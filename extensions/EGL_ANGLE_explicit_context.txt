@@ -1,0 +1,1630 @@
+Name
+
+    ANGLE_explicit_context
+
+Name Strings
+
+    EGL_ANGLE_explicit_context
+
+Contributors
+
+    Brandon Jones, Intel
+
+Contacts
+
+    Brandon Jones, Intel (brandon1.jones 'at' intel 'dot' com)
+
+Status
+
+    Unimplemented Draft
+
+Version
+
+    Version 1, 2018-4-27
+
+Number
+
+    EGL Extension XXX
+
+Extension Type
+
+    EGL Client Extension
+
+Dependencies
+
+    OpenGL ES 3.0 is required.
+
+    GL_CHROMIUM_copy_texture is required.
+
+    GL_ANGLE_robust_client_memory is required.
+
+Overview
+
+    This extension adds new GL ES entry points that allow the user to pass the current EGL context
+    as a function parameter. This allows users to skip lookup of the thread's current context upon
+    entry.
+
+New Types
+
+    typedef void* GLeglContextANGLE	//A handle used to pass an eglContext into gl
+
+New Procedures and Functions
+
+    void glAlphaFuncContextANGLE(GLeglContextANGLE context, GLenum func, GLfloat ref)
+    void glAlphaFuncxContextANGLE(GLeglContextANGLE context, GLenum func, GLfixed ref)
+    void glClearColorxContextANGLE(GLeglContextANGLE context,
+                                   GLfixed red,
+                                   GLfixed green,
+                                   GLfixed blue,
+                                   GLfixed alpha)
+    void glClearDepthxContextANGLE(GLeglContextANGLE context, GLfixed depth)
+    void glClientActiveTextureContextANGLE(GLeglContextANGLE context, GLenum texture)
+    void glClipPlanefContextANGLE(GLeglContextANGLE context, GLenum p, const GLfloat *eqn)
+    void glClipPlanexContextANGLE(GLeglContextANGLE context, GLenum plane, const GLfixed *equation)
+    void glColor4fContextANGLE(GLeglContextANGLE context,
+                               GLfloat red,
+                               GLfloat green,
+                               GLfloat blue,
+                               GLfloat alpha)
+    void glColor4ubContextANGLE(GLeglContextANGLE context,
+                                GLubyte red,
+                                GLubyte green,
+                                GLubyte blue,
+                                GLubyte alpha)
+    void glColor4xContextANGLE(GLeglContextANGLE context,
+                               GLfixed red,
+                               GLfixed green,
+                               GLfixed blue,
+                               GLfixed alpha)
+    void glColorPointerContextANGLE(GLeglContextANGLE context,
+                                    GLint size,
+                                    GLenum type,
+                                    GLsizei stride,
+                                    const void *pointer)
+    void glDepthRangexContextANGLE(GLeglContextANGLE context, GLfixed n, GLfixed f)
+    void glDisableClientStateContextANGLE(GLeglContextANGLE context, GLenum array)
+    void glEnableClientStateContextANGLE(GLeglContextANGLE context, GLenum array)
+    void glFogfContextANGLE(GLeglContextANGLE context, GLenum pname, GLfloat param)
+    void glFogfvContextANGLE(GLeglContextANGLE context, GLenum pname, const GLfloat *params)
+    void glFogxContextANGLE(GLeglContextANGLE context, GLenum pname, GLfixed param)
+    void glFogxvContextANGLE(GLeglContextANGLE context, GLenum pname, const GLfixed *param)
+    void glFrustumfContextANGLE(GLeglContextANGLE context,
+                                GLfloat l,
+                                GLfloat r,
+                                GLfloat b,
+                                GLfloat t,
+                                GLfloat n,
+                                GLfloat f)
+    void glFrustumxContextANGLE(GLeglContextANGLE context,
+                                GLfixed l,
+                                GLfixed r,
+                                GLfixed b,
+                                GLfixed t,
+                                GLfixed n,
+                                GLfixed f)
+    void glGetClipPlanefContextANGLE(GLeglContextANGLE context, GLenum plane, GLfloat *equation)
+    void glGetClipPlanexContextANGLE(GLeglContextANGLE context, GLenum plane, GLfixed *equation)
+    void glGetFixedvContextANGLE(GLeglContextANGLE context, GLenum pname, GLfixed *params)
+    void glGetLightfvContextANGLE(GLeglContextANGLE context,
+                                  GLenum light,
+                                  GLenum pname,
+                                  GLfloat *params)
+    void glGetLightxvContextANGLE(GLeglContextANGLE context,
+                                  GLenum light,
+                                  GLenum pname,
+                                  GLfixed *params)
+    void glGetMaterialfvContextANGLE(GLeglContextANGLE context,
+                                     GLenum face,
+                                     GLenum pname,
+                                     GLfloat *params)
+    void glGetMaterialxvContextANGLE(GLeglContextANGLE context,
+                                     GLenum face,
+                                     GLenum pname,
+                                     GLfixed *params)
+    void glGetPointervContextANGLE(GLeglContextANGLE context, GLenum pname, void **params)
+    void glGetTexEnvfvContextANGLE(GLeglContextANGLE context,
+                                   GLenum target,
+                                   GLenum pname,
+                                   GLfloat *params)
+    void glGetTexEnvivContextANGLE(GLeglContextANGLE context,
+                                   GLenum target,
+                                   GLenum pname,
+                                   GLint *params)
+    void glGetTexEnvxvContextANGLE(GLeglContextANGLE context,
+                                   GLenum target,
+                                   GLenum pname,
+                                   GLfixed *params)
+    void glGetTexParameterxvContextANGLE(GLeglContextANGLE context,
+                                         GLenum target,
+                                         GLenum pname,
+                                         GLfixed *params)
+    void glLightModelfContextANGLE(GLeglContextANGLE context, GLenum pname, GLfloat param)
+    void glLightModelfvContextANGLE(GLeglContextANGLE context, GLenum pname, const GLfloat *params)
+    void glLightModelxContextANGLE(GLeglContextANGLE context, GLenum pname, GLfixed param)
+    void glLightModelxvContextANGLE(GLeglContextANGLE context, GLenum pname, const GLfixed *param)
+    void glLightfContextANGLE(GLeglContextANGLE context, GLenum light, GLenum pname, GLfloat param)
+    void glLightfvContextANGLE(GLeglContextANGLE context,
+                               GLenum light,
+                               GLenum pname,
+                               const GLfloat *params)
+    void glLightxContextANGLE(GLeglContextANGLE context, GLenum light, GLenum pname, GLfixed param)
+    void glLightxvContextANGLE(GLeglContextANGLE context,
+                               GLenum light,
+                               GLenum pname,
+                               const GLfixed *params)
+    void glLineWidthxContextANGLE(GLeglContextANGLE context, GLfixed width)
+    void glLoadIdentityContextANGLE(GLeglContextANGLE context)
+    void glLoadMatrixfContextANGLE(GLeglContextANGLE context, const GLfloat *m)
+    void glLoadMatrixxContextANGLE(GLeglContextANGLE context, const GLfixed *m)
+    void glLogicOpContextANGLE(GLeglContextANGLE context, GLenum opcode)
+    void glMaterialfContextANGLE(GLeglContextANGLE context,
+                                 GLenum face,
+                                 GLenum pname,
+                                 GLfloat param)
+    void glMaterialfvContextANGLE(GLeglContextANGLE context,
+                                  GLenum face,
+                                  GLenum pname,
+                                  const GLfloat *params)
+    void glMaterialxContextANGLE(GLeglContextANGLE context,
+                                 GLenum face,
+                                 GLenum pname,
+                                 GLfixed param)
+    void glMaterialxvContextANGLE(GLeglContextANGLE context,
+                                  GLenum face,
+                                  GLenum pname,
+                                  const GLfixed *param)
+    void glMatrixModeContextANGLE(GLeglContextANGLE context, GLenum mode)
+    void glMultMatrixfContextANGLE(GLeglContextANGLE context, const GLfloat *m)
+    void glMultMatrixxContextANGLE(GLeglContextANGLE context, const GLfixed *m)
+    void glMultiTexCoord4fContextANGLE(GLeglContextANGLE context,
+                                       GLenum target,
+                                       GLfloat s,
+                                       GLfloat t,
+                                       GLfloat r,
+                                       GLfloat q)
+    void glMultiTexCoord4xContextANGLE(GLeglContextANGLE context,
+                                       GLenum texture,
+                                       GLfixed s,
+                                       GLfixed t,
+                                       GLfixed r,
+                                       GLfixed q)
+    void glNormal3fContextANGLE(GLeglContextANGLE context, GLfloat nx, GLfloat ny, GLfloat nz)
+    void glNormal3xContextANGLE(GLeglContextANGLE context, GLfixed nx, GLfixed ny, GLfixed nz)
+    void glNormalPointerContextANGLE(GLeglContextANGLE context,
+                                     GLenum type,
+                                     GLsizei stride,
+                                     const void *pointer)
+    void glOrthofContextANGLE(GLeglContextANGLE context,
+                              GLfloat l,
+                              GLfloat r,
+                              GLfloat b,
+                              GLfloat t,
+                              GLfloat n,
+                              GLfloat f)
+    void glOrthoxContextANGLE(GLeglContextANGLE context,
+                              GLfixed l,
+                              GLfixed r,
+                              GLfixed b,
+                              GLfixed t,
+                              GLfixed n,
+                              GLfixed f)
+    void glPointParameterfContextANGLE(GLeglContextANGLE context, GLenum pname, GLfloat param)
+    void glPointParameterfvContextANGLE(GLeglContextANGLE context,
+                                        GLenum pname,
+                                        const GLfloat *params)
+    void glPointParameterxContextANGLE(GLeglContextANGLE context, GLenum pname, GLfixed param)
+    void glPointParameterxvContextANGLE(GLeglContextANGLE context,
+                                        GLenum pname,
+                                        const GLfixed *params)
+    void glPointSizeContextANGLE(GLeglContextANGLE context, GLfloat size)
+    void glPointSizexContextANGLE(GLeglContextANGLE context, GLfixed size)
+    void glPolygonOffsetxContextANGLE(GLeglContextANGLE context, GLfixed factor, GLfixed units)
+    void glPopMatrixContextANGLE(GLeglContextANGLE context)
+    void glPushMatrixContextANGLE(GLeglContextANGLE context)
+    void glRotatefContextANGLE(GLeglContextANGLE context,
+                               GLfloat angle,
+                               GLfloat x,
+                               GLfloat y,
+                               GLfloat z)
+    void glRotatexContextANGLE(GLeglContextANGLE context,
+                               GLfixed angle,
+                               GLfixed x,
+                               GLfixed y,
+                               GLfixed z)
+    void glSampleCoveragexContextANGLE(GLeglContextANGLE context, GLclampx value, GLboolean invert)
+    void glScalefContextANGLE(GLeglContextANGLE context, GLfloat x, GLfloat y, GLfloat z)
+    void glScalexContextANGLE(GLeglContextANGLE context, GLfixed x, GLfixed y, GLfixed z)
+    void glShadeModelContextANGLE(GLeglContextANGLE context, GLenum mode)
+    void glTexCoordPointerContextANGLE(GLeglContextANGLE context,
+                                       GLint size,
+                                       GLenum type,
+                                       GLsizei stride,
+                                       const void *pointer)
+    void glTexEnvfContextANGLE(GLeglContextANGLE context,
+                               GLenum target,
+                               GLenum pname,
+                               GLfloat param)
+    void glTexEnvfvContextANGLE(GLeglContextANGLE context,
+                                GLenum target,
+                                GLenum pname,
+                                const GLfloat *params)
+    void glTexEnviContextANGLE(GLeglContextANGLE context, GLenum target, GLenum pname, GLint param)
+    void glTexEnvivContextANGLE(GLeglContextANGLE context,
+                                GLenum target,
+                                GLenum pname,
+                                const GLint *params)
+    void glTexEnvxContextANGLE(GLeglContextANGLE context,
+                               GLenum target,
+                               GLenum pname,
+                               GLfixed param)
+    void glTexEnvxvContextANGLE(GLeglContextANGLE context,
+                                GLenum target,
+                                GLenum pname,
+                                const GLfixed *params)
+    void glTexParameterxContextANGLE(GLeglContextANGLE context,
+                                     GLenum target,
+                                     GLenum pname,
+                                     GLfixed param)
+    void glTexParameterxvContextANGLE(GLeglContextANGLE context,
+                                      GLenum target,
+                                      GLenum pname,
+                                      const GLfixed *params)
+    void glTranslatefContextANGLE(GLeglContextANGLE context, GLfloat x, GLfloat y, GLfloat z)
+    void glTranslatexContextANGLE(GLeglContextANGLE context, GLfixed x, GLfixed y, GLfixed z)
+    void glVertexPointerContextANGLE(GLeglContextANGLE context,
+                                     GLint size,
+                                     GLenum type,
+                                     GLsizei stride,
+                                     const void *pointer)
+
+    void glActiveTextureContextANGLE(GLeglContextANGLE context, GLenum texture)
+    void glAttachShaderContextANGLE(GLeglContextANGLE context, GLuint program, GLuint shader)
+    void glBindAttribLocationContextANGLE(GLeglContextANGLE context,
+                                          GLuint program,
+                                          GLuint index,
+                                          const GLchar *name)
+    void glBindBufferContextANGLE(GLeglContextANGLE context, GLenum target, GLuint buffer)
+    void glBindFramebufferContextANGLE(GLeglContextANGLE context, GLenum target, GLuint framebuffer)
+    void glBindRenderbufferContextANGLE(GLeglContextANGLE context,
+                                        GLenum target,
+                                        GLuint renderbuffer)
+    void glBindTextureContextANGLE(GLeglContextANGLE context, GLenum target, GLuint texture)
+    void glBlendColorContextANGLE(GLeglContextANGLE context,
+                                  GLfloat red,
+                                  GLfloat green,
+                                  GLfloat blue,
+                                  GLfloat alpha)
+    void glBlendEquationContextANGLE(GLeglContextANGLE context, GLenum mode)
+    void glBlendEquationSeparateContextANGLE(GLeglContextANGLE context,
+                                             GLenum modeRGB,
+                                             GLenum modeAlpha)
+    void glBlendFuncContextANGLE(GLeglContextANGLE context, GLenum sfactor, GLenum dfactor)
+    void glBlendFuncSeparateContextANGLE(GLeglContextANGLE context,
+                                         GLenum sfactorRGB,
+                                         GLenum dfactorRGB,
+                                         GLenum sfactorAlpha,
+                                         GLenum dfactorAlpha)
+    void glBufferDataContextANGLE(GLeglContextANGLE context,
+                                  GLenum target,
+                                  GLsizeiptr size,
+                                  const void *data,
+                                  GLenum usage)
+    void glBufferSubDataContextANGLE(GLeglContextANGLE context,
+                                     GLenum target,
+                                     GLintptr offset,
+                                     GLsizeiptr size,
+                                     const void *data)
+    GLenum glCheckFramebufferStatusContextANGLE(GLeglContextANGLE context, GLenum target)
+    void glClearContextANGLE(GLeglContextANGLE context, GLbitfield mask)
+    void glClearColorContextANGLE(GLeglContextANGLE context,
+                                  GLfloat red,
+                                  GLfloat green,
+                                  GLfloat blue,
+                                  GLfloat alpha)
+    void glClearDepthfContextANGLE(GLeglContextANGLE context, GLfloat d)
+    void glClearStencilContextANGLE(GLeglContextANGLE context, GLint s)
+    void glColorMaskContextANGLE(GLeglContextANGLE context,
+                                 GLboolean red,
+                                 GLboolean green,
+                                 GLboolean blue,
+                                 GLboolean alpha)
+    void glCompileShaderContextANGLE(GLeglContextANGLE context, GLuint shader)
+    void glCompressedTexImage2DContextANGLE(GLeglContextANGLE context,
+                                            GLenum target,
+                                            GLint level,
+                                            GLenum internalformat,
+                                            GLsizei width,
+                                            GLsizei height,
+                                            GLint border,
+                                            GLsizei imageSize,
+                                            const void *data)
+    void glCompressedTexSubImage2DContextANGLE(GLeglContextANGLE context,
+                                               GLenum target,
+                                               GLint level,
+                                               GLint xoffset,
+                                               GLint yoffset,
+                                               GLsizei width,
+                                               GLsizei height,
+                                               GLenum format,
+                                               GLsizei imageSize,
+                                               const void *data)
+    void glCopyTexImage2DContextANGLE(GLeglContextANGLE context,
+                                      GLenum target,
+                                      GLint level,
+                                      GLenum internalformat,
+                                      GLint x,
+                                      GLint y,
+                                      GLsizei width,
+                                      GLsizei height,
+                                      GLint border)
+    void glCopyTexSubImage2DContextANGLE(GLeglContextANGLE context,
+                                         GLenum target,
+                                         GLint level,
+                                         GLint xoffset,
+                                         GLint yoffset,
+                                         GLint x,
+                                         GLint y,
+                                         GLsizei width,
+                                         GLsizei height)
+    GLuint glCreateProgramContextANGLE(GLeglContextANGLE context)
+    GLuint glCreateShaderContextANGLE(GLeglContextANGLE context, GLenum type)
+    void glCullFaceContextANGLE(GLeglContextANGLE context, GLenum mode)
+    void glDeleteBuffersContextANGLE(GLeglContextANGLE context, GLsizei n, const GLuint *buffers)
+    void glDeleteFramebuffersContextANGLE(GLeglContextANGLE context,
+                                          GLsizei n,
+                                          const GLuint *framebuffers)
+    void glDeleteProgramContextANGLE(GLeglContextANGLE context, GLuint program)
+    void glDeleteRenderbuffersContextANGLE(GLeglContextANGLE context,
+                                           GLsizei n,
+                                           const GLuint *renderbuffers)
+    void glDeleteShaderContextANGLE(GLeglContextANGLE context, GLuint shader)
+    void glDeleteTexturesContextANGLE(GLeglContextANGLE context, GLsizei n, const GLuint *textures)
+    void glDepthFuncContextANGLE(GLeglContextANGLE context, GLenum func)
+    void glDepthMaskContextANGLE(GLeglContextANGLE context, GLboolean flag)
+    void glDepthRangefContextANGLE(GLeglContextANGLE context, GLfloat n, GLfloat f)
+    void glDetachShaderContextANGLE(GLeglContextANGLE context, GLuint program, GLuint shader)
+    void glDisableContextANGLE(GLeglContextANGLE context, GLenum cap)
+    void glDisableVertexAttribArrayContextANGLE(GLeglContextANGLE context, GLuint index)
+    void glDrawArraysContextANGLE(GLeglContextANGLE context,
+                                  GLenum mode,
+                                  GLint first,
+                                  GLsizei count)
+    void glDrawElementsContextANGLE(GLeglContextANGLE context,
+                                    GLenum mode,
+                                    GLsizei count,
+                                    GLenum type,
+                                    const void *indices)
+    void glEnableContextANGLE(GLeglContextANGLE context, GLenum cap)
+    void glEnableVertexAttribArrayContextANGLE(GLeglContextANGLE context, GLuint index)
+    void glFinishContextANGLE(GLeglContextANGLE context)
+    void glFlushContextANGLE(GLeglContextANGLE context)
+    void glFramebufferRenderbufferContextANGLE(GLeglContextANGLE context,
+                                               GLenum target,
+                                               GLenum attachment,
+                                               GLenum renderbuffertarget,
+                                               GLuint renderbuffer)
+    void glFramebufferTexture2DContextANGLE(GLeglContextANGLE context,
+                                            GLenum target,
+                                            GLenum attachment,
+                                            GLenum textarget,
+                                            GLuint texture,
+                                            GLint level)
+    void glFrontFaceContextANGLE(GLeglContextANGLE context, GLenum mode)
+    void glGenBuffersContextANGLE(GLeglContextANGLE context, GLsizei n, GLuint *buffers)
+    void glGenFramebuffersContextANGLE(GLeglContextANGLE context, GLsizei n, GLuint *framebuffers)
+    void glGenRenderbuffersContextANGLE(GLeglContextANGLE context,
+                                        GLsizei n,
+                                        GLuint *renderbuffers)
+    void glGenTexturesContextANGLE(GLeglContextANGLE context, GLsizei n, GLuint *textures)
+    void glGenerateMipmapContextANGLE(GLeglContextANGLE context, GLenum target)
+    void glGetActiveAttribContextANGLE(GLeglContextANGLE context,
+                                       GLuint program,
+                                       GLuint index,
+                                       GLsizei bufSize,
+                                       GLsizei *length,
+                                       GLint *size,
+                                       GLenum *type,
+                                       GLchar *name)
+    void glGetActiveUniformContextANGLE(GLeglContextANGLE context,
+                                        GLuint program,
+                                        GLuint index,
+                                        GLsizei bufSize,
+                                        GLsizei *length,
+                                        GLint *size,
+                                        GLenum *type,
+                                        GLchar *name)
+    void glGetAttachedShadersContextANGLE(GLeglContextANGLE context,
+                                          GLuint program,
+                                          GLsizei maxCount,
+                                          GLsizei *count,
+                                          GLuint *shaders)
+    GLint glGetAttribLocationContextANGLE(GLeglContextANGLE context,
+                                          GLuint program,
+                                          const GLchar *name)
+    void glGetBooleanvContextANGLE(GLeglContextANGLE context, GLenum pname, GLboolean *data)
+    void glGetBufferParameterivContextANGLE(GLeglContextANGLE context,
+                                            GLenum target,
+                                            GLenum pname,
+                                            GLint *params)
+    GLenum glGetErrorContextANGLE(GLeglContextANGLE context)
+    void glGetFloatvContextANGLE(GLeglContextANGLE context, GLenum pname, GLfloat *data)
+    void glGetFramebufferAttachmentParameterivContextANGLE(GLeglContextANGLE context,
+                                                           GLenum target,
+                                                           GLenum attachment,
+                                                           GLenum pname,
+                                                           GLint *params)
+    void glGetIntegervContextANGLE(GLeglContextANGLE context, GLenum pname, GLint *data)
+    void glGetProgramInfoLogContextANGLE(GLeglContextANGLE context,
+                                         GLuint program,
+                                         GLsizei bufSize,
+                                         GLsizei *length,
+                                         GLchar *infoLog)
+    void glGetProgramivContextANGLE(GLeglContextANGLE context,
+                                    GLuint program,
+                                    GLenum pname,
+                                    GLint *params)
+    void glGetRenderbufferParameterivContextANGLE(GLeglContextANGLE context,
+                                                  GLenum target,
+                                                  GLenum pname,
+                                                  GLint *params)
+    void glGetShaderInfoLogContextANGLE(GLeglContextANGLE context,
+                                        GLuint shader,
+                                        GLsizei bufSize,
+                                        GLsizei *length,
+                                        GLchar *infoLog)
+    void glGetShaderPrecisionFormatContextANGLE(GLeglContextANGLE context,
+                                                GLenum shadertype,
+                                                GLenum precisiontype,
+                                                GLint *range,
+                                                GLint *precision)
+    void glGetShaderSourceContextANGLE(GLeglContextANGLE context,
+                                       GLuint shader,
+                                       GLsizei bufSize,
+                                       GLsizei *length,
+                                       GLchar *source)
+    void glGetShaderivContextANGLE(GLeglContextANGLE context,
+                                   GLuint shader,
+                                   GLenum pname,
+                                   GLint *params)
+    const GLubyte *glGetStringContextANGLE(GLeglContextANGLE context, GLenum name)
+    void glGetTexParameterfvContextANGLE(GLeglContextANGLE context,
+                                         GLenum target,
+                                         GLenum pname,
+                                         GLfloat *params)
+    void glGetTexParameterivContextANGLE(GLeglContextANGLE context,
+                                         GLenum target,
+                                         GLenum pname,
+                                         GLint *params)
+    GLint glGetUniformLocationContextANGLE(GLeglContextANGLE context,
+                                           GLuint program,
+                                           const GLchar *name)
+    void glGetUniformfvContextANGLE(GLeglContextANGLE context,
+                                    GLuint program,
+                                    GLint location,
+                                    GLfloat *params)
+    void glGetUniformivContextANGLE(GLeglContextANGLE context,
+                                    GLuint program,
+                                    GLint location,
+                                    GLint *params)
+    void glGetVertexAttribPointervContextANGLE(GLeglContextANGLE context,
+                                               GLuint index,
+                                               GLenum pname,
+                                               void **pointer)
+    void glGetVertexAttribfvContextANGLE(GLeglContextANGLE context,
+                                         GLuint index,
+                                         GLenum pname,
+                                         GLfloat *params)
+    void glGetVertexAttribivContextANGLE(GLeglContextANGLE context,
+                                         GLuint index,
+                                         GLenum pname,
+                                         GLint *params)
+    void glHintContextANGLE(GLeglContextANGLE context, GLenum target, GLenum mode)
+    GLboolean glIsBufferContextANGLE(GLeglContextANGLE context, GLuint buffer)
+    GLboolean glIsEnabledContextANGLE(GLeglContextANGLE context, GLenum cap)
+    GLboolean glIsFramebufferContextANGLE(GLeglContextANGLE context, GLuint framebuffer)
+    GLboolean glIsProgramContextANGLE(GLeglContextANGLE context, GLuint program)
+    GLboolean glIsRenderbufferContextANGLE(GLeglContextANGLE context, GLuint renderbuffer)
+    GLboolean glIsShaderContextANGLE(GLeglContextANGLE context, GLuint shader)
+    GLboolean glIsTextureContextANGLE(GLeglContextANGLE context, GLuint texture)
+    void glLineWidthContextANGLE(GLeglContextANGLE context, GLfloat width)
+    void glLinkProgramContextANGLE(GLeglContextANGLE context, GLuint program)
+    void glPixelStoreiContextANGLE(GLeglContextANGLE context, GLenum pname, GLint param)
+    void glPolygonOffsetContextANGLE(GLeglContextANGLE context, GLfloat factor, GLfloat units)
+    void glReadPixelsContextANGLE(GLeglContextANGLE context,
+                                  GLint x,
+                                  GLint y,
+                                  GLsizei width,
+                                  GLsizei height,
+                                  GLenum format,
+                                  GLenum type,
+                                  void *pixels)
+    void glReleaseShaderCompilerContextANGLE(GLeglContextANGLE context)
+    void glRenderbufferStorageContextANGLE(GLeglContextANGLE context,
+                                           GLenum target,
+                                           GLenum internalformat,
+                                           GLsizei width,
+                                           GLsizei height)
+    void glSampleCoverageContextANGLE(GLeglContextANGLE context, GLfloat value, GLboolean invert)
+    void glScissorContextANGLE(GLeglContextANGLE context,
+                               GLint x,
+                               GLint y,
+                               GLsizei width,
+                               GLsizei height)
+    void glShaderBinaryContextANGLE(GLeglContextANGLE context,
+                                    GLsizei count,
+                                    const GLuint *shaders,
+                                    GLenum binaryformat,
+                                    const void *binary,
+                                    GLsizei length)
+    void glShaderSourceContextANGLE(GLeglContextANGLE context,
+                                    GLuint shader,
+                                    GLsizei count,
+                                    const GLchar *const *string,
+                                    const GLint *length)
+    void glStencilFuncContextANGLE(GLeglContextANGLE context, GLenum func, GLint ref, GLuint mask)
+    void glStencilFuncSeparateContextANGLE(GLeglContextANGLE context,
+                                           GLenum face,
+                                           GLenum func,
+                                           GLint ref,
+                                           GLuint mask)
+    void glStencilMaskContextANGLE(GLeglContextANGLE context, GLuint mask)
+    void glStencilMaskSeparateContextANGLE(GLeglContextANGLE context, GLenum face, GLuint mask)
+    void glStencilOpContextANGLE(GLeglContextANGLE context,
+                                 GLenum fail,
+                                 GLenum zfail,
+                                 GLenum zpass)
+    void glStencilOpSeparateContextANGLE(GLeglContextANGLE context,
+                                         GLenum face,
+                                         GLenum sfail,
+                                         GLenum dpfail,
+                                         GLenum dppass)
+    void glTexImage2DContextANGLE(GLeglContextANGLE context,
+                                  GLenum target,
+                                  GLint level,
+                                  GLint internalformat,
+                                  GLsizei width,
+                                  GLsizei height,
+                                  GLint border,
+                                  GLenum format,
+                                  GLenum type,
+                                  const void *pixels)
+    void glTexParameterfContextANGLE(GLeglContextANGLE context,
+                                     GLenum target,
+                                     GLenum pname,
+                                     GLfloat param)
+    void glTexParameterfvContextANGLE(GLeglContextANGLE context,
+                                      GLenum target,
+                                      GLenum pname,
+                                      const GLfloat *params)
+    void glTexParameteriContextANGLE(GLeglContextANGLE context,
+                                     GLenum target,
+                                     GLenum pname,
+                                     GLint param)
+    void glTexParameterivContextANGLE(GLeglContextANGLE context,
+                                      GLenum target,
+                                      GLenum pname,
+                                      const GLint *params)
+    void glTexSubImage2DContextANGLE(GLeglContextANGLE context,
+                                     GLenum target,
+                                     GLint level,
+                                     GLint xoffset,
+                                     GLint yoffset,
+                                     GLsizei width,
+                                     GLsizei height,
+                                     GLenum format,
+                                     GLenum type,
+                                     const void *pixels)
+    void glUniform1fContextANGLE(GLeglContextANGLE context, GLint location, GLfloat v0)
+    void glUniform1fvContextANGLE(GLeglContextANGLE context,
+                                  GLint location,
+                                  GLsizei count,
+                                  const GLfloat *value)
+    void glUniform1iContextANGLE(GLeglContextANGLE context, GLint location, GLint v0)
+    void glUniform1ivContextANGLE(GLeglContextANGLE context,
+                                  GLint location,
+                                  GLsizei count,
+                                  const GLint *value)
+    void glUniform2fContextANGLE(GLeglContextANGLE context, GLint location, GLfloat v0, GLfloat v1)
+    void glUniform2fvContextANGLE(GLeglContextANGLE context,
+                                  GLint location,
+                                  GLsizei count,
+                                  const GLfloat *value)
+    void glUniform2iContextANGLE(GLeglContextANGLE context, GLint location, GLint v0, GLint v1)
+    void glUniform2ivContextANGLE(GLeglContextANGLE context,
+                                  GLint location,
+                                  GLsizei count,
+                                  const GLint *value)
+    void glUniform3fContextANGLE(GLeglContextANGLE context,
+                                 GLint location,
+                                 GLfloat v0,
+                                 GLfloat v1,
+                                 GLfloat v2)
+    void glUniform3fvContextANGLE(GLeglContextANGLE context,
+                                  GLint location,
+                                  GLsizei count,
+                                  const GLfloat *value)
+    void glUniform3iContextANGLE(GLeglContextANGLE context,
+                                 GLint location,
+                                 GLint v0,
+                                 GLint v1,
+                                 GLint v2)
+    void glUniform3ivContextANGLE(GLeglContextANGLE context,
+                                  GLint location,
+                                  GLsizei count,
+                                  const GLint *value)
+    void glUniform4fContextANGLE(GLeglContextANGLE context,
+                                 GLint location,
+                                 GLfloat v0,
+                                 GLfloat v1,
+                                 GLfloat v2,
+                                 GLfloat v3)
+    void glUniform4fvContextANGLE(GLeglContextANGLE context,
+                                  GLint location,
+                                  GLsizei count,
+                                  const GLfloat *value)
+    void glUniform4iContextANGLE(GLeglContextANGLE context,
+                                 GLint location,
+                                 GLint v0,
+                                 GLint v1,
+                                 GLint v2,
+                                 GLint v3)
+    void glUniform4ivContextANGLE(GLeglContextANGLE context,
+                                  GLint location,
+                                  GLsizei count,
+                                  const GLint *value)
+    void glUniformMatrix2fvContextANGLE(GLeglContextANGLE context,
+                                        GLint location,
+                                        GLsizei count,
+                                        GLboolean transpose,
+                                        const GLfloat *value)
+    void glUniformMatrix3fvContextANGLE(GLeglContextANGLE context,
+                                        GLint location,
+                                        GLsizei count,
+                                        GLboolean transpose,
+                                        const GLfloat *value)
+    void glUniformMatrix4fvContextANGLE(GLeglContextANGLE context,
+                                        GLint location,
+                                        GLsizei count,
+                                        GLboolean transpose,
+                                        const GLfloat *value)
+    void glUseProgramContextANGLE(GLeglContextANGLE context, GLuint program)
+    void glValidateProgramContextANGLE(GLeglContextANGLE context, GLuint program)
+    void glVertexAttrib1fContextANGLE(GLeglContextANGLE context, GLuint index, GLfloat x)
+    void glVertexAttrib1fvContextANGLE(GLeglContextANGLE context, GLuint index, const GLfloat *v)
+    void glVertexAttrib2fContextANGLE(GLeglContextANGLE context,
+                                      GLuint index,
+                                      GLfloat x,
+                                      GLfloat y)
+    void glVertexAttrib2fvContextANGLE(GLeglContextANGLE context, GLuint index, const GLfloat *v)
+    void glVertexAttrib3fContextANGLE(GLeglContextANGLE context,
+                                      GLuint index,
+                                      GLfloat x,
+                                      GLfloat y,
+                                      GLfloat z)
+    void glVertexAttrib3fvContextANGLE(GLeglContextANGLE context, GLuint index, const GLfloat *v)
+    void glVertexAttrib4fContextANGLE(GLeglContextANGLE context,
+                                      GLuint index,
+                                      GLfloat x,
+                                      GLfloat y,
+                                      GLfloat z,
+                                      GLfloat w)
+    void glVertexAttrib4fvContextANGLE(GLeglContextANGLE context, GLuint index, const GLfloat *v)
+    void glVertexAttribPointerContextANGLE(GLeglContextANGLE context,
+                                           GLuint index,
+                                           GLint size,
+                                           GLenum type,
+                                           GLboolean normalized,
+                                           GLsizei stride,
+                                           const void *pointer)
+    void glViewportContextANGLE(GLeglContextANGLE context,
+                                GLint x,
+                                GLint y,
+                                GLsizei width,
+                                GLsizei height)
+
+    void glBeginQueryContextANGLE(GLeglContextANGLE context, GLenum target, GLuint id)
+    void glBeginTransformFeedbackContextANGLE(GLeglContextANGLE context, GLenum primitiveMode)
+    void glBindBufferBaseContextANGLE(GLeglContextANGLE context,
+                                      GLenum target,
+                                      GLuint index,
+                                      GLuint buffer)
+    void glBindBufferRangeContextANGLE(GLeglContextANGLE context,
+                                       GLenum target,
+                                       GLuint index,
+                                       GLuint buffer,
+                                       GLintptr offset,
+                                       GLsizeiptr size)
+    void glBindSamplerContextANGLE(GLeglContextANGLE context, GLuint unit, GLuint sampler)
+    void glBindTransformFeedbackContextANGLE(GLeglContextANGLE context, GLenum target, GLuint id)
+    void glBindVertexArrayContextANGLE(GLeglContextANGLE context, GLuint array)
+    void glBlitFramebufferContextANGLE(GLeglContextANGLE context,
+                                       GLint srcX0,
+                                       GLint srcY0,
+                                       GLint srcX1,
+                                       GLint srcY1,
+                                       GLint dstX0,
+                                       GLint dstY0,
+                                       GLint dstX1,
+                                       GLint dstY1,
+                                       GLbitfield mask,
+                                       GLenum filter)
+    void glClearBufferfiContextANGLE(GLeglContextANGLE context,
+                                     GLenum buffer,
+                                     GLint drawbuffer,
+                                     GLfloat depth,
+                                     GLint stencil)
+    void glClearBufferfvContextANGLE(GLeglContextANGLE context,
+                                     GLenum buffer,
+                                     GLint drawbuffer,
+                                     const GLfloat *value)
+    void glClearBufferivContextANGLE(GLeglContextANGLE context,
+                                     GLenum buffer,
+                                     GLint drawbuffer,
+                                     const GLint *value)
+    void glClearBufferuivContextANGLE(GLeglContextANGLE context,
+                                      GLenum buffer,
+                                      GLint drawbuffer,
+                                      const GLuint *value)
+    GLenum glClientWaitSyncContextANGLE(GLeglContextANGLE context,
+                                        GLsync sync,
+                                        GLbitfield flags,
+                                        GLuint64 timeout)
+    void glCompressedTexImage3DContextANGLE(GLeglContextANGLE context,
+                                            GLenum target,
+                                            GLint level,
+                                            GLenum internalformat,
+                                            GLsizei width,
+                                            GLsizei height,
+                                            GLsizei depth,
+                                            GLint border,
+                                            GLsizei imageSize,
+                                            const void *data)
+    void glCompressedTexSubImage3DContextANGLE(GLeglContextANGLE context,
+                                               GLenum target,
+                                               GLint level,
+                                               GLint xoffset,
+                                               GLint yoffset,
+                                               GLint zoffset,
+                                               GLsizei width,
+                                               GLsizei height,
+                                               GLsizei depth,
+                                               GLenum format,
+                                               GLsizei imageSize,
+                                               const void *data)
+    void glCopyBufferSubDataContextANGLE(GLeglContextANGLE context,
+                                         GLenum readTarget,
+                                         GLenum writeTarget,
+                                         GLintptr readOffset,
+                                         GLintptr writeOffset,
+                                         GLsizeiptr size)
+    void glCopyTexSubImage3DContextANGLE(GLeglContextANGLE context,
+                                         GLenum target,
+                                         GLint level,
+                                         GLint xoffset,
+                                         GLint yoffset,
+                                         GLint zoffset,
+                                         GLint x,
+                                         GLint y,
+                                         GLsizei width,
+                                         GLsizei height)
+    void glDeleteQueriesContextANGLE(GLeglContextANGLE context, GLsizei n, const GLuint *ids)
+    void glDeleteSamplersContextANGLE(GLeglContextANGLE context,
+                                      GLsizei count,
+                                      const GLuint *samplers)
+    void glDeleteSyncContextANGLE(GLeglContextANGLE context, GLsync sync)
+    void glDeleteTransformFeedbacksContextANGLE(GLeglContextANGLE context,
+                                                GLsizei n,
+                                                const GLuint *ids)
+    void glDeleteVertexArraysContextANGLE(GLeglContextANGLE context,
+                                          GLsizei n,
+                                          const GLuint *arrays)
+    void glDrawArraysInstancedContextANGLE(GLeglContextANGLE context,
+                                           GLenum mode,
+                                           GLint first,
+                                           GLsizei count,
+                                           GLsizei instancecount)
+    void glDrawBuffersContextANGLE(GLeglContextANGLE context, GLsizei n, const GLenum *bufs)
+    void glDrawElementsInstancedContextANGLE(GLeglContextANGLE context,
+                                             GLenum mode,
+                                             GLsizei count,
+                                             GLenum type,
+                                             const void *indices,
+                                             GLsizei instancecount)
+    void glDrawRangeElementsContextANGLE(GLeglContextANGLE context,
+                                         GLenum mode,
+                                         GLuint start,
+                                         GLuint end,
+                                         GLsizei count,
+                                         GLenum type,
+                                         const void *indices)
+    void glEndQueryContextANGLE(GLeglContextANGLE context, GLenum target)
+    void glEndTransformFeedbackContextANGLE(GLeglContextANGLE context)
+    GLsync glFenceSyncContextANGLE(GLeglContextANGLE context, GLenum condition, GLbitfield flags)
+    void glFlushMappedBufferRangeContextANGLE(GLeglContextANGLE context,
+                                              GLenum target,
+                                              GLintptr offset,
+                                              GLsizeiptr length)
+    void glFramebufferTextureLayerContextANGLE(GLeglContextANGLE context,
+                                               GLenum target,
+                                               GLenum attachment,
+                                               GLuint texture,
+                                               GLint level,
+                                               GLint layer)
+    void glGenQueriesContextANGLE(GLeglContextANGLE context, GLsizei n, GLuint *ids)
+    void glGenSamplersContextANGLE(GLeglContextANGLE context, GLsizei count, GLuint *samplers)
+    void glGenTransformFeedbacksContextANGLE(GLeglContextANGLE context, GLsizei n, GLuint *ids)
+    void glGenVertexArraysContextANGLE(GLeglContextANGLE context, GLsizei n, GLuint *arrays)
+    void glGetActiveUniformBlockNameContextANGLE(GLeglContextANGLE context,
+                                                 GLuint program,
+                                                 GLuint uniformBlockIndex,
+                                                 GLsizei bufSize,
+                                                 GLsizei *length,
+                                                 GLchar *uniformBlockName)
+    void glGetActiveUniformBlockivContextANGLE(GLeglContextANGLE context,
+                                               GLuint program,
+                                               GLuint uniformBlockIndex,
+                                               GLenum pname,
+                                               GLint *params)
+    void glGetActiveUniformsivContextANGLE(GLeglContextANGLE context,
+                                           GLuint program,
+                                           GLsizei uniformCount,
+                                           const GLuint *uniformIndices,
+                                           GLenum pname,
+                                           GLint *params)
+    void glGetBufferParameteri64vContextANGLE(GLeglContextANGLE context,
+                                              GLenum target,
+                                              GLenum pname,
+                                              GLint64 *params)
+    void glGetBufferPointervContextANGLE(GLeglContextANGLE context,
+                                         GLenum target,
+                                         GLenum pname,
+                                         void **params)
+    GLint glGetFragDataLocationContextANGLE(GLeglContextANGLE context,
+                                            GLuint program,
+                                            const GLchar *name)
+    void glGetInteger64i_vContextANGLE(GLeglContextANGLE context,
+                                       GLenum target,
+                                       GLuint index,
+                                       GLint64 *data)
+    void glGetInteger64vContextANGLE(GLeglContextANGLE context, GLenum pname, GLint64 *data)
+    void glGetIntegeri_vContextANGLE(GLeglContextANGLE context,
+                                     GLenum target,
+                                     GLuint index,
+                                     GLint *data)
+    void glGetInternalformativContextANGLE(GLeglContextANGLE context,
+                                           GLenum target,
+                                           GLenum internalformat,
+                                           GLenum pname,
+                                           GLsizei bufSize,
+                                           GLint *params)
+    void glGetProgramBinaryContextANGLE(GLeglContextANGLE context,
+                                        GLuint program,
+                                        GLsizei bufSize,
+                                        GLsizei *length,
+                                        GLenum *binaryFormat,
+                                        void *binary)
+    void glGetQueryObjectuivContextANGLE(GLeglContextANGLE context,
+                                         GLuint id,
+                                         GLenum pname,
+                                         GLuint *params)
+    void glGetQueryivContextANGLE(GLeglContextANGLE context,
+                                  GLenum target,
+                                  GLenum pname,
+                                  GLint *params)
+    void glGetSamplerParameterfvContextANGLE(GLeglContextANGLE context,
+                                             GLuint sampler,
+                                             GLenum pname,
+                                             GLfloat *params)
+    void glGetSamplerParameterivContextANGLE(GLeglContextANGLE context,
+                                             GLuint sampler,
+                                             GLenum pname,
+                                             GLint *params)
+    const GLubyte *glGetStringiContextANGLE(GLeglContextANGLE context, GLenum name, GLuint index)
+    void glGetSyncivContextANGLE(GLeglContextANGLE context,
+                                 GLsync sync,
+                                 GLenum pname,
+                                 GLsizei bufSize,
+                                 GLsizei *length,
+                                 GLint *values)
+    void glGetTransformFeedbackVaryingContextANGLE(GLeglContextANGLE context,
+                                                   GLuint program,
+                                                   GLuint index,
+                                                   GLsizei bufSize,
+                                                   GLsizei *length,
+                                                   GLsizei *size,
+                                                   GLenum *type,
+                                                   GLchar *name)
+    GLuint glGetUniformBlockIndexContextANGLE(GLeglContextANGLE context,
+                                              GLuint program,
+                                              const GLchar *uniformBlockName)
+    void glGetUniformIndicesContextANGLE(GLeglContextANGLE context,
+                                         GLuint program,
+                                         GLsizei uniformCount,
+                                         const GLchar *const *uniformNames,
+                                         GLuint *uniformIndices)
+    void glGetUniformuivContextANGLE(GLeglContextANGLE context,
+                                     GLuint program,
+                                     GLint location,
+                                     GLuint *params)
+    void glGetVertexAttribIivContextANGLE(GLeglContextANGLE context,
+                                          GLuint index,
+                                          GLenum pname,
+                                          GLint *params)
+    void glGetVertexAttribIuivContextANGLE(GLeglContextANGLE context,
+                                           GLuint index,
+                                           GLenum pname,
+                                           GLuint *params)
+    void glInvalidateFramebufferContextANGLE(GLeglContextANGLE context,
+                                             GLenum target,
+                                             GLsizei numAttachments,
+                                             const GLenum *attachments)
+    void glInvalidateSubFramebufferContextANGLE(GLeglContextANGLE context,
+                                                GLenum target,
+                                                GLsizei numAttachments,
+                                                const GLenum *attachments,
+                                                GLint x,
+                                                GLint y,
+                                                GLsizei width,
+                                                GLsizei height)
+    GLboolean glIsQueryContextANGLE(GLeglContextANGLE context, GLuint id)
+    GLboolean glIsSamplerContextANGLE(GLeglContextANGLE context, GLuint sampler)
+    GLboolean glIsSyncContextANGLE(GLeglContextANGLE context, GLsync sync)
+    GLboolean glIsTransformFeedbackContextANGLE(GLeglContextANGLE context, GLuint id)
+    GLboolean glIsVertexArrayContextANGLE(GLeglContextANGLE context, GLuint array)
+    void *glMapBufferRangeContextANGLE(GLeglContextANGLE context,
+                                       GLenum target,
+                                       GLintptr offset,
+                                       GLsizeiptr length,
+                                       GLbitfield access)
+    void glPauseTransformFeedbackContextANGLE(GLeglContextANGLE context)
+    void glProgramBinaryContextANGLE(GLeglContextANGLE context,
+                                     GLuint program,
+                                     GLenum binaryFormat,
+                                     const void *binary,
+                                     GLsizei length)
+    void glProgramParameteriContextANGLE(GLeglContextANGLE context,
+                                         GLuint program,
+                                         GLenum pname,
+                                         GLint value)
+    void glReadBufferContextANGLE(GLeglContextANGLE context, GLenum src)
+    void glRenderbufferStorageMultisampleContextANGLE(GLeglContextANGLE context,
+                                                      GLenum target,
+                                                      GLsizei samples,
+                                                      GLenum internalformat,
+                                                      GLsizei width,
+                                                      GLsizei height)
+    void glResumeTransformFeedbackContextANGLE(GLeglContextANGLE context)
+    void glSamplerParameterfContextANGLE(GLeglContextANGLE context,
+                                         GLuint sampler,
+                                         GLenum pname,
+                                         GLfloat param)
+    void glSamplerParameterfvContextANGLE(GLeglContextANGLE context,
+                                          GLuint sampler,
+                                          GLenum pname,
+                                          const GLfloat *param)
+    void glSamplerParameteriContextANGLE(GLeglContextANGLE context,
+                                         GLuint sampler,
+                                         GLenum pname,
+                                         GLint param)
+    void glSamplerParameterivContextANGLE(GLeglContextANGLE context,
+                                          GLuint sampler,
+                                          GLenum pname,
+                                          const GLint *param)
+    void glTexImage3DContextANGLE(GLeglContextANGLE context,
+                                  GLenum target,
+                                  GLint level,
+                                  GLint internalformat,
+                                  GLsizei width,
+                                  GLsizei height,
+                                  GLsizei depth,
+                                  GLint border,
+                                  GLenum format,
+                                  GLenum type,
+                                  const void *pixels)
+    void glTexStorage2DContextANGLE(GLeglContextANGLE context,
+                                    GLenum target,
+                                    GLsizei levels,
+                                    GLenum internalformat,
+                                    GLsizei width,
+                                    GLsizei height)
+    void glTexStorage3DContextANGLE(GLeglContextANGLE context,
+                                    GLenum target,
+                                    GLsizei levels,
+                                    GLenum internalformat,
+                                    GLsizei width,
+                                    GLsizei height,
+                                    GLsizei depth)
+    void glTexSubImage3DContextANGLE(GLeglContextANGLE context,
+                                     GLenum target,
+                                     GLint level,
+                                     GLint xoffset,
+                                     GLint yoffset,
+                                     GLint zoffset,
+                                     GLsizei width,
+                                     GLsizei height,
+                                     GLsizei depth,
+                                     GLenum format,
+                                     GLenum type,
+                                     const void *pixels)
+    void glTransformFeedbackVaryingsContextANGLE(GLeglContextANGLE context,
+                                                 GLuint program,
+                                                 GLsizei count,
+                                                 const GLchar *const *varyings,
+                                                 GLenum bufferMode)
+    void glUniform1uiContextANGLE(GLeglContextANGLE context, GLint location, GLuint v0)
+    void glUniform1uivContextANGLE(GLeglContextANGLE context,
+                                   GLint location,
+                                   GLsizei count,
+                                   const GLuint *value)
+    void glUniform2uiContextANGLE(GLeglContextANGLE context, GLint location, GLuint v0, GLuint v1)
+    void glUniform2uivContextANGLE(GLeglContextANGLE context,
+                                   GLint location,
+                                   GLsizei count,
+                                   const GLuint *value)
+    void glUniform3uiContextANGLE(GLeglContextANGLE context,
+                                  GLint location,
+                                  GLuint v0,
+                                  GLuint v1,
+                                  GLuint v2)
+    void glUniform3uivContextANGLE(GLeglContextANGLE context,
+                                   GLint location,
+                                   GLsizei count,
+                                   const GLuint *value)
+    void glUniform4uiContextANGLE(GLeglContextANGLE context,
+                                  GLint location,
+                                  GLuint v0,
+                                  GLuint v1,
+                                  GLuint v2,
+                                  GLuint v3)
+    void glUniform4uivContextANGLE(GLeglContextANGLE context,
+                                   GLint location,
+                                   GLsizei count,
+                                   const GLuint *value)
+    void glUniformBlockBindingContextANGLE(GLeglContextANGLE context,
+                                           GLuint program,
+                                           GLuint uniformBlockIndex,
+                                           GLuint uniformBlockBinding)
+    void glUniformMatrix2x3fvContextANGLE(GLeglContextANGLE context,
+                                          GLint location,
+                                          GLsizei count,
+                                          GLboolean transpose,
+                                          const GLfloat *value)
+    void glUniformMatrix2x4fvContextANGLE(GLeglContextANGLE context,
+                                          GLint location,
+                                          GLsizei count,
+                                          GLboolean transpose,
+                                          const GLfloat *value)
+    void glUniformMatrix3x2fvContextANGLE(GLeglContextANGLE context,
+                                          GLint location,
+                                          GLsizei count,
+                                          GLboolean transpose,
+                                          const GLfloat *value)
+    void glUniformMatrix3x4fvContextANGLE(GLeglContextANGLE context,
+                                          GLint location,
+                                          GLsizei count,
+                                          GLboolean transpose,
+                                          const GLfloat *value)
+    void glUniformMatrix4x2fvContextANGLE(GLeglContextANGLE context,
+                                          GLint location,
+                                          GLsizei count,
+                                          GLboolean transpose,
+                                          const GLfloat *value)
+    void glUniformMatrix4x3fvContextANGLE(GLeglContextANGLE context,
+                                          GLint location,
+                                          GLsizei count,
+                                          GLboolean transpose,
+                                          const GLfloat *value)
+    GLboolean glUnmapBufferContextANGLE(GLeglContextANGLE context, GLenum target)
+    void glVertexAttribDivisorContextANGLE(GLeglContextANGLE context, GLuint index, GLuint divisor)
+    void glVertexAttribI4iContextANGLE(GLeglContextANGLE context,
+                                       GLuint index,
+                                       GLint x,
+                                       GLint y,
+                                       GLint z,
+                                       GLint w)
+    void glVertexAttribI4ivContextANGLE(GLeglContextANGLE context, GLuint index, const GLint *v)
+    void glVertexAttribI4uiContextANGLE(GLeglContextANGLE context,
+                                        GLuint index,
+                                        GLuint x,
+                                        GLuint y,
+                                        GLuint z,
+                                        GLuint w)
+    void glVertexAttribI4uivContextANGLE(GLeglContextANGLE context, GLuint index, const GLuint *v)
+    void glVertexAttribIPointerContextANGLE(GLeglContextANGLE context,
+                                            GLuint index,
+                                            GLint size,
+                                            GLenum type,
+                                            GLsizei stride,
+                                            const void *pointer)
+    void glWaitSyncContextANGLE(GLeglContextANGLE context,
+                                GLsync sync,
+                                GLbitfield flags,
+                                GLuint64 timeout)
+
+    void glGetBooleanvRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                              enum pname,
+                                              sizei bufSize,
+                                              sizei *length,
+                                              boolean *data)
+    void glGetBufferParameterivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                       enum target,
+                                                       enum pname,
+                                                       sizei bufSize,
+                                                       sizei *length,
+                                                       int *params)
+    void glGetFloatvRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                            enum pname,
+                                            sizei bufSize,
+                                            sizei *length,
+                                            float *data)
+    void glGetFramebufferAttachmentParameterivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                                      enum target,
+                                                                      enum attachment,
+                                                                      enum pname,
+                                                                      sizei bufSize,
+                                                                      sizei *length,
+                                                                      int *params)
+    void glGetIntegervRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                              enum pname,
+                                              sizei bufSize,
+                                              sizei *length,
+                                              int *data)
+    void glGetProgramivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                               uint program,
+                                               enum pname,
+                                               sizei bufSize,
+                                               sizei *length,
+                                               int *params)
+    void glGetRenderbufferParameterivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                             enum target,
+                                                             enum pname,
+                                                             sizei bufSize,
+                                                             sizei *length,
+                                                             int *params)
+    void glGetShaderivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                              uint shader,
+                                              enum pname,
+                                              sizei bufSize,
+                                              sizei *length,
+                                              int *params)
+    void glGetTexParameterfvRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                    enum target,
+                                                    enum pname,
+                                                    sizei bufSize,
+                                                    sizei *length,
+                                                    float *params)
+    void glGetTexParameterivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                    enum target,
+                                                    enum pname,
+                                                    sizei bufSize,
+                                                    sizei *length,
+                                                    int *params)
+    void glGetUniformfvRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                               uint program,
+                                               int location,
+                                               sizei bufSize,
+                                               sizei *length,
+                                               float *params)
+    void glGetUniformivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                               uint program,
+                                               int location,
+                                               sizei bufSize,
+                                               sizei *length,
+                                               int *params)
+    void glGetVertexAttribfvRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                    uint index,
+                                                    enum pname,
+                                                    sizei bufSize,
+                                                    sizei *length,
+                                                    float *params)
+    void glGetVertexAttribivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                    uint index,
+                                                    enum pname,
+                                                    sizei bufSize,
+                                                    sizei *length,
+                                                    int *params)
+    void glGetVertexAttribPointervRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                          uint index,
+                                                          enum pname,
+                                                          sizei bufSize,
+                                                          sizei *length,
+                                                          void gl **pointer)
+    void glReadPixelsRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                             int x,
+                                             int y,
+                                             sizei width,
+                                             sizei height,
+                                             enum format,
+                                             enum type,
+                                             sizei bufSize,
+                                             sizei *length,
+                                             sizei *columns,
+                                             sizei *rows,
+                                             void *pixels)
+    void glTexImage2DRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                             enum target,
+                                             int level,
+                                             int internalformat,
+                                             sizei width,
+                                             sizei height,
+                                             int border,
+                                             enum format,
+                                             enum type,
+                                             sizei bufSize,
+                                             const void *pixels)
+    void glTexParameterfvRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                 enum target,
+                                                 enum pname,
+                                                 sizei bufSize,
+                                                 const GLfloat *params)
+    void glTexParameterivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                 enum target,
+                                                 enum pname,
+                                                 sizei bufSize,
+                                                 const GLint *params)
+    void glTexSubImage2DRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                enum target,
+                                                int level,
+                                                int xoffset,
+                                                int yoffset,
+                                                sizei width,
+                                                sizei height,
+                                                enum format,
+                                                enum type,
+                                                sizei bufSize,
+                                                const void *pixels)
+    void glCompressedTexImage2DContextANGLE(GLeglContextANGLE context,
+                                            enum target,
+                                            int level,
+                                            enum internalformat,
+                                            sizei width,
+                                            sizei height,
+                                            int border,
+                                            sizei imageSize,
+                                            sizei bufSize,
+                                            const void *data)
+    void glCompressedTexSubImage2DContextANGLE(GLeglContextANGLE context,
+                                               enum target,
+                                               int level,
+                                               int xoffset,
+                                               int yoffset,
+                                               sizei width,
+                                               sizei height,
+                                               enum format,
+                                               sizei imageSize,
+                                               sizei bufSize,
+                                               const void *data)
+    void glCompressedTexImage3DContextANGLE(GLeglContextANGLE context,
+                                            enum target,
+                                            int level,
+                                            enum internalformat,
+                                            sizei width,
+                                            sizei height,
+                                            sizei depth,
+                                            int border,
+                                            sizei imageSize,
+                                            sizei bufSize,
+                                            const void *data)
+    void glCompressedTexSubImage3DContextANGLE(GLeglContextANGLE context,
+                                               enum target,
+                                               int level,
+                                               int xoffset,
+                                               int yoffset,
+                                               int zoffset,
+                                               sizei width,
+                                               sizei height,
+                                               sizei depth,
+                                               enum format,
+                                               sizei imageSize,
+                                               sizei bufSize,
+                                               const void *data)
+    void glTexImage3DRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                             enum target,
+                                             int level,
+                                             int internalformat,
+                                             sizei width,
+                                             sizei height,
+                                             sizei depth,
+                                             int border,
+                                             enum format,
+                                             enum type,
+                                             sizei bufSize,
+                                             const void *pixels)
+    void glTexSubImage3DRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                enum target,
+                                                int level,
+                                                int xoffset,
+                                                int yoffset,
+                                                int zoffset,
+                                                sizei width,
+                                                sizei height,
+                                                sizei depth,
+                                                enum format,
+                                                enum type,
+                                                sizei bufSize,
+                                                const void *pixels)
+    void glGetQueryivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                             enum target,
+                                             enum pname,
+                                             sizei bufSize,
+                                             sizei *length,
+                                             int *params)
+    void glGetQueryObjectuivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                    uint id,
+                                                    enum pname,
+                                                    sizei bufSize,
+                                                    sizei *length,
+                                                    uint *params)
+    void glGetBufferPointervRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                    enum target,
+                                                    enum pname,
+                                                    sizei bufSize,
+                                                    sizei *length,
+                                                    void **params)
+    void glGetIntegeri_vRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                enum target,
+                                                uint index,
+                                                sizei bufSize,
+                                                sizei *length,
+                                                int *data)
+    void glGetInternalformativRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                      enum target,
+                                                      enum internalformat,
+                                                      enum pname,
+                                                      sizei bufSize,
+                                                      sizei *length,
+                                                      int *params)
+    void glGetVertexAttribIivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                     uint index,
+                                                     enum pname,
+                                                     sizei bufSize,
+                                                     sizei *length,
+                                                     int *params)
+    void glGetVertexAttribIuivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                      uint index,
+                                                      enum pname,
+                                                      sizei bufSize,
+                                                      sizei *length,
+                                                      uint *params)
+    void glGetUniformuivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                uint program,
+                                                int location,
+                                                sizei bufSize,
+                                                sizei *length,
+                                                uint *params)
+    void glGetActiveUniformBlockivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                          uint program,
+                                                          uint uniformBlockIndex,
+                                                          enum pname,
+                                                          sizei bufSize,
+                                                          sizei *length,
+                                                          int *params)
+    void glGetInteger64vRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                enum pname,
+                                                sizei bufSize,
+                                                sizei *length,
+                                                int64 *data)
+    void glGetInteger64i_vRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                  enum target,
+                                                  uint index,
+                                                  sizei bufSize,
+                                                  sizei *length,
+                                                  int64 *data)
+    void glGetBufferParameteri64vRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                         enum target,
+                                                         enum pname,
+                                                         sizei bufSize,
+                                                         sizei *length,
+                                                         int64 *params)
+    void glSamplerParameterivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                     uint sampler,
+                                                     enum pname,
+                                                     sizei bufSize,
+                                                     const GLint *param)
+    void glSamplerParameterfvRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                     uint sampler,
+                                                     enum pname,
+                                                     sizei bufSize,
+                                                     const GLfloat *param)
+    void glGetSamplerParameterivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                        uint sampler,
+                                                        enum pname,
+                                                        sizei bufSize,
+                                                        sizei *length,
+                                                        int *params)
+    void glGetSamplerParameterfvRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                        uint sampler,
+                                                        enum pname,
+                                                        sizei bufSize,
+                                                        sizei *length,
+                                                        float *params)
+    void glGetFramebufferParameterivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                            enum target,
+                                                            enum pname,
+                                                            sizei bufSize,
+                                                            sizei *length,
+                                                            int *params)
+    void glGetProgramInterfaceivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                        uint program,
+                                                        enum programInterface,
+                                                        enum pname,
+                                                        sizei bufSize,
+                                                        sizei *length,
+                                                        int *params)
+    void glGetBooleani_vRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                enum target,
+                                                uint index,
+                                                sizei bufSize,
+                                                sizei *length,
+                                                boolean *data)
+    void glGetMultisamplefvRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                   enum pname,
+                                                   uint index,
+                                                   sizei bufSize,
+                                                   sizei *length,
+                                                   float *val)
+    void glGetTexLevelParameterivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                         enum target,
+                                                         int level,
+                                                         enum pname,
+                                                         sizei bufSize,
+                                                         sizei *length,
+                                                         int *params)
+    void glGetTexLevelParameterfvRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                         enum target,
+                                                         int level,
+                                                         enum pname,
+                                                         sizei bufSize,
+                                                         sizei *length,
+                                                         float *params)
+    void glGetPointervRobustANGLERobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                         enum pname,
+                                                         sizei bufSize,
+                                                         sizei *length,
+                                                         void **params)
+    void glReadnPixelsRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                              int x,
+                                              int y,
+                                              sizei width,
+                                              sizei height,
+                                              enum format,
+                                              enum type,
+                                              sizei bufSize,
+                                              sizei *length,
+                                              sizei *columns,
+                                              sizei *rows,
+                                              void *data)
+    void glGetnUniformfvRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                uint program,
+                                                int location,
+                                                sizei bufSize,
+                                                sizei *length,
+                                                float *params)
+    void glGetnUniformivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                uint program,
+                                                int location,
+                                                sizei bufSize,
+                                                sizei *length,
+                                                int *params)
+    void glGetnUniformuivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                 uint program,
+                                                 int location,
+                                                 sizei bufSize,
+                                                 sizei *length,
+                                                 uint *params)
+    void glTexParameterIivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                  enum target,
+                                                  enum pname,
+                                                  sizei bufSize,
+                                                  const GLint *params)
+    void glTexParameterIuivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                   enum target,
+                                                   enum pname,
+                                                   sizei bufSize,
+                                                   const GLuint *params)
+    void glGetTexParameterIivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                     enum target,
+                                                     enum pname,
+                                                     sizei bufSize,
+                                                     sizei *length,
+                                                     int *params)
+    void glGetTexParameterIuivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                      enum target,
+                                                      enum pname,
+                                                      sizei bufSize,
+                                                      sizei *length,
+                                                      uint *params)
+    void glSamplerParameterIivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                      uint sampler,
+                                                      enum pname,
+                                                      sizei bufSize,
+                                                      const GLint *param)
+    void glSamplerParameterIuivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                       uint sampler,
+                                                       enum pname,
+                                                       sizei bufSize,
+                                                       const GLuint *param)
+    void glGetSamplerParameterIivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                         uint sampler,
+                                                         enum pname,
+                                                         sizei bufSize,
+                                                         sizei *length,
+                                                         int *params)
+    void glGetSamplerParameterIuivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                          uint sampler,
+                                                          enum pname,
+                                                          sizei bufSize,
+                                                          sizei *length,
+                                                          uint *params)
+    void glGetQueryObjectivRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                   uint id,
+                                                   enum pname,
+                                                   sizei bufSize,
+                                                   sizei *length,
+                                                   int *params)
+    void glGetQueryObjecti64vRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                     uint id,
+                                                     enum pname,
+                                                     sizei bufSize,
+                                                     sizei *length,
+                                                     int64 *params)
+    void glGetQueryObjectui64vRobustANGLEContextANGLE(GLeglContextANGLE context,
+                                                      uint id,
+                                                      enum pname,
+                                                      sizei bufSize,
+                                                      sizei *length,
+                                                      uint64 *params)
+
+    void glCopyTextureCHROMIUMContextANGLE(GLeglContextANGLE context,
+                                           uint sourceId,
+                                           int sourceLevel,
+                                           enum destTarget,
+                                           uint destId,
+                                           int destLevel,
+                                           int internalFormat,
+                                           enum destType,
+                                           boolean unpackFlipY,
+                                           boolean unpackPremultiplyAlpha,
+                                           boolean unpackUnmultiplyAlpha)
+    void glCopySubTextureCHROMIUMContextANGLE(GLeglContextANGLE context,
+                                              uint sourceId,
+                                              int sourceLevel,
+                                              enum destTarget,
+                                              uint destId,
+                                              int destLevel,
+                                              int xoffset,
+                                              int yoffset,
+                                              int x,
+                                              int y,
+                                              sizei width,
+                                              sizei height,
+                                              boolean unpackFlipY,
+                                              boolean unpackPremultiplyAlpha,
+                                              boolean unpackUnmultiplyAlpha)
+
+New Tokens
+
+    None
+
+Additions to the EGL Specification
+
+    When using GL ES as a client library, the glxContextANGLE entry points allow the user to
+    pass the current EGL context as a function parameter to provide better performance than
+    looking the current EGL context at every GL entry point.
+
+    Calls to "xContextANGLE" provide no additional validation for the passed context parameter.
+
+    Calls to "xContextANGLE" will generate errors under the same conditions as "x". Any
+    instances of undefined behaviour in "x" will also be undefined in "xContextANGLE".
+
+Issues
+
+    1) What happens when a passed in context is not current?
+
+    This behavior is undefined. It is the client's responsibility to ensure the passed context has
+    been set with eglMakeCurrent.
+
+Revision History
+
+    Version 1, 2017-4-27 (Brandon Jones)
+        - Initial draft
