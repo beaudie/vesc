@@ -51,7 +51,7 @@ Error ShaderLibrary::getShader(RendererVk *renderer,
     createInfo.pCode    = GetInternalShaderCode(shaderID);
 
     ANGLE_TRY(shader.get().init(renderer->getDevice(), createInfo));
-    shader.updateSerial(renderer->issueProgramSerial());
+    shader.updateSerial(renderer->issueShaderSerial());
     return NoError();
 }
 }  // namespace vk
