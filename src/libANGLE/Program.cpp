@@ -523,6 +523,7 @@ bool ValidateGraphicsInterfaceBlocksPerShader(
     const std::vector<sh::InterfaceBlock> &interfaceBlocksToLink,
     ShaderType shaderType,
     bool webglCompatibility,
+    bool appendInterfaceBlockMap,
     InterfaceBlockMap *linkedBlocks,
     InfoLog &infoLog)
 {
@@ -545,7 +546,7 @@ bool ValidateGraphicsInterfaceBlocksPerShader(
                 return false;
             }
         }
-        else
+        else if (appendInterfaceBlockMap)
         {
             (*linkedBlocks)[block.name] = std::make_pair(shaderType, &block);
         }
@@ -554,16 +555,22 @@ bool ValidateGraphicsInterfaceBlocksPerShader(
     return true;
 }
 
-bool ValidateGraphicsInterfaceBlocks(
+bool ValidateInterfaceBlocksMatch(
+    GLuint numActiveShaderStages,
     const ShaderMap<const std::vector<sh::InterfaceBlock> *> &shaderInterfaceBlocks,
     InfoLog &infoLog,
     bool webglCompatibility)
 {
-    // Check that interface blocks defined in the graphics shaders are identical
+    if (numActiveShaderStages < 2u)
+    {
+        return true;
+    }
+
+    // Check that interface blocks defined in all the active shader stages are identical
 
     InterfaceBlockMap linkedInterfaceBlocks;
 
-    bool interfaceBlockMapInitialized = false;
+    GLuint numLinkedShaders = 0u;
     for (ShaderType shaderType : kAllGraphicsShaderTypes)
     {
         if (!shaderInterfaceBlocks[shaderType])
@@ -571,18 +578,20 @@ bool ValidateGraphicsInterfaceBlocks(
             continue;
         }
 
-        if (!interfaceBlockMapInitialized)
+        if (numLinkedShaders == 0u)
         {
             InitializeInterfaceBlockMap(*shaderInterfaceBlocks[shaderType], shaderType,
                                         &linkedInterfaceBlocks);
-            interfaceBlockMapInitialized = true;
         }
-        else if (!ValidateGraphicsInterfaceBlocksPerShader(*shaderInterfaceBlocks[shaderType],
-                                                           shaderType, webglCompatibility,
-                                                           &linkedInterfaceBlocks, infoLog))
+        else if (!ValidateGraphicsInterfaceBlocksPerShader(
+                     *shaderInterfaceBlocks[shaderType], shaderType, webglCompatibility,
+                     numLinkedShaders == numActiveShaderStages - 1u, &linkedInterfaceBlocks,
+                     infoLog))
         {
             return false;
         }
+
+        ++numLinkedShaders;
     }
 
     return true;
@@ -2782,37 +2791,12 @@ bool Program::linkAttributes(const Context *context, InfoLog &infoLog)
 bool Program::linkInterfaceBlocks(const Context *context, InfoLog &infoLog)
 {
     const auto &caps = context->getCaps();
+    bool webglCompatibility = context->getExtensions().webglCompatibility;
 
-    if (mState.mAttachedShaders[ShaderType::Compute])
-    {
-        Shader &computeShader              = *mState.mAttachedShaders[ShaderType::Compute];
-        const auto &computeUniformBlocks   = computeShader.getUniformBlocks(context);
-
-        if (!ValidateInterfaceBlocksCount(caps.maxComputeUniformBlocks, computeUniformBlocks,
-                                          ShaderType::Compute, sh::BlockType::BLOCK_UNIFORM,
-                                          nullptr, infoLog))
-        {
-            return false;
-        }
-
-        const auto &computeShaderStorageBlocks = computeShader.getShaderStorageBlocks(context);
-        if (!ValidateInterfaceBlocksCount(caps.maxComputeShaderStorageBlocks,
-                                          computeShaderStorageBlocks, ShaderType::Compute,
-                                          sh::BlockType::BLOCK_BUFFER, nullptr, infoLog))
-        {
-            return false;
-        }
-        return true;
-    }
-
-    ShaderMap<GLuint> maxShaderUniformBlocks         = {};
-    maxShaderUniformBlocks[gl::ShaderType::Vertex]   = caps.maxVertexUniformBlocks;
-    maxShaderUniformBlocks[gl::ShaderType::Fragment] = caps.maxFragmentUniformBlocks;
-    maxShaderUniformBlocks[gl::ShaderType::Geometry] = caps.maxGeometryUniformBlocks;
-
-    GLuint combinedUniformBlocksCount                                              = 0u;
-    ShaderMap<const std::vector<sh::InterfaceBlock> *> graphicsShaderUniformBlocks = {};
-    for (ShaderType shaderType : kAllGraphicsShaderTypes)
+    GLuint numShadersHasUniformBlocks                                      = 0u;
+    GLuint combinedUniformBlocksCount                                      = 0u;
+    ShaderMap<const std::vector<sh::InterfaceBlock> *> shaderUniformBlocks = {};
+    for (ShaderType shaderType : AllShaderTypes())
     {
         Shader *shader = mState.mAttachedShaders[shaderType];
         if (!shader)
@@ -2820,15 +2804,19 @@ bool Program::linkInterfaceBlocks(const Context *context, InfoLog &infoLog)
             continue;
         }
 
-        const auto &uniformBlocks = mState.mAttachedShaders[shaderType]->getUniformBlocks(context);
-        if (!ValidateInterfaceBlocksCount(maxShaderUniformBlocks[shaderType], uniformBlocks,
-                                          shaderType, sh::BlockType::BLOCK_UNIFORM,
-                                          &combinedUniformBlocksCount, infoLog))
+        const auto &uniformBlocks = shader->getUniformBlocks(context);
+        if (!uniformBlocks.empty())
         {
-            return false;
-        }
+            if (!ValidateInterfaceBlocksCount(
+                    caps.maxShaderUniformBlocks[shaderType], uniformBlocks, shaderType,
+                    sh::BlockType::BLOCK_UNIFORM, &combinedUniformBlocksCount, infoLog))
+            {
+                return false;
+            }
 
-        graphicsShaderUniformBlocks[shaderType] = &uniformBlocks;
+            shaderUniformBlocks[shaderType] = &uniformBlocks;
+            ++numShadersHasUniformBlocks;
+        }
     }
 
     if (combinedUniformBlocksCount > caps.maxCombinedUniformBlocks)
@@ -2839,22 +2827,18 @@ bool Program::linkInterfaceBlocks(const Context *context, InfoLog &infoLog)
         return false;
     }
 
-    bool webglCompatibility = context->getExtensions().webglCompatibility;
-    if (!ValidateGraphicsInterfaceBlocks(graphicsShaderUniformBlocks, infoLog, webglCompatibility))
+    if (!ValidateInterfaceBlocksMatch(numShadersHasUniformBlocks, shaderUniformBlocks, infoLog,
+                                      webglCompatibility))
     {
         return false;
     }
 
     if (context->getClientVersion() >= Version(3, 1))
     {
-        ShaderMap<GLuint> maxShaderStorageBlocks     = {};
-        maxShaderStorageBlocks[ShaderType::Vertex]   = caps.maxVertexShaderStorageBlocks;
-        maxShaderStorageBlocks[ShaderType::Fragment] = caps.maxFragmentShaderStorageBlocks;
-        maxShaderStorageBlocks[ShaderType::Geometry] = caps.maxGeometryShaderStorageBlocks;
-
+        GLuint numShadersHasShaderStorageBlocks                                        = 0u;
         GLuint combinedShaderStorageBlocksCount                                        = 0u;
-        ShaderMap<const std::vector<sh::InterfaceBlock> *> graphicsShaderStorageBlocks = {};
-        for (ShaderType shaderType : kAllGraphicsShaderTypes)
+        ShaderMap<const std::vector<sh::InterfaceBlock> *> allShaderStorageBlocks      = {};
+        for (ShaderType shaderType : AllShaderTypes())
         {
             Shader *shader = mState.mAttachedShaders[shaderType];
             if (!shader)
@@ -2863,14 +2847,18 @@ bool Program::linkInterfaceBlocks(const Context *context, InfoLog &infoLog)
             }
 
             const auto &shaderStorageBlocks = shader->getShaderStorageBlocks(context);
-            if (!ValidateInterfaceBlocksCount(
-                    maxShaderStorageBlocks[shaderType], shaderStorageBlocks, shaderType,
-                    sh::BlockType::BLOCK_BUFFER, &combinedShaderStorageBlocksCount, infoLog))
+            if (!shaderStorageBlocks.empty())
             {
-                return false;
-            }
+                if (!ValidateInterfaceBlocksCount(
+                        caps.maxShaderStorageBlocks[shaderType], shaderStorageBlocks, shaderType,
+                        sh::BlockType::BLOCK_BUFFER, &combinedShaderStorageBlocksCount, infoLog))
+                {
+                    return false;
+                }
 
-            graphicsShaderStorageBlocks[shaderType] = &shaderStorageBlocks;
+                allShaderStorageBlocks[shaderType] = &shaderStorageBlocks;
+                ++numShadersHasShaderStorageBlocks;
+            }
         }
 
         if (combinedShaderStorageBlocksCount > caps.maxCombinedShaderStorageBlocks)
@@ -2881,8 +2869,8 @@ bool Program::linkInterfaceBlocks(const Context *context, InfoLog &infoLog)
             return false;
         }
 
-        if (!ValidateGraphicsInterfaceBlocks(graphicsShaderStorageBlocks, infoLog,
-                                             webglCompatibility))
+        if (!ValidateInterfaceBlocksMatch(numShadersHasShaderStorageBlocks, allShaderStorageBlocks,
+                                          infoLog, webglCompatibility))
         {
             return false;
         }
