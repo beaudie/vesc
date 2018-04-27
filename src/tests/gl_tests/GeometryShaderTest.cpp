@@ -464,6 +464,13 @@ TEST_P(GeometryShaderTest, ShaderStorageBlockMismatchBetweenGeometryAndFragmentS
     GLint maxGeometryShaderStorageBlocks = 0;
     glGetIntegerv(GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_EXT, &maxGeometryShaderStorageBlocks);
 
+    GLint maxVertexShaderStorageBlocks = 0;
+    glGetIntegerv(GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS, &maxVertexShaderStorageBlocks);
+
+    // The minimum value of MAX_VERTEX_SHADER_STORAGE_BLOCKS can be 0.
+    // [OpenGL ES 3.1] Table 20.43
+    ANGLE_SKIP_TEST_IF(maxVertexShaderStorageBlocks == 0);
+
     // The minimun value of MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_EXT can be 0.
     // [EXT_geometry_shader] Table 20.43gs
     ANGLE_SKIP_TEST_IF(maxGeometryShaderStorageBlocks == 0);
@@ -475,10 +482,22 @@ TEST_P(GeometryShaderTest, ShaderStorageBlockMismatchBetweenGeometryAndFragmentS
     // [OpenGL ES 3.1] Table 20.44
     ANGLE_SKIP_TEST_IF(maxFragmentShaderStorageBlocks == 0);
 
+    const std::string &vertexShader =
+        R"(#version 310 es
+        layout(binding = 0) buffer ssbo_vs
+        {
+            vec4 ssbo_value;
+        } block_vs;
+        void main()
+        {
+            block_vs.ssbo_value = vec4(1.0, 0.0, 0.0, 1.0);
+            gl_Position = block_vs.ssbo_value ; 
+        })";
+
     const std::string &geometryShader =
         R"(#version 310 es
         #extension GL_EXT_geometry_shader : require
-        buffer ssbo
+        layout(binding = 1) buffer ssbo
         {
             vec4 ssbo_value;
         } block0;
@@ -493,7 +512,7 @@ TEST_P(GeometryShaderTest, ShaderStorageBlockMismatchBetweenGeometryAndFragmentS
     const std::string &fragmentShader =
         R"(#version 310 es
         precision highp float;
-        buffer ssbo
+        layout(binding = 2) buffer ssbo
         {
             vec3 ssbo_value;
         } block0;
@@ -503,8 +522,7 @@ TEST_P(GeometryShaderTest, ShaderStorageBlockMismatchBetweenGeometryAndFragmentS
             output_color = vec4(block0.ssbo_value, 1);
         })";
 
-    GLuint program =
-        CompileProgramWithGS(essl31_shaders::vs::Simple(), geometryShader, fragmentShader);
+    GLuint program = CompileProgramWithGS(vertexShader, geometryShader, fragmentShader);
     EXPECT_EQ(0u, program);
 
     EXPECT_GL_NO_ERROR();
