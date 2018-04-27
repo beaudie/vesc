@@ -273,7 +273,7 @@ class PipelineDesc final
 
     // Shader stage info
     const ShaderStageInfo &getShaderStageInfo() const;
-    void updateShaders(ProgramVk *programVk);
+    void updateShaders(Serial vertexSerial, Serial fragmentSerial);
 
     // Vertex input state
     void updateVertexInputInfo(const VertexInputBindings &bindings,

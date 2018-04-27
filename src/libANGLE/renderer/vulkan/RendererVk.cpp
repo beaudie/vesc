@@ -951,7 +951,7 @@ vk::Error RendererVk::initGraphicsPipelineLayout()
     return vk::NoError();
 }
 
-Serial RendererVk::issueProgramSerial()
+Serial RendererVk::issueShaderSerial()
 {
     return mProgramSerialFactory.generate();
 }
