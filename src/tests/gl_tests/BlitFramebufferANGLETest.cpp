@@ -1268,10 +1268,6 @@ TEST_P(BlitFramebufferTest, BlitSRGBToRGBAndClip)
 // clipped out).
 TEST_P(BlitFramebufferTest, BlitSRGBToRGBOversizedSourceArea)
 {
-    // D3D11 blit implementation seems to have a bug where the blit rectangles are computed
-    // incorrectly. http://anglebug.com/2521
-    ANGLE_SKIP_TEST_IF(IsD3D11());
-
     ANGLE_GL_PROGRAM(checkerProgram, essl1_shaders::vs::Passthrough(),
                      essl1_shaders::fs::Checkered());
 
