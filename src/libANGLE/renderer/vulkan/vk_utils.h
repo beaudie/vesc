@@ -396,6 +396,10 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                             const uint32_t *dynamicOffsets);
 
     void executeCommands(uint32_t commandBufferCount, const CommandBuffer *commandBuffers);
+    void updateBuffer(const vk::Buffer &buffer,
+                      VkDeviceSize dstOffset,
+                      VkDeviceSize dataSize,
+                      const void *data);
 };
 
 class Image final : public WrappedObject<Image, VkImage>

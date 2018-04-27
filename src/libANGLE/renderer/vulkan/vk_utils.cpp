@@ -555,6 +555,15 @@ void CommandBuffer::executeCommands(uint32_t commandBufferCount,
     vkCmdExecuteCommands(mHandle, commandBufferCount, commandBuffers[0].ptr());
 }
 
+void CommandBuffer::updateBuffer(const vk::Buffer &buffer,
+                                 VkDeviceSize dstOffset,
+                                 VkDeviceSize dataSize,
+                                 const void *data)
+{
+    ASSERT(valid() && buffer.valid());
+    vkCmdUpdateBuffer(mHandle, buffer.getHandle(), dstOffset, dataSize, data);
+}
+
 // Image implementation.
 Image::Image()
 {
