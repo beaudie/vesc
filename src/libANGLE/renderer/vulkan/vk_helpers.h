@@ -243,7 +243,6 @@ class ImageHelper final : angle::NonCopyable
     // Cached properties.
     uint32_t mLayerCount;
 };
-
 }  // namespace vk
 }  // namespace rx
 
