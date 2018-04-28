@@ -1397,6 +1397,10 @@ void GenerateCaps(ID3D11Device *device,
     caps->maxComputeImageUniforms =
         static_cast<GLuint>(GetMaximumComputeImageUniforms(featureLevel));
 
+    // We temporarily use the minimum required value in OpenGL ES 3.1 SPEC.
+    // TODO(jiawei.shao@intel.com): set a more accurate limit.
+    caps->maxCombinedShaderOutputResources = 4u;
+
     // Aggregate shader limits
     caps->maxUniformBufferBindings = caps->maxVertexUniformBlocks + caps->maxFragmentUniformBlocks;
     caps->maxUniformBlockSize = GetMaximumConstantBufferSize(featureLevel);
