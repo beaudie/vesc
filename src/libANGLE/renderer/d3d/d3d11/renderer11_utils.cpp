@@ -929,31 +929,53 @@ size_t GetMaximumComputeTextureUnits(D3D_FEATURE_LEVEL featureLevel)
     }
 }
 
-size_t GetMaximumImageUnits(D3D_FEATURE_LEVEL featureLevel)
+// TODO(jiawei.shao@intel.com): allow more UAVs for UAV related resources on D3D11 feature
+// level 11_1.
+void SetUAVRelatedResourceLimits(D3D_FEATURE_LEVEL featureLevel, gl::Caps *caps)
 {
-    switch (featureLevel)
-    {
-        case D3D_FEATURE_LEVEL_11_1:
-        case D3D_FEATURE_LEVEL_11_0:
-            // TODO(xinghua.cao@intel.com): Get a more accurate limit. For now using
-            // the minimum requirement for GLES 3.1.
-            return 4;
-        default:
-            return 0;
-    }
-}
+    ASSERT(caps);
 
-size_t GetMaximumComputeImageUniforms(D3D_FEATURE_LEVEL featureLevel)
-{
+    // Allocate 1 UAV for atomic counter buffers.
+    constexpr GLuint kReservedUAVsForAtomicCounterBuffers = 1u;
+
+    // The sum of the number of UAV and RTV must not exceed D3D11_PS_CS_UAV_REGISTER_COUNT(8).
+    // https://msdn.microsoft.com/en-us/library/windows/desktop/ff476465(v=vs.85).aspx
+    constexpr GLuint kMaxNumRTVAndUAV = D3D11_PS_CS_UAV_REGISTER_COUNT;
+    static_assert(kMaxNumRTVAndUAV == D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT,
+                  "Maximum render target views and unordered access views should equal to 8");
+
+    // Allocate 7 UAVs for the sum of active images, active ssbos, and active pixel shader outputs.
+    // As UAV is not available in vertex shader in feature level 11_0, we only allocate UAVs for
+    // atomic counter buffers, images and ssbos in compute shaders and pixel shaders.
+    constexpr GLuint kUAVsForCombinedShaderResources =
+        kMaxNumRTVAndUAV - kReservedUAVsForAtomicCounterBuffers;
     switch (featureLevel)
     {
         case D3D_FEATURE_LEVEL_11_1:
         case D3D_FEATURE_LEVEL_11_0:
-            // TODO(xinghua.cao@intel.com): Get a more accurate limit. For now using
-            // the minimum requirement for GLES 3.1.
-            return 4;
+            caps->maxCombinedShaderOutputResources = kUAVsForCombinedShaderResources;
+
+            caps->maxCombinedAtomicCounterBuffers = kReservedUAVsForAtomicCounterBuffers;
+            caps->maxComputeAtomicCounterBuffers  = caps->maxCombinedAtomicCounterBuffers;
+            caps->maxFragmentAtomicCounterBuffers = caps->maxCombinedAtomicCounterBuffers;
+            caps->maxAtomicCounterBufferBindings  = caps->maxCombinedAtomicCounterBuffers;
+
+            caps->maxCombinedShaderStorageBlocks = caps->maxCombinedShaderOutputResources;
+            caps->maxComputeShaderStorageBlocks  = caps->maxCombinedShaderOutputResources;
+            caps->maxFragmentShaderStorageBlocks = caps->maxCombinedShaderOutputResources;
+            caps->maxShaderStorageBufferBindings = caps->maxCombinedShaderOutputResources;
+
+            caps->maxImageUnits            = caps->maxCombinedShaderOutputResources;
+            caps->maxCombinedImageUniforms = caps->maxCombinedShaderOutputResources;
+            caps->maxComputeImageUniforms  = caps->maxCombinedShaderOutputResources;
+            caps->maxFragmentImageUniforms = caps->maxCombinedShaderOutputResources;
+
+            caps->maxDrawBuffers      = caps->maxCombinedShaderOutputResources;
+            caps->maxColorAttachments = caps->maxCombinedShaderOutputResources;
+            break;
+
         default:
-            return 0;
+            break;
     }
 }
 
@@ -1393,9 +1415,9 @@ void GenerateCaps(ID3D11Device *device,
         static_cast<GLuint>(GetMaximumComputeUniformBlocks(featureLevel));
     caps->maxComputeTextureImageUnits =
         static_cast<GLuint>(GetMaximumComputeTextureUnits(featureLevel));
-    caps->maxImageUnits = static_cast<GLuint>(GetMaximumImageUnits(featureLevel));
-    caps->maxComputeImageUniforms =
-        static_cast<GLuint>(GetMaximumComputeImageUniforms(featureLevel));
+
+    // Limits related to unordered access views in feature level 11_0 and above.
+    SetUAVRelatedResourceLimits(featureLevel, caps);
 
     // Aggregate shader limits
     caps->maxUniformBufferBindings = caps->maxVertexUniformBlocks + caps->maxFragmentUniformBlocks;
