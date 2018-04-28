@@ -226,12 +226,12 @@ TEST_P(DrawBuffersTest, VerifyD3DLimits)
     if (platform.majorVersion == 9 && platform.minorVersion == 3)
     {
         // D3D11 Feature Level 9_3 supports 4 draw buffers
-        ASSERT_EQ(mMaxDrawBuffers, 4);
+        ASSERT_EQ(4, mMaxDrawBuffers);
     }
     else
     {
-        // D3D11 Feature Level 10_0+ supports 8 draw buffers
-        ASSERT_EQ(mMaxDrawBuffers, 8);
+        // D3D11 Feature Level 10_0+ supports 7 draw buffers
+        ASSERT_EQ(7, mMaxDrawBuffers);
     }
 }
 
