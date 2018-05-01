@@ -51,7 +51,7 @@ void MapSwizzleState(GLenum internalFormat,
 
 constexpr VkBufferUsageFlags kStagingBufferFlags =
     (VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
-constexpr size_t kStagingBufferSize = 1024 * 16;
+constexpr size_t kStagingBufferSize = 1024 * 1024;
 }  // anonymous namespace
 
 // StagingStorage implementation.
