@@ -326,7 +326,8 @@ EGLint WindowSurfaceCGL::getSwapBehavior() const
     return EGL_BUFFER_DESTROYED;
 }
 
-FramebufferImpl *WindowSurfaceCGL::createDefaultFramebuffer(const gl::FramebufferState &state)
+FramebufferImpl *WindowSurfaceCGL::createDefaultFramebuffer(const gl::Context *context,
+                                                            const gl::FramebufferState &state)
 {
     // TODO(cwallez) assert it happens only once?
     return new FramebufferGL(data, mFramebuffer, true);
