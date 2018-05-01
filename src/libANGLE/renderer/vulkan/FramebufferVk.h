@@ -35,7 +35,6 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
 
     ~FramebufferVk() override;
     void destroy(const gl::Context *context) override;
-    void destroyDefault(const egl::Display *display) override;
 
     gl::Error discard(const gl::Context *context, size_t count, const GLenum *attachments) override;
     gl::Error invalidate(const gl::Context *context,
@@ -84,7 +83,9 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
     gl::Error syncState(const gl::Context *context,
                         const gl::Framebuffer::DirtyBits &dirtyBits) override;
 
-    gl::Error getSamplePosition(size_t index, GLfloat *xy) const override;
+    gl::Error getSamplePosition(const gl::Context *context,
+                                size_t index,
+                                GLfloat *xy) const override;
 
     const vk::RenderPassDesc &getRenderPassDesc();
     gl::Error getCommandGraphNodeForDraw(ContextVk *contextVk, vk::CommandGraphNode **nodeOut);
