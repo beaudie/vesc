@@ -69,7 +69,7 @@ IOSurfaceSurfaceCGL::IOSurfaceSurfaceCGL(const egl::SurfaceState &state,
                                          DisplayCGL *display,
                                          EGLClientBuffer buffer,
                                          const egl::AttributeMap &attribs)
-    : SurfaceGL(state, renderer),
+    : SurfaceGL(state),
       mDisplay(display),
       mRenderer(renderer),
       mStateManager(renderer->getStateManager()),

@@ -147,7 +147,7 @@
                                        EGLNativeWindowType layer,
                                        const FunctionsGL *functions,
                                        CGLContextObj context)
-        : SurfaceGL(state, renderer),
+        : SurfaceGL(state),
           mSwapLayer(nil),
           mCurrentSwapId(0),
           mLayer(reinterpret_cast<CALayer *>(layer)),
@@ -331,8 +331,7 @@ EGLint WindowSurfaceCGL::getSwapBehavior() const
 FramebufferImpl *WindowSurfaceCGL::createDefaultFramebuffer(const gl::FramebufferState &state)
 {
     // TODO(cwallez) assert it happens only once?
-    return new FramebufferGL(mFramebuffer, state, mFunctions, mWorkarounds, mRenderer->getBlitter(),
-                             mRenderer->getMultiviewClearer(), mStateManager);
+    return new FramebufferGL(data, mFramebuffer, true);
 }
 
 }  // namespace rx
