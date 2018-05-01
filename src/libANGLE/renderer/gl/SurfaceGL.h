@@ -14,12 +14,10 @@
 namespace rx
 {
 
-class RendererGL;
-
 class SurfaceGL : public SurfaceImpl
 {
   public:
-    SurfaceGL(const egl::SurfaceState &state, RendererGL *renderer);
+    SurfaceGL(const egl::SurfaceState &state);
     ~SurfaceGL() override;
 
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
@@ -31,9 +29,6 @@ class SurfaceGL : public SurfaceImpl
 
     virtual egl::Error makeCurrent() = 0;
     virtual egl::Error unMakeCurrent();
-
-  private:
-    RendererGL *mRenderer;
 };
 
 }

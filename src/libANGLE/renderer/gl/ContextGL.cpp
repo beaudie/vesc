@@ -65,8 +65,10 @@ ProgramImpl *ContextGL::createProgram(const gl::ProgramState &data)
 
 FramebufferImpl *ContextGL::createFramebuffer(const gl::FramebufferState &data)
 {
-    return new FramebufferGL(data, getFunctions(), getStateManager(), getWorkaroundsGL(),
-                             mRenderer->getBlitter(), mRenderer->getMultiviewClearer(), false);
+    GLuint fbo = 0;
+    getFunctions()->genFramebuffers(1, &fbo);
+
+    return new FramebufferGL(data, fbo, false);
 }
 
 TextureImpl *ContextGL::createTexture(const gl::TextureState &state)
@@ -410,6 +412,16 @@ StateManagerGL *ContextGL::getStateManager()
 const WorkaroundsGL &ContextGL::getWorkaroundsGL() const
 {
     return mRenderer->getWorkarounds();
+}
+
+rx::BlitGL *ContextGL::getBlitter() const
+{
+    return mRenderer->getBlitter();
+}
+
+rx::ClearMultiviewGL *ContextGL::getMultiviewClearer() const
+{
+    return mRenderer->getMultiviewClearer();
 }
 
 gl::Error ContextGL::dispatchCompute(const gl::Context *context,
