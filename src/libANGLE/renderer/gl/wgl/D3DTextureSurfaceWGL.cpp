@@ -494,7 +494,8 @@ EGLint D3DTextureSurfaceWGL::getSwapBehavior() const
     return EGL_BUFFER_PRESERVED;
 }
 
-FramebufferImpl *D3DTextureSurfaceWGL::createDefaultFramebuffer(const gl::FramebufferState &data)
+FramebufferImpl *D3DTextureSurfaceWGL::createDefaultFramebuffer(const gl::Context *context,
+                                                                const gl::FramebufferState &data)
 {
     return new FramebufferGL(data, mFramebufferID, true);
 }
