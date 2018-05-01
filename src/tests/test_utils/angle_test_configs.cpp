@@ -58,6 +58,28 @@ EGLint PlatformParameters::getRenderer() const
     return eglParameters.renderer;
 }
 
+const char *GetRendererName(EGLint renderer)
+{
+    switch (renderer)
+    {
+        case EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE:
+            return "DEFAULT";
+        case EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE:
+            return "D3D9";
+        case EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE:
+            return "D3D11";
+        case EGL_PLATFORM_ANGLE_TYPE_NULL_ANGLE:
+            return "NULL";
+        case EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE:
+            return "OPENGL";
+        case EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE:
+            return "OPENGLES";
+        case EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE:
+            return "VULKAN";
+        default:
+            return "UNDEFINED";
+    }
+}
 bool operator<(const PlatformParameters &a, const PlatformParameters &b)
 {
     if (a.majorVersion != b.majorVersion)
@@ -88,33 +110,7 @@ std::ostream &operator<<(std::ostream& stream, const PlatformParameters &pp)
         stream << pp.minorVersion << "_";
     }
 
-    switch (pp.eglParameters.renderer)
-    {
-        case EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE:
-            stream << "DEFAULT";
-            break;
-        case EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE:
-            stream << "D3D9";
-            break;
-        case EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE:
-            stream << "D3D11";
-            break;
-        case EGL_PLATFORM_ANGLE_TYPE_NULL_ANGLE:
-            stream << "NULL";
-            break;
-        case EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE:
-            stream << "OPENGL";
-            break;
-        case EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE:
-            stream << "OPENGLES";
-            break;
-        case EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE:
-            stream << "VULKAN";
-            break;
-        default:
-            stream << "UNDEFINED";
-            break;
-    }
+    stream << GetRendererName(pp.eglParameters.renderer);
 
     if (pp.eglParameters.majorVersion != EGL_DONT_CARE)
     {
