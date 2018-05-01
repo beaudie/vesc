@@ -17,6 +17,7 @@ namespace rx
 {
 
 class FunctionsWGL;
+class RendererWGL;
 
 class DisplayWGL : public DisplayGL
 {
@@ -40,6 +41,8 @@ class DisplayWGL : public DisplayGL
     SurfaceImpl *createPixmapSurface(const egl::SurfaceState &state,
                                      NativePixmapType nativePixmap,
                                      const egl::AttributeMap &attribs) override;
+
+    ContextImpl *createContext(const gl::ContextState &state) override;
 
     egl::ConfigSet generateConfigs() override;
 
@@ -66,6 +69,8 @@ class DisplayWGL : public DisplayGL
     egl::Error registerD3DDevice(IUnknown *device, HANDLE *outHandle);
     void releaseD3DDevice(HANDLE handle);
 
+    gl::Version getMaxSupportedESVersion() const override;
+
   private:
     const FunctionsGL *getFunctionsGL() const override;
 
@@ -79,7 +84,11 @@ class DisplayWGL : public DisplayGL
     HGLRC initializeContextAttribs(const egl::AttributeMap &eglAttributes) const;
     HGLRC createContextAttribs(const gl::Version &version, int profileMask) const;
 
-    HDC mCurrentDC;
+    std::shared_ptr<RendererWGL> mRenderer;
+
+    HGLRC mCurrentGLRC;
+    HDC mCurrentDrawDC;
+    HDC mCurrentReadDC;
 
     HMODULE mOpenGLModule;
 
@@ -93,7 +102,6 @@ class DisplayWGL : public DisplayGL
     HWND mWindow;
     HDC mDeviceContext;
     int mPixelFormat;
-    HGLRC mWGLContext;
 
     bool mUseDXGISwapChains;
     bool mHasDXInterop;

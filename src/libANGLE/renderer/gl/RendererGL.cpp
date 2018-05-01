@@ -541,11 +541,6 @@ GLenum RendererGL::getResetStatus()
     return mFunctions->getGraphicsResetStatus();
 }
 
-ContextImpl *RendererGL::createContext(const gl::ContextState &state)
-{
-    return new ContextGL(state, this);
-}
-
 void RendererGL::insertEventMarker(GLsizei length, const char *marker)
 {
 }
