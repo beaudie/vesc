@@ -25,7 +25,7 @@ namespace egl
 {
 
 SurfaceState::SurfaceState(const egl::Config *configIn, const AttributeMap &attributesIn)
-    : defaultFramebuffer(nullptr), config(configIn), attributes(attributesIn)
+    : config(configIn), attributes(attributesIn)
 {
 }
 
@@ -117,10 +117,6 @@ rx::FramebufferAttachmentObjectImpl *Surface::getAttachmentImpl() const
 
 Error Surface::destroyImpl(const Display *display)
 {
-    if (mState.defaultFramebuffer)
-    {
-        mState.defaultFramebuffer->onDestroy(display->getProxyContext());
-    }
     if (mImplementation)
     {
         mImplementation->destroy(display);
@@ -141,11 +137,6 @@ Error Surface::destroyImpl(const Display *display)
         mTexture.set(nullptr, nullptr);
     }
 
-    if (mState.defaultFramebuffer)
-    {
-        mState.defaultFramebuffer->onDestroy(display->getProxyContext());
-    }
-    SafeDelete(mState.defaultFramebuffer);
     SafeDelete(mImplementation);
 
     delete this;
@@ -168,10 +159,6 @@ Error Surface::initialize(const Display *display)
     // Initialized here since impl is nullptr in the constructor.
     // Must happen after implementation initialize for Android.
     mSwapBehavior = mImplementation->getSwapBehavior();
-
-    // Must happen after implementation initialize for OSX.
-    mState.defaultFramebuffer = createDefaultFramebuffer(display);
-    ASSERT(mState.defaultFramebuffer != nullptr);
 
     if (mBuftype == EGL_IOSURFACE_ANGLE)
     {
@@ -447,9 +434,9 @@ GLuint Surface::getId() const
     return 0;
 }
 
-gl::Framebuffer *Surface::createDefaultFramebuffer(const Display *display)
+gl::Framebuffer *Surface::createDefaultFramebuffer(const gl::Context *context)
 {
-    return new gl::Framebuffer(display, this);
+    return new gl::Framebuffer(context, this);
 }
 
 gl::InitState Surface::initState(const gl::ImageIndex & /*imageIndex*/) const
