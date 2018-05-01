@@ -536,7 +536,7 @@ egl::Error Context::makeCurrent(egl::Display *display, egl::Surface *surface)
     {
         ANGLE_TRY(surface->setIsCurrent(this, true));
         mCurrentSurface = surface;
-        newDefault      = surface->getDefaultFramebuffer();
+        newDefault      = surface->createDefaultFramebuffer(this);
     }
     else
     {
@@ -569,25 +569,20 @@ egl::Error Context::makeCurrent(egl::Display *display, egl::Surface *surface)
 
 egl::Error Context::releaseSurface(const egl::Display *display)
 {
-    // Remove the default framebuffer
-    Framebuffer *currentDefault = nullptr;
-    if (mCurrentSurface != nullptr)
-    {
-        currentDefault = mCurrentSurface->getDefaultFramebuffer();
-    }
-    else if (mSurfacelessFramebuffer != nullptr)
-    {
-        currentDefault = mSurfacelessFramebuffer;
-    }
+    gl::Framebuffer *defaultFramebuffer = mState.mFramebuffers->getFramebuffer(0);
 
-    if (mGLState.getReadFramebuffer() == currentDefault)
+    // Remove the default framebuffer
+    if (mGLState.getReadFramebuffer() == defaultFramebuffer)
     {
         mGLState.setReadFramebufferBinding(nullptr);
     }
-    if (mGLState.getDrawFramebuffer() == currentDefault)
+
+    if (mGLState.getDrawFramebuffer() == defaultFramebuffer)
     {
         mGLState.setDrawFramebufferBinding(nullptr);
     }
+
+    mState.mFramebuffers->deleteObject(this, 0);
     mState.mFramebuffers->setDefaultFramebuffer(nullptr);
 
     if (mCurrentSurface)
