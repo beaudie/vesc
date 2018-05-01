@@ -4795,7 +4795,7 @@ void Context::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
     switch (pname)
     {
         case GL_SAMPLE_POSITION:
-            handleError(framebuffer->getSamplePosition(index, val));
+            handleError(framebuffer->getSamplePosition(this, index, val));
             break;
         default:
             UNREACHABLE();
