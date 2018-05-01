@@ -31,8 +31,7 @@ class IOSurfaceSurfaceCGL : public SurfaceGL
 {
   public:
     IOSurfaceSurfaceCGL(const egl::SurfaceState &state,
-                        RendererGL *renderer,
-                        DisplayCGL *display,
+                        CGLContextObj cglContext,
                         EGLClientBuffer buffer,
                         const egl::AttributeMap &attribs);
     ~IOSurfaceSurfaceCGL() override;
@@ -62,9 +61,7 @@ class IOSurfaceSurfaceCGL : public SurfaceGL
     static bool validateAttributes(EGLClientBuffer buffer, const egl::AttributeMap &attribs);
 
   private:
-    DisplayCGL *mDisplay;
-    RendererGL *mRenderer;
-    StateManagerGL *mStateManager;
+    CGLContextObj mCGLContext;
     IOSurfaceRef mIOSurface;
     int mWidth;
     int mHeight;
