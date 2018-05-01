@@ -31,7 +31,8 @@ egl::Error SurfaceOzone::initialize(const egl::Display *display)
     return egl::NoError();
 }
 
-FramebufferImpl *SurfaceOzone::createDefaultFramebuffer(const gl::FramebufferState &state)
+FramebufferImpl *SurfaceOzone::createDefaultFramebuffer(const gl::Context *context,
+                                                        const gl::FramebufferState &state)
 {
     return mBuffer->framebufferGL(state);
 }
