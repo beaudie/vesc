@@ -75,7 +75,7 @@ class DisplayOzone final : public DisplayEGL
         bool initialize(int32_t width, int32_t height);
         void reset();
         bool resize(int32_t width, int32_t height);
-        FramebufferGL *framebufferGL(const gl::FramebufferState &state);
+        FramebufferGL *framebufferGL(const gl::Context *context, const gl::FramebufferState &state);
         void present();
         uint32_t getDRMFB();
         void bindTexImage();

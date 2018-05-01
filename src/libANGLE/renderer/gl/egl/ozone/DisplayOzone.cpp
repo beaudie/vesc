@@ -305,12 +305,10 @@ uint32_t DisplayOzone::Buffer::getDRMFB()
     return mDRMFB;
 }
 
-FramebufferGL *DisplayOzone::Buffer::framebufferGL(const gl::FramebufferState &state)
+FramebufferGL *DisplayOzone::Buffer::framebufferGL(const gl::Context *context,
+                                                   const gl::FramebufferState &state)
 {
-    return new FramebufferGL(
-        mGLFB, state, mDisplay->mFunctionsGL, mDisplay->getRenderer()->getWorkarounds(),
-        mDisplay->getRenderer()->getBlitter(), mDisplay->getRenderer()->getMultiviewClearer(),
-        mDisplay->getRenderer()->getStateManager());
+    return new FramebufferGL(state, mGLFB, true);
 }
 
 void DisplayOzone::Buffer::present()
