@@ -144,7 +144,6 @@ class Framebuffer final : public angle::ObserverInterface, public LabeledObject
 
     ~Framebuffer() override;
     void onDestroy(const Context *context);
-    void destroyDefault(const egl::Display *display);
 
     void setLabel(const std::string &label) override;
     const std::string &getLabel() const override;
@@ -216,7 +215,7 @@ class Framebuffer final : public angle::ObserverInterface, public LabeledObject
     // This method calls checkStatus.
     int getSamples(const Context *context);
 
-    Error getSamplePosition(size_t index, GLfloat *xy) const;
+    Error getSamplePosition(const Context *context, size_t index, GLfloat *xy) const;
 
     GLint getDefaultWidth() const;
     GLint getDefaultHeight() const;
