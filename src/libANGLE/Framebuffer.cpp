@@ -700,11 +700,6 @@ void Framebuffer::onDestroy(const Context *context)
     mImpl->destroy(context);
 }
 
-void Framebuffer::destroyDefault(const egl::Display *display)
-{
-    mImpl->destroyDefault(display);
-}
-
 void Framebuffer::setLabel(const std::string &label)
 {
     mState.mLabel = label;
@@ -1458,9 +1453,9 @@ int Framebuffer::getCachedSamples(const Context *context)
     return 0;
 }
 
-Error Framebuffer::getSamplePosition(size_t index, GLfloat *xy) const
+Error Framebuffer::getSamplePosition(const Context *context, size_t index, GLfloat *xy) const
 {
-    ANGLE_TRY(mImpl->getSamplePosition(index, xy));
+    ANGLE_TRY(mImpl->getSamplePosition(context, index, xy));
     return NoError();
 }
 

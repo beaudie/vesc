@@ -85,13 +85,6 @@ void FramebufferVk::destroy(const gl::Context *context)
     renderer->releaseResource(*this, &mMaskedClearUniformBuffer.memory);
 }
 
-void FramebufferVk::destroyDefault(const egl::Display *display)
-{
-    VkDevice device = vk::GetImpl(display)->getRenderer()->getDevice();
-
-    mFramebuffer.destroy(device);
-}
-
 gl::Error FramebufferVk::discard(const gl::Context *context,
                                  size_t count,
                                  const GLenum *attachments)
@@ -715,7 +708,9 @@ gl::Error FramebufferVk::clearWithDraw(ContextVk *contextVk, VkColorComponentFla
     return gl::NoError();
 }
 
-gl::Error FramebufferVk::getSamplePosition(size_t index, GLfloat *xy) const
+gl::Error FramebufferVk::getSamplePosition(const gl::Context *context,
+                                           size_t index,
+                                           GLfloat *xy) const
 {
     UNIMPLEMENTED();
     return gl::InternalError() << "getSamplePosition is unimplemented.";
