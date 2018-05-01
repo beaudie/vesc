@@ -26,7 +26,7 @@ class D3DTextureSurfaceWGL : public SurfaceWGL
 {
   public:
     D3DTextureSurfaceWGL(const egl::SurfaceState &state,
-                         RendererGL *renderer,
+                         StateManagerGL *stateManager,
                          EGLenum buftype,
                          EGLClientBuffer clientBuffer,
                          DisplayWGL *display,
@@ -71,13 +71,10 @@ class D3DTextureSurfaceWGL : public SurfaceWGL
     EGLenum mBuftype;
     EGLClientBuffer mClientBuffer;
 
-    RendererGL *mRenderer;
-
     ID3D11Device *mDisplayD3D11Device;
 
     DisplayWGL *mDisplay;
     StateManagerGL *mStateManager;
-    const WorkaroundsGL &mWorkarounds;
     const FunctionsGL *mFunctionsGL;
     const FunctionsWGL *mFunctionsWGL;
 
