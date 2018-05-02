@@ -69,6 +69,10 @@ supported_extensions = sorted(angle_extensions + gles1_extensions + [
     "GL_OES_vertex_array_object",
 ])
 
+# The EGL_ANGLE_explicit_context extension is generated differently from other extensions.
+# Toggle generation here.
+support_EGL_ANGLE_explicit_context = True
+
 # This is a list of exceptions for entry points which don't want to have
 # the EVENT macro. This is required for some debug marker entry points.
 no_event_marker_exceptions_list = sorted([
@@ -170,14 +174,15 @@ EXPORTS
 """
 
 template_entry_point_decl = """ANGLE_EXPORT {return_type}GL_APIENTRY {name}({params});"""
+template_entry_point_decl = """ANGLE_EXPORT {return_type}GL_APIENTRY {name}{explicit_context_suffix}({explicit_context_param}{explicit_context_comma}{params});"""
 
-template_entry_point_def = """{return_type}GL_APIENTRY {name}({params})
+template_entry_point_def = """{return_type}GL_APIENTRY {name}{explicit_context_suffix}({explicit_context_param}{explicit_context_comma}{params})
 {{
     {event_comment}EVENT("({format_params})"{comma_if_needed}{pass_params});
 
-    Context *context = {context_getter}();
+    Context *context = {context_getter};
     if (context)
-    {{{packed_gl_enum_conversions}
+    {{{assert_explicit_context}{packed_gl_enum_conversions}
         context->gatherParams<EntryPoint::{name}>({internal_params});
 
         if (context->skipValidation() || Validate{name}({validate_params}))
@@ -208,13 +213,13 @@ context_gles_header = """// GENERATED FILE - DO NOT EDIT.
 
 context_gles_decl = """    {return_type} {name_lower_no_suffix}({internal_params}); \\"""
 
-libgles_entry_point_def = """{return_type}GL_APIENTRY gl{name}({params})
+libgles_entry_point_def = """{return_type}GL_APIENTRY gl{name}{explicit_context_suffix}({explicit_context_param}{explicit_context_comma}{params})
 {{
-    return gl::{name}({internal_params});
+    return gl::{name}{explicit_context_suffix}({explicit_context_internal_param}{explicit_context_comma}{internal_params});
 }}
 """
 
-libgles_entry_point_export = """    {name}{spaces}@{ordinal}"""
+libgles_entry_point_export = """    {name}{explicit_context_suffix}{spaces}@{ordinal}"""
 
 def script_relative(path):
     return os.path.join(os.path.dirname(sys.argv[0]), path)
@@ -226,11 +231,16 @@ commands = root.find(".//commands[@namespace='GL']")
 with open(script_relative('entry_point_packed_gl_enums.json')) as f:
     cmd_packed_gl_enums = json.loads(f.read())
 
-def format_entry_point_decl(cmd_name, proto, params):
+def format_entry_point_decl(cmd_name, proto, params, is_explicit_context):
+    comma_if_needed = ", " if len(params) > 0 else ""
     return template_entry_point_decl.format(
         name = cmd_name[2:],
         return_type = proto[:-len(cmd_name)],
-        params = ", ".join(params))
+        params = ", ".join(params),
+        comma_if_needed = comma_if_needed,
+        explicit_context_suffix = "ContextANGLE" if is_explicit_context else "",
+        explicit_context_param = "GLeglContext ctx" if is_explicit_context else "",
+        explicit_context_comma = ", " if is_explicit_context and len(params) > 0 else "")
 
 def type_name_sep_index(param):
     space = param.rfind(" ")
@@ -298,17 +308,19 @@ def default_return_value(cmd_name, return_type):
         return ""
     return "GetDefaultReturnValue<EntryPoint::" + cmd_name[2:] + ", " + return_type + ">()"
 
-def get_context_getter_function(cmd_name):
+def get_context_getter_function(cmd_name, is_explicit_context):
     if cmd_name == "glGetError":
-        return "GetGlobalContext"
+        return "GetGlobalContext()"
+    elif is_explicit_context:
+        return "static_cast<gl::Context *>(ctx)"
     else:
-        return "GetValidGlobalContext"
+        return "GetValidGlobalContext()"
 
 template_event_comment = """// Don't run an EVENT() macro on the EXT_debug_marker entry points.
     // It can interfere with the debug events being set by the caller.
     // """
 
-def format_entry_point_def(cmd_name, proto, params):
+def format_entry_point_def(cmd_name, proto, params, is_explicit_context):
     packed_gl_enums = cmd_packed_gl_enums.get(cmd_name, {})
     internal_params = [just_the_name_packed(param, packed_gl_enums) for param in params]
     packed_gl_enum_conversions = []
@@ -344,8 +356,12 @@ def format_entry_point_def(cmd_name, proto, params):
         format_params = ", ".join(format_params),
         return_if_needed = "" if default_return == "" else "return ",
         default_return_if_needed = "" if default_return == "" else "\n    return " + default_return + ";\n",
-        context_getter = get_context_getter_function(cmd_name),
-        event_comment = event_comment)
+        context_getter = get_context_getter_function(cmd_name, is_explicit_context),
+        event_comment = event_comment,
+        explicit_context_suffix = "ContextANGLE" if is_explicit_context else "",
+        explicit_context_param = "GLeglContext ctx" if is_explicit_context else "",
+        explicit_context_comma = ", " if is_explicit_context and len(params) > 0 else "",
+        assert_explicit_context = "\nASSERT(context->hasBeenCurrent());" if is_explicit_context else "")
 
 def format_context_gles_decl(cmd_name, proto, params):
     packed_gl_enums = cmd_packed_gl_enums.get(cmd_name, {})
@@ -364,7 +380,7 @@ def format_context_gles_decl(cmd_name, proto, params):
         name_lower_no_suffix = name_lower_no_suffix,
         internal_params = internal_params)
 
-def format_libgles_entry_point_def(cmd_name, proto, params):
+def format_libgles_entry_point_def(cmd_name, proto, params, is_explicit_context):
     internal_params = [just_the_name(param) for param in params]
     return_type = proto[:-len(cmd_name)]
 
@@ -372,20 +388,23 @@ def format_libgles_entry_point_def(cmd_name, proto, params):
         name = cmd_name[2:],
         return_type = return_type,
         params = ", ".join(params),
-        internal_params = ", ".join(internal_params)
-    )
+        internal_params = ", ".join(internal_params),
+        explicit_context_suffix = "ContextANGLE" if is_explicit_context else "",
+        explicit_context_param = "GLeglContext ctx" if is_explicit_context else "",
+        explicit_context_comma = ", " if is_explicit_context and len(params) > 0 else "",
+        explicit_context_internal_param = "ctx" if is_explicit_context else "")
 
-def format_libgles_entry_point_export(cmd_name, ordinal):
+def format_libgles_entry_point_export(cmd_name, ordinal, is_explicit_context):
     return libgles_entry_point_export.format(
         name = cmd_name,
         ordinal = ordinal,
-        spaces = " "*(50 - len(cmd_name))
-    )
+        spaces = " "*(50 - len(cmd_name)),
+        explicit_context_suffix = "ContextANGLE" if is_explicit_context else "")
 
 def path_to(folder, file):
     return os.path.join(script_relative(".."), "src", folder, file)
 
-def get_entry_points(all_commands, gles_commands, ordinal):
+def get_entry_points(all_commands, gles_commands, ordinal, is_explicit_context):
     decls = []
     defs = []
     export_defs = []
@@ -400,12 +419,11 @@ def get_entry_points(all_commands, gles_commands, ordinal):
 
         param_text = ["".join(param.itertext()) for param in command.findall('param')]
         proto_text = "".join(proto.itertext())
+        decls.append(format_entry_point_decl(cmd_name, proto_text, param_text, is_explicit_context))
+        defs.append(format_entry_point_def(cmd_name, proto_text, param_text, is_explicit_context))
 
-        decls.append(format_entry_point_decl(cmd_name, proto_text, param_text))
-        defs.append(format_entry_point_def(cmd_name, proto_text, param_text))
-
-        export_defs.append(format_libgles_entry_point_def(cmd_name, proto_text, param_text))
-        exports.append(format_libgles_entry_point_export(cmd_name, ordinal))
+        export_defs.append(format_libgles_entry_point_def(cmd_name, proto_text, param_text, is_explicit_context))
+        exports.append(format_libgles_entry_point_export(cmd_name, ordinal, is_explicit_context))
         ordinal = ordinal + 1
 
     return decls, defs, export_defs, exports
@@ -557,7 +575,7 @@ for major_version, minor_version in [[2, 0], [3, 0], [3, 1], [1, 0]]:
     all_cmd_names += gles_commands
 
     decls, defs, libgles_defs, libgles_exports = get_entry_points(
-        all_commands, gles_commands, ordinal_start)
+        all_commands, gles_commands, ordinal_start, False)
 
     # Increment the ordinal before inserting the version comment
     ordinal_start += len(libgles_exports)
@@ -627,7 +645,6 @@ for extension in root.findall("extensions/extension"):
     ext_data[extension_name] = sorted(ext_cmd_names)
 
 for extension_name, ext_cmd_names in sorted(ext_data.iteritems()):
-
     # Detect and filter duplicate extensions.
     dupes = []
     for ext_cmd in ext_cmd_names:
@@ -640,7 +657,7 @@ for extension_name, ext_cmd_names in sorted(ext_data.iteritems()):
     all_cmd_names += ext_cmd_names
 
     decls, defs, libgles_defs, libgles_exports = get_entry_points(
-        all_commands, ext_cmd_names, ordinal_start)
+        all_commands, ext_cmd_names, ordinal_start, False)
 
     # Avoid writing out entry points defined by a prior extension.
     for dupe in dupes:
@@ -666,6 +683,22 @@ for extension_name, ext_cmd_names in sorted(ext_data.iteritems()):
     if extension_name in gles1_extensions:
         if extension_name not in gles1_no_context_decl_extensions:
             gles1decls['exts'][extension_name] = get_gles1_decls(all_commands, ext_cmd_names)
+
+# Special handling for EGL_ANGLE_explicit_context extension
+if(support_EGL_ANGLE_explicit_context):
+    comment = "\n// EGL_ANGLE_explicit_context"
+    extension_defs.append(comment)
+    extension_decls.append(comment)
+    libgles_defs.insert(0, comment)
+    libgles_exports.insert(0, "\n    ; EGL_ANGLE_explicit_context")
+    # Get the explicit context entry points
+    decls, defs, libgles_defs, libgles_exports = get_entry_points(all_commands, all_cmd_names, ordinal_start, True)
+
+    # Append the explicit context entry points
+    extension_decls += decls
+    extension_defs += defs
+    libgles_ep_defs += libgles_defs
+    libgles_ep_exports += libgles_exports
 
 header_includes = template_header_includes.format(
     major="", minor="")

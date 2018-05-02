@@ -380,6 +380,9 @@ struct Extensions
     bool pointSizeArray;
     // GL_OES_texture_cube_map
     bool textureCubeMap;
+
+    // EGL_ANGLE_explicit_context
+    bool explicitContext;
 };
 
 struct ExtensionInfo
