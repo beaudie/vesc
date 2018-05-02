@@ -12,6 +12,12 @@
 
 // clang-format off
 
+#ifndef GL_ANGLE_explicit_context_GLES1
+#define GL_ANGLE_explicit_context_GLES1
+typedef void *GLeglContext;
+#include "glext_explicit_context_autogen.inc"
+#endif /* GL_ANGLE_explicit_context_GLES1 */
+
 // clang-format on
 
 #endif  // INCLUDE_GLES_GLEXT_ANGLE_H_
