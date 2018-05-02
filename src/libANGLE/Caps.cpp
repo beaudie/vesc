@@ -238,7 +238,8 @@ Extensions::Extensions()
       textureRectangle(false),
       geometryShader(false),
       pointSizeArray(false),
-      textureCubeMap(false)
+      textureCubeMap(false),
+      explicitContext(false)
 {
 }
 
@@ -832,6 +833,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_ANGLE_program_cache_control"] = esOnlyExtension(&Extensions::programCacheControl);
         map["GL_ANGLE_texture_rectangle"] = enableableExtension(&Extensions::textureRectangle);
         map["GL_EXT_geometry_shader"] = enableableExtension(&Extensions::geometryShader);
+        map["EGL_ANGLE_explicit_context"] = enableableExtension(&Extensions::explicitContext);
         // GLES1 extensinos
         map["GL_OES_point_size_array"] = enableableExtension(&Extensions::pointSizeArray);
         map["GL_OES_texture_cube_map"] = enableableExtension(&Extensions::textureCubeMap);

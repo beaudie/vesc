@@ -12,6 +12,8 @@
 
 // clang-format off
 
+#include "glext_explicit_context_autogen.inc"
+
 // clang-format on
 
 #endif  // INCLUDE_GLES_GLEXT_ANGLE_H_
