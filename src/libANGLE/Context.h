@@ -1445,6 +1445,8 @@ class Context final : angle::NonCopyable
 
     bool usingDisplayTextureShareGroup() const;
 
+    bool hasBeenCurrent() const { return mHasBeenCurrent; }
+
     // Hack for the special WebGL 1 "DEPTH_STENCIL" internal format.
     GLenum getConvertedRenderbufferFormat(GLenum internalformat) const;
 
