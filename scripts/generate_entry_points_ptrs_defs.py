@@ -228,7 +228,7 @@ template_glext_explicit_context_inl = """// GENERATED FILE - DO NOT EDIT.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// gl{version}ext_explicit_context.inl: 
+// gl{major}{minor}ext_explicit_context.inl: 
 //   Function declarations for the EGL_ANGLE_explicit_context extension
 
 {ifdefine}
@@ -383,7 +383,7 @@ def format_entry_point_def(cmd_name, proto, params, is_explicit_context):
         explicit_context_suffix = "ContextANGLE" if is_explicit_context else "",
         explicit_context_param = "GLeglContext ctx" if is_explicit_context else "",
         explicit_context_comma = ", " if is_explicit_context and len(params) > 0 else "",
-        assert_explicit_context = "\nASSERT(context == GetValidGlobalContext());" if is_explicit_context else "")
+        assert_explicit_context = "\nASSERT(context->GetValidGlobalContext();" if is_explicit_context else "")
 
 def format_context_gles_decl(cmd_name, proto, params):
     packed_gl_enums = cmd_packed_gl_enums.get(cmd_name, {})
@@ -493,28 +493,6 @@ def get_gles1_decls(all_commands, gles_commands):
 
     return decls
 
-def get_glext_decls(all_commands, gles_commands, version):
-    glext_ptrs = []
-    glext_protos = []
-    is_gles1 = False
-
-    if(version == ""):
-        is_gles1 = True
-
-    for command in all_commands:
-        proto = command.find('proto')
-        cmd_name = proto.find('name').text
-
-        if cmd_name not in gles_commands:
-            continue
-
-        param_text = ["".join(param.itertext()) for param in command.findall('param')]
-        proto_text = "".join(proto.itertext())
-        glext_ptrs.append(format_glext_ptr(cmd_name, proto_text, param_text, True))
-        glext_protos.append(format_glext_proto(cmd_name, proto_text, param_text, True, is_gles1))
-
-    return glext_ptrs, glext_protos
-
 def write_file(annotation, comment, template, entry_points, suffix, includes, file):
 
     content = template.format(
@@ -561,6 +539,32 @@ def write_export_files(entry_points, includes, exports):
         out.write(content)
         out.close()
 
+def write_glext_explicit_context_file(major, minor, ptrs, protos):
+    if(major == 1 and minor == 0):
+        ifdefine = "#ifndef EGL_ANGLE_explicit_context\n#define EGL_ANGLE_explicit_context"
+    else:
+        ifdefine = "#ifdef EGL_ANGLE_explicit_context"
+
+    major_if_not_one = major if major != 1 else ""
+    minor_if_not_zero = minor if minor != 0 else ""
+
+    content = template_glext_explicit_context_inl.format(
+        script_name = os.path.basename(sys.argv[0]),
+        data_source_name = "gl.xml and gl_angle_ext.xml",
+        year = date.today().year,
+        major = major_if_not_one,
+        minor = minor_if_not_zero,
+        function_pointers = ptrs,
+        function_prototypes = protos,
+        ifdefine = ifdefine)
+
+    path = path_to("..\include\GLES{}".format(major_if_not_one, minor_if_not_zero), "gl{}{}ext_explicit_context.inl".format(
+        major_if_not_one, minor_if_not_zero))
+
+    with open(path, "w") as out:
+        out.write(content)
+        out.close()
+
 def write_context_api_decls(annotation, template, decls):
 
     interface_lines = []
@@ -586,30 +590,6 @@ def write_context_api_decls(annotation, template, decls):
         out.write(content)
         out.close()
 
-def write_glext_explicit_context_inl(version, ptrs, protos):
-    if(version == ""):
-        ifdefine = "#ifndef EGL_ANGLE_explicit_context\n#define EGL_ANGLE_explicit_context"
-    else:
-        ifdefine = "#ifdef EGL_ANGLE_explicit_context"
-
-    folder_version = version if version != "31" else "3" 
-
-    content = template_glext_explicit_context_inl.format(
-        script_name = os.path.basename(sys.argv[0]),
-        data_source_name = "gl.xml and gl_angle_ext.xml",
-        year = date.today().year,
-        version = version,
-        function_pointers = ptrs,
-        function_prototypes = protos,
-        ifdefine = ifdefine)
-
-    path = path_to("..\include\GLES{}".format(folder_version), "gl{}ext_explicit_context.inl".format(
-        version))
-
-    with open(path, "w") as out:
-        out.write(content)
-        out.close()
-
 def append_angle_extensions(base_root):
     angle_ext_tree = etree.parse(script_relative('gl_angle_ext.xml'))
     angle_ext_root = angle_ext_tree.getroot()
@@ -623,32 +603,49 @@ def append_angle_extensions(base_root):
         insertion_point.extend(extension)
     return base_root
 
-class GLCommandNames:
-    def __init__(self):
-        self.command_names = {}
+def get_glext_decls(all_commands, gles_commands, version):
+    glext_ptrs = []
+    glext_protos = []
+    is_gles1 = False
 
-    def get_commands(self, version):
-        return self.command_names[version]
+    if(version is "1"):
+        is_gles1 = True
 
-    def get_all_commands(self):
-        cmd_names = []
-        # Combine all the version lists into a single list
-        for version, version_cmd_names in sorted(self.command_names.iteritems()):
-            cmd_names += version_cmd_names
+    for command in all_commands:
+        proto = command.find('proto')
+        cmd_name = proto.find('name').text
 
-        return cmd_names
+        if cmd_name not in gles_commands:
+            continue
 
-    def add_commands(self, version, commands):
-        # Add key if it doesn't exist
-        if version not in self.command_names:
-            self.command_names[version] = []
-        # Add the commands that aren't duplicates
-        self.command_names[version] += commands
+        param_text = ["".join(param.itertext()) for param in command.findall('param')]
+        proto_text = "".join(proto.itertext())
+        glext_ptrs.append(format_glext_ptr(cmd_name, proto_text, param_text, True))
+        glext_protos.append(format_glext_proto(cmd_name, proto_text, param_text, True, is_gles1))
+
+    return glext_ptrs, glext_protos
 
 root = append_angle_extensions(root)
 
 all_commands = root.findall('commands/command')
-all_cmd_names = GLCommandNames()
+
+class GLCommandNames:
+    def __init__(self):
+        self.all_cmd_names = {}
+
+    def get_commands(version):
+        return all_cmd_names[version]
+
+    def get_all_commands():
+        # Combine all the version lists into a single list
+
+
+    def add_commands(version, commands):
+        # Remove duplicates
+
+        # Add key if it doesn't exist
+
+        # Add the commands that aren't duplicates
 
 template_header_includes = """#include <GLES{major}/gl{major}{minor}.h>
 #include <export.h>"""
@@ -685,9 +682,9 @@ for major_version, minor_version in [[2, 0], [3, 0], [3, 1], [1, 0]]:
     gles_commands = [cmd.attrib['name'] for cmd in root.findall(gles_xpath)]
 
     # Remove commands that have already been processed
-    gles_commands = [cmd for cmd in gles_commands if cmd not in all_cmd_names.get_all_commands()]
+    gles_commands = [cmd for cmd in gles_commands if cmd not in all_cmd_names]
 
-    all_cmd_names.add_commands(annotation, gles_commands)
+    all_cmd_names[(major_version, minor_version)] += gles_commands
 
     decls, defs, libgles_defs, libgles_exports = get_entry_points(
         all_commands, gles_commands, ordinal_start, False)
@@ -713,7 +710,7 @@ for major_version, minor_version in [[2, 0], [3, 0], [3, 1], [1, 0]]:
         header_includes += "\n#include \"common/platform.h\"\n"
 
     source_includes = template_sources_includes.format(
-        annotation.lower(), major_version, minor_if_not_zero)
+        annotation.lower(), major_version,minor_if_not_zero)
 
     write_file(annotation, comment, template_entry_point_header,
                "\n".join(decls), "h", header_includes, "gl.xml")
@@ -760,20 +757,19 @@ for extension in root.findall("extensions/extension"):
     ext_data[extension_name] = sorted(ext_cmd_names)
 
 for extension_name, ext_cmd_names in sorted(ext_data.iteritems()):
-    
     # Detect and filter duplicate extensions.
     dupes = []
     for ext_cmd in ext_cmd_names:
-        if ext_cmd in all_cmd_names.get_all_commands():
+        if ext_cmd in all_cmd_names.values():
             dupes.append(ext_cmd)
 
     for dupe in dupes:
         ext_cmd_names.remove(dupe)
 
     if(extension_name in gles1_extensions):
-        all_cmd_names.add_commands("glext", ext_cmd_names)
+        all_cmd_names["gl1ext"] += ext_cmd_names
     else:
-        all_cmd_names.add_commands("gl2ext", ext_cmd_names)
+        all_cmd_names["gl2ext"] += ext_cmd_names
 
     decls, defs, libgles_defs, libgles_exports = get_entry_points(
         all_commands, ext_cmd_names, ordinal_start, False)
@@ -803,6 +799,12 @@ for extension_name, ext_cmd_names in sorted(ext_data.iteritems()):
         if extension_name not in gles1_no_context_decl_extensions:
             gles1decls['exts'][extension_name] = get_gles1_decls(all_commands, ext_cmd_names)
 
+# Load all commands into a single list
+#for version,
+all_command_names = []
+for version, version_cmd_names in sorted(all_cmd_names.iteritems()):
+    all_command_names += version_cmd_names
+
 # Special handling for EGL_ANGLE_explicit_context extension
 if(support_EGL_ANGLE_explicit_context):
     comment = "\n// EGL_ANGLE_explicit_context"
@@ -813,7 +815,7 @@ if(support_EGL_ANGLE_explicit_context):
 
     # Get the explicit context entry points
     decls, defs, libgles_defs, libgles_exports = get_entry_points(all_commands, 
-        all_cmd_names.get_all_commands(), ordinal_start, True)
+        all_command_names, ordinal_start, True)
 
     # Append the explicit context entry points
     extension_decls += decls
@@ -821,27 +823,24 @@ if(support_EGL_ANGLE_explicit_context):
     libgles_ep_defs += libgles_defs
     libgles_ep_exports += libgles_exports
 
-    # Generate .inl files for extension function pointers and declarations
+    # Write the extension's function pointers and prototypes in a .inl file
     for major, minor in [[2, 0], [3, 0], [3, 1], [1, 0]]:
-        annotation = "{}_{}".format(major, minor)
-        
-        major_if_not_one = major_version if major_version != 1 else ""
-        minor_if_not_zero = minor_version if minor_version != 0 else ""
-        version = "{}{}".format(major_if_not_one, minor_if_not_zero)
-
-        glext_ptrs, glext_protos = get_glext_decls(all_commands, all_cmd_names.get_commands(annotation), version)
+        glext_ptrs, glext_protos = get_glext_decls(all_commands, all_cmd_names[(major, minor)], major, minor)
 
         glext_ext_ptrs = []
         glext_ext_protos = []
 
         # Append extensions to gl1 and gl2
-        if(annotation is "1_0"): # "" is 1.0
-            glext_ext_ptrs, glext_ext_protos = get_glext_decls(all_commands, all_cmd_names.get_commands("glext"), version)
-        elif(annotation is "2_0"):
-            glext_ext_ptrs, glext_ext_protos = get_glext_decls(all_commands, all_cmd_names.get_commands("gl2ext"), version)
+        if(major == 1 and minor == 0):
+            glext_ext_ptrs, glext_ext_protos = get_glext_decls(all_commands, all_cmd_names["gl1ext"], major, minor)
+        elif(major == 2 and minor == 0):
+            glext_ext_ptrs, glext_ext_protos = get_glext_decls(all_commands, all_cmd_names["gl2ext"], major, minor)
 
-        write_glext_explicit_context_inl(version, "\n".join(glext_ptrs), "\n".join(glext_protos))
+        glext_ptrs += glext_ext_ptrs
+        glext_protos += glext_ext_protos
 
+        write_glext_explicit_context_file(major, minor, "\n".join(glext_ptrs), "\n".join(glext_protos))
+        
 header_includes = template_header_includes.format(
     major="", minor="")
 header_includes += """
@@ -868,7 +867,7 @@ write_file("ext", "extension", template_entry_point_source,
 
 write_context_api_decls("1_0", context_gles_header, gles1decls)
 
-sorted_cmd_names = ["Invalid"] + [cmd[2:] for cmd in sorted(all_cmd_names.get_all_commands())]
+sorted_cmd_names = ["Invalid"] + [cmd[2:] for cmd in sorted(all_command_names)]
 
 entry_points_enum = template_entry_points_enum_header.format(
     script_name = os.path.basename(sys.argv[0]),
