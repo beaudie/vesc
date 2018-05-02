@@ -3071,6 +3071,8 @@ Extensions Context::generateSupportedExtensions(const egl::DisplayExtensions &di
     // Enable the cache control query unconditionally.
     supportedExtensions.programCacheControl = true;
 
+    supportedExtensions.explicitContext = true;
+
     return supportedExtensions;
 }
 
