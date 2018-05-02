@@ -59,6 +59,8 @@ for description, functions in json_data.iteritems():
     for function in functions:
         if function.startswith("gl"):
             all_functions[function] = "gl::" + function[2:]
+            # Special handling for EGL_ANGLE_explicit_context extension
+            all_functions[function + "ContextANGLE"] = "gl::" + function[2:] + "ContextANGLE"
         elif function.startswith("egl"):
             all_functions[function] = "egl::" + function[3:]
         else:
@@ -75,4 +77,4 @@ with open(out_file_name, 'wb') as out_file:
         num_procs = len(proc_data))
     out_file.write(output_cpp)
     out_file.close()
-
+    
