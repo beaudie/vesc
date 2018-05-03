@@ -8,6 +8,7 @@
 #ifndef LIBANGLE_RENDERER_CONTEXTD3D_H_
 #define LIBANGLE_RENDERER_CONTEXTD3D_H_
 
+#include <stack>
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 
