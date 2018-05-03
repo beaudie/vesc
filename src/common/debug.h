@@ -23,6 +23,9 @@
 #include <android/log.h>
 #endif
 
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+
 #if !defined(TRACE_OUTPUT_FILE)
 #define TRACE_OUTPUT_FILE "angle_debug.txt"
 #endif
@@ -210,6 +213,9 @@ std::ostream &FmtHex(std::ostream &os, T value)
 #define ANGLE_LOG_STREAM(severity) COMPACT_ANGLE_LOG_##severity.stream()
 
 #define ANGLE_LOG(severity) ANGLE_LAZY_STREAM(ANGLE_LOG_STREAM(severity), ANGLE_LOG_IS_ON(severity))
+
+std::string decodeEglAttr(EGLint attr);
+std::string dumpEglAttrs(const EGLint *attrList);
 
 }  // namespace gl
 
