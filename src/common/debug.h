@@ -33,6 +33,9 @@ class ScopedPerfEventHelper : angle::NonCopyable
   public:
     ScopedPerfEventHelper(const char* format, ...);
     ~ScopedPerfEventHelper();
+
+  private:
+    std::vector<char> mEventName;
 };
 
 using LogSeverity = int;
