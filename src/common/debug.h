@@ -31,8 +31,8 @@ namespace gl
 class ScopedPerfEventHelper : angle::NonCopyable
 {
   public:
-    ANGLE_FORMAT_PRINTF(2, 3)
-    ScopedPerfEventHelper(const char *format, ...);
+    ANGLE_FORMAT_PRINTF(3, 4)
+    ScopedPerfEventHelper(const char *format, const char *function, ...);
     ~ScopedPerfEventHelper();
 };
 
@@ -72,16 +72,16 @@ class LogMessage : angle::NonCopyable
     std::ostringstream mStream;
 };
 
-// Wraps the D3D9/D3D11 debug annotation functions.
+// Wraps the API/Platform-specific debug annotation functions.
 // Also handles redirecting logging destination.
 class DebugAnnotator : angle::NonCopyable
 {
   public:
     DebugAnnotator(){};
     virtual ~DebugAnnotator() { };
-    virtual void beginEvent(const wchar_t *eventName) = 0;
+    virtual void beginEvent(const char *eventName) = 0;
     virtual void endEvent() = 0;
-    virtual void setMarker(const wchar_t *markerName) = 0;
+    virtual void setMarker(const char *markerName) = 0;
     virtual bool getStatus() = 0;
     // Log Message Handler that gets passed every log message,
     // when debug annotations are initialized,

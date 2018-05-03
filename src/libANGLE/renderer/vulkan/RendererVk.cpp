@@ -1017,6 +1017,7 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
                                       const VkSubmitInfo &submitInfo,
                                       vk::CommandBuffer &&commandBuffer)
 {
+    TRACE_EVENT0("gpu.angle", "RendererVk::submitFrame");
     VkFenceCreateInfo fenceInfo = {};
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceInfo.flags = 0;
