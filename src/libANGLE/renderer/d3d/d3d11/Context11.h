@@ -177,6 +177,7 @@ class Context11 : public ContextD3D, public MultisampleTextureInitializer
 
     Renderer11 *mRenderer;
     IncompleteTextureSet mIncompleteTextures;
+    std::stack<std::string> mMarkerStack;
 };
 }  // namespace rx
 
