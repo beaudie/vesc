@@ -35,13 +35,14 @@ DebugAnnotator11::~DebugAnnotator11()
     }
 }
 
-void DebugAnnotator11::beginEvent(const wchar_t *eventName)
+void DebugAnnotator11::beginEvent(const char *eventName)
 {
     initializeDevice();
 
     if (mUserDefinedAnnotation != nullptr)
     {
-        mUserDefinedAnnotation->BeginEvent(eventName);
+        mbstowcs(mWCharName, eventName, maxNameLength);
+        mUserDefinedAnnotation->BeginEvent(mWCharName);
     }
 }
 
@@ -55,13 +56,14 @@ void DebugAnnotator11::endEvent()
     }
 }
 
-void DebugAnnotator11::setMarker(const wchar_t *markerName)
+void DebugAnnotator11::setMarker(const char *markerName)
 {
     initializeDevice();
 
     if (mUserDefinedAnnotation != nullptr)
     {
-        mUserDefinedAnnotation->SetMarker(markerName);
+        mbstowcs(mWCharName, markerName, maxNameLength);
+        mUserDefinedAnnotation->SetMarker(mWCharName);
     }
 }
 
