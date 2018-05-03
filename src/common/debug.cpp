@@ -20,8 +20,8 @@
 #include <android/log.h>
 #endif
 
-#include "common/angleutils.h"
 #include "common/Optional.h"
+#include "common/angleutils.h"
 
 namespace gl
 {
@@ -98,8 +98,9 @@ void UninitializeDebugAnnotations()
 
 ScopedPerfEventHelper::ScopedPerfEventHelper(const char *format, ...)
 {
+    bool dbgTrace = DebugAnnotationsActive();
 #if !defined(ANGLE_ENABLE_DEBUG_TRACE)
-    if (!DebugAnnotationsActive())
+    if (!dbgTrace)
     {
         return;
     }
@@ -110,7 +111,13 @@ ScopedPerfEventHelper::ScopedPerfEventHelper(const char *format, ...)
     std::vector<char> buffer(512);
     size_t len = FormatStringIntoVector(format, vararg, buffer);
     ANGLE_LOG(EVENT) << std::string(&buffer[0], len);
+    // 2nd arg is always function name
+    const char *funcName = va_arg(vararg, const char *);
     va_end(vararg);
+    if (dbgTrace)
+    {
+        g_debugAnnotator->beginEvent(funcName);
+    }
 }
 
 ScopedPerfEventHelper::~ScopedPerfEventHelper()
@@ -154,15 +161,14 @@ void Trace(LogSeverity severity, const char *message)
 
     if (DebugAnnotationsActive())
     {
-        std::wstring formattedWideMessage(str.begin(), str.end());
 
         switch (severity)
         {
             case LOG_EVENT:
-                g_debugAnnotator->beginEvent(formattedWideMessage.c_str());
+                g_debugAnnotator->beginEvent(message);
                 break;
             default:
-                g_debugAnnotator->setMarker(formattedWideMessage.c_str());
+                g_debugAnnotator->setMarker(message);
                 break;
         }
     }
