@@ -32,6 +32,8 @@
 #include "libANGLE/renderer/vulkan/TransformFeedbackVk.h"
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
 
+#include "third_party/trace_event/trace_event.h"
+
 namespace rx
 {
 
@@ -122,6 +124,7 @@ ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
       mViewport{},
       mScissor{}
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
     memset(&mClearDepthStencilValue, 0, sizeof(mClearDepthStencilValue));
 
@@ -189,6 +192,7 @@ gl::Error ContextVk::getIncompleteTexture(const gl::Context *context,
 
 angle::Result ContextVk::initialize()
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     // Note that this may reserve more sets than strictly necessary for a particular layout.
     ANGLE_TRY(mDynamicDescriptorPools[kUniformsDescriptorSetIndex].init(
         this, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, GetUniformBufferDescriptorCount()));
@@ -274,6 +278,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
                                    DirtyBits dirtyBitMask,
                                    vk::CommandBuffer **commandBufferOut)
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     // Set any dirty bits that depend on draw call parameters or other objects.
     if (mode != mCurrentDrawMode)
     {
@@ -322,6 +327,7 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
                                           const void *indices,
                                           vk::CommandBuffer **commandBufferOut)
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     if (indexType != mCurrentDrawElementsType)
     {
         mDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
@@ -361,6 +367,7 @@ angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
                                            const void *indices,
                                            vk::CommandBuffer **commandBufferOut)
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     ANGLE_TRY(mVertexArray->handleLineLoop(this, firstVertex, vertexOrIndexCount, indexTypeOrNone,
                                            indices));
     mDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
@@ -491,6 +498,7 @@ angle::Result ContextVk::drawArrays(const gl::Context *context,
                                     GLint first,
                                     GLsizei count)
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     vk::CommandBuffer *commandBuffer = nullptr;
     uint32_t clampedVertexCount      = gl::GetClampedVertexCount<uint32_t>(count);
 
@@ -525,6 +533,7 @@ angle::Result ContextVk::drawElements(const gl::Context *context,
                                       GLenum type,
                                       const void *indices)
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     vk::CommandBuffer *commandBuffer = nullptr;
     if (mode == gl::PrimitiveMode::LineLoop)
     {
@@ -691,6 +700,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                    const gl::State::DirtyBits &dirtyBits,
                                    const gl::State::DirtyBits &bitMask)
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     if (dirtyBits.any())
     {
         invalidateVertexAndIndexBuffers();
