@@ -24,6 +24,36 @@
 #define TRACE_OUTPUT_FILE "angle_debug.txt"
 #endif
 
+#if defined(ANGLE_SYSTRACE_ENABLED)
+#include <trace.h>
+
+#define ATRACE_NAME(name) ScopedTrace ___tracer(name)
+
+// ATRACE_CALL is an ATRACE_NAME that uses the current function name.
+#define ATRACE_CALL() ATRACE_NAME(__FUNCTION__)
+
+class ScopedTrace
+{
+  public:
+    inline ScopedTrace(const char *name) : agl_str("AGL::")
+    {
+        agl_str += name;
+        ATrace_beginSection(agl_str.c_str());
+    }
+
+    inline ~ScopedTrace() { ATrace_endSection(); }
+
+  private:
+    std::string agl_str;
+};
+#else
+// no-op that forces ";" after macro
+#define ATRACE_CALL() \
+    do                \
+    {                 \
+    } while (0)
+#endif
+
 namespace gl
 {
 
@@ -211,7 +241,9 @@ std::ostream &FmtHexInt(std::ostream &os, T value)
 
 // A macro to log a performance event around a scope.
 #if defined(ANGLE_TRACE_ENABLED)
-#if defined(_MSC_VER)
+#if defined(ANGLE_SYSTRACE_ENABLED)
+#define EVENT(message, ...) ATRACE_CALL()
+#elif defined(_MSC_VER)
 #define EVENT(message, ...) gl::ScopedPerfEventHelper scopedPerfEventHelper ## __LINE__("%s" message "\n", __FUNCTION__, __VA_ARGS__);
 #else
 #define EVENT(message, ...) gl::ScopedPerfEventHelper scopedPerfEventHelper("%s" message "\n", __FUNCTION__, ##__VA_ARGS__);
@@ -255,11 +287,22 @@ std::ostream &FmtHexInt(std::ostream &os, T value)
                                           ANGLE_ASSERT_IMPL(expression)))
 #define UNREACHABLE_IS_NORETURN ANGLE_ASSERT_IMPL_IS_NORETURN
 #else
-#define ASSERT(condition) ANGLE_EAT_STREAM_PARAMETERS << !(condition)
+// These are just dummy values.
+#define COMPACT_ANGLE_LOG_EX_ASSERT(ClassName, ...) \
+    COMPACT_ANGLE_LOG_EX_EVENT(ClassName, ##__VA_ARGS__)
+#define COMPACT_ANGLE_LOG_ASSERT COMPACT_ANGLE_LOG_EVENT
+namespace gl
+{
+constexpr LogSeverity LOG_ASSERT = LOG_EVENT;
+}  // namespace gl
+
+#define ASSERT(condition)                                                     \
+    ANGLE_LAZY_STREAM(ANGLE_LOG_STREAM(ASSERT), false ? !(condition) : false) \
+        << "Check failed: " #condition ". "
 #define UNREACHABLE_IS_NORETURN 0
 #endif  // defined(ANGLE_ENABLE_ASSERTS)
 
-#define ANGLE_UNUSED_VARIABLE(variable) (static_cast<void>(variable))
+#define UNUSED_VARIABLE(variable) ((void)variable)
 
 // A macro to indicate unimplemented functionality
 #ifndef NOASSERT_UNIMPLEMENTED
