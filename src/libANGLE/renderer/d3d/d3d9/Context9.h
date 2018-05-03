@@ -162,6 +162,7 @@ class Context9 : public ContextD3D
   private:
     Renderer9 *mRenderer;
     IncompleteTextureSet mIncompleteTextures;
+    const char *mMarker;
 };
 
 }  // namespace rx
