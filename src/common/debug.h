@@ -34,6 +34,9 @@ class ScopedPerfEventHelper : angle::NonCopyable
     ANGLE_FORMAT_PRINTF(2, 3)
     ScopedPerfEventHelper(const char *format, ...);
     ~ScopedPerfEventHelper();
+
+  private:
+    std::vector<char> mEventName;
 };
 
 using LogSeverity = int;
