@@ -111,7 +111,7 @@ angle::Result ReadbackIndirectBuffer(const gl::Context *context,
 }  // anonymous namespace
 
 Context11::Context11(const gl::ContextState &state, Renderer11 *renderer)
-    : ContextD3D(state), mRenderer(renderer)
+    : ContextD3D(state), mRenderer(renderer), mMarker(nullptr)
 {
 }
 
@@ -402,25 +402,24 @@ std::string Context11::getRendererDescription() const
 
 void Context11::insertEventMarker(GLsizei length, const char *marker)
 {
-    auto optionalString = angle::WidenString(static_cast<size_t>(length), marker);
-    if (optionalString.valid())
-    {
-        mRenderer->getAnnotator()->setMarker(optionalString.value().data());
-    }
+    mRenderer->getAnnotator()->setMarker(marker);
 }
 
 void Context11::pushGroupMarker(GLsizei length, const char *marker)
 {
-    auto optionalString = angle::WidenString(static_cast<size_t>(length), marker);
-    if (optionalString.valid())
-    {
-        mRenderer->getAnnotator()->beginEvent(optionalString.value().data());
-    }
+    mRenderer->getAnnotator()->beginEvent(marker, marker);
+    mMarkerStack.push(std::string(marker));
 }
 
 void Context11::popGroupMarker()
 {
-    mRenderer->getAnnotator()->endEvent();
+    const char *marker = nullptr;
+    if (!mMarkerStack.empty())
+    {
+        marker = mMarkerStack.top().c_str();
+        mMarkerStack.pop();
+    }
+    mRenderer->getAnnotator()->endEvent(marker);
 }
 
 void Context11::pushDebugGroup(GLenum source, GLuint id, GLsizei length, const char *message)
