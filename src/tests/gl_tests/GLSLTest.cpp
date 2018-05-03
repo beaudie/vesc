@@ -2571,9 +2571,6 @@ TEST_P(GLSLTest_ES31, FindMSBAndFindLSBCornerCases)
 // Test that writing into a swizzled vector that is dynamically indexed succeeds.
 TEST_P(GLSLTest_ES3, WriteIntoDynamicIndexingOfSwizzledVector)
 {
-    // http://anglebug.com/1924
-    ANGLE_SKIP_TEST_IF(IsOpenGL());
-
     // The shader first assigns v.x to v.z (1.0)
     // Then v.y to v.y (2.0)
     // Then v.z to v.x (1.0)
