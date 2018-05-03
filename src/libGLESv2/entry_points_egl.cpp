@@ -211,6 +211,7 @@ EGLBoolean EGLAPIENTRY ChooseConfig(EGLDisplay dpy,
         "(EGLDisplay dpy = %p, const EGLint *attrib_list = %p, "
         "EGLConfig *configs = %p, EGLint config_size = %d, EGLint *num_config = %p)",
         dpy, attrib_list, configs, config_size, num_config);
+    gl::Trace(gl::LOG_WARN, gl::dumpEglAttrs(attrib_list).c_str());
     Thread *thread = GetCurrentThread();
 
     Display *display       = static_cast<Display *>(dpy);
@@ -246,6 +247,7 @@ EGLBoolean EGLAPIENTRY GetConfigAttrib(EGLDisplay dpy,
     Error error = ValidateGetConfigAttrib(display, configuration, attribute);
     if (error.isError())
     {
+        gl::Trace(gl::LOG_WARN, gl::decodeEglAttr(attribute).c_str());
         thread->setError(error);
         return EGL_FALSE;
     }
@@ -253,6 +255,10 @@ EGLBoolean EGLAPIENTRY GetConfigAttrib(EGLDisplay dpy,
     QueryConfigAttrib(configuration, attribute, value);
 
     thread->setError(NoError());
+    std::stringstream output;
+    output << ("EGL Attribute ") << gl::decodeEglAttr(attribute).c_str() << ": " << *value << " (0x"
+           << std::hex << *value << ")\n";
+    gl::Trace(gl::LOG_WARN, output.str().c_str());
     return EGL_TRUE;
 }
 
@@ -265,6 +271,7 @@ EGLSurface EGLAPIENTRY CreateWindowSurface(EGLDisplay dpy,
         "(EGLDisplay dpy = %p, EGLConfig config = %p, EGLNativeWindowType win = %p, "
         "const EGLint *attrib_list = %p)",
         dpy, config, win, attrib_list);
+    gl::Trace(gl::LOG_WARN, gl::dumpEglAttrs(attrib_list).c_str());
     Thread *thread = GetCurrentThread();
 
     Display *display        = static_cast<Display *>(dpy);
@@ -297,6 +304,7 @@ EGLSurface EGLAPIENTRY CreatePbufferSurface(EGLDisplay dpy,
         "(EGLDisplay dpy = %p, EGLConfig config = %p, const EGLint *attrib_list = "
         "%p)",
         dpy, config, attrib_list);
+    gl::Trace(gl::LOG_WARN, gl::dumpEglAttrs(attrib_list).c_str());
     Thread *thread = GetCurrentThread();
 
     Display *display        = static_cast<Display *>(dpy);
@@ -331,6 +339,7 @@ EGLSurface EGLAPIENTRY CreatePixmapSurface(EGLDisplay dpy,
         "%p, "
         "const EGLint *attrib_list = %p)",
         dpy, config, pixmap, attrib_list);
+    gl::Trace(gl::LOG_WARN, gl::dumpEglAttrs(attrib_list).c_str());
     Thread *thread = GetCurrentThread();
 
     Display *display      = static_cast<Display *>(dpy);
@@ -418,6 +427,7 @@ EGLContext EGLAPIENTRY CreateContext(EGLDisplay dpy,
         "%p, "
         "const EGLint *attrib_list = %p)",
         dpy, config, share_context, attrib_list);
+    gl::Trace(gl::LOG_WARN, gl::dumpEglAttrs(attrib_list).c_str());
     Thread *thread = GetCurrentThread();
 
     Display *display             = static_cast<Display *>(dpy);
@@ -933,6 +943,7 @@ EGLSurface EGLAPIENTRY CreatePbufferFromClientBuffer(EGLDisplay dpy,
         "(EGLDisplay dpy = %p, EGLenum buftype = 0x%X, EGLClientBuffer buffer = %p, "
         "EGLConfig config = %p, const EGLint *attrib_list = %p)",
         dpy, buftype, buffer, config, attrib_list);
+    gl::Trace(gl::LOG_WARN, gl::dumpEglAttrs(attrib_list).c_str());
     Thread *thread = GetCurrentThread();
 
     Display *display        = static_cast<Display *>(dpy);
