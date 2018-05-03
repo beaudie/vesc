@@ -2572,23 +2572,25 @@ TEST_P(GLSLTest_ES31, FindMSBAndFindLSBCornerCases)
 TEST_P(GLSLTest_ES3, WriteIntoDynamicIndexingOfSwizzledVector)
 {
     // http://anglebug.com/1924
-    ANGLE_SKIP_TEST_IF(IsOpenGL());
+    ANGLE_SKIP_TEST_IF(IsOpenGL() && (IsAMD() || IsIntel() || IsAndroid()));
 
     // The shader first assigns v.x to v.z (1.0)
     // Then v.y to v.y (2.0)
     // Then v.z to v.x (1.0)
     const std::string &fragmentShader =
-        "#version 300 es\n"
-        "precision highp float;\n"
-        "out vec4 my_FragColor;\n"
-        "void main() {\n"
-        "    vec3 v = vec3(1.0, 2.0, 3.0);\n"
-        "    for (int i = 0; i < 3; i++) {\n"
-        "        v.zyx[i] = v[i];\n"
-        "    }\n"
-        "    my_FragColor = distance(v, vec3(1.0, 2.0, 1.0)) < 0.01 ? vec4(0, 1, 0, 1) : vec4(1, "
-        "0, 0, 1);\n"
-        "}\n";
+        R"(#version 300 es
+        precision highp float;
+        out vec4 my_FragColor;
+        void main()
+        {
+            vec3 v = vec3(1.0, 2.0, 3.0);
+            for (int i = 0; i < 3; i++)
+            {
+                v.zyx[i] = v[i];
+            }
+            my_FragColor = distance(v, vec3(1.0, 2.0, 1.0)) < 0.01 ?
+                vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+        })";
 
     ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), fragmentShader);
     drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.5f);
