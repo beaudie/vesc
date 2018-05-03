@@ -174,6 +174,7 @@ RendererGL::RendererGL(const FunctionsGL *functions, const egl::AttributeMap &at
       mCapsInitialized(false),
       mMultiviewImplementationType(MultiviewImplementationTypeGL::UNSPECIFIED)
 {
+    ATRACE_CALL();
     ASSERT(mFunctions);
     nativegl_gl::GenerateWorkarounds(mFunctions, &mWorkarounds);
     mStateManager = new StateManagerGL(mFunctions, getNativeCaps(), getNativeExtensions());
@@ -216,6 +217,7 @@ RendererGL::RendererGL(const FunctionsGL *functions, const egl::AttributeMap &at
 
 RendererGL::~RendererGL()
 {
+    ATRACE_CALL();
     SafeDelete(mBlitter);
     SafeDelete(mMultiviewClearer);
     SafeDelete(mStateManager);
@@ -223,12 +225,14 @@ RendererGL::~RendererGL()
 
 gl::Error RendererGL::flush()
 {
+    ATRACE_CALL();
     mFunctions->flush();
     return gl::NoError();
 }
 
 gl::Error RendererGL::finish()
 {
+    ATRACE_CALL();
     if (mWorkarounds.finishDoesNotCauseQueriesToBeAvailable && mUseDebugOutput)
     {
         mFunctions->enable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -240,7 +244,6 @@ gl::Error RendererGL::finish()
     {
         mFunctions->disable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     }
-
     return gl::NoError();
 }
 
@@ -249,6 +252,7 @@ gl::Error RendererGL::drawArrays(const gl::Context *context,
                                  GLint first,
                                  GLsizei count)
 {
+    ATRACE_CALL();
     const gl::Program *program  = context->getGLState().getProgram();
     const bool usesMultiview    = program->usesMultiview();
     const GLsizei instanceCount = usesMultiview ? program->getNumViews() : 0;
@@ -271,6 +275,7 @@ gl::Error RendererGL::drawArraysInstanced(const gl::Context *context,
                                           GLsizei count,
                                           GLsizei instanceCount)
 {
+    ATRACE_CALL();
     GLsizei adjustedInstanceCount = instanceCount;
     const gl::Program *program    = context->getGLState().getProgram();
     if (program->usesMultiview())
@@ -289,6 +294,7 @@ gl::Error RendererGL::drawElements(const gl::Context *context,
                                    GLenum type,
                                    const void *indices)
 {
+    ATRACE_CALL();
     const gl::Program *program  = context->getGLState().getProgram();
     const bool usesMultiview    = program->usesMultiview();
     const GLsizei instanceCount = usesMultiview ? program->getNumViews() : 0;
@@ -314,6 +320,7 @@ gl::Error RendererGL::drawElementsInstanced(const gl::Context *context,
                                             const void *indices,
                                             GLsizei instances)
 {
+    ATRACE_CALL();
     GLsizei adjustedInstanceCount = instances;
     const gl::Program *program    = context->getGLState().getProgram();
     if (program->usesMultiview())
@@ -336,6 +343,7 @@ gl::Error RendererGL::drawRangeElements(const gl::Context *context,
                                         GLenum type,
                                         const void *indices)
 {
+    ATRACE_CALL();
     const gl::Program *program   = context->getGLState().getProgram();
     const bool usesMultiview     = program->usesMultiview();
     const GLsizei instanceCount  = usesMultiview ? program->getNumViews() : 0;
@@ -358,6 +366,7 @@ gl::Error RendererGL::drawArraysIndirect(const gl::Context *context,
                                          GLenum mode,
                                          const void *indirect)
 {
+    ATRACE_CALL();
     ANGLE_TRY(mStateManager->setDrawIndirectState(context));
     mFunctions->drawArraysIndirect(mode, indirect);
     return gl::NoError();
@@ -368,6 +377,7 @@ gl::Error RendererGL::drawElementsIndirect(const gl::Context *context,
                                            GLenum type,
                                            const void *indirect)
 {
+    ATRACE_CALL();
     ANGLE_TRY(mStateManager->setDrawIndirectState(context));
     mFunctions->drawElementsIndirect(mode, type, indirect);
     return gl::NoError();
