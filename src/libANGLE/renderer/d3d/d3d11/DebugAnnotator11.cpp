@@ -17,7 +17,8 @@ namespace rx
 DebugAnnotator11::DebugAnnotator11()
     : mInitialized(false),
       mD3d11Module(nullptr),
-      mUserDefinedAnnotation(nullptr)
+      mUserDefinedAnnotation(nullptr),
+      mEventName(nullptr)
 {
     // D3D11 devices can't be created during DllMain.
     // We defer device creation until the object is actually used.
@@ -35,13 +36,17 @@ DebugAnnotator11::~DebugAnnotator11()
     }
 }
 
-void DebugAnnotator11::beginEvent(const wchar_t *eventName)
+void DebugAnnotator11::beginEvent(const char *eventName, const char *eventMessage)
 {
     initializeDevice();
 
+    mEventName = eventName;
+    angle::LoggingAnnotator::beginEvent(mEventName, eventMessage);
     if (mUserDefinedAnnotation != nullptr)
     {
-        mUserDefinedAnnotation->BeginEvent(eventName);
+        std::mbstate_t state = std::mbstate_t();
+        std::mbsrtowcs(mWCharMessage, &eventMessage, kMaxMessageLength, &state);
+        mUserDefinedAnnotation->BeginEvent(mWCharMessage);
     }
 }
 
@@ -49,19 +54,25 @@ void DebugAnnotator11::endEvent()
 {
     initializeDevice();
 
+    ASSERT(mEventName);
+    angle::LoggingAnnotator::endEvent(mEventName);
+    mEventName = nullptr;
     if (mUserDefinedAnnotation != nullptr)
     {
         mUserDefinedAnnotation->EndEvent();
     }
 }
 
-void DebugAnnotator11::setMarker(const wchar_t *markerName)
+void DebugAnnotator11::setMarker(const char *markerName)
 {
     initializeDevice();
 
+    angle::LoggingAnnotator::setMarker(markerName);
     if (mUserDefinedAnnotation != nullptr)
     {
-        mUserDefinedAnnotation->SetMarker(markerName);
+        std::mbstate_t state = std::mbstate_t();
+        std::mbsrtowcs(mWCharMessage, &markerName, kMaxMessageLength, &state);
+        mUserDefinedAnnotation->SetMarker(mWCharMessage);
     }
 }
 
