@@ -9,6 +9,7 @@
 #include "libANGLE/LoggingAnnotator.h"
 
 #include <platform/Platform.h>
+#include "third_party/trace_event/trace_event.h"
 
 namespace angle
 {
@@ -16,6 +17,23 @@ namespace angle
 bool LoggingAnnotator::getStatus()
 {
     return false;
+}
+
+void LoggingAnnotator::beginEvent(const wchar_t *eventName)
+{
+    mEventName = eventName;
+    TRACE_EVENT_BEGIN0("gpu.angle", (const char *)eventName);
+}
+
+void LoggingAnnotator::endEvent()
+{
+    TRACE_EVENT_END0("gpu.angle", (const char *)mEventName);
+    mEventName = nullptr;
+}
+
+void LoggingAnnotator::setMarker(const wchar_t *markerName)
+{
+    TRACE_EVENT_INSTANT0("gpu.angle", (const char *)markerName);
 }
 
 void LoggingAnnotator::logMessage(const gl::LogMessage &msg) const
