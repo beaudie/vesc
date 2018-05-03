@@ -20,8 +20,9 @@
 #include <android/log.h>
 #endif
 
-#include "common/angleutils.h"
 #include "common/Optional.h"
+#include "common/angleutils.h"
+#include "third_party/trace_event/trace_event.h"
 
 namespace gl
 {
@@ -96,7 +97,7 @@ void UninitializeDebugAnnotations()
     g_debugAnnotator = nullptr;
 }
 
-ScopedPerfEventHelper::ScopedPerfEventHelper(const char *format, ...)
+ScopedPerfEventHelper::ScopedPerfEventHelper(const char *format, ...) : mEventName(nullptr)
 {
 #if !defined(ANGLE_ENABLE_DEBUG_TRACE)
     if (!DebugAnnotationsActive())
@@ -107,10 +108,13 @@ ScopedPerfEventHelper::ScopedPerfEventHelper(const char *format, ...)
 
     va_list vararg;
     va_start(vararg, format);
+    // 2nd arg is always function name
+    mEventName = va_arg(vararg, const char *);
     std::vector<char> buffer(512);
     size_t len = FormatStringIntoVector(format, vararg, buffer);
     ANGLE_LOG(EVENT) << std::string(&buffer[0], len);
     va_end(vararg);
+    TRACE_EVENT_BEGIN0("gpu.angle", mEventName);
 }
 
 ScopedPerfEventHelper::~ScopedPerfEventHelper()
@@ -118,6 +122,7 @@ ScopedPerfEventHelper::~ScopedPerfEventHelper()
     if (DebugAnnotationsActive())
     {
         g_debugAnnotator->endEvent();
+        TRACE_EVENT_END0("gpu.angle", mEventName);
     }
 }
 
