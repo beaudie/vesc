@@ -38,6 +38,7 @@
 #include "libANGLE/renderer/gl/VertexArrayGL.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 #include "libANGLE/renderer/renderer_utils.h"
+#include "third_party/trace_event/trace_event.h"
 
 namespace
 {
@@ -177,6 +178,7 @@ RendererGL::RendererGL(std::unique_ptr<FunctionsGL> functions, const egl::Attrib
       mCapsInitialized(false),
       mMultiviewImplementationType(MultiviewImplementationTypeGL::UNSPECIFIED)
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     ASSERT(mFunctions);
     nativegl_gl::GenerateWorkarounds(mFunctions.get(), &mWorkarounds);
     mStateManager = new StateManagerGL(mFunctions.get(), getNativeCaps(), getNativeExtensions());
@@ -219,6 +221,7 @@ RendererGL::RendererGL(std::unique_ptr<FunctionsGL> functions, const egl::Attrib
 
 RendererGL::~RendererGL()
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     SafeDelete(mBlitter);
     SafeDelete(mMultiviewClearer);
     SafeDelete(mStateManager);
@@ -226,12 +229,14 @@ RendererGL::~RendererGL()
 
 angle::Result RendererGL::flush()
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     mFunctions->flush();
     return angle::Result::Continue();
 }
 
 angle::Result RendererGL::finish()
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     if (mWorkarounds.finishDoesNotCauseQueriesToBeAvailable && mUseDebugOutput)
     {
         mFunctions->enable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -243,8 +248,12 @@ angle::Result RendererGL::finish()
     {
         mFunctions->disable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     }
+<<<<<<< HEAD
 
     return angle::Result::Continue();
+=======
+    return gl::NoError();
+>>>>>>> Debug: Unifying ANGLE event systems
 }
 
 angle::Result RendererGL::drawArrays(const gl::Context *context,
@@ -252,6 +261,7 @@ angle::Result RendererGL::drawArrays(const gl::Context *context,
                                      GLint first,
                                      GLsizei count)
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     const gl::Program *program  = context->getGLState().getProgram();
     const bool usesMultiview    = program->usesMultiview();
     const GLsizei instanceCount = usesMultiview ? program->getNumViews() : 0;
@@ -274,6 +284,7 @@ angle::Result RendererGL::drawArraysInstanced(const gl::Context *context,
                                               GLsizei count,
                                               GLsizei instanceCount)
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     GLsizei adjustedInstanceCount = instanceCount;
     const gl::Program *program    = context->getGLState().getProgram();
     if (program->usesMultiview())
@@ -292,6 +303,7 @@ angle::Result RendererGL::drawElements(const gl::Context *context,
                                        GLenum type,
                                        const void *indices)
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     const gl::Program *program  = context->getGLState().getProgram();
     const bool usesMultiview    = program->usesMultiview();
     const GLsizei instanceCount = usesMultiview ? program->getNumViews() : 0;
@@ -317,6 +329,7 @@ angle::Result RendererGL::drawElementsInstanced(const gl::Context *context,
                                                 const void *indices,
                                                 GLsizei instances)
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     GLsizei adjustedInstanceCount = instances;
     const gl::Program *program    = context->getGLState().getProgram();
     if (program->usesMultiview())
@@ -340,6 +353,7 @@ angle::Result RendererGL::drawRangeElements(const gl::Context *context,
                                             GLenum type,
                                             const void *indices)
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     const gl::Program *program   = context->getGLState().getProgram();
     const bool usesMultiview     = program->usesMultiview();
     const GLsizei instanceCount  = usesMultiview ? program->getNumViews() : 0;
@@ -363,6 +377,7 @@ angle::Result RendererGL::drawArraysIndirect(const gl::Context *context,
                                              gl::PrimitiveMode mode,
                                              const void *indirect)
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     ANGLE_TRY(mStateManager->setDrawIndirectState(context));
     mFunctions->drawArraysIndirect(ToGLenum(mode), indirect);
     return angle::Result::Continue();
@@ -373,6 +388,7 @@ angle::Result RendererGL::drawElementsIndirect(const gl::Context *context,
                                                GLenum type,
                                                const void *indirect)
 {
+    TRACE_EVENT0("gpu.angle", __FUNCTION__);
     ANGLE_TRY(mStateManager->setDrawIndirectState(context));
     mFunctions->drawElementsIndirect(ToGLenum(mode), type, indirect);
     return angle::Result::Continue();
