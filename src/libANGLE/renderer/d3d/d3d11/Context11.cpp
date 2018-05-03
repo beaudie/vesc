@@ -402,20 +402,12 @@ std::string Context11::getRendererDescription() const
 
 void Context11::insertEventMarker(GLsizei length, const char *marker)
 {
-    auto optionalString = angle::WidenString(static_cast<size_t>(length), marker);
-    if (optionalString.valid())
-    {
-        mRenderer->getAnnotator()->setMarker(optionalString.value().data());
-    }
+    mRenderer->getAnnotator()->setMarker(marker);
 }
 
 void Context11::pushGroupMarker(GLsizei length, const char *marker)
 {
-    auto optionalString = angle::WidenString(static_cast<size_t>(length), marker);
-    if (optionalString.valid())
-    {
-        mRenderer->getAnnotator()->beginEvent(optionalString.value().data());
-    }
+    mRenderer->getAnnotator()->beginEvent(marker);
 }
 
 void Context11::popGroupMarker()

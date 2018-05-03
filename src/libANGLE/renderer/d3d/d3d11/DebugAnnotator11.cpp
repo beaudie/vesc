@@ -35,13 +35,15 @@ DebugAnnotator11::~DebugAnnotator11()
     }
 }
 
-void DebugAnnotator11::beginEvent(const wchar_t *eventName)
+void DebugAnnotator11::beginEvent(const char *eventName)
 {
     initializeDevice();
 
     if (mUserDefinedAnnotation != nullptr)
     {
-        mUserDefinedAnnotation->BeginEvent(eventName);
+        angle::LoggingAnnotator::beginEvent(eventName);
+        std::mbsrtowcs(mWCharName, eventName, kMaxNameLength);
+        mUserDefinedAnnotation->BeginEvent(mWCharName);
     }
 }
 
@@ -51,17 +53,20 @@ void DebugAnnotator11::endEvent()
 
     if (mUserDefinedAnnotation != nullptr)
     {
+        angle::LoggingAnnotator::endEvent();
         mUserDefinedAnnotation->EndEvent();
     }
 }
 
-void DebugAnnotator11::setMarker(const wchar_t *markerName)
+void DebugAnnotator11::setMarker(const char *markerName)
 {
     initializeDevice();
 
     if (mUserDefinedAnnotation != nullptr)
     {
-        mUserDefinedAnnotation->SetMarker(markerName);
+        angle::LoggingAnnotator::setMarker(markerName);
+        std::mbsrtowcs(mWCharName, markerName, kMaxNameLength);
+        mUserDefinedAnnotation->SetMarker(mWCharName);
     }
 }
 
