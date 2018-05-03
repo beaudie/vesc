@@ -24,6 +24,36 @@
 #define TRACE_OUTPUT_FILE "angle_debug.txt"
 #endif
 
+#if defined(ANGLE_SYSTRACE_ENABLED)
+#include <trace.h>
+
+#define ATRACE_NAME(name) ScopedTrace ___tracer(name)
+
+// ATRACE_CALL is an ATRACE_NAME that uses the current function name.
+#define ATRACE_CALL() ATRACE_NAME(__FUNCTION__)
+
+class ScopedTrace
+{
+  public:
+    inline ScopedTrace(const char *name) : agl_str("AGL::")
+    {
+        agl_str += name;
+        ATrace_beginSection(agl_str.c_str());
+    }
+
+    inline ~ScopedTrace() { ATrace_endSection(); }
+
+  private:
+    std::string agl_str;
+};
+#else
+// no-op that forces ";" after macro
+#define ATRACE_CALL() \
+    do                \
+    {                 \
+    } while (0)
+#endif
+
 namespace gl
 {
 
@@ -224,7 +254,9 @@ std::ostream &FmtHex(std::ostream &os, T value)
 
 // A macro to log a performance event around a scope.
 #if defined(ANGLE_TRACE_ENABLED)
-#if defined(_MSC_VER)
+#if defined(ANGLE_SYSTRACE_ENABLED)
+#define EVENT(message, ...) TRACE_EVENT0("gpu.angle", __FUNCTION__)
+#elif defined(_MSC_VER)
 #define EVENT(message, ...) gl::ScopedPerfEventHelper scopedPerfEventHelper ## __LINE__("%s" message "\n", __FUNCTION__, __VA_ARGS__);
 #else
 #define EVENT(message, ...) gl::ScopedPerfEventHelper scopedPerfEventHelper("%s" message "\n", __FUNCTION__, ##__VA_ARGS__);

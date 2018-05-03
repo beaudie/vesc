@@ -20,6 +20,7 @@ declare_args() {
 
   # Link in system libGL, to work with apitrace.  See doc/DebuggingTips.md.
   angle_link_glx = false
+  angle_enable_systrace = false
 }
 
 if (!build_with_chromium) {
@@ -157,6 +158,12 @@ config("debug_annotations_config") {
   if (is_debug) {
     defines = [ "ANGLE_ENABLE_DEBUG_ANNOTATIONS" ]
   }
+  if (angle_enable_systrace && is_android) {
+    defines = [
+      "ANGLE_SYSTRACE_ENABLED",
+      "ANGLE_ENABLE_DEBUG_TRACE",
+    ]
+  }
 }
 
 config("angle_release_asserts_config") {
@@ -169,6 +176,10 @@ config("angle_common_config") {
   include_dirs = [ "src/common/third_party/base" ]
   if (is_android) {
     libs = [ "log" ]
+    if (angle_enable_systrace && is_android) {
+      include_dirs +=
+          [ "../../third_party/android_ndk/sysroot/usr/include/android/" ]
+    }
   }
 }
 
