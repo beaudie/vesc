@@ -457,6 +457,21 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
     return vk::NoError();
 }
 
+gl::Error RendererVk::initializeMultisampleTextureToBlack(const gl::Context *context,
+                                                          gl::Texture *glTexture)
+{
+    // TODO(lucferron): Initialize incomplete texture for 2DMultisample (ES 3.0 only)
+    UNIMPLEMENTED();
+    return gl::NoError();
+}
+
+gl::Error RendererVk::getIncompleteTexture(const gl::Context *context,
+                                           gl::TextureType type,
+                                           gl::Texture **textureOut)
+{
+    return mIncompleteTextures.getIncompleteTexture(context, type, this, textureOut);
+}
+
 vk::Error RendererVk::initializeDevice(uint32_t queueFamilyIndex)
 {
     uint32_t deviceLayerCount = 0;
@@ -1028,5 +1043,10 @@ vk::Error RendererVk::getInternalPipeline(const vk::ShaderAndSerial &vertexShade
 vk::ShaderLibrary *RendererVk::getShaderLibrary()
 {
     return &mShaderLibrary;
+}
+
+void RendererVk::cleanup(const gl::Context *context)
+{
+    mIncompleteTextures.onDestroy(context);
 }
 }  // namespace rx
