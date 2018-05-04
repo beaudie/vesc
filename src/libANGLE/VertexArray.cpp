@@ -183,6 +183,7 @@ void VertexArray::setVertexAttribBinding(const Context *context,
     {
         // In ES 3.0 contexts, the binding cannot change, hence the code below is unreachable.
         ASSERT(context->getClientVersion() >= ES_3_1);
+        mVertexArray->onAttribBindingChanged(attribIndex, bindingIndex);
         mState.mVertexAttributes[attribIndex].bindingIndex = bindingIndex;
 
         setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_BINDING);
