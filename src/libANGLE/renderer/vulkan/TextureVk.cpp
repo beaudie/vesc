@@ -233,7 +233,10 @@ gl::Error TextureVk::setImage(const gl::Context *context,
     {
         const gl::ImageDesc &desc  = mState.getImageDesc(index);
         const vk::Format &vkFormat = renderer->getFormat(formatInfo.sizedInternalFormat);
-        if (desc.size != size || mImage.getFormat() != vkFormat)
+
+        // When the size is 0x0, it means this represents an incomplete texture, this setImage
+        // is just trying to define that mip level, we should'nt be releasing the entire image.
+        if (desc.size != gl::Extents() && (desc.size != size || mImage.getFormat() != vkFormat))
         {
             releaseImage(context, renderer);
         }
