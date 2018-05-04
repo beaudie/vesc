@@ -45,6 +45,8 @@ class VertexArrayImpl : angle::NonCopyable
 
     const gl::VertexArrayState &getState() const { return mState; }
 
+    virtual void onAttribBindingChanged(size_t attribIndex, size_t newBindingIndex){};
+
   protected:
     const gl::VertexArrayState &mState;
 };
