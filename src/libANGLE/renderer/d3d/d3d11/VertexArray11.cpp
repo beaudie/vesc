@@ -27,6 +27,13 @@ VertexArray11::VertexArray11(const gl::VertexArrayState &data)
       mCurrentElementArrayStorage(IndexStorageType::Invalid),
       mCachedDestinationIndexType(GL_NONE)
 {
+    // Initialize the mappings from each binding to all of the attributes that are using that
+    // binding and the bindingIndex of each attribute.
+    for (size_t attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; ++attribIndex)
+    {
+        mBoundAttributesMaskOnBindings[attribIndex].set(attribIndex);
+        mLastAttributeBindings[attribIndex] = attribIndex;
+    }
 }
 
 VertexArray11::~VertexArray11()
@@ -37,18 +44,54 @@ void VertexArray11::destroy(const gl::Context *context)
 {
 }
 
-#define ANGLE_VERTEX_DIRTY_ATTRIB_FUNC(INDEX)                          \
-    case gl::VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:                  \
-        ASSERT(INDEX == mState.getBindingIndexFromAttribIndex(INDEX)); \
-        updateVertexAttribStorage(stateManager, dirtyBit, INDEX);      \
-        invalidateVertexBuffer = true;                                 \
+void VertexArray11::onAttribBindingChanged(size_t attribIndex)
+{
+    ASSERT(attribIndex < gl::MAX_VERTEX_ATTRIBS);
+
+    const size_t newBindingIndex = mState.getBindingIndexFromAttribIndex(attribIndex);
+    const size_t oldBindingIndex = mLastAttributeBindings[attribIndex];
+    ASSERT(oldBindingIndex != newBindingIndex);
+
+    ASSERT(mBoundAttributesMaskOnBindings[oldBindingIndex].test(attribIndex) &&
+           !mBoundAttributesMaskOnBindings[newBindingIndex].test(attribIndex));
+
+    mBoundAttributesMaskOnBindings[oldBindingIndex].reset(attribIndex);
+    mBoundAttributesMaskOnBindings[newBindingIndex].set(attribIndex);
+    mLastAttributeBindings[attribIndex] = newBindingIndex;
+}
+
+// As VertexAttribPointer can modify both attribute and binding, we should also set other attributes
+// that are also using this binding dirty.
+// We can also directly use mBoundAttributesMaskOnBindings[INDEX] in updating DIRTY_ATTRIB_POINTER
+// before mBoundAttributesMaskOnBindings[INDEX] is fully updated:
+// - Consider there is an attribute with a greater attribIndex, which changes its binding to INDEX
+//   in the current sync. We will not miss it because the attribute will be labelled dirty when we
+//   iterate it for its dirty DIRTY_ATTRIB_BINDING.
+// - Consider there is an attribute with a greater attribIndex, whose binding was INDEX in the last
+//   sync and use another binding in the current sync. When iterating the attribute INDEX, although
+//   the bit of this attribute has not been reset in mBoundAttributesMaskOnBindings[INDEX], it is
+//   still necessary to label this attribute dirty because it has changed its bindingIndex.
+#define ANGLE_VERTEX_DIRTY_ATTRIB_FUNC(INDEX)                                             \
+    case gl::VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:                                     \
+        if (attribBits[INDEX][gl::VertexArray::DirtyAttribBitType::DIRTY_ATTRIB_BINDING]) \
+        {                                                                                 \
+            onAttribBindingChanged(INDEX);                                                \
+        }                                                                                 \
+        if (attribBits[INDEX][gl::VertexArray::DirtyAttribBitType::DIRTY_ATTRIB_POINTER]) \
+        {                                                                                 \
+            attributesToUpdate |= mBoundAttributesMaskOnBindings[INDEX];                  \
+        }                                                                                 \
+        else                                                                              \
+        {                                                                                 \
+            attributesToUpdate.set(INDEX);                                                \
+        }                                                                                 \
+        invalidateVertexBuffer = true;                                                    \
         break;
 
-#define ANGLE_VERTEX_DIRTY_BINDING_FUNC(INDEX)                         \
-    case gl::VertexArray::DIRTY_BIT_BINDING_0 + INDEX:                 \
-        ASSERT(INDEX == mState.getBindingIndexFromAttribIndex(INDEX)); \
-        updateVertexAttribStorage(stateManager, dirtyBit, INDEX);      \
-        invalidateVertexBuffer = true;                                 \
+#define ANGLE_VERTEX_DIRTY_BINDING_FUNC(INDEX)                       \
+    case gl::VertexArray::DIRTY_BIT_BINDING_0 + INDEX:               \
+        attributesToUpdate |= mBoundAttributesMaskOnBindings[INDEX]; \
+        invalidateVertexBuffer = true;                               \
         break;
 
 #define ANGLE_VERTEX_DIRTY_BUFFER_DATA_FUNC(INDEX)                      \
@@ -76,6 +119,8 @@ gl::Error VertexArray11::syncState(const gl::Context *context,
 
     bool invalidateVertexBuffer = false;
 
+    gl::AttributesMask attributesToUpdate;
+
     // Make sure we trigger re-translation for static index or vertex data.
     for (size_t dirtyBit : dirtyBits)
     {
@@ -99,6 +144,13 @@ gl::Error VertexArray11::syncState(const gl::Context *context,
                 UNREACHABLE();
                 break;
         }
+    }
+
+    for (size_t attribIndex : attributesToUpdate)
+    {
+        ASSERT(mLastAttributeBindings[attribIndex] ==
+               mState.getBindingIndexFromAttribIndex(attribIndex));
+        updateVertexAttribStorage(stateManager, attribIndex);
     }
 
     if (invalidateVertexBuffer)
@@ -188,16 +240,10 @@ gl::Error VertexArray11::updateElementArrayStorage(const gl::Context *context,
         ClassifyIndexStorage(context->getGLState(), mState.getElementArrayBuffer().get(),
                              drawCallParams.type(), mCachedDestinationIndexType, offset);
 
-    // Mark non-static buffers as irrelevant.
-    bool isStatic = (mCurrentElementArrayStorage == IndexStorageType::Static);
-    mRelevantDirtyBitsMask.set(gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER_DATA, isStatic);
-
     return gl::NoError();
 }
 
-void VertexArray11::updateVertexAttribStorage(StateManager11 *stateManager,
-                                              size_t dirtyBit,
-                                              size_t attribIndex)
+void VertexArray11::updateVertexAttribStorage(StateManager11 *stateManager, size_t attribIndex)
 {
     const gl::VertexAttribute &attrib = mState.getVertexAttribute(attribIndex);
     const gl::VertexBinding &binding  = mState.getBindingFromAttribIndex(attribIndex);
@@ -212,10 +258,6 @@ void VertexArray11::updateVertexAttribStorage(StateManager11 *stateManager,
 
     mAttributeStorageTypes[attribIndex] = newStorageType;
     mDynamicAttribsMask.set(attribIndex, newStorageType == VertexStorageType::DYNAMIC);
-
-    // Mark non-static buffers as irrelevant.
-    size_t bufferDataDirtyBit = (gl::VertexArray::DIRTY_BIT_BUFFER_DATA_0 + attribIndex);
-    mRelevantDirtyBitsMask.set(bufferDataDirtyBit, newStorageType == VertexStorageType::STATIC);
 
     if (newStorageType == VertexStorageType::CURRENT_VALUE)
     {

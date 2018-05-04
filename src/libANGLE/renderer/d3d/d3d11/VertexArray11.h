@@ -58,9 +58,10 @@ class VertexArray11 : public VertexArrayImpl
 
     GLenum getCachedDestinationIndexType() const;
 
+    void onAttribBindingChanged(size_t attribIndex);
+
   private:
     void updateVertexAttribStorage(StateManager11 *stateManager,
-                                   size_t dirtyBit,
                                    size_t attribIndex);
     gl::Error updateDirtyAttribs(const gl::Context *context,
                                  const gl::AttributesMask &activeDirtyAttribs);
@@ -74,9 +75,6 @@ class VertexArray11 : public VertexArrayImpl
 
     // The mask of attributes marked as dynamic.
     gl::AttributesMask mDynamicAttribsMask;
-
-    // Mask applied to dirty bits on syncState. If a bit is on, it is relevant.
-    gl::VertexArray::DirtyBits mRelevantDirtyBitsMask;
 
     // A set of attributes we know are dirty, and need to be re-translated.
     gl::AttributesMask mAttribsToTranslate;
@@ -93,6 +91,14 @@ class VertexArray11 : public VertexArrayImpl
     IndexStorageType mCurrentElementArrayStorage;
     Optional<TranslatedIndexData> mCachedIndexInfo;
     GLenum mCachedDestinationIndexType;
+
+    // Records the mappings from each binding to all of the attributes that are using that binding.
+    // It is used to label all the relevant attributes dirty when we are updating a dirty binding in
+    // VertexArray11::syncStates().
+    std::array<gl::AttributesMask, gl::MAX_VERTEX_ATTRIB_BINDINGS> mBoundAttributesMaskOnBindings;
+    // Records the bindingIndex of each attribute in the last sync. It is used to make it easier to
+    // label the attribute is no longer using the binding it used in the last sync.
+    std::array<size_t, gl::MAX_VERTEX_ATTRIBS> mLastAttributeBindings;
 };
 
 }  // namespace rx
