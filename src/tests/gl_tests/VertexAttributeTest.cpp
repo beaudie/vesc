@@ -1084,16 +1084,8 @@ TEST_P(VertexAttributeTestES31, DrawArraysWithLargeStride)
     drawArraysWithStrideAndOffset(largeStride, 0);
 }
 
-// TODO(jiawei.shao@intel.com): Merge it into VertexAttributeTestES31 when Vertex Attrib
-// Binding is supported on D3D11 back-ends.
-class VertexAttributeTestES31_OpenGL : public VertexAttributeTestES31
-{
-  protected:
-    VertexAttributeTestES31_OpenGL() {}
-};
-
 // Verify that using VertexAttribBinding after VertexAttribPointer won't mess up the draw.
-TEST_P(VertexAttributeTestES31_OpenGL, ChangeAttribBindingAfterVertexAttribPointer)
+TEST_P(VertexAttributeTestES31, ChangeAttribBindingAfterVertexAttribPointer)
 {
     initTest();
 
@@ -1143,7 +1135,7 @@ TEST_P(VertexAttributeTestES31_OpenGL, ChangeAttribBindingAfterVertexAttribPoint
 }
 
 // Verify that using VertexAttribFormat after VertexAttribPointer won't mess up the draw.
-TEST_P(VertexAttributeTestES31_OpenGL, ChangeAttribFormatAfterVertexAttribPointer)
+TEST_P(VertexAttributeTestES31, ChangeAttribFormatAfterVertexAttribPointer)
 {
     initTest();
 
@@ -1520,8 +1512,6 @@ ANGLE_INSTANTIATE_TEST(VertexAttributeTest,
 ANGLE_INSTANTIATE_TEST(VertexAttributeTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 
 ANGLE_INSTANTIATE_TEST(VertexAttributeTestES31, ES31_D3D11(), ES31_OPENGL(), ES31_OPENGLES());
-
-ANGLE_INSTANTIATE_TEST(VertexAttributeTestES31_OpenGL, ES31_OPENGL(), ES31_OPENGLES());
 
 ANGLE_INSTANTIATE_TEST(VertexAttributeCachingTest,
                        ES2_D3D9(),

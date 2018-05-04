@@ -37,18 +37,23 @@ void VertexArray11::destroy(const gl::Context *context)
 {
 }
 
-#define ANGLE_VERTEX_DIRTY_ATTRIB_FUNC(INDEX)                          \
-    case gl::VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:                  \
-        ASSERT(INDEX == mState.getBindingIndexFromAttribIndex(INDEX)); \
-        updateVertexAttribStorage(stateManager, dirtyBit, INDEX);      \
-        invalidateVertexBuffer = true;                                 \
+// As VertexAttribPointer can modify both attribute and binding, we should set the binding to dirty
+// so that we will not miss other attributes that are also using this binding.
+#define ANGLE_VERTEX_DIRTY_ATTRIB_FUNC(INDEX)                                             \
+    case gl::VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:                                     \
+        updateVertexAttribStorage(stateManager, INDEX);                                   \
+        unupdatedEnabledAttributesMask.reset(INDEX);                                      \
+        if (attribBits[INDEX][gl::VertexArray::DirtyAttribBitType::DIRTY_ATTRIB_POINTER]) \
+        {                                                                                 \
+            dirtyBindingsMask.set(mState.getBindingIndexFromAttribIndex(INDEX));          \
+        }                                                                                 \
+        invalidateVertexBuffer = true;                                                    \
         break;
 
-#define ANGLE_VERTEX_DIRTY_BINDING_FUNC(INDEX)                         \
-    case gl::VertexArray::DIRTY_BIT_BINDING_0 + INDEX:                 \
-        ASSERT(INDEX == mState.getBindingIndexFromAttribIndex(INDEX)); \
-        updateVertexAttribStorage(stateManager, dirtyBit, INDEX);      \
-        invalidateVertexBuffer = true;                                 \
+#define ANGLE_VERTEX_DIRTY_BINDING_FUNC(INDEX)         \
+    case gl::VertexArray::DIRTY_BIT_BINDING_0 + INDEX: \
+        dirtyBindingsMask.set(INDEX);                  \
+        invalidateVertexBuffer = true;                 \
         break;
 
 #define ANGLE_VERTEX_DIRTY_BUFFER_DATA_FUNC(INDEX)                      \
@@ -76,6 +81,9 @@ gl::Error VertexArray11::syncState(const gl::Context *context,
 
     bool invalidateVertexBuffer = false;
 
+    gl::AttributesMask unupdatedEnabledAttributesMask = mState.getEnabledAttributesMask();
+    gl::BindingsMask dirtyBindingsMask;
+
     // Make sure we trigger re-translation for static index or vertex data.
     for (size_t dirtyBit : dirtyBits)
     {
@@ -98,6 +106,17 @@ gl::Error VertexArray11::syncState(const gl::Context *context,
             default:
                 UNREACHABLE();
                 break;
+        }
+    }
+
+    const auto &attribs = mState.getVertexAttributes();
+    for (size_t attribIndex : unupdatedEnabledAttributesMask)
+    {
+        const size_t bindingIndex = attribs[attribIndex].bindingIndex;
+        if (dirtyBindingsMask[bindingIndex])
+        {
+            updateVertexAttribStorage(stateManager, attribIndex);
+            invalidateVertexBuffer = true;
         }
     }
 
@@ -196,7 +215,6 @@ gl::Error VertexArray11::updateElementArrayStorage(const gl::Context *context,
 }
 
 void VertexArray11::updateVertexAttribStorage(StateManager11 *stateManager,
-                                              size_t dirtyBit,
                                               size_t attribIndex)
 {
     const gl::VertexAttribute &attrib = mState.getVertexAttribute(attribIndex);
