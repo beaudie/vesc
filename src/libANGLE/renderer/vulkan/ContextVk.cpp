@@ -69,6 +69,7 @@ ContextVk::~ContextVk()
 
 void ContextVk::onDestroy(const gl::Context *context)
 {
+    mRenderer->cleanup(context);
     mDynamicDescriptorPool.destroy(mRenderer);
 }
 
@@ -127,7 +128,8 @@ gl::Error ContextVk::initPipeline()
     return gl::NoError();
 }
 
-gl::Error ContextVk::setupDraw(const gl::DrawCallParams &drawCallParams,
+gl::Error ContextVk::setupDraw(const gl::Context *context,
+                               const gl::DrawCallParams &drawCallParams,
                                vk::CommandGraphNode **drawNodeOut,
                                bool *newCommandBufferOut)
 {
@@ -183,12 +185,13 @@ gl::Error ContextVk::setupDraw(const gl::DrawCallParams &drawCallParams,
             GLuint textureUnit         = samplerBinding.boundTextureUnits[0];
             const gl::Texture *texture = completeTextures[textureUnit];
 
-            // TODO(jmadill): Incomplete textures handling.
-            ASSERT(texture);
-
-            TextureVk *textureVk = vk::GetImpl(texture);
-            ANGLE_TRY(textureVk->ensureImageInitialized(mRenderer));
-            textureVk->onReadResource(graphNode, mRenderer->getCurrentQueueSerial());
+            // Null textures represent incomplete textures
+            if (texture != nullptr)
+            {
+                TextureVk *textureVk = vk::GetImpl(texture);
+                ANGLE_TRY(textureVk->ensureImageInitialized(mRenderer));
+                textureVk->onReadResource(graphNode, mRenderer->getCurrentQueueSerial());
+            }
         }
     }
 
@@ -200,7 +203,7 @@ gl::Error ContextVk::setupDraw(const gl::DrawCallParams &drawCallParams,
 
     // TODO(jmadill): Can probably use more dirty bits here.
     ANGLE_TRY(programVk->updateUniforms(this));
-    ANGLE_TRY(programVk->updateTexturesDescriptorSet(this));
+    ANGLE_TRY(programVk->updateTexturesDescriptorSet(context));
 
     // Bind the graphics descriptor sets.
     // TODO(jmadill): Handle multiple command buffers.
@@ -227,7 +230,7 @@ gl::Error ContextVk::drawArrays(const gl::Context *context, GLenum mode, GLint f
 
     vk::CommandGraphNode *drawNode = nullptr;
     bool newCommands               = false;
-    ANGLE_TRY(setupDraw(drawCallParams, &drawNode, &newCommands));
+    ANGLE_TRY(setupDraw(context, drawCallParams, &drawNode, &newCommands));
 
     const gl::VertexArray *vertexArray = context->getGLState().getVertexArray();
     VertexArrayVk *vertexArrayVk       = vk::GetImpl(vertexArray);
@@ -256,7 +259,7 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
 
     vk::CommandGraphNode *drawNode = nullptr;
     bool newCommands               = false;
-    ANGLE_TRY(setupDraw(drawCallParams, &drawNode, &newCommands));
+    ANGLE_TRY(setupDraw(context, drawCallParams, &drawNode, &newCommands));
 
     gl::VertexArray *vao         = mState.getState().getVertexArray();
     VertexArrayVk *vertexArrayVk = vk::GetImpl(vao);
