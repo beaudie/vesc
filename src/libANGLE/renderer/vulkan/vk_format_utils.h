@@ -40,13 +40,17 @@ struct Format final : private angle::NonCopyable
     const angle::Format &textureFormat() const;
     const angle::Format &bufferFormat() const;
 
-    GLenum internalFormat;
+    GLenum internalFormat;  // XXX there are GL_ enums for things like 3*normalized-signed-short ?
     angle::Format::ID textureFormatID;
     VkFormat vkTextureFormat;
     angle::Format::ID bufferFormatID;
     VkFormat vkBufferFormat;
+    // XXX add vertexFormatID and vkVertexFormat?  no, that is what bufferFormat is
     InitializeTextureDataFunction dataInitializerFunction;
-    LoadFunctionMap loadFunctions;
+    LoadFunctionMap loadFunctions;  // rename texture load functions
+    // XXX vertexLoadFunction here, not in map?  yes here
+    // XXX vertex conversion needed bool flag here?  what's it used for?  as an alternative to a
+    // null function pointer
 };
 
 bool operator==(const Format &lhs, const Format &rhs);
@@ -63,14 +67,20 @@ class FormatTable final : angle::NonCopyable
                     gl::TextureCapsMap *outTextureCapsMap,
                     std::vector<GLenum> *outCompressedTextureFormats);
 
+    // XXX again, there are GL_ enums for things like 3*normalized-signed-short ?  so I have to find
+    // that enum, given glVertexAttrib args (dimension 1..4, GL_{FLOAT,BYTE,etc}, normalized)
     const Format &operator[](GLenum internalFormat) const;
+
+    // XXX add func angle format id -> Format   just cast to int and index
+    // XXX??? how do I get angle format id?  I see VertexFormatType GetVertexFormatType(const
+    // VertexAttribute &attrib) ...
 
   private:
     // The table data is indexed by angle::Format::ID.
     std::array<Format, angle::kNumANGLEFormats> mFormatData;
 };
 
-// TODO(jmadill): This is temporary. Figure out how to handle format conversions.
+// XXX return vk::Format instead
 VkFormat GetNativeVertexFormat(gl::VertexFormatType vertexFormat);
 
 // This will return a reference to a VkFormatProperties with the feature flags supported
