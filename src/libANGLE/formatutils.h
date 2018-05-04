@@ -306,6 +306,11 @@ struct VertexFormat : private angle::NonCopyable
     bool pureInteger;
 };
 
+angle::Format::ID GetVertexFormatID(GLenum type,
+                                    GLboolean normalized,
+                                    GLuint components,
+                                    bool pureInteger);
+angle::Format::ID GetVertexFormatID(const VertexAttribute &attrib);
 VertexFormatType GetVertexFormatType(GLenum type, GLboolean normalized, GLuint components, bool pureInteger);
 VertexFormatType GetVertexFormatType(const VertexAttribute &attrib);
 VertexFormatType GetVertexFormatType(const VertexAttribute &attrib, GLenum currentValueType);
