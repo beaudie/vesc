@@ -216,6 +216,7 @@ class ImageHelper final : angle::NonCopyable
     void clearDepthStencil(VkImageAspectFlags aspectFlags,
                            const VkClearDepthStencilValue &depthStencil,
                            CommandBuffer *commandBuffer);
+    gl::Extents getSize(const gl::ImageIndex &index);
 
     static void Copy(ImageHelper *srcImage,
                      ImageHelper *dstImage,

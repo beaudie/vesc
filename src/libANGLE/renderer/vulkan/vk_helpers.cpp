@@ -773,6 +773,17 @@ void ImageHelper::clearDepthStencil(VkImageAspectFlags aspectFlags,
     commandBuffer->clearDepthStencilImage(mImage, mCurrentLayout, depthStencil, 1, &clearRange);
 }
 
+gl::Extents ImageHelper::getSize(const gl::ImageIndex &index)
+{
+    ASSERT(getExtents().depth == 1);
+    GLint mipLevel             = index.getLevelIndex();
+    const gl::Extents &extents = getExtents();
+    // Level 0 should be the size of the extents, after that every time you increase a level
+    // you shrink the extents by half.
+    return gl::Extents(std::max(1, extents.width >> mipLevel),
+                       std::max(1, extents.height >> mipLevel), extents.depth);
+}
+
 // static
 void ImageHelper::Copy(ImageHelper *srcImage,
                        ImageHelper *dstImage,
