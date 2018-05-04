@@ -55,6 +55,16 @@ void MapSwizzleState(GLenum internalFormat,
     }
 }
 
+gl::Extents GetExpectedSizeForImageIndex(const gl::Extents &extents, const gl::ImageIndex &index)
+{
+    GLint mipLevel = index.getLevelIndex();
+
+    // Level 0 should be the size of the extents, after that every time you increase a level
+    // you shrink the extents by half.
+    return gl::Extents(std::max(1, extents.width >> mipLevel),
+                       std::max(1, extents.height >> mipLevel), extents.depth);
+}
+
 constexpr VkBufferUsageFlags kStagingBufferFlags =
     (VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
 constexpr size_t kStagingBufferSize = 1024 * 16;
@@ -237,9 +247,13 @@ gl::Error TextureVk::setImage(const gl::Context *context,
 
     if (mImage.valid())
     {
-        const gl::ImageDesc &desc  = mState.getImageDesc(index);
         const vk::Format &vkFormat = renderer->getFormat(formatInfo.sizedInternalFormat);
-        if (desc.size != size || mImage.getFormat() != vkFormat)
+
+        // Calculate the expected size for the index we are defining. If the size is different from
+        // the given size, or the format is different, we are redefining the image so we must
+        // release it.
+        if (mImage.getFormat() != vkFormat ||
+            size != GetExpectedSizeForImageIndex(mImage.getExtents(), index))
         {
             releaseImage(context, renderer);
         }
