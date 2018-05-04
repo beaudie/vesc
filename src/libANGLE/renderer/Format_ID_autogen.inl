@@ -141,12 +141,13 @@ enum class Format::ID
     R8G8_UNORM,
     R8_SINT,
     R8_SNORM,
+    R8_SSCALED,
     R8_UINT,
     R8_UNORM,
     R9G9B9E5_SHAREDEXP,
     S8_UINT
 };
 
-constexpr uint32_t kNumANGLEFormats = 133;
+constexpr uint32_t kNumANGLEFormats = 134;
 
 }  // namespace angle

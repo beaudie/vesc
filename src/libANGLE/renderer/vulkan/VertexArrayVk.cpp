@@ -336,7 +336,10 @@ void VertexArrayVk::updatePackedInputInfo(uint32_t attribIndex,
     bindingDesc.inputRate = static_cast<uint16_t>(
         binding.getDivisor() > 0 ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX);
 
-    gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib); // using for e.g. bits from glVertexAttribPointer(size,type,normalized) bake into one enum
+    gl::VertexFormatType vertexFormatType =
+        gl::GetVertexFormatType(attrib);  // using for e.g. bits from
+                                          // glVertexAttribPointer(size,type,normalized) bake into
+                                          // one enum
     VkFormat vkFormat                     = vk::GetNativeVertexFormat(vertexFormatType);
     ASSERT(vkFormat <= std::numeric_limits<uint16_t>::max());
 

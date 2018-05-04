@@ -207,6 +207,8 @@ std::string ToString(const T &value)
 #define GL_BGRA8_TYPELESS_ANGLEX 0x6AC3
 #define GL_BGRA8_TYPELESS_SRGB_ANGLEX 0x6AC4
 
+#define GL_R8_SSCALED_ANGLEX 0x6AC6
+
 // TODO(jmadill): Clean this up at some point.
 #define EGL_PLATFORM_ANGLE_PLATFORM_METHODS_ANGLEX 0x9999
 
