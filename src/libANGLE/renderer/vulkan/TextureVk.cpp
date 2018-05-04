@@ -244,7 +244,7 @@ gl::Error TextureVk::setImage(const gl::Context *context,
     }
 
     // Create a new graph node to store image initialization commands.
-    getNewWritingNode(renderer);
+    onResourceChanged(renderer);
 
     // Handle initial data.
     if (pixels)
@@ -271,7 +271,7 @@ gl::Error TextureVk::setSubImage(const gl::Context *context,
         gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels));
 
     // Create a new graph node to store image initialization commands.
-    getNewWritingNode(contextVk->getRenderer());
+    onResourceChanged(contextVk->getRenderer());
 
     return gl::NoError();
 }
@@ -402,20 +402,7 @@ vk::Error TextureVk::ensureImageInitialized(RendererVk *renderer)
     vk::CommandBuffer *commandBuffer = nullptr;
 
     updateQueueSerial(renderer->getCurrentQueueSerial());
-    if (!hasChildlessWritingNode())
-    {
-        beginWriteResource(renderer, &commandBuffer);
-    }
-    else
-    {
-        vk::CommandGraphNode *node = getCurrentWritingNode();
-        commandBuffer              = node->getOutsideRenderPassCommands();
-        if (!commandBuffer->valid())
-        {
-            ANGLE_TRY(node->beginOutsideRenderPassRecording(device, renderer->getCommandPool(),
-                                                            &commandBuffer));
-        }
-    }
+    ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
 
     if (!mImage.valid())
     {

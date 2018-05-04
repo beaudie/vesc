@@ -668,6 +668,12 @@ template <typename T>
 using ShaderMap = angle::PackedEnumMap<ShaderType, T>;
 
 using AllShaderTypes = angle::AllEnums<vk::ShaderType>;
+
+enum class RecordingMode
+{
+    Start,
+    Append,
+};
 }  // namespace vk
 
 namespace gl_vk

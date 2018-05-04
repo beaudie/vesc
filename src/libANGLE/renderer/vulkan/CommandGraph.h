@@ -33,6 +33,36 @@ class CommandGraphResource
     void updateQueueSerial(Serial queueSerial);
     Serial getQueueSerial() const;
 
+    // Allocates a write node via getNewWriteNode and returns a started command buffer.
+    // The started command buffer will render outside of a RenderPass.
+    Error beginWriteResource(RendererVk *renderer, CommandBuffer **commandBufferOut);
+
+    Error beginRenderPass(RendererVk *renderer,
+                          const Framebuffer &framebuffer,
+                          const gl::Rectangle &renderArea,
+                          const RenderPassDesc &renderPassDesc,
+                          const std::vector<VkClearValue> &clearValues,
+                          CommandBuffer **commandBufferOut);
+
+    bool getStartedRenderPassCommandBuffer(CommandBuffer **commandBufferOut) const;
+    const gl::Rectangle &getRenderPassRenderArea() const;
+
+    // Similar to addWriteDependency, but with only 'this' object changing.
+    void onResourceChanged(RendererVk *renderer);
+
+    // Sets up dependency relations. 'this' resource is the resource being written to.
+    void addWriteDependency(CommandGraphResource *writingResource);
+
+    // Sets up dependency relations. 'this' resource is the resource being read.
+    void addReadDependency(CommandGraphResource *readingResource);
+
+    // Returns false if the resource is not in use, and clears any current read/write nodes.
+    bool checkResourceInUseAndRefreshDeps(RendererVk *renderer);
+
+  private:
+    bool hasStartedRenderPass() const;
+    void onWriteImpl(CommandGraphNode *writingNode, Serial currentSerial);
+
     // Returns true if this node has a current writing node with no children.
     bool hasChildlessWritingNode() const;
 
@@ -42,20 +72,6 @@ class CommandGraphResource
     // Allocates a new write node and calls onWriteResource internally.
     CommandGraphNode *getNewWritingNode(RendererVk *renderer);
 
-    // Allocates a write node via getNewWriteNode and returns a started command buffer.
-    // The started command buffer will render outside of a RenderPass.
-    Error beginWriteResource(RendererVk *renderer, CommandBuffer **commandBufferOut);
-
-    // Sets up dependency relations. 'writingNode' will modify 'this' ResourceVk.
-    void onWriteResource(CommandGraphNode *writingNode, Serial serial);
-
-    // Sets up dependency relations. 'readingNode' will read from 'this' ResourceVk.
-    void onReadResource(CommandGraphNode *readingNode, Serial serial);
-
-    // Returns false if the resource is not in use, and clears any current read/write nodes.
-    bool checkResourceInUseAndRefreshDeps(RendererVk *renderer);
-
-  private:
     Serial mStoredQueueSerial;
     std::vector<CommandGraphNode *> mCurrentReadingNodes;
     CommandGraphNode *mCurrentWritingNode;
