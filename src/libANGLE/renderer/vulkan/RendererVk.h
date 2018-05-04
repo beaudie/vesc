@@ -34,7 +34,7 @@ namespace vk
 struct Format;
 }
 
-class RendererVk : angle::NonCopyable
+class RendererVk : angle::NonCopyable, public MultisampleTextureInitializer
 {
   public:
     RendererVk();
@@ -76,6 +76,12 @@ class RendererVk : angle::NonCopyable
 
     bool isResourceInUse(const vk::CommandGraphResource &resource);
     bool isSerialInUse(Serial serial);
+
+    gl::Error initializeMultisampleTextureToBlack(const gl::Context *context,
+                                                  gl::Texture *glTexture) override;
+    gl::Error getIncompleteTexture(const gl::Context *context,
+                                   gl::TextureType type,
+                                   gl::Texture **textureOut);
 
     template <typename T>
     void releaseResource(const vk::CommandGraphResource &resource, T *object)
@@ -142,8 +148,9 @@ class RendererVk : angle::NonCopyable
     Serial issueShaderSerial();
 
     vk::ShaderLibrary *getShaderLibrary();
+    void cleanup(const gl::Context* context);
 
-  private:
+private:
     vk::Error initializeDevice(uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
     vk::Error submitFrame(const VkSubmitInfo &submitInfo, vk::CommandBuffer &&commandBatch);
@@ -173,6 +180,7 @@ class RendererVk : angle::NonCopyable
     SerialFactory mShaderSerialFactory;
     Serial mLastCompletedQueueSerial;
     Serial mCurrentQueueSerial;
+    IncompleteTextureSet mIncompleteTextures;
 
     struct CommandBatch final : angle::NonCopyable
     {
