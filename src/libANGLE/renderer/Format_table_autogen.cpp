@@ -153,6 +153,7 @@ constexpr Format g_formatInfoTable[] = {
     { Format::ID::R8G8_UNORM, GL_RG8, GL_RG8, GenerateMip<R8G8>, NoCopyFunctions, ReadColor<R8G8, GLfloat>, WriteColor<R8G8, GLfloat>, GL_UNSIGNED_NORMALIZED, 8, 8, 0, 0, 0, 0, 2, false },
     { Format::ID::R8_SINT, GL_R8I, GL_R8I, GenerateMip<R8S>, NoCopyFunctions, ReadColor<R8S, GLint>, WriteColor<R8S, GLint>, GL_INT, 8, 0, 0, 0, 0, 0, 1, false },
     { Format::ID::R8_SNORM, GL_R8_SNORM, GL_R8_SNORM, GenerateMip<R8S>, NoCopyFunctions, ReadColor<R8S, GLfloat>, WriteColor<R8S, GLfloat>, GL_SIGNED_NORMALIZED, 8, 0, 0, 0, 0, 0, 1, false },
+    { Format::ID::R8_SSCALED, GL_R8_SSCALED_ANGLEX, GL_R8_SSCALED_ANGLEX, GenerateMip<R8S>, NoCopyFunctions, ReadColor<R8S, GLint>, WriteColor<R8S, GLint>, GL_INT, 8, 0, 0, 0, 0, 0, 1, false },
     { Format::ID::R8_UINT, GL_R8UI, GL_R8UI, GenerateMip<R8>, NoCopyFunctions, ReadColor<R8, GLuint>, WriteColor<R8, GLuint>, GL_UNSIGNED_INT, 8, 0, 0, 0, 0, 0, 1, false },
     { Format::ID::R8_UNORM, GL_R8, GL_R8, GenerateMip<R8>, NoCopyFunctions, ReadColor<R8, GLfloat>, WriteColor<R8, GLfloat>, GL_UNSIGNED_NORMALIZED, 8, 0, 0, 0, 0, 0, 1, false },
     { Format::ID::R9G9B9E5_SHAREDEXP, GL_RGB9_E5, GL_RGB9_E5, GenerateMip<R9G9B9E5>, NoCopyFunctions, ReadColor<R9G9B9E5, GLfloat>, WriteColor<R9G9B9E5, GLfloat>, GL_FLOAT, 9, 9, 9, 0, 0, 0, 3, false },
@@ -337,6 +338,8 @@ Format::ID Format::InternalFormatToID(GLenum internalFormat)
             return Format::ID::R8_UINT;
         case GL_R8_SNORM:
             return Format::ID::R8_SNORM;
+        case GL_R8_SSCALED_ANGLEX:
+            return Format::ID::R8_SSCALED;
         case GL_RG16F:
             return Format::ID::R16G16_FLOAT;
         case GL_RG16I:

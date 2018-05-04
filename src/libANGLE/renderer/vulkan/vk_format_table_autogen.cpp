@@ -1262,6 +1262,10 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
             break;
         }
 
+        case angle::Format::ID::R8_SSCALED:
+            // This format is not implemented in Vulkan.
+            break;
+
         case angle::Format::ID::R8_UINT:
         {
             internalFormat          = GL_R8UI;

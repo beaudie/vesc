@@ -1277,7 +1277,7 @@ AttributeType GetAttributeType(GLenum enumValue)
     }
 }
 
-VertexFormatType GetVertexFormatType(GLenum type, GLboolean normalized, GLuint components, bool pureInteger)
+angle::Format::ID GetVertexFormatId(GLenum type, GLboolean normalized, GLuint components, bool pureInteger)
 {
     switch (type)
     {
@@ -1286,10 +1286,12 @@ VertexFormatType GetVertexFormatType(GLenum type, GLboolean normalized, GLuint c
             {
                 case 1:
                     if (pureInteger)
-                        return VERTEX_FORMAT_SBYTE1_INT;
+                        return angle::Format::ID::R8_SINT;
                     if (normalized)
-                        return VERTEX_FORMAT_SBYTE1_NORM;
-                    return VERTEX_FORMAT_SBYTE1;
+                        return angle::Format::ID::R8_SNORM;
+                    return angle::Format::ID::R8_SSCALED;
+            }
+#if 0 // TODO
                 case 2:
                     if (pureInteger)
                         return VERTEX_FORMAT_SBYTE2_INT;
@@ -1542,11 +1544,30 @@ VertexFormatType GetVertexFormatType(GLenum type, GLboolean normalized, GLuint c
             if (normalized)
                 return VERTEX_FORMAT_UINT210_NORM;
             return VERTEX_FORMAT_UINT210;
+#endif
         default:
             UNREACHABLE();
 #if !UNREACHABLE_IS_NORETURN
-            return VERTEX_FORMAT_INVALID;
+            return angle::Format::ID::NONE;
 #endif
+    }
+}
+
+angle::Format::ID GetVertexFormatId(const VertexAttribute &attrib)
+{
+    return GetVertexFormatId(attrib.type, attrib.normalized, attrib.size, attrib.pureInteger);
+}
+
+// TODO(fjhenigman): Do away with VertexFormatType; use angle::Format::ID instead.
+VertexFormatType GetVertexFormatType(GLenum type, GLboolean normalized, GLuint components, bool pureInteger)
+{
+    switch (GetVertexFormatId(type, normalized, components, pureInteger))
+    {
+        case angle::Format::ID::R8_SINT:    return VERTEX_FORMAT_SBYTE1_INT;
+        case angle::Format::ID::R8_SNORM:   return VERTEX_FORMAT_SBYTE1_NORM;
+        case angle::Format::ID::R8_SSCALED: return VERTEX_FORMAT_SBYTE1;
+        // TODO other cases
+        default: return VERTEX_FORMAT_INVALID;
     }
 }
 
