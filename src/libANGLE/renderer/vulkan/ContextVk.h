@@ -25,7 +25,7 @@ class ContextVk : public ContextImpl
     ContextVk(const gl::ContextState &state, RendererVk *renderer);
     ~ContextVk() override;
 
-    gl::Error initialize() override;
+    gl::Error initialize(gl::Caps *caps) override;
 
     void onDestroy(const gl::Context *context) override;
 
