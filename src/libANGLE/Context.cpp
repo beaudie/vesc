@@ -289,6 +289,12 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mContextLostForced(false),
       mResetStrategy(GetResetStrategy(attribs)),
       mRobustAccess(GetRobustAccess(attribs)),
+      mRobustResourceInit(GetRobustResourceInit(attribs)),
+      mSurfacelessSupported(displayExtensions.surfacelessContext),
+      mDebugContext(GetDebug(attribs)),
+      mBindGeneratesResource(GetBindGeneratesResource(attribs)),
+      mClientArraysEnabled(GetClientArraysEnabled(attribs)),
+      mExplicitContextAvailable(clientExtensions.explicitContext),
       mCurrentSurface(static_cast<egl::Surface *>(EGL_NO_SURFACE)),
       mCurrentDisplay(static_cast<egl::Display *>(EGL_NO_DISPLAY)),
       mWebGLContext(GetWebGLContext(attribs)),
@@ -300,16 +306,17 @@ Context::Context(rx::EGLImplFactory *implFactory,
     // Needed to solve a Clang warning of unused variables.
     ANGLE_UNUSED_VARIABLE(mSavedArgsType);
     ANGLE_UNUSED_VARIABLE(mParamsBuffer);
+}
 
-    mImplementation->setMemoryProgramCache(memoryProgramCache);
+void Context::initialize()
+{
+    mImplementation->setMemoryProgramCache(mMemoryProgramCache);
 
-    bool robustResourceInit = GetRobustResourceInit(attribs);
-    initCaps(displayExtensions, clientExtensions, robustResourceInit);
+    initCaps();
     initWorkarounds();
 
-    mGLState.initialize(this, GetDebug(attribs), GetBindGeneratesResource(attribs),
-                        GetClientArraysEnabled(attribs), robustResourceInit,
-                        mMemoryProgramCache != nullptr);
+    mGLState.initialize(this, mDebugContext, mBindGeneratesResource, mClientArraysEnabled,
+                        mRobustResourceInit, mMemoryProgramCache != nullptr);
 
     mFenceNVHandleAllocator.setBaseHandle(0);
 
@@ -517,6 +524,7 @@ egl::Error Context::makeCurrent(egl::Display *display, egl::Surface *surface)
 
     if (!mHasBeenCurrent)
     {
+        initialize();
         initRendererString();
         initVersionStrings();
         initExtensionStrings();
@@ -3014,9 +3022,7 @@ bool Context::hasActiveTransformFeedback(GLuint program) const
     return false;
 }
 
-Extensions Context::generateSupportedExtensions(const egl::DisplayExtensions &displayExtensions,
-                                                const egl::ClientExtensions &clientExtensions,
-                                                bool robustResourceInit) const
+Extensions Context::generateSupportedExtensions() const
 {
     Extensions supportedExtensions = mImplementation->getNativeExtensions();
 
@@ -3060,7 +3066,7 @@ Extensions Context::generateSupportedExtensions(const egl::DisplayExtensions &di
     supportedExtensions.noError = mSkipValidation;
 
     // Enable surfaceless to advertise we'll have the correct behavior when there is no default FBO
-    supportedExtensions.surfacelessContext = displayExtensions.surfacelessContext;
+    supportedExtensions.surfacelessContext = mSurfacelessSupported;
 
     // Explicitly enable GL_KHR_debug
     supportedExtensions.debug                   = true;
@@ -3073,7 +3079,7 @@ Extensions Context::generateSupportedExtensions(const egl::DisplayExtensions &di
     supportedExtensions.robustClientMemory = true;
 
     // Determine robust resource init availability from EGL.
-    supportedExtensions.robustResourceInitialization = robustResourceInit;
+    supportedExtensions.robustResourceInitialization = mRobustResourceInit;
 
     // mExtensions.robustBufferAccessBehavior is true only if robust access is true and the backend
     // supports it.
@@ -3084,7 +3090,7 @@ Extensions Context::generateSupportedExtensions(const egl::DisplayExtensions &di
     supportedExtensions.programCacheControl = true;
 
     // Enable EGL_ANGLE_explicit_context subextensions
-    if (clientExtensions.explicitContext)
+    if (mExplicitContextAvailable)
     {
         // GL_ANGLE_explicit_context_gles1
         supportedExtensions.explicitContextGles1 = true;
@@ -3095,15 +3101,12 @@ Extensions Context::generateSupportedExtensions(const egl::DisplayExtensions &di
     return supportedExtensions;
 }
 
-void Context::initCaps(const egl::DisplayExtensions &displayExtensions,
-                       const egl::ClientExtensions &clientExtensions,
-                       bool robustResourceInit)
+void Context::initCaps()
 {
     mCaps = mImplementation->getNativeCaps();
 
-    mSupportedExtensions =
-        generateSupportedExtensions(displayExtensions, clientExtensions, robustResourceInit);
-    mExtensions = mSupportedExtensions;
+    mSupportedExtensions = generateSupportedExtensions();
+    mExtensions          = mSupportedExtensions;
 
     mLimitations = mImplementation->getNativeLimitations();
 
