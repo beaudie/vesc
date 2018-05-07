@@ -117,7 +117,7 @@ EGLBoolean EGLAPIENTRY Terminate(EGLDisplay dpy)
         thread->setCurrent(nullptr);
     }
 
-    Error error = display->terminate();
+    Error error = display->terminate(thread);
     if (error.isError())
     {
         thread->setError(error);
@@ -504,8 +504,8 @@ EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface r
     // Only call makeCurrent if the context or surfaces have changed.
     if (previousDraw != drawSurface || previousRead != readSurface || previousContext != context)
     {
-        ANGLE_EGL_TRY_RETURN(thread, display->makeCurrent(drawSurface, readSurface, context),
-                             EGL_FALSE);
+        ANGLE_EGL_TRY_RETURN(
+            thread, display->makeCurrent(thread, drawSurface, readSurface, context), EGL_FALSE);
 
         thread->setCurrent(context);
 

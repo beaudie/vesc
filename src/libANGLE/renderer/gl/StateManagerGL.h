@@ -172,7 +172,9 @@ class StateManagerGL final : angle::NonCopyable
     gl::Error pauseQuery(gl::QueryType type);
     gl::Error resumeAllQueries();
     gl::Error resumeQuery(gl::QueryType type);
-    gl::Error onMakeCurrent(const gl::Context *context);
+
+    gl::Error onMakeCurrent(const gl::Context *context, const gl::Context *prevContext);
+    gl::Error onMakeUnCurrent(const gl::Context *context, const gl::Context *nextContext);
 
     void syncState(const gl::Context *context, const gl::State::DirtyBits &glDirtyBits);
 
@@ -258,8 +260,6 @@ class StateManagerGL final : angle::NonCopyable
     // Queries that are temporarily in the paused state so that their results will not be affected
     // by other operations
     angle::PackedEnumMap<gl::QueryType, QueryGL *> mTemporaryPausedQueries;
-
-    gl::ContextID mPrevDrawContext;
 
     GLint mUnpackAlignment;
     GLint mUnpackRowLength;

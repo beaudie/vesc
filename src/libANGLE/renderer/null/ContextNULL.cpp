@@ -309,8 +309,14 @@ GLint64 ContextNULL::getTimestamp()
     return 0;
 }
 
-void ContextNULL::onMakeCurrent(const gl::Context *context)
+gl::Error ContextNULL::onMakeCurrent(const gl::Context *context, const gl::Context *prevContext)
 {
+    return gl::NoError();
+}
+
+gl::Error ContextNULL::onMakeUnCurrent(const gl::Context *context, const gl::Context *nextContext)
+{
+    return gl::NoError();
 }
 
 gl::Caps ContextNULL::getNativeCaps() const

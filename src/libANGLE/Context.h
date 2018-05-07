@@ -78,7 +78,13 @@ class Context final : angle::NonCopyable
     egl::Error onDestroy(const egl::Display *display);
     ~Context();
 
-    egl::Error makeCurrent(egl::Display *display, egl::Surface *surface);
+    egl::Error makeCurrent(egl::Display *display,
+                           egl::Surface *surface,
+                           const Context *prevContext);
+    egl::Error makeUnCurrent(egl::Display *display,
+                             egl::Surface *surface,
+                             const Context *nextContext);
+
     egl::Error releaseSurface(const egl::Display *display);
 
     // These create  and destroy methods are merely pass-throughs to

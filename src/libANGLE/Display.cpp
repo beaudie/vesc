@@ -29,6 +29,7 @@
 #include "libANGLE/ResourceManager.h"
 #include "libANGLE/Stream.h"
 #include "libANGLE/Surface.h"
+#include "libANGLE/Thread.h"
 #include "libANGLE/histogram_macros.h"
 #include "libANGLE/renderer/DeviceImpl.h"
 #include "libANGLE/renderer/DisplayImpl.h"
@@ -532,14 +533,14 @@ Error Display::initialize()
     return NoError();
 }
 
-Error Display::terminate()
+Error Display::terminate(const Thread *thread)
 {
     if (!mInitialized)
     {
         return NoError();
     }
 
-    ANGLE_TRY(makeCurrent(nullptr, nullptr, nullptr));
+    ANGLE_TRY(makeCurrent(thread, nullptr, nullptr, nullptr));
 
     mMemoryProgramCache.clear();
 
@@ -804,16 +805,23 @@ Error Display::createContext(const Config *configuration,
     return NoError();
 }
 
-Error Display::makeCurrent(egl::Surface *drawSurface,
-                           egl::Surface *readSurface,
+Error Display::makeCurrent(const Thread *thread,
+                           Surface *drawSurface,
+                           Surface *readSurface,
                            gl::Context *context)
 {
+    gl::Context *prevContext = thread->getContext();
+    if (prevContext)
+    {
+        ANGLE_TRY(context->makeUnCurrent(this, thread->getCurrentDrawSurface(), context));
+    }
+
     ANGLE_TRY(mImplementation->makeCurrent(drawSurface, readSurface, context));
 
     if (context != nullptr)
     {
         ASSERT(readSurface == drawSurface);
-        ANGLE_TRY(context->makeCurrent(this, drawSurface));
+        ANGLE_TRY(context->makeCurrent(this, drawSurface, prevContext));
     }
 
     return NoError();
