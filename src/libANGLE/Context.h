@@ -1460,6 +1460,8 @@ class Context final : angle::NonCopyable
     int vertexArrayIndex(ClientVertexArrayType type) const;
 
   private:
+    void initialize();
+
     Error prepareForDraw();
     Error prepareForClear(GLbitfield mask);
     Error prepareForClearBuffer(GLenum buffer, GLint drawbuffer);
@@ -1489,9 +1491,8 @@ class Context final : angle::NonCopyable
     void initVersionStrings();
     void initExtensionStrings();
 
-    Extensions generateSupportedExtensions(const egl::DisplayExtensions &displayExtensions,
-                                           bool robustResourceInit) const;
-    void initCaps(const egl::DisplayExtensions &displayExtensions, bool robustResourceInit);
+    Extensions generateSupportedExtensions() const;
+    void initCaps();
     void updateCaps();
     void initWorkarounds();
 
@@ -1562,11 +1563,16 @@ class Context final : angle::NonCopyable
     mutable GLenum mResetStatus;
     mutable bool mContextLostForced;
     GLenum mResetStrategy;
-    bool mRobustAccess;
+    const bool mRobustAccess;
+    const bool mRobustResourceInit;
+    const bool mSurfacelessSupported;
+    const bool mDebugContext;
+    const bool mBindGeneratesResource;
+    const bool mClientArraysEnabled;
     egl::Surface *mCurrentSurface;
     egl::Display *mCurrentDisplay;
-    bool mWebGLContext;
-    bool mExtensionsEnabled;
+    const bool mWebGLContext;
+    const bool mExtensionsEnabled;
     MemoryProgramCache *mMemoryProgramCache;
 
     State::DirtyBits mTexImageDirtyBits;
