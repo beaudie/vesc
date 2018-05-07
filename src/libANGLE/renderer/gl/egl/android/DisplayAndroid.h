@@ -18,6 +18,8 @@
 namespace rx
 {
 
+class RendererEGL;
+
 class DisplayAndroid : public DisplayEGL
 {
   public:
@@ -44,6 +46,8 @@ class DisplayAndroid : public DisplayEGL
                            EGLenum target,
                            const egl::AttributeMap &attribs) override;
 
+    ContextImpl *createContext(const gl::ContextState &state) override;
+
     egl::ConfigSet generateConfigs() override;
 
     bool testDeviceLost() override;
@@ -60,8 +64,11 @@ class DisplayAndroid : public DisplayEGL
                            egl::Surface *readSurface,
                            gl::Context *context) override;
 
+    void destroyNativeContext(EGLContext context);
+
   private:
-    egl::Error makeCurrentSurfaceless(gl::Context *context) override;
+    egl::ErrorOrResult<std::shared_ptr<RendererEGL>> createRenderer(EGLContext shareContext,
+                                                                    bool makeNewContextCurrent);
 
     template <typename T>
     void getConfigAttrib(EGLConfig config, EGLint attribute, T *value) const;
@@ -73,10 +80,17 @@ class DisplayAndroid : public DisplayEGL
                                     const char *extension,
                                     const U &defaultValue) const;
 
+    Display *mDisplay;
+
+    std::shared_ptr<RendererEGL> mRenderer;
+
     std::vector<EGLint> mConfigAttribList;
     std::map<EGLint, EGLint> mConfigIds;
     EGLSurface mDummyPbuffer;
-    EGLSurface mCurrentSurface;
+
+    EGLSurface mCurrentDrawSurface;
+    EGLSurface mCurrentReadSurface;
+    EGLContext mCurrentContext;
 };
 
 }  // namespace rx

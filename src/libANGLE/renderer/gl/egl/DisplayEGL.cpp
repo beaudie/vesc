@@ -19,7 +19,6 @@ DisplayEGL::DisplayEGL(const egl::DisplayState &state)
     : DisplayGL(state),
       mEGL(nullptr),
       mConfig(EGL_NO_CONFIG),
-      mContext(EGL_NO_CONTEXT),
       mFunctionsGL(nullptr)
 {
 }
@@ -35,7 +34,12 @@ std::string DisplayEGL::getVendorString() const
     return vendor;
 }
 
-egl::Error DisplayEGL::initializeContext(const egl::AttributeMap &eglAttributes)
+void DisplayEGL::destroyNativeContext(EGLContext context)
+{
+    mEGL->destroyContext(context);
+}
+
+egl::ErrorOrResult<EGLContext> DisplayEGL::createContext(const egl::AttributeMap &eglAttributes)
 {
     gl::Version eglVersion(mEGL->majorVersion, mEGL->minorVersion);
 
@@ -88,10 +92,10 @@ egl::Error DisplayEGL::initializeContext(const egl::AttributeMap &eglAttributes)
 
     for (const auto &attribList : contextAttribLists)
     {
-        mContext = mEGL->createContext(mConfig, EGL_NO_CONTEXT, attribList.data());
-        if (mContext != EGL_NO_CONTEXT)
+        EGLContext context = mEGL->createContext(mConfig, EGL_NO_CONTEXT, attribList.data());
+        if (context != EGL_NO_CONTEXT)
         {
-            return egl::NoError();
+            return context;
         }
     }
 
