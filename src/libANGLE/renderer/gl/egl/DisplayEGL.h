@@ -23,12 +23,13 @@ class DisplayEGL : public DisplayGL
 
     std::string getVendorString() const override;
 
+    void destroyNativeContext(EGLContext context);
+
   protected:
-    egl::Error initializeContext(const egl::AttributeMap &eglAttributes);
+    egl::ErrorOrResult<EGLContext> createContext(const egl::AttributeMap &eglAttributes);
 
     FunctionsEGL *mEGL;
     EGLConfig mConfig;
-    EGLContext mContext;
     FunctionsGL *mFunctionsGL;
 
   private:
