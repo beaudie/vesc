@@ -292,8 +292,11 @@ DynamicDescriptorPool::~DynamicDescriptorPool()
 
 void DynamicDescriptorPool::destroy(RendererVk *rendererVk)
 {
-    ASSERT(mCurrentDescriptorSetPool.valid());
-    mCurrentDescriptorSetPool.destroy(rendererVk->getDevice());
+    // The owning context may never have been made current/initialized
+    if (mCurrentDescriptorSetPool.valid())
+    {
+        mCurrentDescriptorSetPool.destroy(rendererVk->getDevice());
+    }
 }
 
 Error DynamicDescriptorPool::init(const VkDevice &device,
