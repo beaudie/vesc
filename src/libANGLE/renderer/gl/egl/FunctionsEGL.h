@@ -55,7 +55,9 @@ class FunctionsEGL
                                    const EGLint *attrib_list) const;
     EGLBoolean destroyContext(EGLContext context) const;
     EGLBoolean destroySurface(EGLSurface surface) const;
-    EGLBoolean makeCurrent(EGLSurface surface, EGLContext context) const;
+    EGLBoolean makeCurrent(EGLSurface drawSurface,
+                           EGLSurface readSurface,
+                           EGLContext context) const;
     const char *queryString(EGLint name) const;
     EGLBoolean querySurface(EGLSurface surface, EGLint attribute, EGLint *value) const;
     EGLBoolean swapBuffers(EGLSurface surface) const;
