@@ -80,12 +80,9 @@ egl::Error DisplayGL::makeCurrent(egl::Surface *drawSurface, egl::Surface *readS
         SurfaceGL *glDrawSurface = GetImplAs<SurfaceGL>(drawSurface);
         ANGLE_TRY(glDrawSurface->makeCurrent());
         mCurrentDrawSurface = drawSurface;
-        return egl::NoError();
     }
-    else
-    {
-        return makeCurrentSurfaceless(context);
-    }
+
+    return egl::NoError();
 }
 
 void DisplayGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
