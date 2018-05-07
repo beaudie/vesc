@@ -149,7 +149,8 @@ class ContextNULL : public ContextImpl
     GLint64 getTimestamp() override;
 
     // Context switching
-    void onMakeCurrent(const gl::Context *context) override;
+    gl::Error onMakeCurrent(const gl::Context *context) override;
+    gl::Error onMakeUnCurrent(const gl::Context *context) override;
 
     // Native capabilities, unmodified by gl::Context.
     const gl::Caps &getNativeCaps() const override;
