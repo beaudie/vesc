@@ -380,10 +380,20 @@ GLint64 ContextGL::getTimestamp()
     return mRenderer->getTimestamp();
 }
 
-void ContextGL::onMakeCurrent(const gl::Context *context)
+gl::Error ContextGL::onMakeCurrent(const gl::Context *context, const gl::Context *prevContext)
 {
     // Queries need to be paused/resumed on context switches
-    ANGLE_SWALLOW_ERR(mRenderer->getStateManager()->onMakeCurrent(context));
+    ANGLE_TRY(mRenderer->getStateManager()->onMakeCurrent(context, prevContext));
+
+    return gl::NoError();
+}
+
+gl::Error ContextGL::onMakeUnCurrent(const gl::Context *context, const gl::Context *nextContext)
+{
+    // Queries need to be paused/resumed on context switches
+    ANGLE_TRY(mRenderer->getStateManager()->onMakeUnCurrent(context, nextContext));
+
+    return gl::NoError();
 }
 
 gl::Caps ContextGL::getNativeCaps() const

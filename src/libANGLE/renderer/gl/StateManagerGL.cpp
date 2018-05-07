@@ -83,7 +83,6 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions,
       mTransformFeedback(0),
       mCurrentTransformFeedback(nullptr),
       mQueries(),
-      mPrevDrawContext(0),
       mUnpackAlignment(4),
       mUnpackRowLength(0),
       mUnpackSkipRows(0),
@@ -824,10 +823,37 @@ gl::Error StateManagerGL::resumeQuery(gl::QueryType type)
     return gl::NoError();
 }
 
-gl::Error StateManagerGL::onMakeCurrent(const gl::Context *context)
+gl::Error StateManagerGL::onMakeCurrent(const gl::Context *context, const gl::Context *prevContext)
 {
-    const gl::State &glState = context->getGLState();
+    if (context != prevContext)
+    {
+        const gl::State &glState = context->getGLState();
 
+        for (gl::QueryType type : angle::AllEnums<gl::QueryType>())
+        {
+            // Check if this new context needs to resume a query
+            gl::Query *newQuery = glState.getActiveQuery(type);
+            if (newQuery != nullptr)
+            {
+                QueryGL *queryGL = GetImplAs<QueryGL>(newQuery);
+                ANGLE_TRY(queryGL->resume());
+            }
+        }
+
+        onTransformFeedbackStateChange();
+
+        // Seamless cubemaps are required for ES3 and higher contexts. It should be the cheapest to
+        // set this state here since MakeCurrent is expected to be called less frequently than draw
+        // calls.
+        setTextureCubemapSeamlessEnabled(context->getClientMajorVersion() >= 3);
+    }
+
+    return gl::NoError();
+}
+
+gl::Error StateManagerGL::onMakeUnCurrent(const gl::Context *context,
+                                          const gl::Context *nextContext)
+{
 #if defined(ANGLE_ENABLE_ASSERTS)
     // Temporarily pausing queries during context switch is not supported
     for (auto &pausedQuery : mTemporaryPausedQueries)
@@ -836,9 +862,7 @@ gl::Error StateManagerGL::onMakeCurrent(const gl::Context *context)
     }
 #endif
 
-    // If the context has changed, pause the previous context's queries
-    auto contextID = context->getContextState().getContextID();
-    if (contextID != mPrevDrawContext)
+    if (context != nextContext)
     {
         for (gl::QueryType type : angle::AllEnums<gl::QueryType>())
         {
@@ -849,22 +873,14 @@ gl::Error StateManagerGL::onMakeCurrent(const gl::Context *context)
                 ANGLE_TRY(currentQuery->pause());
                 mQueries[type] = nullptr;
             }
+        }
 
-            // Check if this new context needs to resume a query
-            gl::Query *newQuery = glState.getActiveQuery(type);
-            if (newQuery != nullptr)
-            {
-                QueryGL *queryGL = GetImplAs<QueryGL>(newQuery);
-                ANGLE_TRY(queryGL->resume());
-            }
+        // Pause the current transform feedback, if there is one.
+        if (mCurrentTransformFeedback)
+        {
+            mCurrentTransformFeedback->syncPausedState(true);
         }
     }
-    onTransformFeedbackStateChange();
-    mPrevDrawContext = contextID;
-
-    // Seamless cubemaps are required for ES3 and higher contexts. It should be the cheapest to set
-    // this state here since MakeCurrent is expected to be called less frequently than draw calls.
-    setTextureCubemapSeamlessEnabled(context->getClientMajorVersion() >= 3);
 
     return gl::NoError();
 }

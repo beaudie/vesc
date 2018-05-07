@@ -539,7 +539,7 @@ Error Display::terminate()
         return NoError();
     }
 
-    ANGLE_TRY(makeCurrent(nullptr, nullptr, nullptr));
+    ANGLE_TRY(makeCurrent(nullptr, nullptr, nullptr, nullptr));
 
     mMemoryProgramCache.clear();
 
@@ -804,16 +804,31 @@ Error Display::createContext(const Config *configuration,
     return NoError();
 }
 
-Error Display::makeCurrent(egl::Surface *drawSurface,
-                           egl::Surface *readSurface,
-                           gl::Context *context)
+Error Display::makeUnCurrent(Surface *drawSurface,
+                             Surface *readSurface,
+                             gl::Context *context,
+                             const gl::Context *nextContext)
+{
+    if (context != nullptr)
+    {
+        ASSERT(readSurface == drawSurface);
+        ANGLE_TRY(context->makeUnCurrent(this, drawSurface, nextContext));
+    }
+
+    return NoError();
+}
+
+Error Display::makeCurrent(Surface *drawSurface,
+                           Surface *readSurface,
+                           gl::Context *context,
+                           const gl::Context *prevContext)
 {
     ANGLE_TRY(mImplementation->makeCurrent(drawSurface, readSurface, context));
 
     if (context != nullptr)
     {
         ASSERT(readSurface == drawSurface);
-        ANGLE_TRY(context->makeCurrent(this, drawSurface));
+        ANGLE_TRY(context->makeCurrent(this, drawSurface, prevContext));
     }
 
     return NoError();
