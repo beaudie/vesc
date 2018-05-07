@@ -23,19 +23,18 @@ class DisplayEGL : public DisplayGL
 
     std::string getVendorString() const override;
 
+    void destroyNativeContext(EGLContext context);
+
   protected:
-    egl::Error initializeContext(const egl::AttributeMap &eglAttributes);
+    egl::ErrorOrResult<EGLContext> createNativeContext(const egl::AttributeMap &eglAttributes);
 
     FunctionsEGL *mEGL;
     EGLConfig mConfig;
-    EGLContext mContext;
     FunctionsGL *mFunctionsGL;
 
   private:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
     void generateCaps(egl::Caps *outCaps) const override;
-
-    const FunctionsGL *getFunctionsGL() const override;
 };
 
 }  // namespace rx
