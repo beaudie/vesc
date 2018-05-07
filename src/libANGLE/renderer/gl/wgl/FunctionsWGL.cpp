@@ -93,7 +93,9 @@ FunctionsWGL::FunctionsWGL()
       dxUnregisterObjectNV(nullptr),
       dxObjectAccessNV(nullptr),
       dxLockObjectsNV(nullptr),
-      dxUnlockObjectsNV(nullptr)
+      dxUnlockObjectsNV(nullptr),
+      makeContextCurrentARB(nullptr),
+      getCurrentReadDCARB(nullptr)
 {
 }
 
@@ -176,6 +178,12 @@ void FunctionsWGL::initialize(HMODULE glModule, HDC context)
     GetWGLExtensionProcAddress(glModule, getProcAddress, extensions, "WGL_NV_DX_interop", "wglDXObjectAccessNV", &dxObjectAccessNV);
     GetWGLExtensionProcAddress(glModule, getProcAddress, extensions, "WGL_NV_DX_interop", "wglDXLockObjectsNV", &dxLockObjectsNV);
     GetWGLExtensionProcAddress(glModule, getProcAddress, extensions, "WGL_NV_DX_interop", "wglDXUnlockObjectsNV", &dxUnlockObjectsNV);
+
+    // WGL_ARB_make_current_read
+    GetWGLExtensionProcAddress(glModule, getProcAddress, extensions, "WGL_ARB_make_current_read",
+                               "wglMakeContextCurrentARB", &makeContextCurrentARB);
+    GetWGLExtensionProcAddress(glModule, getProcAddress, extensions, "WGL_ARB_make_current_read",
+                               "wglGetCurrentReadDCARB", &getCurrentReadDCARB);
 }
 
 bool FunctionsWGL::hasExtension(const std::string &ext) const

@@ -45,9 +45,7 @@ class RendererGL : angle::NonCopyable
 {
   public:
     RendererGL(const FunctionsGL *functions, const egl::AttributeMap &attribMap);
-    ~RendererGL();
-
-    ContextImpl *createContext(const gl::ContextState &state);
+    virtual ~RendererGL();
 
     gl::Error flush();
     gl::Error finish();
