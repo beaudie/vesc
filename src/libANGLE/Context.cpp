@@ -3092,7 +3092,7 @@ Extensions Context::generateSupportedExtensions(const egl::DisplayExtensions &di
 
 void Context::initCaps(const egl::DisplayExtensions &displayExtensions, bool robustResourceInit)
 {
-    mCaps = mImplementation->getNativeCaps();
+    mImplementation->getNativeCaps(&mCaps);
 
     mSupportedExtensions = generateSupportedExtensions(displayExtensions, robustResourceInit);
     mExtensions          = mSupportedExtensions;

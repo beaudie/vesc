@@ -271,9 +271,10 @@ void Context9::onMakeCurrent(const gl::Context *context)
 {
 }
 
-const gl::Caps &Context9::getNativeCaps() const
+void Context9::getNativeCaps(gl::Caps *caps) const
 {
-    return mRenderer->getNativeCaps();
+    ASSERT(caps);
+    *caps = mRenderer->getNativeCaps();
 }
 
 const gl::TextureCapsMap &Context9::getNativeTextureCaps() const

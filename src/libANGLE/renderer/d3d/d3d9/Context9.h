@@ -130,7 +130,7 @@ class Context9 : public ContextImpl
     void onMakeCurrent(const gl::Context *context) override;
 
     // Caps queries
-    const gl::Caps &getNativeCaps() const override;
+    void getNativeCaps(gl::Caps *caps) const override;
     const gl::TextureCapsMap &getNativeTextureCaps() const override;
     const gl::Extensions &getNativeExtensions() const override;
     const gl::Limitations &getNativeLimitations() const override;

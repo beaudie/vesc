@@ -632,9 +632,10 @@ void ContextVk::onMakeCurrent(const gl::Context * /*context*/)
 {
 }
 
-const gl::Caps &ContextVk::getNativeCaps() const
+void ContextVk::getNativeCaps(gl::Caps *caps) const
 {
-    return mRenderer->getNativeCaps();
+    ASSERT(caps);
+    *caps = mRenderer->getNativeCaps();
 }
 
 const gl::TextureCapsMap &ContextVk::getNativeTextureCaps() const
