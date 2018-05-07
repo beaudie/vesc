@@ -36,7 +36,7 @@ class ContextNULL : public ContextImpl
     ContextNULL(const gl::ContextState &state, AllocationTrackerNULL *allocationTracker);
     ~ContextNULL() override;
 
-    gl::Error initialize() override;
+    gl::Error initialize(gl::Caps *caps) override;
 
     // Flush and finish.
     gl::Error flush(const gl::Context *context) override;

@@ -30,7 +30,7 @@ class ContextGL : public ContextImpl
     ContextGL(const gl::ContextState &state, RendererGL *renderer);
     ~ContextGL() override;
 
-    gl::Error initialize() override;
+    gl::Error initialize(gl::Caps *caps) override;
 
     // Shader creation
     CompilerImpl *createCompiler() override;

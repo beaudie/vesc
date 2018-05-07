@@ -22,7 +22,7 @@ class Context11 : public ContextImpl
     Context11(const gl::ContextState &state, Renderer11 *renderer);
     ~Context11() override;
 
-    gl::Error initialize() override;
+    gl::Error initialize(gl::Caps *caps) override;
 
     // Shader creation
     CompilerImpl *createCompiler() override;

@@ -22,7 +22,7 @@ class Context9 : public ContextImpl
     Context9(const gl::ContextState &state, Renderer9 *renderer);
     ~Context9() override;
 
-    gl::Error initialize() override;
+    gl::Error initialize(gl::Caps *caps) override;
 
     // Shader creation
     CompilerImpl *createCompiler() override;
