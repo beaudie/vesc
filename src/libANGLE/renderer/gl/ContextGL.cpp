@@ -40,7 +40,7 @@ ContextGL::~ContextGL()
 {
 }
 
-gl::Error ContextGL::initialize()
+gl::Error ContextGL::initialize(gl::Caps *caps)
 {
     return gl::NoError();
 }

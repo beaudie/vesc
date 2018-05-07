@@ -426,7 +426,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
     mComputeDirtyBits.set(State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_TEXTURES);
 
-    handleError(mImplementation->initialize());
+    handleError(mImplementation->initialize(&mCaps));
 }
 
 egl::Error Context::onDestroy(const egl::Display *display)
