@@ -824,10 +824,8 @@ gl::Error StateManagerGL::resumeQuery(gl::QueryType type)
     return gl::NoError();
 }
 
-gl::Error StateManagerGL::onMakeCurrent(const gl::Context *context)
+gl::Error StateManagerGL::onMakeUnCurrent(const gl::Context *context)
 {
-    const gl::State &glState = context->getGLState();
-
 #if defined(ANGLE_ENABLE_ASSERTS)
     // Temporarily pausing queries during context switch is not supported
     for (auto &pausedQuery : mTemporaryPausedQueries)
@@ -836,31 +834,42 @@ gl::Error StateManagerGL::onMakeCurrent(const gl::Context *context)
     }
 #endif
 
-    // If the context has changed, pause the previous context's queries
-    auto contextID = context->getContextState().getContextID();
-    if (contextID != mPrevDrawContext)
+    for (gl::QueryType type : angle::AllEnums<gl::QueryType>())
     {
-        for (gl::QueryType type : angle::AllEnums<gl::QueryType>())
+        QueryGL *currentQuery = mQueries[type];
+        // Pause any old query object
+        if (currentQuery != nullptr)
         {
-            QueryGL *currentQuery = mQueries[type];
-            // Pause any old query object
-            if (currentQuery != nullptr)
-            {
-                ANGLE_TRY(currentQuery->pause());
-                mQueries[type] = nullptr;
-            }
-
-            // Check if this new context needs to resume a query
-            gl::Query *newQuery = glState.getActiveQuery(type);
-            if (newQuery != nullptr)
-            {
-                QueryGL *queryGL = GetImplAs<QueryGL>(newQuery);
-                ANGLE_TRY(queryGL->resume());
-            }
+            ANGLE_TRY(currentQuery->pause());
+            mQueries[type] = nullptr;
         }
     }
+
+    // Pause the current transform feedback, if there is one.
+    if (mCurrentTransformFeedback)
+    {
+        mCurrentTransformFeedback->syncPausedState(true);
+    }
+
+    return gl::NoError();
+}
+
+gl::Error StateManagerGL::onMakeCurrent(const gl::Context *context)
+{
+    const gl::State &glState = context->getGLState();
+
+    for (gl::QueryType type : angle::AllEnums<gl::QueryType>())
+    {
+        // Check if this new context needs to resume a query
+        gl::Query *newQuery = glState.getActiveQuery(type);
+        if (newQuery != nullptr)
+        {
+            QueryGL *queryGL = GetImplAs<QueryGL>(newQuery);
+            ANGLE_TRY(queryGL->resume());
+        }
+    }
+
     onTransformFeedbackStateChange();
-    mPrevDrawContext = contextID;
 
     // Seamless cubemaps are required for ES3 and higher contexts. It should be the cheapest to set
     // this state here since MakeCurrent is expected to be called less frequently than draw calls.

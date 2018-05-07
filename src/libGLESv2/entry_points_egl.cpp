@@ -504,6 +504,8 @@ EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface r
     // Only call makeCurrent if the context or surfaces have changed.
     if (previousDraw != drawSurface || previousRead != readSurface || previousContext != context)
     {
+        ANGLE_EGL_TRY_RETURN(
+            thread, display->makeUnCurrent(previousDraw, previousRead, previousContext), EGL_FALSE);
         ANGLE_EGL_TRY_RETURN(thread, display->makeCurrent(drawSurface, readSurface, context),
                              EGL_FALSE);
 

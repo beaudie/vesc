@@ -172,6 +172,8 @@ class StateManagerGL final : angle::NonCopyable
     gl::Error pauseQuery(gl::QueryType type);
     gl::Error resumeAllQueries();
     gl::Error resumeQuery(gl::QueryType type);
+
+    gl::Error onMakeUnCurrent(const gl::Context *context);
     gl::Error onMakeCurrent(const gl::Context *context);
 
     void syncState(const gl::Context *context, const gl::State::DirtyBits &glDirtyBits);

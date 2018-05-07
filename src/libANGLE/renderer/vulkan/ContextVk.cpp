@@ -629,8 +629,14 @@ GLint64 ContextVk::getTimestamp()
     return GLint64();
 }
 
-void ContextVk::onMakeCurrent(const gl::Context * /*context*/)
+gl::Error ContextVk::onMakeCurrent(const gl::Context * /*context*/)
 {
+    return gl::NoError();
+}
+
+gl::Error ContextVk::onMakeUnCurrent(const gl::Context *context)
+{
+    return gl::NoError();
 }
 
 const gl::Caps &ContextVk::getNativeCaps() const

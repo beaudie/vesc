@@ -574,7 +574,14 @@ egl::Error Context::makeCurrent(egl::Display *display, egl::Surface *surface)
     }
 
     // Notify the renderer of a context switch
-    mImplementation->onMakeCurrent(this);
+    ANGLE_TRY(mImplementation->onMakeCurrent(this));
+    return egl::NoError();
+}
+
+egl::Error Context::makeUnCurrent(egl::Display *display)
+{
+    // Notify the renderer of a context switch
+    ANGLE_TRY(mImplementation->onMakeUnCurrent(this));
     return egl::NoError();
 }
 

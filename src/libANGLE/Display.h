@@ -101,6 +101,7 @@ class Display final : angle::NonCopyable
                         const AttributeMap &attribs,
                         gl::Context **outContext);
 
+    Error makeUnCurrent(Surface *drawSurface, Surface *readSurface, gl::Context *context);
     Error makeCurrent(Surface *drawSurface, Surface *readSurface, gl::Context *context);
 
     Error destroySurface(Surface *surface);

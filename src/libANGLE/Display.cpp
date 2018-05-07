@@ -798,9 +798,17 @@ Error Display::createContext(const Config *configuration,
     return NoError();
 }
 
-Error Display::makeCurrent(egl::Surface *drawSurface,
-                           egl::Surface *readSurface,
-                           gl::Context *context)
+Error Display::makeUnCurrent(Surface *drawSurface, Surface *readSurface, gl::Context *context)
+{
+    if (context != nullptr)
+    {
+        ANGLE_TRY(context->makeUnCurrent(this));
+    }
+
+    return NoError();
+}
+
+Error Display::makeCurrent(Surface *drawSurface, Surface *readSurface, gl::Context *context)
 {
     ANGLE_TRY(mImplementation->makeCurrent(drawSurface, readSurface, context));
 
