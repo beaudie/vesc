@@ -36,7 +36,7 @@ Context9::~Context9()
 {
 }
 
-gl::Error Context9::initialize()
+gl::Error Context9::initialize(gl::Caps *caps)
 {
     return gl::NoError();
 }

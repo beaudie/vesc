@@ -72,7 +72,7 @@ void ContextVk::onDestroy(const gl::Context *context)
     mDynamicDescriptorPool.destroy(mRenderer);
 }
 
-gl::Error ContextVk::initialize()
+gl::Error ContextVk::initialize(gl::Caps *caps)
 {
     ANGLE_TRY(mDynamicDescriptorPool.init(this->getDevice(),
                                           mRenderer->getUniformBufferDescriptorCount(),

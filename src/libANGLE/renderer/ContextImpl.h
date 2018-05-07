@@ -33,7 +33,7 @@ class ContextImpl : public GLImplFactory
 
     virtual void onDestroy(const gl::Context *context) {}
 
-    virtual gl::Error initialize() = 0;
+    virtual gl::Error initialize(gl::Caps *caps) = 0;
 
     // Flush and finish.
     virtual gl::Error flush(const gl::Context *context)  = 0;
