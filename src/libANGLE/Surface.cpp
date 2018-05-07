@@ -117,9 +117,10 @@ rx::FramebufferAttachmentObjectImpl *Surface::getAttachmentImpl() const
 
 Error Surface::destroyImpl(const Display *display)
 {
+    gl::Context *context = display->getProxyContext();
     if (mState.defaultFramebuffer)
     {
-        mState.defaultFramebuffer->onDestroy(display->getProxyContext());
+        mState.defaultFramebuffer->onDestroy(context);
     }
     if (mImplementation)
     {
@@ -130,20 +131,19 @@ Error Surface::destroyImpl(const Display *display)
     {
         if (mImplementation)
         {
-            ANGLE_TRY(
-                mImplementation->releaseTexImage(display->getProxyContext(), EGL_BACK_BUFFER));
+            ANGLE_TRY(mImplementation->releaseTexImage(context, EGL_BACK_BUFFER));
         }
-        auto glErr = mTexture->releaseTexImageFromSurface(display->getProxyContext());
+        auto glErr = mTexture->releaseTexImageFromSurface(context);
         if (glErr.isError())
         {
             return Error(EGL_BAD_SURFACE);
         }
-        mTexture.set(nullptr, nullptr);
+        mTexture.set(context, nullptr);
     }
 
     if (mState.defaultFramebuffer)
     {
-        mState.defaultFramebuffer->onDestroy(display->getProxyContext());
+        mState.defaultFramebuffer->onDestroy(context);
     }
     SafeDelete(mState.defaultFramebuffer);
     SafeDelete(mImplementation);
