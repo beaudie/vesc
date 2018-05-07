@@ -10,14 +10,17 @@
 
 #include "common/debug.h"
 #include "libANGLE/Config.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/gl/RendererGL.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
+#include "libANGLE/renderer/gl/wgl/ContextWGL.h"
 #include "libANGLE/renderer/gl/wgl/D3DTextureSurfaceWGL.h"
 #include "libANGLE/renderer/gl/wgl/DXGISwapChainWindowSurfaceWGL.h"
 #include "libANGLE/renderer/gl/wgl/FunctionsWGL.h"
 #include "libANGLE/renderer/gl/wgl/PbufferSurfaceWGL.h"
+#include "libANGLE/renderer/gl/wgl/RendererWGL.h"
 #include "libANGLE/renderer/gl/wgl/WindowSurfaceWGL.h"
 #include "libANGLE/renderer/gl/wgl/wgl_utils.h"
 
@@ -29,6 +32,31 @@
 
 namespace rx
 {
+
+namespace
+{
+egl::Error CallWGLMakeCurrent(FunctionsWGL *functionsWGL, HDC drawDC, HDC readDC, HGLRC glRC)
+{
+    if (functionsWGL->makeContextCurrentARB)
+    {
+        if (!functionsWGL->makeContextCurrentARB(drawDC, readDC, glRC))
+        {
+            return egl::EglContextLost() << "Failed to make the WGL context current.";
+        }
+    }
+    else
+    {
+        ASSERT(functionsWGL->makeCurrent);
+        ASSERT(drawDC == readDC);
+        if (!functionsWGL->makeCurrent(drawDC, glRC))
+        {
+            return egl::EglContextLost() << "Failed to make the WGL context current.";
+        }
+    }
+
+    return egl::NoError();
+}
+}
 
 class FunctionsGLWindows : public FunctionsGL
 {
@@ -60,17 +88,15 @@ class FunctionsGLWindows : public FunctionsGL
 
 DisplayWGL::DisplayWGL(const egl::DisplayState &state)
     : DisplayGL(state),
-      mCurrentDC(nullptr),
+      mRenderer(nullptr),
       mOpenGLModule(nullptr),
       mFunctionsWGL(nullptr),
-      mFunctionsGL(nullptr),
       mHasWGLCreateContextRobustness(false),
       mHasRobustness(false),
       mWindowClass(0),
       mWindow(nullptr),
       mDeviceContext(nullptr),
       mPixelFormat(0),
-      mWGLContext(nullptr),
       mUseDXGISwapChains(false),
       mHasDXInterop(false),
       mDxgiModule(nullptr),
@@ -98,6 +124,8 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
 
 egl::Error DisplayWGL::initializeImpl(egl::Display *display)
 {
+    mDisplayAttributes = display->getAttributeMap();
+
     mOpenGLModule = LoadLibraryA("opengl32.dll");
     if (!mOpenGLModule)
     {
@@ -245,34 +273,11 @@ egl::Error DisplayWGL::initializeImpl(egl::Display *display)
                << "Failed to set the pixel format on the intermediate OpenGL window.";
     }
 
-    if (mFunctionsWGL->createContextAttribsARB)
-    {
-        mWGLContext = initializeContextAttribs(displayAttributes);
-    }
+    ANGLE_TRY(createRenderer(mDeviceContext, nullptr, true, &mRenderer));
 
-    // If wglCreateContextAttribsARB is unavailable or failed, try the standard wglCreateContext
-    if (!mWGLContext)
-    {
-        // Don't have control over GL versions
-        mWGLContext = mFunctionsWGL->createContext(mDeviceContext);
-    }
+    const FunctionsGL *functionsGL = mRenderer->getFunctions();
 
-    if (!mWGLContext)
-    {
-        return egl::EglNotInitialized()
-               << "Failed to create a WGL context for the intermediate OpenGL window.";
-    }
-
-    if (!mFunctionsWGL->makeCurrent(mDeviceContext, mWGLContext))
-    {
-        return egl::EglNotInitialized() << "Failed to make the intermediate WGL context current.";
-    }
-    mCurrentDC = mDeviceContext;
-
-    mFunctionsGL = new FunctionsGLWindows(mOpenGLModule, mFunctionsWGL->getProcAddress);
-    mFunctionsGL->initialize(displayAttributes);
-
-    mHasRobustness = mFunctionsGL->getGraphicsResetStatus != nullptr;
+    mHasRobustness = functionsGL->getGraphicsResetStatus != nullptr;
     if (mHasWGLCreateContextRobustness != mHasRobustness)
     {
         WARN() << "WGL_ARB_create_context_robustness exists but unable to OpenGL context with "
@@ -280,7 +285,7 @@ egl::Error DisplayWGL::initializeImpl(egl::Display *display)
     }
 
     // Intel OpenGL ES drivers are not currently supported due to bugs in the driver and ANGLE
-    VendorID vendor = GetVendorID(mFunctionsGL);
+    VendorID vendor = GetVendorID(functionsGL);
     if (requestedDisplayType == EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE && IsIntel(vendor))
     {
         return egl::EglNotInitialized() << "Intel OpenGL ES drivers are not supported.";
@@ -319,6 +324,154 @@ egl::Error DisplayWGL::initializeImpl(egl::Display *display)
         }
     }
 
+    const gl::Version &maxVersion = mRenderer->getMaxSupportedESVersion();
+    if (maxVersion < gl::Version(2, 0))
+    {
+        return egl::EglNotInitialized() << "OpenGL ES 2.0 is not supportable.";
+    }
+
+    return egl::NoError();
+}
+
+static HGLRC createContextAttribs(FunctionsWGL *functionsWGL,
+                                  HDC deviceContext,
+                                  HGLRC shareContext,
+                                  const gl::Version &version,
+                                  int profileMask)
+{
+    std::vector<int> attribs;
+
+    if (functionsWGL->hasExtension("WGL_ARB_create_context_robustness"))
+    {
+        attribs.push_back(WGL_CONTEXT_FLAGS_ARB);
+        attribs.push_back(WGL_CONTEXT_ROBUST_ACCESS_BIT_ARB);
+        attribs.push_back(WGL_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB);
+        attribs.push_back(WGL_LOSE_CONTEXT_ON_RESET_ARB);
+    }
+
+    attribs.push_back(WGL_CONTEXT_MAJOR_VERSION_ARB);
+    attribs.push_back(version.major);
+
+    attribs.push_back(WGL_CONTEXT_MINOR_VERSION_ARB);
+    attribs.push_back(version.minor);
+
+    if (profileMask != 0)
+    {
+        attribs.push_back(WGL_CONTEXT_PROFILE_MASK_ARB);
+        attribs.push_back(profileMask);
+    }
+
+    attribs.push_back(0);
+    attribs.push_back(0);
+
+    return functionsWGL->createContextAttribsARB(deviceContext, shareContext, &attribs[0]);
+}
+
+static HGLRC initializeContextAttribs(FunctionsWGL *functionsWGL,
+                                      HDC deviceContext,
+                                      HGLRC shareContext,
+                                      const egl::AttributeMap &eglAttributes)
+{
+    EGLint requestedDisplayType = static_cast<EGLint>(
+        eglAttributes.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE));
+
+    // Create a context of the requested version, if any.
+    gl::Version requestedVersion(static_cast<EGLint>(eglAttributes.get(
+                                     EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE, EGL_DONT_CARE)),
+                                 static_cast<EGLint>(eglAttributes.get(
+                                     EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE, EGL_DONT_CARE)));
+    if (static_cast<EGLint>(requestedVersion.major) != EGL_DONT_CARE &&
+        static_cast<EGLint>(requestedVersion.minor) != EGL_DONT_CARE)
+    {
+        int profileMask = 0;
+        if (requestedDisplayType != EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE &&
+            requestedVersion >= gl::Version(3, 2))
+        {
+            profileMask |= WGL_CONTEXT_CORE_PROFILE_BIT_ARB;
+        }
+        return createContextAttribs(functionsWGL, deviceContext, shareContext, requestedVersion,
+                                    profileMask);
+    }
+
+    // Try all the GL version in order as a workaround for Mesa context creation where the driver
+    // doesn't automatically return the highest version available.
+    for (const auto &info : GenerateContextCreationToTry(requestedDisplayType, false))
+    {
+        int profileFlag = 0;
+        if (info.type == ContextCreationTry::Type::DESKTOP_CORE)
+        {
+            profileFlag |= WGL_CONTEXT_CORE_PROFILE_BIT_ARB;
+        }
+        else if (info.type == ContextCreationTry::Type::ES)
+        {
+            profileFlag |= WGL_CONTEXT_ES_PROFILE_BIT_EXT;
+        }
+
+        HGLRC context = createContextAttribs(functionsWGL, deviceContext, shareContext,
+                                             info.version, profileFlag);
+        if (context != nullptr)
+        {
+            return context;
+        }
+    }
+
+    return nullptr;
+}
+
+egl::Error DisplayWGL::createRenderer(HDC deviceContext,
+                                      HGLRC shareContext,
+                                      bool makeNewContextCurrent,
+                                      std::shared_ptr<RendererWGL> *outRenderer)
+{
+    HGLRC context = nullptr;
+    if (mFunctionsWGL->createContextAttribsARB)
+    {
+        context = initializeContextAttribs(mFunctionsWGL, deviceContext, shareContext,
+                                           mDisplayAttributes);
+    }
+
+    // If wglCreateContextAttribsARB is unavailable or failed, try the standard wglCreateContext
+    if (!context)
+    {
+        ASSERT(shareContext == nullptr);
+
+        // Don't have control over GL versions
+        context = mFunctionsWGL->createContext(deviceContext);
+    }
+
+    if (!context)
+    {
+        return egl::EglNotInitialized()
+               << "Failed to create a WGL context for the intermediate OpenGL window.";
+    }
+
+    if (!mFunctionsWGL->makeCurrent(deviceContext, context))
+    {
+        return egl::EglNotInitialized() << "Failed to make the intermediate WGL context current.";
+    }
+
+    FunctionsGL *functionsGL = new FunctionsGLWindows(mOpenGLModule, mFunctionsWGL->getProcAddress);
+    functionsGL->initialize(mDisplayAttributes);
+
+    std::unique_ptr<RendererWGL> newRenderer(
+        new RendererWGL(functionsGL, mDisplayAttributes, this, context));
+
+    CurrentData &currentData = mCurrentData[std::this_thread::get_id()];
+    if (makeNewContextCurrent)
+    {
+        currentData.drawDC = mDeviceContext;
+        currentData.readDC = mDeviceContext;
+        currentData.glRC   = context;
+    }
+    else
+    {
+        // Set the previous context back to current
+        ANGLE_TRY(CallWGLMakeCurrent(mFunctionsWGL, currentData.drawDC, currentData.readDC,
+                                     currentData.glRC));
+    }
+
+    outRenderer->reset(newRenderer.release());
+
     return egl::NoError();
 }
 
@@ -332,22 +485,14 @@ void DisplayWGL::destroy()
 {
     releaseD3DDevice(mD3D11DeviceHandle);
 
-    if (mFunctionsWGL)
+    if (mFunctionsWGL && mDeviceContext)
     {
-        if (mDeviceContext)
-        {
-            mFunctionsWGL->makeCurrent(mDeviceContext, nullptr);
-        }
-        if (mWGLContext)
-        {
-            mFunctionsWGL->deleteContext(mWGLContext);
-        }
+        mFunctionsWGL->makeCurrent(mDeviceContext, nullptr);
     }
-    mCurrentDC = nullptr;
-    mWGLContext = nullptr;
+    mCurrentData.clear();
+    mRenderer.reset();
 
     SafeDelete(mFunctionsWGL);
-    SafeDelete(mFunctionsGL);
 
     if (mDeviceContext)
     {
@@ -407,9 +552,9 @@ SurfaceImpl *DisplayWGL::createWindowSurface(const egl::SurfaceState &state,
             return nullptr;
         }
 
-        return new DXGISwapChainWindowSurfaceWGL(state, getRenderer()->getStateManager(), window,
-                                                 mD3D11Device, mD3D11DeviceHandle, mDeviceContext,
-                                                 mFunctionsGL, mFunctionsWGL, orientation);
+        return new DXGISwapChainWindowSurfaceWGL(
+            state, mRenderer->getStateManager(), window, mD3D11Device, mD3D11DeviceHandle,
+            mDeviceContext, mRenderer->getFunctions(), mFunctionsWGL, orientation);
     }
     else
     {
@@ -441,8 +586,8 @@ SurfaceImpl *DisplayWGL::createPbufferFromClientBuffer(const egl::SurfaceState &
         return nullptr;
     }
 
-    return new D3DTextureSurfaceWGL(state, getRenderer()->getStateManager(), buftype, clientBuffer,
-                                    this, mDeviceContext, mD3D11Device, mFunctionsGL,
+    return new D3DTextureSurfaceWGL(state, mRenderer->getStateManager(), buftype, clientBuffer,
+                                    this, mDeviceContext, mD3D11Device, mRenderer->getFunctions(),
                                     mFunctionsWGL);
 }
 
@@ -452,6 +597,20 @@ SurfaceImpl *DisplayWGL::createPixmapSurface(const egl::SurfaceState &state,
 {
     UNIMPLEMENTED();
     return nullptr;
+}
+
+ContextImpl *DisplayWGL::createContext(const gl::ContextState &state)
+{
+    // Create a new renderer/context that shares with the root one
+    std::shared_ptr<RendererWGL> newRenderer;
+    egl::Error error = createRenderer(mDeviceContext, mRenderer->getContext(), false, &newRenderer);
+    if (error.isError())
+    {
+        // TODO: Propagate this error up?
+        return nullptr;
+    }
+
+    return new ContextWGL(state, newRenderer);
 }
 
 DeviceImpl *DisplayWGL::createDevice()
@@ -541,7 +700,7 @@ bool DisplayWGL::testDeviceLost()
 {
     if (mHasRobustness)
     {
-        return getRenderer()->getResetStatus() != GL_NO_ERROR;
+        return mRenderer->getResetStatus() != GL_NO_ERROR;
     }
 
     return false;
@@ -579,11 +738,6 @@ std::string DisplayWGL::getVendorString() const
 {
     // UNIMPLEMENTED();
     return "";
-}
-
-const FunctionsGL *DisplayWGL::getFunctionsGL() const
-{
-    return mFunctionsGL;
 }
 
 egl::Error DisplayWGL::initializeD3DDevice()
@@ -647,7 +801,7 @@ void DisplayWGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
     // Contexts are virtualized so textures can be shared globally
     outExtensions->displayTextureShareGroup = true;
 
-    outExtensions->surfacelessContext = true;
+    outExtensions->surfacelessContext = mFunctionsWGL->hasExtension("WGL_ARB_create_context");
 
     DisplayGL::generateExtensions(outExtensions);
 }
@@ -655,13 +809,6 @@ void DisplayWGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 void DisplayWGL::generateCaps(egl::Caps *outCaps) const
 {
     outCaps->textureNPOT = true;
-}
-
-egl::Error DisplayWGL::makeCurrentSurfaceless(gl::Context *context)
-{
-    // Nothing to do because WGL always uses the same context and the previous surface can be left
-    // current.
-    return egl::NoError();
 }
 
 egl::Error DisplayWGL::waitClient(const gl::Context *context) const
@@ -680,19 +827,54 @@ egl::Error DisplayWGL::makeCurrent(egl::Surface *drawSurface,
                                    egl::Surface *readSurface,
                                    gl::Context *context)
 {
+    // Initialize the new draw surfaces to the currently bound ones.  There is no need to change
+    // surface if one is already bound, validation of surfaceless contexts is handled in ANGLE's
+    // frontend.
+    HDC newDrawDC = nullptr;
     if (drawSurface)
     {
         SurfaceWGL *drawSurfaceWGL = GetImplAs<SurfaceWGL>(drawSurface);
-        HDC dc                     = drawSurfaceWGL->getDC();
-        if (dc != mCurrentDC)
+        newDrawDC                  = drawSurfaceWGL->getDC();
+    }
+
+    HDC newReadDC = nullptr;
+    if (readSurface)
+    {
+        SurfaceWGL *readSurfaceWGL = GetImplAs<SurfaceWGL>(drawSurface);
+        newReadDC                  = readSurfaceWGL->getDC();
+    }
+
+    HGLRC newGLRC = nullptr;
+    if (context)
+    {
+        ContextWGL *contextWGL = GetImplAs<ContextWGL>(context);
+        newGLRC                = contextWGL->getContext();
+    }
+
+    CurrentData &currentData = mCurrentData[std::this_thread::get_id()];
+
+    if (newDrawDC != currentData.drawDC || newReadDC != currentData.readDC ||
+        newGLRC != currentData.glRC)
+    {
+        if (mFunctionsWGL->makeContextCurrentARB)
         {
-            if (!mFunctionsWGL->makeCurrent(dc, mWGLContext))
+            if (!mFunctionsWGL->makeContextCurrentARB(newDrawDC, newReadDC, newGLRC))
             {
-                // TODO(geofflang): What error type here?
                 return egl::EglContextLost() << "Failed to make the WGL context current.";
             }
-            mCurrentDC = dc;
         }
+        else
+        {
+            ASSERT(mFunctionsWGL->makeCurrent);
+            ASSERT(newDrawDC == newReadDC);
+            if (!mFunctionsWGL->makeCurrent(newDrawDC, newGLRC))
+            {
+                return egl::EglContextLost() << "Failed to make the WGL context current.";
+            }
+        }
+        currentData.drawDC = newDrawDC;
+        currentData.readDC = newReadDC;
+        currentData.glRC   = newGLRC;
     }
 
     return DisplayGL::makeCurrent(drawSurface, readSurface, context);
@@ -746,79 +928,21 @@ void DisplayWGL::releaseD3DDevice(HANDLE deviceHandle)
     }
 }
 
-HGLRC DisplayWGL::initializeContextAttribs(const egl::AttributeMap &eglAttributes) const
+gl::Version DisplayWGL::getMaxSupportedESVersion() const
 {
-    EGLint requestedDisplayType = static_cast<EGLint>(
-        eglAttributes.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE));
-
-    // Create a context of the requested version, if any.
-    gl::Version requestedVersion(static_cast<EGLint>(eglAttributes.get(
-                                     EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE, EGL_DONT_CARE)),
-                                 static_cast<EGLint>(eglAttributes.get(
-                                     EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE, EGL_DONT_CARE)));
-    if (static_cast<EGLint>(requestedVersion.major) != EGL_DONT_CARE &&
-        static_cast<EGLint>(requestedVersion.minor) != EGL_DONT_CARE)
-    {
-        int profileMask = 0;
-        if (requestedDisplayType != EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE &&
-            requestedVersion >= gl::Version(3, 2))
-        {
-            profileMask |= WGL_CONTEXT_CORE_PROFILE_BIT_ARB;
-        }
-        return createContextAttribs(requestedVersion, profileMask);
-    }
-
-    // Try all the GL version in order as a workaround for Mesa context creation where the driver
-    // doesn't automatically return the highest version available.
-    for (const auto &info : GenerateContextCreationToTry(requestedDisplayType, false))
-    {
-        int profileFlag = 0;
-        if (info.type == ContextCreationTry::Type::DESKTOP_CORE)
-        {
-            profileFlag |= WGL_CONTEXT_CORE_PROFILE_BIT_ARB;
-        }
-        else if (info.type == ContextCreationTry::Type::ES)
-        {
-            profileFlag |= WGL_CONTEXT_ES_PROFILE_BIT_EXT;
-        }
-
-        HGLRC context = createContextAttribs(info.version, profileFlag);
-        if (context != nullptr)
-        {
-            return context;
-        }
-    }
-
-    return nullptr;
+    ASSERT(mRenderer != nullptr);
+    return mRenderer->getMaxSupportedESVersion();
 }
 
-HGLRC DisplayWGL::createContextAttribs(const gl::Version &version, int profileMask) const
+void DisplayWGL::destroyNativeContext(HGLRC context)
 {
-    std::vector<int> attribs;
-
-    if (mHasWGLCreateContextRobustness)
+    mFunctionsWGL->deleteContext(context);
+    CurrentData &currentData = mCurrentData[std::this_thread::get_id()];
+    if (currentData.glRC == context)
     {
-        attribs.push_back(WGL_CONTEXT_FLAGS_ARB);
-        attribs.push_back(WGL_CONTEXT_ROBUST_ACCESS_BIT_ARB);
-        attribs.push_back(WGL_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB);
-        attribs.push_back(WGL_LOSE_CONTEXT_ON_RESET_ARB);
+        currentData.glRC   = nullptr;
+        currentData.drawDC = nullptr;
+        currentData.readDC = nullptr;
     }
-
-    attribs.push_back(WGL_CONTEXT_MAJOR_VERSION_ARB);
-    attribs.push_back(version.major);
-
-    attribs.push_back(WGL_CONTEXT_MINOR_VERSION_ARB);
-    attribs.push_back(version.minor);
-
-    if (profileMask != 0)
-    {
-        attribs.push_back(WGL_CONTEXT_PROFILE_MASK_ARB);
-        attribs.push_back(profileMask);
-    }
-
-    attribs.push_back(0);
-    attribs.push_back(0);
-
-    return mFunctionsWGL->createContextAttribsARB(mDeviceContext, nullptr, &attribs[0]);
 }
 }
