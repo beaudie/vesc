@@ -31,7 +31,7 @@
 namespace rx
 {
 
-ContextGL::ContextGL(const gl::ContextState &state, RendererGL *renderer)
+ContextGL::ContextGL(const gl::ContextState &state, std::shared_ptr<RendererGL> renderer)
     : ContextImpl(state), mRenderer(renderer)
 {
 }
@@ -376,10 +376,20 @@ GLint64 ContextGL::getTimestamp()
     return mRenderer->getTimestamp();
 }
 
-void ContextGL::onMakeCurrent(const gl::Context *context)
+gl::Error ContextGL::onMakeCurrent(const gl::Context *context)
 {
     // Queries need to be paused/resumed on context switches
-    ANGLE_SWALLOW_ERR(mRenderer->getStateManager()->onMakeCurrent(context));
+    ANGLE_TRY(mRenderer->getStateManager()->onMakeCurrent(context));
+
+    return gl::NoError();
+}
+
+gl::Error ContextGL::onMakeUnCurrent(const gl::Context *context)
+{
+    // Queries need to be paused/resumed on context switches
+    ANGLE_TRY(mRenderer->getStateManager()->onMakeUnCurrent(context));
+
+    return gl::NoError();
 }
 
 const gl::Caps &ContextGL::getNativeCaps() const
