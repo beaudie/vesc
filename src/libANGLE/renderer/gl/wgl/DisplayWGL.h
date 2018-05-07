@@ -11,12 +11,16 @@
 
 #include "libANGLE/renderer/gl/DisplayGL.h"
 
+#include <thread>
+#include <unordered_map>
+
 #include <GL/wglext.h>
 
 namespace rx
 {
 
 class FunctionsWGL;
+class RendererWGL;
 
 class DisplayWGL : public DisplayGL
 {
@@ -40,6 +44,8 @@ class DisplayWGL : public DisplayGL
     SurfaceImpl *createPixmapSurface(const egl::SurfaceState &state,
                                      NativePixmapType nativePixmap,
                                      const egl::AttributeMap &attribs) override;
+
+    ContextImpl *createContext(const gl::ContextState &state) override;
 
     egl::ConfigSet generateConfigs() override;
 
@@ -66,37 +72,47 @@ class DisplayWGL : public DisplayGL
     egl::Error registerD3DDevice(IUnknown *device, HANDLE *outHandle);
     void releaseD3DDevice(HANDLE handle);
 
+    gl::Version getMaxSupportedESVersion() const override;
+
+    void destroyNativeContext(HGLRC context);
+
   private:
     egl::Error initializeImpl(egl::Display *display);
     void destroy();
 
-    const FunctionsGL *getFunctionsGL() const override;
+    egl::Error createRenderer(HDC deviceContext,
+                              HGLRC shareContext,
+                              bool makeNewContextCurrent,
+                              std::shared_ptr<RendererWGL> *outRenderer);
 
     egl::Error initializeD3DDevice();
 
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
     void generateCaps(egl::Caps *outCaps) const override;
 
-    egl::Error makeCurrentSurfaceless(gl::Context *context) override;
+    std::shared_ptr<RendererWGL> mRenderer;
 
-    HGLRC initializeContextAttribs(const egl::AttributeMap &eglAttributes) const;
-    HGLRC createContextAttribs(const gl::Version &version, int profileMask) const;
-
-    HDC mCurrentDC;
+    struct CurrentData
+    {
+        HDC drawDC = nullptr;
+        HDC readDC = nullptr;
+        HGLRC glRC = nullptr;
+    };
+    std::unordered_map<std::thread::id, CurrentData> mCurrentData;
 
     HMODULE mOpenGLModule;
 
     FunctionsWGL *mFunctionsWGL;
-    FunctionsGL *mFunctionsGL;
 
     bool mHasWGLCreateContextRobustness;
     bool mHasRobustness;
+
+    egl::AttributeMap mDisplayAttributes;
 
     ATOM mWindowClass;
     HWND mWindow;
     HDC mDeviceContext;
     int mPixelFormat;
-    HGLRC mWGLContext;
 
     bool mUseDXGISwapChains;
     bool mHasDXInterop;

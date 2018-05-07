@@ -88,6 +88,10 @@ class FunctionsWGL : angle::NonCopyable
     PFNWGLDXOBJECTACCESSNVPROC dxObjectAccessNV;
     PFNWGLDXLOCKOBJECTSNVPROC dxLockObjectsNV;
     PFNWGLDXUNLOCKOBJECTSNVPROC dxUnlockObjectsNV;
+
+    // WGL_ARB_make_current_read
+    PFNWGLMAKECONTEXTCURRENTARBPROC makeContextCurrentARB;
+    PFNWGLGETCURRENTREADDCARBPROC getCurrentReadDCARB;
 };
 
 }
