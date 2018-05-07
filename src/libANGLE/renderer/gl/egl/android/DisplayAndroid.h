@@ -11,12 +11,15 @@
 
 #include <map>
 #include <string>
+#include <thread>
 #include <vector>
 
 #include "libANGLE/renderer/gl/egl/DisplayEGL.h"
 
 namespace rx
 {
+
+class RendererEGL;
 
 class DisplayAndroid : public DisplayEGL
 {
@@ -44,6 +47,8 @@ class DisplayAndroid : public DisplayEGL
                            EGLenum target,
                            const egl::AttributeMap &attribs) override;
 
+    ContextImpl *createContext(const gl::ContextState &state) override;
+
     egl::ConfigSet generateConfigs() override;
 
     bool testDeviceLost() override;
@@ -60,8 +65,11 @@ class DisplayAndroid : public DisplayEGL
                            egl::Surface *readSurface,
                            gl::Context *context) override;
 
+    gl::Version getMaxSupportedESVersion() const override;
+
   private:
-    egl::Error makeCurrentSurfaceless(gl::Context *context) override;
+    egl::ErrorOrResult<std::shared_ptr<RendererEGL>> createRenderer(EGLContext shareContext,
+                                                                    bool makeNewContextCurrent);
 
     template <typename T>
     void getConfigAttrib(EGLConfig config, EGLint attribute, T *value) const;
@@ -73,10 +81,21 @@ class DisplayAndroid : public DisplayEGL
                                     const char *extension,
                                     const U &defaultValue) const;
 
+    egl::Display *mDisplay;
+
+    std::shared_ptr<RendererEGL> mRenderer;
+
     std::vector<EGLint> mConfigAttribList;
     std::map<EGLint, EGLint> mConfigIds;
     EGLSurface mDummyPbuffer;
-    EGLSurface mCurrentSurface;
+
+    struct CurrentData
+    {
+        EGLSurface drawSurface = EGL_NO_SURFACE;
+        EGLSurface readSurface = EGL_NO_SURFACE;
+        EGLContext context     = EGL_NO_CONTEXT;
+    };
+    std::unordered_map<std::thread::id, CurrentData> mCurrentData;
 };
 
 }  // namespace rx
