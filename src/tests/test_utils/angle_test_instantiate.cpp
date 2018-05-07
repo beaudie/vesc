@@ -53,6 +53,7 @@ bool IsPlatformAvailable(const CompilerParameters &param)
 
 bool IsPlatformAvailable(const PlatformParameters &param)
 {
+    return true;
     switch (param.getRenderer())
     {
         case EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE:
