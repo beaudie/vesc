@@ -280,9 +280,11 @@ EGLBoolean FunctionsEGL::destroySurface(EGLSurface surface) const
     return mFnPtrs->destroySurfacePtr(mEGLDisplay, surface);
 }
 
-EGLBoolean FunctionsEGL::makeCurrent(EGLSurface surface, EGLContext context) const
+EGLBoolean FunctionsEGL::makeCurrent(EGLSurface drawSurface,
+                                     EGLSurface readSurface,
+                                     EGLContext context) const
 {
-    return mFnPtrs->makeCurrentPtr(mEGLDisplay, surface, surface, context);
+    return mFnPtrs->makeCurrentPtr(mEGLDisplay, drawSurface, readSurface, context);
 }
 
 char const *FunctionsEGL::queryString(EGLint name) const

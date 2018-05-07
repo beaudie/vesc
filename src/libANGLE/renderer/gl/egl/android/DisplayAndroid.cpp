@@ -9,15 +9,21 @@
 #include <android/native_window.h>
 
 #include "common/debug.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
-#include "libANGLE/renderer/gl/egl/FunctionsEGLDL.h"
+<<<<<<< HEAD
+== == == =
+#include "libANGLE/renderer/gl/egl/ContextEGL.h"
+>>>>>>> 0ac56df84... refactor egl context wip.
+             #include "libANGLE/renderer/gl/egl/FunctionsEGLDL.h"
 #include "libANGLE/renderer/gl/egl/PbufferSurfaceEGL.h"
+#include "libANGLE/renderer/gl/egl/RendererEGL.h"
 #include "libANGLE/renderer/gl/egl/WindowSurfaceEGL.h"
 #include "libANGLE/renderer/gl/egl/android/DisplayAndroid.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 
-namespace
+    namespace
 {
 const char *GetEGLPath()
 {
@@ -33,7 +39,7 @@ namespace rx
 {
 
 DisplayAndroid::DisplayAndroid(const egl::DisplayState &state)
-    : DisplayEGL(state), mDummyPbuffer(EGL_NO_SURFACE), mCurrentSurface(EGL_NO_SURFACE)
+    : DisplayEGL(state), mDisplay(nullptr), mDummyPbuffer(EGL_NO_SURFACE)
 {
 }
 
@@ -43,6 +49,8 @@ DisplayAndroid::~DisplayAndroid()
 
 egl::Error DisplayAndroid::initialize(egl::Display *display)
 {
+    mDisplay = display;
+
     FunctionsEGLDL *egl = new FunctionsEGLDL();
     mEGL = egl;
     void *eglHandle     = reinterpret_cast<void *>(display->getAttributeMap().get(
@@ -112,17 +120,20 @@ egl::Error DisplayAndroid::initialize(egl::Display *display)
                << "eglChooseConfig failed with " << egl::Error(mEGL->getError());
     }
 
-    int dummyPbufferAttribs[] = {
-        EGL_WIDTH, 1, EGL_HEIGHT, 1, EGL_NONE,
-    };
-    mDummyPbuffer = mEGL->createPbufferSurface(configWithFormat, dummyPbufferAttribs);
-    if (mDummyPbuffer == EGL_NO_SURFACE)
+    if (!mEGL->hasExtension("EGL_KHR_surfaceless_context"))
     {
-        return egl::EglNotInitialized()
-               << "eglCreatePbufferSurface failed with " << egl::Error(mEGL->getError());
+        int dummyPbufferAttribs[] = {
+            EGL_WIDTH, 1, EGL_HEIGHT, 1, EGL_NONE,
+        };
+        mDummyPbuffer = mEGL->createPbufferSurface(configWithFormat, dummyPbufferAttribs);
+        if (mDummyPbuffer == EGL_NO_SURFACE)
+        {
+            return egl::EglNotInitialized()
+                   << "eglCreatePbufferSurface failed with " << egl::Error(mEGL->getError());
+        }
     }
 
-    // Create mDummyPbuffer with a normal config, but create a no_config mContext, if possible
+    // Create mDummyPbuffer with a normal config, but create a no_config context, if possible
     if (mEGL->hasExtension("EGL_KHR_no_config_context"))
     {
         mConfigAttribList = configAttribListBase;
@@ -134,18 +145,7 @@ egl::Error DisplayAndroid::initialize(egl::Display *display)
         mConfig           = configWithFormat;
     }
 
-    ANGLE_TRY(initializeContext(display->getAttributeMap()));
-
-    success = mEGL->makeCurrent(mDummyPbuffer, mContext);
-    if (success == EGL_FALSE)
-    {
-        return egl::EglNotInitialized()
-               << "eglMakeCurrent failed with " << egl::Error(mEGL->getError());
-    }
-    mCurrentSurface = mDummyPbuffer;
-
-    mFunctionsGL = mEGL->makeFunctionsGL();
-    mFunctionsGL->initialize(display->getAttributeMap());
+    ANGLE_TRY_RESULT(createRenderer(EGL_NO_CONTEXT, true), mRenderer);
 
     return DisplayGL::initialize(display);
 }
@@ -154,12 +154,12 @@ void DisplayAndroid::terminate()
 {
     DisplayGL::terminate();
 
-    EGLBoolean success = mEGL->makeCurrent(EGL_NO_SURFACE, EGL_NO_CONTEXT);
+    EGLBoolean success = mEGL->makeCurrent(EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
     if (success == EGL_FALSE)
     {
         ERR() << "eglMakeCurrent error " << egl::Error(mEGL->getError());
     }
-    mCurrentSurface = EGL_NO_SURFACE;
+    mCurrentData.clear();
 
     if (mDummyPbuffer != EGL_NO_SURFACE)
     {
@@ -171,15 +171,7 @@ void DisplayAndroid::terminate()
         }
     }
 
-    if (mContext != EGL_NO_CONTEXT)
-    {
-        success = mEGL->destroyContext(mContext);
-        mContext = EGL_NO_CONTEXT;
-        if (success == EGL_FALSE)
-        {
-            ERR() << "eglDestroyContext error " << egl::Error(mEGL->getError());
-        }
-    }
+    mRenderer.reset();
 
     egl::Error result = mEGL->terminate();
     if (result.isError())
@@ -243,6 +235,17 @@ ImageImpl *DisplayAndroid::createImage(const egl::ImageState &state,
 {
     UNIMPLEMENTED();
     return DisplayGL::createImage(state, target, attribs);
+}
+
+ContextImpl *DisplayAndroid::createContext(const gl::ContextState &state)
+{
+    auto newRenderer = createRenderer(mRenderer->getContext(), false);
+    if (newRenderer.isError())
+    {
+        return nullptr;
+    }
+
+    return new ContextEGL(state, newRenderer.getResult());
 }
 
 template <typename T>
@@ -438,28 +441,89 @@ egl::Error DisplayAndroid::makeCurrent(egl::Surface *drawSurface,
                                        egl::Surface *readSurface,
                                        gl::Context *context)
 {
+
+    EGLSurface newDrawSurface = EGL_NO_SURFACE;
     if (drawSurface)
     {
         SurfaceEGL *drawSurfaceEGL = GetImplAs<SurfaceEGL>(drawSurface);
-        EGLSurface surface         = drawSurfaceEGL->getSurface();
-        if (surface != mCurrentSurface)
+        newDrawSurface             = drawSurfaceEGL->getSurface();
+    }
+
+    EGLSurface newReadSurface = EGL_NO_SURFACE;
+    if (readSurface)
+    {
+        SurfaceEGL *readSurfaceEGL = GetImplAs<SurfaceEGL>(readSurface);
+        newReadSurface             = readSurfaceEGL->getSurface();
+    }
+
+    EGLContext newContext = EGL_NO_CONTEXT;
+    if (context)
+    {
+        ContextEGL *contextEGL = GetImplAs<ContextEGL>(context);
+        newContext             = contextEGL->getContext();
+    }
+
+    CurrentData &currentData = mCurrentData[std::this_thread::get_id()];
+
+    if (currentData.drawSurface != newDrawSurface || currentData.readSurface != newReadSurface ||
+        currentData.context != newContext)
+    {
+        if (mEGL->makeCurrent(newDrawSurface, newReadSurface, newContext) == EGL_FALSE)
         {
-            if (mEGL->makeCurrent(surface, mContext) == EGL_FALSE)
-            {
-                return egl::Error(mEGL->getError(), "eglMakeCurrent failed");
-            }
-            mCurrentSurface = surface;
+            return egl::Error(mEGL->getError(), "eglMakeCurrent failed");
         }
+
+        currentData.drawSurface = newDrawSurface;
+        currentData.readSurface = newReadSurface;
+        currentData.context     = newContext;
     }
 
     return DisplayGL::makeCurrent(drawSurface, readSurface, context);
 }
 
-egl::Error DisplayAndroid::makeCurrentSurfaceless(gl::Context *context)
+gl::Version DisplayAndroid::getMaxSupportedESVersion() const
 {
-    // Nothing to do because EGL always uses the same context and the previous surface can be left
-    // current.
-    return egl::NoError();
+    ASSERT(mRenderer != nullptr);
+    return mRenderer->getMaxSupportedESVersion();
+}
+
+egl::ErrorOrResult<std::shared_ptr<RendererEGL>> DisplayAndroid::createRenderer(
+    EGLContext shareContext,
+    bool makeNewContextCurrent)
+{
+    const egl::AttributeMap &displayAttributes = mDisplay->getAttributeMap();
+
+    EGLContext context = EGL_NO_CONTEXT;
+    ANGLE_TRY_RESULT(createNativeContext(displayAttributes), context);
+
+    if (mEGL->makeCurrent(mDummyPbuffer, mDummyPbuffer, context) == EGL_FALSE)
+    {
+        return egl::Error(mEGL->getError(), "eglMakeCurrent failed");
+    }
+
+    FunctionsGL *functionsGL = mEGL->makeFunctionsGL();
+    functionsGL->initialize(displayAttributes);
+
+    std::unique_ptr<RendererEGL> newRenderer(
+        new RendererEGL(functionsGL, displayAttributes, this, context));
+
+    CurrentData &currentData = mCurrentData[std::this_thread::get_id()];
+    if (makeNewContextCurrent)
+    {
+        currentData.drawSurface = mDummyPbuffer;
+        currentData.readSurface = mDummyPbuffer;
+        currentData.context     = context;
+    }
+    else
+    {
+        if (mEGL->makeCurrent(currentData.drawSurface, currentData.readSurface,
+                              currentData.context) == EGL_FALSE)
+        {
+            return egl::Error(mEGL->getError(), "eglMakeCurrent failed");
+        }
+    }
+
+    return std::shared_ptr<RendererEGL>(newRenderer.release());
 }
 
 }  // namespace rx
