@@ -105,7 +105,7 @@ ContextNULL::~ContextNULL()
 {
 }
 
-gl::Error ContextNULL::initialize()
+gl::Error ContextNULL::initialize(gl::Caps *caps)
 {
     return gl::NoError();
 }
