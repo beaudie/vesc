@@ -168,6 +168,7 @@ class OutputHLSL : public TIntermTraverser
 
     // Indexed by block id, not instance id.
     ReferencedInterfaceBlocks mReferencedUniformBlocks;
+    ReferencedInterfaceBlocks mReferencedShaderStorageBlocks;
 
     ReferencedVariables mReferencedAttributes;
     ReferencedVariables mReferencedVaryings;
