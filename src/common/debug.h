@@ -43,6 +43,7 @@ constexpr LogSeverity LOG_EVENT          = 0;
 constexpr LogSeverity LOG_WARN           = 1;
 constexpr LogSeverity LOG_ERR            = 2;
 constexpr LogSeverity LOG_NUM_SEVERITIES = 3;
+constexpr LogSeverity LOG_VERBOSE        = 4;
 
 void Trace(LogSeverity severity, const char *message);
 

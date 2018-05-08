@@ -588,6 +588,10 @@ static_library("libANGLE") {
     defines += [ "ANGLE_GENERATE_SHADER_DEBUG_INFO" ]
   }
 
+  if (angle_enable_debug_verbose) {
+    defines += [ "ANGLE_ENABLE_DEBUG_VERBOSE" ]
+  }
+
   configs -= angle_undefine_configs
 
   configs += [
