@@ -376,7 +376,7 @@ TString OutputHLSL::generateStructMapping(const std::vector<MappedStruct> &std14
                 unsigned int instanceStringArrayIndex = GL_INVALID_INDEX;
                 if (isInstanceArray)
                     instanceStringArrayIndex = instanceArrayIndex;
-                TString instanceString = mUniformHLSL->UniformBlockInstanceString(
+                TString instanceString = mUniformHLSL->InterfaceBlockInstanceString(
                     instanceName, instanceStringArrayIndex);
                 originalName += instanceString;
                 mappedName += instanceString;
@@ -437,6 +437,7 @@ void OutputHLSL::header(TInfoSinkBase &out,
 
     mUniformHLSL->uniformsHeader(out, mOutputType, mReferencedUniforms, mSymbolTable);
     out << mUniformHLSL->uniformBlocksHeader(mReferencedUniformBlocks);
+    out << mUniformHLSL->shaderStorageBlocksHeader(mReferencedShaderStorageBlocks);
 
     if (!mEqualityFunctions.empty())
     {
@@ -922,6 +923,31 @@ void OutputHLSL::visitSymbol(TIntermSymbol *node)
 
             out << DecorateVariableIfNeeded(variable);
         }
+        else if (qualifier == EvqBuffer)
+        {
+            const TInterfaceBlock *interfaceBlock = variableType.getInterfaceBlock();
+            ASSERT(interfaceBlock);
+            if (mReferencedShaderStorageBlocks.count(interfaceBlock->uniqueId().get()) == 0)
+            {
+                const TVariable *instanceVariable = nullptr;
+                if (variableType.isInterfaceBlock())
+                {
+                    instanceVariable = &variable;
+                }
+                mReferencedShaderStorageBlocks[interfaceBlock->uniqueId().get()] =
+                    new TReferencedBlock(interfaceBlock, instanceVariable);
+            }
+            if (variableType.isInterfaceBlock())
+            {
+                out << DecorateVariableIfNeeded(variable) << "[0]";
+            }
+            else
+            {
+                TString variableName = TString(interfaceBlock->name().data()) + "[0]." +
+                                       DecorateVariableIfNeeded(variable);
+                out << variableName;
+            }
+        }
         else if (qualifier == EvqAttribute || qualifier == EvqVertexIn)
         {
             mReferencedAttributes[uniqueId.get()] = &variable;
@@ -1260,14 +1286,33 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                 {
                     TIntermSymbol *instanceArraySymbol = node->getLeft()->getAsSymbolNode();
                     const TInterfaceBlock *interfaceBlock = leftType.getInterfaceBlock();
-                    if (mReferencedUniformBlocks.count(interfaceBlock->uniqueId().get()) == 0)
-                    {
-                        mReferencedUniformBlocks[interfaceBlock->uniqueId().get()] =
-                            new TReferencedBlock(interfaceBlock, &instanceArraySymbol->variable());
-                    }
                     const int arrayIndex = node->getRight()->getAsConstantUnion()->getIConst(0);
-                    out << mUniformHLSL->UniformBlockInstanceString(instanceArraySymbol->getName(),
-                                                                    arrayIndex);
+
+                    if (leftType.getQualifier() == EvqUniform)
+                    {
+                        if (mReferencedUniformBlocks.count(interfaceBlock->uniqueId().get()) == 0)
+                        {
+                            mReferencedUniformBlocks[interfaceBlock->uniqueId().get()] =
+                                new TReferencedBlock(interfaceBlock,
+                                                     &instanceArraySymbol->variable());
+                        }
+                        out << mUniformHLSL->InterfaceBlockInstanceString(
+                            instanceArraySymbol->getName(), arrayIndex);
+                    }
+                    else
+                    {
+                        ASSERT(leftType.getQualifier() == EvqBuffer);
+                        if (mReferencedShaderStorageBlocks.count(
+                                interfaceBlock->uniqueId().get()) == 0)
+                        {
+                            mReferencedShaderStorageBlocks[interfaceBlock->uniqueId().get()] =
+                                new TReferencedBlock(interfaceBlock,
+                                                     &instanceArraySymbol->variable());
+                        }
+                        out << mUniformHLSL->InterfaceBlockInstanceString(
+                                   instanceArraySymbol->getName(), arrayIndex)
+                            << "[0]";
+                    }
                     return false;
                 }
             }

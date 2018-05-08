@@ -131,7 +131,6 @@ void TranslatorHLSL::translate(TIntermBlock *root,
                               compileOptions, &getSymbolTable(), perfDiagnostics);
 
     outputHLSL.output(root, getInfoSink().obj);
-
     mUniformBlockRegisterMap   = outputHLSL.getUniformBlockRegisterMap();
     mUniformRegisterMap        = outputHLSL.getUniformRegisterMap();
 }

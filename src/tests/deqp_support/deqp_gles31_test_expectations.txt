@@ -60,14 +60,12 @@
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_compute_shared_memory_size_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_compute_atomic_counter_buffers_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_compute_atomic_counters_* = FAIL
-1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_compute_shader_storage_blocks_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_atomic_counter_buffer_bindings_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_atomic_counter_buffer_size_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_combined_atomic_counter_buffers_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_combined_atomic_counters* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_image_units_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_combined_image_uniforms_* = FAIL
-1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_shader_storage_buffer_bindings_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_shader_storage_block_size_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_combined_shader_storage_blocks_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_uniform_buffer_bindings_* = FAIL
@@ -75,7 +73,6 @@
 1729 D3D11 : dEQP-GLES31.functional.state_query.indexed.atomic_counter_buffer_* = FAIL
 1951 D3D11 : dEQP-GLES31.functional.state_query.indexed.shader_storage_buffer_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.program.compute_work_group_size_get_programiv = FAIL
-1442 D3D11 : dEQP-GLES31.functional.layout_binding.ssbo.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.compute* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.atomic_counter.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.debug.async.case_4_log = SKIP
