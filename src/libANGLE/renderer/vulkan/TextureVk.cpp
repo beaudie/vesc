@@ -328,8 +328,7 @@ gl::Error TextureVk::setStorage(const gl::Context *context,
                                 GLenum internalFormat,
                                 const gl::Extents &size)
 {
-    UNIMPLEMENTED();
-    return gl::InternalError();
+    return gl::NoError();
 }
 
 gl::Error TextureVk::setEGLImageTarget(const gl::Context *context,
@@ -378,7 +377,7 @@ gl::Error TextureVk::getAttachmentRenderTarget(const gl::Context *context,
                                                const gl::ImageIndex &imageIndex,
                                                FramebufferAttachmentRenderTarget **rtOut)
 {
-    // TODO(jmadill): Handle cube textures. http://anglebug.com/2318
+    // TODO(jmadill): Handle cube textures. http://anglebug.com/2470
     ASSERT(imageIndex.getType() == gl::TextureType::_2D);
 
     // Non-zero mip level attachments are an ES 3.0 feature.
