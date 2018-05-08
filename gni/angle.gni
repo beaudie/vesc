@@ -51,6 +51,7 @@ declare_args() {
         (angle_64bit_current_cpu && android64_ndk_api_level >= 26)
   }
   angle_shared_libvulkan = false
+  angle_enable_debug_verbose = false
   angle_libs_suffix = ""
 }
 
