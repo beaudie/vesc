@@ -105,6 +105,7 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
                            const gl::Rectangle &sourceArea,
                            gl::Framebuffer *source) override;
 
+    gl::Error getCommandBuffer(RendererVk *renderer, vk::CommandBuffer **outCommandBuffer);
     gl::Error setStorage(const gl::Context *context,
                          gl::TextureType type,
                          size_t levels,
@@ -149,6 +150,11 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
     const vk::ImageView &getImageView() const;
     const vk::Sampler &getSampler() const;
 
+    vk::Error initImageAndView(RendererVk *renderer,
+                               const vk::Format &format,
+                               const gl::Extents &extents,
+                               const uint32_t levelCount,
+                               vk::CommandBuffer *commandBuffer);
     vk::Error ensureImageInitialized(RendererVk *renderer);
 
   private:
