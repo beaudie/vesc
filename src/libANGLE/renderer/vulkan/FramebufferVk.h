@@ -87,7 +87,9 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
     gl::Error getSamplePosition(size_t index, GLfloat *xy) const override;
 
     const vk::RenderPassDesc &getRenderPassDesc();
-    gl::Error getCommandGraphNodeForDraw(ContextVk *contextVk, vk::CommandGraphNode **nodeOut);
+    gl::Error getCommandBufferForDraw(ContextVk *contextVk,
+                                      vk::CommandBuffer **commandBufferOut,
+                                      vk::RecordingMode *modeOut);
 
   private:
     FramebufferVk(const gl::FramebufferState &state);

@@ -164,8 +164,8 @@ class ContextVk : public ContextImpl
   private:
     gl::Error initPipeline();
     gl::Error setupDraw(const gl::DrawCallParams &drawCallParams,
-                        vk::CommandGraphNode **drawNodeOut,
-                        bool *newCommandBufferOut);
+                        vk::CommandBuffer **commandBufferOut,
+                        bool *shouldApplyVertexArrayOut);
 
     void updateScissor(const gl::State &glState);
 
