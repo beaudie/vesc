@@ -55,6 +55,9 @@ class DynamicBuffer : angle::NonCopyable
     // This releases resources when they might currently be in use.
     void release(RendererVk *renderer);
 
+    // This releases all the buffers that have been allocated since this was last called.
+    void releaseRetainedBuffers(RendererVk *renderer);
+
     // This frees resources immediately.
     void destroy(VkDevice device);
 
@@ -66,13 +69,21 @@ class DynamicBuffer : angle::NonCopyable
   private:
     VkBufferUsageFlags mUsage;
     size_t mMinSize;
-    Buffer mBuffer;
-    DeviceMemory mMemory;
+    Buffer *mBuffer;
+    DeviceMemory *mMemory;
     uint32_t mNextWriteOffset;
     uint32_t mLastFlushOffset;
     size_t mSize;
     size_t mAlignment;
     uint8_t *mMappedMemory;
+
+    // Just a simple struct to keep the buffer and memory together and release them together later.
+    struct BufferAndMemory
+    {
+        Buffer *buffer;
+        DeviceMemory *memory;
+    };
+    std::vector<BufferAndMemory> mRetainedBuffers;
 };
 
 // Uses DescriptorPool to allocate descriptor sets as needed. If the descriptor pool
