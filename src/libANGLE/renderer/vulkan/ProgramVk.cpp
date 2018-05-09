@@ -173,7 +173,7 @@ vk::Error ProgramVk::reset(ContextVk *contextVk)
 
     for (auto &uniformBlock : mDefaultUniformBlocks)
     {
-        uniformBlock.storage.destroy(device);
+        uniformBlock.storage.destroy(contextVk->getRenderer());
     }
 
     mEmptyUniformBlockStorage.memory.destroy(device);

@@ -73,10 +73,8 @@ VkImageCreateFlags GetImageCreateFlags(gl::TextureType textureType)
     {
         return VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
     }
-    else
-    {
-        return 0;
-    }
+
+    return 0;
 }
 
 uint32_t GetImageLayerCount(gl::TextureType textureType)
@@ -85,10 +83,8 @@ uint32_t GetImageLayerCount(gl::TextureType textureType)
     {
         return gl::CUBE_FACE_COUNT;
     }
-    else
-    {
-        return 1;
-    }
+
+    return 1;
 }
 }  // anonymous namespace
 
@@ -96,12 +92,16 @@ uint32_t GetImageLayerCount(gl::TextureType textureType)
 DynamicBuffer::DynamicBuffer(VkBufferUsageFlags usage, size_t minSize)
     : mUsage(usage),
       mMinSize(minSize),
+      mBuffer(),
+      mMemory(),
       mNextWriteOffset(0),
       mLastFlushOffset(0),
       mSize(0),
       mAlignment(0),
       mMappedMemory(nullptr)
 {
+    mBuffer = new Buffer();
+    mMemory = new DeviceMemory();
 }
 
 void DynamicBuffer::init(size_t alignment)
@@ -141,13 +141,14 @@ Error DynamicBuffer::allocate(RendererVk *renderer,
         if (mMappedMemory)
         {
             ANGLE_TRY(flush(device));
-            mMemory.unmap(device);
+            mMemory->unmap(device);
             mMappedMemory = nullptr;
         }
 
-        Serial currentSerial = renderer->getCurrentQueueSerial();
-        renderer->releaseObject(currentSerial, &mBuffer);
-        renderer->releaseObject(currentSerial, &mMemory);
+        mPreviouslyAllocatedBuffers.emplace_back(
+            PreviouslyAllocatedBufferAndMemory{mBuffer, mMemory});
+        mBuffer = new Buffer();
+        mMemory = new DeviceMemory();
 
         VkBufferCreateInfo createInfo;
         createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -158,12 +159,12 @@ Error DynamicBuffer::allocate(RendererVk *renderer,
         createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
         createInfo.queueFamilyIndexCount = 0;
         createInfo.pQueueFamilyIndices   = nullptr;
-        ANGLE_TRY(mBuffer.init(device, createInfo));
+        ANGLE_TRY(mBuffer->init(device, createInfo));
 
-        ANGLE_TRY(AllocateBufferMemory(renderer, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, &mBuffer,
-                                       &mMemory, &mSize));
+        ANGLE_TRY(AllocateBufferMemory(renderer, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, mBuffer,
+                                       mMemory, &mSize));
 
-        ANGLE_TRY(mMemory.map(device, 0, mSize, 0, &mMappedMemory));
+        ANGLE_TRY(mMemory->map(device, 0, mSize, 0, &mMappedMemory));
         mNextWriteOffset = 0;
         mLastFlushOffset = 0;
 
@@ -177,11 +178,11 @@ Error DynamicBuffer::allocate(RendererVk *renderer,
         *newBufferAllocatedOut = false;
     }
 
-    ASSERT(mBuffer.valid());
+    ASSERT(mBuffer->valid());
 
     if (handleOut != nullptr)
     {
-        *handleOut = mBuffer.getHandle();
+        *handleOut = mBuffer->getHandle();
     }
 
     ASSERT(mMappedMemory);
@@ -198,7 +199,7 @@ Error DynamicBuffer::flush(VkDevice device)
         VkMappedMemoryRange range;
         range.sType  = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
         range.pNext  = nullptr;
-        range.memory = mMemory.getHandle();
+        range.memory = mMemory->getHandle();
         range.offset = mLastFlushOffset;
         range.size   = mNextWriteOffset - mLastFlushOffset;
         ANGLE_VK_TRY(vkFlushMappedMemoryRanges(device, 1, &range));
@@ -212,20 +213,35 @@ void DynamicBuffer::release(RendererVk *renderer)
 {
     mAlignment           = 0;
     Serial currentSerial = renderer->getCurrentQueueSerial();
-    renderer->releaseObject(currentSerial, &mBuffer);
-    renderer->releaseObject(currentSerial, &mMemory);
+    renderer->releaseObject(currentSerial, mBuffer);
+    renderer->releaseObject(currentSerial, mMemory);
 }
 
-void DynamicBuffer::destroy(VkDevice device)
+void DynamicBuffer::releasePreviouslyAllocatedBuffers(RendererVk *renderer)
 {
+    for (PreviouslyAllocatedBufferAndMemory &toFree : mPreviouslyAllocatedBuffers)
+    {
+        Serial currentSerial = renderer->getCurrentQueueSerial();
+        renderer->releaseObject(currentSerial, toFree.buffer);
+        renderer->releaseObject(currentSerial, toFree.memory);
+    }
+
+    mPreviouslyAllocatedBuffers.clear();
+}
+
+void DynamicBuffer::destroy(RendererVk *renderer)
+{
+    releasePreviouslyAllocatedBuffers(renderer);
+
     mAlignment = 0;
-    mBuffer.destroy(device);
-    mMemory.destroy(device);
+    VkDevice device = renderer->getDevice();
+    mBuffer->destroy(device);
+    mMemory->destroy(device);
 }
 
 VkBuffer DynamicBuffer::getCurrentBufferHandle() const
 {
-    return mBuffer.getHandle();
+    return mBuffer->getHandle();
 }
 
 void DynamicBuffer::setMinimumSizeForTesting(size_t minSize)
@@ -351,6 +367,8 @@ gl::Error LineLoopHelper::getIndexBufferForDrawArrays(RendererVk *renderer,
     uint32_t *indices    = nullptr;
     size_t allocateBytes = sizeof(uint32_t) * (drawCallParams.vertexCount() + 1);
     uint32_t offset      = 0;
+
+    mDynamicIndexBuffer.releasePreviouslyAllocatedBuffers(renderer);
     ANGLE_TRY(mDynamicIndexBuffer.allocate(renderer, allocateBytes,
                                            reinterpret_cast<uint8_t **>(&indices), bufferHandleOut,
                                            &offset, nullptr));
@@ -387,6 +405,8 @@ gl::Error LineLoopHelper::getIndexBufferForElementArrayBuffer(RendererVk *render
 
     auto unitSize = (indexType == VK_INDEX_TYPE_UINT16 ? sizeof(uint16_t) : sizeof(uint32_t));
     size_t allocateBytes = unitSize * (indexCount + 1);
+
+    mDynamicIndexBuffer.releasePreviouslyAllocatedBuffers(renderer);
     ANGLE_TRY(mDynamicIndexBuffer.allocate(renderer, allocateBytes,
                                            reinterpret_cast<uint8_t **>(&indices), bufferHandleOut,
                                            &destinationOffset, nullptr));
@@ -438,9 +458,9 @@ gl::Error LineLoopHelper::getIndexBufferForClientElementArray(RendererVk *render
     return gl::NoError();
 }
 
-void LineLoopHelper::destroy(VkDevice device)
+void LineLoopHelper::destroy(RendererVk *renderer)
 {
-    mDynamicIndexBuffer.destroy(device);
+    mDynamicIndexBuffer.destroy(renderer);
 }
 
 // static
