@@ -558,7 +558,7 @@ vk::Error TextureVk::initImageAndView(RendererVk *renderer,
                                    mappedSwizzle, &mBaseLevelImageView, 1));
 
     // TODO(jmadill): Fold this into the RenderPass load/store ops. http://anglebug.com/2361
-    VkClearColorValue black = {{0}};
+    VkClearColorValue black = {{0, 0, 0, 1.0f}};
     mImage.clearColor(black, commandBuffer);
     return vk::NoError();
 }
