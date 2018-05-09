@@ -640,10 +640,27 @@ Error AllocateBufferMemory(RendererVk *renderer,
                            DeviceMemory *deviceMemoryOut,
                            size_t *requiredSizeOut);
 
-struct BufferAndMemory final : private angle::NonCopyable
+struct BufferAndMemory final : angle::NonCopyable
 {
     Buffer buffer;
     DeviceMemory memory;
+
+    BufferAndMemory() {}
+
+    BufferAndMemory(Buffer &&buffer, DeviceMemory &&deviceMemory)
+        : buffer(std::move(buffer)), memory(std::move(deviceMemory))
+    {
+    }
+
+    BufferAndMemory(BufferAndMemory &other)
+        : buffer(std::move(other.buffer)), memory(std::move(other.memory))
+    {
+    }
+
+    BufferAndMemory(BufferAndMemory &&other)
+        : buffer(std::move(other.buffer)), memory(std::move(other.memory))
+    {
+    }
 };
 
 Error AllocateImageMemory(VkDevice device,
