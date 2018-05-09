@@ -174,6 +174,7 @@ vk::Error PixelBuffer::flushUpdatesToImage(RendererVk *renderer,
     }
 
     mSubresourceUpdates.clear();
+    mStagingBuffer.releasePreviouslyAllocatedBuffers(renderer);
 
     return vk::NoError();
 }
