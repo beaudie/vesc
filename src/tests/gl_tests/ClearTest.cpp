@@ -404,6 +404,8 @@ class ScissoredClearTest : public ANGLETest
 // Simple scissored clear.
 TEST_P(ScissoredClearTest, BasicScissoredColorClear)
 {
+    ANGLE_SKIP_TEST_IF(IsWindows());
+
     const int w     = getWindowWidth();
     const int h     = getWindowHeight();
     const int whalf = w >> 1;
