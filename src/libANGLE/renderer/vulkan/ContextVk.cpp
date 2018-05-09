@@ -128,8 +128,8 @@ gl::Error ContextVk::initPipeline()
 }
 
 gl::Error ContextVk::setupDraw(const gl::DrawCallParams &drawCallParams,
-                               vk::CommandGraphNode **drawNodeOut,
-                               bool *newCommandBufferOut)
+                               vk::CommandBuffer **commandBufferOut,
+                               bool *shouldApplyVertexArrayOut)
 {
     if (drawCallParams.mode() != mCurrentDrawMode)
     {
@@ -145,26 +145,22 @@ gl::Error ContextVk::setupDraw(const gl::DrawCallParams &drawCallParams,
     const auto &state            = mState.getState();
     const gl::Program *programGL = state.getProgram();
     ProgramVk *programVk         = vk::GetImpl(programGL);
-    const auto *drawFBO          = state.getDrawFramebuffer();
-    FramebufferVk *vkFBO         = vk::GetImpl(drawFBO);
+    const gl::Framebuffer *framebuffer = state.getDrawFramebuffer();
+    FramebufferVk *framebufferVk       = vk::GetImpl(framebuffer);
     Serial queueSerial           = mRenderer->getCurrentQueueSerial();
 
-    vk::CommandGraphNode *graphNode = nullptr;
-    ANGLE_TRY(vkFBO->getCommandGraphNodeForDraw(this, &graphNode));
+    vk::RecordingMode mode = vk::RecordingMode::Start;
+    ANGLE_TRY(framebufferVk->getCommandBufferForDraw(this, commandBufferOut, &mode));
 
-    vk::CommandBuffer *commandBuffer = nullptr;
-
-    if (!graphNode->getInsideRenderPassCommands()->valid())
+    if (mode == vk::RecordingMode::Start)
     {
-        mTexturesDirty    = true;
-        *newCommandBufferOut = true;
-        ANGLE_TRY(graphNode->beginInsideRenderPassRecording(mRenderer, &commandBuffer));
+        mTexturesDirty             = true;
+        *shouldApplyVertexArrayOut = true;
     }
     else
     {
-        *newCommandBufferOut          = mVertexArrayBindingHasChanged;
+        *shouldApplyVertexArrayOut    = mVertexArrayBindingHasChanged;
         mVertexArrayBindingHasChanged = false;
-        commandBuffer                 = graphNode->getInsideRenderPassCommands();
     }
 
     // Ensure any writes to the textures are flushed before we read from them.
@@ -188,11 +184,11 @@ gl::Error ContextVk::setupDraw(const gl::DrawCallParams &drawCallParams,
 
             TextureVk *textureVk = vk::GetImpl(texture);
             ANGLE_TRY(textureVk->ensureImageInitialized(mRenderer));
-            textureVk->onReadResource(graphNode, mRenderer->getCurrentQueueSerial());
+            textureVk->addReadDependency(framebufferVk);
         }
     }
 
-    commandBuffer->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline->get());
+    (*commandBufferOut)->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline->get());
 
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentPipeline && mCurrentPipeline->valid());
@@ -211,13 +207,13 @@ gl::Error ContextVk::setupDraw(const gl::DrawCallParams &drawCallParams,
         ASSERT(!descriptorSets.empty());
         const vk::PipelineLayout &pipelineLayout = mRenderer->getGraphicsPipelineLayout();
 
-        commandBuffer->bindDescriptorSets(
-            VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, usedRange.low(), usedRange.length(),
-            &descriptorSets[usedRange.low()], programVk->getDynamicOffsetsCount(),
-            programVk->getDynamicOffsets());
+        (*commandBufferOut)
+            ->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, usedRange.low(),
+                                 usedRange.length(), &descriptorSets[usedRange.low()],
+                                 programVk->getDynamicOffsetsCount(),
+                                 programVk->getDynamicOffsets());
     }
 
-    *drawNodeOut = graphNode;
     return gl::NoError();
 }
 
@@ -225,13 +221,14 @@ gl::Error ContextVk::drawArrays(const gl::Context *context, GLenum mode, GLint f
 {
     const gl::DrawCallParams &drawCallParams = context->getParams<gl::DrawCallParams>();
 
-    vk::CommandGraphNode *drawNode = nullptr;
-    bool newCommands               = false;
-    ANGLE_TRY(setupDraw(drawCallParams, &drawNode, &newCommands));
+    vk::CommandBuffer *commandBuffer = nullptr;
+    bool shouldApplyVertexArray      = false;
+    ANGLE_TRY(setupDraw(drawCallParams, &commandBuffer, &shouldApplyVertexArray));
 
     const gl::VertexArray *vertexArray = context->getGLState().getVertexArray();
     VertexArrayVk *vertexArrayVk       = vk::GetImpl(vertexArray);
-    ANGLE_TRY(vertexArrayVk->drawArrays(context, mRenderer, drawCallParams, drawNode, newCommands));
+    ANGLE_TRY(vertexArrayVk->drawArrays(context, mRenderer, drawCallParams, commandBuffer,
+                                        shouldApplyVertexArray));
 
     return gl::NoError();
 }
@@ -254,14 +251,14 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
 {
     const gl::DrawCallParams &drawCallParams = context->getParams<gl::DrawCallParams>();
 
-    vk::CommandGraphNode *drawNode = nullptr;
-    bool newCommands               = false;
-    ANGLE_TRY(setupDraw(drawCallParams, &drawNode, &newCommands));
+    vk::CommandBuffer *commandBuffer = nullptr;
+    bool shouldApplyVertexArray      = false;
+    ANGLE_TRY(setupDraw(drawCallParams, &commandBuffer, &shouldApplyVertexArray));
 
     gl::VertexArray *vao         = mState.getState().getVertexArray();
     VertexArrayVk *vertexArrayVk = vk::GetImpl(vao);
-    ANGLE_TRY(
-        vertexArrayVk->drawElements(context, mRenderer, drawCallParams, drawNode, newCommands));
+    ANGLE_TRY(vertexArrayVk->drawElements(context, mRenderer, drawCallParams, commandBuffer,
+                                          shouldApplyVertexArray));
 
     return gl::NoError();
 }
