@@ -62,7 +62,9 @@ struct FunctionsEGL::EGLDispatchTable
           clientWaitSyncKHRPtr(nullptr),
           createSyncKHRPtr(nullptr),
           destroySyncKHRPtr(nullptr),
-          getSyncAttribKHRPtr(nullptr)
+          getSyncAttribKHRPtr(nullptr),
+
+          swapBuffersWithDamageEXTPtr(nullptr)
     {
     }
 
@@ -98,6 +100,9 @@ struct FunctionsEGL::EGLDispatchTable
     PFNEGLCREATESYNCKHRPROC createSyncKHRPtr;
     PFNEGLDESTROYSYNCKHRPROC destroySyncKHRPtr;
     PFNEGLGETSYNCATTRIBKHRPROC getSyncAttribKHRPtr;
+
+    // EGL_EXT_swap_buffers_with_damage
+    PFNEGLSWAPBUFFERSWITHDAMAGEKHRPROC swapBuffersWithDamageEXTPtr;
 };
 
 FunctionsEGL::FunctionsEGL()
@@ -175,6 +180,11 @@ egl::Error FunctionsEGL::initialize(EGLNativeDisplayType nativeDisplay)
         ANGLE_GET_PROC_OR_ERROR(&mFnPtrs->createSyncKHRPtr, eglCreateSyncKHR);
         ANGLE_GET_PROC_OR_ERROR(&mFnPtrs->destroySyncKHRPtr, eglDestroySyncKHR);
         ANGLE_GET_PROC_OR_ERROR(&mFnPtrs->getSyncAttribKHRPtr, eglGetSyncAttribKHR);
+    }
+
+    if (hasExtension("EGL_EXT_swap_buffers_with_damage"))
+    {
+        ANGLE_GET_PROC_OR_ERROR(&mFnPtrs->swapBuffersWithDamageEXTPtr, eglSwapBuffersWithDamageEXT);
     }
 
 #undef ANGLE_GET_PROC_OR_ERROR
@@ -336,5 +346,12 @@ EGLint FunctionsEGL::clientWaitSyncKHR(EGLSyncKHR sync, EGLint flags, EGLTimeKHR
 EGLBoolean FunctionsEGL::getSyncAttribKHR(EGLSyncKHR sync, EGLint attribute, EGLint *value)
 {
     return mFnPtrs->getSyncAttribKHRPtr(mEGLDisplay, sync, attribute, value);
+}
+
+EGLBoolean FunctionsEGL::swapBuffersWithDamageEXT(EGLSurface surface,
+                                                  EGLint *rects,
+                                                  EGLint n_rects) const
+{
+    return mFnPtrs->swapBuffersWithDamageEXTPtr(mEGLDisplay, surface, rects, n_rects);
 }
 }  // namespace rx
