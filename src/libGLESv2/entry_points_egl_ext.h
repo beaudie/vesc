@@ -88,10 +88,10 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY GetSyncValuesCHROMIUM(EGLDisplay dpy,
                                                           EGLuint64KHR *sbc);
 
 // EGL_EXT_swap_buffers_with_damage
-ANGLE_EXPORT EGLBoolean SwapBuffersWithDamageEXT(EGLDisplay dpy,
-                                                 EGLSurface surface,
-                                                 EGLint *rects,
-                                                 EGLint n_rects);
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY SwapBuffersWithDamageEXT(EGLDisplay dpy,
+                                                             EGLSurface surface,
+                                                             EGLint *rects,
+                                                             EGLint n_rects);
 
 //
 ANGLE_EXPORT EGLint EGLAPIENTRY ProgramCacheGetAttribANGLE(EGLDisplay dpy, EGLenum attrib);
