@@ -360,7 +360,11 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                            VkImageLayout dstImageLayout,
                            uint32_t regionCount,
                            const VkBufferImageCopy *regions);
-
+    void copyImageToBuffer(VkBuffer dstBuffer,
+                           const Image &srcImage,
+                           VkImageLayout srcImageLayout,
+                           uint32_t regionCount,
+                           const VkBufferImageCopy *regions);
     void copyImage(const Image &srcImage,
                    VkImageLayout srcImageLayout,
                    const Image &dstImage,

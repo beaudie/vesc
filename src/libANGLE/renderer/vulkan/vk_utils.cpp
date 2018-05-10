@@ -436,6 +436,19 @@ void CommandBuffer::copyBufferToImage(VkBuffer srcBuffer,
                            regions);
 }
 
+void CommandBuffer::copyImageToBuffer(VkBuffer dstBuffer,
+                                      const Image &srcImage,
+                                      VkImageLayout srcImageLayout,
+                                      uint32_t regionCount,
+                                      const VkBufferImageCopy *regions)
+{
+    ASSERT(valid());
+    ASSERT(dstBuffer != VK_NULL_HANDLE);
+    ASSERT(srcImage.valid());
+    vkCmdCopyImageToBuffer(mHandle, srcImage.getHandle(), srcImageLayout, dstBuffer, regionCount,
+                           regions);
+}
+
 void CommandBuffer::clearColorImage(const vk::Image &image,
                                     VkImageLayout imageLayout,
                                     const VkClearColorValue &color,
