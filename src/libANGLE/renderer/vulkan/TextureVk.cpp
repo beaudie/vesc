@@ -12,6 +12,7 @@
 #include "common/debug.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
@@ -146,21 +147,21 @@ gl::Error PixelBuffer::stageSubresourceUpdate(ContextVk *contextVk,
     return gl::NoError();
 }
 
-gl::Error PixelBuffer::stageSubresourceUpdateFromImage(ContextVk *contextVk,
-                                                       vk::CommandBuffer *commandBuffer,
-                                                       const gl::ImageIndex &index,
-                                                       const gl::Rectangle &sourceArea,
-                                                       const gl::Offset dstOffset,
-                                                       const gl::Extents dstExtent,
-                                                       const gl::InternalFormat &formatInfo,
-                                                       GLenum type,
-                                                       vk::ImageHelper &srcImageHelper)
+gl::Error PixelBuffer::stageSubresourceUpdateFromFramebuffer(const gl::Context *context,
+                                                             const gl::ImageIndex &index,
+                                                             const gl::Rectangle &sourceArea,
+                                                             gl::Offset dstOffset,
+                                                             gl::Extents dstExtent,
+                                                             const gl::InternalFormat &formatInfo,
+                                                             FramebufferVk &srcFramebuffer)
 {
+    vk::ImageHelper *srcImageHelper = srcFramebuffer.getColorReadImage();
+
     // If the extents and offset is outside the source image, we need to clip.
     gl::Rectangle clippedRectangle;
     if (!ClipRectangle(sourceArea,
-                       gl::Rectangle(0, 0, srcImageHelper.getExtents().width,
-                                     srcImageHelper.getExtents().height),
+                       gl::Rectangle(0, 0, srcImageHelper->getExtents().width,
+                                     srcImageHelper->getExtents().height),
                        &clippedRectangle))
     {
         // Empty source area, nothing to do.
@@ -168,10 +169,11 @@ gl::Error PixelBuffer::stageSubresourceUpdateFromImage(ContextVk *contextVk,
     }
 
     // 1- obtain a buffer handle to copy to
-    RendererVk *renderer = contextVk->getRenderer();
+    RendererVk *renderer = GetImplAs<ContextVk>(context)->getRenderer();
 
     const vk::Format &vkFormat         = renderer->getFormat(formatInfo.sizedInternalFormat);
     const angle::Format &storageFormat = vkFormat.textureFormat();
+    LoadImageFunctionInfo loadFunction = vkFormat.loadFunctions(formatInfo.type);
 
     size_t outputRowPitch   = storageFormat.pixelBytes * clippedRectangle.width;
     size_t outputDepthPitch = outputRowPitch * clippedRectangle.height;
@@ -181,36 +183,37 @@ gl::Error PixelBuffer::stageSubresourceUpdateFromImage(ContextVk *contextVk,
     uint8_t *stagingPointer = nullptr;
     bool newBufferAllocated = false;
     uint32_t stagingOffset  = 0;
-    size_t allocationSize   = outputDepthPitch * 1;
+
+    // The destination is only one layer deep.
+    size_t allocationSize = outputDepthPitch;
     mStagingBuffer.allocate(renderer, allocationSize, &stagingPointer, &bufferHandle,
                             &stagingOffset, &newBufferAllocated);
 
-    // 2- copy the source image region to the pixel buffer.
-    VkBufferImageCopy copyToBuffer;
-    copyToBuffer.bufferOffset                    = static_cast<VkDeviceSize>(stagingOffset);
-    copyToBuffer.bufferRowLength                 = clippedRectangle.width;
-    copyToBuffer.bufferImageHeight               = clippedRectangle.height;
-    copyToBuffer.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
-    copyToBuffer.imageSubresource.mipLevel       = 0;
-    copyToBuffer.imageSubresource.baseArrayLayer = 0;
-    copyToBuffer.imageSubresource.layerCount     = 1;
-    copyToBuffer.imageOffset.x                   = clippedRectangle.x;
-    copyToBuffer.imageOffset.y                   = clippedRectangle.y;
-    copyToBuffer.imageOffset.z                   = 0;
-    copyToBuffer.imageExtent.width               = clippedRectangle.width;
-    copyToBuffer.imageExtent.height              = clippedRectangle.height;
-    copyToBuffer.imageExtent.depth               = 1;
+    // 2- copy the source image region to the pixel buffer using a cpu readback
+    if (loadFunction.requiresConversion)
+    {
+        // TODO(lucferron): This needs additional work, we will read into a temp buffer and then
+        // use the loadFunction to read the data to our PixelBuffer.
+        // http://anglebug.com/2501
+        UNIMPLEMENTED();
+    }
+    else
+    {
+        PackPixelsParams params;
+        params.area        = sourceArea;
+        params.format      = formatInfo.internalFormat;
+        params.type        = formatInfo.type;
+        params.outputPitch = static_cast<GLuint>(outputRowPitch);
+        params.packBuffer  = nullptr;
+        params.pack        = gl::PixelPackState();
 
-    srcImageHelper.changeLayoutWithStages(
-        VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, commandBuffer);
+        ANGLE_TRY(srcFramebuffer.readPixels(context, sourceArea, params, stagingPointer));
+    }
 
-    commandBuffer->copyImageToBuffer(srcImageHelper.getImage(), srcImageHelper.getCurrentLayout(),
-                                     bufferHandle, 1, &copyToBuffer);
-
+    // 3- enqueue the destination image subresource update
     VkBufferImageCopy copyToImage;
     copyToImage.bufferOffset                    = static_cast<VkDeviceSize>(stagingOffset);
-    copyToImage.bufferRowLength                 = clippedRectangle.width;
+    copyToImage.bufferRowLength                 = 0;  // Tightly packed data can be specified as 0.
     copyToImage.bufferImageHeight               = clippedRectangle.height;
     copyToImage.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
     copyToImage.imageSubresource.mipLevel       = index.getLevelIndex();
@@ -402,12 +405,37 @@ gl::Error TextureVk::copyImage(const gl::Context *context,
 
 gl::Error TextureVk::copySubImage(const gl::Context *context,
                                   const gl::ImageIndex &index,
-                                  const gl::Offset &destOffset,
-                                  const gl::Rectangle &sourceArea,
+                                  const gl::Offset &origDestOffset,
+                                  const gl::Rectangle &origSourceArea,
                                   gl::Framebuffer *source)
 {
-    UNIMPLEMENTED();
-    return gl::InternalError();
+    gl::Extents fbSize = source->getReadColorbuffer()->getSize();
+    gl::Rectangle sourceArea;
+    if (!ClipRectangle(origSourceArea, gl::Rectangle(0, 0, fbSize.width, fbSize.height),
+                       &sourceArea))
+    {
+        return gl::NoError();
+    }
+
+    const gl::Offset destOffset(origDestOffset.x + sourceArea.x - origSourceArea.x,
+                                origDestOffset.y + sourceArea.y - origSourceArea.y, 0);
+
+    ContextVk *contextVk = vk::GetImpl(context);
+
+    FramebufferVk &framebufferVk            = *GetImplAs<FramebufferVk>(source);
+    const gl::InternalFormat &currentFormat = *mState.getBaseLevelDesc().format.info;
+
+    // For now, favor conformance. We do a CPU readback that does the conversion, and then stage the
+    // change to the pixel buffer.
+    // Eventually we can improve this easily by implementing vkCmdBlitImage to do the conversion
+    // when its supported.
+    ANGLE_TRY(mPixelBuffer.stageSubresourceUpdateFromFramebuffer(
+        context, index, sourceArea, destOffset, gl::Extents(sourceArea.width, sourceArea.height, 1),
+        currentFormat, framebufferVk));
+
+    vk::CommandGraphNode *writingNode = getNewWritingNode(contextVk->getRenderer());
+    framebufferVk.onReadResource(writingNode, contextVk->getRenderer()->getCurrentQueueSerial());
+    return gl::NoError();
 }
 
 vk::Error TextureVk::getCommandBufferForWrite(RendererVk *renderer,

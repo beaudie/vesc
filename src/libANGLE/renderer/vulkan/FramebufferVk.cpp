@@ -277,6 +277,28 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
                                     void *pixels)
 {
     const gl::State &glState = context->getGLState();
+    RenderTargetVk *renderTarget = mRenderTargetCache.getColorRead(mState);
+    ASSERT(renderTarget);
+
+    const angle::Format &angleFormat = renderTarget->image->getFormat().textureFormat();
+    GLuint outputPitch               = angleFormat.pixelBytes * area.width;
+
+    PackPixelsParams params;
+    params.area        = area;
+    params.format      = format;
+    params.type        = type;
+    params.outputPitch = outputPitch;
+    params.packBuffer  = glState.getTargetBuffer(gl::BufferBinding::PixelPack);
+    params.pack        = glState.getPackState();
+
+    return readPixels(context, area, params, pixels);
+}
+
+gl::Error FramebufferVk::readPixels(const gl::Context *context,
+                                    const gl::Rectangle &area,
+                                    const PackPixelsParams &packPixelsParams,
+                                    void *pixels)
+{
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
     VkDevice device      = renderer->getDevice();
@@ -310,28 +332,24 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
                                                  0, &mapPointer));
 
     const angle::Format &angleFormat = renderTarget->image->getFormat().textureFormat();
-    GLuint outputPitch               = angleFormat.pixelBytes * area.width;
 
     // Get the staging image pitch and use it to pack the pixels later.
     VkSubresourceLayout subresourceLayout;
     stagingImage.getImage().getSubresourceLayout(device, VK_IMAGE_ASPECT_COLOR_BIT, 0, 0,
                                                  &subresourceLayout);
 
-    PackPixelsParams params;
-    params.area        = area;
-    params.format      = format;
-    params.type        = type;
-    params.outputPitch = outputPitch;
-    params.packBuffer  = glState.getTargetBuffer(gl::BufferBinding::PixelPack);
-    params.pack        = glState.getPackState();
-
-    PackPixels(params, angleFormat, static_cast<int>(subresourceLayout.rowPitch), mapPointer,
-               reinterpret_cast<uint8_t *>(pixels));
+    PackPixels(packPixelsParams, angleFormat, static_cast<int>(subresourceLayout.rowPitch),
+               mapPointer, reinterpret_cast<uint8_t *>(pixels));
 
     stagingImage.getDeviceMemory().unmap(device);
     renderer->releaseObject(renderer->getCurrentQueueSerial(), &stagingImage);
 
     return vk::NoError();
+}
+
+vk::ImageHelper *FramebufferVk::getColorReadImage()
+{
+    return mRenderTargetCache.getColorRead(mState)->image;
 }
 
 gl::Error FramebufferVk::blit(const gl::Context *context,
