@@ -317,6 +317,11 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
     return vk::NoError();
 }
 
+vk::ImageHelper *FramebufferVk::getColorReadImage()
+{
+    return mRenderTargetCache.getColorRead(mState)->image;
+}
+
 gl::Error FramebufferVk::blit(const gl::Context *context,
                               const gl::Rectangle &sourceArea,
                               const gl::Rectangle &destArea,
