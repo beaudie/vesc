@@ -21,6 +21,13 @@ class RendererVk;
 class RenderTargetVk;
 class WindowSurfaceVk;
 
+gl::Error ReadPixelsFromFramebuffer(const gl::Context *context,
+                                    const gl::Rectangle &area,
+                                    const PackPixelsParams &packPixelsParams,
+                                    RenderTargetVk *renderTarget,
+                                    vk::CommandBuffer *commandBuffer,
+                                    void *pixels);
+
 class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
 {
   public:
@@ -71,7 +78,7 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
                          GLenum format,
                          GLenum type,
                          void *pixels) override;
-
+    RenderTargetVk *getColorReadRenderTarget();
     gl::Error blit(const gl::Context *context,
                    const gl::Rectangle &sourceArea,
                    const gl::Rectangle &destArea,
