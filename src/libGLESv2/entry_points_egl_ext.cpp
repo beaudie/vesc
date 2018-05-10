@@ -754,10 +754,10 @@ EGLBoolean EGLAPIENTRY GetSyncValuesCHROMIUM(EGLDisplay dpy,
     return EGL_TRUE;
 }
 
-ANGLE_EXPORT EGLBoolean SwapBuffersWithDamageEXT(EGLDisplay dpy,
-                                                 EGLSurface surface,
-                                                 EGLint *rects,
-                                                 EGLint n_rects)
+EGLBoolean EGLAPIENTRY SwapBuffersWithDamageEXT(EGLDisplay dpy,
+                                                EGLSurface surface,
+                                                EGLint *rects,
+                                                EGLint n_rects)
 {
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLSurface surface = 0x%0.8p, EGLint *rects = 0x%0.8p, EGLint "
