@@ -71,7 +71,11 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
                          GLenum format,
                          GLenum type,
                          void *pixels) override;
-
+    gl::Error readPixels(const gl::Context *context,
+                         const gl::Rectangle &area,
+                         const PackPixelsParams &packPixelsParams,
+                         void *pixels);
+    vk::ImageHelper *getColorReadImage();
     gl::Error blit(const gl::Context *context,
                    const gl::Rectangle &sourceArea,
                    const gl::Rectangle &destArea,
