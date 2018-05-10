@@ -14,6 +14,7 @@
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
+#include "libANGLE/renderer/vulkan/FramebufferVk.h"
 
 namespace rx
 {
@@ -402,8 +403,39 @@ gl::Error TextureVk::copySubImage(const gl::Context *context,
                                   const gl::Rectangle &sourceArea,
                                   gl::Framebuffer *source)
 {
-    UNIMPLEMENTED();
-    return gl::InternalError();
+    ASSERT(index.getTarget() == gl::TextureTarget::_2D);
+
+    ContextVk *contextVk = vk::GetImpl(context);
+
+    FramebufferVk *framebufferVk     = GetAs<FramebufferVk>(source->getImplementation());
+    vk::ImageHelper *imageHelper     = framebufferVk->getImage();
+    vk::CommandBuffer *commandBuffer = nullptr;
+
+    const gl::InternalFormat &inputFormat =
+        gl::GetSizedInternalFormatInfo(imageHelper->getFormat().internalFormat);
+
+    if (inputFormat != gl::GetSizedInternalFormatInfo(mImage.getFormat().internalFormat))
+    {
+        // TODO(lucferron): We will need to use a blit image or a manual conversion to achieve this.
+        // http://anglebug.com/2501
+        UNIMPLEMENTED();
+    } 
+    else
+    {
+        // Same format copy is easy -- We can just stage the content of the image directly.
+        ANGLE_TRY(getCommandBufferForWrite(contextVk->getRenderer(), &commandBuffer));
+
+        ANGLE_TRY(mPixelBuffer.stageSubresourceUpdateFromImage(
+            contextVk, commandBuffer, index, sourceArea, destOffset,
+            gl::Extents(sourceArea.width, sourceArea.height, 1), inputFormat, inputFormat.componentType,
+            *imageHelper));
+
+        vk::CommandGraphNode *writingNode = getNewWritingNode(contextVk->getRenderer());
+        framebufferVk->onReadResource(writingNode, contextVk->getRenderer()->getCurrentQueueSerial());
+
+    }
+    
+    return gl::NoError();
 }
 
 vk::Error TextureVk::getCommandBufferForWrite(RendererVk *renderer,

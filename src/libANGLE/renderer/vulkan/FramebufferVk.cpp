@@ -317,6 +317,25 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
     return vk::NoError();
 }
 
+vk::ImageHelper* FramebufferVk::getImage()
+{
+    // TODO(lucferron): This is probably not the right way to get the image from the frame buffer?
+    const auto &colorRenderTargets = mRenderTargetCache.getColors();
+
+    ASSERT(mState.getEnabledDrawBuffers().size() > 0);
+
+    // return first color target, this is wrong, just trying to get this to work.
+    for (size_t colorIndex : mState.getEnabledDrawBuffers())
+    {
+        RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndex];
+        ASSERT(colorRenderTarget);
+        return colorRenderTarget->image;
+    }
+
+    UNREACHABLE();
+    return nullptr;
+}
+
 gl::Error FramebufferVk::blit(const gl::Context *context,
                               const gl::Rectangle &sourceArea,
                               const gl::Rectangle &destArea,
