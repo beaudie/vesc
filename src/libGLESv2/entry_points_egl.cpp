@@ -490,36 +490,43 @@ EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface r
     Thread *thread = GetCurrentThread();
 
     Display *display     = static_cast<Display *>(dpy);
+    Surface *drawSurface = static_cast<Surface *>(draw);
+    Surface *readSurface = static_cast<Surface *>(read);
     gl::Context *context = static_cast<gl::Context *>(ctx);
 
-    Error error = ValidateMakeCurrent(display, draw, read, context);
+    Error error = ValidateMakeCurrent(display, drawSurface, readSurface, context);
     if (error.isError())
     {
         thread->setError(error);
         return EGL_FALSE;
     }
 
-    Surface *readSurface   = static_cast<Surface *>(read);
-    Surface *drawSurface   = static_cast<Surface *>(draw);
-    Error makeCurrentError = display->makeCurrent(drawSurface, readSurface, context);
-    if (makeCurrentError.isError())
-    {
-        thread->setError(makeCurrentError);
-        return EGL_FALSE;
-    }
-
+    Surface *previousDraw        = thread->getCurrentDrawSurface();
+    Surface *previousRead        = thread->getCurrentReadSurface();
     gl::Context *previousContext = thread->getContext();
-    thread->setCurrent(context);
 
-    // Release the surface from the previously-current context, to allow
-    // destroyed surfaces to delete themselves.
-    if (previousContext != nullptr && context != previousContext)
+    // Only call makeCurrent if the context or surfaces have changed.
+    if (previousDraw != drawSurface || previousRead != readSurface || previousContext != context)
     {
-        auto err = previousContext->releaseSurface(display);
-        if (err.isError())
+        error = display->makeCurrent(drawSurface, readSurface, context);
+        if (error.isError())
         {
-            thread->setError(err);
+            thread->setError(error);
             return EGL_FALSE;
+        }
+
+        thread->setCurrent(context);
+
+        // Release the surface from the previously-current context, to allow
+        // destroyed surfaces to delete themselves.
+        if (previousContext != nullptr && context != previousContext)
+        {
+            error = previousContext->releaseSurface(display);
+            if (error.isError())
+            {
+                thread->setError(error);
+                return EGL_FALSE;
+            }
         }
     }
 
