@@ -392,7 +392,7 @@ gl::Error VertexDataManager::storeDynamicAttribs(
     std::vector<TranslatedAttribute> *translatedAttribs,
     const gl::AttributesMask &dynamicAttribsMask,
     GLint start,
-    GLsizei count,
+    size_t count,
     GLsizei instances)
 {
     // Instantiating this class will ensure the streaming buffer is never left mapped.
@@ -434,7 +434,7 @@ void VertexDataManager::PromoteDynamicAttribs(
     const gl::Context *context,
     const std::vector<TranslatedAttribute> &translatedAttribs,
     const gl::AttributesMask &dynamicAttribsMask,
-    GLsizei count)
+    size_t count)
 {
     for (auto attribIndex : dynamicAttribsMask)
     {
@@ -445,16 +445,17 @@ void VertexDataManager::PromoteDynamicAttribs(
         gl::Buffer *buffer = binding.getBuffer().get();
         if (buffer)
         {
+            // Note: this multiplication can overflow. It should not be a security problem.
             BufferD3D *bufferD3D = GetImplAs<BufferD3D>(buffer);
             size_t typeSize      = ComputeVertexAttributeTypeSize(*dynamicAttrib.attribute);
-            bufferD3D->promoteStaticUsage(context, count * static_cast<int>(typeSize));
+            bufferD3D->promoteStaticUsage(context, count * typeSize);
         }
     }
 }
 
 gl::Error VertexDataManager::reserveSpaceForAttrib(const TranslatedAttribute &translatedAttrib,
                                                    GLint start,
-                                                   GLsizei count,
+                                                   size_t count,
                                                    GLsizei instances) const
 {
     ASSERT(translatedAttrib.attribute && translatedAttrib.binding);
@@ -493,8 +494,8 @@ gl::Error VertexDataManager::reserveSpaceForAttrib(const TranslatedAttribute &tr
 gl::Error VertexDataManager::storeDynamicAttrib(const gl::Context *context,
                                                 TranslatedAttribute *translated,
                                                 GLint start,
-                                                GLsizei count,
-                                                GLsizei instances)
+                                                size_t count,
+                                                GLsizei instances) const
 {
     ASSERT(translated->attribute && translated->binding);
     const auto &attrib  = *translated->attribute;
