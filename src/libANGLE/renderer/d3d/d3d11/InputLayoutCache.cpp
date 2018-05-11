@@ -249,8 +249,8 @@ gl::Error InputLayoutCache::createInputLayout(
         GLsizei numIndicesPerInstance = 0;
         if (drawCallParams.instances() > 0)
         {
-            // This requires that the index range is resolved.
-            numIndicesPerInstance = drawCallParams.vertexCount();
+            // Note: Vertex indexes can be arbitrarily large.
+            numIndicesPerInstance = drawCallParams.getClampedVertexCount<GLsizei>();
         }
 
         for (size_t elementIndex = 0; elementIndex < inputElementCount; ++elementIndex)
