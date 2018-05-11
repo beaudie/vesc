@@ -1419,6 +1419,9 @@ gl::Error Renderer11::drawArrays(const gl::Context *context, const gl::DrawCallP
     GLsizei adjustedInstanceCount = GetAdjustedInstanceCount(program, params.instances());
     ProgramD3D *programD3D        = GetImplAs<ProgramD3D>(program);
 
+    // Note: vertex indexes can be arbitrarily large.
+    UINT clampedVertexCount = params.getClampedVertexCount<UINT>();
+
     if (programD3D->usesGeometryShader(params.mode()) &&
         glState.isTransformFeedbackActiveUnpaused())
     {
@@ -1430,11 +1433,11 @@ gl::Error Renderer11::drawArrays(const gl::Context *context, const gl::DrawCallP
 
         if (adjustedInstanceCount > 0)
         {
-            mDeviceContext->DrawInstanced(params.vertexCount(), adjustedInstanceCount, 0, 0);
+            mDeviceContext->DrawInstanced(clampedVertexCount, adjustedInstanceCount, 0, 0);
         }
         else
         {
-            mDeviceContext->Draw(params.vertexCount(), 0);
+            mDeviceContext->Draw(clampedVertexCount, 0);
         }
 
         rx::ShaderExecutableD3D *pixelExe = nullptr;
@@ -1458,24 +1461,24 @@ gl::Error Renderer11::drawArrays(const gl::Context *context, const gl::DrawCallP
 
         if (adjustedInstanceCount > 0)
         {
-            mDeviceContext->DrawInstanced(params.vertexCount(), adjustedInstanceCount, 0, 0);
+            mDeviceContext->DrawInstanced(clampedVertexCount, adjustedInstanceCount, 0, 0);
         }
         else
         {
-            mDeviceContext->Draw(params.vertexCount(), 0);
+            mDeviceContext->Draw(clampedVertexCount, 0);
         }
         return gl::NoError();
     }
 
     if (params.mode() == GL_LINE_LOOP)
     {
-        return drawLineLoop(context, params.vertexCount(), GL_NONE, nullptr, 0,
+        return drawLineLoop(context, clampedVertexCount, GL_NONE, nullptr, 0,
                             adjustedInstanceCount);
     }
 
     if (params.mode() == GL_TRIANGLE_FAN)
     {
-        return drawTriangleFan(context, params.vertexCount(), GL_NONE, nullptr, 0,
+        return drawTriangleFan(context, clampedVertexCount, GL_NONE, nullptr, 0,
                                adjustedInstanceCount);
     }
 
@@ -1486,11 +1489,11 @@ gl::Error Renderer11::drawArrays(const gl::Context *context, const gl::DrawCallP
     {
         if (adjustedInstanceCount == 0)
         {
-            mDeviceContext->Draw(params.vertexCount(), 0);
+            mDeviceContext->Draw(clampedVertexCount, 0);
         }
         else
         {
-            mDeviceContext->DrawInstanced(params.vertexCount(), adjustedInstanceCount, 0, 0);
+            mDeviceContext->DrawInstanced(clampedVertexCount, adjustedInstanceCount, 0, 0);
         }
         return gl::NoError();
     }
@@ -1503,7 +1506,7 @@ gl::Error Renderer11::drawArrays(const gl::Context *context, const gl::DrawCallP
     // D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST and DrawIndexedInstanced is called instead.
     if (adjustedInstanceCount == 0)
     {
-        mDeviceContext->DrawIndexedInstanced(6, params.vertexCount(), 0, 0, 0);
+        mDeviceContext->DrawIndexedInstanced(6, clampedVertexCount, 0, 0, 0);
         return gl::NoError();
     }
 
@@ -1516,7 +1519,7 @@ gl::Error Renderer11::drawArrays(const gl::Context *context, const gl::DrawCallP
     {
         ANGLE_TRY(
             mStateManager.updateVertexOffsetsForPointSpritesEmulation(params.baseVertex(), i));
-        mDeviceContext->DrawIndexedInstanced(6, params.vertexCount(), 0, 0, 0);
+        mDeviceContext->DrawIndexedInstanced(6, clampedVertexCount, 0, 0, 0);
     }
 
     // This required by updateVertexOffsets... above but is outside of the loop for speed.
@@ -1595,13 +1598,13 @@ gl::Error Renderer11::drawElements(const gl::Context *context, const gl::DrawCal
     // efficent code path. Instanced rendering of emulated pointsprites requires a loop to draw each
     // batch of points. An offset into the instanced data buffer is calculated and applied on each
     // iteration to ensure all instances are rendered correctly.
-    GLsizei elementsToRender = params.vertexCount();
+    UINT clampedVertexCount = params.getClampedVertexCount<UINT>();
 
     // Each instance being rendered requires the inputlayout cache to reapply buffers and offsets.
     for (GLsizei i = 0; i < params.instances(); i++)
     {
         ANGLE_TRY(mStateManager.updateVertexOffsetsForPointSpritesEmulation(startVertex, i));
-        mDeviceContext->DrawIndexedInstanced(6, elementsToRender, 0, 0, 0);
+        mDeviceContext->DrawIndexedInstanced(6, clampedVertexCount, 0, 0, 0);
     }
     mStateManager.invalidateVertexBuffer();
     return gl::NoError();
