@@ -66,6 +66,7 @@ ProcEntry g_procTable[] = {
     {"eglInitialize", P(egl::Initialize)},
     {"eglMakeCurrent", P(egl::MakeCurrent)},
     {"eglPostSubBufferNV", P(egl::PostSubBufferNV)},
+    {"eglPresentationTimeANDROID", P(egl::PresentationTimeANDROID)},
     {"eglProgramCacheGetAttribANGLE", P(egl::ProgramCacheGetAttribANGLE)},
     {"eglProgramCachePopulateANGLE", P(egl::ProgramCachePopulateANGLE)},
     {"eglProgramCacheQueryANGLE", P(egl::ProgramCacheQueryANGLE)},
@@ -1231,5 +1232,5 @@ ProcEntry g_procTable[] = {
     {"glWeightPointerOES", P(gl::WeightPointerOES)},
     {"glWeightPointerOESContextANGLE", P(gl::WeightPointerOESContextANGLE)}};
 
-size_t g_numProcs = 1163;
+size_t g_numProcs = 1164;
 }  // namespace egl
