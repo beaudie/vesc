@@ -21,12 +21,12 @@ class RendererVk;
 class RenderTargetVk;
 class WindowSurfaceVk;
 
-gl::Error ReadPixelsFromFramebuffer(const gl::Context *context,
-                                    const gl::Rectangle &area,
-                                    const PackPixelsParams &packPixelsParams,
-                                    RenderTargetVk *renderTarget,
-                                    vk::CommandBuffer *commandBuffer,
-                                    void *pixels);
+gl::Error ReadPixelsFromRenderTarget(const gl::Context *context,
+                                     const gl::Rectangle &area,
+                                     const PackPixelsParams &packPixelsParams,
+                                     RenderTargetVk *renderTarget,
+                                     vk::CommandBuffer *commandBuffer,
+                                     void *pixels);
 
 class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
 {
