@@ -63,6 +63,7 @@ EXPORTS
     eglProgramCachePopulateANGLE                @69
     eglProgramCacheQueryANGLE                   @70
     eglProgramCacheResizeANGLE                  @71
+    eglPresentationTimeANDROID                  @72
 
     ; 1.5 entry points
     eglCreateSync                               @38
