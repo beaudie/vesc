@@ -276,6 +276,16 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
                                     GLenum type,
                                     void *pixels)
 {
+    // Clip read area to framebuffer.
+    const gl::Extents fbSize = getState().getReadAttachment()->getSize();
+    const gl::Rectangle fbRect(0, 0, fbSize.width, fbSize.height);
+    gl::Rectangle clippedArea;
+    if (!ClipRectangle(area, fbRect, &clippedArea))
+    {
+        // nothing to read
+        return gl::NoError();
+    }
+
     const gl::State &glState = context->getGLState();
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
@@ -287,7 +297,7 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
     vk::ImageHelper stagingImage;
     ANGLE_TRY(stagingImage.init2DStaging(
         device, renderer->getMemoryProperties(), renderTarget->image->getFormat(),
-        gl::Extents(area.width, area.height, 1), vk::StagingUsage::Read));
+        gl::Extents(clippedArea.width, clippedArea.height, 1), vk::StagingUsage::Read));
 
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
@@ -296,8 +306,9 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
                                         VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                         VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, commandBuffer);
 
-    vk::ImageHelper::Copy(renderTarget->image, &stagingImage, gl::Offset(area.x, area.y, 0),
-                          gl::Offset(), gl::Extents(area.width, area.height, 1),
+    vk::ImageHelper::Copy(renderTarget->image, &stagingImage,
+                          gl::Offset(clippedArea.x, clippedArea.y, 0), gl::Offset(),
+                          gl::Extents(clippedArea.width, clippedArea.height, 1),
                           VK_IMAGE_ASPECT_COLOR_BIT, commandBuffer);
 
     // Triggers a full finish.
@@ -310,7 +321,20 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
                                                  0, &mapPointer));
 
     const angle::Format &angleFormat = renderTarget->image->getFormat().textureFormat();
-    GLuint outputPitch               = angleFormat.pixelBytes * area.width;
+    const gl::PixelPackState &packState = context->getGLState().getPackState();
+
+    const gl::InternalFormat &sizedFormatInfo = gl::GetInternalFormatInfo(format, type);
+
+    GLuint outputPitch = 0;
+    ANGLE_TRY_RESULT(
+        sizedFormatInfo.computeRowPitch(type, area.width, packState.alignment, packState.rowLength),
+        outputPitch);
+    GLuint outputSkipBytes = 0;
+    ANGLE_TRY_RESULT(sizedFormatInfo.computeSkipBytes(outputPitch, 0, packState, false),
+                     outputSkipBytes);
+
+    outputSkipBytes += (clippedArea.x - area.x) * sizedFormatInfo.pixelBytes +
+                       (clippedArea.y - area.y) * outputPitch;
 
     // Get the staging image pitch and use it to pack the pixels later.
     VkSubresourceLayout subresourceLayout;
@@ -326,7 +350,7 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
     params.pack        = glState.getPackState();
 
     PackPixels(params, angleFormat, static_cast<int>(subresourceLayout.rowPitch), mapPointer,
-               reinterpret_cast<uint8_t *>(pixels));
+               reinterpret_cast<uint8_t *>(pixels) + outputSkipBytes);
 
     stagingImage.getDeviceMemory().unmap(device);
     renderer->releaseObject(renderer->getCurrentQueueSerial(), &stagingImage);
