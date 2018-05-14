@@ -113,6 +113,12 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
                            const gl::Offset &destOffset,
                            const gl::Rectangle &sourceArea,
                            gl::Framebuffer *source) override;
+    gl::Error copySubImageImpl(const gl::Context *context,
+                               const gl::ImageIndex &index,
+                               const gl::Offset &destOffset,
+                               const gl::Rectangle &sourceArea,
+                               const gl::InternalFormat &internalFormat,
+                               gl::Framebuffer *source);
 
     gl::Error setStorage(const gl::Context *context,
                          gl::TextureType type,
