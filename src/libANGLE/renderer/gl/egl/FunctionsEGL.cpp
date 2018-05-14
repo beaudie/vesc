@@ -64,7 +64,9 @@ struct FunctionsEGL::EGLDispatchTable
           destroySyncKHRPtr(nullptr),
           getSyncAttribKHRPtr(nullptr),
 
-          swapBuffersWithDamageEXTPtr(nullptr)
+          swapBuffersWithDamageEXTPtr(nullptr),
+
+          presentationTimeANDROIDPtr(nullptr)
     {
     }
 
@@ -103,6 +105,9 @@ struct FunctionsEGL::EGLDispatchTable
 
     // EGL_EXT_swap_buffers_with_damage
     PFNEGLSWAPBUFFERSWITHDAMAGEKHRPROC swapBuffersWithDamageEXTPtr;
+
+    // EGL_ANDROID_presentation_time
+    PFNEGLPRESENTATIONTIMEANDROIDPROC presentationTimeANDROIDPtr;
 };
 
 FunctionsEGL::FunctionsEGL()
@@ -185,6 +190,11 @@ egl::Error FunctionsEGL::initialize(EGLNativeDisplayType nativeDisplay)
     if (hasExtension("EGL_EXT_swap_buffers_with_damage"))
     {
         ANGLE_GET_PROC_OR_ERROR(&mFnPtrs->swapBuffersWithDamageEXTPtr, eglSwapBuffersWithDamageEXT);
+    }
+
+    if (hasExtension("EGL_ANDROID_presentation_time"))
+    {
+        ANGLE_GET_PROC_OR_ERROR(&mFnPtrs->presentationTimeANDROIDPtr, eglPresentationTimeANDROID);
     }
 
 #undef ANGLE_GET_PROC_OR_ERROR
@@ -353,5 +363,10 @@ EGLBoolean FunctionsEGL::swapBuffersWithDamageEXT(EGLSurface surface,
                                                   EGLint n_rects) const
 {
     return mFnPtrs->swapBuffersWithDamageEXTPtr(mEGLDisplay, surface, rects, n_rects);
+}
+
+EGLBoolean FunctionsEGL::presentationTimeANDROID(EGLSurface surface, EGLnsecsANDROID time) const
+{
+    return mFnPtrs->presentationTimeANDROIDPtr(mEGLDisplay, surface, time);
 }
 }  // namespace rx
