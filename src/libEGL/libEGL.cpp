@@ -376,6 +376,13 @@ EGLBoolean EGLAPIENTRY eglSwapBuffersWithDamageEXT(EGLDisplay dpy,
     return egl::SwapBuffersWithDamageEXT(dpy, surface, rects, n_rects);
 }
 
+EGLBoolean EGLAPIENTRY eglPresentationTimeANDROID(EGLDisplay dpy,
+                                                  EGLSurface surface,
+                                                  EGLnsecsANDROID time)
+{
+    return egl::PresentationTimeANDROID(dpy, surface, time);
+}
+
 EGLint EGLAPIENTRY eglProgramCacheGetAttribANGLE(EGLDisplay dpy, EGLenum attrib)
 {
     return egl::ProgramCacheGetAttribANGLE(dpy, attrib);

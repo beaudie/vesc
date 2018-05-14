@@ -822,6 +822,10 @@
         "eglSwapBuffersWithDamageEXT"
     ],
 
+    "EGL_ANDROID_presentation_time": [
+        "eglPresentationTimeANDROID"
+    ],
+
     "EGL_ANGLE_program_cache_control": [
         "eglProgramCacheGetAttribANGLE",
         "eglProgramCacheQueryANGLE",
