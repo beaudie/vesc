@@ -408,8 +408,13 @@ gl::Error TextureVk::copyImage(const gl::Context *context,
                                GLenum internalFormat,
                                gl::Framebuffer *source)
 {
-    UNIMPLEMENTED();
-    return gl::InternalError();
+    gl::Extents newImageSize = gl::Extents(sourceArea.width, sourceArea.height, 1);
+    const gl::InternalFormat &internalFormatInfo =
+        gl::GetInternalFormatInfo(internalFormat, GL_UNSIGNED_BYTE);
+    ANGLE_TRY(setImage(context, index, internalFormat, newImageSize, internalFormatInfo.format,
+                       internalFormatInfo.type, gl::PixelUnpackState(), nullptr));
+    return copySubImageImpl(context, index, gl::Offset(0, 0, 0), sourceArea, internalFormatInfo,
+                            source);
 }
 
 gl::Error TextureVk::copySubImage(const gl::Context *context,
@@ -417,6 +422,17 @@ gl::Error TextureVk::copySubImage(const gl::Context *context,
                                   const gl::Offset &origDestOffset,
                                   const gl::Rectangle &origSourceArea,
                                   gl::Framebuffer *source)
+{
+    const gl::InternalFormat &currentFormat = *mState.getBaseLevelDesc().format.info;
+    return copySubImageImpl(context, index, origDestOffset, origSourceArea, currentFormat, source);
+}
+
+gl::Error TextureVk::copySubImageImpl(const gl::Context *context,
+                                      const gl::ImageIndex &index,
+                                      const gl::Offset &origDestOffset,
+                                      const gl::Rectangle &origSourceArea,
+                                      const gl::InternalFormat &internalFormat,
+                                      gl::Framebuffer *source)
 {
     gl::Extents fbSize = source->getReadColorbuffer()->getSize();
     gl::Rectangle sourceArea;
@@ -431,8 +447,7 @@ gl::Error TextureVk::copySubImage(const gl::Context *context,
 
     ContextVk *contextVk = vk::GetImpl(context);
 
-    FramebufferVk &framebufferVk            = *GetImplAs<FramebufferVk>(source);
-    const gl::InternalFormat &currentFormat = *mState.getBaseLevelDesc().format.info;
+    FramebufferVk &framebufferVk = *GetImplAs<FramebufferVk>(source);
 
     // For now, favor conformance. We do a CPU readback that does the conversion, and then stage the
     // change to the pixel buffer.
@@ -440,7 +455,7 @@ gl::Error TextureVk::copySubImage(const gl::Context *context,
     // when its supported.
     ANGLE_TRY(mPixelBuffer.stageSubresourceUpdateFromFramebuffer(
         context, index, sourceArea, destOffset, gl::Extents(sourceArea.width, sourceArea.height, 1),
-        currentFormat, framebufferVk));
+        internalFormat, framebufferVk));
 
     vk::CommandGraphNode *writingNode = getNewWritingNode(contextVk->getRenderer());
     framebufferVk.onReadResource(writingNode, contextVk->getRenderer()->getCurrentQueueSerial());
