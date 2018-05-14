@@ -896,7 +896,6 @@
             'libGLESv2/global_state.cpp',
             'libGLESv2/global_state.h',
             'libGLESv2/libGLESv2_autogen.cpp',
-            'libGLESv2/libGLESv2_autogen.def',
             'libGLESv2/libGLESv2.rc',
             'libGLESv2/proc_table.h',
             'libGLESv2/proc_table_autogen.cpp',
@@ -912,7 +911,6 @@
         'libegl_sources':
         [
             'libEGL/libEGL.cpp',
-            'libEGL/libEGL.def',
             'libEGL/libEGL.rc',
             'libEGL/resource.h',
         ],
@@ -1282,6 +1280,7 @@
             'includes': [ '../gyp/common_defines.gypi', ],
             'sources':
             [
+                'libGLESv2/libGLESv2_autogen.def',
                 '<@(libglesv2_sources)',
             ],
             'defines':
