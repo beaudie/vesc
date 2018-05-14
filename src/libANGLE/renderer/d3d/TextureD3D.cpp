@@ -1019,26 +1019,27 @@ gl::Error TextureD3D_2D::copySubImage(const gl::Context *context,
     // can only make our texture storage to a render target if level 0 is defined (with a width & height) and
     // the current level we're copying to is defined (with appropriate format, width & height)
 
-    // If the zero max LOD workaround is active, then we can't sample from individual layers of the framebuffer in shaders,
-    // so we should use the non-rendering copy path.
-    if (!canCreateRenderTargetForImage(index) || mRenderer->getWorkarounds().zeroMaxLodWorkaround)
-    {
-        ANGLE_TRY(mImageArray[index.getLevelIndex()]->copyFromFramebuffer(context, destOffset,
-                                                                          sourceArea, source));
-        mDirtyImages = true;
-    }
-    else
-    {
-        ANGLE_TRY(ensureRenderTarget(context));
-
-        if (isValidLevel(index.getLevelIndex()))
-        {
-            ANGLE_TRY(updateStorageLevel(context, index.getLevelIndex()));
-            ANGLE_TRY(mRenderer->copyImage2D(context, source, sourceArea,
-                                             gl::GetUnsizedFormat(getBaseLevelInternalFormat()),
-                                             destOffset, mTexStorage, index.getLevelIndex()));
-        }
-    }
+    // If the zero max LOD workaround is active, then we can't sample from individual layers of the
+    // framebuffer in shaders, so we should use the non-rendering copy path.
+    // if (!canCreateRenderTargetForImage(index) ||
+    // mRenderer->getWorkarounds().zeroMaxLodWorkaround)
+    //{
+    ANGLE_TRY(mImageArray[index.getLevelIndex()]->copyFromFramebuffer(context, destOffset,
+                                                                      sourceArea, source));
+    mDirtyImages = true;
+    //}
+    // else
+    //{
+    //    ANGLE_TRY(ensureRenderTarget(context));
+    //
+    //    if (isValidLevel(index.getLevelIndex()))
+    //    {
+    //        ANGLE_TRY(updateStorageLevel(context, index.getLevelIndex()));
+    //        ANGLE_TRY(mRenderer->copyImage2D(context, source, sourceArea,
+    //                                         gl::GetUnsizedFormat(getBaseLevelInternalFormat()),
+    //                                         destOffset, mTexStorage, index.getLevelIndex()));
+    //    }
+    //}
 
     return gl::NoError();
 }
