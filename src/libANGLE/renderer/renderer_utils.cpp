@@ -268,6 +268,13 @@ void PackPixels(const PackPixelsParams &params,
         inputPitch = -inputPitch;
     }
 
+    int outputPitch = params.outputPitch;
+    if (params.pack.alignment)
+    {
+        // we need to make sure we respeck the pack alignment.
+        outputPitch = roundUp(outputPitch, params.pack.alignment);
+    }
+
     const auto &sourceGLInfo = gl::GetSizedInternalFormatInfo(sourceFormat.glInternalFormat);
 
     if (sourceGLInfo.format == params.format && sourceGLInfo.type == params.type)
@@ -275,7 +282,7 @@ void PackPixels(const PackPixelsParams &params,
         // Direct copy possible
         for (int y = 0; y < params.area.height; ++y)
         {
-            memcpy(destWithOffset + y * params.outputPitch, source + y * inputPitch,
+            memcpy(destWithOffset + y * outputPitch, source + y * inputPitch,
                    params.area.width * sourceGLInfo.pixelBytes);
         }
         return;
@@ -295,8 +302,7 @@ void PackPixels(const PackPixelsParams &params,
         {
             for (int x = 0; x < params.area.width; ++x)
             {
-                uint8_t *dest =
-                    destWithOffset + y * params.outputPitch + x * destFormatInfo.pixelBytes;
+                uint8_t *dest = destWithOffset + y * outputPitch + x * destFormatInfo.pixelBytes;
                 const uint8_t *src = source + y * inputPitch + x * sourceGLInfo.pixelBytes;
 
                 fastCopyFunc(src, dest);
@@ -319,7 +325,7 @@ void PackPixels(const PackPixelsParams &params,
     {
         for (int x = 0; x < params.area.width; ++x)
         {
-            uint8_t *dest      = destWithOffset + y * params.outputPitch + x * destFormatInfo.pixelBytes;
+            uint8_t *dest      = destWithOffset + y * outputPitch + x * destFormatInfo.pixelBytes;
             const uint8_t *src = source + y * inputPitch + x * sourceGLInfo.pixelBytes;
 
             // readFunc and writeFunc will be using the same type of color, CopyTexImage
