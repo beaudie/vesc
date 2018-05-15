@@ -27,6 +27,8 @@
 #include <string>
 #include <sstream>
 
+#include <iostream>
+
 namespace rx
 {
 
@@ -105,8 +107,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     const LPSTR idcArrow = MAKEINTRESOURCEA(32512);
 
     std::ostringstream stream;
-    stream << "ANGLE DisplayWGL " << std::internal << std::setw(10) << std::setfill('0') << mDisplay
-           << " Intermediate Window Class";
+    stream << "ANGLE DisplayWGL " << gl::FmtHex(mDisplay) << " Intermediate Window Class";
     std::string className = stream.str();
 
     WNDCLASSA intermediateClassDesc = { 0 };
@@ -123,9 +124,13 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     mWindowClass = RegisterClassA(&intermediateClassDesc);
     if (!mWindowClass)
     {
-        return egl::EglNotInitialized() << "Failed to register intermediate OpenGL window class, "
-                                        << gl::FmtErr(HRESULT_CODE(GetLastError()));
+        return egl::EglNotInitialized()
+               << "Failed to register intermediate OpenGL window class \"" << className.c_str()
+               << "\":" << gl::FmtErr(HRESULT_CODE(GetLastError()));
     }
+
+    std::cout << "Registered intermediate OpenGL window class \"" << className.c_str()
+              << "\": " << gl::FmtHex(mWindowClass) << std::endl;
 
     HWND dummyWindow = CreateWindowExA(0,
                                        reinterpret_cast<const char *>(mWindowClass),
@@ -347,7 +352,12 @@ void DisplayWGL::terminate()
     DestroyWindow(mWindow);
     mWindow = nullptr;
 
-    UnregisterClassA(reinterpret_cast<const char *>(mWindowClass), nullptr);
+    if (!UnregisterClassA(reinterpret_cast<const char *>(mWindowClass), GetModuleHandle(nullptr)))
+    {
+        WARN() << "Failed to unregister OpenGL window class: " << gl::FmtHex(mWindowClass);
+    }
+    std::cout << "Unregistered intermediate OpenGL window class: " << gl::FmtHex(mWindowClass)
+              << std::endl;
     mWindowClass = NULL;
 
     SafeDelete(mFunctionsWGL);
