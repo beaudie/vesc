@@ -31,6 +31,8 @@ namespace rx
 
 namespace
 {
+constexpr size_t kMinReadPixelsBufferSize = 1024 * 1024 * 16;
+
 const gl::InternalFormat &GetReadAttachmentInfo(const gl::Context *context,
                                                 RenderTargetVk *renderTarget)
 {
@@ -59,7 +61,9 @@ FramebufferVk::FramebufferVk(const gl::FramebufferState &state)
       mRenderPassDesc(),
       mFramebuffer(),
       mActiveColorComponents(0),
-      mMaskedClearDescriptorSet(VK_NULL_HANDLE)
+      mMaskedClearDescriptorSet(VK_NULL_HANDLE),
+      mReadPixelsBuffer(VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+                        kMinReadPixelsBufferSize)
 {
 }
 
@@ -69,7 +73,9 @@ FramebufferVk::FramebufferVk(const gl::FramebufferState &state, WindowSurfaceVk 
       mRenderPassDesc(),
       mFramebuffer(),
       mActiveColorComponents(0),
-      mMaskedClearDescriptorSet(VK_NULL_HANDLE)
+      mMaskedClearDescriptorSet(VK_NULL_HANDLE),
+      mReadPixelsBuffer(VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+                        kMinReadPixelsBufferSize)
 {
 }
 
@@ -293,34 +299,27 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
 
     RenderTargetVk *renderTarget = mRenderTargetCache.getColorRead(mState);
     ASSERT(renderTarget);
-
-    vk::ImageHelper stagingImage;
-    ANGLE_TRY(stagingImage.init2DStaging(
-        device, renderer->getMemoryProperties(), renderTarget->image->getFormat(),
-        gl::Extents(clippedArea.width, clippedArea.height, 1), vk::StagingUsage::Read));
+    const rx::vk::Format &renderTargetFormat = renderTarget->image->getFormat();
 
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
 
-    stagingImage.changeLayoutWithStages(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_GENERAL,
-                                        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-                                        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, commandBuffer);
-
-    vk::ImageHelper::Copy(renderTarget->image, &stagingImage,
-                          gl::Offset(clippedArea.x, clippedArea.y, 0), gl::Offset(),
-                          gl::Extents(clippedArea.width, clippedArea.height, 1),
-                          VK_IMAGE_ASPECT_COLOR_BIT, commandBuffer);
+    bool newBufferAllocated = false;
+    uint32_t offset         = 0;
+    VkBuffer bufferOut;
+    uint8_t *dataOut = nullptr;
+    size_t sizeInBytes =
+        renderTargetFormat.textureFormat().pixelBytes * clippedArea.width * clippedArea.height;
+    ANGLE_TRY(mReadPixelsBuffer.allocate(renderer, sizeInBytes, &dataOut, &bufferOut, &offset,
+                                         &newBufferAllocated));
 
     // Triggers a full finish.
     // TODO(jmadill): Don't block on asynchronous readback.
     ANGLE_TRY(renderer->finish(context));
 
-    // TODO(jmadill): parameters
-    uint8_t *mapPointer = nullptr;
-    ANGLE_TRY(stagingImage.getDeviceMemory().map(device, 0, stagingImage.getAllocatedMemorySize(),
-                                                 0, &mapPointer));
+    commandBuffer->copyImageToBuffer()
 
-    const angle::Format &angleFormat = renderTarget->image->getFormat().textureFormat();
+        const angle::Format &angleFormat = renderTarget->image->getFormat().textureFormat();
     const gl::PixelPackState &packState = context->getGLState().getPackState();
 
     const gl::InternalFormat &sizedFormatInfo = gl::GetInternalFormatInfo(format, type);
