@@ -608,6 +608,7 @@ shared_library("libGLESv2${angle_libs_suffix}") {
 
   if (is_android) {
     configs -= [ "//build/config/android:hide_all_but_jni_onload" ]
+    ldflags = [ "-Wl,--build-id" ]
   }
 
   if (is_win) {
@@ -675,6 +676,7 @@ shared_library("libGLESv1_CM${angle_libs_suffix}") {
 
   if (is_android) {
     configs -= [ "//build/config/android:hide_all_but_jni_onload" ]
+    ldflags = [ "-Wl,--build-id" ]
   }
 
   if (is_mac && !is_component_build) {
@@ -737,6 +739,7 @@ shared_library("libEGL${angle_libs_suffix}") {
 
   if (is_android) {
     configs -= [ "//build/config/android:hide_all_but_jni_onload" ]
+    ldflags = [ "-Wl,--build-id" ]
   }
   configs -= angle_undefine_configs
   configs += [
