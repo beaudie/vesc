@@ -20,6 +20,8 @@ namespace rx
 {
 namespace
 {
+constexpr size_t kMinCopyImageBufferSize = 128 * 1024;
+
 void MapSwizzleState(GLenum internalFormat,
                      const gl::SwizzleState &swizzleState,
                      gl::SwizzleState *swizzleStateOut)
@@ -205,8 +207,8 @@ gl::Error PixelBuffer::stageSubresourceUpdateFromRenderTarget(const gl::Context 
         params.packBuffer  = nullptr;
         params.pack        = gl::PixelPackState();
 
-        ANGLE_TRY(ReadPixelsFromRenderTarget(context, sourceArea, params, renderTarget,
-                                             commandBuffer, stagingPointer));
+        ANGLE_TRY(ReadPixelsFromRenderTarget(context, sourceArea, params, mStagingBuffer,
+                                             renderTarget, commandBuffer, stagingPointer));
     }
 
     // 3- enqueue the destination image subresource update
