@@ -12,6 +12,7 @@
 
 #include "libANGLE/renderer/FramebufferImpl.h"
 #include "libANGLE/renderer/RenderTargetCache.h"
+#include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
@@ -118,6 +119,8 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
     // For use in masked clear.
     vk::BufferAndMemory mMaskedClearUniformBuffer;
     VkDescriptorSet mMaskedClearDescriptorSet;
+
+    vk::DynamicBuffer mReadPixelsBuffer;
 };
 
 }  // namespace rx
