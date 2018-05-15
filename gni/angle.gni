@@ -46,6 +46,12 @@ declare_args() {
   angle_enable_null = true
   angle_enable_essl = true
   angle_enable_glsl = true
+  # When angle_enable_build_id is true build adds -Wl,--build-id to ldflags
+  # -Wl is a special option that indicates that clang should pass the associated
+  # option --build-id to the linker. This will cause a build-id section to be
+  # to libraries. The build-id makes it possible for a debugger to find the right
+  # symbol file to use.
+  angle_enable_build_id = true
 }
 
 declare_args() {
