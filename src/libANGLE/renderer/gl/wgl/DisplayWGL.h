@@ -67,6 +67,8 @@ class DisplayWGL : public DisplayGL
     void releaseD3DDevice(HANDLE handle);
 
   private:
+    void destroy();
+
     const FunctionsGL *getFunctionsGL() const override;
 
     egl::Error initializeD3DDevice();
