@@ -12,6 +12,7 @@
 
 #include "libANGLE/renderer/FramebufferImpl.h"
 #include "libANGLE/renderer/RenderTargetCache.h"
+#include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
@@ -89,7 +90,6 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
 
     const vk::RenderPassDesc &getRenderPassDesc();
     gl::Error getCommandGraphNodeForDraw(ContextVk *contextVk, vk::CommandGraphNode **nodeOut);
-
   private:
     FramebufferVk(const gl::FramebufferState &state);
     FramebufferVk(const gl::FramebufferState &state, WindowSurfaceVk *backbuffer);
@@ -118,11 +118,14 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
     // For use in masked clear.
     vk::BufferAndMemory mMaskedClearUniformBuffer;
     VkDescriptorSet mMaskedClearDescriptorSet;
+
+    vk::DynamicBuffer mReadPixelsBuffer;
 };
 
 gl::Error ReadPixelsFromRenderTarget(const gl::Context *context,
                                      const gl::Rectangle &area,
                                      const PackPixelsParams &packPixelsParams,
+                                     vk::DynamicBuffer &dynamicBuffer,
                                      RenderTargetVk *renderTarget,
                                      vk::CommandBuffer *commandBuffer,
                                      void *pixels);
