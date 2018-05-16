@@ -313,12 +313,12 @@ ANGLE_PLATFORM_EXPORT void ANGLE_APIENTRY ANGLEResetDisplayPlatform(angle::EGLDi
 
 namespace angle
 {
-typedef bool(ANGLE_APIENTRY *GetDisplayPlatformFunc)(angle::EGLDisplayType,
+typedef bool(ANGLE_APIENTRY *GetDisplayPlatformFunc)(EGLDisplayType,
                                                      const char *const *,
                                                      unsigned int,
                                                      void *,
-                                                     void *);
-typedef void(ANGLE_APIENTRY *ResetDisplayPlatformFunc)(angle::EGLDisplayType);
+                                                     PlatformMethods **);
+typedef void(ANGLE_APIENTRY *ResetDisplayPlatformFunc)(EGLDisplayType);
 }  // namespace angle
 
 // This function is not exported
