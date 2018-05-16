@@ -23,21 +23,25 @@
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 
+#include "OSPixmap.h"
+#include "OSWindow.h"
 #include "deClock.h"
+#include "deDynamicLibrary.hpp"
 #include "deMemory.h"
 #include "egluDefs.hpp"
 #include "eglwLibrary.hpp"
-#include "OSPixmap.h"
-#include "OSWindow.h"
 #include "tcuTexture.hpp"
 
 // clang-format off
 #if (DE_OS == DE_OS_WIN32)
     #define ANGLE_EGL_LIBRARY_FULL_NAME ANGLE_EGL_LIBRARY_NAME ".dll"
+    #define ANGLE_GLESV2_LIBRARY_FULL_NAME ANGLE_GLESV2_LIBRARY_NAME ".dll"
 #elif (DE_OS == DE_OS_UNIX) || (DE_OS == DE_OS_ANDROID)
     #define ANGLE_EGL_LIBRARY_FULL_NAME ANGLE_EGL_LIBRARY_NAME ".so"
+    #define ANGLE_GLESV2_LIBRARY_FULL_NAME ANGLE_GLESV2_LIBRARY_NAME ".so"
 #elif (DE_OS == DE_OS_OSX)
     #define ANGLE_EGL_LIBRARY_FULL_NAME ANGLE_EGL_LIBRARY_NAME ".dylib"
+    #define ANGLE_GLESV2_LIBRARY_FULL_NAME ANGLE_GLESV2_LIBRARY_NAME ".dylib"
 #else
     #error "Unsupported platform"
 #endif
@@ -117,7 +121,7 @@ class NativePixmap : public eglu::NativePixmap
 class NativeWindowFactory : public eglu::NativeWindowFactory
 {
   public:
-    explicit NativeWindowFactory(EventState *eventState);
+    explicit NativeWindowFactory(EventState *eventState, angle::LogErrorFunc logErrorFunc);
     ~NativeWindowFactory() override = default;
 
     eglu::NativeWindow *createWindow(eglu::NativeDisplay *nativeDisplay, const eglu::WindowParams &params) const override;
@@ -129,6 +133,7 @@ class NativeWindowFactory : public eglu::NativeWindowFactory
 
   private:
     EventState *mEvents;
+    angle::LogErrorFunc mLogErrorFunc;
 };
 
 class NativeWindow : public eglu::NativeWindow
@@ -223,8 +228,10 @@ eglu::NativePixmap *NativePixmapFactory::createPixmap(eglu::NativeDisplay* nativ
 
 // NativeWindowFactory
 
-NativeWindowFactory::NativeWindowFactory(EventState *eventState)
-    : eglu::NativeWindowFactory("window", "ANGLE Window", kWindowCapabilities), mEvents(eventState)
+NativeWindowFactory::NativeWindowFactory(EventState *eventState, angle::LogErrorFunc logErrorFunc)
+    : eglu::NativeWindowFactory("window", "ANGLE Window", kWindowCapabilities),
+      mEvents(eventState),
+      mLogErrorFunc(logErrorFunc)
 {
 }
 
@@ -241,6 +248,29 @@ eglu::NativeWindow *NativeWindowFactory::createWindow(eglu::NativeDisplay *nativ
                                                       const eglw::EGLAttrib *attribList,
                                                       const eglu::WindowParams &params) const
 {
+    if (mLogErrorFunc)
+    {
+        de::DynamicLibrary glesv2Library(ANGLE_GLESV2_LIBRARY_FULL_NAME);
+
+        angle::GetDisplayPlatformFunc getDisplayPlatform =
+            reinterpret_cast<angle::GetDisplayPlatformFunc>(
+                glesv2Library.getFunction("ANGLEGetDisplayPlatform"));
+        if (getDisplayPlatform == nullptr)
+        {
+            throw InternalError("Failed to initialize platform", DE_NULL, __FILE__, __LINE__);
+        }
+
+        angle::PlatformMethods *methods;
+        if (!getDisplayPlatform(static_cast<angle::EGLDisplayType>(display),
+                                angle::g_PlatformMethodNames, angle::g_NumPlatformMethods, nullptr,
+                                &methods))
+        {
+            throw InternalError("Failed to initialize platform", DE_NULL, __FILE__, __LINE__);
+        }
+
+        methods->logError = mLogErrorFunc;
+    }
+
     return new NativeWindow(dynamic_cast<ANGLENativeDisplay*>(nativeDisplay), params, mEvents);
 }
 
@@ -328,7 +358,8 @@ ANGLENativeDisplayFactory::ANGLENativeDisplayFactory(
     const std::string &name,
     const std::string &description,
     std::vector<eglw::EGLAttrib> platformAttributes,
-    EventState *eventState)
+    EventState *eventState,
+    angle::LogErrorFunc logErrorFunc)
     : eglu::NativeDisplayFactory(name,
                                  description,
                                  kDisplayCapabilities,
@@ -336,7 +367,7 @@ ANGLENativeDisplayFactory::ANGLENativeDisplayFactory(
                                  "EGL_EXT_platform_base"),
       mPlatformAttributes(std::move(platformAttributes))
 {
-    m_nativeWindowRegistry.registerFactory(new NativeWindowFactory(eventState));
+    m_nativeWindowRegistry.registerFactory(new NativeWindowFactory(eventState, logErrorFunc));
     m_nativePixmapRegistry.registerFactory(new NativePixmapFactory());
 }
 
