@@ -273,10 +273,10 @@ egl::Error Renderer9::initialize()
     static const TCHAR className[]  = TEXT("STATIC");
 
     {
-        TRACE_EVENT0("gpu.angle", "CreateWindowEx");
+        TRACE_EVENT0("gpu.angle", "CreateWindowExA");
         mDeviceWindow =
-            CreateWindowEx(WS_EX_NOACTIVATE, className, windowName, WS_DISABLED | WS_POPUP, 0, 0, 1,
-                           1, HWND_MESSAGE, nullptr, GetModuleHandle(nullptr), nullptr);
+            CreateWindowExA(WS_EX_NOACTIVATE, className, windowName, WS_DISABLED | WS_POPUP, 0, 0,
+                            1, 1, HWND_MESSAGE, nullptr, GetModuleHandle(nullptr), nullptr);
     }
 
     D3DPRESENT_PARAMETERS presentParameters = getDefaultPresentParameters();
