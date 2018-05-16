@@ -25,7 +25,6 @@
 
 #include "deClock.h"
 #include "deMemory.h"
-#include "deThread.h"
 #include "egluDefs.hpp"
 #include "eglwLibrary.hpp"
 #include "OSPixmap.h"
@@ -53,24 +52,26 @@ enum
 {
     DEFAULT_SURFACE_WIDTH       = 400,
     DEFAULT_SURFACE_HEIGHT      = 300,
-    WAIT_WINDOW_VISIBLE_MS      = 500   //!< Time to wait before issuing screenshot after changing window visibility (hack for DWM)
 };
 
-static const eglu::NativeDisplay::Capability DISPLAY_CAPABILITIES = eglu::NativeDisplay::CAPABILITY_GET_DISPLAY_PLATFORM;
-static const eglu::NativePixmap::Capability  BITMAP_CAPABILITIES  = eglu::NativePixmap::CAPABILITY_CREATE_SURFACE_LEGACY;
-static const eglu::NativeWindow::Capability  WINDOW_CAPABILITIES  = (eglu::NativeWindow::Capability)
-                                                                     (eglu::NativeWindow::CAPABILITY_CREATE_SURFACE_LEGACY    |
-                                                                      eglu::NativeWindow::CAPABILITY_GET_SURFACE_SIZE         |
-                                                                      eglu::NativeWindow::CAPABILITY_GET_SCREEN_SIZE          |
-                                                                      eglu::NativeWindow::CAPABILITY_READ_SCREEN_PIXELS       |
-                                                                      eglu::NativeWindow::CAPABILITY_SET_SURFACE_SIZE         |
-                                                                      eglu::NativeWindow::CAPABILITY_CHANGE_VISIBILITY);
+constexpr eglu::NativeDisplay::Capability kDisplayCapabilities =
+    eglu::NativeDisplay::CAPABILITY_GET_DISPLAY_PLATFORM;
+constexpr eglu::NativePixmap::Capability kBitmapCapabilities =
+    eglu::NativePixmap::CAPABILITY_CREATE_SURFACE_LEGACY;
+constexpr eglu::NativeWindow::Capability kWindowCapabilities =
+    static_cast<eglu::NativeWindow::Capability>(
+        eglu::NativeWindow::CAPABILITY_CREATE_SURFACE_LEGACY |
+        eglu::NativeWindow::CAPABILITY_GET_SURFACE_SIZE |
+        eglu::NativeWindow::CAPABILITY_GET_SCREEN_SIZE |
+        eglu::NativeWindow::CAPABILITY_READ_SCREEN_PIXELS |
+        eglu::NativeWindow::CAPABILITY_SET_SURFACE_SIZE |
+        eglu::NativeWindow::CAPABILITY_CHANGE_VISIBILITY);
 
 class ANGLENativeDisplay : public eglu::NativeDisplay
 {
   public:
-    ANGLENativeDisplay(const std::vector<eglw::EGLAttrib> &attribs);
-    virtual ~ANGLENativeDisplay() {}
+    explicit ANGLENativeDisplay(std::vector<eglw::EGLAttrib> attribs);
+    ~ANGLENativeDisplay() override = default;
 
     void *getPlatformNative() override
     {
@@ -83,7 +84,7 @@ class ANGLENativeDisplay : public eglu::NativeDisplay
     const eglw::EGLAttrib *getPlatformAttributes() const override { return &mPlatformAttributes[0]; }
     const eglw::Library &getLibrary() const override { return mLibrary; }
 
-    EGLNativeDisplayType getDeviceContext() { return mDeviceContext; }
+    EGLNativeDisplayType getDeviceContext() const { return mDeviceContext; }
 
   private:
     EGLNativeDisplayType mDeviceContext;
@@ -95,7 +96,7 @@ class NativePixmapFactory : public eglu::NativePixmapFactory
 {
   public:
     NativePixmapFactory();
-    ~NativePixmapFactory() {}
+    ~NativePixmapFactory() override = default;
 
     eglu::NativePixmap *createPixmap(eglu::NativeDisplay *nativeDisplay, int width, int height) const override;
     eglu::NativePixmap *createPixmap(eglu::NativeDisplay *nativeDisplay, eglw::EGLDisplay display, eglw::EGLConfig config, const eglw::EGLAttrib* attribList, int width, int height) const override;
@@ -116,8 +117,8 @@ class NativePixmap : public eglu::NativePixmap
 class NativeWindowFactory : public eglu::NativeWindowFactory
 {
   public:
-    NativeWindowFactory(EventState *eventState);
-    ~NativeWindowFactory() override {}
+    explicit NativeWindowFactory(EventState *eventState);
+    ~NativeWindowFactory() override = default;
 
     eglu::NativeWindow *createWindow(eglu::NativeDisplay *nativeDisplay, const eglu::WindowParams &params) const override;
 
@@ -146,19 +147,18 @@ class NativeWindow : public eglu::NativeWindow
 
 // ANGLE NativeDisplay
 
-ANGLENativeDisplay::ANGLENativeDisplay(const std::vector<EGLAttrib> &attribs)
-    : eglu::NativeDisplay(DISPLAY_CAPABILITIES, EGL_PLATFORM_ANGLE_ANGLE, "EGL_EXT_platform_base"),
+ANGLENativeDisplay::ANGLENativeDisplay(std::vector<EGLAttrib> attribs)
+    : eglu::NativeDisplay(kDisplayCapabilities, EGL_PLATFORM_ANGLE_ANGLE, "EGL_EXT_platform_base"),
       mDeviceContext(EGL_DEFAULT_DISPLAY),
       mLibrary(ANGLE_EGL_LIBRARY_FULL_NAME),
-      mPlatformAttributes(attribs)
+      mPlatformAttributes(std::move(attribs))
 {
 }
 
 // NativePixmap
 
 NativePixmap::NativePixmap(EGLNativeDisplayType display, int width, int height, int bitDepth)
-    : eglu::NativePixmap(BITMAP_CAPABILITIES),
-      mPixmap(CreateOSPixmap())
+    : eglu::NativePixmap(kBitmapCapabilities), mPixmap(CreateOSPixmap())
 {
     if (!mPixmap)
     {
@@ -184,7 +184,7 @@ eglw::EGLNativePixmapType NativePixmap::getLegacyNative()
 // NativePixmapFactory
 
 NativePixmapFactory::NativePixmapFactory()
-    : eglu::NativePixmapFactory("bitmap", "ANGLE Bitmap", BITMAP_CAPABILITIES)
+    : eglu::NativePixmapFactory("bitmap", "ANGLE Bitmap", kBitmapCapabilities)
 {
 }
 
@@ -219,8 +219,7 @@ eglu::NativePixmap *NativePixmapFactory::createPixmap(eglu::NativeDisplay* nativ
 // NativeWindowFactory
 
 NativeWindowFactory::NativeWindowFactory(EventState *eventState)
-    : eglu::NativeWindowFactory("window", "ANGLE Window", WINDOW_CAPABILITIES),
-      mEvents(eventState)
+    : eglu::NativeWindowFactory("window", "ANGLE Window", kWindowCapabilities), mEvents(eventState)
 {
 }
 
@@ -231,10 +230,10 @@ eglu::NativeWindow *NativeWindowFactory::createWindow(eglu::NativeDisplay* nativ
 
 // NativeWindow
 
-NativeWindow::NativeWindow(ANGLENativeDisplay *nativeDisplay, const eglu::WindowParams& params, EventState *eventState)
-    : eglu::NativeWindow(WINDOW_CAPABILITIES),
-      mWindow(CreateOSWindow()),
-      mEvents(eventState)
+NativeWindow::NativeWindow(ANGLENativeDisplay *nativeDisplay,
+                           const eglu::WindowParams &params,
+                           EventState *eventState)
+    : eglu::NativeWindow(kWindowCapabilities), mWindow(CreateOSWindow()), mEvents(eventState)
 {
     bool initialized = mWindow->initialize("dEQP ANGLE Tests",
                                            params.width == eglu::WindowParams::SIZE_DONT_CARE ? DEFAULT_SURFACE_WIDTH : params.width,
@@ -242,7 +241,7 @@ NativeWindow::NativeWindow(ANGLENativeDisplay *nativeDisplay, const eglu::Window
     TCU_CHECK(initialized);
 
     if (params.visibility != eglu::WindowParams::VISIBILITY_DONT_CARE)
-        setVisibility(params.visibility);
+        NativeWindow::setVisibility(params.visibility);
 }
 
 void NativeWindow::setVisibility(eglu::WindowParams::Visibility visibility)
@@ -255,7 +254,6 @@ void NativeWindow::setVisibility(eglu::WindowParams::Visibility visibility)
 
       case eglu::WindowParams::VISIBILITY_VISIBLE:
       case eglu::WindowParams::VISIBILITY_FULLSCREEN:
-        // \todo [2014-03-12 pyry] Implement FULLSCREEN, or at least SW_MAXIMIZE.
         mWindow->setVisible(true);
         break;
 
@@ -284,7 +282,7 @@ void NativeWindow::processEvents()
     mWindow->messageLoop();
 
     // Look for a quit event to forward to the EventState
-    Event event;
+    Event event = {};
     while (mWindow->popEvent(&event))
     {
         if (event.Type == Event::EVENT_CLOSED)
@@ -310,20 +308,23 @@ void NativeWindow::readScreenPixels(tcu::TextureLevel *dst) const
 
 } // anonymous
 
-ANGLENativeDisplayFactory::ANGLENativeDisplayFactory(const std::string &name,
-                                                     const std::string &description,
-                                                     const std::vector<eglw::EGLAttrib> &platformAttributes,
-                                                     EventState *eventState)
-    : eglu::NativeDisplayFactory(name, description, DISPLAY_CAPABILITIES, EGL_PLATFORM_ANGLE_ANGLE, "EGL_EXT_platform_base"),
-      mPlatformAttributes(platformAttributes)
+ANGLENativeDisplayFactory::ANGLENativeDisplayFactory(
+    const std::string &name,
+    const std::string &description,
+    std::vector<eglw::EGLAttrib> platformAttributes,
+    EventState *eventState)
+    : eglu::NativeDisplayFactory(name,
+                                 description,
+                                 kDisplayCapabilities,
+                                 EGL_PLATFORM_ANGLE_ANGLE,
+                                 "EGL_EXT_platform_base"),
+      mPlatformAttributes(std::move(platformAttributes))
 {
     m_nativeWindowRegistry.registerFactory(new NativeWindowFactory(eventState));
     m_nativePixmapRegistry.registerFactory(new NativePixmapFactory());
 }
 
-ANGLENativeDisplayFactory::~ANGLENativeDisplayFactory()
-{
-}
+ANGLENativeDisplayFactory::~ANGLENativeDisplayFactory() = default;
 
 eglu::NativeDisplay *ANGLENativeDisplayFactory::createDisplay(const eglw::EGLAttrib *attribList) const
 {
