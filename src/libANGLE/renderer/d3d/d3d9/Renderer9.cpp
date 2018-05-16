@@ -269,14 +269,11 @@ egl::Error Renderer9::initialize()
         mD3d9->GetAdapterIdentifier(mAdapter, 0, &mAdapterIdentifier);
     }
 
-    static const TCHAR windowName[] = TEXT("AngleHiddenWindow");
-    static const TCHAR className[]  = TEXT("STATIC");
-
     {
-        TRACE_EVENT0("gpu.angle", "CreateWindowEx");
+        TRACE_EVENT0("gpu.angle", "CreateWindowExA");
         mDeviceWindow =
-            CreateWindowEx(WS_EX_NOACTIVATE, className, windowName, WS_DISABLED | WS_POPUP, 0, 0, 1,
-                           1, HWND_MESSAGE, nullptr, GetModuleHandle(nullptr), nullptr);
+            CreateWindowExA(WS_EX_NOACTIVATE, "STATIC", "AngleHiddenWindow", WS_DISABLED | WS_POPUP,
+                            0, 0, 1, 1, HWND_MESSAGE, nullptr, GetModuleHandle(nullptr), nullptr);
     }
 
     D3DPRESENT_PARAMETERS presentParameters = getDefaultPresentParameters();
