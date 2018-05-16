@@ -31,7 +31,7 @@
 namespace tcu
 {
 
-ANGLEPlatform::ANGLEPlatform()
+ANGLEPlatform::ANGLEPlatform(angle::LogErrorFunc logErrorFunc)
 {
     angle::SetLowPriorityProcess();
 
@@ -44,8 +44,8 @@ ANGLEPlatform::ANGLEPlatform()
         d3d11Attribs.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE);
         d3d11Attribs.push_back(EGL_NONE);
 
-        auto *d3d11Factory = new ANGLENativeDisplayFactory(
-            "angle-d3d11", "ANGLE D3D11 Display", d3d11Attribs, &mEvents);
+        auto *d3d11Factory = new ANGLENativeDisplayFactory("angle-d3d11", "ANGLE D3D11 Display",
+                                                           d3d11Attribs, &mEvents, logErrorFunc);
         m_nativeDisplayFactoryRegistry.registerFactory(d3d11Factory);
     }
 
@@ -57,8 +57,8 @@ ANGLEPlatform::ANGLEPlatform()
         d3d9Attribs.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE);
         d3d9Attribs.push_back(EGL_NONE);
 
-        auto *d3d9Factory = new ANGLENativeDisplayFactory(
-            "angle-d3d9", "ANGLE D3D9 Display", d3d9Attribs, &mEvents);
+        auto *d3d9Factory = new ANGLENativeDisplayFactory("angle-d3d9", "ANGLE D3D9 Display",
+                                                          d3d9Attribs, &mEvents, logErrorFunc);
         m_nativeDisplayFactoryRegistry.registerFactory(d3d9Factory);
     }
 
@@ -74,8 +74,9 @@ ANGLEPlatform::ANGLEPlatform()
         d3d1193Attribs.push_back(3);
         d3d1193Attribs.push_back(EGL_NONE);
 
-        auto *d3d1193Factory = new ANGLENativeDisplayFactory(
-            "angle-d3d11-fl93", "ANGLE D3D11 FL9_3 Display", d3d1193Attribs, &mEvents);
+        auto *d3d1193Factory =
+            new ANGLENativeDisplayFactory("angle-d3d11-fl93", "ANGLE D3D11 FL9_3 Display",
+                                          d3d1193Attribs, &mEvents, logErrorFunc);
         m_nativeDisplayFactoryRegistry.registerFactory(d3d1193Factory);
     }
 #endif // (DE_OS == DE_OS_WIN32)
@@ -87,8 +88,8 @@ ANGLEPlatform::ANGLEPlatform()
         glesAttribs.push_back(EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE);
         glesAttribs.push_back(EGL_NONE);
 
-        auto *glesFactory = new ANGLENativeDisplayFactory(
-            "angle-gles", "ANGLE OpenGL ES Display", glesAttribs, &mEvents);
+        auto *glesFactory = new ANGLENativeDisplayFactory("angle-gles", "ANGLE OpenGL ES Display",
+                                                          glesAttribs, &mEvents, logErrorFunc);
         m_nativeDisplayFactoryRegistry.registerFactory(glesFactory);
     }
 #endif
@@ -99,8 +100,8 @@ ANGLEPlatform::ANGLEPlatform()
         glAttribs.push_back(EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE);
         glAttribs.push_back(EGL_NONE);
 
-        auto *glFactory = new ANGLENativeDisplayFactory(
-            "angle-gl", "ANGLE OpenGL Display", glAttribs, &mEvents);
+        auto *glFactory = new ANGLENativeDisplayFactory("angle-gl", "ANGLE OpenGL Display",
+                                                        glAttribs, &mEvents, logErrorFunc);
         m_nativeDisplayFactoryRegistry.registerFactory(glFactory);
     }
 
@@ -112,7 +113,7 @@ ANGLEPlatform::ANGLEPlatform()
         vkAttribs.push_back(EGL_NONE);
 
         auto *vkFactory = new ANGLENativeDisplayFactory("angle-vulkan", "ANGLE Vulkan Display",
-                                                        vkAttribs, &mEvents);
+                                                        vkAttribs, &mEvents, logErrorFunc);
         m_nativeDisplayFactoryRegistry.registerFactory(vkFactory);
     }
 #endif
@@ -123,8 +124,8 @@ ANGLEPlatform::ANGLEPlatform()
         nullAttribs.push_back(EGL_PLATFORM_ANGLE_TYPE_NULL_ANGLE);
         nullAttribs.push_back(EGL_NONE);
 
-        auto *nullFactory = new ANGLENativeDisplayFactory(
-            "angle-null", "ANGLE NULL Display", nullAttribs, &mEvents);
+        auto *nullFactory = new ANGLENativeDisplayFactory("angle-null", "ANGLE NULL Display",
+                                                          nullAttribs, &mEvents, logErrorFunc);
         m_nativeDisplayFactoryRegistry.registerFactory(nullFactory);
     }
 
@@ -146,7 +147,12 @@ bool ANGLEPlatform::processEvents()
 } // tcu
 
 // Create platform
+tcu::Platform *CreateANGLEPlatform(angle::LogErrorFunc logErrorFunc)
+{
+    return new tcu::ANGLEPlatform(logErrorFunc);
+}
+
 tcu::Platform *createPlatform()
 {
-    return new tcu::ANGLEPlatform();
+    return CreateANGLEPlatform(nullptr);
 }
