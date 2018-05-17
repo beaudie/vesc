@@ -266,7 +266,7 @@ inline void DefaultCacheProgram(PlatformMethods *platform,
 
 struct ANGLE_PLATFORM_EXPORT PlatformMethods
 {
-    PlatformMethods();
+    PlatformMethods() {}
 
     // User data pointer for any implementation specific members. Put it at the start of the
     // platform structure so it doesn't become overwritten if one version of the platform
@@ -313,12 +313,12 @@ ANGLE_PLATFORM_EXPORT void ANGLE_APIENTRY ANGLEResetDisplayPlatform(angle::EGLDi
 
 namespace angle
 {
-typedef bool(ANGLE_APIENTRY *GetDisplayPlatformFunc)(angle::EGLDisplayType,
+typedef bool(ANGLE_APIENTRY *GetDisplayPlatformFunc)(EGLDisplayType,
                                                      const char *const *,
                                                      unsigned int,
                                                      void *,
-                                                     void *);
-typedef void(ANGLE_APIENTRY *ResetDisplayPlatformFunc)(angle::EGLDisplayType);
+                                                     PlatformMethods **);
+typedef void(ANGLE_APIENTRY *ResetDisplayPlatformFunc)(EGLDisplayType);
 }  // namespace angle
 
 // This function is not exported

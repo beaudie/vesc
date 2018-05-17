@@ -21,9 +21,9 @@
 #ifndef TCU_ANGLE_WIN32_NATIVE_DISPLAY_FACTORY_H_
 #define TCU_ANGLE_WIN32_NATIVE_DISPLAY_FACTORY_H_
 
-#include "tcuDefs.hpp"
 #include "egluNativeDisplay.hpp"
 #include "eglwDefs.hpp"
+#include "tcuDefs.hpp"
 
 namespace tcu
 {
