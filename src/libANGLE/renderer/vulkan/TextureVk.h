@@ -35,6 +35,12 @@ class PixelBuffer final : angle::NonCopyable
                                      GLenum type,
                                      const uint8_t *pixels);
 
+    gl::Error stageSubresourceUpdateFromBuffer(const gl::ImageIndex &index,
+                                               const gl::Extents &extents,
+                                               const gl::Offset &offset,
+                                               VkDeviceSize bufferOffset,
+                                               VkBuffer bufferHandle);
+
     gl::Error stageSubresourceUpdateFromFramebuffer(const gl::Context *context,
                                                     const gl::ImageIndex &index,
                                                     const gl::Rectangle &sourceArea,
@@ -43,11 +49,27 @@ class PixelBuffer final : angle::NonCopyable
                                                     const gl::InternalFormat &formatInfo,
                                                     FramebufferVk *framebufferVk);
 
+    // This will used the underlying dynamic buffer to allocate some memory to be used as a src or
+    // dst.
+    gl::Error allocate(RendererVk *renderer,
+                       size_t sizeInBytes,
+                       uint8_t **ptrOut,
+                       VkBuffer *handleOut,
+                       uint32_t *offsetOut,
+                       bool *newBufferAllocatedOut);
+
     vk::Error flushUpdatesToImage(RendererVk *renderer,
                                   vk::ImageHelper *image,
                                   vk::CommandBuffer *commandBuffer);
 
     bool empty() const;
+
+    gl::Error stageSubresourceUpdateAndGetBuffer(RendererVk *renderer,
+                                                 size_t allocationSize,
+                                                 const gl::ImageIndex &imageIndex,
+                                                 const gl::Extents &extents,
+                                                 const gl::Offset &offset,
+                                                 uint8_t **destData);
 
   private:
     struct SubresourceUpdate
@@ -159,6 +181,15 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
     vk::Error ensureImageInitialized(RendererVk *renderer);
 
   private:
+    gl::Error generateMipmapLevels(ContextVk *contextVk,
+                                   const angle::Format &sourceFormat,
+                                   GLuint firstMipLevel,
+                                   GLuint maxMipLevel,
+                                   size_t sourceWidth,
+                                   size_t sourceHeight,
+                                   size_t sourceRowPitch,
+                                   uint8_t *sourceData);
+
     gl::Error copySubImageImpl(const gl::Context *context,
                                const gl::ImageIndex &index,
                                const gl::Offset &destOffset,
