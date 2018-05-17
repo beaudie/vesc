@@ -255,7 +255,7 @@ void VertexArrayVk::syncDirtyAttrib(const gl::VertexAttribute &attrib,
     }
     else
     {
-        UNIMPLEMENTED();
+        WARN() << "Default vertex attributes unimplemented. http://anglebug.com/2444";
     }
 }
 
@@ -317,7 +317,7 @@ void VertexArrayVk::updatePackedInputDescriptions()
         }
         else
         {
-            UNIMPLEMENTED();
+            WARN() << "Default vertex attributes unimplemented. http://anglebug.com/2444";
         }
     }
 

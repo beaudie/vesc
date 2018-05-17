@@ -28,6 +28,7 @@
 #include "OSPixmap.h"
 #include "OSWindow.h"
 #include "deClock.h"
+#include "deDynamicLibrary.hpp"
 #include "deMemory.h"
 #include "egluDefs.hpp"
 #include "eglwLibrary.hpp"
