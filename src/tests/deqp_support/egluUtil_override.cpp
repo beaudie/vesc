@@ -23,11 +23,11 @@
 
 #include "egluNativeDisplay_override.hpp"
 
-#include "egluUtil.hpp"
 #include "deSTLUtil.hpp"
 #include "deStringUtil.hpp"
 #include "egluConfigFilter.hpp"
 #include "egluDefs.hpp"
+#include "egluUtil.hpp"
 #include "eglwEnums.hpp"
 #include "eglwLibrary.hpp"
 #include "glwEnums.hpp"
