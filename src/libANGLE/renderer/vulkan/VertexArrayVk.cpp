@@ -26,7 +26,7 @@ constexpr size_t kDynamicVertexDataSize = 1024 * 1024;
 constexpr size_t kDynamicIndexDataSize  = 1024 * 8;
 }  // anonymous namespace
 
-VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state)
+VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state, RendererVk *renderer)
     : VertexArrayImpl(state),
       mCurrentArrayBufferHandles{},
       mCurrentArrayBufferOffsets{},
@@ -36,6 +36,7 @@ VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state)
       mCurrentElementArrayBufferResource(nullptr),
       mDynamicVertexData(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, kDynamicVertexDataSize),
       mDynamicIndexData(VK_BUFFER_USAGE_INDEX_BUFFER_BIT, kDynamicIndexDataSize),
+      mLineLoopHelper(renderer),
       mDirtyLineLoopTranslation(true),
       mVertexBuffersDirty(false),
       mIndexBufferDirty(false)
@@ -47,8 +48,10 @@ VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state)
     mPackedInputBindings.fill({0, 0});
     mPackedInputAttributes.fill({0, 0, 0});
 
-    mDynamicVertexData.init(1);
-    mDynamicIndexData.init(1);
+    const size_t nonCoherentAtomSize =
+        renderer->getPhysicalDeviceProperties().limits.nonCoherentAtomSize;
+    mDynamicVertexData.init(static_cast<size_t>(nonCoherentAtomSize));
+    mDynamicIndexData.init(static_cast<size_t>(nonCoherentAtomSize));
 }
 
 VertexArrayVk::~VertexArrayVk()
