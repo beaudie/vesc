@@ -675,7 +675,8 @@ FramebufferImpl *ContextVk::createFramebuffer(const gl::FramebufferState &state)
 
 TextureImpl *ContextVk::createTexture(const gl::TextureState &state)
 {
-    return new TextureVk(state);
+    return new TextureVk(state,
+                         getRenderer()->getPhysicalDeviceProperties().limits.nonCoherentAtomSize);
 }
 
 RenderbufferImpl *ContextVk::createRenderbuffer(const gl::RenderbufferState &state)
@@ -690,7 +691,8 @@ BufferImpl *ContextVk::createBuffer(const gl::BufferState &state)
 
 VertexArrayImpl *ContextVk::createVertexArray(const gl::VertexArrayState &state)
 {
-    return new VertexArrayVk(state);
+    return new VertexArrayVk(
+        state, getRenderer()->getPhysicalDeviceProperties().limits.nonCoherentAtomSize);
 }
 
 QueryImpl *ContextVk::createQuery(gl::QueryType type)
