@@ -689,6 +689,10 @@ TEST_P(MipmapTest, MipMapGenerationD3D9Bug)
 // works as expected. It tests enabling/disabling mipmaps, generating mipmaps, and rendering to level zero.
 TEST_P(MipmapTest, TextureCubeGeneralLevelZero)
 {
+    // TODO(lucferron): Support cube textures for mipmap generation.
+    // http://anglebug.com/2502
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
     glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureCube);
 
     // Draw. Since the negative-Y face's is blue, this should be blue.
@@ -727,6 +731,10 @@ TEST_P(MipmapTest, TextureCubeGeneralLevelZero)
 // This test ensures that rendering to level-zero of a TextureCube works as expected.
 TEST_P(MipmapTest, TextureCubeRenderToLevelZero)
 {
+    // TODO(lucferron): Support cube textures for mipmap generation.
+    // http://anglebug.com/2502
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
     glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureCube);
 
     // Draw. Since the negative-Y face's is blue, this should be blue.
@@ -1148,5 +1156,6 @@ ANGLE_INSTANTIATE_TEST(MipmapTest,
                        ES2_OPENGL(),
                        ES3_OPENGL(),
                        ES2_OPENGLES(),
-                       ES3_OPENGLES());
+                       ES3_OPENGLES(),
+                       ES2_VULKAN());
 ANGLE_INSTANTIATE_TEST(MipmapTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());

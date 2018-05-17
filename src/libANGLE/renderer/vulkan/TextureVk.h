@@ -44,6 +44,15 @@ class PixelBuffer final : angle::NonCopyable
                                                      vk::CommandBuffer *commandBuffer,
                                                      RenderTargetVk *renderTarget);
 
+    gl::Error generateMipmapLevel(RendererVk *renderer,
+                                  const angle::Format &sourceFormat,
+                                  GLuint mipLevel,
+                                  GLuint maxMipLevel,
+                                  size_t sourceWidth,
+                                  size_t sourceHeight,
+                                  size_t sourceRowPitch,
+                                  uint8_t *sourceData);
+
     vk::Error flushUpdatesToImage(RendererVk *renderer,
                                   vk::ImageHelper *image,
                                   vk::CommandBuffer *commandBuffer);
@@ -68,7 +77,7 @@ class PixelBuffer final : angle::NonCopyable
 class TextureVk : public TextureImpl, public vk::CommandGraphResource
 {
   public:
-    TextureVk(const gl::TextureState &state);
+    TextureVk(const gl::TextureState &state, RendererVk *renderer);
     ~TextureVk() override;
     gl::Error onDestroy(const gl::Context *context) override;
 
@@ -183,6 +192,7 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
     RenderTargetVk mRenderTarget;
 
     PixelBuffer mPixelBuffer;
+    vk::DynamicBuffer mMipmapsBuffer;
 };
 
 }  // namespace rx
