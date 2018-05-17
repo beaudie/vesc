@@ -129,7 +129,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
 class LineLoopHelper final : public vk::CommandGraphResource
 {
   public:
-    LineLoopHelper();
+    LineLoopHelper(VkDeviceSize nonCoherentAtomSize);
     ~LineLoopHelper();
 
     gl::Error getIndexBufferForDrawArrays(RendererVk *renderer,
