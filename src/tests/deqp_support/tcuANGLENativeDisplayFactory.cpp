@@ -130,7 +130,11 @@ class NativeWindowFactory : public eglu::NativeWindowFactory
     explicit NativeWindowFactory(EventState *eventState);
     ~NativeWindowFactory() override = default;
 
+    eglu::NativeWindow *createWindow(eglu::NativeDisplay *nativeDisplay, const eglu::WindowParams &params) const override;
     eglu::NativeWindow *createWindow(eglu::NativeDisplay *nativeDisplay,
+                                     eglw::EGLDisplay display,
+                                     eglw::EGLConfig config,
+                                     const eglw::EGLAttrib *attribList,
                                      const eglu::WindowParams &params) const override;
 
   private:
@@ -246,6 +250,16 @@ NativeWindowFactory::NativeWindowFactory(EventState *eventState)
 }
 
 eglu::NativeWindow *NativeWindowFactory::createWindow(eglu::NativeDisplay *nativeDisplay,
+                                                      const eglu::WindowParams &params) const
+{
+    DE_ASSERT(DE_FALSE);
+    return nullptr;
+}
+
+eglu::NativeWindow *NativeWindowFactory::createWindow(eglu::NativeDisplay *nativeDisplay,
+                                                      eglw::EGLDisplay display,
+                                                      eglw::EGLConfig config,
+                                                      const eglw::EGLAttrib *attribList,
                                                       const eglu::WindowParams &params) const
 {
     return new NativeWindow(dynamic_cast<ANGLENativeDisplay *>(nativeDisplay), params, mEvents);
