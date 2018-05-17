@@ -351,7 +351,7 @@ void DynamicDescriptorPool::setMaxSetsPerPoolForTesting(uint32_t maxSetsPerPool)
 }
 
 // LineLoopHelper implementation.
-LineLoopHelper::LineLoopHelper()
+LineLoopHelper::LineLoopHelper(VkDeviceSize nonCoherentAtomSize)
     : mDynamicIndexBuffer(kLineLoopDynamicBufferUsage, kLineLoopDynamicBufferMinSize)
 {
     // We need to use an alignment of the maximum size we're going to allocate, which is
@@ -359,7 +359,9 @@ LineLoopHelper::LineLoopHelper()
     // can vary in size. According to the Vulkan spec, when calling vkCmdBindIndexBuffer: 'The
     // sum of offset and the address of the range of VkDeviceMemory object that is backing buffer,
     // must be a multiple of the type indicated by indexType'.
-    mDynamicIndexBuffer.init(sizeof(uint32_t));
+    mDynamicIndexBuffer.init(sizeof(uint32_t) > static_cast<size_t>(nonCoherentAtomSize)
+                                 ? sizeof(uint32_t)
+                                 : static_cast<size_t>(nonCoherentAtomSize));
 }
 
 LineLoopHelper::~LineLoopHelper() = default;
