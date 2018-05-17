@@ -47,7 +47,7 @@ class ANGLENativeDisplayFactory : public eglu::NativeDisplayFactory
   public:
     ANGLENativeDisplayFactory(const std::string &name,
                               const std::string &description,
-                              const std::vector<eglw::EGLAttrib> &platformAttributes,
+                              std::vector<eglw::EGLAttrib> platformAttributes,
                               EventState *eventState);
     ~ANGLENativeDisplayFactory() override;
 
