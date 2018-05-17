@@ -55,7 +55,9 @@ enum
 };
 
 constexpr eglu::NativeDisplay::Capability kDisplayCapabilities =
-    eglu::NativeDisplay::CAPABILITY_GET_DISPLAY_PLATFORM;
+    static_cast<eglu::NativeDisplay::Capability>(
+        eglu::NativeDisplay::CAPABILITY_GET_DISPLAY_PLATFORM |
+        eglu::NativeDisplay::CAPABILITY_GET_DISPLAY_PLATFORM_EXT);
 constexpr eglu::NativePixmap::Capability kBitmapCapabilities =
     eglu::NativePixmap::CAPABILITY_CREATE_SURFACE_LEGACY;
 constexpr eglu::NativeWindow::Capability kWindowCapabilities =
