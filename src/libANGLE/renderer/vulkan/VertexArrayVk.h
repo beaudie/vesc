@@ -32,7 +32,7 @@ class DynamicBuffer;
 class VertexArrayVk : public VertexArrayImpl
 {
   public:
-    VertexArrayVk(const gl::VertexArrayState &state);
+    VertexArrayVk(const gl::VertexArrayState &state, VkDeviceSize nonCoherentAtomSize);
     ~VertexArrayVk() override;
 
     void destroy(const gl::Context *context) override;
@@ -126,7 +126,7 @@ class VertexArrayVk : public VertexArrayImpl
 
     // Cache variable for determining whether or not to store new dependencies in the node.
     bool mVertexBuffersDirty;
-    bool mIndexBufferDirty;
+    bool mIndexBufferDirty = false;
 };
 
 }  // namespace rx
