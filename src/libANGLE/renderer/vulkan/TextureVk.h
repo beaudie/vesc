@@ -35,6 +35,12 @@ class PixelBuffer final : angle::NonCopyable
                                      GLenum type,
                                      const uint8_t *pixels);
 
+    gl::Error stageSubresourceUpdateFromBuffer(const gl::ImageIndex &index,
+                                               const gl::Extents &extents,
+                                               const gl::Offset &offset,
+                                               VkDeviceSize bufferOffset,
+                                               VkBuffer bufferHandle);
+
     gl::Error stageSubresourceUpdateFromFramebuffer(const gl::Context *context,
                                                     const gl::ImageIndex &index,
                                                     const gl::Rectangle &sourceArea,
@@ -159,6 +165,15 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
     vk::Error ensureImageInitialized(RendererVk *renderer);
 
   private:
+    gl::Error generateMipmapLevels(ContextVk *contextVk,
+                                   const angle::Format &sourceFormat,
+                                   GLuint firstMipLevel,
+                                   GLuint maxMipLevel,
+                                   size_t sourceWidth,
+                                   size_t sourceHeight,
+                                   size_t sourceRowPitch,
+                                   uint8_t *sourceData);
+
     gl::Error copySubImageImpl(const gl::Context *context,
                                const gl::ImageIndex &index,
                                const gl::Offset &destOffset,
@@ -182,6 +197,7 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
     RenderTargetVk mRenderTarget;
 
     PixelBuffer mPixelBuffer;
+    vk::DynamicBuffer mMipmapsBuffer;
 };
 
 }  // namespace rx
