@@ -48,6 +48,11 @@ class ANGLEPlatform : public tcu::Platform,
     const eglu::Platform &getEGLPlatform() const override { return static_cast<const eglu::Platform&>(*this); }
 
   private:
+    std::vector<eglw::EGLAttrib> initAttribs(eglw::EGLAttrib type,
+                                             eglw::EGLAttrib deviceType   = -1,
+                                             eglw::EGLAttrib majorVersion = -1,
+                                             eglw::EGLAttrib minorVersion = -1);
+
     EventState mEvents;
 };
 
