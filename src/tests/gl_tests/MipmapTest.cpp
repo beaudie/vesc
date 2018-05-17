@@ -535,9 +535,13 @@ TEST_P(MipmapTest, GenerateMipmapFromInitDataThenRender)
     clearAndDrawQuad(m2DProgram, getWindowWidth(), getWindowHeight());
     EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, GLColor::blue);
 
-    // Use mip level 1
-    clearAndDrawQuad(m2DProgram, getWindowWidth() / 2, getWindowHeight() / 2);
-    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, getWindowHeight() / 4, GLColor::blue);
+    for (int i = 0; i < 1000; i++)
+    {
+        // Use mip level 1
+        clearAndDrawQuad(m2DProgram, getWindowWidth() / 2, getWindowHeight() / 2);
+        EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, getWindowHeight() / 4, GLColor::blue);
+        swapBuffers();
+    }
 
     // Use mip level 2
     clearAndDrawQuad(m2DProgram, getWindowWidth() / 4, getWindowHeight() / 4);
@@ -1148,5 +1152,6 @@ ANGLE_INSTANTIATE_TEST(MipmapTest,
                        ES2_OPENGL(),
                        ES3_OPENGL(),
                        ES2_OPENGLES(),
-                       ES3_OPENGLES());
+                       ES3_OPENGLES(),
+                       ES2_VULKAN());
 ANGLE_INSTANTIATE_TEST(MipmapTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
