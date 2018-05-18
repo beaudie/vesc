@@ -23,6 +23,7 @@ class BuiltInFunctionEmulator;
 namespace sh
 {
 class StructureHLSL;
+class ShaderStorageBlockFunctionHLSL;
 class TextureFunctionHLSL;
 class TSymbolTable;
 class TVariable;
@@ -167,6 +168,8 @@ class OutputHLSL : public TIntermTraverser
 
     // Indexed by block id, not instance id.
     ReferencedInterfaceBlocks mReferencedUniformBlocks;
+    ReferencedInterfaceBlocks mReferencedShaderStorageBlocks;
+    ShaderStorageBlockFunctionHLSL *mSSBOFunctionHLSL;
 
     ReferencedVariables mReferencedAttributes;
     ReferencedVariables mReferencedVaryings;
@@ -253,7 +256,12 @@ class OutputHLSL : public TIntermTraverser
   private:
     TString generateStructMapping(const std::vector<MappedStruct> &std140Structs) const;
     ImmutableString samplerNamePrefixFromStruct(TIntermTyped *node);
+    void ancestorEvaluatesBufferVariableType(const TType &type,
+                                             TBasicType *outBasicType,
+                                             TString *outBuiltInTypeName);
+    bool isLastNodeInSSBO();
     bool ancestorEvaluatesToSamplerInStruct();
+    bool mBufferVariableInAssignLeft;
 };
 }
 

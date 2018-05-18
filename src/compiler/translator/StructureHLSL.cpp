@@ -166,14 +166,14 @@ TString Std140PaddingHelper::prePaddingString(const TType &type)
     return padding;
 }
 
-TString Std140PaddingHelper::postPaddingString(const TType &type, bool useHLSLRowMajorPacking)
+int Std140PaddingHelper::postPadding(const TType &type, bool useHLSLRowMajorPacking)
 {
     if (!type.isMatrix() && !type.isArray() && type.getBasicType() != EbtStruct)
     {
-        return "";
+        return 0;
     }
 
-    int numComponents     = 0;
+    int numComponents           = 0;
     const TStructure *structure = type.getStruct();
 
     if (type.isMatrix())
@@ -197,7 +197,7 @@ TString Std140PaddingHelper::postPaddingString(const TType &type, bool useHLSLRo
 
         if (numComponents == 0)
         {
-            return "";
+            return 0;
         }
     }
     else
@@ -206,8 +206,15 @@ TString Std140PaddingHelper::postPaddingString(const TType &type, bool useHLSLRo
         numComponents       = gl::VariableComponentCount(glType);
     }
 
+    return (4 - numComponents);
+}
+
+TString Std140PaddingHelper::postPaddingString(const TType &type, bool useHLSLRowMajorPacking)
+{
+    int paddingCount = postPadding(type, useHLSLRowMajorPacking);
+    ASSERT(paddingCount < 4);
     TString padding;
-    for (int paddingOffset = numComponents; paddingOffset < 4; paddingOffset++)
+    for (int paddingIndex = 0; paddingIndex < paddingCount; paddingIndex++)
     {
         padding += "    float pad_" + next() + ";\n";
     }

@@ -34,6 +34,7 @@ class Std140PaddingHelper
     int elementIndex() const { return mElementIndex; }
     int prePadding(const TType &type);
     TString prePaddingString(const TType &type);
+    int postPadding(const TType &type, bool useHLSLRowMajorPacking);
     TString postPaddingString(const TType &type, bool useHLSLRowMajorPacking);
 
   private:

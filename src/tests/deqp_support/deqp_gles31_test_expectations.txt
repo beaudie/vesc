@@ -59,6 +59,8 @@
 1951 D3D11 : dEQP-GLES31.functional.ssbo.* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.layout_binding.image.* = SKIP
 1951 D3D11 : dEQP-GLES31.functional.shaders.linkage.es31.shader_storage_block.* = SKIP
+// This case is skipped since it uses atomic counter builtin functions which haven't been implemented.
+1442 D3D11 : dEQP-GLES31.functional.state_query.program.active_atomic_counter_buffers_get_programiv = SKIP
 
 // D3D11 Failing Tests
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_compute_shared_memory_size_* = FAIL
@@ -81,7 +83,6 @@
 1442 D3D11 : dEQP-GLES31.functional.debug.error_groups.case_3 = FAIL
 1442 D3D11 : dEQP-GLES31.functional.debug.error_groups.case_9 = FAIL
 1442 D3D11 : dEQP-GLES31.functional.debug.error_groups.case_10 = FAIL
-1442 D3D11 : dEQP-GLES31.functional.state_query.program.active_atomic_counter_buffers_get_programiv = FAIL
 1442 D3D11 : dEQP-GLES31.functional.layout_binding.ubo.* = FAIL
 1663 D3D11 : dEQP-GLES31.functional.draw_indirect.compute_interop.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.shaders.builtin_constants.core.max_vertex_attribs = FAIL
@@ -1560,6 +1561,9 @@
 1941 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.shader_directive.geometry_shader = FAIL
 1941 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.shader_directive.geometry_shader = FAIL
 1941 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.shader_directive.geometry_shader = FAIL
+1941 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.compute.exceed_shared_memory_size_limit = FAIL
+1941 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.compute.exceed_shared_memory_size_limit = FAIL
+1941 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.compute.exceed_shared_memory_size_limit = FAIL
 
 // Recetly added tests failing on D3D11 Windows.
 2619 D3D11 : dEQP-GLES31.functional.shaders.builtin_functions.uniform.findLSBMinusOne.highp_compute = FAIL

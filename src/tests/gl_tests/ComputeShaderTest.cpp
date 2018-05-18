@@ -1441,6 +1441,108 @@ TEST_P(ComputeShaderTest, StructArrayAsSharedVariable)
     runSharedMemoryTest<2, 2>(kCSShader, inputData, expectedValues);
 }
 
+// Test that shader storage blocks read/write are supported.
+TEST_P(ComputeShaderTest, SimpleShaderStorageBlocksReadWrite)
+{
+    const std::string csSource =
+        R"(#version 310 es
+        layout(local_size_x=8) in;
+        layout(std140, binding = 0) buffer blockIn {
+            int a[8];
+            uint b[8];
+            float c[8];
+        } instanceIn;
+        layout(std140, binding = 0) buffer blockOut {
+            int a[8];
+            uint b[8];
+            float c[8];
+        } instanceOut;
+
+        void main()
+        {
+            instanceOut.a[gl_LocalInvocationIndex] = instanceIn.a[gl_LocalInvocationIndex];
+            instanceOut.b[gl_LocalInvocationIndex] = instanceIn.b[gl_LocalInvocationIndex];
+            instanceOut.c[gl_LocalInvocationIndex] = instanceIn.c[gl_LocalInvocationIndex];
+        })";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test that shader storage blocks with struct member are supported.
+TEST_P(ComputeShaderTest, ShaderStorageBlocksWithStructMember)
+{
+    const std::string csSource =
+        R"(#version 310 es
+        layout(local_size_x=8) in;
+        struct S {
+          int a;
+          int b;
+        };
+
+        layout(std140, binding = 0) buffer blockA {
+            S bd[8];
+        };
+        layout(std140, binding = 1) buffer blockB {
+            S bd[8];
+        } instanceB;
+        void main()
+        {
+            bd[gl_LocalInvocationIndex].a = 1;
+            instanceB.bd[gl_LocalInvocationIndex].a = 2;
+        })";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test that shader storage blocks with nested struct member are supported.
+TEST_P(ComputeShaderTest, ShaderStorageBlocksWithNestedStructMember)
+{
+    const std::string csSource =
+        R"(#version 310 es
+        layout(local_size_x=8) in;
+        struct S1 {
+          int a;
+        };
+        struct S2 {
+          S1 s;
+        };
+        layout(std140, binding = 0) buffer blockA {
+            S2 bd[8];
+        };
+        layout(std140, binding = 1) buffer blockB {
+            S2 bd[8];
+        } instanceB;
+        void main()
+        {
+            bd[gl_LocalInvocationIndex].s.a = 1;
+            instanceB.bd[gl_LocalInvocationIndex].s.a = 2;
+        })";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test that shader storage blocks with unsized array are supported.
+TEST_P(ComputeShaderTest, ShaderStorageBlocksWithUnsizedArray)
+{
+    const std::string csSource =
+        R"(#version 310 es
+        layout(local_size_x=8) in;
+
+        layout(std140, binding = 0) buffer blockA {
+            int a[];
+        };
+        void main()
+        {
+            a[gl_LocalInvocationIndex] = 1;
+        })";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Check that it is not possible to create a compute shader when the context does not support ES
 // 3.10
 TEST_P(ComputeShaderTestES3, NotSupported)
