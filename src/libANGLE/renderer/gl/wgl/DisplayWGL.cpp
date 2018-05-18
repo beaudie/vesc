@@ -30,6 +30,12 @@
 namespace rx
 {
 
+namespace
+{
+// Each DisplayWGL needs a unique value to use when registering a Window class
+uint64_t gDisplayWGLNativeClassCounter = 0;
+}  // anonymous namespace
+
 class FunctionsGLWindows : public FunctionsGL
 {
   public:
@@ -105,7 +111,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     const LPSTR idcArrow = MAKEINTRESOURCEA(32512);
 
     std::ostringstream stream;
-    stream << "ANGLE DisplayWGL " << std::internal << std::setw(10) << std::setfill('0') << mDisplay
+    stream << "ANGLE DisplayWGL " << gDisplayWGLNativeClassCounter++
            << " Intermediate Window Class";
     std::string className = stream.str();
 
