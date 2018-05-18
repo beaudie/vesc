@@ -727,12 +727,9 @@ gl::Error FramebufferVk::getCommandBufferForDraw(ContextVk *contextVk,
                                                  vk::RecordingMode *modeOut)
 {
     RendererVk *renderer = contextVk->getRenderer();
-    Serial currentSerial = renderer->getCurrentQueueSerial();
 
     // This will clear the current write operation if it is complete.
-    updateQueueSerial(currentSerial);
-
-    if (hasStartedRenderPass())
+    if (canAppendToRenderPass(renderer))
     {
         appendToRenderPass(commandBufferOut);
         *modeOut = vk::RecordingMode::Append;
