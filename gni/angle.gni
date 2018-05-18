@@ -27,10 +27,14 @@ data_dir = "angledata"
 declare_args() {
   if (!is_android) {
     ndk_supports_vulkan = false
+    ndk_supports_nativewindow = false
   } else {
     ndk_supports_vulkan =
-        (current_cpu == "arm" && android32_ndk_api_level >= 24) ||
-        (current_cpu == "arm64" && android64_ndk_api_level >= 24)
+        (android_64bit_current_cpu == false && android32_ndk_api_level >= 24) ||
+        (android_64bit_current_cpu == true && android64_ndk_api_level >= 24)
+    ndk_supports_nativewindow =
+        (android_64bit_current_cpu == false && android32_ndk_api_level >= 26) ||
+        (android_64bit_current_cpu == true && android64_ndk_api_level >= 26)
   }
   angle_shared_libvulkan = false
   angle_libs_suffix = ""
