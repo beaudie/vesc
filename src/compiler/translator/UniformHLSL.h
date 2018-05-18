@@ -38,10 +38,11 @@ class UniformHLSL : angle::NonCopyable
     void samplerMetadataUniforms(TInfoSinkBase &out, const char *reg);
 
     TString uniformBlocksHeader(const ReferencedInterfaceBlocks &referencedInterfaceBlocks);
+    TString shaderStorageBlocksHeader(const ReferencedInterfaceBlocks &referencedInterfaceBlocks);
 
     // Used for direct index references
-    static TString UniformBlockInstanceString(const ImmutableString &instanceName,
-                                              unsigned int arrayIndex);
+    static TString InterfaceBlockInstanceString(const ImmutableString &instanceName,
+                                                unsigned int arrayIndex);
 
     const std::map<std::string, unsigned int> &getUniformBlockRegisterMap() const
     {
@@ -52,14 +53,21 @@ class UniformHLSL : angle::NonCopyable
         return mUniformRegisterMap;
     }
 
+    void setShaderStorageBlockMembersOffset(const TInterfaceBlock *interfaceBlock);
+
   private:
     TString uniformBlockString(const TInterfaceBlock &interfaceBlock,
                                const TVariable *instanceVariable,
                                unsigned int registerIndex,
                                unsigned int arrayIndex);
-    TString uniformBlockMembersString(const TInterfaceBlock &interfaceBlock,
-                                      TLayoutBlockStorage blockStorage);
-    TString uniformBlockStructString(const TInterfaceBlock &interfaceBlock);
+
+    TString shaderStorageBlockString(const TInterfaceBlock &interfaceBlock,
+                                     const TVariable *instanceVariable,
+                                     unsigned int registerIndex,
+                                     unsigned int arrayIndex);
+    TString interfaceBlockMembersString(const TInterfaceBlock &interfaceBlock,
+                                        TLayoutBlockStorage blockStorage);
+    TString interfaceBlockStructString(const TInterfaceBlock &interfaceBlock);
     const Uniform *findUniformByName(const ImmutableString &name) const;
 
     void outputHLSL4_0_FL9_3Sampler(TInfoSinkBase &out,
@@ -104,13 +112,14 @@ class UniformHLSL : angle::NonCopyable
     unsigned int mUniformRegister;
     unsigned int mUniformBlockRegister;
     unsigned int mTextureRegister;
-    unsigned int mRWTextureRegister;
+    unsigned int mUnorderedAccessViewRegister;
     unsigned int mSamplerCount;
     StructureHLSL *mStructureHLSL;
     ShShaderOutput mOutputType;
 
     const std::vector<Uniform> &mUniforms;
     std::map<std::string, unsigned int> mUniformBlockRegisterMap;
+    std::map<std::string, unsigned int> mShaderStorageBlockRegisterMap;
     std::map<std::string, unsigned int> mUniformRegisterMap;
 };
 }
