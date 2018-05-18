@@ -209,6 +209,12 @@ bool CommandGraphResource::hasStartedRenderPass() const
     return hasChildlessWritingNode() && mCurrentWritingNode->getInsideRenderPassCommands()->valid();
 }
 
+bool CommandGraphResource::canAppendToRenderPass(RendererVk *renderer)
+{
+    updateQueueSerial(renderer->getCurrentQueueSerial());
+    return hasStartedRenderPass();
+}
+
 const gl::Rectangle &CommandGraphResource::getRenderPassRenderArea() const
 {
     ASSERT(hasStartedRenderPass());
