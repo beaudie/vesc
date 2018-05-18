@@ -499,7 +499,12 @@ Error Display::initialize()
         {
             std::unique_ptr<rx::DeviceImpl> impl(mImplementation->createDevice());
             ASSERT(impl != nullptr);
-            ANGLE_TRY(impl->initialize());
+            error = impl->initialize();
+            if (error.isError())
+            {
+                mImplementation->terminate();
+                return error;
+            }
             mDevice = new Device(this, impl.release());
         }
         else
