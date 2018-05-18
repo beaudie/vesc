@@ -13,7 +13,6 @@
 #include <array>
 
 #include "common/debug.h"
-#include "image_util/imageformats.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/formatutils.h"
@@ -56,8 +55,6 @@ FramebufferVk *FramebufferVk::CreateDefaultFBO(const gl::FramebufferState &state
 FramebufferVk::FramebufferVk(const gl::FramebufferState &state)
     : FramebufferImpl(state),
       mBackbuffer(nullptr),
-      mRenderPassDesc(),
-      mFramebuffer(),
       mActiveColorComponents(0),
       mMaskedClearDescriptorSet(VK_NULL_HANDLE)
 {
@@ -66,16 +63,12 @@ FramebufferVk::FramebufferVk(const gl::FramebufferState &state)
 FramebufferVk::FramebufferVk(const gl::FramebufferState &state, WindowSurfaceVk *backbuffer)
     : FramebufferImpl(state),
       mBackbuffer(backbuffer),
-      mRenderPassDesc(),
-      mFramebuffer(),
       mActiveColorComponents(0),
       mMaskedClearDescriptorSet(VK_NULL_HANDLE)
 {
 }
 
-FramebufferVk::~FramebufferVk()
-{
-}
+FramebufferVk::~FramebufferVk() = default;
 
 void FramebufferVk::destroy(const gl::Context *context)
 {
@@ -312,13 +305,11 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
     params.packBuffer  = glState.getTargetBuffer(gl::BufferBinding::PixelPack);
     params.pack        = glState.getPackState();
 
-    vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(beginWriteResource(vk::GetImpl(context)->getRenderer(), &commandBuffer));
-    return ReadPixelsFromRenderTarget(context, clippedArea, params, renderTarget, commandBuffer,
-                                      reinterpret_cast<uint8_t *>(pixels) + outputSkipBytes);
+    return readPixelsImpl(context, clippedArea, params,
+                          reinterpret_cast<uint8_t *>(pixels) + outputSkipBytes);
 }
 
-RenderTargetVk *FramebufferVk::getColorReadRenderTarget()
+RenderTargetVk *FramebufferVk::getColorReadRenderTarget() const
 {
     RenderTargetVk *renderTarget = mRenderTargetCache.getColorRead(mState);
     ASSERT(renderTarget && renderTarget->image->valid());
@@ -380,7 +371,7 @@ gl::Error FramebufferVk::syncState(const gl::Context *context,
                 }
                 else
                 {
-                    updateActiveColorMasks(colorIndex, 0, 0, 0, 0);
+                    updateActiveColorMasks(colorIndex, false, false, false, false);
                 }
                 break;
             }
@@ -752,15 +743,11 @@ gl::Error FramebufferVk::getCommandGraphNodeForDraw(ContextVk *contextVk,
 
     std::vector<VkClearValue> attachmentClearValues;
 
-    vk::CommandBuffer *commandBuffer = nullptr;
     if (!(*nodeOut)->getOutsideRenderPassCommands()->valid())
     {
+        vk::CommandBuffer *commandBuffer = nullptr;
         ANGLE_TRY((*nodeOut)->beginOutsideRenderPassRecording(
             renderer->getDevice(), renderer->getCommandPool(), &commandBuffer));
-    }
-    else
-    {
-        commandBuffer = (*nodeOut)->getOutsideRenderPassCommands();
     }
 
     // Initialize RenderPass info.
@@ -799,16 +786,19 @@ void FramebufferVk::updateActiveColorMasks(size_t colorIndex, bool r, bool g, bo
     mActiveColorComponentMasks[3].set(colorIndex, a);
 }
 
-gl::Error ReadPixelsFromRenderTarget(const gl::Context *context,
-                                     const gl::Rectangle &area,
-                                     const PackPixelsParams &packPixelsParams,
-                                     RenderTargetVk *renderTarget,
-                                     vk::CommandBuffer *commandBuffer,
-                                     void *pixels)
+gl::Error FramebufferVk::readPixelsImpl(const gl::Context *context,
+                                        const gl::Rectangle &area,
+                                        const PackPixelsParams &packPixelsParams,
+                                        void *pixels)
 {
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
     VkDevice device      = renderer->getDevice();
+
+    vk::CommandBuffer *commandBuffer = nullptr;
+    ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
+
+    RenderTargetVk *renderTarget = getColorReadRenderTarget();
 
     vk::ImageHelper stagingImage;
     ANGLE_TRY(stagingImage.init2DStaging(
@@ -827,7 +817,6 @@ gl::Error ReadPixelsFromRenderTarget(const gl::Context *context,
     // TODO(jmadill): Don't block on asynchronous readback.
     ANGLE_TRY(renderer->finish(context));
 
-    // TODO(jmadill): parameters
     uint8_t *mapPointer = nullptr;
     ANGLE_TRY(stagingImage.getDeviceMemory().map(device, 0, stagingImage.getAllocatedMemorySize(),
                                                  0, &mapPointer));
@@ -846,5 +835,10 @@ gl::Error ReadPixelsFromRenderTarget(const gl::Context *context,
     renderer->releaseObject(renderer->getCurrentQueueSerial(), &stagingImage);
 
     return vk::NoError();
+}
+
+const gl::Extents &FramebufferVk::getReadImageExtents() const
+{
+    return getColorReadRenderTarget()->image->getExtents();
 }
 }  // namespace rx
