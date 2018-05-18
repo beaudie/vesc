@@ -519,10 +519,12 @@ static_library("libANGLE") {
       sources += rebase_path(gles_gypi.libangle_gl_egl_dl_sources, ".", "src")
       sources +=
           rebase_path(gles_gypi.libangle_gl_egl_android_sources, ".", "src")
-      libs += [
-        "android",
-        "log",
-      ]
+      if (android32_ndk_api_level >= 26 || android64_ndk_api_level >= 26) {
+        libs += [ "nativewindow" ]
+      } else {
+        libs += [ "android" ]
+      }
+      libs += [ "log" ]
     }
     if (ozone_platform_gbm) {
       configs += [ ":libdrm" ]
@@ -855,7 +857,7 @@ foreach(is_shared_library,
       sources += rebase_path(util_gypi.util_linux_sources, ".", "util")
       sources += rebase_path(util_gypi.util_android_sources, ".", "util")
       libs = [
-        "android",
+        "nativewindow",
         "log",
       ]
     }
