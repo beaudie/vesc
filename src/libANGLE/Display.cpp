@@ -463,12 +463,15 @@ Error Display::initialize()
         return NoError();
     }
 
-    Error error = mImplementation->initialize(this);
-    if (error.isError())
     {
-        // Log extended error message here
-        ERR() << "ANGLE Display::initialize error " << error.getID() << ": " << error.getMessage();
-        return error;
+        Error error = mImplementation->initialize(this);
+        if (error.isError())
+        {
+            // Log extended error message here
+            ERR() << "ANGLE Display::initialize error " << error.getID() << ": "
+                  << error.getMessage();
+            return error;
+        }
     }
 
     mCaps = mImplementation->getCaps();
@@ -499,7 +502,12 @@ Error Display::initialize()
         {
             std::unique_ptr<rx::DeviceImpl> impl(mImplementation->createDevice());
             ASSERT(impl != nullptr);
-            ANGLE_TRY(impl->initialize());
+            Error error = impl->initialize();
+            if (error.isError())
+            {
+                mImplementation->terminate();
+                return error;
+            }
             mDevice = new Device(this, impl.release());
         }
         else
