@@ -241,6 +241,7 @@ ProcEntry g_procTable[] = {
     {"glFramebufferParameteri", P(gl::FramebufferParameteri)},
     {"glFramebufferRenderbuffer", P(gl::FramebufferRenderbuffer)},
     {"glFramebufferTexture2D", P(gl::FramebufferTexture2D)},
+    {"glFramebufferTextureEXT", P(gl::FramebufferTextureEXT)},
     {"glFramebufferTextureLayer", P(gl::FramebufferTextureLayer)},
     {"glFramebufferTextureMultiviewLayeredANGLE", P(gl::FramebufferTextureMultiviewLayeredANGLE)},
     {"glFramebufferTextureMultiviewSideBySideANGLE",
@@ -646,5 +647,5 @@ ProcEntry g_procTable[] = {
     {"glWaitSync", P(gl::WaitSync)},
     {"glWeightPointerOES", P(gl::WeightPointerOES)}};
 
-size_t g_numProcs = 617;
+size_t g_numProcs = 618;
 }  // namespace egl
