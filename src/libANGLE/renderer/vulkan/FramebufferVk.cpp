@@ -111,7 +111,6 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
 
     // This command buffer is only started once.
     vk::CommandBuffer *commandBuffer  = nullptr;
-    vk::CommandGraphNode *writingNode = nullptr;
 
     const gl::FramebufferAttachment *depthAttachment = mState.getDepthAttachment();
     bool clearDepth = (depthAttachment && (mask & GL_DEPTH_BUFFER_BIT) != 0);
@@ -170,7 +169,6 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
     if (clearDepth || clearStencil)
     {
         ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
-        writingNode = getCurrentWritingNode();
 
         const VkClearDepthStencilValue &clearDepthStencilValue =
             contextVk->getClearDepthStencilValue().depthStencil;
@@ -183,7 +181,7 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
             (stencilAttachment ? VK_IMAGE_ASPECT_STENCIL_BIT : 0);
 
         RenderTargetVk *renderTarget = mRenderTargetCache.getDepthStencil();
-        vk::ImageHelper *image       = renderTarget->getImageForWrite(currentSerial, writingNode);
+        vk::ImageHelper *image       = renderTarget->getImageForWrite(currentSerial, this);
         image->clearDepthStencil(aspectFlags, clearDepthStencilValue, commandBuffer);
 
         if (!clearColor)
@@ -199,7 +197,6 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
     if (!commandBuffer)
     {
         ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
-        writingNode = getCurrentWritingNode();
     }
 
     // TODO(jmadill): Support gaps in RenderTargets. http://anglebug.com/2394
@@ -209,7 +206,7 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
     {
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndex];
         ASSERT(colorRenderTarget);
-        vk::ImageHelper *image = colorRenderTarget->getImageForWrite(currentSerial, writingNode);
+        vk::ImageHelper *image = colorRenderTarget->getImageForWrite(currentSerial, this);
         image->clearColor(clearColorValue, commandBuffer);
     }
 
@@ -385,8 +382,9 @@ gl::Error FramebufferVk::syncState(const gl::Context *context,
     mRenderPassDesc.reset();
     renderer->releaseResource(*this, &mFramebuffer);
 
-    // Trigger a new set of secondary commands next time we render to this FBO.
-    getNewWritingNode(renderer);
+    // Will freeze the current set of dependencies on this FBO. The next time we render we will
+    // create a new vk::CommandGraphNode.
+    onResourceChanged(renderer);
 
     contextVk->invalidateCurrentPipeline();
 
@@ -491,23 +489,14 @@ gl::Error FramebufferVk::clearWithClearAttachments(ContextVk *contextVk,
                                                    bool clearDepth,
                                                    bool clearStencil)
 {
-    RendererVk *renderer = contextVk->getRenderer();
-
-    getNewWritingNode(renderer);
+    // Trigger a new command node to ensure overlapping writes happen sequentially.
+    onResourceChanged(contextVk->getRenderer());
 
     // This command can only happen inside a render pass, so obtain one if its already happening
     // or create a new one if not.
-    vk::CommandGraphNode *node       = nullptr;
     vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(getCommandGraphNodeForDraw(contextVk, &node));
-    if (node->getInsideRenderPassCommands()->valid())
-    {
-        commandBuffer = node->getInsideRenderPassCommands();
-    }
-    else
-    {
-        ANGLE_TRY(node->beginInsideRenderPassRecording(renderer, &commandBuffer));
-    }
+    vk::RecordingMode mode           = vk::RecordingMode::Start;
+    ANGLE_TRY(getCommandBufferForDraw(contextVk, &commandBuffer, &mode));
 
     // TODO(jmadill): Cube map attachments. http://anglebug.com/2470
     // We assume for now that we always need to clear only 1 layer starting at the
@@ -520,7 +509,7 @@ gl::Error FramebufferVk::clearWithClearAttachments(ContextVk *contextVk,
     // When clearing, the scissor region must be clipped to the renderArea per the validation rules
     // in Vulkan.
     gl::Rectangle intersection;
-    if (!gl::ClipRectangle(contextVk->getGLState().getScissor(), node->getRenderPassRenderArea(),
+    if (!gl::ClipRectangle(contextVk->getGLState().getScissor(), getRenderPassRenderArea(),
                            &intersection))
     {
         // There is nothing to clear since the scissor is outside of the render area.
@@ -585,6 +574,9 @@ gl::Error FramebufferVk::clearWithDraw(ContextVk *contextVk, VkColorComponentFla
     RendererVk *renderer             = contextVk->getRenderer();
     vk::ShaderLibrary *shaderLibrary = renderer->getShaderLibrary();
 
+    // Trigger a new command node to ensure overlapping writes happen sequentially.
+    onResourceChanged(renderer);
+
     const vk::ShaderAndSerial *fullScreenQuad = nullptr;
     ANGLE_TRY(shaderLibrary->getShader(renderer, vk::InternalShaderID::FullScreenQuad_vert,
                                        &fullScreenQuad));
@@ -596,11 +588,11 @@ gl::Error FramebufferVk::clearWithDraw(ContextVk *contextVk, VkColorComponentFla
     const vk::PipelineLayout *pipelineLayout = nullptr;
     ANGLE_TRY(renderer->getInternalUniformPipelineLayout(&pipelineLayout));
 
-    vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
+    vk::RecordingMode recordingMode = vk::RecordingMode::Start;
+    vk::CommandBuffer *drawCommands = nullptr;
+    ANGLE_TRY(getCommandBufferForDraw(contextVk, &drawCommands, &recordingMode));
 
-    vk::CommandGraphNode *node = nullptr;
-    ANGLE_TRY(getCommandGraphNodeForDraw(contextVk, &node));
+    const gl::Rectangle &renderArea = getRenderPassRenderArea();
 
     // This pipeline desc could be cached.
     vk::PipelineDesc pipelineDesc;
@@ -608,14 +600,13 @@ gl::Error FramebufferVk::clearWithDraw(ContextVk *contextVk, VkColorComponentFla
     pipelineDesc.updateColorWriteMask(colorMaskFlags);
     pipelineDesc.updateRenderPassDesc(getRenderPassDesc());
     pipelineDesc.updateShaders(fullScreenQuad->queueSerial(), uniformColor->queueSerial());
-    pipelineDesc.updateViewport(node->getRenderPassRenderArea(), 0.0f, 1.0f);
+    pipelineDesc.updateViewport(renderArea, 0.0f, 1.0f);
 
     const gl::State &glState = contextVk->getGLState();
     if (glState.isScissorTestEnabled())
     {
         gl::Rectangle intersection;
-        if (!gl::ClipRectangle(glState.getScissor(), node->getRenderPassRenderArea(),
-                               &intersection))
+        if (!gl::ClipRectangle(glState.getScissor(), renderArea, &intersection))
         {
             return gl::NoError();
         }
@@ -624,7 +615,7 @@ gl::Error FramebufferVk::clearWithDraw(ContextVk *contextVk, VkColorComponentFla
     }
     else
     {
-        pipelineDesc.updateScissor(node->getRenderPassRenderArea());
+        pipelineDesc.updateScissor(renderArea);
     }
 
     vk::PipelineAndSerial *pipeline = nullptr;
@@ -687,21 +678,21 @@ gl::Error FramebufferVk::clearWithDraw(ContextVk *contextVk, VkColorComponentFla
         vkUpdateDescriptorSets(device, 1, &writeSet, 0, nullptr);
     }
 
+    vk::CommandBuffer *writeCommands = nullptr;
+    ANGLE_TRY(appendWriteResource(renderer, &writeCommands));
+
     VkClearColorValue clearColorValue = contextVk->getClearColorValue().color;
-    commandBuffer->updateBuffer(mMaskedClearUniformBuffer.buffer, 0, sizeof(VkClearColorValue),
+    writeCommands->updateBuffer(mMaskedClearUniformBuffer.buffer, 0, sizeof(VkClearColorValue),
                                 clearColorValue.float32);
 
-    vk::CommandBuffer *drawCommandBuffer = nullptr;
-    ANGLE_TRY(node->beginInsideRenderPassRecording(renderer, &drawCommandBuffer));
-
     std::array<uint32_t, 2> dynamicOffsets = {{0, 0}};
-    drawCommandBuffer->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, *pipelineLayout, 0, 1,
-                                          &mMaskedClearDescriptorSet, 2, dynamicOffsets.data());
+    drawCommands->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, *pipelineLayout, 0, 1,
+                                     &mMaskedClearDescriptorSet, 2, dynamicOffsets.data());
 
     // TODO(jmadill): Masked combined color and depth/stencil clear. http://anglebug.com/2455
     // Any active queries submitted by the user should also be paused here.
-    drawCommandBuffer->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->get());
-    drawCommandBuffer->draw(6, 1, 0, 0);
+    drawCommands->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->get());
+    drawCommands->draw(6, 1, 0, 0);
 
     return gl::NoError();
 }
@@ -714,40 +705,31 @@ gl::Error FramebufferVk::getSamplePosition(const gl::Context *context,
     return gl::InternalError() << "getSamplePosition is unimplemented.";
 }
 
-gl::Error FramebufferVk::getCommandGraphNodeForDraw(ContextVk *contextVk,
-                                                    vk::CommandGraphNode **nodeOut)
+gl::Error FramebufferVk::getCommandBufferForDraw(ContextVk *contextVk,
+                                                 vk::CommandBuffer **commandBufferOut,
+                                                 vk::RecordingMode *modeOut)
 {
     RendererVk *renderer = contextVk->getRenderer();
     Serial currentSerial = renderer->getCurrentQueueSerial();
 
-    // This will reset the current writing node if it has been completed.
+    // This will clear the current write operation if it is complete.
     updateQueueSerial(currentSerial);
 
-    if (hasChildlessWritingNode())
+    if (hasStartedRenderPass())
     {
-        *nodeOut = getCurrentWritingNode();
-    }
-    else
-    {
-        *nodeOut = getNewWritingNode(renderer);
-    }
-
-    if ((*nodeOut)->getInsideRenderPassCommands()->valid())
-    {
+        appendToRenderPass(commandBufferOut);
+        *modeOut = vk::RecordingMode::Append;
         return gl::NoError();
     }
 
     vk::Framebuffer *framebuffer = nullptr;
     ANGLE_TRY_RESULT(getFramebuffer(renderer), framebuffer);
 
+    // TODO(jmadill): Proper clear value implementation. http://anglebug.com/2361
     std::vector<VkClearValue> attachmentClearValues;
 
-    if (!(*nodeOut)->getOutsideRenderPassCommands()->valid())
-    {
-        vk::CommandBuffer *commandBuffer = nullptr;
-        ANGLE_TRY((*nodeOut)->beginOutsideRenderPassRecording(
-            renderer->getDevice(), renderer->getCommandPool(), &commandBuffer));
-    }
+    vk::CommandBuffer *writeCommands = nullptr;
+    ANGLE_TRY(appendWriteResource(renderer, &writeCommands));
 
     vk::RenderPassDesc renderPassDesc;
 
@@ -759,25 +741,23 @@ gl::Error FramebufferVk::getCommandGraphNodeForDraw(ContextVk *contextVk,
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndex];
         ASSERT(colorRenderTarget);
 
-        colorRenderTarget->onRenderColor(currentSerial, *nodeOut, &renderPassDesc);
+        colorRenderTarget->onRenderColor(this, writeCommands, &renderPassDesc);
         attachmentClearValues.emplace_back(contextVk->getClearColorValue());
     }
 
     RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil();
     if (depthStencilRenderTarget)
     {
-        depthStencilRenderTarget->onRenderDepthStencil(currentSerial, *nodeOut, &renderPassDesc);
+        depthStencilRenderTarget->onRenderDepthStencil(this, writeCommands, &renderPassDesc);
         attachmentClearValues.emplace_back(contextVk->getClearDepthStencilValue());
     }
 
     gl::Rectangle renderArea =
         gl::Rectangle(0, 0, mState.getDimensions().width, mState.getDimensions().height);
-    // Hard-code RenderPass to clear the first render target to the current clear value.
-    // TODO(jmadill): Proper clear value implementation. http://anglebug.com/2361
-    (*nodeOut)->storeRenderPassInfo(*framebuffer, renderArea, renderPassDesc,
-                                    attachmentClearValues);
 
-    return gl::NoError();
+    *modeOut = vk::RecordingMode::Start;
+    return beginRenderPass(renderer, *framebuffer, renderArea, mRenderPassDesc.value(),
+                           attachmentClearValues, commandBufferOut);
 }
 
 void FramebufferVk::updateActiveColorMasks(size_t colorIndex, bool r, bool g, bool b, bool a)
@@ -809,7 +789,7 @@ gl::Error FramebufferVk::readPixelsImpl(const gl::Context *context,
                                          vk::StagingUsage::Read));
 
     vk::ImageHelper *srcImage =
-        renderTarget->getImageForWrite(renderer->getCurrentQueueSerial(), getCurrentWritingNode());
+        renderTarget->getImageForWrite(renderer->getCurrentQueueSerial(), this);
 
     stagingImage.changeLayoutWithStages(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_GENERAL,
                                         VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
