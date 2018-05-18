@@ -67,14 +67,6 @@ class UniformHLSL : angle::NonCopyable
                                     const TType &type,
                                     const TVariable &variable,
                                     const unsigned int registerIndex);
-    void outputHLSL4_1_FL11Texture(TInfoSinkBase &out,
-                                   const TType &type,
-                                   const TVariable &variable,
-                                   const unsigned int registerIndex);
-    void outputHLSL4_1_FL11RWTexture(TInfoSinkBase &out,
-                                     const TType &type,
-                                     const TVariable &variable,
-                                     const unsigned int registerIndex);
     void outputUniform(TInfoSinkBase &out,
                        const TType &type,
                        const TVariable &variable,
@@ -94,6 +86,21 @@ class UniformHLSL : angle::NonCopyable
         const TVector<const TVariable *> &group,
         const TMap<const TVariable *, TString> &samplerInStructSymbolsToAPINames,
         unsigned int *groupTextureRegisterIndex);
+
+    void outputHLSLImageUniformIndices(TInfoSinkBase &out,
+                                       const TVector<const TVariable *> &group,
+                                       unsigned int imageArrayIndex,
+                                       unsigned int *groupRegisterCount);
+    void outputHLSLReadonlyImageUniformGroup(TInfoSinkBase &out,
+                                             const HLSLTextureGroup textureGroup,
+                                             const TVector<const TVariable *> &group,
+                                             unsigned int *groupTextureRegisterIndex,
+                                             unsigned int *imageUniformGroupIndex);
+    void outputHLSLImageUniformGroup(TInfoSinkBase &out,
+                                     const HLSLRWTextureGroup textureGroup,
+                                     const TVector<const TVariable *> &group,
+                                     unsigned int *groupTextureRegisterIndex,
+                                     unsigned int *imageUniformGroupIndex);
 
     unsigned int mUniformRegister;
     unsigned int mUniformBlockRegister;
