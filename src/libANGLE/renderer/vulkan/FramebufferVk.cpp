@@ -854,9 +854,14 @@ gl::Error ReadPixelsFromRenderTarget(const gl::Context *context,
     commandBuffer->copyImageToBuffer(renderTargetImage->getImage(),
                                      renderTargetImage->getCurrentLayout(), bufferHandle, 1,
                                      &region);
+
     // Triggers a full finish.
     // TODO(jmadill): Don't block on asynchronous readback.
     ANGLE_TRY(renderer->finish(context));
+
+    // The buffer we copied to needs to be flushed before we read from it because its not been
+    // created with the host coherent bit.
+    ANGLE_TRY(dynamicBuffer.flush(renderer->getDevice()));
 
     PackPixels(packPixelsParams, angleFormat, area.width * angleFormat.pixelBytes, readPixelBuffer,
                reinterpret_cast<uint8_t *>(pixels));
