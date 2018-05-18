@@ -25,6 +25,18 @@ namespace sh
 {
 class TIntermBlock;
 class TSymbolTable;
+class TIntermTyped;
+
+struct TReferencedBlock : angle::NonCopyable
+{
+    POOL_ALLOCATOR_NEW_DELETE();
+    TReferencedBlock(const TInterfaceBlock *block, const TVariable *instanceVariable);
+    const TInterfaceBlock *block;
+    const TVariable *instanceVariable;  // May be nullptr if the block is not instanced.
+};
+
+// Maps from uniqueId to a variable.
+using ReferencedInterfaceBlocks = std::map<int, const TReferencedBlock *>;
 
 float NumericLexFloat32OutOfRangeToInfinity(const std::string &str);
 
@@ -62,6 +74,8 @@ bool IsOutputESSL(ShShaderOutput output);
 bool IsOutputGLSL(ShShaderOutput output);
 bool IsOutputHLSL(ShShaderOutput output);
 bool IsOutputVulkan(ShShaderOutput output);
+
+bool IsInShaderStorageBlock(TIntermTyped *node);
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_UTIL_H_
