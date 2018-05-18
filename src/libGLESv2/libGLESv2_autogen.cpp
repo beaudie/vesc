@@ -3479,6 +3479,15 @@ void GL_APIENTRY glDrawBuffersEXT(GLsizei n, const GLenum *bufs)
     return gl::DrawBuffersEXT(n, bufs);
 }
 
+// GL_EXT_geometry_shader
+void GL_APIENTRY glFramebufferTextureEXT(GLenum target,
+                                         GLenum attachment,
+                                         GLuint texture,
+                                         GLint level)
+{
+    return gl::FramebufferTextureEXT(target, attachment, texture, level);
+}
+
 // GL_EXT_map_buffer_range
 void GL_APIENTRY glFlushMappedBufferRangeEXT(GLenum target, GLintptr offset, GLsizeiptr length)
 {

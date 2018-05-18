@@ -566,110 +566,113 @@ EXPORTS
     ; GL_EXT_draw_buffers
     glDrawBuffersEXT                                  @519
 
+    ; GL_EXT_geometry_shader
+    glFramebufferTextureEXT                           @520
+
     ; GL_EXT_map_buffer_range
-    glFlushMappedBufferRangeEXT                       @520
-    glMapBufferRangeEXT                               @521
+    glFlushMappedBufferRangeEXT                       @521
+    glMapBufferRangeEXT                               @522
 
     ; GL_EXT_occlusion_query_boolean
 
     ; GL_EXT_robustness
-    glGetGraphicsResetStatusEXT                       @522
-    glGetnUniformfvEXT                                @523
-    glGetnUniformivEXT                                @524
-    glReadnPixelsEXT                                  @525
+    glGetGraphicsResetStatusEXT                       @523
+    glGetnUniformfvEXT                                @524
+    glGetnUniformivEXT                                @525
+    glReadnPixelsEXT                                  @526
 
     ; GL_EXT_texture_storage
-    glTexStorage1DEXT                                 @526
-    glTexStorage2DEXT                                 @527
-    glTexStorage3DEXT                                 @528
+    glTexStorage1DEXT                                 @527
+    glTexStorage2DEXT                                 @528
+    glTexStorage3DEXT                                 @529
 
     ; GL_KHR_debug
-    glDebugMessageCallbackKHR                         @529
-    glDebugMessageControlKHR                          @530
-    glDebugMessageInsertKHR                           @531
-    glGetDebugMessageLogKHR                           @532
-    glGetObjectLabelKHR                               @533
-    glGetObjectPtrLabelKHR                            @534
-    glGetPointervKHR                                  @535
-    glObjectLabelKHR                                  @536
-    glObjectPtrLabelKHR                               @537
-    glPopDebugGroupKHR                                @538
-    glPushDebugGroupKHR                               @539
+    glDebugMessageCallbackKHR                         @530
+    glDebugMessageControlKHR                          @531
+    glDebugMessageInsertKHR                           @532
+    glGetDebugMessageLogKHR                           @533
+    glGetObjectLabelKHR                               @534
+    glGetObjectPtrLabelKHR                            @535
+    glGetPointervKHR                                  @536
+    glObjectLabelKHR                                  @537
+    glObjectPtrLabelKHR                               @538
+    glPopDebugGroupKHR                                @539
+    glPushDebugGroupKHR                               @540
 
     ; GL_NV_fence
-    glDeleteFencesNV                                  @540
-    glFinishFenceNV                                   @541
-    glGenFencesNV                                     @542
-    glGetFenceivNV                                    @543
-    glIsFenceNV                                       @544
-    glSetFenceNV                                      @545
-    glTestFenceNV                                     @546
+    glDeleteFencesNV                                  @541
+    glFinishFenceNV                                   @542
+    glGenFencesNV                                     @543
+    glGetFenceivNV                                    @544
+    glIsFenceNV                                       @545
+    glSetFenceNV                                      @546
+    glTestFenceNV                                     @547
 
     ; GL_OES_EGL_image
-    glEGLImageTargetRenderbufferStorageOES            @547
-    glEGLImageTargetTexture2DOES                      @548
+    glEGLImageTargetRenderbufferStorageOES            @548
+    glEGLImageTargetTexture2DOES                      @549
 
     ; GL_OES_draw_texture
-    glDrawTexfOES                                     @549
-    glDrawTexfvOES                                    @550
-    glDrawTexiOES                                     @551
-    glDrawTexivOES                                    @552
-    glDrawTexsOES                                     @553
-    glDrawTexsvOES                                    @554
-    glDrawTexxOES                                     @555
-    glDrawTexxvOES                                    @556
+    glDrawTexfOES                                     @550
+    glDrawTexfvOES                                    @551
+    glDrawTexiOES                                     @552
+    glDrawTexivOES                                    @553
+    glDrawTexsOES                                     @554
+    glDrawTexsvOES                                    @555
+    glDrawTexxOES                                     @556
+    glDrawTexxvOES                                    @557
 
     ; GL_OES_framebuffer_object
-    glBindFramebufferOES                              @557
-    glBindRenderbufferOES                             @558
-    glCheckFramebufferStatusOES                       @559
-    glDeleteFramebuffersOES                           @560
-    glDeleteRenderbuffersOES                          @561
-    glFramebufferRenderbufferOES                      @562
-    glFramebufferTexture2DOES                         @563
-    glGenFramebuffersOES                              @564
-    glGenRenderbuffersOES                             @565
-    glGenerateMipmapOES                               @566
-    glGetFramebufferAttachmentParameterivOES          @567
-    glGetRenderbufferParameterivOES                   @568
-    glIsFramebufferOES                                @569
-    glIsRenderbufferOES                               @570
-    glRenderbufferStorageOES                          @571
+    glBindFramebufferOES                              @558
+    glBindRenderbufferOES                             @559
+    glCheckFramebufferStatusOES                       @560
+    glDeleteFramebuffersOES                           @561
+    glDeleteRenderbuffersOES                          @562
+    glFramebufferRenderbufferOES                      @563
+    glFramebufferTexture2DOES                         @564
+    glGenFramebuffersOES                              @565
+    glGenRenderbuffersOES                             @566
+    glGenerateMipmapOES                               @567
+    glGetFramebufferAttachmentParameterivOES          @568
+    glGetRenderbufferParameterivOES                   @569
+    glIsFramebufferOES                                @570
+    glIsRenderbufferOES                               @571
+    glRenderbufferStorageOES                          @572
 
     ; GL_OES_get_program_binary
-    glGetProgramBinaryOES                             @572
-    glProgramBinaryOES                                @573
+    glGetProgramBinaryOES                             @573
+    glProgramBinaryOES                                @574
 
     ; GL_OES_mapbuffer
-    glGetBufferPointervOES                            @574
-    glMapBufferOES                                    @575
-    glUnmapBufferOES                                  @576
+    glGetBufferPointervOES                            @575
+    glMapBufferOES                                    @576
+    glUnmapBufferOES                                  @577
 
     ; GL_OES_matrix_palette
-    glCurrentPaletteMatrixOES                         @577
-    glLoadPaletteFromModelViewMatrixOES               @578
-    glMatrixIndexPointerOES                           @579
-    glWeightPointerOES                                @580
+    glCurrentPaletteMatrixOES                         @578
+    glLoadPaletteFromModelViewMatrixOES               @579
+    glMatrixIndexPointerOES                           @580
+    glWeightPointerOES                                @581
 
     ; GL_OES_point_size_array
-    glPointSizePointerOES                             @581
+    glPointSizePointerOES                             @582
 
     ; GL_OES_query_matrix
-    glQueryMatrixxOES                                 @582
+    glQueryMatrixxOES                                 @583
 
     ; GL_OES_texture_cube_map
-    glGetTexGenfvOES                                  @583
-    glGetTexGenivOES                                  @584
-    glGetTexGenxvOES                                  @585
-    glTexGenfOES                                      @586
-    glTexGenfvOES                                     @587
-    glTexGeniOES                                      @588
-    glTexGenivOES                                     @589
-    glTexGenxOES                                      @590
-    glTexGenxvOES                                     @591
+    glGetTexGenfvOES                                  @584
+    glGetTexGenivOES                                  @585
+    glGetTexGenxvOES                                  @586
+    glTexGenfOES                                      @587
+    glTexGenfvOES                                     @588
+    glTexGeniOES                                      @589
+    glTexGenivOES                                     @590
+    glTexGenxOES                                      @591
+    glTexGenxvOES                                     @592
 
     ; GL_OES_vertex_array_object
-    glBindVertexArrayOES                              @592
-    glDeleteVertexArraysOES                           @593
-    glGenVertexArraysOES                              @594
-    glIsVertexArrayOES                                @595
+    glBindVertexArrayOES                              @593
+    glDeleteVertexArraysOES                           @594
+    glGenVertexArraysOES                              @595
+    glIsVertexArrayOES                                @596
