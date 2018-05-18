@@ -10,6 +10,7 @@ Contributors
 
     Shannon Woods, Google
     Geoff Lang, Google
+    Courtney Goeltzenleuchter, Google
 
 Contacts
 
@@ -21,7 +22,7 @@ Status
 
 Version
 
-    Version 3, 2014-11-26
+    Version 4, 2018-05-17
 
 Number
 
@@ -37,7 +38,9 @@ Dependencies
 
 Overview
 
-    This extension enables selection of OpenGL display types.
+    This extension enables selection of OpenGL display types and,
+    for Android, allows the system to pass in a handle to the EGL
+    library to use.
 
 New Types
 
@@ -54,6 +57,9 @@ New Tokens
         EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE               0x320D
         EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE             0x320E
 
+    Attribute for an EGL handle.
+        EGL_PLATFORM_ANGLE_EGL_HANDLE_ANGLE                0x3480
+
 Additions to the EGL Specification
 
     None.
@@ -69,6 +75,12 @@ New Behavior
     API, EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE and
     EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE can be used.
 
+    To support ANGLE for Android, need to tell ANGLE what library to use
+    when EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE is requested. ANGLE can't
+    use the default system library since that's what's calling ANGLE. ANGLE
+    needs to talk with the device driver which is only known to the system
+    and passed via this attribute.
+
 Issues
 
     None
@@ -82,3 +94,5 @@ Revision History
         EGL_ANGLE_platform_angle spec to EGL_ANGLE_platform_angle_opengl.
     Version 3, 2014-11-26 (Geoff Lang)
       - Updated enum values.
+    Version 4, 2018-05-17 (Courtney Goeltzenleuchter)
+      - Add attribute for specifying underlying OpenGL library.
