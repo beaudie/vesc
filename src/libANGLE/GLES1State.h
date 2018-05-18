@@ -157,6 +157,20 @@ class GLES1State final : angle::NonCopyable
     bool isTexCoordArrayEnabled(unsigned int unit) const;
     bool isTextureTargetEnabled(unsigned int unit, const TextureType type) const;
 
+    void setLightParameters(GLenum light, LightParameter pname, const GLfloat *params);
+    void getLightParameters(GLenum light, LightParameter pname, GLfloat *params) const;
+
+    void setLightModelParameters(GLenum pname, const GLfloat *params);
+    void getLightModelParameters(GLenum pname, GLfloat *params) const;
+    bool isLightModelTwoSided() const;
+
+    void setMaterialParameters(GLenum face, MaterialParameter pname, const GLfloat *params);
+    void getMaterialParameters(GLenum face, MaterialParameter pname, GLfloat *params) const;
+
+    static unsigned int GetLightModelParameterCount(GLenum pname);
+    static unsigned int GetLightParameterCount(LightParameter pname);
+    static unsigned int GetMaterialParameterCount(MaterialParameter pname);
+
   private:
     friend class State;
     friend class GLES1Renderer;
