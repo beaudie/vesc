@@ -32,8 +32,17 @@ FunctionsEGLDL::~FunctionsEGLDL()
 {
 }
 
-egl::Error FunctionsEGLDL::initialize(EGLNativeDisplayType nativeDisplay, const char *libName)
+egl::Error FunctionsEGLDL::initialize(EGLNativeDisplayType nativeDisplay,
+                                      const char *libName,
+                                      EGLAttrib eglHandle)
 {
+
+    if (eglHandle)
+    {
+        // If the handle is provided, use it. Android has already dlopened the vendor library.
+        nativeEGLHandle = reinterpret_cast<void *>(eglHandle);
+    }
+
     if (!nativeEGLHandle)
     {
         nativeEGLHandle = dlopen(libName, RTLD_NOW);
