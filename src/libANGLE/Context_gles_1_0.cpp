@@ -157,24 +157,36 @@ void Context::getFixedv(GLenum pname, GLfixed *params)
     UNIMPLEMENTED();
 }
 
-void Context::getLightfv(GLenum light, GLenum pname, GLfloat *params)
+void Context::getLightfv(GLenum light, LightParameter pname, GLfloat *params)
 {
-    UNIMPLEMENTED();
+    mGLState.gles1().getLightParameters(light, pname, params);
 }
 
-void Context::getLightxv(GLenum light, GLenum pname, GLfixed *params)
+void Context::getLightxv(GLenum light, LightParameter pname, GLfixed *params)
 {
-    UNIMPLEMENTED();
+    GLfloat paramsf[4];
+    getLightfv(light, pname, paramsf);
+
+    for (unsigned int i = 0; i < GLES1State::GetLightParameterCount(pname); i++)
+    {
+        params[i] = FixedToFloat(paramsf[i]);
+    }
 }
 
-void Context::getMaterialfv(GLenum face, GLenum pname, GLfloat *params)
+void Context::getMaterialfv(GLenum face, MaterialParameter pname, GLfloat *params)
 {
-    UNIMPLEMENTED();
+    mGLState.gles1().getMaterialParameters(face, pname, params);
 }
 
-void Context::getMaterialxv(GLenum face, GLenum pname, GLfixed *params)
+void Context::getMaterialxv(GLenum face, MaterialParameter pname, GLfixed *params)
 {
-    UNIMPLEMENTED();
+    GLfloat paramsf[4];
+    getMaterialfv(face, pname, paramsf);
+
+    for (unsigned int i = 0; i < GLES1State::GetMaterialParameterCount(pname); i++)
+    {
+        params[i] = FloatToFixed(paramsf[i]);
+    }
 }
 
 void Context::getTexEnvfv(GLenum env, GLenum pname, GLfloat *params)
@@ -199,42 +211,67 @@ void Context::getTexParameterxv(TextureType target, GLenum pname, GLfixed *param
 
 void Context::lightModelf(GLenum pname, GLfloat param)
 {
-    UNIMPLEMENTED();
+    mGLState.gles1().setLightModelParameters(pname, &param);
 }
 
 void Context::lightModelfv(GLenum pname, const GLfloat *params)
 {
-    UNIMPLEMENTED();
+    mGLState.gles1().setLightModelParameters(pname, params);
 }
 
 void Context::lightModelx(GLenum pname, GLfixed param)
 {
-    UNIMPLEMENTED();
+    lightModelf(pname, FixedToFloat(param));
 }
 
 void Context::lightModelxv(GLenum pname, const GLfixed *param)
 {
-    UNIMPLEMENTED();
+    GLfloat paramsf[4];
+
+    unsigned int numParams = 1;
+    switch (pname)
+    {
+        case GL_LIGHT_MODEL_AMBIENT:
+            numParams = 4;
+            break;
+        case GL_LIGHT_MODEL_TWO_SIDE:
+            numParams = 1;
+            break;
+    }
+
+    for (unsigned int i = 0; i < numParams; i++)
+    {
+        paramsf[i] = FixedToFloat(param[i]);
+    }
+
+    lightModelfv(pname, paramsf);
 }
 
-void Context::lightf(GLenum light, GLenum pname, GLfloat param)
+void Context::lightf(GLenum light, LightParameter pname, GLfloat param)
 {
-    UNIMPLEMENTED();
+    mGLState.gles1().setLightParameters(light, pname, &param);
 }
 
-void Context::lightfv(GLenum light, GLenum pname, const GLfloat *params)
+void Context::lightfv(GLenum light, LightParameter pname, const GLfloat *params)
 {
-    UNIMPLEMENTED();
+    mGLState.gles1().setLightParameters(light, pname, params);
 }
 
-void Context::lightx(GLenum light, GLenum pname, GLfixed param)
+void Context::lightx(GLenum light, LightParameter pname, GLfixed param)
 {
-    UNIMPLEMENTED();
+    lightf(light, pname, FixedToFloat(param));
 }
 
-void Context::lightxv(GLenum light, GLenum pname, const GLfixed *params)
+void Context::lightxv(GLenum light, LightParameter pname, const GLfixed *params)
 {
-    UNIMPLEMENTED();
+    GLfloat paramsf[4];
+
+    for (unsigned int i = 0; i < GLES1State::GetLightParameterCount(pname); i++)
+    {
+        paramsf[i] = FloatToFixed(params[i]);
+    }
+
+    lightfv(light, pname, paramsf);
 }
 
 void Context::lineWidthx(GLfixed width)
@@ -262,24 +299,31 @@ void Context::logicOp(GLenum opcode)
     UNIMPLEMENTED();
 }
 
-void Context::materialf(GLenum face, GLenum pname, GLfloat param)
+void Context::materialf(GLenum face, MaterialParameter pname, GLfloat param)
 {
-    UNIMPLEMENTED();
+    mGLState.gles1().setMaterialParameters(face, pname, &param);
 }
 
-void Context::materialfv(GLenum face, GLenum pname, const GLfloat *params)
+void Context::materialfv(GLenum face, MaterialParameter pname, const GLfloat *params)
 {
-    UNIMPLEMENTED();
+    mGLState.gles1().setMaterialParameters(face, pname, params);
 }
 
-void Context::materialx(GLenum face, GLenum pname, GLfixed param)
+void Context::materialx(GLenum face, MaterialParameter pname, GLfixed param)
 {
-    UNIMPLEMENTED();
+    materialf(face, pname, FixedToFloat(param));
 }
 
-void Context::materialxv(GLenum face, GLenum pname, const GLfixed *param)
+void Context::materialxv(GLenum face, MaterialParameter pname, const GLfixed *param)
 {
-    UNIMPLEMENTED();
+    GLfloat paramsf[4];
+
+    for (unsigned int i = 0; i < GLES1State::GetMaterialParameterCount(pname); i++)
+    {
+        paramsf[i] = FixedToFloat(param[i]);
+    }
+
+    materialfv(face, pname, paramsf);
 }
 
 void Context::matrixMode(MatrixType mode)

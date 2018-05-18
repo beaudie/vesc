@@ -7071,6 +7071,7 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
                 return true;
             case GL_CURRENT_COLOR:
             case GL_CURRENT_TEXTURE_COORDS:
+            case GL_LIGHT_MODEL_AMBIENT:
                 *type      = GL_FLOAT;
                 *numParams = 4;
                 return true;
@@ -7083,6 +7084,10 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
             case GL_TEXTURE_MATRIX:
                 *type      = GL_FLOAT;
                 *numParams = 16;
+                return true;
+            case GL_LIGHT_MODEL_TWO_SIDE:
+                *type      = GL_BOOL;
+                *numParams = 1;
                 return true;
         }
     }

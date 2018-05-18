@@ -9,41 +9,32 @@
 //   Implements ANGLE-specific enums classes for EGLenums and functions operating
 //   on them.
 
-#include "libANGLE/PackedEGLEnums_autogen.h"
 #include "common/debug.h"
+#include "libANGLE/PackedEGLEnums_autogen.h"
 
 namespace egl
 {
 
-template <>
+template<>
 TextureFormat FromEGLenum<TextureFormat>(EGLenum from)
 {
-    switch (from)
+    switch(from)
     {
-        case EGL_NO_TEXTURE:
-            return TextureFormat::NoTexture;
-        case EGL_TEXTURE_RGB:
-            return TextureFormat::RGB;
-        case EGL_TEXTURE_RGBA:
-            return TextureFormat::RGBA;
-        default:
-            return TextureFormat::InvalidEnum;
+        case EGL_NO_TEXTURE: return TextureFormat::NoTexture;
+        case EGL_TEXTURE_RGB: return TextureFormat::RGB;
+        case EGL_TEXTURE_RGBA: return TextureFormat::RGBA;
+        default: return TextureFormat::InvalidEnum;
     }
 }
 
 EGLenum ToEGLenum(TextureFormat from)
 {
-    switch (from)
+    switch(from)
     {
-        case TextureFormat::NoTexture:
-            return EGL_NO_TEXTURE;
-        case TextureFormat::RGB:
-            return EGL_TEXTURE_RGB;
-        case TextureFormat::RGBA:
-            return EGL_TEXTURE_RGBA;
-        default:
-            UNREACHABLE();
-            return 0;
+        case TextureFormat::NoTexture: return EGL_NO_TEXTURE;
+        case TextureFormat::RGB: return EGL_TEXTURE_RGB;
+        case TextureFormat::RGBA: return EGL_TEXTURE_RGBA;
+        default: UNREACHABLE(); return 0;
     }
 }
 

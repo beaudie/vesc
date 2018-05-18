@@ -12,32 +12,32 @@
 #ifndef LIBANGLE_PACKEDEGLENUMS_AUTOGEN_H_
 #define LIBANGLE_PACKEDEGLENUMS_AUTOGEN_H_
 
+#include <angle_gl.h>
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
-#include <angle_gl.h>
 
 #include <cstdint>
 
 namespace egl
 {
 
-template <typename Enum>
+template<typename Enum>
 Enum FromEGLenum(EGLenum from);
 
 enum class TextureFormat : uint8_t
 {
     NoTexture = 0,
-    RGB       = 1,
-    RGBA      = 2,
+    RGB = 1,
+    RGBA = 2,
 
     InvalidEnum = 3,
-    EnumCount   = 3,
+    EnumCount = 3,
 };
 
-template <>
+template<>
 TextureFormat FromEGLenum<TextureFormat>(EGLenum from);
 EGLenum ToEGLenum(TextureFormat from);
 
 }  // namespace egl
 
-#endif  // LIBANGLE_PACKEDEGLENUMS_AUTOGEN_H_
+#endif // LIBANGLE_PACKEDEGLENUMS_AUTOGEN_H_

@@ -14,6 +14,7 @@
 #include "libANGLE/validationES1.h"
 #include "libGLESv2/global_state.h"
 
+
 namespace gl
 {
 void GL_APIENTRY AlphaFunc(GLenum func, GLfloat ref)
@@ -52,8 +53,7 @@ void GL_APIENTRY AlphaFuncx(GLenum func, GLfixed ref)
 
 void GL_APIENTRY ClearColorx(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)
 {
-    EVENT("(GLfixed red = 0x%X, GLfixed green = 0x%X, GLfixed blue = 0x%X, GLfixed alpha = 0x%X)",
-          red, green, blue, alpha);
+    EVENT("(GLfixed red = 0x%X, GLfixed green = 0x%X, GLfixed blue = 0x%X, GLfixed alpha = 0x%X)", red, green, blue, alpha);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -133,8 +133,7 @@ void GL_APIENTRY ClipPlanex(GLenum plane, const GLfixed *equation)
 
 void GL_APIENTRY Color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
 {
-    EVENT("(GLfloat red = %f, GLfloat green = %f, GLfloat blue = %f, GLfloat alpha = %f)", red,
-          green, blue, alpha);
+    EVENT("(GLfloat red = %f, GLfloat green = %f, GLfloat blue = %f, GLfloat alpha = %f)", red, green, blue, alpha);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -150,8 +149,7 @@ void GL_APIENTRY Color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha
 
 void GL_APIENTRY Color4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha)
 {
-    EVENT("(GLubyte red = %d, GLubyte green = %d, GLubyte blue = %d, GLubyte alpha = %d)", red,
-          green, blue, alpha);
+    EVENT("(GLubyte red = %d, GLubyte green = %d, GLubyte blue = %d, GLubyte alpha = %d)", red, green, blue, alpha);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -167,8 +165,7 @@ void GL_APIENTRY Color4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alph
 
 void GL_APIENTRY Color4x(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)
 {
-    EVENT("(GLfixed red = 0x%X, GLfixed green = 0x%X, GLfixed blue = 0x%X, GLfixed alpha = 0x%X)",
-          red, green, blue, alpha);
+    EVENT("(GLfixed red = 0x%X, GLfixed green = 0x%X, GLfixed blue = 0x%X, GLfixed alpha = 0x%X)", red, green, blue, alpha);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -184,9 +181,7 @@ void GL_APIENTRY Color4x(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha
 
 void GL_APIENTRY ColorPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
 {
-    EVENT(
-        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)",
-        size, type, stride, pointer);
+    EVENT("(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)", size, type, stride, pointer);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -316,10 +311,7 @@ void GL_APIENTRY Fogxv(GLenum pname, const GLfixed *param)
 
 void GL_APIENTRY Frustumf(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f)
 {
-    EVENT(
-        "(GLfloat l = %f, GLfloat r = %f, GLfloat b = %f, GLfloat t = %f, GLfloat n = %f, GLfloat "
-        "f = %f)",
-        l, r, b, t, n, f);
+    EVENT("(GLfloat l = %f, GLfloat r = %f, GLfloat b = %f, GLfloat t = %f, GLfloat n = %f, GLfloat f = %f)", l, r, b, t, n, f);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -335,10 +327,7 @@ void GL_APIENTRY Frustumf(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n,
 
 void GL_APIENTRY Frustumx(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f)
 {
-    EVENT(
-        "(GLfixed l = 0x%X, GLfixed r = 0x%X, GLfixed b = 0x%X, GLfixed t = 0x%X, GLfixed n = "
-        "0x%X, GLfixed f = 0x%X)",
-        l, r, b, t, n, f);
+    EVENT("(GLfixed l = 0x%X, GLfixed r = 0x%X, GLfixed b = 0x%X, GLfixed t = 0x%X, GLfixed n = 0x%X, GLfixed f = 0x%X)", l, r, b, t, n, f);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -402,68 +391,68 @@ void GL_APIENTRY GetFixedv(GLenum pname, GLfixed *params)
 
 void GL_APIENTRY GetLightfv(GLenum light, GLenum pname, GLfloat *params)
 {
-    EVENT("(GLenum light = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)", light, pname,
-          params);
+    EVENT("(GLenum light = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)", light, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::GetLightfv>(light, pname, params);
+        LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
+        context->gatherParams<EntryPoint::GetLightfv>(light, pnamePacked, params);
 
-        if (context->skipValidation() || ValidateGetLightfv(context, light, pname, params))
+        if (context->skipValidation() || ValidateGetLightfv(context, light, pnamePacked, params))
         {
-            context->getLightfv(light, pname, params);
+            context->getLightfv(light, pnamePacked, params);
         }
     }
 }
 
 void GL_APIENTRY GetLightxv(GLenum light, GLenum pname, GLfixed *params)
 {
-    EVENT("(GLenum light = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%0.8p)", light, pname,
-          params);
+    EVENT("(GLenum light = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%0.8p)", light, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::GetLightxv>(light, pname, params);
+        LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
+        context->gatherParams<EntryPoint::GetLightxv>(light, pnamePacked, params);
 
-        if (context->skipValidation() || ValidateGetLightxv(context, light, pname, params))
+        if (context->skipValidation() || ValidateGetLightxv(context, light, pnamePacked, params))
         {
-            context->getLightxv(light, pname, params);
+            context->getLightxv(light, pnamePacked, params);
         }
     }
 }
 
 void GL_APIENTRY GetMaterialfv(GLenum face, GLenum pname, GLfloat *params)
 {
-    EVENT("(GLenum face = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)", face, pname,
-          params);
+    EVENT("(GLenum face = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)", face, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::GetMaterialfv>(face, pname, params);
+        MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
+        context->gatherParams<EntryPoint::GetMaterialfv>(face, pnamePacked, params);
 
-        if (context->skipValidation() || ValidateGetMaterialfv(context, face, pname, params))
+        if (context->skipValidation() || ValidateGetMaterialfv(context, face, pnamePacked, params))
         {
-            context->getMaterialfv(face, pname, params);
+            context->getMaterialfv(face, pnamePacked, params);
         }
     }
 }
 
 void GL_APIENTRY GetMaterialxv(GLenum face, GLenum pname, GLfixed *params)
 {
-    EVENT("(GLenum face = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%0.8p)", face, pname,
-          params);
+    EVENT("(GLenum face = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%0.8p)", face, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::GetMaterialxv>(face, pname, params);
+        MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
+        context->gatherParams<EntryPoint::GetMaterialxv>(face, pnamePacked, params);
 
-        if (context->skipValidation() || ValidateGetMaterialxv(context, face, pname, params))
+        if (context->skipValidation() || ValidateGetMaterialxv(context, face, pnamePacked, params))
         {
-            context->getMaterialxv(face, pname, params);
+            context->getMaterialxv(face, pnamePacked, params);
         }
     }
 }
@@ -486,8 +475,7 @@ void GL_APIENTRY GetPointerv(GLenum pname, void **params)
 
 void GL_APIENTRY GetTexEnvfv(GLenum target, GLenum pname, GLfloat *params)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)", target, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -503,8 +491,7 @@ void GL_APIENTRY GetTexEnvfv(GLenum target, GLenum pname, GLfloat *params)
 
 void GL_APIENTRY GetTexEnviv(GLenum target, GLenum pname, GLint *params)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", target, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -520,8 +507,7 @@ void GL_APIENTRY GetTexEnviv(GLenum target, GLenum pname, GLint *params)
 
 void GL_APIENTRY GetTexEnvxv(GLenum target, GLenum pname, GLfixed *params)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%0.8p)", target, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -537,8 +523,7 @@ void GL_APIENTRY GetTexEnvxv(GLenum target, GLenum pname, GLfixed *params)
 
 void GL_APIENTRY GetTexParameterxv(GLenum target, GLenum pname, GLfixed *params)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%0.8p)", target, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -546,8 +531,7 @@ void GL_APIENTRY GetTexParameterxv(GLenum target, GLenum pname, GLfixed *params)
         TextureType targetPacked = FromGLenum<TextureType>(target);
         context->gatherParams<EntryPoint::GetTexParameterxv>(targetPacked, pname, params);
 
-        if (context->skipValidation() ||
-            ValidateGetTexParameterxv(context, targetPacked, pname, params))
+        if (context->skipValidation() || ValidateGetTexParameterxv(context, targetPacked, pname, params))
         {
             context->getTexParameterxv(targetPacked, pname, params);
         }
@@ -625,28 +609,29 @@ void GL_APIENTRY Lightf(GLenum light, GLenum pname, GLfloat param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Lightf>(light, pname, param);
+        LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
+        context->gatherParams<EntryPoint::Lightf>(light, pnamePacked, param);
 
-        if (context->skipValidation() || ValidateLightf(context, light, pname, param))
+        if (context->skipValidation() || ValidateLightf(context, light, pnamePacked, param))
         {
-            context->lightf(light, pname, param);
+            context->lightf(light, pnamePacked, param);
         }
     }
 }
 
 void GL_APIENTRY Lightfv(GLenum light, GLenum pname, const GLfloat *params)
 {
-    EVENT("(GLenum light = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%0.8p)", light,
-          pname, params);
+    EVENT("(GLenum light = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%0.8p)", light, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Lightfv>(light, pname, params);
+        LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
+        context->gatherParams<EntryPoint::Lightfv>(light, pnamePacked, params);
 
-        if (context->skipValidation() || ValidateLightfv(context, light, pname, params))
+        if (context->skipValidation() || ValidateLightfv(context, light, pnamePacked, params))
         {
-            context->lightfv(light, pname, params);
+            context->lightfv(light, pnamePacked, params);
         }
     }
 }
@@ -658,28 +643,29 @@ void GL_APIENTRY Lightx(GLenum light, GLenum pname, GLfixed param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Lightx>(light, pname, param);
+        LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
+        context->gatherParams<EntryPoint::Lightx>(light, pnamePacked, param);
 
-        if (context->skipValidation() || ValidateLightx(context, light, pname, param))
+        if (context->skipValidation() || ValidateLightx(context, light, pnamePacked, param))
         {
-            context->lightx(light, pname, param);
+            context->lightx(light, pnamePacked, param);
         }
     }
 }
 
 void GL_APIENTRY Lightxv(GLenum light, GLenum pname, const GLfixed *params)
 {
-    EVENT("(GLenum light = 0x%X, GLenum pname = 0x%X, const GLfixed *params = 0x%0.8p)", light,
-          pname, params);
+    EVENT("(GLenum light = 0x%X, GLenum pname = 0x%X, const GLfixed *params = 0x%0.8p)", light, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Lightxv>(light, pname, params);
+        LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
+        context->gatherParams<EntryPoint::Lightxv>(light, pnamePacked, params);
 
-        if (context->skipValidation() || ValidateLightxv(context, light, pname, params))
+        if (context->skipValidation() || ValidateLightxv(context, light, pnamePacked, params))
         {
-            context->lightxv(light, pname, params);
+            context->lightxv(light, pnamePacked, params);
         }
     }
 }
@@ -771,28 +757,29 @@ void GL_APIENTRY Materialf(GLenum face, GLenum pname, GLfloat param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Materialf>(face, pname, param);
+        MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
+        context->gatherParams<EntryPoint::Materialf>(face, pnamePacked, param);
 
-        if (context->skipValidation() || ValidateMaterialf(context, face, pname, param))
+        if (context->skipValidation() || ValidateMaterialf(context, face, pnamePacked, param))
         {
-            context->materialf(face, pname, param);
+            context->materialf(face, pnamePacked, param);
         }
     }
 }
 
 void GL_APIENTRY Materialfv(GLenum face, GLenum pname, const GLfloat *params)
 {
-    EVENT("(GLenum face = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%0.8p)", face, pname,
-          params);
+    EVENT("(GLenum face = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%0.8p)", face, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Materialfv>(face, pname, params);
+        MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
+        context->gatherParams<EntryPoint::Materialfv>(face, pnamePacked, params);
 
-        if (context->skipValidation() || ValidateMaterialfv(context, face, pname, params))
+        if (context->skipValidation() || ValidateMaterialfv(context, face, pnamePacked, params))
         {
-            context->materialfv(face, pname, params);
+            context->materialfv(face, pnamePacked, params);
         }
     }
 }
@@ -804,28 +791,29 @@ void GL_APIENTRY Materialx(GLenum face, GLenum pname, GLfixed param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Materialx>(face, pname, param);
+        MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
+        context->gatherParams<EntryPoint::Materialx>(face, pnamePacked, param);
 
-        if (context->skipValidation() || ValidateMaterialx(context, face, pname, param))
+        if (context->skipValidation() || ValidateMaterialx(context, face, pnamePacked, param))
         {
-            context->materialx(face, pname, param);
+            context->materialx(face, pnamePacked, param);
         }
     }
 }
 
 void GL_APIENTRY Materialxv(GLenum face, GLenum pname, const GLfixed *param)
 {
-    EVENT("(GLenum face = 0x%X, GLenum pname = 0x%X, const GLfixed *param = 0x%0.8p)", face, pname,
-          param);
+    EVENT("(GLenum face = 0x%X, GLenum pname = 0x%X, const GLfixed *param = 0x%0.8p)", face, pname, param);
 
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Materialxv>(face, pname, param);
+        MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
+        context->gatherParams<EntryPoint::Materialxv>(face, pnamePacked, param);
 
-        if (context->skipValidation() || ValidateMaterialxv(context, face, pname, param))
+        if (context->skipValidation() || ValidateMaterialxv(context, face, pnamePacked, param))
         {
-            context->materialxv(face, pname, param);
+            context->materialxv(face, pnamePacked, param);
         }
     }
 }
@@ -881,8 +869,7 @@ void GL_APIENTRY MultMatrixx(const GLfixed *m)
 
 void GL_APIENTRY MultiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q)
 {
-    EVENT("(GLenum target = 0x%X, GLfloat s = %f, GLfloat t = %f, GLfloat r = %f, GLfloat q = %f)",
-          target, s, t, r, q);
+    EVENT("(GLenum target = 0x%X, GLfloat s = %f, GLfloat t = %f, GLfloat r = %f, GLfloat q = %f)", target, s, t, r, q);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -898,10 +885,7 @@ void GL_APIENTRY MultiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r,
 
 void GL_APIENTRY MultiTexCoord4x(GLenum texture, GLfixed s, GLfixed t, GLfixed r, GLfixed q)
 {
-    EVENT(
-        "(GLenum texture = 0x%X, GLfixed s = 0x%X, GLfixed t = 0x%X, GLfixed r = 0x%X, GLfixed q = "
-        "0x%X)",
-        texture, s, t, r, q);
+    EVENT("(GLenum texture = 0x%X, GLfixed s = 0x%X, GLfixed t = 0x%X, GLfixed r = 0x%X, GLfixed q = 0x%X)", texture, s, t, r, q);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -949,8 +933,7 @@ void GL_APIENTRY Normal3x(GLfixed nx, GLfixed ny, GLfixed nz)
 
 void GL_APIENTRY NormalPointer(GLenum type, GLsizei stride, const void *pointer)
 {
-    EVENT("(GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)", type, stride,
-          pointer);
+    EVENT("(GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)", type, stride, pointer);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -966,10 +949,7 @@ void GL_APIENTRY NormalPointer(GLenum type, GLsizei stride, const void *pointer)
 
 void GL_APIENTRY Orthof(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f)
 {
-    EVENT(
-        "(GLfloat l = %f, GLfloat r = %f, GLfloat b = %f, GLfloat t = %f, GLfloat n = %f, GLfloat "
-        "f = %f)",
-        l, r, b, t, n, f);
+    EVENT("(GLfloat l = %f, GLfloat r = %f, GLfloat b = %f, GLfloat t = %f, GLfloat n = %f, GLfloat f = %f)", l, r, b, t, n, f);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -985,10 +965,7 @@ void GL_APIENTRY Orthof(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, G
 
 void GL_APIENTRY Orthox(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f)
 {
-    EVENT(
-        "(GLfixed l = 0x%X, GLfixed r = 0x%X, GLfixed b = 0x%X, GLfixed t = 0x%X, GLfixed n = "
-        "0x%X, GLfixed f = 0x%X)",
-        l, r, b, t, n, f);
+    EVENT("(GLfixed l = 0x%X, GLfixed r = 0x%X, GLfixed b = 0x%X, GLfixed t = 0x%X, GLfixed n = 0x%X, GLfixed f = 0x%X)", l, r, b, t, n, f);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1164,8 +1141,7 @@ void GL_APIENTRY Rotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 
 void GL_APIENTRY Rotatex(GLfixed angle, GLfixed x, GLfixed y, GLfixed z)
 {
-    EVENT("(GLfixed angle = 0x%X, GLfixed x = 0x%X, GLfixed y = 0x%X, GLfixed z = 0x%X)", angle, x,
-          y, z);
+    EVENT("(GLfixed angle = 0x%X, GLfixed x = 0x%X, GLfixed y = 0x%X, GLfixed z = 0x%X)", angle, x, y, z);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1245,17 +1221,14 @@ void GL_APIENTRY ShadeModel(GLenum mode)
 
 void GL_APIENTRY TexCoordPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
 {
-    EVENT(
-        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)",
-        size, type, stride, pointer);
+    EVENT("(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)", size, type, stride, pointer);
 
     Context *context = GetValidGlobalContext();
     if (context)
     {
         context->gatherParams<EntryPoint::TexCoordPointer>(size, type, stride, pointer);
 
-        if (context->skipValidation() ||
-            ValidateTexCoordPointer(context, size, type, stride, pointer))
+        if (context->skipValidation() || ValidateTexCoordPointer(context, size, type, stride, pointer))
         {
             context->texCoordPointer(size, type, stride, pointer);
         }
@@ -1280,8 +1253,7 @@ void GL_APIENTRY TexEnvf(GLenum target, GLenum pname, GLfloat param)
 
 void GL_APIENTRY TexEnvfv(GLenum target, GLenum pname, const GLfloat *params)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%0.8p)", target,
-          pname, params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%0.8p)", target, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1313,8 +1285,7 @@ void GL_APIENTRY TexEnvi(GLenum target, GLenum pname, GLint param)
 
 void GL_APIENTRY TexEnviv(GLenum target, GLenum pname, const GLint *params)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLint *params = 0x%0.8p)", target,
-          pname, params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLint *params = 0x%0.8p)", target, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1330,8 +1301,7 @@ void GL_APIENTRY TexEnviv(GLenum target, GLenum pname, const GLint *params)
 
 void GL_APIENTRY TexEnvx(GLenum target, GLenum pname, GLfixed param)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfixed param = 0x%X)", target, pname,
-          param);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfixed param = 0x%X)", target, pname, param);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1347,8 +1317,7 @@ void GL_APIENTRY TexEnvx(GLenum target, GLenum pname, GLfixed param)
 
 void GL_APIENTRY TexEnvxv(GLenum target, GLenum pname, const GLfixed *params)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLfixed *params = 0x%0.8p)", target,
-          pname, params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLfixed *params = 0x%0.8p)", target, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1364,8 +1333,7 @@ void GL_APIENTRY TexEnvxv(GLenum target, GLenum pname, const GLfixed *params)
 
 void GL_APIENTRY TexParameterx(GLenum target, GLenum pname, GLfixed param)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfixed param = 0x%X)", target, pname,
-          param);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfixed param = 0x%X)", target, pname, param);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1382,8 +1350,7 @@ void GL_APIENTRY TexParameterx(GLenum target, GLenum pname, GLfixed param)
 
 void GL_APIENTRY TexParameterxv(GLenum target, GLenum pname, const GLfixed *params)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLfixed *params = 0x%0.8p)", target,
-          pname, params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLfixed *params = 0x%0.8p)", target, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1391,8 +1358,7 @@ void GL_APIENTRY TexParameterxv(GLenum target, GLenum pname, const GLfixed *para
         TextureType targetPacked = FromGLenum<TextureType>(target);
         context->gatherParams<EntryPoint::TexParameterxv>(targetPacked, pname, params);
 
-        if (context->skipValidation() ||
-            ValidateTexParameterxv(context, targetPacked, pname, params))
+        if (context->skipValidation() || ValidateTexParameterxv(context, targetPacked, pname, params))
         {
             context->texParameterxv(targetPacked, pname, params);
         }
@@ -1433,17 +1399,14 @@ void GL_APIENTRY Translatex(GLfixed x, GLfixed y, GLfixed z)
 
 void GL_APIENTRY VertexPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
 {
-    EVENT(
-        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)",
-        size, type, stride, pointer);
+    EVENT("(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)", size, type, stride, pointer);
 
     Context *context = GetValidGlobalContext();
     if (context)
     {
         context->gatherParams<EntryPoint::VertexPointer>(size, type, stride, pointer);
 
-        if (context->skipValidation() ||
-            ValidateVertexPointer(context, size, type, stride, pointer))
+        if (context->skipValidation() || ValidateVertexPointer(context, size, type, stride, pointer))
         {
             context->vertexPointer(size, type, stride, pointer);
         }

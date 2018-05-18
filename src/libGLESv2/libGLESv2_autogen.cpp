@@ -7,6 +7,7 @@
 //
 // libGLESv2.cpp: Implements the exported OpenGL ES functions.
 
+
 #include "angle_gl.h"
 
 #include "libGLESv2/entry_points_gles_1_0_autogen.h"
@@ -75,10 +76,7 @@ void GL_APIENTRY glBlendFunc(GLenum sfactor, GLenum dfactor)
     return gl::BlendFunc(sfactor, dfactor);
 }
 
-void GL_APIENTRY glBlendFuncSeparate(GLenum sfactorRGB,
-                                     GLenum dfactorRGB,
-                                     GLenum sfactorAlpha,
-                                     GLenum dfactorAlpha)
+void GL_APIENTRY glBlendFuncSeparate(GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha)
 {
     return gl::BlendFuncSeparate(sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
 }
@@ -128,53 +126,22 @@ void GL_APIENTRY glCompileShader(GLuint shader)
     return gl::CompileShader(shader);
 }
 
-void GL_APIENTRY glCompressedTexImage2D(GLenum target,
-                                        GLint level,
-                                        GLenum internalformat,
-                                        GLsizei width,
-                                        GLsizei height,
-                                        GLint border,
-                                        GLsizei imageSize,
-                                        const void *data)
+void GL_APIENTRY glCompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const void *data)
 {
-    return gl::CompressedTexImage2D(target, level, internalformat, width, height, border, imageSize,
-                                    data);
+    return gl::CompressedTexImage2D(target, level, internalformat, width, height, border, imageSize, data);
 }
 
-void GL_APIENTRY glCompressedTexSubImage2D(GLenum target,
-                                           GLint level,
-                                           GLint xoffset,
-                                           GLint yoffset,
-                                           GLsizei width,
-                                           GLsizei height,
-                                           GLenum format,
-                                           GLsizei imageSize,
-                                           const void *data)
+void GL_APIENTRY glCompressedTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const void *data)
 {
-    return gl::CompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format,
-                                       imageSize, data);
+    return gl::CompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, imageSize, data);
 }
 
-void GL_APIENTRY glCopyTexImage2D(GLenum target,
-                                  GLint level,
-                                  GLenum internalformat,
-                                  GLint x,
-                                  GLint y,
-                                  GLsizei width,
-                                  GLsizei height,
-                                  GLint border)
+void GL_APIENTRY glCopyTexImage2D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border)
 {
     return gl::CopyTexImage2D(target, level, internalformat, x, y, width, height, border);
 }
 
-void GL_APIENTRY glCopyTexSubImage2D(GLenum target,
-                                     GLint level,
-                                     GLint xoffset,
-                                     GLint yoffset,
-                                     GLint x,
-                                     GLint y,
-                                     GLsizei width,
-                                     GLsizei height)
+void GL_APIENTRY glCopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height)
 {
     return gl::CopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
 }
@@ -284,19 +251,12 @@ void GL_APIENTRY glFlush()
     return gl::Flush();
 }
 
-void GL_APIENTRY glFramebufferRenderbuffer(GLenum target,
-                                           GLenum attachment,
-                                           GLenum renderbuffertarget,
-                                           GLuint renderbuffer)
+void GL_APIENTRY glFramebufferRenderbuffer(GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer)
 {
     return gl::FramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
 }
 
-void GL_APIENTRY glFramebufferTexture2D(GLenum target,
-                                        GLenum attachment,
-                                        GLenum textarget,
-                                        GLuint texture,
-                                        GLint level)
+void GL_APIENTRY glFramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
 {
     return gl::FramebufferTexture2D(target, attachment, textarget, texture, level);
 }
@@ -331,32 +291,17 @@ void GL_APIENTRY glGenerateMipmap(GLenum target)
     return gl::GenerateMipmap(target);
 }
 
-void GL_APIENTRY glGetActiveAttrib(GLuint program,
-                                   GLuint index,
-                                   GLsizei bufSize,
-                                   GLsizei *length,
-                                   GLint *size,
-                                   GLenum *type,
-                                   GLchar *name)
+void GL_APIENTRY glGetActiveAttrib(GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name)
 {
     return gl::GetActiveAttrib(program, index, bufSize, length, size, type, name);
 }
 
-void GL_APIENTRY glGetActiveUniform(GLuint program,
-                                    GLuint index,
-                                    GLsizei bufSize,
-                                    GLsizei *length,
-                                    GLint *size,
-                                    GLenum *type,
-                                    GLchar *name)
+void GL_APIENTRY glGetActiveUniform(GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name)
 {
     return gl::GetActiveUniform(program, index, bufSize, length, size, type, name);
 }
 
-void GL_APIENTRY glGetAttachedShaders(GLuint program,
-                                      GLsizei maxCount,
-                                      GLsizei *count,
-                                      GLuint *shaders)
+void GL_APIENTRY glGetAttachedShaders(GLuint program, GLsizei maxCount, GLsizei *count, GLuint *shaders)
 {
     return gl::GetAttachedShaders(program, maxCount, count, shaders);
 }
@@ -386,10 +331,7 @@ void GL_APIENTRY glGetFloatv(GLenum pname, GLfloat *data)
     return gl::GetFloatv(pname, data);
 }
 
-void GL_APIENTRY glGetFramebufferAttachmentParameteriv(GLenum target,
-                                                       GLenum attachment,
-                                                       GLenum pname,
-                                                       GLint *params)
+void GL_APIENTRY glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attachment, GLenum pname, GLint *params)
 {
     return gl::GetFramebufferAttachmentParameteriv(target, attachment, pname, params);
 }
@@ -399,10 +341,7 @@ void GL_APIENTRY glGetIntegerv(GLenum pname, GLint *data)
     return gl::GetIntegerv(pname, data);
 }
 
-void GL_APIENTRY glGetProgramInfoLog(GLuint program,
-                                     GLsizei bufSize,
-                                     GLsizei *length,
-                                     GLchar *infoLog)
+void GL_APIENTRY glGetProgramInfoLog(GLuint program, GLsizei bufSize, GLsizei *length, GLchar *infoLog)
 {
     return gl::GetProgramInfoLog(program, bufSize, length, infoLog);
 }
@@ -417,18 +356,12 @@ void GL_APIENTRY glGetRenderbufferParameteriv(GLenum target, GLenum pname, GLint
     return gl::GetRenderbufferParameteriv(target, pname, params);
 }
 
-void GL_APIENTRY glGetShaderInfoLog(GLuint shader,
-                                    GLsizei bufSize,
-                                    GLsizei *length,
-                                    GLchar *infoLog)
+void GL_APIENTRY glGetShaderInfoLog(GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *infoLog)
 {
     return gl::GetShaderInfoLog(shader, bufSize, length, infoLog);
 }
 
-void GL_APIENTRY glGetShaderPrecisionFormat(GLenum shadertype,
-                                            GLenum precisiontype,
-                                            GLint *range,
-                                            GLint *precision)
+void GL_APIENTRY glGetShaderPrecisionFormat(GLenum shadertype, GLenum precisiontype, GLint *range, GLint *precision)
 {
     return gl::GetShaderPrecisionFormat(shadertype, precisiontype, range, precision);
 }
@@ -548,13 +481,7 @@ void GL_APIENTRY glPolygonOffset(GLfloat factor, GLfloat units)
     return gl::PolygonOffset(factor, units);
 }
 
-void GL_APIENTRY glReadPixels(GLint x,
-                              GLint y,
-                              GLsizei width,
-                              GLsizei height,
-                              GLenum format,
-                              GLenum type,
-                              void *pixels)
+void GL_APIENTRY glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, void *pixels)
 {
     return gl::ReadPixels(x, y, width, height, format, type, pixels);
 }
@@ -564,10 +491,7 @@ void GL_APIENTRY glReleaseShaderCompiler()
     return gl::ReleaseShaderCompiler();
 }
 
-void GL_APIENTRY glRenderbufferStorage(GLenum target,
-                                       GLenum internalformat,
-                                       GLsizei width,
-                                       GLsizei height)
+void GL_APIENTRY glRenderbufferStorage(GLenum target, GLenum internalformat, GLsizei width, GLsizei height)
 {
     return gl::RenderbufferStorage(target, internalformat, width, height);
 }
@@ -582,19 +506,12 @@ void GL_APIENTRY glScissor(GLint x, GLint y, GLsizei width, GLsizei height)
     return gl::Scissor(x, y, width, height);
 }
 
-void GL_APIENTRY glShaderBinary(GLsizei count,
-                                const GLuint *shaders,
-                                GLenum binaryformat,
-                                const void *binary,
-                                GLsizei length)
+void GL_APIENTRY glShaderBinary(GLsizei count, const GLuint *shaders, GLenum binaryformat, const void *binary, GLsizei length)
 {
     return gl::ShaderBinary(count, shaders, binaryformat, binary, length);
 }
 
-void GL_APIENTRY glShaderSource(GLuint shader,
-                                GLsizei count,
-                                const GLchar *const *string,
-                                const GLint *length)
+void GL_APIENTRY glShaderSource(GLuint shader, GLsizei count, const GLchar *const*string, const GLint *length)
 {
     return gl::ShaderSource(shader, count, string, length);
 }
@@ -629,18 +546,9 @@ void GL_APIENTRY glStencilOpSeparate(GLenum face, GLenum sfail, GLenum dpfail, G
     return gl::StencilOpSeparate(face, sfail, dpfail, dppass);
 }
 
-void GL_APIENTRY glTexImage2D(GLenum target,
-                              GLint level,
-                              GLint internalformat,
-                              GLsizei width,
-                              GLsizei height,
-                              GLint border,
-                              GLenum format,
-                              GLenum type,
-                              const void *pixels)
+void GL_APIENTRY glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const void *pixels)
 {
-    return gl::TexImage2D(target, level, internalformat, width, height, border, format, type,
-                          pixels);
+    return gl::TexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 }
 
 void GL_APIENTRY glTexParameterf(GLenum target, GLenum pname, GLfloat param)
@@ -663,15 +571,7 @@ void GL_APIENTRY glTexParameteriv(GLenum target, GLenum pname, const GLint *para
     return gl::TexParameteriv(target, pname, params);
 }
 
-void GL_APIENTRY glTexSubImage2D(GLenum target,
-                                 GLint level,
-                                 GLint xoffset,
-                                 GLint yoffset,
-                                 GLsizei width,
-                                 GLsizei height,
-                                 GLenum format,
-                                 GLenum type,
-                                 const void *pixels)
+void GL_APIENTRY glTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const void *pixels)
 {
     return gl::TexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 }
@@ -756,26 +656,17 @@ void GL_APIENTRY glUniform4iv(GLint location, GLsizei count, const GLint *value)
     return gl::Uniform4iv(location, count, value);
 }
 
-void GL_APIENTRY glUniformMatrix2fv(GLint location,
-                                    GLsizei count,
-                                    GLboolean transpose,
-                                    const GLfloat *value)
+void GL_APIENTRY glUniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::UniformMatrix2fv(location, count, transpose, value);
 }
 
-void GL_APIENTRY glUniformMatrix3fv(GLint location,
-                                    GLsizei count,
-                                    GLboolean transpose,
-                                    const GLfloat *value)
+void GL_APIENTRY glUniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::UniformMatrix3fv(location, count, transpose, value);
 }
 
-void GL_APIENTRY glUniformMatrix4fv(GLint location,
-                                    GLsizei count,
-                                    GLboolean transpose,
-                                    const GLfloat *value)
+void GL_APIENTRY glUniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::UniformMatrix4fv(location, count, transpose, value);
 }
@@ -830,12 +721,7 @@ void GL_APIENTRY glVertexAttrib4fv(GLuint index, const GLfloat *v)
     return gl::VertexAttrib4fv(index, v);
 }
 
-void GL_APIENTRY glVertexAttribPointer(GLuint index,
-                                       GLint size,
-                                       GLenum type,
-                                       GLboolean normalized,
-                                       GLsizei stride,
-                                       const void *pointer)
+void GL_APIENTRY glVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer)
 {
     return gl::VertexAttribPointer(index, size, type, normalized, stride, pointer);
 }
@@ -844,6 +730,7 @@ void GL_APIENTRY glViewport(GLint x, GLint y, GLsizei width, GLsizei height)
 {
     return gl::Viewport(x, y, width, height);
 }
+
 
 // OpenGL ES 3.0
 void GL_APIENTRY glBeginQuery(GLenum target, GLuint id)
@@ -861,8 +748,7 @@ void GL_APIENTRY glBindBufferBase(GLenum target, GLuint index, GLuint buffer)
     return gl::BindBufferBase(target, index, buffer);
 }
 
-void GL_APIENTRY
-glBindBufferRange(GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size)
+void GL_APIENTRY glBindBufferRange(GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size)
 {
     return gl::BindBufferRange(target, index, buffer, offset, size);
 }
@@ -882,19 +768,9 @@ void GL_APIENTRY glBindVertexArray(GLuint array)
     return gl::BindVertexArray(array);
 }
 
-void GL_APIENTRY glBlitFramebuffer(GLint srcX0,
-                                   GLint srcY0,
-                                   GLint srcX1,
-                                   GLint srcY1,
-                                   GLint dstX0,
-                                   GLint dstY0,
-                                   GLint dstX1,
-                                   GLint dstY1,
-                                   GLbitfield mask,
-                                   GLenum filter)
+void GL_APIENTRY glBlitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter)
 {
-    return gl::BlitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask,
-                               filter);
+    return gl::BlitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask, filter);
 }
 
 void GL_APIENTRY glClearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil)
@@ -922,54 +798,22 @@ GLenum GL_APIENTRY glClientWaitSync(GLsync sync, GLbitfield flags, GLuint64 time
     return gl::ClientWaitSync(sync, flags, timeout);
 }
 
-void GL_APIENTRY glCompressedTexImage3D(GLenum target,
-                                        GLint level,
-                                        GLenum internalformat,
-                                        GLsizei width,
-                                        GLsizei height,
-                                        GLsizei depth,
-                                        GLint border,
-                                        GLsizei imageSize,
-                                        const void *data)
+void GL_APIENTRY glCompressedTexImage3D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, const void *data)
 {
-    return gl::CompressedTexImage3D(target, level, internalformat, width, height, depth, border,
-                                    imageSize, data);
+    return gl::CompressedTexImage3D(target, level, internalformat, width, height, depth, border, imageSize, data);
 }
 
-void GL_APIENTRY glCompressedTexSubImage3D(GLenum target,
-                                           GLint level,
-                                           GLint xoffset,
-                                           GLint yoffset,
-                                           GLint zoffset,
-                                           GLsizei width,
-                                           GLsizei height,
-                                           GLsizei depth,
-                                           GLenum format,
-                                           GLsizei imageSize,
-                                           const void *data)
+void GL_APIENTRY glCompressedTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const void *data)
 {
-    return gl::CompressedTexSubImage3D(target, level, xoffset, yoffset, zoffset, width, height,
-                                       depth, format, imageSize, data);
+    return gl::CompressedTexSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, data);
 }
 
-void GL_APIENTRY glCopyBufferSubData(GLenum readTarget,
-                                     GLenum writeTarget,
-                                     GLintptr readOffset,
-                                     GLintptr writeOffset,
-                                     GLsizeiptr size)
+void GL_APIENTRY glCopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size)
 {
     return gl::CopyBufferSubData(readTarget, writeTarget, readOffset, writeOffset, size);
 }
 
-void GL_APIENTRY glCopyTexSubImage3D(GLenum target,
-                                     GLint level,
-                                     GLint xoffset,
-                                     GLint yoffset,
-                                     GLint zoffset,
-                                     GLint x,
-                                     GLint y,
-                                     GLsizei width,
-                                     GLsizei height)
+void GL_APIENTRY glCopyTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height)
 {
     return gl::CopyTexSubImage3D(target, level, xoffset, yoffset, zoffset, x, y, width, height);
 }
@@ -999,10 +843,7 @@ void GL_APIENTRY glDeleteVertexArrays(GLsizei n, const GLuint *arrays)
     return gl::DeleteVertexArrays(n, arrays);
 }
 
-void GL_APIENTRY glDrawArraysInstanced(GLenum mode,
-                                       GLint first,
-                                       GLsizei count,
-                                       GLsizei instancecount)
+void GL_APIENTRY glDrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instancecount)
 {
     return gl::DrawArraysInstanced(mode, first, count, instancecount);
 }
@@ -1012,21 +853,12 @@ void GL_APIENTRY glDrawBuffers(GLsizei n, const GLenum *bufs)
     return gl::DrawBuffers(n, bufs);
 }
 
-void GL_APIENTRY glDrawElementsInstanced(GLenum mode,
-                                         GLsizei count,
-                                         GLenum type,
-                                         const void *indices,
-                                         GLsizei instancecount)
+void GL_APIENTRY glDrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei instancecount)
 {
     return gl::DrawElementsInstanced(mode, count, type, indices, instancecount);
 }
 
-void GL_APIENTRY glDrawRangeElements(GLenum mode,
-                                     GLuint start,
-                                     GLuint end,
-                                     GLsizei count,
-                                     GLenum type,
-                                     const void *indices)
+void GL_APIENTRY glDrawRangeElements(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const void *indices)
 {
     return gl::DrawRangeElements(mode, start, end, count, type, indices);
 }
@@ -1051,11 +883,7 @@ void GL_APIENTRY glFlushMappedBufferRange(GLenum target, GLintptr offset, GLsize
     return gl::FlushMappedBufferRange(target, offset, length);
 }
 
-void GL_APIENTRY glFramebufferTextureLayer(GLenum target,
-                                           GLenum attachment,
-                                           GLuint texture,
-                                           GLint level,
-                                           GLint layer)
+void GL_APIENTRY glFramebufferTextureLayer(GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer)
 {
     return gl::FramebufferTextureLayer(target, attachment, texture, level, layer);
 }
@@ -1080,29 +908,17 @@ void GL_APIENTRY glGenVertexArrays(GLsizei n, GLuint *arrays)
     return gl::GenVertexArrays(n, arrays);
 }
 
-void GL_APIENTRY glGetActiveUniformBlockName(GLuint program,
-                                             GLuint uniformBlockIndex,
-                                             GLsizei bufSize,
-                                             GLsizei *length,
-                                             GLchar *uniformBlockName)
+void GL_APIENTRY glGetActiveUniformBlockName(GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei *length, GLchar *uniformBlockName)
 {
-    return gl::GetActiveUniformBlockName(program, uniformBlockIndex, bufSize, length,
-                                         uniformBlockName);
+    return gl::GetActiveUniformBlockName(program, uniformBlockIndex, bufSize, length, uniformBlockName);
 }
 
-void GL_APIENTRY glGetActiveUniformBlockiv(GLuint program,
-                                           GLuint uniformBlockIndex,
-                                           GLenum pname,
-                                           GLint *params)
+void GL_APIENTRY glGetActiveUniformBlockiv(GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint *params)
 {
     return gl::GetActiveUniformBlockiv(program, uniformBlockIndex, pname, params);
 }
 
-void GL_APIENTRY glGetActiveUniformsiv(GLuint program,
-                                       GLsizei uniformCount,
-                                       const GLuint *uniformIndices,
-                                       GLenum pname,
-                                       GLint *params)
+void GL_APIENTRY glGetActiveUniformsiv(GLuint program, GLsizei uniformCount, const GLuint *uniformIndices, GLenum pname, GLint *params)
 {
     return gl::GetActiveUniformsiv(program, uniformCount, uniformIndices, pname, params);
 }
@@ -1137,20 +953,12 @@ void GL_APIENTRY glGetIntegeri_v(GLenum target, GLuint index, GLint *data)
     return gl::GetIntegeri_v(target, index, data);
 }
 
-void GL_APIENTRY glGetInternalformativ(GLenum target,
-                                       GLenum internalformat,
-                                       GLenum pname,
-                                       GLsizei bufSize,
-                                       GLint *params)
+void GL_APIENTRY glGetInternalformativ(GLenum target, GLenum internalformat, GLenum pname, GLsizei bufSize, GLint *params)
 {
     return gl::GetInternalformativ(target, internalformat, pname, bufSize, params);
 }
 
-void GL_APIENTRY glGetProgramBinary(GLuint program,
-                                    GLsizei bufSize,
-                                    GLsizei *length,
-                                    GLenum *binaryFormat,
-                                    void *binary)
+void GL_APIENTRY glGetProgramBinary(GLuint program, GLsizei bufSize, GLsizei *length, GLenum *binaryFormat, void *binary)
 {
     return gl::GetProgramBinary(program, bufSize, length, binaryFormat, binary);
 }
@@ -1180,19 +988,12 @@ const GLubyte *GL_APIENTRY glGetStringi(GLenum name, GLuint index)
     return gl::GetStringi(name, index);
 }
 
-void GL_APIENTRY
-glGetSynciv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values)
+void GL_APIENTRY glGetSynciv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values)
 {
     return gl::GetSynciv(sync, pname, bufSize, length, values);
 }
 
-void GL_APIENTRY glGetTransformFeedbackVarying(GLuint program,
-                                               GLuint index,
-                                               GLsizei bufSize,
-                                               GLsizei *length,
-                                               GLsizei *size,
-                                               GLenum *type,
-                                               GLchar *name)
+void GL_APIENTRY glGetTransformFeedbackVarying(GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLsizei *size, GLenum *type, GLchar *name)
 {
     return gl::GetTransformFeedbackVarying(program, index, bufSize, length, size, type, name);
 }
@@ -1202,10 +1003,7 @@ GLuint GL_APIENTRY glGetUniformBlockIndex(GLuint program, const GLchar *uniformB
     return gl::GetUniformBlockIndex(program, uniformBlockName);
 }
 
-void GL_APIENTRY glGetUniformIndices(GLuint program,
-                                     GLsizei uniformCount,
-                                     const GLchar *const *uniformNames,
-                                     GLuint *uniformIndices)
+void GL_APIENTRY glGetUniformIndices(GLuint program, GLsizei uniformCount, const GLchar *const*uniformNames, GLuint *uniformIndices)
 {
     return gl::GetUniformIndices(program, uniformCount, uniformNames, uniformIndices);
 }
@@ -1225,20 +1023,12 @@ void GL_APIENTRY glGetVertexAttribIuiv(GLuint index, GLenum pname, GLuint *param
     return gl::GetVertexAttribIuiv(index, pname, params);
 }
 
-void GL_APIENTRY glInvalidateFramebuffer(GLenum target,
-                                         GLsizei numAttachments,
-                                         const GLenum *attachments)
+void GL_APIENTRY glInvalidateFramebuffer(GLenum target, GLsizei numAttachments, const GLenum *attachments)
 {
     return gl::InvalidateFramebuffer(target, numAttachments, attachments);
 }
 
-void GL_APIENTRY glInvalidateSubFramebuffer(GLenum target,
-                                            GLsizei numAttachments,
-                                            const GLenum *attachments,
-                                            GLint x,
-                                            GLint y,
-                                            GLsizei width,
-                                            GLsizei height)
+void GL_APIENTRY glInvalidateSubFramebuffer(GLenum target, GLsizei numAttachments, const GLenum *attachments, GLint x, GLint y, GLsizei width, GLsizei height)
 {
     return gl::InvalidateSubFramebuffer(target, numAttachments, attachments, x, y, width, height);
 }
@@ -1268,10 +1058,7 @@ GLboolean GL_APIENTRY glIsVertexArray(GLuint array)
     return gl::IsVertexArray(array);
 }
 
-void *GL_APIENTRY glMapBufferRange(GLenum target,
-                                   GLintptr offset,
-                                   GLsizeiptr length,
-                                   GLbitfield access)
+void *GL_APIENTRY glMapBufferRange(GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access)
 {
     return gl::MapBufferRange(target, offset, length, access);
 }
@@ -1281,10 +1068,7 @@ void GL_APIENTRY glPauseTransformFeedback()
     return gl::PauseTransformFeedback();
 }
 
-void GL_APIENTRY glProgramBinary(GLuint program,
-                                 GLenum binaryFormat,
-                                 const void *binary,
-                                 GLsizei length)
+void GL_APIENTRY glProgramBinary(GLuint program, GLenum binaryFormat, const void *binary, GLsizei length)
 {
     return gl::ProgramBinary(program, binaryFormat, binary, length);
 }
@@ -1299,11 +1083,7 @@ void GL_APIENTRY glReadBuffer(GLenum src)
     return gl::ReadBuffer(src);
 }
 
-void GL_APIENTRY glRenderbufferStorageMultisample(GLenum target,
-                                                  GLsizei samples,
-                                                  GLenum internalformat,
-                                                  GLsizei width,
-                                                  GLsizei height)
+void GL_APIENTRY glRenderbufferStorageMultisample(GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height)
 {
     return gl::RenderbufferStorageMultisample(target, samples, internalformat, width, height);
 }
@@ -1333,57 +1113,27 @@ void GL_APIENTRY glSamplerParameteriv(GLuint sampler, GLenum pname, const GLint 
     return gl::SamplerParameteriv(sampler, pname, param);
 }
 
-void GL_APIENTRY glTexImage3D(GLenum target,
-                              GLint level,
-                              GLint internalformat,
-                              GLsizei width,
-                              GLsizei height,
-                              GLsizei depth,
-                              GLint border,
-                              GLenum format,
-                              GLenum type,
-                              const void *pixels)
+void GL_APIENTRY glTexImage3D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const void *pixels)
 {
-    return gl::TexImage3D(target, level, internalformat, width, height, depth, border, format, type,
-                          pixels);
+    return gl::TexImage3D(target, level, internalformat, width, height, depth, border, format, type, pixels);
 }
 
-void GL_APIENTRY
-glTexStorage2D(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height)
+void GL_APIENTRY glTexStorage2D(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height)
 {
     return gl::TexStorage2D(target, levels, internalformat, width, height);
 }
 
-void GL_APIENTRY glTexStorage3D(GLenum target,
-                                GLsizei levels,
-                                GLenum internalformat,
-                                GLsizei width,
-                                GLsizei height,
-                                GLsizei depth)
+void GL_APIENTRY glTexStorage3D(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth)
 {
     return gl::TexStorage3D(target, levels, internalformat, width, height, depth);
 }
 
-void GL_APIENTRY glTexSubImage3D(GLenum target,
-                                 GLint level,
-                                 GLint xoffset,
-                                 GLint yoffset,
-                                 GLint zoffset,
-                                 GLsizei width,
-                                 GLsizei height,
-                                 GLsizei depth,
-                                 GLenum format,
-                                 GLenum type,
-                                 const void *pixels)
+void GL_APIENTRY glTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const void *pixels)
 {
-    return gl::TexSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth, format,
-                             type, pixels);
+    return gl::TexSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels);
 }
 
-void GL_APIENTRY glTransformFeedbackVaryings(GLuint program,
-                                             GLsizei count,
-                                             const GLchar *const *varyings,
-                                             GLenum bufferMode)
+void GL_APIENTRY glTransformFeedbackVaryings(GLuint program, GLsizei count, const GLchar *const*varyings, GLenum bufferMode)
 {
     return gl::TransformFeedbackVaryings(program, count, varyings, bufferMode);
 }
@@ -1428,57 +1178,37 @@ void GL_APIENTRY glUniform4uiv(GLint location, GLsizei count, const GLuint *valu
     return gl::Uniform4uiv(location, count, value);
 }
 
-void GL_APIENTRY glUniformBlockBinding(GLuint program,
-                                       GLuint uniformBlockIndex,
-                                       GLuint uniformBlockBinding)
+void GL_APIENTRY glUniformBlockBinding(GLuint program, GLuint uniformBlockIndex, GLuint uniformBlockBinding)
 {
     return gl::UniformBlockBinding(program, uniformBlockIndex, uniformBlockBinding);
 }
 
-void GL_APIENTRY glUniformMatrix2x3fv(GLint location,
-                                      GLsizei count,
-                                      GLboolean transpose,
-                                      const GLfloat *value)
+void GL_APIENTRY glUniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::UniformMatrix2x3fv(location, count, transpose, value);
 }
 
-void GL_APIENTRY glUniformMatrix2x4fv(GLint location,
-                                      GLsizei count,
-                                      GLboolean transpose,
-                                      const GLfloat *value)
+void GL_APIENTRY glUniformMatrix2x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::UniformMatrix2x4fv(location, count, transpose, value);
 }
 
-void GL_APIENTRY glUniformMatrix3x2fv(GLint location,
-                                      GLsizei count,
-                                      GLboolean transpose,
-                                      const GLfloat *value)
+void GL_APIENTRY glUniformMatrix3x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::UniformMatrix3x2fv(location, count, transpose, value);
 }
 
-void GL_APIENTRY glUniformMatrix3x4fv(GLint location,
-                                      GLsizei count,
-                                      GLboolean transpose,
-                                      const GLfloat *value)
+void GL_APIENTRY glUniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::UniformMatrix3x4fv(location, count, transpose, value);
 }
 
-void GL_APIENTRY glUniformMatrix4x2fv(GLint location,
-                                      GLsizei count,
-                                      GLboolean transpose,
-                                      const GLfloat *value)
+void GL_APIENTRY glUniformMatrix4x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::UniformMatrix4x2fv(location, count, transpose, value);
 }
 
-void GL_APIENTRY glUniformMatrix4x3fv(GLint location,
-                                      GLsizei count,
-                                      GLboolean transpose,
-                                      const GLfloat *value)
+void GL_APIENTRY glUniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::UniformMatrix4x3fv(location, count, transpose, value);
 }
@@ -1513,8 +1243,7 @@ void GL_APIENTRY glVertexAttribI4uiv(GLuint index, const GLuint *v)
     return gl::VertexAttribI4uiv(index, v);
 }
 
-void GL_APIENTRY
-glVertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const void *pointer)
+void GL_APIENTRY glVertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const void *pointer)
 {
     return gl::VertexAttribIPointer(index, size, type, stride, pointer);
 }
@@ -1524,19 +1253,14 @@ void GL_APIENTRY glWaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout)
     return gl::WaitSync(sync, flags, timeout);
 }
 
+
 // OpenGL ES 3.1
 void GL_APIENTRY glActiveShaderProgram(GLuint pipeline, GLuint program)
 {
     return gl::ActiveShaderProgram(pipeline, program);
 }
 
-void GL_APIENTRY glBindImageTexture(GLuint unit,
-                                    GLuint texture,
-                                    GLint level,
-                                    GLboolean layered,
-                                    GLint layer,
-                                    GLenum access,
-                                    GLenum format)
+void GL_APIENTRY glBindImageTexture(GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format)
 {
     return gl::BindImageTexture(unit, texture, level, layered, layer, access, format);
 }
@@ -1546,15 +1270,12 @@ void GL_APIENTRY glBindProgramPipeline(GLuint pipeline)
     return gl::BindProgramPipeline(pipeline);
 }
 
-void GL_APIENTRY glBindVertexBuffer(GLuint bindingindex,
-                                    GLuint buffer,
-                                    GLintptr offset,
-                                    GLsizei stride)
+void GL_APIENTRY glBindVertexBuffer(GLuint bindingindex, GLuint buffer, GLintptr offset, GLsizei stride)
 {
     return gl::BindVertexBuffer(bindingindex, buffer, offset, stride);
 }
 
-GLuint GL_APIENTRY glCreateShaderProgramv(GLenum type, GLsizei count, const GLchar *const *strings)
+GLuint GL_APIENTRY glCreateShaderProgramv(GLenum type, GLsizei count, const GLchar *const*strings)
 {
     return gl::CreateShaderProgramv(type, count, strings);
 }
@@ -1609,18 +1330,12 @@ void GL_APIENTRY glGetMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
     return gl::GetMultisamplefv(pname, index, val);
 }
 
-void GL_APIENTRY glGetProgramInterfaceiv(GLuint program,
-                                         GLenum programInterface,
-                                         GLenum pname,
-                                         GLint *params)
+void GL_APIENTRY glGetProgramInterfaceiv(GLuint program, GLenum programInterface, GLenum pname, GLint *params)
 {
     return gl::GetProgramInterfaceiv(program, programInterface, pname, params);
 }
 
-void GL_APIENTRY glGetProgramPipelineInfoLog(GLuint pipeline,
-                                             GLsizei bufSize,
-                                             GLsizei *length,
-                                             GLchar *infoLog)
+void GL_APIENTRY glGetProgramPipelineInfoLog(GLuint pipeline, GLsizei bufSize, GLsizei *length, GLchar *infoLog)
 {
     return gl::GetProgramPipelineInfoLog(pipeline, bufSize, length, infoLog);
 }
@@ -1630,41 +1345,24 @@ void GL_APIENTRY glGetProgramPipelineiv(GLuint pipeline, GLenum pname, GLint *pa
     return gl::GetProgramPipelineiv(pipeline, pname, params);
 }
 
-GLuint GL_APIENTRY glGetProgramResourceIndex(GLuint program,
-                                             GLenum programInterface,
-                                             const GLchar *name)
+GLuint GL_APIENTRY glGetProgramResourceIndex(GLuint program, GLenum programInterface, const GLchar *name)
 {
     return gl::GetProgramResourceIndex(program, programInterface, name);
 }
 
-GLint GL_APIENTRY glGetProgramResourceLocation(GLuint program,
-                                               GLenum programInterface,
-                                               const GLchar *name)
+GLint GL_APIENTRY glGetProgramResourceLocation(GLuint program, GLenum programInterface, const GLchar *name)
 {
     return gl::GetProgramResourceLocation(program, programInterface, name);
 }
 
-void GL_APIENTRY glGetProgramResourceName(GLuint program,
-                                          GLenum programInterface,
-                                          GLuint index,
-                                          GLsizei bufSize,
-                                          GLsizei *length,
-                                          GLchar *name)
+void GL_APIENTRY glGetProgramResourceName(GLuint program, GLenum programInterface, GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name)
 {
     return gl::GetProgramResourceName(program, programInterface, index, bufSize, length, name);
 }
 
-void GL_APIENTRY glGetProgramResourceiv(GLuint program,
-                                        GLenum programInterface,
-                                        GLuint index,
-                                        GLsizei propCount,
-                                        const GLenum *props,
-                                        GLsizei bufSize,
-                                        GLsizei *length,
-                                        GLint *params)
+void GL_APIENTRY glGetProgramResourceiv(GLuint program, GLenum programInterface, GLuint index, GLsizei propCount, const GLenum *props, GLsizei bufSize, GLsizei *length, GLint *params)
 {
-    return gl::GetProgramResourceiv(program, programInterface, index, propCount, props, bufSize,
-                                    length, params);
+    return gl::GetProgramResourceiv(program, programInterface, index, propCount, props, bufSize, length, params);
 }
 
 void GL_APIENTRY glGetTexLevelParameterfv(GLenum target, GLint level, GLenum pname, GLfloat *params)
@@ -1697,10 +1395,7 @@ void GL_APIENTRY glProgramUniform1f(GLuint program, GLint location, GLfloat v0)
     return gl::ProgramUniform1f(program, location, v0);
 }
 
-void GL_APIENTRY glProgramUniform1fv(GLuint program,
-                                     GLint location,
-                                     GLsizei count,
-                                     const GLfloat *value)
+void GL_APIENTRY glProgramUniform1fv(GLuint program, GLint location, GLsizei count, const GLfloat *value)
 {
     return gl::ProgramUniform1fv(program, location, count, value);
 }
@@ -1710,10 +1405,7 @@ void GL_APIENTRY glProgramUniform1i(GLuint program, GLint location, GLint v0)
     return gl::ProgramUniform1i(program, location, v0);
 }
 
-void GL_APIENTRY glProgramUniform1iv(GLuint program,
-                                     GLint location,
-                                     GLsizei count,
-                                     const GLint *value)
+void GL_APIENTRY glProgramUniform1iv(GLuint program, GLint location, GLsizei count, const GLint *value)
 {
     return gl::ProgramUniform1iv(program, location, count, value);
 }
@@ -1723,10 +1415,7 @@ void GL_APIENTRY glProgramUniform1ui(GLuint program, GLint location, GLuint v0)
     return gl::ProgramUniform1ui(program, location, v0);
 }
 
-void GL_APIENTRY glProgramUniform1uiv(GLuint program,
-                                      GLint location,
-                                      GLsizei count,
-                                      const GLuint *value)
+void GL_APIENTRY glProgramUniform1uiv(GLuint program, GLint location, GLsizei count, const GLuint *value)
 {
     return gl::ProgramUniform1uiv(program, location, count, value);
 }
@@ -1736,10 +1425,7 @@ void GL_APIENTRY glProgramUniform2f(GLuint program, GLint location, GLfloat v0, 
     return gl::ProgramUniform2f(program, location, v0, v1);
 }
 
-void GL_APIENTRY glProgramUniform2fv(GLuint program,
-                                     GLint location,
-                                     GLsizei count,
-                                     const GLfloat *value)
+void GL_APIENTRY glProgramUniform2fv(GLuint program, GLint location, GLsizei count, const GLfloat *value)
 {
     return gl::ProgramUniform2fv(program, location, count, value);
 }
@@ -1749,10 +1435,7 @@ void GL_APIENTRY glProgramUniform2i(GLuint program, GLint location, GLint v0, GL
     return gl::ProgramUniform2i(program, location, v0, v1);
 }
 
-void GL_APIENTRY glProgramUniform2iv(GLuint program,
-                                     GLint location,
-                                     GLsizei count,
-                                     const GLint *value)
+void GL_APIENTRY glProgramUniform2iv(GLuint program, GLint location, GLsizei count, const GLint *value)
 {
     return gl::ProgramUniform2iv(program, location, count, value);
 }
@@ -1762,24 +1445,17 @@ void GL_APIENTRY glProgramUniform2ui(GLuint program, GLint location, GLuint v0, 
     return gl::ProgramUniform2ui(program, location, v0, v1);
 }
 
-void GL_APIENTRY glProgramUniform2uiv(GLuint program,
-                                      GLint location,
-                                      GLsizei count,
-                                      const GLuint *value)
+void GL_APIENTRY glProgramUniform2uiv(GLuint program, GLint location, GLsizei count, const GLuint *value)
 {
     return gl::ProgramUniform2uiv(program, location, count, value);
 }
 
-void GL_APIENTRY
-glProgramUniform3f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2)
+void GL_APIENTRY glProgramUniform3f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2)
 {
     return gl::ProgramUniform3f(program, location, v0, v1, v2);
 }
 
-void GL_APIENTRY glProgramUniform3fv(GLuint program,
-                                     GLint location,
-                                     GLsizei count,
-                                     const GLfloat *value)
+void GL_APIENTRY glProgramUniform3fv(GLuint program, GLint location, GLsizei count, const GLfloat *value)
 {
     return gl::ProgramUniform3fv(program, location, count, value);
 }
@@ -1789,147 +1465,92 @@ void GL_APIENTRY glProgramUniform3i(GLuint program, GLint location, GLint v0, GL
     return gl::ProgramUniform3i(program, location, v0, v1, v2);
 }
 
-void GL_APIENTRY glProgramUniform3iv(GLuint program,
-                                     GLint location,
-                                     GLsizei count,
-                                     const GLint *value)
+void GL_APIENTRY glProgramUniform3iv(GLuint program, GLint location, GLsizei count, const GLint *value)
 {
     return gl::ProgramUniform3iv(program, location, count, value);
 }
 
-void GL_APIENTRY
-glProgramUniform3ui(GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2)
+void GL_APIENTRY glProgramUniform3ui(GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2)
 {
     return gl::ProgramUniform3ui(program, location, v0, v1, v2);
 }
 
-void GL_APIENTRY glProgramUniform3uiv(GLuint program,
-                                      GLint location,
-                                      GLsizei count,
-                                      const GLuint *value)
+void GL_APIENTRY glProgramUniform3uiv(GLuint program, GLint location, GLsizei count, const GLuint *value)
 {
     return gl::ProgramUniform3uiv(program, location, count, value);
 }
 
-void GL_APIENTRY
-glProgramUniform4f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
+void GL_APIENTRY glProgramUniform4f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
 {
     return gl::ProgramUniform4f(program, location, v0, v1, v2, v3);
 }
 
-void GL_APIENTRY glProgramUniform4fv(GLuint program,
-                                     GLint location,
-                                     GLsizei count,
-                                     const GLfloat *value)
+void GL_APIENTRY glProgramUniform4fv(GLuint program, GLint location, GLsizei count, const GLfloat *value)
 {
     return gl::ProgramUniform4fv(program, location, count, value);
 }
 
-void GL_APIENTRY
-glProgramUniform4i(GLuint program, GLint location, GLint v0, GLint v1, GLint v2, GLint v3)
+void GL_APIENTRY glProgramUniform4i(GLuint program, GLint location, GLint v0, GLint v1, GLint v2, GLint v3)
 {
     return gl::ProgramUniform4i(program, location, v0, v1, v2, v3);
 }
 
-void GL_APIENTRY glProgramUniform4iv(GLuint program,
-                                     GLint location,
-                                     GLsizei count,
-                                     const GLint *value)
+void GL_APIENTRY glProgramUniform4iv(GLuint program, GLint location, GLsizei count, const GLint *value)
 {
     return gl::ProgramUniform4iv(program, location, count, value);
 }
 
-void GL_APIENTRY
-glProgramUniform4ui(GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3)
+void GL_APIENTRY glProgramUniform4ui(GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3)
 {
     return gl::ProgramUniform4ui(program, location, v0, v1, v2, v3);
 }
 
-void GL_APIENTRY glProgramUniform4uiv(GLuint program,
-                                      GLint location,
-                                      GLsizei count,
-                                      const GLuint *value)
+void GL_APIENTRY glProgramUniform4uiv(GLuint program, GLint location, GLsizei count, const GLuint *value)
 {
     return gl::ProgramUniform4uiv(program, location, count, value);
 }
 
-void GL_APIENTRY glProgramUniformMatrix2fv(GLuint program,
-                                           GLint location,
-                                           GLsizei count,
-                                           GLboolean transpose,
-                                           const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix2fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::ProgramUniformMatrix2fv(program, location, count, transpose, value);
 }
 
-void GL_APIENTRY glProgramUniformMatrix2x3fv(GLuint program,
-                                             GLint location,
-                                             GLsizei count,
-                                             GLboolean transpose,
-                                             const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix2x3fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::ProgramUniformMatrix2x3fv(program, location, count, transpose, value);
 }
 
-void GL_APIENTRY glProgramUniformMatrix2x4fv(GLuint program,
-                                             GLint location,
-                                             GLsizei count,
-                                             GLboolean transpose,
-                                             const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix2x4fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::ProgramUniformMatrix2x4fv(program, location, count, transpose, value);
 }
 
-void GL_APIENTRY glProgramUniformMatrix3fv(GLuint program,
-                                           GLint location,
-                                           GLsizei count,
-                                           GLboolean transpose,
-                                           const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix3fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::ProgramUniformMatrix3fv(program, location, count, transpose, value);
 }
 
-void GL_APIENTRY glProgramUniformMatrix3x2fv(GLuint program,
-                                             GLint location,
-                                             GLsizei count,
-                                             GLboolean transpose,
-                                             const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix3x2fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::ProgramUniformMatrix3x2fv(program, location, count, transpose, value);
 }
 
-void GL_APIENTRY glProgramUniformMatrix3x4fv(GLuint program,
-                                             GLint location,
-                                             GLsizei count,
-                                             GLboolean transpose,
-                                             const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix3x4fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::ProgramUniformMatrix3x4fv(program, location, count, transpose, value);
 }
 
-void GL_APIENTRY glProgramUniformMatrix4fv(GLuint program,
-                                           GLint location,
-                                           GLsizei count,
-                                           GLboolean transpose,
-                                           const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix4fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::ProgramUniformMatrix4fv(program, location, count, transpose, value);
 }
 
-void GL_APIENTRY glProgramUniformMatrix4x2fv(GLuint program,
-                                             GLint location,
-                                             GLsizei count,
-                                             GLboolean transpose,
-                                             const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix4x2fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::ProgramUniformMatrix4x2fv(program, location, count, transpose, value);
 }
 
-void GL_APIENTRY glProgramUniformMatrix4x3fv(GLuint program,
-                                             GLint location,
-                                             GLsizei count,
-                                             GLboolean transpose,
-                                             const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix4x3fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     return gl::ProgramUniformMatrix4x3fv(program, location, count, transpose, value);
 }
@@ -1939,15 +1560,9 @@ void GL_APIENTRY glSampleMaski(GLuint maskNumber, GLbitfield mask)
     return gl::SampleMaski(maskNumber, mask);
 }
 
-void GL_APIENTRY glTexStorage2DMultisample(GLenum target,
-                                           GLsizei samples,
-                                           GLenum internalformat,
-                                           GLsizei width,
-                                           GLsizei height,
-                                           GLboolean fixedsamplelocations)
+void GL_APIENTRY glTexStorage2DMultisample(GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations)
 {
-    return gl::TexStorage2DMultisample(target, samples, internalformat, width, height,
-                                       fixedsamplelocations);
+    return gl::TexStorage2DMultisample(target, samples, internalformat, width, height, fixedsamplelocations);
 }
 
 void GL_APIENTRY glUseProgramStages(GLuint pipeline, GLbitfield stages, GLuint program)
@@ -1965,19 +1580,12 @@ void GL_APIENTRY glVertexAttribBinding(GLuint attribindex, GLuint bindingindex)
     return gl::VertexAttribBinding(attribindex, bindingindex);
 }
 
-void GL_APIENTRY glVertexAttribFormat(GLuint attribindex,
-                                      GLint size,
-                                      GLenum type,
-                                      GLboolean normalized,
-                                      GLuint relativeoffset)
+void GL_APIENTRY glVertexAttribFormat(GLuint attribindex, GLint size, GLenum type, GLboolean normalized, GLuint relativeoffset)
 {
     return gl::VertexAttribFormat(attribindex, size, type, normalized, relativeoffset);
 }
 
-void GL_APIENTRY glVertexAttribIFormat(GLuint attribindex,
-                                       GLint size,
-                                       GLenum type,
-                                       GLuint relativeoffset)
+void GL_APIENTRY glVertexAttribIFormat(GLuint attribindex, GLint size, GLenum type, GLuint relativeoffset)
 {
     return gl::VertexAttribIFormat(attribindex, size, type, relativeoffset);
 }
@@ -1986,6 +1594,7 @@ void GL_APIENTRY glVertexBindingDivisor(GLuint bindingindex, GLuint divisor)
 {
     return gl::VertexBindingDivisor(bindingindex, divisor);
 }
+
 
 // OpenGL ES 1.0
 void GL_APIENTRY glAlphaFunc(GLenum func, GLfloat ref)
@@ -2418,46 +2027,28 @@ void GL_APIENTRY glVertexPointer(GLint size, GLenum type, GLsizei stride, const 
     return gl::VertexPointer(size, type, stride, pointer);
 }
 
+
 // GL_ANGLE_framebuffer_blit
-void GL_APIENTRY glBlitFramebufferANGLE(GLint srcX0,
-                                        GLint srcY0,
-                                        GLint srcX1,
-                                        GLint srcY1,
-                                        GLint dstX0,
-                                        GLint dstY0,
-                                        GLint dstX1,
-                                        GLint dstY1,
-                                        GLbitfield mask,
-                                        GLenum filter)
+void GL_APIENTRY glBlitFramebufferANGLE(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter)
 {
-    return gl::BlitFramebufferANGLE(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask,
-                                    filter);
+    return gl::BlitFramebufferANGLE(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask, filter);
 }
 
+
 // GL_ANGLE_framebuffer_multisample
-void GL_APIENTRY glRenderbufferStorageMultisampleANGLE(GLenum target,
-                                                       GLsizei samples,
-                                                       GLenum internalformat,
-                                                       GLsizei width,
-                                                       GLsizei height)
+void GL_APIENTRY glRenderbufferStorageMultisampleANGLE(GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height)
 {
     return gl::RenderbufferStorageMultisampleANGLE(target, samples, internalformat, width, height);
 }
 
+
 // GL_ANGLE_instanced_arrays
-void GL_APIENTRY glDrawArraysInstancedANGLE(GLenum mode,
-                                            GLint first,
-                                            GLsizei count,
-                                            GLsizei primcount)
+void GL_APIENTRY glDrawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei count, GLsizei primcount)
 {
     return gl::DrawArraysInstancedANGLE(mode, first, count, primcount);
 }
 
-void GL_APIENTRY glDrawElementsInstancedANGLE(GLenum mode,
-                                              GLsizei count,
-                                              GLenum type,
-                                              const void *indices,
-                                              GLsizei primcount)
+void GL_APIENTRY glDrawElementsInstancedANGLE(GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei primcount)
 {
     return gl::DrawElementsInstancedANGLE(mode, count, type, indices, primcount);
 }
@@ -2467,689 +2058,361 @@ void GL_APIENTRY glVertexAttribDivisorANGLE(GLuint index, GLuint divisor)
     return gl::VertexAttribDivisorANGLE(index, divisor);
 }
 
+
 // GL_ANGLE_multiview
-void GL_APIENTRY glFramebufferTextureMultiviewLayeredANGLE(GLenum target,
-                                                           GLenum attachment,
-                                                           GLuint texture,
-                                                           GLint level,
-                                                           GLint baseViewIndex,
-                                                           GLsizei numViews)
+void GL_APIENTRY glFramebufferTextureMultiviewLayeredANGLE(GLenum target, GLenum attachment, GLuint texture, GLint level, GLint baseViewIndex, GLsizei numViews)
 {
-    return gl::FramebufferTextureMultiviewLayeredANGLE(target, attachment, texture, level,
-                                                       baseViewIndex, numViews);
+    return gl::FramebufferTextureMultiviewLayeredANGLE(target, attachment, texture, level, baseViewIndex, numViews);
 }
 
-void GL_APIENTRY glFramebufferTextureMultiviewSideBySideANGLE(GLenum target,
-                                                              GLenum attachment,
-                                                              GLuint texture,
-                                                              GLint level,
-                                                              GLsizei numViews,
-                                                              const GLint *viewportOffsets)
+void GL_APIENTRY glFramebufferTextureMultiviewSideBySideANGLE(GLenum target, GLenum attachment, GLuint texture, GLint level, GLsizei numViews, const GLint * viewportOffsets)
 {
-    return gl::FramebufferTextureMultiviewSideBySideANGLE(target, attachment, texture, level,
-                                                          numViews, viewportOffsets);
+    return gl::FramebufferTextureMultiviewSideBySideANGLE(target, attachment, texture, level, numViews, viewportOffsets);
 }
+
 
 // GL_ANGLE_request_extension
-void GL_APIENTRY glRequestExtensionANGLE(const GLchar *name)
+void GL_APIENTRY glRequestExtensionANGLE(const GLchar * name)
 {
     return gl::RequestExtensionANGLE(name);
 }
 
+
 // GL_ANGLE_robust_client_memory
-void GL_APIENTRY glGetBooleanvRobustANGLE(GLenum pname,
-                                          GLsizei bufSize,
-                                          GLsizei *length,
-                                          GLboolean *params)
+void GL_APIENTRY glGetBooleanvRobustANGLE(GLenum pname, GLsizei bufSize, GLsizei * length, GLboolean * params)
 {
     return gl::GetBooleanvRobustANGLE(pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetBufferParameterivRobustANGLE(GLenum target,
-                                                   GLenum pname,
-                                                   GLsizei bufSize,
-                                                   GLsizei *length,
-                                                   GLint *params)
+void GL_APIENTRY glGetBufferParameterivRobustANGLE(GLenum target, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
     return gl::GetBufferParameterivRobustANGLE(target, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetFloatvRobustANGLE(GLenum pname,
-                                        GLsizei bufSize,
-                                        GLsizei *length,
-                                        GLfloat *params)
+void GL_APIENTRY glGetFloatvRobustANGLE(GLenum pname, GLsizei bufSize, GLsizei * length, GLfloat * params)
 {
     return gl::GetFloatvRobustANGLE(pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetFramebufferAttachmentParameterivRobustANGLE(GLenum target,
-                                                                  GLenum attachment,
-                                                                  GLenum pname,
-                                                                  GLsizei bufSize,
-                                                                  GLsizei *length,
-                                                                  GLint *params)
+void GL_APIENTRY glGetFramebufferAttachmentParameterivRobustANGLE(GLenum target, GLenum attachment, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
-    return gl::GetFramebufferAttachmentParameterivRobustANGLE(target, attachment, pname, bufSize,
-                                                              length, params);
+    return gl::GetFramebufferAttachmentParameterivRobustANGLE(target, attachment, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetIntegervRobustANGLE(GLenum pname,
-                                          GLsizei bufSize,
-                                          GLsizei *length,
-                                          GLint *data)
+void GL_APIENTRY glGetIntegervRobustANGLE(GLenum pname, GLsizei bufSize, GLsizei * length, GLint * data)
 {
     return gl::GetIntegervRobustANGLE(pname, bufSize, length, data);
 }
 
-void GL_APIENTRY glGetProgramivRobustANGLE(GLuint program,
-                                           GLenum pname,
-                                           GLsizei bufSize,
-                                           GLsizei *length,
-                                           GLint *params)
+void GL_APIENTRY glGetProgramivRobustANGLE(GLuint program, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
     return gl::GetProgramivRobustANGLE(program, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetRenderbufferParameterivRobustANGLE(GLenum target,
-                                                         GLenum pname,
-                                                         GLsizei bufSize,
-                                                         GLsizei *length,
-                                                         GLint *params)
+void GL_APIENTRY glGetRenderbufferParameterivRobustANGLE(GLenum target, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
     return gl::GetRenderbufferParameterivRobustANGLE(target, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetShaderivRobustANGLE(GLuint shader,
-                                          GLenum pname,
-                                          GLsizei bufSize,
-                                          GLsizei *length,
-                                          GLint *params)
+void GL_APIENTRY glGetShaderivRobustANGLE(GLuint shader, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
     return gl::GetShaderivRobustANGLE(shader, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetTexParameterfvRobustANGLE(GLenum target,
-                                                GLenum pname,
-                                                GLsizei bufSize,
-                                                GLsizei *length,
-                                                GLfloat *params)
+void GL_APIENTRY glGetTexParameterfvRobustANGLE(GLenum target, GLenum pname, GLsizei bufSize, GLsizei * length, GLfloat * params)
 {
     return gl::GetTexParameterfvRobustANGLE(target, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetTexParameterivRobustANGLE(GLenum target,
-                                                GLenum pname,
-                                                GLsizei bufSize,
-                                                GLsizei *length,
-                                                GLint *params)
+void GL_APIENTRY glGetTexParameterivRobustANGLE(GLenum target, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
     return gl::GetTexParameterivRobustANGLE(target, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetUniformfvRobustANGLE(GLuint program,
-                                           GLint location,
-                                           GLsizei bufSize,
-                                           GLsizei *length,
-                                           GLfloat *params)
+void GL_APIENTRY glGetUniformfvRobustANGLE(GLuint program, GLint location, GLsizei bufSize, GLsizei * length, GLfloat * params)
 {
     return gl::GetUniformfvRobustANGLE(program, location, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetUniformivRobustANGLE(GLuint program,
-                                           GLint location,
-                                           GLsizei bufSize,
-                                           GLsizei *length,
-                                           GLint *params)
+void GL_APIENTRY glGetUniformivRobustANGLE(GLuint program, GLint location, GLsizei bufSize, GLsizei * length, GLint * params)
 {
     return gl::GetUniformivRobustANGLE(program, location, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetVertexAttribfvRobustANGLE(GLuint index,
-                                                GLenum pname,
-                                                GLsizei bufSize,
-                                                GLsizei *length,
-                                                GLfloat *params)
+void GL_APIENTRY glGetVertexAttribfvRobustANGLE(GLuint index, GLenum pname, GLsizei bufSize, GLsizei * length, GLfloat * params)
 {
     return gl::GetVertexAttribfvRobustANGLE(index, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetVertexAttribivRobustANGLE(GLuint index,
-                                                GLenum pname,
-                                                GLsizei bufSize,
-                                                GLsizei *length,
-                                                GLint *params)
+void GL_APIENTRY glGetVertexAttribivRobustANGLE(GLuint index, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
     return gl::GetVertexAttribivRobustANGLE(index, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetVertexAttribPointervRobustANGLE(GLuint index,
-                                                      GLenum pname,
-                                                      GLsizei bufSize,
-                                                      GLsizei *length,
-                                                      void **pointer)
+void GL_APIENTRY glGetVertexAttribPointervRobustANGLE(GLuint index, GLenum pname, GLsizei bufSize, GLsizei * length, void ** pointer)
 {
     return gl::GetVertexAttribPointervRobustANGLE(index, pname, bufSize, length, pointer);
 }
 
-void GL_APIENTRY glReadPixelsRobustANGLE(GLint x,
-                                         GLint y,
-                                         GLsizei width,
-                                         GLsizei height,
-                                         GLenum format,
-                                         GLenum type,
-                                         GLsizei bufSize,
-                                         GLsizei *length,
-                                         GLsizei *columns,
-                                         GLsizei *rows,
-                                         void *pixels)
+void GL_APIENTRY glReadPixelsRobustANGLE(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei bufSize, GLsizei * length, GLsizei * columns, GLsizei * rows, void * pixels)
 {
-    return gl::ReadPixelsRobustANGLE(x, y, width, height, format, type, bufSize, length, columns,
-                                     rows, pixels);
+    return gl::ReadPixelsRobustANGLE(x, y, width, height, format, type, bufSize, length, columns, rows, pixels);
 }
 
-void GL_APIENTRY glTexImage2DRobustANGLE(GLenum target,
-                                         GLint level,
-                                         GLint internalformat,
-                                         GLsizei width,
-                                         GLsizei height,
-                                         GLint border,
-                                         GLenum format,
-                                         GLenum type,
-                                         GLsizei bufSize,
-                                         const void *pixels)
+void GL_APIENTRY glTexImage2DRobustANGLE(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, GLsizei bufSize, const void * pixels)
 {
-    return gl::TexImage2DRobustANGLE(target, level, internalformat, width, height, border, format,
-                                     type, bufSize, pixels);
+    return gl::TexImage2DRobustANGLE(target, level, internalformat, width, height, border, format, type, bufSize, pixels);
 }
 
-void GL_APIENTRY glTexParameterfvRobustANGLE(GLenum target,
-                                             GLenum pname,
-                                             GLsizei bufSize,
-                                             const GLfloat *params)
+void GL_APIENTRY glTexParameterfvRobustANGLE(GLenum target, GLenum pname, GLsizei bufSize, const GLfloat * params)
 {
     return gl::TexParameterfvRobustANGLE(target, pname, bufSize, params);
 }
 
-void GL_APIENTRY glTexParameterivRobustANGLE(GLenum target,
-                                             GLenum pname,
-                                             GLsizei bufSize,
-                                             const GLint *params)
+void GL_APIENTRY glTexParameterivRobustANGLE(GLenum target, GLenum pname, GLsizei bufSize, const GLint * params)
 {
     return gl::TexParameterivRobustANGLE(target, pname, bufSize, params);
 }
 
-void GL_APIENTRY glTexSubImage2DRobustANGLE(GLenum target,
-                                            GLint level,
-                                            GLint xoffset,
-                                            GLint yoffset,
-                                            GLsizei width,
-                                            GLsizei height,
-                                            GLenum format,
-                                            GLenum type,
-                                            GLsizei bufSize,
-                                            const void *pixels)
+void GL_APIENTRY glTexSubImage2DRobustANGLE(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei bufSize, const void * pixels)
 {
-    return gl::TexSubImage2DRobustANGLE(target, level, xoffset, yoffset, width, height, format,
-                                        type, bufSize, pixels);
+    return gl::TexSubImage2DRobustANGLE(target, level, xoffset, yoffset, width, height, format, type, bufSize, pixels);
 }
 
-void GL_APIENTRY glTexImage3DRobustANGLE(GLenum target,
-                                         GLint level,
-                                         GLint internalformat,
-                                         GLsizei width,
-                                         GLsizei height,
-                                         GLsizei depth,
-                                         GLint border,
-                                         GLenum format,
-                                         GLenum type,
-                                         GLsizei bufSize,
-                                         const void *pixels)
+void GL_APIENTRY glTexImage3DRobustANGLE(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, GLsizei bufSize, const void * pixels)
 {
-    return gl::TexImage3DRobustANGLE(target, level, internalformat, width, height, depth, border,
-                                     format, type, bufSize, pixels);
+    return gl::TexImage3DRobustANGLE(target, level, internalformat, width, height, depth, border, format, type, bufSize, pixels);
 }
 
-void GL_APIENTRY glTexSubImage3DRobustANGLE(GLenum target,
-                                            GLint level,
-                                            GLint xoffset,
-                                            GLint yoffset,
-                                            GLint zoffset,
-                                            GLsizei width,
-                                            GLsizei height,
-                                            GLsizei depth,
-                                            GLenum format,
-                                            GLenum type,
-                                            GLsizei bufSize,
-                                            const void *pixels)
+void GL_APIENTRY glTexSubImage3DRobustANGLE(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, GLsizei bufSize, const void * pixels)
 {
-    return gl::TexSubImage3DRobustANGLE(target, level, xoffset, yoffset, zoffset, width, height,
-                                        depth, format, type, bufSize, pixels);
+    return gl::TexSubImage3DRobustANGLE(target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, bufSize, pixels);
 }
 
-void GL_APIENTRY glCompressedTexImage2DRobustANGLE(GLenum target,
-                                                   GLint level,
-                                                   GLenum internalformat,
-                                                   GLsizei width,
-                                                   GLsizei height,
-                                                   GLint border,
-                                                   GLsizei imageSize,
-                                                   GLsizei dataSize,
-                                                   const GLvoid *data)
+void GL_APIENTRY glCompressedTexImage2DRobustANGLE(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, GLsizei dataSize, const GLvoid * data)
 {
-    return gl::CompressedTexImage2DRobustANGLE(target, level, internalformat, width, height, border,
-                                               imageSize, dataSize, data);
+    return gl::CompressedTexImage2DRobustANGLE(target, level, internalformat, width, height, border, imageSize, dataSize, data);
 }
 
-void GL_APIENTRY glCompressedTexSubImage2DRobustANGLE(GLenum target,
-                                                      GLint level,
-                                                      GLsizei xoffset,
-                                                      GLsizei yoffset,
-                                                      GLsizei width,
-                                                      GLsizei height,
-                                                      GLenum format,
-                                                      GLsizei imageSize,
-                                                      GLsizei dataSize,
-                                                      const GLvoid *data)
+void GL_APIENTRY glCompressedTexSubImage2DRobustANGLE(GLenum target, GLint level, GLsizei xoffset, GLsizei yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, GLsizei dataSize, const GLvoid * data)
 {
-    return gl::CompressedTexSubImage2DRobustANGLE(target, level, xoffset, yoffset, width, height,
-                                                  format, imageSize, dataSize, data);
+    return gl::CompressedTexSubImage2DRobustANGLE(target, level, xoffset, yoffset, width, height, format, imageSize, dataSize, data);
 }
 
-void GL_APIENTRY glCompressedTexImage3DRobustANGLE(GLenum target,
-                                                   GLint level,
-                                                   GLenum internalformat,
-                                                   GLsizei width,
-                                                   GLsizei height,
-                                                   GLsizei depth,
-                                                   GLint border,
-                                                   GLsizei imageSize,
-                                                   GLsizei dataSize,
-                                                   const GLvoid *data)
+void GL_APIENTRY glCompressedTexImage3DRobustANGLE(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, GLsizei dataSize, const GLvoid * data)
 {
-    return gl::CompressedTexImage3DRobustANGLE(target, level, internalformat, width, height, depth,
-                                               border, imageSize, dataSize, data);
+    return gl::CompressedTexImage3DRobustANGLE(target, level, internalformat, width, height, depth, border, imageSize, dataSize, data);
 }
 
-void GL_APIENTRY glCompressedTexSubImage3DRobustANGLE(GLenum target,
-                                                      GLint level,
-                                                      GLint xoffset,
-                                                      GLint yoffset,
-                                                      GLint zoffset,
-                                                      GLsizei width,
-                                                      GLsizei height,
-                                                      GLsizei depth,
-                                                      GLenum format,
-                                                      GLsizei imageSize,
-                                                      GLsizei dataSize,
-                                                      const GLvoid *data)
+void GL_APIENTRY glCompressedTexSubImage3DRobustANGLE(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, GLsizei dataSize, const GLvoid * data)
 {
-    return gl::CompressedTexSubImage3DRobustANGLE(target, level, xoffset, yoffset, zoffset, width,
-                                                  height, depth, format, imageSize, dataSize, data);
+    return gl::CompressedTexSubImage3DRobustANGLE(target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, dataSize, data);
 }
 
-void GL_APIENTRY glGetQueryivRobustANGLE(GLenum target,
-                                         GLenum pname,
-                                         GLsizei bufSize,
-                                         GLsizei *length,
-                                         GLint *params)
+void GL_APIENTRY glGetQueryivRobustANGLE(GLenum target, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
     return gl::GetQueryivRobustANGLE(target, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetQueryObjectuivRobustANGLE(GLuint id,
-                                                GLenum pname,
-                                                GLsizei bufSize,
-                                                GLsizei *length,
-                                                GLuint *params)
+void GL_APIENTRY glGetQueryObjectuivRobustANGLE(GLuint id, GLenum pname, GLsizei bufSize, GLsizei * length, GLuint * params)
 {
     return gl::GetQueryObjectuivRobustANGLE(id, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetBufferPointervRobustANGLE(GLenum target,
-                                                GLenum pname,
-                                                GLsizei bufSize,
-                                                GLsizei *length,
-                                                void **params)
+void GL_APIENTRY glGetBufferPointervRobustANGLE(GLenum target, GLenum pname, GLsizei bufSize, GLsizei * length, void ** params)
 {
     return gl::GetBufferPointervRobustANGLE(target, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetIntegeri_vRobustANGLE(GLenum target,
-                                            GLuint index,
-                                            GLsizei bufSize,
-                                            GLsizei *length,
-                                            GLint *data)
+void GL_APIENTRY glGetIntegeri_vRobustANGLE(GLenum target, GLuint index, GLsizei bufSize, GLsizei * length, GLint * data)
 {
     return gl::GetIntegeri_vRobustANGLE(target, index, bufSize, length, data);
 }
 
-void GL_APIENTRY glGetInternalformativRobustANGLE(GLenum target,
-                                                  GLenum internalformat,
-                                                  GLenum pname,
-                                                  GLsizei bufSize,
-                                                  GLsizei *length,
-                                                  GLint *params)
+void GL_APIENTRY glGetInternalformativRobustANGLE(GLenum target, GLenum internalformat, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
-    return gl::GetInternalformativRobustANGLE(target, internalformat, pname, bufSize, length,
-                                              params);
+    return gl::GetInternalformativRobustANGLE(target, internalformat, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetVertexAttribIivRobustANGLE(GLuint index,
-                                                 GLenum pname,
-                                                 GLsizei bufSize,
-                                                 GLsizei *length,
-                                                 GLint *params)
+void GL_APIENTRY glGetVertexAttribIivRobustANGLE(GLuint index, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
     return gl::GetVertexAttribIivRobustANGLE(index, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetVertexAttribIuivRobustANGLE(GLuint index,
-                                                  GLenum pname,
-                                                  GLsizei bufSize,
-                                                  GLsizei *length,
-                                                  GLuint *params)
+void GL_APIENTRY glGetVertexAttribIuivRobustANGLE(GLuint index, GLenum pname, GLsizei bufSize, GLsizei * length, GLuint * params)
 {
     return gl::GetVertexAttribIuivRobustANGLE(index, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetUniformuivRobustANGLE(GLuint program,
-                                            GLint location,
-                                            GLsizei bufSize,
-                                            GLsizei *length,
-                                            GLuint *params)
+void GL_APIENTRY glGetUniformuivRobustANGLE(GLuint program, GLint location, GLsizei bufSize, GLsizei * length, GLuint * params)
 {
     return gl::GetUniformuivRobustANGLE(program, location, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetActiveUniformBlockivRobustANGLE(GLuint program,
-                                                      GLuint uniformBlockIndex,
-                                                      GLenum pname,
-                                                      GLsizei bufSize,
-                                                      GLsizei *length,
-                                                      GLint *params)
+void GL_APIENTRY glGetActiveUniformBlockivRobustANGLE(GLuint program, GLuint uniformBlockIndex, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
-    return gl::GetActiveUniformBlockivRobustANGLE(program, uniformBlockIndex, pname, bufSize,
-                                                  length, params);
+    return gl::GetActiveUniformBlockivRobustANGLE(program, uniformBlockIndex, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetInteger64vRobustANGLE(GLenum pname,
-                                            GLsizei bufSize,
-                                            GLsizei *length,
-                                            GLint64 *data)
+void GL_APIENTRY glGetInteger64vRobustANGLE(GLenum pname, GLsizei bufSize, GLsizei * length, GLint64 * data)
 {
     return gl::GetInteger64vRobustANGLE(pname, bufSize, length, data);
 }
 
-void GL_APIENTRY glGetInteger64i_vRobustANGLE(GLenum target,
-                                              GLuint index,
-                                              GLsizei bufSize,
-                                              GLsizei *length,
-                                              GLint64 *data)
+void GL_APIENTRY glGetInteger64i_vRobustANGLE(GLenum target, GLuint index, GLsizei bufSize, GLsizei * length, GLint64 * data)
 {
     return gl::GetInteger64i_vRobustANGLE(target, index, bufSize, length, data);
 }
 
-void GL_APIENTRY glGetBufferParameteri64vRobustANGLE(GLenum target,
-                                                     GLenum pname,
-                                                     GLsizei bufSize,
-                                                     GLsizei *length,
-                                                     GLint64 *params)
+void GL_APIENTRY glGetBufferParameteri64vRobustANGLE(GLenum target, GLenum pname, GLsizei bufSize, GLsizei * length, GLint64 * params)
 {
     return gl::GetBufferParameteri64vRobustANGLE(target, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glSamplerParameterivRobustANGLE(GLuint sampler,
-                                                 GLuint pname,
-                                                 GLsizei bufSize,
-                                                 const GLint *param)
+void GL_APIENTRY glSamplerParameterivRobustANGLE(GLuint sampler, GLuint pname, GLsizei bufSize, const GLint * param)
 {
     return gl::SamplerParameterivRobustANGLE(sampler, pname, bufSize, param);
 }
 
-void GL_APIENTRY glSamplerParameterfvRobustANGLE(GLuint sampler,
-                                                 GLenum pname,
-                                                 GLsizei bufSize,
-                                                 const GLfloat *param)
+void GL_APIENTRY glSamplerParameterfvRobustANGLE(GLuint sampler, GLenum pname, GLsizei bufSize, const GLfloat * param)
 {
     return gl::SamplerParameterfvRobustANGLE(sampler, pname, bufSize, param);
 }
 
-void GL_APIENTRY glGetSamplerParameterivRobustANGLE(GLuint sampler,
-                                                    GLenum pname,
-                                                    GLsizei bufSize,
-                                                    GLsizei *length,
-                                                    GLint *params)
+void GL_APIENTRY glGetSamplerParameterivRobustANGLE(GLuint sampler, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
     return gl::GetSamplerParameterivRobustANGLE(sampler, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetSamplerParameterfvRobustANGLE(GLuint sampler,
-                                                    GLenum pname,
-                                                    GLsizei bufSize,
-                                                    GLsizei *length,
-                                                    GLfloat *params)
+void GL_APIENTRY glGetSamplerParameterfvRobustANGLE(GLuint sampler, GLenum pname, GLsizei bufSize, GLsizei * length, GLfloat * params)
 {
     return gl::GetSamplerParameterfvRobustANGLE(sampler, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetFramebufferParameterivRobustANGLE(GLuint sampler,
-                                                        GLenum pname,
-                                                        GLsizei bufSize,
-                                                        GLsizei *length,
-                                                        GLint *params)
+void GL_APIENTRY glGetFramebufferParameterivRobustANGLE(GLuint sampler, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
     return gl::GetFramebufferParameterivRobustANGLE(sampler, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetProgramInterfaceivRobustANGLE(GLuint program,
-                                                    GLenum programInterface,
-                                                    GLenum pname,
-                                                    GLsizei bufSize,
-                                                    GLsizei *length,
-                                                    GLint *params)
+void GL_APIENTRY glGetProgramInterfaceivRobustANGLE(GLuint program, GLenum programInterface, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
-    return gl::GetProgramInterfaceivRobustANGLE(program, programInterface, pname, bufSize, length,
-                                                params);
+    return gl::GetProgramInterfaceivRobustANGLE(program, programInterface, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetBooleani_vRobustANGLE(GLenum target,
-                                            GLuint index,
-                                            GLsizei bufSize,
-                                            GLsizei *length,
-                                            GLboolean *data)
+void GL_APIENTRY glGetBooleani_vRobustANGLE(GLenum target, GLuint index, GLsizei bufSize, GLsizei * length, GLboolean * data)
 {
     return gl::GetBooleani_vRobustANGLE(target, index, bufSize, length, data);
 }
 
-void GL_APIENTRY glGetMultisamplefvRobustANGLE(GLenum pname,
-                                               GLuint index,
-                                               GLsizei bufSize,
-                                               GLsizei *length,
-                                               GLfloat *val)
+void GL_APIENTRY glGetMultisamplefvRobustANGLE(GLenum pname, GLuint index, GLsizei bufSize, GLsizei * length, GLfloat * val)
 {
     return gl::GetMultisamplefvRobustANGLE(pname, index, bufSize, length, val);
 }
 
-void GL_APIENTRY glGetTexLevelParameterivRobustANGLE(GLenum target,
-                                                     GLint level,
-                                                     GLenum pname,
-                                                     GLsizei bufSize,
-                                                     GLsizei *length,
-                                                     GLint *params)
+void GL_APIENTRY glGetTexLevelParameterivRobustANGLE(GLenum target, GLint level, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
     return gl::GetTexLevelParameterivRobustANGLE(target, level, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetTexLevelParameterfvRobustANGLE(GLenum target,
-                                                     GLint level,
-                                                     GLenum pname,
-                                                     GLsizei bufSize,
-                                                     GLsizei *length,
-                                                     GLfloat *params)
+void GL_APIENTRY glGetTexLevelParameterfvRobustANGLE(GLenum target, GLint level, GLenum pname, GLsizei bufSize, GLsizei * length, GLfloat * params)
 {
     return gl::GetTexLevelParameterfvRobustANGLE(target, level, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetPointervRobustANGLERobustANGLE(GLenum pname,
-                                                     GLsizei bufSize,
-                                                     GLsizei *length,
-                                                     void **params)
+void GL_APIENTRY glGetPointervRobustANGLERobustANGLE(GLenum pname, GLsizei bufSize, GLsizei * length, void ** params)
 {
     return gl::GetPointervRobustANGLERobustANGLE(pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glReadnPixelsRobustANGLE(GLint x,
-                                          GLint y,
-                                          GLsizei width,
-                                          GLsizei height,
-                                          GLenum format,
-                                          GLenum type,
-                                          GLsizei bufSize,
-                                          GLsizei *length,
-                                          GLsizei *columns,
-                                          GLsizei *rows,
-                                          void *data)
+void GL_APIENTRY glReadnPixelsRobustANGLE(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei bufSize, GLsizei * length, GLsizei * columns, GLsizei * rows, void * data)
 {
-    return gl::ReadnPixelsRobustANGLE(x, y, width, height, format, type, bufSize, length, columns,
-                                      rows, data);
+    return gl::ReadnPixelsRobustANGLE(x, y, width, height, format, type, bufSize, length, columns, rows, data);
 }
 
-void GL_APIENTRY glGetnUniformfvRobustANGLE(GLuint program,
-                                            GLint location,
-                                            GLsizei bufSize,
-                                            GLsizei *length,
-                                            GLfloat *params)
+void GL_APIENTRY glGetnUniformfvRobustANGLE(GLuint program, GLint location, GLsizei bufSize, GLsizei * length, GLfloat * params)
 {
     return gl::GetnUniformfvRobustANGLE(program, location, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetnUniformivRobustANGLE(GLuint program,
-                                            GLint location,
-                                            GLsizei bufSize,
-                                            GLsizei *length,
-                                            GLint *params)
+void GL_APIENTRY glGetnUniformivRobustANGLE(GLuint program, GLint location, GLsizei bufSize, GLsizei * length, GLint * params)
 {
     return gl::GetnUniformivRobustANGLE(program, location, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetnUniformuivRobustANGLE(GLuint program,
-                                             GLint location,
-                                             GLsizei bufSize,
-                                             GLsizei *length,
-                                             GLuint *params)
+void GL_APIENTRY glGetnUniformuivRobustANGLE(GLuint program, GLint location, GLsizei bufSize, GLsizei * length, GLuint * params)
 {
     return gl::GetnUniformuivRobustANGLE(program, location, bufSize, length, params);
 }
 
-void GL_APIENTRY glTexParameterIivRobustANGLE(GLenum target,
-                                              GLenum pname,
-                                              GLsizei bufSize,
-                                              const GLint *params)
+void GL_APIENTRY glTexParameterIivRobustANGLE(GLenum target, GLenum pname, GLsizei bufSize, const GLint * params)
 {
     return gl::TexParameterIivRobustANGLE(target, pname, bufSize, params);
 }
 
-void GL_APIENTRY glTexParameterIuivRobustANGLE(GLenum target,
-                                               GLenum pname,
-                                               GLsizei bufSize,
-                                               const GLuint *params)
+void GL_APIENTRY glTexParameterIuivRobustANGLE(GLenum target, GLenum pname, GLsizei bufSize, const GLuint * params)
 {
     return gl::TexParameterIuivRobustANGLE(target, pname, bufSize, params);
 }
 
-void GL_APIENTRY glGetTexParameterIivRobustANGLE(GLenum target,
-                                                 GLenum pname,
-                                                 GLsizei bufSize,
-                                                 GLsizei *length,
-                                                 GLint *params)
+void GL_APIENTRY glGetTexParameterIivRobustANGLE(GLenum target, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
     return gl::GetTexParameterIivRobustANGLE(target, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetTexParameterIuivRobustANGLE(GLenum target,
-                                                  GLenum pname,
-                                                  GLsizei bufSize,
-                                                  GLsizei *length,
-                                                  GLuint *params)
+void GL_APIENTRY glGetTexParameterIuivRobustANGLE(GLenum target, GLenum pname, GLsizei bufSize, GLsizei * length, GLuint * params)
 {
     return gl::GetTexParameterIuivRobustANGLE(target, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glSamplerParameterIivRobustANGLE(GLuint sampler,
-                                                  GLenum pname,
-                                                  GLsizei bufSize,
-                                                  const GLint *param)
+void GL_APIENTRY glSamplerParameterIivRobustANGLE(GLuint sampler, GLenum pname, GLsizei bufSize, const GLint * param)
 {
     return gl::SamplerParameterIivRobustANGLE(sampler, pname, bufSize, param);
 }
 
-void GL_APIENTRY glSamplerParameterIuivRobustANGLE(GLuint sampler,
-                                                   GLenum pname,
-                                                   GLsizei bufSize,
-                                                   const GLuint *param)
+void GL_APIENTRY glSamplerParameterIuivRobustANGLE(GLuint sampler, GLenum pname, GLsizei bufSize, const GLuint * param)
 {
     return gl::SamplerParameterIuivRobustANGLE(sampler, pname, bufSize, param);
 }
 
-void GL_APIENTRY glGetSamplerParameterIivRobustANGLE(GLuint sampler,
-                                                     GLenum pname,
-                                                     GLsizei bufSize,
-                                                     GLsizei *length,
-                                                     GLint *params)
+void GL_APIENTRY glGetSamplerParameterIivRobustANGLE(GLuint sampler, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
     return gl::GetSamplerParameterIivRobustANGLE(sampler, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetSamplerParameterIuivRobustANGLE(GLuint sampler,
-                                                      GLenum pname,
-                                                      GLsizei bufSize,
-                                                      GLsizei *length,
-                                                      GLuint *params)
+void GL_APIENTRY glGetSamplerParameterIuivRobustANGLE(GLuint sampler, GLenum pname, GLsizei bufSize, GLsizei * length, GLuint * params)
 {
     return gl::GetSamplerParameterIuivRobustANGLE(sampler, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetQueryObjectivRobustANGLE(GLuint id,
-                                               GLenum pname,
-                                               GLsizei bufSize,
-                                               GLsizei *length,
-                                               GLint *params)
+void GL_APIENTRY glGetQueryObjectivRobustANGLE(GLuint id, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * params)
 {
     return gl::GetQueryObjectivRobustANGLE(id, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetQueryObjecti64vRobustANGLE(GLuint id,
-                                                 GLenum pname,
-                                                 GLsizei bufSize,
-                                                 GLsizei *length,
-                                                 GLint64 *params)
+void GL_APIENTRY glGetQueryObjecti64vRobustANGLE(GLuint id, GLenum pname, GLsizei bufSize, GLsizei * length, GLint64 * params)
 {
     return gl::GetQueryObjecti64vRobustANGLE(id, pname, bufSize, length, params);
 }
 
-void GL_APIENTRY glGetQueryObjectui64vRobustANGLE(GLuint id,
-                                                  GLenum pname,
-                                                  GLsizei bufSize,
-                                                  GLsizei *length,
-                                                  GLuint64 *params)
+void GL_APIENTRY glGetQueryObjectui64vRobustANGLE(GLuint id, GLenum pname, GLsizei bufSize, GLsizei * length, GLuint64 * params)
 {
     return gl::GetQueryObjectui64vRobustANGLE(id, pname, bufSize, length, params);
 }
 
+
 // GL_ANGLE_translated_shader_source
-void GL_APIENTRY glGetTranslatedShaderSourceANGLE(GLuint shader,
-                                                  GLsizei bufsize,
-                                                  GLsizei *length,
-                                                  GLchar *source)
+void GL_APIENTRY glGetTranslatedShaderSourceANGLE(GLuint shader, GLsizei bufsize, GLsizei *length, GLchar *source)
 {
     return gl::GetTranslatedShaderSourceANGLE(shader, bufsize, length, source);
 }
 
+
 // GL_CHROMIUM_bind_uniform_location
-void GL_APIENTRY glBindUniformLocationCHROMIUM(GLuint program, GLint location, const GLchar *name)
+void GL_APIENTRY glBindUniformLocationCHROMIUM(GLuint program, GLint location, const GLchar* name)
 {
     return gl::BindUniformLocationCHROMIUM(program, location, name);
 }
+
 
 // GL_CHROMIUM_copy_compressed_texture
 void GL_APIENTRY glCompressedCopyTextureCHROMIUM(GLuint sourceId, GLuint destId)
@@ -3157,42 +2420,18 @@ void GL_APIENTRY glCompressedCopyTextureCHROMIUM(GLuint sourceId, GLuint destId)
     return gl::CompressedCopyTextureCHROMIUM(sourceId, destId);
 }
 
+
 // GL_CHROMIUM_copy_texture
-void GL_APIENTRY glCopyTextureCHROMIUM(GLuint sourceId,
-                                       GLint sourceLevel,
-                                       GLenum destTarget,
-                                       GLuint destId,
-                                       GLint destLevel,
-                                       GLint internalFormat,
-                                       GLenum destType,
-                                       GLboolean unpackFlipY,
-                                       GLboolean unpackPremultiplyAlpha,
-                                       GLboolean unpackUnmultiplyAlpha)
+void GL_APIENTRY glCopyTextureCHROMIUM(GLuint sourceId, GLint sourceLevel, GLenum destTarget, GLuint destId, GLint destLevel, GLint internalFormat, GLenum destType, GLboolean unpackFlipY, GLboolean unpackPremultiplyAlpha, GLboolean unpackUnmultiplyAlpha)
 {
-    return gl::CopyTextureCHROMIUM(sourceId, sourceLevel, destTarget, destId, destLevel,
-                                   internalFormat, destType, unpackFlipY, unpackPremultiplyAlpha,
-                                   unpackUnmultiplyAlpha);
+    return gl::CopyTextureCHROMIUM(sourceId, sourceLevel, destTarget, destId, destLevel, internalFormat, destType, unpackFlipY, unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
 }
 
-void GL_APIENTRY glCopySubTextureCHROMIUM(GLuint sourceId,
-                                          GLint sourceLevel,
-                                          GLenum destTarget,
-                                          GLuint destId,
-                                          GLint destLevel,
-                                          GLint xoffset,
-                                          GLint yoffset,
-                                          GLint x,
-                                          GLint y,
-                                          GLint width,
-                                          GLint height,
-                                          GLboolean unpackFlipY,
-                                          GLboolean unpackPremultiplyAlpha,
-                                          GLboolean unpackUnmultiplyAlpha)
+void GL_APIENTRY glCopySubTextureCHROMIUM(GLuint sourceId, GLint sourceLevel, GLenum destTarget, GLuint destId, GLint destLevel, GLint xoffset, GLint yoffset, GLint x, GLint y, GLint width, GLint height, GLboolean unpackFlipY, GLboolean unpackPremultiplyAlpha, GLboolean unpackUnmultiplyAlpha)
 {
-    return gl::CopySubTextureCHROMIUM(sourceId, sourceLevel, destTarget, destId, destLevel, xoffset,
-                                      yoffset, x, y, width, height, unpackFlipY,
-                                      unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
+    return gl::CopySubTextureCHROMIUM(sourceId, sourceLevel, destTarget, destId, destLevel, xoffset, yoffset, x, y, width, height, unpackFlipY, unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
 }
+
 
 // GL_CHROMIUM_framebuffer_mixed_samples
 void GL_APIENTRY glCoverageModulationCHROMIUM(GLenum components)
@@ -3200,7 +2439,7 @@ void GL_APIENTRY glCoverageModulationCHROMIUM(GLenum components)
     return gl::CoverageModulationCHROMIUM(components);
 }
 
-void GL_APIENTRY glMatrixLoadfCHROMIUM(GLenum matrixMode, const GLfloat *matrix)
+void GL_APIENTRY glMatrixLoadfCHROMIUM(GLenum matrixMode, const GLfloat * matrix)
 {
     return gl::MatrixLoadfCHROMIUM(matrixMode, matrix);
 }
@@ -3209,6 +2448,7 @@ void GL_APIENTRY glMatrixLoadIdentityCHROMIUM(GLenum matrixMode)
 {
     return gl::MatrixLoadIdentityCHROMIUM(matrixMode);
 }
+
 
 // GL_CHROMIUM_path_rendering
 GLuint GL_APIENTRY glGenPathsCHROMIUM(GLsizei range)
@@ -3226,12 +2466,7 @@ GLboolean GL_APIENTRY glIsPathCHROMIUM(GLuint path)
     return gl::IsPathCHROMIUM(path);
 }
 
-void GL_APIENTRY glPathCommandsCHROMIUM(GLuint path,
-                                        GLsizei numCommands,
-                                        const GLubyte *commands,
-                                        GLsizei numCoords,
-                                        GLenum coordType,
-                                        const void *coords)
+void GL_APIENTRY glPathCommandsCHROMIUM(GLuint path, GLsizei numCommands, const GLubyte * commands, GLsizei numCoords, GLenum coordType, const void* coords)
 {
     return gl::PathCommandsCHROMIUM(path, numCommands, commands, numCoords, coordType, coords);
 }
@@ -3246,12 +2481,12 @@ void GL_APIENTRY glPathParameteriCHROMIUM(GLuint path, GLenum pname, GLint value
     return gl::PathParameteriCHROMIUM(path, pname, value);
 }
 
-void GL_APIENTRY glGetPathParameterfvCHROMIUM(GLuint path, GLenum pname, GLfloat *value)
+void GL_APIENTRY glGetPathParameterfvCHROMIUM(GLuint path, GLenum pname, GLfloat * value)
 {
     return gl::GetPathParameterfvCHROMIUM(path, pname, value);
 }
 
-void GL_APIENTRY glGetPathParameterivCHROMIUM(GLuint path, GLenum pname, GLint *value)
+void GL_APIENTRY glGetPathParameterivCHROMIUM(GLuint path, GLenum pname, GLint * value)
 {
     return gl::GetPathParameterivCHROMIUM(path, pname, value);
 }
@@ -3281,117 +2516,56 @@ void GL_APIENTRY glCoverStrokePathCHROMIUM(GLuint path, GLenum coverMode)
     return gl::CoverStrokePathCHROMIUM(path, coverMode);
 }
 
-void GL_APIENTRY glStencilThenCoverFillPathCHROMIUM(GLuint path,
-                                                    GLenum fillMode,
-                                                    GLuint mask,
-                                                    GLenum coverMode)
+void GL_APIENTRY glStencilThenCoverFillPathCHROMIUM(GLuint path, GLenum fillMode, GLuint mask, GLenum coverMode)
 {
     return gl::StencilThenCoverFillPathCHROMIUM(path, fillMode, mask, coverMode);
 }
 
-void GL_APIENTRY glStencilThenCoverStrokePathCHROMIUM(GLuint path,
-                                                      GLint reference,
-                                                      GLuint mask,
-                                                      GLenum coverMode)
+void GL_APIENTRY glStencilThenCoverStrokePathCHROMIUM(GLuint path, GLint reference, GLuint mask, GLenum coverMode)
 {
     return gl::StencilThenCoverStrokePathCHROMIUM(path, reference, mask, coverMode);
 }
 
-void GL_APIENTRY glCoverFillPathInstancedCHROMIUM(GLsizei numPath,
-                                                  GLenum pathNameType,
-                                                  const void *paths,
-                                                  GLuint pathBase,
-                                                  GLenum coverMode,
-                                                  GLenum transformType,
-                                                  const GLfloat *transformValues)
+void GL_APIENTRY glCoverFillPathInstancedCHROMIUM(GLsizei numPath, GLenum pathNameType, const void * paths, GLuint pathBase, GLenum coverMode, GLenum transformType, const GLfloat * transformValues)
 {
-    return gl::CoverFillPathInstancedCHROMIUM(numPath, pathNameType, paths, pathBase, coverMode,
-                                              transformType, transformValues);
+    return gl::CoverFillPathInstancedCHROMIUM(numPath, pathNameType, paths, pathBase, coverMode, transformType, transformValues);
 }
 
-void GL_APIENTRY glCoverStrokePathInstancedCHROMIUM(GLsizei numPath,
-                                                    GLenum pathNameType,
-                                                    const void *paths,
-                                                    GLuint pathBase,
-                                                    GLenum coverMode,
-                                                    GLenum transformType,
-                                                    const GLfloat *transformValues)
+void GL_APIENTRY glCoverStrokePathInstancedCHROMIUM(GLsizei numPath, GLenum pathNameType, const void * paths, GLuint pathBase, GLenum coverMode, GLenum transformType, const GLfloat * transformValues)
 {
-    return gl::CoverStrokePathInstancedCHROMIUM(numPath, pathNameType, paths, pathBase, coverMode,
-                                                transformType, transformValues);
+    return gl::CoverStrokePathInstancedCHROMIUM(numPath, pathNameType, paths, pathBase, coverMode, transformType, transformValues);
 }
 
-void GL_APIENTRY glStencilStrokePathInstancedCHROMIUM(GLsizei numPath,
-                                                      GLenum pathNameType,
-                                                      const void *paths,
-                                                      GLuint pathBase,
-                                                      GLint reference,
-                                                      GLuint mask,
-                                                      GLenum transformType,
-                                                      const GLfloat *transformValues)
+void GL_APIENTRY glStencilStrokePathInstancedCHROMIUM(GLsizei numPath, GLenum pathNameType, const void * paths, GLuint pathBase, GLint reference, GLuint mask, GLenum transformType, const GLfloat * transformValues)
 {
-    return gl::StencilStrokePathInstancedCHROMIUM(numPath, pathNameType, paths, pathBase, reference,
-                                                  mask, transformType, transformValues);
+    return gl::StencilStrokePathInstancedCHROMIUM(numPath, pathNameType, paths, pathBase, reference, mask, transformType, transformValues);
 }
 
-void GL_APIENTRY glStencilFillPathInstancedCHROMIUM(GLsizei numPaths,
-                                                    GLenum pathNameType,
-                                                    const void *paths,
-                                                    GLuint pathBase,
-                                                    GLenum fillMode,
-                                                    GLuint mask,
-                                                    GLenum transformType,
-                                                    const GLfloat *transformValues)
+void GL_APIENTRY glStencilFillPathInstancedCHROMIUM(GLsizei numPaths, GLenum pathNameType, const void * paths, GLuint pathBase, GLenum fillMode, GLuint mask, GLenum transformType, const GLfloat * transformValues)
 {
-    return gl::StencilFillPathInstancedCHROMIUM(numPaths, pathNameType, paths, pathBase, fillMode,
-                                                mask, transformType, transformValues);
+    return gl::StencilFillPathInstancedCHROMIUM(numPaths, pathNameType, paths, pathBase, fillMode, mask, transformType, transformValues);
 }
 
-void GL_APIENTRY glStencilThenCoverFillPathInstancedCHROMIUM(GLsizei numPaths,
-                                                             GLenum pathNameType,
-                                                             const void *paths,
-                                                             GLuint pathBase,
-                                                             GLenum fillMode,
-                                                             GLuint mask,
-                                                             GLenum coverMode,
-                                                             GLenum transformType,
-                                                             const GLfloat *transformValues)
+void GL_APIENTRY glStencilThenCoverFillPathInstancedCHROMIUM(GLsizei numPaths, GLenum pathNameType, const void * paths, GLuint pathBase, GLenum fillMode, GLuint mask, GLenum coverMode, GLenum transformType, const GLfloat * transformValues)
 {
-    return gl::StencilThenCoverFillPathInstancedCHROMIUM(numPaths, pathNameType, paths, pathBase,
-                                                         fillMode, mask, coverMode, transformType,
-                                                         transformValues);
+    return gl::StencilThenCoverFillPathInstancedCHROMIUM(numPaths, pathNameType, paths, pathBase, fillMode, mask, coverMode, transformType, transformValues);
 }
 
-void GL_APIENTRY glStencilThenCoverStrokePathInstancedCHROMIUM(GLsizei numPaths,
-                                                               GLenum pathNameType,
-                                                               const void *paths,
-                                                               GLuint pathBase,
-                                                               GLint reference,
-                                                               GLuint mask,
-                                                               GLenum coverMode,
-                                                               GLenum transformType,
-                                                               const GLfloat *transformValues)
+void GL_APIENTRY glStencilThenCoverStrokePathInstancedCHROMIUM(GLsizei numPaths, GLenum pathNameType, const void * paths, GLuint pathBase, GLint reference, GLuint mask, GLenum coverMode, GLenum transformType, const GLfloat * transformValues)
 {
-    return gl::StencilThenCoverStrokePathInstancedCHROMIUM(numPaths, pathNameType, paths, pathBase,
-                                                           reference, mask, coverMode,
-                                                           transformType, transformValues);
+    return gl::StencilThenCoverStrokePathInstancedCHROMIUM(numPaths, pathNameType, paths, pathBase, reference, mask, coverMode, transformType, transformValues);
 }
 
-void GL_APIENTRY glBindFragmentInputLocationCHROMIUM(GLuint programs,
-                                                     GLint location,
-                                                     const GLchar *name)
+void GL_APIENTRY glBindFragmentInputLocationCHROMIUM(GLuint programs, GLint location, const GLchar * name)
 {
     return gl::BindFragmentInputLocationCHROMIUM(programs, location, name);
 }
 
-void GL_APIENTRY glProgramPathFragmentInputGenCHROMIUM(GLuint program,
-                                                       GLint location,
-                                                       GLenum genMode,
-                                                       GLint components,
-                                                       const GLfloat *coeffs)
+void GL_APIENTRY glProgramPathFragmentInputGenCHROMIUM(GLuint program, GLint location, GLenum genMode, GLint components, const GLfloat * coeffs)
 {
     return gl::ProgramPathFragmentInputGenCHROMIUM(program, location, genMode, components, coeffs);
 }
+
 
 // GL_EXT_debug_marker
 void GL_APIENTRY glInsertEventMarkerEXT(GLsizei length, const GLchar *marker)
@@ -3409,13 +2583,13 @@ void GL_APIENTRY glPushGroupMarkerEXT(GLsizei length, const GLchar *marker)
     return gl::PushGroupMarkerEXT(length, marker);
 }
 
+
 // GL_EXT_discard_framebuffer
-void GL_APIENTRY glDiscardFramebufferEXT(GLenum target,
-                                         GLsizei numAttachments,
-                                         const GLenum *attachments)
+void GL_APIENTRY glDiscardFramebufferEXT(GLenum target, GLsizei numAttachments, const GLenum *attachments)
 {
     return gl::DiscardFramebufferEXT(target, numAttachments, attachments);
 }
+
 
 // GL_EXT_disjoint_timer_query
 void GL_APIENTRY glBeginQueryEXT(GLenum target, GLuint id)
@@ -3473,11 +2647,13 @@ void GL_APIENTRY glQueryCounterEXT(GLuint id, GLenum target)
     return gl::QueryCounterEXT(id, target);
 }
 
+
 // GL_EXT_draw_buffers
 void GL_APIENTRY glDrawBuffersEXT(GLsizei n, const GLenum *bufs)
 {
     return gl::DrawBuffersEXT(n, bufs);
 }
+
 
 // GL_EXT_map_buffer_range
 void GL_APIENTRY glFlushMappedBufferRangeEXT(GLenum target, GLintptr offset, GLsizeiptr length)
@@ -3485,13 +2661,11 @@ void GL_APIENTRY glFlushMappedBufferRangeEXT(GLenum target, GLintptr offset, GLs
     return gl::FlushMappedBufferRangeEXT(target, offset, length);
 }
 
-void *GL_APIENTRY glMapBufferRangeEXT(GLenum target,
-                                      GLintptr offset,
-                                      GLsizeiptr length,
-                                      GLbitfield access)
+void *GL_APIENTRY glMapBufferRangeEXT(GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access)
 {
     return gl::MapBufferRangeEXT(target, offset, length, access);
 }
+
 
 // GL_EXT_occlusion_query_boolean
 
@@ -3501,10 +2675,7 @@ GLenum GL_APIENTRY glGetGraphicsResetStatusEXT()
     return gl::GetGraphicsResetStatusEXT();
 }
 
-void GL_APIENTRY glGetnUniformfvEXT(GLuint program,
-                                    GLint location,
-                                    GLsizei bufSize,
-                                    GLfloat *params)
+void GL_APIENTRY glGetnUniformfvEXT(GLuint program, GLint location, GLsizei bufSize, GLfloat *params)
 {
     return gl::GetnUniformfvEXT(program, location, bufSize, params);
 }
@@ -3514,45 +2685,28 @@ void GL_APIENTRY glGetnUniformivEXT(GLuint program, GLint location, GLsizei bufS
     return gl::GetnUniformivEXT(program, location, bufSize, params);
 }
 
-void GL_APIENTRY glReadnPixelsEXT(GLint x,
-                                  GLint y,
-                                  GLsizei width,
-                                  GLsizei height,
-                                  GLenum format,
-                                  GLenum type,
-                                  GLsizei bufSize,
-                                  void *data)
+void GL_APIENTRY glReadnPixelsEXT(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei bufSize, void *data)
 {
     return gl::ReadnPixelsEXT(x, y, width, height, format, type, bufSize, data);
 }
 
+
 // GL_EXT_texture_storage
-void GL_APIENTRY glTexStorage1DEXT(GLenum target,
-                                   GLsizei levels,
-                                   GLenum internalformat,
-                                   GLsizei width)
+void GL_APIENTRY glTexStorage1DEXT(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width)
 {
     return gl::TexStorage1DEXT(target, levels, internalformat, width);
 }
 
-void GL_APIENTRY glTexStorage2DEXT(GLenum target,
-                                   GLsizei levels,
-                                   GLenum internalformat,
-                                   GLsizei width,
-                                   GLsizei height)
+void GL_APIENTRY glTexStorage2DEXT(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height)
 {
     return gl::TexStorage2DEXT(target, levels, internalformat, width, height);
 }
 
-void GL_APIENTRY glTexStorage3DEXT(GLenum target,
-                                   GLsizei levels,
-                                   GLenum internalformat,
-                                   GLsizei width,
-                                   GLsizei height,
-                                   GLsizei depth)
+void GL_APIENTRY glTexStorage3DEXT(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth)
 {
     return gl::TexStorage3DEXT(target, levels, internalformat, width, height, depth);
 }
+
 
 // GL_KHR_debug
 void GL_APIENTRY glDebugMessageCallbackKHR(GLDEBUGPROCKHR callback, const void *userParam)
@@ -3560,49 +2714,27 @@ void GL_APIENTRY glDebugMessageCallbackKHR(GLDEBUGPROCKHR callback, const void *
     return gl::DebugMessageCallbackKHR(callback, userParam);
 }
 
-void GL_APIENTRY glDebugMessageControlKHR(GLenum source,
-                                          GLenum type,
-                                          GLenum severity,
-                                          GLsizei count,
-                                          const GLuint *ids,
-                                          GLboolean enabled)
+void GL_APIENTRY glDebugMessageControlKHR(GLenum source, GLenum type, GLenum severity, GLsizei count, const GLuint *ids, GLboolean enabled)
 {
     return gl::DebugMessageControlKHR(source, type, severity, count, ids, enabled);
 }
 
-void GL_APIENTRY glDebugMessageInsertKHR(GLenum source,
-                                         GLenum type,
-                                         GLuint id,
-                                         GLenum severity,
-                                         GLsizei length,
-                                         const GLchar *buf)
+void GL_APIENTRY glDebugMessageInsertKHR(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *buf)
 {
     return gl::DebugMessageInsertKHR(source, type, id, severity, length, buf);
 }
 
-GLuint GL_APIENTRY glGetDebugMessageLogKHR(GLuint count,
-                                           GLsizei bufSize,
-                                           GLenum *sources,
-                                           GLenum *types,
-                                           GLuint *ids,
-                                           GLenum *severities,
-                                           GLsizei *lengths,
-                                           GLchar *messageLog)
+GLuint GL_APIENTRY glGetDebugMessageLogKHR(GLuint count, GLsizei bufSize, GLenum *sources, GLenum *types, GLuint *ids, GLenum *severities, GLsizei *lengths, GLchar *messageLog)
 {
-    return gl::GetDebugMessageLogKHR(count, bufSize, sources, types, ids, severities, lengths,
-                                     messageLog);
+    return gl::GetDebugMessageLogKHR(count, bufSize, sources, types, ids, severities, lengths, messageLog);
 }
 
-void GL_APIENTRY
-glGetObjectLabelKHR(GLenum identifier, GLuint name, GLsizei bufSize, GLsizei *length, GLchar *label)
+void GL_APIENTRY glGetObjectLabelKHR(GLenum identifier, GLuint name, GLsizei bufSize, GLsizei *length, GLchar *label)
 {
     return gl::GetObjectLabelKHR(identifier, name, bufSize, length, label);
 }
 
-void GL_APIENTRY glGetObjectPtrLabelKHR(const void *ptr,
-                                        GLsizei bufSize,
-                                        GLsizei *length,
-                                        GLchar *label)
+void GL_APIENTRY glGetObjectPtrLabelKHR(const void *ptr, GLsizei bufSize, GLsizei *length, GLchar *label)
 {
     return gl::GetObjectPtrLabelKHR(ptr, bufSize, length, label);
 }
@@ -3612,10 +2744,7 @@ void GL_APIENTRY glGetPointervKHR(GLenum pname, void **params)
     return gl::GetPointervKHR(pname, params);
 }
 
-void GL_APIENTRY glObjectLabelKHR(GLenum identifier,
-                                  GLuint name,
-                                  GLsizei length,
-                                  const GLchar *label)
+void GL_APIENTRY glObjectLabelKHR(GLenum identifier, GLuint name, GLsizei length, const GLchar *label)
 {
     return gl::ObjectLabelKHR(identifier, name, length, label);
 }
@@ -3630,13 +2759,11 @@ void GL_APIENTRY glPopDebugGroupKHR()
     return gl::PopDebugGroupKHR();
 }
 
-void GL_APIENTRY glPushDebugGroupKHR(GLenum source,
-                                     GLuint id,
-                                     GLsizei length,
-                                     const GLchar *message)
+void GL_APIENTRY glPushDebugGroupKHR(GLenum source, GLuint id, GLsizei length, const GLchar *message)
 {
     return gl::PushDebugGroupKHR(source, id, length, message);
 }
+
 
 // GL_NV_fence
 void GL_APIENTRY glDeleteFencesNV(GLsizei n, const GLuint *fences)
@@ -3674,6 +2801,7 @@ GLboolean GL_APIENTRY glTestFenceNV(GLuint fence)
     return gl::TestFenceNV(fence);
 }
 
+
 // GL_OES_EGL_image
 void GL_APIENTRY glEGLImageTargetRenderbufferStorageOES(GLenum target, GLeglImageOES image)
 {
@@ -3684,6 +2812,7 @@ void GL_APIENTRY glEGLImageTargetTexture2DOES(GLenum target, GLeglImageOES image
 {
     return gl::EGLImageTargetTexture2DOES(target, image);
 }
+
 
 // GL_OES_draw_texture
 void GL_APIENTRY glDrawTexfOES(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height)
@@ -3726,6 +2855,7 @@ void GL_APIENTRY glDrawTexxvOES(const GLfixed *coords)
     return gl::DrawTexxvOES(coords);
 }
 
+
 // GL_OES_framebuffer_object
 void GL_APIENTRY glBindFramebufferOES(GLenum target, GLuint framebuffer)
 {
@@ -3752,19 +2882,12 @@ void GL_APIENTRY glDeleteRenderbuffersOES(GLsizei n, const GLuint *renderbuffers
     return gl::DeleteRenderbuffersOES(n, renderbuffers);
 }
 
-void GL_APIENTRY glFramebufferRenderbufferOES(GLenum target,
-                                              GLenum attachment,
-                                              GLenum renderbuffertarget,
-                                              GLuint renderbuffer)
+void GL_APIENTRY glFramebufferRenderbufferOES(GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer)
 {
     return gl::FramebufferRenderbufferOES(target, attachment, renderbuffertarget, renderbuffer);
 }
 
-void GL_APIENTRY glFramebufferTexture2DOES(GLenum target,
-                                           GLenum attachment,
-                                           GLenum textarget,
-                                           GLuint texture,
-                                           GLint level)
+void GL_APIENTRY glFramebufferTexture2DOES(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
 {
     return gl::FramebufferTexture2DOES(target, attachment, textarget, texture, level);
 }
@@ -3784,10 +2907,7 @@ void GL_APIENTRY glGenerateMipmapOES(GLenum target)
     return gl::GenerateMipmapOES(target);
 }
 
-void GL_APIENTRY glGetFramebufferAttachmentParameterivOES(GLenum target,
-                                                          GLenum attachment,
-                                                          GLenum pname,
-                                                          GLint *params)
+void GL_APIENTRY glGetFramebufferAttachmentParameterivOES(GLenum target, GLenum attachment, GLenum pname, GLint *params)
 {
     return gl::GetFramebufferAttachmentParameterivOES(target, attachment, pname, params);
 }
@@ -3807,31 +2927,23 @@ GLboolean GL_APIENTRY glIsRenderbufferOES(GLuint renderbuffer)
     return gl::IsRenderbufferOES(renderbuffer);
 }
 
-void GL_APIENTRY glRenderbufferStorageOES(GLenum target,
-                                          GLenum internalformat,
-                                          GLsizei width,
-                                          GLsizei height)
+void GL_APIENTRY glRenderbufferStorageOES(GLenum target, GLenum internalformat, GLsizei width, GLsizei height)
 {
     return gl::RenderbufferStorageOES(target, internalformat, width, height);
 }
 
+
 // GL_OES_get_program_binary
-void GL_APIENTRY glGetProgramBinaryOES(GLuint program,
-                                       GLsizei bufSize,
-                                       GLsizei *length,
-                                       GLenum *binaryFormat,
-                                       void *binary)
+void GL_APIENTRY glGetProgramBinaryOES(GLuint program, GLsizei bufSize, GLsizei *length, GLenum *binaryFormat, void *binary)
 {
     return gl::GetProgramBinaryOES(program, bufSize, length, binaryFormat, binary);
 }
 
-void GL_APIENTRY glProgramBinaryOES(GLuint program,
-                                    GLenum binaryFormat,
-                                    const void *binary,
-                                    GLint length)
+void GL_APIENTRY glProgramBinaryOES(GLuint program, GLenum binaryFormat, const void *binary, GLint length)
 {
     return gl::ProgramBinaryOES(program, binaryFormat, binary, length);
 }
+
 
 // GL_OES_mapbuffer
 void GL_APIENTRY glGetBufferPointervOES(GLenum target, GLenum pname, void **params)
@@ -3849,6 +2961,7 @@ GLboolean GL_APIENTRY glUnmapBufferOES(GLenum target)
     return gl::UnmapBufferOES(target);
 }
 
+
 // GL_OES_matrix_palette
 void GL_APIENTRY glCurrentPaletteMatrixOES(GLuint matrixpaletteindex)
 {
@@ -3860,10 +2973,7 @@ void GL_APIENTRY glLoadPaletteFromModelViewMatrixOES()
     return gl::LoadPaletteFromModelViewMatrixOES();
 }
 
-void GL_APIENTRY glMatrixIndexPointerOES(GLint size,
-                                         GLenum type,
-                                         GLsizei stride,
-                                         const void *pointer)
+void GL_APIENTRY glMatrixIndexPointerOES(GLint size, GLenum type, GLsizei stride, const void *pointer)
 {
     return gl::MatrixIndexPointerOES(size, type, stride, pointer);
 }
@@ -3873,17 +2983,20 @@ void GL_APIENTRY glWeightPointerOES(GLint size, GLenum type, GLsizei stride, con
     return gl::WeightPointerOES(size, type, stride, pointer);
 }
 
+
 // GL_OES_point_size_array
 void GL_APIENTRY glPointSizePointerOES(GLenum type, GLsizei stride, const void *pointer)
 {
     return gl::PointSizePointerOES(type, stride, pointer);
 }
 
+
 // GL_OES_query_matrix
 GLbitfield GL_APIENTRY glQueryMatrixxOES(GLfixed *mantissa, GLint *exponent)
 {
     return gl::QueryMatrixxOES(mantissa, exponent);
 }
+
 
 // GL_OES_texture_cube_map
 void GL_APIENTRY glGetTexGenfvOES(GLenum coord, GLenum pname, GLfloat *params)
@@ -3931,6 +3044,7 @@ void GL_APIENTRY glTexGenxvOES(GLenum coord, GLenum pname, const GLfixed *params
     return gl::TexGenxvOES(coord, pname, params);
 }
 
+
 // GL_OES_vertex_array_object
 void GL_APIENTRY glBindVertexArrayOES(GLuint array)
 {
@@ -3952,4 +3066,4 @@ GLboolean GL_APIENTRY glIsVertexArrayOES(GLuint array)
     return gl::IsVertexArrayOES(array);
 }
 
-}  // extern "C"
+} // extern "C"

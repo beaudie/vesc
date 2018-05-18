@@ -168,11 +168,11 @@ Error GLES1Renderer::prepareForDraw(Context *context, State *glState)
         {
             const auto &light                        = gles1State.mLights[i];
             uniformBuffers.lightEnables[i] = light.enabled;
-            memcpy(uniformBuffers.lightAmbients.data() + i, &light.ambient, sizeof(Vec4Uniform));
-            memcpy(uniformBuffers.lightDiffuses.data() + i, &light.diffuse, sizeof(Vec4Uniform));
-            memcpy(uniformBuffers.lightSpeculars.data() + i, &light.specular, sizeof(Vec4Uniform));
-            memcpy(uniformBuffers.lightPositions.data() + i, &light.position, sizeof(Vec4Uniform));
-            memcpy(uniformBuffers.lightDirections.data() + i, &light.direction, sizeof(Vec3Uniform));
+            memcpy(uniformBuffers.lightAmbients.data() + i, light.ambient.data(), sizeof(Vec4Uniform));
+            memcpy(uniformBuffers.lightDiffuses.data() + i, light.diffuse.data(), sizeof(Vec4Uniform));
+            memcpy(uniformBuffers.lightSpeculars.data() + i, light.specular.data(), sizeof(Vec4Uniform));
+            memcpy(uniformBuffers.lightPositions.data() + i, light.position.data(), sizeof(Vec4Uniform));
+            memcpy(uniformBuffers.lightDirections.data() + i, light.direction.data(), sizeof(Vec3Uniform));
             uniformBuffers.spotlightExponents[i]    = light.spotlightExponent;
             uniformBuffers.spotlightCutoffAngles[i] = light.spotlightCutoffAngle;
             uniformBuffers.attenuationConsts[i]     = light.attenuationConst;
