@@ -19,6 +19,7 @@ namespace rx
 {
 namespace vk
 {
+class CommandBuffer;
 class CommandGraphNode;
 class CommandGraphResource;
 struct Format;
@@ -39,17 +40,17 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     ~RenderTargetVk();
 
     // Note: RenderTargets should be called in order, with the depth/stencil onRender last.
-    void onRenderColor(Serial currentSerial,
-                       vk::CommandGraphNode *writingNode,
+    void onRenderColor(vk::CommandGraphResource *framebufferVk,
+                       vk::CommandBuffer *commandBuffer,
                        vk::RenderPassDesc *renderPassDesc);
-    void onRenderDepthStencil(Serial currentSerial,
-                              vk::CommandGraphNode *writingNode,
+    void onRenderDepthStencil(vk::CommandGraphResource *framebufferVk,
+                              vk::CommandBuffer *commandBuffer,
                               vk::RenderPassDesc *renderPassDesc);
 
     const vk::ImageHelper &getImage() const;
 
     vk::ImageHelper *getImageForWrite(Serial currentSerial,
-                                      vk::CommandGraphNode *writingNode) const;
+                                      vk::CommandGraphResource *writingResource) const;
     vk::ImageView *getImageView() const;
     vk::CommandGraphResource *getResource() const;
 
