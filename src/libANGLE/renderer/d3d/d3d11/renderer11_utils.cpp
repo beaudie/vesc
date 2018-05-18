@@ -929,6 +929,20 @@ size_t GetMaximumComputeTextureUnits(D3D_FEATURE_LEVEL featureLevel)
     }
 }
 
+GLuint GetMaximumComputeShaderStorageBlocks(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+            return static_cast<GLuint>(D3D11_1_UAV_SLOT_COUNT);
+        case D3D_FEATURE_LEVEL_11_0:
+            return static_cast<GLuint>(D3D11_PS_CS_UAV_REGISTER_COUNT);
+
+        default:
+            return 0;
+    }
+}
+
 size_t GetMaximumImageUnits(D3D_FEATURE_LEVEL featureLevel)
 {
     switch (featureLevel)
@@ -965,7 +979,7 @@ size_t GetMaximumCombinedShaderOutputResources(D3D_FEATURE_LEVEL featureLevel)
         // requirement for GLES 3.1.
         case D3D_FEATURE_LEVEL_11_1:
         case D3D_FEATURE_LEVEL_11_0:
-            return 4;
+            return 8;
         default:
             return 0;
     }
@@ -1412,8 +1426,12 @@ void GenerateCaps(ID3D11Device *device,
     caps->maxImageUnits = static_cast<GLuint>(GetMaximumImageUnits(featureLevel));
     caps->maxComputeImageUniforms =
         static_cast<GLuint>(GetMaximumComputeImageUniforms(featureLevel));
-    caps->maxCombinedShaderOutputResources =
-        static_cast<GLuint>(GetMaximumCombinedShaderOutputResources(featureLevel));
+    caps->maxCombinedShaderOutputResources = GetMaximumCombinedShaderOutputResources(featureLevel);
+
+    caps->maxShaderStorageBlocks[gl::ShaderType::Compute] =
+        GetMaximumComputeShaderStorageBlocks(featureLevel);
+    caps->maxShaderStorageBufferBindings = caps->maxShaderStorageBlocks[gl::ShaderType::Compute];
+    caps->maxCombinedShaderStorageBlocks = caps->maxShaderStorageBufferBindings;
 
     // Aggregate shader limits
     caps->maxUniformBufferBindings = caps->maxShaderUniformBlocks[gl::ShaderType::Vertex] +

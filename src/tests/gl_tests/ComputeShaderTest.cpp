@@ -464,6 +464,107 @@ TEST_P(ComputeShaderTest, ImageArrayWithoutBindingQualifier)
     }
 }
 
+// Test that shader storage block is supported.
+TEST_P(ComputeShaderTest, ShaderStorageBlock)
+{
+    const std::string csSource =
+        R"(#version 310 es
+        layout(local_size_x=8) in;
+        layout(rgba8) uniform highp readonly image2D mImage2DInput;
+        layout(rgba8) uniform highp writeonly image2D mImage2DOutput;
+        layout(std140, binding = 1) buffer blockName {
+            int data[2];
+        };
+        void main()
+        {
+            int t1 = data[0];
+            int t2 = data[1];
+            vec4 result2d = imageLoad(mImage2DInput, ivec2(t1, t2));
+            imageStore(mImage2DOutput, ivec2(gl_LocalInvocationID.xy), result2d);
+        })";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test that shader storage block instance is supported.
+TEST_P(ComputeShaderTest, ShaderStorageBlockInstance)
+{
+    const std::string csSource =
+        R"(#version 310 es
+        layout(local_size_x=8) in;
+        layout(rgba8) uniform highp readonly image2D mImage2DInput;
+        layout(rgba8) uniform highp writeonly image2D mImage2DOutput;
+        layout(std140, binding = 1) buffer blockName {
+            int data[2];
+        } instanceName;
+        void main()
+        {
+            int t1 = instanceName.data[0];
+            int t2 = instanceName.data[1];
+            vec4 result2d = imageLoad(mImage2DInput, ivec2(t1, t2));
+            imageStore(mImage2DOutput, ivec2(gl_LocalInvocationID.xy), result2d);
+        })";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test that shader storage block instance array is supported.
+TEST_P(ComputeShaderTest, ShaderStorageBlockInstanceArray)
+{
+    const std::string csSource =
+        R"(#version 310 es
+        layout(local_size_x=8) in;
+        layout(rgba8) uniform highp readonly image2D mImage2DInput;
+        layout(rgba8) uniform highp writeonly image2D mImage2DOutput;
+        layout(std140, binding = 1) buffer blockName {
+            int data[2];
+        } instanceName[2];
+        void main()
+        {
+            int t1 = instanceName[0].data[0];
+            int t2 = instanceName[1].data[1];
+            vec4 result2d = imageLoad(mImage2DInput, ivec2(t1, t2));
+            imageStore(mImage2DOutput, ivec2(gl_LocalInvocationID.xy), result2d);
+        })";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test that combined shader storage blocks are supported.
+TEST_P(ComputeShaderTest, CombinedShaderStorageBlocks)
+{
+    const std::string csSource =
+        R"(#version 310 es
+        layout(local_size_x=8) in;
+        layout(rgba8) uniform highp readonly image2D mImage2DInput;
+        layout(rgba8) uniform highp writeonly image2D mImage2DOutput;
+        layout(std140, binding = 0) buffer blockA {
+            float a1;
+            int a2[2];
+        };
+        layout(std140, binding = 1) buffer blockB {
+            float b1;
+            int b2[2];
+        } instanceB;
+        layout(std140, binding = 2) buffer blockC {
+            float c1;
+            int c2[2];
+        } instanceC[2];
+        void main()
+        {
+            int t1 = a2[0] + instanceB.b2[0];
+            int t2 = instanceC[0].c2[0] + instanceC[1].c2[0];
+            vec4 result2d = imageLoad(mImage2DInput, ivec2(t1, t2));
+            imageStore(mImage2DOutput, ivec2(gl_LocalInvocationID.xy), result2d);
+        })";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+    EXPECT_GL_NO_ERROR();
+}
+
 // imageLoad functions
 TEST_P(ComputeShaderTest, ImageLoad)
 {
