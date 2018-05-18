@@ -78,6 +78,8 @@
             'compiler/translator/QualifierTypes.cpp',
             'compiler/translator/Severity.h',
             'compiler/translator/ShaderLang.cpp',
+            'compiler/translator/ShaderStorageBlockFunctionHLSL.h',
+            'compiler/translator/ShaderStorageBlockFunctionHLSL.cpp',
             'compiler/translator/ShaderVars.cpp',
             'compiler/translator/StaticType.h',
             'compiler/translator/Symbol.cpp',
