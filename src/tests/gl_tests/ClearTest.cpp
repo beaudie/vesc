@@ -480,14 +480,6 @@ TEST_P(ScissoredClearTest, ScissoredColorAndDepthClear)
 // Tests combined color+depth clear.
 TEST_P(ClearTest, MaskedColorAndDepthClear)
 {
-    // Possible Intel driver bug on Intel 630.
-    // TODO(jmadill): Re-enable when possible. http://anglebug.com/2547
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsWindows() && IsVulkan());
-
-    // Flaky on Android Nexus 5x, possible driver bug.
-    // TODO(jmadill): Re-enable when possible. http://anglebug.com/2548
-    ANGLE_SKIP_TEST_IF(IsOpenGLES() && IsAndroid());
-
     // Clear to a random color and 1.0 depth.
     Vector4 color1(0.1f, 0.2f, 0.3f, 0.4f);
     GLColor color1RGB(color1);

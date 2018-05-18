@@ -606,9 +606,6 @@ gl::Error FramebufferVk::clearWithDraw(ContextVk *contextVk, VkColorComponentFla
     const vk::PipelineLayout *pipelineLayout = nullptr;
     ANGLE_TRY(renderer->getInternalUniformPipelineLayout(&pipelineLayout));
 
-    vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
-
     vk::CommandGraphNode *node = nullptr;
     ANGLE_TRY(getCommandGraphNodeForDraw(contextVk, &node));
 
@@ -663,7 +660,9 @@ gl::Error FramebufferVk::clearWithDraw(ContextVk *contextVk, VkColorComponentFla
 
         ANGLE_TRY(mMaskedClearUniformBuffer.buffer.init(device, uniformBufferInfo));
 
-        VkMemoryPropertyFlags memoryFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+        VkMemoryPropertyFlags memoryFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
+                                            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                                            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
         size_t requiredSize               = 0;
         ANGLE_TRY(vk::AllocateBufferMemory(renderer, memoryFlags, &mMaskedClearUniformBuffer.buffer,
                                            &mMaskedClearUniformBuffer.memory, &requiredSize));
@@ -698,8 +697,13 @@ gl::Error FramebufferVk::clearWithDraw(ContextVk *contextVk, VkColorComponentFla
     }
 
     VkClearColorValue clearColorValue = contextVk->getClearColorValue().color;
-    commandBuffer->updateBuffer(mMaskedClearUniformBuffer.buffer, 0, sizeof(VkClearColorValue),
-                                clearColorValue.float32);
+
+    uint8_t *mapPointer = nullptr;
+    ANGLE_TRY(
+        mMaskedClearUniformBuffer.memory.map(device, 0, sizeof(VkClearColorValue), 0, &mapPointer));
+    ASSERT(mapPointer);
+    memcpy(mapPointer, clearColorValue.float32, sizeof(VkClearColorValue));
+    mMaskedClearUniformBuffer.memory.unmap(device);
 
     vk::CommandBuffer *drawCommandBuffer = nullptr;
     ANGLE_TRY(node->beginInsideRenderPassRecording(renderer, &drawCommandBuffer));
