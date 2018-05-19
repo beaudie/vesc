@@ -3680,7 +3680,8 @@ gl::Error Renderer11::dispatchCompute(const gl::Context *context,
                                       GLuint numGroupsY,
                                       GLuint numGroupsZ)
 {
-    ANGLE_TRY(mStateManager.updateStateForCompute(context, numGroupsX, numGroupsY, numGroupsZ));
+    ANGLE_TRY_TO_ERR(
+        mStateManager.updateStateForCompute(context, numGroupsX, numGroupsY, numGroupsZ));
     ANGLE_TRY(applyComputeShader(context));
 
     mDeviceContext->Dispatch(numGroupsX, numGroupsY, numGroupsZ);
