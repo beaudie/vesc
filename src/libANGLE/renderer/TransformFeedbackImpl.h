@@ -21,7 +21,7 @@ class TransformFeedbackImpl : angle::NonCopyable
     TransformFeedbackImpl(const gl::TransformFeedbackState &state) : mState(state) {}
     virtual ~TransformFeedbackImpl() { }
 
-    virtual void begin(GLenum primitiveMode) = 0;
+    virtual void begin(gl::PrimitiveMode primitiveMode) = 0;
     virtual void end() = 0;
     virtual void pause() = 0;
     virtual void resume() = 0;

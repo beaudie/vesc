@@ -494,24 +494,26 @@ bool ValidateVertexShaderAttributeTypeMatch(Context *context)
     return true;
 }
 
-bool IsCompatibleDrawModeWithGeometryShader(GLenum drawMode,
-                                            GLenum geometryShaderInputPrimitiveType)
+bool IsCompatibleDrawModeWithGeometryShader(PrimitiveMode drawMode,
+                                            PrimitiveMode geometryShaderInputPrimitiveType)
 {
     // [EXT_geometry_shader] Section 11.1gs.1, Geometry Shader Input Primitives
     switch (geometryShaderInputPrimitiveType)
     {
-        case GL_POINTS:
-            return drawMode == GL_POINTS;
-        case GL_LINES:
-            return drawMode == GL_LINES || drawMode == GL_LINE_STRIP || drawMode == GL_LINE_LOOP;
-        case GL_LINES_ADJACENCY_EXT:
-            return drawMode == GL_LINES_ADJACENCY_EXT || drawMode == GL_LINE_STRIP_ADJACENCY_EXT;
-        case GL_TRIANGLES:
-            return drawMode == GL_TRIANGLES || drawMode == GL_TRIANGLE_FAN ||
-                   drawMode == GL_TRIANGLE_STRIP;
-        case GL_TRIANGLES_ADJACENCY_EXT:
-            return drawMode == GL_TRIANGLES_ADJACENCY_EXT ||
-                   drawMode == GL_TRIANGLE_STRIP_ADJACENCY_EXT;
+        case PrimitiveMode::Points:
+            return drawMode == PrimitiveMode::Points;
+        case PrimitiveMode::Lines:
+            return drawMode == PrimitiveMode::Lines || drawMode == PrimitiveMode::LineStrip ||
+                   drawMode == PrimitiveMode::LineLoop;
+        case PrimitiveMode::LinesAdjacency:
+            return drawMode == PrimitiveMode::LinesAdjacency ||
+                   drawMode == PrimitiveMode::LineStripAdjacency;
+        case PrimitiveMode::Triangles:
+            return drawMode == PrimitiveMode::Triangles || drawMode == PrimitiveMode::TriangleFan ||
+                   drawMode == PrimitiveMode::TriangleStrip;
+        case PrimitiveMode::TrianglesAdjacency:
+            return drawMode == PrimitiveMode::TrianglesAdjacency ||
+                   drawMode == PrimitiveMode::TriangleStripAdjacency;
         default:
             UNREACHABLE();
             return false;
@@ -635,8 +637,8 @@ bool ValidTexture2DDestinationTarget(const Context *context, TextureTarget targe
 }
 
 bool ValidateTransformFeedbackPrimitiveMode(const Context *context,
-                                            GLenum transformFeedbackPrimitiveMode,
-                                            GLenum renderPrimitiveMode)
+                                            PrimitiveMode transformFeedbackPrimitiveMode,
+                                            PrimitiveMode renderPrimitiveMode)
 {
     ASSERT(context);
 
@@ -651,15 +653,16 @@ bool ValidateTransformFeedbackPrimitiveMode(const Context *context,
     // [GL_EXT_geometry_shader] Table 12.1gs
     switch (transformFeedbackPrimitiveMode)
     {
-        case GL_POINTS:
-            return renderPrimitiveMode == GL_POINTS;
-        case GL_TRIANGLES:
-            return renderPrimitiveMode == GL_TRIANGLES ||
-                   renderPrimitiveMode == GL_TRIANGLE_STRIP ||
-                   renderPrimitiveMode == GL_TRIANGLE_FAN;
-        case GL_LINES:
-            return renderPrimitiveMode == GL_LINES || renderPrimitiveMode == GL_LINE_LOOP ||
-                   renderPrimitiveMode == GL_LINE_STRIP;
+        case PrimitiveMode::Points:
+            return renderPrimitiveMode == PrimitiveMode::Points;
+        case PrimitiveMode::Triangles:
+            return renderPrimitiveMode == PrimitiveMode::Triangles ||
+                   renderPrimitiveMode == PrimitiveMode::TriangleStrip ||
+                   renderPrimitiveMode == PrimitiveMode::TriangleFan;
+        case PrimitiveMode::Lines:
+            return renderPrimitiveMode == PrimitiveMode::Lines ||
+                   renderPrimitiveMode == PrimitiveMode::LineLoop ||
+                   renderPrimitiveMode == PrimitiveMode::LineStrip;
         default:
             UNREACHABLE();
             return false;
@@ -667,7 +670,7 @@ bool ValidateTransformFeedbackPrimitiveMode(const Context *context,
 }
 
 bool ValidateDrawElementsInstancedBase(Context *context,
-                                       GLenum mode,
+                                       PrimitiveMode mode,
                                        GLsizei count,
                                        GLenum type,
                                        const GLvoid *indices,
@@ -688,7 +691,7 @@ bool ValidateDrawElementsInstancedBase(Context *context,
 }
 
 bool ValidateDrawArraysInstancedBase(Context *context,
-                                     GLenum mode,
+                                     PrimitiveMode mode,
                                      GLint first,
                                      GLsizei count,
                                      GLsizei primcount)
@@ -2616,25 +2619,25 @@ bool ValidateCopyTexImageParametersBase(Context *context,
     return true;
 }
 
-bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
+bool ValidateDrawBase(Context *context, PrimitiveMode mode, GLsizei count)
 {
     const Extensions &extensions = context->getExtensions();
 
     switch (mode)
     {
-        case GL_POINTS:
-        case GL_LINES:
-        case GL_LINE_LOOP:
-        case GL_LINE_STRIP:
-        case GL_TRIANGLES:
-        case GL_TRIANGLE_STRIP:
-        case GL_TRIANGLE_FAN:
+        case PrimitiveMode::Points:
+        case PrimitiveMode::Lines:
+        case PrimitiveMode::LineLoop:
+        case PrimitiveMode::LineStrip:
+        case PrimitiveMode::Triangles:
+        case PrimitiveMode::TriangleStrip:
+        case PrimitiveMode::TriangleFan:
             break;
 
-        case GL_LINES_ADJACENCY_EXT:
-        case GL_LINE_STRIP_ADJACENCY_EXT:
-        case GL_TRIANGLES_ADJACENCY_EXT:
-        case GL_TRIANGLE_STRIP_ADJACENCY_EXT:
+        case PrimitiveMode::LinesAdjacency:
+        case PrimitiveMode::LineStripAdjacency:
+        case PrimitiveMode::TrianglesAdjacency:
+        case PrimitiveMode::TriangleStripAdjacency:
             if (!extensions.geometryShader)
             {
                 ANGLE_VALIDATION_ERR(context, InvalidEnum(), GeometryShaderExtensionNotEnabled);
@@ -2861,7 +2864,7 @@ bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count)
 }
 
 bool ValidateDrawArraysCommon(Context *context,
-                              GLenum mode,
+                              PrimitiveMode mode,
                               GLint first,
                               GLsizei count,
                               GLsizei primcount)
@@ -2920,7 +2923,7 @@ bool ValidateDrawArraysCommon(Context *context,
 }
 
 bool ValidateDrawArraysInstancedANGLE(Context *context,
-                                      GLenum mode,
+                                      PrimitiveMode mode,
                                       GLint first,
                                       GLsizei count,
                                       GLsizei primcount)
@@ -2939,7 +2942,7 @@ bool ValidateDrawArraysInstancedANGLE(Context *context,
     return ValidateDrawInstancedANGLE(context);
 }
 
-bool ValidateDrawElementsBase(Context *context, GLenum mode, GLenum type)
+bool ValidateDrawElementsBase(Context *context, PrimitiveMode mode, GLenum type)
 {
     switch (type)
     {
@@ -2990,7 +2993,7 @@ bool ValidateDrawElementsBase(Context *context, GLenum mode, GLenum type)
 }
 
 bool ValidateDrawElementsCommon(Context *context,
-                                GLenum mode,
+                                PrimitiveMode mode,
                                 GLsizei count,
                                 GLenum type,
                                 const void *indices,
@@ -3164,7 +3167,7 @@ bool ValidateDrawElementsCommon(Context *context,
 }
 
 bool ValidateDrawElementsInstancedCommon(Context *context,
-                                         GLenum mode,
+                                         PrimitiveMode mode,
                                          GLsizei count,
                                          GLenum type,
                                          const void *indices,
@@ -3174,7 +3177,7 @@ bool ValidateDrawElementsInstancedCommon(Context *context,
 }
 
 bool ValidateDrawElementsInstancedANGLE(Context *context,
-                                        GLenum mode,
+                                        PrimitiveMode mode,
                                         GLsizei count,
                                         GLenum type,
                                         const void *indices,

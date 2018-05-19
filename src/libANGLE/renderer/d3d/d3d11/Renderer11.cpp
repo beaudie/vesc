@@ -1470,13 +1470,13 @@ gl::Error Renderer11::drawArrays(const gl::Context *context, const gl::DrawCallP
         return gl::NoError();
     }
 
-    if (params.mode() == GL_LINE_LOOP)
+    if (params.mode() == gl::PrimitiveMode::LineLoop)
     {
         return drawLineLoop(context, clampedVertexCount, GL_NONE, nullptr, 0,
                             adjustedInstanceCount);
     }
 
-    if (params.mode() == GL_TRIANGLE_FAN)
+    if (params.mode() == gl::PrimitiveMode::TriangleFan)
     {
         return drawTriangleFan(context, clampedVertexCount, GL_NONE, nullptr, 0,
                                adjustedInstanceCount);
@@ -1485,7 +1485,7 @@ gl::Error Renderer11::drawArrays(const gl::Context *context, const gl::DrawCallP
     bool useInstancedPointSpriteEmulation =
         programD3D->usesPointSize() && getWorkarounds().useInstancedPointSpriteEmulation;
 
-    if (params.mode() != GL_POINTS || !useInstancedPointSpriteEmulation)
+    if (params.mode() != gl::PrimitiveMode::Points || !useInstancedPointSpriteEmulation)
     {
         if (adjustedInstanceCount == 0)
         {
@@ -1547,13 +1547,13 @@ gl::Error Renderer11::drawElements(const gl::Context *context, const gl::DrawCal
     const gl::Program *program    = glState.getProgram();
     GLsizei adjustedInstanceCount = GetAdjustedInstanceCount(program, params.instances());
 
-    if (params.mode() == GL_LINE_LOOP)
+    if (params.mode() == gl::PrimitiveMode::LineLoop)
     {
         return drawLineLoop(context, params.indexCount(), params.type(), params.indices(),
                             baseVertex, adjustedInstanceCount);
     }
 
-    if (params.mode() == GL_TRIANGLE_FAN)
+    if (params.mode() == gl::PrimitiveMode::TriangleFan)
     {
         return drawTriangleFan(context, params.indexCount(), params.type(), params.indices(),
                                baseVertex, adjustedInstanceCount);
@@ -1561,7 +1561,8 @@ gl::Error Renderer11::drawElements(const gl::Context *context, const gl::DrawCal
 
     const ProgramD3D *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
 
-    if (params.mode() != GL_POINTS || !programD3D->usesInstancedPointSpriteEmulation())
+    if (params.mode() != gl::PrimitiveMode::Points ||
+        !programD3D->usesInstancedPointSpriteEmulation())
     {
         if (adjustedInstanceCount == 0)
         {

@@ -15,23 +15,23 @@
 namespace gl
 {
 
-PrimitiveType GetPrimitiveType(GLenum drawMode)
+PrimitiveType GetPrimitiveType(PrimitiveMode drawMode)
 {
     switch (drawMode)
     {
-        case GL_POINTS:
+        case PrimitiveMode::Points:
             return PRIMITIVE_POINTS;
-        case GL_LINES:
+        case PrimitiveMode::Lines:
             return PRIMITIVE_LINES;
-        case GL_LINE_STRIP:
+        case PrimitiveMode::LineStrip:
             return PRIMITIVE_LINE_STRIP;
-        case GL_LINE_LOOP:
+        case PrimitiveMode::LineLoop:
             return PRIMITIVE_LINE_LOOP;
-        case GL_TRIANGLES:
+        case PrimitiveMode::Triangles:
             return PRIMITIVE_TRIANGLES;
-        case GL_TRIANGLE_STRIP:
+        case gl::PrimitiveMode::TriangleStrip:
             return PRIMITIVE_TRIANGLE_STRIP;
-        case GL_TRIANGLE_FAN:
+        case gl::PrimitiveMode::TriangleFan:
             return PRIMITIVE_TRIANGLE_FAN;
         default:
             UNREACHABLE();

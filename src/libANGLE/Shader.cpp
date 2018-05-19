@@ -426,13 +426,13 @@ void Shader::resolveCompile(const Context *context)
 
             if (sh::HasValidGeometryShaderInputPrimitiveType(compilerHandle))
             {
-                mState.mGeometryShaderInputPrimitiveType =
-                    sh::GetGeometryShaderInputPrimitiveType(compilerHandle);
+                mState.mGeometryShaderInputPrimitiveType = FromGLenum<PrimitiveMode>(
+                    sh::GetGeometryShaderInputPrimitiveType(compilerHandle));
             }
             if (sh::HasValidGeometryShaderOutputPrimitiveType(compilerHandle))
             {
-                mState.mGeometryShaderOutputPrimitiveType =
-                    sh::GetGeometryShaderOutputPrimitiveType(compilerHandle);
+                mState.mGeometryShaderOutputPrimitiveType = FromGLenum<PrimitiveMode>(
+                    sh::GetGeometryShaderOutputPrimitiveType(compilerHandle));
             }
             if (sh::HasValidGeometryShaderMaxVertices(compilerHandle))
             {
@@ -594,13 +594,13 @@ int Shader::getNumViews(const Context *context)
     return mState.mNumViews;
 }
 
-Optional<GLenum> Shader::getGeometryShaderInputPrimitiveType(const Context *context)
+Optional<PrimitiveMode> Shader::getGeometryShaderInputPrimitiveType(const Context *context)
 {
     resolveCompile(context);
     return mState.mGeometryShaderInputPrimitiveType;
 }
 
-Optional<GLenum> Shader::getGeometryShaderOutputPrimitiveType(const Context *context)
+Optional<PrimitiveMode> Shader::getGeometryShaderOutputPrimitiveType(const Context *context)
 {
     resolveCompile(context);
     return mState.mGeometryShaderOutputPrimitiveType;
