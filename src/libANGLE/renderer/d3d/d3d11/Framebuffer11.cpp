@@ -65,23 +65,23 @@ Framebuffer11::~Framebuffer11()
 {
 }
 
-gl::Error Framebuffer11::markAttachmentsDirty(const gl::Context *context) const
+angle::Result Framebuffer11::markAttachmentsDirty(const gl::Context *context) const
 {
     const auto &colorAttachments = mState.getColorAttachments();
     for (size_t drawBuffer : mState.getEnabledDrawBuffers())
     {
         const gl::FramebufferAttachment &colorAttachment = colorAttachments[drawBuffer];
         ASSERT(colorAttachment.isAttached());
-        ANGLE_TRY(MarkAttachmentsDirty(context, &colorAttachment));
+        ANGLE_TRY_ERR(MarkAttachmentsDirty(context, &colorAttachment), context);
     }
 
     const gl::FramebufferAttachment *dsAttachment = mState.getDepthOrStencilAttachment();
     if (dsAttachment)
     {
-        ANGLE_TRY(MarkAttachmentsDirty(context, dsAttachment));
+        ANGLE_TRY_ERR(MarkAttachmentsDirty(context, dsAttachment), context);
     }
 
-    return gl::NoError();
+    return angle::Result::Continue;
 }
 
 gl::Error Framebuffer11::clearImpl(const gl::Context *context, const ClearParameters &clearParams)
@@ -107,7 +107,7 @@ gl::Error Framebuffer11::clearImpl(const gl::Context *context, const ClearParame
         ANGLE_TRY(clearer->clearFramebuffer(context, clearParams, mState));
     }
 
-    ANGLE_TRY(markAttachmentsDirty(context));
+    ANGLE_TRY_TO_ERR(markAttachmentsDirty(context));
 
     return gl::NoError();
 }
@@ -347,7 +347,7 @@ gl::Error Framebuffer11::blitImpl(const gl::Context *context,
                                                   blitDepth, blitStencil));
     }
 
-    ANGLE_TRY(markAttachmentsDirty(context));
+    ANGLE_TRY_TO_ERR(markAttachmentsDirty(context));
     return gl::NoError();
 }
 
