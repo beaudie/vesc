@@ -110,8 +110,8 @@ gl::Error VertexArray11::syncState(const gl::Context *context,
     return gl::NoError();
 }
 
-gl::Error VertexArray11::syncStateForDraw(const gl::Context *context,
-                                          const gl::DrawCallParams &drawCallParams)
+angle::Result VertexArray11::syncStateForDraw(const gl::Context *context,
+                                              const gl::DrawCallParams &drawCallParams)
 {
     Renderer11 *renderer         = GetImplAs<Context11>(context)->getRenderer();
     StateManager11 *stateManager = renderer->getStateManager();
@@ -128,7 +128,7 @@ gl::Error VertexArray11::syncStateForDraw(const gl::Context *context,
         gl::AttributesMask activeDirtyAttribs = (mAttribsToTranslate & activeLocations);
         if (activeDirtyAttribs.any())
         {
-            ANGLE_TRY(updateDirtyAttribs(context, activeDirtyAttribs));
+            ANGLE_TRY_ERR(updateDirtyAttribs(context, activeDirtyAttribs), context);
             stateManager->invalidateInputLayout();
         }
     }
@@ -141,8 +141,9 @@ gl::Error VertexArray11::syncStateForDraw(const gl::Context *context,
 
         if (activeDynamicAttribs.any())
         {
-            ANGLE_TRY(updateDynamicAttribs(context, stateManager->getVertexDataManager(),
-                                           drawCallParams, activeDynamicAttribs));
+            ANGLE_TRY_ERR(updateDynamicAttribs(context, stateManager->getVertexDataManager(),
+                                               drawCallParams, activeDynamicAttribs),
+                          context);
             stateManager->invalidateInputLayout();
         }
     }
@@ -159,7 +160,8 @@ gl::Error VertexArray11::syncStateForDraw(const gl::Context *context,
             mLastDrawElementsIndices     = drawCallParams.indices();
             mLastPrimitiveRestartEnabled = restartEnabled;
 
-            ANGLE_TRY(updateElementArrayStorage(context, drawCallParams, restartEnabled));
+            ANGLE_TRY_ERR(updateElementArrayStorage(context, drawCallParams, restartEnabled),
+                          context);
             stateManager->invalidateIndexBuffer();
         }
         else if (mCurrentElementArrayStorage == IndexStorageType::Dynamic)
@@ -168,7 +170,7 @@ gl::Error VertexArray11::syncStateForDraw(const gl::Context *context,
         }
     }
 
-    return gl::NoError();
+    return angle::Result::Continue;
 }
 
 gl::Error VertexArray11::updateElementArrayStorage(const gl::Context *context,
