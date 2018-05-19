@@ -17,6 +17,7 @@
 #include <vector>
 #include "angle_gl.h"
 
+#include "common/PackedEnums.h"
 #include "common/mathutil.h"
 
 namespace sh
@@ -70,7 +71,7 @@ IndexRange ComputeIndexRange(GLenum indexType,
 // Get the primitive restart index value for the given index type.
 GLuint GetPrimitiveRestartIndex(GLenum indexType);
 
-bool IsTriangleMode(GLenum drawMode);
+bool IsTriangleMode(PrimitiveMode drawMode);
 bool IsIntegerFormat(GLenum unsizedFormat);
 
 // Returns the product of the sizes in the vector, or 1 if the vector is empty. Doesn't currently

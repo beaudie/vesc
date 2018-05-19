@@ -66,7 +66,7 @@ gl::Error Framebuffer9::clearImpl(const gl::Context *context, const ClearParamet
     const gl::State &glState = context->getGLState();
     float nearZ              = glState.getNearPlane();
     float farZ = glState.getFarPlane();
-    mRenderer->setViewport(glState.getViewport(), nearZ, farZ, GL_TRIANGLES,
+    mRenderer->setViewport(glState.getViewport(), nearZ, farZ, gl::PrimitiveMode::Triangles,
                            glState.getRasterizerState().frontFace, true);
 
     mRenderer->setScissorRectangle(glState.getScissor(), glState.isScissorTestEnabled());

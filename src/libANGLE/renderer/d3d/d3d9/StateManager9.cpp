@@ -477,7 +477,7 @@ gl::Error StateManager9::setBlendDepthRasterStates(const gl::State &glState,
 void StateManager9::setViewportState(const gl::Rectangle &viewport,
                                      float zNear,
                                      float zFar,
-                                     GLenum drawMode,
+                                     gl::PrimitiveMode drawMode,
                                      GLenum frontFace,
                                      bool ignoreViewport)
 {

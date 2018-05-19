@@ -427,8 +427,8 @@ class ProgramState final : angle::NonCopyable
     int mNumViews;
 
     // GL_EXT_geometry_shader.
-    GLenum mGeometryShaderInputPrimitiveType;
-    GLenum mGeometryShaderOutputPrimitiveType;
+    PrimitiveMode mGeometryShaderInputPrimitiveType;
+    PrimitiveMode mGeometryShaderOutputPrimitiveType;
     int mGeometryShaderInvocations;
     int mGeometryShaderMaxVertices;
 
@@ -658,11 +658,11 @@ class Program final : angle::NonCopyable, public LabeledObject
         return mState.mComputeShaderLocalSize;
     }
 
-    GLenum getGeometryShaderInputPrimitiveType() const
+    PrimitiveMode getGeometryShaderInputPrimitiveType() const
     {
         return mState.mGeometryShaderInputPrimitiveType;
     }
-    GLenum getGeometryShaderOutputPrimitiveType() const
+    PrimitiveMode getGeometryShaderOutputPrimitiveType() const
     {
         return mState.mGeometryShaderOutputPrimitiveType;
     }

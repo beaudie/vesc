@@ -582,7 +582,7 @@ StateManager11::StateManager11(Renderer11 *renderer)
       mCurrentInputLayout(),
       mDirtyVertexBufferRange(gl::MAX_VERTEX_ATTRIBS, 0),
       mCurrentPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_UNDEFINED),
-      mLastAppliedDrawMode(GL_INVALID_INDEX),
+      mLastAppliedDrawMode(gl::PrimitiveMode::InvalidEnum),
       mCurrentMinimumDrawCount(0),
       mDirtySwizzles(false),
       mAppliedIB(nullptr),
@@ -1211,7 +1211,7 @@ gl::Error StateManager11::syncRasterizerState(const gl::Context *context,
 {
     // TODO: Remove pointDrawMode and multiSample from gl::RasterizerState.
     gl::RasterizerState rasterState = context->getGLState().getRasterizerState();
-    rasterState.pointDrawMode       = (drawCallParams.mode() == GL_POINTS);
+    rasterState.pointDrawMode       = (drawCallParams.mode() == gl::PrimitiveMode::Points);
     rasterState.multiSample         = mCurRasterState.multiSample;
 
     ID3D11RasterizerState *dxRasterState = nullptr;
@@ -2052,7 +2052,7 @@ gl::Error StateManager11::updateState(const gl::Context *context,
         mLastAppliedDrawMode = drawCallParams.mode();
         mInternalDirtyBits.set(DIRTY_BIT_PRIMITIVE_TOPOLOGY);
 
-        bool pointDrawMode = (drawCallParams.mode() == GL_POINTS);
+        bool pointDrawMode = (drawCallParams.mode() == gl::PrimitiveMode::Points);
         if (pointDrawMode != mCurRasterState.pointDrawMode)
         {
             mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
@@ -2667,7 +2667,7 @@ gl::Error StateManager11::setTextureForImage(const gl::Context *context,
 // 6. An internal shader was used.             -> triggered in StateManager11::set*Shader.
 // 7. Drawing with/without point sprites.      -> checked in StateManager11::updateState.
 // TODO(jmadill): Use dirty bits for transform feedback.
-gl::Error StateManager11::syncProgram(const gl::Context *context, GLenum drawMode)
+gl::Error StateManager11::syncProgram(const gl::Context *context, gl::PrimitiveMode drawMode)
 {
     Context11 *context11 = GetImplAs<Context11>(context);
     ANGLE_TRY(context11->triggerDrawCallProgramRecompilation(context, drawMode));
@@ -2777,7 +2777,7 @@ gl::Error StateManager11::applyVertexBuffers(const gl::Context *context,
     bool programUsesInstancedPointSprites =
         programD3D->usesPointSize() && programD3D->usesInstancedPointSpriteEmulation();
     bool instancedPointSpritesActive =
-        programUsesInstancedPointSprites && (drawCallParams.mode() == GL_POINTS);
+        programUsesInstancedPointSprites && (drawCallParams.mode() == gl::PrimitiveMode::Points);
 
     // Note that if we use instance emulation, we reserve the first buffer slot.
     size_t reservedBuffers = GetReservedBufferCount(programUsesInstancedPointSprites);
@@ -3451,13 +3451,13 @@ void StateManager11::ConstantBufferObserver::reset()
 
 void StateManager11::syncPrimitiveTopology(const gl::State &glState,
                                            ProgramD3D *programD3D,
-                                           GLenum currentDrawMode)
+                                           gl::PrimitiveMode currentDrawMode)
 {
     D3D11_PRIMITIVE_TOPOLOGY primitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_UNDEFINED;
 
     switch (currentDrawMode)
     {
-        case GL_POINTS:
+        case gl::PrimitiveMode::Points:
         {
             bool usesPointSize = programD3D->usesPointSize();
 
@@ -3485,30 +3485,30 @@ void StateManager11::syncPrimitiveTopology(const gl::State &glState,
             mCurrentMinimumDrawCount = 1;
             break;
         }
-        case GL_LINES:
+        case gl::PrimitiveMode::Lines:
             primitiveTopology        = D3D_PRIMITIVE_TOPOLOGY_LINELIST;
             mCurrentMinimumDrawCount = 2;
             break;
-        case GL_LINE_LOOP:
+        case gl::PrimitiveMode::LineLoop:
             primitiveTopology        = D3D_PRIMITIVE_TOPOLOGY_LINESTRIP;
             mCurrentMinimumDrawCount = 2;
             break;
-        case GL_LINE_STRIP:
+        case gl::PrimitiveMode::LineStrip:
             primitiveTopology        = D3D_PRIMITIVE_TOPOLOGY_LINESTRIP;
             mCurrentMinimumDrawCount = 2;
             break;
-        case GL_TRIANGLES:
+        case gl::PrimitiveMode::Triangles:
             primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
             mCurrentMinimumDrawCount =
                 CullsEverything(glState) ? std::numeric_limits<GLsizei>::max() : 3;
             break;
-        case GL_TRIANGLE_STRIP:
+        case gl::PrimitiveMode::TriangleStrip:
             primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
             mCurrentMinimumDrawCount =
                 CullsEverything(glState) ? std::numeric_limits<GLsizei>::max() : 3;
             break;
         // emulate fans via rewriting index buffer
-        case GL_TRIANGLE_FAN:
+        case gl::PrimitiveMode::TriangleFan:
             primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
             mCurrentMinimumDrawCount =
                 CullsEverything(glState) ? std::numeric_limits<GLsizei>::max() : 3;

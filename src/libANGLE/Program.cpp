@@ -792,8 +792,8 @@ ProgramState::ProgramState()
       mBinaryRetrieveableHint(false),
       mNumViews(-1),
       // [GL_EXT_geometry_shader] Table 20.22
-      mGeometryShaderInputPrimitiveType(GL_TRIANGLES),
-      mGeometryShaderOutputPrimitiveType(GL_TRIANGLE_STRIP),
+      mGeometryShaderInputPrimitiveType(PrimitiveMode::Triangles),
+      mGeometryShaderOutputPrimitiveType(PrimitiveMode::TriangleStrip),
       mGeometryShaderInvocations(1),
       mGeometryShaderMaxVertices(0)
 {
@@ -1307,8 +1307,8 @@ void Program::unlink()
     mState.mSamplerBindings.clear();
     mState.mImageBindings.clear();
     mState.mNumViews = -1;
-    mState.mGeometryShaderInputPrimitiveType  = GL_TRIANGLES;
-    mState.mGeometryShaderOutputPrimitiveType = GL_TRIANGLE_STRIP;
+    mState.mGeometryShaderInputPrimitiveType  = PrimitiveMode::Triangles;
+    mState.mGeometryShaderOutputPrimitiveType = PrimitiveMode::TriangleStrip;
     mState.mGeometryShaderInvocations         = 1;
     mState.mGeometryShaderMaxVertices         = 0;
 
@@ -2329,7 +2329,7 @@ bool Program::linkValidateShaders(const Context *context, InfoLog &infoLog)
             }
             ASSERT(geometryShader->getType() == ShaderType::Geometry);
 
-            Optional<GLenum> inputPrimitive =
+            Optional<PrimitiveMode> inputPrimitive =
                 geometryShader->getGeometryShaderInputPrimitiveType(context);
             if (!inputPrimitive.valid())
             {
@@ -2337,7 +2337,7 @@ bool Program::linkValidateShaders(const Context *context, InfoLog &infoLog)
                 return false;
             }
 
-            Optional<GLenum> outputPrimitive =
+            Optional<PrimitiveMode> outputPrimitive =
                 geometryShader->getGeometryShaderOutputPrimitiveType(context);
             if (!outputPrimitive.valid())
             {

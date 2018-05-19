@@ -104,8 +104,8 @@ class ShaderState final : angle::NonCopyable
     int mNumViews;
 
     // Geometry Shader.
-    Optional<GLenum> mGeometryShaderInputPrimitiveType;
-    Optional<GLenum> mGeometryShaderOutputPrimitiveType;
+    Optional<PrimitiveMode> mGeometryShaderInputPrimitiveType;
+    Optional<PrimitiveMode> mGeometryShaderOutputPrimitiveType;
     Optional<GLint> mGeometryShaderMaxVertices;
     int mGeometryShaderInvocations;
 
@@ -180,8 +180,8 @@ class Shader final : angle::NonCopyable, public LabeledObject
 
     int getNumViews(const Context *context);
 
-    Optional<GLenum> getGeometryShaderInputPrimitiveType(const Context *context);
-    Optional<GLenum> getGeometryShaderOutputPrimitiveType(const Context *context);
+    Optional<PrimitiveMode> getGeometryShaderInputPrimitiveType(const Context *context);
+    Optional<PrimitiveMode> getGeometryShaderOutputPrimitiveType(const Context *context);
     int getGeometryShaderInvocations(const Context *context);
     Optional<GLint> getGeometryShaderMaxVertices(const Context *context);
 

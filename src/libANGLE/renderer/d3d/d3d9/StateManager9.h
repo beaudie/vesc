@@ -48,7 +48,7 @@ class StateManager9 final : angle::NonCopyable
     void setViewportState(const gl::Rectangle &viewport,
                           float zNear,
                           float zFar,
-                          GLenum drawMode,
+                          gl::PrimitiveMode drawMode,
                           GLenum frontFace,
                           bool ignoreViewport);
 
