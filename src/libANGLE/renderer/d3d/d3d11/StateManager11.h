@@ -26,6 +26,7 @@ namespace rx
 class Buffer11;
 struct RenderTargetDesc;
 struct Renderer11DeviceCaps;
+class VertexArray11;
 
 class ShaderConstants11 : angle::NonCopyable
 {
@@ -246,6 +247,8 @@ class StateManager11 final : angle::NonCopyable
 
     GLsizei getCurrentMinimumDrawCount() const { return mCurrentMinimumDrawCount; }
     VertexDataManager *getVertexDataManager() { return &mVertexDataManager; }
+
+    ProgramD3D *getProgramD3D() const { return mProgramD3D; }
 
   private:
     template <typename SRVType>
