@@ -33,8 +33,8 @@ class VertexArray11 : public VertexArrayImpl
                         const gl::VertexArray::DirtyBindingBitsArray &bindingBits) override;
 
     // Applied buffer pointers are updated here.
-    gl::Error syncStateForDraw(const gl::Context *context,
-                               const gl::DrawCallParams &drawCallParams);
+    angle::Result syncStateForDraw(const gl::Context *context,
+                                   const gl::DrawCallParams &drawCallParams);
 
     // This will check the dynamic attribs mask.
     bool hasActiveDynamicAttrib(const gl::Context *context);
