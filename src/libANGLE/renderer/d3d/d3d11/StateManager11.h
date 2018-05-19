@@ -261,11 +261,10 @@ class StateManager11 final : angle::NonCopyable
     bool unsetConflictingSRVs(gl::ShaderType shaderType,
                               uintptr_t resource,
                               const gl::ImageIndex *index);
-    void unsetConflictingAttachmentResources(const gl::FramebufferAttachment *attachment,
+    void unsetConflictingAttachmentResources(const gl::FramebufferAttachment &attachment,
                                              ID3D11Resource *resource);
 
     gl::Error syncBlendState(const gl::Context *context,
-                             const gl::Framebuffer *framebuffer,
                              const gl::BlendState &blendState,
                              const gl::ColorF &blendColor,
                              unsigned int sampleMask);
@@ -281,7 +280,7 @@ class StateManager11 final : angle::NonCopyable
 
     void checkPresentPath(const gl::Context *context);
 
-    gl::Error syncFramebuffer(const gl::Context *context, gl::Framebuffer *framebuffer);
+    gl::Error syncFramebuffer(const gl::Context *context);
     gl::Error syncProgram(const gl::Context *context, gl::PrimitiveMode drawMode);
 
     angle::Result syncTextures(const gl::Context *context);
@@ -314,10 +313,10 @@ class StateManager11 final : angle::NonCopyable
     angle::Result generateSwizzlesForShader(const gl::Context *context, gl::ShaderType type);
     angle::Result generateSwizzles(const gl::Context *context);
 
-    gl::Error applyDriverUniforms(const ProgramD3D &programD3D);
-    gl::Error applyUniforms(ProgramD3D *programD3D);
+    gl::Error applyDriverUniforms();
+    gl::Error applyUniforms();
 
-    gl::Error syncUniformBuffers(const gl::Context *context, ProgramD3D *programD3D);
+    gl::Error syncUniformBuffers(const gl::Context *context);
     gl::Error syncTransformFeedbackBuffers(const gl::Context *context);
 
     // These are currently only called internally.
@@ -344,9 +343,7 @@ class StateManager11 final : angle::NonCopyable
                                  UINT offset);
     void applyVertexBufferChanges();
     bool setPrimitiveTopologyInternal(D3D11_PRIMITIVE_TOPOLOGY primitiveTopology);
-    void syncPrimitiveTopology(const gl::State &glState,
-                               ProgramD3D *programD3D,
-                               gl::PrimitiveMode currentDrawMode);
+    void syncPrimitiveTopology(const gl::State &glState, gl::PrimitiveMode currentDrawMode);
 
     // Not handled by an internal dirty bit because it isn't synced on drawArrays calls.
     gl::Error applyIndexBuffer(const gl::Context *context,
@@ -575,6 +572,11 @@ class StateManager11 final : angle::NonCopyable
     Serial mAppliedTFSerial;
 
     Serial mEmptySerial;
+
+    // These objects are cached to avoid having to query the impls.
+    ProgramD3D *mProgramD3D;
+    VertexArray11 *mVertexArray11;
+    Framebuffer11 *mFramebuffer11;
 };
 
 }  // namespace rx
