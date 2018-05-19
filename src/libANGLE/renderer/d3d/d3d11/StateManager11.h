@@ -150,10 +150,10 @@ class StateManager11 final : angle::NonCopyable
 
     void syncState(const gl::Context *context, const gl::State::DirtyBits &dirtyBits);
 
-    gl::Error updateStateForCompute(const gl::Context *context,
-                                    GLuint numGroupsX,
-                                    GLuint numGroupsY,
-                                    GLuint numGroupsZ);
+    angle::Result updateStateForCompute(const gl::Context *context,
+                                        GLuint numGroupsX,
+                                        GLuint numGroupsY,
+                                        GLuint numGroupsZ);
 
     void updateStencilSizeIfChanged(bool depthStencilInitialized, unsigned int stencilSize);
 
@@ -204,7 +204,7 @@ class StateManager11 final : angle::NonCopyable
 
     void setSingleVertexBuffer(const d3d11::Buffer *buffer, UINT stride, UINT offset);
 
-    gl::Error updateState(const gl::Context *context, const gl::DrawCallParams &drawCallParams);
+    angle::Result updateState(const gl::Context *context, const gl::DrawCallParams &drawCallParams);
 
     void setShaderResourceShared(gl::ShaderType shaderType,
                                  UINT resourceSlot,
@@ -284,7 +284,7 @@ class StateManager11 final : angle::NonCopyable
     gl::Error syncFramebuffer(const gl::Context *context, gl::Framebuffer *framebuffer);
     gl::Error syncProgram(const gl::Context *context, gl::PrimitiveMode drawMode);
 
-    gl::Error syncTextures(const gl::Context *context);
+    angle::Result syncTextures(const gl::Context *context);
     gl::Error applyTextures(const gl::Context *context, gl::ShaderType shaderType);
     gl::Error syncTexturesForCompute(const gl::Context *context);
 
@@ -310,9 +310,9 @@ class StateManager11 final : angle::NonCopyable
 
     gl::Error syncCurrentValueAttribs(const gl::State &glState);
 
-    gl::Error generateSwizzle(const gl::Context *context, gl::Texture *texture);
-    gl::Error generateSwizzlesForShader(const gl::Context *context, gl::ShaderType type);
-    gl::Error generateSwizzles(const gl::Context *context);
+    angle::Result generateSwizzle(const gl::Context *context, gl::Texture *texture);
+    angle::Result generateSwizzlesForShader(const gl::Context *context, gl::ShaderType type);
+    angle::Result generateSwizzles(const gl::Context *context);
 
     gl::Error applyDriverUniforms(const ProgramD3D &programD3D);
     gl::Error applyUniforms(ProgramD3D *programD3D);

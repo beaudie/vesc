@@ -1027,7 +1027,7 @@ std::string DynamicHLSL::generateGeometryShaderHLSL(const gl::Context *context,
 
     std::stringstream shaderStream;
 
-    const bool pointSprites   = (primitiveType == gl::PrimitiveMode::Points) && pointSpriteEmulation;
+    const bool pointSprites = (primitiveType == gl::PrimitiveMode::Points) && pointSpriteEmulation;
     const bool usesPointCoord = preambleString.find("gl_PointCoord") != std::string::npos;
 
     const char *inputPT  = nullptr;
