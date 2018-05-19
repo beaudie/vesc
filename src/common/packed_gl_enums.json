@@ -98,13 +98,13 @@
         "Timestamp": "GL_TIMESTAMP_EXT",
         "TransformFeedbackPrimitivesWritten": "GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN"
     },
-    "ShaderType":
-    [
-        {"name": "Vertex", "gl_name": "GL_VERTEX_SHADER", "value": 0},
-        {"name": "Fragment", "gl_name": "GL_FRAGMENT_SHADER", "value": 1},
-        {"name": "Geometry", "gl_name": "GL_GEOMETRY_SHADER_EXT", "value": 2},
-        {"name": "Compute", "gl_name": "GL_COMPUTE_SHADER", "value": 3}
-    ],
+    "ShaderType (ordered)":
+    {
+        "Vertex": "GL_VERTEX_SHADER",
+        "Fragment": "GL_FRAGMENT_SHADER",
+        "Geometry": "GL_GEOMETRY_SHADER_EXT",
+        "Compute": "GL_COMPUTE_SHADER"
+    },
     "ShadingModel":
     {
         "Flat" : "GL_FLAT",
@@ -144,31 +144,31 @@
         "PrimaryColor" : "GL_PRIMARY_COLOR",
         "Previous" : "GL_PREVIOUS"
     },
-    "TextureType":
-    [
-        {"name": "_2D", "gl_name": "GL_TEXTURE_2D", "value": 0},
-        {"name": "_2DArray", "gl_name": "GL_TEXTURE_2D_ARRAY","value": 1},
-        {"name": "_2DMultisample", "gl_name": "GL_TEXTURE_2D_MULTISAMPLE","value": 2},
-        {"name": "_3D", "gl_name": "GL_TEXTURE_3D","value": 3},
-        {"name": "External", "gl_name": "GL_TEXTURE_EXTERNAL_OES","value": 4},
-        {"name": "Rectangle", "gl_name": "GL_TEXTURE_RECTANGLE_ANGLE","value": 5},
-        {"name": "CubeMap", "gl_name": "GL_TEXTURE_CUBE_MAP", "value": 6}
-    ],
-    "TextureTarget":
-    [
-        {"name": "_2D", "gl_name": "GL_TEXTURE_2D", "value": 0},
-        {"name": "_2DArray", "gl_name": "GL_TEXTURE_2D_ARRAY", "value": 1},
-        {"name": "_2DMultisample", "gl_name": "GL_TEXTURE_2D_MULTISAMPLE", "value": 2},
-        {"name": "_3D", "gl_name": "GL_TEXTURE_3D", "value": 3},
-        {"name": "External", "gl_name": "GL_TEXTURE_EXTERNAL_OES", "value": 4},
-        {"name": "Rectangle", "gl_name": "GL_TEXTURE_RECTANGLE_ANGLE", "value": 5},
-        {"name": "CubeMapPositiveX", "gl_name": "GL_TEXTURE_CUBE_MAP_POSITIVE_X", "value": 6},
-        {"name": "CubeMapNegativeX", "gl_name": "GL_TEXTURE_CUBE_MAP_NEGATIVE_X", "value": 7},
-        {"name": "CubeMapPositiveY", "gl_name": "GL_TEXTURE_CUBE_MAP_POSITIVE_Y", "value": 8},
-        {"name": "CubeMapNegativeY", "gl_name": "GL_TEXTURE_CUBE_MAP_NEGATIVE_Y", "value": 9},
-        {"name": "CubeMapPositiveZ", "gl_name": "GL_TEXTURE_CUBE_MAP_POSITIVE_Z", "value": 10},
-        {"name": "CubeMapNegativeZ", "gl_name": "GL_TEXTURE_CUBE_MAP_NEGATIVE_Z", "value": 11}
-    ],
+    "TextureType (ordered)":
+    {
+        "_2D": "GL_TEXTURE_2D",
+        "_2DArray": "GL_TEXTURE_2D_ARRAY",
+        "_2DMultisample": "GL_TEXTURE_2D_MULTISAMPLE",
+        "_3D": "GL_TEXTURE_3D",
+        "External": "GL_TEXTURE_EXTERNAL_OES",
+        "Rectangle": "GL_TEXTURE_RECTANGLE_ANGLE",
+        "CubeMap": "GL_TEXTURE_CUBE_MAP"
+    },
+    "TextureTarget (ordered)":
+    {
+        "_2D": "GL_TEXTURE_2D",
+        "_2DArray": "GL_TEXTURE_2D_ARRAY",
+        "_2DMultisample": "GL_TEXTURE_2D_MULTISAMPLE",
+        "_3D": "GL_TEXTURE_3D",
+        "External": "GL_TEXTURE_EXTERNAL_OES",
+        "Rectangle": "GL_TEXTURE_RECTANGLE_ANGLE",
+        "CubeMapPositiveX": "GL_TEXTURE_CUBE_MAP_POSITIVE_X",
+        "CubeMapNegativeX": "GL_TEXTURE_CUBE_MAP_NEGATIVE_X",
+        "CubeMapPositiveY": "GL_TEXTURE_CUBE_MAP_POSITIVE_Y",
+        "CubeMapNegativeY": "GL_TEXTURE_CUBE_MAP_NEGATIVE_Y",
+        "CubeMapPositiveZ": "GL_TEXTURE_CUBE_MAP_POSITIVE_Z",
+        "CubeMapNegativeZ": "GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"
+    },
     "VertexArrayType":
     {
         "Vertex" : "GL_VERTEX_ARRAY",

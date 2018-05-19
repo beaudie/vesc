@@ -7,6 +7,7 @@
 
 import datetime, json, os, sys
 from collections import namedtuple
+from collections import OrderedDict
 
 Enum = namedtuple('Enum', ['name', 'values', 'max_value'])
 EnumValue = namedtuple('EnumValue', ['name', 'gl_name', 'value'])
@@ -28,28 +29,28 @@ Generators = [
 
 def load_enums(path):
     with open(path) as map_file:
-        enums_dict = json.loads(map_file.read())
+        enums_dict = json.loads(map_file.read(), object_pairs_hook=OrderedDict)
 
     enums = []
     for (enum_name, value_list) in enums_dict.iteritems():
 
-        if isinstance(value_list, dict):
-            values = []
-            i = 0
-            for (value_name, value_gl_name) in sorted(value_list.iteritems()):
-                values.append(EnumValue(value_name, value_gl_name, i))
-                i += 1
+        values = []
+        i = 0
 
-            assert(i < 255) # This makes sure enums fit in the uint8_t
-            enums.append(Enum(enum_name, values, i))
+        items = value_list.iteritems()
+        ordered = " (ordered)"
 
+        if enum_name.endswith(ordered):
+            enum_name = enum_name[0:-len(ordered)]
         else:
-            assert(isinstance(value_list, list))
+            items = sorted(items)
 
-            values = [EnumValue(v['name'], v['gl_name'], v['value']) for v in value_list]
-            max_value = max([value.value for value in values]) + 1
+        for (value_name, value_gl_name) in items:
+            values.append(EnumValue(value_name, value_gl_name, i))
+            i += 1
 
-            enums.append(Enum(enum_name, values, max_value))
+        assert(i < 255) # This makes sure enums fit in the uint8_t
+        enums.append(Enum(enum_name, values, i))
 
     enums.sort(key=lambda enum: enum.name)
     return enums
