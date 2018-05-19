@@ -1382,14 +1382,9 @@ void StateManager11::invalidateRenderTarget()
 
 void StateManager11::processFramebufferInvalidation(const gl::Context *context)
 {
-    if (!mRenderTargetIsDirty)
-    {
-        return;
-    }
-
     ASSERT(context);
+    ASSERT(mRenderTargetIsDirty);
 
-    mRenderTargetIsDirty = false;
     mInternalDirtyBits.set(DIRTY_BIT_RENDER_TARGET);
 
     // The pixel shader is dependent on the output layout.
@@ -1997,7 +1992,11 @@ angle::Result StateManager11::updateState(const gl::Context *context,
     auto *programD3D         = GetImplAs<ProgramD3D>(glState.getProgram());
 
     // TODO(jmadill): Use dirty bits.
-    processFramebufferInvalidation(context);
+    if (mRenderTargetIsDirty)
+    {
+        processFramebufferInvalidation(context);
+        mRenderTargetIsDirty = false;
+    }
 
     // TODO(jmadill): Use dirty bits.
     if (programD3D->updateSamplerMapping() == ProgramD3D::SamplerMapping::WasDirty)
@@ -2020,7 +2019,7 @@ angle::Result StateManager11::updateState(const gl::Context *context,
 
     gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
     Framebuffer11 *framebuffer11 = GetImplAs<Framebuffer11>(framebuffer);
-    ANGLE_TRY_ERR(framebuffer11->markAttachmentsDirty(context), context);
+    ANGLE_TRY_FAST(framebuffer11->markAttachmentsDirty(context));
 
     // TODO(jiawei.shao@intel.com): This can be recomputed only on framebuffer or multisample mask
     // state changes.
@@ -2033,7 +2032,7 @@ angle::Result StateManager11::updateState(const gl::Context *context,
     }
 
     VertexArray11 *vao11 = GetImplAs<VertexArray11>(glState.getVertexArray());
-    ANGLE_TRY_ERR(vao11->syncStateForDraw(context, drawCallParams), context);
+    ANGLE_TRY_FAST(vao11->syncStateForDraw(context, drawCallParams));
 
     // Changes in the draw call can affect the vertex buffer translations.
     if (!mLastFirstVertex.valid() || mLastFirstVertex.value() != drawCallParams.firstVertex())
