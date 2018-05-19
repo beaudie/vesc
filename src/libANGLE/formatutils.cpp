@@ -1139,7 +1139,8 @@ ErrorOrResult<GLuint> InternalFormat::computeCompressedImageSize(const Extents &
     return bytes.ValueOrDie();
 }
 
-ErrorOrResult<GLuint> InternalFormat::computeSkipBytes(GLuint rowPitch,
+ErrorOrResult<GLuint> InternalFormat::computeSkipBytes(GLenum formatType,
+                                                           GLuint rowPitch,
                                                            GLuint depthPitch,
                                                            const PixelStoreStateBase &state,
                                                            bool is3D) const
@@ -1149,7 +1150,7 @@ ErrorOrResult<GLuint> InternalFormat::computeSkipBytes(GLuint rowPitch,
     CheckedNumeric<GLuint> checkedSkipImages(static_cast<GLuint>(state.skipImages));
     CheckedNumeric<GLuint> checkedSkipRows(static_cast<GLuint>(state.skipRows));
     CheckedNumeric<GLuint> checkedSkipPixels(static_cast<GLuint>(state.skipPixels));
-    CheckedNumeric<GLuint> checkedPixelBytes(pixelBytes);
+    CheckedNumeric<GLuint> checkedPixelBytes(computePixelBytes(formatType));
     auto checkedSkipImagesBytes = checkedSkipImages * checkedDepthPitch;
     if (!is3D)
     {
@@ -1198,7 +1199,7 @@ ErrorOrResult<GLuint> InternalFormat::computePackUnpackEndByte(
     }
 
     CheckedNumeric<GLuint> checkedSkipBytes = 0;
-    ANGLE_TRY_RESULT(computeSkipBytes(rowPitch, depthPitch, state, is3D), checkedSkipBytes);
+    ANGLE_TRY_RESULT(computeSkipBytes(formatType, rowPitch, depthPitch, state, is3D), checkedSkipBytes);
 
     CheckedNumeric<GLuint> endByte = checkedCopyBytes + checkedSkipBytes;
 
