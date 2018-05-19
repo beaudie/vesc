@@ -584,7 +584,6 @@ StateManager11::StateManager11(Renderer11 *renderer)
       mCurrentPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_UNDEFINED),
       mLastAppliedDrawMode(gl::PrimitiveMode::InvalidEnum),
       mCurrentMinimumDrawCount(0),
-      mDirtySwizzles(false),
       mAppliedIB(nullptr),
       mAppliedIBFormat(DXGI_FORMAT_UNKNOWN),
       mAppliedIBOffset(0),
@@ -1470,7 +1469,6 @@ void StateManager11::invalidateViewport(const gl::Context *context)
 void StateManager11::invalidateTexturesAndSamplers()
 {
     mInternalDirtyBits.set(DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE);
-    invalidateSwizzles();
 
     // Texture state affects the driver uniforms (base level, etc).
     invalidateDriverUniforms();
@@ -1478,7 +1476,7 @@ void StateManager11::invalidateTexturesAndSamplers()
 
 void StateManager11::invalidateSwizzles()
 {
-    mDirtySwizzles = true;
+    mInternalDirtyBits.set(DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE);
 }
 
 void StateManager11::invalidateProgramUniforms()
@@ -2011,13 +2009,6 @@ gl::Error StateManager11::updateState(const gl::Context *context,
         mInternalDirtyBits.set(DIRTY_BIT_PROGRAM_UNIFORMS);
     }
 
-    // Swizzling can cause internal state changes with blit shaders.
-    if (mDirtySwizzles)
-    {
-        ANGLE_TRY(generateSwizzles(context));
-        mDirtySwizzles = false;
-    }
-
     gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
     Framebuffer11 *framebuffer11 = GetImplAs<Framebuffer11>(framebuffer);
     ANGLE_TRY(framebuffer11->markAttachmentsDirty(context));
@@ -2446,6 +2437,7 @@ gl::Error StateManager11::applyTextures(const gl::Context *context, gl::ShaderTy
 
 gl::Error StateManager11::syncTextures(const gl::Context *context)
 {
+    ANGLE_TRY(generateSwizzles(context));
     ANGLE_TRY(applyTextures(context, gl::ShaderType::Vertex));
     ANGLE_TRY(applyTextures(context, gl::ShaderType::Fragment));
     return gl::NoError();

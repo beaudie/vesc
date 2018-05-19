@@ -505,9 +505,6 @@ class StateManager11 final : angle::NonCopyable
     std::vector<bool> mForceSetComputeSamplerStates;
     std::vector<gl::SamplerState> mCurComputeSamplerStates;
 
-    // Special dirty bit for swizzles. Since they use internal shaders, must be done in a pre-pass.
-    bool mDirtySwizzles;
-
     // Currently applied index buffer
     ID3D11Buffer *mAppliedIB;
     DXGI_FORMAT mAppliedIBFormat;
