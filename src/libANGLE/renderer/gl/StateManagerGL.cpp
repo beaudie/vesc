@@ -682,10 +682,10 @@ void StateManagerGL::endQuery(gl::QueryType type, QueryGL *queryObject, GLuint q
     mFunctions->endQuery(ToGLenum(type));
 }
 
-gl::Error StateManagerGL::setDrawArraysState(const gl::Context *context,
-                                             GLint first,
-                                             GLsizei count,
-                                             GLsizei instanceCount)
+angle::Result StateManagerGL::setDrawArraysState(const gl::Context *context,
+                                                 GLint first,
+                                                 GLsizei count,
+                                                 GLsizei instanceCount)
 {
     const gl::State &glState = context->getGLState();
 
@@ -694,18 +694,18 @@ gl::Error StateManagerGL::setDrawArraysState(const gl::Context *context,
     const gl::VertexArray *vao = glState.getVertexArray();
     const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
 
-    ANGLE_TRY(vaoGL->syncDrawArraysState(context, program->getActiveAttribLocationsMask(), first,
-                                         count, instanceCount));
+    ANGLE_TRY_EXPR(vaoGL->syncDrawArraysState(context, program->getActiveAttribLocationsMask(),
+                                              first, count, instanceCount));
 
     return setGenericDrawState(context);
 }
 
-gl::Error StateManagerGL::setDrawElementsState(const gl::Context *context,
-                                               GLsizei count,
-                                               GLenum type,
-                                               const void *indices,
-                                               GLsizei instanceCount,
-                                               const void **outIndices)
+angle::Result StateManagerGL::setDrawElementsState(const gl::Context *context,
+                                                   GLsizei count,
+                                                   GLenum type,
+                                                   const void *indices,
+                                                   GLsizei instanceCount,
+                                                   const void **outIndices)
 {
     const gl::State &glState = context->getGLState();
 
@@ -714,14 +714,14 @@ gl::Error StateManagerGL::setDrawElementsState(const gl::Context *context,
     const gl::VertexArray *vao = glState.getVertexArray();
     const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
 
-    ANGLE_TRY(vaoGL->syncDrawElementsState(context, program->getActiveAttribLocationsMask(), count,
-                                           type, indices, instanceCount,
-                                           glState.isPrimitiveRestartEnabled(), outIndices));
+    ANGLE_TRY_EXPR(vaoGL->syncDrawElementsState(context, program->getActiveAttribLocationsMask(),
+                                                count, type, indices, instanceCount,
+                                                glState.isPrimitiveRestartEnabled(), outIndices));
 
     return setGenericDrawState(context);
 }
 
-gl::Error StateManagerGL::setDrawIndirectState(const gl::Context *context)
+angle::Result StateManagerGL::setDrawIndirectState(const gl::Context *context)
 {
     return setGenericDrawState(context);
 }
@@ -1034,7 +1034,7 @@ void StateManagerGL::updateProgramStorageBufferBindings(const gl::Context *conte
     }
 }
 
-gl::Error StateManagerGL::setGenericDrawState(const gl::Context *context)
+angle::Result StateManagerGL::setGenericDrawState(const gl::Context *context)
 {
     setGenericShaderState(context);
 
@@ -1053,7 +1053,7 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::Context *context)
     ASSERT(mVAO ==
            GetImplAs<VertexArrayGL>(context->getGLState().getVertexArray())->getVertexArrayID());
 
-    return gl::NoError();
+    return angle::Result::Continue;
 }
 
 void StateManagerGL::setAttributeCurrentData(size_t index,
