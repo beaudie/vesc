@@ -36,7 +36,7 @@ TransformFeedbackGL::~TransformFeedbackGL()
     mTransformFeedbackID = 0;
 }
 
-void TransformFeedbackGL::begin(GLenum primitiveMode)
+void TransformFeedbackGL::begin(gl::PrimitiveMode primitiveMode)
 {
     mStateManager->onTransformFeedbackStateChange();
 }

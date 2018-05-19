@@ -128,7 +128,7 @@ gl::Error InputLayoutCache::getInputLayout(
     bool programUsesInstancedPointSprites =
         programD3D->usesPointSize() && programD3D->usesInstancedPointSpriteEmulation();
     bool instancedPointSpritesActive =
-        programUsesInstancedPointSprites && (drawCallParams.mode() == GL_POINTS);
+        programUsesInstancedPointSprites && (drawCallParams.mode() == gl::PrimitiveMode::Points);
 
     if (programUsesInstancedPointSprites)
     {
@@ -258,7 +258,7 @@ gl::Error InputLayoutCache::createInputLayout(
         {
             // If rendering points and instanced pointsprite emulation is being used, the
             // inputClass is required to be configured as per instance data
-            if (drawCallParams.mode() == GL_POINTS)
+            if (drawCallParams.mode() == gl::PrimitiveMode::Points)
             {
                 inputElements[elementIndex].InputSlotClass       = D3D11_INPUT_PER_INSTANCE_DATA;
                 inputElements[elementIndex].InstanceDataStepRate = 1;

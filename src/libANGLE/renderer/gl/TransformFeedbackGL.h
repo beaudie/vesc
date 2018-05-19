@@ -25,7 +25,7 @@ class TransformFeedbackGL : public TransformFeedbackImpl
                         StateManagerGL *stateManager);
     ~TransformFeedbackGL() override;
 
-    void begin(GLenum primitiveMode) override;
+    void begin(gl::PrimitiveMode primitiveMode) override;
     void end() override;
     void pause() override;
     void resume() override;

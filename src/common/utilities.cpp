@@ -542,20 +542,21 @@ GLuint GetPrimitiveRestartIndex(GLenum indexType)
     }
 }
 
-bool IsTriangleMode(GLenum drawMode)
+bool IsTriangleMode(PrimitiveMode drawMode)
 {
     switch (drawMode)
     {
-      case GL_TRIANGLES:
-      case GL_TRIANGLE_FAN:
-      case GL_TRIANGLE_STRIP:
-        return true;
-      case GL_POINTS:
-      case GL_LINES:
-      case GL_LINE_LOOP:
-      case GL_LINE_STRIP:
-        return false;
-      default: UNREACHABLE();
+        case PrimitiveMode::Triangles:
+        case PrimitiveMode::TriangleFan:
+        case PrimitiveMode::TriangleStrip:
+            return true;
+        case PrimitiveMode::Points:
+        case PrimitiveMode::Lines:
+        case PrimitiveMode::LineLoop:
+        case PrimitiveMode::LineStrip:
+            return false;
+        default:
+            UNREACHABLE();
     }
 
     return false;

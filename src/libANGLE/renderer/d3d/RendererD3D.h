@@ -328,7 +328,7 @@ class RendererD3D : public BufferFactoryD3D, public MultisampleTextureInitialize
 
     void cleanup();
 
-    bool skipDraw(const gl::State &glState, GLenum drawMode);
+    bool skipDraw(const gl::State &glState, gl::PrimitiveMode drawMode);
 
     egl::Display *mDisplay;
 
@@ -359,7 +359,7 @@ class RendererD3D : public BufferFactoryD3D, public MultisampleTextureInitialize
 };
 
 unsigned int GetBlendSampleMask(const gl::State &glState, int samples);
-bool InstancedPointSpritesActive(ProgramD3D *programD3D, GLenum mode);
+bool InstancedPointSpritesActive(ProgramD3D *programD3D, gl::PrimitiveMode mode);
 
 }  // namespace rx
 

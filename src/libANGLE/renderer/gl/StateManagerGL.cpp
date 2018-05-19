@@ -2292,7 +2292,7 @@ void StateManagerGL::syncTransformFeedbackState(const gl::Context *context)
             GetImplAs<TransformFeedbackGL>(transformFeedback);
         bindTransformFeedback(GL_TRANSFORM_FEEDBACK, transformFeedbackGL->getTransformFeedbackID());
         transformFeedbackGL->syncActiveState(transformFeedback->isActive(),
-                                             transformFeedback->getPrimitiveMode());
+                                             ToGLenum(transformFeedback->getPrimitiveMode()));
         transformFeedbackGL->syncPausedState(transformFeedback->isPaused());
         mCurrentTransformFeedback = transformFeedbackGL;
     }

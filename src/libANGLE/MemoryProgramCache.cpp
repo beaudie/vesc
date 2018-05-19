@@ -239,8 +239,8 @@ LinkResult MemoryProgramCache::Deserialize(const Context *context,
     state->mComputeShaderLocalSize[1] = stream.readInt<int>();
     state->mComputeShaderLocalSize[2] = stream.readInt<int>();
 
-    state->mGeometryShaderInputPrimitiveType  = stream.readInt<GLenum>();
-    state->mGeometryShaderOutputPrimitiveType = stream.readInt<GLenum>();
+    state->mGeometryShaderInputPrimitiveType  = stream.readInt<PrimitiveMode>();
+    state->mGeometryShaderOutputPrimitiveType = stream.readInt<PrimitiveMode>();
     state->mGeometryShaderInvocations         = stream.readInt<int>();
     state->mGeometryShaderMaxVertices         = stream.readInt<int>();
 
@@ -469,8 +469,8 @@ void MemoryProgramCache::Serialize(const Context *context,
     stream.writeInt(computeLocalSize[2]);
 
     ASSERT(state.mGeometryShaderInvocations >= 1 && state.mGeometryShaderMaxVertices >= 0);
-    stream.writeInt(state.mGeometryShaderInputPrimitiveType);
-    stream.writeInt(state.mGeometryShaderOutputPrimitiveType);
+    stream.writeEnum(state.mGeometryShaderInputPrimitiveType);
+    stream.writeEnum(state.mGeometryShaderOutputPrimitiveType);
     stream.writeInt(state.mGeometryShaderInvocations);
     stream.writeInt(state.mGeometryShaderMaxVertices);
 

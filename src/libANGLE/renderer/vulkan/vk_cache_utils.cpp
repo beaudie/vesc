@@ -665,7 +665,7 @@ void PipelineDesc::updateVertexInputInfo(const VertexInputBindings &bindings,
     mVertexInputAttribs  = attribs;
 }
 
-void PipelineDesc::updateTopology(GLenum drawMode)
+void PipelineDesc::updateTopology(gl::PrimitiveMode drawMode)
 {
     mInputAssemblyInfo.topology = static_cast<uint32_t>(gl_vk::GetPrimitiveTopology(drawMode));
 }

@@ -410,7 +410,7 @@ bool ValidateGetBooleani_vRobustANGLE(Context *context,
     return true;
 }
 
-bool ValidateDrawIndirectBase(Context *context, GLenum mode, const void *indirect)
+bool ValidateDrawIndirectBase(Context *context, PrimitiveMode mode, const void *indirect)
 {
     if (context->getClientVersion() < ES_3_1)
     {
@@ -468,7 +468,7 @@ bool ValidateDrawIndirectBase(Context *context, GLenum mode, const void *indirec
     return true;
 }
 
-bool ValidateDrawArraysIndirect(Context *context, GLenum mode, const void *indirect)
+bool ValidateDrawArraysIndirect(Context *context, PrimitiveMode mode, const void *indirect)
 {
     const State &state                          = context->getGLState();
     TransformFeedback *curTransformFeedback     = state.getCurrentTransformFeedback();
@@ -516,7 +516,10 @@ bool ValidateDrawArraysIndirect(Context *context, GLenum mode, const void *indir
     return true;
 }
 
-bool ValidateDrawElementsIndirect(Context *context, GLenum mode, GLenum type, const void *indirect)
+bool ValidateDrawElementsIndirect(Context *context,
+                                  PrimitiveMode mode,
+                                  GLenum type,
+                                  const void *indirect)
 {
     if (!ValidateDrawElementsBase(context, mode, type))
     {
