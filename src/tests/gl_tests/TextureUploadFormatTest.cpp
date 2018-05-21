@@ -164,12 +164,10 @@ struct SizedFloat
         return Assemble(sVal, eVal, mVal);
     }
 
-    static constexpr float Decode(const uint32_t sVal,
-                                  const uint32_t eVal,
-                                  const uint32_t mVal)
+    static constexpr float Decode(const uint32_t sVal, const uint32_t eVal, const uint32_t mVal)
     {
         constexpr int eBias = (1 << (kEBits - 1)) - 1;
-        constexpr int mDiv = 1 << kMBits;
+        constexpr int mDiv  = 1 << kMBits;
         float ret = powf(-1, sVal) * powf(2, int(eVal) - eBias) * (1.0f + float(mVal) / mDiv);
         return ret;
     }
@@ -181,29 +179,27 @@ using UFloat10 = SizedFloat<0, 5, 5>;
 struct RGB9_E5 final
 {
     // GLES 3.0.5 p129
-    static constexpr int N = 9; // number of mantissa bits per component
-    static constexpr int B = 15; // exponent bias
+    static constexpr int N = 9;   // number of mantissa bits per component
+    static constexpr int B = 15;  // exponent bias
 
     static uint32_t Encode(const float red, const float green, const float blue)
     {
-        const auto floori = [](const float x) {
-            return static_cast<int>(floor(x));
-        };
+        const auto floori = [](const float x) { return static_cast<int>(floor(x)); };
         // GLES 3.0.5 p129
-        constexpr int eMax = 31; // max allowed biased exponent value
+        constexpr int eMax = 31;  // max allowed biased exponent value
 
-        const float twoToN = powf(2, N);
+        const float twoToN       = powf(2, N);
         const float sharedExpMax = (twoToN - 1) / twoToN * powf(2, eMax - B);
 
         const auto fnClampColor = [&](const float color) {
             return std::max(0.0f, std::min(color, sharedExpMax));
         };
-        const float redC = fnClampColor(red);
+        const float redC   = fnClampColor(red);
         const float greenC = fnClampColor(green);
-        const float blueC = fnClampColor(blue);
+        const float blueC  = fnClampColor(blue);
 
-        const float maxC = std::max({ redC, greenC, blueC });
-        const int expP = std::max(-B - 1, floori(log2f(maxC))) + 1 + B;
+        const float maxC = std::max({redC, greenC, blueC});
+        const int expP   = std::max(-B - 1, floori(log2f(maxC))) + 1 + B;
 
         const auto fnColorS = [&](const float colorC, const float exp) {
             return floori(colorC / powf(2, exp - B - N) + 0.5f);
@@ -211,9 +207,9 @@ struct RGB9_E5 final
         const int maxS = fnColorS(maxC, expP);
         const int expS = expP + ((maxS == (1 << N)) ? 1 : 0);
 
-        const int redS = fnColorS(redC, expS);
+        const int redS   = fnColorS(redC, expS);
         const int greenS = fnColorS(greenC, expS);
-        const int blueS = fnColorS(blueC, expS);
+        const int blueS  = fnColorS(blueC, expS);
 
         // Pack as u32 EGBR.
         uint32_t ret = expS & 0x1f;
@@ -226,29 +222,28 @@ struct RGB9_E5 final
         return ret;
     }
 
-    static void Decode(uint32_t packed, float* const out_red,
-                       float* const out_green, float* const out_blue)
+    static void Decode(uint32_t packed,
+                       float *const out_red,
+                       float *const out_green,
+                       float *const out_blue)
     {
-        const auto redS   = packed & 0x1ff;
+        const auto redS = packed & 0x1ff;
         packed >>= 9;
         const auto greenS = packed & 0x1ff;
         packed >>= 9;
-        const auto blueS  = packed & 0x1ff;
+        const auto blueS = packed & 0x1ff;
         packed >>= 9;
-        const auto expS   = packed & 0x1f;
+        const auto expS = packed & 0x1f;
 
         // These are *not* IEEE-like UFloat14s.
         // GLES 3.0.5 p165:
         // red = redS*pow(2,expS-B-N)
-        const auto fnToFloat = [&](const uint32_t x) {
-            return x * powf(2, int(expS) - B - N);
-        };
-        *out_red   = fnToFloat(redS  );
-        *out_green = fnToFloat(greenS);
-        *out_blue  = fnToFloat(blueS );
+        const auto fnToFloat = [&](const uint32_t x) { return x * powf(2, int(expS) - B - N); };
+        *out_red             = fnToFloat(redS);
+        *out_green           = fnToFloat(greenS);
+        *out_blue            = fnToFloat(blueS);
     }
 };
-
 
 }  // anonymous namespace
 
@@ -309,13 +304,12 @@ TEST_P(TextureUploadFormatTest, All)
 {
     ANGLE_SKIP_TEST_IF(IsD3D9() || IsD3D11_FL93());
 
-    constexpr char kVertShader[] = R"(
+    constexpr char kVertShaderES2[]     = R"(
         void main()
         {
             gl_PointSize = 1.0;
             gl_Position = vec4(0, 0, 0, 1);
         })";
-
     constexpr char kFragShader_Floats[] = R"(
         precision mediump float;
         uniform sampler2D uTex;
@@ -376,7 +370,7 @@ TEST_P(TextureUploadFormatTest, All)
         glTexImage2D(GL_TEXTURE_2D, 0, format.internalFormat, 1, 1, 0, format.unpackFormat,
                      format.unpackType, data);
         const auto uploadErr = glGetError();
-        if (uploadErr) // Format might not be supported. (e.g. on ES2)
+        if (uploadErr)  // Format might not be supported. (e.g. on ES2)
             return;
 
         glClearColor(1, 0, 1, 1);
@@ -751,7 +745,7 @@ TEST_P(TextureUploadFormatTest, All)
 
     // UNSIGNED_INT_5_9_9_9_REV
     {
-        const uint32_t src[] = { RGB9_E5::Encode(srcVals[0], srcVals[1], srcVals[2]) };
+        const uint32_t src[] = {RGB9_E5::Encode(srcVals[0], srcVals[1], srcVals[2])};
         ZeroAndCopy(srcBuffer, src);
 
         fnTest({GL_RGB9_E5, GL_RGB, GL_UNSIGNED_INT_5_9_9_9_REV}, {1, 1, 1, 0});
