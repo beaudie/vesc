@@ -58,8 +58,7 @@ FramebufferVk::FramebufferVk(const gl::FramebufferState &state)
       mBackbuffer(nullptr),
       mRenderPassDesc(),
       mFramebuffer(),
-      mActiveColorComponents(0),
-      mMaskedClearDescriptorSet(VK_NULL_HANDLE)
+      mActiveColorComponents(0)
 {
 }
 
@@ -68,8 +67,7 @@ FramebufferVk::FramebufferVk(const gl::FramebufferState &state, WindowSurfaceVk 
       mBackbuffer(backbuffer),
       mRenderPassDesc(),
       mFramebuffer(),
-      mActiveColorComponents(0),
-      mMaskedClearDescriptorSet(VK_NULL_HANDLE)
+      mActiveColorComponents(0)
 {
 }
 
@@ -81,8 +79,6 @@ void FramebufferVk::destroy(const gl::Context *context)
 {
     RendererVk *renderer = vk::GetImpl(context)->getRenderer();
     renderer->releaseResource(*this, &mFramebuffer);
-    renderer->releaseResource(*this, &mMaskedClearUniformBuffer.buffer);
-    renderer->releaseResource(*this, &mMaskedClearUniformBuffer.memory);
 }
 
 gl::Error FramebufferVk::discard(const gl::Context *context,
@@ -599,15 +595,12 @@ gl::Error FramebufferVk::clearWithDraw(ContextVk *contextVk, VkColorComponentFla
     ANGLE_TRY(shaderLibrary->getShader(renderer, vk::InternalShaderID::FullScreenQuad_vert,
                                        &fullScreenQuad));
 
-    const vk::ShaderAndSerial *uniformColor = nullptr;
-    ANGLE_TRY(
-        shaderLibrary->getShader(renderer, vk::InternalShaderID::UniformColor_frag, &uniformColor));
+    const vk::ShaderAndSerial *pushConstantColor = nullptr;
+    ANGLE_TRY(shaderLibrary->getShader(renderer, vk::InternalShaderID::PushConstantColor_frag,
+                                       &pushConstantColor));
 
     const vk::PipelineLayout *pipelineLayout = nullptr;
-    ANGLE_TRY(renderer->getInternalUniformPipelineLayout(&pipelineLayout));
-
-    vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
+    ANGLE_TRY(renderer->getInternalPushConstantPipelineLayout(&pipelineLayout));
 
     vk::CommandGraphNode *node = nullptr;
     ANGLE_TRY(getCommandGraphNodeForDraw(contextVk, &node));
@@ -617,7 +610,7 @@ gl::Error FramebufferVk::clearWithDraw(ContextVk *contextVk, VkColorComponentFla
     pipelineDesc.initDefaults();
     pipelineDesc.updateColorWriteMask(colorMaskFlags);
     pipelineDesc.updateRenderPassDesc(getRenderPassDesc());
-    pipelineDesc.updateShaders(fullScreenQuad->queueSerial(), uniformColor->queueSerial());
+    pipelineDesc.updateShaders(fullScreenQuad->queueSerial(), pushConstantColor->queueSerial());
     pipelineDesc.updateViewport(node->getRenderPassRenderArea(), 0.0f, 1.0f);
 
     const gl::State &glState = contextVk->getGLState();
@@ -638,75 +631,17 @@ gl::Error FramebufferVk::clearWithDraw(ContextVk *contextVk, VkColorComponentFla
     }
 
     vk::PipelineAndSerial *pipeline = nullptr;
-    ANGLE_TRY(renderer->getInternalPipeline(*fullScreenQuad, *uniformColor, *pipelineLayout,
+    ANGLE_TRY(renderer->getInternalPipeline(*fullScreenQuad, *pushConstantColor, *pipelineLayout,
                                             pipelineDesc, gl::AttributesMask(), &pipeline));
     pipeline->updateSerial(renderer->getCurrentQueueSerial());
 
-    VkDevice device = renderer->getDevice();
-
-    if (!mMaskedClearUniformBuffer.buffer.valid())
-    {
-        ASSERT(mMaskedClearDescriptorSet == VK_NULL_HANDLE);
-
-        VkBufferUsageFlags bufferUsage =
-            (VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
-
-        VkBufferCreateInfo uniformBufferInfo;
-        uniformBufferInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-        uniformBufferInfo.pNext                 = nullptr;
-        uniformBufferInfo.flags                 = 0;
-        uniformBufferInfo.size                  = sizeof(VkClearColorValue);
-        uniformBufferInfo.usage                 = bufferUsage;
-        uniformBufferInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
-        uniformBufferInfo.queueFamilyIndexCount = 0;
-        uniformBufferInfo.pQueueFamilyIndices   = nullptr;
-
-        ANGLE_TRY(mMaskedClearUniformBuffer.buffer.init(device, uniformBufferInfo));
-
-        VkMemoryPropertyFlags memoryFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-        size_t requiredSize               = 0;
-        ANGLE_TRY(vk::AllocateBufferMemory(renderer, memoryFlags, &mMaskedClearUniformBuffer.buffer,
-                                           &mMaskedClearUniformBuffer.memory, &requiredSize));
-
-        const vk::DescriptorSetLayout &descriptorSetLayout =
-            renderer->getInternalUniformDescriptorSetLayout();
-
-        // This might confuse the dynamic descriptor pool's counting, but it shouldn't cause
-        // overflow.
-        vk::DynamicDescriptorPool *descriptorPool = contextVk->getDynamicDescriptorPool();
-        descriptorPool->allocateDescriptorSets(contextVk, descriptorSetLayout.ptr(), 1,
-                                               &mMaskedClearDescriptorSet);
-
-        VkDescriptorBufferInfo bufferInfo;
-        bufferInfo.buffer = mMaskedClearUniformBuffer.buffer.getHandle();
-        bufferInfo.offset = 0;
-        bufferInfo.range  = VK_WHOLE_SIZE;
-
-        VkWriteDescriptorSet writeSet;
-        writeSet.sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        writeSet.pNext            = nullptr;
-        writeSet.dstSet           = mMaskedClearDescriptorSet;
-        writeSet.dstBinding       = 1;
-        writeSet.dstArrayElement  = 0;
-        writeSet.descriptorCount  = 1;
-        writeSet.descriptorType   = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-        writeSet.pImageInfo       = nullptr;
-        writeSet.pBufferInfo      = &bufferInfo;
-        writeSet.pTexelBufferView = nullptr;
-
-        vkUpdateDescriptorSets(device, 1, &writeSet, 0, nullptr);
-    }
-
-    VkClearColorValue clearColorValue = contextVk->getClearColorValue().color;
-    commandBuffer->updateBuffer(mMaskedClearUniformBuffer.buffer, 0, sizeof(VkClearColorValue),
-                                clearColorValue.float32);
 
     vk::CommandBuffer *drawCommandBuffer = nullptr;
     ANGLE_TRY(node->beginInsideRenderPassRecording(renderer, &drawCommandBuffer));
 
-    std::array<uint32_t, 2> dynamicOffsets = {{0, 0}};
-    drawCommandBuffer->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, *pipelineLayout, 0, 1,
-                                          &mMaskedClearDescriptorSet, 2, dynamicOffsets.data());
+    VkClearColorValue clearColorValue = contextVk->getClearColorValue().color;
+    drawCommandBuffer->pushConstants(*pipelineLayout, VK_SHADER_STAGE_FRAGMENT_BIT, 0,
+                                     sizeof(VkClearColorValue), clearColorValue.float32);
 
     // TODO(jmadill): Masked combined color and depth/stencil clear. http://anglebug.com/2455
     // Any active queries submitted by the user should also be paused here.
@@ -733,14 +668,7 @@ gl::Error FramebufferVk::getCommandGraphNodeForDraw(ContextVk *contextVk,
     // This will reset the current writing node if it has been completed.
     updateQueueSerial(currentSerial);
 
-    if (hasChildlessWritingNode())
-    {
-        *nodeOut = getCurrentWritingNode();
-    }
-    else
-    {
-        *nodeOut = getNewWritingNode(renderer);
-    }
+    *nodeOut = getNewWritingNode(renderer);
 
     if ((*nodeOut)->getInsideRenderPassCommands()->valid())
     {
