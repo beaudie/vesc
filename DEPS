@@ -9,10 +9,10 @@ vars = {
 deps = {
 
   '{root}/build':
-    '{chromium_git}/chromium/src/build.git@2f3b6e8ce9e783b2a09496d70eef2974506a41c8',
+    '{chromium_git}/chromium/src/build.git@b944b99e72923c5a6699235ed858e725db21f81f',
 
   '{root}/buildtools':
-    '{chromium_git}/chromium/buildtools.git@461b345a815c1c745ac0534a6a4bd52d123abe68',
+    '{chromium_git}/chromium/buildtools.git@94288c26d2ffe3aec9848c147839afee597acefd',
 
   '{root}/testing':
     '{chromium_git}/chromium/src/testing@6dfa36ab2e5143fa2f7353e3af5d2935af2e61f7',
