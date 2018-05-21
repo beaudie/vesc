@@ -640,6 +640,10 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenArrayUniform(
         const std::string elementName       = namePrefix + ArrayString(arrayElement);
         const std::string elementMappedName = mappedNamePrefix + ArrayString(arrayElement);
 
+        // TODO (xinghua.cao@intel.com): Does not ensure that the binding of sampler and atomic
+        // counter should been updated here.
+        binding += shaderUniformCount.imageCount;
+
         shaderUniformCount +=
             flattenUniformImpl(uniformElement, elementName, elementMappedName, samplerUniforms,
                                imageUniforms, atomicCounterUniforms, shaderType, markActive,
