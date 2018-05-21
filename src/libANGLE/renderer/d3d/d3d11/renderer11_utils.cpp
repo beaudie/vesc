@@ -872,8 +872,12 @@ std::array<GLuint, 3> GetMaxComputeWorkGroupSize(D3D_FEATURE_LEVEL featureLevel)
     {
         case D3D_FEATURE_LEVEL_11_1:
         case D3D_FEATURE_LEVEL_11_0:
-            return {{D3D11_CS_THREAD_GROUP_MAX_X, D3D11_CS_THREAD_GROUP_MAX_Y,
-                     D3D11_CS_THREAD_GROUP_MAX_Z}};
+            // On Direct3D 11.x hardware, the maximum number of threads is limited to
+            // D3D11_CS_THREAD_GROUP_MAX_THREADS_PER_GROUP (1024) per group. The X, Y and Z
+            // dimension of numthreads is limited to D3D11_CS_THREAD_GROUP_MAX_X (1024),
+            // D3D11_CS_THREAD_GROUP_MAX_Y (1024) and D3D11_CS_THREAD_GROUP_MAX_Z (64).
+            // https://msdn.microsoft.com/en-us/library/windows/desktop/ff476331(v=vs.85).aspx
+            return {{16, 16, 4}};
             break;
         default:
             return {{0, 0, 0}};
