@@ -306,6 +306,9 @@ TEST_P(TextureUploadFormatTest, All)
 
     GLTexture testTex;
     glBindTexture(GL_TEXTURE_2D, testTex);
+    // Must be nearest because some texture formats aren't filterable!
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     ASSERT_GL_NO_ERROR();
 
@@ -330,7 +333,7 @@ TEST_P(TextureUploadFormatTest, All)
         glTexImage2D(GL_TEXTURE_2D, 0, format.internalFormat, 1, 1, 0, format.unpackFormat,
                      format.unpackType, data);
         const auto uploadErr = glGetError();
-        if (uploadErr)
+        if (uploadErr) // Format might not be supported. (e.g. on ES2)
             return;
 
         glClearColor(1, 0, 1, 1);
@@ -675,8 +678,10 @@ TEST_P(TextureUploadFormatTest, All)
 }
 
 ANGLE_INSTANTIATE_TEST(TextureUploadFormatTest,
-                       ES2_D3D11(),
+                       ES3_D3D11(),
                        ES2_D3D11_FL9_3(),
                        ES2_D3D9(),
                        ES2_OPENGL(),
-                       ES2_OPENGLES());
+                       ES3_OPENGL(),
+                       ES2_OPENGLES(),
+                       ES3_OPENGLES());
