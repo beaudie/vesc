@@ -639,6 +639,8 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenArrayUniform(
         uniformElement.indexIntoArray(arrayElement);
         const std::string elementName       = namePrefix + ArrayString(arrayElement);
         const std::string elementMappedName = mappedNamePrefix + ArrayString(arrayElement);
+        binding += shaderUniformCount.samplerCount + shaderUniformCount.imageCount +
+                   shaderUniformCount.atomicCounterCount;
 
         shaderUniformCount +=
             flattenUniformImpl(uniformElement, elementName, elementMappedName, samplerUniforms,
