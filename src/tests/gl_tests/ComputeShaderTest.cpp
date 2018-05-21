@@ -411,15 +411,9 @@ TEST_P(ComputeShaderTest, BindImageTexture)
     }
 }
 
-// When declare a image array without a binding qualifier, all elements are bound to unit zero.
+// Be not supported to declare an image array without a binding qualifier.
 TEST_P(ComputeShaderTest, ImageArrayWithoutBindingQualifier)
 {
-    ANGLE_SKIP_TEST_IF(IsD3D11());
-
-    // TODO(xinghua.cao@intel.com): On AMD desktop OpenGL, bind two image variables to unit 0,
-    // only one variable is valid.
-    ANGLE_SKIP_TEST_IF(IsAMD() && IsDesktopOpenGL());
-
     GLTexture mTexture;
     GLFramebuffer mFramebuffer;
     const std::string csSource =
@@ -432,36 +426,28 @@ TEST_P(ComputeShaderTest, ImageArrayWithoutBindingQualifier)
             imageStore(uImage[1], ivec2(gl_LocalInvocationIndex, 1), uvec4(100, 0, 0, 0));
         })";
 
-    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
-    glUseProgram(program.get());
-    constexpr int kTextureWidth = 1, kTextureHeight = 2;
-    GLuint inputValues[] = {200, 200};
+    GLuint program = CompileComputeProgram(csSource, false);
+    EXPECT_EQ(0u, program);
+}
 
-    glBindTexture(GL_TEXTURE_2D, mTexture);
-    glTexStorage2D(GL_TEXTURE_2D, 1, GL_R32UI, kTextureWidth, kTextureHeight);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kTextureWidth, kTextureHeight, GL_RED_INTEGER,
-                    GL_UNSIGNED_INT, inputValues);
-    EXPECT_GL_NO_ERROR();
+// Do not image that variables are bound to the same image unit.
+TEST_P(ComputeShaderTest, ImageVariablesBoundToSameImageUnit)
+{
+    GLTexture mTexture;
+    GLFramebuffer mFramebuffer;
+    const std::string csSource =
+        R"(#version 310 es
+        layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+        layout(r32ui) writeonly uniform highp uimage2D uImage1;
+		layout(r32ui) writeonly uniform highp uimage2D uImage2;
+        void main()
+        {
+            imageStore(uImage1, ivec2(gl_LocalInvocationIndex, 0), uvec4(100, 0, 0, 0));
+            imageStore(uImage2, ivec2(gl_LocalInvocationIndex, 1), uvec4(100, 0, 0, 0));
+        })";
 
-    glBindImageTexture(0, mTexture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI);
-    glDispatchCompute(1, 1, 1);
-    EXPECT_GL_NO_ERROR();
-
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
-    glUseProgram(0);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, mFramebuffer);
-
-    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTexture, 0);
-    GLuint outputValues[kTextureWidth * kTextureHeight];
-    glReadPixels(0, 0, kTextureWidth, kTextureHeight, GL_RED_INTEGER, GL_UNSIGNED_INT,
-                 outputValues);
-    EXPECT_GL_NO_ERROR();
-
-    GLuint expectedValue = 100;
-    for (int i = 0; i < kTextureWidth * kTextureHeight; i++)
-    {
-        EXPECT_EQ(expectedValue, outputValues[i]);
-    }
+    GLuint program = CompileComputeProgram(csSource, false);
+    EXPECT_EQ(0u, program);
 }
 
 // imageLoad functions
@@ -470,10 +456,10 @@ TEST_P(ComputeShaderTest, ImageLoad)
     const std::string csSource =
         R"(#version 310 es
         layout(local_size_x=8) in;
-        layout(rgba8) uniform highp readonly image2D mImage2DInput;
-        layout(rgba16i) uniform highp readonly iimageCube mImageCubeInput;
-        layout(rgba32ui) uniform highp readonly uimage3D mImage3DInput;
-        layout(r32i) uniform highp writeonly iimage2D imageOut;
+        layout(rgba8, binding = 0) uniform highp readonly image2D mImage2DInput;
+        layout(rgba16i, binding = 1) uniform highp readonly iimageCube mImageCubeInput;
+        layout(rgba32ui, binding = 2) uniform highp readonly uimage3D mImage3DInput;
+        layout(r32i, binding = 3) uniform highp writeonly iimage2D imageOut;
         void main()
         {
             vec4 result2d = imageLoad(mImage2DInput, ivec2(gl_LocalInvocationID.xy));
@@ -492,9 +478,9 @@ TEST_P(ComputeShaderTest, ImageStore)
     const std::string csSource =
         R"(#version 310 es
         layout(local_size_x=8) in;
-        layout(rgba16f) uniform highp writeonly imageCube mImageCubeOutput;
-        layout(r32f) uniform highp writeonly image3D mImage3DOutput;
-        layout(rgba8ui) uniform highp writeonly uimage2DArray mImage2DArrayOutput;
+        layout(rgba16f, binding = 0) uniform highp writeonly imageCube mImageCubeOutput;
+        layout(r32f, binding = 1) uniform highp writeonly image3D mImage3DOutput;
+        layout(rgba8ui, binding = 2) uniform highp writeonly uimage2DArray mImage2DArrayOutput;
         void main()
         {
             imageStore(mImageCubeOutput, ivec3(gl_LocalInvocationID.xyz), vec4(0.0));
@@ -512,10 +498,10 @@ TEST_P(ComputeShaderTest, ImageSize)
     const std::string csSource =
         R"(#version 310 es
         layout(local_size_x=8) in;
-        layout(rgba8) uniform highp readonly imageCube mImageCubeInput;
-        layout(r32i) uniform highp readonly iimage2D mImage2DInput;
-        layout(rgba16ui) uniform highp readonly uimage2DArray mImage2DArrayInput;
-        layout(r32i) uniform highp writeonly iimage2D imageOut;
+        layout(rgba8, binding = 0) uniform highp readonly imageCube mImageCubeInput;
+        layout(r32i, binding = 1) uniform highp readonly iimage2D mImage2DInput;
+        layout(rgba16ui, binding = 2) uniform highp readonly uimage2DArray mImage2DArrayInput;
+        layout(r32i, binding = 3) uniform highp writeonly iimage2D imageOut;
         void main()
         {
             ivec2 sizeCube = imageSize(mImageCubeInput);
@@ -1284,8 +1270,8 @@ TEST_P(ComputeShaderTest, UniformBlockWithStructMember)
     const std::string csSource =
         R"(#version 310 es
         layout(local_size_x=8) in;
-        layout(rgba8) uniform highp readonly image2D mImage2DInput;
-        layout(rgba8) uniform highp writeonly image2D mImage2DOutput;
+        layout(rgba8, binding = 0) uniform highp readonly image2D mImage2DInput;
+        layout(rgba8, binding = 1) uniform highp writeonly image2D mImage2DOutput;
         struct S {
           ivec3 a;
           ivec2 b;
