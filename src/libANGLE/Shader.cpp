@@ -398,6 +398,24 @@ void Shader::resolveCompile(const Context *context)
         case ShaderType::Compute:
         {
             mState.mLocalSize = sh::GetComputeShaderLocalGroupSize(compilerHandle);
+            if (mState.mLocalSize.isDeclared())
+            {
+                angle::CheckedNumeric<std::uint32_t> local_size_x(mState.mLocalSize[0]);
+                angle::CheckedNumeric<std::uint32_t> local_size_y(mState.mLocalSize[1]);
+                angle::CheckedNumeric<std::uint32_t> local_size_z(mState.mLocalSize[2]);
+                angle::CheckedNumeric<std::uint32_t> local_size_xy  = local_size_x * local_size_y;
+                angle::CheckedNumeric<std::uint32_t> local_size_xyz = local_size_xy * local_size_z;
+                if (!local_size_xy.IsValid() || !local_size_xyz.IsValid() ||
+                    local_size_xyz.ValueUnsafe() >
+                        context->getCaps().maxComputeWorkGroupInvocations)
+                {
+                    WARN() << std::endl
+                           << "The total number of invocations within a work group exceeds "
+                           << "MAX_COMPUTE_WORK_GROUP_INVOCATIONS.";
+                    mState.mCompileStatus = CompileStatus::NOT_COMPILED;
+                    return;
+                }
+            }
             break;
         }
         case ShaderType::Vertex:
