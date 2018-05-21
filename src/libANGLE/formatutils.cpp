@@ -1140,10 +1140,10 @@ ErrorOrResult<GLuint> InternalFormat::computeCompressedImageSize(const Extents &
 }
 
 ErrorOrResult<GLuint> InternalFormat::computeSkipBytes(GLenum formatType,
-                                                           GLuint rowPitch,
-                                                           GLuint depthPitch,
-                                                           const PixelStoreStateBase &state,
-                                                           bool is3D) const
+                                                       GLuint rowPitch,
+                                                       GLuint depthPitch,
+                                                       const PixelStoreStateBase &state,
+                                                       bool is3D) const
 {
     CheckedNumeric<GLuint> checkedRowPitch(rowPitch);
     CheckedNumeric<GLuint> checkedDepthPitch(depthPitch);
@@ -1199,7 +1199,8 @@ ErrorOrResult<GLuint> InternalFormat::computePackUnpackEndByte(
     }
 
     CheckedNumeric<GLuint> checkedSkipBytes = 0;
-    ANGLE_TRY_RESULT(computeSkipBytes(formatType, rowPitch, depthPitch, state, is3D), checkedSkipBytes);
+    ANGLE_TRY_RESULT(computeSkipBytes(formatType, rowPitch, depthPitch, state, is3D),
+                     checkedSkipBytes);
 
     CheckedNumeric<GLuint> endByte = checkedCopyBytes + checkedSkipBytes;
 
