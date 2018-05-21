@@ -324,26 +324,7 @@ TEST_P(TextureUploadFormatTest, All)
         {
             gl_FragColor = texture2D(uTex, vec2(0,0));
         })";
-    constexpr char kFragShader_Ints[]   = R"(
-        precision mediump float;
-        uniform sampler2D uTex;
-
-        void main()
-        {
-            gl_FragColor = texture2D(uTex, vec2(0,0)) / 8.0;
-        })";
-    ANGLE_GL_PROGRAM(floatsProg, kVertShader, kFragShader_Floats);
-    ANGLE_GL_PROGRAM(intsProg, kVertShader, kFragShader_Ints);
-
-    GLint uTex = glGetUniformLocation(floatsProg, "uTex");
-    ASSERT_NE(uTex, -1);
-    glUseProgram(floatsProg);
-    glUniform1i(uTex, 0);
-
-    uTex = glGetUniformLocation(intsProg, "uTex");
-    ASSERT_NE(uTex, -1);
-    glUseProgram(intsProg);
-    glUniform1i(uTex, 0);
+    ANGLE_GL_PROGRAM(floatsProg, kVertShaderES2, kFragShader_Floats);
 
     glDisable(GL_DITHER);
 
@@ -598,6 +579,36 @@ TEST_P(TextureUploadFormatTest, All)
         fnTest({GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8}, {1, 0, 0, 0});
     }
 
+    if (getClientMajorVersion() < 3)
+        return;
+
+    constexpr char kVertShaderES3[]    = R"(#version 300 es
+        void main()
+        {
+            gl_PointSize = 1.0;
+            gl_Position = vec4(0, 0, 0, 1);
+        })";
+    constexpr char kFragShader_Ints[]  = R"(#version 300 es
+        precision mediump float;
+        uniform highp isampler2D uTex;
+        out vec4 oFragColor;
+
+        void main()
+        {
+            oFragColor = vec4(texture(uTex, vec2(0,0))) / 8.0;
+        })";
+    constexpr char kFragShader_Uints[] = R"(#version 300 es
+        precision mediump float;
+        uniform highp usampler2D uTex;
+        out vec4 oFragColor;
+
+        void main()
+        {
+            oFragColor = vec4(texture(uTex, vec2(0,0))) / 8.0;
+        })";
+    ANGLE_GL_PROGRAM(intsProg, kVertShaderES3, kFragShader_Ints);
+    ANGLE_GL_PROGRAM(uintsProg, kVertShaderES3, kFragShader_Uints);
+
     // Non-normalized ints
     glUseProgram(intsProg);
 
@@ -605,11 +616,6 @@ TEST_P(TextureUploadFormatTest, All)
     {
         constexpr uint8_t src[4] = {srcIntVals[0], srcIntVals[1], srcIntVals[2], srcIntVals[3]};
         ZeroAndCopy(srcBuffer, src);
-
-        fnTest({GL_RGBA8UI, GL_RGBA_INTEGER, GL_UNSIGNED_BYTE}, {1, 1, 1, 1});
-        fnTest({GL_RGB8UI, GL_RGB_INTEGER, GL_UNSIGNED_BYTE}, {1, 1, 1, 1});
-        fnTest({GL_RG8UI, GL_RG_INTEGER, GL_UNSIGNED_BYTE}, {1, 1, 1, 1});
-        fnTest({GL_R8UI, GL_RED_INTEGER, GL_UNSIGNED_BYTE}, {1, 1, 1, 1});
 
         fnTest({GL_RGBA8I, GL_RGBA_INTEGER, GL_BYTE}, {1, 1, 1, 1});
         fnTest({GL_RGB8I, GL_RGB_INTEGER, GL_BYTE}, {1, 1, 1, 1});
@@ -622,11 +628,6 @@ TEST_P(TextureUploadFormatTest, All)
         constexpr uint16_t src[4] = {srcIntVals[0], srcIntVals[1], srcIntVals[2], srcIntVals[3]};
         ZeroAndCopy(srcBuffer, src);
 
-        fnTest({GL_RGBA16UI, GL_RGBA_INTEGER, GL_UNSIGNED_SHORT}, {1, 1, 1, 1});
-        fnTest({GL_RGB16UI, GL_RGB_INTEGER, GL_UNSIGNED_SHORT}, {1, 1, 1, 1});
-        fnTest({GL_RG16UI, GL_RG_INTEGER, GL_UNSIGNED_SHORT}, {1, 1, 1, 1});
-        fnTest({GL_R16UI, GL_RED_INTEGER, GL_UNSIGNED_SHORT}, {1, 1, 1, 1});
-
         fnTest({GL_RGBA16I, GL_RGBA_INTEGER, GL_SHORT}, {1, 1, 1, 1});
         fnTest({GL_RGB16I, GL_RGB_INTEGER, GL_SHORT}, {1, 1, 1, 1});
         fnTest({GL_RG16I, GL_RG_INTEGER, GL_SHORT}, {1, 1, 1, 1});
@@ -638,15 +639,46 @@ TEST_P(TextureUploadFormatTest, All)
         constexpr uint32_t src[4] = {srcIntVals[0], srcIntVals[1], srcIntVals[2], srcIntVals[3]};
         ZeroAndCopy(srcBuffer, src);
 
-        fnTest({GL_RGBA32UI, GL_RGBA_INTEGER, GL_UNSIGNED_INT}, {1, 1, 1, 1});
-        fnTest({GL_RGB32UI, GL_RGB_INTEGER, GL_UNSIGNED_INT}, {1, 1, 1, 1});
-        fnTest({GL_RG32UI, GL_RG_INTEGER, GL_UNSIGNED_INT}, {1, 1, 1, 1});
-        fnTest({GL_R32UI, GL_RED_INTEGER, GL_UNSIGNED_INT}, {1, 1, 1, 1});
-
         fnTest({GL_RGBA32I, GL_RGBA_INTEGER, GL_INT}, {1, 1, 1, 1});
         fnTest({GL_RGB32I, GL_RGB_INTEGER, GL_INT}, {1, 1, 1, 1});
         fnTest({GL_RG32I, GL_RG_INTEGER, GL_INT}, {1, 1, 1, 1});
         fnTest({GL_R32I, GL_RED_INTEGER, GL_INT}, {1, 1, 1, 1});
+    }
+
+    // Non-normalized uints
+    glUseProgram(uintsProg);
+
+    // RGBA_INTEGER+UNSIGNED_BYTE
+    {
+        constexpr uint8_t src[4] = {srcIntVals[0], srcIntVals[1], srcIntVals[2], srcIntVals[3]};
+        ZeroAndCopy(srcBuffer, src);
+
+        fnTest({GL_RGBA8UI, GL_RGBA_INTEGER, GL_UNSIGNED_BYTE}, {1, 1, 1, 1});
+        fnTest({GL_RGB8UI, GL_RGB_INTEGER, GL_UNSIGNED_BYTE}, {1, 1, 1, 1});
+        fnTest({GL_RG8UI, GL_RG_INTEGER, GL_UNSIGNED_BYTE}, {1, 1, 1, 1});
+        fnTest({GL_R8UI, GL_RED_INTEGER, GL_UNSIGNED_BYTE}, {1, 1, 1, 1});
+    }
+
+    // RGBA_INTEGER+UNSIGNED_SHORT
+    {
+        constexpr uint16_t src[4] = {srcIntVals[0], srcIntVals[1], srcIntVals[2], srcIntVals[3]};
+        ZeroAndCopy(srcBuffer, src);
+
+        fnTest({GL_RGBA16UI, GL_RGBA_INTEGER, GL_UNSIGNED_SHORT}, {1, 1, 1, 1});
+        fnTest({GL_RGB16UI, GL_RGB_INTEGER, GL_UNSIGNED_SHORT}, {1, 1, 1, 1});
+        fnTest({GL_RG16UI, GL_RG_INTEGER, GL_UNSIGNED_SHORT}, {1, 1, 1, 1});
+        fnTest({GL_R16UI, GL_RED_INTEGER, GL_UNSIGNED_SHORT}, {1, 1, 1, 1});
+    }
+
+    // RGBA_INTEGER+UNSIGNED_INT
+    {
+        constexpr uint32_t src[4] = {srcIntVals[0], srcIntVals[1], srcIntVals[2], srcIntVals[3]};
+        ZeroAndCopy(srcBuffer, src);
+
+        fnTest({GL_RGBA32UI, GL_RGBA_INTEGER, GL_UNSIGNED_INT}, {1, 1, 1, 1});
+        fnTest({GL_RGB32UI, GL_RGB_INTEGER, GL_UNSIGNED_INT}, {1, 1, 1, 1});
+        fnTest({GL_RG32UI, GL_RG_INTEGER, GL_UNSIGNED_INT}, {1, 1, 1, 1});
+        fnTest({GL_R32UI, GL_RED_INTEGER, GL_UNSIGNED_INT}, {1, 1, 1, 1});
     }
 
     // RGBA_INTEGER+UNSIGNED_INT_2_10_10_10_REV
