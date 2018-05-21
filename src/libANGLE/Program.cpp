@@ -2280,6 +2280,16 @@ bool Program::linkValidateShaders(const Context *context, InfoLog &infoLog)
             infoLog << "Work group size is not specified.";
             return false;
         }
+
+        unsigned int totalInvocationsPerWorkGroup = mState.mComputeShaderLocalSize[0] *
+                                                    mState.mComputeShaderLocalSize[1] *
+                                                    mState.mComputeShaderLocalSize[2];
+        if (totalInvocationsPerWorkGroup > context->getCaps().maxComputeWorkGroupInvocations)
+        {
+            infoLog << "The total number of invocations within a work group exceeds "
+                    << "MAX_COMPUTE_WORK_GROUP_INVOCATIONS.";
+            return false;
+        }
     }
     else
     {
