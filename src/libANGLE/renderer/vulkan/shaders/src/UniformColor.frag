@@ -7,13 +7,18 @@
 
 #version 450 core
 
-layout(set = 0, binding = 1) uniform block {
-    vec4 colorIn;
-};
+// layout(set = 0, binding = 1) uniform block {
+//     vec4 colorIn;
+// };
+
+layout(push_constant) uniform pushConstantBlock {
+    vec4 color;
+} kConstant;
 
 layout(location = 0) out vec4 colorOut;
 
 void main()
 {
-    colorOut = colorIn;
+    // colorOut = colorIn;
+    colorOut = kConstant.color;
 }

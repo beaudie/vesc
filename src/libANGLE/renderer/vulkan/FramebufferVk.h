@@ -114,10 +114,6 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
     // if the masked out channel is present in any of the attachments.
     VkColorComponentFlags mActiveColorComponents;
     gl::DrawBufferMask mActiveColorComponentMasks[4];
-
-    // For use in masked clear.
-    vk::BufferAndMemory mMaskedClearUniformBuffer;
-    VkDescriptorSet mMaskedClearDescriptorSet;
 };
 
 gl::Error ReadPixelsFromRenderTarget(const gl::Context *context,
