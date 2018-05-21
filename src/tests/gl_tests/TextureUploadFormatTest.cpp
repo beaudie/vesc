@@ -163,46 +163,92 @@ struct SizedFloat
         const auto sVal = static_cast<uint32_t>(v < 0.0f);
         return Assemble(sVal, eVal, mVal);
     }
+
+    static constexpr float Decode(const uint32_t sVal,
+                                  const uint32_t eVal,
+                                  const uint32_t mVal)
+    {
+        constexpr int eBias = (1 << (kEBits - 1)) - 1;
+        constexpr int mDiv = 1 << kMBits;
+        float ret = powf(-1, sVal) * powf(2, int(eVal) - eBias) * (1.0f + float(mVal) / mDiv);
+        return ret;
+    }
 };
 using Float16  = SizedFloat<1, 5, 10>;
 using UFloat11 = SizedFloat<0, 5, 6>;
 using UFloat10 = SizedFloat<0, 5, 5>;
 
-uint32_t EncodeRGB9_E5_Rev(const float signedR, const float signedG, const float signedB)
+struct RGB9_E5 final
 {
-    const float r       = std::max(0.0f, signedR);
-    const float g       = std::max(0.0f, signedG);
-    const float b       = std::max(0.0f, signedB);
-    const int eBits     = 5;
-    const int eBias     = (1 << (eBits - 1)) - 1;  // 15
-    const int eMax      = (1 << eBits) - 1;
-    const int mBits     = 9;
-    const uint32_t mMax = (1 << mBits) - 1;
-    // Maximize mVal for one channel
-    // => Find the lowest viable exponent
-    int minViableActualExp                    = 1 << eBits;
-    const auto fnMinimizeViableActualExponent = [&](const float v) {
-        const auto cur = static_cast<int>(ceil(log2f(v / mMax)));
-        if (cur < minViableActualExp)
-        {
-            minViableActualExp = cur;
-        }
-    };
-    fnMinimizeViableActualExponent(r);
-    fnMinimizeViableActualExponent(g);
-    fnMinimizeViableActualExponent(b);
-    const int eVal = std::max(0, std::min(minViableActualExp + eBias + mBits, eMax));
+    // GLES 3.0.5 p129
+    static constexpr int N = 9; // number of mantissa bits per component
+    static constexpr int B = 15; // exponent bias
 
-    const auto fnM = [&](const float v) {
-        const auto m = static_cast<uint32_t>(v * powf(2, static_cast<float>(mBits + eBias - eVal)));
-        return std::min(m, mMax);
-    };
+    static uint32_t Encode(const float red, const float green, const float blue)
+    {
+        const auto floori = [](const float x) {
+            return static_cast<int>(floor(x));
+        };
+        // GLES 3.0.5 p129
+        constexpr int eMax = 31; // max allowed biased exponent value
 
-    const auto mR = fnM(r);
-    const auto mG = fnM(g);
-    const auto mB = fnM(b);
-    return (mR << 0) | (mG << 9) | (mB << 18) | (eVal << 27);
-}
+        const float twoToN = powf(2, N);
+        const float sharedExpMax = (twoToN - 1) / twoToN * powf(2, eMax - B);
+
+        const auto fnClampColor = [&](const float color) {
+            return std::max(0.0f, std::min(color, sharedExpMax));
+        };
+        const float redC = fnClampColor(red);
+        const float greenC = fnClampColor(green);
+        const float blueC = fnClampColor(blue);
+
+        const float maxC = std::max({ redC, greenC, blueC });
+        const int expP = std::max(-B - 1, floori(log2f(maxC))) + 1 + B;
+
+        const auto fnColorS = [&](const float colorC, const float exp) {
+            return floori(colorC / powf(2, exp - B - N) + 0.5f);
+        };
+        const int maxS = fnColorS(maxC, expP);
+        const int expS = expP + ((maxS == (1 << N)) ? 1 : 0);
+
+        const int redS = fnColorS(redC, expS);
+        const int greenS = fnColorS(greenC, expS);
+        const int blueS = fnColorS(blueC, expS);
+
+        // Pack as u32 EGBR.
+        uint32_t ret = expS & 0x1f;
+        ret <<= 9;
+        ret |= blueS & 0x1ff;
+        ret <<= 9;
+        ret |= greenS & 0x1ff;
+        ret <<= 9;
+        ret |= redS & 0x1ff;
+        return ret;
+    }
+
+    static void Decode(uint32_t packed, float* const out_red,
+                       float* const out_green, float* const out_blue)
+    {
+        const auto redS   = packed & 0x1ff;
+        packed >>= 9;
+        const auto greenS = packed & 0x1ff;
+        packed >>= 9;
+        const auto blueS  = packed & 0x1ff;
+        packed >>= 9;
+        const auto expS   = packed & 0x1f;
+
+        // These are *not* IEEE-like UFloat14s.
+        // GLES 3.0.5 p165:
+        // red = redS*pow(2,expS-B-N)
+        const auto fnToFloat = [&](const uint32_t x) {
+            return x * powf(2, int(expS) - B - N);
+        };
+        *out_red   = fnToFloat(redS  );
+        *out_green = fnToFloat(greenS);
+        *out_blue  = fnToFloat(blueS );
+    }
+};
+
 
 }  // anonymous namespace
 
@@ -212,6 +258,9 @@ uint32_t EncodeRGB9_E5_Rev(const float signedR, const float signedG, const float
 // re-encode by hand.
 TEST(TextureUploadFormatTestInternals, Float16Encoding)
 {
+    EXPECT_EQ(Float16::Decode(0, 0x0f, 0), 1.0f);
+    EXPECT_EQ(Float16::Decode(0, 0x0f - 1, 0), 0.5f);
+
     EXPECT_EQ(Float16::Assemble(0, 0x0f, 0), Float16::Encode(1.0));
     EXPECT_EQ(Float16::Assemble(0, 0x0f - 1, 0), Float16::Encode(1.0 / 2));
 
@@ -219,6 +268,19 @@ TEST(TextureUploadFormatTestInternals, Float16Encoding)
     EXPECT_EQ(Float16::Assemble(0, 0x0f - 2, 0), Float16::Encode(2.0 / 8));
     EXPECT_EQ(Float16::Assemble(0, 0x0f - 2, 1 << (Float16::kMBits - 1)), Float16::Encode(3.0 / 8));
     EXPECT_EQ(Float16::Assemble(0, 0x0f - 1, 1 << (Float16::kMBits - 2)), Float16::Encode(5.0 / 8));
+}
+
+TEST(TextureUploadFormatTestInternals, RGB9E5Encoding)
+{
+    const auto fnTest = [](const float refR, const float refG, const float refB) {
+        const auto packed = RGB9_E5::Encode(refR, refG, refB);
+        float testR, testG, testB;
+        RGB9_E5::Decode(packed, &testR, &testG, &testB);
+        EXPECT_EQ(testR, refR);
+        EXPECT_EQ(testG, refG);
+        EXPECT_EQ(testB, refB);
+    };
+    fnTest(0.125f, 0.250f, 0.625f);
 }
 
 namespace
@@ -657,7 +719,7 @@ TEST_P(TextureUploadFormatTest, All)
 
     // UNSIGNED_INT_5_9_9_9_REV
     {
-        const uint32_t src[] = {EncodeRGB9_E5_Rev(srcVals[0], srcVals[1], srcVals[2])};
+        const uint32_t src[] = { RGB9_E5::Encode(srcVals[0], srcVals[1], srcVals[2]) };
         ZeroAndCopy(srcBuffer, src);
 
         fnTest({GL_RGB9_E5, GL_RGB, GL_UNSIGNED_INT_5_9_9_9_REV}, {1, 1, 1, 0});
