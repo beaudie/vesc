@@ -3,17 +3,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// UniformColor.frag: Simple solid color fragment shader.
+// PushConstantColor.frag: Simple solid color fragment shader.
 
 #version 450 core
 
-layout(set = 0, binding = 1) uniform block {
-    vec4 colorIn;
-};
+layout(push_constant) uniform block {
+    vec4 color;
+} pushConstantBlock;
 
 layout(location = 0) out vec4 colorOut;
 
 void main()
 {
-    colorOut = colorIn;
+    colorOut = pushConstantBlock.color;
 }
