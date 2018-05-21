@@ -9,10 +9,10 @@ vars = {
 deps = {
 
   '{root}/build':
-    '{chromium_git}/chromium/src/build.git@2f3b6e8ce9e783b2a09496d70eef2974506a41c8',
+    '{chromium_git}/chromium/src/build.git@b944b99e72923c5a6699235ed858e725db21f81f',
 
   '{root}/buildtools':
-    '{chromium_git}/chromium/buildtools.git@461b345a815c1c745ac0534a6a4bd52d123abe68',
+    '{chromium_git}/chromium/buildtools.git@94288c26d2ffe3aec9848c147839afee597acefd',
 
   '{root}/testing':
     '{chromium_git}/chromium/src/testing@6dfa36ab2e5143fa2f7353e3af5d2935af2e61f7',
@@ -46,7 +46,7 @@ deps = {
     '{chromium_git}/chromium/src/third_party/zlib@24ab14872e8e068ba08cc31cc3d43bcc6d5cb832',
 
   '{root}/tools/clang':
-    '{chromium_git}/chromium/src/tools/clang.git@e70074db10b27867e6c873adc3ac7e5f9ee0ff6e',
+    '{chromium_git}/chromium/src/tools/clang.git@c893c7eec4706f8c7fc244ee254b1dadd8f8d158',
 
   '{root}/tools/gyp':
     '{chromium_git}/external/gyp@5e2b3ddde7cda5eb6bc09a5546a76b00e49d888f',
@@ -140,7 +140,7 @@ hooks = [
     # Note: On Win, this should run after win_toolchain, as it may use it.
     'name': 'clang',
     'pattern': '.',
-    'action': ['python', '{root}/tools/clang/scripts/update.py', '--if-needed'],
+    'action': ['python', '{root}/tools/clang/scripts/update.py'],
   },
 
   # Pull rc binaries using checked-in hashes.
