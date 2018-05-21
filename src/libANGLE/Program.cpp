@@ -2530,7 +2530,10 @@ bool Program::linkUniforms(const Context *context,
 
     linker.getResults(&mState.mUniforms, &mState.mUniformLocations);
 
-    linkSamplerAndImageBindings(combinedImageUniformsCount);
+    if (!linkSamplerAndImageBindings(infoLog, combinedImageUniformsCount))
+    {
+        return false;
+    }
 
     if (!linkAtomicCounterBuffers())
     {
@@ -2540,7 +2543,7 @@ bool Program::linkUniforms(const Context *context,
     return true;
 }
 
-void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
+bool Program::linkSamplerAndImageBindings(InfoLog &infoLog, GLuint *combinedImageUniforms)
 {
     ASSERT(combinedImageUniforms);
 
@@ -2563,9 +2566,38 @@ void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
         --low;
     }
 
+    // Direct3D 11 cannot allow that two UAVs share a subresource (and therefore share the same
+    // resource), https://msdn.microsoft.com/en-us/library/windows/desktop/ff476465(v=vs.85).aspx.
+    // Restrict binding qualifier for image variables, cannot allow that image variables are bound
+    // to the same image unit.
     mState.mImageUniformRange = RangeUI(low, high);
-    *combinedImageUniforms    = 0u;
+    std::set<unsigned int> imageUnitSet;
+    for (unsigned int imageIndex : mState.mImageUniformRange)
+    {
+        auto &imageUniform = mState.mUniforms[imageIndex];
+        if (imageUniform.binding == -1 && imageUniform.getBasicTypeElementCount() > 1)
+        {
+            infoLog << "Be not supported to declare an image array without a binding qualifier.";
+            return false;
+        }
+
+        unsigned int binding = imageUniform.binding != -1 ? imageUniform.binding : 0;
+        for (size_t i = 0; i < imageUniform.getBasicTypeElementCount(); ++i)
+        {
+            if (imageUnitSet.find(binding + i) == imageUnitSet.end())
+            {
+                imageUnitSet.insert(binding + i);
+            }
+            else
+            {
+                infoLog << "Do not allow that image variables are bound to the same image unit.";
+                return false;
+            }
+        }
+    }
+
     // If uniform is a image type, insert it into the mImageBindings array.
+    *combinedImageUniforms = 0u;
     for (unsigned int imageIndex : mState.mImageUniformRange)
     {
         // ES3.1 (section 7.6.1) and GLSL ES3.1 (section 4.4.5), Uniform*i{v} commands
@@ -2606,6 +2638,8 @@ void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
         mState.mSamplerBindings.emplace_back(
             SamplerBinding(textureType, samplerUniform.getBasicTypeElementCount(), false));
     }
+
+    return true;
 }
 
 bool Program::linkAtomicCounterBuffers()

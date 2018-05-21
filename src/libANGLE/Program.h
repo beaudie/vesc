@@ -722,7 +722,7 @@ class Program final : angle::NonCopyable, public LabeledObject
                       InfoLog &infoLog,
                       const ProgramBindings &uniformLocationBindings,
                       GLuint *combinedImageUniformsCount);
-    void linkSamplerAndImageBindings(GLuint *combinedImageUniformsCount);
+    bool linkSamplerAndImageBindings(InfoLog &infoLog, GLuint *combinedImageUniforms);
     bool linkAtomicCounterBuffers();
 
     void updateLinkedShaderStages();
