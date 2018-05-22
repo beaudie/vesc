@@ -67,7 +67,7 @@ PixelBuffer::PixelBuffer(RendererVk *renderer)
 {
     // vkCmdCopyBufferToImage must have an offset that is a multiple of 4.
     // https://www.khronos.org/registry/vulkan/specs/1.0/man/html/VkBufferImageCopy.html
-    mStagingBuffer.init(4, renderer);
+    mStagingBuffer.init(4, vk::DynamicBuffer::AccessType::WRITE, renderer);
 }
 
 PixelBuffer::~PixelBuffer()
