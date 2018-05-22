@@ -78,9 +78,9 @@ void FramebufferVk::destroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
-    renderer->releaseResource(*this, &mFramebuffer);
-    renderer->releaseResource(*this, &mMaskedClearUniformBuffer.buffer);
-    renderer->releaseResource(*this, &mMaskedClearUniformBuffer.memory);
+    renderer->releaseObject(getStoredQueueSerial(), &mFramebuffer);
+    renderer->releaseObject(getStoredQueueSerial(), &mMaskedClearUniformBuffer.buffer);
+    renderer->releaseObject(getStoredQueueSerial(), &mMaskedClearUniformBuffer.memory);
 
     mReadPixelsBuffer.destroy(contextVk->getDevice());
 }
@@ -391,7 +391,7 @@ gl::Error FramebufferVk::syncState(const gl::Context *context,
         mActiveColorComponentMasks[2].any(), mActiveColorComponentMasks[3].any());
 
     mRenderPassDesc.reset();
-    renderer->releaseResource(*this, &mFramebuffer);
+    renderer->releaseObject(getStoredQueueSerial(), &mFramebuffer);
 
     // Will freeze the current set of dependencies on this FBO. The next time we render we will
     // create a new entry in the command graph.
