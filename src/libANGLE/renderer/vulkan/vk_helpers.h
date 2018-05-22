@@ -34,8 +34,16 @@ class DynamicBuffer : angle::NonCopyable
     DynamicBuffer(VkBufferUsageFlags usage, size_t minSize);
     ~DynamicBuffer();
 
+    // This enum is used to identify if this Dynamicbuffer will be used for allocating buffers to
+    // read from or to write to.
+    enum class AccessType
+    {
+        READ,
+        WRITE
+    };
+
     // Init is called after the buffer creation so that the alignment can be specified later.
-    void init(size_t alignment, RendererVk *renderer);
+    void init(size_t alignment, AccessType accessType, RendererVk *renderer);
 
     bool valid();
 
@@ -74,12 +82,13 @@ class DynamicBuffer : angle::NonCopyable
     size_t mMinSize;
     Buffer mBuffer;
     DeviceMemory mMemory;
-    uint32_t mNextWriteOffset;
+    uint32_t mNextAllocationOffset;
     uint32_t mLastFlushOffset;
     uint32_t mLastInvalidatedOffset;
     size_t mSize;
     size_t mAlignment;
     uint8_t *mMappedMemory;
+    AccessType mAccessType;
 
     std::vector<BufferAndMemory> mRetainedBuffers;
 };

@@ -323,7 +323,7 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
 
     if (!mReadPixelsBuffer.valid())
     {
-        mReadPixelsBuffer.init(1, renderer);
+        mReadPixelsBuffer.init(1, vk::DynamicBuffer::AccessType::READ, renderer);
         ASSERT(mReadPixelsBuffer.valid());
     }
 
