@@ -348,7 +348,8 @@ gl::Error ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
             size_t minAlignment = static_cast<size_t>(
                 renderer->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
 
-            mDefaultUniformBlocks[shaderType].storage.init(minAlignment, renderer);
+            mDefaultUniformBlocks[shaderType].storage.init(
+                minAlignment, vk::DynamicBuffer::AccessType::WRITE, renderer);
 
             // Initialize uniform buffer memory to zero by default.
             mDefaultUniformBlocks[shaderType].uniformData.fill(0);

@@ -97,7 +97,7 @@ uint32_t GetImageLayerCount(gl::TextureType textureType)
 DynamicBuffer::DynamicBuffer(VkBufferUsageFlags usage, size_t minSize)
     : mUsage(usage),
       mMinSize(minSize),
-      mNextWriteOffset(0),
+      mNextAllocationOffset(0),
       mLastFlushOffset(0),
       mLastInvalidatedOffset(0),
       mSize(0),
@@ -106,9 +106,10 @@ DynamicBuffer::DynamicBuffer(VkBufferUsageFlags usage, size_t minSize)
 {
 }
 
-void DynamicBuffer::init(size_t alignment, RendererVk *renderer)
+void DynamicBuffer::init(size_t alignment, AccessType accessType, RendererVk *renderer)
 {
     ASSERT(alignment > 0);
+    mAccessType = accessType;
     mAlignment = std::max(
         alignment,
         static_cast<size_t>(renderer->getPhysicalDeviceProperties().limits.nonCoherentAtomSize));
@@ -135,7 +136,7 @@ Error DynamicBuffer::allocate(RendererVk *renderer,
 
     size_t sizeToAllocate = roundUp(sizeInBytes, mAlignment);
 
-    angle::base::CheckedNumeric<size_t> checkedNextWriteOffset = mNextWriteOffset;
+    angle::base::CheckedNumeric<size_t> checkedNextWriteOffset = mNextAllocationOffset;
     checkedNextWriteOffset += sizeToAllocate;
 
     if (!checkedNextWriteOffset.IsValid() || checkedNextWriteOffset.ValueOrDie() > mSize)
@@ -144,7 +145,14 @@ Error DynamicBuffer::allocate(RendererVk *renderer,
 
         if (mMappedMemory)
         {
-            ANGLE_TRY(flush(device));
+            if (mAccessType == AccessType::WRITE)
+            {
+                ANGLE_TRY(flush(device));
+            }
+            else
+            {
+                ANGLE_TRY(invalidate(device));
+            }
             mMemory.unmap(device);
             mMappedMemory = nullptr;
         }
@@ -166,7 +174,7 @@ Error DynamicBuffer::allocate(RendererVk *renderer,
                                        &mMemory, &mSize));
 
         ANGLE_TRY(mMemory.map(device, 0, mSize, 0, &mMappedMemory));
-        mNextWriteOffset = 0;
+        mNextAllocationOffset  = 0;
         mLastFlushOffset = 0;
         mLastInvalidatedOffset = 0;
 
@@ -188,42 +196,46 @@ Error DynamicBuffer::allocate(RendererVk *renderer,
     }
 
     ASSERT(mMappedMemory);
-    *ptrOut    = mMappedMemory + mNextWriteOffset;
-    *offsetOut = mNextWriteOffset;
-    mNextWriteOffset += static_cast<uint32_t>(sizeToAllocate);
+    *ptrOut    = mMappedMemory + mNextAllocationOffset;
+    *offsetOut = mNextAllocationOffset;
+    mNextAllocationOffset += static_cast<uint32_t>(sizeToAllocate);
     return NoError();
 }
 
 Error DynamicBuffer::flush(VkDevice device)
 {
-    if (mNextWriteOffset > mLastFlushOffset)
+    ASSERT(mAccessType == AccessType::WRITE);
+
+    if (mNextAllocationOffset > mLastFlushOffset)
     {
         VkMappedMemoryRange range;
         range.sType  = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
         range.pNext  = nullptr;
         range.memory = mMemory.getHandle();
         range.offset = mLastFlushOffset;
-        range.size   = mNextWriteOffset - mLastFlushOffset;
+        range.size   = mNextAllocationOffset - mLastFlushOffset;
         ANGLE_VK_TRY(vkFlushMappedMemoryRanges(device, 1, &range));
 
-        mLastFlushOffset = mNextWriteOffset;
+        mLastFlushOffset = mNextAllocationOffset;
     }
     return NoError();
 }
 
 Error DynamicBuffer::invalidate(VkDevice device)
 {
-    if (mNextWriteOffset > mLastInvalidatedOffset)
+    ASSERT(mAccessType == AccessType::READ);
+
+    if (mNextAllocationOffset > mLastInvalidatedOffset)
     {
         VkMappedMemoryRange range;
         range.sType  = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
         range.pNext  = nullptr;
         range.memory = mMemory.getHandle();
         range.offset = mLastInvalidatedOffset;
-        range.size   = mNextWriteOffset - mLastInvalidatedOffset;
+        range.size   = mNextAllocationOffset - mLastInvalidatedOffset;
         ANGLE_VK_TRY(vkInvalidateMappedMemoryRanges(device, 1, &range));
 
-        mLastInvalidatedOffset = mNextWriteOffset;
+        mLastInvalidatedOffset = mNextAllocationOffset;
     }
     return NoError();
 }
@@ -380,7 +392,7 @@ LineLoopHelper::LineLoopHelper(RendererVk *renderer)
     // can vary in size. According to the Vulkan spec, when calling vkCmdBindIndexBuffer: 'The
     // sum of offset and the address of the range of VkDeviceMemory object that is backing buffer,
     // must be a multiple of the type indicated by indexType'.
-    mDynamicIndexBuffer.init(sizeof(uint32_t), renderer);
+    mDynamicIndexBuffer.init(sizeof(uint32_t), vk::DynamicBuffer::AccessType::WRITE, renderer);
 }
 
 LineLoopHelper::~LineLoopHelper() = default;
