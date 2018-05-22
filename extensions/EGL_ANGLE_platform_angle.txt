@@ -75,6 +75,7 @@ New Tokens
     Accepted as values for the EGL_PLATFORM_ANGLE_TYPE_ANGLE attribute:
 
         EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE              0x3206
+        EGL_PLATFORM_ANGLE_TYPE_NATIVE                     0x3481
 
     Accepted as values for the EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE attribute:
 
@@ -130,6 +131,10 @@ New Behavior
     If no display matching the requested <native_display> or of the type
     requested by the value of EGL_PLATFORM_ANGLE_TYPE_ANGLE is available,
     EGL_NO_DISPLAY is returned. No error condition is raised in this case.
+
+    An EGL_PLATFORM_ANGLE_TYPE_ANGLE value of EGL_PLATFORM_ANGLE_TYPE_NATIVE
+    indicates that the platform will use the native OpenGL driver, not
+    ANGLE.
 
     If EGL_PLATFORM_ANGLE_DEBUG_LAYERS_ENABLED is specified, it
     controls enabling back-end validation layers. EGL_TRUE enables
