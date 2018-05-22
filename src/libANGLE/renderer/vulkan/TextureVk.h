@@ -43,14 +43,16 @@ class PixelBuffer final : angle::NonCopyable
                                                     const gl::InternalFormat &formatInfo,
                                                     FramebufferVk *framebufferVk);
 
-    gl::Error generateMipmaps(RendererVk *renderer,
-                              const angle::Format &sourceFormat,
-                              GLuint mipLevel,
-                              GLuint maxMipLevel,
-                              size_t sourceWidth,
-                              size_t sourceHeight,
-                              size_t sourceRowPitch,
-                              uint8_t *sourceData);
+    gl::Error generateMipmapLevels(RendererVk *renderer,
+                                   const angle::Format &sourceFormat,
+                                   GLuint layer,
+                                   GLuint layerCount,
+                                   GLuint mipLevel,
+                                   GLuint maxMipLevel,
+                                   size_t sourceWidth,
+                                   size_t sourceHeight,
+                                   size_t sourceRowPitch,
+                                   uint8_t *sourceData);
 
     vk::Error flushUpdatesToImage(RendererVk *renderer,
                                   vk::ImageHelper *image,
