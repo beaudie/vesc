@@ -48,8 +48,8 @@ VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state, RendererVk *rend
     mPackedInputBindings.fill({0, 0});
     mPackedInputAttributes.fill({0, 0, 0});
 
-    mDynamicVertexData.init(1, renderer);
-    mDynamicIndexData.init(1, renderer);
+    mDynamicVertexData.init(1, vk::DynamicBuffer::AccessType::WRITE, renderer);
+    mDynamicIndexData.init(1, vk::DynamicBuffer::AccessType::WRITE, renderer);
 }
 
 VertexArrayVk::~VertexArrayVk()
