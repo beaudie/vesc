@@ -14,7 +14,6 @@
 
 #include <vulkan/vulkan.h>
 
-#include "common/Optional.h"
 #include "common/debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Observer.h"
