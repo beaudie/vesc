@@ -783,6 +783,14 @@ void OutputHLSL::header(TInfoSinkBase &out,
         {
             out << "static uint gl_LocalInvocationIndex = uint(0);\n";
         }
+
+        if (!mappedStructs.empty())
+        {
+            out << "// Structures from std140 blocks with padding removed\n";
+            out << "\n";
+            out << mappedStructs;
+            out << "\n";
+        }
     }
 
     bool getDimensionsIgnoresBaseLevel =
