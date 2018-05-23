@@ -486,303 +486,302 @@ void OutputHLSL::header(TInfoSinkBase &out,
            "#define FLATTEN\n"
            "#endif\n";
 
-    if (mShaderType == GL_FRAGMENT_SHADER)
+    switch (mShaderType)
     {
-        const bool usingMRTExtension =
-            IsExtensionEnabled(mExtensionBehavior, TExtension::EXT_draw_buffers);
-
-        out << "// Varyings\n";
-        out << varyings;
-        out << "\n";
-
-        if (mShaderVersion >= 300)
+        case GL_FRAGMENT_SHADER:
         {
-            for (const auto &outputVariable : mReferencedOutputVariables)
-            {
-                const ImmutableString &variableName = outputVariable.second->name();
-                const TType &variableType   = outputVariable.second->getType();
+            const bool usingMRTExtension =
+                IsExtensionEnabled(mExtensionBehavior, TExtension::EXT_draw_buffers);
 
-                out << "static " << TypeString(variableType) << " out_" << variableName
-                    << ArrayString(variableType) << " = " << zeroInitializer(variableType) << ";\n";
-            }
-        }
-        else
-        {
-            const unsigned int numColorValues = usingMRTExtension ? mNumRenderTargets : 1;
+            out << "// Varyings\n";
+            out << varyings;
+            out << "\n";
 
-            out << "static float4 gl_Color[" << numColorValues << "] =\n"
-                                                                  "{\n";
-            for (unsigned int i = 0; i < numColorValues; i++)
+            if (mShaderVersion >= 300)
             {
-                out << "    float4(0, 0, 0, 0)";
-                if (i + 1 != numColorValues)
+                for (const auto &outputVariable : mReferencedOutputVariables)
                 {
-                    out << ",";
+                    const ImmutableString &variableName = outputVariable.second->name();
+                    const TType &variableType           = outputVariable.second->getType();
+
+                    out << "static " << TypeString(variableType) << " out_" << variableName
+                        << ArrayString(variableType) << " = " << zeroInitializer(variableType)
+                        << ";\n";
                 }
-                out << "\n";
+            }
+            else
+            {
+                const unsigned int numColorValues = usingMRTExtension ? mNumRenderTargets : 1;
+
+                out << "static float4 gl_Color[" << numColorValues
+                    << "] =\n"
+                       "{\n";
+                for (unsigned int i = 0; i < numColorValues; i++)
+                {
+                    out << "    float4(0, 0, 0, 0)";
+                    if (i + 1 != numColorValues)
+                    {
+                        out << ",";
+                    }
+                    out << "\n";
+                }
+
+                out << "};\n";
             }
 
-            out << "};\n";
-        }
+            if (mUsesFragDepth)
+            {
+                out << "static float gl_Depth = 0.0;\n";
+            }
 
-        if (mUsesFragDepth)
+            if (mUsesFragCoord)
+            {
+                out << "static float4 gl_FragCoord = float4(0, 0, 0, 0);\n";
+            }
+
+            if (mUsesPointCoord)
+            {
+                out << "static float2 gl_PointCoord = float2(0.5, 0.5);\n";
+            }
+
+            if (mUsesFrontFacing)
+            {
+                out << "static bool gl_FrontFacing = false;\n";
+            }
+
+            out << "\n";
+
+            if (mUsesDepthRange)
+            {
+                out << "struct gl_DepthRangeParameters\n"
+                       "{\n"
+                       "    float near;\n"
+                       "    float far;\n"
+                       "    float diff;\n"
+                       "};\n"
+                       "\n";
+            }
+
+            if (mOutputType == SH_HLSL_4_1_OUTPUT || mOutputType == SH_HLSL_4_0_FL9_3_OUTPUT)
+            {
+                out << "cbuffer DriverConstants : register(b1)\n"
+                       "{\n";
+
+                if (mUsesDepthRange)
+                {
+                    out << "    float3 dx_DepthRange : packoffset(c0);\n";
+                }
+
+                if (mUsesFragCoord)
+                {
+                    out << "    float4 dx_ViewCoords : packoffset(c1);\n";
+                }
+
+                if (mUsesFragCoord || mUsesFrontFacing)
+                {
+                    out << "    float3 dx_DepthFront : packoffset(c2);\n";
+                }
+
+                if (mUsesFragCoord)
+                {
+                    // dx_ViewScale is only used in the fragment shader to correct
+                    // the value for glFragCoord if necessary
+                    out << "    float2 dx_ViewScale : packoffset(c3);\n";
+                }
+
+                if (mHasMultiviewExtensionEnabled)
+                {
+                    // We have to add a value which we can use to keep track of which multi-view
+                    // code path is to be selected in the GS.
+                    out << "    float multiviewSelectViewportIndex : packoffset(c3.z);\n";
+                }
+
+                if (mOutputType == SH_HLSL_4_1_OUTPUT)
+                {
+                    mUniformHLSL->samplerMetadataUniforms(out, "c4");
+                }
+
+                out << "};\n";
+            }
+            else
+            {
+                if (mUsesDepthRange)
+                {
+                    out << "uniform float3 dx_DepthRange : register(c0);";
+                }
+
+                if (mUsesFragCoord)
+                {
+                    out << "uniform float4 dx_ViewCoords : register(c1);\n";
+                }
+
+                if (mUsesFragCoord || mUsesFrontFacing)
+                {
+                    out << "uniform float3 dx_DepthFront : register(c2);\n";
+                }
+            }
+
+            out << "\n";
+
+            if (mUsesDepthRange)
+            {
+                out << "static gl_DepthRangeParameters gl_DepthRange = {dx_DepthRange.x, "
+                       "dx_DepthRange.y, dx_DepthRange.z};\n"
+                       "\n";
+            }
+
+            if (usingMRTExtension && mNumRenderTargets > 1)
+            {
+                out << "#define GL_USES_MRT\n";
+            }
+
+            if (mUsesFragColor)
+            {
+                out << "#define GL_USES_FRAG_COLOR\n";
+            }
+
+            if (mUsesFragData)
+            {
+                out << "#define GL_USES_FRAG_DATA\n";
+            }
+            break;
+        }
+        case GL_VERTEX_SHADER:
         {
-            out << "static float gl_Depth = 0.0;\n";
+            out << "// Attributes\n";
+            out << attributes;
+            out << "\n"
+                   "static float4 gl_Position = float4(0, 0, 0, 0);\n";
+
+            if (mUsesPointSize)
+            {
+                out << "static float gl_PointSize = float(1);\n";
+            }
+
+            if (mUsesInstanceID)
+            {
+                out << "static int gl_InstanceID;";
+            }
+
+            if (mUsesVertexID)
+            {
+                out << "static int gl_VertexID;";
+            }
+
+            out << "\n"
+                   "// Varyings\n";
+            out << varyings;
+            out << "\n";
+
+            if (mUsesDepthRange)
+            {
+                out << "struct gl_DepthRangeParameters\n"
+                       "{\n"
+                       "    float near;\n"
+                       "    float far;\n"
+                       "    float diff;\n"
+                       "};\n"
+                       "\n";
+            }
+
+            if (mOutputType == SH_HLSL_4_1_OUTPUT || mOutputType == SH_HLSL_4_0_FL9_3_OUTPUT)
+            {
+                out << "cbuffer DriverConstants : register(b1)\n"
+                       "{\n";
+
+                if (mUsesDepthRange)
+                {
+                    out << "    float3 dx_DepthRange : packoffset(c0);\n";
+                }
+
+                // dx_ViewAdjust and dx_ViewCoords will only be used in Feature Level 9
+                // shaders. However, we declare it for all shaders (including Feature Level 10+).
+                // The bytecode is the same whether we declare it or not, since D3DCompiler removes
+                // it if it's unused.
+                out << "    float4 dx_ViewAdjust : packoffset(c1);\n";
+                out << "    float2 dx_ViewCoords : packoffset(c2);\n";
+                out << "    float2 dx_ViewScale  : packoffset(c3);\n";
+
+                if (mHasMultiviewExtensionEnabled)
+                {
+                    // We have to add a value which we can use to keep track of which multi-view
+                    // code path is to be selected in the GS.
+                    out << "    float multiviewSelectViewportIndex : packoffset(c3.z);\n";
+                }
+
+                if (mOutputType == SH_HLSL_4_1_OUTPUT)
+                {
+                    mUniformHLSL->samplerMetadataUniforms(out, "c4");
+                }
+
+                out << "};\n"
+                       "\n";
+            }
+            else
+            {
+                if (mUsesDepthRange)
+                {
+                    out << "uniform float3 dx_DepthRange : register(c0);\n";
+                }
+
+                out << "uniform float4 dx_ViewAdjust : register(c1);\n";
+                out << "uniform float2 dx_ViewCoords : register(c2);\n"
+                       "\n";
+            }
+
+            if (mUsesDepthRange)
+            {
+                out << "static gl_DepthRangeParameters gl_DepthRange = {dx_DepthRange.x, "
+                       "dx_DepthRange.y, dx_DepthRange.z};\n"
+                       "\n";
+            }
+            break;
         }
-
-        if (mUsesFragCoord)
-        {
-            out << "static float4 gl_FragCoord = float4(0, 0, 0, 0);\n";
-        }
-
-        if (mUsesPointCoord)
-        {
-            out << "static float2 gl_PointCoord = float2(0.5, 0.5);\n";
-        }
-
-        if (mUsesFrontFacing)
-        {
-            out << "static bool gl_FrontFacing = false;\n";
-        }
-
-        out << "\n";
-
-        if (mUsesDepthRange)
-        {
-            out << "struct gl_DepthRangeParameters\n"
-                   "{\n"
-                   "    float near;\n"
-                   "    float far;\n"
-                   "    float diff;\n"
-                   "};\n"
-                   "\n";
-        }
-
-        if (mOutputType == SH_HLSL_4_1_OUTPUT || mOutputType == SH_HLSL_4_0_FL9_3_OUTPUT)
+        case GL_COMPUTE_SHADER:
         {
             out << "cbuffer DriverConstants : register(b1)\n"
                    "{\n";
-
-            if (mUsesDepthRange)
+            if (mUsesNumWorkGroups)
             {
-                out << "    float3 dx_DepthRange : packoffset(c0);\n";
+                out << "    uint3 gl_NumWorkGroups : packoffset(c0);\n";
             }
-
-            if (mUsesFragCoord)
-            {
-                out << "    float4 dx_ViewCoords : packoffset(c1);\n";
-            }
-
-            if (mUsesFragCoord || mUsesFrontFacing)
-            {
-                out << "    float3 dx_DepthFront : packoffset(c2);\n";
-            }
-
-            if (mUsesFragCoord)
-            {
-                // dx_ViewScale is only used in the fragment shader to correct
-                // the value for glFragCoord if necessary
-                out << "    float2 dx_ViewScale : packoffset(c3);\n";
-            }
-
-            if (mHasMultiviewExtensionEnabled)
-            {
-                // We have to add a value which we can use to keep track of which multi-view code
-                // path is to be selected in the GS.
-                out << "    float multiviewSelectViewportIndex : packoffset(c3.z);\n";
-            }
-
-            if (mOutputType == SH_HLSL_4_1_OUTPUT)
-            {
-                mUniformHLSL->samplerMetadataUniforms(out, "c4");
-            }
-
+            ASSERT(mOutputType == SH_HLSL_4_1_OUTPUT);
+            mUniformHLSL->samplerMetadataUniforms(out, "c1");
             out << "};\n";
-        }
-        else
-        {
-            if (mUsesDepthRange)
+
+            // Follow built-in variables would be initialized in
+            // DynamicHLSL::generateComputeShaderLinkHLSL, if they
+            // are used in compute shader.
+            if (mUsesWorkGroupID)
             {
-                out << "uniform float3 dx_DepthRange : register(c0);";
+                out << "static uint3 gl_WorkGroupID = uint3(0, 0, 0);\n";
             }
 
-            if (mUsesFragCoord)
+            if (mUsesLocalInvocationID)
             {
-                out << "uniform float4 dx_ViewCoords : register(c1);\n";
+                out << "static uint3 gl_LocalInvocationID = uint3(0, 0, 0);\n";
             }
 
-            if (mUsesFragCoord || mUsesFrontFacing)
+            if (mUsesGlobalInvocationID)
             {
-                out << "uniform float3 dx_DepthFront : register(c2);\n";
+                out << "static uint3 gl_GlobalInvocationID = uint3(0, 0, 0);\n";
             }
-        }
 
-        out << "\n";
-
-        if (mUsesDepthRange)
-        {
-            out << "static gl_DepthRangeParameters gl_DepthRange = {dx_DepthRange.x, "
-                   "dx_DepthRange.y, dx_DepthRange.z};\n"
-                   "\n";
+            if (mUsesLocalInvocationIndex)
+            {
+                out << "static uint gl_LocalInvocationIndex = uint(0);\n";
+            }
+            break;
         }
-
-        if (!mappedStructs.empty())
-        {
-            out << "// Structures from std140 blocks with padding removed\n";
-            out << "\n";
-            out << mappedStructs;
-            out << "\n";
-        }
-
-        if (usingMRTExtension && mNumRenderTargets > 1)
-        {
-            out << "#define GL_USES_MRT\n";
-        }
-
-        if (mUsesFragColor)
-        {
-            out << "#define GL_USES_FRAG_COLOR\n";
-        }
-
-        if (mUsesFragData)
-        {
-            out << "#define GL_USES_FRAG_DATA\n";
-        }
+        default:
+            UNREACHABLE();
     }
-    else if (mShaderType == GL_VERTEX_SHADER)
+    if (!mappedStructs.empty())
     {
-        out << "// Attributes\n";
-        out << attributes;
-        out << "\n"
-               "static float4 gl_Position = float4(0, 0, 0, 0);\n";
-
-        if (mUsesPointSize)
-        {
-            out << "static float gl_PointSize = float(1);\n";
-        }
-
-        if (mUsesInstanceID)
-        {
-            out << "static int gl_InstanceID;";
-        }
-
-        if (mUsesVertexID)
-        {
-            out << "static int gl_VertexID;";
-        }
-
-        out << "\n"
-               "// Varyings\n";
-        out << varyings;
+        out << "// Structures from std140 blocks with padding removed\n";
         out << "\n";
-
-        if (mUsesDepthRange)
-        {
-            out << "struct gl_DepthRangeParameters\n"
-                   "{\n"
-                   "    float near;\n"
-                   "    float far;\n"
-                   "    float diff;\n"
-                   "};\n"
-                   "\n";
-        }
-
-        if (mOutputType == SH_HLSL_4_1_OUTPUT || mOutputType == SH_HLSL_4_0_FL9_3_OUTPUT)
-        {
-            out << "cbuffer DriverConstants : register(b1)\n"
-                   "{\n";
-
-            if (mUsesDepthRange)
-            {
-                out << "    float3 dx_DepthRange : packoffset(c0);\n";
-            }
-
-            // dx_ViewAdjust and dx_ViewCoords will only be used in Feature Level 9
-            // shaders. However, we declare it for all shaders (including Feature Level 10+).
-            // The bytecode is the same whether we declare it or not, since D3DCompiler removes it
-            // if it's unused.
-            out << "    float4 dx_ViewAdjust : packoffset(c1);\n";
-            out << "    float2 dx_ViewCoords : packoffset(c2);\n";
-            out << "    float2 dx_ViewScale  : packoffset(c3);\n";
-
-            if (mHasMultiviewExtensionEnabled)
-            {
-                // We have to add a value which we can use to keep track of which multi-view code
-                // path is to be selected in the GS.
-                out << "    float multiviewSelectViewportIndex : packoffset(c3.z);\n";
-            }
-
-            if (mOutputType == SH_HLSL_4_1_OUTPUT)
-            {
-                mUniformHLSL->samplerMetadataUniforms(out, "c4");
-            }
-
-            out << "};\n"
-                   "\n";
-        }
-        else
-        {
-            if (mUsesDepthRange)
-            {
-                out << "uniform float3 dx_DepthRange : register(c0);\n";
-            }
-
-            out << "uniform float4 dx_ViewAdjust : register(c1);\n";
-            out << "uniform float2 dx_ViewCoords : register(c2);\n"
-                   "\n";
-        }
-
-        if (mUsesDepthRange)
-        {
-            out << "static gl_DepthRangeParameters gl_DepthRange = {dx_DepthRange.x, "
-                   "dx_DepthRange.y, dx_DepthRange.z};\n"
-                   "\n";
-        }
-
-        if (!mappedStructs.empty())
-        {
-            out << "// Structures from std140 blocks with padding removed\n";
-            out << "\n";
-            out << mappedStructs;
-            out << "\n";
-        }
-    }
-    else  // Compute shader
-    {
-        ASSERT(mShaderType == GL_COMPUTE_SHADER);
-
-        out << "cbuffer DriverConstants : register(b1)\n"
-               "{\n";
-        if (mUsesNumWorkGroups)
-        {
-            out << "    uint3 gl_NumWorkGroups : packoffset(c0);\n";
-        }
-        ASSERT(mOutputType == SH_HLSL_4_1_OUTPUT);
-        mUniformHLSL->samplerMetadataUniforms(out, "c1");
-        out << "};\n";
-
-        // Follow built-in variables would be initialized in
-        // DynamicHLSL::generateComputeShaderLinkHLSL, if they
-        // are used in compute shader.
-        if (mUsesWorkGroupID)
-        {
-            out << "static uint3 gl_WorkGroupID = uint3(0, 0, 0);\n";
-        }
-
-        if (mUsesLocalInvocationID)
-        {
-            out << "static uint3 gl_LocalInvocationID = uint3(0, 0, 0);\n";
-        }
-
-        if (mUsesGlobalInvocationID)
-        {
-            out << "static uint3 gl_GlobalInvocationID = uint3(0, 0, 0);\n";
-        }
-
-        if (mUsesLocalInvocationIndex)
-        {
-            out << "static uint gl_LocalInvocationIndex = uint(0);\n";
-        }
+        out << mappedStructs;
+        out << "\n";
     }
 
     bool getDimensionsIgnoresBaseLevel =
