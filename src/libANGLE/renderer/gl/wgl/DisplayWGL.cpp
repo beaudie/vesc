@@ -92,6 +92,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     mOpenGLModule = LoadLibraryA("opengl32.dll");
     if (!mOpenGLModule)
     {
+        destroy();
         return egl::EglNotInitialized() << "Failed to load OpenGL library.";
     }
 
@@ -122,8 +123,10 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     mWindowClass = RegisterClassA(&intermediateClassDesc);
     if (!mWindowClass)
     {
-        return egl::EglNotInitialized() << "Failed to register intermediate OpenGL window class, "
-                                        << gl::FmtErr(HRESULT_CODE(GetLastError()));
+        destroy();
+        return egl::EglNotInitialized()
+               << "Failed to register intermediate OpenGL window class \"" << className.c_str()
+               << "\":" << gl::FmtErr(HRESULT_CODE(GetLastError()));
     }
 
     HWND dummyWindow = CreateWindowExA(0,
@@ -140,12 +143,14 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
                                        nullptr);
     if (!dummyWindow)
     {
+        destroy();
         return egl::EglNotInitialized() << "Failed to create dummy OpenGL window.";
     }
 
     HDC dummyDeviceContext = GetDC(dummyWindow);
     if (!dummyDeviceContext)
     {
+        destroy();
         return egl::EglNotInitialized()
                << "Failed to get the device context of the dummy OpenGL window.";
     }
@@ -155,12 +160,14 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     int dummyPixelFormat = ChoosePixelFormat(dummyDeviceContext, &pixelFormatDescriptor);
     if (dummyPixelFormat == 0)
     {
+        destroy();
         return egl::EglNotInitialized()
                << "Could not find a compatible pixel format for the dummy OpenGL window.";
     }
 
     if (!SetPixelFormat(dummyDeviceContext, dummyPixelFormat, &pixelFormatDescriptor))
     {
+        destroy();
         return egl::EglNotInitialized()
                << "Failed to set the pixel format on the intermediate OpenGL window.";
     }
@@ -168,12 +175,14 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     HGLRC dummyWGLContext = mFunctionsWGL->createContext(dummyDeviceContext);
     if (!dummyDeviceContext)
     {
+        destroy();
         return egl::EglNotInitialized()
                << "Failed to create a WGL context for the dummy OpenGL window.";
     }
 
     if (!mFunctionsWGL->makeCurrent(dummyDeviceContext, dummyWGLContext))
     {
+        destroy();
         return egl::EglNotInitialized() << "Failed to make the dummy WGL context current.";
     }
 
@@ -196,6 +205,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
         !mFunctionsWGL->hasExtension("WGL_EXT_create_context_es2_profile") &&
         !mFunctionsWGL->hasExtension("WGL_EXT_create_context_es_profile"))
     {
+        destroy();
         return egl::EglNotInitialized() << "Cannot create an OpenGL ES platform on Windows without "
                                            "the WGL_EXT_create_context_es(2)_profile extension.";
     }
@@ -215,12 +225,14 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
                               nullptr);
     if (!mWindow)
     {
+        destroy();
         return egl::EglNotInitialized() << "Failed to create intermediate OpenGL window.";
     }
 
     mDeviceContext = GetDC(mWindow);
     if (!mDeviceContext)
     {
+        destroy();
         return egl::EglNotInitialized()
                << "Failed to get the device context of the intermediate OpenGL window.";
     }
@@ -241,6 +253,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
 
     if (mPixelFormat == 0)
     {
+        destroy();
         return egl::EglNotInitialized()
                << "Could not find a compatible pixel format for the intermediate OpenGL window.";
     }
@@ -253,7 +266,6 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
 
     if (mFunctionsWGL->createContextAttribsARB)
     {
-
         mWGLContext = initializeContextAttribs(displayAttributes);
     }
 
@@ -266,6 +278,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
 
     if (!mWGLContext)
     {
+        destroy();
         return egl::EglNotInitialized()
                << "Failed to create a WGL context for the intermediate OpenGL window.";
     }
@@ -317,11 +330,17 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     {
         if (mHasDXInterop)
         {
-            ANGLE_TRY(initializeD3DDevice());
+            egl::Error error = initializeD3DDevice();
+            if (error.isError())
+            {
+                destroy();
+                return error;
+            }
         }
         else
         {
             // Want to use DXGI swap chains but WGL_NV_DX_interop2 is not present, fail initialization
+            destroy();
             return egl::EglNotInitialized() << "WGL_NV_DX_interop2 is required but not present.";
         }
     }
@@ -332,44 +351,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
 void DisplayWGL::terminate()
 {
     DisplayGL::terminate();
-
-    releaseD3DDevice(mD3D11DeviceHandle);
-
-    mFunctionsWGL->makeCurrent(mDeviceContext, nullptr);
-    mCurrentDC = nullptr;
-    mFunctionsWGL->deleteContext(mWGLContext);
-    mWGLContext = nullptr;
-
-    ReleaseDC(mWindow, mDeviceContext);
-    mDeviceContext = nullptr;
-
-    DestroyWindow(mWindow);
-    mWindow = nullptr;
-
-    UnregisterClassA(reinterpret_cast<const char *>(mWindowClass), nullptr);
-    mWindowClass = NULL;
-
-    SafeDelete(mFunctionsWGL);
-    SafeDelete(mFunctionsGL);
-
-    FreeLibrary(mOpenGLModule);
-    mOpenGLModule = nullptr;
-
-    SafeRelease(mD3D11Device);
-
-    if (mDxgiModule)
-    {
-        FreeLibrary(mDxgiModule);
-        mDxgiModule = nullptr;
-    }
-
-    if (mD3d11Module)
-    {
-        FreeLibrary(mD3d11Module);
-        mD3d11Module = nullptr;
-    }
-
-    ASSERT(mRegisteredD3DDevices.empty());
+    destroy();
 }
 
 SurfaceImpl *DisplayWGL::createWindowSurface(const egl::SurfaceState &state,
@@ -556,6 +538,72 @@ std::string DisplayWGL::getVendorString() const
 {
     //UNIMPLEMENTED();
     return "";
+}
+
+void DisplayWGL::destroy()
+{
+    releaseD3DDevice(mD3D11DeviceHandle);
+
+    if (mFunctionsWGL)
+    {
+        if (mDeviceContext)
+        {
+            mFunctionsWGL->makeCurrent(mDeviceContext, nullptr);
+        }
+        if (mWGLContext)
+        {
+            mFunctionsWGL->deleteContext(mWGLContext);
+        }
+    }
+    mCurrentDC  = nullptr;
+    mWGLContext = nullptr;
+
+    SafeDelete(mFunctionsWGL);
+    SafeDelete(mFunctionsGL);
+
+    if (mDeviceContext)
+    {
+        ReleaseDC(mWindow, mDeviceContext);
+        mDeviceContext = nullptr;
+    }
+
+    if (mWindow)
+    {
+        DestroyWindow(mWindow);
+        mWindow = nullptr;
+    }
+
+    if (mWindowClass)
+    {
+        if (!UnregisterClassA(reinterpret_cast<const char *>(mWindowClass),
+                              GetModuleHandle(nullptr)))
+        {
+            WARN() << "Failed to unregister OpenGL window class: " << gl::FmtHex(mWindowClass);
+        }
+        mWindowClass = NULL;
+    }
+
+    if (mOpenGLModule)
+    {
+        FreeLibrary(mOpenGLModule);
+        mOpenGLModule = nullptr;
+    }
+
+    SafeRelease(mD3D11Device);
+
+    if (mDxgiModule)
+    {
+        FreeLibrary(mDxgiModule);
+        mDxgiModule = nullptr;
+    }
+
+    if (mD3d11Module)
+    {
+        FreeLibrary(mD3d11Module);
+        mD3d11Module = nullptr;
+    }
+
+    ASSERT(mRegisteredD3DDevices.empty());
 }
 
 const FunctionsGL *DisplayWGL::getFunctionsGL() const
