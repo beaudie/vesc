@@ -4,6 +4,8 @@ vars = {
 
   # This variable is set on the Chrome infra for compatiblity with gclient.
   'root': '.',
+  # Vulkan-Headers is cloned into 3 repos so use common var
+  'vulkan-headers': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Headers@a901a3edf256c1a1441433e77feac919fb8e5ed6',
 }
 
 deps = {
@@ -39,8 +41,23 @@ deps = {
   '{root}/third_party/spirv-tools/src':
     '{android_git}/platform/external/shaderc/spirv-tools@9996173f363729b3a97309685dbd4d78547a63a7',
 
+  '{root}/third_party/vulkan-loader/src':
+    '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Loader@dba71dacd085918656a69e07fe8f37a71f5ebe2e',
+
+  '{root}/third_party/vulkan-loader/src/Vulkan-Headers':
+    '{vulkan-headers}',
+
+  '{root}/third_party/vulkan-tools/src':
+    '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Tools@51dfb7b8a19820d6716190dd7e45cd6e861e1f1a',
+
+  '{root}/third_party/vulkan-tools/src/Vulkan-Headers':
+    '{vulkan-headers}',
+
   '{root}/third_party/vulkan-validation-layers/src':
-    '{android_git}/platform/external/vulkan-validation-layers@25d5884746a2de7b51a8ef3ec88e1cd8066460e8',
+    '{chromium_git}/external/github.com/KhronosGroup/Vulkan-ValidationLayers@0fe5bfe66443b288ccf19b3d4c523af7e080672c',
+
+  '{root}/third_party/vulkan-validation-layers/src/Vulkan-Headers':
+    '{vulkan-headers}',
 
   '{root}/third_party/zlib':
     '{chromium_git}/chromium/src/third_party/zlib@da0819d6c816a61be6fcb2fcf9b74246f0f8b808',
