@@ -441,12 +441,10 @@ if (angle_enable_vulkan) {
     ]
     data_deps = []
     if (!is_android) {
-      deps += [ "$angle_root/third_party/vulkan-validation-layers:libvulkan" ]
-      data_deps +=
-          [ "$angle_root/third_party/vulkan-validation-layers:VkICD_mock_icd" ]
-      public_configs += [
-        "$angle_root/third_party/vulkan-validation-layers:vulkan_loader_config",
-      ]
+      deps += [ "$angle_root/third_party/vulkan-loader:libvulkan" ]
+      data_deps += [ "$angle_root/third_party/vulkan-tools:VkICD_mock_icd" ]
+      public_configs +=
+          [ "$angle_root/third_party/vulkan-loader:vulkan_loader_config" ]
     }
 
     if (angle_enable_vulkan_validation_layers) {
