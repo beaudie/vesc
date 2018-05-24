@@ -104,7 +104,7 @@ gl::Error RenderbufferVk::setStorage(const gl::Context *context,
         }
         else
         {
-            mImage.clearColor(kBlackClearColorValue, commandBuffer);
+            mImage.clearColor(kBlackClearColorValue, 0, 1, commandBuffer);
         }
     }
 
