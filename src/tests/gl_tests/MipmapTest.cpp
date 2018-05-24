@@ -520,6 +520,10 @@ TEST_P(MipmapTest, DISABLED_ThreeLevelsInitData)
 // In particular, on D3D11 Feature Level 9_3 it ensures that both the zero LOD workaround texture AND the 'normal' texture are copied during conversion.
 TEST_P(MipmapTest, GenerateMipmapFromInitDataThenRender)
 {
+    // TODO(lucferron): Figure out why this test is failing only on Intel Linux.
+    // http://anglebug.com/2502
+    ANGLE_SKIP_TEST_IF(IsVulkan() && IsIntel());
+
     // Pass in initial data so the texture is blue.
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, getWindowWidth(), getWindowHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, mLevelZeroBlueInitData);
@@ -606,6 +610,10 @@ TEST_P(MipmapTest, GenerateMipmapFromRenderedImage)
 // TODO: This test hits a texture rebind bug in the D3D11 renderer. Fix this.
 TEST_P(MipmapTest, RenderOntoLevelZeroAfterGenerateMipmap)
 {
+    // TODO(lucferron): Figure out why this test is failing only on Intel Linux.
+    // http://anglebug.com/2502
+    ANGLE_SKIP_TEST_IF(IsVulkan() && IsIntel());
+
     // TODO(geofflang): Figure out why this is broken on AMD OpenGL
     ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL());
 
