@@ -137,6 +137,9 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
                                gl::TextureType type,
                                egl::Stream *stream,
                                const egl::Stream::GLTextureDescription &desc) override;
+    void generateMipmapWithBlit(vk::CommandBuffer *commandBuffer,
+                                uint32_t imageLayerCount,
+                                gl::Extents baseLevelExtents) const;
 
     gl::Error generateMipmap(const gl::Context *context) override;
 
