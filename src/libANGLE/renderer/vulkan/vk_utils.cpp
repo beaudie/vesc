@@ -384,6 +384,19 @@ Error CommandBuffer::init(VkDevice device, const VkCommandBufferAllocateInfo &cr
     return NoError();
 }
 
+void CommandBuffer::blitImage(const Image &srcImage,
+                              VkImageLayout srcImageLayout,
+                              const Image &dstImage,
+                              VkImageLayout dstImageLayout,
+                              int regionCount,
+                              VkImageBlit *pRegions,
+                              VkFilter filter)
+{
+    ASSERT(valid());
+    vkCmdBlitImage(mHandle, srcImage.getHandle(), srcImageLayout, dstImage.getHandle(),
+                   dstImageLayout, regionCount, pRegions, filter);
+}
+
 Error CommandBuffer::begin(const VkCommandBufferBeginInfo &info)
 {
     ASSERT(valid());
@@ -408,7 +421,7 @@ Error CommandBuffer::reset()
 void CommandBuffer::singleImageBarrier(VkPipelineStageFlags srcStageMask,
                                        VkPipelineStageFlags dstStageMask,
                                        VkDependencyFlags dependencyFlags,
-                                       const VkImageMemoryBarrier &imageMemoryBarrier)
+                                       VkImageMemoryBarrier &imageMemoryBarrier)
 {
     ASSERT(valid());
     vkCmdPipelineBarrier(mHandle, srcStageMask, dstStageMask, dependencyFlags, 0, nullptr, 0,
