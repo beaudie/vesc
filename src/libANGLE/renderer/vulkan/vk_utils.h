@@ -314,6 +314,13 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
     VkCommandBuffer releaseHandle();
     void destroy(VkDevice device, const CommandPool &commandPool);
     Error init(VkDevice device, const VkCommandBufferAllocateInfo &createInfo);
+    void blitImage(const Image &srcImage,
+                   VkImageLayout srcImageLayout,
+                   const Image &dstImage,
+                   VkImageLayout dstImageLayout,
+                   int regionCount,
+                   VkImageBlit *pRegions,
+                   VkFilter filter);
     using WrappedObject::operator=;
 
     Error begin(const VkCommandBufferBeginInfo &info);
@@ -324,7 +331,7 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
     void singleImageBarrier(VkPipelineStageFlags srcStageMask,
                             VkPipelineStageFlags dstStageMask,
                             VkDependencyFlags dependencyFlags,
-                            const VkImageMemoryBarrier &imageMemoryBarrier);
+                            VkImageMemoryBarrier &imageMemoryBarrier);
 
     void singleBufferBarrier(VkPipelineStageFlags srcStageMask,
                              VkPipelineStageFlags dstStageMask,

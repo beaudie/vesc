@@ -726,6 +726,7 @@ void ImageHelper::changeLayoutWithStages(VkImageAspectFlags aspectMask,
                                          VkPipelineStageFlags dstStageMask,
                                          CommandBuffer *commandBuffer)
 {
+
     VkImageMemoryBarrier imageMemoryBarrier;
     imageMemoryBarrier.sType               = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
     imageMemoryBarrier.pNext               = nullptr;
