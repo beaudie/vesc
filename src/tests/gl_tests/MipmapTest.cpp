@@ -521,7 +521,7 @@ TEST_P(MipmapTest, DISABLED_ThreeLevelsInitData)
 TEST_P(MipmapTest, GenerateMipmapFromInitDataThenRender)
 {
     // TODO(lucferron): Figure out why this test is failing only on Intel Linux.
-    // http://anglebug.com/2502
+    // http://anglebug.com/2608
     ANGLE_SKIP_TEST_IF(IsVulkan() && IsIntel());
 
     // Pass in initial data so the texture is blue.
@@ -579,7 +579,7 @@ TEST_P(MipmapTest, GenerateMipmapFromInitDataThenRender)
 TEST_P(MipmapTest, GenerateMipmapFromRenderedImage)
 {
     // TODO(lucferron): Figure out why this test is failing only on Intel Linux.
-    // http://anglebug.com/2502
+    // http://anglebug.com/2608
     ANGLE_SKIP_TEST_IF(IsVulkan() && IsIntel());
 
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
@@ -611,7 +611,7 @@ TEST_P(MipmapTest, GenerateMipmapFromRenderedImage)
 TEST_P(MipmapTest, RenderOntoLevelZeroAfterGenerateMipmap)
 {
     // TODO(lucferron): Figure out why this test is failing only on Intel Linux.
-    // http://anglebug.com/2502
+    // http://anglebug.com/2608
     ANGLE_SKIP_TEST_IF(IsVulkan() && IsIntel());
 
     // TODO(geofflang): Figure out why this is broken on AMD OpenGL
