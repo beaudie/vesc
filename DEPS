@@ -15,13 +15,22 @@ vars = {
   'glslang_revision': '2edde6665d9a56ead5ea0e55b4e64d9a803e6164',
 
   # Current revision fo the SPIRV-Headers Vulkan support library.
-  'spirv_headers_revision': '98b01515724c428d0f0a5d01deffcce0f5f5e61c',
+  'spirv_headers_revision': '634e3658d6fa8f95f9062a3a7831d5567baf0eb3',
 
   # Current revision of SPIRV-Tools for Vulkan.
   'spirv_tools_revision': '9996173f363729b3a97309685dbd4d78547a63a7',
 
   # Current revision of the Vulkan Validation Layers SDK.
-  'vulkan_revision': '25d5884746a2de7b51a8ef3ec88e1cd8066460e8',
+  'vulkan_validation_revision': 'f28793411e46fb86d8e1cecbfb22733761184403',
+
+  # Vulkan-Headers is cloned into 3 repos so use common var
+  'vulkan_headers_revision': 'a901a3edf256c1a1441433e77feac919fb8e5ed6',
+
+  # Current revision of Khronos Vulkan-Tools
+  'vulkan_tools_revision': '84230dc24e866d887f6d856c6e12745292703d49',
+
+  # Current revision of Khronos Vulkan-Loader
+  'vulkan_loader_revision': '1bd294a1ddb32e832916aa874d103618f4faf1b3',
 }
 
 deps = {
@@ -73,8 +82,20 @@ deps = {
     'url': '{android_git}/platform/external/shaderc/spirv-tools@{spirv_tools_revision}',
   },
 
+  '{angle_root}/third_party/vulkan-loader/src': {
+    'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Loader@{vulkan_loader_revision}',
+  },
+
+  '{angle_root}/third_party/vulkan-headers/src': {
+    'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Headers@{vulkan_headers_revision}',
+  },
+
+  '{angle_root}/third_party/vulkan-tools/src': {
+    'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Tools@{vulkan_tools_revision}',
+  },
+
   '{angle_root}/third_party/vulkan-validation-layers/src': {
-    'url': '{android_git}/platform/external/vulkan-validation-layers@{vulkan_revision}',
+    'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-ValidationLayers@{vulkan_validation_revision}',
   },
 
   '{angle_root}/third_party/zlib': {
