@@ -319,7 +319,10 @@ static_library("translator") {
     sources += rebase_path(compiler_gypi.angle_translator_lib_vulkan_sources,
                            ".",
                            "src")
-    defines += [ "ANGLE_ENABLE_VULKAN" ]
+    defines += [
+      "ANGLE_ENABLE_VULKAN",
+      "API_NAME=Vulkan",
+    ]
   }
 
   configs -= angle_undefine_configs
@@ -441,12 +444,10 @@ if (angle_enable_vulkan) {
     ]
     data_deps = []
     if (!is_android) {
-      deps += [ "$angle_root/third_party/vulkan-validation-layers:libvulkan" ]
-      data_deps +=
-          [ "$angle_root/third_party/vulkan-validation-layers:VkICD_mock_icd" ]
-      public_configs += [
-        "$angle_root/third_party/vulkan-validation-layers:vulkan_loader_config",
-      ]
+      deps += [ "$angle_root/third_party/vulkan-loader:libvulkan" ]
+      data_deps += [ "$angle_root/third_party/vulkan-tools:VkICD_mock_icd" ]
+      public_configs +=
+          [ "$angle_root/third_party/vulkan-loader:vulkan_loader_config" ]
     }
 
     if (angle_enable_vulkan_validation_layers) {
