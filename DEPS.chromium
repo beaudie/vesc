@@ -11,6 +11,7 @@
 
 vars = {
   'android_git': 'https://android.googlesource.com',
+  'chromium_git': 'https://chromium.googlesource.com',
 
   # Current revision of dEQP.
   'deqp_revision': '4c0f2a4fba813e1046115c43c887eccb749b7bb3',
@@ -24,8 +25,17 @@ vars = {
   # Current revision of SPIRV-Tools for Vulkan.
   'spirv_tools_revision': '9996173f363729b3a97309685dbd4d78547a63a7',
 
-  # Current revision of the Vulkan Validation Layers SDK.
-  'vulkan_revision': '25d5884746a2de7b51a8ef3ec88e1cd8066460e8',
+  # Current revision of the Vulkan Loader.
+  'vulkan_loader_revision': 'dba71dacd085918656a69e07fe8f37a71f5ebe2e',
+
+  # Current revision of the Vulkan Tools where Mock ICD is located.
+  'vulkan_tools_revision': '51dfb7b8a19820d6716190dd7e45cd6e861e1f1a',
+
+  # Current revision of the Vulkan Validation Layers.
+  'vulkan_layers_revision': '0fe5bfe66443b288ccf19b3d4c523af7e080672c',
+
+  # Current revision of the Vulkan Headers.
+  'vulkan_headers_revision': 'a901a3edf256c1a1441433e77feac919fb8e5ed6',
 }
 
 deps = {
@@ -41,6 +51,21 @@ deps = {
   'src/third_party/angle/third_party/spirv-tools/src':
     Var('android_git') + '/platform/external/shaderc/spirv-tools@' + Var('spirv_tools_revision'),
 
+  'src/third_party/angle/third_party/vulkan-loader/src':
+    Var('chromium_git') + '/platform/external/vulkan-loader@' + Var('vulkan_loader_revision'),
+
+  'src/third_party/angle/third_party/vulkan-loader/src/Vulkan-Headers':
+    Var('chromium_git') + '/platform/external/vulkan-loader/Vulkan-Headers@' + Var('vulkan_headers_revision'),
+
   'src/third_party/angle/third_party/vulkan-validation-layers/src':
-    Var('android_git') + '/platform/external/vulkan-validation-layers@' + Var('vulkan_revision'),
+    Var('chromium_git') + '/platform/external/vulkan-tools@' + Var('vulkan_tools_revision'),
+
+  'src/third_party/angle/third_party/vulkan-validation-layers/src/Vulkan-Headers':
+    Var('chromium_git') + '/platform/external/vulkan-tools/Vulkan-Headers@' + Var('vulkan_headers_revision'),
+
+  'src/third_party/angle/third_party/vulkan-validation-layers/src':
+    Var('chromium_git') + '/platform/external/vulkan-validation-layers@' + Var('vulkan_layers_revision'),
+
+  'src/third_party/angle/third_party/vulkan-validation-layers/src/Vulkan-Headers':
+    Var('chromium_git') + '/platform/external/vulkan-validation-layers/Vulkan-Headers@' + Var('vulkan_headers_revision'),
 }
