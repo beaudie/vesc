@@ -62,6 +62,9 @@ void MapSwizzleState(GLenum internalFormat,
 constexpr VkBufferUsageFlags kStagingBufferFlags =
     (VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
 constexpr size_t kStagingBufferSize = 1024 * 16;
+
+constexpr VkFormatFeatureFlags kBlitFeatureFlags =
+    VK_FORMAT_FEATURE_BLIT_SRC_BIT | VK_FORMAT_FEATURE_BLIT_DST_BIT;
 }  // anonymous namespace
 
 // StagingStorage implementation.
@@ -298,15 +301,15 @@ bool PixelBuffer::empty() const
     return mSubresourceUpdates.empty();
 }
 
-gl::Error TextureVk::generateMipmapLevels(ContextVk *contextVk,
-                                          const angle::Format &sourceFormat,
-                                          GLuint layer,
-                                          GLuint firstMipLevel,
-                                          GLuint maxMipLevel,
-                                          const size_t sourceWidth,
-                                          const size_t sourceHeight,
-                                          const size_t sourceRowPitch,
-                                          uint8_t *sourceData)
+gl::Error TextureVk::generateMipmapLevelsCpuOnly(ContextVk *contextVk,
+                                                 const angle::Format &sourceFormat,
+                                                 GLuint layer,
+                                                 GLuint firstMipLevel,
+                                                 GLuint maxMipLevel,
+                                                 const size_t sourceWidth,
+                                                 const size_t sourceHeight,
+                                                 const size_t sourceRowPitch,
+                                                 uint8_t *sourceData)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -602,43 +605,97 @@ gl::Error TextureVk::setImageExternal(const gl::Context *context,
     return gl::InternalError();
 }
 
-gl::Error TextureVk::generateMipmap(const gl::Context *context)
+void TextureVk::generateMipmapWithBlit(RendererVk *renderer)
+{
+    // Before we loop to generate all the next levels, we can get the source level and copy it to a
+    // buffer.
+    uint32_t imageLayerCount           = GetImageLayerCount(mState.getType());
+    const gl::Extents baseLevelExtents = mImage.getExtents();
+    vk::CommandBuffer *commandBuffer   = nullptr;
+    getCommandBufferForWrite(renderer, &commandBuffer);
+
+    for (GLuint layer = 0; layer < imageLayerCount; layer++)
+    {
+        // We are able to use blitImage since the image format we are using supports it. This
+        // is the fastest way we can generate the mips.
+        int32_t mipWidth  = baseLevelExtents.width;
+        int32_t mipHeight = baseLevelExtents.height;
+
+        // Manually manage the image memory barrier because it uses a lot more parameters than our
+        // usual one.
+        VkImageMemoryBarrier barrier;
+        barrier.sType                           = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+        barrier.image                           = mImage.getImage().getHandle();
+        barrier.srcQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
+        barrier.dstQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
+        barrier.pNext                           = nullptr;
+        barrier.subresourceRange.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+        barrier.subresourceRange.baseArrayLayer = layer;
+        barrier.subresourceRange.layerCount     = 1;
+        barrier.subresourceRange.levelCount     = 1;
+
+        for (uint32_t mipLevel = 1; mipLevel <= mState.getMipmapMaxLevel(); mipLevel++)
+        {
+            int32_t nextMipWidth  = std::max<int32_t>(1, mipWidth >> 1);
+            int32_t nextMipHeight = std::max<int32_t>(1, mipHeight >> 1);
+
+            barrier.subresourceRange.baseMipLevel = mipLevel - 1;
+            barrier.oldLayout                     = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+            barrier.newLayout                     = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+            barrier.srcAccessMask                 = VK_ACCESS_TRANSFER_WRITE_BIT;
+            barrier.dstAccessMask                 = VK_ACCESS_TRANSFER_READ_BIT;
+
+            commandBuffer->singleImageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                              VK_PIPELINE_STAGE_TRANSFER_BIT, 0, barrier);
+
+            VkImageBlit blit                   = {};
+            blit.srcOffsets[0]                 = {0, 0, 0};
+            blit.srcOffsets[1]                 = {mipWidth, mipHeight, 1};
+            blit.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+            blit.srcSubresource.mipLevel       = mipLevel - 1;
+            blit.srcSubresource.baseArrayLayer = layer;
+            blit.srcSubresource.layerCount     = 1;
+            blit.dstOffsets[0]                 = {0, 0, 0};
+            blit.dstOffsets[1]                 = {nextMipWidth, nextMipHeight, 1};
+            blit.dstSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+            blit.dstSubresource.mipLevel       = mipLevel;
+            blit.dstSubresource.baseArrayLayer = layer;
+            blit.dstSubresource.layerCount     = 1;
+
+            mipWidth  = nextMipWidth;
+            mipHeight = nextMipHeight;
+
+            commandBuffer->blitImage(mImage.getImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                     mImage.getImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1,
+                                     &blit, VK_FILTER_LINEAR);
+        }
+    }
+
+    // Put back the image in the undefined layout. This will cause the next updates to work no
+    // matter what layout each level is at.
+    mImage.updateLayout(VK_IMAGE_LAYOUT_UNDEFINED);
+}
+
+gl::Error TextureVk::generateMipmapCpuOnly(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
-    // Some data is pending, or the image has not been defined at all yet
-    if (!mImage.valid())
-    {
-        // lets initialize the image so we can generate the next levels.
-        if (!mPixelBuffer.empty())
-        {
-            ANGLE_TRY(ensureImageInitialized(renderer));
-            ASSERT(mImage.valid());
-        }
-        else
-        {
-            // There is nothing to generate if there is nothing uploaded so far.
-            return gl::NoError();
-        }
-    }
+    vk::CommandBuffer *commandBuffer = nullptr;
+    getCommandBufferForWrite(renderer, &commandBuffer);
 
-    // Before we loop to generate all the next levels, we can get the source level and copy it to a
-    // buffer.
-    const angle::Format &angleFormat = mImage.getFormat().textureFormat();
-    uint32_t imageLayerCount         = GetImageLayerCount(mState.getType());
+    const gl::Extents baseLevelExtents = mImage.getExtents();
+    const angle::Format &angleFormat   = mImage.getFormat().textureFormat();
 
+    // Slow path with cpu copies only that works for every format.
+    uint32_t imageLayerCount = GetImageLayerCount(mState.getType());
     std::vector<VkBuffer> baseLevelBufferHandles(imageLayerCount, VK_NULL_HANDLE);
     std::vector<uint8_t *> baseLevelBuffers(imageLayerCount, nullptr);
     std::vector<uint32_t> baseLevelBufferOffsets(imageLayerCount, 0);
 
-    bool newBufferAllocated            = false;
-    const gl::Extents baseLevelExtents = mImage.getExtents();
-    GLuint sourceRowPitch              = baseLevelExtents.width * angleFormat.pixelBytes;
-    size_t baseLevelAllocationSize     = sourceRowPitch * baseLevelExtents.height;
-
-    vk::CommandBuffer *commandBuffer = nullptr;
-    getCommandBufferForWrite(renderer, &commandBuffer);
+    bool newBufferAllocated        = false;
+    GLuint sourceRowPitch          = baseLevelExtents.width * angleFormat.pixelBytes;
+    size_t baseLevelAllocationSize = sourceRowPitch * baseLevelExtents.height;
 
     // Requirement of the copyImageToBuffer, the source image must be in SRC_OPTIMAL layout.
     mImage.changeLayoutWithStages(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
@@ -646,12 +703,12 @@ gl::Error TextureVk::generateMipmap(const gl::Context *context)
                                   VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, commandBuffer);
 
     // For each layer, copy the image for the level 0 mip
-    // We specifically need to do this in 2 loops because we can't call renderer->finish multiple
-    // times, and renderer->finish need to be called before we do call
-    // generateMipmapLevels(...)
+    // We specifically need to do this in 2 loops because we can't call renderer->finish
+    // multiple times, and renderer->finish need to be called before we do call
+    // generateMipmapLevelsCpuOnly(...)
     for (GLuint layer = 0; layer < imageLayerCount; layer++)
     {
-        ANGLE_TRY(mMipmapsBuffer.allocate(renderer, baseLevelAllocationSize,
+        ANGLE_TRY(mMipmapsBuffer.allocate(contextVk->getRenderer(), baseLevelAllocationSize,
                                           &baseLevelBuffers[layer], &baseLevelBufferHandles[layer],
                                           &baseLevelBufferOffsets[layer], &newBufferAllocated));
 
@@ -685,11 +742,54 @@ gl::Error TextureVk::generateMipmap(const gl::Context *context)
     // For each layer, use the copied data to generate all the mips.
     for (GLuint layer = 0; layer < imageLayerCount; layer++)
     {
-        ANGLE_TRY(
-            generateMipmapLevels(contextVk, angleFormat, layer, mState.getEffectiveBaseLevel() + 1,
-                                 mState.getMipmapMaxLevel(), baseLevelExtents.width,
-                                 baseLevelExtents.height, sourceRowPitch, baseLevelBuffers[layer]));
+        ANGLE_TRY(generateMipmapLevelsCpuOnly(
+            contextVk, angleFormat, layer, mState.getEffectiveBaseLevel() + 1,
+            mState.getMipmapMaxLevel(), baseLevelExtents.width, baseLevelExtents.height,
+            sourceRowPitch, baseLevelBuffers[layer]));
     }
+
+    mMipmapsBuffer.releaseRetainedBuffers(renderer);
+    return gl::NoError();
+}
+
+gl::Error TextureVk::generateMipmap(const gl::Context *context)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+
+    // Some data is pending, or the image has not been defined at all yet
+    if (!mImage.valid())
+    {
+        // lets initialize the image so we can generate the next levels.
+        if (!mPixelBuffer.empty())
+        {
+            ANGLE_TRY(ensureImageInitialized(renderer));
+            ASSERT(mImage.valid());
+        }
+        else
+        {
+            // There is nothing to generate if there is nothing uploaded so far.
+            return gl::NoError();
+        }
+    }
+
+    VkFormatProperties imageProperties;
+    vk::GetFormatProperties(renderer->getPhysicalDevice(), mImage.getFormat().vkTextureFormat,
+                            &imageProperties);
+
+    // Check if the image supports blit. If it does, we can do the mipmap generation on the gpu
+    // only.
+    if (IsMaskFlagSet(kBlitFeatureFlags, imageProperties.linearTilingFeatures))
+    {
+        generateMipmapWithBlit(renderer);
+    }
+    else
+    {
+        ANGLE_TRY(generateMipmapCpuOnly(context));
+    }
+
+    // Create a new graph node to store image initialization commands.
+    getNewWritingNode(renderer);
 
     return gl::NoError();
 }
