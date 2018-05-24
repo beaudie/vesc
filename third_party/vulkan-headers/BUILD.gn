@@ -1,0 +1,49 @@
+# Copyright 2018 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# BUILD settings for Vulkan Headers
+# Header repo is at
+# https://github.com/KhronosGroup/Vulkan-Headers
+
+import("../../gni/angle.gni")
+
+if (is_win) {
+  vulkan_undefine_configs += [
+    "//build/config/win:nominmax",
+    "//build/config/win:unicode",
+  ]
+}
+
+vulkan_gen_dir = "$target_gen_dir/../vulkan-common/angle/vulkan"
+
+config("vulkan_headers_config") {
+  include_dirs = [ "src/include" ]
+}
+
+# Vulkan headers only, no compiled sources.
+source_set("vulkan_headers") {
+  sources = [
+    "include/vulkan/vk_icd.h",
+    "include/vulkan/vk_layer.h",
+    "include/vulkan/vk_platform.h",
+    "include/vulkan/vk_sdk_platform.h",
+    "include/vulkan/vulkan.h",
+    "include/vulkan/vulkan.hpp",
+    "include/vulkan/vulkan_core.h",
+  ]
+  public_configs = [ ":vulkan_headers_config" ]
+}
+
+# Python dependencies from the Headers repo neede by other repos.
+copy("header_py_dep_files") {
+  sources = [
+    "src/registry/cgenerator.py",
+    "src/registry/generator.py",
+    "src/registry/reg.py",
+    "src/registry/vk.xml",
+  ]
+  outputs = [
+    "$vulkan_gen_dir/{{source_file_part}}",
+  ]
+}
