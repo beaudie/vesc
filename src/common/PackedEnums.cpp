@@ -23,6 +23,7 @@ TextureType TextureTargetToType(TextureTarget target)
         case TextureTarget::CubeMapPositiveX:
         case TextureTarget::CubeMapPositiveY:
         case TextureTarget::CubeMapPositiveZ:
+        case TextureTarget::CubeMap:
             return TextureType::CubeMap;
         case TextureTarget::External:
             return TextureType::External;
@@ -39,6 +40,33 @@ TextureType TextureTargetToType(TextureTarget target)
         default:
             UNREACHABLE();
             return TextureType::InvalidEnum;
+    }
+}
+
+bool IsCubeMapFace(TextureTarget target)
+{
+    switch (target)
+    {
+        case TextureTarget::CubeMapNegativeX:
+        case TextureTarget::CubeMapNegativeY:
+        case TextureTarget::CubeMapNegativeZ:
+        case TextureTarget::CubeMapPositiveX:
+        case TextureTarget::CubeMapPositiveY:
+        case TextureTarget::CubeMapPositiveZ:
+            return true;
+
+        case TextureTarget::CubeMap:
+        case TextureTarget::External:
+        case TextureTarget::Rectangle:
+        case TextureTarget::_2D:
+        case TextureTarget::_2DArray:
+        case TextureTarget::_2DMultisample:
+        case TextureTarget::_3D:
+            return false;
+
+        default:
+            UNREACHABLE();
+            return false;
     }
 }
 
@@ -94,7 +122,7 @@ TextureTarget CubeFaceIndexToTextureTarget(size_t face)
 
 size_t CubeMapTextureTargetToFaceIndex(TextureTarget target)
 {
-    ASSERT(TextureTargetToType(target) == TextureType::CubeMap);
+    ASSERT(IsCubeMapFace(target));
     return static_cast<uint8_t>(target) - static_cast<uint8_t>(TextureTarget::CubeMapPositiveX);
 }
 

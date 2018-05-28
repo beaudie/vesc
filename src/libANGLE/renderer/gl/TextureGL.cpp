@@ -35,9 +35,8 @@ namespace
 
 size_t GetLevelInfoIndex(gl::TextureTarget target, size_t level)
 {
-    return gl::TextureTargetToType(target) == gl::TextureType::CubeMap
-               ? ((level * 6) + gl::CubeMapTextureTargetToFaceIndex(target))
-               : level;
+    return gl::IsCubeMapFace(target) ? ((level * 6) + gl::CubeMapTextureTargetToFaceIndex(target))
+                                     : level;
 }
 
 bool IsLUMAFormat(GLenum format)
