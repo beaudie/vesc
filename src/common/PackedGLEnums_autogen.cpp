@@ -912,6 +912,8 @@ TextureTarget FromGLenum<TextureTarget>(GLenum from)
             return TextureTarget::External;
         case GL_TEXTURE_RECTANGLE_ANGLE:
             return TextureTarget::Rectangle;
+        case GL_TEXTURE_CUBE_MAP:
+            return TextureTarget::CubeMap;
         case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
             return TextureTarget::CubeMapPositiveX;
         case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
@@ -945,6 +947,8 @@ GLenum ToGLenum(TextureTarget from)
             return GL_TEXTURE_EXTERNAL_OES;
         case TextureTarget::Rectangle:
             return GL_TEXTURE_RECTANGLE_ANGLE;
+        case TextureTarget::CubeMap:
+            return GL_TEXTURE_CUBE_MAP;
         case TextureTarget::CubeMapPositiveX:
             return GL_TEXTURE_CUBE_MAP_POSITIVE_X;
         case TextureTarget::CubeMapNegativeX:
