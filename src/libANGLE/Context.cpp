@@ -3691,10 +3691,48 @@ void Context::framebufferTextureMultiviewSideBySide(GLenum target,
     mGLState.setObjectDirty(target);
 }
 
-// TODO(jiawei.shao@intel.com): implement framebufferTextureEXT
 void Context::framebufferTexture(GLenum target, GLenum attachment, GLuint texture, GLint level)
 {
-    UNIMPLEMENTED();
+    Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
+    ASSERT(framebuffer);
+
+    if (texture != 0)
+    {
+        Texture *textureObj = getTexture(texture);
+
+        ImageIndex index;
+        switch (textureObj->getType())
+        {
+            case TextureType::_2D:
+                index = ImageIndex::Make2D(level);
+                break;
+            case TextureType::Rectangle:
+                index = ImageIndex::MakeRectangle(level);
+                break;
+            case TextureType::_2DMultisample:
+                index = ImageIndex::Make2DMultisample();
+                break;
+            case TextureType::_3D:
+                index = ImageIndex::Make3D(level);
+                break;
+            case TextureType::_2DArray:
+                index = ImageIndex::Make2DArray(level);
+                break;
+            case TextureType::CubeMap:
+                index = ImageIndex::MakeCube(TextureTarget::CubeMap, level);
+                break;
+            default:
+                UNREACHABLE();
+        }
+
+        framebuffer->setAttachment(this, GL_TEXTURE, attachment, index, textureObj);
+    }
+    else
+    {
+        framebuffer->resetAttachment(this, attachment);
+    }
+
+    mGLState.setObjectDirty(target);
 }
 
 void Context::drawBuffers(GLsizei n, const GLenum *bufs)

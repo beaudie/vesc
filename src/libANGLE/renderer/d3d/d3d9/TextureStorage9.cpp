@@ -520,8 +520,7 @@ gl::Error TextureStorage9_Cube::getRenderTarget(const gl::Context *context,
     ASSERT(outRT);
     ASSERT(index.getLevelIndex() == 0);
 
-    ASSERT(index.getType() == gl::TextureType::CubeMap &&
-           gl::TextureTargetToType(index.getTarget()) == gl::TextureType::CubeMap);
+    ASSERT(index.getType() == gl::TextureType::CubeMap && gl::IsCubeMapFace(index.getTarget()));
     const size_t renderTargetIndex = index.cubeMapFaceIndex();
 
     if (mRenderTarget[renderTargetIndex] == nullptr && isRenderTarget())

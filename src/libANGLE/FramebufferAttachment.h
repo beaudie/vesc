@@ -107,6 +107,7 @@ class FramebufferAttachment final
     TextureTarget cubeMapFace() const;
     GLint mipLevel() const;
     GLint layer() const;
+    bool isLayered() const;
     GLsizei getNumViews() const;
     GLenum getMultiviewLayout() const;
     GLint getBaseViewIndex() const;
