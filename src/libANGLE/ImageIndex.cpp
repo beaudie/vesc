@@ -46,6 +46,8 @@ GLint TextureTargetToLayer(TextureTarget target)
             return ImageIndex::kEntireLevel;
         case TextureTarget::_3D:
             return ImageIndex::kEntireLevel;
+        case TextureTarget::CubeMap:
+            return ImageIndex::kEntireLevel;
         default:
             UNREACHABLE();
             return 0;
@@ -56,7 +58,14 @@ TextureTarget TextureTypeToTarget(TextureType type, GLint layerIndex)
 {
     if (type == TextureType::CubeMap)
     {
-        return CubeFaceIndexToTextureTarget(layerIndex);
+        if (layerIndex == ImageIndex::kEntireLevel)
+        {
+            return TextureTarget::CubeMap;
+        }
+        else
+        {
+            return CubeFaceIndexToTextureTarget(layerIndex);
+        }
     }
     else
     {
@@ -77,6 +86,19 @@ ImageIndex &ImageIndex::operator=(const ImageIndex &other) = default;
 bool ImageIndex::hasLayer() const
 {
     return mLayerIndex != kEntireLevel;
+}
+
+bool ImageIndex::isLayered() const
+{
+    switch (mType)
+    {
+        case TextureType::_2DArray:
+        case TextureType::CubeMap:
+        case TextureType::_3D:
+            return mLayerIndex == kEntireLevel;
+        default:
+            return false;
+    }
 }
 
 bool ImageIndex::has3DLayer() const

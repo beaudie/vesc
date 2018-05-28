@@ -32,6 +32,7 @@ class ImageIndex
     GLint getLayerCount() const { return mLayerCount; }
 
     bool hasLayer() const;
+    bool isLayered() const;
     bool has3DLayer() const;
     bool usesTex3D() const;
     GLint cubeMapFaceIndex() const;
@@ -41,7 +42,7 @@ class ImageIndex
     static ImageIndex Make2D(GLint levelIndex);
     static ImageIndex MakeRectangle(GLint levelIndex);
     static ImageIndex MakeCube(TextureTarget target, GLint levelIndex);
-    static ImageIndex Make2DArray(GLint levelIndex, GLint layerIndex);
+    static ImageIndex Make2DArray(GLint levelIndex, GLint layerIndex = kEntireLevel);
     static ImageIndex Make2DArrayRange(GLint levelIndex, GLint layerIndex, GLint layerCount);
     static ImageIndex Make3D(GLint levelIndex, GLint layerIndex = kEntireLevel);
     static ImageIndex MakeFromTarget(TextureTarget target, GLint levelIndex);
