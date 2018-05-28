@@ -237,6 +237,7 @@ void VertexArrayVk::syncDirtyAttrib(const gl::VertexAttribute &attrib,
 
     if (attrib.enabled)
     {
+        printf("attrib %d type %x size %d norm %d\n", (int)attribIndex, (int)attrib.type, (int)attrib.size, (int)attrib.normalized);
         gl::Buffer *bufferGL = binding.getBuffer().get();
 
         if (bufferGL)
