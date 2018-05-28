@@ -319,7 +319,7 @@ class AttributeLayoutTest : public ANGLETest
 
         for (unsigned i = 0; i < mTestCases.size(); ++i)
         {
-            if (Skip(mTestCases[i]))
+            if (mTestCases[i].size() == 0 || Skip(mTestCases[i]))
                 continue;
 
             PrepareTestCase(mTestCases[i]);
@@ -392,22 +392,39 @@ void AttributeLayoutTest::GetTestCases(void)
     // 5. stride != size
     mTestCases.push_back({{M0, 0, 16, mCoord, Float}, {M1, 0, 12, mColor, Float}});
 
+    if (IsAndroid())
+    {
+        // Vulkan on Android doesn't support these formats and we don't yet convert to a supported
+        // format. Push empty tests so the numbering is consistent.
+        mTestCases.push_back({});
+        mTestCases.push_back({});
+    }
+    else
+    {
+        // 6. signed short, unsigned byte
+        mTestCases.push_back({{B0, 0, 8, mCoord, SS}, {B1, 0, 12, mColor, UB}});
+
+        // 7. signed byte, unsigned short
+        mTestCases.push_back({{B0, 0, 8, mCoord, SB}, {B1, 0, 12, mColor, US}});
+    }
+
     if (IsVulkan())
     {
-        std::cout << "cases skipped on Vulkan: integer data, non-zero buffer offsets" << std::endl;
+        std::cout << "cases skipped on Vulkan: non-float in memory, non-zero buffer offsets"
+                  << std::endl;
         return;
     }
 
-    // 6. one buffer, sequential
+    // 8. one buffer, sequential
     mTestCases.push_back({{B0, 0, 8, mCoord, Float}, {B0, 96, 12, mColor, Float}});
 
-    // 7. one buffer, interleaved
+    // 9. one buffer, interleaved
     mTestCases.push_back({{B0, 0, 20, mCoord, Float}, {B0, 8, 20, mColor, Float}});
 
-    // 8. memory and buffer, float and integer
+    // 10. memory and buffer, float and integer
     mTestCases.push_back({{M0, 0, 8, mCoord, Float}, {B0, 0, 12, mColor, SB}});
 
-    // 9. buffer and memory, unusual offset and stride
+    // 11. buffer and memory, unusual offset and stride
     mTestCases.push_back({{B0, 11, 13, mCoord, Float}, {M0, 23, 17, mColor, Float}});
 }
 
