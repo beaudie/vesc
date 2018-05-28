@@ -291,13 +291,14 @@ void VertexArrayVk::updateElementArrayBufferReadDependency(vk::CommandGraphNode 
     }
 }
 
-void VertexArrayVk::getPackedInputDescriptions(vk::PipelineDesc *pipelineDesc)
+void VertexArrayVk::getPackedInputDescriptions(const RendererVk *rendererVk,
+                                               vk::PipelineDesc *pipelineDesc)
 {
-    updatePackedInputDescriptions();
+    updatePackedInputDescriptions(rendererVk);
     pipelineDesc->updateVertexInputInfo(mPackedInputBindings, mPackedInputAttributes);
 }
 
-void VertexArrayVk::updatePackedInputDescriptions()
+void VertexArrayVk::updatePackedInputDescriptions(const RendererVk *rendererVk)
 {
     if (!mDirtyPackedInputs.any())
     {
@@ -313,7 +314,7 @@ void VertexArrayVk::updatePackedInputDescriptions()
         const auto &binding = bindings[attrib.bindingIndex];
         if (attrib.enabled)
         {
-            updatePackedInputInfo(static_cast<uint32_t>(attribIndex), binding, attrib);
+            updatePackedInputInfo(rendererVk, static_cast<uint32_t>(attribIndex), binding, attrib);
         }
         else
         {
@@ -324,7 +325,8 @@ void VertexArrayVk::updatePackedInputDescriptions()
     mDirtyPackedInputs.reset();
 }
 
-void VertexArrayVk::updatePackedInputInfo(uint32_t attribIndex,
+void VertexArrayVk::updatePackedInputInfo(const RendererVk *rendererVk,
+                                          uint32_t attribIndex,
                                           const gl::VertexBinding &binding,
                                           const gl::VertexAttribute &attrib)
 {
@@ -337,8 +339,7 @@ void VertexArrayVk::updatePackedInputInfo(uint32_t attribIndex,
     bindingDesc.inputRate = static_cast<uint16_t>(
         binding.getDivisor() > 0 ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX);
 
-    gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib);
-    VkFormat vkFormat                     = vk::GetNativeVertexFormat(vertexFormatType);
+    VkFormat vkFormat = rendererVk->getFormat(GetVertexFormatID(attrib)).vkBufferFormat;
     ASSERT(vkFormat <= std::numeric_limits<uint16_t>::max());
 
     vk::PackedVertexInputAttributeDesc &attribDesc = mPackedInputAttributes[attribIndex];
