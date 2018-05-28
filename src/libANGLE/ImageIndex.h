@@ -36,12 +36,16 @@ class ImageIndex
     bool usesTex3D() const;
     GLint cubeMapFaceIndex() const;
     bool valid() const;
+    // Note: you cannot use this function when the ImageIndex represents a full cube map.
     TextureTarget getTarget() const;
+
+    bool isLayered() const;
+    bool isEntireLevelCubeMap() const;
 
     static ImageIndex Make2D(GLint levelIndex);
     static ImageIndex MakeRectangle(GLint levelIndex);
-    static ImageIndex MakeCube(TextureTarget target, GLint levelIndex);
-    static ImageIndex Make2DArray(GLint levelIndex, GLint layerIndex);
+    static ImageIndex MakeCubeMapFace(TextureTarget target, GLint levelIndex);
+    static ImageIndex Make2DArray(GLint levelIndex, GLint layerIndex = kEntireLevel);
     static ImageIndex Make2DArrayRange(GLint levelIndex, GLint layerIndex, GLint layerCount);
     static ImageIndex Make3D(GLint levelIndex, GLint layerIndex = kEntireLevel);
     static ImageIndex MakeFromTarget(TextureTarget target, GLint levelIndex);
