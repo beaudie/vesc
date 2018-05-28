@@ -88,13 +88,6 @@ gl::Error VertexArrayVk::streamVertexData(RendererVk *renderer,
         const gl::VertexBinding &binding  = bindings[attrib.bindingIndex];
         ASSERT(attrib.enabled && binding.getBuffer().get() == nullptr);
 
-        // TODO(fjhenigman): Work with more formats than just GL_FLOAT.
-        if (attrib.type != GL_FLOAT)
-        {
-            UNIMPLEMENTED();
-            return gl::InternalError();
-        }
-
         // Only [firstVertex, lastVertex] is needed by the upcoming draw so that
         // is all we copy, but we allocate space for [0, lastVertex] so indexing
         // will work.  If we don't start at zero all the indices will be off.
@@ -244,6 +237,7 @@ void VertexArrayVk::syncDirtyAttrib(const gl::VertexAttribute &attrib,
 
     if (attrib.enabled)
     {
+        printf("attrib %d type %x size %d norm %d\n", (int)attribIndex, (int)attrib.type, (int)attrib.size, (int)attrib.normalized);
         gl::Buffer *bufferGL = binding.getBuffer().get();
 
         if (bufferGL)
@@ -349,6 +343,8 @@ void VertexArrayVk::updatePackedInputInfo(const RendererVk *rendererVk,
 
     VkFormat vkFormat = rendererVk->getFormat(GetVertexFormatID(attrib)).vkBufferFormat;
     ASSERT(vkFormat <= std::numeric_limits<uint16_t>::max());
+    // TODO(fjhenigman): check that the Vulkan implementation actually supports this format and if not,
+    // convert the data to a supported format.  anglebug.com/2405
 
     vk::PackedVertexInputAttributeDesc &attribDesc = mPackedInputAttributes[attribIndex];
     attribDesc.format                              = static_cast<uint16_t>(vkFormat);
