@@ -394,19 +394,28 @@ void AttributeLayoutTest::GetTestCases(void)
 
     if (IsAndroid())
     {
-        // Vulkan on Android doesn't support these formats and we don't yet convert to a supported
-        // format. Push empty tests so the numbering is consistent.
+        // Vulkan on Android doesn't support these formats and we don't yet convert buffers to a
+        // supported format. Push empty test cases so the numbering is consistent.
         mTestCases.push_back({});
         mTestCases.push_back({});
     }
     else
     {
-        // 6. signed short, unsigned byte
+        // 6. signed short and unsigned byte in buffer
         mTestCases.push_back({{B0, 0, 8, mCoord, SS}, {B1, 0, 12, mColor, UB}});
 
-        // 7. signed byte, unsigned short
+        // 7. signed byte and unsigned short in buffer
         mTestCases.push_back({{B0, 0, 8, mCoord, SB}, {B1, 0, 12, mColor, US}});
     }
+
+    // 8. signed short and unsigned byte in memory
+    mTestCases.push_back({{M0, 0, 8, mCoord, SS}, {M1, 0, 12, mColor, UB}});
+
+    // 9. signed byte and unsigned short in memory
+    mTestCases.push_back({{M0, 0, 8, mCoord, SB}, {M1, 0, 12, mColor, US}});
+
+    // 10. fixed in memory
+    mTestCases.push_back({{M0, 0, 20, mCoord, Fixed}, {M0, 8, 20, mColor, Fixed}});
 
     if (IsVulkan())
     {
@@ -415,16 +424,16 @@ void AttributeLayoutTest::GetTestCases(void)
         return;
     }
 
-    // 8. one buffer, sequential
+    // 11. one buffer, sequential
     mTestCases.push_back({{B0, 0, 8, mCoord, Float}, {B0, 96, 12, mColor, Float}});
 
-    // 9. one buffer, interleaved
+    // 12. one buffer, interleaved
     mTestCases.push_back({{B0, 0, 20, mCoord, Float}, {B0, 8, 20, mColor, Float}});
 
-    // 10. memory and buffer, float and integer
+    // 13. memory and buffer, float and integer
     mTestCases.push_back({{M0, 0, 8, mCoord, Float}, {B0, 0, 12, mColor, SB}});
 
-    // 11. buffer and memory, unusual offset and stride
+    // 14. buffer and memory, unusual offset and stride
     mTestCases.push_back({{B0, 11, 13, mCoord, Float}, {M0, 23, 17, mColor, Float}});
 }
 

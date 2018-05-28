@@ -13,6 +13,7 @@
 
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/Format.h"
+#include "libANGLE/renderer/copyvertex.h"
 #include "libANGLE/renderer/renderer_utils.h"
 
 #include <array>
@@ -51,6 +52,8 @@ struct Format final : private angle::NonCopyable
     VkFormat vkBufferFormat;
     InitializeTextureDataFunction dataInitializerFunction;
     LoadFunctionMap loadFunctions;
+    VertexCopyFunction vertexCopyFunction;
+    bool nativeVertexFormat;
 };
 
 bool operator==(const Format &lhs, const Format &rhs);

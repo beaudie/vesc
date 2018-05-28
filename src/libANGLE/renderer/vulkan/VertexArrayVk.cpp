@@ -25,6 +25,13 @@ namespace
 {
 constexpr size_t kDynamicVertexDataSize = 1024 * 1024;
 constexpr size_t kDynamicIndexDataSize  = 1024 * 8;
+
+GLuint FormatSize(angle::Format::ID id)
+{
+    const angle::Format &f = angle::Format::Get(id);
+    return (f.redBits + f.greenBits + f.blueBits + f.alphaBits) / 8;
+}
+
 }  // anonymous namespace
 
 VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state, RendererVk *renderer)
@@ -74,8 +81,6 @@ gl::Error VertexArrayVk::streamVertexData(RendererVk *renderer,
     const auto &attribs  = mState.getVertexAttributes();
     const auto &bindings = mState.getVertexBindings();
 
-    const size_t lastVertex = drawCallParams.firstVertex() + drawCallParams.vertexCount();
-
     // TODO(fjhenigman): When we have a bunch of interleaved attributes, they end up
     // un-interleaved, wasting space and copying time.  Consider improving on that.
     for (size_t attribIndex : attribsToStream)
@@ -84,28 +89,24 @@ gl::Error VertexArrayVk::streamVertexData(RendererVk *renderer,
         const gl::VertexBinding &binding  = bindings[attrib.bindingIndex];
         ASSERT(attrib.enabled && binding.getBuffer().get() == nullptr);
 
-        // TODO(fjhenigman): Work with more formats than just GL_FLOAT.
-        if (attrib.type != GL_FLOAT)
-        {
-            UNIMPLEMENTED();
-            return gl::InternalError();
-        }
-
-        // Only [firstVertex, lastVertex] is needed by the upcoming draw so that
-        // is all we copy, but we allocate space for [0, lastVertex] so indexing
+        // Only vertexCount() vertices are will be used by the draw so that is all we copy,
+        // but we allocate space for firstVertex() + vertexCount() so indexing
         // will work.  If we don't start at zero all the indices will be off.
         // TODO(fjhenigman): See if we can account for indices being off by adjusting
         // the offset, thus avoiding wasted memory.
-        const size_t firstByte = drawCallParams.firstVertex() * binding.getStride();
-        const size_t lastByte =
-            lastVertex * binding.getStride() + gl::ComputeVertexAttributeTypeSize(attrib);
         uint8_t *dst    = nullptr;
         uint32_t offset = 0;
         ANGLE_TRY(mDynamicVertexData.allocate(
-            renderer, lastByte, &dst, &mCurrentArrayBufferHandles[attribIndex], &offset, nullptr));
+            renderer,
+            (drawCallParams.firstVertex() + drawCallParams.vertexCount()) * mStride[attribIndex],
+            &dst, &mCurrentArrayBufferHandles[attribIndex], &offset, nullptr));
         mCurrentArrayBufferOffsets[attribIndex] = static_cast<VkDeviceSize>(offset);
-        memcpy(dst + firstByte, static_cast<const uint8_t *>(attrib.pointer) + firstByte,
-               lastByte - firstByte);
+
+        const vk::Format &vkFormat = renderer->getFormat(mFormat[attribIndex]);
+        vkFormat.vertexCopyFunction(static_cast<const uint8_t *>(attrib.pointer) +
+                                        drawCallParams.firstVertex() * binding.getStride(),
+                                    binding.getStride(), drawCallParams.vertexCount(),
+                                    dst + drawCallParams.firstVertex() * mStride[attribIndex]);
     }
 
     ANGLE_TRY(mDynamicVertexData.flush(renderer->getDevice()));
@@ -242,16 +243,19 @@ void VertexArrayVk::syncDirtyAttrib(const gl::VertexAttribute &attrib,
     {
         gl::Buffer *bufferGL = binding.getBuffer().get();
 
+        mFormat[attribIndex] = GetVertexFormatID(attrib);
         if (bufferGL)
         {
             BufferVk *bufferVk                        = vk::GetImpl(bufferGL);
             mCurrentArrayBufferResources[attribIndex] = bufferVk;
             mCurrentArrayBufferHandles[attribIndex]   = bufferVk->getVkBuffer().getHandle();
+            mStride[attribIndex]                      = binding.getStride();
         }
         else
         {
             mCurrentArrayBufferResources[attribIndex] = nullptr;
             mCurrentArrayBufferHandles[attribIndex]   = VK_NULL_HANDLE;
+            mStride[attribIndex]                      = FormatSize(mFormat[attribIndex]);
         }
         // TODO(jmadill): Offset handling.  Assume zero for now.
         mCurrentArrayBufferOffsets[attribIndex] = 0;
@@ -336,14 +340,11 @@ void VertexArrayVk::updatePackedInputInfo(const RendererVk *rendererVk,
 {
     vk::PackedVertexInputBindingDesc &bindingDesc = mPackedInputBindings[attribIndex];
 
-    size_t attribSize = gl::ComputeVertexAttributeTypeSize(attrib);
-    ASSERT(attribSize <= std::numeric_limits<uint16_t>::max());
-
-    bindingDesc.stride    = static_cast<uint16_t>(binding.getStride());
+    bindingDesc.stride    = static_cast<uint16_t>(mStride[attribIndex]);
     bindingDesc.inputRate = static_cast<uint16_t>(
         binding.getDivisor() > 0 ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX);
 
-    VkFormat vkFormat = rendererVk->getFormat(GetVertexFormatID(attrib)).vkBufferFormat;
+    VkFormat vkFormat = rendererVk->getFormat(mFormat[attribIndex]).vkBufferFormat;
     ASSERT(vkFormat <= std::numeric_limits<uint16_t>::max());
 
     vk::PackedVertexInputAttributeDesc &attribDesc = mPackedInputAttributes[attribIndex];

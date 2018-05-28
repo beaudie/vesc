@@ -108,6 +108,8 @@ class VertexArrayVk : public VertexArrayImpl
     gl::AttribArray<VkBuffer> mCurrentArrayBufferHandles;
     gl::AttribArray<VkDeviceSize> mCurrentArrayBufferOffsets;
     gl::AttribArray<vk::CommandGraphResource *> mCurrentArrayBufferResources;
+    gl::AttribArray<angle::Format::ID> mFormat;
+    gl::AttribArray<GLuint> mStride;
     VkBuffer mCurrentElementArrayBufferHandle;
     VkDeviceSize mCurrentElementArrayBufferOffset;
     vk::CommandGraphResource *mCurrentElementArrayBufferResource;
