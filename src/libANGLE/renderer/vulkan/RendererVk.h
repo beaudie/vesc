@@ -10,8 +10,8 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_RENDERERVK_H_
 #define LIBANGLE_RENDERER_VULKAN_RENDERERVK_H_
 
-#include <memory>
 #include <vulkan/vulkan.h>
+#include <memory>
 
 #include "common/angleutils.h"
 #include "libANGLE/Caps.h"
@@ -97,6 +97,8 @@ class RendererVk : angle::NonCopyable
     {
         return mFormatTable[internalFormat];
     }
+
+    const vk::Format &getFormat(angle::Format::ID formatID) const { return mFormatTable[formatID]; }
 
     vk::Error getCompatibleRenderPass(const vk::RenderPassDesc &desc,
                                       vk::RenderPass **renderPassOut);

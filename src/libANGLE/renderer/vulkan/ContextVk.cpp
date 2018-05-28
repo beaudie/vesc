@@ -120,7 +120,7 @@ gl::Error ContextVk::initPipeline()
     mPipelineDesc->updateTopology(mCurrentDrawMode);
 
     // Copy over the latest attrib and binding descriptions.
-    vertexArrayVk->getPackedInputDescriptions(mPipelineDesc.get());
+    vertexArrayVk->getPackedInputDescriptions(mRenderer, mPipelineDesc.get());
 
     // Ensure that the RenderPass description is updated.
     mPipelineDesc->updateRenderPassDesc(framebufferVk->getRenderPassDesc());
@@ -148,12 +148,12 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
         ANGLE_TRY(initPipeline());
     }
 
-    const auto &state            = mState.getState();
-    const gl::Program *programGL = state.getProgram();
-    ProgramVk *programVk         = vk::GetImpl(programGL);
+    const auto &state                  = mState.getState();
+    const gl::Program *programGL       = state.getProgram();
+    ProgramVk *programVk               = vk::GetImpl(programGL);
     const gl::Framebuffer *framebuffer = state.getDrawFramebuffer();
     FramebufferVk *framebufferVk       = vk::GetImpl(framebuffer);
-    Serial queueSerial           = mRenderer->getCurrentQueueSerial();
+    Serial queueSerial                 = mRenderer->getCurrentQueueSerial();
 
     vk::RecordingMode mode = vk::RecordingMode::Start;
     ANGLE_TRY(framebufferVk->getCommandBufferForDraw(this, commandBufferOut, &mode));

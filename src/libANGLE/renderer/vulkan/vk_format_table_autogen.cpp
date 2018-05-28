@@ -757,8 +757,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         }
 
         case angle::Format::ID::R16G16B16A16_SSCALED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_RGBA16_SSCALED_ANGLEX;
+            textureFormatID         = angle::Format::ID::R16G16B16A16_SSCALED;
+            vkTextureFormat         = VK_FORMAT_R16G16B16A16_SSCALED;
+            bufferFormatID          = angle::Format::ID::R16G16B16A16_SSCALED;
+            vkBufferFormat          = VK_FORMAT_R16G16B16A16_SSCALED;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R16G16B16A16_UINT:
         {
@@ -783,8 +790,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         }
 
         case angle::Format::ID::R16G16B16A16_USCALED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_RGBA16_USCALED_ANGLEX;
+            textureFormatID         = angle::Format::ID::R16G16B16A16_USCALED;
+            vkTextureFormat         = VK_FORMAT_R16G16B16A16_USCALED;
+            bufferFormatID          = angle::Format::ID::R16G16B16A16_USCALED;
+            vkBufferFormat          = VK_FORMAT_R16G16B16A16_USCALED;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R16G16B16_FLOAT:
         {
@@ -820,8 +834,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         }
 
         case angle::Format::ID::R16G16B16_SSCALED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_RGB16_SSCALED_ANGLEX;
+            textureFormatID         = angle::Format::ID::R16G16B16_SSCALED;
+            vkTextureFormat         = VK_FORMAT_R16G16B16_SSCALED;
+            bufferFormatID          = angle::Format::ID::R16G16B16_SSCALED;
+            vkBufferFormat          = VK_FORMAT_R16G16B16_SSCALED;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R16G16B16_UINT:
         {
@@ -846,8 +867,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         }
 
         case angle::Format::ID::R16G16B16_USCALED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_RGB16_USCALED_ANGLEX;
+            textureFormatID         = angle::Format::ID::R16G16B16_USCALED;
+            vkTextureFormat         = VK_FORMAT_R16G16B16_USCALED;
+            bufferFormatID          = angle::Format::ID::R16G16B16_USCALED;
+            vkBufferFormat          = VK_FORMAT_R16G16B16_USCALED;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R16G16_FLOAT:
         {
@@ -883,8 +911,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         }
 
         case angle::Format::ID::R16G16_SSCALED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_RG16_SSCALED_ANGLEX;
+            textureFormatID         = angle::Format::ID::R16G16_SSCALED;
+            vkTextureFormat         = VK_FORMAT_R16G16_SSCALED;
+            bufferFormatID          = angle::Format::ID::R16G16_SSCALED;
+            vkBufferFormat          = VK_FORMAT_R16G16_SSCALED;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R16G16_UINT:
         {
@@ -909,8 +944,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         }
 
         case angle::Format::ID::R16G16_USCALED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_RG16_USCALED_ANGLEX;
+            textureFormatID         = angle::Format::ID::R16G16_USCALED;
+            vkTextureFormat         = VK_FORMAT_R16G16_USCALED;
+            bufferFormatID          = angle::Format::ID::R16G16_USCALED;
+            vkBufferFormat          = VK_FORMAT_R16G16_USCALED;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R16_FLOAT:
         {
@@ -946,8 +988,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         }
 
         case angle::Format::ID::R16_SSCALED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_R16_SSCALED_ANGLEX;
+            textureFormatID         = angle::Format::ID::R16_SSCALED;
+            vkTextureFormat         = VK_FORMAT_R16_SSCALED;
+            bufferFormatID          = angle::Format::ID::R16_SSCALED;
+            vkBufferFormat          = VK_FORMAT_R16_SSCALED;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R16_UINT:
         {
@@ -972,12 +1021,26 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         }
 
         case angle::Format::ID::R16_USCALED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_R16_USCALED_ANGLEX;
+            textureFormatID         = angle::Format::ID::R16_USCALED;
+            vkTextureFormat         = VK_FORMAT_R16_USCALED;
+            bufferFormatID          = angle::Format::ID::R16_USCALED;
+            vkBufferFormat          = VK_FORMAT_R16_USCALED;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R32G32B32A32_FIXED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_RGBA32_FIXED_ANGLEX;
+            textureFormatID         = angle::Format::ID::NONE;
+            vkTextureFormat         = VK_FORMAT_UNDEFINED;
+            bufferFormatID          = angle::Format::ID::R32G32B32A32_FLOAT;
+            vkBufferFormat          = VK_FORMAT_R32G32B32A32_SFLOAT;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R32G32B32A32_FLOAT:
         {
@@ -1029,8 +1092,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
             break;
 
         case angle::Format::ID::R32G32B32_FIXED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_RGB32_FIXED_ANGLEX;
+            textureFormatID         = angle::Format::ID::NONE;
+            vkTextureFormat         = VK_FORMAT_UNDEFINED;
+            bufferFormatID          = angle::Format::ID::R32G32B32_FLOAT;
+            vkBufferFormat          = VK_FORMAT_R32G32B32_SFLOAT;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R32G32B32_FLOAT:
         {
@@ -1082,8 +1152,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
             break;
 
         case angle::Format::ID::R32G32_FIXED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_RG32_FIXED_ANGLEX;
+            textureFormatID         = angle::Format::ID::NONE;
+            vkTextureFormat         = VK_FORMAT_UNDEFINED;
+            bufferFormatID          = angle::Format::ID::R32G32_FLOAT;
+            vkBufferFormat          = VK_FORMAT_R32G32_SFLOAT;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R32G32_FLOAT:
         {
@@ -1135,8 +1212,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
             break;
 
         case angle::Format::ID::R32_FIXED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_R32_FIXED_ANGLEX;
+            textureFormatID         = angle::Format::ID::NONE;
+            vkTextureFormat         = VK_FORMAT_UNDEFINED;
+            bufferFormatID          = angle::Format::ID::R32_FLOAT;
+            vkBufferFormat          = VK_FORMAT_R32_SFLOAT;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R32_FLOAT:
         {
@@ -1243,8 +1327,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         }
 
         case angle::Format::ID::R8G8B8A8_SSCALED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_RGBA8_SSCALED_ANGLEX;
+            textureFormatID         = angle::Format::ID::R8G8B8A8_SSCALED;
+            vkTextureFormat         = VK_FORMAT_R8G8B8A8_SSCALED;
+            bufferFormatID          = angle::Format::ID::R8G8B8A8_SSCALED;
+            vkBufferFormat          = VK_FORMAT_R8G8B8A8_SSCALED;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R8G8B8A8_TYPELESS:
             // This format is not implemented in Vulkan.
@@ -1281,8 +1372,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
             break;
 
         case angle::Format::ID::R8G8B8A8_USCALED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_RGBA8_USCALED_ANGLEX;
+            textureFormatID         = angle::Format::ID::R8G8B8A8_USCALED;
+            vkTextureFormat         = VK_FORMAT_R8G8B8A8_USCALED;
+            bufferFormatID          = angle::Format::ID::R8G8B8A8_USCALED;
+            vkBufferFormat          = VK_FORMAT_R8G8B8A8_USCALED;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R8G8B8_SINT:
         {
@@ -1307,8 +1405,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         }
 
         case angle::Format::ID::R8G8B8_SSCALED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_RGB8_SSCALED_ANGLEX;
+            textureFormatID         = angle::Format::ID::R8G8B8_SSCALED;
+            vkTextureFormat         = VK_FORMAT_R8G8B8_SSCALED;
+            bufferFormatID          = angle::Format::ID::R8G8B8_SSCALED;
+            vkBufferFormat          = VK_FORMAT_R8G8B8_SSCALED;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R8G8B8_UINT:
         {
@@ -1337,8 +1442,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
             break;
 
         case angle::Format::ID::R8G8B8_USCALED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_RGB8_USCALED_ANGLEX;
+            textureFormatID         = angle::Format::ID::R8G8B8_USCALED;
+            vkTextureFormat         = VK_FORMAT_R8G8B8_USCALED;
+            bufferFormatID          = angle::Format::ID::R8G8B8_USCALED;
+            vkBufferFormat          = VK_FORMAT_R8G8B8_USCALED;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R8G8_SINT:
         {
@@ -1363,8 +1475,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         }
 
         case angle::Format::ID::R8G8_SSCALED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_RG8_SSCALED_ANGLEX;
+            textureFormatID         = angle::Format::ID::R8G8_SSCALED;
+            vkTextureFormat         = VK_FORMAT_R8G8_SSCALED;
+            bufferFormatID          = angle::Format::ID::R8G8_SSCALED;
+            vkBufferFormat          = VK_FORMAT_R8G8_SSCALED;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R8G8_UINT:
         {
@@ -1389,8 +1508,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         }
 
         case angle::Format::ID::R8G8_USCALED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_RG8_USCALED_ANGLEX;
+            textureFormatID         = angle::Format::ID::R8G8_USCALED;
+            vkTextureFormat         = VK_FORMAT_R8G8_USCALED;
+            bufferFormatID          = angle::Format::ID::R8G8_USCALED;
+            vkBufferFormat          = VK_FORMAT_R8G8_USCALED;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R8_SINT:
         {
@@ -1415,8 +1541,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         }
 
         case angle::Format::ID::R8_SSCALED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_R8_SSCALED_ANGLEX;
+            textureFormatID         = angle::Format::ID::R8_SSCALED;
+            vkTextureFormat         = VK_FORMAT_R8_SSCALED;
+            bufferFormatID          = angle::Format::ID::R8_SSCALED;
+            vkBufferFormat          = VK_FORMAT_R8_SSCALED;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R8_UINT:
         {
@@ -1441,8 +1574,15 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
         }
 
         case angle::Format::ID::R8_USCALED:
-            // This format is not implemented in Vulkan.
+        {
+            internalFormat          = GL_R8_USCALED_ANGLEX;
+            textureFormatID         = angle::Format::ID::R8_USCALED;
+            vkTextureFormat         = VK_FORMAT_R8_USCALED;
+            bufferFormatID          = angle::Format::ID::R8_USCALED;
+            vkBufferFormat          = VK_FORMAT_R8_USCALED;
+            dataInitializerFunction = nullptr;
             break;
+        }
 
         case angle::Format::ID::R9G9B9E5_SHAREDEXP:
             // This format is not implemented in Vulkan.
