@@ -2279,7 +2279,7 @@ gl::Error Renderer11::copyImageCube(const gl::Context *context,
     TextureStorage11_Cube *storage11 = GetAs<TextureStorage11_Cube>(storage);
     ASSERT(storage11);
 
-    gl::ImageIndex index              = gl::ImageIndex::MakeCube(target, level);
+    gl::ImageIndex index              = gl::ImageIndex::MakeCubeMapFace(target, level);
     RenderTargetD3D *destRenderTarget = nullptr;
     ANGLE_TRY(storage11->getRenderTarget(context, index, &destRenderTarget));
     ASSERT(destRenderTarget);
