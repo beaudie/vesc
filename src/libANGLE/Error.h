@@ -264,4 +264,48 @@ inline Error NoError()
 
 #include "Error.inl"
 
+namespace angle
+{
+class Result : angle::NonCopyable
+{
+  public:
+    inline Result() : mPayload(nullptr) {}
+    inline Result(gl::Error &&error) : mPayload(new gl::Error(error)) {}
+    inline Result(Result &&result) : mPayload(result.mPayload) { result.mPayload = nullptr; }
+    inline ~Result()
+    {
+        if (mPayload)
+        {
+            delete mPayload;
+        }
+    }
+
+    inline bool isError() const { return mPayload != nullptr; }
+
+    inline gl::Error getError() const { return *mPayload; }
+
+  private:
+    gl::Error *mPayload;
+};
+}
+
+#define ANGLE_TRY_TO_RESULT(EXPR)                             \
+    {                                                         \
+        auto ANGLE_LOCAL_VAR = EXPR;                          \
+        if (ANGLE_LOCAL_VAR.isError())                        \
+        {                                                     \
+            return angle::Result(std::move(ANGLE_LOCAL_VAR)); \
+        }                                                     \
+    }
+
+#define ANGLE_TRY_TO_ERR(EXPR)                 \
+    {                                          \
+        \
+auto ANGLE_LOCAL_VAR = EXPR;                   \
+        if (ANGLE_LOCAL_VAR.isError())         \
+        {                                      \
+            return ANGLE_LOCAL_VAR.getError(); \
+        }                                      \
+    }
+
 #endif // LIBANGLE_ERROR_H_

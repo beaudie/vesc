@@ -1989,8 +1989,8 @@ void StateManager11::setSingleVertexBuffer(const d3d11::Buffer *buffer, UINT str
     }
 }
 
-gl::Error StateManager11::updateState(const gl::Context *context,
-                                      const gl::DrawCallParams &drawCallParams)
+angle::Result StateManager11::updateState(const gl::Context *context,
+                                          const gl::DrawCallParams &drawCallParams)
 {
     const gl::State &glState = context->getGLState();
     auto *programD3D         = GetImplAs<ProgramD3D>(glState.getProgram());
@@ -2013,13 +2013,13 @@ gl::Error StateManager11::updateState(const gl::Context *context,
     // Swizzling can cause internal state changes with blit shaders.
     if (mDirtySwizzles)
     {
-        ANGLE_TRY(generateSwizzles(context));
+        ANGLE_TRY_TO_RESULT(generateSwizzles(context));
         mDirtySwizzles = false;
     }
 
     gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
     Framebuffer11 *framebuffer11 = GetImplAs<Framebuffer11>(framebuffer);
-    ANGLE_TRY(framebuffer11->markAttachmentsDirty(context));
+    ANGLE_TRY_TO_RESULT(framebuffer11->markAttachmentsDirty(context));
 
     // TODO(jiawei.shao@intel.com): This can be recomputed only on framebuffer or multisample mask
     // state changes.
@@ -2032,7 +2032,7 @@ gl::Error StateManager11::updateState(const gl::Context *context,
     }
 
     VertexArray11 *vao11 = GetImplAs<VertexArray11>(glState.getVertexArray());
-    ANGLE_TRY(vao11->syncStateForDraw(context, drawCallParams));
+    ANGLE_TRY_TO_RESULT(vao11->syncStateForDraw(context, drawCallParams));
 
     // Changes in the draw call can affect the vertex buffer translations.
     if (!mLastFirstVertex.valid() || mLastFirstVertex.value() != drawCallParams.firstVertex())
@@ -2043,7 +2043,7 @@ gl::Error StateManager11::updateState(const gl::Context *context,
 
     if (drawCallParams.isDrawElements())
     {
-        ANGLE_TRY(applyIndexBuffer(context, drawCallParams));
+        ANGLE_TRY_TO_RESULT(applyIndexBuffer(context, drawCallParams));
     }
 
     if (mLastAppliedDrawMode != drawCallParams.mode())
@@ -2069,7 +2069,7 @@ gl::Error StateManager11::updateState(const gl::Context *context,
         switch (dirtyBit)
         {
             case DIRTY_BIT_RENDER_TARGET:
-                ANGLE_TRY(syncFramebuffer(context, framebuffer));
+                ANGLE_TRY_TO_RESULT(syncFramebuffer(context, framebuffer));
                 break;
             case DIRTY_BIT_VIEWPORT_STATE:
                 syncViewport(context);
@@ -2078,40 +2078,40 @@ gl::Error StateManager11::updateState(const gl::Context *context,
                 syncScissorRectangle(glState.getScissor(), glState.isScissorTestEnabled());
                 break;
             case DIRTY_BIT_RASTERIZER_STATE:
-                ANGLE_TRY(syncRasterizerState(context, drawCallParams));
+                ANGLE_TRY_TO_RESULT(syncRasterizerState(context, drawCallParams));
                 break;
             case DIRTY_BIT_BLEND_STATE:
-                ANGLE_TRY(syncBlendState(context, framebuffer, glState.getBlendState(),
-                                         glState.getBlendColor(), sampleMask));
+                ANGLE_TRY_TO_RESULT(syncBlendState(context, framebuffer, glState.getBlendState(),
+                                                   glState.getBlendColor(), sampleMask));
                 break;
             case DIRTY_BIT_DEPTH_STENCIL_STATE:
-                ANGLE_TRY(syncDepthStencilState(glState));
+                ANGLE_TRY_TO_RESULT(syncDepthStencilState(glState));
                 break;
             case DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE:
                 // TODO(jmadill): More fine-grained update.
-                ANGLE_TRY(syncTextures(context));
+                ANGLE_TRY_TO_RESULT(syncTextures(context));
                 break;
             case DIRTY_BIT_PROGRAM_UNIFORMS:
-                ANGLE_TRY(applyUniforms(programD3D));
+                ANGLE_TRY_TO_RESULT(applyUniforms(programD3D));
                 break;
             case DIRTY_BIT_DRIVER_UNIFORMS:
                 // This must happen after viewport sync; the viewport affects builtin uniforms.
-                ANGLE_TRY(applyDriverUniforms(*programD3D));
+                ANGLE_TRY_TO_RESULT(applyDriverUniforms(*programD3D));
                 break;
             case DIRTY_BIT_PROGRAM_UNIFORM_BUFFERS:
-                ANGLE_TRY(syncUniformBuffers(context, programD3D));
+                ANGLE_TRY_TO_RESULT(syncUniformBuffers(context, programD3D));
                 break;
             case DIRTY_BIT_SHADERS:
-                ANGLE_TRY(syncProgram(context, drawCallParams.mode()));
+                ANGLE_TRY_TO_RESULT(syncProgram(context, drawCallParams.mode()));
                 break;
             case DIRTY_BIT_CURRENT_VALUE_ATTRIBS:
-                ANGLE_TRY(syncCurrentValueAttribs(glState));
+                ANGLE_TRY_TO_RESULT(syncCurrentValueAttribs(glState));
                 break;
             case DIRTY_BIT_TRANSFORM_FEEDBACK:
-                ANGLE_TRY(syncTransformFeedbackBuffers(context));
+                ANGLE_TRY_TO_RESULT(syncTransformFeedbackBuffers(context));
                 break;
             case DIRTY_BIT_VERTEX_BUFFERS_AND_INPUT_LAYOUT:
-                ANGLE_TRY(syncVertexBuffersAndInputLayout(context, drawCallParams));
+                ANGLE_TRY_TO_RESULT(syncVertexBuffersAndInputLayout(context, drawCallParams));
                 break;
             case DIRTY_BIT_PRIMITIVE_TOPOLOGY:
                 syncPrimitiveTopology(glState, programD3D, drawCallParams.mode());

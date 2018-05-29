@@ -45,8 +45,8 @@ egl::Error DisplayAndroid::initialize(egl::Display *display)
 {
     FunctionsEGLDL *egl = new FunctionsEGLDL();
     mEGL = egl;
-    void *eglHandle     = reinterpret_cast<void *>(display->getAttributeMap().get(
-        EGL_PLATFORM_ANGLE_EGL_HANDLE_ANGLE, 0));
+    void *eglHandle     = reinterpret_cast<void *>(
+        display->getAttributeMap().get(EGL_PLATFORM_ANGLE_EGL_HANDLE_ANGLE, 0));
     ANGLE_TRY(egl->initialize(display->getNativeDisplayId(), GetEGLPath(), eglHandle));
 
     gl::Version eglVersion(mEGL->majorVersion, mEGL->minorVersion);
