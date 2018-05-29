@@ -204,7 +204,7 @@ class StateManager11 final : angle::NonCopyable
 
     void setSingleVertexBuffer(const d3d11::Buffer *buffer, UINT stride, UINT offset);
 
-    gl::Error updateState(const gl::Context *context, const gl::DrawCallParams &drawCallParams);
+    angle::Result updateState(const gl::Context *context, const gl::DrawCallParams &drawCallParams);
 
     void setShaderResourceShared(gl::ShaderType shaderType,
                                  UINT resourceSlot,

@@ -150,7 +150,7 @@ class Context11 : public ContextImpl
                                                   gl::PrimitiveMode drawMode);
 
   private:
-    gl::Error prepareForDrawCall(const gl::Context *context,
+    angle::Result prepareForDrawCall(const gl::Context *context,
                                  const gl::DrawCallParams &drawCallParams);
 
     Renderer11 *mRenderer;

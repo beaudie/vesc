@@ -241,7 +241,7 @@ gl::Error Context11::drawArrays(const gl::Context *context,
 {
     const gl::DrawCallParams &drawCallParams = context->getParams<gl::DrawCallParams>();
     ASSERT(!drawCallParams.isDrawElements() && !drawCallParams.isDrawIndirect());
-    ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+    ANGLE_TRY_TO_ERR(prepareForDrawCall(context, drawCallParams));
     return mRenderer->drawArrays(context, drawCallParams);
 }
 
@@ -253,7 +253,7 @@ gl::Error Context11::drawArraysInstanced(const gl::Context *context,
 {
     const gl::DrawCallParams &drawCallParams = context->getParams<gl::DrawCallParams>();
     ASSERT(!drawCallParams.isDrawElements() && !drawCallParams.isDrawIndirect());
-    ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+    ANGLE_TRY_TO_ERR(prepareForDrawCall(context, drawCallParams));
     return mRenderer->drawArrays(context, drawCallParams);
 }
 
@@ -265,7 +265,7 @@ gl::Error Context11::drawElements(const gl::Context *context,
 {
     const gl::DrawCallParams &drawCallParams = context->getParams<gl::DrawCallParams>();
     ASSERT(drawCallParams.isDrawElements() && !drawCallParams.isDrawIndirect());
-    ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+    ANGLE_TRY_TO_ERR(prepareForDrawCall(context, drawCallParams));
     return mRenderer->drawElements(context, drawCallParams);
 }
 
@@ -278,7 +278,7 @@ gl::Error Context11::drawElementsInstanced(const gl::Context *context,
 {
     const gl::DrawCallParams &drawCallParams = context->getParams<gl::DrawCallParams>();
     ASSERT(drawCallParams.isDrawElements() && !drawCallParams.isDrawIndirect());
-    ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+    ANGLE_TRY_TO_ERR(prepareForDrawCall(context, drawCallParams));
     return mRenderer->drawElements(context, drawCallParams);
 }
 
@@ -292,7 +292,7 @@ gl::Error Context11::drawRangeElements(const gl::Context *context,
 {
     const gl::DrawCallParams &drawCallParams = context->getParams<gl::DrawCallParams>();
     ASSERT(drawCallParams.isDrawElements() && !drawCallParams.isDrawIndirect());
-    ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+    ANGLE_TRY_TO_ERR(prepareForDrawCall(context, drawCallParams));
     return mRenderer->drawElements(context, drawCallParams);
 }
 
@@ -306,14 +306,14 @@ gl::Error Context11::drawArraysIndirect(const gl::Context *context,
         ANGLE_TRY(ReadbackIndirectBuffer(context, indirect, &cmd));
 
         gl::DrawCallParams drawCallParams(mode, cmd->first, cmd->count, cmd->instanceCount);
-        ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+        ANGLE_TRY_TO_ERR(prepareForDrawCall(context, drawCallParams));
         return mRenderer->drawArrays(context, drawCallParams);
     }
     else
     {
         const gl::DrawCallParams &drawCallParams = context->getParams<gl::DrawCallParams>();
         ASSERT(!drawCallParams.isDrawElements() && drawCallParams.isDrawIndirect());
-        ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+        ANGLE_TRY_TO_ERR(prepareForDrawCall(context, drawCallParams));
         return mRenderer->drawArraysIndirect(context, drawCallParams);
     }
 }
@@ -341,14 +341,14 @@ gl::Error Context11::drawElementsIndirect(const gl::Context *context,
         // direct drawElements.
         ANGLE_TRY(drawCallParams.ensureIndexRangeResolved(context));
 
-        ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+        ANGLE_TRY_TO_ERR(prepareForDrawCall(context, drawCallParams));
         return mRenderer->drawElements(context, drawCallParams);
     }
     else
     {
         const gl::DrawCallParams &drawCallParams = context->getParams<gl::DrawCallParams>();
         ASSERT(drawCallParams.isDrawElements() && drawCallParams.isDrawIndirect());
-        ANGLE_TRY(prepareForDrawCall(context, drawCallParams));
+        ANGLE_TRY_TO_ERR(prepareForDrawCall(context, drawCallParams));
         return mRenderer->drawElementsIndirect(context, drawCallParams);
     }
 }
@@ -553,11 +553,12 @@ gl::Error Context11::triggerDrawCallProgramRecompilation(const gl::Context *cont
     return gl::NoError();
 }
 
-gl::Error Context11::prepareForDrawCall(const gl::Context *context,
+angle::Result Context11::prepareForDrawCall(const gl::Context *context,
                                         const gl::DrawCallParams &drawCallParams)
 {
+    OutputDebugStringA("don't inline this!");
     ANGLE_TRY(mRenderer->getStateManager()->updateState(context, drawCallParams));
-    return gl::NoError();
+    return angle::Result();
 }
 
 gl::Error Context11::memoryBarrier(const gl::Context *context, GLbitfield barriers)
