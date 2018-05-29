@@ -737,10 +737,10 @@ void StateManager11::checkPresentPath(const gl::Context *context)
     }
 }
 
-gl::Error StateManager11::updateStateForCompute(const gl::Context *context,
-                                                GLuint numGroupsX,
-                                                GLuint numGroupsY,
-                                                GLuint numGroupsZ)
+angle::Result StateManager11::updateStateForCompute(const gl::Context *context,
+                                                    GLuint numGroupsX,
+                                                    GLuint numGroupsY,
+                                                    GLuint numGroupsZ)
 {
     mShaderConstants.setComputeWorkGroups(numGroupsX, numGroupsY, numGroupsZ);
 
@@ -750,14 +750,14 @@ gl::Error StateManager11::updateStateForCompute(const gl::Context *context,
     programD3D->updateSamplerMapping();
 
     // TODO(jmadill): Use dirty bits.
-    ANGLE_TRY(generateSwizzlesForShader(context, gl::ShaderType::Compute));
+    ANGLE_TRY_FAST(generateSwizzlesForShader(context, gl::ShaderType::Compute));
 
     // TODO(jmadill): More complete implementation.
-    ANGLE_TRY(syncTexturesForCompute(context));
+    ANGLE_TRY_ERR(syncTexturesForCompute(context), context);
 
     // TODO(Xinghua): applyUniformBuffers for compute shader.
 
-    return gl::NoError();
+    return angle::Result::Continue;
 }
 
 void StateManager11::syncState(const gl::Context *context, const gl::State::DirtyBits &dirtyBits)
@@ -1989,8 +1989,8 @@ void StateManager11::setSingleVertexBuffer(const d3d11::Buffer *buffer, UINT str
     }
 }
 
-gl::Error StateManager11::updateState(const gl::Context *context,
-                                      const gl::DrawCallParams &drawCallParams)
+angle::Result StateManager11::updateState(const gl::Context *context,
+                                          const gl::DrawCallParams &drawCallParams)
 {
     const gl::State &glState = context->getGLState();
     auto *programD3D         = GetImplAs<ProgramD3D>(glState.getProgram());
@@ -2013,13 +2013,13 @@ gl::Error StateManager11::updateState(const gl::Context *context,
     // Swizzling can cause internal state changes with blit shaders.
     if (mDirtySwizzles)
     {
-        ANGLE_TRY(generateSwizzles(context));
+        ANGLE_TRY_FAST(generateSwizzles(context));
         mDirtySwizzles = false;
     }
 
     gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
     Framebuffer11 *framebuffer11 = GetImplAs<Framebuffer11>(framebuffer);
-    ANGLE_TRY(framebuffer11->markAttachmentsDirty(context));
+    ANGLE_TRY_FAST(framebuffer11->markAttachmentsDirty(context));
 
     // TODO(jiawei.shao@intel.com): This can be recomputed only on framebuffer or multisample mask
     // state changes.
@@ -2032,7 +2032,7 @@ gl::Error StateManager11::updateState(const gl::Context *context,
     }
 
     VertexArray11 *vao11 = GetImplAs<VertexArray11>(glState.getVertexArray());
-    ANGLE_TRY(vao11->syncStateForDraw(context, drawCallParams));
+    ANGLE_TRY_ERR(vao11->syncStateForDraw(context, drawCallParams), context);
 
     // Changes in the draw call can affect the vertex buffer translations.
     if (!mLastFirstVertex.valid() || mLastFirstVertex.value() != drawCallParams.firstVertex())
@@ -2043,7 +2043,7 @@ gl::Error StateManager11::updateState(const gl::Context *context,
 
     if (drawCallParams.isDrawElements())
     {
-        ANGLE_TRY(applyIndexBuffer(context, drawCallParams));
+        ANGLE_TRY_ERR(applyIndexBuffer(context, drawCallParams), context);
     }
 
     if (mLastAppliedDrawMode != drawCallParams.mode())
@@ -2069,7 +2069,7 @@ gl::Error StateManager11::updateState(const gl::Context *context,
         switch (dirtyBit)
         {
             case DIRTY_BIT_RENDER_TARGET:
-                ANGLE_TRY(syncFramebuffer(context, framebuffer));
+                ANGLE_TRY_ERR(syncFramebuffer(context, framebuffer), context);
                 break;
             case DIRTY_BIT_VIEWPORT_STATE:
                 syncViewport(context);
@@ -2078,40 +2078,41 @@ gl::Error StateManager11::updateState(const gl::Context *context,
                 syncScissorRectangle(glState.getScissor(), glState.isScissorTestEnabled());
                 break;
             case DIRTY_BIT_RASTERIZER_STATE:
-                ANGLE_TRY(syncRasterizerState(context, drawCallParams));
+                ANGLE_TRY_ERR(syncRasterizerState(context, drawCallParams), context);
                 break;
             case DIRTY_BIT_BLEND_STATE:
-                ANGLE_TRY(syncBlendState(context, framebuffer, glState.getBlendState(),
-                                         glState.getBlendColor(), sampleMask));
+                ANGLE_TRY_ERR(syncBlendState(context, framebuffer, glState.getBlendState(),
+                                             glState.getBlendColor(), sampleMask),
+                              context);
                 break;
             case DIRTY_BIT_DEPTH_STENCIL_STATE:
-                ANGLE_TRY(syncDepthStencilState(glState));
+                ANGLE_TRY_ERR(syncDepthStencilState(glState), context);
                 break;
             case DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE:
                 // TODO(jmadill): More fine-grained update.
-                ANGLE_TRY(syncTextures(context));
+                ANGLE_TRY_FAST(syncTextures(context));
                 break;
             case DIRTY_BIT_PROGRAM_UNIFORMS:
-                ANGLE_TRY(applyUniforms(programD3D));
+                ANGLE_TRY_ERR(applyUniforms(programD3D), context);
                 break;
             case DIRTY_BIT_DRIVER_UNIFORMS:
                 // This must happen after viewport sync; the viewport affects builtin uniforms.
-                ANGLE_TRY(applyDriverUniforms(*programD3D));
+                ANGLE_TRY_ERR(applyDriverUniforms(*programD3D), context);
                 break;
             case DIRTY_BIT_PROGRAM_UNIFORM_BUFFERS:
-                ANGLE_TRY(syncUniformBuffers(context, programD3D));
+                ANGLE_TRY_ERR(syncUniformBuffers(context, programD3D), context);
                 break;
             case DIRTY_BIT_SHADERS:
-                ANGLE_TRY(syncProgram(context, drawCallParams.mode()));
+                ANGLE_TRY_ERR(syncProgram(context, drawCallParams.mode()), context);
                 break;
             case DIRTY_BIT_CURRENT_VALUE_ATTRIBS:
-                ANGLE_TRY(syncCurrentValueAttribs(glState));
+                ANGLE_TRY_ERR(syncCurrentValueAttribs(glState), context);
                 break;
             case DIRTY_BIT_TRANSFORM_FEEDBACK:
-                ANGLE_TRY(syncTransformFeedbackBuffers(context));
+                ANGLE_TRY_ERR(syncTransformFeedbackBuffers(context), context);
                 break;
             case DIRTY_BIT_VERTEX_BUFFERS_AND_INPUT_LAYOUT:
-                ANGLE_TRY(syncVertexBuffersAndInputLayout(context, drawCallParams));
+                ANGLE_TRY_ERR(syncVertexBuffersAndInputLayout(context, drawCallParams), context);
                 break;
             case DIRTY_BIT_PRIMITIVE_TOPOLOGY:
                 syncPrimitiveTopology(glState, programD3D, drawCallParams.mode());
@@ -2125,7 +2126,7 @@ gl::Error StateManager11::updateState(const gl::Context *context,
     // Check that we haven't set any dirty bits in the flushing of the dirty bits loop.
     ASSERT(mInternalDirtyBits.none());
 
-    return gl::NoError();
+    return angle::Result::Continue;
 }
 
 void StateManager11::setShaderResourceShared(gl::ShaderType shaderType,
@@ -2443,11 +2444,11 @@ gl::Error StateManager11::applyTextures(const gl::Context *context, gl::ShaderTy
     return gl::NoError();
 }
 
-gl::Error StateManager11::syncTextures(const gl::Context *context)
+angle::Result StateManager11::syncTextures(const gl::Context *context)
 {
-    ANGLE_TRY(applyTextures(context, gl::ShaderType::Vertex));
-    ANGLE_TRY(applyTextures(context, gl::ShaderType::Fragment));
-    return gl::NoError();
+    ANGLE_TRY_ERR(applyTextures(context, gl::ShaderType::Vertex), context);
+    ANGLE_TRY_ERR(applyTextures(context, gl::ShaderType::Fragment), context);
+    return angle::Result::Continue;
 }
 
 gl::Error StateManager11::setSamplerState(const gl::Context *context,
@@ -3019,30 +3020,32 @@ gl::Error StateManager11::updateVertexOffsetsForPointSpritesEmulation(GLint star
     return gl::NoError();
 }
 
-gl::Error StateManager11::generateSwizzle(const gl::Context *context, gl::Texture *texture)
+angle::Result StateManager11::generateSwizzle(const gl::Context *context, gl::Texture *texture)
 {
     if (!texture)
     {
-        return gl::NoError();
+        return angle::Result::Continue;
     }
 
     TextureD3D *textureD3D = GetImplAs<TextureD3D>(texture);
     ASSERT(textureD3D);
 
     TextureStorage *texStorage = nullptr;
-    ANGLE_TRY(textureD3D->getNativeTexture(context, &texStorage));
+    ANGLE_TRY_ERR(textureD3D->getNativeTexture(context, &texStorage), context);
 
     if (texStorage)
     {
         TextureStorage11 *storage11          = GetAs<TextureStorage11>(texStorage);
         const gl::TextureState &textureState = texture->getTextureState();
-        ANGLE_TRY(storage11->generateSwizzles(context, textureState.getSwizzleState()));
+        ANGLE_TRY_ERR(storage11->generateSwizzles(context, textureState.getSwizzleState()),
+                      context);
     }
 
-    return gl::NoError();
+    return angle::Result::Continue;
 }
 
-gl::Error StateManager11::generateSwizzlesForShader(const gl::Context *context, gl::ShaderType type)
+angle::Result StateManager11::generateSwizzlesForShader(const gl::Context *context,
+                                                        gl::ShaderType type)
 {
     const auto &glState    = context->getGLState();
     ProgramD3D *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
@@ -3059,19 +3062,18 @@ gl::Error StateManager11::generateSwizzlesForShader(const gl::Context *context, 
             ASSERT(texture);
             if (texture->getTextureState().swizzleRequired())
             {
-                ANGLE_TRY(generateSwizzle(context, texture));
+                ANGLE_TRY_FAST(generateSwizzle(context, texture));
             }
         }
     }
 
-    return gl::NoError();
+    return angle::Result::Continue;
 }
 
-gl::Error StateManager11::generateSwizzles(const gl::Context *context)
+angle::Result StateManager11::generateSwizzles(const gl::Context *context)
 {
-    ANGLE_TRY(generateSwizzlesForShader(context, gl::ShaderType::Vertex));
-    ANGLE_TRY(generateSwizzlesForShader(context, gl::ShaderType::Fragment));
-    return gl::NoError();
+    ANGLE_TRY_FAST(generateSwizzlesForShader(context, gl::ShaderType::Vertex));
+    return generateSwizzlesForShader(context, gl::ShaderType::Fragment);
 }
 
 gl::Error StateManager11::applyUniforms(ProgramD3D *programD3D)

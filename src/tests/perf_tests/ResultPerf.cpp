@@ -27,30 +27,30 @@ ResultPerfTest::ResultPerfTest() : ANGLEPerfTest("ResultPerf", "_run")
 {
 }
 
-ANGLE_NOINLINE gl::Error ExternalCall()
+ANGLE_NOINLINE angle::Result ExternalCall()
 {
     if (gThing != 0)
     {
         printf("Something very slow");
-        return gl::Error(GL_INVALID_OPERATION);
+        return angle::Result::Stop;
     }
     else
     {
-        return gl::NoError();
+        return angle::Result::Continue;
     }
 }
 
-gl::Error CallReturningResult(int depth)
+angle::Result CallReturningResult(int depth)
 {
-    ANGLE_TRY(ExternalCall());
-    ANGLE_TRY(ExternalCall());
-    ANGLE_TRY(ExternalCall());
-    ANGLE_TRY(ExternalCall());
-    ANGLE_TRY(ExternalCall());
-    ANGLE_TRY(ExternalCall());
-    ANGLE_TRY(ExternalCall());
-    ANGLE_TRY(ExternalCall());
-    ANGLE_TRY(ExternalCall());
+    ANGLE_TRY_FAST(ExternalCall());
+    ANGLE_TRY_FAST(ExternalCall());
+    ANGLE_TRY_FAST(ExternalCall());
+    ANGLE_TRY_FAST(ExternalCall());
+    ANGLE_TRY_FAST(ExternalCall());
+    ANGLE_TRY_FAST(ExternalCall());
+    ANGLE_TRY_FAST(ExternalCall());
+    ANGLE_TRY_FAST(ExternalCall());
+    ANGLE_TRY_FAST(ExternalCall());
     return ExternalCall();
 }
 

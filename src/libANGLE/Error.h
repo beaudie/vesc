@@ -262,6 +262,41 @@ inline Error NoError()
 #undef ANGLE_CONCAT2
 #undef ANGLE_CONCAT1
 
+namespace angle
+{
+enum class Result
+{
+    Stop,
+    Continue,
+};
+
+#define ANGLE_TRY_ERR(EXPR, CONTEXT)                   \
+    {                                                  \
+        auto ANGLE_LOCAL_VAR = EXPR;                   \
+        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR.isError())) \
+        {                                              \
+            context->handleError(ANGLE_LOCAL_VAR);     \
+            return angle::Result::Stop;                \
+        }                                              \
+    }                                                  \
+    ANGLE_EMPTY_STATEMENT
+
+#define ANGLE_TRY_FAST(EXPR)         \
+    if (EXPR == angle::Result::Stop) \
+    {                                \
+        return angle::Result::Stop;  \
+    }                                \
+    ANGLE_EMPTY_STATEMENT
+
+#define ANGLE_TRY_TO_ERR(EXPR)       \
+    if (EXPR == angle::Result::Stop) \
+    {                                \
+        return gl::NoError();        \
+    }                                \
+    ANGLE_EMPTY_STATEMENT
+
+}  // namespace angle
+
 #include "Error.inl"
 
 #endif // LIBANGLE_ERROR_H_
