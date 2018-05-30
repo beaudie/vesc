@@ -80,6 +80,7 @@ PixelBuffer::~PixelBuffer()
 
 void PixelBuffer::release(RendererVk *renderer)
 {
+    mSubresourceUpdates.clear();
     mStagingBuffer.release(renderer);
 }
 
@@ -250,6 +251,8 @@ gl::Error PixelBuffer::allocate(RendererVk *renderer,
 }
 
 vk::Error PixelBuffer::flushUpdatesToImage(RendererVk *renderer,
+                                           uint32_t levelCount,
+                                           gl::Extents baseLevelExtents,
                                            vk::ImageHelper *image,
                                            vk::CommandBuffer *commandBuffer)
 {
@@ -262,6 +265,19 @@ vk::Error PixelBuffer::flushUpdatesToImage(RendererVk *renderer,
 
     for (const SubresourceUpdate &update : mSubresourceUpdates)
     {
+        const uint32_t updateMipLevel = update.copyRegion.imageSubresource.mipLevel;
+        // It's possible we've accumulated updates that are no longer applicable if the image has
+        // never been flushed but the image description has changed. Check if this level exist for
+        // this image.
+        uint32_t expectedLevelWidth  = std::max(1, baseLevelExtents.width >> updateMipLevel);
+        uint32_t expectedLevelHeight = std::max(1, baseLevelExtents.height >> updateMipLevel);
+        if (updateMipLevel > levelCount ||
+            update.copyRegion.imageExtent.width > expectedLevelWidth ||
+            update.copyRegion.imageExtent.height > expectedLevelHeight)
+        {
+            continue;
+        }
+
         ASSERT(update.bufferHandle != VK_NULL_HANDLE);
 
         // Conservatively flush all writes to the image. We could use a more restricted barrier.
@@ -280,6 +296,12 @@ vk::Error PixelBuffer::flushUpdatesToImage(RendererVk *renderer,
     mStagingBuffer.releaseRetainedBuffers(renderer);
 
     return vk::NoError();
+}
+
+void PixelBuffer::clearPendingUpdates(RendererVk *renderer)
+{
+    mSubresourceUpdates.clear();
+    mStagingBuffer.releaseRetainedBuffers(renderer);
 }
 
 bool PixelBuffer::empty() const
@@ -828,18 +850,19 @@ vk::Error TextureVk::ensureImageInitialized(RendererVk *renderer)
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(getCommandBufferForWrite(renderer, &commandBuffer));
 
+    const gl::ImageDesc &baseLevelDesc  = mState.getBaseLevelDesc();
+    const gl::Extents &baseLevelExtents = baseLevelDesc.size;
+    const uint32_t levelCount           = getLevelCount();
+
     if (!mImage.valid())
     {
-        const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
         const vk::Format &format =
             renderer->getFormat(baseLevelDesc.format.info->sizedInternalFormat);
-        const gl::Extents &extents = baseLevelDesc.size;
-        const uint32_t levelCount = getLevelCount();
-
-        ANGLE_TRY(initImage(renderer, format, extents, levelCount, commandBuffer));
+        ANGLE_TRY(initImage(renderer, format, baseLevelExtents, levelCount, commandBuffer));
     }
 
-    ANGLE_TRY(mPixelBuffer.flushUpdatesToImage(renderer, &mImage, commandBuffer));
+    ANGLE_TRY(mPixelBuffer.flushUpdatesToImage(renderer, levelCount, baseLevelExtents, &mImage,
+                                               commandBuffer));
     return vk::NoError();
 }
 
@@ -962,6 +985,7 @@ vk::Error TextureVk::initImage(RendererVk *renderer,
 
 void TextureVk::releaseImage(const gl::Context *context, RendererVk *renderer)
 {
+    mPixelBuffer.clearPendingUpdates(renderer);
     mImage.release(renderer->getCurrentQueueSerial(), renderer);
     renderer->releaseObject(getStoredQueueSerial(), &mBaseLevelImageView);
     renderer->releaseObject(getStoredQueueSerial(), &mMipmapImageView);
