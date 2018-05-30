@@ -7,9 +7,10 @@
 //   Test the sh::Compile interface with different parameters.
 //
 
+#include <clocale>
+#include "GLSLANG/ShaderLang.h"
 #include "angle_gl.h"
 #include "gtest/gtest.h"
-#include "GLSLANG/ShaderLang.h"
 
 class ShCompileTest : public testing::Test
 {
@@ -36,13 +37,16 @@ class ShCompileTest : public testing::Test
 
     void testCompile(const char **shaderStrings, int stringCount, bool expectation)
     {
-        bool success                  = sh::Compile(mCompiler, shaderStrings, stringCount, 0);
+        ShCompileOptions options      = SH_OBJECT_CODE;
+        bool success                  = sh::Compile(mCompiler, shaderStrings, stringCount, options);
         const std::string &compileLog = sh::GetInfoLog(mCompiler);
         EXPECT_EQ(expectation, success) << compileLog;
     }
 
   private:
     ShBuiltInResources mResources;
+
+  public:
     ShHandle mCompiler;
 };
 
@@ -80,4 +84,26 @@ TEST_F(ShCompileTest, TokensSplitInShaderStrings)
                                    shaderString3.c_str()};
 
     testCompile(shaderStrings, 3, true);
+}
+
+// Parsing floats in shaders can run afoul of locale settings.
+// In de_DE, `strtof("1.9")` will yield `1.0f`. (It's expecting "1,9")
+TEST_F(ShCompileTest, DecimalSepLocale)
+{
+    const auto defaultLocale = setlocale(LC_NUMERIC, nullptr);
+    ASSERT_TRUE(setlocale(LC_NUMERIC, "de-DE"));
+
+    const char kSource[] = R"(
+        void main()
+        {
+            gl_FragColor = vec4(1.9);
+        })";
+    const char *parts[] = {kSource};
+    testCompile(parts, 1, true);
+
+    const auto &translated = sh::GetObjectCode(mCompiler);
+    // printf("%s\n", translated.data());
+    EXPECT_NE(translated.find("1.9"), std::string::npos);
+
+    setlocale(LC_NUMERIC, defaultLocale);
 }
