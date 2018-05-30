@@ -250,6 +250,8 @@ gl::Error PixelBuffer::allocate(RendererVk *renderer,
 }
 
 vk::Error PixelBuffer::flushUpdatesToImage(RendererVk *renderer,
+                                           uint32_t levelCount,
+                                           gl::Extents baseLevelExtents,
                                            vk::ImageHelper *image,
                                            vk::CommandBuffer *commandBuffer)
 {
@@ -263,6 +265,19 @@ vk::Error PixelBuffer::flushUpdatesToImage(RendererVk *renderer,
     for (const SubresourceUpdate &update : mSubresourceUpdates)
     {
         ASSERT(update.bufferHandle != VK_NULL_HANDLE);
+
+        const uint32_t updateMipLevel = update.copyRegion.imageSubresource.mipLevel;
+        // It's possible we've accumulated updates that are no longer applicable if the image has
+        // never been flushed but the image description has changed. Check if this level exist for
+        // this image.
+        uint32_t expectedLevelWidth  = std::max(1, baseLevelExtents.width >> updateMipLevel);
+        uint32_t expectedLevelHeight = std::max(1, baseLevelExtents.height >> updateMipLevel);
+        if (updateMipLevel > levelCount ||
+            update.copyRegion.imageExtent.width > expectedLevelWidth ||
+            update.copyRegion.imageExtent.height > expectedLevelHeight)
+        {
+            continue;
+        }
 
         // Conservatively flush all writes to the image. We could use a more restricted barrier.
         // Do not move this above the for loop, otherwise multiple updates can have race conditions
@@ -720,6 +735,8 @@ gl::Error TextureVk::generateMipmapWithCPU(const gl::Context *context)
 
     ANGLE_TRY(renderer->finish(context));
 
+    const uint32_t levelCount = getLevelCount();
+
     // We now have the base level available to be manipulated in the baseLevelBuffer pointer.
     // Generate all the missing mipmaps with the slow path. We can optimize with vkCmdBlitImage
     // later.
@@ -734,7 +751,8 @@ gl::Error TextureVk::generateMipmapWithCPU(const gl::Context *context)
             sourceRowPitch, baseLevelBuffers + bufferOffset));
     }
 
-    mPixelBuffer.flushUpdatesToImage(renderer, &mImage, commandBuffer);
+    mPixelBuffer.flushUpdatesToImage(renderer, levelCount, baseLevelExtents, &mImage,
+                                     commandBuffer);
     return gl::NoError();
 }
 
@@ -828,18 +846,20 @@ vk::Error TextureVk::ensureImageInitialized(RendererVk *renderer)
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(getCommandBufferForWrite(renderer, &commandBuffer));
 
+    const gl::ImageDesc &baseLevelDesc  = mState.getBaseLevelDesc();
+    const gl::Extents &baseLevelExtents = baseLevelDesc.size;
+    const uint32_t levelCount           = getLevelCount();
+
     if (!mImage.valid())
     {
-        const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
         const vk::Format &format =
             renderer->getFormat(baseLevelDesc.format.info->sizedInternalFormat);
-        const gl::Extents &extents = baseLevelDesc.size;
-        const uint32_t levelCount = getLevelCount();
 
-        ANGLE_TRY(initImage(renderer, format, extents, levelCount, commandBuffer));
+        ANGLE_TRY(initImage(renderer, format, baseLevelExtents, levelCount, commandBuffer));
     }
 
-    ANGLE_TRY(mPixelBuffer.flushUpdatesToImage(renderer, &mImage, commandBuffer));
+    ANGLE_TRY(mPixelBuffer.flushUpdatesToImage(renderer, levelCount, baseLevelExtents, &mImage,
+                                               commandBuffer));
     return vk::NoError();
 }
 
