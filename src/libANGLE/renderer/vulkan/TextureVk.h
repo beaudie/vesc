@@ -26,6 +26,8 @@ class PixelBuffer final : angle::NonCopyable
 
     void release(RendererVk *renderer);
 
+    void removeStagedUpdates(const gl::ImageIndex &index);
+
     gl::Error stageSubresourceUpdate(ContextVk *contextVk,
                                      const gl::ImageIndex &index,
                                      const gl::Extents &extents,
@@ -60,6 +62,8 @@ class PixelBuffer final : angle::NonCopyable
                        bool *newBufferAllocatedOut);
 
     vk::Error flushUpdatesToImage(RendererVk *renderer,
+                                  uint32_t levelCount,
+                                  gl::Extents baseLevelExtents,
                                   vk::ImageHelper *image,
                                   vk::CommandBuffer *commandBuffer);
 
