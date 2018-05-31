@@ -562,7 +562,10 @@ void ProgramVk::setUniformMatrix2fv(GLint location,
         return;
     }
 
-    setUniformImpl(location, count, value, GL_FLOAT_MAT2);
+    const gl::VariableLocation &locationInfo = mState.getUniformLocations()[location];
+    const gl::LinkedUniform &linkedUniform   = mState.getUniforms()[locationInfo.index];
+
+    SetUniformMatrixfvImpl<2, 2>(arrayElementOffset, elementCount, count, transpose, value, uniformData);
 }
 
 void ProgramVk::setUniformMatrix3fv(GLint location,
