@@ -218,7 +218,6 @@
 2583 VULKAN : dEQP-GLES2.functional.shaders.conversions.matrix_to_matrix.* = SKIP
 2583 VULKAN : dEQP-GLES2.functional.shaders.conversions.matrix_combine.* = SKIP
 2583 VULKAN : dEQP-GLES2.functional.shaders.random.scalar_conversion* = SKIP
-2584 VULKAN : dEQP-GLES2.functional.shaders.functions.datatypes.float_mat* = SKIP
 2584 VULKAN : dEQP-GLES2.functional.shaders.functions.datatypes.mat* = SKIP
 2585 VULKAN : dEQP-GLES2.functional.shaders.qualification_order.variables.valid.* = SKIP
 2586 VULKAN : dEQP-GLES2.functional.shaders.indexing.uniform_array.vec2_* = SKIP
