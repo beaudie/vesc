@@ -225,6 +225,66 @@ void WriteFloatColor(const gl::ColorF &color,
     colorWriteFunction(reinterpret_cast<const uint8_t *>(&color), destPixelData);
 }
 
+template <typename T, int cols, int rows>
+bool TransposeExpandMatrix(T *target, const GLfloat *value)
+{
+    constexpr int targetWidth  = 4;
+    constexpr int targetHeight = rows;
+    constexpr int srcWidth     = rows;
+    constexpr int srcHeight    = cols;
+
+    constexpr int copyWidth  = std::min(targetHeight, srcWidth);
+    constexpr int copyHeight = std::min(targetWidth, srcHeight);
+
+    T staging[targetWidth * targetHeight] = {0};
+
+    for (int x = 0; x < copyWidth; x++)
+    {
+        for (int y = 0; y < copyHeight; y++)
+        {
+            staging[x * targetWidth + y] = static_cast<T>(value[y * srcWidth + x]);
+        }
+    }
+
+    if (memcmp(target, staging, targetWidth * targetHeight * sizeof(T)) == 0)
+    {
+        return false;
+    }
+
+    memcpy(target, staging, targetWidth * targetHeight * sizeof(T));
+    return true;
+}
+
+template <typename T, int cols, int rows>
+bool ExpandMatrix(T *target, const GLfloat *value)
+{
+    constexpr int targetWidth  = 4;
+    constexpr int targetHeight = rows;
+    constexpr int srcWidth     = cols;
+    constexpr int srcHeight    = rows;
+
+    constexpr int copyWidth  = std::min(targetWidth, srcWidth);
+    constexpr int copyHeight = std::min(targetHeight, srcHeight);
+
+    T staging[targetWidth * targetHeight] = {0};
+
+    for (int y = 0; y < copyHeight; y++)
+    {
+        for (int x = 0; x < copyWidth; x++)
+        {
+            staging[y * targetWidth + x] = static_cast<T>(value[y * srcWidth + x]);
+        }
+    }
+
+    if (memcmp(target, staging, targetWidth * targetHeight * sizeof(T)) == 0)
+    {
+        return false;
+    }
+
+    memcpy(target, staging, targetWidth * targetHeight * sizeof(T));
+    return true;
+}
+
 }  // anonymous namespace
 
 PackPixelsParams::PackPixelsParams()
@@ -544,6 +604,41 @@ gl::Error IncompleteTextureSet::getIncompleteTexture(
     mIncompleteTextures[type].set(context, t.release());
     *textureOut = mIncompleteTextures[type].get();
     return gl::NoError();
+}
+
+template <int cols, int rows>
+bool SetUniformMatrixfvImpl(unsigned int elementCount,
+                            unsigned int arrayElementOffset,
+                            GLsizei countIn,
+                            GLboolean transpose,
+                            const GLfloat *value,
+                            uint8_t *targetData)
+{
+    unsigned int count =
+        std::min(elementCount - arrayElementOffset, static_cast<unsigned int>(countIn));
+
+    const unsigned int targetMatrixStride = (4 * rows);
+    GLfloat *target                       = reinterpret_cast<GLfloat *>(
+        targetData + arrayElementOffset * sizeof(GLfloat) * targetMatrixStride);
+
+    bool dirty = false;
+
+    for (unsigned int i = 0; i < count; i++)
+    {
+        // Internally store matrices as transposed versions to accomodate HLSL matrix indexing
+        if (transpose == GL_FALSE)
+        {
+            dirty = TransposeExpandMatrix<GLfloat, cols, rows>(target, value) || dirty;
+        }
+        else
+        {
+            dirty = ExpandMatrix<GLfloat, cols, rows>(target, value) || dirty;
+        }
+        target += targetMatrixStride;
+        value += cols * rows;
+    }
+
+    return dirty;
 }
 
 }  // namespace rx
