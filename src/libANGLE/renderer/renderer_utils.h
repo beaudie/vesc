@@ -258,6 +258,14 @@ class IncompleteTextureSet final : angle::NonCopyable
     gl::TextureMap mIncompleteTextures;
 };
 
+template <int cols, int rows>
+bool SetUniformMatrixfvImpl(unsigned int arrayElementOffset,
+                            unsigned int elementCount,
+                            GLsizei countIn,
+                            GLboolean transpose,
+                            const GLfloat *value,
+                            uint8_t *targetData);
+
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_RENDERER_UTILS_H_
