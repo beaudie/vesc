@@ -606,7 +606,9 @@ gl::Error IncompleteTextureSet::getIncompleteTexture(
     return gl::NoError();
 }
 
-#define INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(cols, rows) template bool SetUniformMatrixfvImpl<cols, rows>(unsigned int, unsigned int, GLsizei, GLboolean, const GLfloat *, uint8_t *)
+#define INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(cols, rows)                                   \
+    template bool SetUniformMatrixfvImpl<cols, rows>(unsigned int, unsigned int, GLsizei, \
+                                                     GLboolean, const GLfloat *, uint8_t *)
 
 INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(2, 2);
 INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(3, 3);
