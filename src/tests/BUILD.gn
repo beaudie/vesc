@@ -524,7 +524,7 @@ if (build_angle_deqp_tests) {
                           [
                             rebase_path("deqp.gypi"),
                             "--replace=<(angle_path)=.",
-                            "--replace=<(deqp_path)=//third_party/deqp/src",
+                            "--replace=<(deqp_path)=$angle_root/third_party/deqp/src",
                           ],
                           "scope",
                           [ "deqp.gypi" ])
