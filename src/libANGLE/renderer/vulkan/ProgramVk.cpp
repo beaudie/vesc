@@ -12,6 +12,7 @@
 #include "common/debug.h"
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/renderer/renderer_utils.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/GlslangWrapper.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
@@ -556,13 +557,22 @@ void ProgramVk::setUniformMatrix2fv(GLint location,
                                     GLboolean transpose,
                                     const GLfloat *value)
 {
-    if (transpose == GL_TRUE)
-    {
-        UNIMPLEMENTED();
-        return;
-    }
+    const gl::VariableLocation &locationInfo = mState.getUniformLocations()[location];
+    const gl::LinkedUniform &linkedUniform   = mState.getUniforms()[locationInfo.index];
 
-    setUniformImpl(location, count, value, GL_FLOAT_MAT2);
+    for (auto &uniformBlock : mDefaultUniformBlocks)
+    {
+        const sh::BlockMemberInfo &layoutInfo = uniformBlock.uniformLayout[location];
+
+        // Assume an offset of -1 means the block is unused.
+        if (layoutInfo.offset == -1)
+        {
+            continue;
+        }
+
+        SetUniformMatrixfvImpl<2, 2>(locationInfo.arrayIndex, linkedUniform.getArraySizeProduct(), count, transpose, value, reinterpret_cast<uint8_t*>(&uniformBlock.uniformData));
+        uniformBlock.uniformsDirty = true;
+    }
 }
 
 void ProgramVk::setUniformMatrix3fv(GLint location,
