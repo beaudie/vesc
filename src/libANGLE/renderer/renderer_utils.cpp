@@ -656,4 +656,35 @@ bool SetFloatUniformMatrix(unsigned int arrayElementOffset,
     return dirty;
 }
 
+template void GetMatrixUniform<GLint>(GLint, GLint, GLint *, const GLint *, GLboolean);
+template void GetMatrixUniform<GLuint>(GLint, GLint, GLuint *, const GLuint *, GLboolean);
+
+void GetMatrixUniform(GLint columns,
+                      GLint rows,
+                      GLfloat *dataOut,
+                      const GLfloat *source,
+                      GLboolean transpose)
+{
+    for (GLint col = 0; col < columns; ++col)
+    {
+        for (GLint row = 0; row < rows; ++row)
+        {
+            GLfloat *outptr = dataOut + ((col * rows) + row);
+            const GLfloat *inptr =
+                transpose ? source + ((row * 4) + col) : source + ((col * 4) + row);
+            *outptr = *inptr;
+        }
+    }
+}
+
+template <typename NonFloatT>
+void GetMatrixUniform(GLint columns,
+                      GLint rows,
+                      NonFloatT *dataOut,
+                      const NonFloatT *source,
+                      GLboolean transpose)
+{
+    UNREACHABLE();
+}
+
 }  // namespace rx

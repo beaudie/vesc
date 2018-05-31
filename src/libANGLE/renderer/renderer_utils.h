@@ -267,6 +267,20 @@ bool SetFloatUniformMatrix(unsigned int arrayElementOffset,
                            const GLfloat *value,
                            uint8_t *targetData);
 
+// Helper method to de-tranpose a matrix uniform for an API query.
+void GetMatrixUniform(GLint columns,
+                      GLint rows,
+                      GLfloat *dataOut,
+                      const GLfloat *source,
+                      GLboolean transpose);
+
+template <typename NonFloatT>
+void GetMatrixUniform(GLint columns,
+                      GLint rows,
+                      NonFloatT *dataOut,
+                      const NonFloatT *source,
+                      GLboolean transpose);
+
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_RENDERER_UTILS_H_
