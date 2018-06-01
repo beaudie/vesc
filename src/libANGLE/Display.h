@@ -109,7 +109,7 @@ class Display final : angle::NonCopyable
     Error destroySurface(Surface *surface);
     void destroyImage(Image *image);
     void destroyStream(Stream *stream);
-    Error destroyContext(gl::Context *context);
+    Error destroyContext(const Thread *thread, gl::Context *context);
 
     bool isInitialized() const;
     bool isValidConfig(const Config *config) const;
