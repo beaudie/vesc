@@ -29,6 +29,7 @@
 #include "libANGLE/ResourceManager.h"
 #include "libANGLE/Stream.h"
 #include "libANGLE/Surface.h"
+#include "libANGLE/Thread.h"
 #include "libANGLE/histogram_macros.h"
 #include "libANGLE/renderer/DeviceImpl.h"
 #include "libANGLE/renderer/DisplayImpl.h"
@@ -532,21 +533,21 @@ Error Display::initialize()
     return NoError();
 }
 
-Error Display::terminate()
+Error Display::terminate(const Thread *thread)
 {
     if (!mInitialized)
     {
         return NoError();
     }
 
-    ANGLE_TRY(makeCurrent(nullptr, nullptr, nullptr));
-
     mMemoryProgramCache.clear();
 
     while (!mContextSet.empty())
     {
-        ANGLE_TRY(destroyContext(*mContextSet.begin()));
+        ANGLE_TRY(destroyContext(thread, *mContextSet.begin()));
     }
+
+    ANGLE_TRY(makeCurrent(nullptr, nullptr, nullptr));
 
     // The global texture manager should be deleted with the last context that uses it.
     ASSERT(mGlobalTextureShareGroupUsers == 0 && mTextureManager == nullptr);
@@ -875,8 +876,19 @@ void Display::destroyStream(egl::Stream *stream)
     SafeDelete(stream);
 }
 
-Error Display::destroyContext(gl::Context *context)
+Error Display::destroyContext(const Thread *thread, gl::Context *context)
 {
+    gl::Context *currentContext   = thread->getContext();
+    bool contextIsCurrent         = context == currentContext;
+    bool changeContextForDeletion = !contextIsCurrent && context->hasBeenCurrent();
+
+    // Make the context being deleted current during it's deletion.  This allows it to delete any
+    // resources it's holding.
+    if (changeContextForDeletion)
+    {
+        ANGLE_TRY(makeCurrent(nullptr, nullptr, context));
+    }
+
     if (context->usingDisplayTextureShareGroup())
     {
         ASSERT(mGlobalTextureShareGroupUsers >= 1 && mTextureManager != nullptr);
@@ -893,6 +905,14 @@ Error Display::destroyContext(gl::Context *context)
     ANGLE_TRY(context->onDestroy(this));
     mContextSet.erase(context);
     SafeDelete(context);
+
+    // Set the previous context back to current
+    if (changeContextForDeletion)
+    {
+        ANGLE_TRY(makeCurrent(thread->getCurrentDrawSurface(), thread->getCurrentReadSurface(),
+                              currentContext));
+    }
+
     return NoError();
 }
 
