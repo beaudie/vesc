@@ -107,7 +107,7 @@ Error GLES1Renderer::prepareForDraw(Context *context, State *glState)
         }
 
         setUniformMatrix4fv(programObject, mProgramState.textureMatrixLoc, kTexUnitCount, GL_FALSE,
-                            reinterpret_cast<float*>(uniformBuffers.textureMatrices.data()));
+                            reinterpret_cast<float *>(uniformBuffers.textureMatrices.data()));
     }
 
     // Texturing
@@ -211,25 +211,36 @@ Error GLES1Renderer::prepareForDraw(Context *context, State *glState)
         setUniform1iv(programObject, mProgramState.lightEnablesLoc, kLightCount,
                       uniformBuffers.lightEnables.data());
         setUniform4fv(programObject, mProgramState.lightAmbientsLoc, kLightCount,
-                      reinterpret_cast<float*>(uniformBuffers.lightAmbients.data()));
+                      reinterpret_cast<float *>(uniformBuffers.lightAmbients.data()));
         setUniform4fv(programObject, mProgramState.lightDiffusesLoc, kLightCount,
-                      reinterpret_cast<float*>(uniformBuffers.lightDiffuses.data()));
+                      reinterpret_cast<float *>(uniformBuffers.lightDiffuses.data()));
         setUniform4fv(programObject, mProgramState.lightSpecularsLoc, kLightCount,
-                      reinterpret_cast<float*>(uniformBuffers.lightSpeculars.data()));
+                      reinterpret_cast<float *>(uniformBuffers.lightSpeculars.data()));
         setUniform4fv(programObject, mProgramState.lightPositionsLoc, kLightCount,
-                      reinterpret_cast<float*>(uniformBuffers.lightPositions.data()));
+                      reinterpret_cast<float *>(uniformBuffers.lightPositions.data()));
         setUniform3fv(programObject, mProgramState.lightDirectionsLoc, kLightCount,
-                      reinterpret_cast<float*>(uniformBuffers.lightDirections.data()));
+                      reinterpret_cast<float *>(uniformBuffers.lightDirections.data()));
         setUniform1fv(programObject, mProgramState.lightSpotlightExponentsLoc, kLightCount,
-                      reinterpret_cast<float*>(uniformBuffers.spotlightExponents.data()));
+                      reinterpret_cast<float *>(uniformBuffers.spotlightExponents.data()));
         setUniform1fv(programObject, mProgramState.lightSpotlightCutoffAnglesLoc, kLightCount,
-                      reinterpret_cast<float*>(uniformBuffers.spotlightCutoffAngles.data()));
+                      reinterpret_cast<float *>(uniformBuffers.spotlightCutoffAngles.data()));
         setUniform1fv(programObject, mProgramState.lightAttenuationConstsLoc, kLightCount,
-                      reinterpret_cast<float*>(uniformBuffers.attenuationConsts.data()));
+                      reinterpret_cast<float *>(uniformBuffers.attenuationConsts.data()));
         setUniform1fv(programObject, mProgramState.lightAttenuationLinearsLoc, kLightCount,
-                      reinterpret_cast<float*>(uniformBuffers.attenuationLinears.data()));
+                      reinterpret_cast<float *>(uniformBuffers.attenuationLinears.data()));
         setUniform1fv(programObject, mProgramState.lightAttenuationQuadraticsLoc, kLightCount,
-                      reinterpret_cast<float*>(uniformBuffers.attenuationQuadratics.data()));
+                      reinterpret_cast<float *>(uniformBuffers.attenuationQuadratics.data()));
+    }
+
+    // Fog
+    {
+        const FogParameters &fog = gles1State.fogParameters();
+        setUniform1i(programObject, mProgramState.fogEnableLoc, glState->getEnableFeature(GL_FOG));
+        setUniform1i(programObject, mProgramState.fogModeLoc, ToGLenum(fog.mode));
+        setUniform1f(programObject, mProgramState.fogDensityLoc, fog.density);
+        setUniform1f(programObject, mProgramState.fogStartLoc, fog.start);
+        setUniform1f(programObject, mProgramState.fogEndLoc, fog.end);
+        setUniform4fv(programObject, mProgramState.fogColorLoc, 1, fog.color.data());
     }
 
     // Clip planes
@@ -239,14 +250,15 @@ Error GLES1Renderer::prepareForDraw(Context *context, State *glState)
         {
             uniformBuffers.clipPlaneEnables[i] = glState->getEnableFeature(GL_CLIP_PLANE0 + i);
             enableClipPlanes = enableClipPlanes || uniformBuffers.clipPlaneEnables[i];
-            gles1State.getClipPlane(i, reinterpret_cast<float*>(uniformBuffers.clipPlanes.data() + i));
+            gles1State.getClipPlane(
+                i, reinterpret_cast<float *>(uniformBuffers.clipPlanes.data() + i));
         }
 
         setUniform1i(programObject, mProgramState.enableClipPlanesLoc, enableClipPlanes);
         setUniform1iv(programObject, mProgramState.clipPlaneEnablesLoc, kClipPlaneCount,
                       uniformBuffers.clipPlaneEnables.data());
         setUniform4fv(programObject, mProgramState.clipPlanesLoc, kClipPlaneCount,
-                      reinterpret_cast<float*>(uniformBuffers.clipPlanes.data()));
+                      reinterpret_cast<float *>(uniformBuffers.clipPlanes.data()));
     }
 
     // None of those are changes in sampler, so there is no need to set the GL_PROGRAM dirty.
@@ -500,6 +512,13 @@ Error GLES1Renderer::initializeRendererProgram(Context *context, State *glState)
         programObject->getUniformLocation("light_attenuation_linears");
     mProgramState.lightAttenuationQuadraticsLoc =
         programObject->getUniformLocation("light_attenuation_quadratics");
+
+    mProgramState.fogEnableLoc  = programObject->getUniformLocation("enable_fog");
+    mProgramState.fogModeLoc    = programObject->getUniformLocation("fog_mode");
+    mProgramState.fogDensityLoc = programObject->getUniformLocation("fog_density");
+    mProgramState.fogStartLoc   = programObject->getUniformLocation("fog_start");
+    mProgramState.fogEndLoc     = programObject->getUniformLocation("fog_end");
+    mProgramState.fogColorLoc   = programObject->getUniformLocation("fog_color");
 
     mProgramState.enableClipPlanesLoc = programObject->getUniformLocation("enable_clip_planes");
     mProgramState.clipPlaneEnablesLoc = programObject->getUniformLocation("clip_plane_enables");
