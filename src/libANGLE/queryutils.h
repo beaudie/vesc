@@ -175,6 +175,10 @@ unsigned int GetLightModelParameterCount(GLenum pname);
 unsigned int GetLightParameterCount(LightParameter pname);
 unsigned int GetMaterialParameterCount(MaterialParameter pname);
 
+void SetFogParameters(GLES1State *state, GLenum pname, const GLfloat *params);
+void GetFogParameters(const GLES1State *state, GLenum pname, GLfloat *params);
+unsigned int GetFogParameterCount(GLenum pname);
+
 }  // namespace gl
 
 namespace egl

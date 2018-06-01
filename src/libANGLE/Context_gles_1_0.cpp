@@ -118,22 +118,61 @@ void Context::enableClientState(ClientVertexArrayType clientState)
 
 void Context::fogf(GLenum pname, GLfloat param)
 {
-    UNIMPLEMENTED();
+    SetFogParameters(&mGLState.gles1(), pname, &param);
 }
 
 void Context::fogfv(GLenum pname, const GLfloat *params)
 {
-    UNIMPLEMENTED();
+    SetFogParameters(&mGLState.gles1(), pname, params);
 }
 
 void Context::fogx(GLenum pname, GLfixed param)
 {
-    UNIMPLEMENTED();
+    GLfloat paramf[4];
+
+    switch (pname)
+    {
+        case GL_FOG_MODE:
+            fogf(pname, (GLfloat)(GLenum)param);
+            break;
+        case GL_FOG_DENSITY:
+        case GL_FOG_START:
+        case GL_FOG_END:
+            paramf[0] = FixedToFloat(param);
+            fogf(pname, paramf[0]);
+            break;
+        case GL_FOG_COLOR:
+            UNREACHABLE();
+            break;
+        default:
+            return;
+    }
 }
 
 void Context::fogxv(GLenum pname, const GLfixed *param)
 {
-    UNIMPLEMENTED();
+    GLfloat paramf[4];
+    switch (pname)
+    {
+        case GL_FOG_MODE:
+            fogf(pname, (GLfloat)(GLenum)param[0]);
+            break;
+        case GL_FOG_DENSITY:
+        case GL_FOG_START:
+        case GL_FOG_END:
+            paramf[0] = FixedToFloat(param[0]);
+            fogf(pname, paramf[0]);
+            break;
+        case GL_FOG_COLOR:
+            for (int i = 0; i < 4; i++)
+            {
+                paramf[i] = FixedToFloat(param[i]);
+            }
+            fogfv(pname, paramf);
+            break;
+        default:
+            return;
+    }
 }
 
 void Context::frustumf(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f)
