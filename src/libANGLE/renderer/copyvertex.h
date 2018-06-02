@@ -14,6 +14,8 @@
 namespace rx
 {
 
+typedef void (*VertexCopyFunction)(const uint8_t *input, size_t stride, size_t count, uint8_t *output);
+
 // 'alphaDefaultValueBits' gives the default value for the alpha channel (4th component)
 template <typename T, size_t inputComponentCount, size_t outputComponentCount, uint32_t alphaDefaultValueBits>
 inline void CopyNativeVertexData(const uint8_t *input, size_t stride, size_t count, uint8_t *output);
