@@ -41,7 +41,7 @@ void InsertLayoutSpecifierString(std::string *shaderString,
     searchStringBuilder << kLayoutMarkerBegin << variableName << kMarkerEnd;
     std::string searchString = searchStringBuilder.str();
 
-    if (layoutString != "")
+    if (!layoutString.empty())
     {
         angle::ReplaceSubstring(shaderString, searchString, "layout(" + layoutString + ")");
     }
@@ -190,10 +190,8 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
     // Assign textures to a descriptor set and binding.
     int textureCount     = 0;
     const auto &uniforms = programState.getUniforms();
-    for (unsigned int uniformIndex : programState.getSamplerUniformRange())
+    for (const gl::LinkedUniform &samplerUniform : uniforms)
     {
-        const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
-
         std::string setBindingString = "set = 1, binding = " + Str(textureCount);
 
         ASSERT(samplerUniform.isActive(gl::ShaderType::Vertex) ||
@@ -219,6 +217,16 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
         }
 
         textureCount += samplerUniform.getBasicTypeElementCount();
+    }
+
+    for (const gl::LinkedUniform &linkedUniform : resources.unusedUniforms)
+    {
+        InsertLayoutSpecifierString(&vertexSource, linkedUniform.name, "");
+        InsertLayoutSpecifierString(&fragmentSource, linkedUniform.name, "");
+
+        std::string qualifierToUse = linkedUniform.isSampler() ? kUniformQualifier : "";
+        InsertQualifierSpecifierString(&vertexSource, linkedUniform.name, qualifierToUse);
+        InsertQualifierSpecifierString(&fragmentSource, linkedUniform.name, qualifierToUse);
     }
 
     std::array<const char *, 2> strings = {{vertexSource.c_str(), fragmentSource.c_str()}};
