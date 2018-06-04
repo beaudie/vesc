@@ -747,7 +747,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     bool linkUniforms(const Context *context,
                       InfoLog &infoLog,
                       const ProgramBindings &uniformLocationBindings,
-                      GLuint *combinedImageUniformsCount);
+                      GLuint *combinedImageUniformsCount,
+                      std::vector<LinkedUniform> *unusedUniforms);
     void linkSamplerAndImageBindings(GLuint *combinedImageUniformsCount);
     bool linkAtomicCounterBuffers();
 

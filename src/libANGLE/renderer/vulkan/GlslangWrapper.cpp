@@ -41,7 +41,7 @@ void InsertLayoutSpecifierString(std::string *shaderString,
     searchStringBuilder << kLayoutMarkerBegin << variableName << kMarkerEnd;
     std::string searchString = searchStringBuilder.str();
 
-    if (layoutString != "")
+    if (!layoutString.empty())
     {
         angle::ReplaceSubstring(shaderString, searchString, "layout(" + layoutString + ")");
     }
@@ -59,6 +59,22 @@ void InsertQualifierSpecifierString(std::string *shaderString,
     searchStringBuilder << kQualifierMarkerBegin << variableName << kMarkerEnd;
     std::string searchString = searchStringBuilder.str();
     angle::ReplaceSubstring(shaderString, searchString, replacementString);
+}
+
+void RemoveEntireDeclaration(std::string *shaderString, const std::string &variableName)
+{
+    std::stringstream searchStringBuilder;
+    searchStringBuilder << kLayoutMarkerBegin << variableName;
+    size_t index = shaderString->find(searchStringBuilder.str());
+
+    if (index == std::string::npos)
+    {
+        return;
+    }
+
+    // Find first semi-colon starting at index
+    size_t endIndex = shaderString->find(";", index) + 1;
+    shaderString->erase(index, endIndex - index);
 }
 
 }  // anonymous namespace
@@ -193,7 +209,6 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
     for (unsigned int uniformIndex : programState.getSamplerUniformRange())
     {
         const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
-
         std::string setBindingString = "set = 1, binding = " + Str(textureCount);
 
         ASSERT(samplerUniform.isActive(gl::ShaderType::Vertex) ||
@@ -219,6 +234,16 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
         }
 
         textureCount += samplerUniform.getBasicTypeElementCount();
+    }
+
+    for (const gl::LinkedUniform &linkedUniform : resources.unusedUniforms)
+    {
+        InsertLayoutSpecifierString(&vertexSource, linkedUniform.name, "");
+        InsertLayoutSpecifierString(&fragmentSource, linkedUniform.name, "");
+
+        std::string qualifierToUse = linkedUniform.isSampler() ? kUniformQualifier : "";
+        InsertQualifierSpecifierString(&vertexSource, linkedUniform.name, qualifierToUse);
+        InsertQualifierSpecifierString(&fragmentSource, linkedUniform.name, qualifierToUse);
     }
 
     std::array<const char *, 2> strings = {{vertexSource.c_str(), fragmentSource.c_str()}};
