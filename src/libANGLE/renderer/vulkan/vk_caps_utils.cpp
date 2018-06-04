@@ -22,12 +22,12 @@ namespace vk
 {
 
 void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
-                  const gl::TextureCapsMap &textureCaps,
+                  const gl::FormatCapsMap &formatCaps,
                   gl::Caps *outCaps,
                   gl::Extensions *outExtensions,
                   gl::Limitations * /* outLimitations */)
 {
-    outExtensions->setTextureExtensionSupport(textureCaps);
+    outExtensions->setTextureExtensionSupport(formatCaps);
 
     // Enable this for simple buffer readback testing, but some functionality is missing.
     // TODO(jmadill): Support full mapBufferRange extension.

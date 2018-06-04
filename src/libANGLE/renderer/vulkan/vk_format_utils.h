@@ -19,7 +19,7 @@
 
 namespace gl
 {
-class TextureCapsMap;
+class FormatCapsMap;
 }  // namespace gl
 
 namespace rx
@@ -62,9 +62,9 @@ class FormatTable final : angle::NonCopyable
     FormatTable();
     ~FormatTable();
 
-    // Also initializes the TextureCapsMap and the compressedTextureCaps in the Caps instance.
+    // Also initializes the FormatCapsMap and the compressedTextureFormats in the Caps instance.
     void initialize(VkPhysicalDevice physicalDevice,
-                    gl::TextureCapsMap *outTextureCapsMap,
+                    gl::FormatCapsMap *outFormatCapsMap,
                     std::vector<GLenum> *outCompressedTextureFormats);
 
     const Format &operator[](GLenum internalFormat) const;

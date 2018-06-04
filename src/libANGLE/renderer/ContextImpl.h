@@ -151,7 +151,7 @@ class ContextImpl : public GLImplFactory
 
     // Native capabilities, unmodified by gl::Context.
     virtual gl::Caps getNativeCaps() const                         = 0;
-    virtual const gl::TextureCapsMap &getNativeTextureCaps() const = 0;
+    virtual const gl::FormatCapsMap &getNativeFormatCaps() const   = 0;
     virtual const gl::Extensions &getNativeExtensions() const      = 0;
     virtual const gl::Limitations &getNativeLimitations() const    = 0;
 
@@ -171,7 +171,7 @@ class ContextImpl : public GLImplFactory
     int getClientMinorVersion() const { return mState.getClientMinorVersion(); }
     const gl::State &getGLState() const { return mState.getState(); }
     const gl::Caps &getCaps() const { return mState.getCaps(); }
-    const gl::TextureCapsMap &getTextureCaps() const { return mState.getTextureCaps(); }
+    const gl::FormatCapsMap &getFormatCaps() const { return mState.getFormatCaps(); }
     const gl::Extensions &getExtensions() const { return mState.getExtensions(); }
     const gl::Limitations &getLimitations() const { return mState.getLimitations(); }
 

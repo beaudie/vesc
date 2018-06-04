@@ -67,14 +67,14 @@ ContextState::ContextState(ContextID contextIn,
                            const Version &clientVersion,
                            State *stateIn,
                            const Caps &capsIn,
-                           const TextureCapsMap &textureCapsIn,
+                           const FormatCapsMap &formatCapsIn,
                            const Extensions &extensionsIn,
                            const Limitations &limitationsIn)
     : mClientVersion(clientVersion),
       mContext(contextIn),
       mState(stateIn),
       mCaps(capsIn),
-      mTextureCaps(textureCapsIn),
+      mFormatCaps(formatCapsIn),
       mExtensions(extensionsIn),
       mLimitations(limitationsIn),
       mBuffers(AllocateOrGetSharedResourceManager(shareContextState, &ContextState::mBuffers)),
@@ -108,9 +108,9 @@ bool ContextState::isWebGL1() const
     return (isWebGL() && mClientVersion.major == 2);
 }
 
-const TextureCaps &ContextState::getTextureCap(GLenum internalFormat) const
+const FormatCaps &ContextState::getFormatCap(GLenum internalFormat) const
 {
-    return mTextureCaps.get(internalFormat);
+    return mFormatCaps.get(internalFormat);
 }
 
 }  // namespace gl

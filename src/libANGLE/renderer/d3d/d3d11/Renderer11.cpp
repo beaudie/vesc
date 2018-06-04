@@ -963,8 +963,8 @@ void Renderer11::populateRenderer11DeviceCaps()
 }
 
 gl::SupportedSampleSet Renderer11::generateSampleSetForEGLConfig(
-    const gl::TextureCaps &colorBufferFormatCaps,
-    const gl::TextureCaps &depthStencilBufferFormatCaps) const
+    const gl::FormatCaps &colorBufferFormatCaps,
+    const gl::FormatCaps &depthStencilBufferFormatCaps) const
 {
     gl::SupportedSampleSet sampleCounts;
 
@@ -1028,8 +1028,8 @@ egl::ConfigSet Renderer11::generateConfigs()
         GL_STENCIL_INDEX8,
     };
 
-    const gl::Caps &rendererCaps                  = getNativeCaps();
-    const gl::TextureCapsMap &rendererTextureCaps = getNativeTextureCaps();
+    const gl::Caps &rendererCaps                = getNativeCaps();
+    const gl::FormatCapsMap &rendererFormatCaps = getNativeFormatCaps();
 
     const EGLint optimalSurfaceOrientation =
         mPresentPathFastEnabled ? 0 : EGL_SURFACE_ORIENTATION_INVERT_Y_ANGLE;
@@ -1037,18 +1037,19 @@ egl::ConfigSet Renderer11::generateConfigs()
     egl::ConfigSet configs;
     for (GLenum colorBufferInternalFormat : colorBufferFormats)
     {
-        const gl::TextureCaps &colorBufferFormatCaps =
-            rendererTextureCaps.get(colorBufferInternalFormat);
-        if (!colorBufferFormatCaps.renderable)
+        const gl::FormatCaps &colorBufferFormatCaps =
+            rendererFormatCaps.get(colorBufferInternalFormat);
+        if (!colorBufferFormatCaps.renderbuffer && !colorBufferFormatCaps.framebufferAttachment)
         {
             continue;
         }
 
         for (GLenum depthStencilBufferInternalFormat : depthStencilBufferFormats)
         {
-            const gl::TextureCaps &depthStencilBufferFormatCaps =
-                rendererTextureCaps.get(depthStencilBufferInternalFormat);
-            if (!depthStencilBufferFormatCaps.renderable &&
+            const gl::FormatCaps &depthStencilBufferFormatCaps =
+                rendererFormatCaps.get(depthStencilBufferInternalFormat);
+            if (!depthStencilBufferFormatCaps.renderbuffer &&
+                !depthStencilBufferFormatCaps.framebufferAttachment &&
                 depthStencilBufferInternalFormat != GL_NONE)
             {
                 continue;
@@ -2490,8 +2491,8 @@ gl::Error Renderer11::createRenderTarget(int width,
 {
     const d3d11::Format &formatInfo = d3d11::Format::Get(format, mRenderer11DeviceCaps);
 
-    const gl::TextureCaps &textureCaps = getNativeTextureCaps().get(format);
-    GLuint supportedSamples            = textureCaps.getNearestSamples(samples);
+    const gl::FormatCaps &formatCaps = getNativeFormatCaps().get(format);
+    GLuint supportedSamples          = formatCaps.getNearestSamples(samples);
 
     if (width > 0 && height > 0)
     {
@@ -3619,12 +3620,12 @@ gl::ErrorOrResult<unsigned int> Renderer11::getVertexSpaceRequired(
 }
 
 void Renderer11::generateCaps(gl::Caps *outCaps,
-                              gl::TextureCapsMap *outTextureCaps,
+                              gl::FormatCapsMap *outFormatCaps,
                               gl::Extensions *outExtensions,
                               gl::Limitations *outLimitations) const
 {
     d3d11_gl::GenerateCaps(mDevice, mDeviceContext, mRenderer11DeviceCaps, getWorkarounds(),
-                           outCaps, outTextureCaps, outExtensions, outLimitations);
+                           outCaps, outFormatCaps, outExtensions, outLimitations);
 }
 
 angle::WorkaroundsD3D Renderer11::generateWorkarounds() const

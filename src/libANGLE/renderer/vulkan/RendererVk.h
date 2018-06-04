@@ -64,7 +64,7 @@ class RendererVk : angle::NonCopyable
     const vk::CommandPool &getCommandPool() const;
 
     const gl::Caps &getNativeCaps() const;
-    const gl::TextureCapsMap &getNativeTextureCaps() const;
+    const gl::FormatCapsMap &getNativeFormatCaps() const;
     const gl::Extensions &getNativeExtensions() const;
     const gl::Limitations &getNativeLimitations() const;
     uint32_t getMaxActiveTextures();
@@ -145,7 +145,7 @@ class RendererVk : angle::NonCopyable
 
     mutable bool mCapsInitialized;
     mutable gl::Caps mNativeCaps;
-    mutable gl::TextureCapsMap mNativeTextureCaps;
+    mutable gl::FormatCapsMap mNativeFormatCaps;
     mutable gl::Extensions mNativeExtensions;
     mutable gl::Limitations mNativeLimitations;
 

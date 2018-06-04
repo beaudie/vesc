@@ -42,7 +42,7 @@ TEST_P(D3D11FormatTablesTest, TestFormatSupport)
     gl::Context *context = reinterpret_cast<gl::Context *>(getEGLWindow()->getContext());
     rx::Context11 *context11 = rx::GetImplAs<rx::Context11>(context);
     rx::Renderer11 *renderer = context11->getRenderer();
-    const auto &textureCaps  = renderer->getNativeTextureCaps();
+    const auto &formatCaps   = renderer->getNativeFormatCaps();
 
     ID3D11Device *device = renderer->getDevice();
 
@@ -51,7 +51,7 @@ TEST_P(D3D11FormatTablesTest, TestFormatSupport)
     {
         const rx::d3d11::Format &formatInfo =
             rx::d3d11::Format::Get(internalFormat, renderer->getRenderer11DeviceCaps());
-        const auto &textureInfo = textureCaps.get(internalFormat);
+        const auto &formatCap = formatCaps.get(internalFormat);
 
         // Bits for texturing
         const gl::InternalFormat &internalFormatInfo =
@@ -70,7 +70,7 @@ TEST_P(D3D11FormatTablesTest, TestFormatSupport)
         UINT texSupport  = 0;
         bool texSuccess  = SUCCEEDED(device->CheckFormatSupport(formatInfo.texFormat, &texSupport));
         bool textureable = texSuccess && ((texSupport & texSupportMask) == texSupportMask);
-        EXPECT_EQ(textureable, textureInfo.texturable) << "for 0x" << std::hex << internalFormat;
+        EXPECT_EQ(textureable, formatCap.texturable) << "for 0x" << std::hex << internalFormat;
 
         // Bits for mipmap auto-gen.
         bool expectedMipGen = texSuccess && ((texSupport & D3D11_FORMAT_SUPPORT_MIP_AUTOGEN) != 0);
@@ -87,7 +87,7 @@ TEST_P(D3D11FormatTablesTest, TestFormatSupport)
         bool filterSuccess =
             SUCCEEDED(device->CheckFormatSupport(formatInfo.srvFormat, &filterSupport));
         bool filterable = filterSuccess && ((filterSupport & D3D11_FORMAT_SUPPORT_SHADER_SAMPLE) != 0);
-        EXPECT_EQ(filterable, textureInfo.filterable) << "for 0x" << std::hex << internalFormat;
+        EXPECT_EQ(filterable, formatCap.filterable) << "for 0x" << std::hex << internalFormat;
 
         // Bits for renderable
         bool renderable = false;
@@ -118,8 +118,10 @@ TEST_P(D3D11FormatTablesTest, TestFormatSupport)
                     << "for 0x" << std::hex << internalFormat;
             }
         }
-        EXPECT_EQ(renderable, textureInfo.renderable) << "for 0x" << std::hex << internalFormat;
-        if (!textureInfo.sampleCounts.empty())
+        EXPECT_EQ(renderable, formatCap.renderbuffer) << "for 0x" << std::hex << internalFormat;
+        EXPECT_EQ(renderable, formatCap.framebufferAttachment)
+            << "for 0x" << std::hex << internalFormat;
+        if (!formatCap.sampleCounts.empty())
         {
             EXPECT_TRUE(renderable) << "for 0x" << std::hex << internalFormat;
         }
@@ -129,7 +131,7 @@ TEST_P(D3D11FormatTablesTest, TestFormatSupport)
         {
             if ((renderSupport & D3D11_FORMAT_SUPPORT_MULTISAMPLE_RENDERTARGET) != 0)
             {
-                EXPECT_TRUE(!textureInfo.sampleCounts.empty());
+                EXPECT_TRUE(!formatCap.sampleCounts.empty());
                 for (unsigned int sampleCount = 1;
                      sampleCount <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; sampleCount *= 2)
                 {
@@ -137,13 +139,13 @@ TEST_P(D3D11FormatTablesTest, TestFormatSupport)
                     bool sampleSuccess = SUCCEEDED(device->CheckMultisampleQualityLevels(
                         renderFormat, sampleCount, &qualityCount));
                     GLuint expectedCount = (!sampleSuccess || qualityCount == 0) ? 0 : 1;
-                    EXPECT_EQ(expectedCount, textureInfo.sampleCounts.count(sampleCount))
+                    EXPECT_EQ(expectedCount, formatCap.sampleCounts.count(sampleCount))
                         << "for 0x" << std::hex << internalFormat;
                 }
             }
             else
             {
-                EXPECT_TRUE(textureInfo.sampleCounts.empty())
+                EXPECT_TRUE(formatCap.sampleCounts.empty())
                     << "for 0x" << std::hex << internalFormat;
             }
         }

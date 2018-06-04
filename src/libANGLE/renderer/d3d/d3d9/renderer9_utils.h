@@ -63,7 +63,7 @@ void GenerateCaps(IDirect3D9 *d3d9,
                   D3DDEVTYPE deviceType,
                   UINT adapter,
                   gl::Caps *caps,
-                  gl::TextureCapsMap *textureCapsMap,
+                  gl::FormatCapsMap *formatCapsMap,
                   gl::Extensions *extensions,
                   gl::Limitations *limitations);
 }

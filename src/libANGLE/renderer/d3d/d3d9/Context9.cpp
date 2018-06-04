@@ -279,9 +279,9 @@ gl::Caps Context9::getNativeCaps() const
     return mRenderer->getNativeCaps();
 }
 
-const gl::TextureCapsMap &Context9::getNativeTextureCaps() const
+const gl::FormatCapsMap &Context9::getNativeFormatCaps() const
 {
-    return mRenderer->getNativeTextureCaps();
+    return mRenderer->getNativeFormatCaps();
 }
 
 const gl::Extensions &Context9::getNativeExtensions() const

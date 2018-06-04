@@ -22,7 +22,7 @@
 namespace gl
 {
 struct Caps;
-class TextureCapsMap;
+class FormatCapsMap;
 struct Extensions;
 struct Version;
 struct Workarounds;
@@ -57,7 +57,7 @@ namespace nativegl_gl
 void GenerateCaps(const FunctionsGL *functions,
                   const WorkaroundsGL &workarounds,
                   gl::Caps *caps,
-                  gl::TextureCapsMap *textureCapsMap,
+                  gl::FormatCapsMap *formatCapsMap,
                   gl::Extensions *extensions,
                   gl::Version *maxSupportedESVersion,
                   MultiviewImplementationTypeGL *multiviewImplementationType);

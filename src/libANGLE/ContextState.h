@@ -43,7 +43,7 @@ class ContextState final : angle::NonCopyable
                  const Version &clientVersion,
                  State *state,
                  const Caps &caps,
-                 const TextureCapsMap &textureCaps,
+                 const FormatCapsMap &formatCaps,
                  const Extensions &extensions,
                  const Limitations &limitations);
     ~ContextState();
@@ -54,11 +54,11 @@ class ContextState final : angle::NonCopyable
     const Version &getClientVersion() const { return mClientVersion; }
     const State &getState() const { return *mState; }
     const Caps &getCaps() const { return mCaps; }
-    const TextureCapsMap &getTextureCaps() const { return mTextureCaps; }
+    const FormatCapsMap &getFormatCaps() const { return mFormatCaps; }
     const Extensions &getExtensions() const { return mExtensions; }
     const Limitations &getLimitations() const { return mLimitations; }
 
-    const TextureCaps &getTextureCap(GLenum internalFormat) const;
+    const FormatCaps &getFormatCap(GLenum internalFormat) const;
 
     bool isWebGL() const;
     bool isWebGL1() const;
@@ -70,7 +70,7 @@ class ContextState final : angle::NonCopyable
     ContextID mContext;
     State *mState;
     const Caps &mCaps;
-    const TextureCapsMap &mTextureCaps;
+    const FormatCapsMap &mFormatCaps;
     const Extensions &mExtensions;
     const Limitations &mLimitations;
 

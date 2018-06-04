@@ -89,7 +89,7 @@ TextureImpl *ContextGL::createTexture(const gl::TextureState &state)
 RenderbufferImpl *ContextGL::createRenderbuffer(const gl::RenderbufferState &state)
 {
     return new RenderbufferGL(state, getFunctions(), getWorkaroundsGL(), getStateManager(),
-                              mRenderer->getBlitter(), getNativeTextureCaps());
+                              mRenderer->getBlitter(), getNativeFormatCaps());
 }
 
 BufferImpl *ContextGL::createBuffer(const gl::BufferState &state)
@@ -391,9 +391,9 @@ gl::Caps ContextGL::getNativeCaps() const
     return mRenderer->getNativeCaps();
 }
 
-const gl::TextureCapsMap &ContextGL::getNativeTextureCaps() const
+const gl::FormatCapsMap &ContextGL::getNativeFormatCaps() const
 {
-    return mRenderer->getNativeTextureCaps();
+    return mRenderer->getNativeFormatCaps();
 }
 
 const gl::Extensions &ContextGL::getNativeExtensions() const

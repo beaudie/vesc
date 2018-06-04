@@ -44,7 +44,7 @@ class ImageIndex;
 class Renderbuffer;
 class State;
 class Texture;
-class TextureCapsMap;
+class FormatCapsMap;
 struct Caps;
 struct Extensions;
 struct Rectangle;

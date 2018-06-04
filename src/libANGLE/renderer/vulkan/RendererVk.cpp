@@ -447,7 +447,7 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
     mGlslangWrapper = GlslangWrapper::GetReference();
 
     // Initialize the format table.
-    mFormatTable.initialize(mPhysicalDevice, &mNativeTextureCaps,
+    mFormatTable.initialize(mPhysicalDevice, &mNativeFormatCaps,
                             &mNativeCaps.compressedTextureFormats);
 
     // Initialize the pipeline layout for GL programs.
@@ -614,7 +614,7 @@ void RendererVk::ensureCapsInitialized() const
 {
     if (!mCapsInitialized)
     {
-        vk::GenerateCaps(mPhysicalDeviceProperties, mNativeTextureCaps, &mNativeCaps,
+        vk::GenerateCaps(mPhysicalDeviceProperties, mNativeFormatCaps, &mNativeCaps,
                          &mNativeExtensions, &mNativeLimitations);
         mCapsInitialized = true;
     }
@@ -626,10 +626,10 @@ const gl::Caps &RendererVk::getNativeCaps() const
     return mNativeCaps;
 }
 
-const gl::TextureCapsMap &RendererVk::getNativeTextureCaps() const
+const gl::FormatCapsMap &RendererVk::getNativeFormatCaps() const
 {
     ensureCapsInitialized();
-    return mNativeTextureCaps;
+    return mNativeFormatCaps;
 }
 
 const gl::Extensions &RendererVk::getNativeExtensions() const

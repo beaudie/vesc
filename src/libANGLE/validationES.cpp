@@ -1186,8 +1186,8 @@ bool ValidateRenderbufferStorageParametersBase(Context *context,
     // Hack for the special WebGL 1 "DEPTH_STENCIL" internal format.
     GLenum convertedInternalFormat = context->getConvertedRenderbufferFormat(internalformat);
 
-    const TextureCaps &formatCaps = context->getTextureCaps().get(convertedInternalFormat);
-    if (!formatCaps.renderable)
+    const FormatCaps &formatCaps = context->getFormatCaps().get(convertedInternalFormat);
+    if (!formatCaps.renderbuffer)
     {
         context->handleError(InvalidEnum());
         return false;
@@ -3607,9 +3607,9 @@ bool ValidateEGLImageTargetTexture2DOES(Context *context, TextureType type, GLeg
         return false;
     }
 
-    const TextureCaps &textureCaps =
-        context->getTextureCaps().get(imageObject->getFormat().info->sizedInternalFormat);
-    if (!textureCaps.texturable)
+    const FormatCaps &formatCaps =
+        context->getFormatCaps().get(imageObject->getFormat().info->sizedInternalFormat);
+    if (!formatCaps.texturable)
     {
         context->handleError(InvalidOperation()
                              << "EGL image internal format is not supported as a texture.");
@@ -3648,9 +3648,9 @@ bool ValidateEGLImageTargetRenderbufferStorageOES(Context *context,
         return false;
     }
 
-    const TextureCaps &textureCaps =
-        context->getTextureCaps().get(imageObject->getFormat().info->sizedInternalFormat);
-    if (!textureCaps.renderable)
+    const FormatCaps &formatCaps =
+        context->getFormatCaps().get(imageObject->getFormat().info->sizedInternalFormat);
+    if (!formatCaps.renderbuffer)
     {
         context->handleError(InvalidOperation()
                              << "EGL image internal format is not supported as a renderbuffer.");
@@ -6338,8 +6338,8 @@ bool ValidateGetInternalFormativBase(Context *context,
         return false;
     }
 
-    const TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
-    if (!formatCaps.renderable)
+    const FormatCaps &formatCaps = context->getFormatCaps().get(internalformat);
+    if (!formatCaps.renderbuffer)
     {
         context->handleError(InvalidEnum() << "Internal format is not renderable.");
         return false;

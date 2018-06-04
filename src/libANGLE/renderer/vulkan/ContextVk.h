@@ -98,7 +98,7 @@ class ContextVk : public ContextImpl
 
     // Native capabilities, unmodified by gl::Context.
     gl::Caps getNativeCaps() const override;
-    const gl::TextureCapsMap &getNativeTextureCaps() const override;
+    const gl::FormatCapsMap &getNativeFormatCaps() const override;
     const gl::Extensions &getNativeExtensions() const override;
     const gl::Limitations &getNativeLimitations() const override;
 

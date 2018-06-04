@@ -66,7 +66,7 @@ TEST_P(VulkanFormatTablesTest, TestFormatSupport)
             continue;
         }
 
-        const gl::TextureCaps &textureCaps = renderer->getNativeTextureCaps().get(internalFormat);
+        const gl::FormatCaps &formatCaps = renderer->getNativeFormatCaps().get(internalFormat);
 
         for (const ParametersToTest params : parametersToTest)
         {
@@ -83,7 +83,7 @@ TEST_P(VulkanFormatTablesTest, TestFormatSupport)
                     renderer->getPhysicalDevice(), vkFormat.vkTextureFormat, params.imageType,
                     VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_SAMPLED_BIT, params.createFlags,
                     &imageProperties) == VK_SUCCESS;
-            EXPECT_EQ(isTexturable, textureCaps.texturable) << vkFormat.vkTextureFormat;
+            EXPECT_EQ(isTexturable, formatCaps.texturable) << vkFormat.vkTextureFormat;
 
             // TODO(jmadill): Support ES3 textures.
 
@@ -91,7 +91,7 @@ TEST_P(VulkanFormatTablesTest, TestFormatSupport)
             bool isFilterable = (formatProperties.optimalTilingFeatures &
                                  VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT) ==
                                 VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
-            EXPECT_EQ(isFilterable, textureCaps.filterable) << vkFormat.vkTextureFormat;
+            EXPECT_EQ(isFilterable, formatCaps.filterable) << vkFormat.vkTextureFormat;
 
             // isRenderable?
             const bool isRenderableColor =
@@ -106,7 +106,8 @@ TEST_P(VulkanFormatTablesTest, TestFormatSupport)
                     params.createFlags, &imageProperties)) == VK_SUCCESS;
 
             bool isRenderable = isRenderableColor || isRenderableDepthStencil;
-            EXPECT_EQ(isRenderable, textureCaps.renderable) << vkFormat.vkTextureFormat;
+            EXPECT_EQ(isRenderable, formatCaps.renderbuffer) << vkFormat.vkTextureFormat;
+            EXPECT_EQ(isRenderable, formatCaps.framebufferAttachment) << vkFormat.vkTextureFormat;
         }
     }
 }

@@ -98,7 +98,7 @@ ContextNULL::ContextNULL(const gl::ContextState &state, AllocationTrackerNULL *a
     const gl::Version maxClientVersion(3, 1);
     mCaps = GenerateMinimumCaps(maxClientVersion, mExtensions);
 
-    InitMinimumTextureCapsMap(maxClientVersion, mExtensions, &mTextureCaps);
+    InitMinimumFormatCapsMap(maxClientVersion, mExtensions, &mFormatCaps);
 }
 
 ContextNULL::~ContextNULL()
@@ -318,9 +318,9 @@ gl::Caps ContextNULL::getNativeCaps() const
     return mCaps;
 }
 
-const gl::TextureCapsMap &ContextNULL::getNativeTextureCaps() const
+const gl::FormatCapsMap &ContextNULL::getNativeFormatCaps() const
 {
-    return mTextureCaps;
+    return mFormatCaps;
 }
 
 const gl::Extensions &ContextNULL::getNativeExtensions() const
