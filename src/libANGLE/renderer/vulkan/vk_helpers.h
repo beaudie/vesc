@@ -85,7 +85,11 @@ class DynamicBuffer : angle::NonCopyable
 
 // Uses DescriptorPool to allocate descriptor sets as needed. If the descriptor pool
 // is full, we simply allocate a new pool to keep allocating descriptor sets as needed and
-// leave the renderer take care of the life time of the pools that become unused.
+// leave the renderer take care of the life time of the pools that become unused. Note that
+// we used a fixed layout for our descriptor pool in ANGLE. Uniform buffers must use set zero and
+// combined Image Samplers must use set 1. We conservatively count each new set using the maximum
+// number of descriptor sets and buffers with each allocation.
+// Currently: 2 (Vertex/Fragment) uniform buffers and 64 (MAX_ACTIVE_TEXTURES) image/samplers.
 enum DescriptorPoolIndex : uint8_t
 {
     UniformBufferIndex       = 0,
