@@ -349,12 +349,17 @@ static gl::TextureCaps GenerateTextureFormatCaps(GLenum internalFormat, IDirect3
 
     if (d3dFormatInfo.renderFormat != D3DFMT_UNKNOWN)
     {
-        textureCaps.renderable = SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat, D3DUSAGE_RENDERTARGET, D3DRTYPE_TEXTURE, d3dFormatInfo.renderFormat));
+        bool renderable = SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat,
+                                                            D3DUSAGE_RENDERTARGET, D3DRTYPE_TEXTURE,
+                                                            d3dFormatInfo.renderFormat));
 
-        if ((formatInfo.depthBits > 0 || formatInfo.stencilBits > 0) && !textureCaps.renderable)
+        if ((formatInfo.depthBits > 0 || formatInfo.stencilBits > 0) && !renderable)
         {
-            textureCaps.renderable = SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat, D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE, d3dFormatInfo.renderFormat));
+            renderable = SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat,
+                                                           D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE,
+                                                           d3dFormatInfo.renderFormat));
         }
+        textureCaps.renderbufferAttachment = textureCaps.textureAttachment = renderable;
 
         textureCaps.sampleCounts.insert(1);
         for (unsigned int i = D3DMULTISAMPLE_2_SAMPLES; i <= D3DMULTISAMPLE_16_SAMPLES; i++)

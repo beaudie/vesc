@@ -3183,14 +3183,18 @@ void Context::updateCaps()
         // ES3.
         formatCaps.texturable =
             formatCaps.texturable && formatInfo.textureSupport(getClientVersion(), mExtensions);
-        formatCaps.renderable =
-            formatCaps.renderable && formatInfo.renderSupport(getClientVersion(), mExtensions);
         formatCaps.filterable =
             formatCaps.filterable && formatInfo.filterSupport(getClientVersion(), mExtensions);
+        formatCaps.textureAttachment =
+            formatCaps.textureAttachment &&
+            formatInfo.textureAttachmentSupport(getClientVersion(), mExtensions);
+        formatCaps.renderbufferAttachment =
+            formatCaps.renderbufferAttachment &&
+            formatInfo.renderbufferAttachmentSupport(getClientVersion(), mExtensions);
 
         // OpenGL ES does not support multisampling with non-rendererable formats
         // OpenGL ES 3.0 or prior does not support multisampling with integer formats
-        if (!formatCaps.renderable ||
+        if (!formatCaps.renderbufferAttachment ||
             (getClientVersion() < ES_3_1 &&
              (formatInfo.componentType == GL_INT || formatInfo.componentType == GL_UNSIGNED_INT)))
         {

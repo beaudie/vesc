@@ -119,7 +119,7 @@ gl::TextureCaps GenerateTextureFormatCaps(gl::Version maxClientVersion,
     textureCaps.texturable = support.query(formatInfo.texFormat, texSupportMask);
     textureCaps.filterable =
         support.query(formatInfo.srvFormat, D3D11_FORMAT_SUPPORT_SHADER_SAMPLE);
-    textureCaps.renderable =
+    textureCaps.renderbufferAttachment = textureCaps.textureAttachment =
         (support.query(formatInfo.rtvFormat, D3D11_FORMAT_SUPPORT_RENDER_TARGET)) ||
         (support.query(formatInfo.dsvFormat, D3D11_FORMAT_SUPPORT_DEPTH_STENCIL));
 

@@ -72,7 +72,11 @@ bool CheckAttachmentCompleteness(const Context *context, const FramebufferAttach
     }
 
     const InternalFormat &format = *attachment.getFormat().info;
-    if (!format.renderSupport(context->getClientVersion(), context->getExtensions()))
+    if ((attachment.type() == GL_RENDERBUFFER &&
+         !format.renderbufferAttachmentSupport(context->getClientVersion(),
+                                               context->getExtensions())) ||
+        (attachment.type() == GL_TEXTURE &&
+         !format.textureAttachmentSupport(context->getClientVersion(), context->getExtensions())))
     {
         return false;
     }

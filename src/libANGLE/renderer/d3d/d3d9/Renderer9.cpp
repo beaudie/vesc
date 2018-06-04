@@ -472,7 +472,7 @@ egl::ConfigSet Renderer9::generateConfigs()
         GLenum colorBufferInternalFormat = colorBufferFormats[formatIndex];
         const gl::TextureCaps &colorBufferFormatCaps =
             rendererTextureCaps.get(colorBufferInternalFormat);
-        if (colorBufferFormatCaps.renderable)
+        if (colorBufferFormatCaps.renderbufferAttachment || colorBufferFormatCaps.textureAttachment)
         {
             for (size_t depthStencilIndex = 0;
                  depthStencilIndex < ArraySize(depthStencilBufferFormats); depthStencilIndex++)
@@ -481,7 +481,8 @@ egl::ConfigSet Renderer9::generateConfigs()
                     depthStencilBufferFormats[depthStencilIndex];
                 const gl::TextureCaps &depthStencilBufferFormatCaps =
                     rendererTextureCaps.get(depthStencilBufferInternalFormat);
-                if (depthStencilBufferFormatCaps.renderable ||
+                if (depthStencilBufferFormatCaps.renderbufferAttachment ||
+                    depthStencilBufferFormatCaps.textureAttachment ||
                     depthStencilBufferInternalFormat == GL_NONE)
                 {
                     const gl::InternalFormat &colorBufferFormatInfo =

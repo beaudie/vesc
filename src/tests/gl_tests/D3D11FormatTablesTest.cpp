@@ -118,7 +118,10 @@ TEST_P(D3D11FormatTablesTest, TestFormatSupport)
                     << "for 0x" << std::hex << internalFormat;
             }
         }
-        EXPECT_EQ(renderable, textureInfo.renderable) << "for 0x" << std::hex << internalFormat;
+        EXPECT_EQ(renderable, textureInfo.textureAttachment)
+            << "for 0x" << std::hex << internalFormat;
+        EXPECT_EQ(renderable, textureInfo.renderbufferAttachment)
+            << "for 0x" << std::hex << internalFormat;
         if (!textureInfo.sampleCounts.empty())
         {
             EXPECT_TRUE(renderable) << "for 0x" << std::hex << internalFormat;
