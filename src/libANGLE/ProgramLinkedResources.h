@@ -54,6 +54,7 @@ class UniformLinker final : angle::NonCopyable
               const ProgramBindings &uniformLocationBindings);
 
     void getResults(std::vector<LinkedUniform> *uniforms,
+                    std::vector<std::string> *unusedUniformNames,
                     std::vector<VariableLocation> *uniformLocations);
 
   private:
@@ -88,6 +89,7 @@ class UniformLinker final : angle::NonCopyable
                                               std::vector<LinkedUniform> &samplerUniforms,
                                               std::vector<LinkedUniform> &imageUniforms,
                                               std::vector<LinkedUniform> &atomicCounterUniforms,
+                                              std::vector<std::string> &unusedUniformsNames,
                                               InfoLog &infoLog);
 
     bool flattenUniformsAndCheckCaps(const Context *context, InfoLog &infoLog);
@@ -97,6 +99,7 @@ class UniformLinker final : angle::NonCopyable
                                       std::vector<LinkedUniform> *samplerUniforms,
                                       std::vector<LinkedUniform> *imageUniforms,
                                       std::vector<LinkedUniform> *atomicCounterUniforms,
+                                      std::vector<std::string> *unusedUniformsNames,
                                       ShaderType shaderType);
 
     ShaderUniformCount flattenArrayOfStructsUniform(
@@ -107,7 +110,7 @@ class UniformLinker final : angle::NonCopyable
         std::vector<LinkedUniform> *samplerUniforms,
         std::vector<LinkedUniform> *imageUniforms,
         std::vector<LinkedUniform> *atomicCounterUniforms,
-
+        std::vector<std::string> *unusedUniformsNames,
         ShaderType shaderType,
         bool markActive,
         bool markStaticUse,
@@ -121,6 +124,7 @@ class UniformLinker final : angle::NonCopyable
                                             std::vector<LinkedUniform> *samplerUniforms,
                                             std::vector<LinkedUniform> *imageUniforms,
                                             std::vector<LinkedUniform> *atomicCounterUniforms,
+                                            std::vector<std::string> *unusedUniformsNames,
                                             ShaderType shaderType,
                                             bool markActive,
                                             bool markStaticUse,
@@ -134,6 +138,7 @@ class UniformLinker final : angle::NonCopyable
                                            std::vector<LinkedUniform> *samplerUniforms,
                                            std::vector<LinkedUniform> *imageUniforms,
                                            std::vector<LinkedUniform> *atomicCounterUniforms,
+                                           std::vector<std::string> *unusedUniformsNames,
                                            ShaderType shaderType,
                                            bool markActive,
                                            bool markStaticUse,
@@ -149,6 +154,7 @@ class UniformLinker final : angle::NonCopyable
                                           std::vector<LinkedUniform> *samplerUniforms,
                                           std::vector<LinkedUniform> *imageUniforms,
                                           std::vector<LinkedUniform> *atomicCounterUniforms,
+                                          std::vector<std::string> *unusedUniformsNames,
                                           ShaderType shaderType,
                                           bool markActive,
                                           bool markStaticUse,
@@ -165,6 +171,7 @@ class UniformLinker final : angle::NonCopyable
 
     const ProgramState &mState;
     std::vector<LinkedUniform> mUniforms;
+    std::vector<std::string> mUnusedUniformNames;
     std::vector<VariableLocation> mUniformLocations;
 };
 
@@ -309,6 +316,7 @@ struct ProgramLinkedResources
     UniformBlockLinker uniformBlockLinker;
     ShaderStorageBlockLinker shaderStorageBlockLinker;
     AtomicCounterBufferLinker atomicCounterBufferLinker;
+    std::vector<std::string> unusedUniformNames;
 };
 
 }  // namespace gl
