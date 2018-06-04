@@ -94,12 +94,12 @@ class DXGISupportHelper : angle::NonCopyable
     D3D_FEATURE_LEVEL mFeatureLevel;
 };
 
-gl::TextureCaps GenerateTextureFormatCaps(gl::Version maxClientVersion,
-                                          GLenum internalFormat,
-                                          ID3D11Device *device,
-                                          const Renderer11DeviceCaps &renderer11DeviceCaps)
+gl::FormatCaps GenerateFormatCaps(gl::Version maxClientVersion,
+                                  GLenum internalFormat,
+                                  ID3D11Device *device,
+                                  const Renderer11DeviceCaps &renderer11DeviceCaps)
 {
-    gl::TextureCaps textureCaps;
+    gl::FormatCaps formatCaps;
 
     DXGISupportHelper support(device, renderer11DeviceCaps.featureLevel);
     const d3d11::Format &formatInfo = d3d11::Format::Get(internalFormat, renderer11DeviceCaps);
@@ -116,10 +116,9 @@ gl::TextureCaps GenerateTextureFormatCaps(gl::Version maxClientVersion,
         }
     }
 
-    textureCaps.texturable = support.query(formatInfo.texFormat, texSupportMask);
-    textureCaps.filterable =
-        support.query(formatInfo.srvFormat, D3D11_FORMAT_SUPPORT_SHADER_SAMPLE);
-    textureCaps.renderable =
+    formatCaps.texturable = support.query(formatInfo.texFormat, texSupportMask);
+    formatCaps.filterable = support.query(formatInfo.srvFormat, D3D11_FORMAT_SUPPORT_SHADER_SAMPLE);
+    formatCaps.renderbuffer = formatCaps.framebufferAttachment =
         (support.query(formatInfo.rtvFormat, D3D11_FORMAT_SUPPORT_RENDER_TARGET)) ||
         (support.query(formatInfo.dsvFormat, D3D11_FORMAT_SUPPORT_DEPTH_STENCIL));
 
@@ -136,7 +135,7 @@ gl::TextureCaps GenerateTextureFormatCaps(gl::Version maxClientVersion,
         support.query(renderFormat, D3D11_FORMAT_SUPPORT_MULTISAMPLE_RENDERTARGET))
     {
         // Assume 1x
-        textureCaps.sampleCounts.insert(1);
+        formatCaps.sampleCounts.insert(1);
 
         for (unsigned int sampleCount = 2; sampleCount <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT;
              sampleCount *= 2)
@@ -150,12 +149,12 @@ gl::TextureCaps GenerateTextureFormatCaps(gl::Version maxClientVersion,
                 {
                     break;
                 }
-                textureCaps.sampleCounts.insert(sampleCount);
+                formatCaps.sampleCounts.insert(sampleCount);
             }
         }
     }
 
-    return textureCaps;
+    return formatCaps;
 }
 
 bool GetNPOTTextureSupport(D3D_FEATURE_LEVEL featureLevel)
@@ -1315,7 +1314,7 @@ void GenerateCaps(ID3D11Device *device,
                   const Renderer11DeviceCaps &renderer11DeviceCaps,
                   const angle::WorkaroundsD3D &workarounds,
                   gl::Caps *caps,
-                  gl::TextureCapsMap *textureCapsMap,
+                  gl::FormatCapsMap *formatCapsMap,
                   gl::Extensions *extensions,
                   gl::Limitations *limitations)
 {
@@ -1323,9 +1322,9 @@ void GenerateCaps(ID3D11Device *device,
     const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats();
     for (GLenum internalFormat : allFormats)
     {
-        gl::TextureCaps textureCaps = GenerateTextureFormatCaps(
+        gl::FormatCaps formatCaps = GenerateFormatCaps(
             GetMaximumClientVersion(featureLevel), internalFormat, device, renderer11DeviceCaps);
-        textureCapsMap->insert(internalFormat, textureCaps);
+        formatCapsMap->insert(internalFormat, formatCaps);
 
         if (gl::GetSizedInternalFormatInfo(internalFormat).compressed)
         {
@@ -1498,7 +1497,7 @@ void GenerateCaps(ID3D11Device *device,
     caps->maxFramebufferHeight = caps->maxFramebufferWidth;
 
     // GL extension support
-    extensions->setTextureExtensionSupport(*textureCapsMap);
+    extensions->setTextureExtensionSupport(*formatCapsMap);
     extensions->elementIndexUint = true;
     extensions->getProgramBinary = true;
     extensions->rgb8rgba8 = true;

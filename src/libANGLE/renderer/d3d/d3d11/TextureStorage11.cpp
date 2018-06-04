@@ -3267,9 +3267,9 @@ gl::Error TextureStorage11_2DMultisample::ensureTextureExists(int mipLevels)
         desc.CPUAccessFlags = 0;
         desc.MiscFlags      = getMiscFlags();
 
-        const gl::TextureCaps &textureCaps =
-            mRenderer->getNativeTextureCaps().get(mFormatInfo.internalFormat);
-        GLuint supportedSamples = textureCaps.getNearestSamples(mSamples);
+        const gl::FormatCaps &formatCaps =
+            mRenderer->getNativeFormatCaps().get(mFormatInfo.internalFormat);
+        GLuint supportedSamples = formatCaps.getNearestSamples(mSamples);
         desc.SampleDesc.Count   = (supportedSamples == 0) ? 1 : supportedSamples;
         desc.SampleDesc.Quality = static_cast<UINT>(D3D11_STANDARD_MULTISAMPLE_PATTERN);
 

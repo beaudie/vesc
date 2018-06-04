@@ -409,7 +409,7 @@ class Renderer9 : public RendererD3D
     gl::Error applyTextures(const gl::Context *context, gl::ShaderType shaderType);
 
     void generateCaps(gl::Caps *outCaps,
-                      gl::TextureCapsMap *outTextureCaps,
+                      gl::FormatCapsMap *outFormatCaps,
                       gl::Extensions *outExtensions,
                       gl::Limitations *outLimitations) const override;
 

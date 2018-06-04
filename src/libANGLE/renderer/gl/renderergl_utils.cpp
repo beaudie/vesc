@@ -92,21 +92,23 @@ static bool MeetsRequirements(const FunctionsGL *functions, const nativegl::Supp
     }
 }
 
-static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
-                                                 GLenum internalFormat)
+static gl::FormatCaps GenerateFormatCaps(const FunctionsGL *functions, GLenum internalFormat)
 {
     ASSERT(functions->getError() == GL_NO_ERROR);
 
-    gl::TextureCaps textureCaps;
+    gl::FormatCaps formatCaps;
 
     const nativegl::InternalFormat &formatInfo = nativegl::GetInternalFormatInfo(internalFormat, functions->standard);
-    textureCaps.texturable = MeetsRequirements(functions, formatInfo.texture);
-    textureCaps.filterable = textureCaps.texturable && MeetsRequirements(functions, formatInfo.filter);
-    textureCaps.renderable = MeetsRequirements(functions, formatInfo.framebufferAttachment);
+    formatCaps.texturable                      = MeetsRequirements(functions, formatInfo.texture);
+    formatCaps.filterable =
+        formatCaps.texturable && MeetsRequirements(functions, formatInfo.filter);
+    formatCaps.framebufferAttachment =
+        MeetsRequirements(functions, formatInfo.framebufferAttachment);
+    formatCaps.renderbuffer = MeetsRequirements(functions, formatInfo.renderbuffer);
 
     // glGetInternalformativ is not available until version 4.2 but may be available through the 3.0
     // extension GL_ARB_internalformat_query
-    if (textureCaps.renderable && functions->getInternalformativ)
+    if (formatCaps.renderbuffer && functions->getInternalformativ)
     {
         GLenum queryInternalFormat = internalFormat;
 
@@ -160,14 +162,14 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
                 }
                 if (conformant == GL_TRUE)
                 {
-                    textureCaps.sampleCounts.insert(samples[sampleIndex]);
+                    formatCaps.sampleCounts.insert(samples[sampleIndex]);
                 }
             }
         }
     }
 
     ASSERT(functions->getError() == GL_NO_ERROR);
-    return textureCaps;
+    return formatCaps;
 }
 
 static GLint QuerySingleGLInt(const FunctionsGL *functions, GLenum name)
@@ -250,7 +252,7 @@ static void LimitVersion(gl::Version *curVersion, const gl::Version &maxVersion)
 void GenerateCaps(const FunctionsGL *functions,
                   const WorkaroundsGL &workarounds,
                   gl::Caps *caps,
-                  gl::TextureCapsMap *textureCapsMap,
+                  gl::FormatCapsMap *formatCapsMap,
                   gl::Extensions *extensions,
                   gl::Version *maxSupportedESVersion,
                   MultiviewImplementationTypeGL *multiviewImplementationType)
@@ -259,8 +261,8 @@ void GenerateCaps(const FunctionsGL *functions,
     const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats();
     for (GLenum internalFormat : allFormats)
     {
-        gl::TextureCaps textureCaps = GenerateTextureFormatCaps(functions, internalFormat);
-        textureCapsMap->insert(internalFormat, textureCaps);
+        gl::FormatCaps formatCaps = GenerateFormatCaps(functions, internalFormat);
+        formatCapsMap->insert(internalFormat, formatCaps);
 
         if (gl::GetSizedInternalFormatInfo(internalFormat).compressed)
         {
@@ -865,7 +867,7 @@ void GenerateCaps(const FunctionsGL *functions,
     }
 
     // Extension support
-    extensions->setTextureExtensionSupport(*textureCapsMap);
+    extensions->setTextureExtensionSupport(*formatCapsMap);
     extensions->elementIndexUint = functions->standard == STANDARD_GL_DESKTOP ||
                                    functions->isAtLeastGLES(gl::Version(3, 0)) || functions->hasGLESExtension("GL_OES_element_index_uint");
     extensions->getProgramBinary = caps->programBinaryFormats.size() > 0;

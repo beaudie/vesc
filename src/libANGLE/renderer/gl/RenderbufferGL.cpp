@@ -24,13 +24,13 @@ RenderbufferGL::RenderbufferGL(const gl::RenderbufferState &state,
                                const WorkaroundsGL &workarounds,
                                StateManagerGL *stateManager,
                                BlitGL *blitter,
-                               const gl::TextureCapsMap &textureCaps)
+                               const gl::FormatCapsMap &formatCaps)
     : RenderbufferImpl(state),
       mFunctions(functions),
       mWorkarounds(workarounds),
       mStateManager(stateManager),
       mBlitter(blitter),
-      mTextureCaps(textureCaps),
+      mFormatCaps(formatCaps),
       mRenderbufferID(0)
 {
     mFunctions->genRenderbuffers(1, &mRenderbufferID);
@@ -74,7 +74,7 @@ gl::Error RenderbufferGL::setStorageMultisample(const gl::Context *context,
         GL_RENDERBUFFER, static_cast<GLsizei>(samples), renderbufferFormat.internalFormat,
         static_cast<GLsizei>(width), static_cast<GLsizei>(height));
 
-    const gl::TextureCaps &formatCaps = mTextureCaps.get(internalformat);
+    const gl::FormatCaps &formatCaps = mFormatCaps.get(internalformat);
     if (samples > formatCaps.getMaxSamples())
     {
         // Before version 4.2, it is unknown if the specific internal format can support the requested number

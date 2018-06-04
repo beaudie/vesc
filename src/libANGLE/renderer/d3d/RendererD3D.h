@@ -316,7 +316,7 @@ class RendererD3D : public BufferFactoryD3D, public MultisampleTextureInitialize
         const egl::AttributeMap &attribs) = 0;
 
     const gl::Caps &getNativeCaps() const;
-    const gl::TextureCapsMap &getNativeTextureCaps() const;
+    const gl::FormatCapsMap &getNativeFormatCaps() const;
     const gl::Extensions &getNativeExtensions() const;
     const gl::Limitations &getNativeLimitations() const;
 
@@ -346,7 +346,7 @@ class RendererD3D : public BufferFactoryD3D, public MultisampleTextureInitialize
   protected:
     virtual bool getLUID(LUID *adapterLuid) const                    = 0;
     virtual void generateCaps(gl::Caps *outCaps,
-                              gl::TextureCapsMap *outTextureCaps,
+                              gl::FormatCapsMap *outFormatCaps,
                               gl::Extensions *outExtensions,
                               gl::Limitations *outLimitations) const = 0;
 
@@ -365,7 +365,7 @@ class RendererD3D : public BufferFactoryD3D, public MultisampleTextureInitialize
 
     mutable bool mCapsInitialized;
     mutable gl::Caps mNativeCaps;
-    mutable gl::TextureCapsMap mNativeTextureCaps;
+    mutable gl::FormatCapsMap mNativeFormatCaps;
     mutable gl::Extensions mNativeExtensions;
     mutable gl::Limitations mNativeLimitations;
 

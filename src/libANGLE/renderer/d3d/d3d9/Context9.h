@@ -131,7 +131,7 @@ class Context9 : public ContextImpl
 
     // Caps queries
     gl::Caps getNativeCaps() const override;
-    const gl::TextureCapsMap &getNativeTextureCaps() const override;
+    const gl::FormatCapsMap &getNativeFormatCaps() const override;
     const gl::Extensions &getNativeExtensions() const override;
     const gl::Limitations &getNativeLimitations() const override;
 

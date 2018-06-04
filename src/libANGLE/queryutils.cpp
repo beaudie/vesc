@@ -1223,7 +1223,7 @@ void QueryActiveUniformBlockiv(const Program *program,
                            std::numeric_limits<GLsizei>::max(), nullptr, params);
 }
 
-void QueryInternalFormativ(const TextureCaps &format, GLenum pname, GLsizei bufSize, GLint *params)
+void QueryInternalFormativ(const FormatCaps &format, GLenum pname, GLsizei bufSize, GLint *params)
 {
     switch (pname)
     {

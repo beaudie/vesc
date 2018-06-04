@@ -613,11 +613,11 @@ const gl::Version &RendererGL::getMaxSupportedESVersion() const
 }
 
 void RendererGL::generateCaps(gl::Caps *outCaps,
-                              gl::TextureCapsMap *outTextureCaps,
+                              gl::FormatCapsMap *outFormatCaps,
                               gl::Extensions *outExtensions,
                               gl::Limitations * /* outLimitations */) const
 {
-    nativegl_gl::GenerateCaps(mFunctions, mWorkarounds, outCaps, outTextureCaps, outExtensions,
+    nativegl_gl::GenerateCaps(mFunctions, mWorkarounds, outCaps, outFormatCaps, outExtensions,
                               &mMaxSupportedESVersion, &mMultiviewImplementationType);
 }
 
@@ -638,7 +638,7 @@ void RendererGL::ensureCapsInitialized() const
 {
     if (!mCapsInitialized)
     {
-        generateCaps(&mNativeCaps, &mNativeTextureCaps, &mNativeExtensions, &mNativeLimitations);
+        generateCaps(&mNativeCaps, &mNativeFormatCaps, &mNativeExtensions, &mNativeLimitations);
         mCapsInitialized = true;
     }
 }
@@ -649,10 +649,10 @@ const gl::Caps &RendererGL::getNativeCaps() const
     return mNativeCaps;
 }
 
-const gl::TextureCapsMap &RendererGL::getNativeTextureCaps() const
+const gl::FormatCapsMap &RendererGL::getNativeFormatCaps() const
 {
     ensureCapsInitialized();
-    return mNativeTextureCaps;
+    return mNativeFormatCaps;
 }
 
 const gl::Extensions &RendererGL::getNativeExtensions() const

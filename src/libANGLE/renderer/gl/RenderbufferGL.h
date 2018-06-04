@@ -13,7 +13,7 @@
 
 namespace gl
 {
-class TextureCapsMap;
+class FormatCapsMap;
 }
 
 namespace rx
@@ -32,7 +32,7 @@ class RenderbufferGL : public RenderbufferImpl
                    const WorkaroundsGL &workarounds,
                    StateManagerGL *stateManager,
                    BlitGL *blitter,
-                   const gl::TextureCapsMap &textureCaps);
+                   const gl::FormatCapsMap &formatCaps);
     ~RenderbufferGL() override;
 
     gl::Error setStorage(const gl::Context *context,
@@ -56,7 +56,7 @@ class RenderbufferGL : public RenderbufferImpl
     const WorkaroundsGL &mWorkarounds;
     StateManagerGL *mStateManager;
     BlitGL *mBlitter;
-    const gl::TextureCapsMap &mTextureCaps;
+    const gl::FormatCapsMap &mFormatCaps;
 
     GLuint mRenderbufferID;
 

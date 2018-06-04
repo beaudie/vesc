@@ -173,7 +173,7 @@ class RendererGL : angle::NonCopyable
 
     MultiviewImplementationTypeGL getMultiviewImplementationType() const;
     const gl::Caps &getNativeCaps() const;
-    const gl::TextureCapsMap &getNativeTextureCaps() const;
+    const gl::FormatCapsMap &getNativeFormatCaps() const;
     const gl::Extensions &getNativeExtensions() const;
     const gl::Limitations &getNativeLimitations() const;
     void applyNativeWorkarounds(gl::Workarounds *workarounds) const;
@@ -190,7 +190,7 @@ class RendererGL : angle::NonCopyable
   private:
     void ensureCapsInitialized() const;
     void generateCaps(gl::Caps *outCaps,
-                      gl::TextureCapsMap *outTextureCaps,
+                      gl::FormatCapsMap *outFormatCaps,
                       gl::Extensions *outExtensions,
                       gl::Limitations *outLimitations) const;
 
@@ -208,7 +208,7 @@ class RendererGL : angle::NonCopyable
 
     mutable bool mCapsInitialized;
     mutable gl::Caps mNativeCaps;
-    mutable gl::TextureCapsMap mNativeTextureCaps;
+    mutable gl::FormatCapsMap mNativeFormatCaps;
     mutable gl::Extensions mNativeExtensions;
     mutable gl::Limitations mNativeLimitations;
     mutable MultiviewImplementationTypeGL mMultiviewImplementationType;

@@ -1041,8 +1041,8 @@ bool ValidateTexStorage2DMultisample(Context *context,
         return false;
     }
 
-    const TextureCaps &formatCaps = context->getTextureCaps().get(internalFormat);
-    if (!formatCaps.renderable)
+    const FormatCaps &formatCaps = context->getFormatCaps().get(internalFormat);
+    if (!formatCaps.framebufferAttachment)
     {
         context->handleError(InvalidEnum() << "SizedInternalformat must be color-renderable, "
                                               "depth-renderable, or stencil-renderable.");

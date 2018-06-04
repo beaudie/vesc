@@ -155,7 +155,7 @@ void RendererD3D::ensureCapsInitialized() const
 {
     if (!mCapsInitialized)
     {
-        generateCaps(&mNativeCaps, &mNativeTextureCaps, &mNativeExtensions, &mNativeLimitations);
+        generateCaps(&mNativeCaps, &mNativeFormatCaps, &mNativeExtensions, &mNativeLimitations);
         mCapsInitialized = true;
     }
 }
@@ -166,10 +166,10 @@ const gl::Caps &RendererD3D::getNativeCaps() const
     return mNativeCaps;
 }
 
-const gl::TextureCapsMap &RendererD3D::getNativeTextureCaps() const
+const gl::FormatCapsMap &RendererD3D::getNativeFormatCaps() const
 {
     ensureCapsInitialized();
-    return mNativeTextureCaps;
+    return mNativeFormatCaps;
 }
 
 const gl::Extensions &RendererD3D::getNativeExtensions() const

@@ -25,11 +25,11 @@ struct Extensions;
 
 typedef std::set<GLuint> SupportedSampleSet;
 
-struct TextureCaps
+struct FormatCaps
 {
-    TextureCaps();
-    TextureCaps(const TextureCaps &other);
-    ~TextureCaps();
+    FormatCaps();
+    FormatCaps(const FormatCaps &other);
+    ~FormatCaps();
 
     // Supports for basic texturing: glTexImage, glTexSubImage, etc
     bool texturable;
@@ -37,8 +37,11 @@ struct TextureCaps
     // Support for linear or anisotropic filtering
     bool filterable;
 
-    // Support for being used as a framebuffer attachment or renderbuffer format
-    bool renderable;
+    // Support for being used as a framebuffer attachment, i.e. glFramebufferTexture2D
+    bool framebufferAttachment;
+
+    // Support for being used as a renderbuffer format, i.e. glFramebufferRenderbuffer
+    bool renderbuffer;
 
     // Set of supported sample counts, only guaranteed to be valid in ES3.
     SupportedSampleSet sampleCounts;
@@ -51,36 +54,36 @@ struct TextureCaps
     GLuint getNearestSamples(GLuint requestedSamples) const;
 };
 
-TextureCaps GenerateMinimumTextureCaps(GLenum internalFormat,
-                                       const Version &clientVersion,
-                                       const Extensions &extensions);
+FormatCaps GenerateMinimumFormatCaps(GLenum internalFormat,
+                                     const Version &clientVersion,
+                                     const Extensions &extensions);
 
-class TextureCapsMap final : angle::NonCopyable
+class FormatCapsMap final : angle::NonCopyable
 {
   public:
-    TextureCapsMap();
-    ~TextureCapsMap();
+    FormatCapsMap();
+    ~FormatCapsMap();
 
     // These methods are deprecated. Please use angle::Format for new features.
-    void insert(GLenum internalFormat, const TextureCaps &caps);
-    const TextureCaps &get(GLenum internalFormat) const;
+    void insert(GLenum internalFormat, const FormatCaps &caps);
+    const FormatCaps &get(GLenum internalFormat) const;
 
     void clear();
 
     // Prefer using angle::Format methods.
-    const TextureCaps &get(angle::Format::ID formatID) const;
-    void set(angle::Format::ID formatID, const TextureCaps &caps);
+    const FormatCaps &get(angle::Format::ID formatID) const;
+    void set(angle::Format::ID formatID, const FormatCaps &caps);
 
   private:
-    TextureCaps &get(angle::Format::ID formatID);
+    FormatCaps &get(angle::Format::ID formatID);
 
     // Indexed by angle::Format::ID
-    std::array<TextureCaps, angle::kNumANGLEFormats> mFormatData;
+    std::array<FormatCaps, angle::kNumANGLEFormats> mFormatData;
 };
 
-void InitMinimumTextureCapsMap(const Version &clientVersion,
-                               const Extensions &extensions,
-                               TextureCapsMap *capsMap);
+void InitMinimumFormatCapsMap(const Version &clientVersion,
+                              const Extensions &extensions,
+                              FormatCapsMap *capsMap);
 
 struct Extensions
 {
@@ -106,7 +109,7 @@ struct Extensions
     // GL_ANGLE_depth_texture, GL_OES_depth32
     // GL_EXT_color_buffer_float
     // GL_EXT_texture_norm16
-    void setTextureExtensionSupport(const TextureCapsMap &textureCaps);
+    void setTextureExtensionSupport(const FormatCapsMap &formatCaps);
 
     // ES2 Extension support
 
@@ -120,11 +123,11 @@ struct Extensions
     bool getProgramBinary;
 
     // GL_OES_rgb8_rgba8
-    // Implies that TextureCaps for GL_RGB8 and GL_RGBA8 exist
+    // Implies that FormatCaps for GL_RGB8 and GL_RGBA8 exist
     bool rgb8rgba8;
 
     // GL_EXT_texture_format_BGRA8888
-    // Implies that TextureCaps for GL_BGRA8 exist
+    // Implies that FormatCaps for GL_BGRA8 exist
     bool textureFormatBGRA8888;
 
     // GL_EXT_read_format_bgra
@@ -143,24 +146,24 @@ struct Extensions
     bool colorBufferHalfFloat;
 
     // GL_OES_texture_half_float and GL_OES_texture_half_float_linear
-    // Implies that TextureCaps for GL_RGB16F, GL_RGBA16F, GL_ALPHA32F_EXT, GL_LUMINANCE32F_EXT and
+    // Implies that FormatCaps for GL_RGB16F, GL_RGBA16F, GL_ALPHA32F_EXT, GL_LUMINANCE32F_EXT and
     // GL_LUMINANCE_ALPHA32F_EXT exist
     bool textureHalfFloat;
     bool textureHalfFloatLinear;
 
     // GL_OES_texture_float and GL_OES_texture_float_linear
-    // Implies that TextureCaps for GL_RGB32F, GL_RGBA32F, GL_ALPHA16F_EXT, GL_LUMINANCE16F_EXT and
+    // Implies that FormatCaps for GL_RGB32F, GL_RGBA32F, GL_ALPHA16F_EXT, GL_LUMINANCE16F_EXT and
     // GL_LUMINANCE_ALPHA16F_EXT exist
     bool textureFloat;
     bool textureFloatLinear;
 
     // GL_EXT_texture_rg
-    // Implies that TextureCaps for GL_R8, GL_RG8 (and floating point R/RG texture formats if
+    // Implies that FormatCaps for GL_R8, GL_RG8 (and floating point R/RG texture formats if
     // floating point extensions are also present) exist
     bool textureRG;
 
     // GL_EXT_texture_compression_dxt1, GL_ANGLE_texture_compression_dxt3 and
-    // GL_ANGLE_texture_compression_dxt5 Implies that TextureCaps exist for
+    // GL_ANGLE_texture_compression_dxt5 Implies that FormatCaps exist for
     // GL_COMPRESSED_RGB_S3TC_DXT1_EXT, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT
     // GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE and GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE
     bool textureCompressionDXT1;
@@ -168,7 +171,7 @@ struct Extensions
     bool textureCompressionDXT5;
 
     // GL_EXT_texture_compression_s3tc_srgb
-    // Implies that TextureCaps exist for GL_COMPRESSED_SRGB_S3TC_DXT1_EXT,
+    // Implies that FormatCaps exist for GL_COMPRESSED_SRGB_S3TC_DXT1_EXT,
     // GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT, GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT, and
     // GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT
     bool textureCompressionS3TCsRGB;
@@ -180,7 +183,7 @@ struct Extensions
     bool textureCompressionASTCLDR;
 
     // GL_OES_compressed_ETC1_RGB8_texture
-    // Implies that TextureCaps for GL_ETC1_RGB8_OES exist
+    // Implies that FormatCaps for GL_ETC1_RGB8_OES exist
     bool compressedETC1RGB8Texture;
 
     // OES_compressed_ETC2_RGB8_texture
@@ -214,7 +217,7 @@ struct Extensions
     bool compressedEACRG11SignedTexture;
 
     // GL_EXT_sRGB
-    // Implies that TextureCaps for GL_SRGB8_ALPHA8 and GL_SRGB8 exist
+    // Implies that FormatCaps for GL_SRGB8_ALPHA8 and GL_SRGB8 exist
     // TODO: Don't advertise this extension in ES3
     bool sRGB;
 

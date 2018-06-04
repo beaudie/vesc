@@ -273,7 +273,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
              GetClientVersion(attribs),
              &mGLState,
              mCaps,
-             mTextureCaps,
+             mFormatCaps,
              mExtensions,
              mLimitations),
       mSkipValidation(GetNoError(attribs)),
@@ -3171,11 +3171,11 @@ void Context::initCaps()
 void Context::updateCaps()
 {
     mCaps.compressedTextureFormats.clear();
-    mTextureCaps.clear();
+    mFormatCaps.clear();
 
     for (GLenum sizedInternalFormat : GetAllSizedInternalFormats())
     {
-        TextureCaps formatCaps = mImplementation->getNativeTextureCaps().get(sizedInternalFormat);
+        FormatCaps formatCaps = mImplementation->getNativeFormatCaps().get(sizedInternalFormat);
         const InternalFormat &formatInfo = GetSizedInternalFormatInfo(sizedInternalFormat);
 
         // Update the format caps based on the client version and extensions.
@@ -3183,14 +3183,17 @@ void Context::updateCaps()
         // ES3.
         formatCaps.texturable =
             formatCaps.texturable && formatInfo.textureSupport(getClientVersion(), mExtensions);
-        formatCaps.renderable =
-            formatCaps.renderable && formatInfo.renderSupport(getClientVersion(), mExtensions);
         formatCaps.filterable =
             formatCaps.filterable && formatInfo.filterSupport(getClientVersion(), mExtensions);
+        formatCaps.framebufferAttachment =
+            formatCaps.framebufferAttachment &&
+            formatInfo.framebufferAttachmentSupport(getClientVersion(), mExtensions);
+        formatCaps.renderbuffer = formatCaps.renderbuffer &&
+                                  formatInfo.renderbufferSupport(getClientVersion(), mExtensions);
 
         // OpenGL ES does not support multisampling with non-rendererable formats
         // OpenGL ES 3.0 or prior does not support multisampling with integer formats
-        if (!formatCaps.renderable ||
+        if (!formatCaps.renderbuffer ||
             (getClientVersion() < ES_3_1 &&
              (formatInfo.componentType == GL_INT || formatInfo.componentType == GL_UNSIGNED_INT)))
         {
@@ -3248,7 +3251,7 @@ void Context::updateCaps()
             mCaps.compressedTextureFormats.push_back(sizedInternalFormat);
         }
 
-        mTextureCaps.insert(sizedInternalFormat, formatCaps);
+        mFormatCaps.insert(sizedInternalFormat, formatCaps);
     }
 
     // If program binary is disabled, blank out the memory cache pointer.
@@ -6128,7 +6131,7 @@ void Context::getInternalformativ(GLenum target,
                                   GLsizei bufSize,
                                   GLint *params)
 {
-    const TextureCaps &formatCaps = mTextureCaps.get(internalformat);
+    const FormatCaps &formatCaps = mFormatCaps.get(internalformat);
     QueryInternalFormativ(formatCaps, pname, bufSize, params);
 }
 

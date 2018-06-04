@@ -2658,7 +2658,7 @@ bool ValidateRenderbufferStorageMultisample(Context *context,
     }
 
     // The behavior is different than the ANGLE version, which would generate a GL_OUT_OF_MEMORY.
-    const TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
+    const FormatCaps &formatCaps = context->getFormatCaps().get(internalformat);
     if (static_cast<GLuint>(samples) > formatCaps.getMaxSamples())
     {
         context->handleError(

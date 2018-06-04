@@ -153,7 +153,7 @@ class ContextNULL : public ContextImpl
 
     // Native capabilities, unmodified by gl::Context.
     gl::Caps getNativeCaps() const override;
-    const gl::TextureCapsMap &getNativeTextureCaps() const override;
+    const gl::FormatCapsMap &getNativeFormatCaps() const override;
     const gl::Extensions &getNativeExtensions() const override;
     const gl::Limitations &getNativeLimitations() const override;
 
@@ -205,7 +205,7 @@ class ContextNULL : public ContextImpl
 
   private:
     gl::Caps mCaps;
-    gl::TextureCapsMap mTextureCaps;
+    gl::FormatCapsMap mFormatCaps;
     gl::Extensions mExtensions;
     gl::Limitations mLimitations;
 

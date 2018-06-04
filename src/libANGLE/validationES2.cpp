@@ -4807,10 +4807,10 @@ bool ValidateRenderbufferStorageMultisampleANGLE(Context *context,
     // ANGLE_framebuffer_multisample states GL_OUT_OF_MEMORY is generated on a failure to create
     // the specified storage. This is different than ES 3.0 in which a sample number higher
     // than the maximum sample number supported by this format generates a GL_INVALID_VALUE.
-    // The TextureCaps::getMaxSamples method is only guarenteed to be valid when the context is ES3.
+    // The FormatCaps::getMaxSamples method is only guarenteed to be valid when the context is ES3.
     if (context->getClientMajorVersion() >= 3)
     {
-        const TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
+        const FormatCaps &formatCaps = context->getFormatCaps().get(internalformat);
         if (static_cast<GLuint>(samples) > formatCaps.getMaxSamples())
         {
             context->handleError(OutOfMemory());
@@ -6110,7 +6110,7 @@ bool ValidateGenerateMipmap(Context *context, TextureType target)
     bool formatUnsized = !format.sized;
     bool formatColorRenderableAndFilterable =
         format.filterSupport(context->getClientVersion(), context->getExtensions()) &&
-        format.renderSupport(context->getClientVersion(), context->getExtensions());
+        format.framebufferAttachmentSupport(context->getClientVersion(), context->getExtensions());
     if (!formatUnsized && !formatColorRenderableAndFilterable)
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), GenerateMipmapNotAllowed);

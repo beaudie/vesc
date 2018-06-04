@@ -61,7 +61,7 @@ gl::Error RenderbufferD3D::setStorageMultisample(const gl::Context *context,
     // the specified storage.
     // Because ES 3.0 already knows the exact number of supported samples, it would already have been
     // validated and generated GL_INVALID_VALUE.
-    const gl::TextureCaps &formatCaps = mRenderer->getNativeTextureCaps().get(creationFormat);
+    const gl::FormatCaps &formatCaps = mRenderer->getNativeFormatCaps().get(creationFormat);
     if (samples > formatCaps.getMaxSamples())
     {
         return gl::OutOfMemory() << "Renderbuffer format does not support " << samples

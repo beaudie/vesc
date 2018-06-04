@@ -72,7 +72,7 @@ void GenerateCaps(ID3D11Device *device,
                   const Renderer11DeviceCaps &renderer11DeviceCaps,
                   const angle::WorkaroundsD3D &workarounds,
                   gl::Caps *caps,
-                  gl::TextureCapsMap *textureCapsMap,
+                  gl::FormatCapsMap *formatCapsMap,
                   gl::Extensions *extensions,
                   gl::Limitations *limitations);
 

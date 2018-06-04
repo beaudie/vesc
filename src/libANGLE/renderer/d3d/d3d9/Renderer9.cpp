@@ -430,8 +430,8 @@ egl::ConfigSet Renderer9::generateConfigs()
         GL_DEPTH_COMPONENT16,
     };
 
-    const gl::Caps &rendererCaps                  = getNativeCaps();
-    const gl::TextureCapsMap &rendererTextureCaps = getNativeTextureCaps();
+    const gl::Caps &rendererCaps                = getNativeCaps();
+    const gl::FormatCapsMap &rendererFormatCaps = getNativeFormatCaps();
 
     D3DDISPLAYMODE currentDisplayMode;
     mD3d9->GetAdapterDisplayMode(mAdapter, &currentDisplayMode);
@@ -470,18 +470,19 @@ egl::ConfigSet Renderer9::generateConfigs()
     for (size_t formatIndex = 0; formatIndex < ArraySize(colorBufferFormats); formatIndex++)
     {
         GLenum colorBufferInternalFormat = colorBufferFormats[formatIndex];
-        const gl::TextureCaps &colorBufferFormatCaps =
-            rendererTextureCaps.get(colorBufferInternalFormat);
-        if (colorBufferFormatCaps.renderable)
+        const gl::FormatCaps &colorBufferFormatCaps =
+            rendererFormatCaps.get(colorBufferInternalFormat);
+        if (colorBufferFormatCaps.renderbuffer || colorBufferFormatCaps.framebufferAttachment)
         {
             for (size_t depthStencilIndex = 0;
                  depthStencilIndex < ArraySize(depthStencilBufferFormats); depthStencilIndex++)
             {
                 GLenum depthStencilBufferInternalFormat =
                     depthStencilBufferFormats[depthStencilIndex];
-                const gl::TextureCaps &depthStencilBufferFormatCaps =
-                    rendererTextureCaps.get(depthStencilBufferInternalFormat);
-                if (depthStencilBufferFormatCaps.renderable ||
+                const gl::FormatCaps &depthStencilBufferFormatCaps =
+                    rendererFormatCaps.get(depthStencilBufferInternalFormat);
+                if (depthStencilBufferFormatCaps.renderbuffer ||
+                    depthStencilBufferFormatCaps.framebufferAttachment ||
                     depthStencilBufferInternalFormat == GL_NONE)
                 {
                     const gl::InternalFormat &colorBufferFormatInfo =
@@ -2564,8 +2565,8 @@ gl::Error Renderer9::createRenderTarget(int width,
 {
     const d3d9::TextureFormat &d3d9FormatInfo = d3d9::GetTextureFormatInfo(format);
 
-    const gl::TextureCaps &textureCaps = getNativeTextureCaps().get(format);
-    GLuint supportedSamples            = textureCaps.getNearestSamples(samples);
+    const gl::FormatCaps &formatCaps = getNativeFormatCaps().get(format);
+    GLuint supportedSamples          = formatCaps.getNearestSamples(samples);
 
     IDirect3DTexture9 *texture      = nullptr;
     IDirect3DSurface9 *renderTarget = nullptr;
@@ -3040,11 +3041,11 @@ gl::ErrorOrResult<unsigned int> Renderer9::getVertexSpaceRequired(const gl::Vert
 }
 
 void Renderer9::generateCaps(gl::Caps *outCaps,
-                             gl::TextureCapsMap *outTextureCaps,
+                             gl::FormatCapsMap *outFormatCaps,
                              gl::Extensions *outExtensions,
                              gl::Limitations *outLimitations) const
 {
-    d3d9_gl::GenerateCaps(mD3d9, mDevice, mDeviceType, mAdapter, outCaps, outTextureCaps,
+    d3d9_gl::GenerateCaps(mD3d9, mDevice, mDeviceType, mAdapter, outCaps, outFormatCaps,
                           outExtensions, outLimitations);
 }
 

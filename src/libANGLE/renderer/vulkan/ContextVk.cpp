@@ -634,9 +634,9 @@ gl::Caps ContextVk::getNativeCaps() const
     return mRenderer->getNativeCaps();
 }
 
-const gl::TextureCapsMap &ContextVk::getNativeTextureCaps() const
+const gl::FormatCapsMap &ContextVk::getNativeFormatCaps() const
 {
-    return mRenderer->getNativeTextureCaps();
+    return mRenderer->getNativeFormatCaps();
 }
 
 const gl::Extensions &ContextVk::getNativeExtensions() const

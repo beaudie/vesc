@@ -29,14 +29,13 @@ bool HasFormatFeatureBits(const VkFormatFeatureFlags featureBits,
     return IsMaskFlagSet(formatProperties.optimalTilingFeatures, featureBits);
 }
 
-void FillTextureFormatCaps(const VkFormatProperties &formatProperties,
-                           gl::TextureCaps *outTextureCaps)
+void FillFormatCaps(const VkFormatProperties &formatProperties, gl::FormatCaps *outFormatCaps)
 {
-    outTextureCaps->texturable =
+    outFormatCaps->texturable =
         HasFormatFeatureBits(VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT, formatProperties);
-    outTextureCaps->filterable =
+    outFormatCaps->filterable =
         HasFormatFeatureBits(VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT, formatProperties);
-    outTextureCaps->renderable =
+    outFormatCaps->renderbuffer = outFormatCaps->framebufferAttachment =
         HasFormatFeatureBits(VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT, formatProperties) ||
         HasFormatFeatureBits(VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT, formatProperties);
 }
@@ -125,7 +124,7 @@ FormatTable::~FormatTable()
 }
 
 void FormatTable::initialize(VkPhysicalDevice physicalDevice,
-                             gl::TextureCapsMap *outTextureCapsMap,
+                             gl::FormatCapsMap *outFormatCapsMap,
                              std::vector<GLenum> *outCompressedTextureFormats)
 {
     for (size_t formatIndex = 0; formatIndex < angle::kNumANGLEFormats; ++formatIndex)
@@ -148,9 +147,9 @@ void FormatTable::initialize(VkPhysicalDevice physicalDevice,
         // information we need, we'll make the call to Vulkan.
         VkFormatProperties formatProperties;
         GetFormatProperties(physicalDevice, vkFormat, &formatProperties);
-        gl::TextureCaps textureCaps;
-        FillTextureFormatCaps(formatProperties, &textureCaps);
-        outTextureCapsMap->set(formatID, textureCaps);
+        gl::FormatCaps formatCaps;
+        FillFormatCaps(formatProperties, &formatCaps);
+        outFormatCapsMap->set(formatID, formatCaps);
 
         if (angleFormat.isBlock)
         {

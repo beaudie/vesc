@@ -324,10 +324,13 @@ bool IsFormatChannelEquivalent(D3DFORMAT d3dformat, GLenum format)
     return convertedFormat == format;
 }
 
-static gl::TextureCaps GenerateTextureFormatCaps(GLenum internalFormat, IDirect3D9 *d3d9, D3DDEVTYPE deviceType,
-                                                 UINT adapter, D3DFORMAT adapterFormat)
+static gl::FormatCaps GenerateFormatCaps(GLenum internalFormat,
+                                         IDirect3D9 *d3d9,
+                                         D3DDEVTYPE deviceType,
+                                         UINT adapter,
+                                         D3DFORMAT adapterFormat)
 {
-    gl::TextureCaps textureCaps;
+    gl::FormatCaps formatCaps;
 
     const d3d9::TextureFormat &d3dFormatInfo = d3d9::GetTextureFormatInfo(internalFormat);
     const gl::InternalFormat &formatInfo     = gl::GetSizedInternalFormatInfo(internalFormat);
@@ -336,27 +339,38 @@ static gl::TextureCaps GenerateTextureFormatCaps(GLenum internalFormat, IDirect3
     {
         if (formatInfo.depthBits > 0 || formatInfo.stencilBits > 0)
         {
-            textureCaps.texturable = SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat, 0, D3DRTYPE_TEXTURE, d3dFormatInfo.texFormat));
+            formatCaps.texturable = SUCCEEDED(d3d9->CheckDeviceFormat(
+                adapter, deviceType, adapterFormat, 0, D3DRTYPE_TEXTURE, d3dFormatInfo.texFormat));
         }
         else
         {
-            textureCaps.texturable = SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat, 0, D3DRTYPE_TEXTURE, d3dFormatInfo.texFormat)) &&
-                                     SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat, 0, D3DRTYPE_CUBETEXTURE, d3dFormatInfo.texFormat));
+            formatCaps.texturable =
+                SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat, 0,
+                                                  D3DRTYPE_TEXTURE, d3dFormatInfo.texFormat)) &&
+                SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat, 0,
+                                                  D3DRTYPE_CUBETEXTURE, d3dFormatInfo.texFormat));
         }
 
-        textureCaps.filterable = SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat, D3DUSAGE_QUERY_FILTER, D3DRTYPE_TEXTURE, d3dFormatInfo.texFormat));
+        formatCaps.filterable = SUCCEEDED(
+            d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat, D3DUSAGE_QUERY_FILTER,
+                                    D3DRTYPE_TEXTURE, d3dFormatInfo.texFormat));
     }
 
     if (d3dFormatInfo.renderFormat != D3DFMT_UNKNOWN)
     {
-        textureCaps.renderable = SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat, D3DUSAGE_RENDERTARGET, D3DRTYPE_TEXTURE, d3dFormatInfo.renderFormat));
+        bool renderable = SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat,
+                                                            D3DUSAGE_RENDERTARGET, D3DRTYPE_TEXTURE,
+                                                            d3dFormatInfo.renderFormat));
 
-        if ((formatInfo.depthBits > 0 || formatInfo.stencilBits > 0) && !textureCaps.renderable)
+        if ((formatInfo.depthBits > 0 || formatInfo.stencilBits > 0) && !renderable)
         {
-            textureCaps.renderable = SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat, D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE, d3dFormatInfo.renderFormat));
+            renderable = SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat,
+                                                           D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE,
+                                                           d3dFormatInfo.renderFormat));
         }
+        formatCaps.renderbuffer = formatCaps.framebufferAttachment = renderable;
 
-        textureCaps.sampleCounts.insert(1);
+        formatCaps.sampleCounts.insert(1);
         for (unsigned int i = D3DMULTISAMPLE_2_SAMPLES; i <= D3DMULTISAMPLE_16_SAMPLES; i++)
         {
             D3DMULTISAMPLE_TYPE multisampleType = D3DMULTISAMPLE_TYPE(i);
@@ -365,12 +379,12 @@ static gl::TextureCaps GenerateTextureFormatCaps(GLenum internalFormat, IDirect3
                 adapter, deviceType, d3dFormatInfo.renderFormat, TRUE, multisampleType, nullptr);
             if (SUCCEEDED(result))
             {
-                textureCaps.sampleCounts.insert(i);
+                formatCaps.sampleCounts.insert(i);
             }
         }
     }
 
-    return textureCaps;
+    return formatCaps;
 }
 
 void GenerateCaps(IDirect3D9 *d3d9,
@@ -378,7 +392,7 @@ void GenerateCaps(IDirect3D9 *d3d9,
                   D3DDEVTYPE deviceType,
                   UINT adapter,
                   gl::Caps *caps,
-                  gl::TextureCapsMap *textureCapsMap,
+                  gl::FormatCapsMap *formatCapsMap,
                   gl::Extensions *extensions,
                   gl::Limitations *limitations)
 {
@@ -395,11 +409,11 @@ void GenerateCaps(IDirect3D9 *d3d9,
     GLuint maxSamples = 0;
     for (GLenum internalFormat : gl::GetAllSizedInternalFormats())
     {
-        gl::TextureCaps textureCaps = GenerateTextureFormatCaps(internalFormat, d3d9, deviceType,
-                                                                adapter, currentDisplayMode.Format);
-        textureCapsMap->insert(internalFormat, textureCaps);
+        gl::FormatCaps formatCaps = GenerateFormatCaps(internalFormat, d3d9, deviceType, adapter,
+                                                       currentDisplayMode.Format);
+        formatCapsMap->insert(internalFormat, formatCaps);
 
-        maxSamples = std::max(maxSamples, textureCaps.getMaxSamples());
+        maxSamples = std::max(maxSamples, formatCaps.getMaxSamples());
 
         if (gl::GetSizedInternalFormatInfo(internalFormat).compressed)
         {
@@ -540,7 +554,7 @@ void GenerateCaps(IDirect3D9 *d3d9,
     caps->maxSamples = maxSamples;
 
     // GL extension support
-    extensions->setTextureExtensionSupport(*textureCapsMap);
+    extensions->setTextureExtensionSupport(*formatCapsMap);
     extensions->elementIndexUint = deviceCaps.MaxVertexIndex >= (1 << 16);
     extensions->getProgramBinary = true;
     extensions->rgb8rgba8 = true;

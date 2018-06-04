@@ -42,7 +42,7 @@ TEST_P(D3D11FormatTablesTest, TestFormatSupport)
     gl::Context *context = reinterpret_cast<gl::Context *>(getEGLWindow()->getContext());
     rx::Context11 *context11 = rx::GetImplAs<rx::Context11>(context);
     rx::Renderer11 *renderer = context11->getRenderer();
-    const auto &textureCaps  = renderer->getNativeTextureCaps();
+    const auto &formatCaps   = renderer->getNativeFormatCaps();
 
     ID3D11Device *device = renderer->getDevice();
 
@@ -51,7 +51,7 @@ TEST_P(D3D11FormatTablesTest, TestFormatSupport)
     {
         const rx::d3d11::Format &formatInfo =
             rx::d3d11::Format::Get(internalFormat, renderer->getRenderer11DeviceCaps());
-        const auto &textureInfo = textureCaps.get(internalFormat);
+        const auto &textureInfo = formatCaps.get(internalFormat);
 
         // Bits for texturing
         const gl::InternalFormat &internalFormatInfo =

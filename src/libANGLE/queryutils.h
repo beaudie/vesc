@@ -28,7 +28,7 @@ class Renderbuffer;
 class Sampler;
 class Shader;
 class Texture;
-struct TextureCaps;
+struct FormatCaps;
 struct UniformBlock;
 struct VertexAttribute;
 class VertexBinding;
@@ -96,7 +96,7 @@ void QueryActiveUniformBlockiv(const Program *program,
                                GLenum pname,
                                GLint *params);
 
-void QueryInternalFormativ(const TextureCaps &format, GLenum pname, GLsizei bufSize, GLint *params);
+void QueryInternalFormativ(const FormatCaps &format, GLenum pname, GLsizei bufSize, GLint *params);
 
 void QueryFramebufferParameteriv(const Framebuffer *framebuffer, GLenum pname, GLint *params);
 

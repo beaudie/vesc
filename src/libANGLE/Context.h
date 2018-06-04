@@ -1429,7 +1429,7 @@ class Context final : angle::NonCopyable
     const Version &getClientVersion() const { return mState.getClientVersion(); }
     const State &getGLState() const { return mState.getState(); }
     const Caps &getCaps() const { return mState.getCaps(); }
-    const TextureCapsMap &getTextureCaps() const { return mState.getTextureCaps(); }
+    const FormatCapsMap &getFormatCaps() const { return mState.getFormatCaps(); }
     const Extensions &getExtensions() const { return mState.getExtensions(); }
     const Limitations &getLimitations() const { return mState.getLimitations(); }
     bool skipValidation() const { return mSkipValidation; }
@@ -1521,7 +1521,7 @@ class Context final : angle::NonCopyable
 
     // Caps to use for validation
     Caps mCaps;
-    TextureCapsMap mTextureCaps;
+    FormatCapsMap mFormatCaps;
     Extensions mExtensions;
     Limitations mLimitations;
 

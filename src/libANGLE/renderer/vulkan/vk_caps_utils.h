@@ -16,9 +16,9 @@ namespace gl
 {
 struct Limitations;
 struct Extensions;
-class TextureCapsMap;
+class FormatCapsMap;
 struct Caps;
-struct TextureCaps;
+struct FormatCaps;
 }
 
 namespace rx
@@ -27,7 +27,7 @@ namespace rx
 namespace vk
 {
 void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
-                  const gl::TextureCapsMap &textureCaps,
+                  const gl::FormatCapsMap &formatCaps,
                   gl::Caps *outCaps,
                   gl::Extensions *outExtensions,
                   gl::Limitations * /* outLimitations */);
