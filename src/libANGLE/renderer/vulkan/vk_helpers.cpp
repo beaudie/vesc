@@ -331,6 +331,7 @@ Error DynamicDescriptorPool::allocateDescriptorSets(
 
 Error DynamicDescriptorPool::allocateNewPool(const VkDevice &device)
 {
+    // FIXME: this is bogus with the new descriptor counts.
     VkDescriptorPoolSize poolSizes[DescriptorPoolIndexCount];
     poolSizes[UniformBufferIndex].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
     poolSizes[UniformBufferIndex].descriptorCount =
