@@ -12,6 +12,7 @@
 #include "libANGLE/Config.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
+#include "libANGLE/renderer/gl/ContextGL.h"
 #include "libANGLE/renderer/gl/RendererGL.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 #include "libANGLE/renderer/gl/wgl/D3DTextureSurfaceWGL.h"
@@ -60,6 +61,7 @@ class FunctionsGLWindows : public FunctionsGL
 
 DisplayWGL::DisplayWGL(const egl::DisplayState &state)
     : DisplayGL(state),
+      mRenderer(nullptr),
       mCurrentDC(nullptr),
       mOpenGLModule(nullptr),
       mFunctionsWGL(nullptr),
@@ -98,6 +100,8 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
 
 egl::Error DisplayWGL::initializeImpl(egl::Display *display)
 {
+    mDisplayAttributes = display->getAttributeMap();
+
     mOpenGLModule = LoadLibraryA("opengl32.dll");
     if (!mOpenGLModule)
     {
@@ -245,34 +249,10 @@ egl::Error DisplayWGL::initializeImpl(egl::Display *display)
                << "Failed to set the pixel format on the intermediate OpenGL window.";
     }
 
-    if (mFunctionsWGL->createContextAttribsARB)
-    {
-        mWGLContext = initializeContextAttribs(displayAttributes);
-    }
+    ANGLE_TRY(createRenderer(mDeviceContext, nullptr, &mRenderer, &mWGLContext));
+    const FunctionsGL *functionsGL = mRenderer->getFunctions();
 
-    // If wglCreateContextAttribsARB is unavailable or failed, try the standard wglCreateContext
-    if (!mWGLContext)
-    {
-        // Don't have control over GL versions
-        mWGLContext = mFunctionsWGL->createContext(mDeviceContext);
-    }
-
-    if (!mWGLContext)
-    {
-        return egl::EglNotInitialized()
-               << "Failed to create a WGL context for the intermediate OpenGL window.";
-    }
-
-    if (!mFunctionsWGL->makeCurrent(mDeviceContext, mWGLContext))
-    {
-        return egl::EglNotInitialized() << "Failed to make the intermediate WGL context current.";
-    }
-    mCurrentDC = mDeviceContext;
-
-    mFunctionsGL = new FunctionsGLWindows(mOpenGLModule, mFunctionsWGL->getProcAddress);
-    mFunctionsGL->initialize(displayAttributes);
-
-    mHasRobustness = mFunctionsGL->getGraphicsResetStatus != nullptr;
+    mHasRobustness = functionsGL->getGraphicsResetStatus != nullptr;
     if (mHasWGLCreateContextRobustness != mHasRobustness)
     {
         WARN() << "WGL_ARB_create_context_robustness exists but unable to OpenGL context with "
@@ -280,7 +260,7 @@ egl::Error DisplayWGL::initializeImpl(egl::Display *display)
     }
 
     // Intel OpenGL ES drivers are not currently supported due to bugs in the driver and ANGLE
-    VendorID vendor = GetVendorID(mFunctionsGL);
+    VendorID vendor = GetVendorID(functionsGL);
     if (requestedDisplayType == EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE && IsIntel(vendor))
     {
         return egl::EglNotInitialized() << "Intel OpenGL ES drivers are not supported.";
@@ -319,6 +299,12 @@ egl::Error DisplayWGL::initializeImpl(egl::Display *display)
         }
     }
 
+    const gl::Version &maxVersion = mRenderer->getMaxSupportedESVersion();
+    if (maxVersion < gl::Version(2, 0))
+    {
+        return egl::EglNotInitialized() << "OpenGL ES 2.0 is not supportable.";
+    }
+
     return egl::NoError();
 }
 
@@ -347,7 +333,7 @@ void DisplayWGL::destroy()
     mWGLContext = nullptr;
 
     SafeDelete(mFunctionsWGL);
-    SafeDelete(mFunctionsGL);
+    mRenderer.reset();
 
     if (mDeviceContext)
     {
@@ -407,7 +393,7 @@ SurfaceImpl *DisplayWGL::createWindowSurface(const egl::SurfaceState &state,
             return nullptr;
         }
 
-        return new DXGISwapChainWindowSurfaceWGL(state, getRenderer()->getStateManager(), window,
+        return new DXGISwapChainWindowSurfaceWGL(state, mRenderer->getStateManager(), window,
                                                  mD3D11Device, mD3D11DeviceHandle, mDeviceContext,
                                                  mFunctionsGL, mFunctionsWGL, orientation);
     }
@@ -441,7 +427,7 @@ SurfaceImpl *DisplayWGL::createPbufferFromClientBuffer(const egl::SurfaceState &
         return nullptr;
     }
 
-    return new D3DTextureSurfaceWGL(state, getRenderer()->getStateManager(), buftype, clientBuffer,
+    return new D3DTextureSurfaceWGL(state, mRenderer->getStateManager(), buftype, clientBuffer,
                                     this, mDeviceContext, mD3D11Device, mFunctionsGL,
                                     mFunctionsWGL);
 }
@@ -452,6 +438,11 @@ SurfaceImpl *DisplayWGL::createPixmapSurface(const egl::SurfaceState &state,
 {
     UNIMPLEMENTED();
     return nullptr;
+}
+
+ContextImpl *DisplayWGL::createContext(const gl::ContextState &state)
+{
+    return new ContextGL(state, mRenderer);
 }
 
 DeviceImpl *DisplayWGL::createDevice()
@@ -541,7 +532,7 @@ bool DisplayWGL::testDeviceLost()
 {
     if (mHasRobustness)
     {
-        return getRenderer()->getResetStatus() != GL_NO_ERROR;
+        return mRenderer->getResetStatus() != GL_NO_ERROR;
     }
 
     return false;
@@ -579,11 +570,6 @@ std::string DisplayWGL::getVendorString() const
 {
     // UNIMPLEMENTED();
     return "";
-}
-
-const FunctionsGL *DisplayWGL::getFunctionsGL() const
-{
-    return mFunctionsGL;
 }
 
 egl::Error DisplayWGL::initializeD3DDevice()
@@ -746,7 +732,16 @@ void DisplayWGL::releaseD3DDevice(HANDLE deviceHandle)
     }
 }
 
-HGLRC DisplayWGL::initializeContextAttribs(const egl::AttributeMap &eglAttributes) const
+gl::Version DisplayWGL::getMaxSupportedESVersion() const
+{
+    return mRenderer->getMaxSupportedESVersion();
+}
+
+// static
+HGLRC DisplayWGL::initializeContextAttribs(FunctionsWGL *functionsWGL,
+                                           HDC deviceContext,
+                                           HGLRC shareContext,
+                                           const egl::AttributeMap &eglAttributes)
 {
     EGLint requestedDisplayType = static_cast<EGLint>(
         eglAttributes.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE));
@@ -765,7 +760,8 @@ HGLRC DisplayWGL::initializeContextAttribs(const egl::AttributeMap &eglAttribute
         {
             profileMask |= WGL_CONTEXT_CORE_PROFILE_BIT_ARB;
         }
-        return createContextAttribs(requestedVersion, profileMask);
+        return createContextAttribs(functionsWGL, deviceContext, shareContext, requestedVersion,
+                                    profileMask);
     }
 
     // Try all the GL version in order as a workaround for Mesa context creation where the driver
@@ -782,7 +778,8 @@ HGLRC DisplayWGL::initializeContextAttribs(const egl::AttributeMap &eglAttribute
             profileFlag |= WGL_CONTEXT_ES_PROFILE_BIT_EXT;
         }
 
-        HGLRC context = createContextAttribs(info.version, profileFlag);
+        HGLRC context = createContextAttribs(functionsWGL, deviceContext, shareContext,
+                                             info.version, profileFlag);
         if (context != nullptr)
         {
             return context;
@@ -792,11 +789,16 @@ HGLRC DisplayWGL::initializeContextAttribs(const egl::AttributeMap &eglAttribute
     return nullptr;
 }
 
-HGLRC DisplayWGL::createContextAttribs(const gl::Version &version, int profileMask) const
+// static
+HGLRC DisplayWGL::createContextAttribs(FunctionsWGL *functionsWGL,
+                                       HDC deviceContext,
+                                       HGLRC shareContext,
+                                       const gl::Version &version,
+                                       int profileMask)
 {
     std::vector<int> attribs;
 
-    if (mHasWGLCreateContextRobustness)
+    if (functionsWGL->hasExtension("WGL_ARB_create_context_robustness"))
     {
         attribs.push_back(WGL_CONTEXT_FLAGS_ARB);
         attribs.push_back(WGL_CONTEXT_ROBUST_ACCESS_BIT_ARB);
@@ -819,6 +821,48 @@ HGLRC DisplayWGL::createContextAttribs(const gl::Version &version, int profileMa
     attribs.push_back(0);
     attribs.push_back(0);
 
-    return mFunctionsWGL->createContextAttribsARB(mDeviceContext, nullptr, &attribs[0]);
+    return functionsWGL->createContextAttribsARB(deviceContext, shareContext, &attribs[0]);
+}
+
+egl::Error DisplayWGL::createRenderer(HDC deviceContext,
+                                      HGLRC shareContext,
+                                      std::shared_ptr<RendererGL> *outRenderer,
+                                      HGLRC *outContext) const
+{
+    HGLRC context = nullptr;
+    if (mFunctionsWGL->createContextAttribsARB)
+    {
+        context = initializeContextAttribs(mFunctionsWGL, deviceContext, shareContext,
+                                           mDisplayAttributes);
+    }
+
+    // If wglCreateContextAttribsARB is unavailable or failed, try the standard wglCreateContext
+    if (!context)
+    {
+        ASSERT(shareContext == nullptr);
+
+        // Don't have control over GL versions
+        context = mFunctionsWGL->createContext(deviceContext);
+    }
+
+    if (!context)
+    {
+        return egl::EglNotInitialized()
+               << "Failed to create a WGL context for the intermediate OpenGL window.";
+    }
+
+    if (!mFunctionsWGL->makeCurrent(deviceContext, context))
+    {
+        return egl::EglNotInitialized() << "Failed to make the intermediate WGL context current.";
+    }
+
+    std::unique_ptr<FunctionsGL> functionsGL(
+        new FunctionsGLWindows(mOpenGLModule, mFunctionsWGL->getProcAddress));
+    functionsGL->initialize(mDisplayAttributes);
+
+    outRenderer->reset(new RendererGL(std::move(functionsGL), mDisplayAttributes));
+    *outContext = context;
+
+    return egl::NoError();
 }
 }

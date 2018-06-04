@@ -41,6 +41,8 @@ class DisplayWGL : public DisplayGL
                                      NativePixmapType nativePixmap,
                                      const egl::AttributeMap &attribs) override;
 
+    ContextImpl *createContext(const gl::ContextState &state) override;
+
     egl::ConfigSet generateConfigs() override;
 
     bool testDeviceLost() override;
@@ -66,11 +68,11 @@ class DisplayWGL : public DisplayGL
     egl::Error registerD3DDevice(IUnknown *device, HANDLE *outHandle);
     void releaseD3DDevice(HANDLE handle);
 
+    gl::Version getMaxSupportedESVersion() const override;
+
   private:
     egl::Error initializeImpl(egl::Display *display);
     void destroy();
-
-    const FunctionsGL *getFunctionsGL() const override;
 
     egl::Error initializeD3DDevice();
 
@@ -79,18 +81,34 @@ class DisplayWGL : public DisplayGL
 
     egl::Error makeCurrentSurfaceless(gl::Context *context) override;
 
-    HGLRC initializeContextAttribs(const egl::AttributeMap &eglAttributes) const;
-    HGLRC createContextAttribs(const gl::Version &version, int profileMask) const;
+    static HGLRC initializeContextAttribs(FunctionsWGL *functionsWGL,
+                                          HDC deviceContext,
+                                          HGLRC shareContext,
+                                          const egl::AttributeMap &eglAttributes);
+    static HGLRC createContextAttribs(FunctionsWGL *functionsWGL,
+                                      HDC deviceContext,
+                                      HGLRC shareContext,
+                                      const gl::Version &version,
+                                      int profileMask);
+
+    egl::Error createRenderer(HDC deviceContext,
+                              HGLRC shareContext,
+                              std::shared_ptr<RendererGL> *outRenderer,
+                              HGLRC *outContext) const;
+
+    std::shared_ptr<RendererGL> mRenderer;
 
     HDC mCurrentDC;
 
     HMODULE mOpenGLModule;
 
     FunctionsWGL *mFunctionsWGL;
-    FunctionsGL *mFunctionsGL;
+    FunctionsGL *mFunctionsGL;  // TODO(remove)?
 
     bool mHasWGLCreateContextRobustness;
     bool mHasRobustness;
+
+    egl::AttributeMap mDisplayAttributes;
 
     ATOM mWindowClass;
     HWND mWindow;
