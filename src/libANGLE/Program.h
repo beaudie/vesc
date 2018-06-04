@@ -308,6 +308,7 @@ class ProgramState final : angle::NonCopyable
     const std::vector<sh::OutputVariable> &getOutputVariables() const { return mOutputVariables; }
     const std::vector<VariableLocation> &getOutputLocations() const { return mOutputLocations; }
     const std::vector<LinkedUniform> &getUniforms() const { return mUniforms; }
+    const std::vector<LinkedUniform> &getUnusedUniforms() const { return mUnusedUniforms; }
     const std::vector<VariableLocation> &getUniformLocations() const { return mUniformLocations; }
     const std::vector<InterfaceBlock> &getUniformBlocks() const { return mUniformBlocks; }
     const std::vector<InterfaceBlock> &getShaderStorageBlocks() const
@@ -385,6 +386,7 @@ class ProgramState final : angle::NonCopyable
     // inner array of an array of arrays. Names and mapped names of uniforms that are arrays include
     // [0] in the end. This makes implementation of queries simpler.
     std::vector<LinkedUniform> mUniforms;
+    std::vector<LinkedUniform> mUnusedUniforms;
 
     std::vector<VariableLocation> mUniformLocations;
     std::vector<InterfaceBlock> mUniformBlocks;
