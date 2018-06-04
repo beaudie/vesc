@@ -2566,7 +2566,7 @@ bool Program::linkUniforms(const Context *context,
         return false;
     }
 
-    linker.getResults(&mState.mUniforms, &mState.mUniformLocations);
+    linker.getResults(&mState.mUniforms, &mState.mUnusedUniforms, &mState.mUniformLocations);
 
     linkSamplerAndImageBindings(combinedImageUniformsCount);
 
