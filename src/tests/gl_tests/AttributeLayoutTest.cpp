@@ -256,34 +256,39 @@ class AttributeLayoutTest : public ANGLETest
 
             PrepareTestCase(mTestCases[i]);
 
-            glClear(GL_COLOR_BUFFER_BIT);
+            for (int i = 0; i < 15; ++i)
+            {
+                glClear(GL_COLOR_BUFFER_BIT);
 
-            std::string testCase;
-            if (drawFirstTriangle)
-            {
-                Draw(0, kNumVertices, mIndices);
-                testCase = "draw";
-            }
-            else
-            {
-                Draw(3, kNumVertices - 3, mIndices + 3);
-                testCase = "skip";
-            }
+                std::string testCase;
+                if (drawFirstTriangle)
+                {
+                    Draw(0, kNumVertices, mIndices);
+                    testCase = "draw";
+                }
+                else
+                {
+                    Draw(3, kNumVertices - 3, mIndices + 3);
+                    testCase = "skip";
+                }
 
-            testCase += " first triangle case ";
-            int w = getWindowWidth() / 4;
-            int h = getWindowHeight() / 4;
-            if (drawFirstTriangle)
-            {
-                EXPECT_PIXEL_EQ(w * 2, h * 3, 255, 255, 0, 0) << testCase << i;
+                testCase += " first triangle case ";
+                int w = getWindowWidth() / 4;
+                int h = getWindowHeight() / 4;
+                if (drawFirstTriangle)
+                {
+                    EXPECT_PIXEL_EQ(w * 2, h * 3, 255, 255, 0, 0) << testCase << i;
+                }
+                else
+                {
+                    EXPECT_PIXEL_EQ(w * 2, h * 3, 51, 51, 51, 0) << testCase << i;
+                }
+                EXPECT_PIXEL_EQ(w * 3, h * 2, 0, 255, 0, 0) << testCase << i;
+                EXPECT_PIXEL_EQ(w * 2, h * 1, 0, 255, 255, 0) << testCase << i;
+                EXPECT_PIXEL_EQ(w * 1, h * 2, 255, 0, 255, 0) << testCase << i;
+
+                swapBuffers();
             }
-            else
-            {
-                EXPECT_PIXEL_EQ(w * 2, h * 3, 51, 51, 51, 0) << testCase << i;
-            }
-            EXPECT_PIXEL_EQ(w * 3, h * 2, 0, 255, 0, 0) << testCase << i;
-            EXPECT_PIXEL_EQ(w * 2, h * 1, 0, 255, 255, 0) << testCase << i;
-            EXPECT_PIXEL_EQ(w * 1, h * 2, 255, 0, 255, 0) << testCase << i;
         }
     }
 
@@ -334,41 +339,41 @@ void AttributeLayoutTest::GetTestCases(void)
     std::shared_ptr<Container> B0 = std::make_shared<Buffer>();
     std::shared_ptr<Container> B1 = std::make_shared<Buffer>();
 
-    // 0. two buffers
-    mTestCases.push_back({Attrib(B0, 0, 8, mCoord), Attrib(B1, 0, 12, mColor)});
+    //// 0. two buffers
+    //mTestCases.push_back({Attrib(B0, 0, 8, mCoord), Attrib(B1, 0, 12, mColor)});
 
-    // 1. two memory
-    mTestCases.push_back({Attrib(M0, 0, 8, mCoord), Attrib(M1, 0, 12, mColor)});
+    //// 1. two memory
+    //mTestCases.push_back({Attrib(M0, 0, 8, mCoord), Attrib(M1, 0, 12, mColor)});
 
-    // 2. one memory, sequential
-    mTestCases.push_back({Attrib(M0, 0, 8, mCoord), Attrib(M0, 96, 12, mColor)});
+    //// 2. one memory, sequential
+    //mTestCases.push_back({Attrib(M0, 0, 8, mCoord), Attrib(M0, 96, 12, mColor)});
 
-    // 3. one memory, interleaved
-    mTestCases.push_back({Attrib(M0, 0, 20, mCoord), Attrib(M0, 8, 20, mColor)});
+    //// 3. one memory, interleaved
+    //mTestCases.push_back({Attrib(M0, 0, 20, mCoord), Attrib(M0, 8, 20, mColor)});
 
-    // 4. buffer and memory
-    mTestCases.push_back({Attrib(B0, 0, 8, mCoord), Attrib(M0, 0, 12, mColor)});
+    //// 4. buffer and memory
+    //mTestCases.push_back({Attrib(B0, 0, 8, mCoord), Attrib(M0, 0, 12, mColor)});
 
-    // 5. stride != size
-    mTestCases.push_back({Attrib(B0, 0, 16, mCoord), Attrib(B1, 0, 12, mColor)});
+    //// 5. stride != size
+    //mTestCases.push_back({Attrib(B0, 0, 16, mCoord), Attrib(B1, 0, 12, mColor)});
 
-    if (IsVulkan())
-    {
-        std::cout << "cases skipped on Vulkan: integer data, non-zero buffer offsets" << std::endl;
-        return;
-    }
+    //if (IsVulkan())
+    //{
+    //    std::cout << "cases skipped on Vulkan: integer data, non-zero buffer offsets" << std::endl;
+    //    return;
+    //}
 
-    // 6. one buffer, sequential
-    mTestCases.push_back({Attrib(B0, 0, 8, mCoord), Attrib(B0, 96, 12, mColor)});
+    //// 6. one buffer, sequential
+    //mTestCases.push_back({Attrib(B0, 0, 8, mCoord), Attrib(B0, 96, 12, mColor)});
 
-    // 7. one buffer, interleaved
-    mTestCases.push_back({Attrib(B0, 0, 20, mCoord), Attrib(B0, 8, 20, mColor)});
+    //// 7. one buffer, interleaved
+    //mTestCases.push_back({Attrib(B0, 0, 20, mCoord), Attrib(B0, 8, 20, mColor)});
 
-    // 8. memory and buffer, float and integer
-    mTestCases.push_back({Attrib(M0, 0, 8, mCoord), Attrib(B0, 0, 12, mBColor)});
+    //// 8. memory and buffer, float and integer
+    //mTestCases.push_back({Attrib(M0, 0, 8, mCoord), Attrib(B0, 0, 12, mBColor)});
 
     // 9. buffer and memory, unusual offset and stride
-    mTestCases.push_back({Attrib(B0, 11, 13, mCoord), Attrib(M0, 23, 17, mColor)});
+    mTestCases.push_back({Attrib(B0, 1, 8, mCoord), Attrib(M0, 0, 16, mColor)});
 }
 
 class AttributeLayoutNonIndexed : public AttributeLayoutTest
@@ -410,7 +415,7 @@ TEST_P(AttributeLayoutNonIndexed, Test)
         return;
     }
 
-    Run(false);
+    //Run(false);
 }
 
 TEST_P(AttributeLayoutMemoryIndexed, Test)
