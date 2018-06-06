@@ -705,7 +705,6 @@ vk::Error ProgramVk::allocateDescriptorSet(ContextVk *contextVk, uint32_t descri
 
     // Write out to a new a descriptor set.
     vk::DynamicDescriptorPool *dynamicDescriptorPool = contextVk->getDynamicDescriptorPool();
-    const auto &descriptorSetLayouts = renderer->getGraphicsDescriptorSetLayouts();
 
     uint32_t potentialNewCount = descriptorSetIndex + 1;
     if (potentialNewCount > mDescriptorSets.size())
@@ -713,10 +712,10 @@ vk::Error ProgramVk::allocateDescriptorSet(ContextVk *contextVk, uint32_t descri
         mDescriptorSets.resize(potentialNewCount, VK_NULL_HANDLE);
     }
 
-    const VkDescriptorSetLayout *descriptorSetLayout =
-        descriptorSetLayouts[descriptorSetIndex].ptr();
+    const vk::DescriptorSetLayout &descriptorSetLayout =
+        renderer->getGraphicsDescriptorSetLayout(descriptorSetIndex);
 
-    ANGLE_TRY(dynamicDescriptorPool->allocateDescriptorSets(contextVk, descriptorSetLayout, 1,
+    ANGLE_TRY(dynamicDescriptorPool->allocateDescriptorSets(contextVk, descriptorSetLayout.ptr(), 1,
                                                             &mDescriptorSets[descriptorSetIndex]));
     return vk::NoError();
 }
