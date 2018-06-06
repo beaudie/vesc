@@ -1535,7 +1535,8 @@ static bool ValidateBindBufferCommon(Context *context,
                 return false;
             }
 
-            if (buffer != 0 && (offset % caps.uniformBufferOffsetAlignment) != 0)
+            if (buffer != 0 && caps.uniformBufferOffsetAlignment != 0 &&
+                (offset % caps.uniformBufferOffsetAlignment) != 0)
             {
                 context->handleError(
                     InvalidValue()
@@ -1581,7 +1582,8 @@ static bool ValidateBindBufferCommon(Context *context,
                                                        "indexed binding points.");
                 return false;
             }
-            if (buffer != 0 && (offset % caps.shaderStorageBufferOffsetAlignment) != 0)
+            if (buffer != 0 && caps.shaderStorageBufferOffsetAlignment != 0 &&
+                (offset % caps.shaderStorageBufferOffsetAlignment) != 0)
             {
                 context->handleError(InvalidValue() << "offset must be multiple of value of "
                                                        "SHADER_STORAGE_BUFFER_OFFSET_"
