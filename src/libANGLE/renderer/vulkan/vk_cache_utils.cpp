@@ -956,6 +956,12 @@ void PipelineLayoutDesc::updatePushConstantRange(gl::ShaderType shaderType,
     packed.offset                   = offset;
     packed.size                     = size;
 }
+
+const std::array<PackedPushConstantRange, kMaxPushConstantRanges>
+    &PipelineLayoutDesc::getPushConstantRanges() const
+{
+    return mPushConstantRanges;
+}
 }  // namespace vk
 
 // RenderPassCache implementation.
@@ -1210,6 +1216,23 @@ vk::Error PipelineLayoutCache::getPipelineLayout(
         }
     }
 
+    angle::FixedVector<VkPushConstantRange, vk::kMaxPushConstantRanges> pushConstantRanges;
+    const auto &descPushConstantRanges = desc.getPushConstantRanges();
+    for (size_t shaderIndex = 0; shaderIndex < descPushConstantRanges.size(); ++shaderIndex)
+    {
+        const vk::PackedPushConstantRange &pushConstantDesc = descPushConstantRanges[shaderIndex];
+        if (pushConstantDesc.size > 0)
+        {
+            VkPushConstantRange pushConstantRange;
+            pushConstantRange.stageFlags =
+                shaderIndex == 0 ? VK_SHADER_STAGE_VERTEX_BIT : VK_SHADER_STAGE_FRAGMENT_BIT;
+            pushConstantRange.offset = pushConstantDesc.offset;
+            pushConstantRange.size   = pushConstantDesc.size;
+
+            pushConstantRanges.push_back(pushConstantRange);
+        }
+    }
+
     // No pipeline layout found. We must create a new one.
     VkPipelineLayoutCreateInfo createInfo;
     createInfo.sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -1217,10 +1240,8 @@ vk::Error PipelineLayoutCache::getPipelineLayout(
     createInfo.flags                  = 0;
     createInfo.setLayoutCount         = static_cast<uint32_t>(setLayoutHandles.size());
     createInfo.pSetLayouts            = setLayoutHandles.data();
-
-    // TODO(jmadill): Init push constant ranges. http://anglebug.com/2462
-    createInfo.pushConstantRangeCount = 0;
-    createInfo.pPushConstantRanges    = nullptr;
+    createInfo.pushConstantRangeCount = static_cast<uint32_t>(pushConstantRanges.size());
+    createInfo.pPushConstantRanges    = pushConstantRanges.data();
 
     vk::PipelineLayout newLayout;
 
