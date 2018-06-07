@@ -41,10 +41,6 @@ TEST_P(PointSpritesTest, PointCoordAndPointSizeCompliance)
     // http://anglebug.com/1643
     ANGLE_SKIP_TEST_IF(IsAMD() && IsDesktopOpenGL() && IsWindows());
 
-    // TODO: Point coord not yet implemented in Vulkan.
-    // http://anglebug.com/2457
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     const std::string fs =
         R"(precision mediump float;
         void main()
@@ -106,7 +102,6 @@ TEST_P(PointSpritesTest, PointCoordAndPointSizeCompliance)
     glDrawArrays(GL_POINTS, 0, 4);
     ASSERT_GL_NO_ERROR();
 
-    std::string debugText;
     for (float py = 0; py < 2; ++py)
     {
         for (float px = 0; px < 2; ++px)
