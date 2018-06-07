@@ -183,6 +183,9 @@ class GLES1State final : angle::NonCopyable
     FogParameters &fogParameters();
     const FogParameters &fogParameters() const;
 
+    TextureEnvironmentParameters &textureEnvironment(unsigned int unit);
+    const TextureEnvironmentParameters &textureEnvironment(unsigned int unit) const;
+
   private:
     friend class State;
     friend class GLES1Renderer;
