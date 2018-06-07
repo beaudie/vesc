@@ -12,6 +12,7 @@
 
 // TODO(jmadill): Rework this if Chromium decides to ban <random>
 #include <random>
+#include <vector>
 
 #include <export.h>
 
@@ -37,6 +38,18 @@ class ANGLE_EXPORT RNG
     float randomFloatBetween(float min, float max);
     float randomFloatNonnegative();
     float randomNegativeOneToOne();
+
+    template <class T>
+    T &randomSelect(std::vector<T> &elts)
+    {
+        return elts[randomIntBetween(0, elts.size() - 1)];
+    }
+
+    template <class T>
+    const T &randomSelect(const std::vector<T> &elts)
+    {
+        return elts.at(randomIntBetween(0, elts.size() - 1));
+    }
 
   private:
     std::default_random_engine mGenerator;

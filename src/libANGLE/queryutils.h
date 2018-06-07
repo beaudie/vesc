@@ -180,6 +180,25 @@ void GetFogParameters(const GLES1State *state, GLenum pname, GLfloat *params);
 unsigned int GetFogParameterCount(GLenum pname);
 
 GLenum FixedToEnum(GLfixed val);
+GLenum FloatToEnum(GLfloat val);
+
+unsigned int GetTextureEnvParameterCount(TextureEnvParameter pname);
+
+void ConvertTextureEnvFromInt(TextureEnvParameter pname, const GLint *input, GLfloat *output);
+void ConvertTextureEnvFromFixed(TextureEnvParameter pname, const GLfixed *input, GLfloat *output);
+void ConvertTextureEnvToInt(TextureEnvParameter pname, const GLfloat *input, GLint *output);
+void ConvertTextureEnvToFixed(TextureEnvParameter pname, const GLfloat *input, GLfixed *output);
+
+void SetTextureEnv(unsigned int unit,
+                   GLES1State *state,
+                   TextureEnvTarget target,
+                   TextureEnvParameter pname,
+                   const GLfloat *params);
+void GetTextureEnv(unsigned int unit,
+                   const GLES1State *state,
+                   TextureEnvTarget target,
+                   TextureEnvParameter pname,
+                   GLfloat *params);
 
 }  // namespace gl
 
