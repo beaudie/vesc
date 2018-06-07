@@ -2091,6 +2091,327 @@ GLenum FixedToEnum(GLfixed val)
     return static_cast<GLenum>(val);
 }
 
+GLenum FloatToEnum(GLfloat val)
+{
+    return static_cast<GLenum>(val);
+}
+
+unsigned int GetTextureEnvParameterCount(TextureEnvParameter pname)
+{
+    switch (pname)
+    {
+        case TextureEnvParameter::Mode:
+        case TextureEnvParameter::CombineRgb:
+        case TextureEnvParameter::CombineAlpha:
+        case TextureEnvParameter::RgbScale:
+        case TextureEnvParameter::AlphaScale:
+            return 1;
+        case TextureEnvParameter::Color:
+            return 4;
+        default:
+            return 0;
+    }
+}
+
+void ConvertTextureEnvFromInt(TextureEnvParameter pname, const GLint *input, GLfloat *output)
+{
+    switch (pname)
+    {
+        case TextureEnvParameter::Mode:
+        case TextureEnvParameter::CombineRgb:
+        case TextureEnvParameter::CombineAlpha:
+        case TextureEnvParameter::Src0Rgb:
+        case TextureEnvParameter::Src1Rgb:
+        case TextureEnvParameter::Src2Rgb:
+        case TextureEnvParameter::Src0Alpha:
+        case TextureEnvParameter::Src1Alpha:
+        case TextureEnvParameter::Src2Alpha:
+        case TextureEnvParameter::Op0Rgb:
+        case TextureEnvParameter::Op1Rgb:
+        case TextureEnvParameter::Op2Rgb:
+        case TextureEnvParameter::Op0Alpha:
+        case TextureEnvParameter::Op1Alpha:
+        case TextureEnvParameter::Op2Alpha:
+        case TextureEnvParameter::RgbScale:
+        case TextureEnvParameter::AlphaScale:
+            output[0] = static_cast<GLfloat>(input[0]);
+            break;
+        case TextureEnvParameter::Color:
+            output[0] = input[0] / 255.0f;
+            output[1] = input[1] / 255.0f;
+            output[2] = input[2] / 255.0f;
+            output[3] = input[3] / 255.0f;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
+void ConvertTextureEnvFromFixed(TextureEnvParameter pname, const GLfixed *input, GLfloat *output)
+{
+    switch (pname)
+    {
+        case TextureEnvParameter::Mode:
+        case TextureEnvParameter::CombineRgb:
+        case TextureEnvParameter::CombineAlpha:
+        case TextureEnvParameter::Src0Rgb:
+        case TextureEnvParameter::Src1Rgb:
+        case TextureEnvParameter::Src2Rgb:
+        case TextureEnvParameter::Src0Alpha:
+        case TextureEnvParameter::Src1Alpha:
+        case TextureEnvParameter::Src2Alpha:
+        case TextureEnvParameter::Op0Rgb:
+        case TextureEnvParameter::Op1Rgb:
+        case TextureEnvParameter::Op2Rgb:
+        case TextureEnvParameter::Op0Alpha:
+        case TextureEnvParameter::Op1Alpha:
+        case TextureEnvParameter::Op2Alpha:
+            output[0] = static_cast<GLfloat>(input[0]);
+            break;
+        case TextureEnvParameter::Color:
+            output[0] = FixedToFloat(input[0]);
+            output[1] = FixedToFloat(input[1]);
+            output[2] = FixedToFloat(input[2]);
+            output[3] = FixedToFloat(input[3]);
+            break;
+        case TextureEnvParameter::RgbScale:
+        case TextureEnvParameter::AlphaScale:
+            output[0] = FixedToFloat(input[0]);
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
+void ConvertTextureEnvToInt(TextureEnvParameter pname, const GLfloat *input, GLint *output)
+{
+    switch (pname)
+    {
+        case TextureEnvParameter::Mode:
+        case TextureEnvParameter::CombineRgb:
+        case TextureEnvParameter::CombineAlpha:
+        case TextureEnvParameter::Src0Rgb:
+        case TextureEnvParameter::Src1Rgb:
+        case TextureEnvParameter::Src2Rgb:
+        case TextureEnvParameter::Src0Alpha:
+        case TextureEnvParameter::Src1Alpha:
+        case TextureEnvParameter::Src2Alpha:
+        case TextureEnvParameter::Op0Rgb:
+        case TextureEnvParameter::Op1Rgb:
+        case TextureEnvParameter::Op2Rgb:
+        case TextureEnvParameter::Op0Alpha:
+        case TextureEnvParameter::Op1Alpha:
+        case TextureEnvParameter::Op2Alpha:
+        case TextureEnvParameter::RgbScale:
+        case TextureEnvParameter::AlphaScale:
+            output[0] = static_cast<GLint>(input[0]);
+            break;
+        case TextureEnvParameter::Color:
+            output[0] = static_cast<GLint>(input[0] * 255.0f);
+            output[1] = static_cast<GLint>(input[1] * 255.0f);
+            output[2] = static_cast<GLint>(input[2] * 255.0f);
+            output[3] = static_cast<GLint>(input[3] * 255.0f);
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
+void ConvertTextureEnvToFixed(TextureEnvParameter pname, const GLfloat *input, GLfixed *output)
+{
+    switch (pname)
+    {
+        case TextureEnvParameter::Mode:
+        case TextureEnvParameter::CombineRgb:
+        case TextureEnvParameter::CombineAlpha:
+        case TextureEnvParameter::Src0Rgb:
+        case TextureEnvParameter::Src1Rgb:
+        case TextureEnvParameter::Src2Rgb:
+        case TextureEnvParameter::Src0Alpha:
+        case TextureEnvParameter::Src1Alpha:
+        case TextureEnvParameter::Src2Alpha:
+        case TextureEnvParameter::Op0Rgb:
+        case TextureEnvParameter::Op1Rgb:
+        case TextureEnvParameter::Op2Rgb:
+        case TextureEnvParameter::Op0Alpha:
+        case TextureEnvParameter::Op1Alpha:
+        case TextureEnvParameter::Op2Alpha:
+            output[0] = static_cast<GLfixed>(input[0]);
+            break;
+        case TextureEnvParameter::Color:
+            output[0] = FloatToFixed(input[0]);
+            output[1] = FloatToFixed(input[1]);
+            output[2] = FloatToFixed(input[2]);
+            output[3] = FloatToFixed(input[3]);
+            break;
+        case TextureEnvParameter::RgbScale:
+        case TextureEnvParameter::AlphaScale:
+            output[0] = FloatToFixed(input[0]);
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
+void SetTextureEnv(unsigned int unit,
+                   GLES1State *state,
+                   TextureEnvTarget target,
+                   TextureEnvParameter pname,
+                   const GLfloat *params)
+{
+    if (target == TextureEnvTarget::Env)
+    {
+        TextureEnvironmentParameters &env = state->textureEnvironment(unit);
+        GLenum asEnum                     = FloatToEnum(params[0]);
+        switch (pname)
+        {
+            case TextureEnvParameter::Mode:
+                env.mode = FromGLenum<TextureEnvMode>(asEnum);
+                break;
+            case TextureEnvParameter::CombineRgb:
+                env.combineRgb = FromGLenum<TextureCombine>(asEnum);
+                break;
+            case TextureEnvParameter::CombineAlpha:
+                env.combineAlpha = FromGLenum<TextureCombine>(asEnum);
+                break;
+            case TextureEnvParameter::Src0Rgb:
+                env.src0Rgb = FromGLenum<TextureSrc>(asEnum);
+                break;
+            case TextureEnvParameter::Src1Rgb:
+                env.src1Rgb = FromGLenum<TextureSrc>(asEnum);
+                break;
+            case TextureEnvParameter::Src2Rgb:
+                env.src2Rgb = FromGLenum<TextureSrc>(asEnum);
+                break;
+            case TextureEnvParameter::Src0Alpha:
+                env.src0Alpha = FromGLenum<TextureSrc>(asEnum);
+                break;
+            case TextureEnvParameter::Src1Alpha:
+                env.src1Alpha = FromGLenum<TextureSrc>(asEnum);
+                break;
+            case TextureEnvParameter::Src2Alpha:
+                env.src2Alpha = FromGLenum<TextureSrc>(asEnum);
+                break;
+            case TextureEnvParameter::Op0Rgb:
+                env.op0Rgb = FromGLenum<TextureOp>(asEnum);
+                break;
+            case TextureEnvParameter::Op1Rgb:
+                env.op1Rgb = FromGLenum<TextureOp>(asEnum);
+                break;
+            case TextureEnvParameter::Op2Rgb:
+                env.op2Rgb = FromGLenum<TextureOp>(asEnum);
+                break;
+            case TextureEnvParameter::Op0Alpha:
+                env.op0Alpha = FromGLenum<TextureOp>(asEnum);
+                break;
+            case TextureEnvParameter::Op1Alpha:
+                env.op1Alpha = FromGLenum<TextureOp>(asEnum);
+                break;
+            case TextureEnvParameter::Op2Alpha:
+                env.op2Alpha = FromGLenum<TextureOp>(asEnum);
+                break;
+            case TextureEnvParameter::Color:
+                env.color = ColorF::fromData(params);
+                break;
+            case TextureEnvParameter::RgbScale:
+                env.rgbScale = params[0];
+                break;
+            case TextureEnvParameter::AlphaScale:
+                env.alphaScale = params[0];
+                break;
+            default:
+                UNREACHABLE();
+                break;
+        }
+    }
+    else
+    {
+        // TODO(lfy@google.com): point sprite target
+        UNREACHABLE();
+    }
+}
+
+void GetTextureEnv(unsigned int unit,
+                   const GLES1State *state,
+                   TextureEnvTarget target,
+                   TextureEnvParameter pname,
+                   GLfloat *params)
+{
+    if (target == TextureEnvTarget::Env)
+    {
+        const TextureEnvironmentParameters &env = state->textureEnvironment(unit);
+        switch (pname)
+        {
+            case TextureEnvParameter::Mode:
+                *params = static_cast<GLfloat>(ToGLenum(env.mode));
+                break;
+            case TextureEnvParameter::CombineRgb:
+                *params = static_cast<GLfloat>(ToGLenum(env.combineRgb));
+                break;
+            case TextureEnvParameter::CombineAlpha:
+                *params = static_cast<GLfloat>(ToGLenum(env.combineAlpha));
+                break;
+            case TextureEnvParameter::Src0Rgb:
+                *params = static_cast<GLfloat>(ToGLenum(env.src0Rgb));
+                break;
+            case TextureEnvParameter::Src1Rgb:
+                *params = static_cast<GLfloat>(ToGLenum(env.src1Rgb));
+                break;
+            case TextureEnvParameter::Src2Rgb:
+                *params = static_cast<GLfloat>(ToGLenum(env.src2Rgb));
+                break;
+            case TextureEnvParameter::Src0Alpha:
+                *params = static_cast<GLfloat>(ToGLenum(env.src0Alpha));
+                break;
+            case TextureEnvParameter::Src1Alpha:
+                *params = static_cast<GLfloat>(ToGLenum(env.src1Alpha));
+                break;
+            case TextureEnvParameter::Src2Alpha:
+                *params = static_cast<GLfloat>(ToGLenum(env.src2Alpha));
+                break;
+            case TextureEnvParameter::Op0Rgb:
+                *params = static_cast<GLfloat>(ToGLenum(env.op0Rgb));
+                break;
+            case TextureEnvParameter::Op1Rgb:
+                *params = static_cast<GLfloat>(ToGLenum(env.op1Rgb));
+                break;
+            case TextureEnvParameter::Op2Rgb:
+                *params = static_cast<GLfloat>(ToGLenum(env.op2Rgb));
+                break;
+            case TextureEnvParameter::Op0Alpha:
+                *params = static_cast<GLfloat>(ToGLenum(env.op0Alpha));
+                break;
+            case TextureEnvParameter::Op1Alpha:
+                *params = static_cast<GLfloat>(ToGLenum(env.op1Alpha));
+                break;
+            case TextureEnvParameter::Op2Alpha:
+                *params = static_cast<GLfloat>(ToGLenum(env.op2Alpha));
+                break;
+            case TextureEnvParameter::Color:
+                env.color.writeData(params);
+                break;
+            case TextureEnvParameter::RgbScale:
+                *params = env.rgbScale;
+                break;
+            case TextureEnvParameter::AlphaScale:
+                *params = env.alphaScale;
+                break;
+            default:
+                UNREACHABLE();
+                break;
+        }
+    }
+    else
+    {
+        // TODO(lfy@google.com): point sprite target
+        UNREACHABLE();
+    }
+}
+
 }  // namespace gl
 
 namespace egl
