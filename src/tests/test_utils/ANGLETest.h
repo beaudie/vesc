@@ -178,13 +178,12 @@ GLColor32F ReadColor32F(GLint x, GLint y);
 
 #define EXPECT_PIXEL_NEAR(x, y, r, g, b, a, abs_error) \
 { \
-    GLubyte pixel[4]; \
-    glReadPixels((x), (y), 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel); \
+    GLColor color = angle::ReadColor(x, y); \
     EXPECT_GL_NO_ERROR(); \
-    EXPECT_NEAR((r), pixel[0], abs_error); \
-    EXPECT_NEAR((g), pixel[1], abs_error); \
-    EXPECT_NEAR((b), pixel[2], abs_error); \
-    EXPECT_NEAR((a), pixel[3], abs_error); \
+    EXPECT_NEAR((r), color[0], abs_error); \
+    EXPECT_NEAR((g), color[1], abs_error); \
+    EXPECT_NEAR((b), color[2], abs_error); \
+    EXPECT_NEAR((a), color[3], abs_error); \
 }
 
 #define EXPECT_PIXEL32F_NEAR(x, y, r, g, b, a, abs_error)       \
