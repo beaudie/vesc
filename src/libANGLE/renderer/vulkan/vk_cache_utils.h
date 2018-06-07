@@ -498,6 +498,9 @@ class PipelineLayoutDesc final
     void updateDescriptorSetLayout(uint32_t setIndex, const DescriptorSetLayoutDesc &desc);
     void updatePushConstantRange(gl::ShaderType shaderType, uint32_t offset, uint32_t size);
 
+    const std::array<PackedPushConstantRange, kMaxPushConstantRanges> &getPushConstantRanges()
+        const;
+
   private:
     DescriptorSetLayoutArray<DescriptorSetLayoutDesc> mDescriptorSetLayouts;
     std::array<PackedPushConstantRange, kMaxPushConstantRanges> mPushConstantRanges;
