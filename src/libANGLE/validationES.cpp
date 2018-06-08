@@ -3050,16 +3050,21 @@ bool ValidateDrawElementsCommon(Context *context,
             ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeOffset);
             return false;
         }
+
+        if (!elementArrayBuffer)
+        {
+            // [WebGL 1.0] Section 6.2 No Client Side Arrays
+            // If an indexed draw command (drawElements) is called and no WebGLBuffer is bound to
+            // the ELEMENT_ARRAY_BUFFER binding point, an INVALID_OPERATION error is generated.
+            ANGLE_VALIDATION_ERR(context, InvalidOperation(), MustHaveElementArrayBinding);
+            return false;
+        }
     }
 
-    if (context->getExtensions().webglCompatibility ||
-        !context->getGLState().areClientArraysEnabled())
+    if (!context->getGLState().areClientArraysEnabled())
     {
         if (!elementArrayBuffer && count > 0)
         {
-            // [WebGL 1.0] Section 6.2 No Client Side Arrays
-            // If drawElements is called with a count greater than zero, and no WebGLBuffer is bound
-            // to the ELEMENT_ARRAY_BUFFER binding point, an INVALID_OPERATION error is generated.
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), MustHaveElementArrayBinding);
             return false;
         }
