@@ -1368,6 +1368,9 @@ TEST_P(BlitFramebufferTest, BlitFramebufferSizeOverflow)
     EXPECT_GL_ERROR(GL_INVALID_VALUE);
 }
 
+// TODO(lucferron): Implement the blit operation on FramebufferVk
+// http://anglebug.com/2643
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(BlitFramebufferANGLETest,
                        ES2_D3D9(),
