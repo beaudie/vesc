@@ -299,6 +299,8 @@ class ProgramD3D : public ProgramImpl
 
     const gl::ProgramState &getState() const { return mState; }
 
+    const gl::ShaderBitSet &getLinkedShaderStages() const { return mState.getLinkedShaderStages(); }
+
   private:
     // These forward-declared tasks are used for multi-thread shader compiles.
     class GetExecutableTask;
