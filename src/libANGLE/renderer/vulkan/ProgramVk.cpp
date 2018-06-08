@@ -172,6 +172,12 @@ vk::Error ProgramVk::reset(ContextVk *contextVk)
 
     VkDevice device = contextVk->getDevice();
 
+    for (auto &descriptorSetLayout : mDescriptorSetLayouts)
+    {
+        descriptorSetLayout.reset();
+    }
+    mPipelineLayout.reset();
+
     for (auto &uniformBlock : mDefaultUniformBlocks)
     {
         uniformBlock.storage.destroy(device);
@@ -269,6 +275,32 @@ gl::LinkResult ProgramVk::link(const gl::Context *glContext,
         mUsedDescriptorSetRange.extend(1);
         mDirtyTextures = true;
     }
+
+    // Store a reference to the pipeline and descriptor set layouts. This will create them if they
+    // don't already exist in the cache.
+    vk::DescriptorSetLayoutDesc uniformsSetDesc;
+    uniformsSetDesc.update(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1);
+    uniformsSetDesc.update(1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1);
+
+    ANGLE_TRY(renderer->getDescriptorSetLayout(uniformsSetDesc, &mDescriptorSetLayouts[0]));
+
+    const uint32_t maxTextures = renderer->getMaxActiveTextures();
+
+    vk::DescriptorSetLayoutDesc texturesSetDesc;
+    for (uint32_t textureIndex = 0; textureIndex < maxTextures; ++textureIndex)
+    {
+        // TODO(jmadll): Sampler arrays. http://anglebug.com/2462
+        texturesSetDesc.update(textureIndex, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1);
+    }
+
+    ANGLE_TRY(renderer->getDescriptorSetLayout(texturesSetDesc, &mDescriptorSetLayouts[1]));
+
+    vk::PipelineLayoutDesc pipelineLayoutDesc;
+    pipelineLayoutDesc.updateDescriptorSetLayout(0, uniformsSetDesc);
+    pipelineLayoutDesc.updateDescriptorSetLayout(1, texturesSetDesc);
+
+    ANGLE_TRY(
+        renderer->getPipelineLayout(pipelineLayoutDesc, mDescriptorSetLayouts, &mPipelineLayout));
 
     return true;
 }
@@ -701,8 +733,6 @@ Serial ProgramVk::getFragmentModuleSerial() const
 
 vk::Error ProgramVk::allocateDescriptorSet(ContextVk *contextVk, uint32_t descriptorSetIndex)
 {
-    RendererVk *renderer = contextVk->getRenderer();
-
     // Write out to a new a descriptor set.
     vk::DynamicDescriptorPool *dynamicDescriptorPool = contextVk->getDynamicDescriptorPool();
 
@@ -713,8 +743,7 @@ vk::Error ProgramVk::allocateDescriptorSet(ContextVk *contextVk, uint32_t descri
     }
 
     const vk::DescriptorSetLayout &descriptorSetLayout =
-        renderer->getGraphicsDescriptorSetLayout(descriptorSetIndex);
-
+        mDescriptorSetLayouts[descriptorSetIndex].get();
     ANGLE_TRY(dynamicDescriptorPool->allocateDescriptorSets(contextVk, descriptorSetLayout.ptr(), 1,
                                                             &mDescriptorSets[descriptorSetIndex]));
     return vk::NoError();
@@ -923,6 +952,11 @@ gl::Error ProgramVk::updateTexturesDescriptorSet(const gl::Context *context)
 void ProgramVk::invalidateTextures()
 {
     mDirtyTextures = true;
+}
+
+const vk::PipelineLayout &ProgramVk::getPipelineLayout() const
+{
+    return mPipelineLayout.get();
 }
 
 void ProgramVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize)
