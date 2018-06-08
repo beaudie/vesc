@@ -528,6 +528,9 @@ TEST_P(InstancingTestES31, UpdateAttribBindingByVertexAttribDivisor)
     glDeleteVertexArrays(1, &vao);
 }
 
+// TODO(lucferron): Diagnose and fix InstancingTestAllConfigs for Vulkan.
+// http://anglebug.com/2647
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against. We test on D3D9 and D3D11 9_3 because they use special codepaths
 // when attribute zero is instanced, unlike D3D11.
@@ -536,7 +539,8 @@ ANGLE_INSTANTIATE_TEST(InstancingTestAllConfigs,
                        ES2_D3D11(),
                        ES2_D3D11_FL9_3(),
                        ES2_OPENGL(),
-                       ES2_OPENGLES());
+                       ES2_OPENGLES(),
+                       ES2_VULKAN());
 
 // TODO(jmadill): Figure out the situation with DrawInstanced on FL 9_3
 ANGLE_INSTANTIATE_TEST(InstancingTestNo9_3, ES2_D3D9(), ES2_D3D11());
