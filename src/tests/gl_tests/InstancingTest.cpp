@@ -528,6 +528,9 @@ TEST_P(InstancingTestES31, UpdateAttribBindingByVertexAttribDivisor)
     glDeleteVertexArrays(1, &vao);
 }
 
+// TODO(lucferron): Diagnose and fix InstancingTestAllConfigs for Vulkan.
+// http://anglebug.com/2647
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against. We test on D3D9 and D3D11 9_3 because they use special codepaths
 // when attribute zero is instanced, unlike D3D11.
