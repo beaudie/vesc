@@ -165,6 +165,27 @@ uniform samplerCube tex_cube_sampler2;
 uniform sampler2D tex_sampler3;
 uniform samplerCube tex_cube_sampler3;
 
+uniform int texture_format[kMaxTexUnits];
+
+uniform int texture_env_mode[kMaxTexUnits];
+uniform int combine_rgb[kMaxTexUnits];
+uniform int combine_alpha[kMaxTexUnits];
+uniform int src0_rgb[kMaxTexUnits];
+uniform int src0_alpha[kMaxTexUnits];
+uniform int src1_rgb[kMaxTexUnits];
+uniform int src1_alpha[kMaxTexUnits];
+uniform int src2_rgb[kMaxTexUnits];
+uniform int src2_alpha[kMaxTexUnits];
+uniform int op0_rgb[kMaxTexUnits];
+uniform int op0_alpha[kMaxTexUnits];
+uniform int op1_rgb[kMaxTexUnits];
+uniform int op1_alpha[kMaxTexUnits];
+uniform int op2_rgb[kMaxTexUnits];
+uniform int op2_alpha[kMaxTexUnits];
+uniform vec4 texture_env_color[kMaxTexUnits];
+uniform float texture_env_rgb_scale[kMaxTexUnits];
+uniform float texture_env_alpha_scale[kMaxTexUnits];
+
 // Vertex attributes////////////////////////////////////////////////////////////
 
 in vec4 pos_varying;
@@ -291,14 +312,336 @@ vec4 getTextureColor(int unit)
     return res;
 }
 
-vec4 getColor(int unit, vec4 vertexColor)
-{
-    if (!isTextureUnitEnabled(unit))
-    {
-        return vertexColor;
+vec3 textureCombineSrcnOpnRgb(int srcnRgb, int opnRgb,
+                              vec4 textureEnvColor,
+                              vec4 vertexColor,
+                              vec4 texturePrevColor,
+                              vec4 textureColor) {
+    vec3 res;
+    vec4 op;
+
+    switch(srcnRgb) {
+    case kTexture:
+        op = textureColor;
+        break;
+    case kConstant:
+        op = textureEnvColor;
+        break;
+    case kPrimaryColor:
+        op = vertexColor;
+        break;
+    case kPrevious:
+        op = texturePrevColor;
+        break;
+    default:
+        op = texturePrevColor;
+        break;
     }
 
-    return getTextureColor(unit);
+    switch (opnRgb) {
+    case kSrcColor:
+        res = op.rgb;
+        break;
+    case kOneMinusSrcColor:
+        res = 1.0 - op.rgb;
+        break;
+    case kSrcAlpha:
+        res = vec3(op.a, op.a, op.a);
+        break;
+    case kOneMinusSrcAlpha:
+        res = vec3(1.0 - op.a,
+                   1.0 - op.a,
+                   1.0 - op.a);
+        break;
+    default:
+        break;
+    }
+
+    return res;
+}
+
+float textureCombineSrcnOpnAlpha(int srcn, int opn,
+                                vec4 textureEnvColor,
+                                vec4 vertexColor,
+                                vec4 texturePrevColor,
+                                vec4 textureColor) {
+    float res;
+    vec4 op;
+
+    switch(srcn) {
+    case kTexture:
+        op = textureColor;
+        break;
+    case kConstant:
+        op = textureEnvColor;
+        break;
+    case kPrimaryColor:
+        op = vertexColor;
+        break;
+    case kPrevious:
+        op = texturePrevColor;
+        break;
+    default:
+        op = texturePrevColor;
+        break;
+    }
+
+    switch (opn) {
+    case kSrcAlpha:
+        res = op.a;
+        break;
+    case kOneMinusSrcAlpha:
+        res = 1.0 - op.a;
+        break;
+    default:
+        break;
+    }
+
+    return res;
+}
+
+vec4 textureCombine(
+        int combineRgb, int combineAlpha,
+        int src0Rgb, int src0Alpha,
+        int src1Rgb, int src1Alpha,
+        int src2Rgb, int src2Alpha,
+        int op0Rgb, int op0Alpha,
+        int op1Rgb, int op1Alpha,
+        int op2Rgb, int op2Alpha,
+        vec4 textureEnvColor,
+        float rgbScale, float alphaScale,
+        vec4 vertexColor,
+        vec4 texturePrevColor,
+        vec4 textureColor) {
+
+    vec3 resRgb;
+    float resAlpha;
+
+    vec3 arg0Rgb;
+    float arg0Alpha;
+    vec3 arg1Rgb;
+    float arg1Alpha;
+    vec3 arg2Rgb;
+    float arg2Alpha;
+    float dotVal;
+
+    arg0Rgb = textureCombineSrcnOpnRgb(src0Rgb, op0Rgb, textureEnvColor, vertexColor, texturePrevColor, textureColor);
+    arg0Alpha = textureCombineSrcnOpnAlpha(src0Alpha, op0Alpha, textureEnvColor, vertexColor, texturePrevColor, textureColor);
+
+    if (combineRgb != kReplace) {
+        arg1Rgb = textureCombineSrcnOpnRgb(src1Rgb, op1Rgb, textureEnvColor, vertexColor, texturePrevColor, textureColor);
+    }
+
+    if (combineAlpha != kReplace) {
+        arg1Alpha = textureCombineSrcnOpnAlpha(src1Alpha, op1Alpha, textureEnvColor, vertexColor, texturePrevColor, textureColor);
+    }
+
+    if (combineRgb == kInterpolate) {
+        arg2Rgb = textureCombineSrcnOpnRgb(src2Rgb, op2Rgb, textureEnvColor, vertexColor, texturePrevColor, textureColor);
+    }
+
+    if (combineAlpha == kInterpolate) {
+        arg2Alpha = textureCombineSrcnOpnAlpha(src2Alpha, op2Alpha, textureEnvColor, vertexColor, texturePrevColor, textureColor);
+    }
+
+    switch (combineRgb) {
+    case kReplace:
+        resRgb = arg0Rgb;
+        break;
+    case kModulate:
+        resRgb = arg0Rgb * arg1Rgb;
+        break;
+    case kAdd:
+        resRgb = arg0Rgb + arg1Rgb;
+        break;
+    case kAddSigned:
+        resRgb = arg0Rgb + arg1Rgb - 0.5;
+        break;
+    case kInterpolate:
+        resRgb = arg0Rgb * arg2Rgb + arg1Rgb * (1.0 - arg2Rgb);
+        break;
+    case kSubtract:
+        resRgb = arg0Rgb - arg1Rgb;
+        break;
+    default:
+        break;
+    }
+
+    switch (combineAlpha) {
+    case kReplace:
+        resAlpha = arg0Alpha;
+        break;
+    case kModulate:
+        resAlpha = arg0Alpha * arg1Alpha;
+        break;
+    case kAdd:
+        resAlpha = arg0Alpha + arg1Alpha;
+        break;
+    case kAddSigned:
+        resAlpha = arg0Alpha + arg1Alpha - 0.5;
+        break;
+    case kInterpolate:
+        resAlpha = arg0Alpha * arg2Alpha + arg1Alpha * (1.0 - arg2Alpha);
+        break;
+    case kSubtract:
+        resAlpha = arg0Alpha - arg1Alpha;
+        break;
+    default:
+        break;
+    }
+
+    if (combineRgb == kDot3Rgb ||
+        combineRgb == kDot3Rgba ) {
+        dotVal = 4.0 * dot(arg0Rgb - 0.5, arg1Rgb - 0.5);
+
+        if (combineRgb == kDot3Rgb) {
+            return vec4(dotVal, dotVal, dotVal, resAlpha);
+        } else {
+            return vec4(dotVal, dotVal, dotVal, dotVal);
+        }
+    } else {
+        return vec4(resRgb, resAlpha);
+    }
+}
+
+vec4 textureFunction(
+        int unit,
+        int texFormat,
+        int envMode,
+        int combineRgb, int combineAlpha,
+        int src0Rgb, int src0Alpha,
+        int src1Rgb, int src1Alpha,
+        int src2Rgb, int src2Alpha,
+        int op0Rgb, int op0Alpha,
+        int op1Rgb, int op1Alpha,
+        int op2Rgb, int op2Alpha,
+        vec4 textureEnvColor,
+        float rgbScale, float alphaScale,
+        vec4 vertexColor,
+        vec4 texturePrevColor,
+        vec4 textureColor) {
+
+    if (!isTextureUnitEnabled(unit)) {
+        return texturePrevColor;
+    }
+
+    vec4 res;
+
+    switch (envMode) {
+        case kReplace:
+            switch (texFormat) {
+                case kAlpha:
+                    res.rgb = texturePrevColor.rgb;
+                    res.a = textureColor.a;
+                    break;
+                case kRGBA:
+                case kLuminanceAlpha:
+                    res.rgba = textureColor.rgba;
+                    break;
+                case kRGB:
+                case kLuminance:
+                default:
+                    res.rgb = textureColor.rgb;
+                    res.a = texturePrevColor.a;
+                    break;
+            }
+            break;
+        case kModulate:
+            switch (texFormat) {
+                case kAlpha:
+                    res.rgb = texturePrevColor.rgb;
+                    res.a = texturePrevColor.a * textureColor.a;
+                    break;
+                case kRGBA:
+                case kLuminanceAlpha:
+                    res.rgba = texturePrevColor.rgba * textureColor.rgba;
+                    break;
+                case kRGB:
+                case kLuminance:
+                default:
+                    res.rgb = texturePrevColor.rgb * textureColor.rgb;
+                    res.a = texturePrevColor.a;
+                    break;
+            }
+            break;
+        case kDecal:
+            switch (texFormat) {
+                case kRGB:
+                    res.rgb = textureColor.rgb;
+                    res.a = texturePrevColor.a;
+                    break;
+                case kRGBA:
+                    res.rgb = texturePrevColor.rgb * (1.0 - textureColor.a) + textureColor.rgb * textureColor.a;
+                    res.a = texturePrevColor.a;
+                    break;
+                case kAlpha:
+                case kLuminance:
+                case kLuminanceAlpha:
+                default:
+                    res.rgb = texturePrevColor.rgb * textureColor.rgb;
+                    res.a = texturePrevColor.a;
+                    break;
+            }
+            break;
+        case kBlend:
+            switch (texFormat) {
+                case kAlpha:
+                    res.rgb = texturePrevColor.rgb;
+                    res.a = textureColor.a * texturePrevColor.a;
+                    break;
+                case kLuminance:
+                case kRGB:
+                    res.rgb = texturePrevColor.rgb * (1.0 - textureColor.rgb) + textureEnvColor.rgb * textureColor.rgb;
+                    res.a = texturePrevColor.a;
+                    break;
+                case kLuminanceAlpha:
+                case kRGBA:
+                default:
+                    res.rgb = texturePrevColor.rgb * (1.0 - textureColor.rgb) + textureEnvColor.rgb * textureColor.rgb;
+                    res.a = textureColor.a * texturePrevColor.a;
+                    break;
+            }
+            break;
+        case kAdd:
+            switch (texFormat) {
+                case kAlpha:
+                    res.rgb = texturePrevColor.rgb;
+                    res.a = textureColor.a * texturePrevColor.a;
+                    break;
+                case kLuminance:
+                case kRGB:
+                    res.rgb = texturePrevColor.rgb + textureColor.rgb;
+                    res.a = texturePrevColor.a;
+                    break;
+                case kLuminanceAlpha:
+                case kRGBA:
+                default:
+                    res.rgb = texturePrevColor.rgb + textureColor.rgb;
+                    res.a = textureColor.a * texturePrevColor.a;
+                    break;
+            }
+            break;
+        case kCombine:
+            res = textureCombine(combineRgb, combineAlpha,
+                                 src0Rgb, src0Alpha,
+                                 src1Rgb, src1Alpha,
+                                 src2Rgb, src2Alpha,
+                                 op0Rgb, op0Alpha,
+                                 op1Rgb, op1Alpha,
+                                 op2Rgb, op2Alpha,
+                                 textureEnvColor,
+                                 rgbScale, alphaScale,
+                                 vertexColor,
+                                 texturePrevColor,
+                                 textureColor);
+            res.rgb *= rgbScale;
+            res.a *= alphaScale;
+            break;
+        default:
+            break;
+    }
+
+    return clamp(res, 0.0, 1.0);
 }
 
 float posDot(vec3 a, vec3 b) {
@@ -490,8 +833,30 @@ void main()
         vertex_color = color_varying;
     }
 
-    // Unit 0 only for now
-    currentFragment = getColor(0, vertex_color);
+    currentFragment = vertex_color;
+    
+    vec4 texturePrevColor = currentFragment;
+    
+    for (int i = 0; i < kMaxTexUnits; i++) {
+        currentFragment =
+            textureFunction(i,
+                    texture_format[i],
+                    texture_env_mode[i],
+                    combine_rgb[i], combine_alpha[i],
+                    src0_rgb[i], src0_alpha[i],
+                    src1_rgb[i], src1_alpha[i],
+                    src2_rgb[i], src2_alpha[i],
+                    op0_rgb[i], op0_alpha[i],
+                    op1_rgb[i], op1_alpha[i],
+                    op2_rgb[i], op2_alpha[i],
+                    texture_env_color[i],
+                    texture_env_rgb_scale[i],
+                    texture_env_alpha_scale[i],
+                    vertex_color,
+                    texturePrevColor,
+                    getTextureColor(i));
+        texturePrevColor = currentFragment;
+    }
 
     if (enable_lighting) {
         currentFragment = doLighting(currentFragment);
