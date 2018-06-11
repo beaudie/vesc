@@ -809,6 +809,9 @@ struct ClientExtensions
     // EGL_ANGLE_platform_angle_vulkan
     bool platformANGLEVulkan;
 
+    // EGL_ANGLE_platform_angle_context_virtualization
+    bool platformANGLEContextVirtualization;
+
     // EGL_ANGLE_device_creation
     bool deviceCreation;
 
