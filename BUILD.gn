@@ -1118,3 +1118,16 @@ group("angle") {
     ":libGLESv2",
   ]
 }
+
+shared_library("shadertranslator") {
+
+  defines = [ "LIBANGLE_IMPLEMENTATION" ]
+
+  sources = [
+    "src/libShaderTranslator/libShaderTranslator.cpp",
+  ]
+
+  deps = [
+    ":translator",
+  ]
+}
