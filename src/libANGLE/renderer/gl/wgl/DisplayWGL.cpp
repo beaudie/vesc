@@ -24,6 +24,7 @@
 #include "libANGLE/renderer/gl/wgl/RendererWGL.h"
 #include "libANGLE/renderer/gl/wgl/WindowSurfaceWGL.h"
 #include "libANGLE/renderer/gl/wgl/wgl_utils.h"
+#include "libANGLE/renderer/renderer_utils.h"
 
 #include "platform/Platform.h"
 
@@ -65,6 +66,7 @@ class FunctionsGLWindows : public FunctionsGL
 DisplayWGL::DisplayWGL(const egl::DisplayState &state)
     : DisplayGL(state),
       mRenderer(nullptr),
+      mVirtualizedContexts(true),
       mCurrentData(),
       mOpenGLModule(nullptr),
       mFunctionsWGL(nullptr),
@@ -102,6 +104,11 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
 egl::Error DisplayWGL::initializeImpl(egl::Display *display)
 {
     mDisplayAttributes = display->getAttributeMap();
+
+    // Use context virtualization by default because Chrome uses it.
+    static constexpr bool kDefaultWGLVirtualizedContexts = true;
+    mVirtualizedContexts =
+        ShouldUseVirtualizedContexts(mDisplayAttributes, kDefaultWGLVirtualizedContexts);
 
     mOpenGLModule = LoadLibraryA("opengl32.dll");
     if (!mOpenGLModule)
@@ -250,7 +257,7 @@ egl::Error DisplayWGL::initializeImpl(egl::Display *display)
                << "Failed to set the pixel format on the intermediate OpenGL window.";
     }
 
-    ANGLE_TRY(createRenderer(&mRenderer));
+    ANGLE_TRY(createRenderer(nullptr, true, &mRenderer));
     const FunctionsGL *functionsGL = mRenderer->getFunctions();
 
     mHasRobustness = functionsGL->getGraphicsResetStatus != nullptr;
@@ -439,7 +446,23 @@ SurfaceImpl *DisplayWGL::createPixmapSurface(const egl::SurfaceState &state,
 
 ContextImpl *DisplayWGL::createContext(const gl::ContextState &state)
 {
-    return new ContextWGL(state, mRenderer);
+    std::shared_ptr<RendererWGL> renderer;
+    if (mVirtualizedContexts)
+    {
+        renderer = mRenderer;
+    }
+    else
+    {
+        // Create a new renderer that shares with the Display-level one.
+        egl::Error error = createRenderer(mRenderer->getContext(), false, &renderer);
+        if (error.isError())
+        {
+            ERR() << "Failed to create a shared renderer: " << error.getMessage();
+            return nullptr;
+        }
+    }
+
+    return new ContextWGL(state, renderer);
 }
 
 DeviceImpl *DisplayWGL::createDevice()
@@ -527,11 +550,6 @@ egl::ConfigSet DisplayWGL::generateConfigs()
 
 bool DisplayWGL::testDeviceLost()
 {
-    if (mHasRobustness)
-    {
-        return mRenderer->getResetStatus() != GL_NO_ERROR;
-    }
-
     return false;
 }
 
@@ -665,14 +683,17 @@ egl::Error DisplayWGL::makeCurrent(egl::Surface *drawSurface,
 {
     CurrentData &currentData = mCurrentData[std::this_thread::get_id()];
 
-    HDC newDC = currentData.dc;
+    // When contexts are virtualized, only single-threaded rendering is supported.  This means we
+    // can skip wglMakeCurrent calls when the surface is null and emulate a surfaceless context.
+    // This is not possible if the surface could be made current on another thread.
+    HDC newDC = mVirtualizedContexts ? currentData.dc : mDeviceContext;
     if (drawSurface)
     {
         SurfaceWGL *drawSurfaceWGL = GetImplAs<SurfaceWGL>(drawSurface);
         newDC                      = drawSurfaceWGL->getDC();
     }
 
-    HGLRC newContext = currentData.glrc;
+    HGLRC newContext = mVirtualizedContexts ? currentData.glrc : nullptr;
     if (context)
     {
         ContextWGL *contextWGL = GetImplAs<ContextWGL>(context);
@@ -749,9 +770,19 @@ gl::Version DisplayWGL::getMaxSupportedESVersion() const
 void DisplayWGL::destroyNativeContext(HGLRC context)
 {
     mFunctionsWGL->deleteContext(context);
+
+    // If this context is current, remove it from the tracking of current contexts to make sure we
+    // don't try to make it current again.
+    CurrentData &currentData = mCurrentData[std::this_thread::get_id()];
+    if (currentData.glrc == context)
+    {
+        currentData.dc   = nullptr;
+        currentData.glrc = nullptr;
+    }
 }
 
-HGLRC DisplayWGL::initializeContextAttribs(const egl::AttributeMap &eglAttributes) const
+HGLRC DisplayWGL::initializeContextAttribs(HGLRC shareContext,
+                                           const egl::AttributeMap &eglAttributes) const
 {
     EGLint requestedDisplayType = static_cast<EGLint>(
         eglAttributes.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE));
@@ -770,7 +801,7 @@ HGLRC DisplayWGL::initializeContextAttribs(const egl::AttributeMap &eglAttribute
         {
             profileMask |= WGL_CONTEXT_CORE_PROFILE_BIT_ARB;
         }
-        return createContextAttribs(requestedVersion, profileMask);
+        return createContextAttribs(shareContext, requestedVersion, profileMask);
     }
 
     // Try all the GL version in order as a workaround for Mesa context creation where the driver
@@ -787,7 +818,7 @@ HGLRC DisplayWGL::initializeContextAttribs(const egl::AttributeMap &eglAttribute
             profileFlag |= WGL_CONTEXT_ES_PROFILE_BIT_EXT;
         }
 
-        HGLRC context = createContextAttribs(info.version, profileFlag);
+        HGLRC context = createContextAttribs(shareContext, info.version, profileFlag);
         if (context != nullptr)
         {
             return context;
@@ -797,7 +828,9 @@ HGLRC DisplayWGL::initializeContextAttribs(const egl::AttributeMap &eglAttribute
     return nullptr;
 }
 
-HGLRC DisplayWGL::createContextAttribs(const gl::Version &version, int profileMask) const
+HGLRC DisplayWGL::createContextAttribs(HGLRC shareContext,
+                                       const gl::Version &version,
+                                       int profileMask) const
 {
     std::vector<int> attribs;
 
@@ -824,15 +857,17 @@ HGLRC DisplayWGL::createContextAttribs(const gl::Version &version, int profileMa
     attribs.push_back(0);
     attribs.push_back(0);
 
-    return mFunctionsWGL->createContextAttribsARB(mDeviceContext, nullptr, &attribs[0]);
+    return mFunctionsWGL->createContextAttribsARB(mDeviceContext, shareContext, &attribs[0]);
 }
 
-egl::Error DisplayWGL::createRenderer(std::shared_ptr<RendererWGL> *outRenderer)
+egl::Error DisplayWGL::createRenderer(HGLRC shareContext,
+                                      bool makeNewContextCurrent,
+                                      std::shared_ptr<RendererWGL> *outRenderer)
 {
     HGLRC context = nullptr;
     if (mFunctionsWGL->createContextAttribsARB)
     {
-        context = initializeContextAttribs(mDisplayAttributes);
+        context = initializeContextAttribs(shareContext, mDisplayAttributes);
     }
 
     // If wglCreateContextAttribsARB is unavailable or failed, try the standard wglCreateContext
@@ -840,6 +875,14 @@ egl::Error DisplayWGL::createRenderer(std::shared_ptr<RendererWGL> *outRenderer)
     {
         // Don't have control over GL versions
         context = mFunctionsWGL->createContext(mDeviceContext);
+        if (context && shareContext)
+        {
+            if (!mFunctionsWGL->shareLists(shareContext, context))
+            {
+                return egl::EglNotInitialized()
+                       << "Failed to share lists to newly created context.";
+            }
+        }
     }
 
     if (!context)
@@ -852,15 +895,27 @@ egl::Error DisplayWGL::createRenderer(std::shared_ptr<RendererWGL> *outRenderer)
     {
         return egl::EglNotInitialized() << "Failed to make the intermediate WGL context current.";
     }
-    CurrentData &currentData = mCurrentData[std::this_thread::get_id()];
-    currentData.dc           = mDeviceContext;
-    currentData.glrc         = context;
 
     std::unique_ptr<FunctionsGL> functionsGL(
         new FunctionsGLWindows(mOpenGLModule, mFunctionsWGL->getProcAddress));
     functionsGL->initialize(mDisplayAttributes);
 
     outRenderer->reset(new RendererWGL(std::move(functionsGL), mDisplayAttributes, this, context));
+
+    CurrentData &currentData = mCurrentData[std::this_thread::get_id()];
+    if (makeNewContextCurrent)
+    {
+        currentData.dc   = mDeviceContext;
+        currentData.glrc = context;
+    }
+    else
+    {
+        // Reset the current context back to the previous state
+        if (!mFunctionsWGL->makeCurrent(currentData.dc, currentData.glrc))
+        {
+            return egl::EglNotInitialized() << "Failed reset the current context.";
+        }
+    }
 
     return egl::NoError();
 }
