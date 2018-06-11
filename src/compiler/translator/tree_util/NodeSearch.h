@@ -15,17 +15,17 @@ namespace sh
 {
 
 template <class Parent>
-class NodeSearchTraverser : public TIntermTraverser
+class NodeSearchTraverser : public TIntermTraverser2
 {
   public:
-    NodeSearchTraverser() : TIntermTraverser(true, false, false), mFound(false) {}
+    NodeSearchTraverser() : TIntermTraverser2(true, false, false), mFound(false) {}
 
     bool found() const { return mFound; }
 
     static bool search(TIntermNode *node)
     {
         Parent searchTraverser;
-        node->traverse(&searchTraverser);
+        searchTraverser.traverse(node);
         return searchTraverser.found();
     }
 
@@ -36,19 +36,19 @@ class NodeSearchTraverser : public TIntermTraverser
 class FindDiscard : public NodeSearchTraverser<FindDiscard>
 {
   public:
-    virtual bool visitBranch(Visit visit, TIntermBranch *node)
+    TAction *visitBranch(Visit visit, TIntermBranch *node) override
     {
         switch (node->getFlowOp())
         {
             case EOpKill:
                 mFound = true;
-                break;
+                return new TAction(Continue::Stop);
 
             default:
                 break;
         }
 
-        return !mFound;
+        return nullptr;
     }
 };
 }

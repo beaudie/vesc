@@ -68,13 +68,14 @@ class RemovePowTest : public testing::Test
 class FindPow : public sh::NodeSearchTraverser<FindPow>
 {
   public:
-    bool visitBinary(Visit visit, TIntermBinary *node) override
+    TAction *visitBinary(Visit visit, TIntermBinary *node) override
     {
         if (node->getOp() == EOpPow)
         {
             mFound = true;
+            return new TAction(Continue::Stop);
         }
-        return !mFound;
+        return nullptr;
     }
 };
 
@@ -107,10 +108,14 @@ bool IsPowWorkaround(TIntermNode *node, TIntermNode **base)
 class FindPowWorkaround : public sh::NodeSearchTraverser<FindPowWorkaround>
 {
   public:
-    bool visitUnary(Visit visit, TIntermUnary *node) override
+    TAction *visitUnary(Visit visit, TIntermUnary *node) override
     {
         mFound = IsPowWorkaround(node, nullptr);
-        return !mFound;
+        if (mFound)
+        {
+            return new TAction(Continue::Stop);
+        }
+        return nullptr;
     }
 };
 
@@ -119,13 +124,19 @@ class FindPowWorkaround : public sh::NodeSearchTraverser<FindPowWorkaround>
 class FindNestedPowWorkaround : public sh::NodeSearchTraverser<FindNestedPowWorkaround>
 {
   public:
-    bool visitUnary(Visit visit, TIntermUnary *node) override
+    TAction *visitUnary(Visit visit, TIntermUnary *node) override
     {
         TIntermNode *base = nullptr;
         bool oneFound = IsPowWorkaround(node, &base);
         if (oneFound && base)
+        {
             mFound = IsPowWorkaround(base, nullptr);
-        return !mFound;
+            if (mFound)
+            {
+                return new TAction(Continue::Stop);
+            }
+        }
+        return nullptr;
     }
 };
 

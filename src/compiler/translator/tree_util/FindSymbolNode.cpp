@@ -18,20 +18,22 @@ namespace sh
 namespace
 {
 
-class SymbolFinder : public TIntermTraverser
+class SymbolFinder : public TIntermTraverser2
 {
   public:
     SymbolFinder(const ImmutableString &symbolName)
-        : TIntermTraverser(true, false, false), mSymbolName(symbolName), mNodeFound(nullptr)
+        : TIntermTraverser2(true, false, false), mSymbolName(symbolName), mNodeFound(nullptr)
     {
     }
 
-    void visitSymbol(TIntermSymbol *node)
+    TAction *visitSymbol(Visit visit, TIntermSymbol *node) override
     {
         if (node->variable().symbolType() != SymbolType::Empty && node->getName() == mSymbolName)
         {
             mNodeFound = node;
+            return new TAction(Continue::Stop);
         }
+        return nullptr;
     }
 
     bool isFound() const { return mNodeFound != nullptr; }
@@ -47,7 +49,7 @@ class SymbolFinder : public TIntermTraverser
 const TIntermSymbol *FindSymbolNode(TIntermNode *root, const ImmutableString &symbolName)
 {
     SymbolFinder finder(symbolName);
-    root->traverse(&finder);
+    finder.traverse(root);
     return finder.getNode();
 }
 
