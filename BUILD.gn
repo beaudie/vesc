@@ -804,6 +804,19 @@ static_library("libEGL_static") {
   ]
 }
 
+shared_library("libShaderTranslator${angle_libs_suffix}") {
+
+  defines = [ "LIBANGLE_IMPLEMENTATION" ]
+
+  sources = [
+    "src/libShaderTranslator/libShaderTranslator.cpp",
+  ]
+
+  deps = [
+    ":translator",
+  ]
+}
+
 util_gypi = exec_script("//build/gypi_to_gn.py",
                         [ rebase_path("util/util.gyp") ],
                         "scope",
