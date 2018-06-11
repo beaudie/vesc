@@ -315,6 +315,148 @@ class TLValueTrackingTraverser : public TIntermTraverser
     bool mInFunctionCallOutParameter;
 };
 
+enum class Mutate
+{
+    ReplaceThisNode,
+    ReplaceParentNode,
+    InsertBeforeThisNodeInParentBlock,
+    InsertAfterThisNodeInParentBlock
+};
+
+struct TMutation
+{
+    POOL_ALLOCATOR_NEW_DELETE();
+    TMutation(Mutate mutate, TIntermNode *node) : mMutate(mutate), mNode(node) {}
+
+    Mutate mMutate;
+    TIntermNode *mNode;
+};
+
+enum class Continue
+{
+    Stop,                // Will stop traversal entirely.
+    ThroughThisSubtree,  // Will traverse through the rest of this subtree. If this subtree is
+                         // replaced, then traversal will resume from the beginning of the
+                         // replacement tree.
+    FromNextSibling,  // Will continue from the next sibling node of this node. If this subtree is
+                      // replaced, then traversal will resume from after the replacement tree.
+};
+
+struct TAction
+{
+    POOL_ALLOCATOR_NEW_DELETE();
+    TAction() : mContinue(Continue::ThroughThisSubtree) {}
+    TAction(Continue cont) : mContinue(cont) {}
+    TVector<TMutation *> mMutations;
+    Continue mContinue;
+};
+
+class TIntermTraverser2 : angle::NonCopyable
+{
+  public:
+    POOL_ALLOCATOR_NEW_DELETE();
+    TIntermTraverser2(bool preVisit,
+                      bool inVisit,
+                      bool postVisit,
+                      TSymbolTable *symbolTable = nullptr);
+    virtual ~TIntermTraverser2();
+
+// TODO: Clean this up
+#define DefaultAction nullptr
+
+    static const TAction defaultLeafNodeAction;
+
+    // Override the visit functions to operate on the tree. In case you need to change a node that
+    // is already in the traversal stack, then return an TAction with a TMutation that will do that.
+    // If you're only changing the children of the node on preVisit or are not mutating the tree,
+    // you can just do the operations in the visit function.
+    virtual const TAction *visitSymbol(Visit visit, TIntermSymbol *node)
+    {
+        return &defaultLeafNodeAction;
+    }
+    virtual const TAction *visitConstantUnion(Visit visit, TIntermConstantUnion *node)
+    {
+        return &defaultLeafNodeAction;
+    }
+    virtual const TAction *visitSwizzle(Visit visit, TIntermSwizzle *node) { return DefaultAction; }
+    virtual const TAction *visitBinary(Visit visit, TIntermBinary *node) { return DefaultAction; }
+    virtual const TAction *visitUnary(Visit visit, TIntermUnary *node) { return DefaultAction; }
+    virtual const TAction *visitTernary(Visit visit, TIntermTernary *node) { return DefaultAction; }
+    virtual const TAction *visitIfElse(Visit visit, TIntermIfElse *node) { return DefaultAction; }
+    virtual const TAction *visitSwitch(Visit visit, TIntermSwitch *node) { return DefaultAction; }
+    virtual const TAction *visitCase(Visit visit, TIntermCase *node) { return DefaultAction; }
+    virtual const TAction *visitFunctionPrototype(Visit visit, TIntermFunctionPrototype *node)
+    {
+        return &defaultLeafNodeAction;
+    }
+    virtual const TAction *visitFunctionDefinition(Visit visit, TIntermFunctionDefinition *node)
+    {
+        return DefaultAction;
+    }
+    virtual const TAction *visitAggregate(Visit visit, TIntermAggregate *node)
+    {
+        return DefaultAction;
+    }
+    virtual const TAction *visitBlock(Visit visit, TIntermBlock *node) { return DefaultAction; }
+    virtual const TAction *visitInvariantDeclaration(Visit visit, TIntermInvariantDeclaration *node)
+    {
+        return DefaultAction;
+    }
+    virtual const TAction *visitDeclaration(Visit visit, TIntermDeclaration *node)
+    {
+        return DefaultAction;
+    }
+    virtual const TAction *visitLoop(Visit visit, TIntermLoop *node) { return DefaultAction; }
+    virtual const TAction *visitBranch(Visit visit, TIntermBranch *node) { return DefaultAction; }
+
+    // This function should only be overridden in special circumstances to provide extra contextual
+    // information for visit*() functions.
+    virtual void traverse(TIntermNode *node);
+
+  protected:
+    // int getCurrentTraversalDepth() const { return static_cast<int>(mPath.size()) - 1; }
+    TIntermNode *getParentNode()
+    {
+        return mTraversalStack.size() <= 1 ? nullptr
+                                           : mTraversalStack[mTraversalStack.size() - 2u].node;
+    }
+
+    // Only to be called from traverse(). Returns the number of top nodes that were replaced.
+    unsigned int applyMutations(const TVector<TMutation *> &mutations);
+
+    const bool mPreVisit;
+    const bool mInVisit;
+    const bool mPostVisit;
+
+    struct TraversalStackEntry
+    {
+        TraversalStackEntry(TIntermNode *node, unsigned int childIndex)
+            : node(node), childIndex(childIndex)
+        {
+        }
+        TIntermNode *node;
+        unsigned int childIndex;
+    };
+    TVector<TraversalStackEntry> mTraversalStack;
+
+    TSymbolTable *mSymbolTable;
+};
+
+class TLValueTrackingTraverser2 : public TIntermTraverser2
+{
+  public:
+    TLValueTrackingTraverser2(bool preVisit,
+                              bool inVisit,
+                              bool postVisit,
+                              TSymbolTable *symbolTable = nullptr)
+        : TIntermTraverser2(preVisit, inVisit, postVisit, symbolTable)
+    {
+    }
+
+    // TODO:
+    // void traverse(TIntermNode *node) override;
+};
+
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_TREEUTIL_INTERMTRAVERSE_H_

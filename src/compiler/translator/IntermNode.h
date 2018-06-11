@@ -37,6 +37,8 @@ class ImmutableString;
 class TDiagnostics;
 
 class TIntermTraverser;
+class TIntermTraverser2;
+struct TAction;
 class TIntermAggregate;
 class TIntermBlock;
 class TIntermInvariantDeclaration;
@@ -82,7 +84,8 @@ class TIntermNode : angle::NonCopyable
     void setLine(const TSourceLoc &l) { mLine = l; }
 
     virtual void traverse(TIntermTraverser *it);
-    virtual bool visit(Visit visit, TIntermTraverser *it) = 0;
+    virtual bool visit(Visit visit, TIntermTraverser *it)            = 0;
+    virtual const TAction *visit(Visit visit, TIntermTraverser2 *it) = 0;
 
     virtual TIntermTyped *getAsTyped() { return 0; }
     virtual TIntermConstantUnion *getAsConstantUnion() { return 0; }
@@ -194,6 +197,7 @@ class TIntermLoop : public TIntermNode
     TIntermLoop *getAsLoopNode() override { return this; }
     void traverse(TIntermTraverser *it) final;
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     unsigned int getChildCount() final;
     TIntermNode *getChildNode(unsigned int index) final;
@@ -228,6 +232,7 @@ class TIntermBranch : public TIntermNode
 
     TIntermBranch *getAsBranchNode() override { return this; }
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     unsigned int getChildCount() final;
     TIntermNode *getChildNode(unsigned int index) final;
@@ -265,6 +270,7 @@ class TIntermSymbol : public TIntermTyped
     TIntermSymbol *getAsSymbolNode() override { return this; }
     void traverse(TIntermTraverser *it) final;
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     unsigned int getChildCount() final;
     TIntermNode *getChildNode(unsigned int index) final;
@@ -336,6 +342,7 @@ class TIntermConstantUnion : public TIntermExpression
     TIntermConstantUnion *getAsConstantUnion() override { return this; }
     void traverse(TIntermTraverser *it) final;
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     unsigned int getChildCount() final;
     TIntermNode *getChildNode(unsigned int index) final;
@@ -409,6 +416,7 @@ class TIntermSwizzle : public TIntermExpression
 
     TIntermSwizzle *getAsSwizzleNode() override { return this; };
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     unsigned int getChildCount() final;
     TIntermNode *getChildNode(unsigned int index) final;
@@ -458,6 +466,7 @@ class TIntermBinary : public TIntermOperator
     TIntermBinary *getAsBinaryNode() override { return this; };
     void traverse(TIntermTraverser *it) final;
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     unsigned int getChildCount() final;
     TIntermNode *getChildNode(unsigned int index) final;
@@ -508,6 +517,7 @@ class TIntermUnary : public TIntermOperator
     TIntermUnary *getAsUnaryNode() override { return this; }
     void traverse(TIntermTraverser *it) final;
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     unsigned int getChildCount() final;
     TIntermNode *getChildNode(unsigned int index) final;
@@ -588,6 +598,7 @@ class TIntermAggregate : public TIntermOperator, public TIntermAggregateBase
     TIntermAggregate *getAsAggregate() override { return this; }
     void traverse(TIntermTraverser *it) final;
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     unsigned int getChildCount() final;
     TIntermNode *getChildNode(unsigned int index) final;
@@ -657,6 +668,7 @@ class TIntermBlock : public TIntermNode, public TIntermAggregateBase
     TIntermBlock *getAsBlock() override { return this; }
     void traverse(TIntermTraverser *it) final;
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     unsigned int getChildCount() final;
     TIntermNode *getChildNode(unsigned int index) final;
@@ -683,6 +695,7 @@ class TIntermFunctionPrototype : public TIntermTyped
     TIntermFunctionPrototype *getAsFunctionPrototypeNode() override { return this; }
     void traverse(TIntermTraverser *it) final;
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     unsigned int getChildCount() final;
     TIntermNode *getChildNode(unsigned int index) final;
@@ -722,6 +735,7 @@ class TIntermFunctionDefinition : public TIntermNode
     TIntermFunctionDefinition *getAsFunctionDefinition() override { return this; }
     void traverse(TIntermTraverser *it) final;
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     unsigned int getChildCount() final;
     TIntermNode *getChildNode(unsigned int index) final;
@@ -746,6 +760,7 @@ class TIntermDeclaration : public TIntermNode, public TIntermAggregateBase
 
     TIntermDeclaration *getAsDeclarationNode() override { return this; }
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     unsigned int getChildCount() final;
     TIntermNode *getChildNode(unsigned int index) final;
@@ -770,6 +785,7 @@ class TIntermInvariantDeclaration : public TIntermNode
 
     virtual TIntermInvariantDeclaration *getAsInvariantDeclarationNode() override { return this; }
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     TIntermSymbol *getSymbol() { return mSymbol; }
 
@@ -789,6 +805,7 @@ class TIntermTernary : public TIntermExpression
 
     TIntermTernary *getAsTernaryNode() override { return this; }
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     unsigned int getChildCount() final;
     TIntermNode *getChildNode(unsigned int index) final;
@@ -827,6 +844,7 @@ class TIntermIfElse : public TIntermNode
 
     TIntermIfElse *getAsIfElseNode() override { return this; }
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     unsigned int getChildCount() final;
     TIntermNode *getChildNode(unsigned int index) final;
@@ -852,6 +870,7 @@ class TIntermSwitch : public TIntermNode
 
     TIntermSwitch *getAsSwitchNode() override { return this; }
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     unsigned int getChildCount() final;
     TIntermNode *getChildNode(unsigned int index) final;
@@ -878,6 +897,7 @@ class TIntermCase : public TIntermNode
 
     TIntermCase *getAsCaseNode() override { return this; }
     bool visit(Visit visit, TIntermTraverser *it) final;
+    const TAction *visit(Visit visit, TIntermTraverser2 *it) final;
 
     unsigned int getChildCount() final;
     TIntermNode *getChildNode(unsigned int index) final;

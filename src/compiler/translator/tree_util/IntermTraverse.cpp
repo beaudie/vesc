@@ -191,6 +191,91 @@ bool TIntermCase::visit(Visit visit, TIntermTraverser *it)
     return it->visitCase(visit, this);
 }
 
+const TAction *TIntermSymbol::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitSymbol(visit, this);
+}
+
+const TAction *TIntermConstantUnion::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitConstantUnion(visit, this);
+}
+
+const TAction *TIntermFunctionPrototype::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitFunctionPrototype(visit, this);
+}
+
+const TAction *TIntermFunctionDefinition::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitFunctionDefinition(visit, this);
+}
+
+const TAction *TIntermUnary::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitUnary(visit, this);
+}
+
+const TAction *TIntermSwizzle::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitSwizzle(visit, this);
+}
+
+const TAction *TIntermBinary::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitBinary(visit, this);
+}
+
+const TAction *TIntermTernary::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitTernary(visit, this);
+}
+
+const TAction *TIntermAggregate::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitAggregate(visit, this);
+}
+
+const TAction *TIntermDeclaration::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitDeclaration(visit, this);
+}
+
+const TAction *TIntermInvariantDeclaration::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitInvariantDeclaration(visit, this);
+}
+
+const TAction *TIntermBlock::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitBlock(visit, this);
+}
+
+const TAction *TIntermIfElse::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitIfElse(visit, this);
+}
+
+const TAction *TIntermLoop::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitLoop(visit, this);
+}
+
+const TAction *TIntermBranch::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitBranch(visit, this);
+}
+
+const TAction *TIntermSwitch::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitSwitch(visit, this);
+}
+
+const TAction *TIntermCase::visit(Visit visit, TIntermTraverser2 *it)
+{
+    return it->visitCase(visit, this);
+}
+
 TIntermTraverser::TIntermTraverser(bool preVisit,
                                    bool inVisit,
                                    bool postVisit,
@@ -613,6 +698,152 @@ void TLValueTrackingTraverser::traverseAggregate(TIntermAggregate *node)
 void TIntermTraverser::traverseLoop(TIntermLoop *node)
 {
     traverse(node);
+}
+
+const TAction TIntermTraverser2::defaultLeafNodeAction(Continue::FromNextSibling);
+
+TIntermTraverser2::TIntermTraverser2(bool preVisit,
+                                     bool inVisit,
+                                     bool postVisit,
+                                     TSymbolTable *symbolTable)
+    : mPreVisit(preVisit), mInVisit(inVisit), mPostVisit(postVisit), mSymbolTable(symbolTable)
+{
+}
+
+TIntermTraverser2::~TIntermTraverser2()
+{
+}
+
+unsigned int TIntermTraverser2::applyMutations(const TVector<TMutation *> &mutations)
+{
+    unsigned int topNodesReplaced = 0;
+    for (TMutation *mutation : mutations)
+    {
+        switch (mutation->mMutate)
+        {
+            case Mutate::ReplaceThisNode:
+                mTraversalStack.at(mTraversalStack.size() - 2)
+                    .node->replaceChildNode(mTraversalStack.back().node, mutation->mNode);
+                topNodesReplaced = 1;
+                break;
+            case Mutate::ReplaceParentNode:
+                mTraversalStack.at(mTraversalStack.size() - 3)
+                    .node->replaceChildNode(mTraversalStack.at(mTraversalStack.size() - 2).node,
+                                            mutation->mNode);
+                topNodesReplaced = 2;
+                break;
+            case Mutate::InsertBeforeThisNodeInParentBlock:
+            {
+                TraversalStackEntry *parentBlock;
+                unsigned int parentBlockIndex = 1;
+                do
+                {
+                    ++parentBlockIndex;
+                    parentBlock = &mTraversalStack.at(mTraversalStack.size() - parentBlockIndex);
+                } while (!parentBlock->node->getAsBlock());
+                TIntermBlock *parentBlockNode = parentBlock->node->getAsBlock();
+                parentBlockNode->getSequence()->insert(
+                    parentBlockNode->getSequence()->begin() + parentBlock->childIndex,
+                    mutation->mNode);
+                parentBlock->childIndex++;
+                break;
+            }
+            case Mutate::InsertAfterThisNodeInParentBlock:
+                UNIMPLEMENTED();
+                break;
+        }
+    }
+    return topNodesReplaced;
+}
+
+void TIntermTraverser2::traverse(TIntermNode *node)
+{
+    TIntermNode *currentNode = node;
+
+    ASSERT(mTraversalStack.empty());
+    mTraversalStack.push_back(TraversalStackEntry(node, 0));
+
+    const TAction defaultAction(Continue::ThroughThisSubtree);
+
+    while (!mTraversalStack.empty())
+    {
+        if (mTraversalStack.back().childIndex >= currentNode->getChildCount())
+        {
+            if (mPostVisit)
+            {
+                const TAction *action = currentNode->visit(PostVisit, this);
+                ANGLE_UNUSED_VARIABLE(action);
+                ASSERT(action == nullptr);
+            }
+            mTraversalStack.pop_back();
+            if (!mTraversalStack.empty())
+            {
+                currentNode = mTraversalStack.back().node;
+                ++mTraversalStack.back().childIndex;
+            }
+        }
+        else
+        {
+            const TAction *action = nullptr;
+            if (mTraversalStack.back().childIndex == 0 && mPreVisit)
+            {
+                action = currentNode->visit(PreVisit, this);
+            }
+            if (mTraversalStack.back().childIndex > 0 && mInVisit)
+            {
+                action = currentNode->visit(InVisit, this);
+            }
+            if (!action)
+            {
+                action = &defaultAction;
+            }
+
+            unsigned int topNodesReplaced = applyMutations(action->mMutations);
+            switch (action->mContinue)
+            {
+                case Continue::Stop:
+                    return;
+                case Continue::ThroughThisSubtree:
+                    // If some of the nodes at the top of the traversal stack were replaced, we'll
+                    // rewind some of the traversal stack and continue from the replacement node.
+                    if (topNodesReplaced > 0)
+                    {
+                        while (topNodesReplaced > 0)
+                        {
+                            mTraversalStack.pop_back();
+                            --topNodesReplaced;
+                        }
+                        currentNode = mTraversalStack.back().node;
+                    }
+                    if (currentNode->getChildCount() == 0)
+                    {
+                        // For leaf nodes preVisit will be executed at childIndex 0, and postVisit
+                        // at childIndex 1.
+                        ++mTraversalStack.back().childIndex;
+                    }
+                    else
+                    {
+                        mTraversalStack.push_back(TraversalStackEntry(
+                            currentNode->getChildNode(mTraversalStack.back().childIndex), 0));
+                        currentNode = mTraversalStack.back().node;
+                    }
+                    break;
+                case Continue::FromNextSibling:
+                    // TODO: Find the correct node to continue from depending on mutations done on
+                    // the tree.
+                    mTraversalStack.pop_back();
+                    if (!mTraversalStack.empty())
+                    {
+                        currentNode = mTraversalStack.back().node;
+                        ++mTraversalStack.back().childIndex;
+                    }
+                    break;
+                default:
+                    UNREACHABLE();
+                    break;
+            }
+        }
+    }
 }
 
 }  // namespace sh

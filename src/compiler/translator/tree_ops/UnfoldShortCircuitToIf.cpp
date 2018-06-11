@@ -22,50 +22,36 @@ namespace sh
 namespace
 {
 
-// Traverser that unfolds one short-circuiting operation at a time.
-class UnfoldShortCircuitTraverser : public TIntermTraverser
+class UnfoldShortCircuitTraverser : public TIntermTraverser2
 {
   public:
     UnfoldShortCircuitTraverser(TSymbolTable *symbolTable);
 
-    bool visitBinary(Visit visit, TIntermBinary *node) override;
-    bool visitTernary(Visit visit, TIntermTernary *node) override;
-
-    void nextIteration();
-    bool foundShortCircuit() const { return mFoundShortCircuit; }
+    TAction *visitBinary(Visit visit, TIntermBinary *node) override;
+    TAction *visitTernary(Visit visit, TIntermTernary *node) override;
 
   protected:
-    // Marked to true once an operation that needs to be unfolded has been found.
-    // After that, no more unfolding is performed on that traversal.
-    bool mFoundShortCircuit;
 
     IntermNodePatternMatcher mPatternToUnfoldMatcher;
 };
 
 UnfoldShortCircuitTraverser::UnfoldShortCircuitTraverser(TSymbolTable *symbolTable)
-    : TIntermTraverser(true, false, true, symbolTable),
-      mFoundShortCircuit(false),
+    : TIntermTraverser2(true, false, false, symbolTable),
       mPatternToUnfoldMatcher(IntermNodePatternMatcher::kUnfoldedShortCircuitExpression)
 {
 }
 
-bool UnfoldShortCircuitTraverser::visitBinary(Visit visit, TIntermBinary *node)
+TAction *UnfoldShortCircuitTraverser::visitBinary(Visit visit, TIntermBinary *node)
 {
-    if (mFoundShortCircuit)
-        return false;
-
-    if (visit != PreVisit)
-        return true;
-
     if (!mPatternToUnfoldMatcher.match(node, getParentNode()))
-        return true;
+        return nullptr;
 
     // If our right node doesn't have side effects, we know we don't need to unfold this
     // expression: there will be no short-circuiting side effects to avoid
     // (note: unfolding doesn't depend on the left node -- it will always be evaluated)
     ASSERT(node->getRight()->hasSideEffects());
 
-    mFoundShortCircuit = true;
+    TAction *action = new TAction(Continue::ThroughThisSubtree);
 
     switch (node->getOp())
     {
@@ -80,7 +66,10 @@ bool UnfoldShortCircuitTraverser::visitBinary(Visit visit, TIntermBinary *node)
             TVariable *resultVariable = CreateTempVariable(mSymbolTable, boolType);
 
             ASSERT(node->getLeft()->getType() == *boolType);
-            insertions.push_back(CreateTempInitDeclarationNode(resultVariable, node->getLeft()));
+            auto insertion =
+                new TMutation(Mutate::InsertBeforeThisNodeInParentBlock,
+                              CreateTempInitDeclarationNode(resultVariable, node->getLeft()));
+            action->mMutations.push_back(insertion);
 
             TIntermBlock *assignRightBlock = new TIntermBlock();
             ASSERT(node->getRight()->getType() == *boolType);
@@ -90,24 +79,27 @@ bool UnfoldShortCircuitTraverser::visitBinary(Visit visit, TIntermBinary *node)
             TIntermUnary *notTempSymbol =
                 new TIntermUnary(EOpLogicalNot, CreateTempSymbolNode(resultVariable), nullptr);
             TIntermIfElse *ifNode = new TIntermIfElse(notTempSymbol, assignRightBlock, nullptr);
-            insertions.push_back(ifNode);
+            insertion = new TMutation(Mutate::InsertBeforeThisNodeInParentBlock, ifNode);
+            action->mMutations.push_back(insertion);
 
-            insertStatementsInParentBlock(insertions);
-
-            queueReplacement(CreateTempSymbolNode(resultVariable), OriginalNode::IS_DROPPED);
-            return false;
+            auto replacement =
+                new TMutation(Mutate::ReplaceThisNode, CreateTempSymbolNode(resultVariable));
+            action->mMutations.push_back(replacement);
+            return action;
         }
         case EOpLogicalAnd:
         {
             // "x && y" is equivalent to "x ? y : false", which unfolds to "bool s; if(x) s = y;
             // else s = false;",
             // and then further simplifies down to "bool s = x; if(s) s = y;".
-            TIntermSequence insertions;
             const TType *boolType = StaticType::Get<EbtBool, EbpUndefined, EvqTemporary, 1, 1>();
             TVariable *resultVariable = CreateTempVariable(mSymbolTable, boolType);
 
             ASSERT(node->getLeft()->getType() == *boolType);
-            insertions.push_back(CreateTempInitDeclarationNode(resultVariable, node->getLeft()));
+            auto insertion =
+                new TMutation(Mutate::InsertBeforeThisNodeInParentBlock,
+                              CreateTempInitDeclarationNode(resultVariable, node->getLeft()));
+            action->mMutations.push_back(insertion);
 
             TIntermBlock *assignRightBlock = new TIntermBlock();
             ASSERT(node->getRight()->getType() == *boolType);
@@ -116,38 +108,34 @@ bool UnfoldShortCircuitTraverser::visitBinary(Visit visit, TIntermBinary *node)
 
             TIntermIfElse *ifNode =
                 new TIntermIfElse(CreateTempSymbolNode(resultVariable), assignRightBlock, nullptr);
-            insertions.push_back(ifNode);
+            insertion = new TMutation(Mutate::InsertBeforeThisNodeInParentBlock, ifNode);
+            action->mMutations.push_back(insertion);
 
-            insertStatementsInParentBlock(insertions);
-
-            queueReplacement(CreateTempSymbolNode(resultVariable), OriginalNode::IS_DROPPED);
-            return false;
+            auto replacement =
+                new TMutation(Mutate::ReplaceThisNode, CreateTempSymbolNode(resultVariable));
+            action->mMutations.push_back(replacement);
+            return action;
         }
         default:
             UNREACHABLE();
-            return true;
+            return nullptr;
     }
 }
 
-bool UnfoldShortCircuitTraverser::visitTernary(Visit visit, TIntermTernary *node)
+TAction *UnfoldShortCircuitTraverser::visitTernary(Visit visit, TIntermTernary *node)
 {
-    if (mFoundShortCircuit)
-        return false;
-
-    if (visit != PreVisit)
-        return true;
-
     if (!mPatternToUnfoldMatcher.match(node))
-        return true;
+        return nullptr;
 
-    mFoundShortCircuit = true;
+    TAction *action = new TAction(Continue::ThroughThisSubtree);
 
     // Unfold "b ? x : y" into "type s; if(b) s = x; else s = y;"
     TIntermSequence insertions;
     TIntermDeclaration *tempDeclaration = nullptr;
     TVariable *resultVariable = DeclareTempVariable(mSymbolTable, new TType(node->getType()),
                                                     EvqTemporary, &tempDeclaration);
-    insertions.push_back(tempDeclaration);
+    auto insertion = new TMutation(Mutate::InsertBeforeThisNodeInParentBlock, tempDeclaration);
+    action->mMutations.push_back(insertion);
 
     TIntermBlock *trueBlock = new TIntermBlock();
     TIntermBinary *trueAssignment =
@@ -161,19 +149,13 @@ bool UnfoldShortCircuitTraverser::visitTernary(Visit visit, TIntermTernary *node
 
     TIntermIfElse *ifNode =
         new TIntermIfElse(node->getCondition()->getAsTyped(), trueBlock, falseBlock);
-    insertions.push_back(ifNode);
-
-    insertStatementsInParentBlock(insertions);
+    insertion = new TMutation(Mutate::InsertBeforeThisNodeInParentBlock, ifNode);
+    action->mMutations.push_back(insertion);
 
     TIntermSymbol *ternaryResult = CreateTempSymbolNode(resultVariable);
-    queueReplacement(ternaryResult, OriginalNode::IS_DROPPED);
-
-    return false;
-}
-
-void UnfoldShortCircuitTraverser::nextIteration()
-{
-    mFoundShortCircuit = false;
+    auto replacement             = new TMutation(Mutate::ReplaceThisNode, ternaryResult);
+    action->mMutations.push_back(replacement);
+    return action;
 }
 
 }  // namespace
@@ -181,14 +163,7 @@ void UnfoldShortCircuitTraverser::nextIteration()
 void UnfoldShortCircuitToIf(TIntermNode *root, TSymbolTable *symbolTable)
 {
     UnfoldShortCircuitTraverser traverser(symbolTable);
-    // Unfold one operator at a time, and reset the traverser between iterations.
-    do
-    {
-        traverser.nextIteration();
-        root->traverse(&traverser);
-        if (traverser.foundShortCircuit())
-            traverser.updateTree();
-    } while (traverser.foundShortCircuit());
+    traverser.traverse(root);
 }
 
 }  // namespace sh
