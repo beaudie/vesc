@@ -3129,6 +3129,8 @@ void Context::initCaps()
     // Apply implementation limits
     LimitCap(&mCaps.maxVertexAttributes, MAX_VERTEX_ATTRIBS);
 
+    mCaps.minAliasedPointSize = std::max(1.0f, mCaps.minAliasedPointSize);
+
     if (getClientVersion() < ES_3_1)
     {
         mCaps.maxVertexAttribBindings = mCaps.maxVertexAttributes;
