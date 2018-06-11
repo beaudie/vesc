@@ -603,7 +603,7 @@ Error Display::createWindowSurface(const Config *configuration,
                                    const AttributeMap &attribs,
                                    Surface **outSurface)
 {
-    if (mImplementation->testDeviceLost())
+    if (isDeviceLost())
     {
         ANGLE_TRY(restoreLostDevice());
     }
@@ -629,7 +629,7 @@ Error Display::createPbufferSurface(const Config *configuration,
 {
     ASSERT(isInitialized());
 
-    if (mImplementation->testDeviceLost())
+    if (isDeviceLost())
     {
         ANGLE_TRY(restoreLostDevice());
     }
@@ -652,7 +652,7 @@ Error Display::createPbufferFromClientBuffer(const Config *configuration,
 {
     ASSERT(isInitialized());
 
-    if (mImplementation->testDeviceLost())
+    if (isDeviceLost())
     {
         ANGLE_TRY(restoreLostDevice());
     }
@@ -675,7 +675,7 @@ Error Display::createPixmapSurface(const Config *configuration,
 {
     ASSERT(isInitialized());
 
-    if (mImplementation->testDeviceLost())
+    if (isDeviceLost())
     {
         ANGLE_TRY(restoreLostDevice());
     }
@@ -699,7 +699,7 @@ Error Display::createImage(const gl::Context *context,
 {
     ASSERT(isInitialized());
 
-    if (mImplementation->testDeviceLost())
+    if (isDeviceLost())
     {
         ANGLE_TRY(restoreLostDevice());
     }
@@ -757,7 +757,7 @@ Error Display::createContext(const Config *configuration,
 {
     ASSERT(isInitialized());
 
-    if (mImplementation->testDeviceLost())
+    if (isDeviceLost())
     {
         ANGLE_TRY(restoreLostDevice());
     }
@@ -1018,6 +1018,9 @@ static ClientExtensions GenerateClientExtensions()
 
 #if defined(ANGLE_ENABLE_OPENGL)
     extensions.platformANGLEOpenGL = true;
+
+    // Selecting context virtualization is currently only supported in the OpenGL backend.
+    extensions.platformANGLEContextVirtualization = true;
 #endif
 
 #if defined(ANGLE_ENABLE_NULL)
