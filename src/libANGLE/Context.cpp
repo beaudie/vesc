@@ -1288,7 +1288,7 @@ void Context::getFloatvImpl(GLenum pname, GLfloat *params)
             params[1] = mCaps.maxAliasedLineWidth;
             break;
         case GL_ALIASED_POINT_SIZE_RANGE:
-            params[0] = mCaps.minAliasedPointSize;
+            params[0] = std::max(static_cast<GLfloat>(1.0), mCaps.minAliasedPointSize);
             params[1] = mCaps.maxAliasedPointSize;
             break;
         case GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT:
