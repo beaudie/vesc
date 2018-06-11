@@ -13,6 +13,9 @@
 
 #include <GL/wglext.h>
 
+#include <thread>
+#include <unordered_map>
+
 namespace rx
 {
 
@@ -91,8 +94,12 @@ class DisplayWGL : public DisplayGL
 
     std::shared_ptr<RendererWGL> mRenderer;
 
-    HDC mCurrentDC;
-    HGLRC mCurrentGLRC;
+    struct CurrentData
+    {
+        HDC dc     = nullptr;
+        HGLRC glrc = nullptr;
+    };
+    std::unordered_map<std::thread::id, CurrentData> mCurrentData;
 
     HMODULE mOpenGLModule;
 
