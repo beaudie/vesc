@@ -92,7 +92,8 @@ Format::Format()
       bufferFormatID(angle::Format::ID::NONE),
       vkBufferFormat(VK_FORMAT_UNDEFINED),
       dataInitializerFunction(nullptr),
-      loadFunctions()
+      loadFunctions(),
+      angleFormatID(angle::Format::ID::NONE)
 {
 }
 
@@ -104,6 +105,11 @@ const angle::Format &Format::textureFormat() const
 const angle::Format &Format::bufferFormat() const
 {
     return angle::Format::Get(bufferFormatID);
+}
+
+const angle::Format &Format::angleFormat() const
+{
+    return angle::Format::Get(angleFormatID);
 }
 
 bool operator==(const Format &lhs, const Format &rhs)
@@ -132,6 +138,7 @@ void FormatTable::initialize(VkPhysicalDevice physicalDevice,
     for (size_t formatIndex = 0; formatIndex < angle::kNumANGLEFormats; ++formatIndex)
     {
         const auto formatID              = static_cast<angle::Format::ID>(formatIndex);
+        mFormatData[formatIndex].angleFormatID = formatID;
         const angle::Format &angleFormat = angle::Format::Get(formatID);
         mFormatData[formatIndex].initialize(physicalDevice, angleFormat);
         const GLenum internalFormat = mFormatData[formatIndex].internalFormat;
