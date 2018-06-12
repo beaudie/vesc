@@ -493,6 +493,7 @@ gl::Error VertexArrayVk::onIndexedDraw(const gl::Context *context,
                                        bool newCommandBuffer)
 {
     ANGLE_TRY(onDraw(context, renderer, drawCallParams, commandBuffer, newCommandBuffer));
+    uintptr_t offset = reinterpret_cast<uintptr_t>(drawCallParams.indices());
 
     if (!mState.getElementArrayBuffer().get() &&
         drawCallParams.mode() != gl::PrimitiveMode::LineLoop)
@@ -500,7 +501,7 @@ gl::Error VertexArrayVk::onIndexedDraw(const gl::Context *context,
         ANGLE_TRY(drawCallParams.ensureIndexRangeResolved(context));
         ANGLE_TRY(streamIndexData(renderer, drawCallParams));
         commandBuffer->bindIndexBuffer(mCurrentElementArrayBufferHandle,
-                                       mCurrentElementArrayBufferOffset,
+                                       mCurrentElementArrayBufferOffset + offset,
                                        gl_vk::GetIndexType(drawCallParams.type()));
     }
     else if (mIndexBufferDirty || newCommandBuffer)
@@ -514,7 +515,7 @@ gl::Error VertexArrayVk::onIndexedDraw(const gl::Context *context,
         }
 
         commandBuffer->bindIndexBuffer(mCurrentElementArrayBufferHandle,
-                                       mCurrentElementArrayBufferOffset,
+                                       mCurrentElementArrayBufferOffset + offset,
                                        gl_vk::GetIndexType(drawCallParams.type()));
 
         const gl::State &glState                  = context->getGLState();
