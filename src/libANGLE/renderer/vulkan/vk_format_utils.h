@@ -43,6 +43,7 @@ struct Format final : private angle::NonCopyable
 
     const angle::Format &textureFormat() const;
     const angle::Format &bufferFormat() const;
+    const angle::Format &angleFormat() const;
 
     GLenum internalFormat;
     angle::Format::ID textureFormatID;
@@ -51,6 +52,7 @@ struct Format final : private angle::NonCopyable
     VkFormat vkBufferFormat;
     InitializeTextureDataFunction dataInitializerFunction;
     LoadFunctionMap loadFunctions;
+    angle::Format::ID angleFormatID;
 };
 
 bool operator==(const Format &lhs, const Format &rhs);
