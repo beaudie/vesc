@@ -22,7 +22,6 @@ constexpr char kVertexShaderSource[] =
             gl_Position  = vPosition;
         })";
 
-// TODO(ynovikov): Improve the tests to work with point size 1. http://anglebug.com/2553
 constexpr GLfloat kMinMaxPointSize = 2.0f;
 
 class PointSpritesTest : public ANGLETest
@@ -535,6 +534,61 @@ TEST_P(PointSpritesTest, PointSizeAboveMaxIsClamped)
 
     // Pixel on the left of the viewport center should not be covered by the point.
     EXPECT_PIXEL_NEAR(getWindowWidth() / 2 - 2, getWindowHeight() / 2, 0, 0, 0, 0, 4);
+}
+
+TEST_P(PointSpritesTest, PointSizeOne)
+{
+    constexpr char kVS[] =
+        R"(void main()
+        {
+            gl_PointSize = 1.0;
+            gl_Position = vec4(0.0, 0.0, 1.0, 1.0);
+        })";
+
+    ANGLE_GL_PROGRAM(program, kVS, essl1_shaders::fs::Green());
+    ASSERT_GL_NO_ERROR();
+
+    glUseProgram(program);
+
+    // dummy, VS outputs (0,0,1,1)
+    const GLfloat vertices[] = {0.5f, 0.5f, 0.5f};
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
+    glEnableVertexAttribArray(0);
+
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glDrawArrays(GL_POINTS, 0, 1);
+    ASSERT_GL_NO_ERROR();
+
+    for (int i = 0; i < getWindowWidth(); i++)
+    {
+        for (int j = 0; j < getWindowHeight(); j++)
+        {
+            GLColor c = angle::ReadColor(i, j);
+            if (c != GLColor::red && c != GLColor::black && c != GLColor::transparentBlack)
+            {
+                std::cout << "pixel [" << i << "," << j << "] color (" << (int)c.R << ","
+                          << (int)c.G << "," << (int)c.B << "," << (int)c.A << ")\n";
+            }
+        }
+    }
+
+    int greenPixels = 0;
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            GLColor c =
+                angle::ReadColor((getWindowWidth() - 1) / 2 + i, (getWindowHeight() - 1) / 2 + j);
+            if (c == GLColor::green)
+            {
+                greenPixels++;
+            }
+        }
+    }
+
+    EXPECT_EQ(greenPixels, 1);
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES
