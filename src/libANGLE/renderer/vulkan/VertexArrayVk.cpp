@@ -513,8 +513,11 @@ gl::Error VertexArrayVk::onIndexedDraw(const gl::Context *context,
                    << "Unsigned byte translation is not implemented for indices in a buffer object";
         }
 
+        uintptr_t offset = mState.getElementArrayBuffer().get() != nullptr
+                               ? reinterpret_cast<uintptr_t>(drawCallParams.indices())
+                               : 0;
         commandBuffer->bindIndexBuffer(mCurrentElementArrayBufferHandle,
-                                       mCurrentElementArrayBufferOffset,
+                                       mCurrentElementArrayBufferOffset + offset,
                                        gl_vk::GetIndexType(drawCallParams.type()));
 
         const gl::State &glState                  = context->getGLState();
