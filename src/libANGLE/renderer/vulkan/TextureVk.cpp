@@ -45,12 +45,6 @@ void MapSwizzleState(GLenum internalFormat,
             swizzleStateOut->swizzleBlue  = GL_ZERO;
             swizzleStateOut->swizzleAlpha = swizzleState.swizzleRed;
             break;
-        case GL_RGB8:
-            swizzleStateOut->swizzleRed   = swizzleState.swizzleRed;
-            swizzleStateOut->swizzleGreen = swizzleState.swizzleGreen;
-            swizzleStateOut->swizzleBlue  = swizzleState.swizzleBlue;
-            swizzleStateOut->swizzleAlpha = GL_ONE;
-            break;
         default:
             *swizzleStateOut = swizzleState;
             break;

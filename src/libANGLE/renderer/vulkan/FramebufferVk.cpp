@@ -146,7 +146,7 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
         {
             // Masked stencil clears are currently not implemented.
             // TODO(jmadill): Masked stencil clear. http://anglebug.com/2540
-            ANGLE_TRY(clearWithClearAttachments(contextVk, false, clearDepth, clearStencil));
+            ANGLE_TRY(clearWithClearAttachments(context, false, clearDepth, clearStencil));
         }
         return gl::NoError();
     }
@@ -164,7 +164,7 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
 
         // Masked stencil clears are currently not implemented.
         // TODO(jmadill): Masked stencil clear. http://anglebug.com/2540
-        ANGLE_TRY(clearWithClearAttachments(contextVk, clearColor, clearDepth, clearStencil));
+        ANGLE_TRY(clearWithClearAttachments(context, clearColor, clearDepth, clearStencil));
         return gl::NoError();
     }
 
@@ -495,11 +495,13 @@ gl::ErrorOrResult<vk::Framebuffer *> FramebufferVk::getFramebuffer(RendererVk *r
     return &mFramebuffer;
 }
 
-gl::Error FramebufferVk::clearWithClearAttachments(ContextVk *contextVk,
+gl::Error FramebufferVk::clearWithClearAttachments(const gl::Context *context,
                                                    bool clearColor,
                                                    bool clearDepth,
                                                    bool clearStencil)
 {
+    ContextVk* contextVk = vk::GetImpl(context);
+
     // Trigger a new command node to ensure overlapping writes happen sequentially.
     onResourceChanged(contextVk->getRenderer());
 
@@ -533,13 +535,25 @@ gl::Error FramebufferVk::clearWithClearAttachments(ContextVk *contextVk,
 
     if (clearColor)
     {
+        RenderTargetVk *renderTarget = getColorReadRenderTarget();
+        vk::ImageHelper *srcImage = renderTarget->
+            getImageForWrite(contextVk->getRenderer()->getCurrentQueueSerial(), this);
+        const angle::Format &angleFormat = srcImage->getFormat().bufferFormat();
+        VkClearValue modifiedClear = contextVk->getClearColorValue();
+
+        // We need to make sure we are not clearing the alpha channel if we are using a buffer
+        // format that doesn't have an alpha channel.
+        if (angleFormat.alphaBits == 0) {
+            modifiedClear.color.float32[3] = 1.0;
+        }
+
         // TODO(jmadill): Support gaps in RenderTargets. http://anglebug.com/2394
         for (size_t colorIndex : mState.getEnabledDrawBuffers())
         {
             VkClearAttachment &clearAttachment = clearAttachments[clearAttachmentIndex];
             clearAttachment.aspectMask         = VK_IMAGE_ASPECT_COLOR_BIT;
             clearAttachment.colorAttachment    = static_cast<uint32_t>(colorIndex);
-            clearAttachment.clearValue         = contextVk->getClearColorValue();
+            clearAttachment.clearValue  = modifiedClear;
             ++clearAttachmentIndex;
         }
     }
