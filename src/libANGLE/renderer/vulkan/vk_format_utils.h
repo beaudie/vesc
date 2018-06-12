@@ -43,6 +43,7 @@ struct Format final : private angle::NonCopyable
 
     const angle::Format &textureFormat() const;
     const angle::Format &bufferFormat() const;
+    const angle::Format &getInternalFormat() const;
 
     GLenum internalFormat;
     angle::Format::ID textureFormatID;
