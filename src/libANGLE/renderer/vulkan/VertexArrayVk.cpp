@@ -493,9 +493,9 @@ gl::Error VertexArrayVk::onIndexedDraw(const gl::Context *context,
                                        bool newCommandBuffer)
 {
     ANGLE_TRY(onDraw(context, renderer, drawCallParams, commandBuffer, newCommandBuffer));
+    bool isLineLoop = drawCallParams.mode() == gl::PrimitiveMode::LineLoop;
 
-    if (!mState.getElementArrayBuffer().get() &&
-        drawCallParams.mode() != gl::PrimitiveMode::LineLoop)
+    if (!mState.getElementArrayBuffer().get() && !isLineLoop)
     {
         ANGLE_TRY(drawCallParams.ensureIndexRangeResolved(context));
         ANGLE_TRY(streamIndexData(renderer, drawCallParams));
@@ -514,8 +514,11 @@ gl::Error VertexArrayVk::onIndexedDraw(const gl::Context *context,
                    << "Unsigned byte translation is not implemented for indices in a buffer object";
         }
 
+        uintptr_t offset = mState.getElementArrayBuffer().get() && !isLineLoop
+                               ? reinterpret_cast<uintptr_t>(drawCallParams.indices())
+                               : 0;
         commandBuffer->bindIndexBuffer(mCurrentElementArrayBufferHandle,
-                                       mCurrentElementArrayBufferOffset,
+                                       mCurrentElementArrayBufferOffset + offset,
                                        gl_vk::GetIndexType(drawCallParams.type()));
 
         const gl::State &glState                  = context->getGLState();
