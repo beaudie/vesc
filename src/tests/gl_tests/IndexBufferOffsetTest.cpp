@@ -129,10 +129,6 @@ TEST_P(IndexBufferOffsetTest, UInt8Index)
 // Test using an offset for an UInt16 index buffer
 TEST_P(IndexBufferOffsetTest, UInt16Index)
 {
-    // TODO(lucferron): Diagnose and fix
-    // http://anglebug.com/2645
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     GLushort indexData[] = {0, 1, 2, 1, 2, 3};
     runTest(GL_UNSIGNED_SHORT, 2, indexData);
 }
