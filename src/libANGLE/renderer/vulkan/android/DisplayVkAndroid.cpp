@@ -61,12 +61,12 @@ egl::ConfigSet DisplayVkAndroid::generateConfigs()
     rgba.maxSwapInterval       = 1;
     rgba.minSwapInterval       = 1;
     rgba.nativeRenderable      = EGL_TRUE;
-    rgba.nativeVisualID        = 0;
+    rgba.nativeVisualID        = WINDOW_FORMAT_RGBA_8888;
     rgba.nativeVisualType      = EGL_NONE;
     rgba.renderableType        = EGL_OPENGL_ES2_BIT;
     rgba.sampleBuffers         = 0;
     rgba.samples               = 0;
-    rgba.surfaceType           = EGL_WINDOW_BIT;
+    rgba.surfaceType           = EGL_WINDOW_BIT | EGL_PBUFFER_BIT;
     rgba.optimalOrientation    = 0;
     rgba.transparentType       = EGL_NONE;
     rgba.transparentRedValue   = 0;
@@ -80,9 +80,15 @@ egl::ConfigSet DisplayVkAndroid::generateConfigs()
     rgbaD24S8.depthSize          = 24;
     rgbaD24S8.stencilSize        = 8;
 
+    egl::Config rgbxD24S8;
+    rgbxD24S8                    = rgbaD24S8;
+    rgbxD24S8.alphaSize          = 0;
+    rgbxD24S8.nativeVisualID     = WINDOW_FORMAT_RGBX_8888;
+
     egl::ConfigSet configSet;
     configSet.add(rgba);
     configSet.add(rgbaD24S8);
+    configSet.add(rgbxD24S8);
     return configSet;
 }
 
