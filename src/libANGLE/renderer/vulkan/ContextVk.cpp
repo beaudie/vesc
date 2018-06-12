@@ -176,6 +176,7 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
     {
         mTexturesDirty = false;
         // TODO(jmadill): Should probably merge this for loop with programVk's descriptor update.
+        ContextVk *contextVk         = vk::GetImpl(context);
         const auto &completeTextures = state.getCompleteTextureCache();
         for (const gl::SamplerBinding &samplerBinding : programGL->getSamplerBindings())
         {
@@ -194,7 +195,7 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
             }
 
             TextureVk *textureVk = vk::GetImpl(texture);
-            ANGLE_TRY(textureVk->ensureImageInitialized(mRenderer));
+            ANGLE_TRY(textureVk->ensureImageInitialized(contextVk));
             textureVk->addReadDependency(framebufferVk);
         }
     }
