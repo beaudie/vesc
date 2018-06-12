@@ -492,10 +492,13 @@ Error ValidateGetPlatformDisplayCommon(EGLenum platform,
         }
 
         if (eglHandle.valid() && platformType != EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE &&
-            platformType != EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE)
+            platformType != EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE &&
+            platformType != EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE)
         {
             return EglBadAttribute() << "EGL_PLATFORM_ANGLE_EGL_HANDLE_ANGLE requires a "
-                                        "device type of EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE.";
+                                        "device type of EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE,"
+                                        "EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE or "
+                                        "EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE";
         }
     }
     else if (platform == EGL_PLATFORM_DEVICE_EXT)
