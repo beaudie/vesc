@@ -129,10 +129,6 @@ TEST_P(IndexBufferOffsetTest, UInt8Index)
 // Test using an offset for an UInt16 index buffer
 TEST_P(IndexBufferOffsetTest, UInt16Index)
 {
-    // TODO(lucferron): Diagnose and fix
-    // http://anglebug.com/2645
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     GLushort indexData[] = {0, 1, 2, 1, 2, 3};
     runTest(GL_UNSIGNED_SHORT, 2, indexData);
 }
@@ -145,6 +141,34 @@ TEST_P(IndexBufferOffsetTest, UInt32Index)
 
     GLuint indexData[] = {0, 1, 2, 1, 2, 3};
     runTest(GL_UNSIGNED_INT, 4, indexData);
+}
+
+TEST_P(IndexBufferOffsetTest, DrawAtDifferentOffsets)
+{
+    GLushort indexData[] = {0, 1, 2, 1, 2, 3};
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    size_t indexDataWidth = 6 * sizeof(GLushort);
+
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexDataWidth, indexData, GL_DYNAMIC_DRAW);
+    glUseProgram(mProgram);
+
+    glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
+    glVertexAttribPointer(mPositionAttributeLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(mPositionAttributeLocation);
+
+    glUniform4f(mColorUniformLocation, 1.0f, 0.0f, 0.0f, 1.0f);
+
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0);
+    EXPECT_PIXEL_COLOR_EQ(0, getWindowHeight() / 2, GLColor::red);
+
+    glUniform4f(mColorUniformLocation, 0.0f, 1.0f, 0.0f, 1.0f);
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT,
+                   reinterpret_cast<void *>(indexDataWidth / 2));
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() - 1, GLColor::green);
+
+    EXPECT_GL_NO_ERROR();
 }
 
 ANGLE_INSTANTIATE_TEST(IndexBufferOffsetTest,
