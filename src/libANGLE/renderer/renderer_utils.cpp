@@ -329,25 +329,25 @@ void PackPixels(const PackPixelsParams &params,
         inputPitch = -inputPitch;
     }
 
-    const auto &sourceGLInfo = gl::GetSizedInternalFormatInfo(sourceFormat.glInternalFormat);
+    const gl::InternalFormat &internalFormat =
+        gl::GetInternalFormatInfo(params.format, params.type);
 
-    if (sourceGLInfo.format == params.format && sourceGLInfo.type == params.type)
+    if (sourceFormat.glInternalFormat == internalFormat.sizedInternalFormat)
     {
         // Direct copy possible
         for (int y = 0; y < params.area.height; ++y)
         {
             memcpy(destWithOffset + y * params.outputPitch, source + y * inputPitch,
-                   params.area.width * sourceGLInfo.pixelBytes);
+                   params.area.width * sourceFormat.pixelBytes);
         }
         return;
     }
-
-    ASSERT(sourceGLInfo.sized);
 
     gl::FormatType formatType(params.format, params.type);
     ColorCopyFunction fastCopyFunc =
         GetFastCopyFunction(sourceFormat.fastCopyFunctions, formatType);
     const auto &destFormatInfo = gl::GetInternalFormatInfo(formatType.format, formatType.type);
+    const auto &sourceGLInfo   = gl::GetSizedInternalFormatInfo(sourceFormat.glInternalFormat);
 
     if (fastCopyFunc)
     {
