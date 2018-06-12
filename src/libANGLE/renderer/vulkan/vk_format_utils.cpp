@@ -106,6 +106,11 @@ const angle::Format &Format::bufferFormat() const
     return angle::Format::Get(bufferFormatID);
 }
 
+const angle::Format &Format::getInternalFormat() const
+{
+    return angle::Format::Get(angle::Format::InternalFormatToID(internalFormat));
+}
+
 bool operator==(const Format &lhs, const Format &rhs)
 {
     return &lhs == &rhs;

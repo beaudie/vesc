@@ -106,7 +106,7 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
 
     gl::ErrorOrResult<vk::Framebuffer *> getFramebuffer(RendererVk *rendererVk);
 
-    gl::Error clearWithClearAttachments(ContextVk *contextVk,
+    gl::Error clearWithClearAttachments(const gl::Context *context,
                                         bool clearColor,
                                         bool clearDepth,
                                         bool clearStencil);
