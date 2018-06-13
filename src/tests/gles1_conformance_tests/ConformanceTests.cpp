@@ -325,7 +325,6 @@ TEST_P(GLES1ConformanceTest, PointAntiAlias)
 
 TEST_P(GLES1ConformanceTest, PointRaster)
 {
-    ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, PointRasterExec());
 }
 
@@ -493,24 +492,22 @@ TEST_P(GLES1ConformanceTest, MatrixQuery)
 
 TEST_P(GLES1ConformanceTest, BufferObject)
 {
-    ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, BufferObjectExec());
 }
 
 TEST_P(GLES1ConformanceTest, PointSizeArray)
 {
-    ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, PointSizeArrayExec());
 }
 
 TEST_P(GLES1ConformanceTest, PointSprite)
 {
-    ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, PointSpriteExec());
 }
 
 TEST_P(GLES1ConformanceTest, UserClip)
 {
+    ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, UserClipExec());
 }
 
