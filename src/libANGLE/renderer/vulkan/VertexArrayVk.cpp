@@ -37,6 +37,7 @@ VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state, RendererVk *rend
       mCurrentElementArrayBufferResource(nullptr),
       mDynamicVertexData(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, kDynamicVertexDataSize),
       mDynamicIndexData(VK_BUFFER_USAGE_INDEX_BUFFER_BIT, kDynamicIndexDataSize),
+      mTranslatedByteIndexData(VK_BUFFER_USAGE_INDEX_BUFFER_BIT, kDynamicIndexDataSize),
       mLineLoopHelper(renderer),
       mDirtyLineLoopTranslation(true),
       mVertexBuffersDirty(false),
@@ -52,6 +53,7 @@ VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state, RendererVk *rend
 
     mDynamicVertexData.init(1, renderer);
     mDynamicIndexData.init(1, renderer);
+    mTranslatedByteIndexData.init(1, renderer);
 }
 
 VertexArrayVk::~VertexArrayVk()
@@ -63,6 +65,7 @@ void VertexArrayVk::destroy(const gl::Context *context)
     VkDevice device = vk::GetImpl(context)->getRenderer()->getDevice();
     mDynamicVertexData.destroy(device);
     mDynamicIndexData.destroy(device);
+    mTranslatedByteIndexData.destroy(device);
     mLineLoopHelper.destroy(device);
 }
 
@@ -512,15 +515,49 @@ gl::Error VertexArrayVk::onIndexedDraw(const gl::Context *context,
         if (drawCallParams.type() == GL_UNSIGNED_BYTE &&
             drawCallParams.mode() != gl::PrimitiveMode::LineLoop)
         {
-            // TODO(fjhenigman): Index format translation for non line-loop calls.
-            UNIMPLEMENTED();
-            return gl::InternalError()
-                   << "Unsigned byte translation is not implemented for indices in a buffer object";
+            // Unsigned bytes don't have direct support in Vulkan so we have to expand the
+            // memory to a GLushort.
+            BufferVk *bufferVk   = vk::GetImpl(mState.getElementArrayBuffer().get());
+            void *srcDataMapping = nullptr;
+            ANGLE_TRY(bufferVk->map(context, 0, &srcDataMapping));
+            uint8_t *srcData = reinterpret_cast<uint8_t *>(srcDataMapping);
+            srcData += reinterpret_cast<intptr_t>(drawCallParams.indices());
+
+            // Allocate a new buffer that's double the size of the buffer provided by the user to
+            // go from unsigned byte to unsigned short.
+            uint8_t *allocatedData      = nullptr;
+            bool newBufferAllocated     = false;
+            uint32_t expandedDataOffset = 0;
+            mTranslatedByteIndexData.allocate(
+                renderer, static_cast<size_t>(bufferVk->getSize()) * 2, &allocatedData,
+                &mCurrentElementArrayBufferHandle, &expandedDataOffset, &newBufferAllocated);
+            mCurrentElementArrayBufferOffset = static_cast<VkDeviceSize>(expandedDataOffset);
+
+            // Expand the source into the destination
+            uint16_t *expandedDst = reinterpret_cast<uint16_t *>(allocatedData);
+            for (GLsizei index = 0; index < drawCallParams.indexCount(); index++)
+            {
+                expandedDst[index] = static_cast<GLushort>(srcData[index]);
+            }
+
+            // Make sure our writes are available.
+            mTranslatedByteIndexData.flush(renderer->getDevice());
+            GLboolean result = false;
+            ANGLE_TRY(bufferVk->unmap(context, &result));
+
+            // We do not add the offset from the drawCallParams here because we've already copied
+            // the source starting at the offset requested.
+            commandBuffer->bindIndexBuffer(mCurrentElementArrayBufferHandle,
+                                           mCurrentElementArrayBufferOffset,
+                                           gl_vk::GetIndexType(drawCallParams.type()));
+        }
+        else
+        {
+            commandBuffer->bindIndexBuffer(mCurrentElementArrayBufferHandle,
+                                           mCurrentElementArrayBufferOffset + offset,
+                                           gl_vk::GetIndexType(drawCallParams.type()));
         }
 
-        commandBuffer->bindIndexBuffer(mCurrentElementArrayBufferHandle,
-                                       mCurrentElementArrayBufferOffset + offset,
-                                       gl_vk::GetIndexType(drawCallParams.type()));
         mLastIndexBufferOffset = offset;
 
         const gl::State &glState                  = context->getGLState();
