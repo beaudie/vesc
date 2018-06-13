@@ -41,6 +41,7 @@ class BufferVk : public BufferImpl, public vk::CommandGraphResource
                           GLintptr destOffset,
                           GLsizeiptr size) override;
     gl::Error map(const gl::Context *context, GLenum access, void **mapPtr) override;
+
     gl::Error mapRange(const gl::Context *context,
                        size_t offset,
                        size_t length,
@@ -54,6 +55,7 @@ class BufferVk : public BufferImpl, public vk::CommandGraphResource
                             size_t count,
                             bool primitiveRestartEnabled,
                             gl::IndexRange *outRange) override;
+    size_t getSize();
 
     const vk::Buffer &getVkBuffer() const;
 
