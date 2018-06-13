@@ -119,6 +119,7 @@ class VertexArrayVk : public VertexArrayImpl
 
     vk::DynamicBuffer mDynamicVertexData;
     vk::DynamicBuffer mDynamicIndexData;
+    vk::DynamicBuffer mExpandedDynamicIndexData;
 
     vk::LineLoopHelper mLineLoopHelper;
     Optional<GLint> mLineLoopBufferFirstIndex;
