@@ -135,51 +135,51 @@ class GLES1ConformanceTest : public ANGLETest
     }
 };
 
-TEST_P(GLES1ConformanceTest, AmbLight)
-{
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, AmbLightExec());
-}
+// TEST_P(GLES1ConformanceTest, AmbLight)
+// {
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, AmbLightExec());
+// }
+// 
+// TEST_P(GLES1ConformanceTest, AmbMat)
+// {
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, AmbMatExec());
+// }
+// 
+// TEST_P(GLES1ConformanceTest, AmbScene)
+// {
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, AmbSceneExec());
+// }
+// 
+// TEST_P(GLES1ConformanceTest, APFunc)
+// {
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, APFuncExec());
+// }
+// 
+// TEST_P(GLES1ConformanceTest, AtnConst)
+// {
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, AtnConstExec());
+// }
+// 
+// TEST_P(GLES1ConformanceTest, AtnPos)
+// {
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, AtnPosExec());
+// }
+// 
+// TEST_P(GLES1ConformanceTest, BClear)
+// {
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, BClearExec());
+// }
 
-TEST_P(GLES1ConformanceTest, AmbMat)
-{
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, AmbMatExec());
-}
-
-TEST_P(GLES1ConformanceTest, AmbScene)
-{
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, AmbSceneExec());
-}
-
-TEST_P(GLES1ConformanceTest, APFunc)
-{
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, APFuncExec());
-}
-
-TEST_P(GLES1ConformanceTest, AtnConst)
-{
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, AtnConstExec());
-}
-
-TEST_P(GLES1ConformanceTest, AtnPos)
-{
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, AtnPosExec());
-}
-
-TEST_P(GLES1ConformanceTest, BClear)
-{
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, BClearExec());
-}
-
-TEST_P(GLES1ConformanceTest, BColor)
-{
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, BColorExec());
-}
-
-TEST_P(GLES1ConformanceTest, BCorner)
-{
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, BCornerExec());
-}
-
+// TEST_P(GLES1ConformanceTest, BColor)
+// {
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, BColorExec());
+// }
+// 
+// TEST_P(GLES1ConformanceTest, BCorner)
+// {
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, BCornerExec());
+// }
+// 
 TEST_P(GLES1ConformanceTest, Blend)
 {
     ASSERT_NE(CONFORMANCE_TEST_ERROR, BlendExec());
@@ -225,25 +225,25 @@ TEST_P(GLES1ConformanceTest, Dither)
     ASSERT_NE(CONFORMANCE_TEST_ERROR, DitherExec());
 }
 
-TEST_P(GLES1ConformanceTest, DivZero)
-{
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, DivZeroExec());
-}
-
-TEST_P(GLES1ConformanceTest, EmitMat)
-{
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, EmitMatExec());
-}
-
-TEST_P(GLES1ConformanceTest, FogExp)
-{
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, FogExpExec());
-}
-
-TEST_P(GLES1ConformanceTest, FogLin)
-{
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, FogLinExec());
-}
+// TEST_P(GLES1ConformanceTest, DivZero)
+// {
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, DivZeroExec());
+// }
+// 
+// TEST_P(GLES1ConformanceTest, EmitMat)
+// {
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, EmitMatExec());
+// }
+// 
+// TEST_P(GLES1ConformanceTest, FogExp)
+// {
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, FogExpExec());
+// }
+// 
+// TEST_P(GLES1ConformanceTest, FogLin)
+// {
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, FogLinExec());
+// }
 
 TEST_P(GLES1ConformanceTest, LineAntiAlias)
 {
@@ -325,7 +325,6 @@ TEST_P(GLES1ConformanceTest, PointAntiAlias)
 
 TEST_P(GLES1ConformanceTest, PointRaster)
 {
-    ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, PointRasterExec());
 }
 
@@ -493,19 +492,16 @@ TEST_P(GLES1ConformanceTest, MatrixQuery)
 
 TEST_P(GLES1ConformanceTest, BufferObject)
 {
-    ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, BufferObjectExec());
 }
 
 TEST_P(GLES1ConformanceTest, PointSizeArray)
 {
-    ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, PointSizeArrayExec());
 }
 
 TEST_P(GLES1ConformanceTest, PointSprite)
 {
-    ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, PointSpriteExec());
 }
 
@@ -514,26 +510,27 @@ TEST_P(GLES1ConformanceTest, UserClip)
     ASSERT_NE(CONFORMANCE_TEST_ERROR, UserClipExec());
 }
 
-TEST_P(GLES1ConformanceTest, MatrixGetTest)
-{
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, MatrixGetTestExec());
-}
-
-TEST_P(GLES1ConformanceTest, Gets)
-{
-    ANGLE_SKIP_TEST_IF(true);
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, GetsExec());
-}
-
-TEST_P(GLES1ConformanceTest, TexCombine)
-{
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, TexCombineExec());
-}
-
-TEST_P(GLES1ConformanceTest, MatrixPalette)
-{
-    ASSERT_NE(CONFORMANCE_TEST_ERROR, MatrixPaletteExec());
-}
+// TEST_P(GLES1ConformanceTest, MatrixGetTest)
+// {
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, MatrixGetTestExec());
+// }
+// 
+// TEST_P(GLES1ConformanceTest, Gets)
+// {
+//     ANGLE_SKIP_TEST_IF(true);
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, GetsExec());
+// }
+// 
+// TEST_P(GLES1ConformanceTest, TexCombine)
+// {
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, TexCombineExec());
+// }
+// 
+// TEST_P(GLES1ConformanceTest, MatrixPalette)
+// {
+//     ASSERT_NE(CONFORMANCE_TEST_ERROR, MatrixPaletteExec());
+// }
 
 ANGLE_INSTANTIATE_TEST(GLES1ConformanceTest, ES1_OPENGL());
 }
+
