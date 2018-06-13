@@ -1468,7 +1468,7 @@ class Context final : angle::NonCopyable
   private:
     void initialize();
 
-    Error prepareForDraw();
+    Error prepareForDraw(PrimitiveMode mode);
     Error prepareForClear(GLbitfield mask);
     Error prepareForClearBuffer(GLenum buffer, GLint drawbuffer);
     Error syncState();
