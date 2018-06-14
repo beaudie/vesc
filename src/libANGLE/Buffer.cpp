@@ -143,6 +143,9 @@ Error Buffer::map(const Context *context, GLenum access)
     mState.mAccessFlags = GL_MAP_WRITE_BIT;
     mIndexRangeCache.clear();
 
+    // Notify when data changes.
+    mImpl->onStateChange(context, angle::SubjectMessage::CONTENTS_CHANGED);
+
     return NoError();
 }
 
