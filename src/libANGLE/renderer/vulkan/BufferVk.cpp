@@ -124,7 +124,6 @@ gl::Error BufferVk::map(const gl::Context *context, GLenum access, void **mapPtr
     ANGLE_TRY(
         mBufferMemory.map(device, 0, mState.getSize(), 0, reinterpret_cast<uint8_t **>(mapPtr)));
 
-    onStateChange(context, angle::SubjectMessage::STORAGE_CHANGED);
     return gl::NoError();
 }
 
@@ -154,7 +153,6 @@ gl::Error BufferVk::unmap(const gl::Context *context, GLboolean *result)
 
     mBufferMemory.unmap(device);
 
-    onStateChange(context, angle::SubjectMessage::STORAGE_CHANGED);
     return gl::NoError();
 }
 
