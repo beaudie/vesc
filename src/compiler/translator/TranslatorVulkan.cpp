@@ -27,6 +27,86 @@ namespace sh
 
 namespace
 {
+// This traverser translates embedded uniform structs into a specifier and declaration.
+// This makes the declarations easier to move into uniform blocks.
+class NameEmbeddedUniformStructsTraverser : public TIntermTraverser
+{
+  public:
+    NameEmbeddedUniformStructsTraverser(TSymbolTable *symbolTable)
+        : TIntermTraverser(true, false, false, symbolTable)
+    {
+    }
+
+    bool visitDeclaration(Visit visit, TIntermDeclaration *decl) override
+    {
+        ASSERT(visit == PreVisit);
+
+        if (!mInGlobalScope)
+        {
+            return false;
+        }
+
+        const TIntermSequence &sequence = *(decl->getSequence());
+        TIntermTyped *declarator        = sequence.front()->getAsTyped();
+        const TType &type               = declarator->getType();
+
+        if (type.isStructSpecifier() && type.getQualifier() == EvqUniform)
+        {
+            const TStructure *structure = type.getStruct();
+
+            if (structure->symbolType() == SymbolType::Empty)
+            {
+                doReplacement(decl, sequence, declarator, structure);
+            }
+        }
+
+        return false;
+    }
+
+  private:
+    void doReplacement(TIntermDeclaration *decl,
+                       const TIntermSequence &sequence,
+                       TIntermTyped *declarator,
+                       const TStructure *oldStructure)
+    {
+        // Name embedded structs so they can be modified.
+        TStructure *structure = new TStructure(mSymbolTable, ImmutableString(""),
+                                               &oldStructure->fields(), SymbolType::AngleInternal);
+        TType *namedType      = new TType(structure, true);
+        namedType->setQualifier(EvqGlobal);
+
+        TVariable *namedVar =
+            new TVariable(mSymbolTable, ImmutableString(""), namedType, SymbolType::Empty);
+        TIntermSymbol *namedSymbol    = new TIntermSymbol(namedVar);
+        TIntermDeclaration *specifier = new TIntermDeclaration;
+        specifier->appendDeclarator(namedSymbol);
+
+        TIntermSequence *newSequence = new TIntermSequence;
+        newSequence->push_back(specifier);
+
+        TIntermSymbol *symbolNode = declarator->getAsSymbolNode();
+        if (symbolNode && symbolNode->variable().symbolType() != SymbolType::Empty)
+        {
+            TIntermDeclaration *namedDecl = new TIntermDeclaration;
+            TType *uniformType            = new TType(structure, false);
+            uniformType->setQualifier(EvqUniform);
+
+            for (TIntermNode *element : sequence)
+            {
+                TIntermSymbol *asSymbol = element->getAsSymbolNode();
+                TVariable *newVar = new TVariable(mSymbolTable, asSymbol->getName(), uniformType,
+                                                  asSymbol->variable().symbolType());
+                TIntermSymbol *newSymbol = new TIntermSymbol(newVar);
+                namedDecl->appendDeclarator(newSymbol);
+            }
+
+            newSequence->push_back(namedDecl);
+        }
+
+        mMultiReplacements.emplace_back(getParentNode()->getAsBlock(), decl, *newSequence);
+    }
+};
+
 // This traverses nodes, find the struct ones and add their declarations to the sink. It also
 // removes the nodes from the tree as it processes them.
 class DeclareStructTypesTraverser : public TIntermTraverser
@@ -52,7 +132,11 @@ class DeclareStructTypesTraverser : public TIntermTraverser
 
         if (type.isStructSpecifier())
         {
-            mOutputVulkanGLSL->writeStructType(type.getStruct());
+            const TStructure *structure = type.getStruct();
+
+            // Embedded structs should be parsed away by now.
+            ASSERT(structure->symbolType() != SymbolType::Empty);
+            mOutputVulkanGLSL->writeStructType(structure);
 
             TIntermSymbol *symbolNode = declarator->getAsSymbolNode();
             if (symbolNode && symbolNode->variable().symbolType() == SymbolType::Empty)
@@ -287,6 +371,10 @@ void TranslatorVulkan::translate(TIntermBlock *root,
     // http://anglebug.com/2461
     if (structTypesUsedForUniforms > 0)
     {
+        NameEmbeddedUniformStructsTraverser nameStructs(&getSymbolTable());
+        root->traverse(&nameStructs);
+        nameStructs.updateTree();
+
         // We must declare the struct types before using them.
         DeclareStructTypesTraverser structTypesTraverser(&outputGLSL);
         root->traverse(&structTypesTraverser);
