@@ -440,7 +440,6 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
     // Initialize the format table.
     mFormatTable.initialize(mPhysicalDevice, &mNativeTextureCaps,
                             &mNativeCaps.compressedTextureFormats);
-
     return vk::NoError();
 }
 
@@ -604,6 +603,7 @@ void RendererVk::ensureCapsInitialized() const
     {
         vk::GenerateCaps(mPhysicalDeviceProperties, mNativeTextureCaps, &mNativeCaps,
                          &mNativeExtensions, &mNativeLimitations);
+
         mCapsInitialized = true;
     }
 }
