@@ -26,6 +26,7 @@
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "platform/Platform.h"
+#include "StandAlone/ResourceLimits.h"
 
 // Consts
 namespace
@@ -192,7 +193,8 @@ RendererVk::RendererVk()
       mDevice(VK_NULL_HANDLE),
       mGlslangWrapper(nullptr),
       mLastCompletedQueueSerial(mQueueSerialFactory.generate()),
-      mCurrentQueueSerial(mQueueSerialFactory.generate())
+      mCurrentQueueSerial(mQueueSerialFactory.generate()),
+      mGlslangResources(glslang::DefaultTBuiltInResource)
 {
 }
 
@@ -441,6 +443,8 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
     mFormatTable.initialize(mPhysicalDevice, &mNativeTextureCaps,
                             &mNativeCaps.compressedTextureFormats);
 
+    ensureCapsInitialized();
+    initializeGlslangResources();
     return vk::NoError();
 }
 
@@ -604,8 +608,18 @@ void RendererVk::ensureCapsInitialized() const
     {
         vk::GenerateCaps(mPhysicalDeviceProperties, mNativeTextureCaps, &mNativeCaps,
                          &mNativeExtensions, &mNativeLimitations);
+
         mCapsInitialized = true;
     }
+}
+
+void RendererVk::initializeGlslangResources()
+{
+    ASSERT(mCapsInitialized);
+
+    mGlslangResources.maxDrawBuffers             = mNativeCaps.maxDrawBuffers;
+    mGlslangResources.maxAtomicCounterBindings   = mNativeCaps.maxAtomicCounterBufferBindings;
+    mGlslangResources.maxAtomicCounterBufferSize = mNativeCaps.maxAtomicCounterBufferSize;
 }
 
 const gl::Caps &RendererVk::getNativeCaps() const
@@ -770,6 +784,11 @@ vk::Error RendererVk::submitFrame(const VkSubmitInfo &submitInfo, vk::CommandBuf
 GlslangWrapper *RendererVk::getGlslangWrapper() const
 {
     return mGlslangWrapper;
+}
+
+const TBuiltInResource &RendererVk::getGlslangResources() const
+{
+    return mGlslangResources;
 }
 
 Serial RendererVk::getCurrentQueueSerial() const
