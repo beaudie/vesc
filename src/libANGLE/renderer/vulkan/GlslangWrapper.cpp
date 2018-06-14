@@ -108,6 +108,7 @@ GlslangWrapper::~GlslangWrapper()
 gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
                                            const gl::ProgramState &programState,
                                            const gl::ProgramLinkedResources &resources,
+                                           const TBuiltInResource &glslangResources,
                                            std::vector<uint32_t> *vertexCodeOut,
                                            std::vector<uint32_t> *fragmentCodeOut)
 {
@@ -242,8 +243,9 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
     glslang::TShader vertexShader(EShLangVertex);
     vertexShader.setStringsWithLengths(&strings[0], &lengths[0], 1);
     vertexShader.setEntryPoint("main");
-    bool vertexResult = vertexShader.parse(&glslang::DefaultTBuiltInResource, 450, ECoreProfile,
-                                           false, false, messages);
+
+    bool vertexResult =
+        vertexShader.parse(&glslangResources, 450, ECoreProfile, false, false, messages);
     if (!vertexResult)
     {
         return gl::InternalError() << "Internal error parsing Vulkan vertex shader:\n"
@@ -254,8 +256,8 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
     glslang::TShader fragmentShader(EShLangFragment);
     fragmentShader.setStringsWithLengths(&strings[1], &lengths[1], 1);
     fragmentShader.setEntryPoint("main");
-    bool fragmentResult = fragmentShader.parse(&glslang::DefaultTBuiltInResource, 450, ECoreProfile,
-                                               false, false, messages);
+    bool fragmentResult =
+        fragmentShader.parse(&glslangResources, 450, ECoreProfile, false, false, messages);
     if (!fragmentResult)
     {
         return gl::InternalError() << "Internal error parsing Vulkan fragment shader:\n"

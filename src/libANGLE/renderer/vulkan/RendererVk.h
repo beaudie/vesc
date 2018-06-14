@@ -13,6 +13,7 @@
 #include <memory>
 #include <vulkan/vulkan.h>
 
+#include <glslang/Include/ResourceLimits.h>
 #include "common/angleutils.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
@@ -70,6 +71,7 @@ class RendererVk : angle::NonCopyable
     uint32_t getMaxActiveTextures();
 
     GlslangWrapper *getGlslangWrapper() const;
+    const TBuiltInResource &getGlslangResources() const;
 
     Serial getCurrentQueueSerial() const;
 
@@ -140,6 +142,7 @@ class RendererVk : angle::NonCopyable
   private:
     vk::Error initializeDevice(uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
+    void initializeGlslangResources();
     vk::Error submitFrame(const VkSubmitInfo &submitInfo, vk::CommandBuffer &&commandBuffer);
     vk::Error checkInFlightCommands();
     void freeAllInFlightResources();
@@ -166,6 +169,7 @@ class RendererVk : angle::NonCopyable
     SerialFactory mShaderSerialFactory;
     Serial mLastCompletedQueueSerial;
     Serial mCurrentQueueSerial;
+    TBuiltInResource mGlslangResources;
 
     struct CommandBatch final : angle::NonCopyable
     {

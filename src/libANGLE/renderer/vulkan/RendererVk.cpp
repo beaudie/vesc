@@ -14,6 +14,7 @@
 
 #include <EGL/eglext.h>
 
+#include "StandAlone/ResourceLimits.h"
 #include "common/debug.h"
 #include "common/system_utils.h"
 #include "libANGLE/renderer/driver_utils.h"
@@ -192,7 +193,8 @@ RendererVk::RendererVk()
       mDevice(VK_NULL_HANDLE),
       mGlslangWrapper(nullptr),
       mLastCompletedQueueSerial(mQueueSerialFactory.generate()),
-      mCurrentQueueSerial(mQueueSerialFactory.generate())
+      mCurrentQueueSerial(mQueueSerialFactory.generate()),
+      mGlslangResources(glslang::DefaultTBuiltInResource)
 {
 }
 
@@ -441,6 +443,8 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
     mFormatTable.initialize(mPhysicalDevice, &mNativeTextureCaps,
                             &mNativeCaps.compressedTextureFormats);
 
+    ensureCapsInitialized();
+    initializeGlslangResources();
     return vk::NoError();
 }
 
@@ -604,8 +608,39 @@ void RendererVk::ensureCapsInitialized() const
     {
         vk::GenerateCaps(mPhysicalDeviceProperties, mNativeTextureCaps, &mNativeCaps,
                          &mNativeExtensions, &mNativeLimitations);
+
         mCapsInitialized = true;
     }
+}
+
+void RendererVk::initializeGlslangResources()
+{
+    ASSERT(mCapsInitialized);
+
+    mGlslangResources.maxDrawBuffers                  = mNativeCaps.maxDrawBuffers;
+    mGlslangResources.maxAtomicCounterBindings        = mNativeCaps.maxAtomicCounterBufferBindings;
+    mGlslangResources.maxAtomicCounterBufferSize      = mNativeCaps.maxAtomicCounterBufferSize;
+    mGlslangResources.maxClipPlanes                   = mNativeCaps.maxClipPlanes;
+    mGlslangResources.maxCombinedAtomicCounterBuffers = mNativeCaps.maxCombinedAtomicCounterBuffers;
+    mGlslangResources.maxCombinedAtomicCounters       = mNativeCaps.maxCombinedAtomicCounters;
+    mGlslangResources.maxCombinedImageUniforms        = mNativeCaps.maxCombinedImageUniforms;
+    mGlslangResources.maxCombinedTextureImageUnits    = mNativeCaps.maxCombinedTextureImageUnits;
+    mGlslangResources.maxCombinedShaderOutputResources =
+        mNativeCaps.maxCombinedShaderOutputResources;
+    mGlslangResources.maxComputeWorkGroupCountX   = mNativeCaps.maxComputeWorkGroupCount[0];
+    mGlslangResources.maxComputeWorkGroupCountY   = mNativeCaps.maxComputeWorkGroupCount[1];
+    mGlslangResources.maxComputeWorkGroupCountZ   = mNativeCaps.maxComputeWorkGroupCount[2];
+    mGlslangResources.maxComputeWorkGroupSizeX    = mNativeCaps.maxComputeWorkGroupSize[0];
+    mGlslangResources.maxComputeWorkGroupSizeY    = mNativeCaps.maxComputeWorkGroupSize[1];
+    mGlslangResources.maxComputeWorkGroupSizeZ    = mNativeCaps.maxComputeWorkGroupSize[2];
+    mGlslangResources.minProgramTexelOffset       = mNativeCaps.minProgramTexelOffset;
+    mGlslangResources.maxFragmentUniformVectors   = mNativeCaps.maxFragmentUniformVectors;
+    mGlslangResources.maxFragmentInputComponents  = mNativeCaps.maxFragmentInputComponents;
+    mGlslangResources.maxGeometryInputComponents  = mNativeCaps.maxGeometryInputComponents;
+    mGlslangResources.maxGeometryOutputComponents = mNativeCaps.maxGeometryOutputComponents;
+    mGlslangResources.maxGeometryOutputVertices   = mNativeCaps.maxGeometryOutputVertices;
+    mGlslangResources.maxGeometryTotalOutputComponents =
+        mNativeCaps.maxGeometryTotalOutputComponents;
 }
 
 const gl::Caps &RendererVk::getNativeCaps() const
@@ -770,6 +805,11 @@ vk::Error RendererVk::submitFrame(const VkSubmitInfo &submitInfo, vk::CommandBuf
 GlslangWrapper *RendererVk::getGlslangWrapper() const
 {
     return mGlslangWrapper;
+}
+
+const TBuiltInResource &RendererVk::getGlslangResources() const
+{
+    return mGlslangResources;
 }
 
 Serial RendererVk::getCurrentQueueSerial() const
