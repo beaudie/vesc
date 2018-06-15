@@ -81,14 +81,33 @@ class RewriteStructSamplers final : public TIntermTraverser
     {
         if (node->getOp() == EOpIndexDirectStruct && node->getType().isSampler())
         {
-            TIntermTyped *lhs                 = node->getLeft();
-            const ImmutableString &structName = lhs->getAsSymbolNode()->variable().name();
-            const TStructure *structure       = lhs->getType().getStruct();
+            TIntermTyped *lhs           = node->getLeft();
+            const TType &lhsType        = lhs->getType();
+            const TStructure *structure = lhsType.getStruct();
+
+            std::stringstream strstr;
+            TIntermBinary *lhsAsBinary = lhs->getAsBinaryNode();
+
+            if (lhsAsBinary)
+            {
+                ASSERT(lhsAsBinary->getOp() == EOpIndexDirect);
+                TIntermTyped *lhsLhs = lhsAsBinary->getLeft();
+
+                const ImmutableString &structName = lhsLhs->getAsSymbolNode()->variable().name();
+                strstr << structName << "_";
+                strstr << lhsAsBinary->getRight()->getAsConstantUnion()->getIConst(0);
+                strstr << "_";
+            }
+            else
+            {
+                const ImmutableString &structName = lhs->getAsSymbolNode()->variable().name();
+                strstr << structName << "_";
+            }
+
             int index                        = node->getRight()->getAsConstantUnion()->getIConst(0);
             const ImmutableString &fieldName = structure->fields()[index]->name();
 
-            std::stringstream strstr;
-            strstr << structName << "_" << fieldName;
+            strstr << fieldName;
             ImmutableString newName(strstr.str());
 
             TVariable *samplerReplacement = mExtractedSamplers[newName];
@@ -154,25 +173,32 @@ class RewriteStructSamplers final : public TIntermTraverser
         for (const TField *field : structure->fields())
         {
             // TODO(jmadill): Nested struct samplers. http://anglebug.com/2494
-            ASSERT(!field->type()->isStructureContainingSamplers());
-            if (field->type()->isSampler())
+            const TType *fieldType = field->type();
+            ASSERT(!fieldType->isStructureContainingSamplers());
+            if (fieldType->isSampler())
             {
-                // Name the sampler internally as structName_fieldName
-                std::stringstream strstr;
-                strstr << variable.name() << "_" << field->name();
-                ImmutableString newName(strstr.str());
-                TType *newType = new TType(*field->type());
-                newType->setQualifier(EvqUniform);
-                TVariable *newVariable =
-                    new TVariable(mSymbolTable, newName, newType, SymbolType::AngleInternal);
-                TIntermSymbol *newRef = new TIntermSymbol(newVariable);
-
-                TIntermDeclaration *samplerDecl = new TIntermDeclaration;
-                samplerDecl->appendDeclarator(newRef);
-
-                newSequence->push_back(samplerDecl);
-
-                mExtractedSamplers[newName] = newVariable;
+                const TType &variableType = variable.getType();
+                if (variableType.isArray())
+                {
+                    // Name the samplers internally as varName_<index>_fieldName
+                    const TVector<unsigned int> &arraySizes = *variableType.getArraySizes();
+                    for (unsigned int arrayElement = 0; arrayElement < arraySizes[0];
+                         ++arrayElement)
+                    {
+                        std::stringstream strstr;
+                        strstr << variable.name() << "_" << arrayElement << "_" << field->name();
+                        const ImmutableString newName(strstr.str());
+                        extractSampler(newName, fieldType, newSequence);
+                    }
+                }
+                else
+                {
+                    // Name the sampler internally as structName_fieldName
+                    std::stringstream strstr;
+                    strstr << variable.name() << "_" << field->name();
+                    const ImmutableString newName(strstr.str());
+                    extractSampler(newName, fieldType, newSequence);
+                }
             }
             else
             {
@@ -189,6 +215,24 @@ class RewriteStructSamplers final : public TIntermTraverser
         {
             mRemovedUniformsCount++;
         }
+    }
+
+    void extractSampler(const ImmutableString &newName,
+                        const TType *fieldType,
+                        TIntermSequence *newSequence)
+    {
+        TType *newType = new TType(*fieldType);
+        newType->setQualifier(EvqUniform);
+        TVariable *newVariable =
+            new TVariable(mSymbolTable, newName, newType, SymbolType::AngleInternal);
+        TIntermSymbol *newRef = new TIntermSymbol(newVariable);
+
+        TIntermDeclaration *samplerDecl = new TIntermDeclaration;
+        samplerDecl->appendDeclarator(newRef);
+
+        newSequence->push_back(samplerDecl);
+
+        mExtractedSamplers[newName] = newVariable;
     }
 
     int mRemovedUniformsCount;
