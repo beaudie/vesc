@@ -61,6 +61,18 @@ void InsertQualifierSpecifierString(std::string *shaderString,
     angle::ReplaceSubstring(shaderString, searchString, replacementString);
 }
 
+std::string GetMappedSamplerName(const std::string &originalName)
+{
+    std::string samplerName = gl::ParseResourceName(originalName, nullptr);
+
+    // Struct references are replaced.
+    std::replace(samplerName.begin(), samplerName.end(), '.', '_');
+
+    // Similarly with arrays of samplers in structs.
+    std::replace(samplerName.begin(), samplerName.end(), '[', '_');
+    samplerName.erase(std::remove(samplerName.begin(), samplerName.end(), ']'), samplerName.end());
+    return samplerName;
+}
 }  // anonymous namespace
 
 // static
@@ -195,15 +207,8 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
         const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
         std::string setBindingString            = "set = 1, binding = " + Str(textureCount);
 
-        std::string samplerName = gl::ParseResourceName(samplerUniform.name, nullptr);
-
-        // Samplers in structs are extracted.
-        std::replace(samplerName.begin(), samplerName.end(), '.', '_');
-
-        // Similarly with arrays of samplers in structs.
-        std::replace(samplerName.begin(), samplerName.end(), '[', '_');
-        samplerName.erase(std::remove(samplerName.begin(), samplerName.end(), ']'),
-                          samplerName.end());
+        // Samplers in structs are extracted and renamed.
+        const std::string samplerName = GetMappedSamplerName(samplerUniform.name);
 
         ASSERT(samplerUniform.isActive(gl::ShaderType::Vertex) ||
                samplerUniform.isActive(gl::ShaderType::Fragment));
@@ -232,12 +237,19 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
 
     for (const gl::UnusedUniform &unusedUniform : resources.unusedUniforms)
     {
-        InsertLayoutSpecifierString(&vertexSource, unusedUniform.name, "");
-        InsertLayoutSpecifierString(&fragmentSource, unusedUniform.name, "");
+        std::string uniformName = unusedUniform.name;
+        if (unusedUniform.isSampler)
+        {
+            // Samplers in structs are extracted and renamed.
+            uniformName = GetMappedSamplerName(uniformName);
+        }
 
-        std::string qualifierToUse = unusedUniform.isSampler ? kUniformQualifier : "";
-        InsertQualifierSpecifierString(&vertexSource, unusedUniform.name, qualifierToUse);
-        InsertQualifierSpecifierString(&fragmentSource, unusedUniform.name, qualifierToUse);
+        InsertLayoutSpecifierString(&vertexSource, uniformName, "");
+        InsertLayoutSpecifierString(&fragmentSource, uniformName, "");
+
+        const std::string qualifierToUse = unusedUniform.isSampler ? kUniformQualifier : "";
+        InsertQualifierSpecifierString(&vertexSource, uniformName, qualifierToUse);
+        InsertQualifierSpecifierString(&fragmentSource, uniformName, qualifierToUse);
     }
 
     std::array<const char *, 2> strings = {{vertexSource.c_str(), fragmentSource.c_str()}};
