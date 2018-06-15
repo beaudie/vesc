@@ -39,6 +39,9 @@ struct SupportRequirement
 
     // Extensions that are always required to support this format
     std::vector<std::string> requiredExtensions;
+
+    // Alternative set of extensions required to support this format
+    std::vector<std::string> altRequiredExtensions;
 };
 
 struct InternalFormat
