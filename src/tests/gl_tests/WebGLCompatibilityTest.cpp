@@ -2721,13 +2721,13 @@ TEST_P(WebGLCompatibilityTest, RGB32FTextures)
         {
             bool texture = extensionEnabled("GL_OES_texture_float");
             bool filter  = extensionEnabled("GL_OES_texture_float_linear");
-            bool render  = extensionEnabled("GL_CHROMIUM_color_buffer_float_rgb");
+            bool render  = false;
             TestFloatTextureFormat(GL_RGB, GL_RGB, GL_FLOAT, texture, filter, render, data, data);
         }
 
         if (getClientMajorVersion() >= 3 || extensionEnabled("GL_EXT_texture_storage"))
         {
-            // Sized RGBA 32F
+            // Sized RGB 32F
             bool texture =
                 (getClientMajorVersion() >= 3) || (extensionEnabled("GL_OES_texture_float") &&
                                                    extensionEnabled("GL_EXT_texture_storage"));
@@ -2755,8 +2755,7 @@ TEST_P(WebGLCompatibilityTest, RGBA32FTextures)
         {
             bool texture = extensionEnabled("GL_OES_texture_float");
             bool filter  = extensionEnabled("GL_OES_texture_float_linear");
-            bool render  = extensionEnabled("GL_EXT_color_buffer_float") ||
-                          extensionEnabled("GL_CHROMIUM_color_buffer_float_rgba");
+            bool render  = false;
             TestFloatTextureFormat(GL_RGBA, GL_RGBA, GL_FLOAT, texture, filter, render, data, data);
         }
 
@@ -2794,9 +2793,8 @@ TEST_P(WebGLCompatibilityTest, R16FTextures)
         {
             bool texture = extensionEnabled("GL_OES_texture_half_float") &&
                            extensionEnabled("GL_EXT_texture_rg");
-            bool filter = getClientMajorVersion() >= 3 ||
-                          extensionEnabled("GL_OES_texture_half_float_linear");
-            bool render = extensionEnabled("GL_EXT_color_buffer_half_float");
+            bool filter = extensionEnabled("GL_OES_texture_half_float_linear");
+            bool render = false;
             TestFloatTextureFormat(GL_RED, GL_RED, GL_HALF_FLOAT_OES, texture, filter, render,
                                    textureData, readPixelsData);
         }
@@ -2810,15 +2808,23 @@ TEST_P(WebGLCompatibilityTest, R16FTextures)
                                    textureData, readPixelsData);
         }
 
-        if (getClientMajorVersion() >= 3 || extensionEnabled("GL_EXT_texture_storage"))
+        if (getClientMajorVersion() >= 3)
         {
             // Sized R 16F
-            bool texture = getClientMajorVersion() >= 3;
-            bool filter  = getClientMajorVersion() >= 3 ||
-                          extensionEnabled("GL_OES_texture_half_float_linear");
-            bool render = extensionEnabled("GL_EXT_color_buffer_half_float") ||
-                          extensionEnabled("GL_EXT_color_buffer_float");
+            bool texture = true;
+            bool filter  = true;
+            bool render  = extensionEnabled("GL_EXT_color_buffer_float");
             TestFloatTextureFormat(GL_R16F, GL_RED, GL_HALF_FLOAT, texture, filter, render,
+                                   textureData, readPixelsData);
+        }
+        else if (extensionEnabled("GL_EXT_texture_storage"))
+        {
+            // Sized R 16F (OES)
+            bool texture = extensionEnabled("GL_OES_texture_half_float") &&
+                           extensionEnabled("GL_EXT_texture_rg");
+            bool filter = extensionEnabled("GL_OES_texture_half_float_linear");
+            bool render = extensionEnabled("GL_EXT_color_buffer_half_float");
+            TestFloatTextureFormat(GL_R16F, GL_RED, GL_HALF_FLOAT_OES, texture, filter, render,
                                    textureData, readPixelsData);
         }
     }
@@ -2843,10 +2849,8 @@ TEST_P(WebGLCompatibilityTest, RG16FTextures)
         {
             bool texture = extensionEnabled("GL_OES_texture_half_float") &&
                            extensionEnabled("GL_EXT_texture_rg");
-            bool filter = getClientMajorVersion() >= 3 ||
-                          extensionEnabled("GL_OES_texture_half_float_linear");
-            bool render = extensionEnabled("GL_EXT_color_buffer_half_float") &&
-                          extensionEnabled("GL_EXT_texture_rg");
+            bool filter = extensionEnabled("GL_OES_texture_half_float_linear");
+            bool render = false;
             TestFloatTextureFormat(GL_RG, GL_RG, GL_HALF_FLOAT_OES, texture, filter, render,
                                    textureData, readPixelsData);
         }
@@ -2860,15 +2864,23 @@ TEST_P(WebGLCompatibilityTest, RG16FTextures)
                                    textureData, readPixelsData);
         }
 
-        if (getClientMajorVersion() >= 3 || extensionEnabled("GL_EXT_texture_storage"))
+        if (getClientMajorVersion() >= 3)
         {
             // Sized RG 16F
-            bool texture = getClientMajorVersion() >= 3;
-            bool filter  = getClientMajorVersion() >= 3 ||
-                          extensionEnabled("GL_OES_texture_half_float_linear");
-            bool render = extensionEnabled("GL_EXT_color_buffer_half_float") ||
-                          extensionEnabled("GL_EXT_color_buffer_float");
+            bool texture = true;
+            bool filter  = true;
+            bool render  = extensionEnabled("GL_EXT_color_buffer_float");
             TestFloatTextureFormat(GL_RG16F, GL_RG, GL_HALF_FLOAT, texture, filter, render,
+                                   textureData, readPixelsData);
+        }
+        else if (extensionEnabled("GL_EXT_texture_storage"))
+        {
+            // Sized RG 16F (OES)
+            bool texture = extensionEnabled("GL_OES_texture_half_float") &&
+                           extensionEnabled("GL_EXT_texture_rg");
+            bool filter = extensionEnabled("GL_OES_texture_half_float_linear");
+            bool render = extensionEnabled("GL_EXT_color_buffer_half_float");
+            TestFloatTextureFormat(GL_RG16F, GL_RG, GL_HALF_FLOAT_OES, texture, filter, render,
                                    textureData, readPixelsData);
         }
     }
@@ -2894,9 +2906,8 @@ TEST_P(WebGLCompatibilityTest, RGB16FTextures)
         // Unsized RGB 16F (OES)
         {
             bool texture = extensionEnabled("GL_OES_texture_half_float");
-            bool filter  = getClientMajorVersion() >= 3 ||
-                          extensionEnabled("GL_OES_texture_half_float_linear");
-            bool render = extensionEnabled("GL_EXT_color_buffer_half_float");
+            bool filter  = extensionEnabled("GL_OES_texture_half_float_linear");
+            bool render  = false;
             TestFloatTextureFormat(GL_RGB, GL_RGB, GL_HALF_FLOAT_OES, texture, filter, render,
                                    textureData, readPixelsData);
         }
@@ -2910,14 +2921,22 @@ TEST_P(WebGLCompatibilityTest, RGB16FTextures)
                                    textureData, readPixelsData);
         }
 
-        if (getClientMajorVersion() >= 3 || extensionEnabled("GL_EXT_texture_storage"))
+        if (getClientMajorVersion() >= 3)
         {
             // Sized RGB 16F
-            bool texture = getClientMajorVersion() >= 3;
-            bool filter  = getClientMajorVersion() >= 3 ||
-                          extensionEnabled("GL_OES_texture_half_float_linear");
-            bool render = extensionEnabled("GL_EXT_color_buffer_half_float");
+            bool texture = true;
+            bool filter  = true;
+            bool render  = false;
             TestFloatTextureFormat(GL_RGB16F, GL_RGB, GL_HALF_FLOAT, texture, filter, render,
+                                   textureData, readPixelsData);
+        }
+        else if (extensionEnabled("GL_EXT_texture_storage"))
+        {
+            // Sized RGB 16F (OES)
+            bool texture = extensionEnabled("GL_OES_texture_half_float");
+            bool filter  = extensionEnabled("GL_OES_texture_half_float_linear");
+            bool render  = extensionEnabled("GL_EXT_color_buffer_half_float");
+            TestFloatTextureFormat(GL_RGB16F, GL_RGB, GL_HALF_FLOAT_OES, texture, filter, render,
                                    textureData, readPixelsData);
         }
     }
@@ -2943,10 +2962,8 @@ TEST_P(WebGLCompatibilityTest, RGBA16FTextures)
         // Unsized RGBA 16F (OES)
         {
             bool texture = extensionEnabled("GL_OES_texture_half_float");
-            bool filter  = getClientMajorVersion() >= 3 ||
-                          extensionEnabled("GL_OES_texture_half_float_linear");
-            bool render = extensionEnabled("GL_EXT_color_buffer_half_float") ||
-                          extensionEnabled("GL_EXT_color_buffer_float");
+            bool filter  = extensionEnabled("GL_OES_texture_half_float_linear");
+            bool render  = extensionEnabled("GL_EXT_color_buffer_half_float");
             TestFloatTextureFormat(GL_RGBA, GL_RGBA, GL_HALF_FLOAT_OES, texture, filter, render,
                                    textureData, readPixelsData);
         }
@@ -2960,15 +2977,22 @@ TEST_P(WebGLCompatibilityTest, RGBA16FTextures)
                                    textureData, readPixelsData);
         }
 
-        if (getClientMajorVersion() >= 3 || extensionEnabled("GL_EXT_texture_storage"))
+        if (getClientMajorVersion() >= 3)
         {
             // Sized RGBA 16F
-            bool texture = getClientMajorVersion() >= 3;
-            bool filter  = getClientMajorVersion() >= 3 ||
-                          extensionEnabled("GL_OES_texture_half_float_linear");
-            bool render = extensionEnabled("GL_EXT_color_buffer_half_float") ||
-                          extensionEnabled("GL_EXT_color_buffer_float");
+            bool texture = true;
+            bool filter  = true;
+            bool render  = extensionEnabled("GL_EXT_color_buffer_float");
             TestFloatTextureFormat(GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT, texture, filter, render,
+                                   textureData, readPixelsData);
+        }
+        else if (extensionEnabled("GL_EXT_texture_storage"))
+        {
+            // Sized RGBA 16F (OES)
+            bool texture = extensionEnabled("GL_OES_texture_half_float");
+            bool filter  = extensionEnabled("GL_OES_texture_half_float_linear");
+            bool render  = extensionEnabled("GL_EXT_color_buffer_half_float");
+            TestFloatTextureFormat(GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT_OES, texture, filter, render,
                                    textureData, readPixelsData);
         }
     }
