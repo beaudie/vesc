@@ -184,8 +184,6 @@
 2630 GLES ANDROID : dEQP-GLES2.functional.shaders.struct.uniform.sampler_in_function_arg_* = FAIL
 
 // Android Vulkan backend only failures
-2549 VULKAN ANDROID : dEQP-GLES2.functional.fragment_ops.depth_stencil.* = SKIP
-2550 VULKAN ANDROID : dEQP-GLES2.functional.rasterization.interpolation.* = SKIP
 2605 VULKAN ANDROID : dEQP-GLES2.functional.fbo.completeness.attachment_combinations.none_none_none_rbo = SKIP
 2605 VULKAN ANDROID : dEQP-GLES2.functional.fbo.completeness.attachment_combinations.none_none_rbo_rbo = SKIP
 2605 VULKAN ANDROID : dEQP-GLES2.functional.fbo.completeness.attachment_combinations.rbo_none_none_rbo = SKIP
