@@ -418,7 +418,7 @@ gl::Error LineLoopHelper::getIndexBufferForElementArrayBuffer(RendererVk *render
 {
     ASSERT(indexType == VK_INDEX_TYPE_UINT16 || indexType == VK_INDEX_TYPE_UINT32);
 
-    uint32_t *indices = nullptr;
+    uint32_t *indices          = nullptr;
     uint32_t destinationOffset = 0;
 
     auto unitSize = (indexType == VK_INDEX_TYPE_UINT16 ? sizeof(uint16_t) : sizeof(uint32_t));
