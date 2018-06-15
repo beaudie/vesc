@@ -39,6 +39,13 @@ struct SupportRequirement
 
     // Extensions that are always required to support this format
     std::vector<std::string> requiredExtensions;
+
+    // Alternative set of extensions required to support this format.
+    // In a few cases, notably GL_EXT_color_buffer_half_float, two different extensions would both
+    // add support to a certain format, possibly when combined with other extensions.
+    // In this case first extension set would be in requiredExtensions
+    // and second set would be in altRequiredExtensions.
+    std::vector<std::string> altRequiredExtensions;
 };
 
 struct InternalFormat
