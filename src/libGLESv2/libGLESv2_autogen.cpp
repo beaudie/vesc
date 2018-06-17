@@ -3647,6 +3647,12 @@ void GL_APIENTRY glPushDebugGroupKHR(GLenum source,
     return gl::PushDebugGroupKHR(source, id, length, message);
 }
 
+// GL_KHR_parallel_shader_compile
+void GL_APIENTRY glMaxShaderCompilerThreadsKHR(GLuint count)
+{
+    return gl::MaxShaderCompilerThreadsKHR(count);
+}
+
 // GL_NV_fence
 void GL_APIENTRY glDeleteFencesNV(GLsizei n, const GLuint *fences)
 {
@@ -8714,6 +8720,11 @@ glFramebufferTextureMultiviewSideBySideANGLEContextANGLE(GLeglContext ctx,
 {
     return gl::FramebufferTextureMultiviewSideBySideANGLEContextANGLE(
         ctx, target, attachment, texture, level, numViews, viewportOffsets);
+}
+
+void GL_APIENTRY glMaxShaderCompilerThreadsKHRContextANGLE(GLeglContext ctx, GLuint count)
+{
+    return gl::MaxShaderCompilerThreadsKHRContextANGLE(ctx, count);
 }
 
 }  // extern "C"

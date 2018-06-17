@@ -718,6 +718,8 @@ bool ValidateTexStorage3DEXT(Context *context,
                              GLsizei height,
                              GLsizei depth);
 
+bool ValidateMaxShaderCompilerThreadsKHR(Context *context, GLuint count);
+
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES2_H_

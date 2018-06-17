@@ -1729,6 +1729,11 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
                               GL_VERTEX_ATTRIB_ARRAY_TYPE, params);
             break;
 
+        // GL_KHR_parallel_shader_compile
+        case GL_MAX_SHADER_COMPILER_THREADS_KHR:
+            *params = mExtensions.maxShaderCompilerThreads;
+            break;
+
         default:
             handleError(mGLState.getIntegerv(this, pname, params));
             break;
@@ -3042,11 +3047,17 @@ Extensions Context::generateSupportedExtensions() const
 {
     Extensions supportedExtensions = mImplementation->getNativeExtensions();
 
+    // Explicitly enable GL_KHR_parallel_shader_compile
+    supportedExtensions.parallelShaderCompile    = true;
+    supportedExtensions.maxShaderCompilerThreads = 0xFFFFFFFFu;
+
     if (getClientVersion() < ES_2_0)
     {
         // Default extensions for GLES1
         supportedExtensions.pointSizeArray = true;
         supportedExtensions.textureCubeMap = true;
+        supportedExtensions.parallelShaderCompile    = false;
+        supportedExtensions.maxShaderCompilerThreads = 0u;
     }
 
     if (getClientVersion() < ES_3_0)
@@ -6973,6 +6984,13 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
     if (getExtensions().programCacheControl && pname == GL_PROGRAM_CACHE_ENABLED_ANGLE)
     {
         *type      = GL_BOOL;
+        *numParams = 1;
+        return true;
+    }
+
+    if (getExtensions().parallelShaderCompile && pname == GL_MAX_SHADER_COMPILER_THREADS_KHR)
+    {
+        *type      = GL_INT;
         *numParams = 1;
         return true;
     }

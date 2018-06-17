@@ -690,6 +690,9 @@ ANGLE_EXPORT void GL_APIENTRY PushDebugGroupKHR(GLenum source,
                                                 GLsizei length,
                                                 const GLchar *message);
 
+// GL_KHR_parallel_shader_compile
+ANGLE_EXPORT void GL_APIENTRY MaxShaderCompilerThreadsKHR(GLuint count);
+
 // GL_NV_fence
 ANGLE_EXPORT void GL_APIENTRY DeleteFencesNV(GLsizei n, const GLuint *fences);
 ANGLE_EXPORT void GL_APIENTRY FinishFenceNV(GLuint fence);
@@ -3267,6 +3270,8 @@ FramebufferTextureMultiviewSideBySideANGLEContextANGLE(GLeglContext ctx,
                                                        GLint level,
                                                        GLsizei numViews,
                                                        const GLint *viewportOffsets);
+ANGLE_EXPORT void GL_APIENTRY MaxShaderCompilerThreadsKHRContextANGLE(GLeglContext ctx,
+                                                                      GLuint count);
 }  // namespace gl
 
 #endif  // LIBGLESV2_ENTRY_POINTS_GLES_EXT_AUTOGEN_H_
