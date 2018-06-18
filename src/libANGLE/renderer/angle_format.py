@@ -82,7 +82,7 @@ def get_component_type(format_id):
         raise ValueError("Unknown component type for " + format_id)
 
 def get_channel_tokens(format_id):
-    r = re.compile(r'([ABDGLRS][\d]+)')
+    r = re.compile(r'([ABDGLRSX][\d]+)')
     return filter(r.match, r.split(format_id))
 
 def get_channels(format_id):
