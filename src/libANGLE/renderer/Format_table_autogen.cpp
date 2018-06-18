@@ -17,7 +17,7 @@
 namespace angle
 {
 
-static constexpr rx::FastCopyFunctionMap::Entry BGRAEntry  = {GL_RGBA, GL_UNSIGNED_BYTE,
+static constexpr rx::FastCopyFunctionMap::Entry BGRAEntry = {GL_RGBA, GL_UNSIGNED_BYTE,
                                                              CopyBGRA8ToRGBA8};
 static constexpr rx::FastCopyFunctionMap BGRACopyFunctions = {&BGRAEntry, 1};
 static constexpr rx::FastCopyFunctionMap NoCopyFunctions;
@@ -64,7 +64,7 @@ constexpr Format g_formatInfoTable[] = {
     { Format::ID::B8G8R8A8_TYPELESS_SRGB, GL_BGRA8_SRGB_ANGLEX, GL_BGRA8_SRGB_ANGLEX, GenerateMip<B8G8R8A8>, NoCopyFunctions, ReadColor<B8G8R8A8, GLfloat>, WriteColor<B8G8R8A8, GLfloat>, GL_UNSIGNED_NORMALIZED, 8, 8, 8, 8, 0, 0, 4, false },
     { Format::ID::B8G8R8A8_UNORM, GL_BGRA8_EXT, GL_BGRA8_EXT, GenerateMip<B8G8R8A8>, BGRACopyFunctions, ReadColor<B8G8R8A8, GLfloat>, WriteColor<B8G8R8A8, GLfloat>, GL_UNSIGNED_NORMALIZED, 8, 8, 8, 8, 0, 0, 4, false },
     { Format::ID::B8G8R8A8_UNORM_SRGB, GL_BGRA8_SRGB_ANGLEX, GL_BGRA8_SRGB_ANGLEX, GenerateMip<B8G8R8A8>, NoCopyFunctions, ReadColor<B8G8R8A8, GLfloat>, WriteColor<B8G8R8A8, GLfloat>, GL_UNSIGNED_NORMALIZED, 8, 8, 8, 8, 0, 0, 4, false },
-    { Format::ID::B8G8R8X8_UNORM, GL_BGRA8_EXT, GL_BGRA8_EXT, GenerateMip<B8G8R8X8>, NoCopyFunctions, ReadColor<B8G8R8X8, GLfloat>, WriteColor<B8G8R8X8, GLfloat>, GL_UNSIGNED_NORMALIZED, 8, 8, 8, 0, 0, 0, 3, false },
+    { Format::ID::B8G8R8X8_UNORM, GL_BGRA8_EXT, GL_BGRA8_EXT, GenerateMip<B8G8R8X8>, NoCopyFunctions, ReadColor<B8G8R8X8, GLfloat>, WriteColor<B8G8R8X8, GLfloat>, GL_UNSIGNED_NORMALIZED, 8, 8, 8, 0, 0, 0, 4, false },
     { Format::ID::BC1_RGBA_UNORM_BLOCK, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, nullptr, NoCopyFunctions, nullptr, nullptr, GL_UNSIGNED_NORMALIZED, 0, 0, 0, 0, 0, 0, 0, true },
     { Format::ID::BC1_RGBA_UNORM_SRGB_BLOCK, GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT, GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT, nullptr, NoCopyFunctions, nullptr, nullptr, GL_UNSIGNED_NORMALIZED, 0, 0, 0, 0, 0, 0, 0, true },
     { Format::ID::BC1_RGB_UNORM_BLOCK, GL_COMPRESSED_RGB_S3TC_DXT1_EXT, GL_COMPRESSED_RGB_S3TC_DXT1_EXT, nullptr, NoCopyFunctions, nullptr, nullptr, GL_UNSIGNED_NORMALIZED, 0, 0, 0, 0, 0, 0, 0, true },
@@ -77,7 +77,7 @@ constexpr Format g_formatInfoTable[] = {
     { Format::ID::D24_UNORM, GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT24, nullptr, NoCopyFunctions, nullptr, nullptr, GL_UNSIGNED_NORMALIZED, 0, 0, 0, 0, 24, 0, 3, false },
     { Format::ID::D24_UNORM_S8_UINT, GL_DEPTH24_STENCIL8, GL_DEPTH24_STENCIL8, nullptr, NoCopyFunctions, nullptr, nullptr, GL_UNSIGNED_NORMALIZED, 0, 0, 0, 0, 24, 8, 4, false },
     { Format::ID::D32_FLOAT, GL_DEPTH_COMPONENT32F, GL_DEPTH_COMPONENT32F, nullptr, NoCopyFunctions, nullptr, nullptr, GL_FLOAT, 0, 0, 0, 0, 32, 0, 4, false },
-    { Format::ID::D32_FLOAT_S8X24_UINT, GL_DEPTH32F_STENCIL8, GL_DEPTH32F_STENCIL8, nullptr, NoCopyFunctions, nullptr, nullptr, GL_FLOAT, 0, 0, 0, 0, 32, 8, 5, false },
+    { Format::ID::D32_FLOAT_S8X24_UINT, GL_DEPTH32F_STENCIL8, GL_DEPTH32F_STENCIL8, nullptr, NoCopyFunctions, nullptr, nullptr, GL_FLOAT, 0, 0, 0, 0, 32, 8, 8, false },
     { Format::ID::D32_UNORM, GL_DEPTH_COMPONENT32_OES, GL_DEPTH_COMPONENT32_OES, nullptr, NoCopyFunctions, nullptr, nullptr, GL_UNSIGNED_NORMALIZED, 0, 0, 0, 0, 32, 0, 4, false },
     { Format::ID::EAC_R11G11_SNORM_BLOCK, GL_COMPRESSED_SIGNED_RG11_EAC, GL_COMPRESSED_SIGNED_RG11_EAC, nullptr, NoCopyFunctions, nullptr, nullptr, GL_SIGNED_NORMALIZED, 11, 11, 0, 0, 0, 0, 2, true },
     { Format::ID::EAC_R11G11_UNORM_BLOCK, GL_COMPRESSED_RG11_EAC, GL_COMPRESSED_RG11_EAC, nullptr, NoCopyFunctions, nullptr, nullptr, GL_UNSIGNED_NORMALIZED, 11, 11, 0, 0, 0, 0, 2, true },
