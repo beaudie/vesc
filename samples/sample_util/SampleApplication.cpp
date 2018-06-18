@@ -10,8 +10,9 @@
 
 #include "angle_gl.h"
 
-#include <iostream>
 #include <string.h>
+#include <iostream>
+#include <utility>
 
 namespace
 {
@@ -23,14 +24,22 @@ const DisplayTypeInfo kDisplayTypes[] = {
     {"null", EGL_PLATFORM_ANGLE_TYPE_NULL_ANGLE}, {"vulkan", EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE}};
 }  // anonymous namespace
 
-SampleApplication::SampleApplication(const std::string &name,
-                                     size_t width,
-                                     size_t height,
+SampleApplication::SampleApplication(std::string name,
+                                     int argc,
+                                     char **argv,
                                      EGLint glesMajorVersion,
                                      EGLint glesMinorVersion,
-                                     EGLint requestedRenderer)
-    : mName(name), mWidth(width), mHeight(height), mRunning(false)
+                                     size_t width,
+                                     size_t height)
+    : mName(std::move(name)), mWidth(width), mHeight(height), mRunning(false)
 {
+    EGLint requestedRenderer = EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE;
+
+    if (argc > 1)
+    {
+        requestedRenderer = GetDisplayTypeFromArg(argv[1]);
+    }
+
     mEGLWindow.reset(new EGLWindow(glesMajorVersion, glesMinorVersion,
                                    EGLPlatformParameters(requestedRenderer)));
     mTimer.reset(CreateTimer());
