@@ -23,12 +23,13 @@ class EGLWindow;
 class SampleApplication
 {
   public:
-    SampleApplication(const std::string &name,
-                      size_t width,
-                      size_t height,
-                      EGLint glesMajorVersion  = 2,
-                      EGLint glesMinorVersion  = 0,
-                      EGLint requestedRenderer = EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE);
+    SampleApplication(std::string name,
+                      int argc,
+                      char **argv,
+                      EGLint glesMajorVersion = 2,
+                      EGLint glesMinorVersion = 0,
+                      size_t width            = 1280,
+                      size_t height           = 720);
     virtual ~SampleApplication();
 
     virtual bool initialize();
@@ -59,8 +60,7 @@ class SampleApplication
     std::unique_ptr<Timer> mTimer;
     std::unique_ptr<EGLWindow> mEGLWindow;
     std::unique_ptr<OSWindow> mOSWindow;
+    static EGLint getDisplayTypeFromArg(const char *displayTypeArg);
 };
-
-EGLint GetDisplayTypeFromArg(const char *displayTypeArg);
 
 #endif // SAMPLE_UTIL_SAMPLE_APPLICATION_H

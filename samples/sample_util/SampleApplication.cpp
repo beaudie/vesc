@@ -10,11 +10,14 @@
 
 #include "angle_gl.h"
 
-#include <iostream>
 #include <string.h>
+#include <iostream>
+#include <utility>
 
 namespace
 {
+const char *kUseAngleArg = "--use-angle=";
+
 using DisplayTypeInfo = std::pair<const char *, EGLint>;
 
 const DisplayTypeInfo kDisplayTypes[] = {
@@ -23,14 +26,22 @@ const DisplayTypeInfo kDisplayTypes[] = {
     {"null", EGL_PLATFORM_ANGLE_TYPE_NULL_ANGLE}, {"vulkan", EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE}};
 }  // anonymous namespace
 
-SampleApplication::SampleApplication(const std::string &name,
-                                     size_t width,
-                                     size_t height,
+SampleApplication::SampleApplication(std::string name,
+                                     int argc,
+                                     char **argv,
                                      EGLint glesMajorVersion,
                                      EGLint glesMinorVersion,
-                                     EGLint requestedRenderer)
-    : mName(name), mWidth(width), mHeight(height), mRunning(false)
+                                     size_t width,
+                                     size_t height)
+    : mName(std::move(name)), mWidth(width), mHeight(height), mRunning(false)
 {
+    EGLint requestedRenderer = EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE;
+
+    if (argc > 1 && strncmp(argv[1], kUseAngleArg, strlen(kUseAngleArg)) == 0)
+    {
+        requestedRenderer = getDisplayTypeFromArg(argv[1] + strlen(kUseAngleArg));
+    }
+
     mEGLWindow.reset(new EGLWindow(glesMajorVersion, glesMinorVersion,
                                    EGLPlatformParameters(requestedRenderer)));
     mTimer.reset(CreateTimer());
@@ -172,12 +183,13 @@ bool SampleApplication::popEvent(Event *event)
     return mOSWindow->popEvent(event);
 }
 
-EGLint GetDisplayTypeFromArg(const char *displayTypeArg)
+EGLint SampleApplication::getDisplayTypeFromArg(const char *displayTypeArg)
 {
     for (const auto &displayTypeInfo : kDisplayTypes)
     {
         if (strcmp(displayTypeInfo.first, displayTypeArg) == 0)
         {
+            std::cout << "Using ANGLE back-end API: " << displayTypeInfo.first << std::endl;
             return displayTypeInfo.second;
         }
     }
