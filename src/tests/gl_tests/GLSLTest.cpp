@@ -4245,6 +4245,66 @@ TEST_P(GLSLTest_ES31, ExceedCombinedShaderOutputResourcesInVSAndFS)
     ASSERT_GL_NO_ERROR();
 }
 
+TEST_P(GLSLTest, FragCoordGo)
+{
+    constexpr char vs[] = R"(attribute vec2 position;
+varying vec2 pos;
+uniform mat2 rotation;
+void main()
+{
+    pos = position * rotation;
+    gl_Position = vec4(pos, 0, 1);
+})";
+    constexpr char fs[] = R"(precision mediump float;
+varying vec2 pos;
+void main()
+{
+    gl_FragColor = vec4(gl_FragCoord.xy / 16.0, ((pos * 0.5) + 0.5));
+})";
+    ANGLE_GL_PROGRAM(program, vs, fs);
+
+    glUseProgram(program);
+
+    constexpr GLfloat kLineVerts[] = { -1.0f, -1.0f, 1.0f, 1.0f };
+
+    GLBuffer buffer;
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(kLineVerts), kLineVerts, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(0);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, 16, 16);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    ASSERT_GL_NO_ERROR();
+
+    glViewport(0, 0, 16, 16);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+    for (int i = 0; i < 10; ++i)
+    {
+        std::array<GLfloat, 4> mat = {{1, 0, 0, 1}};
+
+        GLfloat time = static_cast<GLfloat>(1) * 0.1f;
+        mat[0] = cosf(time);
+        mat[1] = -sinf(time);
+        mat[2] = -mat[1];
+        mat[3] = mat[0];
+
+        glUniformMatrix2fv(0, 1, GL_FALSE, mat.data());
+
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawArrays(GL_LINES, 0, 2);
+        swapBuffers();
+        ASSERT_GL_NO_ERROR();
+    }
+}
+
 // Test that assigning an assignment expression to a swizzled vector field in a user-defined
 // function works correctly.
 TEST_P(GLSLTest_ES3, AssignAssignmentToSwizzled)
