@@ -30,6 +30,7 @@ namespace rx
 
 namespace
 {
+constexpr int kAlphaChannel               = 3;
 constexpr size_t kMinReadPixelsBufferSize = 128000;
 
 const gl::InternalFormat &GetReadAttachmentInfo(const gl::Context *context,
@@ -369,7 +370,7 @@ gl::Error FramebufferVk::syncState(const gl::Context *context,
                 RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndex];
                 if (renderTarget)
                 {
-                    const angle::Format &format = renderTarget->getImageFormat().textureFormat();
+                    const angle::Format &format = renderTarget->getImageFormat().angleFormat();
                     updateActiveColorMasks(colorIndex, format.redBits > 0, format.greenBits > 0,
                                            format.blueBits > 0, format.alphaBits > 0);
                 }
@@ -624,7 +625,7 @@ gl::Error FramebufferVk::clearWithDraw(ContextVk *contextVk, VkColorComponentFla
     // This pipeline desc could be cached.
     vk::PipelineDesc pipelineDesc;
     pipelineDesc.initDefaults();
-    pipelineDesc.updateColorWriteMask(colorMaskFlags);
+    pipelineDesc.updateColorWriteMask(colorMaskFlags, getActiveAlphaColorMask());
     pipelineDesc.updateRenderPassDesc(getRenderPassDesc());
     pipelineDesc.updateShaders(fullScreenQuad->queueSerial(), pushConstantColor->queueSerial());
     pipelineDesc.updateViewport(renderArea, 0.0f, 1.0f);
@@ -731,6 +732,11 @@ void FramebufferVk::updateActiveColorMasks(size_t colorIndex, bool r, bool g, bo
     mActiveColorComponentMasks[1].set(colorIndex, g);
     mActiveColorComponentMasks[2].set(colorIndex, b);
     mActiveColorComponentMasks[3].set(colorIndex, a);
+}
+
+gl::DrawBufferMask FramebufferVk::getActiveAlphaColorMask()
+{
+    return mActiveColorComponentMasks[kAlphaChannel];
 }
 
 gl::Error FramebufferVk::readPixelsImpl(const gl::Context *context,

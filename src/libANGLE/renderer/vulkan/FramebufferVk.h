@@ -100,6 +100,8 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
 
     const gl::Extents &getReadImageExtents() const;
 
+    gl::DrawBufferMask getActiveAlphaColorMask();
+
   private:
     FramebufferVk(const gl::FramebufferState &state);
     FramebufferVk(const gl::FramebufferState &state, WindowSurfaceVk *backbuffer);
