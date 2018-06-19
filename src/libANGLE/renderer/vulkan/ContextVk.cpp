@@ -362,6 +362,21 @@ void ContextVk::popDebugGroup()
     UNIMPLEMENTED();
 }
 
+void ContextVk::updateClearColorMask(const gl::BlendState &blendState)
+{
+    mClearColorMask =
+        gl_vk::GetColorComponentFlags(blendState.colorMaskRed, blendState.colorMaskGreen,
+                                      blendState.colorMaskBlue, blendState.colorMaskAlpha);
+
+    FramebufferVk *framebufferVk = vk::GetImpl(mState.getState().getDrawFramebuffer());
+    gl::DrawBufferMask mask      = framebufferVk->getActiveColorMask(3);
+    if (!mask[0])
+    {
+        mClearColorMask &= ~VK_COLOR_COMPONENT_A_BIT;
+    }
+    mPipelineDesc->updateColorWriteMask(mClearColorMask);
+}
+
 void ContextVk::updateScissor(const gl::State &glState)
 {
     if (glState.isScissorTestEnabled())
@@ -417,14 +432,8 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
                 mPipelineDesc->updateBlendEquations(glState.getBlendState());
                 break;
             case gl::State::DIRTY_BIT_COLOR_MASK:
-            {
-                const gl::BlendState &blendState = glState.getBlendState();
-                mClearColorMask                  = gl_vk::GetColorComponentFlags(
-                    blendState.colorMaskRed, blendState.colorMaskGreen, blendState.colorMaskBlue,
-                    blendState.colorMaskAlpha);
-                mPipelineDesc->updateColorWriteMask(mClearColorMask);
+                updateClearColorMask(glState.getBlendState());
                 break;
-            }
             case gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED:
                 WARN() << "DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED unimplemented";
                 break;
@@ -534,7 +543,7 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
                 WARN() << "DIRTY_BIT_READ_FRAMEBUFFER_BINDING unimplemented";
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
-                WARN() << "DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING unimplemented";
+                updateClearColorMask(glState.getBlendState());
                 break;
             case gl::State::DIRTY_BIT_RENDERBUFFER_BINDING:
                 WARN() << "DIRTY_BIT_RENDERBUFFER_BINDING unimplemented";
