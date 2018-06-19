@@ -169,7 +169,7 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
     }
 
     // Standard Depth/stencil clear without scissor.
-    if (clearDepth || clearStencil)
+    if ((clearDepth || clearStencil) && depthStencilAttachment)
     {
         ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
 
@@ -177,7 +177,7 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
             contextVk->getClearDepthStencilValue().depthStencil;
 
         // We only support packed depth/stencil, not separate.
-        ASSERT(!(clearDepth && clearStencil) || depthStencilAttachment);
+        ASSERT(clearDepth && clearStencil);
 
         const VkImageAspectFlags aspectFlags =
             (depthAttachment ? VK_IMAGE_ASPECT_DEPTH_BIT : 0) |
@@ -186,14 +186,13 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
         RenderTargetVk *renderTarget = mRenderTargetCache.getDepthStencil();
         vk::ImageHelper *image       = renderTarget->getImageForWrite(currentSerial, this);
         image->clearDepthStencil(aspectFlags, clearDepthStencilValue, commandBuffer);
-
-        if (!clearColor)
-        {
-            return gl::NoError();
-        }
     }
 
-    ASSERT(clearColor);
+    if (!clearColor)
+    {
+        return gl::NoError();
+    }
+
     const auto *attachment = mState.getFirstNonNullAttachment();
     ASSERT(attachment && attachment->isAttached());
 
