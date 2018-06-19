@@ -369,9 +369,16 @@ gl::Error FramebufferVk::syncState(const gl::Context *context,
                 RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndex];
                 if (renderTarget)
                 {
-                    const angle::Format &format = renderTarget->getImageFormat().textureFormat();
-                    updateActiveColorMasks(colorIndex, format.redBits > 0, format.greenBits > 0,
-                                           format.blueBits > 0, format.alphaBits > 0);
+                    const angle::Format &textureFormat =
+                        renderTarget->getImageFormat().textureFormat();
+                    updateActiveColorMasks(colorIndex, textureFormat.redBits > 0,
+                                           textureFormat.greenBits > 0, textureFormat.blueBits > 0,
+                                           textureFormat.alphaBits > 0);
+
+                    const angle::Format &angleFormat = renderTarget->getImageFormat().angleFormat();
+
+                    mActiveAlphaMasksForDraw.set(
+                        colorIndex, angleFormat.alphaBits == 0 && textureFormat.alphaBits > 0);
                 }
                 else
                 {
@@ -383,8 +390,8 @@ gl::Error FramebufferVk::syncState(const gl::Context *context,
     }
 
     mActiveColorComponents = gl_vk::GetColorComponentFlags(
-        mActiveColorComponentMasks[0].any(), mActiveColorComponentMasks[1].any(),
-        mActiveColorComponentMasks[2].any(), mActiveColorComponentMasks[3].any());
+        mActiveColorComponentMasksForClear[0].any(), mActiveColorComponentMasksForClear[1].any(),
+        mActiveColorComponentMasksForClear[2].any(), mActiveColorComponentMasksForClear[3].any());
 
     mRenderPassDesc.reset();
     renderer->releaseObject(getStoredQueueSerial(), &mFramebuffer);
@@ -624,7 +631,7 @@ gl::Error FramebufferVk::clearWithDraw(ContextVk *contextVk, VkColorComponentFla
     // This pipeline desc could be cached.
     vk::PipelineDesc pipelineDesc;
     pipelineDesc.initDefaults();
-    pipelineDesc.updateColorWriteMask(colorMaskFlags);
+    pipelineDesc.updateColorWriteMask(colorMaskFlags, getActiveAlphaColorMask());
     pipelineDesc.updateRenderPassDesc(getRenderPassDesc());
     pipelineDesc.updateShaders(fullScreenQuad->queueSerial(), pushConstantColor->queueSerial());
     pipelineDesc.updateViewport(renderArea, 0.0f, 1.0f);
@@ -727,10 +734,15 @@ gl::Error FramebufferVk::getCommandBufferForDraw(ContextVk *contextVk,
 
 void FramebufferVk::updateActiveColorMasks(size_t colorIndex, bool r, bool g, bool b, bool a)
 {
-    mActiveColorComponentMasks[0].set(colorIndex, r);
-    mActiveColorComponentMasks[1].set(colorIndex, g);
-    mActiveColorComponentMasks[2].set(colorIndex, b);
-    mActiveColorComponentMasks[3].set(colorIndex, a);
+    mActiveColorComponentMasksForClear[0].set(colorIndex, r);
+    mActiveColorComponentMasksForClear[1].set(colorIndex, g);
+    mActiveColorComponentMasksForClear[2].set(colorIndex, b);
+    mActiveColorComponentMasksForClear[3].set(colorIndex, a);
+}
+
+gl::DrawBufferMask FramebufferVk::getActiveAlphaColorMask()
+{
+    return mActiveAlphaMasksForDraw;
 }
 
 gl::Error FramebufferVk::readPixelsImpl(const gl::Context *context,
