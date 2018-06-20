@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013-2017 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2013-2018 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
@@ -34,6 +34,21 @@ bool IsAMD(VendorID vendorId)
     return vendorId == kVendorID_AMD;
 }
 
+bool IsARM(VendorID vendorId)
+{
+    return vendorId == kVendorID_ARM;
+}
+
+bool IsImgTec(VendorID vendorId)
+{
+    return vendorId == kVendorID_ImgTec;
+}
+
+bool IsKazan(VendorID vendorId)
+{
+    return vendorId == kVendorID_Kazan;
+}
+
 bool IsIntel(VendorID vendorId)
 {
     return vendorId == kVendorID_Intel;
@@ -47,6 +62,16 @@ bool IsNvidia(VendorID vendorId)
 bool IsQualcomm(VendorID vendorId)
 {
     return vendorId == kVendorID_Qualcomm;
+}
+
+bool IsVeriSilicon(VendorID vendorId)
+{
+    return vendorId == kVendorID_VeriSilicon;
+}
+
+bool IsVivante(VendorID vendorId)
+{
+    return vendorId == kVendorID_Vivante;
 }
 
 bool ParseAMDBrahmaDriverVersion(const std::string &content, std::string *version)
