@@ -16,6 +16,7 @@
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/OutputVulkanGLSL.h"
 #include "compiler/translator/StaticType.h"
+#include "compiler/translator/tree_ops/NameEmbeddedUniformStructs.h"
 #include "compiler/translator/tree_util/BuiltIn_autogen.h"
 #include "compiler/translator/tree_util/FindMain.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
@@ -287,83 +288,6 @@ class RewriteStructSamplers final : public TIntermTraverser
     std::set<ImmutableString> mRemovedStructs;
 };
 
-// This traverser translates embedded uniform structs into a specifier and declaration.
-// This makes the declarations easier to move into uniform blocks.
-class NameEmbeddedUniformStructsTraverser : public TIntermTraverser
-{
-  public:
-    explicit NameEmbeddedUniformStructsTraverser(TSymbolTable *symbolTable)
-        : TIntermTraverser(true, false, false, symbolTable)
-    {
-    }
-
-    bool visitDeclaration(Visit visit, TIntermDeclaration *decl) override
-    {
-        ASSERT(visit == PreVisit);
-
-        if (!mInGlobalScope)
-        {
-            return false;
-        }
-
-        const TIntermSequence &sequence = *(decl->getSequence());
-        ASSERT(sequence.size() == 1);
-        TIntermTyped *declarator = sequence.front()->getAsTyped();
-        const TType &type        = declarator->getType();
-
-        if (type.isStructSpecifier() && type.getQualifier() == EvqUniform)
-        {
-            const TStructure *structure = type.getStruct();
-
-            if (structure->symbolType() == SymbolType::Empty)
-            {
-                doReplacement(decl, declarator, structure);
-            }
-        }
-
-        return false;
-    }
-
-  private:
-    void doReplacement(TIntermDeclaration *decl,
-                       TIntermTyped *declarator,
-                       const TStructure *oldStructure)
-    {
-        // struct <structName> { ... };
-        TStructure *structure = new TStructure(mSymbolTable, kEmptyImmutableString,
-                                               &oldStructure->fields(), SymbolType::AngleInternal);
-        TType *namedType      = new TType(structure, true);
-        namedType->setQualifier(EvqGlobal);
-
-        TVariable *structVariable =
-            new TVariable(mSymbolTable, kEmptyImmutableString, namedType, SymbolType::Empty);
-        TIntermSymbol *structDeclarator       = new TIntermSymbol(structVariable);
-        TIntermDeclaration *structDeclaration = new TIntermDeclaration;
-        structDeclaration->appendDeclarator(structDeclarator);
-
-        TIntermSequence *newSequence = new TIntermSequence;
-        newSequence->push_back(structDeclaration);
-
-        // uniform <structName> <structUniformName>;
-        TIntermSymbol *asSymbol = declarator->getAsSymbolNode();
-        if (asSymbol && asSymbol->variable().symbolType() != SymbolType::Empty)
-        {
-            TIntermDeclaration *namedDecl = new TIntermDeclaration;
-            TType *uniformType            = new TType(structure, false);
-            uniformType->setQualifier(EvqUniform);
-
-            TVariable *newVar        = new TVariable(mSymbolTable, asSymbol->getName(), uniformType,
-                                              asSymbol->variable().symbolType());
-            TIntermSymbol *newSymbol = new TIntermSymbol(newVar);
-            namedDecl->appendDeclarator(newSymbol);
-
-            newSequence->push_back(namedDecl);
-        }
-
-        mMultiReplacements.emplace_back(getParentNode()->getAsBlock(), decl, *newSequence);
-    }
-};
-
 // This traverses nodes, find the struct ones and add their declarations to the sink. It also
 // removes the nodes from the tree as it processes them.
 class DeclareStructTypesTraverser : public TIntermTraverser
@@ -628,9 +552,7 @@ void TranslatorVulkan::translate(TIntermBlock *root,
     // http://anglebug.com/2461
     if (structTypesUsedForUniforms > 0)
     {
-        NameEmbeddedUniformStructsTraverser nameStructs(&getSymbolTable());
-        root->traverse(&nameStructs);
-        nameStructs.updateTree();
+        NameEmbeddedStructUniforms(root, &getSymbolTable());
 
         RewriteStructSamplers rewriteStructSamplers(&getSymbolTable());
         root->traverse(&rewriteStructSamplers);
