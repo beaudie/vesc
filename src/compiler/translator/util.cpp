@@ -10,6 +10,7 @@
 
 #include "common/utilities.h"
 #include "compiler/preprocessor/numeric_lex.h"
+#include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/SymbolTable.h"
 
 bool atoi_clamp(const char *str, unsigned int *value)
@@ -472,13 +473,13 @@ GLenum GLVariablePrecision(const TType &type)
     return GL_NONE;
 }
 
-TString ArrayString(const TType &type)
+ImmutableString ArrayString(const TType &type)
 {
-    TStringStream arrayString;
     if (!type.isArray())
-        return arrayString.str();
+        return ImmutableString("");
 
     const TVector<unsigned int> &arraySizes = *type.getArraySizes();
+    std::stringstream arrayString;
     for (auto arraySizeIter = arraySizes.rbegin(); arraySizeIter != arraySizes.rend();
          ++arraySizeIter)
     {
@@ -489,7 +490,7 @@ TString ArrayString(const TType &type)
         }
         arrayString << "]";
     }
-    return arrayString.str();
+    return ImmutableString(arrayString.str());
 }
 
 ImmutableString GetTypeName(const TType &type, ShHashFunction64 hashFunction, NameMap *nameMap)
