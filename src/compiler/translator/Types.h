@@ -68,7 +68,7 @@ class TFieldListCollection : angle::NonCopyable
     // How many locations the field list consumes as a uniform.
     int getLocationCount() const;
     int deepestNesting() const;
-    const TString &mangledFieldList() const;
+    const ImmutableString &mangledFieldList() const;
 
   protected:
     TFieldListCollection(const TFieldList *fields);
@@ -78,11 +78,11 @@ class TFieldListCollection : angle::NonCopyable
   private:
     size_t calculateObjectSize() const;
     int calculateDeepestNesting() const;
-    TString buildMangledFieldList() const;
+    ImmutableString buildMangledFieldList() const;
 
     mutable size_t mObjectSize;
     mutable int mDeepestNesting;
-    mutable TString mMangledFieldList;
+    mutable ImmutableString mMangledFieldList;
 };
 
 //
