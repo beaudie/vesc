@@ -33,11 +33,11 @@ class Std140PaddingHelper
 
     int elementIndex() const { return mElementIndex; }
     int prePadding(const TType &type);
-    TString prePaddingString(const TType &type);
-    TString postPaddingString(const TType &type, bool useHLSLRowMajorPacking);
+    std::string prePaddingString(const TType &type);
+    std::string postPaddingString(const TType &type, bool useHLSLRowMajorPacking);
 
   private:
-    TString next();
+    unsigned next();
 
     unsigned *mPaddingCounter;
     int mElementIndex;
@@ -50,10 +50,10 @@ class StructureHLSL : angle::NonCopyable
     StructureHLSL();
 
     // Returns the name of the constructor function.
-    TString addStructConstructor(const TStructure &structure);
-    TString addBuiltInConstructor(const TType &type, const TIntermSequence *parameters);
+    ImmutableString addStructConstructor(const TStructure &structure);
+    ImmutableString addBuiltInConstructor(const TType &type, const TIntermSequence *parameters);
 
-    static TString defineNameless(const TStructure &structure);
+    static ImmutableString defineNameless(const TStructure &structure);
     void ensureStructDefined(const TStructure &structure);
 
     void structsHeader(TInfoSinkBase &out) const;
@@ -69,10 +69,10 @@ class StructureHLSL : angle::NonCopyable
     {
         POOL_ALLOCATOR_NEW_DELETE();
 
-        TStructProperties() {}
+        TStructProperties() : constructor(nullptr) {}
 
         // Constructor is an empty string in case the struct doesn't have a constructor yet.
-        TString constructor;
+        ImmutableString constructor;
     };
 
     // Map from struct name to struct properties.
@@ -81,16 +81,16 @@ class StructureHLSL : angle::NonCopyable
 
     // Struct declarations need to be kept in a vector instead of having them inside mDefinedStructs
     // since maintaining the original order is necessary for nested structs.
-    typedef std::vector<TString> StructDeclarations;
+    typedef std::vector<ImmutableString> StructDeclarations;
     StructDeclarations mStructDeclarations;
 
-    typedef std::set<TString> BuiltInConstructors;
+    typedef std::set<std::string> BuiltInConstructors;
     BuiltInConstructors mBuiltInConstructors;
 
     void storeStd140ElementIndex(const TStructure &structure, bool useHLSLRowMajorPacking);
-    TString defineQualified(const TStructure &structure,
-                            bool useHLSLRowMajorPacking,
-                            bool useStd140Packing);
+    ImmutableString defineQualified(const TStructure &structure,
+                                    bool useHLSLRowMajorPacking,
+                                    bool useStd140Packing);
     DefinedStructs::iterator defineVariants(const TStructure &structure,
                                             const ImmutableString &name);
 };

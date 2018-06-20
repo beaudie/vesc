@@ -124,8 +124,8 @@ const char *InterpolationString(TQualifier qualifier);
 const char *QualifierString(TQualifier qualifier);
 // Parameters may need to be included in function names to disambiguate between overloaded
 // functions.
-TString DisambiguateFunctionName(const TFunction *func);
-TString DisambiguateFunctionName(const TIntermSequence *args);
+ImmutableString DisambiguateFunctionName(const TFunction *func);
+ImmutableString DisambiguateFunctionName(const TIntermSequence *args);
 }
 
 #endif  // COMPILER_TRANSLATOR_UTILSHLSL_H_

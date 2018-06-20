@@ -2872,7 +2872,7 @@ void OutputHLSL::outputConstructor(TInfoSinkBase &out, Visit visit, TIntermAggre
 
     if (visit == PreVisit)
     {
-        TString constructorName;
+        ImmutableString constructorName(nullptr);
         if (node->getBasicType() == EbtStruct)
         {
             constructorName = mStructureHLSL->addStructConstructor(*node->getType().getStruct());

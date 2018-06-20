@@ -33,7 +33,7 @@ constexpr const ImmutableString kBoolTypeNames[5] = {
     ImmutableString("bool3"), ImmutableString("bool4")};
 
 void DisambiguateFunctionNameForParameterType(const TType &paramType,
-                                              TStringStream *disambiguatingStringOut)
+                                              std::stringstream *disambiguatingStringOut)
 {
     // Parameter types are only added to function names if they are ambiguous according to the
     // native HLSL compiler. Other parameter types are not added to function names to avoid
@@ -884,9 +884,7 @@ ImmutableString TypeString(const TType &type)
             return StructNameString(*structure);
         }
         // Nameless structure, define in place
-        TString namelessDef = StructureHLSL::defineNameless(*structure);
-        return ImmutableString(AllocatePoolCharArray(namelessDef.c_str(), namelessDef.length()),
-                               namelessDef.length());
+        return StructureHLSL::defineNameless(*structure);
     }
     if (type.isMatrix())
     {
@@ -1078,28 +1076,28 @@ const char *QualifierString(TQualifier qualifier)
     return "";
 }
 
-TString DisambiguateFunctionName(const TFunction *func)
+ImmutableString DisambiguateFunctionName(const TFunction *func)
 {
-    TStringStream disambiguatingString;
+    std::stringstream disambiguatingString;
     size_t paramCount = func->getParamCount();
     for (size_t i = 0; i < paramCount; ++i)
     {
         DisambiguateFunctionNameForParameterType(func->getParam(i)->getType(),
                                                  &disambiguatingString);
     }
-    return disambiguatingString.str();
+    return ImmutableString(disambiguatingString.str());
 }
 
-TString DisambiguateFunctionName(const TIntermSequence *args)
+ImmutableString DisambiguateFunctionName(const TIntermSequence *args)
 {
-    TStringStream disambiguatingString;
+    std::stringstream disambiguatingString;
     for (TIntermNode *arg : *args)
     {
         ASSERT(arg->getAsTyped());
         DisambiguateFunctionNameForParameterType(arg->getAsTyped()->getType(),
                                                  &disambiguatingString);
     }
-    return disambiguatingString.str();
+    return ImmutableString(disambiguatingString.str());
 }
 
 }  // namespace sh
