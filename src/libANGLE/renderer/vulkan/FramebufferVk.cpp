@@ -176,11 +176,12 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
         const VkClearDepthStencilValue &clearDepthStencilValue =
             contextVk->getClearDepthStencilValue().depthStencil;
 
-        const VkImageAspectFlags aspectFlags =
-            (depthAttachment ? VK_IMAGE_ASPECT_DEPTH_BIT : 0) |
-            (stencilAttachment ? VK_IMAGE_ASPECT_STENCIL_BIT : 0);
-
         RenderTargetVk *renderTarget = mRenderTargetCache.getDepthStencil();
+        const angle::Format &format  = renderTarget->getImageFormat().textureFormat();
+        const VkImageAspectFlags aspectFlags =
+            (format.depthBits > 0 ? VK_IMAGE_ASPECT_DEPTH_BIT : 0) |
+            (format.stencilBits > 0 ? VK_IMAGE_ASPECT_STENCIL_BIT : 0);
+
         vk::ImageHelper *image       = renderTarget->getImageForWrite(currentSerial, this);
         image->clearDepthStencil(aspectFlags, clearDepthStencilValue, commandBuffer);
     }
@@ -343,6 +344,13 @@ gl::Error FramebufferVk::blit(const gl::Context *context,
 
 bool FramebufferVk::checkStatus(const gl::Context *context) const
 {
+    // if we have both a depth and stencil buffer, they must refer to the same object
+    // since we only support packed_depth_stencil and not separate depth and stencil
+    if (mState.hasSeparatedDepthAndStencilAttachments())
+    {
+        return false;
+    }
+
     return true;
 }
 
