@@ -110,7 +110,6 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
 {
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
-    Serial currentSerial = renderer->getCurrentQueueSerial();
 
     // This command buffer is only started once.
     vk::CommandBuffer *commandBuffer = nullptr;
@@ -181,7 +180,7 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
             (stencilAttachment ? VK_IMAGE_ASPECT_STENCIL_BIT : 0);
 
         RenderTargetVk *renderTarget = mRenderTargetCache.getDepthStencil();
-        vk::ImageHelper *image       = renderTarget->getImageForWrite(currentSerial, this);
+        vk::ImageHelper *image       = renderTarget->getImageForWrite(this);
         image->clearDepthStencil(aspectFlags, clearDepthStencilValue, commandBuffer);
     }
 
@@ -205,7 +204,7 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
     {
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndex];
         ASSERT(colorRenderTarget);
-        vk::ImageHelper *image = colorRenderTarget->getImageForWrite(currentSerial, this);
+        vk::ImageHelper *image = colorRenderTarget->getImageForWrite(this);
         GLint mipLevelToClear  = (attachment->type() == GL_TEXTURE) ? attachment->mipLevel() : 0;
         image->clearColor(clearColorValue, mipLevelToClear, 1, commandBuffer);
     }
@@ -766,9 +765,8 @@ gl::Error FramebufferVk::readPixelsImpl(const gl::Context *context,
     RenderTargetVk *renderTarget = getColorReadRenderTarget();
 
     // Note that although we're reading from the image, we need to update the layout below.
-    // TODO(jmadill): Clearify read/write semantics. http://anglebug.com/2539
-    vk::ImageHelper *srcImage =
-        renderTarget->getImageForWrite(renderer->getCurrentQueueSerial(), this);
+    vk::ImageHelper *srcImage = renderTarget->getImageForRead(
+        this, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, commandBuffer);
 
     const angle::Format &angleFormat = srcImage->getFormat().textureFormat();
     VkBuffer bufferHandle            = VK_NULL_HANDLE;
@@ -794,10 +792,6 @@ gl::Error FramebufferVk::readPixelsImpl(const gl::Context *context,
     region.imageSubresource.baseArrayLayer = 0;
     region.imageSubresource.layerCount     = 1;
     region.imageSubresource.mipLevel       = 0;
-
-    srcImage->changeLayoutWithStages(
-        VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, commandBuffer);
 
     commandBuffer->copyImageToBuffer(srcImage->getImage(), srcImage->getCurrentLayout(),
                                      bufferHandle, 1, &region);
