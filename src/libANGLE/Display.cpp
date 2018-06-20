@@ -761,8 +761,8 @@ Error Display::createStream(const AttributeMap &attribs, Stream **outStream)
 }
 
 Error Display::createContext(const Config *configuration,
-                             gl::Context *shareContext,
-                             const AttributeMap &attribs,
+                             const gl::Context *shareContext,
+                             const egl::AttributeMap &attribs,
                              gl::Context **outContext)
 {
     ASSERT(isInitialized());
