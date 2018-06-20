@@ -452,7 +452,7 @@ bool TType::canReplaceWithConstantUnion() const
 //
 const char *TType::buildMangledName() const
 {
-    TString mangledName(1, GetSizeMangledName(primarySize, secondarySize));
+    std::string mangledName(1, GetSizeMangledName(primarySize, secondarySize));
 
     char basicMangledName = GetBasicMangledName(type);
     if (basicMangledName != '{')
@@ -470,13 +470,13 @@ const char *TType::buildMangledName() const
                 {
                     mangledName += mStructure->name().data();
                 }
-                mangledName += mStructure->mangledFieldList();
+                mangledName += mStructure->mangledFieldList().data();
                 mangledName += '}';
                 break;
             case EbtInterfaceBlock:
                 mangledName += "{i";
                 mangledName += mInterfaceBlock->name().data();
-                mangledName += mInterfaceBlock->mangledFieldList();
+                mangledName += mInterfaceBlock->mangledFieldList().data();
                 mangledName += '}';
                 break;
             default:
@@ -784,7 +784,7 @@ void TType::createSamplerSymbols(const ImmutableString &namePrefix,
 }
 
 TFieldListCollection::TFieldListCollection(const TFieldList *fields)
-    : mFields(fields), mObjectSize(0), mDeepestNesting(0)
+    : mFields(fields), mObjectSize(0), mDeepestNesting(0), mMangledFieldList(nullptr)
 {
 }
 
@@ -832,14 +832,14 @@ bool TFieldListCollection::containsSamplers() const
     return false;
 }
 
-TString TFieldListCollection::buildMangledFieldList() const
+ImmutableString TFieldListCollection::buildMangledFieldList() const
 {
-    TString mangledName;
+    std::string mangledName;
     for (const auto *field : *mFields)
     {
         mangledName += field->type()->getMangledName();
     }
-    return mangledName;
+    return ImmutableString(mangledName);
 }
 
 size_t TFieldListCollection::calculateObjectSize() const
@@ -888,7 +888,7 @@ int TFieldListCollection::deepestNesting() const
     return mDeepestNesting;
 }
 
-const TString &TFieldListCollection::mangledFieldList() const
+const ImmutableString &TFieldListCollection::mangledFieldList() const
 {
     if (mMangledFieldList.empty())
         mMangledFieldList = buildMangledFieldList();
