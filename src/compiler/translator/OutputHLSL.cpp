@@ -393,7 +393,7 @@ TString OutputHLSL::generateStructMapping(const std::vector<MappedStruct> &std14
 
             if (structType->isArray())
             {
-                mappedStructs += ArrayString(*mappedStruct.field->type());
+                mappedStructs += ArrayString(*mappedStruct.field->type()).data();
             }
 
             mappedStructs += " =\n";
@@ -418,9 +418,9 @@ void OutputHLSL::header(TInfoSinkBase &out,
         const ImmutableString &name = varying.second->name();
 
         // Program linking depends on this exact format
-        varyings += TString("static ") + InterpolationString(type.getQualifier()) + " " + TypeString(type) +
-                    " " + Decorate(name) + ArrayString(type) + " = " + zeroInitializer(type) +
-                    ";\n";
+        varyings += TString("static ") + InterpolationString(type.getQualifier()) + " " +
+                    TypeString(type) + " " + Decorate(name) + ArrayString(type).data() + " = " +
+                    zeroInitializer(type) + ";\n";
     }
 
     for (const auto &attribute : mReferencedAttributes)
@@ -428,8 +428,8 @@ void OutputHLSL::header(TInfoSinkBase &out,
         const TType &type   = attribute.second->getType();
         const ImmutableString &name = attribute.second->name();
 
-        attributes += "static " + TypeString(type) + " " + Decorate(name) + ArrayString(type) +
-                      " = " + zeroInitializer(type) + ";\n";
+        attributes += "static " + TypeString(type) + " " + Decorate(name) +
+                      ArrayString(type).data() + " = " + zeroInitializer(type) + ";\n";
     }
 
     out << mStructureHLSL->structsHeader();
