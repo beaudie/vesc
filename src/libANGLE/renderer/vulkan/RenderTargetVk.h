@@ -50,6 +50,8 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     vk::ImageHelper *getImageForWrite(Serial currentSerial,
                                       vk::CommandGraphResource *writingResource) const;
+    vk::ImageHelper *getImageForRead(Serial currentSerial,
+                                     vk::CommandGraphResource *readingResource) const;
     vk::ImageView *getImageView() const;
     vk::CommandGraphResource *getResource() const;
 

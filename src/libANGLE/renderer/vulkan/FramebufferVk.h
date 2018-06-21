@@ -114,6 +114,19 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
                                         bool clearStencil);
     gl::Error clearWithDraw(const gl::Context *context, VkColorComponentFlags colorMaskFlags);
     void updateActiveColorMasks(size_t colorIndex, bool r, bool g, bool b, bool a);
+
+    gl::Error blitRenderbufferRect(RendererVk *renderer,
+                                   vk::CommandBuffer *commandBuffer,
+                                   const gl::Rectangle &readRectIn,
+                                   const gl::Rectangle &drawRectIn,
+                                   RenderTargetVk *readRenderTarget,
+                                   RenderTargetVk *drawRenderTarget,
+                                   GLenum filter,
+                                   const gl::Rectangle *scissor,
+                                   bool colorBlit,
+                                   bool depthBlit,
+                                   bool stencilBlit);
+
     RenderTargetVk *getColorReadRenderTarget() const;
 
     WindowSurfaceVk *mBackbuffer;

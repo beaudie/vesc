@@ -112,4 +112,12 @@ vk::ImageHelper *RenderTargetVk::getImageForWrite(Serial currentSerial,
     return mImage;
 }
 
+vk::ImageHelper *RenderTargetVk::getImageForRead(Serial currentSerial,
+                                                 vk::CommandGraphResource *readingResource) const
+{
+    ASSERT(mImage && mImage->valid());
+    mResource->addReadDependency(readingResource);
+    return mImage;
+}
+
 }  // namespace rx
