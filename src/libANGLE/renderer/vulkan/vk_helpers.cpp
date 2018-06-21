@@ -278,7 +278,7 @@ void DynamicBuffer::setMinimumSizeForTesting(size_t minSize)
 
 // DynamicDescriptorPool implementation.
 DynamicDescriptorPool::DynamicDescriptorPool()
-    : mMaxSetsPerPool(kDefaultDescriptorPoolMaxSets), mCurrentSetsCount(0), mFreeDescriptorSets({})
+    : mMaxSetsPerPool(64), mCurrentSetsCount(0), mFreeDescriptorSets({})
 {
 }
 
