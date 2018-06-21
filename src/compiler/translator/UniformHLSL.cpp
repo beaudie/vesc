@@ -255,7 +255,7 @@ void UniformHLSL::outputHLSLSamplerUniformGroup(
                 << samplerArrayIndex << ";\n";
         }
     }
-    TString suffix = TextureGroupSuffix(textureGroup);
+    const char *suffix = TextureGroupSuffix(textureGroup);
     // Since HLSL_TEXTURE_2D is the first group, it has a fixed offset of zero.
     if (textureGroup != HLSL_TEXTURE_2D)
     {
@@ -318,7 +318,7 @@ void UniformHLSL::outputHLSLReadonlyImageUniformGroup(TInfoSinkBase &out,
     unsigned int groupRegisterCount = 0;
     outputHLSLImageUniformIndices(out, group, *imageUniformGroupIndex, &groupRegisterCount);
 
-    TString suffix = TextureGroupSuffix(textureGroup);
+    const char *suffix = TextureGroupSuffix(textureGroup);
     out << "static const uint readonlyImageIndexOffset" << suffix << " = "
         << (*imageUniformGroupIndex) << ";\n";
     out << "uniform " << TextureString(textureGroup) << " readonlyImages" << suffix << "["
@@ -342,7 +342,7 @@ void UniformHLSL::outputHLSLImageUniformGroup(TInfoSinkBase &out,
     unsigned int groupRegisterCount = 0;
     outputHLSLImageUniformIndices(out, group, *imageUniformGroupIndex, &groupRegisterCount);
 
-    TString suffix = RWTextureGroupSuffix(textureGroup);
+    const char *suffix = RWTextureGroupSuffix(textureGroup);
     out << "static const uint imageIndexOffset" << suffix << " = " << (*imageUniformGroupIndex)
         << ";\n";
     out << "uniform " << RWTextureString(textureGroup) << " images" << suffix << "["
@@ -359,10 +359,10 @@ void UniformHLSL::outputHLSL4_0_FL9_3Sampler(TInfoSinkBase &out,
 {
     out << "uniform " << SamplerString(type.getBasicType()) << " sampler_"
         << DecorateVariableIfNeeded(variable) << ArrayString(type) << " : register(s"
-        << str(registerIndex) << ");\n";
+        << registerIndex << ");\n";
     out << "uniform " << TextureString(type.getBasicType()) << " texture_"
         << DecorateVariableIfNeeded(variable) << ArrayString(type) << " : register(t"
-        << str(registerIndex) << ");\n";
+        << registerIndex << ");\n";
 }
 
 void UniformHLSL::outputUniform(TInfoSinkBase &out,
@@ -380,14 +380,12 @@ void UniformHLSL::outputUniform(TInfoSinkBase &out,
                                            ? QualifiedStructNameString(*structure, false, false)
                                            : TypeString(type));
 
-    const TString &registerString =
-        TString("register(") + UniformRegisterPrefix(type) + str(registerIndex) + ")";
-
     out << "uniform " << typeName << " ";
 
     out << DecorateVariableIfNeeded(variable);
 
-    out << ArrayString(type) << " : " << registerString << ";\n";
+    out << ArrayString(type) << " : register(" << UniformRegisterPrefix(type) << registerIndex
+        << ");\n";
 }
 
 void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
@@ -527,9 +525,13 @@ void UniformHLSL::samplerMetadataUniforms(TInfoSinkBase &out, const char *reg)
     }
 }
 
-TString UniformHLSL::uniformBlocksHeader(const ReferencedInterfaceBlocks &referencedInterfaceBlocks)
+void UniformHLSL::uniformBlocksHeader(TInfoSinkBase &out,
+                                      const ReferencedInterfaceBlocks &referencedInterfaceBlocks)
 {
-    TString interfaceBlocks;
+    if (!referencedInterfaceBlocks.empty())
+    {
+        out << "// Uniform Blocks\n\n";
+    }
 
     for (const auto &blockReference : referencedInterfaceBlocks)
     {
@@ -537,7 +539,7 @@ TString UniformHLSL::uniformBlocksHeader(const ReferencedInterfaceBlocks &refere
         const TVariable *instanceVariable     = blockReference.second->instanceVariable;
         if (instanceVariable != nullptr)
         {
-            interfaceBlocks += uniformBlockStructString(interfaceBlock);
+            writeUniformBlockStruct(out, interfaceBlock);
         }
 
         unsigned int activeRegister                             = mUniformBlockRegister;
@@ -548,49 +550,47 @@ TString UniformHLSL::uniformBlocksHeader(const ReferencedInterfaceBlocks &refere
             unsigned int instanceArraySize = instanceVariable->getType().getOutermostArraySize();
             for (unsigned int arrayIndex = 0; arrayIndex < instanceArraySize; arrayIndex++)
             {
-                interfaceBlocks += uniformBlockString(interfaceBlock, instanceVariable,
-                                                      activeRegister + arrayIndex, arrayIndex);
+                writeUniformBlock(out, interfaceBlock, instanceVariable,
+                                  activeRegister + arrayIndex, arrayIndex);
             }
             mUniformBlockRegister += instanceArraySize;
         }
         else
         {
-            interfaceBlocks += uniformBlockString(interfaceBlock, instanceVariable, activeRegister,
-                                                  GL_INVALID_INDEX);
+            writeUniformBlock(out, interfaceBlock, instanceVariable, activeRegister,
+                              GL_INVALID_INDEX);
             mUniformBlockRegister += 1u;
         }
     }
-
-    return (interfaceBlocks.empty() ? "" : ("// Uniform Blocks\n\n" + interfaceBlocks));
 }
 
-TString UniformHLSL::uniformBlockString(const TInterfaceBlock &interfaceBlock,
-                                        const TVariable *instanceVariable,
-                                        unsigned int registerIndex,
-                                        unsigned int arrayIndex)
+void UniformHLSL::writeUniformBlock(TInfoSinkBase &out,
+                                    const TInterfaceBlock &interfaceBlock,
+                                    const TVariable *instanceVariable,
+                                    unsigned int registerIndex,
+                                    unsigned int arrayIndex)
 {
-    const TString &arrayIndexString = (arrayIndex != GL_INVALID_INDEX ? str(arrayIndex) : "");
-    TStringStream hlsl;
-
-    hlsl << "cbuffer " << interfaceBlock.name() << arrayIndexString << " : register(b"
-         << registerIndex
-         << ")\n"
-            "{\n";
+    out << "cbuffer " << interfaceBlock.name();
+    if (arrayIndex != GL_INVALID_INDEX)
+    {
+        out << arrayIndex;
+    }
+    out << " : register(b" << registerIndex
+        << ")\n"
+           "{\n";
 
     if (instanceVariable != nullptr)
     {
-        hlsl << "    " << InterfaceBlockStructName(interfaceBlock) << " "
-             << UniformBlockInstanceString(instanceVariable->name(), arrayIndex) << ";\n";
+        out << "    " << InterfaceBlockStructName(interfaceBlock) << " "
+            << UniformBlockInstanceString(instanceVariable->name(), arrayIndex) << ";\n";
     }
     else
     {
         const TLayoutBlockStorage blockStorage = interfaceBlock.blockStorage();
-        hlsl << uniformBlockMembersString(interfaceBlock, blockStorage);
+        writeUniformBlockMembers(out, interfaceBlock, blockStorage);
     }
 
-    hlsl << "};\n\n";
-
-    return hlsl.str();
+    out << "};\n\n";
 }
 
 ImmutableString UniformHLSL::UniformBlockInstanceString(const ImmutableString &instanceName,
@@ -611,11 +611,10 @@ ImmutableString UniformHLSL::UniformBlockInstanceString(const ImmutableString &i
     }
 }
 
-TString UniformHLSL::uniformBlockMembersString(const TInterfaceBlock &interfaceBlock,
-                                               TLayoutBlockStorage blockStorage)
+void UniformHLSL::writeUniformBlockMembers(TInfoSinkBase &out,
+                                           const TInterfaceBlock &interfaceBlock,
+                                           TLayoutBlockStorage blockStorage)
 {
-    TStringStream hlsl;
-
     Std140PaddingHelper padHelper = mStructureHLSL->getPaddingHelper();
 
     for (unsigned int typeIndex = 0; typeIndex < interfaceBlock.fields().size(); typeIndex++)
@@ -626,11 +625,11 @@ TString UniformHLSL::uniformBlockMembersString(const TInterfaceBlock &interfaceB
         if (blockStorage == EbsStd140)
         {
             // 2 and 3 component vector types in some cases need pre-padding
-            hlsl << padHelper.prePaddingString(fieldType);
+            out << padHelper.prePaddingString(fieldType);
         }
 
-        hlsl << "    " << InterfaceBlockFieldTypeString(field, blockStorage) << " "
-             << Decorate(field.name()) << ArrayString(fieldType) << ";\n";
+        out << "    " << InterfaceBlockFieldTypeString(field, blockStorage) << " "
+            << Decorate(field.name()) << ArrayString(fieldType) << ";\n";
 
         // must pad out after matrices and arrays, where HLSL usually allows itself room to pack
         // stuff
@@ -638,20 +637,19 @@ TString UniformHLSL::uniformBlockMembersString(const TInterfaceBlock &interfaceB
         {
             const bool useHLSLRowMajorPacking =
                 (fieldType.getLayoutQualifier().matrixPacking == EmpColumnMajor);
-            hlsl << padHelper.postPaddingString(fieldType, useHLSLRowMajorPacking);
+            out << padHelper.postPaddingString(fieldType, useHLSLRowMajorPacking);
         }
     }
-
-    return hlsl.str();
 }
 
-TString UniformHLSL::uniformBlockStructString(const TInterfaceBlock &interfaceBlock)
+void UniformHLSL::writeUniformBlockStruct(TInfoSinkBase &out, const TInterfaceBlock &interfaceBlock)
 {
     const TLayoutBlockStorage blockStorage = interfaceBlock.blockStorage();
 
-    return TString("struct ") + InterfaceBlockStructName(interfaceBlock).data() +
-           "\n"
-           "{\n" +
-           uniformBlockMembersString(interfaceBlock, blockStorage) + "};\n\n";
+    out << "struct " << InterfaceBlockStructName(interfaceBlock)
+        << "\n"
+           "{\n";
+    writeUniformBlockMembers(out, interfaceBlock, blockStorage);
+    out << "};\n\n";
 }
 }

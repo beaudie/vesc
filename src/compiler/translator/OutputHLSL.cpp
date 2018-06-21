@@ -476,7 +476,7 @@ void OutputHLSL::header(TInfoSinkBase &out,
     mStructureHLSL->structsHeader(out);
 
     mUniformHLSL->uniformsHeader(out, mOutputType, mReferencedUniforms, mSymbolTable);
-    out << mUniformHLSL->uniformBlocksHeader(mReferencedUniformBlocks);
+    mUniformHLSL->uniformBlocksHeader(out, mReferencedUniformBlocks);
 
     if (!mEqualityFunctions.empty())
     {

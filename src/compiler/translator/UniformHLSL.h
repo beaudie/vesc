@@ -37,7 +37,8 @@ class UniformHLSL : angle::NonCopyable
     // Must be called after uniformsHeader
     void samplerMetadataUniforms(TInfoSinkBase &out, const char *reg);
 
-    TString uniformBlocksHeader(const ReferencedInterfaceBlocks &referencedInterfaceBlocks);
+    void uniformBlocksHeader(TInfoSinkBase &out,
+                             const ReferencedInterfaceBlocks &referencedInterfaceBlocks);
 
     // Used for direct index references
     static ImmutableString UniformBlockInstanceString(const ImmutableString &instanceName,
@@ -53,13 +54,15 @@ class UniformHLSL : angle::NonCopyable
     }
 
   private:
-    TString uniformBlockString(const TInterfaceBlock &interfaceBlock,
-                               const TVariable *instanceVariable,
-                               unsigned int registerIndex,
-                               unsigned int arrayIndex);
-    TString uniformBlockMembersString(const TInterfaceBlock &interfaceBlock,
-                                      TLayoutBlockStorage blockStorage);
-    TString uniformBlockStructString(const TInterfaceBlock &interfaceBlock);
+    void writeUniformBlock(TInfoSinkBase &out,
+                           const TInterfaceBlock &interfaceBlock,
+                           const TVariable *instanceVariable,
+                           unsigned int registerIndex,
+                           unsigned int arrayIndex);
+    void writeUniformBlockMembers(TInfoSinkBase &out,
+                                  const TInterfaceBlock &interfaceBlock,
+                                  TLayoutBlockStorage blockStorage);
+    void writeUniformBlockStruct(TInfoSinkBase &out, const TInterfaceBlock &interfaceBlock);
     const Uniform *findUniformByName(const ImmutableString &name) const;
 
     void outputHLSL4_0_FL9_3Sampler(TInfoSinkBase &out,
