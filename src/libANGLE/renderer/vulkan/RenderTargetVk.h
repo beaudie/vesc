@@ -54,6 +54,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
                                      VkImageAspectFlags aspectFlags,
                                      vk::CommandBuffer *commandBuffer);
     vk::ImageHelper *getImageForWrite(vk::CommandGraphResource *writingResource) const;
+
     vk::ImageView *getImageView() const;
     vk::CommandGraphResource *getResource() const;
 
