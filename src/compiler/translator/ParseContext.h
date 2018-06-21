@@ -607,7 +607,6 @@ class TParseContext : angle::NonCopyable
     TLayoutBlockStorage mDefaultUniformBlockStorage;
     TLayoutMatrixPacking mDefaultBufferMatrixPacking;
     TLayoutBlockStorage mDefaultBufferBlockStorage;
-    TString mHashErrMsg;
     TDiagnostics *mDiagnostics;
     TDirectiveHandler mDirectiveHandler;
     angle::pp::Preprocessor mPreprocessor;

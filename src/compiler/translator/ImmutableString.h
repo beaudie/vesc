@@ -41,8 +41,7 @@ class ImmutableString
     // The data pointer passed in must be one of:
     //  1. nullptr (only valid with length 0).
     //  2. a null-terminated static char array like a string literal.
-    //  3. a null-terminated pool allocated char array. This can't be c_str() of a local TString,
-    //     since when a TString goes out of scope it clears its first character.
+    //  3. a null-terminated pool allocated char array.
     explicit constexpr ImmutableString(const char *data) : mData(data), mLength(constStrlen(data))
     {
     }

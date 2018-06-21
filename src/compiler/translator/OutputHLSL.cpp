@@ -322,13 +322,13 @@ const std::map<std::string, unsigned int> &OutputHLSL::getUniformRegisterMap() c
     return mUniformHLSL->getUniformRegisterMap();
 }
 
-TString OutputHLSL::structInitializerString(int indent,
-                                            const TType &type,
-                                            const TString &name) const
+std::string OutputHLSL::structInitializerString(int indent,
+                                                const TType &type,
+                                                const std::string &name) const
 {
-    TString init;
+    std::string init;
 
-    TString indentString;
+    std::string indentString;
     for (int spaces = 0; spaces < indent; spaces++)
     {
         indentString += "    ";
@@ -339,7 +339,7 @@ TString OutputHLSL::structInitializerString(int indent,
         init += indentString + "{\n";
         for (unsigned int arrayIndex = 0u; arrayIndex < type.getOutermostArraySize(); ++arrayIndex)
         {
-            TStringStream indexedString;
+            std::stringstream indexedString;
             indexedString << name << "[" << arrayIndex << "]";
             TType elementType = type;
             elementType.toArrayElementType();
@@ -360,7 +360,7 @@ TString OutputHLSL::structInitializerString(int indent,
         for (unsigned int fieldIndex = 0; fieldIndex < fields.size(); fieldIndex++)
         {
             const TField &field      = *fields[fieldIndex];
-            const TString &fieldName = name + "." + Decorate(field.name()).data();
+            const std::string &fieldName = name + "." + Decorate(field.name()).data();
             const TType &fieldType   = *field.type();
 
             init += structInitializerString(indent + 1, fieldType, fieldName);
@@ -380,9 +380,9 @@ TString OutputHLSL::structInitializerString(int indent,
     return init;
 }
 
-TString OutputHLSL::generateStructMapping(const std::vector<MappedStruct> &std140Structs) const
+std::string OutputHLSL::generateStructMapping(const std::vector<MappedStruct> &std140Structs) const
 {
-    TString mappedStructs;
+    std::string mappedStructs;
 
     for (auto &mappedStruct : std140Structs)
     {
@@ -403,8 +403,8 @@ TString OutputHLSL::generateStructMapping(const std::vector<MappedStruct> &std14
         for (unsigned int instanceArrayIndex = 0; instanceArrayIndex < instanceCount;
              ++instanceArrayIndex)
         {
-            TString originalName;
-            TString mappedName("map");
+            std::string originalName;
+            std::string mappedName("map");
 
             if (mappedStruct.blockDeclarator->variable().symbolType() != SymbolType::Empty)
             {
@@ -426,8 +426,8 @@ TString OutputHLSL::generateStructMapping(const std::vector<MappedStruct> &std14
             mappedName += fieldName.data();
 
             TType *structType = mappedStruct.field->type();
-            mappedStructs += TString("static ") + Decorate(structType->getStruct()->name()).data() +
-                             " " + mappedName;
+            mappedStructs += std::string("static ") +
+                             Decorate(structType->getStruct()->name()).data() + " " + mappedName;
 
             if (structType->isArray())
             {
@@ -471,7 +471,7 @@ void OutputHLSL::header(TInfoSinkBase &out,
                         const std::vector<MappedStruct> &std140Structs,
                         const BuiltInFunctionEmulator *builtInFunctionEmulator) const
 {
-    TString mappedStructs = generateStructMapping(std140Structs);
+    std::string mappedStructs = generateStructMapping(std140Structs);
 
     mStructureHLSL->structsHeader(out);
 
@@ -2864,9 +2864,9 @@ void OutputHLSL::writeParameter(const TVariable *param, TInfoSinkBase &out)
     }
 }
 
-TString OutputHLSL::zeroInitializer(const TType &type)
+std::string OutputHLSL::zeroInitializer(const TType &type)
 {
-    TString string;
+    std::string string;
 
     size_t size = type.getObjectSize();
     for (size_t component = 0; component < size; component++)
@@ -2982,11 +2982,11 @@ bool OutputHLSL::writeSameSymbolInitializer(TInfoSinkBase &out,
     if (symbolInInitializer)
     {
         // Type already printed
-        out << "t" + str(mUniqueIndex) + " = ";
+        out << "t" << mUniqueIndex << " = ";
         expression->traverse(this);
         out << ", ";
         symbolNode->traverse(this);
-        out << " = t" + str(mUniqueIndex);
+        out << " = t" << mUniqueIndex;
 
         mUniqueIndex++;
         return true;

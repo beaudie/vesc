@@ -64,7 +64,7 @@ class OutputHLSL : public TIntermTraverser
     const std::map<std::string, unsigned int> &getUniformBlockRegisterMap() const;
     const std::map<std::string, unsigned int> &getUniformRegisterMap() const;
 
-    static TString zeroInitializer(const TType &type);
+    static std::string zeroInitializer(const TType &type);
 
     TInfoSinkBase &getInfoSink()
     {
@@ -107,7 +107,7 @@ class OutputHLSL : public TIntermTraverser
     bool handleExcessiveLoop(TInfoSinkBase &out, TIntermLoop *node);
 
     // Emit one of three strings depending on traverse phase. Called with literal strings so using
-    // const char* instead of TString.
+    // const char*.
     void outputTriplet(TInfoSinkBase &out,
                        Visit visit,
                        const char *preString,
@@ -220,7 +220,9 @@ class OutputHLSL : public TIntermTraverser
 
     TIntermSymbol *mExcessiveLoopIndex;
 
-    TString structInitializerString(int indent, const TType &type, const TString &name) const;
+    std::string structInitializerString(int indent,
+                                        const TType &type,
+                                        const std::string &name) const;
 
     struct HelperFunction
     {
@@ -264,7 +266,7 @@ class OutputHLSL : public TIntermTraverser
     PerformanceDiagnostics *mPerfDiagnostics;
 
   private:
-    TString generateStructMapping(const std::vector<MappedStruct> &std140Structs) const;
+    std::string generateStructMapping(const std::vector<MappedStruct> &std140Structs) const;
     ImmutableString samplerNamePrefixFromStruct(TIntermTyped *node);
     bool ancestorEvaluatesToSamplerInStruct();
 };

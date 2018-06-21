@@ -45,13 +45,6 @@ struct TSourceLoc
     void operator delete[](void *, void *) {}
 
 //
-// Pool version of string.
-//
-typedef pool_allocator<char> TStringAllocator;
-typedef std::basic_string<char, std::char_traits<char>, TStringAllocator> TString;
-typedef std::basic_ostringstream<char, std::char_traits<char>, TStringAllocator> TStringStream;
-
-//
 // Persistent string memory.  Should only be used for strings that survive
 // across compiles.
 //
@@ -105,17 +98,6 @@ class TMap : public std::map<K, D, CMP, pool_allocator<std::pair<const K, D>>>
     }
 };
 
-// Integer to TString conversion
-template <typename T>
-inline TString str(T i)
-{
-    ASSERT(std::numeric_limits<T>::is_integer);
-    char buffer[((8 * sizeof(T)) / 3) + 3];
-    const char *formatStr = std::numeric_limits<T>::is_signed ? "%d" : "%u";
-    snprintf(buffer, sizeof(buffer), formatStr, i);
-    return buffer;
-}
-
 // Allocate a char array in the global memory pool. str must be a null terminated string. strLength
 // is the length without the null terminator.
 inline const char *AllocatePoolCharArray(const char *str, size_t strLength)
@@ -128,17 +110,5 @@ inline const char *AllocatePoolCharArray(const char *str, size_t strLength)
 }
 
 }  // namespace sh
-
-namespace std
-{
-template <>
-struct hash<sh::TString>
-{
-    size_t operator()(const sh::TString &s) const
-    {
-        return angle::PMurHash32(0, s.data(), static_cast<int>(s.length()));
-    }
-};
-}  // namespace std
 
 #endif  // COMPILER_TRANSLATOR_COMMON_H_

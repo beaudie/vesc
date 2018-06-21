@@ -101,7 +101,7 @@ class MatchOutputCodeTest : public testing::Test
 };
 
 // Returns a pointer to a function call node with a mangled name functionName.
-const TIntermAggregate *FindFunctionCallNode(TIntermNode *root, const TString &functionName);
+const TIntermAggregate *FindFunctionCallNode(TIntermNode *root, const std::string &functionName);
 }
 
 #endif // TESTS_TEST_UTILS_COMPILER_TEST_H_

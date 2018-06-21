@@ -267,7 +267,8 @@ bool MatchOutputCodeTest::notFoundInCode(const char *stringToFind) const
     return true;
 }
 
-const TIntermAggregate *FindFunctionCallNode(TIntermNode *root, const TString &functionMangledName)
+const TIntermAggregate *FindFunctionCallNode(TIntermNode *root,
+                                             const std::string &functionMangledName)
 {
     FunctionCallFinder finder(functionMangledName.c_str());
     root->traverse(&finder);

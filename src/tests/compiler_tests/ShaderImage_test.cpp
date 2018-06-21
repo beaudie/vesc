@@ -23,7 +23,7 @@ namespace
 // Further each argument is checked whether it matches the expected properties given the compiled
 // shader.
 void CheckImageStoreCall(TIntermNode *astRoot,
-                         const TString &imageStoreMangledName,
+                         const std::string &imageStoreMangledName,
                          TBasicType imageType,
                          int storeLocationNominalSize,
                          TBasicType storeValueType,
@@ -52,7 +52,7 @@ void CheckImageStoreCall(TIntermNode *astRoot,
 // Further each argument is checked whether it matches the expected properties given the compiled
 // shader.
 void CheckImageLoadCall(TIntermNode *astRoot,
-                        const TString &imageLoadMangledName,
+                        const std::string &imageLoadMangledName,
                         TBasicType imageType,
                         int loadLocationNominalSize)
 {
@@ -75,7 +75,7 @@ void CheckImageLoadCall(TIntermNode *astRoot,
 void CheckExportedImageUniform(const std::vector<sh::Uniform> &uniforms,
                                size_t uniformIndex,
                                ::GLenum imageTypeGL,
-                               const TString &imageName)
+                               const std::string &imageName)
 {
     ASSERT_EQ(1u, uniforms.size());
 
