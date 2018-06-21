@@ -120,9 +120,9 @@ class TStructure : public TSymbol, public TFieldListCollection
 
     // The char arrays passed in must be pool allocated or static.
     void createSamplerSymbols(const char *namePrefix,
-                              const TString &apiNamePrefix,
+                              const std::string &apiNamePrefix,
                               TVector<const TVariable *> *outputSymbols,
-                              TMap<const TVariable *, TString> *outputSymbolsToAPINames,
+                              std::map<const TVariable *, std::string> *outputSymbolsToAPINames,
                               TSymbolTable *symbolTable) const;
 
     void setAtGlobalScope(bool atGlobalScope) { mAtGlobalScope = atGlobalScope; }

@@ -743,9 +743,9 @@ void TType::invalidateMangledName()
 }
 
 void TType::createSamplerSymbols(const ImmutableString &namePrefix,
-                                 const TString &apiNamePrefix,
+                                 const std::string &apiNamePrefix,
                                  TVector<const TVariable *> *outputSymbols,
-                                 TMap<const TVariable *, TString> *outputSymbolsToAPINames,
+                                 std::map<const TVariable *, std::string> *outputSymbolsToAPINames,
                                  TSymbolTable *symbolTable) const
 {
     if (isStructureContainingSamplers())
@@ -758,7 +758,7 @@ void TType::createSamplerSymbols(const ImmutableString &namePrefix,
             {
                 std::stringstream elementName;
                 elementName << namePrefix << "_" << arrayIndex;
-                TStringStream elementApiName;
+                std::stringstream elementApiName;
                 elementApiName << apiNamePrefix << "[" << arrayIndex << "]";
                 elementType.createSamplerSymbols(ImmutableString(elementName.str()),
                                                  elementApiName.str(), outputSymbols,

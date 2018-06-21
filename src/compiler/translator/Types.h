@@ -320,11 +320,10 @@ class TType
     // several copies of it in the output code is undesirable for performance.
     bool canReplaceWithConstantUnion() const;
 
-    // The char arrays passed in must be pool allocated or static.
     void createSamplerSymbols(const ImmutableString &namePrefix,
-                              const TString &apiNamePrefix,
+                              const std::string &apiNamePrefix,
                               TVector<const TVariable *> *outputSymbols,
-                              TMap<const TVariable *, TString> *outputSymbolsToAPINames,
+                              std::map<const TVariable *, std::string> *outputSymbolsToAPINames,
                               TSymbolTable *symbolTable) const;
 
     // Initializes all lazily-initialized members.

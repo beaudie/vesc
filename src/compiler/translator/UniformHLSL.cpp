@@ -192,13 +192,13 @@ unsigned int UniformHLSL::assignUniformRegister(const TType &type,
 }
 
 unsigned int UniformHLSL::assignSamplerInStructUniformRegister(const TType &type,
-                                                               const TString &name,
+                                                               const std::string &name,
                                                                unsigned int *outRegisterCount)
 {
     // Sampler that is a field of a uniform structure.
     ASSERT(IsSampler(type.getBasicType()));
     unsigned int registerIndex                     = mTextureRegister;
-    mUniformRegisterMap[std::string(name.c_str())] = registerIndex;
+    mUniformRegisterMap[name]                      = registerIndex;
     unsigned int registerCount = type.isArray() ? type.getArraySizeProduct() : 1u;
     mTextureRegister += registerCount;
     if (outRegisterCount)
@@ -212,7 +212,7 @@ void UniformHLSL::outputHLSLSamplerUniformGroup(
     TInfoSinkBase &out,
     const HLSLTextureGroup textureGroup,
     const TVector<const TVariable *> &group,
-    const TMap<const TVariable *, TString> &samplerInStructSymbolsToAPINames,
+    const std::map<const TVariable *, std::string> &samplerInStructSymbolsToAPINames,
     unsigned int *groupTextureRegisterIndex)
 {
     if (group.empty())
@@ -401,7 +401,7 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
     // written. They are grouped based on the combination of the HLSL texture type and
     // HLSL sampler type, enumerated in HLSLTextureSamplerGroup.
     TVector<TVector<const TVariable *>> groupedSamplerUniforms(HLSL_TEXTURE_MAX + 1);
-    TMap<const TVariable *, TString> samplerInStructSymbolsToAPINames;
+    std::map<const TVariable *, std::string> samplerInStructSymbolsToAPINames;
     TVector<TVector<const TVariable *>> groupedReadonlyImageUniforms(HLSL_TEXTURE_MAX + 1);
     TVector<TVector<const TVariable *>> groupedImageUniforms(HLSL_RWTEXTURE_MAX + 1);
     for (auto &uniformIt : referencedUniforms)
@@ -440,13 +440,13 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
             if (type.isStructureContainingSamplers())
             {
                 TVector<const TVariable *> samplerSymbols;
-                TMap<const TVariable *, TString> symbolsToAPINames;
+                std::map<const TVariable *, std::string> symbolsToAPINames;
                 ImmutableStringBuilder namePrefix(kAngleDecorString.length() +
                                                   variable.name().length());
                 namePrefix << kAngleDecorString;
                 namePrefix << variable.name();
-                type.createSamplerSymbols(namePrefix, TString(variable.name().data()),
-                                          &samplerSymbols, &symbolsToAPINames, symbolTable);
+                type.createSamplerSymbols(namePrefix, variable.name().data(), &samplerSymbols,
+                                          &symbolsToAPINames, symbolTable);
                 for (const TVariable *sampler : samplerSymbols)
                 {
                     const TType &samplerType = sampler->getType();

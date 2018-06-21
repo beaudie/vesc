@@ -104,11 +104,12 @@ TStructure::TStructure(const TSymbolUniqueId &id,
 {
 }
 
-void TStructure::createSamplerSymbols(const char *namePrefix,
-                                      const TString &apiNamePrefix,
-                                      TVector<const TVariable *> *outputSymbols,
-                                      TMap<const TVariable *, TString> *outputSymbolsToAPINames,
-                                      TSymbolTable *symbolTable) const
+void TStructure::createSamplerSymbols(
+    const char *namePrefix,
+    const std::string &apiNamePrefix,
+    TVector<const TVariable *> *outputSymbols,
+    std::map<const TVariable *, std::string> *outputSymbolsToAPINames,
+    TSymbolTable *symbolTable) const
 {
     ASSERT(containsSamplers());
     for (const auto *field : *mFields)
@@ -118,9 +119,9 @@ void TStructure::createSamplerSymbols(const char *namePrefix,
         {
             std::stringstream fieldName;
             fieldName << namePrefix << "_" << field->name();
-            TString fieldApiName = apiNamePrefix + ".";
-            fieldApiName += field->name().data();
-            fieldType->createSamplerSymbols(ImmutableString(fieldName.str()), fieldApiName,
+            std::stringstream fieldApiName;
+            fieldApiName << apiNamePrefix << "." << field->name();
+            fieldType->createSamplerSymbols(ImmutableString(fieldName.str()), fieldApiName.str(),
                                             outputSymbols, outputSymbolsToAPINames, symbolTable);
         }
     }

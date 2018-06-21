@@ -79,14 +79,14 @@ class UniformHLSL : angle::NonCopyable
                                        const ImmutableString &name,
                                        unsigned int *outRegisterCount);
     unsigned int assignSamplerInStructUniformRegister(const TType &type,
-                                                      const TString &name,
+                                                      const std::string &name,
                                                       unsigned int *outRegisterCount);
 
     void outputHLSLSamplerUniformGroup(
         TInfoSinkBase &out,
         const HLSLTextureGroup textureGroup,
         const TVector<const TVariable *> &group,
-        const TMap<const TVariable *, TString> &samplerInStructSymbolsToAPINames,
+        const std::map<const TVariable *, std::string> &samplerInStructSymbolsToAPINames,
         unsigned int *groupTextureRegisterIndex);
 
     void outputHLSLImageUniformIndices(TInfoSinkBase &out,
