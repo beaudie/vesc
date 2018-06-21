@@ -711,6 +711,13 @@ Error ImageHelper::init2DStaging(VkDevice device,
     return NoError();
 }
 
+VkImageAspectFlags ImageHelper::getAspectFlags() const
+{
+    const angle::Format &textureFormat = mFormat->textureFormat();
+    return textureFormat.redBits > 0 ? VK_IMAGE_ASPECT_COLOR_BIT
+                                     : 0 | GetDepthStencilAspectFlags(textureFormat);
+}
+
 void ImageHelper::dumpResources(Serial serial, std::vector<GarbageObject> *garbageQueue)
 {
     mImage.dumpResources(serial, garbageQueue);
@@ -865,7 +872,7 @@ void ImageHelper::Copy(ImageHelper *srcImage,
         srcImage->getCurrentLayout() != VK_IMAGE_LAYOUT_GENERAL)
     {
         srcImage->changeLayoutWithStages(
-            VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+            srcImage->getAspectFlags(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
             VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
     }
 
@@ -873,7 +880,7 @@ void ImageHelper::Copy(ImageHelper *srcImage,
         dstImage->getCurrentLayout() != VK_IMAGE_LAYOUT_GENERAL)
     {
         dstImage->changeLayoutWithStages(
-            VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+            dstImage->getAspectFlags(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
             VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
     }
 
