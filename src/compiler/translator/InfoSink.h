@@ -63,11 +63,6 @@ class TInfoSinkBase
         sink.append(str);
         return *this;
     }
-    TInfoSinkBase &operator<<(const TString &str)
-    {
-        sink.append(str.c_str());
-        return *this;
-    }
     TInfoSinkBase &operator<<(const ImmutableString &str);
 
     TInfoSinkBase &operator<<(const TType &type);

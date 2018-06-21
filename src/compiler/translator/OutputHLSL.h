@@ -139,10 +139,10 @@ class OutputHLSL : public TIntermTraverser
     void writeIfElse(TInfoSinkBase &out, TIntermIfElse *node);
 
     // Returns the function name
-    TString addStructEqualityFunction(const TStructure &structure);
-    TString addArrayEqualityFunction(const TType &type);
-    TString addArrayAssignmentFunction(const TType &type);
-    TString addArrayConstructIntoFunction(const TType &type);
+    ImmutableString addStructEqualityFunction(const TStructure &structure);
+    ImmutableString addArrayEqualityFunction(const TType &type);
+    ImmutableString addArrayAssignmentFunction(const TType &type);
+    ImmutableString addArrayConstructIntoFunction(const TType &type);
 
     // Ensures if the type is a struct, the struct is defined
     void ensureStructDefined(const TType &type);
@@ -224,8 +224,10 @@ class OutputHLSL : public TIntermTraverser
 
     struct HelperFunction
     {
-        TString functionName;
-        TString functionDefinition;
+        HelperFunction(const ImmutableString &name) : functionName(name) {}
+
+        ImmutableString functionName;
+        std::string functionDefinition;
 
         virtual ~HelperFunction() {}
     };
@@ -238,12 +240,14 @@ class OutputHLSL : public TIntermTraverser
 
     struct StructEqualityFunction : public HelperFunction
     {
+        StructEqualityFunction(const ImmutableString &name) : HelperFunction(name) {}
         const TStructure *structure;
     };
     std::vector<StructEqualityFunction *> mStructEqualityFunctions;
 
     struct ArrayHelperFunction : public HelperFunction
     {
+        ArrayHelperFunction(const ImmutableString &name) : HelperFunction(name) {}
         TType type;
     };
     std::vector<ArrayHelperFunction *> mArrayEqualityFunctions;

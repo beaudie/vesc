@@ -35,19 +35,22 @@ namespace sh
 namespace
 {
 
-TString ArrayHelperFunctionName(const char *prefix, const TType &type)
+ImmutableString ArrayHelperFunctionName(const char *prefix, const TType &type)
 {
-    TStringStream fnName;
+    const ImmutableString &typeString = TypeString(type);
+    ImmutableStringBuilder fnName(strlen(prefix) + 1 + type.getArraySizes()->size() * 9 +
+                                  typeString.length());
     fnName << prefix << "_";
     if (type.isArray())
     {
         for (unsigned int arraySize : *type.getArraySizes())
         {
-            fnName << arraySize << "_";
+            fnName.appendHex(arraySize);
+            fnName << "_";
         }
     }
-    fnName << TypeString(type);
-    return fnName.str();
+    fnName << typeString;
+    return fnName;
 }
 
 bool IsDeclarationWrittenOut(TIntermDeclaration *node)
@@ -1063,26 +1066,32 @@ void OutputHLSL::outputEqual(Visit visit, const TType &type, TOperator op, TInfo
     }
     else
     {
-        if (visit == PreVisit && op == EOpNotEqual)
+        if (visit == PreVisit)
         {
-            out << "!";
-        }
-
-        if (type.isArray())
-        {
-            const TString &functionName = addArrayEqualityFunction(type);
-            outputTriplet(out, visit, (functionName + "(").c_str(), ", ", ")");
-        }
-        else if (type.getBasicType() == EbtStruct)
-        {
-            const TStructure &structure = *type.getStruct();
-            const TString &functionName = addStructEqualityFunction(structure);
-            outputTriplet(out, visit, (functionName + "(").c_str(), ", ", ")");
+            if (op == EOpNotEqual)
+            {
+                out << "!";
+            }
+            if (type.isArray())
+            {
+                const ImmutableString &functionName = addArrayEqualityFunction(type);
+                out << functionName << "(";
+            }
+            else if (type.getBasicType() == EbtStruct)
+            {
+                const TStructure &structure         = *type.getStruct();
+                const ImmutableString &functionName = addStructEqualityFunction(structure);
+                out << functionName << "(";
+            }
+            else
+            {
+                ASSERT(type.isMatrix() || type.isVector());
+                out << "all(";
+            }
         }
         else
         {
-            ASSERT(type.isMatrix() || type.isVector());
-            outputTriplet(out, visit, "all(", " == ", ")");
+            outputTriplet(out, visit, "", ", ", ")");
         }
     }
 }
@@ -1091,8 +1100,15 @@ void OutputHLSL::outputAssign(Visit visit, const TType &type, TInfoSinkBase &out
 {
     if (type.isArray())
     {
-        const TString &functionName = addArrayAssignmentFunction(type);
-        outputTriplet(out, visit, (functionName + "(").c_str(), ", ", ")");
+        if (visit == PreVisit)
+        {
+            const ImmutableString &functionName = addArrayAssignmentFunction(type);
+            out << functionName << "(";
+        }
+        else
+        {
+            outputTriplet(out, visit, "", ", ", ")");
+        }
     }
     else
     {
@@ -1160,7 +1176,8 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                 TIntermAggregate *rightAgg = node->getRight()->getAsAggregate();
                 if (rightAgg != nullptr && rightAgg->isConstructor())
                 {
-                    const TString &functionName = addArrayConstructIntoFunction(node->getType());
+                    const ImmutableString &functionName =
+                        addArrayConstructIntoFunction(node->getType());
                     out << functionName << "(";
                     node->getLeft()->traverse(this);
                     TIntermSequence *seq = rightAgg->getSequence();
@@ -2995,7 +3012,7 @@ bool OutputHLSL::writeConstantInitialization(TInfoSinkBase &out,
     return false;
 }
 
-TString OutputHLSL::addStructEqualityFunction(const TStructure &structure)
+ImmutableString OutputHLSL::addStructEqualityFunction(const TStructure &structure)
 {
     const TFieldList &fields = structure.fields();
 
@@ -3009,9 +3026,11 @@ TString OutputHLSL::addStructEqualityFunction(const TStructure &structure)
 
     const ImmutableString &structNameString = StructNameString(structure);
 
-    StructEqualityFunction *function = new StructEqualityFunction();
+    constexpr const ImmutableString kAngleEqString("angle_eq_");
+    ImmutableStringBuilder functionNameBuilder(kAngleEqString.length() + structNameString.length());
+    functionNameBuilder << kAngleEqString << structNameString;
+    StructEqualityFunction *function = new StructEqualityFunction(functionNameBuilder);
     function->structure              = &structure;
-    function->functionName           = TString("angle_eq_") + structNameString.data();
 
     TInfoSinkBase fnOut;
 
@@ -3042,7 +3061,7 @@ TString OutputHLSL::addStructEqualityFunction(const TStructure &structure)
     fnOut << ";\n"
           << "}\n";
 
-    function->functionDefinition = fnOut.c_str();
+    function->functionDefinition = fnOut.str();
 
     mStructEqualityFunctions.push_back(function);
     mEqualityFunctions.push_back(function);
@@ -3050,7 +3069,7 @@ TString OutputHLSL::addStructEqualityFunction(const TStructure &structure)
     return function->functionName;
 }
 
-TString OutputHLSL::addArrayEqualityFunction(const TType &type)
+ImmutableString OutputHLSL::addArrayEqualityFunction(const TType &type)
 {
     for (const auto &eqFunction : mArrayEqualityFunctions)
     {
@@ -3063,10 +3082,9 @@ TString OutputHLSL::addArrayEqualityFunction(const TType &type)
     TType elementType(type);
     elementType.toArrayElementType();
 
-    ArrayHelperFunction *function = new ArrayHelperFunction();
+    ArrayHelperFunction *function =
+        new ArrayHelperFunction(ArrayHelperFunctionName("angle_eq", type));
     function->type                = type;
-
-    function->functionName = ArrayHelperFunctionName("angle_eq", type);
 
     TInfoSinkBase fnOut;
 
@@ -3091,7 +3109,7 @@ TString OutputHLSL::addArrayEqualityFunction(const TType &type)
              "    return true;\n"
              "}\n";
 
-    function->functionDefinition = fnOut.c_str();
+    function->functionDefinition = fnOut.str();
 
     mArrayEqualityFunctions.push_back(function);
     mEqualityFunctions.push_back(function);
@@ -3099,7 +3117,7 @@ TString OutputHLSL::addArrayEqualityFunction(const TType &type)
     return function->functionName;
 }
 
-TString OutputHLSL::addArrayAssignmentFunction(const TType &type)
+ImmutableString OutputHLSL::addArrayAssignmentFunction(const TType &type)
 {
     for (const auto &assignFunction : mArrayAssignmentFunctions)
     {
@@ -3112,10 +3130,8 @@ TString OutputHLSL::addArrayAssignmentFunction(const TType &type)
     TType elementType(type);
     elementType.toArrayElementType();
 
-    ArrayHelperFunction function;
+    ArrayHelperFunction function(ArrayHelperFunctionName("angle_assign", type));
     function.type = type;
-
-    function.functionName = ArrayHelperFunctionName("angle_assign", type);
 
     TInfoSinkBase fnOut;
 
@@ -3139,14 +3155,14 @@ TString OutputHLSL::addArrayAssignmentFunction(const TType &type)
              "    }\n"
              "}\n";
 
-    function.functionDefinition = fnOut.c_str();
+    function.functionDefinition = fnOut.str();
 
     mArrayAssignmentFunctions.push_back(function);
 
     return function.functionName;
 }
 
-TString OutputHLSL::addArrayConstructIntoFunction(const TType &type)
+ImmutableString OutputHLSL::addArrayConstructIntoFunction(const TType &type)
 {
     for (const auto &constructIntoFunction : mArrayConstructIntoFunctions)
     {
@@ -3159,10 +3175,8 @@ TString OutputHLSL::addArrayConstructIntoFunction(const TType &type)
     TType elementType(type);
     elementType.toArrayElementType();
 
-    ArrayHelperFunction function;
+    ArrayHelperFunction function(ArrayHelperFunctionName("angle_construct_into", type));
     function.type = type;
-
-    function.functionName = ArrayHelperFunctionName("angle_construct_into", type);
 
     TInfoSinkBase fnOut;
 
@@ -3187,7 +3201,7 @@ TString OutputHLSL::addArrayConstructIntoFunction(const TType &type)
     }
     fnOut << "}\n";
 
-    function.functionDefinition = fnOut.c_str();
+    function.functionDefinition = fnOut.str();
 
     mArrayConstructIntoFunctions.push_back(function);
 
