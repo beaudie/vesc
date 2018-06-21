@@ -29,7 +29,10 @@ class MultithreadingTest : public ANGLETest
         setContextVirtualization(false);
     }
 
-    bool platformSupportsMultithreading() const { return IsOpenGL() && IsWindows(); }
+    bool platformSupportsMultithreading() const
+    {
+        return (IsOpenGL() || IsOpenGLES()) && (IsWindows() || IsAndroid());
+    }
 };
 
 // Test that it's possible to make one context current on different threads
