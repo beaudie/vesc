@@ -864,17 +864,23 @@ void ImageHelper::Copy(ImageHelper *srcImage,
     if (srcImage->getCurrentLayout() != VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL &&
         srcImage->getCurrentLayout() != VK_IMAGE_LAYOUT_GENERAL)
     {
+        const angle::Format &srcFormat = srcImage->getFormat().textureFormat();
         srcImage->changeLayoutWithStages(
-            VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
+            srcFormat.redBits > 0 ? VK_IMAGE_ASPECT_COLOR_BIT
+                                  : 0 | GetDepthStencilAspectFlags(srcFormat),
+            VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+            VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
     }
 
     if (dstImage->getCurrentLayout() != VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL &&
         dstImage->getCurrentLayout() != VK_IMAGE_LAYOUT_GENERAL)
     {
+        const angle::Format &dstFormat = srcImage->getFormat().textureFormat();
         dstImage->changeLayoutWithStages(
-            VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
+            dstFormat.redBits > 0 ? VK_IMAGE_ASPECT_COLOR_BIT
+                                  : 0 | GetDepthStencilAspectFlags(dstFormat),
+            VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+            VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
     }
 
     VkImageCopy region;
