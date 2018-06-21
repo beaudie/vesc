@@ -1929,7 +1929,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
             {
                 const ImmutableString &name = node->getFunction()->name();
                 TType type                = (*arguments)[0]->getAsTyped()->getType();
-                TString imageFunctionName   = mImageFunctionHLSL->useImageFunction(
+                const ImmutableString &imageFunctionName = mImageFunctionHLSL->useImageFunction(
                     name, type.getBasicType(), type.getLayoutQualifier().imageInternalFormat,
                     type.getMemoryQualifier().readonly);
                 out << imageFunctionName << "(";
