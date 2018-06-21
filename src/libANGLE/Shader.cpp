@@ -19,8 +19,10 @@
 #include "libANGLE/Constants.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/ResourceManager.h"
+#include "libANGLE/histogram_macros.h"
 #include "libANGLE/renderer/GLImplFactory.h"
 #include "libANGLE/renderer/ShaderImpl.h"
+#include "third_party/trace_event/trace_event.h"
 
 namespace gl
 {
@@ -355,12 +357,16 @@ void Shader::resolveCompile(const Context *context)
 
     srcStrings.push_back(mLastCompiledSource.c_str());
 
-    if (!sh::Compile(compilerHandle, &srcStrings[0], srcStrings.size(), mLastCompileOptions))
     {
-        mInfoLog = sh::GetInfoLog(compilerHandle);
-        WARN() << std::endl << mInfoLog;
-        mState.mCompileStatus = CompileStatus::NOT_COMPILED;
-        return;
+        TRACE_EVENT0("gpu.angle", "TranslateCompile");
+        SCOPED_ANGLE_HISTOGRAM_TIMER("GPU.ANGLE.TranslateCompileMS");
+        if (!sh::Compile(compilerHandle, &srcStrings[0], srcStrings.size(), mLastCompileOptions))
+        {
+            mInfoLog = sh::GetInfoLog(compilerHandle);
+            WARN() << std::endl << mInfoLog;
+            mState.mCompileStatus = CompileStatus::NOT_COMPILED;
+            return;
+        }
     }
 
     mState.mTranslatedSource = sh::GetObjectCode(compilerHandle);

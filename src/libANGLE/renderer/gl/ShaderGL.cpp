@@ -11,9 +11,11 @@
 #include "common/debug.h"
 #include "libANGLE/Compiler.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/histogram_macros.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/RendererGL.h"
 #include "libANGLE/renderer/gl/WorkaroundsGL.h"
+#include "third_party/trace_event/trace_event.h"
 
 #include <iostream>
 
@@ -147,6 +149,9 @@ bool ShaderGL::postTranslateCompile(const gl::Context *context,
 {
     // Translate the ESSL into GLSL
     const char *translatedSourceCString = mData.getTranslatedSource().c_str();
+
+    TRACE_EVENT0("gpu.angle", "ShaderGLCompile");
+    SCOPED_ANGLE_HISTOGRAM_TIMER("GPU.ANGLE.ShaderGLCompileMS");
 
     // Set the source
     const FunctionsGL *functions = GetFunctionsGL(context);

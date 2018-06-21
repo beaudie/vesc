@@ -16,6 +16,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/Uniform.h"
+#include "libANGLE/histogram_macros.h"
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/renderer/gl/ContextGL.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
@@ -23,6 +24,7 @@
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 #include "libANGLE/renderer/gl/WorkaroundsGL.h"
 #include "platform/Platform.h"
+#include "third_party/trace_event/trace_event.h"
 
 namespace rx
 {
@@ -129,6 +131,9 @@ gl::LinkResult ProgramGL::link(const gl::Context *context,
                                const gl::ProgramLinkedResources &resources,
                                gl::InfoLog &infoLog)
 {
+    TRACE_EVENT0("gpu.angle", "ProgramGLLink");
+    SCOPED_ANGLE_HISTOGRAM_TIMER("GPU.ANGLE.ProgramGLLinkMS");
+
     preLink();
 
     if (mState.getAttachedShader(gl::ShaderType::Compute))
