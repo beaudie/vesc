@@ -391,9 +391,6 @@ gl::Error FramebufferVk::syncState(const gl::Context *context,
                         colorIndex, emulatedFormat.redBits > 0, emulatedFormat.greenBits > 0,
                         emulatedFormat.blueBits > 0, emulatedFormat.alphaBits > 0);
 
-                    // TODO(lucferron): Add a test to trigger edge case where the framebuffer
-                    // attachment would change but not the binding.
-                    // http://anglebug.com/2597
                     const angle::Format &sourceFormat =
                         renderTarget->getImageFormat().angleFormat();
                     mEmulatedAlphaAttachmentMask.set(
