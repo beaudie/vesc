@@ -960,6 +960,9 @@ Error Texture::setImage(const Context *context,
 
     InitState initState = DetermineInitState(context, pixels);
     mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat, type), initState));
+
+    ANGLE_TRY(handleMipmapGenerationHint(context, level));
+
     signalDirty(context, initState);
 
     return NoError();
@@ -980,7 +983,11 @@ Error Texture::setSubImage(const Context *context,
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level);
 
-    return mTexture->setSubImage(context, index, area, format, type, unpackState, pixels);
+    ANGLE_TRY(mTexture->setSubImage(context, index, area, format, type, unpackState, pixels));
+
+    ANGLE_TRY(handleMipmapGenerationHint(context, level));
+
+    return NoError();
 }
 
 Error Texture::setCompressedImage(const Context *context,
@@ -1005,6 +1012,9 @@ Error Texture::setCompressedImage(const Context *context,
 
     InitState initState = DetermineInitState(context, pixels);
     mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat), initState));
+
+    ANGLE_TRY(handleMipmapGenerationHint(context, level));
+
     signalDirty(context, initState);
 
     return NoError();
@@ -1025,8 +1035,11 @@ Error Texture::setCompressedSubImage(const Context *context,
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level);
 
-    return mTexture->setCompressedSubImage(context, index, area, format, unpackState, imageSize,
-                                           pixels);
+    ANGLE_TRY(mTexture->setCompressedSubImage(context, index, area, format, unpackState, imageSize,
+                                              pixels));
+    ANGLE_TRY(handleMipmapGenerationHint(context, level));
+
+    return NoError();
 }
 
 Error Texture::copyImage(const Context *context,
@@ -1060,6 +1073,8 @@ Error Texture::copyImage(const Context *context,
                         ImageDesc(Extents(sourceArea.width, sourceArea.height, 1),
                                   Format(internalFormatInfo), InitState::Initialized));
 
+    ANGLE_TRY(handleMipmapGenerationHint(context, level));
+
     // We need to initialize this texture only if the source attachment is not initialized.
     signalDirty(context, InitState::Initialized);
 
@@ -1083,7 +1098,10 @@ Error Texture::copySubImage(const Context *context,
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level);
 
-    return mTexture->copySubImage(context, index, destOffset, sourceArea, source);
+    ANGLE_TRY(mTexture->copySubImage(context, index, destOffset, sourceArea, source));
+    ANGLE_TRY(handleMipmapGenerationHint(context, level));
+
+    return NoError();
 }
 
 Error Texture::copyTexture(const Context *context,
@@ -1635,6 +1653,17 @@ Error Texture::ensureSubImageInitialized(const Context *context,
             ANGLE_TRY(initializeContents(context, imageIndex));
         }
         setInitState(imageIndex, InitState::Initialized);
+    }
+
+    return NoError();
+}
+
+Error Texture::handleMipmapGenerationHint(const Context *context, int level)
+{
+
+    if (getGenerateMipmapHint() == GL_TRUE && level == 0)
+    {
+        ANGLE_TRY(generateMipmap(context));
     }
 
     return NoError();
