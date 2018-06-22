@@ -3384,7 +3384,7 @@ Error Context::syncState(const State::DirtyBits &bitMask, const State::DirtyObje
 Error Context::syncDirtyBits()
 {
     const State::DirtyBits &dirtyBits = mGLState.getDirtyBits();
-    mImplementation->syncState(this, dirtyBits);
+    ANGLE_TRY(mImplementation->syncState(this, dirtyBits));
     mGLState.clearDirtyBits();
     return NoError();
 }
@@ -3392,7 +3392,7 @@ Error Context::syncDirtyBits()
 Error Context::syncDirtyBits(const State::DirtyBits &bitMask)
 {
     const State::DirtyBits &dirtyBits = (mGLState.getDirtyBits() & bitMask);
-    mImplementation->syncState(this, dirtyBits);
+    ANGLE_TRY(mImplementation->syncState(this, dirtyBits));
     mGLState.clearDirtyBits(dirtyBits);
     return NoError();
 }
