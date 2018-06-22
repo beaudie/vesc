@@ -110,7 +110,8 @@ State::State(bool debug,
       mSampleAlphaToOne(false),
       mFramebufferSRGB(true),
       mRobustResourceInit(robustResourceInit),
-      mProgramBinaryCacheEnabled(programBinaryCacheEnabled)
+      mProgramBinaryCacheEnabled(programBinaryCacheEnabled),
+      mMaxShaderCompilerThreads(0xFFFFFFFFu)
 {
 }
 
@@ -1852,6 +1853,16 @@ void State::setFramebufferSRGB(bool sRGB)
 bool State::getFramebufferSRGB() const
 {
     return mFramebufferSRGB;
+}
+
+void State::setMaxShaderCompilerThreads(GLuint count)
+{
+    mMaxShaderCompilerThreads = count;
+}
+
+GLuint State::getMaxShaderCompilerThreads() const
+{
+    return mMaxShaderCompilerThreads;
 }
 
 void State::getBooleanv(GLenum pname, GLboolean *params)
