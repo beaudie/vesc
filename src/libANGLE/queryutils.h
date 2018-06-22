@@ -197,6 +197,8 @@ void GetTextureEnv(unsigned int unit,
                    TextureEnvParameter pname,
                    GLfloat *params);
 
+unsigned int GetTexParameterCount(GLenum pname);
+
 }  // namespace gl
 
 namespace egl
