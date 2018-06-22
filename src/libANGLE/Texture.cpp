@@ -960,6 +960,12 @@ Error Texture::setImage(const Context *context,
 
     InitState initState = DetermineInitState(context, pixels);
     mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat, type), initState));
+
+    if (getGenerateMipmapHint() == GL_TRUE && level == 0)
+    {
+        ANGLE_TRY(generateMipmap(context));
+    }
+
     signalDirty(context, initState);
 
     return NoError();
