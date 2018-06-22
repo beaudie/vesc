@@ -338,7 +338,7 @@ class Texture2DTestES3 : public Texture2DTest
     {
         return std::string(
             "#version 300 es\n"
-            "precision highp float;\n"
+            "precision highpsam float;\n"
             "uniform highp sampler2D tex;\n"
             "in vec2 texcoord;\n"
             "out vec4 fragColor;\n"
