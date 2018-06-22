@@ -404,7 +404,7 @@ void ContextVk::updateScissor(const gl::State &glState)
     }
 }
 
-void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits &dirtyBits)
+gl::Error ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits &dirtyBits)
 {
     if (dirtyBits.any())
     {
@@ -631,6 +631,8 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
         programVk->invalidateTextures();
         mTexturesDirty = true;
     }
+
+    return gl::NoError();
 }
 
 GLint ContextVk::getGPUDisjoint()
