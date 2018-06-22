@@ -90,6 +90,10 @@
             'gpu_info_util/SystemInfo.h',
             'gpu_info_util/SystemInfo_internal.h',
         ],
+        'libangle_gpu_info_util_android_sources':
+        [
+            'gpu_info_util/SystemInfo_android.cpp',
+        ],
         'libangle_gpu_info_util_win_sources':
         [
             'gpu_info_util/SystemInfo_win.cpp',
