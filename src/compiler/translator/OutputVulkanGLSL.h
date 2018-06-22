@@ -32,6 +32,7 @@ class TOutputVulkanGLSL : public TOutputGLSL
   protected:
     void writeLayoutQualifier(TIntermTyped *variable) override;
     void writeQualifier(TQualifier qualifier, const TSymbol *symbol) override;
+    void declareInterfaceBlockLayout(const TInterfaceBlock *interfaceBlock) override;
 };
 
 }  // namespace sh

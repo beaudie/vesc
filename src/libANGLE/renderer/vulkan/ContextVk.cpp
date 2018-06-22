@@ -878,4 +878,9 @@ vk::Error ContextVk::updateDriverUniforms()
 
     return vk::NoError();
 }
+
+const FeaturesVk &ContextVk::getFeatures() const
+{
+    return mRenderer->getFeatures();
+}
 }  // namespace rx
