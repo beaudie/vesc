@@ -58,8 +58,6 @@ void TOutputVulkanGLSL::writeLayoutQualifier(TIntermTyped *variable)
 
     // This isn't super clean, but it gets the job done.
     // See corresponding code in GlslangWrapper.cpp.
-    // TODO(jmadill): Ensure declarations are separated.
-
     TIntermSymbol *symbol = variable->getAsSymbolNode();
     ASSERT(symbol);
 
@@ -99,9 +97,7 @@ void TOutputVulkanGLSL::writeQualifier(TQualifier qualifier, const TSymbol *symb
     }
 
     TInfoSinkBase &out = objSink();
-    out << "@@ QUALIFIER-";
-    out << symbol->name().data();
-    out << " @@ ";
+    out << "@@ QUALIFIER-" << symbol->name().data() << " @@ ";
 }
 
 void TOutputVulkanGLSL::writeStructType(const TStructure *structure)
@@ -113,4 +109,10 @@ void TOutputVulkanGLSL::writeStructType(const TStructure *structure)
     }
 }
 
+void TOutputVulkanGLSL::declareInterfaceBlockLayout(const TInterfaceBlock *interfaceBlock)
+{
+    // Currently we only support interface blocks for the default uniforms and ANGLE uniforms.
+    TInfoSinkBase &out = objSink();
+    out << "@@ LAYOUT-" << interfaceBlock->name().data() << " @@ ";
+}
 }  // namespace sh

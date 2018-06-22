@@ -228,7 +228,7 @@ class TIntermBranch : public TIntermNode
 
   protected:
     TOperator mFlowOp;
-    TIntermTyped *mExpression;  // non-zero except for "return exp;" statements
+    TIntermTyped *mExpression;  // zero except for "return exp;" statements
 };
 
 // Nodes that correspond to variable symbols in the source code. These may be regular variables or

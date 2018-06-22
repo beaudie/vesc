@@ -14,6 +14,7 @@
 
 namespace rx
 {
+struct FeaturesVk;
 
 class GlslangWrapper : public gl::RefCountObjectNoID
 {
@@ -27,6 +28,8 @@ class GlslangWrapper : public gl::RefCountObjectNoID
                                const gl::ProgramState &programState,
                                const gl::ProgramLinkedResources &resources,
                                const gl::Caps &glCaps,
+                               const FeaturesVk &features,
+                               gl::PrimitiveMode drawMode,
                                std::vector<uint32_t> *vertexCodeOut,
                                std::vector<uint32_t> *fragmentCodeOut);
 

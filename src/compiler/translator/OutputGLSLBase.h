@@ -66,8 +66,8 @@ class TOutputGLSLBase : public TIntermTraverser
     bool visitDeclaration(Visit visit, TIntermDeclaration *node) override;
     bool visitLoop(Visit visit, TIntermLoop *node) override;
     bool visitBranch(Visit visit, TIntermBranch *node) override;
-
     void visitCodeBlock(TIntermBlock *node);
+    void visitRaw(TIntermRaw *node) override;
 
     ImmutableString hashFieldName(const TField *field);
     // Same as hashName(), but without hashing "main".
@@ -80,8 +80,8 @@ class TOutputGLSLBase : public TIntermTraverser
     bool structDeclared(const TStructure *structure) const;
 
   private:
-
-    void declareInterfaceBlockLayout(const TInterfaceBlock *interfaceBlock);
+    // Overriden in the Vulkan output layer.
+    virtual void declareInterfaceBlockLayout(const TInterfaceBlock *interfaceBlock);
     void declareInterfaceBlock(const TInterfaceBlock *interfaceBlock);
 
     void writeBuiltInFunctionTriplet(Visit visit, TOperator op, bool useEmulatedFunction);

@@ -544,6 +544,14 @@ void FlipGLPointCoord(TIntermBlock *root, TSymbolTable *symbolTable)
     mainSequence->insert(mainSequence->begin(), assignment);
 }
 
+TIntermConstantUnion *CreateConstantOneHalf()
+{
+    const TType *constantType     = StaticType::GetBasic<TBasicType::EbtFloat>();
+    TConstantUnion *constantValue = new TConstantUnion();
+    constantValue->setFConst(0.5f);
+    return new TIntermConstantUnion(constantValue, *constantType);
+}
+
 // This operation performs the viewport depth translation needed by Vulkan. In GL the viewport
 // transformation is slightly different - see the GL 2.0 spec section "2.12.1 Controlling the
 // Viewport". In Vulkan the corresponding spec section is currently "23.4. Coordinate
@@ -565,10 +573,7 @@ void AppendVertexShaderDepthCorrectionToMain(TIntermBlock *root, TSymbolTable *s
     TIntermSwizzle *positionZ = new TIntermSwizzle(positionRef, swizzleOffsetZ);
 
     // Create a constant "0.5"
-    const TType *constantType     = StaticType::GetBasic<TBasicType::EbtFloat>();
-    TConstantUnion *constantValue = new TConstantUnion();
-    constantValue->setFConst(0.5f);
-    TIntermConstantUnion *oneHalf = new TIntermConstantUnion(constantValue, *constantType);
+    TIntermConstantUnion *oneHalf = CreateConstantOneHalf();
 
     // Create the expression "gl_Position.z * 0.5 + 0.5"
     TIntermBinary *halfZ         = new TIntermBinary(TOperator::EOpMul, positionZ, oneHalf);
@@ -588,6 +593,203 @@ void AppendVertexShaderDepthCorrectionToMain(TIntermBlock *root, TSymbolTable *s
 
     // Append the assignment as a statement at the end of the shader.
     RunAtTheEndOfShader(root, assignment, symbolTable);
+}
+
+TVariable *AddANGLEPositionVaryingDeclaration(TIntermBlock *root, TSymbolTable *symbolTable)
+{
+    TIntermSequence *insertSequence = new TIntermSequence;
+
+    const TType *voidType = StaticType::GetBasic<EbtVoid>();
+    TIntermRaw *ifDef     = new TIntermRaw(
+        *voidType, ImmutableString("#ifdef ANGLE_ENABLE_LINE_SEGMENT_RASTERIZATION"));
+    insertSequence->push_back(ifDef);
+
+    // Define a driver varying vec2 "ANGLEPosition".
+    TType *varyingType               = new TType(EbtFloat, EbpMedium, EvqVaryingIn, 2);
+    TVariable *varyingVar            = new TVariable(symbolTable, ImmutableString("ANGLEPosition"),
+                                          varyingType, SymbolType::AngleInternal);
+    TIntermSymbol *varyingDeclarator = new TIntermSymbol(varyingVar);
+    TIntermDeclaration *varyingDecl  = new TIntermDeclaration;
+    varyingDecl->appendDeclarator(varyingDeclarator);
+    insertSequence->push_back(varyingDecl);
+
+    TIntermRaw *endIf = new TIntermRaw(*voidType, ImmutableString("#endif"));
+    insertSequence->push_back(endIf);
+
+    // Insert the declarations before Main.
+    size_t mainIndex = FindMainIndex(root);
+    root->insertChildNodes(mainIndex, *insertSequence);
+
+    return varyingVar;
+}
+
+void AddANGLEPositionVarying(TIntermBlock *root, TSymbolTable *symbolTable)
+{
+    TVariable *anglePosition = AddANGLEPositionVaryingDeclaration(root, symbolTable);
+
+    // Add a reference to "gl_Position".
+    const TVariable *position  = BuiltInVariable::gl_Position();
+    TIntermSymbol *positionRef = new TIntermSymbol(position);
+
+    // Create a swizzle to "gl_Position.xy"
+    TVector<int> swizzleOffsetXY;
+    swizzleOffsetXY.push_back(0);
+    swizzleOffsetXY.push_back(1);
+    TIntermSwizzle *positionXY = new TIntermSwizzle(positionRef, swizzleOffsetXY);
+
+    // Add a reference to "ANGLEPosition".
+    TIntermSymbol *varyingRef = new TIntermSymbol(anglePosition);
+
+    // Create an assignment "ANGLEPosition = gl_Position.xy".
+    TIntermBinary *assignment = new TIntermBinary(EOpAssign, varyingRef, positionXY);
+
+    // Ensure the assignment runs at the end of the main() function.
+    RunAtTheEndOfShader(root, assignment, symbolTable);
+}
+
+// This block adds line segment rasterization behind #ifdef flags.
+void AddLineSegmentRasterizationEmulation(TInfoSinkBase &sink,
+                                          TIntermBlock *root,
+                                          TSymbolTable *symbolTable)
+{
+    TIntermSequence *insertSequence = new TIntermSequence;
+
+    TVariable *anglePosition = AddANGLEPositionVaryingDeclaration(root, symbolTable);
+
+    // Define a driver uniform block "ANGLEUniforms" with one member "viewport".
+    TFieldList *driverFieldList = new TFieldList;
+    TType *driverViewportType   = new TType(EbtFloat, 2);
+    TField *driverViewportSize  = new TField(driverViewportType, ImmutableString("viewport"),
+                                            TSourceLoc(), SymbolType::AngleInternal);
+    driverFieldList->push_back(driverViewportSize);
+    TLayoutQualifier driverLayoutQualifier = TLayoutQualifier::Create();
+    TInterfaceBlock *interfaceBlock =
+        new TInterfaceBlock(symbolTable, ImmutableString("ANGLEUniforms"), driverFieldList,
+                            driverLayoutQualifier, SymbolType::AngleInternal);
+
+    // Make the inteface block into a declaration.
+    TType *interfaceBlockType = new TType(interfaceBlock, EvqUniform, driverLayoutQualifier);
+    TIntermDeclaration *driverUniformsDecl = new TIntermDeclaration;
+    TVariable *driverUniformsVar = new TVariable(symbolTable, ImmutableString("ANGLEUniforms"),
+                                                 interfaceBlockType, SymbolType::AngleInternal);
+    TIntermSymbol *driverUniformsDeclarator = new TIntermSymbol(driverUniformsVar);
+    driverUniformsDecl->appendDeclarator(driverUniformsDeclarator);
+    insertSequence->push_back(driverUniformsDecl);
+
+    // Insert the declarations before Main.
+    size_t mainIndex = FindMainIndex(root);
+    root->insertChildNodes(mainIndex, *insertSequence);
+
+    // Create a reference to "ANGLEPosition".
+    TIntermSymbol *positionRef = new TIntermSymbol(anglePosition);
+
+    // Create a reference to "ANGLEUniforms".
+    TIntermSymbol *angleUniformsRef = new TIntermSymbol(driverUniformsVar);
+
+    // Create a reference to "ANGLEUniforms.viewport".
+    TConstantUnion *viewportConstant = new TConstantUnion;
+    viewportConstant->setIConst(0);
+    TIntermConstantUnion *viewportIndex =
+        new TIntermConstantUnion(viewportConstant, *StaticType::GetBasic<EbtInt>());
+    TIntermBinary *viewportRef =
+        new TIntermBinary(EOpIndexDirectInterfaceBlock, angleUniformsRef, viewportIndex);
+
+    // Create a constant "0.5".
+    TIntermConstantUnion *oneHalf = CreateConstantOneHalf();
+
+    // Create the expression "ANGLEPosition * 0.5".
+    TIntermBinary *halfPosition = new TIntermBinary(EOpVectorTimesScalar, positionRef, oneHalf);
+
+    // Create the expression "(ANGLEPosition * 0.5) + 0.5".
+    TIntermBinary *offsetHalfPosition =
+        new TIntermBinary(EOpAdd, halfPosition, oneHalf->deepCopy());
+
+    // Create the expression "((ANGLEPosition * 0.5) + 0.5) * ANGLEUniforms.viewport".
+    TIntermBinary *windowPosition = new TIntermBinary(EOpMul, offsetHalfPosition, viewportRef);
+
+    // Assign the window position to a temporary "b".
+    TVariable *bTemp = CreateTempVariable(symbolTable, StaticType::GetBasic<EbtFloat, 2>());
+    TIntermDeclaration *bDecl = CreateTempInitDeclarationNode(bTemp, windowPosition);
+
+    // Create a reference to "gl_FragCoord".
+    const TVariable *fragCoord  = BuiltInVariable::gl_FragCoord();
+    TIntermSymbol *fragCoordRef = new TIntermSymbol(fragCoord);
+
+    // Create a swizzle to "gl_FragCoord.xy"
+    TVector<int> swizzleOffsetXY;
+    swizzleOffsetXY.push_back(0);
+    swizzleOffsetXY.push_back(1);
+    TIntermSwizzle *fragCoordXY = new TIntermSwizzle(fragCoordRef, swizzleOffsetXY);
+
+    // Create the expression "b - gl_FragCoord.xy".
+    TIntermSymbol *bRef           = CreateTempSymbolNode(bTemp);
+    TIntermBinary *differenceExpr = new TIntermBinary(EOpSub, bRef, fragCoordXY);
+
+    // Assign the diff to a temporary "ba".
+    TVariable *baTemp = CreateTempVariable(symbolTable, StaticType::GetBasic<EbtFloat, 2>());
+    TIntermDeclaration *baDecl = CreateTempInitDeclarationNode(baTemp, differenceExpr);
+
+    // Create a swizzle to "ba.yx".
+    TVector<int> swizzleOffsetYX;
+    swizzleOffsetYX.push_back(1);
+    swizzleOffsetYX.push_back(0);
+    TIntermSymbol *baRef = CreateTempSymbolNode(baTemp);
+    TIntermSwizzle *baYX = new TIntermSwizzle(baRef, swizzleOffsetYX);
+
+    // Create the expression "ba.yx * ba.yx".
+    TIntermBinary *baSquared = new TIntermBinary(EOpMul, baYX, baYX->deepCopy());
+
+    // Create the expression "ba.yx * ba.yx / ba.
+    TIntermBinary *baSqNorm = new TIntermBinary(EOpDiv, baSquared, baRef->deepCopy());
+
+    // Create the expression "ba + (ba.yx * ba.yx / ba)".
+    TIntermBinary *bpInit = new TIntermBinary(EOpAdd, baRef->deepCopy(), baSqNorm);
+
+    // Assign the result to a temporary "bp".
+    TVariable *bpTemp = CreateTempVariable(symbolTable, StaticType::GetBasic<EbtFloat, 2>());
+    TIntermDeclaration *bpDecl = CreateTempInitDeclarationNode(bpTemp, bpInit);
+
+    // Create the expression "abs(bp)".
+    TIntermSymbol *bpRef = CreateTempSymbolNode(bpTemp);
+    TIntermUnary *bpAbs  = new TIntermUnary(EOpAbs, bpRef, nullptr);
+
+    // Assign the result to a temporary "absbp".
+    TVariable *bpAbsTemp = CreateTempVariable(symbolTable, StaticType::GetBasic<EbtFloat, 2>());
+    TIntermDeclaration *bpAbsDecl = CreateTempInitDeclarationNode(bpAbsTemp, bpAbs);
+
+    // Create a swizzle to "absbp.x".
+    TVector<int> swizzleOffsetX;
+    swizzleOffsetX.push_back(0);
+    TIntermSymbol *bpAbsRef = CreateTempSymbolNode(bpAbsTemp);
+    TIntermSwizzle *bpAbsX  = new TIntermSwizzle(bpAbsRef, swizzleOffsetX);
+
+    // Create the expression "absbp.x > 0.5".
+    TIntermBinary *xGreaterHalf = new TIntermBinary(EOpGreaterThan, bpAbsX, oneHalf->deepCopy());
+
+    // Create a swizzle to "absbp.y".
+    TVector<int> swizzleOffsetY;
+    swizzleOffsetY.push_back(1);
+    TIntermSwizzle *bpAbsY = new TIntermSwizzle(bpAbsRef->deepCopy(), swizzleOffsetY);
+
+    // Create the expression "absbp.y > 0.5".
+    TIntermBinary *yGreaterHalf = new TIntermBinary(EOpGreaterThan, bpAbsY, oneHalf->deepCopy());
+
+    // Create the expression "(absbp.x > 0.5) && (absbp.y > 0.5)".
+    TIntermBinary *bothGreaterHalf = new TIntermBinary(EOpLogicalAnd, xGreaterHalf, yGreaterHalf);
+
+    // Create a statement "discard".
+    TIntermBranch *discard     = new TIntermBranch(EOpKill, nullptr);
+    TIntermBlock *discardBlock = new TIntermBlock;
+    discardBlock->appendStatement(discard);
+
+    // Create the statement "if ((absbp.x > 0.5) && (absbp.y > 0.5))".
+    TIntermIfElse *ifStatement = new TIntermIfElse(bothGreaterHalf, discardBlock, nullptr);
+
+    RunAtTheEndOfShader(root, bDecl, symbolTable);
+    RunAtTheEndOfShader(root, baDecl, symbolTable);
+    RunAtTheEndOfShader(root, bpDecl, symbolTable);
+    RunAtTheEndOfShader(root, bpAbsDecl, symbolTable);
+    RunAtTheEndOfShader(root, ifStatement, symbolTable);
 }
 }  // anonymous namespace
 
@@ -658,6 +860,8 @@ void TranslatorVulkan::translate(TIntermBlock *root,
     // if it's core profile shaders and they are used.
     if (getShaderType() == GL_FRAGMENT_SHADER)
     {
+        AddLineSegmentRasterizationEmulation(sink, root, &getSymbolTable());
+
         bool hasGLFragColor = false;
         bool hasGLFragData  = false;
 
@@ -704,6 +908,8 @@ void TranslatorVulkan::translate(TIntermBlock *root,
     else
     {
         ASSERT(getShaderType() == GL_VERTEX_SHADER);
+
+        AddANGLEPositionVarying(root, &getSymbolTable());
 
         // Append depth range translation to main.
         AppendVertexShaderDepthCorrectionToMain(root, &getSymbolTable());
