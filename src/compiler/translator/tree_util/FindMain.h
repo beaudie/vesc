@@ -15,6 +15,7 @@ namespace sh
 class TIntermBlock;
 class TIntermFunctionDefinition;
 
+size_t FindMainIndex(TIntermBlock *root);
 TIntermFunctionDefinition *FindMain(TIntermBlock *root);
 TIntermBlock *FindMainBody(TIntermBlock *root);
 

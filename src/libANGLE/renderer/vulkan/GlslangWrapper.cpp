@@ -22,13 +22,27 @@
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/ProgramLinkedResources.h"
+#include "libaNGLE/renderer/vulkan/FeaturesVk.h"
 
 namespace rx
 {
+bool IsLineMode(gl::PrimitiveMode primitiveMode)
+{
+    switch (primitiveMode)
+    {
+        case gl::PrimitiveMode::LineLoop:
+        case gl::PrimitiveMode::LineStrip:
+        case gl::PrimitiveMode::LineStripAdjacency:
+        case gl::PrimitiveMode::Lines:
+            return true;
+
+        default:
+            return false;
+    }
+}
 
 namespace
 {
-
 constexpr char kQualifierMarkerBegin[] = "@@ QUALIFIER-";
 constexpr char kLayoutMarkerBegin[]    = "@@ LAYOUT-";
 constexpr char kMarkerEnd[]            = " @@";
@@ -166,6 +180,8 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
                                            const gl::ProgramState &programState,
                                            const gl::ProgramLinkedResources &resources,
                                            const gl::Caps &glCaps,
+                                           const FeaturesVk &features,
+                                           gl::PrimitiveMode drawMode,
                                            std::vector<uint32_t> *vertexCodeOut,
                                            std::vector<uint32_t> *fragmentCodeOut)
 {
@@ -232,15 +248,13 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
 
     // Bind the default uniforms for vertex and fragment shaders.
     // See corresponding code in OutputVulkanGLSL.cpp.
-    std::stringstream searchStringBuilder;
-    searchStringBuilder << "@@ DEFAULT-UNIFORMS-SET-BINDING @@";
-    std::string searchString = searchStringBuilder.str();
+    std::string uniformsSearchString("@@ DEFAULT-UNIFORMS-SET-BINDING @@");
 
     std::string vertexDefaultUniformsBinding   = "set = 0, binding = 0";
     std::string fragmentDefaultUniformsBinding = "set = 0, binding = 1";
 
-    angle::ReplaceSubstring(&vertexSource, searchString, vertexDefaultUniformsBinding);
-    angle::ReplaceSubstring(&fragmentSource, searchString, fragmentDefaultUniformsBinding);
+    angle::ReplaceSubstring(&vertexSource, uniformsSearchString, vertexDefaultUniformsBinding);
+    angle::ReplaceSubstring(&fragmentSource, uniformsSearchString, fragmentDefaultUniformsBinding);
 
     // Assign textures to a descriptor set and binding.
     int textureCount     = 0;
@@ -299,15 +313,25 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
         }
     }
 
-    std::array<const char *, 2> strings = {{vertexSource.c_str(), fragmentSource.c_str()}};
-    std::array<int, 2> lengths          = {
-        {static_cast<int>(vertexSource.length()), static_cast<int>(fragmentSource.length())}};
+    const char *defines = "";
+    if (features.basicGLLineRasterization && IsLineMode(drawMode))
+    {
+        defines = "#define ANGLE_ENABLE_LINE_SEGMENT_RASTERIZATION\n";
+    }
+
+    std::array<const char *, 4> strings = {
+        {defines, vertexSource.c_str(), defines, fragmentSource.c_str()}};
+    std::array<int, 4> lengths = {{}};
+    for (size_t stringIndex = 0; stringIndex < strings.size(); ++stringIndex)
+    {
+        lengths[stringIndex] = static_cast<int>(strlen(strings[stringIndex]));
+    }
 
     // Enable SPIR-V and Vulkan rules when parsing GLSL
     EShMessages messages = static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules);
 
     glslang::TShader vertexShader(EShLangVertex);
-    vertexShader.setStringsWithLengths(&strings[0], &lengths[0], 1);
+    vertexShader.setStringsWithLengths(&strings[0], &lengths[0], 2);
     vertexShader.setEntryPoint("main");
 
     TBuiltInResource builtInResources(glslang::DefaultTBuiltInResource);
@@ -323,7 +347,7 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
     }
 
     glslang::TShader fragmentShader(EShLangFragment);
-    fragmentShader.setStringsWithLengths(&strings[1], &lengths[1], 1);
+    fragmentShader.setStringsWithLengths(&strings[2], &lengths[2], 2);
     fragmentShader.setEntryPoint("main");
     bool fragmentResult =
         fragmentShader.parse(&builtInResources, 450, ECoreProfile, false, false, messages);
