@@ -22,6 +22,7 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/queryconversions.h"
+#include "libANGLE/queryutils.h"
 #include "libANGLE/validationES2.h"
 #include "libANGLE/validationES3.h"
 
@@ -5435,6 +5436,26 @@ bool ValidateGetTexParameterBase(Context *context,
         return false;
     }
 
+    // GLES1 texture parameters are a small subset of the others
+    if (context->getClientMajorVersion() == 1)
+    {
+        switch (pname)
+        {
+            case GL_TEXTURE_MAG_FILTER:
+            case GL_TEXTURE_MIN_FILTER:
+            case GL_TEXTURE_WRAP_S:
+            case GL_TEXTURE_WRAP_T:
+            case GL_TEXTURE_WRAP_R:
+            case GL_GENERATE_MIPMAP:
+            case GL_TEXTURE_CROP_RECT_OES:
+                break;
+            default:
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
+                return false;
+                break;
+        }
+    }
+
     switch (pname)
     {
         case GL_TEXTURE_MAG_FILTER:
@@ -5501,6 +5522,16 @@ bool ValidateGetTexParameterBase(Context *context,
             }
             break;
 
+        case GL_GENERATE_MIPMAP:
+        case GL_TEXTURE_CROP_RECT_OES:
+            // TODO(lfy@google.com): Restrict to GL_OES_draw_texture
+            // after GL_OES_draw_texture functionality implemented
+            if (context->getClientMajorVersion() > 1)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), GLES1Only);
+                return false;
+            }
+            break;
         default:
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
             return false;
@@ -5508,7 +5539,7 @@ bool ValidateGetTexParameterBase(Context *context,
 
     if (length)
     {
-        *length = 1;
+        *length = GetTexParameterCount(pname);
     }
     return true;
 }
@@ -5865,11 +5896,31 @@ bool ValidateTexParameterBase(Context *context,
         return false;
     }
 
-    const GLsizei minBufSize = 1;
+    const GLsizei minBufSize = GetTexParameterCount(pname) * sizeof(ParamType);
     if (bufSize >= 0 && bufSize < minBufSize)
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), InsufficientBufferSize);
         return false;
+    }
+
+    // GLES1 texture parameters are a small subset of the others
+    if (context->getClientMajorVersion() == 1)
+    {
+        switch (pname)
+        {
+            case GL_TEXTURE_MAG_FILTER:
+            case GL_TEXTURE_MIN_FILTER:
+            case GL_TEXTURE_WRAP_S:
+            case GL_TEXTURE_WRAP_T:
+            case GL_TEXTURE_WRAP_R:
+            case GL_GENERATE_MIPMAP:
+            case GL_TEXTURE_CROP_RECT_OES:
+                break;
+            default:
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
+                return false;
+                break;
+        }
     }
 
     switch (pname)
@@ -5899,6 +5950,14 @@ bool ValidateTexParameterBase(Context *context,
             }
             break;
 
+        case GL_GENERATE_MIPMAP:
+        case GL_TEXTURE_CROP_RECT_OES:
+            if (context->getClientMajorVersion() > 1)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), GLES1Only);
+                return false;
+            }
+            break;
         default:
             break;
     }
@@ -6083,6 +6142,14 @@ bool ValidateTexParameterBase(Context *context,
             }
             break;
 
+        case GL_GENERATE_MIPMAP:
+        case GL_TEXTURE_CROP_RECT_OES:
+            if (context->getClientMajorVersion() > 1)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), GLES1Only);
+                return false;
+            }
+            break;
         default:
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
             return false;

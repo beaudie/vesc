@@ -3816,6 +3816,10 @@ void Context::texImage2D(TextureTarget target,
     Texture *texture = getTargetTexture(TextureTargetToType(target));
     handleError(texture->setImage(this, mGLState.getUnpackState(), target, level, internalformat,
                                   size, format, type, static_cast<const uint8_t *>(pixels)));
+    if (texture->getGenerateMipmapHint() == GL_TRUE)
+    {
+        handleError(texture->generateMipmap(this));
+    }
 }
 
 void Context::texImage2DRobust(TextureTarget target,
@@ -3889,6 +3893,10 @@ void Context::texSubImage2D(TextureTarget target,
     Texture *texture = getTargetTexture(TextureTargetToType(target));
     handleError(texture->setSubImage(this, mGLState.getUnpackState(), target, level, area, format,
                                      type, static_cast<const uint8_t *>(pixels)));
+    if (texture->getGenerateMipmapHint() == GL_TRUE)
+    {
+        handleError(texture->generateMipmap(this));
+    }
 }
 
 void Context::texSubImage2DRobust(TextureTarget target,
