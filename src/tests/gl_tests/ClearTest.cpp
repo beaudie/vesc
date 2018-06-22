@@ -106,6 +106,38 @@ TEST_P(ClearTest, RGBA8Framebuffer)
     EXPECT_PIXEL_NEAR(0, 0, 128, 128, 128, 128, 1.0);
 }
 
+// Test to validate that we can go from an RGBA framebuffer attachment, to an RGB one and still
+// have a correct behavior after.
+TEST_P(ClearTest, ChangeFramebufferAttachmentFromRGBAtoRGB)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, mFBOs[0]);
+
+    GLTexture texture;
+
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getWindowWidth(), getWindowHeight(), 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+    glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // So far so good, we have an RGBA framebuffer that we've cleared to 0.5 everywhere.
+    EXPECT_PIXEL_NEAR(0, 0, 128, 128, 128, 128, 1.0);
+
+    // In the Vulkan backend, RGB textures are emulated with an RGBA texture format
+    // underneath and we keep a special mask to know that we shouldn't touch the alpha
+    // channel when we have that emulated texture. This test exists to validate that
+    // this mask gets updated correctly when the framebuffer attachment changes.
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, getWindowWidth(), getWindowHeight(), 0, GL_RGB,
+                 GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+    glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_NEAR(0, 0, 128, 128, 128, 255, 1.0);
+}
+
 // Test clearing a RGB8 Framebuffer with a color mask.
 TEST_P(ClearTest, RGB8WithMaskFramebuffer)
 {
