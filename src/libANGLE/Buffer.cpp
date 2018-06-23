@@ -28,7 +28,8 @@ BufferState::BufferState()
       mMapOffset(0),
       mMapLength(0),
       mBindingCount(0),
-      mTransformFeedbackBindingCount(0)
+      mTransformFeedbackIndexedBindingCount(0),
+      mTransformFeedbackGenericBindingCount(0)
 {
 }
 
@@ -239,20 +240,31 @@ bool Buffer::isBound() const
 
 bool Buffer::isBoundForTransformFeedbackAndOtherUse() const
 {
-    return mState.mTransformFeedbackBindingCount > 0 &&
-           mState.mTransformFeedbackBindingCount != mState.mBindingCount;
+    return mState.mTransformFeedbackIndexedBindingCount > 0 &&
+           mState.mTransformFeedbackIndexedBindingCount !=
+               mState.mBindingCount - mState.mTransformFeedbackGenericBindingCount;
 }
 
-void Buffer::onBindingChanged(const Context *context, bool bound, BufferBinding target)
+void Buffer::onBindingChanged(const Context *context,
+                              bool bound,
+                              BufferBinding target,
+                              bool indexed)
 {
     ASSERT(bound || mState.mBindingCount > 0);
     mState.mBindingCount += bound ? 1 : -1;
     if (target == BufferBinding::TransformFeedback)
     {
-        ASSERT(bound || mState.mTransformFeedbackBindingCount > 0);
-        mState.mTransformFeedbackBindingCount += bound ? 1 : -1;
+        if (indexed)
+        {
+            ASSERT(bound || mState.mTransformFeedbackIndexedBindingCount > 0);
+            mState.mTransformFeedbackIndexedBindingCount += bound ? 1 : -1;
 
-        mImpl->onStateChange(context, angle::SubjectMessage::BINDING_CHANGED);
+            mImpl->onStateChange(context, angle::SubjectMessage::BINDING_CHANGED);
+        }
+        else
+        {
+            mState.mTransformFeedbackGenericBindingCount += bound ? 1 : -1;
+        }
     }
 }
 
