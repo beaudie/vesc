@@ -42,6 +42,20 @@ void FillTextureFormatCaps(const VkFormatProperties &formatProperties,
     outTextureCaps->renderbuffer = outTextureCaps->textureAttachment;
 }
 
+bool HasFullTextureFormatSupport(VkPhysicalDevice physicalDevice, VkFormat vkFormat)
+{
+    VkFormatProperties formatProperties;
+    vk::GetFormatProperties(physicalDevice, vkFormat, &formatProperties);
+
+    constexpr uint32_t kBitsColor =
+        (VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT |
+         VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT);
+    constexpr uint32_t kBitsDepth = (VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
+
+    return HasFormatFeatureBits(kBitsColor, formatProperties) ||
+           HasFormatFeatureBits(kBitsDepth, formatProperties);
+}
+
 }  // anonymous namespace
 
 namespace vk
@@ -70,20 +84,6 @@ void GetFormatProperties(VkPhysicalDevice physicalDevice,
     }
 }
 
-bool HasFullFormatSupport(VkPhysicalDevice physicalDevice, VkFormat vkFormat)
-{
-    VkFormatProperties formatProperties;
-    GetFormatProperties(physicalDevice, vkFormat, &formatProperties);
-
-    constexpr uint32_t kBitsColor =
-        (VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT |
-         VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT);
-    constexpr uint32_t kBitsDepth = (VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
-
-    return HasFormatFeatureBits(kBitsColor, formatProperties) ||
-           HasFormatFeatureBits(kBitsDepth, formatProperties);
-}
-
 // Format implementation.
 Format::Format()
     : angleFormatID(angle::Format::ID::NONE),
@@ -93,8 +93,52 @@ Format::Format()
       bufferFormatID(angle::Format::ID::NONE),
       vkBufferFormat(VK_FORMAT_UNDEFINED),
       dataInitializerFunction(nullptr),
-      loadFunctions()
+      textureLoadFunctions()
 {
+}
+
+void Format::initializeTexture(VkPhysicalDevice physicalDevice,
+                               angle::Format::ID format,
+                               VkFormat vkFormat,
+                               InitializeTextureDataFunction initializer,
+                               angle::Format::ID fallbackFormat,
+                               VkFormat fallbackVkFormat,
+                               InitializeTextureDataFunction fallbackInitializer)
+{
+    if (format == angle::Format::ID::NONE)
+        return;
+
+    if (fallbackFormat != angle::Format::ID::NONE &&
+        !HasFullTextureFormatSupport(physicalDevice, vkFormat))
+    {
+        textureFormatID         = fallbackFormat;
+        vkTextureFormat         = fallbackVkFormat;
+        dataInitializerFunction = fallbackInitializer;
+        ASSERT(HasFullTextureFormatSupport(physicalDevice, vkTextureFormat));
+    }
+    else
+    {
+        textureFormatID         = format;
+        vkTextureFormat         = vkFormat;
+        dataInitializerFunction = initializer;
+    }
+}
+
+void Format::initializeBuffer(VkPhysicalDevice,
+                              angle::Format::ID format,
+                              VkFormat vkFormat,
+                              angle::Format::ID fallbackFormat,
+                              VkFormat fallbackVkFormat)
+{
+
+    if (format == angle::Format::ID::NONE)
+        return;
+
+    // TODO(fjhenigman): Implement fallback.  anglebug.com/2405
+    ASSERT(fallbackFormat == angle::Format::ID::NONE);
+
+    bufferFormatID = format;
+    vkBufferFormat = vkFormat;
 }
 
 const angle::Format &Format::textureFormat() const
@@ -141,7 +185,7 @@ void FormatTable::initialize(VkPhysicalDevice physicalDevice,
         const angle::Format &angleFormat = angle::Format::Get(formatID);
         mFormatData[formatIndex].initialize(physicalDevice, angleFormat);
         const GLenum internalFormat = mFormatData[formatIndex].internalFormat;
-        mFormatData[formatIndex].loadFunctions =
+        mFormatData[formatIndex].textureLoadFunctions =
             GetLoadFunctionsMap(internalFormat, mFormatData[formatIndex].textureFormatID);
         mFormatData[formatIndex].angleFormatID = formatID;
 
