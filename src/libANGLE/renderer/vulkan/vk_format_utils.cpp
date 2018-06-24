@@ -56,6 +56,13 @@ bool HasFullTextureFormatSupport(VkPhysicalDevice physicalDevice, VkFormat vkFor
            HasFormatFeatureBits(kBitsDepth, formatProperties);
 }
 
+bool HasFullBufferFormatSupport(VkPhysicalDevice physicalDevice, VkFormat vkFormat)
+{
+    VkFormatProperties formatProperties;
+    vk::GetFormatProperties(physicalDevice, vkFormat, &formatProperties);
+    return formatProperties.bufferFeatures & VK_FORMAT_FEATURE_VERTEX_BUFFER_BIT;
+}
+
 }  // anonymous namespace
 
 namespace vk
@@ -124,21 +131,33 @@ void Format::initializeTexture(VkPhysicalDevice physicalDevice,
     }
 }
 
-void Format::initializeBuffer(VkPhysicalDevice,
+void Format::initializeBuffer(VkPhysicalDevice physicalDevice,
                               angle::Format::ID format,
                               VkFormat vkFormat,
+                              VertexCopyFunction copyFunction,
+                              bool copyFunctionConverts,
                               angle::Format::ID fallbackFormat,
-                              VkFormat fallbackVkFormat)
+                              VkFormat fallbackVkFormat,
+                              VertexCopyFunction fallbackCopyFunction)
 {
-
     if (format == angle::Format::ID::NONE)
         return;
 
-    // TODO(fjhenigman): Implement fallback.  anglebug.com/2405
-    ASSERT(fallbackFormat == angle::Format::ID::NONE);
-
-    bufferFormatID = format;
-    vkBufferFormat = vkFormat;
+    if (fallbackFormat != angle::Format::ID::NONE &&
+        !HasFullBufferFormatSupport(physicalDevice, vkFormat))
+    {
+        bufferFormatID               = fallbackFormat;
+        vkBufferFormat               = fallbackVkFormat;
+        vertexLoadFunction           = fallbackCopyFunction;
+        vertexLoadRequiresConversion = true;
+    }
+    else
+    {
+        bufferFormatID               = format;
+        vkBufferFormat               = vkFormat;
+        vertexLoadFunction           = copyFunction;
+        vertexLoadRequiresConversion = copyFunctionConverts;
+    }
 }
 
 const angle::Format &Format::textureFormat() const
