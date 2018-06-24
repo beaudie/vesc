@@ -27,1549 +27,1556 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
     switch (angleFormat.id)
     {
         case angle::Format::ID::A16_FLOAT:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_ALPHA16F_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::A1R5G5B5_UNORM:
-        {
-            internalFormat          = GL_A1RGB5_ANGLEX;
-            textureFormatID         = angle::Format::ID::A1R5G5B5_UNORM;
-            vkTextureFormat         = VK_FORMAT_A1R5G5B5_UNORM_PACK16;
-            bufferFormatID          = angle::Format::ID::A1R5G5B5_UNORM;
-            vkBufferFormat          = VK_FORMAT_A1R5G5B5_UNORM_PACK16;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_A1RGB5_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::A1R5G5B5_UNORM,
+                              VK_FORMAT_A1R5G5B5_UNORM_PACK16, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::A1R5G5B5_UNORM,
+                             VK_FORMAT_A1R5G5B5_UNORM_PACK16, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::A32_FLOAT:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_ALPHA32F_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::A8_UNORM:
-        {
-            internalFormat          = GL_ALPHA8_EXT;
-            textureFormatID         = angle::Format::ID::R8_UNORM;
-            vkTextureFormat         = VK_FORMAT_R8_UNORM;
-            bufferFormatID          = angle::Format::ID::NONE;
-            vkBufferFormat          = VK_FORMAT_UNDEFINED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_ALPHA8_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::R8_UNORM, VK_FORMAT_R8_UNORM,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_10x10_SRGB_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_10x10_SRGB_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_10x10_SRGB_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_10x10_SRGB_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_10x10_SRGB_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_10x10_SRGB_BLOCK,
+                              VK_FORMAT_ASTC_10x10_SRGB_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_10x10_SRGB_BLOCK,
+                             VK_FORMAT_ASTC_10x10_SRGB_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_10x10_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGBA_ASTC_10x10_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_10x10_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_10x10_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_10x10_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_10x10_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGBA_ASTC_10x10_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_10x10_UNORM_BLOCK,
+                              VK_FORMAT_ASTC_10x10_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_10x10_UNORM_BLOCK,
+                             VK_FORMAT_ASTC_10x10_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_10x5_SRGB_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_10x5_SRGB_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_10x5_SRGB_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_10x5_SRGB_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_10x5_SRGB_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_10x5_SRGB_BLOCK,
+                              VK_FORMAT_ASTC_10x5_SRGB_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_10x5_SRGB_BLOCK,
+                             VK_FORMAT_ASTC_10x5_SRGB_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_10x5_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGBA_ASTC_10x5_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_10x5_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_10x5_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_10x5_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_10x5_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGBA_ASTC_10x5_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_10x5_UNORM_BLOCK,
+                              VK_FORMAT_ASTC_10x5_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_10x5_UNORM_BLOCK,
+                             VK_FORMAT_ASTC_10x5_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_10x6_SRGB_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_10x6_SRGB_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_10x6_SRGB_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_10x6_SRGB_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_10x6_SRGB_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_10x6_SRGB_BLOCK,
+                              VK_FORMAT_ASTC_10x6_SRGB_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_10x6_SRGB_BLOCK,
+                             VK_FORMAT_ASTC_10x6_SRGB_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_10x6_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGBA_ASTC_10x6_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_10x6_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_10x6_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_10x6_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_10x6_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGBA_ASTC_10x6_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_10x6_UNORM_BLOCK,
+                              VK_FORMAT_ASTC_10x6_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_10x6_UNORM_BLOCK,
+                             VK_FORMAT_ASTC_10x6_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_10x8_SRGB_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_10x8_SRGB_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_10x8_SRGB_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_10x8_SRGB_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_10x8_SRGB_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_10x8_SRGB_BLOCK,
+                              VK_FORMAT_ASTC_10x8_SRGB_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_10x8_SRGB_BLOCK,
+                             VK_FORMAT_ASTC_10x8_SRGB_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_10x8_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGBA_ASTC_10x8_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_10x8_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_10x8_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_10x8_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_10x8_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGBA_ASTC_10x8_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_10x8_UNORM_BLOCK,
+                              VK_FORMAT_ASTC_10x8_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_10x8_UNORM_BLOCK,
+                             VK_FORMAT_ASTC_10x8_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_12x10_SRGB_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_12x10_SRGB_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_12x10_SRGB_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_12x10_SRGB_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_12x10_SRGB_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_12x10_SRGB_BLOCK,
+                              VK_FORMAT_ASTC_12x10_SRGB_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_12x10_SRGB_BLOCK,
+                             VK_FORMAT_ASTC_12x10_SRGB_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_12x10_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGBA_ASTC_12x10_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_12x10_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_12x10_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_12x10_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_12x10_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGBA_ASTC_12x10_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_12x10_UNORM_BLOCK,
+                              VK_FORMAT_ASTC_12x10_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_12x10_UNORM_BLOCK,
+                             VK_FORMAT_ASTC_12x10_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_12x12_SRGB_BLOCK:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::ASTC_12x12_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGBA_ASTC_12x12_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_12x12_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_12x12_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_12x12_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_12x12_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGBA_ASTC_12x12_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_12x12_UNORM_BLOCK,
+                              VK_FORMAT_ASTC_12x12_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_12x12_UNORM_BLOCK,
+                             VK_FORMAT_ASTC_12x12_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_4x4_SRGB_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_4x4_SRGB_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_4x4_SRGB_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_4x4_SRGB_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_4x4_SRGB_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_4x4_SRGB_BLOCK,
+                              VK_FORMAT_ASTC_4x4_SRGB_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_4x4_SRGB_BLOCK,
+                             VK_FORMAT_ASTC_4x4_SRGB_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_4x4_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGBA_ASTC_4x4_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_4x4_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_4x4_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_4x4_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_4x4_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGBA_ASTC_4x4_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_4x4_UNORM_BLOCK,
+                              VK_FORMAT_ASTC_4x4_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_4x4_UNORM_BLOCK,
+                             VK_FORMAT_ASTC_4x4_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_5x4_SRGB_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_5x4_SRGB_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_5x4_SRGB_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_5x4_SRGB_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_5x4_SRGB_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_5x4_SRGB_BLOCK,
+                              VK_FORMAT_ASTC_5x4_SRGB_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_5x4_SRGB_BLOCK,
+                             VK_FORMAT_ASTC_5x4_SRGB_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_5x4_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGBA_ASTC_5x4_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_5x4_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_5x4_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_5x4_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_5x4_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGBA_ASTC_5x4_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_5x4_UNORM_BLOCK,
+                              VK_FORMAT_ASTC_5x4_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_5x4_UNORM_BLOCK,
+                             VK_FORMAT_ASTC_5x4_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_5x5_SRGB_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_5x5_SRGB_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_5x5_SRGB_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_5x5_SRGB_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_5x5_SRGB_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_5x5_SRGB_BLOCK,
+                              VK_FORMAT_ASTC_5x5_SRGB_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_5x5_SRGB_BLOCK,
+                             VK_FORMAT_ASTC_5x5_SRGB_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_5x5_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGBA_ASTC_5x5_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_5x5_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_5x5_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_5x5_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_5x5_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGBA_ASTC_5x5_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_5x5_UNORM_BLOCK,
+                              VK_FORMAT_ASTC_5x5_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_5x5_UNORM_BLOCK,
+                             VK_FORMAT_ASTC_5x5_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_6x5_SRGB_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_6x5_SRGB_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_6x5_SRGB_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_6x5_SRGB_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_6x5_SRGB_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_6x5_SRGB_BLOCK,
+                              VK_FORMAT_ASTC_6x5_SRGB_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_6x5_SRGB_BLOCK,
+                             VK_FORMAT_ASTC_6x5_SRGB_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_6x5_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGBA_ASTC_6x5_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_6x5_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_6x5_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_6x5_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_6x5_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGBA_ASTC_6x5_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_6x5_UNORM_BLOCK,
+                              VK_FORMAT_ASTC_6x5_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_6x5_UNORM_BLOCK,
+                             VK_FORMAT_ASTC_6x5_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_6x6_SRGB_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_6x6_SRGB_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_6x6_SRGB_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_6x6_SRGB_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_6x6_SRGB_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_6x6_SRGB_BLOCK,
+                              VK_FORMAT_ASTC_6x6_SRGB_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_6x6_SRGB_BLOCK,
+                             VK_FORMAT_ASTC_6x6_SRGB_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_6x6_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGBA_ASTC_6x6_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_6x6_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_6x6_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_6x6_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_6x6_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGBA_ASTC_6x6_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_6x6_UNORM_BLOCK,
+                              VK_FORMAT_ASTC_6x6_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_6x6_UNORM_BLOCK,
+                             VK_FORMAT_ASTC_6x6_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_8x5_SRGB_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_8x5_SRGB_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_8x5_SRGB_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_8x5_SRGB_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_8x5_SRGB_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_8x5_SRGB_BLOCK,
+                              VK_FORMAT_ASTC_8x5_SRGB_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_8x5_SRGB_BLOCK,
+                             VK_FORMAT_ASTC_8x5_SRGB_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_8x5_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGBA_ASTC_8x5_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_8x5_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_8x5_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_8x5_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_8x5_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGBA_ASTC_8x5_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_8x5_UNORM_BLOCK,
+                              VK_FORMAT_ASTC_8x5_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_8x5_UNORM_BLOCK,
+                             VK_FORMAT_ASTC_8x5_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_8x6_SRGB_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_8x6_SRGB_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_8x6_SRGB_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_8x6_SRGB_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_8x6_SRGB_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_8x6_SRGB_BLOCK,
+                              VK_FORMAT_ASTC_8x6_SRGB_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_8x6_SRGB_BLOCK,
+                             VK_FORMAT_ASTC_8x6_SRGB_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_8x6_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGBA_ASTC_8x6_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_8x6_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_8x6_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_8x6_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_8x6_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGBA_ASTC_8x6_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_8x6_UNORM_BLOCK,
+                              VK_FORMAT_ASTC_8x6_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_8x6_UNORM_BLOCK,
+                             VK_FORMAT_ASTC_8x6_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_8x8_SRGB_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_8x8_SRGB_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_8x8_SRGB_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_8x8_SRGB_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_8x8_SRGB_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_8x8_SRGB_BLOCK,
+                              VK_FORMAT_ASTC_8x8_SRGB_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_8x8_SRGB_BLOCK,
+                             VK_FORMAT_ASTC_8x8_SRGB_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ASTC_8x8_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGBA_ASTC_8x8_KHR;
-            textureFormatID         = angle::Format::ID::ASTC_8x8_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ASTC_8x8_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ASTC_8x8_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ASTC_8x8_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGBA_ASTC_8x8_KHR;
+            initializeTexture(physicalDevice, angle::Format::ID::ASTC_8x8_UNORM_BLOCK,
+                              VK_FORMAT_ASTC_8x8_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ASTC_8x8_UNORM_BLOCK,
+                             VK_FORMAT_ASTC_8x8_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::B4G4R4A4_UNORM:
-        {
-            internalFormat          = GL_BGRA4_ANGLEX;
-            textureFormatID         = angle::Format::ID::B4G4R4A4_UNORM;
-            vkTextureFormat         = VK_FORMAT_B4G4R4A4_UNORM_PACK16;
-            bufferFormatID          = angle::Format::ID::B4G4R4A4_UNORM;
-            vkBufferFormat          = VK_FORMAT_B4G4R4A4_UNORM_PACK16;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_BGRA4_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::B4G4R4A4_UNORM,
+                              VK_FORMAT_B4G4R4A4_UNORM_PACK16, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::B4G4R4A4_UNORM,
+                             VK_FORMAT_B4G4R4A4_UNORM_PACK16, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::B5G5R5A1_UNORM:
-        {
-            internalFormat          = GL_BGR5_A1_ANGLEX;
-            textureFormatID         = angle::Format::ID::B5G5R5A1_UNORM;
-            vkTextureFormat         = VK_FORMAT_B5G5R5A1_UNORM_PACK16;
-            bufferFormatID          = angle::Format::ID::B5G5R5A1_UNORM;
-            vkBufferFormat          = VK_FORMAT_B5G5R5A1_UNORM_PACK16;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_BGR5_A1_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::B5G5R5A1_UNORM,
+                              VK_FORMAT_B5G5R5A1_UNORM_PACK16, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::B5G5R5A1_UNORM,
+                             VK_FORMAT_B5G5R5A1_UNORM_PACK16, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::B5G6R5_UNORM:
-        {
-            internalFormat          = GL_BGR565_ANGLEX;
-            textureFormatID         = angle::Format::ID::B5G6R5_UNORM;
-            vkTextureFormat         = VK_FORMAT_B5G6R5_UNORM_PACK16;
-            bufferFormatID          = angle::Format::ID::B5G6R5_UNORM;
-            vkBufferFormat          = VK_FORMAT_B5G6R5_UNORM_PACK16;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_BGR565_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::B5G6R5_UNORM,
+                              VK_FORMAT_B5G6R5_UNORM_PACK16, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::B5G6R5_UNORM,
+                             VK_FORMAT_B5G6R5_UNORM_PACK16, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::B8G8R8A8_TYPELESS:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_BGRA8_TYPELESS_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::B8G8R8A8_TYPELESS_SRGB:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_BGRA8_TYPELESS_SRGB_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::B8G8R8A8_UNORM:
-        {
-            internalFormat          = GL_BGRA8_EXT;
-            textureFormatID         = angle::Format::ID::B8G8R8A8_UNORM;
-            vkTextureFormat         = VK_FORMAT_B8G8R8A8_UNORM;
-            bufferFormatID          = angle::Format::ID::B8G8R8A8_UNORM;
-            vkBufferFormat          = VK_FORMAT_B8G8R8A8_UNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_BGRA8_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::B8G8R8A8_UNORM,
+                              VK_FORMAT_B8G8R8A8_UNORM, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::B8G8R8A8_UNORM,
+                             VK_FORMAT_B8G8R8A8_UNORM, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::B8G8R8A8_UNORM_SRGB:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_BGRA8_SRGB_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::B8G8R8X8_UNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_BGRX8_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::BC1_RGBA_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
-            textureFormatID         = angle::Format::ID::BC1_RGBA_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_BC1_RGBA_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::BC1_RGBA_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_BC1_RGBA_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::BC1_RGBA_UNORM_BLOCK,
+                              VK_FORMAT_BC1_RGBA_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::BC1_RGBA_UNORM_BLOCK,
+                             VK_FORMAT_BC1_RGBA_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::BC1_RGBA_UNORM_SRGB_BLOCK:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::BC1_RGB_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
-            textureFormatID         = angle::Format::ID::BC1_RGB_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_BC1_RGB_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::BC1_RGB_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_BC1_RGB_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::BC1_RGB_UNORM_BLOCK,
+                              VK_FORMAT_BC1_RGB_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::BC1_RGB_UNORM_BLOCK,
+                             VK_FORMAT_BC1_RGB_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::BC1_RGB_UNORM_SRGB_BLOCK:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_COMPRESSED_SRGB_S3TC_DXT1_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::BC2_RGBA_UNORM_BLOCK:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::BC2_RGBA_UNORM_SRGB_BLOCK:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::BC3_RGBA_UNORM_BLOCK:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::BC3_RGBA_UNORM_SRGB_BLOCK:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::D16_UNORM:
-        {
-            internalFormat          = GL_DEPTH_COMPONENT16;
-            textureFormatID         = angle::Format::ID::D16_UNORM;
-            vkTextureFormat         = VK_FORMAT_D16_UNORM;
-            bufferFormatID          = angle::Format::ID::D16_UNORM;
-            vkBufferFormat          = VK_FORMAT_D16_UNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_DEPTH_COMPONENT16;
+            initializeTexture(physicalDevice, angle::Format::ID::D16_UNORM, VK_FORMAT_D16_UNORM,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::D16_UNORM, VK_FORMAT_D16_UNORM,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::D24_UNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_DEPTH_COMPONENT24;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::D24_UNORM_S8_UINT:
-        {
             internalFormat = GL_DEPTH24_STENCIL8;
-            if (!HasFullFormatSupport(physicalDevice, VK_FORMAT_D24_UNORM_S8_UINT))
-            {
-                textureFormatID         = angle::Format::ID::D32_FLOAT_S8X24_UINT;
-                vkTextureFormat         = VK_FORMAT_D32_SFLOAT_S8_UINT;
-                dataInitializerFunction = nullptr;
-                ASSERT(HasFullFormatSupport(physicalDevice, VK_FORMAT_D32_SFLOAT_S8_UINT));
-            }
-            else
-            {
-                textureFormatID         = angle::Format::ID::D24_UNORM_S8_UINT;
-                vkTextureFormat         = VK_FORMAT_D24_UNORM_S8_UINT;
-                dataInitializerFunction = nullptr;
-            }
-            bufferFormatID = angle::Format::ID::D24_UNORM_S8_UINT;
-            vkBufferFormat = VK_FORMAT_D24_UNORM_S8_UINT;
+            initializeTexture(physicalDevice, angle::Format::ID::D24_UNORM_S8_UINT,
+                              VK_FORMAT_D24_UNORM_S8_UINT, nullptr,
+                              angle::Format::ID::D32_FLOAT_S8X24_UINT, VK_FORMAT_D32_SFLOAT_S8_UINT,
+                              nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::D24_UNORM_S8_UINT,
+                             VK_FORMAT_D24_UNORM_S8_UINT, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::D32_FLOAT:
-        {
-            internalFormat          = GL_DEPTH_COMPONENT32F;
-            textureFormatID         = angle::Format::ID::D32_FLOAT;
-            vkTextureFormat         = VK_FORMAT_D32_SFLOAT;
-            bufferFormatID          = angle::Format::ID::D32_FLOAT;
-            vkBufferFormat          = VK_FORMAT_D32_SFLOAT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_DEPTH_COMPONENT32F;
+            initializeTexture(physicalDevice, angle::Format::ID::D32_FLOAT, VK_FORMAT_D32_SFLOAT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::D32_FLOAT, VK_FORMAT_D32_SFLOAT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::D32_FLOAT_S8X24_UINT:
-        {
             internalFormat = GL_DEPTH32F_STENCIL8;
-            if (!HasFullFormatSupport(physicalDevice, VK_FORMAT_D32_SFLOAT_S8_UINT))
-            {
-                textureFormatID         = angle::Format::ID::D24_UNORM_S8_UINT;
-                vkTextureFormat         = VK_FORMAT_D24_UNORM_S8_UINT;
-                dataInitializerFunction = nullptr;
-                ASSERT(HasFullFormatSupport(physicalDevice, VK_FORMAT_D24_UNORM_S8_UINT));
-            }
-            else
-            {
-                textureFormatID         = angle::Format::ID::D32_FLOAT_S8X24_UINT;
-                vkTextureFormat         = VK_FORMAT_D32_SFLOAT_S8_UINT;
-                dataInitializerFunction = nullptr;
-            }
-            bufferFormatID = angle::Format::ID::D32_FLOAT_S8X24_UINT;
-            vkBufferFormat = VK_FORMAT_D32_SFLOAT_S8_UINT;
+            initializeTexture(physicalDevice, angle::Format::ID::D32_FLOAT_S8X24_UINT,
+                              VK_FORMAT_D32_SFLOAT_S8_UINT, nullptr,
+                              angle::Format::ID::D24_UNORM_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT,
+                              nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::D32_FLOAT_S8X24_UINT,
+                             VK_FORMAT_D32_SFLOAT_S8_UINT, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::D32_UNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_DEPTH_COMPONENT32_OES;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::EAC_R11G11_SNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SIGNED_RG11_EAC;
-            textureFormatID         = angle::Format::ID::EAC_R11G11_SNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_EAC_R11G11_SNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::EAC_R11G11_SNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_EAC_R11G11_SNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SIGNED_RG11_EAC;
+            initializeTexture(physicalDevice, angle::Format::ID::EAC_R11G11_SNORM_BLOCK,
+                              VK_FORMAT_EAC_R11G11_SNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::EAC_R11G11_SNORM_BLOCK,
+                             VK_FORMAT_EAC_R11G11_SNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::EAC_R11G11_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RG11_EAC;
-            textureFormatID         = angle::Format::ID::EAC_R11G11_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_EAC_R11G11_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::EAC_R11G11_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_EAC_R11G11_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RG11_EAC;
+            initializeTexture(physicalDevice, angle::Format::ID::EAC_R11G11_UNORM_BLOCK,
+                              VK_FORMAT_EAC_R11G11_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::EAC_R11G11_UNORM_BLOCK,
+                             VK_FORMAT_EAC_R11G11_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::EAC_R11_SNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SIGNED_R11_EAC;
-            textureFormatID         = angle::Format::ID::EAC_R11_SNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_EAC_R11_SNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::EAC_R11_SNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_EAC_R11_SNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SIGNED_R11_EAC;
+            initializeTexture(physicalDevice, angle::Format::ID::EAC_R11_SNORM_BLOCK,
+                              VK_FORMAT_EAC_R11_SNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::EAC_R11_SNORM_BLOCK,
+                             VK_FORMAT_EAC_R11_SNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::EAC_R11_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_R11_EAC;
-            textureFormatID         = angle::Format::ID::EAC_R11_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_EAC_R11_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::EAC_R11_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_EAC_R11_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_R11_EAC;
+            initializeTexture(physicalDevice, angle::Format::ID::EAC_R11_UNORM_BLOCK,
+                              VK_FORMAT_EAC_R11_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::EAC_R11_UNORM_BLOCK,
+                             VK_FORMAT_EAC_R11_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ETC1_LOSSY_DECODE_R8G8B8_UNORM_BLOCK:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_ETC1_RGB8_LOSSY_DECODE_ANGLE;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::ETC1_R8G8B8_UNORM_BLOCK:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_ETC1_RGB8_OES;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::ETC2_R8G8B8A1_SRGB_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2;
-            textureFormatID         = angle::Format::ID::ETC2_R8G8B8A1_SRGB_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK;
-            bufferFormatID          = angle::Format::ID::ETC2_R8G8B8A1_SRGB_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2;
+            initializeTexture(physicalDevice, angle::Format::ID::ETC2_R8G8B8A1_SRGB_BLOCK,
+                              VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ETC2_R8G8B8A1_SRGB_BLOCK,
+                             VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ETC2_R8G8B8A1_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2;
-            textureFormatID         = angle::Format::ID::ETC2_R8G8B8A1_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ETC2_R8G8B8A1_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK;
-            dataInitializerFunction = Initialize4ComponentData<GLubyte, 0x00, 0x00, 0x00, 0xFF>;
+            internalFormat = GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2;
+            initializeTexture(physicalDevice, angle::Format::ID::ETC2_R8G8B8A1_UNORM_BLOCK,
+                              VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK,
+                              Initialize4ComponentData<GLubyte, 0x00, 0x00, 0x00, 0xFF>,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ETC2_R8G8B8A1_UNORM_BLOCK,
+                             VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ETC2_R8G8B8A8_SRGB_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC;
-            textureFormatID         = angle::Format::ID::ETC2_R8G8B8A8_SRGB_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK;
-            bufferFormatID          = angle::Format::ID::ETC2_R8G8B8A8_SRGB_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC;
+            initializeTexture(physicalDevice, angle::Format::ID::ETC2_R8G8B8A8_SRGB_BLOCK,
+                              VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ETC2_R8G8B8A8_SRGB_BLOCK,
+                             VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ETC2_R8G8B8A8_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGBA8_ETC2_EAC;
-            textureFormatID         = angle::Format::ID::ETC2_R8G8B8A8_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ETC2_R8G8B8A8_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGBA8_ETC2_EAC;
+            initializeTexture(physicalDevice, angle::Format::ID::ETC2_R8G8B8A8_UNORM_BLOCK,
+                              VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ETC2_R8G8B8A8_UNORM_BLOCK,
+                             VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ETC2_R8G8B8_SRGB_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_SRGB8_ETC2;
-            textureFormatID         = angle::Format::ID::ETC2_R8G8B8_SRGB_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK;
-            bufferFormatID          = angle::Format::ID::ETC2_R8G8B8_SRGB_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_SRGB8_ETC2;
+            initializeTexture(physicalDevice, angle::Format::ID::ETC2_R8G8B8_SRGB_BLOCK,
+                              VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ETC2_R8G8B8_SRGB_BLOCK,
+                             VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::ETC2_R8G8B8_UNORM_BLOCK:
-        {
-            internalFormat          = GL_COMPRESSED_RGB8_ETC2;
-            textureFormatID         = angle::Format::ID::ETC2_R8G8B8_UNORM_BLOCK;
-            vkTextureFormat         = VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK;
-            bufferFormatID          = angle::Format::ID::ETC2_R8G8B8_UNORM_BLOCK;
-            vkBufferFormat          = VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_COMPRESSED_RGB8_ETC2;
+            initializeTexture(physicalDevice, angle::Format::ID::ETC2_R8G8B8_UNORM_BLOCK,
+                              VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::ETC2_R8G8B8_UNORM_BLOCK,
+                             VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::L16A16_FLOAT:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_LUMINANCE_ALPHA16F_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::L16_FLOAT:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_LUMINANCE16F_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::L32A32_FLOAT:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_LUMINANCE_ALPHA32F_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::L32_FLOAT:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_LUMINANCE32F_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::L8A8_UNORM:
-        {
-            internalFormat          = GL_LUMINANCE8_ALPHA8_EXT;
-            textureFormatID         = angle::Format::ID::R8G8_UNORM;
-            vkTextureFormat         = VK_FORMAT_R8G8_UNORM;
-            bufferFormatID          = angle::Format::ID::NONE;
-            vkBufferFormat          = VK_FORMAT_UNDEFINED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_LUMINANCE8_ALPHA8_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8_UNORM, VK_FORMAT_R8G8_UNORM,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::L8_UNORM:
-        {
-            internalFormat          = GL_LUMINANCE8_EXT;
-            textureFormatID         = angle::Format::ID::R8_UNORM;
-            vkTextureFormat         = VK_FORMAT_R8_UNORM;
-            bufferFormatID          = angle::Format::ID::NONE;
-            vkBufferFormat          = VK_FORMAT_UNDEFINED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_LUMINANCE8_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::R8_UNORM, VK_FORMAT_R8_UNORM,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::NONE:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_NONE;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R10G10B10A2_SINT:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB10_A2_SINT_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R10G10B10A2_SNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB10_A2_SNORM_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R10G10B10A2_SSCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB10_A2_SSCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R10G10B10A2_UINT:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB10_A2UI;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R10G10B10A2_UNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB10_A2;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R10G10B10A2_USCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB10_A2_USCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R11G11B10_FLOAT:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_R11F_G11F_B10F;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R16G16B16A16_FLOAT:
-        {
-            internalFormat          = GL_RGBA16F;
-            textureFormatID         = angle::Format::ID::R16G16B16A16_FLOAT;
-            vkTextureFormat         = VK_FORMAT_R16G16B16A16_SFLOAT;
-            bufferFormatID          = angle::Format::ID::R16G16B16A16_FLOAT;
-            vkBufferFormat          = VK_FORMAT_R16G16B16A16_SFLOAT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA16F;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16B16A16_FLOAT,
+                              VK_FORMAT_R16G16B16A16_SFLOAT, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16B16A16_FLOAT,
+                             VK_FORMAT_R16G16B16A16_SFLOAT, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16B16A16_SINT:
-        {
-            internalFormat          = GL_RGBA16I;
-            textureFormatID         = angle::Format::ID::R16G16B16A16_SINT;
-            vkTextureFormat         = VK_FORMAT_R16G16B16A16_SINT;
-            bufferFormatID          = angle::Format::ID::R16G16B16A16_SINT;
-            vkBufferFormat          = VK_FORMAT_R16G16B16A16_SINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA16I;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16B16A16_SINT,
+                              VK_FORMAT_R16G16B16A16_SINT, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16B16A16_SINT,
+                             VK_FORMAT_R16G16B16A16_SINT, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16B16A16_SNORM:
-        {
-            internalFormat          = GL_RGBA16_SNORM_EXT;
-            textureFormatID         = angle::Format::ID::R16G16B16A16_SNORM;
-            vkTextureFormat         = VK_FORMAT_R16G16B16A16_SNORM;
-            bufferFormatID          = angle::Format::ID::R16G16B16A16_SNORM;
-            vkBufferFormat          = VK_FORMAT_R16G16B16A16_SNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA16_SNORM_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16B16A16_SNORM,
+                              VK_FORMAT_R16G16B16A16_SNORM, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16B16A16_SNORM,
+                             VK_FORMAT_R16G16B16A16_SNORM, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16B16A16_SSCALED:
-        {
-            internalFormat          = GL_RGBA16_SSCALED_ANGLEX;
-            textureFormatID         = angle::Format::ID::R16G16B16A16_SSCALED;
-            vkTextureFormat         = VK_FORMAT_R16G16B16A16_SSCALED;
-            bufferFormatID          = angle::Format::ID::R16G16B16A16_SSCALED;
-            vkBufferFormat          = VK_FORMAT_R16G16B16A16_SSCALED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA16_SSCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16B16A16_SSCALED,
+                              VK_FORMAT_R16G16B16A16_SSCALED, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16B16A16_SSCALED,
+                             VK_FORMAT_R16G16B16A16_SSCALED, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16B16A16_UINT:
-        {
-            internalFormat          = GL_RGBA16UI;
-            textureFormatID         = angle::Format::ID::R16G16B16A16_UINT;
-            vkTextureFormat         = VK_FORMAT_R16G16B16A16_UINT;
-            bufferFormatID          = angle::Format::ID::R16G16B16A16_UINT;
-            vkBufferFormat          = VK_FORMAT_R16G16B16A16_UINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA16UI;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16B16A16_UINT,
+                              VK_FORMAT_R16G16B16A16_UINT, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16B16A16_UINT,
+                             VK_FORMAT_R16G16B16A16_UINT, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16B16A16_UNORM:
-        {
-            internalFormat          = GL_RGBA16_EXT;
-            textureFormatID         = angle::Format::ID::R16G16B16A16_UNORM;
-            vkTextureFormat         = VK_FORMAT_R16G16B16A16_UNORM;
-            bufferFormatID          = angle::Format::ID::R16G16B16A16_UNORM;
-            vkBufferFormat          = VK_FORMAT_R16G16B16A16_UNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA16_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16B16A16_UNORM,
+                              VK_FORMAT_R16G16B16A16_UNORM, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16B16A16_UNORM,
+                             VK_FORMAT_R16G16B16A16_UNORM, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16B16A16_USCALED:
-        {
-            internalFormat          = GL_RGBA16_USCALED_ANGLEX;
-            textureFormatID         = angle::Format::ID::R16G16B16A16_USCALED;
-            vkTextureFormat         = VK_FORMAT_R16G16B16A16_USCALED;
-            bufferFormatID          = angle::Format::ID::R16G16B16A16_USCALED;
-            vkBufferFormat          = VK_FORMAT_R16G16B16A16_USCALED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA16_USCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16B16A16_USCALED,
+                              VK_FORMAT_R16G16B16A16_USCALED, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16B16A16_USCALED,
+                             VK_FORMAT_R16G16B16A16_USCALED, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16B16_FLOAT:
-        {
-            internalFormat          = GL_RGB16F;
-            textureFormatID         = angle::Format::ID::R16G16B16_FLOAT;
-            vkTextureFormat         = VK_FORMAT_R16G16B16_SFLOAT;
-            bufferFormatID          = angle::Format::ID::R16G16B16_FLOAT;
-            vkBufferFormat          = VK_FORMAT_R16G16B16_SFLOAT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB16F;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16B16_FLOAT,
+                              VK_FORMAT_R16G16B16_SFLOAT, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16B16_FLOAT,
+                             VK_FORMAT_R16G16B16_SFLOAT, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16B16_SINT:
-        {
-            internalFormat          = GL_RGB16I;
-            textureFormatID         = angle::Format::ID::R16G16B16_SINT;
-            vkTextureFormat         = VK_FORMAT_R16G16B16_SINT;
-            bufferFormatID          = angle::Format::ID::R16G16B16_SINT;
-            vkBufferFormat          = VK_FORMAT_R16G16B16_SINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB16I;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16B16_SINT,
+                              VK_FORMAT_R16G16B16_SINT, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16B16_SINT,
+                             VK_FORMAT_R16G16B16_SINT, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16B16_SNORM:
-        {
-            internalFormat          = GL_RGB16_SNORM_EXT;
-            textureFormatID         = angle::Format::ID::R16G16B16_SNORM;
-            vkTextureFormat         = VK_FORMAT_R16G16B16_SNORM;
-            bufferFormatID          = angle::Format::ID::R16G16B16_SNORM;
-            vkBufferFormat          = VK_FORMAT_R16G16B16_SNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB16_SNORM_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16B16_SNORM,
+                              VK_FORMAT_R16G16B16_SNORM, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16B16_SNORM,
+                             VK_FORMAT_R16G16B16_SNORM, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16B16_SSCALED:
-        {
-            internalFormat          = GL_RGB16_SSCALED_ANGLEX;
-            textureFormatID         = angle::Format::ID::R16G16B16_SSCALED;
-            vkTextureFormat         = VK_FORMAT_R16G16B16_SSCALED;
-            bufferFormatID          = angle::Format::ID::R16G16B16_SSCALED;
-            vkBufferFormat          = VK_FORMAT_R16G16B16_SSCALED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB16_SSCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16B16_SSCALED,
+                              VK_FORMAT_R16G16B16_SSCALED, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16B16_SSCALED,
+                             VK_FORMAT_R16G16B16_SSCALED, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16B16_UINT:
-        {
-            internalFormat          = GL_RGB16UI;
-            textureFormatID         = angle::Format::ID::R16G16B16_UINT;
-            vkTextureFormat         = VK_FORMAT_R16G16B16_UINT;
-            bufferFormatID          = angle::Format::ID::R16G16B16_UINT;
-            vkBufferFormat          = VK_FORMAT_R16G16B16_UINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB16UI;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16B16_UINT,
+                              VK_FORMAT_R16G16B16_UINT, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16B16_UINT,
+                             VK_FORMAT_R16G16B16_UINT, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16B16_UNORM:
-        {
-            internalFormat          = GL_RGB16_EXT;
-            textureFormatID         = angle::Format::ID::R16G16B16_UNORM;
-            vkTextureFormat         = VK_FORMAT_R16G16B16_UNORM;
-            bufferFormatID          = angle::Format::ID::R16G16B16_UNORM;
-            vkBufferFormat          = VK_FORMAT_R16G16B16_UNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB16_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16B16_UNORM,
+                              VK_FORMAT_R16G16B16_UNORM, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16B16_UNORM,
+                             VK_FORMAT_R16G16B16_UNORM, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16B16_USCALED:
-        {
-            internalFormat          = GL_RGB16_USCALED_ANGLEX;
-            textureFormatID         = angle::Format::ID::R16G16B16_USCALED;
-            vkTextureFormat         = VK_FORMAT_R16G16B16_USCALED;
-            bufferFormatID          = angle::Format::ID::R16G16B16_USCALED;
-            vkBufferFormat          = VK_FORMAT_R16G16B16_USCALED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB16_USCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16B16_USCALED,
+                              VK_FORMAT_R16G16B16_USCALED, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16B16_USCALED,
+                             VK_FORMAT_R16G16B16_USCALED, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16_FLOAT:
-        {
-            internalFormat          = GL_RG16F;
-            textureFormatID         = angle::Format::ID::R16G16_FLOAT;
-            vkTextureFormat         = VK_FORMAT_R16G16_SFLOAT;
-            bufferFormatID          = angle::Format::ID::R16G16_FLOAT;
-            vkBufferFormat          = VK_FORMAT_R16G16_SFLOAT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RG16F;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16_FLOAT,
+                              VK_FORMAT_R16G16_SFLOAT, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16_FLOAT,
+                             VK_FORMAT_R16G16_SFLOAT, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16_SINT:
-        {
-            internalFormat          = GL_RG16I;
-            textureFormatID         = angle::Format::ID::R16G16_SINT;
-            vkTextureFormat         = VK_FORMAT_R16G16_SINT;
-            bufferFormatID          = angle::Format::ID::R16G16_SINT;
-            vkBufferFormat          = VK_FORMAT_R16G16_SINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RG16I;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16_SINT, VK_FORMAT_R16G16_SINT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16_SINT, VK_FORMAT_R16G16_SINT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16_SNORM:
-        {
-            internalFormat          = GL_RG16_SNORM_EXT;
-            textureFormatID         = angle::Format::ID::R16G16_SNORM;
-            vkTextureFormat         = VK_FORMAT_R16G16_SNORM;
-            bufferFormatID          = angle::Format::ID::R16G16_SNORM;
-            vkBufferFormat          = VK_FORMAT_R16G16_SNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RG16_SNORM_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16_SNORM,
+                              VK_FORMAT_R16G16_SNORM, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16_SNORM,
+                             VK_FORMAT_R16G16_SNORM, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16_SSCALED:
-        {
-            internalFormat          = GL_RG16_SSCALED_ANGLEX;
-            textureFormatID         = angle::Format::ID::R16G16_SSCALED;
-            vkTextureFormat         = VK_FORMAT_R16G16_SSCALED;
-            bufferFormatID          = angle::Format::ID::R16G16_SSCALED;
-            vkBufferFormat          = VK_FORMAT_R16G16_SSCALED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RG16_SSCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16_SSCALED,
+                              VK_FORMAT_R16G16_SSCALED, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16_SSCALED,
+                             VK_FORMAT_R16G16_SSCALED, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16_UINT:
-        {
-            internalFormat          = GL_RG16UI;
-            textureFormatID         = angle::Format::ID::R16G16_UINT;
-            vkTextureFormat         = VK_FORMAT_R16G16_UINT;
-            bufferFormatID          = angle::Format::ID::R16G16_UINT;
-            vkBufferFormat          = VK_FORMAT_R16G16_UINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RG16UI;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16_UINT, VK_FORMAT_R16G16_UINT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16_UINT, VK_FORMAT_R16G16_UINT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16_UNORM:
-        {
-            internalFormat          = GL_RG16_EXT;
-            textureFormatID         = angle::Format::ID::R16G16_UNORM;
-            vkTextureFormat         = VK_FORMAT_R16G16_UNORM;
-            bufferFormatID          = angle::Format::ID::R16G16_UNORM;
-            vkBufferFormat          = VK_FORMAT_R16G16_UNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RG16_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16_UNORM,
+                              VK_FORMAT_R16G16_UNORM, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16_UNORM,
+                             VK_FORMAT_R16G16_UNORM, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16G16_USCALED:
-        {
-            internalFormat          = GL_RG16_USCALED_ANGLEX;
-            textureFormatID         = angle::Format::ID::R16G16_USCALED;
-            vkTextureFormat         = VK_FORMAT_R16G16_USCALED;
-            bufferFormatID          = angle::Format::ID::R16G16_USCALED;
-            vkBufferFormat          = VK_FORMAT_R16G16_USCALED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RG16_USCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::R16G16_USCALED,
+                              VK_FORMAT_R16G16_USCALED, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16G16_USCALED,
+                             VK_FORMAT_R16G16_USCALED, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16_FLOAT:
-        {
-            internalFormat          = GL_R16F;
-            textureFormatID         = angle::Format::ID::R16_FLOAT;
-            vkTextureFormat         = VK_FORMAT_R16_SFLOAT;
-            bufferFormatID          = angle::Format::ID::R16_FLOAT;
-            vkBufferFormat          = VK_FORMAT_R16_SFLOAT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_R16F;
+            initializeTexture(physicalDevice, angle::Format::ID::R16_FLOAT, VK_FORMAT_R16_SFLOAT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16_FLOAT, VK_FORMAT_R16_SFLOAT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16_SINT:
-        {
-            internalFormat          = GL_R16I;
-            textureFormatID         = angle::Format::ID::R16_SINT;
-            vkTextureFormat         = VK_FORMAT_R16_SINT;
-            bufferFormatID          = angle::Format::ID::R16_SINT;
-            vkBufferFormat          = VK_FORMAT_R16_SINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_R16I;
+            initializeTexture(physicalDevice, angle::Format::ID::R16_SINT, VK_FORMAT_R16_SINT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16_SINT, VK_FORMAT_R16_SINT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16_SNORM:
-        {
-            internalFormat          = GL_R16_SNORM_EXT;
-            textureFormatID         = angle::Format::ID::R16_SNORM;
-            vkTextureFormat         = VK_FORMAT_R16_SNORM;
-            bufferFormatID          = angle::Format::ID::R16_SNORM;
-            vkBufferFormat          = VK_FORMAT_R16_SNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_R16_SNORM_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::R16_SNORM, VK_FORMAT_R16_SNORM,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16_SNORM, VK_FORMAT_R16_SNORM,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16_SSCALED:
-        {
-            internalFormat          = GL_R16_SSCALED_ANGLEX;
-            textureFormatID         = angle::Format::ID::R16_SSCALED;
-            vkTextureFormat         = VK_FORMAT_R16_SSCALED;
-            bufferFormatID          = angle::Format::ID::R16_SSCALED;
-            vkBufferFormat          = VK_FORMAT_R16_SSCALED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_R16_SSCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::R16_SSCALED, VK_FORMAT_R16_SSCALED,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16_SSCALED, VK_FORMAT_R16_SSCALED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16_UINT:
-        {
-            internalFormat          = GL_R16UI;
-            textureFormatID         = angle::Format::ID::R16_UINT;
-            vkTextureFormat         = VK_FORMAT_R16_UINT;
-            bufferFormatID          = angle::Format::ID::R16_UINT;
-            vkBufferFormat          = VK_FORMAT_R16_UINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_R16UI;
+            initializeTexture(physicalDevice, angle::Format::ID::R16_UINT, VK_FORMAT_R16_UINT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16_UINT, VK_FORMAT_R16_UINT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16_UNORM:
-        {
-            internalFormat          = GL_R16_EXT;
-            textureFormatID         = angle::Format::ID::R16_UNORM;
-            vkTextureFormat         = VK_FORMAT_R16_UNORM;
-            bufferFormatID          = angle::Format::ID::R16_UNORM;
-            vkBufferFormat          = VK_FORMAT_R16_UNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_R16_EXT;
+            initializeTexture(physicalDevice, angle::Format::ID::R16_UNORM, VK_FORMAT_R16_UNORM,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16_UNORM, VK_FORMAT_R16_UNORM,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R16_USCALED:
-        {
-            internalFormat          = GL_R16_USCALED_ANGLEX;
-            textureFormatID         = angle::Format::ID::R16_USCALED;
-            vkTextureFormat         = VK_FORMAT_R16_USCALED;
-            bufferFormatID          = angle::Format::ID::R16_USCALED;
-            vkBufferFormat          = VK_FORMAT_R16_USCALED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_R16_USCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::R16_USCALED, VK_FORMAT_R16_USCALED,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R16_USCALED, VK_FORMAT_R16_USCALED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R32G32B32A32_FIXED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGBA32_FIXED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32G32B32A32_FLOAT:
-        {
-            internalFormat          = GL_RGBA32F;
-            textureFormatID         = angle::Format::ID::R32G32B32A32_FLOAT;
-            vkTextureFormat         = VK_FORMAT_R32G32B32A32_SFLOAT;
-            bufferFormatID          = angle::Format::ID::R32G32B32A32_FLOAT;
-            vkBufferFormat          = VK_FORMAT_R32G32B32A32_SFLOAT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA32F;
+            initializeTexture(physicalDevice, angle::Format::ID::R32G32B32A32_FLOAT,
+                              VK_FORMAT_R32G32B32A32_SFLOAT, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R32G32B32A32_FLOAT,
+                             VK_FORMAT_R32G32B32A32_SFLOAT, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R32G32B32A32_SINT:
-        {
-            internalFormat          = GL_RGBA32I;
-            textureFormatID         = angle::Format::ID::R32G32B32A32_SINT;
-            vkTextureFormat         = VK_FORMAT_R32G32B32A32_SINT;
-            bufferFormatID          = angle::Format::ID::R32G32B32A32_SINT;
-            vkBufferFormat          = VK_FORMAT_R32G32B32A32_SINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA32I;
+            initializeTexture(physicalDevice, angle::Format::ID::R32G32B32A32_SINT,
+                              VK_FORMAT_R32G32B32A32_SINT, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R32G32B32A32_SINT,
+                             VK_FORMAT_R32G32B32A32_SINT, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R32G32B32A32_SNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGBA32_SNORM_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32G32B32A32_SSCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGBA32_SSCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32G32B32A32_UINT:
-        {
-            internalFormat          = GL_RGBA32UI;
-            textureFormatID         = angle::Format::ID::R32G32B32A32_UINT;
-            vkTextureFormat         = VK_FORMAT_R32G32B32A32_UINT;
-            bufferFormatID          = angle::Format::ID::R32G32B32A32_UINT;
-            vkBufferFormat          = VK_FORMAT_R32G32B32A32_UINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA32UI;
+            initializeTexture(physicalDevice, angle::Format::ID::R32G32B32A32_UINT,
+                              VK_FORMAT_R32G32B32A32_UINT, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R32G32B32A32_UINT,
+                             VK_FORMAT_R32G32B32A32_UINT, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R32G32B32A32_UNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGBA32_UNORM_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32G32B32A32_USCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGBA32_USCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32G32B32_FIXED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB32_FIXED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32G32B32_FLOAT:
-        {
-            internalFormat          = GL_RGB32F;
-            textureFormatID         = angle::Format::ID::R32G32B32_FLOAT;
-            vkTextureFormat         = VK_FORMAT_R32G32B32_SFLOAT;
-            bufferFormatID          = angle::Format::ID::R32G32B32_FLOAT;
-            vkBufferFormat          = VK_FORMAT_R32G32B32_SFLOAT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB32F;
+            initializeTexture(physicalDevice, angle::Format::ID::R32G32B32_FLOAT,
+                              VK_FORMAT_R32G32B32_SFLOAT, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R32G32B32_FLOAT,
+                             VK_FORMAT_R32G32B32_SFLOAT, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R32G32B32_SINT:
-        {
-            internalFormat          = GL_RGB32I;
-            textureFormatID         = angle::Format::ID::R32G32B32_SINT;
-            vkTextureFormat         = VK_FORMAT_R32G32B32_SINT;
-            bufferFormatID          = angle::Format::ID::R32G32B32_SINT;
-            vkBufferFormat          = VK_FORMAT_R32G32B32_SINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB32I;
+            initializeTexture(physicalDevice, angle::Format::ID::R32G32B32_SINT,
+                              VK_FORMAT_R32G32B32_SINT, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R32G32B32_SINT,
+                             VK_FORMAT_R32G32B32_SINT, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R32G32B32_SNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB32_SNORM_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32G32B32_SSCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB32_SSCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32G32B32_UINT:
-        {
-            internalFormat          = GL_RGB32UI;
-            textureFormatID         = angle::Format::ID::R32G32B32_UINT;
-            vkTextureFormat         = VK_FORMAT_R32G32B32_UINT;
-            bufferFormatID          = angle::Format::ID::R32G32B32_UINT;
-            vkBufferFormat          = VK_FORMAT_R32G32B32_UINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB32UI;
+            initializeTexture(physicalDevice, angle::Format::ID::R32G32B32_UINT,
+                              VK_FORMAT_R32G32B32_UINT, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R32G32B32_UINT,
+                             VK_FORMAT_R32G32B32_UINT, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R32G32B32_UNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB32_UNORM_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32G32B32_USCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB32_USCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32G32_FIXED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RG32_FIXED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32G32_FLOAT:
-        {
-            internalFormat          = GL_RG32F;
-            textureFormatID         = angle::Format::ID::R32G32_FLOAT;
-            vkTextureFormat         = VK_FORMAT_R32G32_SFLOAT;
-            bufferFormatID          = angle::Format::ID::R32G32_FLOAT;
-            vkBufferFormat          = VK_FORMAT_R32G32_SFLOAT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RG32F;
+            initializeTexture(physicalDevice, angle::Format::ID::R32G32_FLOAT,
+                              VK_FORMAT_R32G32_SFLOAT, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R32G32_FLOAT,
+                             VK_FORMAT_R32G32_SFLOAT, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R32G32_SINT:
-        {
-            internalFormat          = GL_RG32I;
-            textureFormatID         = angle::Format::ID::R32G32_SINT;
-            vkTextureFormat         = VK_FORMAT_R32G32_SINT;
-            bufferFormatID          = angle::Format::ID::R32G32_SINT;
-            vkBufferFormat          = VK_FORMAT_R32G32_SINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RG32I;
+            initializeTexture(physicalDevice, angle::Format::ID::R32G32_SINT, VK_FORMAT_R32G32_SINT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R32G32_SINT, VK_FORMAT_R32G32_SINT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R32G32_SNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RG32_SNORM_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32G32_SSCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RG32_SSCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32G32_UINT:
-        {
-            internalFormat          = GL_RG32UI;
-            textureFormatID         = angle::Format::ID::R32G32_UINT;
-            vkTextureFormat         = VK_FORMAT_R32G32_UINT;
-            bufferFormatID          = angle::Format::ID::R32G32_UINT;
-            vkBufferFormat          = VK_FORMAT_R32G32_UINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RG32UI;
+            initializeTexture(physicalDevice, angle::Format::ID::R32G32_UINT, VK_FORMAT_R32G32_UINT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R32G32_UINT, VK_FORMAT_R32G32_UINT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R32G32_UNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RG32_UNORM_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32G32_USCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RG32_USCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32_FIXED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_R32_FIXED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32_FLOAT:
-        {
-            internalFormat          = GL_R32F;
-            textureFormatID         = angle::Format::ID::R32_FLOAT;
-            vkTextureFormat         = VK_FORMAT_R32_SFLOAT;
-            bufferFormatID          = angle::Format::ID::R32_FLOAT;
-            vkBufferFormat          = VK_FORMAT_R32_SFLOAT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_R32F;
+            initializeTexture(physicalDevice, angle::Format::ID::R32_FLOAT, VK_FORMAT_R32_SFLOAT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R32_FLOAT, VK_FORMAT_R32_SFLOAT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R32_SINT:
-        {
-            internalFormat          = GL_R32I;
-            textureFormatID         = angle::Format::ID::R32_SINT;
-            vkTextureFormat         = VK_FORMAT_R32_SINT;
-            bufferFormatID          = angle::Format::ID::R32_SINT;
-            vkBufferFormat          = VK_FORMAT_R32_SINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_R32I;
+            initializeTexture(physicalDevice, angle::Format::ID::R32_SINT, VK_FORMAT_R32_SINT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R32_SINT, VK_FORMAT_R32_SINT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R32_SNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_R32_SNORM_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32_SSCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_R32_SSCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32_UINT:
-        {
-            internalFormat          = GL_R32UI;
-            textureFormatID         = angle::Format::ID::R32_UINT;
-            vkTextureFormat         = VK_FORMAT_R32_UINT;
-            bufferFormatID          = angle::Format::ID::R32_UINT;
-            vkBufferFormat          = VK_FORMAT_R32_UINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_R32UI;
+            initializeTexture(physicalDevice, angle::Format::ID::R32_UINT, VK_FORMAT_R32_UINT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R32_UINT, VK_FORMAT_R32_UINT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R32_UNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_R32_UNORM_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R32_USCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_R32_USCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R4G4B4A4_UNORM:
-        {
-            internalFormat          = GL_RGBA4;
-            textureFormatID         = angle::Format::ID::R8G8B8A8_UNORM;
-            vkTextureFormat         = VK_FORMAT_R8G8B8A8_UNORM;
-            bufferFormatID          = angle::Format::ID::NONE;
-            vkBufferFormat          = VK_FORMAT_UNDEFINED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA4;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8B8A8_UNORM,
+                              VK_FORMAT_R8G8B8A8_UNORM, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R4G4B4A4_UNORM,
+                             VK_FORMAT_R4G4B4A4_UNORM_PACK16, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R5G5B5A1_UNORM:
-        {
-            internalFormat          = GL_RGB5_A1;
-            textureFormatID         = angle::Format::ID::A1R5G5B5_UNORM;
-            vkTextureFormat         = VK_FORMAT_A1R5G5B5_UNORM_PACK16;
-            bufferFormatID          = angle::Format::ID::NONE;
-            vkBufferFormat          = VK_FORMAT_UNDEFINED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB5_A1;
+            initializeTexture(physicalDevice, angle::Format::ID::A1R5G5B5_UNORM,
+                              VK_FORMAT_A1R5G5B5_UNORM_PACK16, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R5G5B5A1_UNORM,
+                             VK_FORMAT_R5G5B5A1_UNORM_PACK16, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R5G6B5_UNORM:
-        {
-            internalFormat          = GL_RGB565;
-            textureFormatID         = angle::Format::ID::R5G6B5_UNORM;
-            vkTextureFormat         = VK_FORMAT_R5G6B5_UNORM_PACK16;
-            bufferFormatID          = angle::Format::ID::R5G6B5_UNORM;
-            vkBufferFormat          = VK_FORMAT_R5G6B5_UNORM_PACK16;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB565;
+            initializeTexture(physicalDevice, angle::Format::ID::R5G6B5_UNORM,
+                              VK_FORMAT_R5G6B5_UNORM_PACK16, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R5G6B5_UNORM,
+                             VK_FORMAT_R5G6B5_UNORM_PACK16, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8B8A8_SINT:
-        {
-            internalFormat          = GL_RGBA8I;
-            textureFormatID         = angle::Format::ID::R8G8B8A8_SINT;
-            vkTextureFormat         = VK_FORMAT_R8G8B8A8_SINT;
-            bufferFormatID          = angle::Format::ID::R8G8B8A8_SINT;
-            vkBufferFormat          = VK_FORMAT_R8G8B8A8_SINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA8I;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8B8A8_SINT,
+                              VK_FORMAT_R8G8B8A8_SINT, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8B8A8_SINT,
+                             VK_FORMAT_R8G8B8A8_SINT, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8B8A8_SNORM:
-        {
-            internalFormat          = GL_RGBA8_SNORM;
-            textureFormatID         = angle::Format::ID::R8G8B8A8_SNORM;
-            vkTextureFormat         = VK_FORMAT_R8G8B8A8_SNORM;
-            bufferFormatID          = angle::Format::ID::R8G8B8A8_SNORM;
-            vkBufferFormat          = VK_FORMAT_R8G8B8A8_SNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA8_SNORM;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8B8A8_SNORM,
+                              VK_FORMAT_R8G8B8A8_SNORM, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8B8A8_SNORM,
+                             VK_FORMAT_R8G8B8A8_SNORM, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8B8A8_SSCALED:
-        {
-            internalFormat          = GL_RGBA8_SSCALED_ANGLEX;
-            textureFormatID         = angle::Format::ID::R8G8B8A8_SSCALED;
-            vkTextureFormat         = VK_FORMAT_R8G8B8A8_SSCALED;
-            bufferFormatID          = angle::Format::ID::R8G8B8A8_SSCALED;
-            vkBufferFormat          = VK_FORMAT_R8G8B8A8_SSCALED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA8_SSCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8B8A8_SSCALED,
+                              VK_FORMAT_R8G8B8A8_SSCALED, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8B8A8_SSCALED,
+                             VK_FORMAT_R8G8B8A8_SSCALED, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8B8A8_TYPELESS:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGBA8_TYPELESS_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R8G8B8A8_TYPELESS_SRGB:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGBA8_TYPELESS_SRGB_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R8G8B8A8_UINT:
-        {
-            internalFormat          = GL_RGBA8UI;
-            textureFormatID         = angle::Format::ID::R8G8B8A8_UINT;
-            vkTextureFormat         = VK_FORMAT_R8G8B8A8_UINT;
-            bufferFormatID          = angle::Format::ID::R8G8B8A8_UINT;
-            vkBufferFormat          = VK_FORMAT_R8G8B8A8_UINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA8UI;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8B8A8_UINT,
+                              VK_FORMAT_R8G8B8A8_UINT, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8B8A8_UINT,
+                             VK_FORMAT_R8G8B8A8_UINT, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8B8A8_UNORM:
-        {
-            internalFormat          = GL_RGBA8;
-            textureFormatID         = angle::Format::ID::R8G8B8A8_UNORM;
-            vkTextureFormat         = VK_FORMAT_R8G8B8A8_UNORM;
-            bufferFormatID          = angle::Format::ID::R8G8B8A8_UNORM;
-            vkBufferFormat          = VK_FORMAT_R8G8B8A8_UNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA8;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8B8A8_UNORM,
+                              VK_FORMAT_R8G8B8A8_UNORM, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8B8A8_UNORM,
+                             VK_FORMAT_R8G8B8A8_UNORM, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8B8A8_UNORM_SRGB:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_SRGB8_ALPHA8;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R8G8B8A8_USCALED:
-        {
-            internalFormat          = GL_RGBA8_USCALED_ANGLEX;
-            textureFormatID         = angle::Format::ID::R8G8B8A8_USCALED;
-            vkTextureFormat         = VK_FORMAT_R8G8B8A8_USCALED;
-            bufferFormatID          = angle::Format::ID::R8G8B8A8_USCALED;
-            vkBufferFormat          = VK_FORMAT_R8G8B8A8_USCALED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGBA8_USCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8B8A8_USCALED,
+                              VK_FORMAT_R8G8B8A8_USCALED, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8B8A8_USCALED,
+                             VK_FORMAT_R8G8B8A8_USCALED, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8B8_SINT:
-        {
-            internalFormat          = GL_RGB8I;
-            textureFormatID         = angle::Format::ID::R8G8B8_SINT;
-            vkTextureFormat         = VK_FORMAT_R8G8B8_SINT;
-            bufferFormatID          = angle::Format::ID::R8G8B8_SINT;
-            vkBufferFormat          = VK_FORMAT_R8G8B8_SINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB8I;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8B8_SINT, VK_FORMAT_R8G8B8_SINT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8B8_SINT, VK_FORMAT_R8G8B8_SINT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8B8_SNORM:
-        {
-            internalFormat          = GL_RGB8_SNORM;
-            textureFormatID         = angle::Format::ID::R8G8B8_SNORM;
-            vkTextureFormat         = VK_FORMAT_R8G8B8_SNORM;
-            bufferFormatID          = angle::Format::ID::R8G8B8_SNORM;
-            vkBufferFormat          = VK_FORMAT_R8G8B8_SNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB8_SNORM;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8B8_SNORM,
+                              VK_FORMAT_R8G8B8_SNORM, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8B8_SNORM,
+                             VK_FORMAT_R8G8B8_SNORM, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8B8_SSCALED:
-        {
-            internalFormat          = GL_RGB8_SSCALED_ANGLEX;
-            textureFormatID         = angle::Format::ID::R8G8B8_SSCALED;
-            vkTextureFormat         = VK_FORMAT_R8G8B8_SSCALED;
-            bufferFormatID          = angle::Format::ID::R8G8B8_SSCALED;
-            vkBufferFormat          = VK_FORMAT_R8G8B8_SSCALED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB8_SSCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8B8_SSCALED,
+                              VK_FORMAT_R8G8B8_SSCALED, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8B8_SSCALED,
+                             VK_FORMAT_R8G8B8_SSCALED, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8B8_UINT:
-        {
-            internalFormat          = GL_RGB8UI;
-            textureFormatID         = angle::Format::ID::R8G8B8_UINT;
-            vkTextureFormat         = VK_FORMAT_R8G8B8_UINT;
-            bufferFormatID          = angle::Format::ID::R8G8B8_UINT;
-            vkBufferFormat          = VK_FORMAT_R8G8B8_UINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB8UI;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8B8_UINT, VK_FORMAT_R8G8B8_UINT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8B8_UINT, VK_FORMAT_R8G8B8_UINT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8B8_UNORM:
-        {
-            internalFormat          = GL_RGB8;
-            textureFormatID         = angle::Format::ID::R8G8B8A8_UNORM;
-            vkTextureFormat         = VK_FORMAT_R8G8B8A8_UNORM;
-            bufferFormatID          = angle::Format::ID::R8G8B8_UNORM;
-            vkBufferFormat          = VK_FORMAT_R8G8B8_UNORM;
-            dataInitializerFunction = Initialize4ComponentData<GLubyte, 0x00, 0x00, 0x00, 0xFF>;
+            internalFormat = GL_RGB8;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8B8A8_UNORM,
+                              VK_FORMAT_R8G8B8A8_UNORM,
+                              Initialize4ComponentData<GLubyte, 0x00, 0x00, 0x00, 0xFF>,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8B8_UNORM,
+                             VK_FORMAT_R8G8B8_UNORM, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8B8_UNORM_SRGB:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_SRGB8;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::R8G8B8_USCALED:
-        {
-            internalFormat          = GL_RGB8_USCALED_ANGLEX;
-            textureFormatID         = angle::Format::ID::R8G8B8_USCALED;
-            vkTextureFormat         = VK_FORMAT_R8G8B8_USCALED;
-            bufferFormatID          = angle::Format::ID::R8G8B8_USCALED;
-            vkBufferFormat          = VK_FORMAT_R8G8B8_USCALED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RGB8_USCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8B8_USCALED,
+                              VK_FORMAT_R8G8B8_USCALED, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8B8_USCALED,
+                             VK_FORMAT_R8G8B8_USCALED, angle::Format::ID::NONE,
+                             VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8_SINT:
-        {
-            internalFormat          = GL_RG8I;
-            textureFormatID         = angle::Format::ID::R8G8_SINT;
-            vkTextureFormat         = VK_FORMAT_R8G8_SINT;
-            bufferFormatID          = angle::Format::ID::R8G8_SINT;
-            vkBufferFormat          = VK_FORMAT_R8G8_SINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RG8I;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8_SINT, VK_FORMAT_R8G8_SINT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8_SINT, VK_FORMAT_R8G8_SINT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8_SNORM:
-        {
-            internalFormat          = GL_RG8_SNORM;
-            textureFormatID         = angle::Format::ID::R8G8_SNORM;
-            vkTextureFormat         = VK_FORMAT_R8G8_SNORM;
-            bufferFormatID          = angle::Format::ID::R8G8_SNORM;
-            vkBufferFormat          = VK_FORMAT_R8G8_SNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RG8_SNORM;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8_SNORM, VK_FORMAT_R8G8_SNORM,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8_SNORM, VK_FORMAT_R8G8_SNORM,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8_SSCALED:
-        {
-            internalFormat          = GL_RG8_SSCALED_ANGLEX;
-            textureFormatID         = angle::Format::ID::R8G8_SSCALED;
-            vkTextureFormat         = VK_FORMAT_R8G8_SSCALED;
-            bufferFormatID          = angle::Format::ID::R8G8_SSCALED;
-            vkBufferFormat          = VK_FORMAT_R8G8_SSCALED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RG8_SSCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8_SSCALED,
+                              VK_FORMAT_R8G8_SSCALED, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8_SSCALED,
+                             VK_FORMAT_R8G8_SSCALED, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8_UINT:
-        {
-            internalFormat          = GL_RG8UI;
-            textureFormatID         = angle::Format::ID::R8G8_UINT;
-            vkTextureFormat         = VK_FORMAT_R8G8_UINT;
-            bufferFormatID          = angle::Format::ID::R8G8_UINT;
-            vkBufferFormat          = VK_FORMAT_R8G8_UINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RG8UI;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8_UINT, VK_FORMAT_R8G8_UINT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8_UINT, VK_FORMAT_R8G8_UINT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8_UNORM:
-        {
-            internalFormat          = GL_RG8;
-            textureFormatID         = angle::Format::ID::R8G8_UNORM;
-            vkTextureFormat         = VK_FORMAT_R8G8_UNORM;
-            bufferFormatID          = angle::Format::ID::R8G8_UNORM;
-            vkBufferFormat          = VK_FORMAT_R8G8_UNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RG8;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8_UNORM, VK_FORMAT_R8G8_UNORM,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8_UNORM, VK_FORMAT_R8G8_UNORM,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8G8_USCALED:
-        {
-            internalFormat          = GL_RG8_USCALED_ANGLEX;
-            textureFormatID         = angle::Format::ID::R8G8_USCALED;
-            vkTextureFormat         = VK_FORMAT_R8G8_USCALED;
-            bufferFormatID          = angle::Format::ID::R8G8_USCALED;
-            vkBufferFormat          = VK_FORMAT_R8G8_USCALED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_RG8_USCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::R8G8_USCALED,
+                              VK_FORMAT_R8G8_USCALED, nullptr, angle::Format::ID::NONE,
+                              VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8G8_USCALED,
+                             VK_FORMAT_R8G8_USCALED, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8_SINT:
-        {
-            internalFormat          = GL_R8I;
-            textureFormatID         = angle::Format::ID::R8_SINT;
-            vkTextureFormat         = VK_FORMAT_R8_SINT;
-            bufferFormatID          = angle::Format::ID::R8_SINT;
-            vkBufferFormat          = VK_FORMAT_R8_SINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_R8I;
+            initializeTexture(physicalDevice, angle::Format::ID::R8_SINT, VK_FORMAT_R8_SINT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8_SINT, VK_FORMAT_R8_SINT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8_SNORM:
-        {
-            internalFormat          = GL_R8_SNORM;
-            textureFormatID         = angle::Format::ID::R8_SNORM;
-            vkTextureFormat         = VK_FORMAT_R8_SNORM;
-            bufferFormatID          = angle::Format::ID::R8_SNORM;
-            vkBufferFormat          = VK_FORMAT_R8_SNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_R8_SNORM;
+            initializeTexture(physicalDevice, angle::Format::ID::R8_SNORM, VK_FORMAT_R8_SNORM,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8_SNORM, VK_FORMAT_R8_SNORM,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8_SSCALED:
-        {
-            internalFormat          = GL_R8_SSCALED_ANGLEX;
-            textureFormatID         = angle::Format::ID::R8_SSCALED;
-            vkTextureFormat         = VK_FORMAT_R8_SSCALED;
-            bufferFormatID          = angle::Format::ID::R8_SSCALED;
-            vkBufferFormat          = VK_FORMAT_R8_SSCALED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_R8_SSCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::R8_SSCALED, VK_FORMAT_R8_SSCALED,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8_SSCALED, VK_FORMAT_R8_SSCALED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8_UINT:
-        {
-            internalFormat          = GL_R8UI;
-            textureFormatID         = angle::Format::ID::R8_UINT;
-            vkTextureFormat         = VK_FORMAT_R8_UINT;
-            bufferFormatID          = angle::Format::ID::R8_UINT;
-            vkBufferFormat          = VK_FORMAT_R8_UINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_R8UI;
+            initializeTexture(physicalDevice, angle::Format::ID::R8_UINT, VK_FORMAT_R8_UINT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8_UINT, VK_FORMAT_R8_UINT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8_UNORM:
-        {
-            internalFormat          = GL_R8;
-            textureFormatID         = angle::Format::ID::R8_UNORM;
-            vkTextureFormat         = VK_FORMAT_R8_UNORM;
-            bufferFormatID          = angle::Format::ID::R8_UNORM;
-            vkBufferFormat          = VK_FORMAT_R8_UNORM;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_R8;
+            initializeTexture(physicalDevice, angle::Format::ID::R8_UNORM, VK_FORMAT_R8_UNORM,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8_UNORM, VK_FORMAT_R8_UNORM,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R8_USCALED:
-        {
-            internalFormat          = GL_R8_USCALED_ANGLEX;
-            textureFormatID         = angle::Format::ID::R8_USCALED;
-            vkTextureFormat         = VK_FORMAT_R8_USCALED;
-            bufferFormatID          = angle::Format::ID::R8_USCALED;
-            vkBufferFormat          = VK_FORMAT_R8_USCALED;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_R8_USCALED_ANGLEX;
+            initializeTexture(physicalDevice, angle::Format::ID::R8_USCALED, VK_FORMAT_R8_USCALED,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::R8_USCALED, VK_FORMAT_R8_USCALED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         case angle::Format::ID::R9G9B9E5_SHAREDEXP:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB9_E5;
+            initializeTexture(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr,
+                              angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
 
         case angle::Format::ID::S8_UINT:
-        {
-            internalFormat          = GL_STENCIL_INDEX8;
-            textureFormatID         = angle::Format::ID::S8_UINT;
-            vkTextureFormat         = VK_FORMAT_S8_UINT;
-            bufferFormatID          = angle::Format::ID::S8_UINT;
-            vkBufferFormat          = VK_FORMAT_S8_UINT;
-            dataInitializerFunction = nullptr;
+            internalFormat = GL_STENCIL_INDEX8;
+            initializeTexture(physicalDevice, angle::Format::ID::S8_UINT, VK_FORMAT_S8_UINT,
+                              nullptr, angle::Format::ID::NONE, VK_FORMAT_UNDEFINED, nullptr);
+            initializeBuffer(physicalDevice, angle::Format::ID::S8_UINT, VK_FORMAT_S8_UINT,
+                             angle::Format::ID::NONE, VK_FORMAT_UNDEFINED);
             break;
-        }
 
         default:
             UNREACHABLE();

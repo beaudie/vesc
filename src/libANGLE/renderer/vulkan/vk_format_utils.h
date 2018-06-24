@@ -13,6 +13,7 @@
 
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/Format.h"
+#include "libANGLE/renderer/copyvertex.h"
 #include "libANGLE/renderer/renderer_utils.h"
 
 #include <array>
@@ -41,6 +42,20 @@ struct Format final : private angle::NonCopyable
     // This is an auto-generated method in vk_format_table_autogen.cpp.
     void initialize(VkPhysicalDevice physicalDevice, const angle::Format &angleFormat);
 
+    void initializeTexture(VkPhysicalDevice physicalDevice,
+                           angle::Format::ID format,
+                           VkFormat vkFormat,
+                           InitializeTextureDataFunction initializer,
+                           angle::Format::ID fallbackFormat,
+                           VkFormat fallbackVkFormat,
+                           InitializeTextureDataFunction fallbackInitializer);
+
+    void initializeBuffer(VkPhysicalDevice physicalDevice,
+                          angle::Format::ID format,
+                          VkFormat vkFormat,
+                          angle::Format::ID fallbackFormat,
+                          VkFormat fallbackVkFormat);
+
     const angle::Format &textureFormat() const;
     const angle::Format &bufferFormat() const;
     const angle::Format &angleFormat() const;
@@ -53,6 +68,8 @@ struct Format final : private angle::NonCopyable
     VkFormat vkBufferFormat;
     InitializeTextureDataFunction dataInitializerFunction;
     LoadFunctionMap loadFunctions;
+    VertexCopyFunction vertexCopyFunction;
+    bool vertexRequiresConversion;
 };
 
 bool operator==(const Format &lhs, const Format &rhs);
@@ -82,8 +99,6 @@ class FormatTable final : angle::NonCopyable
 // of the Vulkan spec. If the vkFormat isn't mandatory, it will return a VkFormatProperties
 // initialized to 0.
 const VkFormatProperties &GetMandatoryFormatSupport(VkFormat vkFormat);
-
-bool HasFullFormatSupport(VkPhysicalDevice physicalDevice, VkFormat vkFormat);
 
 }  // namespace vk
 
