@@ -76,9 +76,11 @@ def gen_format_case(angle, internal_format, vk_json_data):
         angle_format.get_internal_format_initializer(internal_format, texture_format_fallback)))
 
     buffer_format, buffer_format_fallback = get_formats(angle, "buffer")
-    body.append("initializeBuffer(physicalDevice, angle::Format::ID::%s, %s, angle::Format::ID::%s, %s);" % (
+    body.append("initializeBuffer(physicalDevice, angle::Format::ID::%s, %s, %s, %s, angle::Format::ID::%s, %s, %s);" % (
         buffer_format, vk_map[buffer_format],
-        buffer_format_fallback, vk_map[buffer_format_fallback]))
+        angle_format.get_vertex_copy_function(angle, buffer_format), 'false' if angle == buffer_format else 'true',
+        buffer_format_fallback, vk_map[buffer_format_fallback],
+        angle_format.get_vertex_copy_function(angle, buffer_format_fallback)))
 
     body.append("break;")
     return "        case angle::Format::ID::%s:\n" % angle + ''.join('            %s\n' % i for i in body)
