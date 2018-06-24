@@ -399,7 +399,8 @@ void AttributeLayoutTest::GetTestCases(void)
     }
     else
     {
-        // TODO(fjhenigman): Enable these once vertex format conversion is implemented.  anglebug.com/2405
+        // TODO(fjhenigman): Enable these once vertex format conversion is implemented.
+        // anglebug.com/2405
         mTestCases.push_back({SByte(M0, 0, 20, mCoord), UByte(M0, 10, 20, mColor)});
         mTestCases.push_back({SShort(M0, 0, 20, mCoord), UShort(M0, 8, 20, mColor)});
         mTestCases.push_back({NormSByte(M0, 0, 8, mCoord), NormUByte(M0, 4, 8, mColor)});

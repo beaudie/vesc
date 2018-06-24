@@ -56,6 +56,13 @@ bool HasFullTextureFormatSupport(VkPhysicalDevice physicalDevice, VkFormat vkFor
            HasFormatFeatureBits(kBitsDepth, formatProperties);
 }
 
+bool HasFullBufferFormatSupport(VkPhysicalDevice physicalDevice, VkFormat vkFormat)
+{
+    VkFormatProperties formatProperties;
+    vk::GetFormatProperties(physicalDevice, vkFormat, &formatProperties);
+    return formatProperties.bufferFeatures & VK_FORMAT_FEATURE_VERTEX_BUFFER_BIT;
+}
+
 }  // anonymous namespace
 
 namespace vk
@@ -124,21 +131,43 @@ void Format::initializeTexture(VkPhysicalDevice physicalDevice,
     }
 }
 
-void Format::initializeBuffer(VkPhysicalDevice,
+void Format::initializeBuffer(VkPhysicalDevice physicalDevice,
                               angle::Format::ID format,
                               VkFormat vkFormat,
                               angle::Format::ID fallbackFormat,
-                              VkFormat fallbackVkFormat)
+                              VkFormat fallbackVkFormat,
+                              VertexCopyFunction copy,
+                              VertexCopyFunction convert)
 {
-
     if (format == angle::Format::ID::NONE)
         return;
 
-    // TODO(fjhenigman): Implement fallback.  anglebug.com/2405
-    ASSERT(fallbackFormat == angle::Format::ID::NONE);
+    if (fallbackFormat != angle::Format::ID::NONE &&
+        !HasFullBufferFormatSupport(physicalDevice, vkFormat))
+    {
+        bufferFormatID               = fallbackFormat;
+        vkBufferFormat               = fallbackVkFormat;
+        vertexLoadFunction           = convert;
+        vertexLoadRequiresConversion = true;
+    }
+    else
+    {
+        bufferFormatID = format;
+        vkBufferFormat = vkFormat;
 
-    bufferFormatID = format;
-    vkBufferFormat = vkFormat;
+        if (convert)
+        {
+            // there is a fallback, but not used, we get here, which is wrong
+            vertexLoadFunction           = convert;
+            vertexLoadRequiresConversion = true;
+        }
+        else
+        {
+            vertexLoadFunction           = copy;
+            vertexLoadRequiresConversion = false;
+        }
+    }
+            vertexLoadFunction           = copy;
 }
 
 const angle::Format &Format::textureFormat() const
