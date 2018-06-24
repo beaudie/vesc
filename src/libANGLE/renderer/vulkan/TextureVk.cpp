@@ -570,7 +570,7 @@ gl::Error TextureVk::copySubImageImpl(const gl::Context *context,
     const gl::Offset modifiedDestOffset(destOffset.x + sourceArea.x - sourceArea.x,
                                         destOffset.y + sourceArea.y - sourceArea.y, 0);
 
-    ContextVk *contextVk = vk::GetImpl(context);
+    ContextVk *contextVk         = vk::GetImpl(context);
     RendererVk *renderer         = contextVk->getRenderer();
     FramebufferVk *framebufferVk = vk::GetImpl(source);
 
@@ -970,7 +970,7 @@ vk::Error TextureVk::initImage(ContextVk *contextVk,
                                vk::CommandBuffer *commandBuffer)
 {
     const RendererVk *renderer = contextVk->getRenderer();
-    const VkDevice device = renderer->getDevice();
+    const VkDevice device      = renderer->getDevice();
 
     const VkImageUsageFlags usage =
         (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
