@@ -39,7 +39,24 @@ struct Format final : private angle::NonCopyable
     bool valid() const { return internalFormat != 0; }
 
     // This is an auto-generated method in vk_format_table_autogen.cpp.
-    void initialize(VkPhysicalDevice physicalDevice, const angle::Format &angleFormat);
+    void initialize(VkPhysicalDevice physicalDevice,
+                    const angle::Format &angleFormat,
+                    VkFormatProperties *textureFormatPropertiesOut);
+
+    void initTextureFallback(VkPhysicalDevice physicalDevice,
+                             angle::Format::ID format,
+                             VkFormat vkFormat,
+                             InitializeTextureDataFunction initializer,
+                             angle::Format::ID fallbackFormat,
+                             VkFormat fallbackVkFormat,
+                             InitializeTextureDataFunction fallbackInitializer,
+                             VkFormatProperties *textureFormatPropertiesOut);
+
+    void initBufferFallback(VkPhysicalDevice physicalDevice,
+                            angle::Format::ID format,
+                            VkFormat vkFormat,
+                            angle::Format::ID fallbackFormat,
+                            VkFormat fallbackVkFormat);
 
     const angle::Format &textureFormat() const;
     const angle::Format &bufferFormat() const;
@@ -52,7 +69,7 @@ struct Format final : private angle::NonCopyable
     angle::Format::ID bufferFormatID;
     VkFormat vkBufferFormat;
     InitializeTextureDataFunction dataInitializerFunction;
-    LoadFunctionMap loadFunctions;
+    LoadFunctionMap textureLoadFunctions;
 };
 
 bool operator==(const Format &lhs, const Format &rhs);
@@ -82,8 +99,6 @@ class FormatTable final : angle::NonCopyable
 // of the Vulkan spec. If the vkFormat isn't mandatory, it will return a VkFormatProperties
 // initialized to 0.
 const VkFormatProperties &GetMandatoryFormatSupport(VkFormat vkFormat);
-
-bool HasFullFormatSupport(VkPhysicalDevice physicalDevice, VkFormat vkFormat);
 
 }  // namespace vk
 

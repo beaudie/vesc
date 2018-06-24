@@ -137,7 +137,7 @@ gl::Error PixelBuffer::stageSubresourceUpdate(ContextVk *contextVk,
 
     const uint8_t *source = pixels + inputSkipBytes;
 
-    LoadImageFunctionInfo loadFunction = vkFormat.loadFunctions(type);
+    LoadImageFunctionInfo loadFunction = vkFormat.textureLoadFunctions(type);
 
     loadFunction.loadFunction(extents.width, extents.height, extents.depth, source, inputRowPitch,
                               inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);
@@ -183,7 +183,7 @@ gl::Error PixelBuffer::stageSubresourceUpdateFromFramebuffer(const gl::Context *
 
     const vk::Format &vkFormat         = renderer->getFormat(formatInfo.sizedInternalFormat);
     const angle::Format &storageFormat = vkFormat.textureFormat();
-    LoadImageFunctionInfo loadFunction = vkFormat.loadFunctions(formatInfo.type);
+    LoadImageFunctionInfo loadFunction = vkFormat.textureLoadFunctions(formatInfo.type);
 
     size_t outputRowPitch   = storageFormat.pixelBytes * clippedRectangle.width;
     size_t outputDepthPitch = outputRowPitch * clippedRectangle.height;
@@ -570,7 +570,7 @@ gl::Error TextureVk::copySubImageImpl(const gl::Context *context,
     const gl::Offset modifiedDestOffset(destOffset.x + sourceArea.x - sourceArea.x,
                                         destOffset.y + sourceArea.y - sourceArea.y, 0);
 
-    ContextVk *contextVk = vk::GetImpl(context);
+    ContextVk *contextVk         = vk::GetImpl(context);
     RendererVk *renderer         = contextVk->getRenderer();
     FramebufferVk *framebufferVk = vk::GetImpl(source);
 
@@ -970,7 +970,7 @@ vk::Error TextureVk::initImage(ContextVk *contextVk,
                                vk::CommandBuffer *commandBuffer)
 {
     const RendererVk *renderer = contextVk->getRenderer();
-    const VkDevice device = renderer->getDevice();
+    const VkDevice device      = renderer->getDevice();
 
     const VkImageUsageFlags usage =
         (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
