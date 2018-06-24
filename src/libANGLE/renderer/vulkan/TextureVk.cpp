@@ -137,7 +137,7 @@ gl::Error PixelBuffer::stageSubresourceUpdate(ContextVk *contextVk,
 
     const uint8_t *source = pixels + inputSkipBytes;
 
-    LoadImageFunctionInfo loadFunction = vkFormat.loadFunctions(type);
+    LoadImageFunctionInfo loadFunction = vkFormat.textureLoadFunctions(type);
 
     loadFunction.loadFunction(extents.width, extents.height, extents.depth, source, inputRowPitch,
                               inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);
@@ -183,7 +183,7 @@ gl::Error PixelBuffer::stageSubresourceUpdateFromFramebuffer(const gl::Context *
 
     const vk::Format &vkFormat         = renderer->getFormat(formatInfo.sizedInternalFormat);
     const angle::Format &storageFormat = vkFormat.textureFormat();
-    LoadImageFunctionInfo loadFunction = vkFormat.loadFunctions(formatInfo.type);
+    LoadImageFunctionInfo loadFunction = vkFormat.textureLoadFunctions(formatInfo.type);
 
     size_t outputRowPitch   = storageFormat.pixelBytes * clippedRectangle.width;
     size_t outputDepthPitch = outputRowPitch * clippedRectangle.height;
