@@ -145,7 +145,7 @@ gl::Error ContextVk::initPipeline()
     mPipelineDesc->updateTopology(mCurrentDrawMode);
 
     // Copy over the latest attrib and binding descriptions.
-    vertexArrayVk->getPackedInputDescriptions(mRenderer, mPipelineDesc.get());
+    vertexArrayVk->getPackedInputDescriptions(mPipelineDesc.get());
 
     // Ensure that the RenderPass description is updated.
     mPipelineDesc->updateRenderPassDesc(framebufferVk->getRenderPassDesc());
@@ -234,8 +234,8 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
 
     // Bind the graphics descriptor sets.
     // TODO(jmadill): Handle multiple command buffers.
-    const auto &descriptorSets   = programVk->getDescriptorSets();
-    const gl::RangeUI &usedRange = programVk->getUsedDescriptorSetRange();
+    const auto &descriptorSets               = programVk->getDescriptorSets();
+    const gl::RangeUI &usedRange             = programVk->getUsedDescriptorSetRange();
     const vk::PipelineLayout &pipelineLayout = programVk->getPipelineLayout();
     if (!usedRange.empty())
     {
