@@ -882,10 +882,12 @@ Program::Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, GLui
     : mProgram(factory->createProgram(mState)),
       mValidated(false),
       mLinked(false),
+      mIsLinking(false),
       mDeleteStatus(false),
       mRefCount(0),
       mResourceManager(manager),
-      mHandle(handle)
+      mHandle(handle),
+      mLinkedResources(mState)
 {
     ASSERT(mProgram);
 
@@ -1096,16 +1098,12 @@ Error Program::link(const gl::Context *context)
 
     if (mState.mAttachedShaders[ShaderType::Compute])
     {
-        ProgramLinkedResources resources = {
-            {0, PackMode::ANGLE_RELAXED},
-            {&mState.mUniformBlocks, &mState.mUniforms},
-            {&mState.mShaderStorageBlocks, &mState.mBufferVariables},
-            {&mState.mAtomicCounterBuffers},
-            {}};
+        mLinkedResources.varyingPacking.initialize(0, PackMode::ANGLE_RELAXED);
+        mLinkedResources.unusedUniforms.clear();
 
         GLuint combinedImageUniforms = 0u;
         if (!linkUniforms(context, mInfoLog, mUniformLocationBindings, &combinedImageUniforms,
-                          &resources.unusedUniforms))
+                          &mLinkedResources.unusedUniforms))
         {
             return NoError();
         }
@@ -1132,10 +1130,10 @@ Error Program::link(const gl::Context *context)
             return NoError();
         }
 
-        InitUniformBlockLinker(context, mState, &resources.uniformBlockLinker);
-        InitShaderStorageBlockLinker(context, mState, &resources.shaderStorageBlockLinker);
+        InitUniformBlockLinker(context, mState, &mLinkedResources.uniformBlockLinker);
+        InitShaderStorageBlockLinker(context, mState, &mLinkedResources.shaderStorageBlockLinker);
 
-        ANGLE_TRY_RESULT(mProgram->link(context, resources, mInfoLog), mLinked);
+        ANGLE_TRY_RESULT(mProgram->link(context, mLinkedResources, mInfoLog), mLinked);
         if (!mLinked)
         {
             return NoError();
@@ -1156,12 +1154,8 @@ Error Program::link(const gl::Context *context)
             packMode = PackMode::WEBGL_STRICT;
         }
 
-        ProgramLinkedResources resources = {
-            {data.getCaps().maxVaryingVectors, packMode},
-            {&mState.mUniformBlocks, &mState.mUniforms},
-            {&mState.mShaderStorageBlocks, &mState.mBufferVariables},
-            {&mState.mAtomicCounterBuffers},
-            {}};
+        mLinkedResources.varyingPacking.initialize(data.getCaps().maxVaryingVectors, packMode);
+        mLinkedResources.unusedUniforms.clear();
 
         if (!linkAttributes(context, mInfoLog))
         {
@@ -1175,7 +1169,7 @@ Error Program::link(const gl::Context *context)
 
         GLuint combinedImageUniforms = 0u;
         if (!linkUniforms(context, mInfoLog, mUniformLocationBindings, &combinedImageUniforms,
-                          &resources.unusedUniforms))
+                          &mLinkedResources.unusedUniforms))
         {
             return NoError();
         }
@@ -1201,21 +1195,21 @@ Error Program::link(const gl::Context *context)
         ASSERT(mState.mAttachedShaders[ShaderType::Vertex]);
         mState.mNumViews = mState.mAttachedShaders[ShaderType::Vertex]->getNumViews(context);
 
-        InitUniformBlockLinker(context, mState, &resources.uniformBlockLinker);
-        InitShaderStorageBlockLinker(context, mState, &resources.shaderStorageBlockLinker);
+        InitUniformBlockLinker(context, mState, &mLinkedResources.uniformBlockLinker);
+        InitShaderStorageBlockLinker(context, mState, &mLinkedResources.shaderStorageBlockLinker);
 
         if (!linkValidateTransformFeedback(context, mInfoLog, mergedVaryings, context->getCaps()))
         {
             return NoError();
         }
 
-        if (!resources.varyingPacking.collectAndPackUserVaryings(
+        if (!mLinkedResources.varyingPacking.collectAndPackUserVaryings(
                 mInfoLog, mergedVaryings, mState.getTransformFeedbackVaryingNames()))
         {
             return NoError();
         }
 
-        ANGLE_TRY_RESULT(mProgram->link(context, resources, mInfoLog), mLinked);
+        ANGLE_TRY_RESULT(mProgram->link(context, mLinkedResources, mInfoLog), mLinked);
         if (!mLinked)
         {
             return NoError();
@@ -1248,6 +1242,47 @@ Error Program::link(const gl::Context *context)
     ANGLE_HISTOGRAM_COUNTS("GPU.ANGLE.ProgramCache.ProgramCacheMissTimeUS", us);
 
     return NoError();
+}
+
+void Program::resolveLink()
+{
+    if (!mIsLinking)
+    {
+        return;
+    }
+
+    LinkResult linkResult = mProgram->link(mLinkingContext, mLinkedResources, mInfoLog);
+    mIsLinking            = false;
+    if (linkResult.isError() || !linkResult.getResult())
+    {
+        mLinked = false;
+        return;
+    }
+    if (!mState.mAttachedShaders[ShaderType::Compute])
+    {
+        const auto &mergedVaryings = getMergedVaryings(mLinkingContext);
+        gatherTransformFeedbackVaryings(mergedVaryings);
+    }
+
+    initInterfaceBlockBindings();
+
+    setUniformValuesFromBindingQualifiers();
+
+    // According to GLES 3.0/3.1 spec for LinkProgram and UseProgram,
+    // Only successfully linked program can replace the executables.
+    updateLinkedShaderStages();
+
+    // Mark implementation-specific unreferenced uniforms as ignored.
+    mProgram->markUnusedUniformLocations(&mState.mUniformLocations, &mState.mSamplerBindings);
+
+    // Save to the program cache.
+    MemoryProgramCache *cache = mLinkingContext->getMemoryProgramCache();
+    if (cache && (mState.mLinkedTransformFeedbackVaryings.empty() ||
+                  !mLinkingContext->getWorkarounds().disableProgramCachingForTransformFeedback))
+    {
+        cache->putProgram(mProgramHash, mLinkingContext, this);
+    }
+    mLinked = true;
 }
 
 void Program::updateLinkedShaderStages()
