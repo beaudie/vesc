@@ -56,12 +56,27 @@ bool ComparePackedVarying(const PackedVarying &x, const PackedVarying &y)
 }  // anonymous namespace
 
 // Implementation of VaryingPacking
+VaryingPacking::VaryingPacking() : mPackMode(PackMode::WEBGL_STRICT)
+{
+}
+
 VaryingPacking::VaryingPacking(GLuint maxVaryingVectors, PackMode packMode)
     : mRegisterMap(maxVaryingVectors), mPackMode(packMode)
 {
 }
 
 VaryingPacking::~VaryingPacking() = default;
+
+void VaryingPacking::initialize(GLuint maxVaryingVectors, PackMode packMode)
+{
+    std::vector<Register> registerMap(maxVaryingVectors);
+    mRegisterMap.swap(registerMap);
+    mPackMode = packMode;
+
+    mRegisterList.clear();
+    mPackedVaryings.clear();
+    mInactiveVaryingNames.clear();
+}
 
 // Packs varyings into generic varying registers, using the algorithm from
 // See [OpenGL ES Shading Language 1.00 rev. 17] appendix A section 7 page 111
