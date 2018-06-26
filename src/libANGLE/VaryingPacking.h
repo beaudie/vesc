@@ -149,8 +149,11 @@ enum class PackMode
 class VaryingPacking final : angle::NonCopyable
 {
   public:
+    VaryingPacking();
     VaryingPacking(GLuint maxVaryingVectors, PackMode packMode);
     ~VaryingPacking();
+
+    void initialize(GLuint maxVaryingVectors, PackMode packMode);
 
     bool packUserVaryings(gl::InfoLog &infoLog,
                           const std::vector<PackedVarying> &packedVaryings,
