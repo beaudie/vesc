@@ -813,9 +813,6 @@ struct ClientExtensions
     // EGL_ANGLE_platform_angle_vulkan
     bool platformANGLEVulkan;
 
-    // EGL_ANGLE_platform_angle_context_virtualization
-    bool platformANGLEContextVirtualization;
-
     // EGL_ANGLE_device_creation
     bool deviceCreation;
 
@@ -831,11 +828,11 @@ struct ClientExtensions
     // EGL_KHR_client_get_all_proc_addresses
     bool clientGetAllProcAddresses;
 
-    // EGL_KHR_debug
-    bool debug;
-
     // EGL_ANGLE_explicit_context
     bool explicitContext;
+
+    // EGL_KHR_debug
+    bool debug;
 };
 
 }  // namespace egl
