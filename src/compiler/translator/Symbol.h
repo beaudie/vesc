@@ -234,6 +234,7 @@ class TFunction : public TSymbol
 
     bool isMain() const;
     bool isImageFunction() const;
+    bool containsStructSamplerParams() const;
 
     // Note: Only to be used for static built-in functions!
     constexpr TFunction(const TSymbolUniqueId &id,
