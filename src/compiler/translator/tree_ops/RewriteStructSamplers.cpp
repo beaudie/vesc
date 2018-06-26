@@ -20,7 +20,7 @@ class Traverser final : public TIntermTraverser
 {
   public:
     explicit Traverser(TSymbolTable *symbolTable)
-        : TIntermTraverser(true, false, false, symbolTable), mRemovedUniformsCount(0)
+        : TIntermTraverser(true, false, true, symbolTable), mRemovedUniformsCount(0)
     {
         mSymbolTable->push();
     }
@@ -31,7 +31,8 @@ class Traverser final : public TIntermTraverser
 
     bool visitDeclaration(Visit visit, TIntermDeclaration *decl) override
     {
-        ASSERT(visit == PreVisit);
+        if (visit != PreVisit)
+            return true;
 
         if (!mInGlobalScope)
         {
@@ -67,6 +68,9 @@ class Traverser final : public TIntermTraverser
 
     bool visitBinary(Visit visit, TIntermBinary *node) override
     {
+        if (visit != PreVisit)
+            return true;
+
         if (node->getOp() == EOpIndexDirectStruct && node->getType().isSampler())
         {
             std::string stringBuilder;
@@ -119,6 +123,57 @@ class Traverser final : public TIntermTraverser
         return true;
     }
 
+    void visitFunctionPrototype(TIntermFunctionPrototype *node) override
+    {
+        const TFunction *function = node->getFunction();
+
+        if (!function->containsStructSamplerParams())
+        {
+            return;
+        }
+
+        TFunction *newFunction = createStructSamplerFunction(function);
+        mSymbolTable->declareUserDefinedFunction(newFunction, true);
+        TIntermFunctionPrototype *newProto = new TIntermFunctionPrototype(newFunction);
+        queueReplacement(newProto, OriginalNode::IS_DROPPED);
+    }
+
+    bool visitFunctionDefinition(Visit visit, TIntermFunctionDefinition *node) override
+    {
+        if (visit == PreVisit)
+        {
+            mSymbolTable->push();
+        }
+        else
+        {
+            ASSERT(visit == PostVisit);
+            mSymbolTable->pop();
+        }
+        return true;
+    }
+
+    bool visitAggregate(Visit visit, TIntermAggregate *node) override
+    {
+        if (visit != PreVisit)
+            return true;
+
+        if (!node->isFunctionCall())
+            return true;
+
+        const TFunction *function = node->getFunction();
+        if (!function->containsStructSamplerParams())
+            return true;
+
+        ASSERT(node->getOp() == EOpCallFunctionInAST);
+        TFunction *newFunction        = mSymbolTable->findUserDefinedFunction(function->name());
+        TIntermSequence *newArguments = getStructSamplerArguments(function, node->getSequence());
+
+        TIntermAggregate *newCall =
+            TIntermAggregate::CreateFunctionCall(*newFunction, newArguments);
+        queueReplacement(newCall, OriginalNode::IS_DROPPED);
+        return true;
+    }
+
   private:
     void stripStructSpecifierSamplers(const TStructure *structure, TIntermSequence *newSequence)
     {
@@ -155,6 +210,8 @@ class Traverser final : public TIntermTraverser
         structDecl->appendDeclarator(newStructRef);
 
         newSequence->push_back(structDecl);
+
+        mSymbolTable->declare(newStruct);
     }
 
     bool isRemovedStructType(const TType &type) const
@@ -251,7 +308,7 @@ class Traverser final : public TIntermTraverser
 
     void extractSampler(const ImmutableString &newName,
                         const TType &fieldType,
-                        TIntermSequence *newSequence)
+                        TIntermSequence *newSequence) const
     {
         TType *newType = new TType(fieldType);
         newType->setQualifier(EvqUniform);
@@ -265,6 +322,208 @@ class Traverser final : public TIntermTraverser
         newSequence->push_back(samplerDecl);
 
         mSymbolTable->declareInternal(newVariable);
+    }
+
+    static ImmutableString GetFieldName(const ImmutableString &paramName,
+                                        const TField *field,
+                                        unsigned arrayIndex)
+    {
+        ImmutableStringBuilder nameBuilder(paramName.length() + 10 + field->name().length());
+        nameBuilder << paramName << "_";
+
+        if (arrayIndex < std::numeric_limits<unsigned>::max())
+        {
+            nameBuilder.appendHex(arrayIndex);
+            nameBuilder << "_";
+        }
+        nameBuilder << field->name();
+
+        return nameBuilder;
+    }
+
+    class StructSamplerFunctionVisitor : angle::NonCopyable
+    {
+      public:
+        StructSamplerFunctionVisitor()          = default;
+        virtual ~StructSamplerFunctionVisitor() = default;
+
+        virtual void traverse(const TFunction *function)
+        {
+            size_t paramCount = function->getParamCount();
+
+            for (size_t paramIndex = 0; paramIndex < paramCount; ++paramIndex)
+            {
+                const TVariable *param = function->getParam(paramIndex);
+                const TType &paramType = param->getType();
+
+                if (paramType.isStructureContainingSamplers())
+                {
+                    bool hasNonSamplerParams    = false;
+                    const TStructure *structure = paramType.getStruct();
+                    for (const TField *field : structure->fields())
+                    {
+                        const TType *fieldType = field->type();
+                        if (fieldType->isSampler())
+                        {
+                            if (paramType.isArray())
+                            {
+                                const TVector<unsigned int> &arraySizes =
+                                    *paramType.getArraySizes();
+                                ASSERT(arraySizes.size() == 1);
+
+                                for (unsigned int arrayIndex = 0; arrayIndex < arraySizes[0];
+                                     ++arrayIndex)
+                                {
+                                    visitStructSamplerParam(function, paramIndex, field,
+                                                            arrayIndex);
+                                }
+                            }
+                            else
+                            {
+                                visitStructSamplerParam(function, paramIndex, field,
+                                                        std::numeric_limits<unsigned>::max());
+                            }
+                        }
+                        else
+                        {
+                            hasNonSamplerParams = true;
+                        }
+                    }
+                    if (hasNonSamplerParams)
+                    {
+                        visitStructParam(function, paramIndex);
+                    }
+                }
+                else
+                {
+                    visitNonStructParam(function, paramIndex);
+                }
+            }
+        }
+
+        virtual void visitStructSamplerParam(const TFunction *function,
+                                             size_t paramIndex,
+                                             const TField *field,
+                                             unsigned int arrayIndex)                  = 0;
+        virtual void visitStructParam(const TFunction *function, size_t paramIndex)    = 0;
+        virtual void visitNonStructParam(const TFunction *function, size_t paramIndex) = 0;
+    };
+
+    class CreateStructSamplerFunctionVisitor final : public StructSamplerFunctionVisitor
+    {
+      public:
+        CreateStructSamplerFunctionVisitor(TSymbolTable *symbolTable)
+            : mSymbolTable(symbolTable), mNewFunction(nullptr)
+        {
+        }
+
+        void traverse(const TFunction *function) override
+        {
+            mNewFunction =
+                new TFunction(mSymbolTable, function->name(), function->symbolType(),
+                              &function->getReturnType(), function->isKnownToNotHaveSideEffects());
+
+            StructSamplerFunctionVisitor::traverse(function);
+        }
+
+        void visitStructSamplerParam(const TFunction *function,
+                                     size_t paramIndex,
+                                     const TField *field,
+                                     unsigned int arrayIndex) override
+        {
+            const TVariable *param = function->getParam(paramIndex);
+            ImmutableString name   = GetFieldName(param->name(), field, arrayIndex);
+
+            TVariable *fieldSampler =
+                new TVariable(mSymbolTable, name, field->type(), SymbolType::AngleInternal);
+            mNewFunction->addParameter(fieldSampler);
+            mSymbolTable->declareInternal(fieldSampler);
+        }
+
+        void visitStructParam(const TFunction *function, size_t paramIndex) override
+        {
+            const TVariable *param      = function->getParam(paramIndex);
+            const TStructure *structure = param->getType().getStruct();
+            const TSymbol *structSymbol = mSymbolTable->findUser(structure->name());
+            ASSERT(structSymbol && structSymbol->isStruct());
+            const TStructure *structVar = static_cast<const TStructure *>(structSymbol);
+            TType *structType           = new TType(structVar, false);
+
+            TVariable *newParam =
+                new TVariable(mSymbolTable, param->name(), structType, param->symbolType());
+            mNewFunction->addParameter(newParam);
+        }
+
+        void visitNonStructParam(const TFunction *function, size_t paramIndex) override
+        {
+            const TVariable *param = function->getParam(paramIndex);
+            mNewFunction->addParameter(param);
+        }
+
+        TFunction *getNewFunction() const { return mNewFunction; }
+
+      private:
+        TSymbolTable *mSymbolTable;
+        TFunction *mNewFunction;
+    };
+
+    TFunction *createStructSamplerFunction(const TFunction *function) const
+    {
+        CreateStructSamplerFunctionVisitor visitor(mSymbolTable);
+        visitor.traverse(function);
+        return visitor.getNewFunction();
+    }
+
+    class GetSamplerArgumentsVisitor final : public StructSamplerFunctionVisitor
+    {
+      public:
+        GetSamplerArgumentsVisitor(TSymbolTable *symbolTable, const TIntermSequence *arguments)
+            : mSymbolTable(symbolTable), mArguments(arguments), mNewArguments(new TIntermSequence)
+        {
+        }
+
+        void visitStructSamplerParam(const TFunction *function,
+                                     size_t paramIndex,
+                                     const TField *field,
+                                     unsigned int arrayIndex) override
+        {
+            TIntermTyped *argument  = (*mArguments)[paramIndex]->getAsTyped();
+            TIntermSymbol *asSymbol = argument->getAsSymbolNode();
+
+            ImmutableString name = GetFieldName(asSymbol->getName(), field, arrayIndex);
+
+            TVariable *argSampler =
+                new TVariable(mSymbolTable, name, field->type(), SymbolType::AngleInternal);
+            TIntermSymbol *argSymbol = new TIntermSymbol(argSampler);
+            mNewArguments->push_back(argSymbol);
+        }
+
+        void visitStructParam(const TFunction *function, size_t paramIndex) override
+        {
+            TIntermTyped *argument = (*mArguments)[paramIndex]->getAsTyped();
+            mNewArguments->push_back(argument);
+        }
+
+        void visitNonStructParam(const TFunction *function, size_t paramIndex) override
+        {
+            TIntermTyped *argument = (*mArguments)[paramIndex]->getAsTyped();
+            mNewArguments->push_back(argument);
+        }
+
+        TIntermSequence *getNewArguments() const { return mNewArguments; }
+
+      private:
+        TSymbolTable *mSymbolTable;
+        const TIntermSequence *mArguments;
+        TIntermSequence *mNewArguments;
+    };
+
+    TIntermSequence *getStructSamplerArguments(const TFunction *function,
+                                               const TIntermSequence *arguments) const
+    {
+        GetSamplerArgumentsVisitor visitor(mSymbolTable, arguments);
+        visitor.traverse(function);
+        return visitor.getNewArguments();
     }
 
     int mRemovedUniformsCount;
