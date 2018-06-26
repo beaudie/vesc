@@ -27,6 +27,8 @@
 #include "libANGLE/Constants.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/MemoryProgramCache.h"
+#include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/Uniform.h"
 #include "libANGLE/angletypes.h"
@@ -351,6 +353,7 @@ class ProgramState final : angle::NonCopyable
   private:
     friend class MemoryProgramCache;
     friend class Program;
+    friend struct ProgramLinkedResources;
 
     void updateTransformFeedbackStrides();
 
@@ -488,7 +491,11 @@ class Program final : angle::NonCopyable, public LabeledObject
                               const GLfloat *coeffs);
 
     Error link(const Context *context);
-    bool isLinked() const { return mLinked; }
+    bool isLinked() const
+    {
+        resolveLink();
+        return mLinked;
+    }
 
     bool hasLinkedShaderStage(ShaderType shaderType) const;
 
@@ -821,6 +828,9 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     GLuint getSamplerUniformBinding(const VariableLocation &uniformLocation) const;
 
+    void resolveLink();
+    void resolveLink() const { return const_cast<Program *>(this)->resolveLink(); }
+
     ProgramState mState;
     rx::ProgramImpl *mProgram;
 
@@ -836,6 +846,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     ProgramBindings mFragmentInputBindings;
 
     bool mLinked;
+    bool mIsLinking;
     bool mDeleteStatus;  // Flag to indicate that the program can be deleted when no longer in use
 
     unsigned int mRefCount;
@@ -848,7 +859,12 @@ class Program final : angle::NonCopyable, public LabeledObject
     // Cache for sampler validation
     Optional<bool> mCachedValidateSamplersResult;
     std::vector<TextureType> mTextureUnitTypesCache;
+
+    ProgramLinkedResources mLinkedResources;
+    ProgramHash mProgramHash;
+    const Context *mLinkingContext;
 };
+
 }  // namespace gl
 
 #endif  // LIBANGLE_PROGRAM_H_
