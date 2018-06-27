@@ -516,10 +516,12 @@ TEST_P(MultiviewCPUBoundBenchmark, Run)
 ANGLE_INSTANTIATE_TEST(MultiviewCPUBoundBenchmark,
                        NoAcceleration(egl_platform::OPENGL_OR_GLES(false), SmallWorkload()),
                        NoAcceleration(egl_platform::D3D11(), SmallWorkload()),
+                       NoAcceleration(egl_platform::VULKAN(), SmallWorkload()),
                        SelectViewInGeometryShader(SmallWorkload()),
                        SelectViewInVertexShader(egl_platform::OPENGL_OR_GLES(false),
                                                 SmallWorkload()),
-                       SelectViewInVertexShader(egl_platform::D3D11(), SmallWorkload()));
+                       SelectViewInVertexShader(egl_platform::D3D11(), SmallWorkload()),
+                       SelectViewInVertexShader(egl_platform::VULKAN(), SmallWorkload()));
 
 TEST_P(MultiviewGPUBoundBenchmark, Run)
 {
@@ -529,8 +531,10 @@ TEST_P(MultiviewGPUBoundBenchmark, Run)
 ANGLE_INSTANTIATE_TEST(MultiviewGPUBoundBenchmark,
                        NoAcceleration(egl_platform::OPENGL_OR_GLES(false), BigWorkload()),
                        NoAcceleration(egl_platform::D3D11(), BigWorkload()),
+                       NoAcceleration(egl_platform::VULKAN(), BigWorkload()),
                        SelectViewInGeometryShader(BigWorkload()),
                        SelectViewInVertexShader(egl_platform::OPENGL_OR_GLES(false), BigWorkload()),
-                       SelectViewInVertexShader(egl_platform::D3D11(), BigWorkload()));
+                       SelectViewInVertexShader(egl_platform::D3D11(), BigWorkload()),
+                       SelectViewInVertexShader(egl_platform::VULKAN(), BigWorkload()));
 
 }  // anonymous namespace
