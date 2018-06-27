@@ -215,6 +215,34 @@ IndexConversionPerfParams IndexRangeOffsetPerfD3D11Params()
     return params;
 }
 
+IndexConversionPerfParams IndexConversionPerfVulkanParams()
+{
+    IndexConversionPerfParams params;
+    params.eglParameters    = egl_platform::VULKAN_NULL();
+    params.majorVersion     = 2;
+    params.minorVersion     = 0;
+    params.windowWidth      = 256;
+    params.windowHeight     = 256;
+    params.iterations       = 225;
+    params.numIndexTris     = 3000;
+    params.indexRangeOffset = 0;
+    return params;
+}
+
+IndexConversionPerfParams IndexRangeOffsetPerfVulkanParams()
+{
+    IndexConversionPerfParams params;
+    params.eglParameters    = egl_platform::VULKAN_NULL();
+    params.majorVersion     = 2;
+    params.minorVersion     = 0;
+    params.windowWidth      = 256;
+    params.windowHeight     = 256;
+    params.iterations       = 16;
+    params.numIndexTris     = 50000;
+    params.indexRangeOffset = 64;
+    return params;
+}
+
 TEST_P(IndexConversionPerfTest, Run)
 {
     run();
@@ -222,6 +250,8 @@ TEST_P(IndexConversionPerfTest, Run)
 
 ANGLE_INSTANTIATE_TEST(IndexConversionPerfTest,
                        IndexConversionPerfD3D11Params(),
-                       IndexRangeOffsetPerfD3D11Params());
+                       IndexRangeOffsetPerfD3D11Params(),
+                       IndexConversionPerfVulkanParams(),
+                       IndexRangeOffsetPerfVulkanParams());
 
 }  // namespace
