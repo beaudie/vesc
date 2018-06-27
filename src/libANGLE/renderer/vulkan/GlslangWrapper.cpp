@@ -262,6 +262,9 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
         textureCount++;
     }
 
+    // Start the unused sampler bindings at something ridiculously high.
+    int unusedSamplerBinding = 100;
+
     for (const gl::UnusedUniform &unusedUniform : resources.unusedUniforms)
     {
         std::string uniformName = unusedUniform.name;
@@ -271,12 +274,29 @@ gl::LinkResult GlslangWrapper::linkProgram(const gl::Context *glContext,
             uniformName = GetMappedSamplerName(uniformName);
         }
 
-        InsertLayoutSpecifierString(&vertexSource, uniformName, "");
-        InsertLayoutSpecifierString(&fragmentSource, uniformName, "");
+        if (unusedUniform.isSampler)
+        {
+            std::stringstream layoutStringStream;
 
-        const std::string qualifierToUse = unusedUniform.isSampler ? kUniformQualifier : "";
-        InsertQualifierSpecifierString(&vertexSource, uniformName, qualifierToUse);
-        InsertQualifierSpecifierString(&fragmentSource, uniformName, qualifierToUse);
+            layoutStringStream << "set = 0, binding = " << unusedSamplerBinding++;
+
+            std::string layoutString = layoutStringStream.str();
+
+            InsertLayoutSpecifierString(&vertexSource, uniformName, layoutString);
+            InsertLayoutSpecifierString(&fragmentSource, uniformName, layoutString);
+
+            const std::string qualifierToUse = unusedUniform.isSampler ? kUniformQualifier : "";
+            InsertQualifierSpecifierString(&vertexSource, uniformName, kUniformQualifier);
+            InsertQualifierSpecifierString(&fragmentSource, uniformName, kUniformQualifier);
+        }
+        else
+        {
+            InsertLayoutSpecifierString(&vertexSource, uniformName, "");
+            InsertLayoutSpecifierString(&fragmentSource, uniformName, "");
+
+            InsertQualifierSpecifierString(&vertexSource, uniformName, "");
+            InsertQualifierSpecifierString(&fragmentSource, uniformName, "");
+        }
     }
 
     std::array<const char *, 2> strings = {{vertexSource.c_str(), fragmentSource.c_str()}};
