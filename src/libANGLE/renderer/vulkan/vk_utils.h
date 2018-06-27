@@ -17,6 +17,7 @@
 #include "common/Optional.h"
 #include "common/PackedEnums.h"
 #include "common/debug.h"
+#include "libANGLE/Config.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Observer.h"
 #include "libANGLE/renderer/renderer_utils.h"
