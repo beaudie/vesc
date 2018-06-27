@@ -1457,6 +1457,7 @@ VkColorComponentFlags GetColorComponentFlags(bool red, bool green, bool blue, bo
            (blue ? VK_COLOR_COMPONENT_B_BIT : 0) | (alpha ? VK_COLOR_COMPONENT_A_BIT : 0);
 }
 }  // namespace gl_vk
+
 }  // namespace rx
 
 std::ostream &operator<<(std::ostream &stream, const rx::vk::Error &error)
