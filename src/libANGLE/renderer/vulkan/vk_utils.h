@@ -17,6 +17,7 @@
 #include "common/Optional.h"
 #include "common/PackedEnums.h"
 #include "common/debug.h"
+#include "libANGLE/Config.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Observer.h"
 #include "libANGLE/renderer/renderer_utils.h"
@@ -719,6 +720,35 @@ VkImageType GetImageType(gl::TextureType textureType);
 VkImageViewType GetImageViewType(gl::TextureType textureType);
 VkColorComponentFlags GetColorComponentFlags(bool red, bool green, bool blue, bool alpha);
 }  // namespace gl_vk
+
+namespace egl_vk
+{
+// Generates a basic config for a combination of color format, depth stencil format and sample
+// count.
+egl::Config GenerateDefaultConfig(const gl::InternalFormat &colorFormat,
+                                  const gl::InternalFormat &depthStencilFormat,
+                                  EGLint sampleCount);
+
+// Permutes over all combinations of color format, depth stencil format and sample count and
+// generates a basic config which is passed to DisplayVk::checkConfigSupport.
+egl::ConfigSet GenerateConfigs(const GLenum *colorFormats,
+                               size_t colorFormatsCount,
+                               const GLenum *depthStencilFormats,
+                               size_t depthStencilFormatCount,
+                               const EGLint *sampleCounts,
+                               size_t sampleCountsCount,
+                               DisplayVk *display);
+
+template <size_t ColorFormatCount, size_t DepthStencilFormatCount, size_t SampleCountsCount>
+egl::ConfigSet GenerateConfigs(const GLenum (&colorFormats)[ColorFormatCount],
+                               const GLenum (&depthStencilFormats)[DepthStencilFormatCount],
+                               const EGLint (&sampleCounts)[SampleCountsCount],
+                               DisplayVk *display)
+{
+    return GenerateConfigs(colorFormats, ColorFormatCount, depthStencilFormats,
+                           DepthStencilFormatCount, sampleCounts, SampleCountsCount, display);
+}
+}  // namespace egl_vk
 
 }  // namespace rx
 
