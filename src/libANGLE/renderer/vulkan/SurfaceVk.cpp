@@ -47,13 +47,66 @@ VkPresentModeKHR GetDesiredPresentMode(const std::vector<VkPresentModeKHR> &pres
            << presentModes[0];
     return presentModes[0];
 }
-
 }  // namespace
+
+OffscreenSurfaceVk::Buffer::Buffer(vk::CommandGraphResource *commandGraphResource)
+    : renderTarget(&image, &imageView, commandGraphResource)
+{
+}
+
+egl::Error OffscreenSurfaceVk::Buffer::initialize(const egl::Display *display,
+                                                  EGLint width,
+                                                  EGLint height,
+                                                  const vk::Format &vkFormat)
+{
+    const DisplayVk *displayVk = vk::GetImpl(display);
+    RendererVk *renderer       = displayVk->getRenderer();
+    VkDevice device            = renderer->getDevice();
+
+    const angle::Format &textureFormat = vkFormat.textureFormat();
+    bool isDepthOrStencilFormat = textureFormat.depthBits > 0 || textureFormat.stencilBits > 0;
+    const VkImageUsageFlags usage =
+        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
+        VK_IMAGE_USAGE_SAMPLED_BIT |
+        (textureFormat.redBits > 0 ? VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT : 0) |
+        (isDepthOrStencilFormat ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT : 0);
+
+    gl::Extents extents(static_cast<int>(width), static_cast<int>(height), 1);
+    ANGLE_TRY(image.init(device, gl::TextureType::_2D, extents, vkFormat, 1, usage, 1));
+
+    VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    ANGLE_TRY(image.initMemory(device, renderer->getMemoryProperties(), flags));
+
+    VkImageAspectFlags aspect = (textureFormat.depthBits > 0 ? VK_IMAGE_ASPECT_DEPTH_BIT : 0) |
+                                (textureFormat.stencilBits > 0 ? VK_IMAGE_ASPECT_STENCIL_BIT : 0) |
+                                (textureFormat.redBits > 0 ? VK_IMAGE_ASPECT_COLOR_BIT : 0);
+
+    ANGLE_TRY(image.initImageView(device, gl::TextureType::_2D, aspect, gl::SwizzleState(),
+                                  &imageView, 1));
+
+    return egl::NoError();
+}
+
+egl::Error OffscreenSurfaceVk::Buffer::destroy(const egl::Display *display,
+                                               Serial storedQueueSerial)
+{
+    const DisplayVk *displayVk = vk::GetImpl(display);
+    RendererVk *renderer       = displayVk->getRenderer();
+
+    image.release(renderer->getCurrentQueueSerial(), renderer);
+    renderer->releaseObject(storedQueueSerial, &imageView);
+
+    return egl::NoError();
+}
 
 OffscreenSurfaceVk::OffscreenSurfaceVk(const egl::SurfaceState &surfaceState,
                                        EGLint width,
                                        EGLint height)
-    : SurfaceImpl(surfaceState), mWidth(width), mHeight(height)
+    : SurfaceImpl(surfaceState),
+      mWidth(width),
+      mHeight(height),
+      mColorBuffer(this),
+      mDepthStencilBuffer(this)
 {
 }
 
@@ -63,7 +116,30 @@ OffscreenSurfaceVk::~OffscreenSurfaceVk()
 
 egl::Error OffscreenSurfaceVk::initialize(const egl::Display *display)
 {
+    const DisplayVk *displayVk = vk::GetImpl(display);
+    RendererVk *renderer       = displayVk->getRenderer();
+
+    const egl::Config *config = mState.config;
+
+    if (config->renderTargetFormat != GL_NONE)
+    {
+        ANGLE_TRY(mColorBuffer.initialize(display, mWidth, mHeight,
+                                          renderer->getFormat(config->renderTargetFormat)));
+    }
+
+    if (config->depthStencilFormat != GL_NONE)
+    {
+        ANGLE_TRY(mDepthStencilBuffer.initialize(display, mWidth, mHeight,
+                                                 renderer->getFormat(config->depthStencilFormat)));
+    }
+
     return egl::NoError();
+}
+
+void OffscreenSurfaceVk::destroy(const egl::Display *display)
+{
+    ANGLE_SWALLOW_ERR(mColorBuffer.destroy(display, getStoredQueueSerial()));
+    ANGLE_SWALLOW_ERR(mDepthStencilBuffer.destroy(display, getStoredQueueSerial()));
 }
 
 FramebufferImpl *OffscreenSurfaceVk::createDefaultFramebuffer(const gl::Context *context,
@@ -137,14 +213,22 @@ EGLint OffscreenSurfaceVk::getSwapBehavior() const
     return EGL_BUFFER_PRESERVED;
 }
 
-gl::Error OffscreenSurfaceVk::getAttachmentRenderTarget(
-    const gl::Context * /*context*/,
-    GLenum /*binding*/,
-    const gl::ImageIndex & /*imageIndex*/,
-    FramebufferAttachmentRenderTarget ** /*rtOut*/)
+gl::Error OffscreenSurfaceVk::getAttachmentRenderTarget(const gl::Context * /*context*/,
+                                                        GLenum binding,
+                                                        const gl::ImageIndex & /*imageIndex*/,
+                                                        FramebufferAttachmentRenderTarget **rtOut)
 {
-    UNREACHABLE();
-    return gl::InternalError();
+    if (binding == GL_BACK)
+    {
+        *rtOut = &mColorBuffer.renderTarget;
+    }
+    else
+    {
+        ASSERT(binding == GL_DEPTH || binding == GL_STENCIL || binding == GL_DEPTH_STENCIL);
+        *rtOut = &mDepthStencilBuffer.renderTarget;
+    }
+
+    return gl::NoError();
 }
 
 gl::Error OffscreenSurfaceVk::initializeContents(const gl::Context *context,
