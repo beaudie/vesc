@@ -236,7 +236,9 @@ Error Surface::swap(const gl::Context *context)
 
 Error Surface::swapWithDamage(const gl::Context *context, EGLint *rects, EGLint n_rects)
 {
-    ANGLE_TRY(mImplementation->swapWithDamage(context, rects, n_rects));
+    // TODO: Check if WithDamage available, if not emulate with swap
+    // ANGLE_TRY(mImplementation->swapWithDamage(context, rects, n_rects));
+    ANGLE_TRY(mImplementation->swap(context));
     postSwap(context);
     return NoError();
 }
