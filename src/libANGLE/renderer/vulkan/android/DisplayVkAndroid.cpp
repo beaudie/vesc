@@ -37,7 +37,7 @@ SurfaceImpl *DisplayVkAndroid::createWindowSurfaceVk(const egl::SurfaceState &st
 
 egl::ConfigSet DisplayVkAndroid::generateConfigs()
 {
-    constexpr GLenum colorFormats[]        = {GL_RGBA8};
+    constexpr GLenum colorFormats[]        = {GL_RGBA8, GL_RGB8};
     constexpr GLenum depthStencilFormats[] = {GL_NONE, GL_DEPTH24_STENCIL8};
     constexpr EGLint sampleCounts[]        = {0};
     return egl_vk::GenerateConfigs(colorFormats, depthStencilFormats, sampleCounts, this);
