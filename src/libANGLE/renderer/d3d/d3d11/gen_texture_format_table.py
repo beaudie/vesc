@@ -14,7 +14,10 @@ import pprint
 import os
 import sys
 
-sys.path.append('../..')
+script_name = os.path.basename(__file__)
+script_dir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(script_dir, '..', '..'))
+
 import angle_format
 
 template_texture_format_table_autogen_cpp = """// GENERATED FILE - DO NOT EDIT.
@@ -266,16 +269,16 @@ def parse_json_into_switch_angle_format_string(json_map, json_data):
 
     return table_data
 
-json_map = angle_format.load_with_override(os.path.abspath('texture_format_map.json'))
+json_map = angle_format.load_with_override(os.path.join(script_dir, 'texture_format_map.json'))
 data_source_name = 'texture_format_data.json'
-json_data = angle_format.load_json(data_source_name)
+json_data = angle_format.load_json(os.path.join(script_dir, data_source_name))
 
 angle_format_cases = parse_json_into_switch_angle_format_string(json_map, json_data)
 output_cpp = template_texture_format_table_autogen_cpp.format(
-    script_name = sys.argv[0],
+    script_name = script_name,
     copyright_year = date.today().year,
     angle_format_info_cases = angle_format_cases,
     data_source_name = data_source_name)
-with open('texture_format_table_autogen.cpp', 'wt') as out_file:
+with open(os.path.join(script_dir, 'texture_format_table_autogen.cpp'), 'wt') as out_file:
     out_file.write(output_cpp)
     out_file.close()
