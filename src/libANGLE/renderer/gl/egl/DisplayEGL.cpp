@@ -113,6 +113,10 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
     // Surfaceless contexts are emulated even if there is no native support.
     outExtensions->surfacelessContext = true;
 
+    // We will fallback to regular swap if swapBuffersWithDamage isn't
+    // supported, so indicate support here to keep validation happy.
+    outExtensions->swapBuffersWithDamage = true;
+
     DisplayGL::generateExtensions(outExtensions);
 }
 
