@@ -42,6 +42,10 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
 
 namespace egl_vk
 {
+
+constexpr GLenum kConfigDepthStencilFormats[] = {GL_NONE, GL_DEPTH24_STENCIL8, GL_DEPTH_COMPONENT24,
+                                                 GL_DEPTH_COMPONENT16};
+
 // Generates a basic config for a combination of color format, depth stencil format and sample
 // count.
 egl::Config GenerateDefaultConfig(const gl::InternalFormat &colorFormat,

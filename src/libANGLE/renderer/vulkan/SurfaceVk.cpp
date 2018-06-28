@@ -69,6 +69,8 @@ egl::Error OffscreenSurfaceVk::AttachmentImage::initialize(const egl::Display *d
                                                            EGLint height,
                                                            const vk::Format &vkFormat)
 {
+    ASSERT(vkFormat.valid());
+
     const DisplayVk *displayVk = vk::GetImpl(display);
     RendererVk *renderer       = displayVk->getRenderer();
     VkDevice device            = renderer->getDevice();
