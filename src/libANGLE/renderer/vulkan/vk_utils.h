@@ -698,6 +698,25 @@ enum class RecordingMode
     Start,
     Append,
 };
+
+// Helper class to handle RAII patterns for initialization. Requires that T have a destroy method
+// that takes a VkDevice and returns void.
+template <typename T>
+class Scoped final : angle::NonCopyable
+{
+  public:
+    Scoped(VkDevice device) : mDevice(device) {}
+    ~Scoped() { mVar.destroy(mDevice); }
+
+    const T &get() const { return mVar; }
+    T &get() { return mVar; }
+
+    T &&release() { return std::move(mVar); }
+
+  private:
+    VkDevice mDevice;
+    T mVar;
+};
 }  // namespace vk
 
 namespace gl_vk

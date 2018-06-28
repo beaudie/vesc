@@ -180,6 +180,12 @@ RendererVk::CommandBatch &RendererVk::CommandBatch::operator=(CommandBatch &&oth
     return *this;
 }
 
+void RendererVk::CommandBatch::destroy(VkDevice device)
+{
+    commandPool.destroy(device);
+    fence.destroy(device);
+}
+
 // RendererVk implementation.
 RendererVk::RendererVk()
     : mCapsInitialized(false),
@@ -731,16 +737,16 @@ vk::Error RendererVk::submitFrame(const VkSubmitInfo &submitInfo, vk::CommandBuf
     fenceInfo.pNext = nullptr;
     fenceInfo.flags = 0;
 
-    CommandBatch batch;
-    ANGLE_TRY(batch.fence.init(mDevice, fenceInfo));
+    vk::Scoped<CommandBatch> batch(mDevice);
+    ANGLE_TRY(batch.get().fence.init(mDevice, fenceInfo));
 
-    ANGLE_VK_TRY(vkQueueSubmit(mQueue, 1, &submitInfo, batch.fence.getHandle()));
+    ANGLE_VK_TRY(vkQueueSubmit(mQueue, 1, &submitInfo, batch.get().fence.getHandle()));
 
     // Store this command buffer in the in-flight list.
-    batch.commandPool = std::move(mCommandPool);
-    batch.serial      = mCurrentQueueSerial;
+    batch.get().commandPool = std::move(mCommandPool);
+    batch.get().serial      = mCurrentQueueSerial;
 
-    mInFlightCommands.emplace_back(std::move(batch));
+    mInFlightCommands.emplace_back(batch.release());
 
     // Sanity check.
     ASSERT(mInFlightCommands.size() < 1000u);
