@@ -69,6 +69,7 @@ angle::Result OffscreenSurfaceVk::AttachmentImage::initialize(DisplayVk *display
                                                               EGLint height,
                                                               const vk::Format &vkFormat)
 {
+    const DisplayVk *displayVk = vk::GetImpl(display);
     RendererVk *renderer       = displayVk->getRenderer();
 
     const angle::Format &textureFormat = vkFormat.textureFormat();
@@ -279,10 +280,10 @@ WindowSurfaceVk::~WindowSurfaceVk()
 
 void WindowSurfaceVk::destroy(const egl::Display *display)
 {
-    DisplayVk *displayVk       = vk::GetImpl(display);
-    RendererVk *renderer       = displayVk->getRenderer();
-    VkDevice device            = renderer->getDevice();
-    VkInstance instance        = renderer->getInstance();
+    DisplayVk *displayVk = vk::GetImpl(display);
+    RendererVk *renderer = displayVk->getRenderer();
+    VkDevice device      = renderer->getDevice();
+    VkInstance instance  = renderer->getInstance();
 
     // We might not need to flush the pipe here.
     (void)renderer->finish(displayVk);
