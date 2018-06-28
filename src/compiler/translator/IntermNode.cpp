@@ -1648,6 +1648,12 @@ const TConstantUnion *TIntermBinary::getConstantValue() const
     return constIndexingResult;
 }
 
+bool TIntermBinary::isAtomicFunctionDirectAssign() const
+{
+    return mOp == EOpAssign && mRight->getAsAggregate() &&
+           IsAtomicFunction(mRight->getAsAggregate()->getOp());
+}
+
 const ImmutableString &TIntermBinary::getIndexStructFieldName() const
 {
     ASSERT(mOp == EOpIndexDirectStruct);
