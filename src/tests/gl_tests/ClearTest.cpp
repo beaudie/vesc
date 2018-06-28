@@ -80,12 +80,33 @@ class ClearTestBase : public ANGLETest
 class ClearTest : public ClearTestBase {};
 class ClearTestES3 : public ClearTestBase {};
 
+class ClearTestRGB : public ANGLETest
+{
+  protected:
+    ClearTestRGB()
+    {
+        setWindowWidth(128);
+        setWindowHeight(128);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+    }
+};
+
 // Test clearing the default framebuffer
 TEST_P(ClearTest, DefaultFramebuffer)
 {
     glClearColor(0.25f, 0.5f, 0.5f, 0.5f);
     glClear(GL_COLOR_BUFFER_BIT);
     EXPECT_PIXEL_NEAR(0, 0, 64, 128, 128, 128, 1.0);
+}
+
+// Test clearing the RGB default framebuffer and verify that the alpha channel is not cleared
+TEST_P(ClearTestRGB, DefaultFramebufferRGB)
+{
+    glClearColor(0.25f, 0.5f, 0.5f, 0.5f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_NEAR(0, 0, 64, 128, 128, 255, 1.0);
 }
 
 // Test clearing a RGBA8 Framebuffer
@@ -616,5 +637,8 @@ ANGLE_INSTANTIATE_TEST(ClearTest,
                        ES2_VULKAN());
 ANGLE_INSTANTIATE_TEST(ClearTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 ANGLE_INSTANTIATE_TEST(ScissoredClearTest, ES2_D3D11(), ES2_OPENGL(), ES2_VULKAN());
+
+// Not all ANGLE backends support RGB backbuffers
+ANGLE_INSTANTIATE_TEST(ClearTestRGB, ES2_D3D11(), ES3_D3D11(), ES2_VULKAN());
 
 }  // anonymous namespace
