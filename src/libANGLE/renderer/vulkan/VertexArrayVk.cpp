@@ -250,8 +250,8 @@ void VertexArrayVk::syncDirtyAttrib(const gl::VertexAttribute &attrib,
             mCurrentArrayBufferResources[attribIndex] = nullptr;
             mCurrentArrayBufferHandles[attribIndex]   = VK_NULL_HANDLE;
         }
-        // TODO(jmadill): Offset handling.  Assume zero for now.
-        mCurrentArrayBufferOffsets[attribIndex] = 0;
+
+        mCurrentArrayBufferOffsets[attribIndex] = binding.getOffset();
     }
     else
     {
@@ -351,7 +351,7 @@ void VertexArrayVk::updatePackedInputInfo(const RendererVk *rendererVk,
     vk::PackedVertexInputAttributeDesc &attribDesc = mPackedInputAttributes[attribIndex];
     attribDesc.format                              = static_cast<uint16_t>(vkFormat);
     attribDesc.location                            = static_cast<uint16_t>(attribIndex);
-    attribDesc.offset = static_cast<uint32_t>(ComputeVertexAttributeOffset(attrib, binding));
+    attribDesc.offset                              = static_cast<uint32_t>(attrib.relativeOffset);
 }
 
 gl::Error VertexArrayVk::drawArrays(const gl::Context *context,
