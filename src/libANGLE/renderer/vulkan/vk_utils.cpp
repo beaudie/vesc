@@ -1321,9 +1321,9 @@ VkCullModeFlags GetCullMode(const gl::RasterizerState &rasterState)
     switch (rasterState.cullMode)
     {
         case gl::CullFaceMode::Front:
-            return VK_CULL_MODE_FRONT_BIT;
-        case gl::CullFaceMode::Back:
             return VK_CULL_MODE_BACK_BIT;
+        case gl::CullFaceMode::Back:
+            return VK_CULL_MODE_FRONT_BIT;
         case gl::CullFaceMode::FrontAndBack:
             return VK_CULL_MODE_FRONT_AND_BACK;
         default:
