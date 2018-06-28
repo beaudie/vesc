@@ -163,6 +163,9 @@ Error DynamicBuffer::allocate(RendererVk *renderer,
         ANGLE_TRY(AllocateBufferMemory(renderer, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, &mBuffer,
                                        &mMemory, &mSize));
 
+        // We should have at least that allocated.
+        mSize = std::max(sizeToAllocate, mMinSize);
+
         ANGLE_TRY(mMemory.map(device, 0, mSize, 0, &mMappedMemory));
         mNextAllocationOffset        = 0;
         mLastFlushOrInvalidateOffset = 0;
