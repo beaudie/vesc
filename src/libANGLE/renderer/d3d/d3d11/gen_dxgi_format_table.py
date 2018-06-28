@@ -9,7 +9,10 @@
 from datetime import date
 import sys
 
-sys.path.append('../..')
+script_name = os.path.basename(__file__)
+script_dir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(script_dir, '..'))
+
 import angle_format
 
 template_cpp = """// GENERATED FILE - DO NOT EDIT.
@@ -87,7 +90,7 @@ format_cases = ""
 
 input_data = 'dxgi_format_data.json'
 
-dxgi_map = angle_format.load_json(input_data)
+dxgi_map = angle_format.load_json(os.path.join(script_dir, input_data))
 
 types = {
     'SNORM': 'GL_SIGNED_NORMALIZED',
@@ -122,9 +125,9 @@ for dxgi_format, angle_format in sorted(dxgi_map.iteritems()):
     else:
         format_cases += undefined_case(dxgi_format)
 
-with open('dxgi_format_map_autogen.cpp', 'wt') as out_file:
+with open(os.path.join(script_dir, 'dxgi_format_map_autogen.cpp'), 'wt') as out_file:
     output_cpp = template_cpp.format(
-        script_name = sys.argv[0],
+        script_name = script_name,
         data_source_name = input_data,
         copyright_year = date.today().year,
         component_type_cases = component_cases,
