@@ -14,7 +14,10 @@ import os
 import re
 import sys
 
-sys.path.append('..')
+script_name = os.path.basename(__file__)
+script_dir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(script_dir, '..'))
+
 import angle_format
 
 template_table_autogen_cpp = """// GENERATED FILE - DO NOT EDIT.
@@ -147,18 +150,18 @@ def gen_format_case(angle, internal_format, vk_json_data):
 input_file_name = 'vk_format_map.json'
 out_file_name = 'vk_format_table'
 
-angle_to_gl = angle_format.load_inverse_table(os.path.join('..', 'angle_format_map.json'))
-vk_json_data = angle_format.load_json(input_file_name)
+angle_to_gl = angle_format.load_inverse_table(os.path.join(script_dir, '..', 'angle_format_map.json'))
+vk_json_data = angle_format.load_json(os.path.join(script_dir, input_file_name))
 vk_cases = [gen_format_case(angle, gl, vk_json_data)
              for angle, gl in sorted(angle_to_gl.iteritems())]
 
 output_cpp = template_table_autogen_cpp.format(
     copyright_year = date.today().year,
     format_case_data = "\n".join(vk_cases),
-    script_name = __file__,
+    script_name = script_name,
     out_file_name = out_file_name,
     input_file_name = input_file_name)
 
-with open(out_file_name + '_autogen.cpp', 'wt') as out_file:
+with open(os.path.join(script_dir, out_file_name + '_autogen.cpp'), 'wt') as out_file:
     out_file.write(output_cpp)
     out_file.close()
