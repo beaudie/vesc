@@ -179,6 +179,20 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          nullptr);
             return info;
         }
+        case GL_BGRX8_ANGLEX:
+        {
+            static constexpr Format info(GL_BGRX8_ANGLEX,
+                                         angle::Format::ID::B8G8R8X8_UNORM,
+                                         DXGI_FORMAT_B8G8R8X8_UNORM,
+                                         DXGI_FORMAT_B8G8R8X8_UNORM,
+                                         DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_B8G8R8X8_UNORM,
+                                         DXGI_FORMAT_UNKNOWN,
+                                         DXGI_FORMAT_B8G8R8X8_UNORM,
+                                         GL_BGRX8_ANGLEX,
+                                         nullptr);
+            return info;
+        }
         case GL_COMPRESSED_R11_EAC:
         {
             static constexpr Format info(GL_COMPRESSED_R11_EAC,
