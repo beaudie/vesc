@@ -44,6 +44,27 @@ constexpr gl::Rectangle kMaxSizedScissor(0,
 constexpr VkColorComponentFlags kAllColorChannelsMask =
     (VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
      VK_COLOR_COMPONENT_A_BIT);
+
+gl::RasterizerState InvertCullMode(const gl::RasterizerState &rasterizerState)
+{
+    gl::RasterizerState state = gl::RasterizerState(rasterizerState);
+    if (state.cullMode == gl::CullFaceMode::Back)
+    {
+        state.cullMode = gl::CullFaceMode::Front;
+    }
+    else if (state.cullMode == gl::CullFaceMode::Front)
+    {
+        state.cullMode = gl::CullFaceMode::Back;
+    }
+    return state;
+}
+gl::Rectangle InvertViewport(const gl::Rectangle &viewport)
+{
+    gl::Rectangle invertedViewport(viewport);
+    invertedViewport.y += viewport.height;
+    invertedViewport.height = -viewport.height;
+    return invertedViewport;
+}
 }  // anonymous namespace
 
 ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
@@ -378,6 +399,12 @@ void ContextVk::popDebugGroup()
     UNIMPLEMENTED();
 }
 
+bool ContextVk::isBackbuffer()
+{
+    gl::Framebuffer *framebuffer = mState.getState().getDrawFramebuffer();
+    return framebuffer->isBackbuffer();
+}
+
 void ContextVk::updateColorMask(const gl::BlendState &blendState)
 {
     mClearColorMask =
@@ -416,6 +443,9 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
     // TODO(jmadill): Full dirty bits implementation.
     bool dirtyTextures = false;
 
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+
     for (auto dirtyBit : dirtyBits)
     {
         switch (dirtyBit)
@@ -425,8 +455,11 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
                 updateScissor(glState);
                 break;
             case gl::State::DIRTY_BIT_VIEWPORT:
-                mPipelineDesc->updateViewport(glState.getViewport(), glState.getNearPlane(),
-                                              glState.getFarPlane());
+                mPipelineDesc->updateViewport(
+                    isBackbuffer() && renderer->getFeatures().flipViewportY
+                        ? InvertViewport(glState.getViewport())
+                        : glState.getViewport(),
+                    glState.getNearPlane(), glState.getFarPlane());
                 break;
             case gl::State::DIRTY_BIT_DEPTH_RANGE:
                 mPipelineDesc->updateDepthRange(glState.getNearPlane(), glState.getFarPlane());
@@ -495,7 +528,9 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
                 break;
             case gl::State::DIRTY_BIT_CULL_FACE_ENABLED:
             case gl::State::DIRTY_BIT_CULL_FACE:
-                mPipelineDesc->updateCullMode(glState.getRasterizerState());
+                mPipelineDesc->updateCullMode(renderer->getFeatures().flipViewportY
+                                                  ? InvertCullMode(glState.getRasterizerState())
+                                                  : glState.getRasterizerState());
                 break;
             case gl::State::DIRTY_BIT_FRONT_FACE:
                 mPipelineDesc->updateFrontFace(glState.getRasterizerState());
@@ -555,6 +590,11 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
                 WARN() << "DIRTY_BIT_READ_FRAMEBUFFER_BINDING unimplemented";
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
+                mPipelineDesc->updateViewport(
+                    isBackbuffer() && renderer->getFeatures().flipViewportY
+                        ? InvertViewport(glState.getViewport())
+                        : glState.getViewport(),
+                    glState.getNearPlane(), glState.getFarPlane());
                 updateColorMask(glState.getBlendState());
                 break;
             case gl::State::DIRTY_BIT_RENDERBUFFER_BINDING:

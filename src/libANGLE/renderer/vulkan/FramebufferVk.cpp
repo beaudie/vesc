@@ -296,20 +296,33 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
     // Clip read area to framebuffer.
     const gl::Extents &fbSize = getState().getReadAttachment()->getSize();
     const gl::Rectangle fbRect(0, 0, fbSize.width, fbSize.height);
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+    bool isBackbuffer    = contextVk->isBackbuffer();
+
     gl::Rectangle clippedArea;
     if (!ClipRectangle(area, fbRect, &clippedArea))
     {
         // nothing to read
         return gl::NoError();
     }
+    gl::Rectangle actualArea = clippedArea;
+    if (isBackbuffer && renderer->getFeatures().flipViewportY)
+    {
+        actualArea.y = fbRect.height - actualArea.y - actualArea.height;
+    }
 
     const gl::State &glState = context->getGLState();
-    RendererVk *renderer     = vk::GetImpl(context)->getRenderer();
 
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
 
-    const gl::PixelPackState &packState       = context->getGLState().getPackState();
+    gl::PixelPackState packState(context->getGLState().getPackState());
+    if (isBackbuffer && renderer->getFeatures().flipViewportY)
+    {
+        packState.reverseRowOrder = !packState.reverseRowOrder;
+    }
+
     const gl::InternalFormat &sizedFormatInfo = gl::GetInternalFormatInfo(format, type);
 
     GLuint outputPitch = 0;
@@ -324,14 +337,14 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
                        (clippedArea.y - area.y) * outputPitch;
 
     PackPixelsParams params;
-    params.area        = clippedArea;
+    params.area        = actualArea;
     params.format      = format;
     params.type        = type;
     params.outputPitch = outputPitch;
     params.packBuffer  = glState.getTargetBuffer(gl::BufferBinding::PixelPack);
     params.pack        = glState.getPackState();
 
-    ANGLE_TRY(readPixelsImpl(context, clippedArea, params,
+    ANGLE_TRY(readPixelsImpl(context, actualArea, params,
                              static_cast<uint8_t *>(pixels) + outputSkipBytes));
     mReadPixelsBuffer.releaseRetainedBuffers(renderer);
     return gl::NoError();

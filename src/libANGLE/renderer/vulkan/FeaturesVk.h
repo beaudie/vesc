@@ -18,6 +18,10 @@ struct FeaturesVk
     // shader patching to implement OpenGL basic line rasterization rules. This feature will
     // normally always be enabled. Exposing it as an option enables performance testing.
     bool basicGLLineRasterization = false;
+
+    // Flips the viewport to render upside-down. This has the effect to render the same way as
+    // OpenGL.
+    bool flipViewportY = false;
 };
 }  // namespace rx
 
