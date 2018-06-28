@@ -521,7 +521,9 @@ Error PipelineDesc::initializePipeline(VkDevice device,
     viewportState.pNext         = nullptr;
     viewportState.flags         = 0;
     viewportState.viewportCount = 1;
-    viewportState.pViewports    = &mViewport;
+    VkViewport flippedViewport  = mViewport;
+    flippedViewport.height      = -mViewport.height;
+    viewportState.pViewports    = &flippedViewport;
     viewportState.scissorCount  = 1;
     viewportState.pScissors     = &mScissor;
 
