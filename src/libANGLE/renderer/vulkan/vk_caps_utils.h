@@ -42,6 +42,19 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
 
 namespace egl_vk
 {
+<<<<<<< HEAD
+== == == =
+
+             constexpr GLenum kConfigDepthStencilFormats[] = {
+                 GL_NONE, GL_DEPTH24_STENCIL8, GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT16};
+
+// Generates a basic config for a combination of color format, depth stencil format and sample
+// count.
+egl::Config GenerateDefaultConfig(const gl::InternalFormat &colorFormat,
+                                  const gl::InternalFormat &depthStencilFormat,
+                                  EGLint sampleCount);
+
+>>>>>>> 51f347d25... Vulkan: Support multiple depth stencil formats for backbuffers.
 // Permutes over all combinations of color format, depth stencil format and sample count and
 // generates a basic config which is passed to DisplayVk::checkConfigSupport.
 egl::ConfigSet GenerateConfigs(const GLenum *colorFormats,
