@@ -1010,6 +1010,11 @@ void OutputHLSL::visitSymbol(TIntermSymbol *node)
     }
 }
 
+void OutputHLSL::visitRaw(TIntermRaw *node)
+{
+    getInfoSink() << node->getRawText();
+}
+
 void OutputHLSL::outputEqual(Visit visit, const TType &type, TOperator op, TInfoSinkBase &out)
 {
     if (type.isScalar() && !type.isArray())
