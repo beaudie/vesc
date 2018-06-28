@@ -76,7 +76,8 @@ gl::Error BufferVk::setData(const gl::Context *context,
         const VkMemoryPropertyFlags memoryPropertyFlags =
             (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
         ANGLE_TRY(vk::AllocateBufferMemory(contextVk->getRenderer(), memoryPropertyFlags, &mBuffer,
-                                           &mBufferMemory, &mCurrentRequiredSize));
+                                           &mBufferMemory));
+        mCurrentRequiredSize = size;
     }
 
     if (data)
