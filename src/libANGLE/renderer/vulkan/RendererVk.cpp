@@ -180,6 +180,12 @@ RendererVk::CommandBatch &RendererVk::CommandBatch::operator=(CommandBatch &&oth
     return *this;
 }
 
+void RendererVk::CommandBatch::destroy(VkDevice device)
+{
+    commandPool.destroy(device);
+    fence.destroy(device);
+}
+
 // RendererVk implementation.
 RendererVk::RendererVk()
     : mCapsInitialized(false),
@@ -731,16 +737,16 @@ vk::Error RendererVk::submitFrame(const VkSubmitInfo &submitInfo, vk::CommandBuf
     fenceInfo.pNext = nullptr;
     fenceInfo.flags = 0;
 
-    CommandBatch batch;
-    ANGLE_TRY(batch.fence.init(mDevice, fenceInfo));
+    vk::Scoped<CommandBatch> batch(mDevice);
+    ANGLE_TRY(batch.get().fence.init(mDevice, fenceInfo));
 
-    ANGLE_VK_TRY(vkQueueSubmit(mQueue, 1, &submitInfo, batch.fence.getHandle()));
+    ANGLE_VK_TRY(vkQueueSubmit(mQueue, 1, &submitInfo, batch.get().fence.getHandle()));
 
     // Store this command buffer in the in-flight list.
-    batch.commandPool = std::move(mCommandPool);
-    batch.serial      = mCurrentQueueSerial;
+    batch.get().commandPool = std::move(mCommandPool);
+    batch.get().serial      = mCurrentQueueSerial;
 
-    mInFlightCommands.emplace_back(std::move(batch));
+    mInFlightCommands.emplace_back(batch.release());
 
     // Sanity check.
     ASSERT(mInFlightCommands.size() < 1000u);
@@ -812,8 +818,8 @@ vk::Error RendererVk::flush(const gl::Context *context,
                             const vk::Semaphore &waitSemaphore,
                             const vk::Semaphore &signalSemaphore)
 {
-    vk::CommandBuffer commandBatch;
-    ANGLE_TRY(flushCommandGraph(context, &commandBatch));
+    vk::Scoped<vk::CommandBuffer> commandBatch(mDevice);
+    ANGLE_TRY(flushCommandGraph(context, &commandBatch.get()));
 
     VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
 
@@ -824,11 +830,11 @@ vk::Error RendererVk::flush(const gl::Context *context,
     submitInfo.pWaitSemaphores      = waitSemaphore.ptr();
     submitInfo.pWaitDstStageMask    = &waitStageMask;
     submitInfo.commandBufferCount   = 1;
-    submitInfo.pCommandBuffers      = commandBatch.ptr();
+    submitInfo.pCommandBuffers      = commandBatch.get().ptr();
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores    = signalSemaphore.ptr();
 
-    ANGLE_TRY(submitFrame(submitInfo, std::move(commandBatch)));
+    ANGLE_TRY(submitFrame(submitInfo, commandBatch.release()));
     return vk::NoError();
 }
 
