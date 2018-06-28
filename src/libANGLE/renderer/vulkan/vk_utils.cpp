@@ -1311,7 +1311,7 @@ VkPrimitiveTopology GetPrimitiveTopology(gl::PrimitiveMode mode)
     }
 }
 
-VkCullModeFlags GetCullMode(const gl::RasterizerState &rasterState)
+VkCullModeFlags GetCullMode(const gl::RasterizerState &rasterState, bool invertCullMode)
 {
     if (!rasterState.cullFace)
     {
@@ -1321,9 +1321,9 @@ VkCullModeFlags GetCullMode(const gl::RasterizerState &rasterState)
     switch (rasterState.cullMode)
     {
         case gl::CullFaceMode::Front:
-            return VK_CULL_MODE_FRONT_BIT;
+            return invertCullMode ? VK_CULL_MODE_BACK_BIT : VK_CULL_MODE_FRONT_BIT;
         case gl::CullFaceMode::Back:
-            return VK_CULL_MODE_BACK_BIT;
+            return invertCullMode ? VK_CULL_MODE_FRONT_BIT : VK_CULL_MODE_BACK_BIT;
         case gl::CullFaceMode::FrontAndBack:
             return VK_CULL_MODE_FRONT_AND_BACK;
         default:
