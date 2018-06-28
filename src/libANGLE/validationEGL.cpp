@@ -2476,13 +2476,6 @@ Error ValidateSwapBuffersWithDamageKHR(const Display *display,
         return error;
     }
 
-    if (!display->getExtensions().swapBuffersWithDamage)
-    {
-        // It is out of spec what happens when calling an extension function when the extension is
-        // not available. EGL_BAD_DISPLAY seems like a reasonable error.
-        return EglBadDisplay() << "EGL_KHR_swap_buffers_with_damage is not available.";
-    }
-
     if (surface == EGL_NO_SURFACE)
     {
         return EglBadSurface() << "Swap surface cannot be EGL_NO_SURFACE.";

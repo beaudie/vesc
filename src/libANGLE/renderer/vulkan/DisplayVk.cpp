@@ -158,6 +158,9 @@ gl::Version DisplayVk::getMaxSupportedESVersion() const
 
 void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
+    // We will fallback to regular swap if swapBuffersWithDamage isn't
+    // supported, so indicate support here to keep validation happy.
+    outExtensions->swapBuffersWithDamage = true;
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const
