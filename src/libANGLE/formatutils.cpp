@@ -727,6 +727,7 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
     AddRGBAFormat(&map, GL_BGRA8_SRGB_ANGLEX, true,  8,  8,  8,  8, 0, GL_BGRA_EXT,     GL_UNSIGNED_BYTE,                  GL_UNSIGNED_NORMALIZED, true,  NeverSupported,                                 AlwaysSupported, AlwaysSupported,                                AlwaysSupported                               );
 
     // Special format which is not really supported, so always false for all supports.
+    AddRGBAFormat(&map, GL_BGRX8_ANGLEX,      true,  8,  8,  8,  0, 0, GL_BGRA_EXT,     GL_UNSIGNED_BYTE,                  GL_UNSIGNED_NORMALIZED, false, NeverSupported,                                 NeverSupported,  NeverSupported,                                 NeverSupported                                );
     AddRGBAFormat(&map, GL_BGR565_ANGLEX,     true,  5,  6,  5,  1, 0, GL_BGRA_EXT,     GL_UNSIGNED_SHORT_5_6_5,           GL_UNSIGNED_NORMALIZED, false, NeverSupported,                                 NeverSupported,  NeverSupported,                                 NeverSupported                                );
 
     // Floating point renderability and filtering is provided by OES_texture_float and OES_texture_half_float
