@@ -255,6 +255,10 @@ gl::Error RendererGL::drawArrays(const gl::Context *context,
     const gl::Program *program  = context->getGLState().getProgram();
     const bool usesMultiview    = program->usesMultiview();
     const GLsizei instanceCount = usesMultiview ? program->getNumViews() : 0;
+    if (count <= 1 && mode != gl::PrimitiveMode::Points)
+    {
+        return gl::NoError();
+    }
 
     ANGLE_TRY(mStateManager->setDrawArraysState(context, first, count, instanceCount));
     if (!usesMultiview)
