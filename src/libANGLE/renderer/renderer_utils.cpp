@@ -442,6 +442,18 @@ bool ShouldUseDebugLayers(const egl::AttributeMap &attribs)
 #endif  // defined(ANGLE_ENABLE_ASSERTS)
 }
 
+bool ShouldEnableMockICD(const egl::AttributeMap &attribs)
+{
+#if !defined(ANGLE_PLATFORM_ANDROID)
+    // Mock ICD does not currently run on Android
+    return (attribs.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE,
+                        EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE) ==
+            EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE);
+#else
+    return false;
+#endif  // !defined(ANGLE_PLATFORM_ANDROID)
+}
+
 bool ShouldUseVirtualizedContexts(const egl::AttributeMap &attribs, bool defaultValue)
 {
     EGLAttrib virtualizedContextRequest =
