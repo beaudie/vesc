@@ -101,13 +101,25 @@ VKAPI_ATTR VkBool32 VKAPI_CALL DebugReportCallback(VkDebugReportFlagsEXT flags,
 class ScopedVkLoaderEnvironment : angle::NonCopyable
 {
   public:
-    explicit ScopedVkLoaderEnvironment(bool enableValidationLayers)
-        : mEnableValidationLayers(enableValidationLayers), mChangedCWD(false)
+    explicit ScopedVkLoaderEnvironment(bool enableValidationLayers, bool enableNullDriver)
+         : mEnableValidationLayers(enableValidationLayers), mChangedCWD(false), mChangedICDPath(false)
     {
 // Changing CWD and setting environment variables makes no sense on Android,
 // since this code is a part of Java application there.
 // Android Vulkan loader doesn't need this either.
 #if !defined(ANGLE_PLATFORM_ANDROID)
+        if (enableNullDriver)
+        {
+            // Override environment variable to use built Mock ICD
+            // ANGLE_VK_ICD_JSON gets set to the built mock ICD in BUILD.gn
+            mPreviousICDPath = angle::GetEnvironmentVar(g_VkICDPathEnv);
+            mChangedICDPath = angle::SetEnvironmentVar(g_VkICDPathEnv, ANGLE_VK_ICD_JSON);
+            if (!mChangedICDPath)
+            {
+              ERR() << "Error setting Path for Mock/Null Driver.";
+              enableNullDriver = false;
+            }
+        }
         if (mEnableValidationLayers)
         {
             const auto &cwd = angle::GetCWD();
@@ -150,6 +162,9 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
             angle::SetCWD(mPreviousCWD.value().c_str());
 #endif  // !defined(ANGLE_PLATFORM_ANDROID)
         }
+        if (mChangedICDPath){
+          angle::SetEnvironmentVar(g_VkICDPathEnv, mPreviousICDPath.value().c_str());
+        }
     }
 
     bool canEnableValidationLayers() const { return mEnableValidationLayers; }
@@ -158,6 +173,8 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
     bool mEnableValidationLayers;
     bool mChangedCWD;
     Optional<std::string> mPreviousCWD;
+    bool mChangedICDPath;
+    Optional<std::string> mPreviousICDPath;
 };
 
 }  // anonymous namespace
@@ -280,24 +297,18 @@ void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
 
 vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *wsiName)
 {
-    ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseDebugLayers(attribs));
-    mEnableValidationLayers = scopedEnvironment.canEnableValidationLayers();
-
 #if !defined(ANGLE_PLATFORM_ANDROID)
     // Mock ICD does not currently run on Android
     bool enableNullDriver = (attribs.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE,
                                          EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE) ==
                              EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE);
-    if (enableNullDriver)
-    {
-        // Override environment variable to use built Mock ICD
-        // ANGLE_VK_ICD_JSON gets set to the built mock ICD in BUILD.gn
-        ANGLE_VK_CHECK(angle::SetEnvironmentVar(g_VkICDPathEnv, ANGLE_VK_ICD_JSON),
-                       VK_ERROR_INITIALIZATION_FAILED);
-    }
 #else
     constexpr bool enableNullDriver = false;
 #endif  // !defined(ANGLE_PLATFORM_ANDROID)
+
+    ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseDebugLayers(attribs), enableNullDriver);
+    mEnableValidationLayers = scopedEnvironment.canEnableValidationLayers();
+
     // Gather global layer properties.
     uint32_t instanceLayerCount = 0;
     ANGLE_VK_TRY(vkEnumerateInstanceLayerProperties(&instanceLayerCount, nullptr));
