@@ -8,7 +8,9 @@
 //
 
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
+
 #include "libANGLE/Caps.h"
+#include "libANGLE/renderer/vulkan/FeaturesVk.h"
 #include "vk_format_utils.h"
 
 namespace
@@ -25,7 +27,8 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
                   const gl::TextureCapsMap &textureCaps,
                   gl::Caps *outCaps,
                   gl::Extensions *outExtensions,
-                  gl::Limitations * /* outLimitations */)
+                  gl::Limitations * /* outLimitations */,
+                  FeaturesVk *features)
 {
     outExtensions->setTextureExtensionSupport(textureCaps);
 
@@ -136,6 +139,9 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
     outCaps->maxVaryingVectors =
         (physicalDeviceProperties.limits.maxVertexOutputComponents / 4) - kReservedVaryingCount;
     outCaps->maxVertexOutputComponents = outCaps->maxVaryingVectors * 4;
+
+    // Use OpenGL line rasterization rules by default.
+    features->basicGLLineRasterization = true;
 }
 }  // namespace vk
 }  // namespace rx
