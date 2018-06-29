@@ -14,6 +14,7 @@
 #include <sstream>
 #include <vector>
 
+#include "common/PackedEnums.h"
 #include "common/matrix_utils.h"
 #include "common/platform.h"
 #include "common/utilities.h"
@@ -253,6 +254,20 @@ void LimitCap(CapT *cap, MaxT maximum)
 {
     *cap = std::min(*cap, static_cast<CapT>(maximum));
 }
+
+constexpr angle::PackedEnumMap<gl::PrimitiveMode, GLsizei> kMinimumPrimitiveCounts = {{
+    /* Points */ 1,
+    /* Lines */ 2,
+    /* LineLoop */ 2,
+    /* LineStrip */ 2,
+    /* Triangles */ 3,
+    /* TriangleStrip */ 3,
+    /* TriangleFan */ 3,
+    /* LinesAdjacency */ 2,
+    /* LineStripAdjacency */ 2,
+    /* TrianglesAdjacency */ 3,
+    /* TriangleStripAdjacency */ 3,
+}};
 
 }  // anonymous namespace
 
@@ -2090,8 +2105,8 @@ void Context::texParameterIuivRobust(TextureType target,
 
 void Context::drawArrays(PrimitiveMode mode, GLint first, GLsizei count)
 {
-    // No-op if zero count
-    if (count == 0)
+    // No-op if count draws no primitives for given mode
+    if (noopDraw(mode, count))
     {
         return;
     }
@@ -2106,8 +2121,8 @@ void Context::drawArraysInstanced(PrimitiveMode mode,
                                   GLsizei count,
                                   GLsizei instanceCount)
 {
-    // No-op if zero count
-    if (count == 0 || instanceCount == 0)
+    // No-op if count draws no primitives for given mode
+    if (noopDrawInstanced(mode, count, instanceCount))
     {
         return;
     }
@@ -2121,8 +2136,8 @@ void Context::drawArraysInstanced(PrimitiveMode mode,
 
 void Context::drawElements(PrimitiveMode mode, GLsizei count, GLenum type, const void *indices)
 {
-    // No-op if zero count
-    if (count == 0)
+    // No-op if count draws no primitives for given mode
+    if (noopDraw(mode, count))
     {
         return;
     }
@@ -2137,8 +2152,8 @@ void Context::drawElementsInstanced(PrimitiveMode mode,
                                     const void *indices,
                                     GLsizei instances)
 {
-    // No-op if zero count
-    if (count == 0 || instances == 0)
+    // No-op if count draws no primitives for given mode
+    if (noopDrawInstanced(mode, count, instances))
     {
         return;
     }
@@ -2155,8 +2170,8 @@ void Context::drawRangeElements(PrimitiveMode mode,
                                 GLenum type,
                                 const void *indices)
 {
-    // No-op if zero count
-    if (count == 0)
+    // No-op if count draws no primitives for given mode
+    if (noopDraw(mode, count))
     {
         return;
     }
@@ -3329,6 +3344,27 @@ void Context::initWorkarounds()
     // Lose the context upon out of memory error if the application is
     // expecting to watch for those events.
     mWorkarounds.loseContextOnOutOfMemory = (mResetStrategy == GL_LOSE_CONTEXT_ON_RESET_EXT);
+}
+
+bool Context::noopDraw(PrimitiveMode mode, GLsizei count)
+{
+    // Default to the max minimum vertices required for visible primitive, 3 for a TRI
+    GLsizei minVisibleCount = 3;
+    // Only check mode if there's a chance that count will cause draw to be a noop
+    if (count < minVisibleCount)
+    {
+        minVisibleCount = kMinimumPrimitiveCounts[mode];
+    }
+    else
+    {
+        return false;
+    }
+    return (count < minVisibleCount) ? true : false;
+}
+
+bool Context::noopDrawInstanced(PrimitiveMode mode, GLsizei count, GLsizei instanceCount)
+{
+    return (instanceCount == 0) ? true : noopDraw(mode, count);
 }
 
 Error Context::prepareForDraw(PrimitiveMode mode)
