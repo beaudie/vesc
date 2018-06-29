@@ -143,6 +143,11 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
 
     ~ScopedVkLoaderEnvironment()
     {
+#if !defined(ANGLE_PLATFORM_ANDROID)
+        // Always unset this environment variable to ensure Mock/Null device isn't selected
+        // in subsequent tests that do not want it
+        unsetenv(g_VkICDPathEnv);
+#endif  // !defined(ANGLE_PLATFORM_ANDROID)
         if (mChangedCWD)
         {
 #if !defined(ANGLE_PLATFORM_ANDROID)
