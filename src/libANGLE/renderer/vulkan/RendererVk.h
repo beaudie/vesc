@@ -75,6 +75,8 @@ class RendererVk : angle::NonCopyable
 
     bool isSerialInUse(Serial serial) const;
 
+    bool ShouldEnableMockICD(const egl::AttributeMap &attribs) const;
+
     template <typename T>
     void releaseObject(Serial resourceSerial, T *object)
     {
