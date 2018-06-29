@@ -2090,8 +2090,8 @@ void Context::texParameterIuivRobust(TextureType target,
 
 void Context::drawArrays(PrimitiveMode mode, GLint first, GLsizei count)
 {
-    // No-op if zero count
-    if (count == 0)
+    // No-op if count draws no primitives for given mode
+    if (noopDraw(mode, count))
     {
         return;
     }
@@ -2106,8 +2106,8 @@ void Context::drawArraysInstanced(PrimitiveMode mode,
                                   GLsizei count,
                                   GLsizei instanceCount)
 {
-    // No-op if zero count
-    if (count == 0 || instanceCount == 0)
+    // No-op if count draws no primitives for given mode
+    if (noopDrawInstanced(mode, count, instanceCount))
     {
         return;
     }
@@ -2121,8 +2121,8 @@ void Context::drawArraysInstanced(PrimitiveMode mode,
 
 void Context::drawElements(PrimitiveMode mode, GLsizei count, GLenum type, const void *indices)
 {
-    // No-op if zero count
-    if (count == 0)
+    // No-op if count draws no primitives for given mode
+    if (noopDraw(mode, count))
     {
         return;
     }
@@ -2137,8 +2137,8 @@ void Context::drawElementsInstanced(PrimitiveMode mode,
                                     const void *indices,
                                     GLsizei instances)
 {
-    // No-op if zero count
-    if (count == 0 || instances == 0)
+    // No-op if count draws no primitives for given mode
+    if (noopDrawInstanced(mode, count, instances))
     {
         return;
     }
@@ -2155,8 +2155,8 @@ void Context::drawRangeElements(PrimitiveMode mode,
                                 GLenum type,
                                 const void *indices)
 {
-    // No-op if zero count
-    if (count == 0)
+    // No-op if count draws no primitives for given mode
+    if (noopDraw(mode, count))
     {
         return;
     }
@@ -3329,6 +3329,44 @@ void Context::initWorkarounds()
     // Lose the context upon out of memory error if the application is
     // expecting to watch for those events.
     mWorkarounds.loseContextOnOutOfMemory = (mResetStrategy == GL_LOSE_CONTEXT_ON_RESET_EXT);
+}
+
+bool Context::noopDraw(PrimitiveMode mode, GLsizei count)
+{
+    GLsizei minVisibleCount = 3;
+    if (count < minVisibleCount)
+    {
+        switch (mode)
+        {
+            case PrimitiveMode::Points:
+            {
+                minVisibleCount = 1;
+                break;
+            }
+            case PrimitiveMode::Lines:
+            case PrimitiveMode::LineLoop:
+            case PrimitiveMode::LineStrip:
+            case PrimitiveMode::LinesAdjacency:
+            case PrimitiveMode::LineStripAdjacency:
+            {
+                minVisibleCount = 2;
+                break;
+            }
+            default:
+                // Triangle cases, keep minVisibleCount == 3
+                break;
+        }
+    }
+    else
+    {
+        return false;
+    }
+    return (count < minVisibleCount) ? true : false;
+}
+
+bool Context::noopDrawInstanced(PrimitiveMode mode, GLsizei count, GLsizei instanceCount)
+{
+    return (instanceCount == 0) ? true : noopDraw(mode, count);
 }
 
 Error Context::prepareForDraw(PrimitiveMode mode)
