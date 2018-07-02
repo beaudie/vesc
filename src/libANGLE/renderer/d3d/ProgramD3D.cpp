@@ -1537,9 +1537,11 @@ gl::LinkResult ProgramD3D::compileComputeExecutable(const gl::Context *context,
 }
 
 gl::LinkResult ProgramD3D::link(const gl::Context *context,
-                                const gl::ProgramLinkedResources &resources,
+                                gl::ProgramLinkedResources *resources,
                                 gl::InfoLog &infoLog)
 {
+    ASSERT(resources);
+
     const auto &data = context->getContextState();
 
     reset();
@@ -1594,10 +1596,12 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
             }
         }
 
-        ProgramD3DMetadata metadata(mRenderer, shadersD3D);
-        BuiltinVaryingsD3D builtins(metadata, resources.varyingPacking);
+        resources->varyingPacking.assignSemanticIndices();
 
-        mDynamicHLSL->generateShaderLinkHLSL(context, mState, metadata, resources.varyingPacking,
+        ProgramD3DMetadata metadata(mRenderer, shadersD3D);
+        BuiltinVaryingsD3D builtins(metadata, resources->varyingPacking);
+
+        mDynamicHLSL->generateShaderLinkHLSL(context, mState, metadata, resources->varyingPacking,
                                              builtins, &mShaderHLSL);
 
         mUsesPointSize = shadersD3D[gl::ShaderType::Vertex]->usesPointSize();
@@ -1612,7 +1616,7 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
         if (mRenderer->getMajorShaderModel() >= 4)
         {
             mGeometryShaderPreamble = mDynamicHLSL->generateGeometryShaderPreamble(
-                resources.varyingPacking, builtins, mHasANGLEMultiviewEnabled,
+                resources->varyingPacking, builtins, mHasANGLEMultiviewEnabled,
                 metadata.canSelectViewInVertexShader());
         }
 
@@ -1620,7 +1624,8 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
 
         defineUniformsAndAssignRegisters(context);
 
-        gatherTransformFeedbackVaryings(resources.varyingPacking, builtins[gl::ShaderType::Vertex]);
+        gatherTransformFeedbackVaryings(resources->varyingPacking,
+                                        builtins[gl::ShaderType::Vertex]);
 
         gl::LinkResult result = compileProgramExecutables(context, infoLog);
         if (result.isError())
@@ -1635,7 +1640,7 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
         }
     }
 
-    linkResources(context, resources);
+    linkResources(context, *resources);
 
     return true;
 }

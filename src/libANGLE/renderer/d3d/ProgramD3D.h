@@ -196,7 +196,7 @@ class ProgramD3D : public ProgramImpl
                                                       gl::InfoLog *infoLog);
     gl::Error getComputeExecutable(ShaderExecutableD3D **outExecutable);
     gl::LinkResult link(const gl::Context *context,
-                        const gl::ProgramLinkedResources &resources,
+                        gl::ProgramLinkedResources *resources,
                         gl::InfoLog &infoLog) override;
     GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) override;
 

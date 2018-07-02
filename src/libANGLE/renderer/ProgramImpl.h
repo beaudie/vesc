@@ -45,7 +45,7 @@ class ProgramImpl : angle::NonCopyable
     virtual void setSeparable(bool separable)               = 0;
 
     virtual gl::LinkResult link(const gl::Context *context,
-                                const gl::ProgramLinkedResources &resources,
+                                gl::ProgramLinkedResources *resources,
                                 gl::InfoLog &infoLog)                      = 0;
     virtual GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) = 0;
 

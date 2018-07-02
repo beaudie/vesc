@@ -1135,7 +1135,7 @@ Error Program::link(const gl::Context *context)
         InitUniformBlockLinker(context, mState, &resources.uniformBlockLinker);
         InitShaderStorageBlockLinker(context, mState, &resources.shaderStorageBlockLinker);
 
-        ANGLE_TRY_RESULT(mProgram->link(context, resources, mInfoLog), mLinked);
+        ANGLE_TRY_RESULT(mProgram->link(context, &resources, mInfoLog), mLinked);
         if (!mLinked)
         {
             return NoError();
@@ -1196,7 +1196,8 @@ Error Program::link(const gl::Context *context)
             return NoError();
         }
 
-        const auto &mergedVaryings = getMergedVaryings(context);
+        ProgramMergedVaryings mergedVaryings;
+        getMergedVaryings(context, &mergedVaryings);
 
         ASSERT(mState.mAttachedShaders[ShaderType::Vertex]);
         mState.mNumViews = mState.mAttachedShaders[ShaderType::Vertex]->getNumViews(context);
@@ -1215,7 +1216,7 @@ Error Program::link(const gl::Context *context)
             return NoError();
         }
 
-        ANGLE_TRY_RESULT(mProgram->link(context, resources, mInfoLog), mLinked);
+        ANGLE_TRY_RESULT(mProgram->link(context, &resources, mInfoLog), mLinked);
         if (!mLinked)
         {
             return NoError();
@@ -3312,23 +3313,21 @@ void Program::gatherTransformFeedbackVaryings(const ProgramMergedVaryings &varyi
     mState.updateTransformFeedbackStrides();
 }
 
-ProgramMergedVaryings Program::getMergedVaryings(const Context *context) const
+void Program::getMergedVaryings(const Context *context, ProgramMergedVaryings *merged) const
 {
-    ProgramMergedVaryings merged;
+    ASSERT(merged);
 
     for (const sh::Varying &varying :
          mState.mAttachedShaders[ShaderType::Vertex]->getOutputVaryings(context))
     {
-        merged[varying.name].vertex = &varying;
+        (*merged)[varying.name].vertex = &varying;
     }
 
     for (const sh::Varying &varying :
          mState.mAttachedShaders[ShaderType::Fragment]->getInputVaryings(context))
     {
-        merged[varying.name].fragment = &varying;
+        (*merged)[varying.name].fragment = &varying;
     }
-
-    return merged;
 }
 
 bool Program::linkOutputVariables(const Context *context,

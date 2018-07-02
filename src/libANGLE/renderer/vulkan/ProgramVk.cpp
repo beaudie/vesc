@@ -222,9 +222,10 @@ void ProgramVk::setSeparable(bool separable)
 }
 
 gl::LinkResult ProgramVk::link(const gl::Context *glContext,
-                               const gl::ProgramLinkedResources &resources,
+                               gl::ProgramLinkedResources *resources,
                                gl::InfoLog &infoLog)
 {
+    ASSERT(resources);
     ContextVk *contextVk           = vk::GetImpl(glContext);
     RendererVk *renderer           = contextVk->getRenderer();
     GlslangWrapper *glslangWrapper = renderer->getGlslangWrapper();
@@ -235,8 +236,8 @@ gl::LinkResult ProgramVk::link(const gl::Context *glContext,
     std::vector<uint32_t> vertexCode;
     std::vector<uint32_t> fragmentCode;
     bool linkSuccess = false;
-    ANGLE_TRY_RESULT(glslangWrapper->linkProgram(glContext, mState, resources, glContext->getCaps(),
-                                                 &vertexCode, &fragmentCode),
+    ANGLE_TRY_RESULT(glslangWrapper->linkProgram(glContext, mState, *resources,
+                                                 glContext->getCaps(), &vertexCode, &fragmentCode),
                      linkSuccess);
     if (!linkSuccess)
     {

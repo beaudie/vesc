@@ -779,7 +779,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     void gatherTransformFeedbackVaryings(const ProgramMergedVaryings &varyings);
 
-    ProgramMergedVaryings getMergedVaryings(const Context *context) const;
+    void getMergedVaryings(const Context *context, ProgramMergedVaryings *merged) const;
     bool linkOutputVariables(const Context *context,
                              GLuint combinedImageUniformsCount,
                              GLuint combinedShaderStorageBlocksCount);

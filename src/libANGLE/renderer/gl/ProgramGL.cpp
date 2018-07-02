@@ -126,9 +126,10 @@ void ProgramGL::setSeparable(bool separable)
 }
 
 gl::LinkResult ProgramGL::link(const gl::Context *context,
-                               const gl::ProgramLinkedResources &resources,
+                               gl::ProgramLinkedResources *resources,
                                gl::InfoLog &infoLog)
 {
+    ASSERT(resources);
     preLink();
 
     if (mState.getAttachedShader(gl::ShaderType::Compute))
@@ -227,7 +228,7 @@ gl::LinkResult ProgramGL::link(const gl::Context *context,
         mStateManager->forceUseProgram(mProgramID);
     }
 
-    linkResources(resources);
+    linkResources(*resources);
     postLink();
 
     return true;
