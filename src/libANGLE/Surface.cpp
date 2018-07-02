@@ -63,7 +63,8 @@ Surface::Surface(EGLint surfaceType,
       mTexture(),
       mColorFormat(config->renderTargetFormat),
       mDSFormat(config->depthStencilFormat),
-      mInitState(gl::InitState::Initialized)
+      mInitState(gl::InitState::Initialized),
+      mHasSwapBuffersWithDamage(false)
 {
     mPostSubBufferRequested =
         (attributes.get(EGL_POST_SUB_BUFFER_SUPPORTED_NV, EGL_FALSE) == EGL_TRUE);
@@ -236,7 +237,9 @@ Error Surface::swap(const gl::Context *context)
 
 Error Surface::swapWithDamage(const gl::Context *context, EGLint *rects, EGLint n_rects)
 {
-    ANGLE_TRY(mImplementation->swapWithDamage(context, rects, n_rects));
+    // TODO: What's right answer here?
+    // ANGLE_TRY(mImplementation->swapWithDamage(context, rects, n_rects));
+    ANGLE_TRY(mImplementation->swap(context));
     postSwap(context);
     return NoError();
 }

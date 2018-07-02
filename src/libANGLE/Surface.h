@@ -197,6 +197,7 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     void postSwap(const gl::Context *context);
 
     gl::InitState mInitState;
+    bool mHasSwapBuffersWithDamage;
 };
 
 class WindowSurface final : public Surface
