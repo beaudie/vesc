@@ -219,6 +219,7 @@ gl::LinkResult ProgramGL::link(const gl::Context *context,
     // Verify the link
     if (!checkLinkStatus(infoLog))
     {
+        UNREACHABLE();
         return false;
     }
 
