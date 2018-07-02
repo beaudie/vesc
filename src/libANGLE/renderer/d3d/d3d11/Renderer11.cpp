@@ -2788,6 +2788,7 @@ gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog,
     // internal state is still OK.
     if (!binary)
     {
+        UNREACHABLE();
         *outExectuable = nullptr;
         return gl::NoError();
     }
