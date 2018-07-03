@@ -1,0 +1,13 @@
+# Copyright 2018 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("../../gni/angle.gni")
+
+# Common scripts & input used by multiple other repos
+vulkan_registry_script_files = [
+  "$angle_root/third_party/vulkan-headers/src/registry/cgenerator.py",
+  "$angle_root/third_party/vulkan-headers/src/registry/generator.py",
+  "$angle_root/third_party/vulkan-headers/src/registry/reg.py",
+  "$angle_root/third_party/vulkan-headers/src/registry/vk.xml",
+]
