@@ -225,7 +225,6 @@ gl::LinkResult ProgramVk::link(const gl::Context *glContext,
 {
     ContextVk *contextVk = vk::GetImpl(glContext);
     RendererVk *renderer = contextVk->getRenderer();
-    VkDevice device      = renderer->getDevice();
 
     ANGLE_TRY(reset(contextVk));
 
@@ -244,29 +243,10 @@ gl::LinkResult ProgramVk::link(const gl::Context *glContext,
         return false;
     }
 
-    {
-        VkShaderModuleCreateInfo vertexShaderInfo;
-        vertexShaderInfo.sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-        vertexShaderInfo.pNext    = nullptr;
-        vertexShaderInfo.flags    = 0;
-        vertexShaderInfo.codeSize = vertexCode.size() * sizeof(uint32_t);
-        vertexShaderInfo.pCode    = vertexCode.data();
-
-        ANGLE_TRY(mDefaultVertexShaderAndSerial.get().init(device, vertexShaderInfo));
-        mDefaultVertexShaderAndSerial.updateSerial(renderer->issueShaderSerial());
-    }
-
-    {
-        VkShaderModuleCreateInfo fragmentShaderInfo;
-        fragmentShaderInfo.sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-        fragmentShaderInfo.pNext    = nullptr;
-        fragmentShaderInfo.flags    = 0;
-        fragmentShaderInfo.codeSize = fragmentCode.size() * sizeof(uint32_t);
-        fragmentShaderInfo.pCode    = fragmentCode.data();
-
-        ANGLE_TRY(mDefaultFragmentShaderAndSerial.get().init(device, fragmentShaderInfo));
-        mDefaultVertexShaderAndSerial.updateSerial(renderer->issueShaderSerial());
-    }
+    vk::InitShaderAndSerial(renderer, &mDefaultVertexShaderAndSerial, vertexCode.data(),
+                            vertexCode.size() * sizeof(uint32_t));
+    vk::InitShaderAndSerial(renderer, &mDefaultFragmentShaderAndSerial, fragmentCode.data(),
+                            fragmentCode.size() * sizeof(uint32_t));
 
     ANGLE_TRY(initDefaultUniformBlocks(glContext));
 
