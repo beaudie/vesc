@@ -60,9 +60,7 @@ ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
     memset(&mClearDepthStencilValue, 0, sizeof(mClearDepthStencilValue));
 }
 
-ContextVk::~ContextVk()
-{
-}
+ContextVk::~ContextVk() = default;
 
 void ContextVk::onDestroy(const gl::Context *context)
 {
@@ -207,27 +205,13 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
     if (mTexturesDirty)
     {
         mTexturesDirty = false;
+
         // TODO(jmadill): Should probably merge this for loop with programVk's descriptor update.
-        ContextVk *contextVk         = vk::GetImpl(context);
-        const auto &completeTextures = state.getCompleteTextureCache();
-        for (const gl::SamplerBinding &samplerBinding : programGL->getSamplerBindings())
+        for (size_t textureIndex : state.getActiveTexturesMask())
         {
-            ASSERT(!samplerBinding.unreferenced);
-
-            for (GLuint textureUnit : samplerBinding.boundTextureUnits)
-            {
-                gl::Texture *texture = completeTextures[textureUnit];
-
-                // Null textures represent incomplete textures.
-                if (texture == nullptr)
-                {
-                    ANGLE_TRY(getIncompleteTexture(context, samplerBinding.textureType, &texture));
-                }
-
-                TextureVk *textureVk = vk::GetImpl(texture);
-                ANGLE_TRY(textureVk->ensureImageInitialized(contextVk));
-                textureVk->addReadDependency(framebufferVk);
-            }
+            TextureVk *textureVk = mActiveTextures[textureIndex];
+            ANGLE_TRY(textureVk->ensureImageInitialized(this));
+            textureVk->addReadDependency(framebufferVk);
         }
     }
 
@@ -413,7 +397,7 @@ void ContextVk::updateColorMask(const gl::BlendState &blendState)
                                         framebufferVk->getEmulatedAlphaAttachmentMask());
 }
 
-void ContextVk::updateScissor(const gl::State &glState)
+void ContextVk::updateScissor(const gl::State &glState) const
 {
     FramebufferVk *framebufferVk = vk::GetImpl(getGLState().getDrawFramebuffer());
     gl::Box dimensions           = framebufferVk->getState().getDimensions();
@@ -659,6 +643,8 @@ gl::Error ContextVk::syncState(const gl::Context *context, const gl::State::Dirt
 
     if (dirtyTextures)
     {
+        ANGLE_TRY(updateActiveTextures(context));
+
         ProgramVk *programVk = vk::GetImpl(glState.getProgram());
         programVk->invalidateTextures();
         mTexturesDirty = true;
@@ -899,5 +885,38 @@ vk::Error ContextVk::updateDriverUniforms()
     vkUpdateDescriptorSets(getDevice(), 1, &writeInfo, 0, nullptr);
 
     return vk::NoError();
+}
+
+gl::Error ContextVk::updateActiveTextures(const gl::Context *context)
+{
+    const auto &completeTextures = mState.getState().getCompleteTextureCache();
+    const gl::Program *programGL = mState.getState().getProgram();
+
+    mActiveTextures.fill(nullptr);
+
+    for (const gl::SamplerBinding &samplerBinding : programGL->getSamplerBindings())
+    {
+        ASSERT(!samplerBinding.unreferenced);
+
+        for (GLuint textureUnit : samplerBinding.boundTextureUnits)
+        {
+            gl::Texture *texture = completeTextures[textureUnit];
+
+            // Null textures represent incomplete textures.
+            if (texture == nullptr)
+            {
+                ANGLE_TRY(getIncompleteTexture(context, samplerBinding.textureType, &texture));
+            }
+
+            mActiveTextures[textureUnit] = vk::GetImpl(texture);
+        }
+    }
+
+    return gl::NoError();
+}
+
+const gl::ActiveTextureArray<TextureVk *> &ContextVk::getActiveTextures() const
+{
+    return mActiveTextures;
 }
 }  // namespace rx
