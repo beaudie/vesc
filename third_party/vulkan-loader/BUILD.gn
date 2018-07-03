@@ -109,10 +109,10 @@ foreach(script_and_dep, helper_script_and_deps) {
     inputs = [
       "$vulkan_gen_dir/$dep",
       "$vulkan_gen_dir/common_codegen.py",
+      "$vulkan_gen_dir/cgenerator.py",
+      "$vulkan_gen_dir/generator.py",
       "$vulkan_gen_dir/reg.py",
       "$vulkan_gen_dir/vk.xml",
-      "$vulkan_gen_dir/generator.py",
-      "$vulkan_gen_dir/cgenerator.py",
     ]
     outputs = [
       "$vulkan_gen_dir/$file",
