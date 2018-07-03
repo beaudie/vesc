@@ -19,6 +19,7 @@ if (is_win) {
 }
 
 vulkan_gen_dir = "$target_gen_dir/angle/vulkan"
+vulkan_header_gen_dir = "$target_gen_dir/../vulkan-headers/angle/vulkan"
 raw_vulkan_gen_dir = rebase_path(vulkan_gen_dir, root_build_dir)
 
 # Vulkan helper scripts
@@ -81,11 +82,10 @@ helper_script_and_deps = [
 # so that all dependencies are together. The reg.py script from
 # the headers repo is required input to loader_genvk.py.
 copy("python_gen_deps") {
+  public_deps = [
+    "$angle_root/third_party/vulkan-headers:vulkan_header_script_deps",
+  ]
   sources = [
-    "$angle_root/third_party/vulkan-headers/src/registry/cgenerator.py",
-    "$angle_root/third_party/vulkan-headers/src/registry/generator.py",
-    "$angle_root/third_party/vulkan-headers/src/registry/reg.py",
-    "$angle_root/third_party/vulkan-headers/src/registry/vk.xml",
     "src/scripts/common_codegen.py",
     "src/scripts/dispatch_table_helper_generator.py",
     "src/scripts/helper_file_generator.py",
@@ -109,10 +109,10 @@ foreach(script_and_dep, helper_script_and_deps) {
     inputs = [
       "$vulkan_gen_dir/$dep",
       "$vulkan_gen_dir/common_codegen.py",
-      "$vulkan_gen_dir/reg.py",
-      "$vulkan_gen_dir/vk.xml",
-      "$vulkan_gen_dir/generator.py",
-      "$vulkan_gen_dir/cgenerator.py",
+      "$vulkan_header_gen_dir/cgenerator.py",
+      "$vulkan_header_gen_dir/generator.py",
+      "$vulkan_header_gen_dir/reg.py",
+      "$vulkan_header_gen_dir/vk.xml",
     ]
     outputs = [
       "$vulkan_gen_dir/$file",

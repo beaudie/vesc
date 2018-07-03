@@ -8,6 +8,8 @@
 
 import("../../gni/angle.gni")
 
+vulkan_gen_dir = "$target_gen_dir/angle/vulkan"
+
 config("vulkan_headers_config") {
   include_dirs = [ "src/include" ]
 }
@@ -24,4 +26,18 @@ source_set("vulkan_headers") {
     "src/include/vulkan/vulkan_core.h",
   ]
   public_configs = [ ":vulkan_headers_config" ]
+}
+
+# Python script files needed for codegen, copy them to a temp dir
+# so that all dependencies are together
+copy("vulkan_header_script_deps") {
+  sources = [
+    "src/registry/cgenerator.py",
+    "src/registry/generator.py",
+    "src/registry/reg.py",
+    "src/registry/vk.xml",
+  ]
+  outputs = [
+    "$vulkan_gen_dir/{{source_file_part}}",
+  ]
 }

@@ -20,6 +20,7 @@ raw_vulkan_headers_dir =
     rebase_path("$angle_root/third_party/vulkan-headers/src", root_build_dir)
 
 vulkan_gen_dir = "$target_gen_dir/angle/vulkan"
+vulkan_header_gen_dir = "$target_gen_dir/../vulkan-headers/angle/vulkan"
 raw_vulkan_gen_dir = rebase_path(vulkan_gen_dir, root_build_dir)
 
 # Vulkan helper scripts
@@ -91,11 +92,10 @@ helper_script_and_deps = [
 # Python scripts needed for codegen, copy them to a temp dir
 # so that all dependencies are together
 copy("python_gen_deps") {
+  public_deps = [
+    "$angle_root/third_party/vulkan-headers:vulkan_header_script_deps",
+  ]
   sources = [
-    "$angle_root/third_party/vulkan-headers/src/registry/cgenerator.py",
-    "$angle_root/third_party/vulkan-headers/src/registry/generator.py",
-    "$angle_root/third_party/vulkan-headers/src/registry/reg.py",
-    "$angle_root/third_party/vulkan-headers/src/registry/vk.xml",
     "src/layers/vk_validation_error_messages.h",
     "src/scripts/common_codegen.py",
     "src/scripts/dispatch_table_helper_generator.py",
@@ -106,7 +106,6 @@ copy("python_gen_deps") {
     "src/scripts/parameter_validation_generator.py",
     "src/scripts/threading_generator.py",
     "src/scripts/unique_objects_generator.py",
-    "src/scripts/vuid_mapping.py",
   ]
   outputs = [
     "$vulkan_gen_dir/{{source_file_part}}",
@@ -124,13 +123,12 @@ foreach(script_and_dep, helper_script_and_deps) {
     script = "$vulkan_gen_dir/lvl_genvk.py"
     inputs = [
       "$vulkan_gen_dir/$dep",
-      "$vulkan_gen_dir/cgenerator.py",
       "$vulkan_gen_dir/common_codegen.py",
-      "$vulkan_gen_dir/generator.py",
-      "$vulkan_gen_dir/reg.py",
-      "$vulkan_gen_dir/vuid_mapping.py",
       "$vulkan_gen_dir/vk_validation_error_messages.h",
-      "$vulkan_gen_dir/vk.xml",
+      "$vulkan_header_gen_dir/cgenerator.py",
+      "$vulkan_header_gen_dir/generator.py",
+      "$vulkan_header_gen_dir/reg.py",
+      "$vulkan_header_gen_dir/vk.xml",
     ]
     outputs = [
       "$vulkan_gen_dir/$file",
@@ -248,26 +246,6 @@ config("vulkan_internal_config") {
 
 config("vulkan_layer_config") {
   include_dirs = [ "src/layers" ]
-}
-
-source_set("vulkan_layer_table") {
-  configs -= vulkan_undefine_configs
-  public_deps = [
-    ":vulkan_generate_helper_files",
-  ]
-  public_configs = [
-    ":vulkan_config",
-    ":vulkan_layer_config",
-    ":vulkan_internal_config",
-  ]
-  configs -= [ "//build/config/compiler:chromium_code" ]
-  configs += [ "//build/config/compiler:no_chromium_code" ]
-  sources = [
-    "$vulkan_gen_dir/vk_dispatch_table_helper.h",
-    "$vulkan_gen_dir/vk_enum_string_helper.h",
-    "src/layers/vk_layer_table.cpp",
-    "src/layers/vk_layer_table.h",
-  ]
 }
 
 core_validation_sources = [
@@ -457,8 +435,8 @@ foreach(layer_info, layers) {
     configs -= [ "//build/config/compiler:chromium_code" ]
     configs += [ "//build/config/compiler:no_chromium_code" ]
     configs -= vulkan_undefine_configs
+    public_configs = [ ":vulkan_layer_config" ]
     deps = [
-      ":vulkan_layer_table",
       ":vulkan_layer_utils",
     ]
     if (layer_info[2] != "") {
