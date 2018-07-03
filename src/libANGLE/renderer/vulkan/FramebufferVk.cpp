@@ -888,7 +888,7 @@ gl::Error FramebufferVk::clearWithDraw(const gl::Context *context,
     pipelineDesc.initDefaults();
     pipelineDesc.updateColorWriteMask(colorMaskFlags, getEmulatedAlphaAttachmentMask());
     pipelineDesc.updateRenderPassDesc(getRenderPassDesc());
-    pipelineDesc.updateShaders(fullScreenQuad->queueSerial(), pushConstantColor->queueSerial());
+    pipelineDesc.updateShaders(fullScreenQuad->getSerial(), pushConstantColor->getSerial());
     pipelineDesc.updateViewport(renderArea, 0.0f, 1.0f, contextVk->isViewportFlipEnabled());
 
     const gl::State &glState = contextVk->getGLState();
@@ -908,9 +908,8 @@ gl::Error FramebufferVk::clearWithDraw(const gl::Context *context,
     }
 
     vk::PipelineAndSerial *pipeline = nullptr;
-    ANGLE_TRY(renderer->getInternalPipeline(*fullScreenQuad, *pushConstantColor,
-                                            pipelineLayout.get(), pipelineDesc,
-                                            gl::AttributesMask(), &pipeline));
+    ANGLE_TRY(renderer->getPipeline(*fullScreenQuad, *pushConstantColor, pipelineLayout.get(),
+                                    pipelineDesc, gl::AttributesMask(), &pipeline));
     pipeline->updateSerial(renderer->getCurrentQueueSerial());
 
     vk::CommandBuffer *writeCommands = nullptr;
