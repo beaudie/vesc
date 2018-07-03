@@ -106,7 +106,6 @@ copy("python_gen_deps") {
     "src/scripts/parameter_validation_generator.py",
     "src/scripts/threading_generator.py",
     "src/scripts/unique_objects_generator.py",
-    "src/scripts/vuid_mapping.py",
   ]
   outputs = [
     "$vulkan_gen_dir/{{source_file_part}}",
@@ -128,7 +127,6 @@ foreach(script_and_dep, helper_script_and_deps) {
       "$vulkan_gen_dir/common_codegen.py",
       "$vulkan_gen_dir/generator.py",
       "$vulkan_gen_dir/reg.py",
-      "$vulkan_gen_dir/vuid_mapping.py",
       "$vulkan_gen_dir/vk_validation_error_messages.h",
       "$vulkan_gen_dir/vk.xml",
     ]
@@ -248,26 +246,6 @@ config("vulkan_internal_config") {
 
 config("vulkan_layer_config") {
   include_dirs = [ "src/layers" ]
-}
-
-source_set("vulkan_layer_table") {
-  configs -= vulkan_undefine_configs
-  public_deps = [
-    ":vulkan_generate_helper_files",
-  ]
-  public_configs = [
-    ":vulkan_config",
-    ":vulkan_layer_config",
-    ":vulkan_internal_config",
-  ]
-  configs -= [ "//build/config/compiler:chromium_code" ]
-  configs += [ "//build/config/compiler:no_chromium_code" ]
-  sources = [
-    "$vulkan_gen_dir/vk_dispatch_table_helper.h",
-    "$vulkan_gen_dir/vk_enum_string_helper.h",
-    "src/layers/vk_layer_table.cpp",
-    "src/layers/vk_layer_table.h",
-  ]
 }
 
 core_validation_sources = [
@@ -457,8 +435,8 @@ foreach(layer_info, layers) {
     configs -= [ "//build/config/compiler:chromium_code" ]
     configs += [ "//build/config/compiler:no_chromium_code" ]
     configs -= vulkan_undefine_configs
+    public_configs = [ ":vulkan_layer_config" ]
     deps = [
-      ":vulkan_layer_table",
       ":vulkan_layer_utils",
     ]
     if (layer_info[2] != "") {
