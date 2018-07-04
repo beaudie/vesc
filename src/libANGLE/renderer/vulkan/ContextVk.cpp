@@ -426,6 +426,10 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
     // TODO(jmadill): Full dirty bits implementation.
     bool dirtyTextures = false;
 
+    FramebufferVk *framebufferVk = vk::GetImpl(mState.getState().getDrawFramebuffer());
+    gl::Rectangle renderArea =
+        gl::Rectangle(0, 0, framebufferVk->getState().getDimensions().width, framebufferVk->getState().getDimensions().height);
+
     for (auto dirtyBit : dirtyBits)
     {
         switch (dirtyBit)
@@ -436,7 +440,7 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
                 break;
             case gl::State::DIRTY_BIT_VIEWPORT:
                 mPipelineDesc->updateViewport(glState.getViewport(), glState.getNearPlane(),
-                                              glState.getFarPlane(), isViewportFlipEnabled());
+                                              glState.getFarPlane(), isViewportFlipEnabled(), renderArea);
                 break;
             case gl::State::DIRTY_BIT_DEPTH_RANGE:
                 mPipelineDesc->updateDepthRange(glState.getNearPlane(), glState.getFarPlane());
@@ -567,7 +571,7 @@ void ContextVk::syncState(const gl::Context *context, const gl::State::DirtyBits
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
                 mPipelineDesc->updateViewport(glState.getViewport(), glState.getNearPlane(),
-                                              glState.getFarPlane(), isViewportFlipEnabled());
+                                              glState.getFarPlane(), isViewportFlipEnabled(), renderArea);
                 updateColorMask(glState.getBlendState());
                 mPipelineDesc->updateCullMode(glState.getRasterizerState(),
                                               isViewportFlipEnabled());

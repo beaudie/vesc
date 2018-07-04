@@ -889,8 +889,8 @@ gl::Error FramebufferVk::clearWithDraw(const gl::Context *context,
     pipelineDesc.updateColorWriteMask(colorMaskFlags, getEmulatedAlphaAttachmentMask());
     pipelineDesc.updateRenderPassDesc(getRenderPassDesc());
     pipelineDesc.updateShaders(fullScreenQuad->queueSerial(), pushConstantColor->queueSerial());
-    pipelineDesc.updateViewport(renderArea, 0.0f, 1.0f, contextVk->isViewportFlipEnabled());
-
+    pipelineDesc.updateViewport(renderArea, 0.0f, 1.0f, contextVk->isViewportFlipEnabled(), renderArea);
+    
     const gl::State &glState = contextVk->getGLState();
     if (glState.isScissorTestEnabled())
     {

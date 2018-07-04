@@ -161,6 +161,19 @@ uint32_t GetImageLayerCount(gl::TextureType textureType)
     }
 }
 
+gl::Rectangle InvertViewport(const gl::Rectangle& viewport, const gl::Rectangle& renderArea)
+{
+    gl::Rectangle invertedViewport(renderArea);
+    invertedViewport.y += renderArea.height;
+    invertedViewport.height = -viewport.height;
+
+    // apply the viewport the user wants to the inverted viewport.
+    invertedViewport.y += viewport.y;
+    invertedViewport.x = viewport.x;
+    invertedViewport.width = viewport.width;
+    return invertedViewport;
+}
+
 const char *g_VkLoaderLayersPathEnv = "VK_LAYER_PATH";
 const char *g_VkICDPathEnv          = "VK_ICD_FILENAMES";
 
