@@ -150,7 +150,8 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
 
 namespace egl_vk
 {
-egl::Config GenerateDefaultConfig(const gl::InternalFormat &colorFormat,
+egl::Config GenerateDefaultConfig(const VkPhysicalDeviceProperties &physicalDeviceProperties,
+                                  const gl::InternalFormat &colorFormat,
                                   const gl::InternalFormat &depthStencilFormat,
                                   EGLint sampleCount)
 {
@@ -173,9 +174,9 @@ egl::Config GenerateDefaultConfig(const gl::InternalFormat &colorFormat,
     config.stencilSize           = depthStencilFormat.stencilBits;
     config.level                 = 0;
     config.matchNativePixmap     = EGL_NONE;
-    config.maxPBufferWidth       = 0;
-    config.maxPBufferHeight      = 0;
-    config.maxPBufferPixels      = 0;
+    config.maxPBufferWidth       = physicalDeviceProperties.limits.maxImageDimension2D;
+    config.maxPBufferHeight      = physicalDeviceProperties.limits.maxImageDimension2D;
+    config.maxPBufferPixels      = config.maxPBufferWidth * config.maxPBufferHeight;
     config.maxSwapInterval       = 1;
     config.minSwapInterval       = 1;
     config.nativeRenderable      = EGL_TRUE;
@@ -196,7 +197,8 @@ egl::Config GenerateDefaultConfig(const gl::InternalFormat &colorFormat,
     return config;
 }
 
-egl::ConfigSet GenerateConfigs(const GLenum *colorFormats,
+egl::ConfigSet GenerateConfigs(const VkPhysicalDeviceProperties &physicalDeviceProperties,
+                               const GLenum *colorFormats,
                                size_t colorFormatsCount,
                                const GLenum *depthStencilFormats,
                                size_t depthStencilFormatCount,
@@ -226,8 +228,9 @@ egl::ConfigSet GenerateConfigs(const GLenum *colorFormats,
             for (size_t sampleCountIndex = 0; sampleCountIndex < sampleCountsCount;
                  sampleCountIndex++)
             {
-                egl::Config config = GenerateDefaultConfig(colorFormatInfo, depthStencilFormatInfo,
-                                                           sampleCounts[sampleCountIndex]);
+                egl::Config config =
+                    GenerateDefaultConfig(physicalDeviceProperties, colorFormatInfo,
+                                          depthStencilFormatInfo, sampleCounts[sampleCountIndex]);
                 if (display->checkConfigSupport(&config))
                 {
                     configSet.add(config);

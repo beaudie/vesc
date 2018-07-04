@@ -12,6 +12,7 @@
 #include <android/native_window.h>
 #include <vulkan/vulkan.h>
 
+#include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/android/WindowSurfaceVkAndroid.h"
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 
@@ -39,8 +40,8 @@ egl::ConfigSet DisplayVkAndroid::generateConfigs()
 {
     constexpr GLenum kColorFormats[] = {GL_RGBA8, GL_RGB8};
     constexpr EGLint kSampleCounts[] = {0};
-    return egl_vk::GenerateConfigs(kColorFormats, egl_vk::kConfigDepthStencilFormats, kSampleCounts,
-                                   this);
+    return egl_vk::GenerateConfigs(getRenderer()->getPhysicalDeviceProperties(), kColorFormats,
+                                   egl_vk::kConfigDepthStencilFormats, kSampleCounts, this);
 }
 
 bool DisplayVkAndroid::checkConfigSupport(egl::Config *config)

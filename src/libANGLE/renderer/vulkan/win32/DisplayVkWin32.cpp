@@ -11,6 +11,7 @@
 
 #include <vulkan/vulkan.h>
 
+#include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 #include "libANGLE/renderer/vulkan/win32/WindowSurfaceVkWin32.h"
 
@@ -38,8 +39,8 @@ egl::ConfigSet DisplayVkWin32::generateConfigs()
 {
     constexpr GLenum kColorFormats[] = {GL_BGRA8_EXT, GL_BGRX8_ANGLEX};
     constexpr EGLint kSampleCounts[] = {0};
-    return egl_vk::GenerateConfigs(kColorFormats, egl_vk::kConfigDepthStencilFormats, kSampleCounts,
-                                   this);
+    return egl_vk::GenerateConfigs(getRenderer()->getPhysicalDeviceProperties(), kColorFormats,
+                                   egl_vk::kConfigDepthStencilFormats, kSampleCounts, this);
 }
 
 bool DisplayVkWin32::checkConfigSupport(egl::Config *config)
