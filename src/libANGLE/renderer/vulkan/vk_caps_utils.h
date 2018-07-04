@@ -44,13 +44,15 @@ namespace egl_vk
 {
 // Generates a basic config for a combination of color format, depth stencil format and sample
 // count.
-egl::Config GenerateDefaultConfig(const gl::InternalFormat &colorFormat,
+egl::Config GenerateDefaultConfig(const VkPhysicalDeviceProperties &physicalDeviceProperties,
+                                  const gl::InternalFormat &colorFormat,
                                   const gl::InternalFormat &depthStencilFormat,
                                   EGLint sampleCount);
 
 // Permutes over all combinations of color format, depth stencil format and sample count and
 // generates a basic config which is passed to DisplayVk::checkConfigSupport.
-egl::ConfigSet GenerateConfigs(const GLenum *colorFormats,
+egl::ConfigSet GenerateConfigs(const VkPhysicalDeviceProperties &physicalDeviceProperties,
+                               const GLenum *colorFormats,
                                size_t colorFormatsCount,
                                const GLenum *depthStencilFormats,
                                size_t depthStencilFormatCount,
@@ -59,13 +61,15 @@ egl::ConfigSet GenerateConfigs(const GLenum *colorFormats,
                                DisplayVk *display);
 
 template <size_t ColorFormatCount, size_t DepthStencilFormatCount, size_t SampleCountsCount>
-egl::ConfigSet GenerateConfigs(const GLenum (&colorFormats)[ColorFormatCount],
+egl::ConfigSet GenerateConfigs(const VkPhysicalDeviceProperties &physicalDeviceProperties,
+                               const GLenum (&colorFormats)[ColorFormatCount],
                                const GLenum (&depthStencilFormats)[DepthStencilFormatCount],
                                const EGLint (&sampleCounts)[SampleCountsCount],
                                DisplayVk *display)
 {
-    return GenerateConfigs(colorFormats, ColorFormatCount, depthStencilFormats,
-                           DepthStencilFormatCount, sampleCounts, SampleCountsCount, display);
+    return GenerateConfigs(physicalDeviceProperties, colorFormats, ColorFormatCount,
+                           depthStencilFormats, DepthStencilFormatCount, sampleCounts,
+                           SampleCountsCount, display);
 }
 }  // namespace egl_vk
 

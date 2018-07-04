@@ -11,6 +11,7 @@
 
 #include <xcb/xcb.h>
 
+#include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 #include "libANGLE/renderer/vulkan/xcb/WindowSurfaceVkXcb.h"
 
@@ -67,7 +68,8 @@ egl::ConfigSet DisplayVkXcb::generateConfigs()
     constexpr GLenum kColorFormats[]        = {GL_BGRA8_EXT};
     constexpr GLenum kDepthStencilFormats[] = {GL_NONE, GL_DEPTH24_STENCIL8};
     constexpr EGLint kSampleCounts[]        = {0};
-    return egl_vk::GenerateConfigs(kColorFormats, kDepthStencilFormats, kSampleCounts, this);
+    return egl_vk::GenerateConfigs(getRenderer()->getPhysicalDeviceProperties(), kColorFormats,
+                                   kDepthStencilFormats, kSampleCounts, this);
 }
 
 bool DisplayVkXcb::checkConfigSupport(egl::Config *config)
