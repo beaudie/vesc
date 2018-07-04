@@ -14,6 +14,7 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/FeaturesVk.h"
+#include "libANGLE/renderer/vulkan/RendererVK.h"
 #include "vk_format_utils.h"
 
 namespace
@@ -150,7 +151,14 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
 
 namespace egl_vk
 {
-egl::Config GenerateDefaultConfig(const gl::InternalFormat &colorFormat,
+
+namespace
+{
+
+// Generates a basic config for a combination of color format, depth stencil format and sample
+// count.
+egl::Config GenerateDefaultConfig(const VkPhysicalDeviceProperties &physicalDeviceProperties,
+                                  const gl::InternalFormat &colorFormat,
                                   const gl::InternalFormat &depthStencilFormat,
                                   EGLint sampleCount)
 {
@@ -173,9 +181,13 @@ egl::Config GenerateDefaultConfig(const gl::InternalFormat &colorFormat,
     config.stencilSize           = depthStencilFormat.stencilBits;
     config.level                 = 0;
     config.matchNativePixmap     = EGL_NONE;
-    config.maxPBufferWidth       = 0;
-    config.maxPBufferHeight      = 0;
-    config.maxPBufferPixels      = 0;
+    config.maxPBufferWidth       = physicalDeviceProperties.limits.maxImageDimension2D;
+    config.maxPBufferHeight      = physicalDeviceProperties.limits.maxImageDimension2D;
+    // Vulkan can query the maximum resource size of an image but at 2^31 is guaranteed to be
+    // supported (found in the documentation of VkImageFormatProperties).  EGLint is only a 32-bit
+    // signed integer so we can't advertise higher than the Vulkan minimum.
+    static_assert(std::numeric_limits<EGLint>::max() >= (1 << 31), "Unexpected size of EGLint");
+    config.maxPBufferPixels      = 1 << 31;
     config.maxSwapInterval       = 1;
     config.minSwapInterval       = 1;
     config.nativeRenderable      = EGL_TRUE;
@@ -196,6 +208,8 @@ egl::Config GenerateDefaultConfig(const gl::InternalFormat &colorFormat,
     return config;
 }
 
+}  // anonymous namespace
+
 egl::ConfigSet GenerateConfigs(const GLenum *colorFormats,
                                size_t colorFormatsCount,
                                const GLenum *depthStencilFormats,
@@ -208,6 +222,10 @@ egl::ConfigSet GenerateConfigs(const GLenum *colorFormats,
     ASSERT(display != nullptr);
 
     egl::ConfigSet configSet;
+
+    const RendererVk *renderer = display->getRenderer();
+    const VkPhysicalDeviceProperties &physicalDeviceProperties =
+        renderer->getPhysicalDeviceProperties();
 
     for (size_t colorFormatIdx = 0; colorFormatIdx < colorFormatsCount; colorFormatIdx++)
     {
@@ -226,8 +244,9 @@ egl::ConfigSet GenerateConfigs(const GLenum *colorFormats,
             for (size_t sampleCountIndex = 0; sampleCountIndex < sampleCountsCount;
                  sampleCountIndex++)
             {
-                egl::Config config = GenerateDefaultConfig(colorFormatInfo, depthStencilFormatInfo,
-                                                           sampleCounts[sampleCountIndex]);
+                egl::Config config =
+                    GenerateDefaultConfig(physicalDeviceProperties, colorFormatInfo,
+                                          depthStencilFormatInfo, sampleCounts[sampleCountIndex]);
                 if (display->checkConfigSupport(&config))
                 {
                     configSet.add(config);
