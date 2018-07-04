@@ -55,11 +55,14 @@ class ViewportTest : public ANGLETest
         glGetIntegerv(GL_VIEWPORT, viewportSize);
 
         // Clear to green. Might be a scissored clear, if scissorSize != window size
-        glClearColor(0, 1, 0, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        // Draw a red quad centered in the middle of the viewport, with dimensions 25% of the size of the viewport.
-        drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f, 0.25f);
+            glClearColor(0, 1, 0, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
+        for (int i = 0; i < 200; i++) {
+            
+            // Draw a red quad centered in the middle of the viewport, with dimensions 25% of the size of the viewport.
+            drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f, 0.25f);
+             swapBuffers();
+        }
 
         GLint centerViewportX = viewportSize[0] + (viewportSize[2] / 2);
         GLint centerViewportY = viewportSize[1] + (viewportSize[3] / 2);
