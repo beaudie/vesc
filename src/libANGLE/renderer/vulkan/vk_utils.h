@@ -71,6 +71,8 @@ bool GetAvailableValidationLayers(const std::vector<VkLayerProperties> &layerPro
 
 uint32_t GetImageLayerCount(gl::TextureType textureType);
 
+gl::Rectangle InvertViewport(const gl::Rectangle &viewport, const gl::Rectangle &renderArea);
+
 extern const char *g_VkLoaderLayersPathEnv;
 extern const char *g_VkICDPathEnv;
 
