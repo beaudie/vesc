@@ -640,7 +640,8 @@ void PipelineDesc::updateShaders(Serial vertexSerial, Serial fragmentSerial)
 void PipelineDesc::updateViewport(const gl::Rectangle &viewport,
                                   float nearPlane,
                                   float farPlane,
-                                  bool invertViewport)
+                                  bool invertViewport,
+                                  const gl::Rectangle &renderArea)
 {
     mViewport.x      = static_cast<float>(viewport.x);
     mViewport.y      = static_cast<float>(viewport.y);
