@@ -353,7 +353,8 @@ class PipelineDesc final
     void updateViewport(const gl::Rectangle &viewport,
                         float nearPlane,
                         float farPlane,
-                        bool invertViewport);
+                        bool invertViewport,
+                        const gl::Rectangle &renderArea);
     void updateDepthRange(float nearPlane, float farPlane);
 
     // Shader stage info
