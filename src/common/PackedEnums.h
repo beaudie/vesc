@@ -70,11 +70,8 @@ struct AllEnums
 template <typename E, typename T>
 class PackedEnumMap
 {
-  private:
     using UnderlyingType = typename std::underlying_type<E>::type;
     using Storage        = std::array<T, EnumSize<E>()>;
-
-    Storage mData;
 
   public:
     // types:
@@ -125,6 +122,8 @@ class PackedEnumMap
 
     T *data() noexcept { return mData.data(); }
     const T *data() const noexcept { return mData.data(); }
+
+    Storage mData;
 };
 
 // PackedEnumBitSetE> is like an std::bitset<E::EnumCount> but is indexed with enum values. It
