@@ -14,6 +14,7 @@
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Program.h"
+#include "libANGLE/Surface.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/CompilerVk.h"
@@ -381,7 +382,20 @@ void ContextVk::popDebugGroup()
 bool ContextVk::isViewportFlipEnabled()
 {
     gl::Framebuffer *framebuffer = mState.getState().getDrawFramebuffer();
-    return framebuffer->isDefault() && mRenderer->getFeatures().flipViewportY;
+    if (!framebuffer->isDefault())
+    {
+        return false;
+    }
+
+    const gl::FramebufferAttachment *colorAttachment = framebuffer->getFirstColorbuffer();
+    ASSERT(colorAttachment->type() == GL_FRAMEBUFFER_DEFAULT);
+    const egl::Surface *surface = colorAttachment->getSurface();
+    EGLint surfaceOrientation   = surface->getOrientation();
+
+    // Flip viewports if FeaturesVk::flipViewportY is enabled and the user did not request that the
+    // surface is flipped.
+    return mRenderer->getFeatures().flipViewportY &&
+           !IsMaskFlagSet(surfaceOrientation, EGL_SURFACE_ORIENTATION_INVERT_Y_ANGLE);
 }
 
 void ContextVk::updateColorMask(const gl::BlendState &blendState)
