@@ -24,7 +24,7 @@ def get_script_dirname(script):
 
 def grab_from_script(script, param):
     res = subprocess.check_output(['python', script, param]).strip()
-    return [os.path.abspath(os.path.join(os.path.dirname(script), name)) for name in res.split(',')]
+    return [os.path.relpath(os.path.join(os.path.dirname(script), name), root_dir).replace("\\", "/") for name in res.split(',')]
 
 def auto_script(script):
     # Set the CWD to the script directory.
