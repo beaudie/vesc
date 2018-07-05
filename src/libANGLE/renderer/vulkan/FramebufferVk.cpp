@@ -458,7 +458,7 @@ gl::Error FramebufferVk::blit(const gl::Context *context,
             ASSERT(drawRenderTarget);
             ASSERT(HasSrcAndDstBlitProperties(renderer->getPhysicalDevice(), readRenderTarget,
                                               drawRenderTarget));
-            ANGLE_TRY(blitImpl(commandBuffer, sourceArea, destArea, readRenderTarget,
+            ANGLE_TRY(blitImpl(contextVk, commandBuffer, sourceArea, destArea, readRenderTarget,
                                drawRenderTarget, filter, scissor, true, false, false));
         }
     }
@@ -473,7 +473,7 @@ gl::Error FramebufferVk::blit(const gl::Context *context,
         if (HasSrcAndDstBlitProperties(renderer->getPhysicalDevice(), readRenderTarget,
                                        drawRenderTarget))
         {
-            ANGLE_TRY(blitImpl(commandBuffer, sourceArea, destArea, readRenderTarget,
+            ANGLE_TRY(blitImpl(contextVk, commandBuffer, sourceArea, destArea, readRenderTarget,
                                drawRenderTarget, filter, scissor, false, blitDepthBuffer,
                                blitStencilBuffer));
         }
@@ -488,7 +488,8 @@ gl::Error FramebufferVk::blit(const gl::Context *context,
     return gl::NoError();
 }
 
-gl::Error FramebufferVk::blitImpl(vk::CommandBuffer *commandBuffer,
+gl::Error FramebufferVk::blitImpl(ContextVk *contextVk,
+                                  vk::CommandBuffer *commandBuffer,
                                   const gl::Rectangle &readRectIn,
                                   const gl::Rectangle &drawRectIn,
                                   RenderTargetVk *readRenderTarget,
@@ -520,11 +521,23 @@ gl::Error FramebufferVk::blitImpl(vk::CommandBuffer *commandBuffer,
         }
     }
 
+    const gl::Extents &drawFrameBufferExtents = drawRenderTarget->getImageExtents();
+    gl::Rectangle drawFrameBufferBounds(0, 0, drawFrameBufferExtents.width,
+                                        drawFrameBufferExtents.height);
     const gl::Extents sourceFrameBufferExtents = readRenderTarget->getImageExtents();
 
     // After cropping for the scissor, we also want to crop for the size of the buffers.
     gl::Rectangle readFrameBufferBounds(0, 0, sourceFrameBufferExtents.width,
                                         sourceFrameBufferExtents.height);
+
+    if (contextVk->isViewportFlipEnabled())
+    {
+        scissoredReadRect.y =
+            readFrameBufferBounds.height - scissoredReadRect.y - scissoredReadRect.height;
+        scissoredDrawRect.y =
+            drawFrameBufferBounds.height - scissoredDrawRect.y - scissoredDrawRect.height;
+    }
+
     if (!ClipRectangle(scissoredReadRect, readFrameBufferBounds, &scissoredReadRect))
     {
         return gl::NoError();
@@ -549,9 +562,6 @@ gl::Error FramebufferVk::blitImpl(vk::CommandBuffer *commandBuffer,
     blit.dstSubresource.baseArrayLayer = 0;
     blit.dstSubresource.layerCount     = 1;
 
-    const gl::Extents &drawFrameBufferExtents = drawRenderTarget->getImageExtents();
-    gl::Rectangle drawFrameBufferBounds(0, 0, drawFrameBufferExtents.width,
-                                        drawFrameBufferExtents.height);
     if (!ClipRectangle(scissoredDrawRect, drawFrameBufferBounds, &scissoredDrawRect))
     {
         return gl::NoError();

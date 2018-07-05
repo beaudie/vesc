@@ -126,7 +126,8 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
     gl::Error clearWithDraw(const gl::Context *context, VkColorComponentFlags colorMaskFlags);
     void updateActiveColorMasks(size_t colorIndex, bool r, bool g, bool b, bool a);
 
-    gl::Error blitImpl(vk::CommandBuffer *commandBuffer,
+    gl::Error blitImpl(ContextVk *contextVk,
+                       vk::CommandBuffer *commandBuffer,
                        const gl::Rectangle &readRectIn,
                        const gl::Rectangle &drawRectIn,
                        RenderTargetVk *readRenderTarget,

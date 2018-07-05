@@ -380,8 +380,9 @@ void ContextVk::popDebugGroup()
 
 bool ContextVk::isViewportFlipEnabled()
 {
-    gl::Framebuffer *framebuffer = mState.getState().getDrawFramebuffer();
-    return framebuffer->isDefault() && mRenderer->getFeatures().flipViewportY;
+    // gl::Framebuffer *framebuffer = mState.getState().getDrawFramebuffer();
+    // return framebuffer->isDefault() && mRenderer->getFeatures().flipViewportY;
+    return mRenderer->getFeatures().flipViewportY;
 }
 
 void ContextVk::updateColorMask(const gl::BlendState &blendState)
