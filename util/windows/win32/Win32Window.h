@@ -12,8 +12,12 @@
 #include <windows.h>
 #include <string>
 
+#include <memory>
+
 #include "OSWindow.h"
 #include "Timer.h"
+
+class WindowWorker;
 
 class Win32Window : public OSWindow
 {
@@ -41,19 +45,9 @@ class Win32Window : public OSWindow
     void signalTestEvent() override;
 
   private:
-    static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    std::unique_ptr<WindowWorker> mWorker;
 
-    std::string mParentClassName;
-    std::string mChildClassName;
-
-    bool mIsVisible;
     Timer *mSetVisibleTimer;
-
-    bool mIsMouseInWindow;
-
-    EGLNativeWindowType mNativeWindow;
-    EGLNativeWindowType mParentWindow;
-    EGLNativeDisplayType mNativeDisplay;
 };
 
 #endif  // UTIL_WIN32_WINDOW_H

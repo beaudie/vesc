@@ -8,9 +8,14 @@
 
 #include "windows/win32/Win32Window.h"
 
+#include <mutex>
 #include <sstream>
+#include <thread>
 
 #include "common/debug.h"
+
+namespace
+{
 
 Key VirtualKeyCodeToKey(WPARAM key, LPARAM flags)
 {
@@ -227,288 +232,271 @@ Key VirtualKeyCodeToKey(WPARAM key, LPARAM flags)
 
     return Key(0);
 }
+}  // anonymous namespace
 
-LRESULT CALLBACK Win32Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+class WindowWorker final : angle::NonCopyable
 {
-    switch (message)
+  public:
+    WindowWorker(const std::string &name);
+    ~WindowWorker();
+
+    EGLNativeWindowType getNativeWindow() const;
+    EGLNativeDisplayType getNativeDisplay() const;
+
+    bool initialize(int width, int height);
+    void destroy();
+    void messageLoop();
+    bool takeScreenshot(int width, int height, uint8_t *pixelData);
+    void setMousePosition(int x, int y);
+    bool setPosition(int x, int y);
+    bool resize(int width, int height);
+    bool resizeNativeWindow(int width, int height);
+    void setVisible(bool isVisible);
+    void signalTestEvent();
+
+    std::list<Event> &&getEvents();
+
+  private:
+    void pushEvent(Event event);
+    void main();
+
+    enum Command
     {
-        case WM_NCCREATE:
-        {
-            LPCREATESTRUCT pCreateStruct = reinterpret_cast<LPCREATESTRUCT>(lParam);
-            SetWindowLongPtr(hWnd, GWLP_USERDATA,
-                             reinterpret_cast<LONG_PTR>(pCreateStruct->lpCreateParams));
-            return DefWindowProcA(hWnd, message, wParam, lParam);
-        }
-    }
+        Initialize,
+        Destroy,
+        MessageLoop,
+        TakeScreenshot,
+        SetMousePosition,
+        SetPosition,
+        Resize,
+        ResizeNativeWindow,
+        SetVisible,
+        SignalTestEvent,
+    };
 
-    Win32Window *window = reinterpret_cast<Win32Window *>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
-    if (window)
+    struct Params
     {
-        switch (message)
-        {
-            case WM_DESTROY:
-            case WM_CLOSE:
-            {
-                Event event;
-                event.Type = Event::EVENT_CLOSED;
-                window->pushEvent(event);
-                break;
-            }
+        Command command;
+        int x = 0, y = 0;
+        int width = 0, height = 0;
+        bool visible    = false;
+        uint8_t *pixels = nullptr;
+    };
 
-            case WM_MOVE:
-            {
-                RECT winRect;
-                GetClientRect(hWnd, &winRect);
+    enum ThreadState
+    {
+        Waiting,
+        Ready,
+        Processed,
+    };
 
-                POINT topLeft;
-                topLeft.x = winRect.left;
-                topLeft.y = winRect.top;
-                ClientToScreen(hWnd, &topLeft);
+    bool call(const Params &params);
+    void doCommand();
 
-                Event event;
-                event.Type   = Event::EVENT_MOVED;
-                event.Move.X = topLeft.x;
-                event.Move.Y = topLeft.y;
-                window->pushEvent(event);
+    bool doInitialize(int width, int height);
+    void doDestroy();
+    void doMessageLoop();
+    bool doTakeScreenshot(int width, int height, uint8_t *pixelData);
+    void doSetMousePosition(int x, int y);
+    bool doSetPosition(int x, int y);
+    bool doResize(int width, int height);
+    bool doResizeNativeWindow(int width, int height);
+    void doSetVisible(bool isVisible);
+    void doSignalTestEvent();
 
-                break;
-            }
+    static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-            case WM_SIZE:
-            {
-                RECT winRect;
-                GetClientRect(hWnd, &winRect);
+    std::string mName;
+    std::string mParentClassName;
+    std::string mChildClassName;
 
-                POINT topLeft;
-                topLeft.x = winRect.left;
-                topLeft.y = winRect.top;
-                ClientToScreen(hWnd, &topLeft);
+    EGLNativeWindowType mNativeWindow;
+    EGLNativeWindowType mParentWindow;
+    EGLNativeDisplayType mNativeDisplay;
 
-                POINT botRight;
-                botRight.x = winRect.right;
-                botRight.y = winRect.bottom;
-                ClientToScreen(hWnd, &botRight);
+    bool mIsMouseInWindow;
+    std::list<Event> mEvents;
 
-                Event event;
-                event.Type        = Event::EVENT_RESIZED;
-                event.Size.Width  = botRight.x - topLeft.x;
-                event.Size.Height = botRight.y - topLeft.y;
-                window->pushEvent(event);
+    Params mParams;
+    bool mReturnValue = false;
 
-                break;
-            }
+    ThreadState mState = ThreadState::Waiting;
 
-            case WM_SETFOCUS:
-            {
-                Event event;
-                event.Type = Event::EVENT_GAINED_FOCUS;
-                window->pushEvent(event);
-                break;
-            }
+    std::mutex mMutex;
+    std::condition_variable mConditionVar;
+    std::thread mThread;
+};
 
-            case WM_KILLFOCUS:
-            {
-                Event event;
-                event.Type = Event::EVENT_LOST_FOCUS;
-                window->pushEvent(event);
-                break;
-            }
-
-            case WM_KEYDOWN:
-            case WM_SYSKEYDOWN:
-            case WM_KEYUP:
-            case WM_SYSKEYUP:
-            {
-                bool down = (message == WM_KEYDOWN || message == WM_SYSKEYDOWN);
-
-                Event event;
-                event.Type        = down ? Event::EVENT_KEY_PRESSED : Event::EVENT_KEY_RELEASED;
-                event.Key.Alt     = HIWORD(GetAsyncKeyState(VK_MENU)) != 0;
-                event.Key.Control = HIWORD(GetAsyncKeyState(VK_CONTROL)) != 0;
-                event.Key.Shift = HIWORD(GetAsyncKeyState(VK_SHIFT)) != 0;
-                event.Key.System =
-                    HIWORD(GetAsyncKeyState(VK_LWIN)) || HIWORD(GetAsyncKeyState(VK_RWIN));
-                event.Key.Code = VirtualKeyCodeToKey(wParam, lParam);
-                window->pushEvent(event);
-
-                break;
-            }
-
-            case WM_MOUSEWHEEL:
-            {
-                Event event;
-                event.Type             = Event::EVENT_MOUSE_WHEEL_MOVED;
-                event.MouseWheel.Delta = static_cast<short>(HIWORD(wParam)) / 120;
-                window->pushEvent(event);
-                break;
-            }
-
-            case WM_LBUTTONDOWN:
-            case WM_LBUTTONDBLCLK:
-            {
-                Event event;
-                event.Type               = Event::EVENT_MOUSE_BUTTON_PRESSED;
-                event.MouseButton.Button = MOUSEBUTTON_LEFT;
-                event.MouseButton.X      = static_cast<short>(LOWORD(lParam));
-                event.MouseButton.Y = static_cast<short>(HIWORD(lParam));
-                window->pushEvent(event);
-                break;
-            }
-
-            case WM_LBUTTONUP:
-            {
-                Event event;
-                event.Type               = Event::EVENT_MOUSE_BUTTON_RELEASED;
-                event.MouseButton.Button = MOUSEBUTTON_LEFT;
-                event.MouseButton.X      = static_cast<short>(LOWORD(lParam));
-                event.MouseButton.Y = static_cast<short>(HIWORD(lParam));
-                window->pushEvent(event);
-                break;
-            }
-
-            case WM_RBUTTONDOWN:
-            case WM_RBUTTONDBLCLK:
-            {
-                Event event;
-                event.Type               = Event::EVENT_MOUSE_BUTTON_PRESSED;
-                event.MouseButton.Button = MOUSEBUTTON_RIGHT;
-                event.MouseButton.X      = static_cast<short>(LOWORD(lParam));
-                event.MouseButton.Y = static_cast<short>(HIWORD(lParam));
-                window->pushEvent(event);
-                break;
-            }
-
-            // Mouse right button up event
-            case WM_RBUTTONUP:
-            {
-                Event event;
-                event.Type               = Event::EVENT_MOUSE_BUTTON_RELEASED;
-                event.MouseButton.Button = MOUSEBUTTON_RIGHT;
-                event.MouseButton.X      = static_cast<short>(LOWORD(lParam));
-                event.MouseButton.Y = static_cast<short>(HIWORD(lParam));
-                window->pushEvent(event);
-                break;
-            }
-
-            // Mouse wheel button down event
-            case WM_MBUTTONDOWN:
-            case WM_MBUTTONDBLCLK:
-            {
-                Event event;
-                event.Type               = Event::EVENT_MOUSE_BUTTON_PRESSED;
-                event.MouseButton.Button = MOUSEBUTTON_MIDDLE;
-                event.MouseButton.X      = static_cast<short>(LOWORD(lParam));
-                event.MouseButton.Y = static_cast<short>(HIWORD(lParam));
-                window->pushEvent(event);
-                break;
-            }
-
-            // Mouse wheel button up event
-            case WM_MBUTTONUP:
-            {
-                Event event;
-                event.Type               = Event::EVENT_MOUSE_BUTTON_RELEASED;
-                event.MouseButton.Button = MOUSEBUTTON_MIDDLE;
-                event.MouseButton.X      = static_cast<short>(LOWORD(lParam));
-                event.MouseButton.Y = static_cast<short>(HIWORD(lParam));
-                window->pushEvent(event);
-                break;
-            }
-
-            // Mouse X button down event
-            case WM_XBUTTONDOWN:
-            case WM_XBUTTONDBLCLK:
-            {
-                Event event;
-                event.Type = Event::EVENT_MOUSE_BUTTON_PRESSED;
-                event.MouseButton.Button =
-                    (HIWORD(wParam) == XBUTTON1) ? MOUSEBUTTON_BUTTON4 : MOUSEBUTTON_BUTTON5;
-                event.MouseButton.X = static_cast<short>(LOWORD(lParam));
-                event.MouseButton.Y = static_cast<short>(HIWORD(lParam));
-                window->pushEvent(event);
-                break;
-            }
-
-            // Mouse X button up event
-            case WM_XBUTTONUP:
-            {
-                Event event;
-                event.Type = Event::EVENT_MOUSE_BUTTON_RELEASED;
-                event.MouseButton.Button =
-                    (HIWORD(wParam) == XBUTTON1) ? MOUSEBUTTON_BUTTON4 : MOUSEBUTTON_BUTTON5;
-                event.MouseButton.X = static_cast<short>(LOWORD(lParam));
-                event.MouseButton.Y = static_cast<short>(HIWORD(lParam));
-                window->pushEvent(event);
-                break;
-            }
-
-            case WM_MOUSEMOVE:
-            {
-                if (!window->mIsMouseInWindow)
-                {
-                    window->mIsMouseInWindow = true;
-                    Event event;
-                    event.Type = Event::EVENT_MOUSE_ENTERED;
-                    window->pushEvent(event);
-                }
-
-                int mouseX = static_cast<short>(LOWORD(lParam));
-                int mouseY = static_cast<short>(HIWORD(lParam));
-
-                Event event;
-                event.Type        = Event::EVENT_MOUSE_MOVED;
-                event.MouseMove.X = mouseX;
-                event.MouseMove.Y = mouseY;
-                window->pushEvent(event);
-                break;
-            }
-
-            case WM_MOUSELEAVE:
-            {
-                Event event;
-                event.Type = Event::EVENT_MOUSE_LEFT;
-                window->pushEvent(event);
-                window->mIsMouseInWindow = false;
-                break;
-            }
-
-            case WM_USER:
-            {
-                Event testEvent;
-                testEvent.Type = Event::EVENT_TEST;
-                window->pushEvent(testEvent);
-                break;
-            }
-        }
-    }
-    return DefWindowProcA(hWnd, message, wParam, lParam);
-}
-
-Win32Window::Win32Window()
-    : mIsVisible(false),
-      mSetVisibleTimer(CreateTimer()),
-      mIsMouseInWindow(false),
+WindowWorker::WindowWorker(const std::string &name)
+    : mName(name),
       mNativeWindow(0),
       mParentWindow(0),
-      mNativeDisplay(0)
+      mNativeDisplay(0),
+      mIsMouseInWindow(false),
+      mThread(&WindowWorker::main, this)
 {
 }
 
-Win32Window::~Win32Window()
+WindowWorker::~WindowWorker()
 {
     destroy();
-    delete mSetVisibleTimer;
 }
 
-bool Win32Window::initialize(const std::string &name, size_t width, size_t height)
+void WindowWorker::main()
 {
-    destroy();
+    while (true)
+    {
+        {
+            std::unique_lock<std::mutex> lock(mMutex);
+            mConditionVar.wait(lock, [this]() { return this->mState == ThreadState::Ready; });
+            doCommand();
+            mState = Processed;
+            lock.unlock();
+            mConditionVar.notify_one();
+        }
+    }
+}
+
+void WindowWorker::doCommand()
+{
+
+    switch (mParams.command)
+    {
+        case Command::Initialize:
+            mReturnValue = doInitialize(mParams.width, mParams.height);
+            break;
+        case Command::Destroy:
+            doDestroy();
+            break;
+        case Command::MessageLoop:
+            doMessageLoop();
+            break;
+        case Command::Resize:
+            mReturnValue = doResize(mParams.width, mParams.height);
+            break;
+        case Command::ResizeNativeWindow:
+            mReturnValue = doResizeNativeWindow(mParams.width, mParams.height);
+            break;
+        case Command::SetMousePosition:
+            doSetMousePosition(mParams.x, mParams.y);
+            break;
+        case Command::SetPosition:
+            mReturnValue = doSetPosition(mParams.x, mParams.y);
+            break;
+        case Command::SetVisible:
+            doSetVisible(mParams.visible);
+            break;
+        case Command::SignalTestEvent:
+            doSignalTestEvent();
+            break;
+        case Command::TakeScreenshot:
+            mReturnValue = doTakeScreenshot(mParams.width, mParams.height, mParams.pixels);
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
+void WindowWorker::pushEvent(Event event)
+{
+    mEvents.push_back(event);
+}
+
+EGLNativeWindowType WindowWorker::getNativeWindow() const
+{
+    return mNativeWindow;
+}
+
+EGLNativeDisplayType WindowWorker::getNativeDisplay() const
+{
+    return mNativeDisplay;
+}
+
+bool WindowWorker::call(const Params &params)
+{
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
+        mParams = params;
+        mState  = ThreadState::Ready;
+    }
+
+    mConditionVar.notify_one();
+
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        mConditionVar.wait(lock, [this]() { return this->mState == ThreadState::Processed; });
+    }
+
+    mState = ThreadState::Waiting;
+
+    return mReturnValue;
+}
+
+std::list<Event> &&WindowWorker::getEvents()
+{
+    return std::move(mEvents);
+}
+
+bool WindowWorker::initialize(int width, int height)
+{
+    return call({Command::Initialize, 0, 0, width, height, false, nullptr});
+}
+
+void WindowWorker::destroy()
+{
+    call({Command::Destroy, 0, 0, 0, 0, false, nullptr});
+}
+
+void WindowWorker::messageLoop()
+{
+    call({Command::MessageLoop, 0, 0, 0, 0, false, nullptr});
+}
+
+bool WindowWorker::takeScreenshot(int width, int height, uint8_t *pixelData)
+{
+    return call({Command::TakeScreenshot, 0, 0, width, height, false, pixelData});
+}
+
+void WindowWorker::setMousePosition(int x, int y)
+{
+    call({Command::SetMousePosition, x, y, 0, 0, false, nullptr});
+}
+
+bool WindowWorker::setPosition(int x, int y)
+{
+    return call({Command::SetPosition, x, y, 0, 0, false, nullptr});
+}
+
+bool WindowWorker::resize(int width, int height)
+{
+    return call({Command::Resize, 0, 0, width, height, false, nullptr});
+}
+
+bool WindowWorker::resizeNativeWindow(int width, int height)
+{
+    return call({Command::ResizeNativeWindow, 0, 0, width, height, false, nullptr});
+}
+
+void WindowWorker::setVisible(bool isVisible)
+{
+    call({Command::SetVisible, 0, 0, 0, 0, isVisible, nullptr});
+}
+
+void WindowWorker::signalTestEvent()
+{
+    call({Command::SignalTestEvent, 0, 0, 0, 0, false, nullptr});
+}
+
+bool WindowWorker::doInitialize(int width, int height)
+{
+    doDestroy();
 
     // Use a new window class name for ever window to ensure that a new window can be created
     // even if the last one was not properly destroyed
     static size_t windowIdx = 0;
     std::ostringstream nameStream;
-    nameStream << name << "_" << windowIdx++;
+    nameStream << mName << "_" << windowIdx++;
 
     mParentClassName = nameStream.str();
     mChildClassName  = mParentClassName + "_Child";
@@ -550,18 +538,18 @@ bool Win32Window::initialize(const std::string &name, size_t width, size_t heigh
         return false;
     }
 
-    DWORD parentStyle         = WS_CAPTION | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU;
+    DWORD parentStyle = WS_CAPTION | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU;
     DWORD parentExtendedStyle = WS_EX_APPWINDOW;
 
     RECT sizeRect = {0, 0, static_cast<LONG>(width), static_cast<LONG>(height)};
     AdjustWindowRectEx(&sizeRect, parentStyle, FALSE, parentExtendedStyle);
 
-    mParentWindow = CreateWindowExA(parentExtendedStyle, mParentClassName.c_str(), name.c_str(),
+    mParentWindow = CreateWindowExA(parentExtendedStyle, mParentClassName.c_str(), mName.c_str(),
                                     parentStyle, CW_USEDEFAULT, CW_USEDEFAULT,
                                     sizeRect.right - sizeRect.left, sizeRect.bottom - sizeRect.top,
                                     nullptr, nullptr, GetModuleHandle(nullptr), this);
 
-    mNativeWindow = CreateWindowExA(0, mChildClassName.c_str(), name.c_str(), WS_CHILD, 0, 0,
+    mNativeWindow = CreateWindowExA(0, mChildClassName.c_str(), mName.c_str(), WS_CHILD, 0, 0,
                                     static_cast<int>(width), static_cast<int>(height),
                                     mParentWindow, nullptr, GetModuleHandle(nullptr), this);
 
@@ -575,7 +563,7 @@ bool Win32Window::initialize(const std::string &name, size_t width, size_t heigh
     return true;
 }
 
-void Win32Window::destroy()
+void WindowWorker::doDestroy()
 {
     if (mNativeDisplay)
     {
@@ -599,26 +587,19 @@ void Win32Window::destroy()
     UnregisterClassA(mChildClassName.c_str(), nullptr);
 }
 
-bool Win32Window::takeScreenshot(uint8_t *pixelData)
+void WindowWorker::doMessageLoop()
 {
-    if (mIsVisible)
+    MSG msg;
+    while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
     {
-        return false;
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
     }
+}
 
+bool WindowWorker::doTakeScreenshot(int width, int height, uint8_t *pixelData)
+{
     bool error = false;
-
-    // Hack for DWM: There is no way to wait for DWM animations to finish, so we just have to wait
-    // for a while before issuing screenshot if window was just made visible.
-    {
-        static const double WAIT_WINDOW_VISIBLE_MS = 0.5;  // Half a second for the animation
-        double timeSinceVisible                    = mSetVisibleTimer->getElapsedTime();
-
-        if (timeSinceVisible < WAIT_WINDOW_VISIBLE_MS)
-        {
-            Sleep(static_cast<DWORD>((WAIT_WINDOW_VISIBLE_MS - timeSinceVisible) * 1000));
-        }
-    }
 
     HDC screenDC      = nullptr;
     HDC windowDC      = nullptr;
@@ -645,7 +626,7 @@ bool Win32Window::takeScreenshot(uint8_t *pixelData)
 
     if (!error)
     {
-        tmpBitmap = CreateCompatibleBitmap(screenDC, mWidth, mHeight);
+        tmpBitmap = CreateCompatibleBitmap(screenDC, width, height);
         error     = tmpBitmap == nullptr;
     }
 
@@ -662,15 +643,15 @@ bool Win32Window::takeScreenshot(uint8_t *pixelData)
 
     if (!error)
     {
-        error = BitBlt(tmpDC, 0, 0, mWidth, mHeight, screenDC, topLeft.x, topLeft.y, SRCCOPY) == 0;
+        error = BitBlt(tmpDC, 0, 0, width, height, screenDC, topLeft.x, topLeft.y, SRCCOPY) == 0;
     }
 
     if (!error)
     {
         BITMAPINFOHEADER bitmapInfo;
         bitmapInfo.biSize          = sizeof(BITMAPINFOHEADER);
-        bitmapInfo.biWidth         = mWidth;
-        bitmapInfo.biHeight        = -mHeight;
+        bitmapInfo.biWidth         = width;
+        bitmapInfo.biHeight        = -height;
         bitmapInfo.biPlanes        = 1;
         bitmapInfo.biBitCount      = 32;
         bitmapInfo.biCompression   = BI_RGB;
@@ -679,9 +660,9 @@ bool Win32Window::takeScreenshot(uint8_t *pixelData)
         bitmapInfo.biYPelsPerMeter = 0;
         bitmapInfo.biClrUsed       = 0;
         bitmapInfo.biClrImportant  = 0;
-        int getBitsResult = GetDIBits(screenDC, tmpBitmap, 0, mHeight, pixelData,
+        int getBitsResult          = GetDIBits(screenDC, tmpBitmap, 0, height, pixelData,
                                       reinterpret_cast<BITMAPINFO *>(&bitmapInfo), DIB_RGB_COLORS);
-        error = (getBitsResult == 0);
+        error                      = (getBitsResult == 0);
     }
 
     if (tmpBitmap != nullptr)
@@ -704,27 +685,7 @@ bool Win32Window::takeScreenshot(uint8_t *pixelData)
     return !error;
 }
 
-EGLNativeWindowType Win32Window::getNativeWindow() const
-{
-    return mNativeWindow;
-}
-
-EGLNativeDisplayType Win32Window::getNativeDisplay() const
-{
-    return mNativeDisplay;
-}
-
-void Win32Window::messageLoop()
-{
-    MSG msg;
-    while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-    {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
-    }
-}
-
-void Win32Window::setMousePosition(int x, int y)
+void WindowWorker::doSetMousePosition(int x, int y)
 {
     RECT winRect;
     GetClientRect(mNativeWindow, &winRect);
@@ -737,18 +698,8 @@ void Win32Window::setMousePosition(int x, int y)
     SetCursorPos(topLeft.x + x, topLeft.y + y);
 }
 
-OSWindow *CreateOSWindow()
+bool WindowWorker::doSetPosition(int x, int y)
 {
-    return new Win32Window();
-}
-
-bool Win32Window::setPosition(int x, int y)
-{
-    if (mX == x && mY == y)
-    {
-        return true;
-    }
-
     RECT windowRect;
     if (!GetWindowRect(mParentWindow, &windowRect))
     {
@@ -764,13 +715,8 @@ bool Win32Window::setPosition(int x, int y)
     return true;
 }
 
-bool Win32Window::resize(int width, int height)
+bool WindowWorker::doResize(int width, int height)
 {
-    if (width == mWidth && height == mHeight)
-    {
-        return true;
-    }
-
     RECT windowRect;
     if (!GetWindowRect(mParentWindow, &windowRect))
     {
@@ -791,7 +737,7 @@ bool Win32Window::resize(int width, int height)
         return false;
     }
 
-    if (!MoveWindow(mNativeWindow, 0, 0, width, height, FALSE))
+    if (!doResizeNativeWindow(width, height))
     {
         return false;
     }
@@ -799,18 +745,407 @@ bool Win32Window::resize(int width, int height)
     return true;
 }
 
-void Win32Window::setVisible(bool isVisible)
+bool WindowWorker::doResizeNativeWindow(int width, int height)
+{
+    return !!MoveWindow(mNativeWindow, 0, 0, width, height, FALSE);
+}
+
+void WindowWorker::doSetVisible(bool isVisible)
 {
     int flag = (isVisible ? SW_SHOW : SW_HIDE);
 
     ShowWindow(mParentWindow, flag);
     ShowWindow(mNativeWindow, flag);
+}
+
+void WindowWorker::doSignalTestEvent()
+{
+    PostMessage(mNativeWindow, WM_USER, 0, 0);
+}
+
+// static
+LRESULT CALLBACK WindowWorker::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch (message)
+    {
+        case WM_NCCREATE:
+        {
+            LPCREATESTRUCT pCreateStruct = reinterpret_cast<LPCREATESTRUCT>(lParam);
+            SetWindowLongPtr(hWnd, GWLP_USERDATA,
+                             reinterpret_cast<LONG_PTR>(pCreateStruct->lpCreateParams));
+            return DefWindowProcA(hWnd, message, wParam, lParam);
+        }
+    }
+
+    WindowWorker *worker = reinterpret_cast<WindowWorker *>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+    if (worker)
+    {
+        switch (message)
+        {
+            case WM_DESTROY:
+            case WM_CLOSE:
+            {
+                Event event;
+                event.Type = Event::EVENT_CLOSED;
+                worker->pushEvent(event);
+                break;
+            }
+
+            case WM_MOVE:
+            {
+                RECT winRect;
+                GetClientRect(hWnd, &winRect);
+
+                POINT topLeft;
+                topLeft.x = winRect.left;
+                topLeft.y = winRect.top;
+                ClientToScreen(hWnd, &topLeft);
+
+                Event event;
+                event.Type   = Event::EVENT_MOVED;
+                event.Move.X = topLeft.x;
+                event.Move.Y = topLeft.y;
+                worker->pushEvent(event);
+
+                break;
+            }
+
+            case WM_SIZE:
+            {
+                RECT winRect;
+                GetClientRect(hWnd, &winRect);
+
+                POINT topLeft;
+                topLeft.x = winRect.left;
+                topLeft.y = winRect.top;
+                ClientToScreen(hWnd, &topLeft);
+
+                POINT botRight;
+                botRight.x = winRect.right;
+                botRight.y = winRect.bottom;
+                ClientToScreen(hWnd, &botRight);
+
+                Event event;
+                event.Type        = Event::EVENT_RESIZED;
+                event.Size.Width  = botRight.x - topLeft.x;
+                event.Size.Height = botRight.y - topLeft.y;
+                worker->pushEvent(event);
+
+                break;
+            }
+
+            case WM_SETFOCUS:
+            {
+                Event event;
+                event.Type = Event::EVENT_GAINED_FOCUS;
+                worker->pushEvent(event);
+                break;
+            }
+
+            case WM_KILLFOCUS:
+            {
+                Event event;
+                event.Type = Event::EVENT_LOST_FOCUS;
+                worker->pushEvent(event);
+                break;
+            }
+
+            case WM_KEYDOWN:
+            case WM_SYSKEYDOWN:
+            case WM_KEYUP:
+            case WM_SYSKEYUP:
+            {
+                bool down = (message == WM_KEYDOWN || message == WM_SYSKEYDOWN);
+
+                Event event;
+                event.Type        = down ? Event::EVENT_KEY_PRESSED : Event::EVENT_KEY_RELEASED;
+                event.Key.Alt     = HIWORD(GetAsyncKeyState(VK_MENU)) != 0;
+                event.Key.Control = HIWORD(GetAsyncKeyState(VK_CONTROL)) != 0;
+                event.Key.Shift   = HIWORD(GetAsyncKeyState(VK_SHIFT)) != 0;
+                event.Key.System =
+                    HIWORD(GetAsyncKeyState(VK_LWIN)) || HIWORD(GetAsyncKeyState(VK_RWIN));
+                event.Key.Code = VirtualKeyCodeToKey(wParam, lParam);
+                worker->pushEvent(event);
+
+                break;
+            }
+
+            case WM_MOUSEWHEEL:
+            {
+                Event event;
+                event.Type             = Event::EVENT_MOUSE_WHEEL_MOVED;
+                event.MouseWheel.Delta = static_cast<short>(HIWORD(wParam)) / 120;
+                worker->pushEvent(event);
+                break;
+            }
+
+            case WM_LBUTTONDOWN:
+            case WM_LBUTTONDBLCLK:
+            {
+                Event event;
+                event.Type               = Event::EVENT_MOUSE_BUTTON_PRESSED;
+                event.MouseButton.Button = MOUSEBUTTON_LEFT;
+                event.MouseButton.X      = static_cast<short>(LOWORD(lParam));
+                event.MouseButton.Y      = static_cast<short>(HIWORD(lParam));
+                worker->pushEvent(event);
+                break;
+            }
+
+            case WM_LBUTTONUP:
+            {
+                Event event;
+                event.Type               = Event::EVENT_MOUSE_BUTTON_RELEASED;
+                event.MouseButton.Button = MOUSEBUTTON_LEFT;
+                event.MouseButton.X      = static_cast<short>(LOWORD(lParam));
+                event.MouseButton.Y      = static_cast<short>(HIWORD(lParam));
+                worker->pushEvent(event);
+                break;
+            }
+
+            case WM_RBUTTONDOWN:
+            case WM_RBUTTONDBLCLK:
+            {
+                Event event;
+                event.Type               = Event::EVENT_MOUSE_BUTTON_PRESSED;
+                event.MouseButton.Button = MOUSEBUTTON_RIGHT;
+                event.MouseButton.X      = static_cast<short>(LOWORD(lParam));
+                event.MouseButton.Y      = static_cast<short>(HIWORD(lParam));
+                worker->pushEvent(event);
+                break;
+            }
+
+            // Mouse right button up event
+            case WM_RBUTTONUP:
+            {
+                Event event;
+                event.Type               = Event::EVENT_MOUSE_BUTTON_RELEASED;
+                event.MouseButton.Button = MOUSEBUTTON_RIGHT;
+                event.MouseButton.X      = static_cast<short>(LOWORD(lParam));
+                event.MouseButton.Y      = static_cast<short>(HIWORD(lParam));
+                worker->pushEvent(event);
+                break;
+            }
+
+            // Mouse wheel button down event
+            case WM_MBUTTONDOWN:
+            case WM_MBUTTONDBLCLK:
+            {
+                Event event;
+                event.Type               = Event::EVENT_MOUSE_BUTTON_PRESSED;
+                event.MouseButton.Button = MOUSEBUTTON_MIDDLE;
+                event.MouseButton.X      = static_cast<short>(LOWORD(lParam));
+                event.MouseButton.Y      = static_cast<short>(HIWORD(lParam));
+                worker->pushEvent(event);
+                break;
+            }
+
+            // Mouse wheel button up event
+            case WM_MBUTTONUP:
+            {
+                Event event;
+                event.Type               = Event::EVENT_MOUSE_BUTTON_RELEASED;
+                event.MouseButton.Button = MOUSEBUTTON_MIDDLE;
+                event.MouseButton.X      = static_cast<short>(LOWORD(lParam));
+                event.MouseButton.Y      = static_cast<short>(HIWORD(lParam));
+                worker->pushEvent(event);
+                break;
+            }
+
+            // Mouse X button down event
+            case WM_XBUTTONDOWN:
+            case WM_XBUTTONDBLCLK:
+            {
+                Event event;
+                event.Type = Event::EVENT_MOUSE_BUTTON_PRESSED;
+                event.MouseButton.Button =
+                    (HIWORD(wParam) == XBUTTON1) ? MOUSEBUTTON_BUTTON4 : MOUSEBUTTON_BUTTON5;
+                event.MouseButton.X = static_cast<short>(LOWORD(lParam));
+                event.MouseButton.Y = static_cast<short>(HIWORD(lParam));
+                worker->pushEvent(event);
+                break;
+            }
+
+            // Mouse X button up event
+            case WM_XBUTTONUP:
+            {
+                Event event;
+                event.Type = Event::EVENT_MOUSE_BUTTON_RELEASED;
+                event.MouseButton.Button =
+                    (HIWORD(wParam) == XBUTTON1) ? MOUSEBUTTON_BUTTON4 : MOUSEBUTTON_BUTTON5;
+                event.MouseButton.X = static_cast<short>(LOWORD(lParam));
+                event.MouseButton.Y = static_cast<short>(HIWORD(lParam));
+                worker->pushEvent(event);
+                break;
+            }
+
+            case WM_MOUSEMOVE:
+            {
+                if (!worker->mIsMouseInWindow)
+                {
+                    worker->mIsMouseInWindow = true;
+                    Event event;
+                    event.Type = Event::EVENT_MOUSE_ENTERED;
+                    worker->pushEvent(event);
+                }
+
+                int mouseX = static_cast<short>(LOWORD(lParam));
+                int mouseY = static_cast<short>(HIWORD(lParam));
+
+                Event event;
+                event.Type        = Event::EVENT_MOUSE_MOVED;
+                event.MouseMove.X = mouseX;
+                event.MouseMove.Y = mouseY;
+                worker->pushEvent(event);
+                break;
+            }
+
+            case WM_MOUSELEAVE:
+            {
+                Event event;
+                event.Type = Event::EVENT_MOUSE_LEFT;
+                worker->pushEvent(event);
+                worker->mIsMouseInWindow = false;
+                break;
+            }
+
+            case WM_USER:
+            {
+                Event testEvent;
+                testEvent.Type = Event::EVENT_TEST;
+                worker->pushEvent(testEvent);
+                break;
+            }
+        }
+    }
+    return DefWindowProcA(hWnd, message, wParam, lParam);
+}
+
+Win32Window::Win32Window() : mSetVisibleTimer(CreateTimer())
+{
+}
+
+Win32Window::~Win32Window()
+{
+    destroy();
+    delete mSetVisibleTimer;
+}
+
+bool Win32Window::initialize(const std::string &name, size_t width, size_t height)
+{
+    destroy();
+    mWorker.reset(new WindowWorker(name));
+    return mWorker->initialize(static_cast<int>(width), static_cast<int>(height));
+}
+
+void Win32Window::destroy()
+{
+    mWorker.reset(nullptr);
+}
+
+bool Win32Window::takeScreenshot(uint8_t *pixelData)
+{
+    // Hack for DWM: There is no way to wait for DWM animations to finish, so we just have to wait
+    // for a while before issuing screenshot if window was just made visible.
+    {
+        static const double WAIT_WINDOW_VISIBLE_MS = 1.0;  // Half a second for the animation
+        double timeSinceVisible                    = mSetVisibleTimer->getElapsedTime();
+
+        if (timeSinceVisible < WAIT_WINDOW_VISIBLE_MS)
+        {
+            Sleep(static_cast<DWORD>((WAIT_WINDOW_VISIBLE_MS - timeSinceVisible) * 1000));
+        }
+    }
+
+    if (mWorker->takeScreenshot(mWidth, mHeight, pixelData))
+    {
+        messageLoop();
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+EGLNativeWindowType Win32Window::getNativeWindow() const
+{
+    return mWorker->getNativeWindow();
+}
+
+EGLNativeDisplayType Win32Window::getNativeDisplay() const
+{
+    return mWorker->getNativeDisplay();
+}
+
+void Win32Window::messageLoop()
+{
+    std::list<Event> newEvents = mWorker->getEvents();
+
+    for (Event &event : newEvents)
+    {
+        pushEvent(event);
+    }
+}
+
+void Win32Window::setMousePosition(int x, int y)
+{
+    mWorker->setMousePosition(x, y);
+    messageLoop();
+}
+
+bool Win32Window::setPosition(int x, int y)
+{
+    if (mX == x && mY == y)
+    {
+        return true;
+    }
+
+    if (mWorker->setPosition(x, y))
+    {
+        messageLoop();
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool Win32Window::resize(int width, int height)
+{
+    if (width == mWidth && height == mHeight)
+    {
+        return true;
+    }
+
+    if (mWorker->resize(width, height))
+    {
+        messageLoop();
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void Win32Window::setVisible(bool isVisible)
+{
+    mWorker->setVisible(isVisible);
 
     if (isVisible)
     {
         mSetVisibleTimer->stop();
         mSetVisibleTimer->start();
     }
+
+    messageLoop();
+}
+
+void Win32Window::signalTestEvent()
+{
+    mWorker->signalTestEvent();
+    messageLoop();
 }
 
 void Win32Window::pushEvent(Event event)
@@ -820,14 +1155,14 @@ void Win32Window::pushEvent(Event event)
     switch (event.Type)
     {
         case Event::EVENT_RESIZED:
-            MoveWindow(mNativeWindow, 0, 0, mWidth, mHeight, FALSE);
+            mWorker->resizeNativeWindow(mWidth, mHeight);
             break;
         default:
             break;
     }
 }
 
-void Win32Window::signalTestEvent()
+OSWindow *CreateOSWindow()
 {
-    PostMessage(mNativeWindow, WM_USER, 0, 0);
+    return new Win32Window();
 }
