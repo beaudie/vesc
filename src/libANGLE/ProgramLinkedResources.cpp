@@ -1258,4 +1258,11 @@ void AtomicCounterBufferLinker::link(const std::map<int, unsigned int> &sizeMap)
     }
 }
 
+ProgramLinkedResources::ProgramLinkedResources(ProgramState &state)
+    : uniformBlockLinker(&state.mUniformBlocks, &state.mUniforms),
+      shaderStorageBlockLinker(&state.mShaderStorageBlocks, &state.mBufferVariables),
+      atomicCounterBufferLinker(&state.mAtomicCounterBuffers)
+{
+}
+
 }  // namespace gl

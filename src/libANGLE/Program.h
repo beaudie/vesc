@@ -351,6 +351,7 @@ class ProgramState final : angle::NonCopyable
   private:
     friend class MemoryProgramCache;
     friend class Program;
+    friend struct ProgramLinkedResources;
 
     void updateTransformFeedbackStrides();
 

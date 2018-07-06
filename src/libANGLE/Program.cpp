@@ -1097,12 +1097,9 @@ Error Program::link(const gl::Context *context)
 
     if (mState.mAttachedShaders[ShaderType::Compute])
     {
-        ProgramLinkedResources resources = {
-            {0, PackMode::ANGLE_RELAXED},
-            {&mState.mUniformBlocks, &mState.mUniforms},
-            {&mState.mShaderStorageBlocks, &mState.mBufferVariables},
-            {&mState.mAtomicCounterBuffers},
-            {}};
+        ProgramLinkedResources resources(mState);
+        resources.varyingPacking.initialize(0, PackMode::ANGLE_RELAXED);
+        resources.unusedUniforms.clear();
 
         GLuint combinedImageUniforms = 0u;
         if (!linkUniforms(context, mInfoLog, mUniformLocationBindings, &combinedImageUniforms,
@@ -1157,12 +1154,9 @@ Error Program::link(const gl::Context *context)
             packMode = PackMode::WEBGL_STRICT;
         }
 
-        ProgramLinkedResources resources = {
-            {data.getCaps().maxVaryingVectors, packMode},
-            {&mState.mUniformBlocks, &mState.mUniforms},
-            {&mState.mShaderStorageBlocks, &mState.mBufferVariables},
-            {&mState.mAtomicCounterBuffers},
-            {}};
+        ProgramLinkedResources resources(mState);
+        resources.varyingPacking.initialize(data.getCaps().maxVaryingVectors, packMode);
+        resources.unusedUniforms.clear();
 
         if (!linkAttributes(context, mInfoLog))
         {
