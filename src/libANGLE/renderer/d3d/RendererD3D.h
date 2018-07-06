@@ -17,7 +17,6 @@
 #include "libANGLE/ContextState.h"
 #include "libANGLE/Device.h"
 #include "libANGLE/Version.h"
-#include "libANGLE/WorkerThread.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
@@ -360,8 +359,6 @@ class RendererD3D : public BufferFactoryD3D
 
     gl::Error initRenderTarget(const gl::Context *context, RenderTargetD3D *renderTarget);
 
-    angle::WorkerThreadPool *getWorkerThreadPool();
-
     virtual gl::Error getIncompleteTexture(const gl::Context *context,
                                            gl::TextureType type,
                                            gl::Texture **textureOut) = 0;
@@ -402,8 +399,6 @@ class RendererD3D : public BufferFactoryD3D
 
     bool mDisjoint;
     bool mDeviceLost;
-
-    angle::WorkerThreadPool mWorkerThreadPool;
 
     SerialFactory mSerialFactory;
 };
