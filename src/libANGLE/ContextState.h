@@ -13,6 +13,7 @@
 #include "common/angleutils.h"
 #include "libANGLE/State.h"
 #include "libANGLE/Version.h"
+#include "libANGLE/WorkerThread.h"
 #include "libANGLE/params.h"
 
 namespace gl
@@ -83,6 +84,7 @@ class ContextState final : angle::NonCopyable
     PathManager *mPaths;
     FramebufferManager *mFramebuffers;
     ProgramPipelineManager *mPipelines;
+    mutable std::unique_ptr<angle::WorkerThreadPool> mThreadPool;
 };
 
 }  // namespace gl
