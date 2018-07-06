@@ -555,6 +555,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     mState.mPaths->release(this);
     mState.mFramebuffers->release(this);
     mState.mPipelines->release(this);
+    mState.mThreadPool.reset();
 
     mImplementation->onDestroy(this);
 
@@ -3347,6 +3348,7 @@ void Context::updateCaps()
         mValidBufferBindings.set(BufferBinding::DrawIndirect);
         mValidBufferBindings.set(BufferBinding::DispatchIndirect);
     }
+    mState.mThreadPool->setMaxThreads(getDefaultParallelCompileThreads());
 }
 
 void Context::initWorkarounds()
@@ -5531,7 +5533,20 @@ void Context::linkProgram(GLuint program)
     Program *programObject = getProgram(program);
     ASSERT(programObject);
     handleError(programObject->link(this));
-    mGLState.onProgramExecutableChange(programObject);
+
+    // Don't parallel link a program which is active in any GL contexts.
+    // With this assumption, we don't need to worry that:
+    //   1. GL draw calls after link have to aware the fact that whether to use
+    //      the existing executable code, or newly generated one, depends on the
+    //      linking result.
+    //   2. When a backend program, e.g., ProgramD3D is linking, other backend
+    //      classes like StateManager11, Renderer11, etc., may have chance to
+    //      make unexpected calls to ProgramD3D.
+    if (programObject->isInUse())
+    {
+        // isLinked() which forces to resolve linking, will be called.
+        mGLState.onProgramExecutableChange(programObject);
+    }
 }
 
 void Context::releaseShaderCompiler()
@@ -7527,6 +7542,15 @@ GLenum Context::getConvertedRenderbufferFormat(GLenum internalformat) const
 void Context::maxShaderCompilerThreads(GLuint count)
 {
     mGLState.setMaxShaderCompilerThreads(count);
+    // This will overwrite the settings from other contexs.
+    mState.mThreadPool->setMaxThreads(count);
+}
+
+size_t Context::getDefaultParallelCompileThreads() const
+{
+    // TODO(jie.a.chen@intel.com: Use std::thread::hardware_concurrency() once Clang supports it.
+    const size_t kDefaultThreads = 6;
+    return (mSupportedExtensions.parallelShaderCompile ? kDefaultThreads - 1 : 0u);
 }
 
 // ErrorSet implementation.
