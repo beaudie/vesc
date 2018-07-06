@@ -12,9 +12,10 @@
 #define LIBANGLE_WORKER_THREAD_H_
 
 #include <array>
-#include <vector>
+#include <list>
 
 #include "common/debug.h"
+#include "libANGLE/RefCountObject.h"
 #include "libANGLE/features.h"
 
 #if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
@@ -55,8 +56,6 @@ class WaitableEventBase : angle::NonCopyable
   public:
     WaitableEventBase(EventResetPolicy resetPolicy, EventInitialState initialState);
 
-    WaitableEventBase(WaitableEventBase &&other);
-
     // Puts the event in the un-signaled state.
     void reset();
 
@@ -67,11 +66,12 @@ class WaitableEventBase : angle::NonCopyable
     // The event state is reset to non-signaled after a waiting thread has been released.
     void signal();
 
-  protected:
-    Impl &copyBase(Impl &&other);
+    // Peeks whether the event is ready. If ready, wait() will not block.
+    bool isReady();
 
+  protected:
     template <size_t Count>
-    static size_t WaitManyBase(std::array<Impl, Count> *waitables);
+    static size_t WaitManyBase(std::array<std::unique_ptr<Impl>, Count> *waitables);
 
     EventResetPolicy mResetPolicy;
     bool mSignaled;
@@ -81,12 +81,6 @@ template <typename Impl>
 WaitableEventBase<Impl>::WaitableEventBase(EventResetPolicy resetPolicy,
                                            EventInitialState initialState)
     : mResetPolicy(resetPolicy), mSignaled(initialState == EventInitialState::Signaled)
-{
-}
-
-template <typename Impl>
-WaitableEventBase<Impl>::WaitableEventBase(WaitableEventBase &&other)
-    : mResetPolicy(other.mResetPolicy), mSignaled(other.mSignaled)
 {
 }
 
@@ -109,26 +103,24 @@ void WaitableEventBase<Impl>::signal()
 }
 
 template <typename Impl>
+bool WaitableEventBase<Impl>::isReady()
+{
+    return static_cast<Impl *>(this)->isReadyImpl();
+}
+
+template <typename Impl>
 template <size_t Count>
 // static
-size_t WaitableEventBase<Impl>::WaitManyBase(std::array<Impl, Count> *waitables)
+size_t WaitableEventBase<Impl>::WaitManyBase(std::array<std::unique_ptr<Impl>, Count> *waitables)
 {
     ASSERT(Count > 0);
 
     for (size_t index = 0; index < Count; ++index)
     {
-        (*waitables)[index].wait();
+        (*waitables)[index]->wait();
     }
 
     return 0;
-}
-
-template <typename Impl>
-Impl &WaitableEventBase<Impl>::copyBase(Impl &&other)
-{
-    std::swap(mSignaled, other.mSignaled);
-    std::swap(mResetPolicy, other.mResetPolicy);
-    return *static_cast<Impl *>(this);
 }
 
 class SingleThreadedWaitableEvent : public WaitableEventBase<SingleThreadedWaitableEvent>
@@ -144,51 +136,57 @@ class SingleThreadedWaitableEvent : public WaitableEventBase<SingleThreadedWaita
     void resetImpl();
     void waitImpl();
     void signalImpl();
+    bool isReadyImpl();
 
     // Wait, synchronously, on multiple events.
     // returns the index of a WaitableEvent which has been signaled.
     template <size_t Count>
-    static size_t WaitMany(std::array<SingleThreadedWaitableEvent, Count> *waitables);
+    static size_t WaitMany(
+        std::array<std::unique_ptr<SingleThreadedWaitableEvent>, Count> *waitables);
 };
 
 template <size_t Count>
 // static
 size_t SingleThreadedWaitableEvent::WaitMany(
-    std::array<SingleThreadedWaitableEvent, Count> *waitables)
+    std::array<std::unique_ptr<SingleThreadedWaitableEvent>, Count> *waitables)
 {
     return WaitableEventBase<SingleThreadedWaitableEvent>::WaitManyBase(waitables);
 }
 
 #if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+class AsyncWorkerPool;
 class AsyncWaitableEvent : public WaitableEventBase<AsyncWaitableEvent>
 {
   public:
-    AsyncWaitableEvent();
-    AsyncWaitableEvent(EventResetPolicy resetPolicy, EventInitialState initialState);
+    AsyncWaitableEvent() = delete;
+    AsyncWaitableEvent(AsyncWorkerPool *pool,
+                       EventResetPolicy resetPolicy,
+                       EventInitialState initialState);
     ~AsyncWaitableEvent();
-
-    AsyncWaitableEvent(AsyncWaitableEvent &&other);
-    AsyncWaitableEvent &operator=(AsyncWaitableEvent &&other);
 
     void resetImpl();
     void waitImpl();
     void signalImpl();
+    bool isReadyImpl();
 
     // Wait, synchronously, on multiple events.
     // returns the index of a WaitableEvent which has been signaled.
     template <size_t Count>
-    static size_t WaitMany(std::array<AsyncWaitableEvent, Count> *waitables);
+    static size_t WaitMany(std::array<std::unique_ptr<AsyncWaitableEvent>, Count> *waitables);
 
   private:
     friend class AsyncWorkerPool;
+
     void setFuture(std::future<void> &&future);
 
     std::future<void> mFuture;
+    AsyncWorkerPool *mPool;
 };
 
 template <size_t Count>
 // static
-size_t AsyncWaitableEvent::WaitMany(std::array<AsyncWaitableEvent, Count> *waitables)
+size_t AsyncWaitableEvent::WaitMany(
+    std::array<std::unique_ptr<AsyncWaitableEvent>, Count> *waitables)
 {
     return WaitableEventBase<AsyncWaitableEvent>::WaitManyBase(waitables);
 }
@@ -219,7 +217,7 @@ struct WorkerThreadPoolTraits<AsyncWorkerPool>
 // Request WorkerThreads from the WorkerThreadPool. Each pool can keep worker threads around so
 // we avoid the costly spin up and spin down time.
 template <typename Impl>
-class WorkerThreadPoolBase : angle::NonCopyable
+class WorkerThreadPoolBase : public gl::RefCountObjectNoID
 {
   public:
     WorkerThreadPoolBase(size_t maxThreads);
@@ -229,11 +227,17 @@ class WorkerThreadPoolBase : angle::NonCopyable
 
     // Returns an event to wait on for the task to finish.
     // If the pool fails to create the task, returns null.
-    WaitableEventType postWorkerTask(Closure *task);
+    WaitableEventType *postWorkerTask(Closure *task);
+
+    void setMaxThreads(size_t maxThreads) { mMaxThreads = maxThreads; }
+    size_t getMaxThreads() { return mMaxThreads; }
+
+  protected:
+    size_t mMaxThreads;
 };
 
 template <typename Impl>
-WorkerThreadPoolBase<Impl>::WorkerThreadPoolBase(size_t maxThreads)
+WorkerThreadPoolBase<Impl>::WorkerThreadPoolBase(size_t maxThreads) : mMaxThreads(maxThreads)
 {
 }
 
@@ -243,7 +247,7 @@ WorkerThreadPoolBase<Impl>::~WorkerThreadPoolBase()
 }
 
 template <typename Impl>
-typename WorkerThreadPoolBase<Impl>::WaitableEventType WorkerThreadPoolBase<Impl>::postWorkerTask(
+typename WorkerThreadPoolBase<Impl>::WaitableEventType *WorkerThreadPoolBase<Impl>::postWorkerTask(
     Closure *task)
 {
     return static_cast<Impl *>(this)->postWorkerTaskImpl(task);
@@ -255,7 +259,7 @@ class SingleThreadedWorkerPool : public WorkerThreadPoolBase<SingleThreadedWorke
     SingleThreadedWorkerPool(size_t maxThreads);
     ~SingleThreadedWorkerPool();
 
-    SingleThreadedWaitableEvent postWorkerTaskImpl(Closure *task);
+    SingleThreadedWaitableEvent *postWorkerTaskImpl(Closure *task);
 };
 
 #if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
@@ -265,7 +269,14 @@ class AsyncWorkerPool : public WorkerThreadPoolBase<AsyncWorkerPool>
     AsyncWorkerPool(size_t maxThreads);
     ~AsyncWorkerPool();
 
-    AsyncWaitableEvent postWorkerTaskImpl(Closure *task);
+    AsyncWaitableEvent *postWorkerTaskImpl(Closure *task);
+
+  private:
+    friend class AsyncWaitableEvent;
+
+    void cleanUpEvent(AsyncWaitableEvent *event);
+
+    std::list<AsyncWaitableEvent *> mEvents;
 };
 #endif  // (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
 

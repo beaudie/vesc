@@ -10,6 +10,7 @@
 
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/ResourceManager.h"
+#include "libANGLE/WorkerThread.h"
 
 namespace gl
 {
@@ -61,6 +62,8 @@ TextureManager *AllocateOrGetSharedTextureManager(const ContextState *shareConte
 
 }  // anonymous namespace
 
+constexpr size_t kDefaultParallelCompileThreads = 6;
+
 ContextState::ContextState(ContextID contextIn,
                            const ContextState *shareContextState,
                            TextureManager *shareTextures,
@@ -89,8 +92,11 @@ ContextState::ContextState(ContextID contextIn,
       mSyncs(AllocateOrGetSharedResourceManager(shareContextState, &ContextState::mSyncs)),
       mPaths(AllocateOrGetSharedResourceManager(shareContextState, &ContextState::mPaths)),
       mFramebuffers(new FramebufferManager()),
-      mPipelines(new ProgramPipelineManager())
+      mPipelines(new ProgramPipelineManager()),
+      mThreadPool(shareContextState ? shareContextState->mThreadPool
+                                    : new angle::WorkerThreadPool(kDefaultParallelCompileThreads))
 {
+    mThreadPool->addRef();
 }
 
 ContextState::~ContextState()
