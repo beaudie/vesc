@@ -24,9 +24,9 @@ class WorkerPoolTest : public ::testing::Test
 };
 
 #if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
-using WorkerPoolTypes = ::testing::Types<priv::AsyncWorkerPool, priv::SingleThreadedWorkerPool>;
+using WorkerPoolTypes = ::testing::Types<AsyncWorkerPool, SingleThreadedWorkerPool>;
 #else
-using WorkerPoolTypes = ::testing::Types<priv::SingleThreadedWorkerPool>;
+using WorkerPoolTypes = ::testing::Types<SingleThreadedWorkerPool>;
 #endif  // (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
 
 TYPED_TEST_CASE(WorkerPoolTest, WorkerPoolTypes);
@@ -43,12 +43,12 @@ TYPED_TEST(WorkerPoolTest, SimpleTask)
     };
 
     std::array<TestTask, 4> tasks;
-    std::array<typename TypeParam::WaitableEventType, 4> waitables = {{
+    std::array<std::unique_ptr<WaitableEvent>, 4> waitables = {{
         this->workerPool.postWorkerTask(&tasks[0]), this->workerPool.postWorkerTask(&tasks[1]),
         this->workerPool.postWorkerTask(&tasks[2]), this->workerPool.postWorkerTask(&tasks[3]),
     }};
 
-    TypeParam::WaitableEventType::WaitMany(&waitables);
+    WaitableEvent::WaitMany(&waitables);
 
     for (const auto &task : tasks)
     {
