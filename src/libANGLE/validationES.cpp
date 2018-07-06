@@ -4400,6 +4400,7 @@ bool ValidateGetProgramivBase(Context *context, GLuint program, GLenum pname, GL
     {
         case GL_DELETE_STATUS:
         case GL_LINK_STATUS:
+        case GL_COMPLETION_STATUS_KHR:
         case GL_VALIDATE_STATUS:
         case GL_INFO_LOG_LENGTH:
         case GL_ATTACHED_SHADERS:
