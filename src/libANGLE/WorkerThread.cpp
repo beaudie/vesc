@@ -16,8 +16,7 @@ namespace angle
 namespace priv
 {
 // SingleThreadedWorkerPool implementation.
-SingleThreadedWorkerPool::SingleThreadedWorkerPool(size_t maxThreads)
-    : WorkerThreadPoolBase(maxThreads)
+SingleThreadedWorkerPool::SingleThreadedWorkerPool(size_t maxThreads) : WorkerThreadPoolBase(0)
 {
 }
 
@@ -25,10 +24,11 @@ SingleThreadedWorkerPool::~SingleThreadedWorkerPool()
 {
 }
 
-SingleThreadedWaitableEvent SingleThreadedWorkerPool::postWorkerTaskImpl(Closure *task)
+SingleThreadedWaitableEvent *SingleThreadedWorkerPool::postWorkerTaskImpl(Closure *task)
 {
     (*task)();
-    return SingleThreadedWaitableEvent(EventResetPolicy::Automatic, EventInitialState::Signaled);
+    return new SingleThreadedWaitableEvent(EventResetPolicy::Automatic,
+                                           EventInitialState::Signaled);
 }
 
 // SingleThreadedWaitableEvent implementation.
@@ -47,17 +47,6 @@ SingleThreadedWaitableEvent::~SingleThreadedWaitableEvent()
 {
 }
 
-SingleThreadedWaitableEvent::SingleThreadedWaitableEvent(SingleThreadedWaitableEvent &&other)
-    : WaitableEventBase(std::move(other))
-{
-}
-
-SingleThreadedWaitableEvent &SingleThreadedWaitableEvent::operator=(
-    SingleThreadedWaitableEvent &&other)
-{
-    return copyBase(std::move(other));
-}
-
 void SingleThreadedWaitableEvent::resetImpl()
 {
     mSignaled = false;
@@ -72,6 +61,11 @@ void SingleThreadedWaitableEvent::signalImpl()
     mSignaled = true;
 }
 
+bool SingleThreadedWaitableEvent::isReadyImpl()
+{
+    return true;
+}
+
 #if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
 // AsyncWorkerPool implementation.
 AsyncWorkerPool::AsyncWorkerPool(size_t maxThreads) : WorkerThreadPoolBase(maxThreads)
@@ -80,43 +74,58 @@ AsyncWorkerPool::AsyncWorkerPool(size_t maxThreads) : WorkerThreadPoolBase(maxTh
 
 AsyncWorkerPool::~AsyncWorkerPool()
 {
+    ASSERT(mEvents.empty());
 }
 
-AsyncWaitableEvent AsyncWorkerPool::postWorkerTaskImpl(Closure *task)
+AsyncWaitableEvent *AsyncWorkerPool::postWorkerTaskImpl(Closure *task)
 {
-    auto future = std::async(std::launch::async, [task] { (*task)(); });
+    size_t runningTasksCount = 0;
+    for (auto *event : mEvents)
+    {
+        ASSERT(event);
+        if (!event->isReady())
+        {
+            ++runningTasksCount;
+        }
+    }
+    AsyncWaitableEvent *waitable = nullptr;
+    if (runningTasksCount < getMaxThreads())
+    {
+        auto future = std::async(std::launch::async, [task] { (*task)(); });
 
-    AsyncWaitableEvent waitable(EventResetPolicy::Automatic, EventInitialState::NonSignaled);
+        waitable = new AsyncWaitableEvent(this, EventResetPolicy::Automatic,
+                                          EventInitialState::NonSignaled);
 
-    waitable.setFuture(std::move(future));
-
+        waitable->setFuture(std::move(future));
+    }
+    else
+    {
+        (*task)();
+        waitable =
+            new AsyncWaitableEvent(this, EventResetPolicy::Automatic, EventInitialState::Signaled);
+    }
+    mEvents.push_back(waitable);
     return waitable;
 }
 
-// AsyncWaitableEvent implementation.
-AsyncWaitableEvent::AsyncWaitableEvent()
-    : AsyncWaitableEvent(EventResetPolicy::Automatic, EventInitialState::NonSignaled)
+void AsyncWorkerPool::cleanUpEvent(AsyncWaitableEvent *event)
 {
+    mEvents.remove(event);
 }
 
-AsyncWaitableEvent::AsyncWaitableEvent(EventResetPolicy resetPolicy, EventInitialState initialState)
-    : WaitableEventBase(resetPolicy, initialState)
+// AsyncWaitableEvent implementation.
+
+AsyncWaitableEvent::AsyncWaitableEvent(AsyncWorkerPool *pool,
+                                       EventResetPolicy resetPolicy,
+                                       EventInitialState initialState)
+    : WaitableEventBase(resetPolicy, initialState), mPool(pool)
 {
 }
 
 AsyncWaitableEvent::~AsyncWaitableEvent()
 {
-}
-
-AsyncWaitableEvent::AsyncWaitableEvent(AsyncWaitableEvent &&other)
-    : WaitableEventBase(std::move(other)), mFuture(std::move(other.mFuture))
-{
-}
-
-AsyncWaitableEvent &AsyncWaitableEvent::operator=(AsyncWaitableEvent &&other)
-{
-    std::swap(mFuture, other.mFuture);
-    return copyBase(std::move(other));
+    ASSERT(mPool);
+    mPool->cleanUpEvent(this);
 }
 
 void AsyncWaitableEvent::setFuture(std::future<void> &&future)
@@ -150,6 +159,16 @@ void AsyncWaitableEvent::signalImpl()
         reset();
     }
 }
+
+bool AsyncWaitableEvent::isReadyImpl()
+{
+    if (mSignaled || !mFuture.valid())
+    {
+        return true;
+    }
+    return mFuture.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
+}
+
 #endif  // (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
 
 }  // namespace priv
