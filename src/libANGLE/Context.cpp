@@ -348,7 +348,8 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mExtensionsEnabled(GetExtensionsEnabled(attribs, mWebGLContext)),
       mMemoryProgramCache(memoryProgramCache),
       mScratchBuffer(1000u),
-      mZeroFilledBuffer(1000u)
+      mZeroFilledBuffer(1000u),
+      mThreadPool(nullptr)
 {
     // Needed to solve a Clang warning of unused variables.
     ANGLE_UNUSED_VARIABLE(mSavedArgsType);
@@ -568,6 +569,8 @@ egl::Error Context::onDestroy(const egl::Display *display)
     mState.mPaths->release(this);
     mState.mFramebuffers->release(this);
     mState.mPipelines->release(this);
+
+    mThreadPool.reset();
 
     mImplementation->onDestroy(this);
 
@@ -3355,6 +3358,8 @@ void Context::updateCaps()
         mValidBufferBindings.set(BufferBinding::DrawIndirect);
         mValidBufferBindings.set(BufferBinding::DispatchIndirect);
     }
+
+    mThreadPool = angle::WorkerThreadPool::Create(mExtensions.parallelShaderCompile);
 }
 
 void Context::initWorkarounds()
@@ -5542,8 +5547,21 @@ void Context::linkProgram(GLuint program)
     Program *programObject = getProgram(program);
     ASSERT(programObject);
     handleError(programObject->link(this));
-    mGLState.onProgramExecutableChange(programObject);
-    mStateCache.updateActiveAttribsMask(this);
+
+    // Don't parallel link a program which is active in any GL contexts.
+    // With this assumption, we don't need to worry that:
+    //   1. GL draw calls after link have to aware the fact that whether to use
+    //      the existing executable code, or newly generated one, depends on the
+    //      linking result.
+    //   2. When a backend program, e.g., ProgramD3D is linking, other backend
+    //      classes like StateManager11, Renderer11, etc., may have chance to
+    //      make unexpected calls to ProgramD3D.
+    if (programObject->isInUse())
+    {
+        // isLinked() which forces to resolve linking, will be called.
+        mGLState.onProgramExecutableChange(programObject);
+        mStateCache.updateActiveAttribsMask(this);
+    }
 }
 
 void Context::releaseShaderCompiler()
@@ -7540,6 +7558,7 @@ GLenum Context::getConvertedRenderbufferFormat(GLenum internalformat) const
 void Context::maxShaderCompilerThreads(GLuint count)
 {
     mGLState.setMaxShaderCompilerThreads(count);
+    mThreadPool->setMaxThreads(count);
 }
 
 bool Context::isGLES1() const
