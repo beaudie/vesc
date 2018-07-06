@@ -325,6 +325,8 @@ struct UnusedUniform
 
 struct ProgramLinkedResources
 {
+    ProgramLinkedResources(ProgramState &state);
+
     VaryingPacking varyingPacking;
     UniformBlockLinker uniformBlockLinker;
     ShaderStorageBlockLinker shaderStorageBlockLinker;
