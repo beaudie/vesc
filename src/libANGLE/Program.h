@@ -490,6 +490,19 @@ class Program final : angle::NonCopyable, public LabeledObject
     Error link(const Context *context);
     bool isLinked() const { return mLinked; }
 
+    // KHR_parallel_shader_compile
+    // Try to link the program asynchrously. As a result, background threads may
+    // be launched to execute the actual linking tasks concurrently.
+    // We can use isLinking() to check whether the tasks are actually launched,
+    // as the program may be invalid, or retrievable in cache.
+    Error beginLink(const Context *context);
+
+    // Wait until the linking tasks are done.
+    Error endLink(const Context *context);
+
+    // Peek whether there is any running linking tasks.
+    bool isLinking() const { return mLinking; }
+
     bool hasLinkedShaderStage(ShaderType shaderType) const;
 
     Error loadBinary(const Context *context,
@@ -836,6 +849,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     ProgramBindings mFragmentInputBindings;
 
     bool mLinked;
+    bool mLinking;
     bool mDeleteStatus;  // Flag to indicate that the program can be deleted when no longer in use
 
     unsigned int mRefCount;

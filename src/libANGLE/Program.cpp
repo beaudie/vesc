@@ -882,6 +882,7 @@ Program::Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, GLui
     : mProgram(factory->createProgram(mState)),
       mValidated(false),
       mLinked(false),
+      mLinking(false),
       mDeleteStatus(false),
       mRefCount(0),
       mResourceManager(manager),
@@ -1248,6 +1249,20 @@ Error Program::link(const gl::Context *context)
     ANGLE_HISTOGRAM_COUNTS("GPU.ANGLE.ProgramCache.ProgramCacheMissTimeUS", us);
 
     return NoError();
+}
+
+Error Program::beginLink(const gl::Context *context)
+{
+    // TODO(jie.a.chen@intel.com): Split link().
+    mLinking = true;
+    return NoError();
+}
+
+Error Program::endLink(const gl::Context *context)
+{
+    // TODO(jie.a.chen@intel.com): Split link().
+    mLinking = false;
+    return link(context);
 }
 
 void Program::updateLinkedShaderStages()

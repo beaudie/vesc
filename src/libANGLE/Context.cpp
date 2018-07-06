@@ -749,6 +749,8 @@ void Context::deleteShader(GLuint shader)
 
 void Context::deleteProgram(GLuint program)
 {
+    // Linking status has been checked in validation.
+
     mState.mShaderPrograms->deleteProgram(this, program);
 }
 
@@ -4849,7 +4851,7 @@ void Context::bufferSubData(BufferBinding target,
 
 void Context::attachShader(GLuint program, GLuint shader)
 {
-    Program *programObject = mState.mShaderPrograms->getProgram(program);
+    Program *programObject = getProgram(program);
     Shader *shaderObject   = mState.mShaderPrograms->getShader(shader);
     ASSERT(programObject && shaderObject);
     programObject->attachShader(shaderObject);
@@ -5551,8 +5553,22 @@ void Context::linkProgram(GLuint program)
 {
     Program *programObject = getProgram(program);
     ASSERT(programObject);
-    handleError(programObject->link(this));
-    mGLState.onProgramExecutableChange(programObject);
+
+    // Don't parallel link a program which is active in any GL contexts.
+    // With this assumption, we don't need to worry that:
+    //   1. GL draw calls may implicitly depend on the linking result of current
+    //      program.
+    //   2. When a backend program e.g ProgramD3D is linking, other backend
+    //      classes can also access it concurrently.
+    if (programObject->getRefCount() != 0 || !getExtensions().parallelShaderCompile)
+    {
+        handleError(programObject->link(this));
+        mGLState.onProgramExecutableChange(programObject);
+    }
+    else
+    {
+        handleError(programObject->beginLink(this));
+    }
 }
 
 void Context::releaseShaderCompiler()
@@ -7499,7 +7515,16 @@ bool Context::getIndexedQueryParameterInfo(GLenum target, GLenum *type, unsigned
 
 Program *Context::getProgram(GLuint handle) const
 {
-    return mState.mShaderPrograms->getProgram(handle);
+
+    auto *program = mState.mShaderPrograms->getProgram(handle);
+
+    // If a program is linking, we have to block any further calls to it until
+    // linked. Otherwise we may risk some error-prone intermediate states.
+    if (getExtensions().parallelShaderCompile && program && program->isLinking())
+    {
+        handleError(program->endLink(this));
+    }
+    return program;
 }
 
 Shader *Context::getShader(GLuint handle) const
