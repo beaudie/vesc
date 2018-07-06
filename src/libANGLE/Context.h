@@ -1488,6 +1488,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable
 
     // GL_KHR_parallel_shader_compile
     void maxShaderCompilerThreads(GLuint count);
+    angle::WorkerThreadPool *getWorkerThreadPool() const { return mState.mThreadPool.get(); }
 
   private:
     void initialize();
@@ -1531,6 +1532,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable
 
     gl::LabeledObject *getLabeledObject(GLenum identifier, GLuint name) const;
     gl::LabeledObject *getLabeledObjectFromPtr(const void *ptr) const;
+
+    size_t getDefaultParallelCompileThreads() const;
 
     ContextState mState;
     bool mSkipValidation;
