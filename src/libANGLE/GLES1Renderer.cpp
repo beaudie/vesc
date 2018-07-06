@@ -47,9 +47,12 @@ void GLES1Renderer::onDestroy(Context *context, State *state)
 
 GLES1Renderer::~GLES1Renderer() = default;
 
-Error GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context, State *glState)
+Error GLES1Renderer::prepareForDraw(PrimitiveMode mode,
+                                    Context *context,
+                                    angle::WorkerThreadPool *threadPool,
+                                    State *glState)
 {
-    ANGLE_TRY(initializeRendererProgram(context, glState));
+    ANGLE_TRY(initializeRendererProgram(context, threadPool, glState));
 
     const GLES1State &gles1State = glState->gles1();
 
@@ -462,6 +465,7 @@ Error GLES1Renderer::compileShader(Context *context,
 }
 
 Error GLES1Renderer::linkProgram(Context *context,
+                                 angle::WorkerThreadPool *threadPool,
                                  State *glState,
                                  GLuint vertexShader,
                                  GLuint fragmentShader,
@@ -489,7 +493,7 @@ Error GLES1Renderer::linkProgram(Context *context,
         programObject->bindAttributeLocation(index, name.c_str());
     }
 
-    ANGLE_TRY(programObject->link(context));
+    ANGLE_TRY(programObject->link(context, threadPool));
 
     glState->onProgramExecutableChange(programObject);
 
@@ -507,7 +511,9 @@ Error GLES1Renderer::linkProgram(Context *context,
     return NoError();
 }
 
-Error GLES1Renderer::initializeRendererProgram(Context *context, State *glState)
+Error GLES1Renderer::initializeRendererProgram(Context *context,
+                                               angle::WorkerThreadPool *threadPool,
+                                               State *glState)
 {
     if (mRendererProgramInitialized)
     {
@@ -545,7 +551,7 @@ Error GLES1Renderer::initializeRendererProgram(Context *context, State *glState)
         attribLocs[kTextureCoordAttribIndexBase + i] = ss.str();
     }
 
-    ANGLE_TRY(linkProgram(context, glState, vertexShader, fragmentShader, attribLocs,
+    ANGLE_TRY(linkProgram(context, threadPool, glState, vertexShader, fragmentShader, attribLocs,
                           &mProgramState.program));
 
     mShaderPrograms->deleteShader(context, vertexShader);

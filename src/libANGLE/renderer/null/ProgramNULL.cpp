@@ -41,11 +41,12 @@ void ProgramNULL::setSeparable(bool separable)
 {
 }
 
-gl::LinkResult ProgramNULL::link(const gl::Context *contextImpl,
-                                 const gl::ProgramLinkedResources &resources,
-                                 gl::InfoLog &infoLog)
+LinkEvent *ProgramNULL::link(const gl::Context *contextImpl,
+                             angle::WorkerThreadPool *threadPool,
+                             const gl::ProgramLinkedResources &resources,
+                             gl::InfoLog &infoLog)
 {
-    return true;
+    return new LinkEventDone(true);
 }
 
 GLboolean ProgramNULL::validate(const gl::Caps &caps, gl::InfoLog *infoLog)

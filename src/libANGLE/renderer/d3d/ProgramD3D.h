@@ -195,9 +195,10 @@ class ProgramD3D : public ProgramImpl
     gl::Error getPixelExecutableForCachedOutputLayout(ShaderExecutableD3D **outExectuable,
                                                       gl::InfoLog *infoLog);
     gl::Error getComputeExecutable(ShaderExecutableD3D **outExecutable);
-    gl::LinkResult link(const gl::Context *context,
-                        const gl::ProgramLinkedResources &resources,
-                        gl::InfoLog &infoLog) override;
+    LinkEvent *link(const gl::Context *context,
+                    angle::WorkerThreadPool *threadPool,
+                    const gl::ProgramLinkedResources &resources,
+                    gl::InfoLog &infoLog) override;
     GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) override;
 
     void setPathFragmentInputGen(const std::string &inputName,
@@ -310,6 +311,7 @@ class ProgramD3D : public ProgramImpl
     class GetVertexExecutableTask;
     class GetPixelExecutableTask;
     class GetGeometryExecutableTask;
+    class LinkEventRendering;
 
     class VertexExecutable
     {
@@ -450,7 +452,9 @@ class ProgramD3D : public ProgramImpl
                                     GLboolean transpose,
                                     const GLfloat *value);
 
-    gl::LinkResult compileProgramExecutables(const gl::Context *context, gl::InfoLog &infoLog);
+    LinkEvent *compileProgramExecutables(const gl::Context *context,
+                                         angle::WorkerThreadPool *threadPool,
+                                         gl::InfoLog &infoLog);
     gl::LinkResult compileComputeExecutable(const gl::Context *context, gl::InfoLog &infoLog);
 
     void gatherTransformFeedbackVaryings(const gl::VaryingPacking &varyings,

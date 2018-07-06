@@ -15,6 +15,7 @@
 #include <vector>
 
 #include "common/debug.h"
+#include "libANGLE/RefCountObject.h"
 #include "libANGLE/features.h"
 
 #if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
@@ -219,7 +220,7 @@ struct WorkerThreadPoolTraits<AsyncWorkerPool>
 // Request WorkerThreads from the WorkerThreadPool. Each pool can keep worker threads around so
 // we avoid the costly spin up and spin down time.
 template <typename Impl>
-class WorkerThreadPoolBase : angle::NonCopyable
+class WorkerThreadPoolBase : public gl::RefCountObjectNoID
 {
   public:
     WorkerThreadPoolBase(size_t maxThreads);
