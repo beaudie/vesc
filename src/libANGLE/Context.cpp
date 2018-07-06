@@ -5497,8 +5497,16 @@ void Context::linkProgram(GLuint program)
 {
     Program *programObject = getProgram(program);
     ASSERT(programObject);
-    handleError(programObject->link(this));
-    mGLState.onProgramExecutableChange(programObject);
+
+    if (programObject == mGLState.getProgram())
+    {
+        handleError(programObject->link(this));
+        mGLState.onProgramExecutableChange(programObject);
+    }
+    else
+    {
+        handleError(programObject->asyncLink(this));
+    }
 }
 
 void Context::releaseShaderCompiler()
@@ -7445,7 +7453,13 @@ bool Context::getIndexedQueryParameterInfo(GLenum target, GLenum *type, unsigned
 
 Program *Context::getProgram(GLuint handle) const
 {
-    return mState.mShaderPrograms->getProgram(handle);
+
+    auto *program = mState.mShaderPrograms->getProgram(handle);
+    if (program && program->isLinking())
+    {
+        handleError(program->waitForLinking(this));
+    }
+    return program;
 }
 
 Shader *Context::getShader(GLuint handle) const
