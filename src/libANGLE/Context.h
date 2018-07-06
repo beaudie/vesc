@@ -1532,6 +1532,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     // GL_KHR_parallel_shader_compile
     void maxShaderCompilerThreads(GLuint count);
+    std::shared_ptr<angle::WorkerThreadPool> getWorkerThreadPool() const { return mThreadPool; }
 
     const StateCache &getStateCache() const { return mStateCache; }
 
@@ -1684,6 +1685,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     // Not really a property of context state. The size and contexts change per-api-call.
     mutable angle::ScratchBuffer mScratchBuffer;
     mutable angle::ScratchBuffer mZeroFilledBuffer;
+
+    std::shared_ptr<angle::WorkerThreadPool> mThreadPool;
 };
 
 template <typename T>
