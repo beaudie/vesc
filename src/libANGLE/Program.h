@@ -490,6 +490,10 @@ class Program final : angle::NonCopyable, public LabeledObject
     Error link(const Context *context);
     bool isLinked() const { return mLinked; }
 
+    Error asyncLink(const Context *context);
+    bool isLinking() const { return mLinking; }
+    Error waitForLinking(const Context *context);
+
     bool hasLinkedShaderStage(ShaderType shaderType) const;
 
     Error loadBinary(const Context *context,
@@ -836,6 +840,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     ProgramBindings mFragmentInputBindings;
 
     bool mLinked;
+    bool mLinking;
     bool mDeleteStatus;  // Flag to indicate that the program can be deleted when no longer in use
 
     unsigned int mRefCount;
