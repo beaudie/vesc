@@ -43,9 +43,15 @@ TYPED_TEST(WorkerPoolTest, SimpleTask)
     };
 
     std::array<TestTask, 4> tasks;
-    std::array<typename TypeParam::WaitableEventType, 4> waitables = {{
-        this->workerPool.postWorkerTask(&tasks[0]), this->workerPool.postWorkerTask(&tasks[1]),
-        this->workerPool.postWorkerTask(&tasks[2]), this->workerPool.postWorkerTask(&tasks[3]),
+    std::array<std::unique_ptr<typename TypeParam::WaitableEventType>, 4> waitables = {{
+        std::unique_ptr<typename TypeParam::WaitableEventType>(
+            this->workerPool.postWorkerTask(&tasks[0])),
+        std::unique_ptr<typename TypeParam::WaitableEventType>(
+            this->workerPool.postWorkerTask(&tasks[1])),
+        std::unique_ptr<typename TypeParam::WaitableEventType>(
+            this->workerPool.postWorkerTask(&tasks[2])),
+        std::unique_ptr<typename TypeParam::WaitableEventType>(
+            this->workerPool.postWorkerTask(&tasks[3])),
     }};
 
     TypeParam::WaitableEventType::WaitMany(&waitables);

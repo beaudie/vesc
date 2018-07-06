@@ -10,6 +10,7 @@
 
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/ResourceManager.h"
+#include "libANGLE/WorkerThread.h"
 
 namespace gl
 {
@@ -89,8 +90,11 @@ ContextState::ContextState(ContextID contextIn,
       mSyncs(AllocateOrGetSharedResourceManager(shareContextState, &ContextState::mSyncs)),
       mPaths(AllocateOrGetSharedResourceManager(shareContextState, &ContextState::mPaths)),
       mFramebuffers(new FramebufferManager()),
-      mPipelines(new ProgramPipelineManager())
+      mPipelines(new ProgramPipelineManager()),
+      mThreadPool(shareContextState ? shareContextState->mThreadPool
+                                    : new angle::WorkerThreadPool(4))
 {
+    mThreadPool->addRef();
 }
 
 ContextState::~ContextState()

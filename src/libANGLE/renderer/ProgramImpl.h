@@ -30,6 +30,26 @@ struct BlockMemberInfo;
 
 namespace rx
 {
+
+class LinkEvent : angle::NonCopyable
+{
+  public:
+    virtual ~LinkEvent(){};
+    virtual bool wait()      = 0;
+    virtual bool isLinking() = 0;
+};
+
+class LinkEventDone final : public LinkEvent
+{
+  public:
+    LinkEventDone(const gl::LinkResult &result) : mResult(result) {}
+    bool wait() override { return (!mResult.isError() && mResult.getResult()); }
+    bool isLinking() override { return false; }
+
+  private:
+    gl::LinkResult mResult;
+};
+
 class ProgramImpl : angle::NonCopyable
 {
   public:
@@ -44,9 +64,10 @@ class ProgramImpl : angle::NonCopyable
     virtual void setBinaryRetrievableHint(bool retrievable) = 0;
     virtual void setSeparable(bool separable)               = 0;
 
-    virtual gl::LinkResult link(const gl::Context *context,
-                                const gl::ProgramLinkedResources &resources,
-                                gl::InfoLog &infoLog)                      = 0;
+    virtual LinkEvent *link(const gl::Context *context,
+                            angle::WorkerThreadPool *threadPool,
+                            const gl::ProgramLinkedResources &resources,
+                            gl::InfoLog &infoLog)                          = 0;
     virtual GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) = 0;
 
     virtual void setUniform1fv(GLint location, GLsizei count, const GLfloat *v) = 0;
