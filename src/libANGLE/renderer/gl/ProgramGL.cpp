@@ -125,9 +125,18 @@ void ProgramGL::setSeparable(bool separable)
     mFunctions->programParameteri(mProgramID, GL_PROGRAM_SEPARABLE, separable ? GL_TRUE : GL_FALSE);
 }
 
-gl::LinkResult ProgramGL::link(const gl::Context *context,
-                               const gl::ProgramLinkedResources &resources,
-                               gl::InfoLog &infoLog)
+LinkEvent *ProgramGL::link(const gl::Context *context,
+                           angle::WorkerThreadPool *threadPool,
+                           const gl::ProgramLinkedResources &resources,
+                           gl::InfoLog &infoLog)
+{
+    // TODO(jie.a.chen@intel.com): Parallelize linking.
+    return new LinkEventDone(linkImpl(context, resources, infoLog));
+}
+
+gl::LinkResult ProgramGL::linkImpl(const gl::Context *context,
+                                   const gl::ProgramLinkedResources &resources,
+                                   gl::InfoLog &infoLog)
 {
     preLink();
 

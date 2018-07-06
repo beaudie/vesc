@@ -1439,72 +1439,137 @@ gl::Error ProgramD3D::getComputeExecutable(ShaderExecutableD3D **outExecutable)
     return gl::NoError();
 }
 
-gl::LinkResult ProgramD3D::compileProgramExecutables(const gl::Context *context,
-                                                     gl::InfoLog &infoLog)
+// The LinkEvent implementation for linking a rendering(VS, FS, GS) program.
+class ProgramD3D::LinkEventRenderingProgram final : public LinkEvent
+{
+  public:
+    LinkEventRenderingProgram(gl::InfoLog &infoLog,
+                              WorkerThreadPool *workerPool,
+                              ProgramD3D::GetVertexExecutableTask *vertexTask,
+                              ProgramD3D::GetPixelExecutableTask *pixelTask,
+                              ProgramD3D::GetGeometryExecutableTask *geometryTask,
+                              bool useGS,
+                              const ShaderD3D *vertexShader,
+                              const ShaderD3D *fragmentShader)
+        : mInfoLog(infoLog),
+          mVertexTask(vertexTask),
+          mPixelTask(pixelTask),
+          mGeometryTask(geometryTask),
+          mWaitEvents({{std::unique_ptr<WaitableEvent>(workerPool->postWorkerTask(vertexTask)),
+                        std::unique_ptr<WaitableEvent>(workerPool->postWorkerTask(pixelTask)),
+                        std::unique_ptr<WaitableEvent>(workerPool->postWorkerTask(geometryTask))}}),
+          mUseGS(useGS),
+          mVertexShader(vertexShader),
+          mFragmentShader(fragmentShader)
+    {
+    }
+
+    bool wait() override
+    {
+        WaitableEvent::WaitMany(&mWaitEvents);
+
+        if (!mVertexTask->getInfoLog().empty())
+        {
+            mInfoLog << mVertexTask->getInfoLog().str();
+        }
+        if (!mPixelTask->getInfoLog().empty())
+        {
+            mInfoLog << mPixelTask->getInfoLog().str();
+        }
+        if (!mGeometryTask->getInfoLog().empty())
+        {
+            mInfoLog << mGeometryTask->getInfoLog().str();
+        }
+        auto result = mVertexTask->getError();
+        if (result.isError())
+        {
+            mInfoLog << result.getMessage();
+            return false;
+        }
+        result = mPixelTask->getError();
+        if (result.isError())
+        {
+            mInfoLog << result.getMessage();
+            return false;
+        }
+        result = mGeometryTask->getError();
+        if (result.isError())
+        {
+            mInfoLog << result.getMessage();
+            return false;
+        }
+
+        ShaderExecutableD3D *defaultVertexExecutable = mVertexTask->getResult();
+        ShaderExecutableD3D *defaultPixelExecutable  = mPixelTask->getResult();
+        ShaderExecutableD3D *pointGS                 = mGeometryTask->getResult();
+
+        if (mUseGS && pointGS)
+        {
+            // Geometry shaders are currently only used internally, so there is no corresponding
+            // shader object at the interface level. For now the geometry shader debug info is
+            // prepended to the vertex shader.
+            mVertexShader->appendDebugInfo("// GEOMETRY SHADER BEGIN\n\n");
+            mVertexShader->appendDebugInfo(pointGS->getDebugInfo());
+            mVertexShader->appendDebugInfo("\nGEOMETRY SHADER END\n\n\n");
+        }
+
+        if (defaultVertexExecutable)
+        {
+            mVertexShader->appendDebugInfo(defaultVertexExecutable->getDebugInfo());
+        }
+
+        if (defaultPixelExecutable)
+        {
+            mFragmentShader->appendDebugInfo(defaultPixelExecutable->getDebugInfo());
+        }
+
+        bool isLinked = (defaultVertexExecutable && defaultPixelExecutable && (!mUseGS || pointGS));
+        if (!isLinked)
+        {
+            mInfoLog << "Failed to create D3D Shaders";
+        }
+        return isLinked;
+    }
+
+    bool isLinking() override
+    {
+        return (!mWaitEvents[0]->isReady() || !mWaitEvents[1]->isReady() ||
+                !mWaitEvents[2]->isReady());
+    }
+
+  private:
+    gl::InfoLog &mInfoLog;
+    std::unique_ptr<ProgramD3D::GetVertexExecutableTask> mVertexTask;
+    std::unique_ptr<ProgramD3D::GetPixelExecutableTask> mPixelTask;
+    std::unique_ptr<ProgramD3D::GetGeometryExecutableTask> mGeometryTask;
+    std::array<std::unique_ptr<WaitableEvent>, 3> mWaitEvents;
+    bool mUseGS;
+    const ShaderD3D *mVertexShader;
+    const ShaderD3D *mFragmentShader;
+};
+
+LinkEvent *ProgramD3D::compileProgramExecutables(const gl::Context *context,
+                                                 angle::WorkerThreadPool *threadPool,
+                                                 gl::InfoLog &infoLog)
 {
     // Ensure the compiler is initialized to avoid race conditions.
-    ANGLE_TRY(mRenderer->ensureHLSLCompilerInitialized());
-
-    WorkerThreadPool *workerPool = mRenderer->getWorkerThreadPool();
-
-    GetVertexExecutableTask vertexTask(this, context);
-    GetPixelExecutableTask pixelTask(this);
-    GetGeometryExecutableTask geometryTask(this, context);
-
-    std::array<WaitableEvent, 3> waitEvents = {{workerPool->postWorkerTask(&vertexTask),
-                                                workerPool->postWorkerTask(&pixelTask),
-                                                workerPool->postWorkerTask(&geometryTask)}};
-
-    WaitableEvent::WaitMany(&waitEvents);
-
-    if (!vertexTask.getInfoLog().empty())
+    gl::Error result = mRenderer->ensureHLSLCompilerInitialized();
+    if (result.isError())
     {
-        infoLog << vertexTask.getInfoLog().str();
-    }
-    if (!pixelTask.getInfoLog().empty())
-    {
-        infoLog << pixelTask.getInfoLog().str();
-    }
-    if (!geometryTask.getInfoLog().empty())
-    {
-        infoLog << geometryTask.getInfoLog().str();
+        return new LinkEventDone(result);
     }
 
-    ANGLE_TRY(vertexTask.getError());
-    ANGLE_TRY(pixelTask.getError());
-    ANGLE_TRY(geometryTask.getError());
-
-    ShaderExecutableD3D *defaultVertexExecutable = vertexTask.getResult();
-    ShaderExecutableD3D *defaultPixelExecutable  = pixelTask.getResult();
-    ShaderExecutableD3D *pointGS                 = geometryTask.getResult();
-
+    auto *vertexTask   = new GetVertexExecutableTask(this, context);
+    auto *pixelTask    = new GetPixelExecutableTask(this);
+    auto *geometryTask = new GetGeometryExecutableTask(this, context);
+    bool useGS         = usesGeometryShader(gl::PrimitiveMode::Points);
     const ShaderD3D *vertexShaderD3D =
         GetImplAs<ShaderD3D>(mState.getAttachedShader(gl::ShaderType::Vertex));
+    const ShaderD3D *fragmentShaderD3D =
+        GetImplAs<ShaderD3D>(mState.getAttachedShader(gl::ShaderType::Fragment));
 
-    if (usesGeometryShader(gl::PrimitiveMode::Points) && pointGS)
-    {
-        // Geometry shaders are currently only used internally, so there is no corresponding shader
-        // object at the interface level. For now the geometry shader debug info is prepended to
-        // the vertex shader.
-        vertexShaderD3D->appendDebugInfo("// GEOMETRY SHADER BEGIN\n\n");
-        vertexShaderD3D->appendDebugInfo(pointGS->getDebugInfo());
-        vertexShaderD3D->appendDebugInfo("\nGEOMETRY SHADER END\n\n\n");
-    }
-
-    if (defaultVertexExecutable)
-    {
-        vertexShaderD3D->appendDebugInfo(defaultVertexExecutable->getDebugInfo());
-    }
-
-    if (defaultPixelExecutable)
-    {
-        const ShaderD3D *fragmentShaderD3D =
-            GetImplAs<ShaderD3D>(mState.getAttachedShader(gl::ShaderType::Fragment));
-        fragmentShaderD3D->appendDebugInfo(defaultPixelExecutable->getDebugInfo());
-    }
-
-    return (defaultVertexExecutable && defaultPixelExecutable &&
-            (!usesGeometryShader(gl::PrimitiveMode::Points) || pointGS));
+    return new LinkEventRenderingProgram(infoLog, threadPool, vertexTask, pixelTask, geometryTask,
+                                         useGS, vertexShaderD3D, fragmentShaderD3D);
 }
 
 gl::LinkResult ProgramD3D::compileComputeExecutable(const gl::Context *context,
@@ -1536,9 +1601,10 @@ gl::LinkResult ProgramD3D::compileComputeExecutable(const gl::Context *context,
     return mComputeExecutable.get() != nullptr;
 }
 
-gl::LinkResult ProgramD3D::link(const gl::Context *context,
-                                const gl::ProgramLinkedResources &resources,
-                                gl::InfoLog &infoLog)
+LinkEvent *ProgramD3D::link(const gl::Context *context,
+                            angle::WorkerThreadPool *threadPool,
+                            const gl::ProgramLinkedResources &resources,
+                            gl::InfoLog &infoLog)
 {
     const auto &data = context->getContextState();
 
@@ -1555,17 +1621,18 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
         mShaderUniformsDirty.set(gl::ShaderType::Compute);
         defineUniformsAndAssignRegisters(context);
 
+        linkResources(context, resources);
+
         gl::LinkResult result = compileComputeExecutable(context, infoLog);
         if (result.isError())
         {
             infoLog << result.getError().getMessage();
-            return result;
         }
         else if (!result.getResult())
         {
             infoLog << "Failed to create D3D compute shader.";
-            return result;
         }
+        return new LinkEventDone(result);
     }
     else
     {
@@ -1590,7 +1657,7 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
             if (shadersD3D[gl::ShaderType::Fragment]->usesFrontFacing())
             {
                 infoLog << "The current renderer doesn't support gl_FrontFacing";
-                return false;
+                return new LinkEventDone(false);
             }
         }
 
@@ -1622,22 +1689,10 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
 
         gatherTransformFeedbackVaryings(resources.varyingPacking, builtins[gl::ShaderType::Vertex]);
 
-        gl::LinkResult result = compileProgramExecutables(context, infoLog);
-        if (result.isError())
-        {
-            infoLog << result.getError().getMessage();
-            return result;
-        }
-        else if (!result.getResult())
-        {
-            infoLog << "Failed to create D3D shaders.";
-            return result;
-        }
+        linkResources(context, resources);
+
+        return compileProgramExecutables(context, threadPool, infoLog);
     }
-
-    linkResources(context, resources);
-
-    return true;
 }
 
 GLboolean ProgramD3D::validate(const gl::Caps & /*caps*/, gl::InfoLog * /*infoLog*/)

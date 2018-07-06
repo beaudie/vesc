@@ -219,9 +219,18 @@ void ProgramVk::setSeparable(bool separable)
     UNIMPLEMENTED();
 }
 
-gl::LinkResult ProgramVk::link(const gl::Context *glContext,
-                               const gl::ProgramLinkedResources &resources,
-                               gl::InfoLog &infoLog)
+LinkEvent *ProgramVk::link(const gl::Context *glContext,
+                           angle::WorkerThreadPool *threadPool,
+                           const gl::ProgramLinkedResources &resources,
+                           gl::InfoLog &infoLog)
+{
+    // TODO(jie.a.chen@intel.com): Parallelize linking.
+    return new LinkEventDone(linkImpl(glContext, resources, infoLog));
+}
+
+gl::LinkResult ProgramVk::linkImpl(const gl::Context *glContext,
+                                   const gl::ProgramLinkedResources &resources,
+                                   gl::InfoLog &infoLog)
 {
     ContextVk *contextVk = vk::GetImpl(glContext);
     RendererVk *renderer = contextVk->getRenderer();

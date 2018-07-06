@@ -12,6 +12,7 @@
 
 #include "angle_gl.h"
 #include "common/angleutils.h"
+#include "libANGLE/WorkerThread.h"
 #include "libANGLE/angletypes.h"
 
 #include <memory>
@@ -35,7 +36,10 @@ class GLES1Renderer final : angle::NonCopyable
 
     void onDestroy(Context *context, State *state);
 
-    Error prepareForDraw(PrimitiveMode mode, Context *context, State *glState);
+    Error prepareForDraw(PrimitiveMode mode,
+                         Context *context,
+                         angle::WorkerThreadPool *threadPool,
+                         State *glState);
 
     int vertexArrayIndex(ClientVertexArrayType type, const State *glState) const;
     static int TexCoordArrayIndex(unsigned int unit);
@@ -54,12 +58,15 @@ class GLES1Renderer final : angle::NonCopyable
                         const char *src,
                         GLuint *shaderOut);
     Error linkProgram(Context *context,
+                      angle::WorkerThreadPool *threadPool,
                       State *glState,
                       GLuint vshader,
                       GLuint fshader,
                       const std::unordered_map<GLint, std::string> &attribLocs,
                       GLuint *programOut);
-    Error initializeRendererProgram(Context *context, State *glState);
+    Error initializeRendererProgram(Context *context,
+                                    angle::WorkerThreadPool *threadPool,
+                                    State *glState);
 
     void setUniform1i(Program *programObject, GLint loc, GLint value);
     void setUniform1iv(Program *programObject, GLint loc, GLint count, const GLint *value);

@@ -61,6 +61,8 @@ TextureManager *AllocateOrGetSharedTextureManager(const ContextState *shareConte
 
 }  // anonymous namespace
 
+constexpr size_t kDefaultParallelCompileThreads = 6;
+
 ContextState::ContextState(ContextID contextIn,
                            const ContextState *shareContextState,
                            TextureManager *shareTextures,
@@ -89,8 +91,13 @@ ContextState::ContextState(ContextID contextIn,
       mSyncs(AllocateOrGetSharedResourceManager(shareContextState, &ContextState::mSyncs)),
       mPaths(AllocateOrGetSharedResourceManager(shareContextState, &ContextState::mPaths)),
       mFramebuffers(new FramebufferManager()),
-      mPipelines(new ProgramPipelineManager())
+      mPipelines(new ProgramPipelineManager()),
+      // Share the thread pool for multiple contexts in a share group as the
+      // KHR_parallel_shader_compile spec suggests.
+      mThreadPool(shareContextState ? shareContextState->mThreadPool
+                                    : new angle::WorkerThreadPool(kDefaultParallelCompileThreads))
 {
+    mThreadPool->addRef();
 }
 
 ContextState::~ContextState()
