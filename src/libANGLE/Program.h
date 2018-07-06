@@ -462,12 +462,20 @@ class Program final : angle::NonCopyable, public LabeledObject
     Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, GLuint handle);
     void onDestroy(const Context *context);
 
-    GLuint id() const { return mHandle; }
+    GLuint id() const
+    {
+        resolveLink();
+        return mHandle;
+    }
 
     void setLabel(const std::string &label) override;
     const std::string &getLabel() const override;
 
-    rx::ProgramImpl *getImplementation() const { return mProgram; }
+    rx::ProgramImpl *getImplementation() const
+    {
+        resolveLink();
+        return mProgram;
+    }
 
     void attachShader(Shader *shader);
     void detachShader(const Context *context, Shader *shader);
@@ -487,8 +495,19 @@ class Program final : angle::NonCopyable, public LabeledObject
                               GLint components,
                               const GLfloat *coeffs);
 
+    // KHR_parallel_shader_compile
+    // Try to link the program asynchrously. As a result, background threads may
+    // be launched to execute the actual linking tasks concurrently.
     Error link(const Context *context);
-    bool isLinked() const { return mLinked; }
+
+    // Peek whether there is any running linking tasks.
+    bool isLinking() const;
+
+    bool isLinked() const
+    {
+        resolveLink();
+        return mLinked;
+    }
 
     bool hasLinkedShaderStage(ShaderType shaderType) const;
 
@@ -523,15 +542,24 @@ class Program final : angle::NonCopyable, public LabeledObject
                             GLchar *name) const;
     GLint getActiveAttributeCount() const;
     GLint getActiveAttributeMaxLength() const;
-    const std::vector<sh::Attribute> &getAttributes() const { return mState.mAttributes; }
+    const std::vector<sh::Attribute> &getAttributes() const
+    {
+        resolveLink();
+        return mState.mAttributes;
+    }
 
     GLint getFragDataLocation(const std::string &name) const;
     size_t getOutputResourceCount() const;
     const std::vector<GLenum> &getOutputVariableTypes() const
     {
+        resolveLink();
         return mState.mOutputVariableTypes;
     }
-    DrawBufferMask getActiveOutputVariables() const { return mState.mActiveOutputVariables; }
+    DrawBufferMask getActiveOutputVariables() const
+    {
+        resolveLink();
+        return mState.mActiveOutputVariables;
+    }
 
     void getActiveUniform(GLuint index,
                           GLsizei bufsize,
@@ -547,11 +575,13 @@ class Program final : angle::NonCopyable, public LabeledObject
     const VariableLocation &getUniformLocation(GLint location) const;
     const std::vector<VariableLocation> &getUniformLocations() const
     {
+        resolveLink();
         return mState.mUniformLocations;
     }
 
     const LinkedUniform &getUniformByIndex(GLuint index) const
     {
+        resolveLink();
         ASSERT(index < static_cast<size_t>(mState.mUniforms.size()));
         return mState.mUniforms[index];
     }
@@ -671,32 +701,53 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     const AttributesMask &getActiveAttribLocationsMask() const
     {
+        resolveLink();
         return mState.mActiveAttribLocationsMask;
     }
 
     const std::vector<SamplerBinding> &getSamplerBindings() const
     {
+        resolveLink();
         return mState.mSamplerBindings;
     }
 
-    const std::vector<ImageBinding> &getImageBindings() const { return mState.mImageBindings; }
+    const std::vector<ImageBinding> &getImageBindings() const
+    {
+        resolveLink();
+        return mState.mImageBindings;
+    }
     const sh::WorkGroupSize &getComputeShaderLocalSize() const
     {
+        resolveLink();
         return mState.mComputeShaderLocalSize;
     }
 
     PrimitiveMode getGeometryShaderInputPrimitiveType() const
     {
+        resolveLink();
         return mState.mGeometryShaderInputPrimitiveType;
     }
     PrimitiveMode getGeometryShaderOutputPrimitiveType() const
     {
+        resolveLink();
         return mState.mGeometryShaderOutputPrimitiveType;
     }
-    GLint getGeometryShaderInvocations() const { return mState.mGeometryShaderInvocations; }
-    GLint getGeometryShaderMaxVertices() const { return mState.mGeometryShaderMaxVertices; }
+    GLint getGeometryShaderInvocations() const
+    {
+        resolveLink();
+        return mState.mGeometryShaderInvocations;
+    }
+    GLint getGeometryShaderMaxVertices() const
+    {
+        resolveLink();
+        return mState.mGeometryShaderMaxVertices;
+    }
 
-    const ProgramState &getState() const { return mState; }
+    const ProgramState &getState() const
+    {
+        resolveLink();
+        return mState;
+    }
 
     static LinkMismatchError LinkValidateVariablesBase(
         const sh::ShaderVariable &variable1,
@@ -717,23 +768,58 @@ class Program final : angle::NonCopyable, public LabeledObject
     const sh::Attribute &getInputResource(GLuint index) const;
     const sh::OutputVariable &getOutputResource(GLuint index) const;
 
-    const ProgramBindings &getAttributeBindings() const { return mAttributeBindings; }
-    const ProgramBindings &getUniformLocationBindings() const { return mUniformLocationBindings; }
-    const ProgramBindings &getFragmentInputBindings() const { return mFragmentInputBindings; }
+    const ProgramBindings &getAttributeBindings() const
+    {
+        resolveLink();
+        return mAttributeBindings;
+    }
+    const ProgramBindings &getUniformLocationBindings() const
+    {
+        resolveLink();
+        return mUniformLocationBindings;
+    }
+    const ProgramBindings &getFragmentInputBindings() const
+    {
+        resolveLink();
+        return mFragmentInputBindings;
+    }
 
-    int getNumViews() const { return mState.getNumViews(); }
-    bool usesMultiview() const { return mState.usesMultiview(); }
+    int getNumViews() const
+    {
+        resolveLink();
+        return mState.getNumViews();
+    }
+    bool usesMultiview() const
+    {
+        resolveLink();
+        return mState.usesMultiview();
+    }
 
-    ComponentTypeMask getDrawBufferTypeMask() const { return mState.mDrawBufferTypeMask; }
-    ComponentTypeMask getAttributesTypeMask() const { return mState.mAttributesTypeMask; }
-    AttributesMask getAttributesMask() const { return mState.mAttributesMask; }
+    ComponentTypeMask getDrawBufferTypeMask() const
+    {
+        resolveLink();
+        return mState.mDrawBufferTypeMask;
+    }
+    ComponentTypeMask getAttributesTypeMask() const
+    {
+        resolveLink();
+        return mState.mAttributesTypeMask;
+    }
+    AttributesMask getAttributesMask() const
+    {
+        resolveLink();
+        return mState.mAttributesMask;
+    }
 
     const std::vector<GLsizei> &getTransformFeedbackStrides() const
     {
+        resolveLink();
         return mState.mTransformFeedbackStrides;
     }
 
   private:
+    struct LinkingState;
+
     ~Program() override;
 
     void unlink();
@@ -821,6 +907,10 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     GLuint getSamplerUniformBinding(const VariableLocation &uniformLocation) const;
 
+    // Wait until the linking tasks are done.
+    void resolveLink();
+    void resolveLink() const { return const_cast<Program *>(this)->resolveLink(); }
+
     ProgramState mState;
     rx::ProgramImpl *mProgram;
 
@@ -836,6 +926,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     ProgramBindings mFragmentInputBindings;
 
     bool mLinked;
+    bool mLinking;
+    std::unique_ptr<LinkingState> mLinkingState;
     bool mDeleteStatus;  // Flag to indicate that the program can be deleted when no longer in use
 
     unsigned int mRefCount;

@@ -5531,7 +5531,21 @@ void Context::linkProgram(GLuint program)
     Program *programObject = getProgram(program);
     ASSERT(programObject);
     handleError(programObject->link(this));
-    mGLState.onProgramExecutableChange(programObject);
+
+    // Don't parallel link a program which is active in any GL contexts.
+    // With this assumption, we don't need to worry that:
+    //   1. GL draw calls after link have to aware the fact that whether to use
+    //      the existing executable code, or newly generated one, depends on the
+    //      linking result.
+    //   2. When a backend program, e.g., ProgramD3D is linking, other backend
+    //      classes like StateManager11, Renderer11, etc., may have chance to
+    //      make unexpected calls to ProgramD3D.
+    if (programObject->getRefCount() != 0 || !getExtensions().parallelShaderCompile)
+    {
+        // Force to resolve link.
+        programObject->isLinked();
+        mGLState.onProgramExecutableChange(programObject);
+    }
 }
 
 void Context::releaseShaderCompiler()
