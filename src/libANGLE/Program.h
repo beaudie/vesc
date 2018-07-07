@@ -50,6 +50,7 @@ class State;
 class InfoLog;
 class Buffer;
 class Framebuffer;
+class ProgramLinkedResources;
 
 extern const char *const g_fakepath;
 
@@ -842,6 +843,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     bool mLinked;
     bool mLinking;
+    ProgramLinkedResources *mLinkingResources;
     bool mDeleteStatus;  // Flag to indicate that the program can be deleted when no longer in use
 
     unsigned int mRefCount;
