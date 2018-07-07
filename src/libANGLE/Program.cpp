@@ -883,6 +883,8 @@ Program::Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, GLui
       mValidated(false),
       mLinked(false),
       mLinking(false),
+      mLinkingEvent(nullptr),
+      mLinkingResources(nullptr),
       mDeleteStatus(false),
       mRefCount(0),
       mResourceManager(manager),
@@ -914,6 +916,8 @@ void Program::onDestroy(const Context *context)
 
     ASSERT(!mState.hasAttachedShader());
     SafeDelete(mProgram);
+
+    SafeDelete(mLinkingResources);
 
     delete this;
 }
@@ -1247,6 +1251,153 @@ Error Program::link(const gl::Context *context)
 
 Error Program::asyncLink(const gl::Context *context)
 {
+    const auto &data = context->getContextState();
+
+    auto *platform   = ANGLEPlatformCurrent();
+    double startTime = platform->currentTime(platform);
+
+    unlink();
+    mInfoLog.reset();
+
+    // Validate we have properly attached shaders before checking the cache.
+    if (!linkValidateShaders(context, mInfoLog))
+    {
+        return NoError();
+    }
+
+    ProgramHash programHash;
+    MemoryProgramCache *cache = context->getMemoryProgramCache();
+    if (cache)
+    {
+        ANGLE_TRY_RESULT(cache->getProgram(context, this, &mState, &programHash), mLinked);
+        ANGLE_HISTOGRAM_BOOLEAN("GPU.ANGLE.ProgramCache.LoadBinarySuccess", mLinked);
+    }
+
+    if (mLinked)
+    {
+        double delta = platform->currentTime(platform) - startTime;
+        int us       = static_cast<int>(delta * 1000000.0);
+        ANGLE_HISTOGRAM_COUNTS("GPU.ANGLE.ProgramCache.ProgramCacheHitTimeUS", us);
+        return NoError();
+    }
+
+    // Cache load failed, fall through to normal linking.
+    unlink();
+
+    // Re-link shaders after the unlink call.
+    ASSERT(linkValidateShaders(context, mInfoLog));
+
+    if (mState.mAttachedShaders[ShaderType::Compute])
+    {
+        mLinkingResources = new ProgramLinkedResources(mState);
+        mLinkingResources->varyingPacking.initialize(0, PackMode::ANGLE_RELAXED);
+        mLinkingResources->unusedUniforms.clear();
+
+        GLuint combinedImageUniforms = 0u;
+        if (!linkUniforms(context, mInfoLog, mUniformLocationBindings, &combinedImageUniforms,
+                          &mLinkingResources->unusedUniforms))
+        {
+            return NoError();
+        }
+
+        GLuint combinedShaderStorageBlocks = 0u;
+        if (!linkInterfaceBlocks(context, mInfoLog, &combinedShaderStorageBlocks))
+        {
+            return NoError();
+        }
+
+        // [OpenGL ES 3.1] Chapter 8.22 Page 203:
+        // A link error will be generated if the sum of the number of active image uniforms used in
+        // all shaders, the number of active shader storage blocks, and the number of active
+        // fragment shader outputs exceeds the implementation-dependent value of
+        // MAX_COMBINED_SHADER_OUTPUT_RESOURCES.
+        if (combinedImageUniforms + combinedShaderStorageBlocks >
+            context->getCaps().maxCombinedShaderOutputResources)
+        {
+            mInfoLog
+                << "The sum of the number of active image uniforms, active shader storage blocks "
+                   "and active fragment shader outputs exceeds "
+                   "MAX_COMBINED_SHADER_OUTPUT_RESOURCES ("
+                << context->getCaps().maxCombinedShaderOutputResources << ")";
+            return NoError();
+        }
+
+        InitUniformBlockLinker(context, mState, &mLinkingResources->uniformBlockLinker);
+        InitShaderStorageBlockLinker(context, mState, &mLinkingResources->shaderStorageBlockLinker);
+    }
+    else
+    {
+        // Map the varyings to the register file
+        // In WebGL, we use a slightly different handling for packing variables.
+        gl::PackMode packMode = PackMode::ANGLE_RELAXED;
+        if (data.getLimitations().noFlexibleVaryingPacking)
+        {
+            // D3D9 pack mode is strictly more strict than WebGL, so takes priority.
+            packMode = PackMode::ANGLE_NON_CONFORMANT_D3D9;
+        }
+        else if (data.getExtensions().webglCompatibility)
+        {
+            packMode = PackMode::WEBGL_STRICT;
+        }
+
+        mLinkingResources = new ProgramLinkedResources(mState);
+        mLinkingResources->varyingPacking.initialize(data.getCaps().maxVaryingVectors, packMode);
+        mLinkingResources->unusedUniforms.clear();
+
+        if (!linkAttributes(context, mInfoLog))
+        {
+            return NoError();
+        }
+
+        if (!linkVaryings(context, mInfoLog))
+        {
+            return NoError();
+        }
+
+        GLuint combinedImageUniforms = 0u;
+        if (!linkUniforms(context, mInfoLog, mUniformLocationBindings, &combinedImageUniforms,
+                          &mLinkingResources->unusedUniforms))
+        {
+            return NoError();
+        }
+
+        GLuint combinedShaderStorageBlocks = 0u;
+        if (!linkInterfaceBlocks(context, mInfoLog, &combinedShaderStorageBlocks))
+        {
+            return NoError();
+        }
+
+        if (!linkValidateGlobalNames(context, mInfoLog))
+        {
+            return NoError();
+        }
+
+        if (!linkOutputVariables(context, combinedImageUniforms, combinedShaderStorageBlocks))
+        {
+            return NoError();
+        }
+
+        const auto &mergedVaryings = getMergedVaryings(context);
+
+        ASSERT(mState.mAttachedShaders[ShaderType::Vertex]);
+        mState.mNumViews = mState.mAttachedShaders[ShaderType::Vertex]->getNumViews(context);
+
+        InitUniformBlockLinker(context, mState, &mLinkingResources->uniformBlockLinker);
+        InitShaderStorageBlockLinker(context, mState, &mLinkingResources->shaderStorageBlockLinker);
+
+        if (!linkValidateTransformFeedback(context, mInfoLog, mergedVaryings, context->getCaps()))
+        {
+            return NoError();
+        }
+
+        if (!mLinkingResources->varyingPacking.collectAndPackUserVaryings(
+                mInfoLog, mergedVaryings, mState.getTransformFeedbackVaryingNames()))
+        {
+            return NoError();
+        }
+    }
+    mLinkingEvent = mProgram->asyncLink(context, *mLinkingResources, mInfoLog);
+
     mLinking = true;
     return NoError();
 }
@@ -1254,7 +1405,48 @@ Error Program::asyncLink(const gl::Context *context)
 Error Program::waitForLinking(const gl::Context *context)
 {
     mLinking = false;
-    return link(context);
+    ANGLE_TRY_RESULT(mLinkingEvent->wait(), mLinked);
+    mProgram->didLink(context, *mLinkingResources, mInfoLog);
+    SafeDelete(mLinkingEvent);
+    if (!mLinked)
+    {
+        return NoError();
+    }
+
+    if (!mState.mAttachedShaders[ShaderType::Compute])
+    {
+        const auto &mergedVaryings = getMergedVaryings(context);
+        gatherTransformFeedbackVaryings(mergedVaryings);
+    }
+
+    initInterfaceBlockBindings();
+
+    setUniformValuesFromBindingQualifiers();
+
+    // According to GLES 3.0/3.1 spec for LinkProgram and UseProgram,
+    // Only successfully linked program can replace the executables.
+    ASSERT(mLinked);
+    updateLinkedShaderStages();
+
+    // Mark implementation-specific unreferenced uniforms as ignored.
+    mProgram->markUnusedUniformLocations(&mState.mUniformLocations, &mState.mSamplerBindings);
+
+    // Save to the program cache.
+    MemoryProgramCache *cache = context->getMemoryProgramCache();
+    if (cache && (mState.mLinkedTransformFeedbackVaryings.empty() ||
+                  !context->getWorkarounds().disableProgramCachingForTransformFeedback))
+    {
+        ProgramHash programHash;
+        cache->ComputeHash(context, this, &programHash);
+        cache->putProgram(programHash, context, this);
+    }
+
+    if (mLinkingResources)
+    {
+        delete mLinkingResources;
+        mLinkingResources = nullptr;
+    }
+    return NoError();
 }
 
 void Program::updateLinkedShaderStages()

@@ -284,6 +284,7 @@
             'libANGLE/renderer/ImageImpl.h',
             'libANGLE/renderer/PathImpl.h',
             'libANGLE/renderer/ProgramImpl.h',
+            'libANGLE/renderer/ProgramImpl.cpp',
             'libANGLE/renderer/ProgramPipelineImpl.h',
             'libANGLE/renderer/QueryImpl.h',
             'libANGLE/renderer/RenderbufferImpl.h',
