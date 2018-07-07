@@ -47,6 +47,14 @@ class ProgramImpl : angle::NonCopyable
     virtual gl::LinkResult link(const gl::Context *context,
                                 const gl::ProgramLinkedResources &resources,
                                 gl::InfoLog &infoLog)                      = 0;
+
+    virtual gl::LinkEvent *asyncLink(const gl::Context *context,
+                                     const gl::ProgramLinkedResources &resources,
+                                     gl::InfoLog &infoLog);
+    virtual void didLink(const gl::Context *context,
+                         const gl::ProgramLinkedResources &resources,
+                         gl::InfoLog &infoLog);
+
     virtual GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) = 0;
 
     virtual void setUniform1fv(GLint location, GLsizei count, const GLfloat *v) = 0;

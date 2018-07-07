@@ -50,6 +50,7 @@ class State;
 class InfoLog;
 class Buffer;
 class Framebuffer;
+struct ProgramLinkedResources;
 
 extern const char *const g_fakepath;
 
@@ -457,6 +458,13 @@ struct ProgramVaryingRef
 
 using ProgramMergedVaryings = std::map<std::string, ProgramVaryingRef>;
 
+class LinkEvent : angle::NonCopyable
+{
+  public:
+    virtual ~LinkEvent(){};
+    virtual gl::LinkResult wait() = 0;
+};
+
 class Program final : angle::NonCopyable, public LabeledObject
 {
   public:
@@ -842,6 +850,8 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     bool mLinked;
     bool mLinking;
+    LinkEvent *mLinkingEvent;
+    ProgramLinkedResources *mLinkingResources;
     bool mDeleteStatus;  // Flag to indicate that the program can be deleted when no longer in use
 
     unsigned int mRefCount;
