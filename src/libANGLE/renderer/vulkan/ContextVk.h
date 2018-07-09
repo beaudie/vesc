@@ -169,6 +169,8 @@ class ContextVk : public ContextImpl
                                    gl::Texture **textureOut);
     void updateColorMask(const gl::BlendState &blendState);
 
+    const gl::ActiveTextureArray<TextureVk *> &getActiveTextures() const;
+
   private:
     gl::Error initPipeline(const gl::DrawCallParams &drawCallParams);
     gl::Error setupDraw(const gl::Context *context,
@@ -176,9 +178,10 @@ class ContextVk : public ContextImpl
                         vk::CommandBuffer **commandBufferOut,
                         bool *shouldApplyVertexArrayOut);
 
-    void updateScissor(const gl::State &glState);
+    void updateScissor(const gl::State &glState) const;
 
     vk::Error updateDriverUniforms();
+    gl::Error updateActiveTextures(const gl::Context *context);
 
     RendererVk *mRenderer;
     vk::PipelineAndSerial *mCurrentPipeline;
@@ -211,6 +214,10 @@ class ContextVk : public ContextImpl
     vk::DynamicBuffer mDriverUniformsBuffer;
     VkDescriptorSet mDriverUniformsDescriptorSet;
     vk::BindingPointer<vk::DescriptorSetLayout> mDriverUniformsSetLayout;
+
+    // This cache should also probably include the texture index (shader location) and array
+    // index (also in the shader). This info is used in the descriptor update step.
+    gl::ActiveTextureArray<TextureVk *> mActiveTextures;
 };
 }  // namespace rx
 
