@@ -111,6 +111,7 @@ class ProgramVk : public ProgramImpl
 
     vk::Error updateDescriptorSets(ContextVk *contextVk,
                                    const gl::DrawCallParams &drawCallParams,
+                                   VkDescriptorSet driverUniformsDescriptorSet,
                                    vk::CommandBuffer *commandBuffer);
 
     // For testing only.
@@ -167,6 +168,7 @@ class ProgramVk : public ProgramImpl
                                         const gl::ProgramState &state,
                                         const std::string &vertexSource,
                                         const std::string &fragmentSource,
+                                        bool enableLineRasterEmulation,
                                         const vk::ShaderAndSerial **vertexShaderAndSerialOut,
                                         const vk::ShaderAndSerial **fragmentShaderAndSerialOut,
                                         const vk::PipelineLayout **pipelineLayoutOut);
@@ -179,9 +181,12 @@ class ProgramVk : public ProgramImpl
             const vk::ShaderMap<DefaultUniformBlock> &defaultUniformBlocks,
             const vk::BufferAndMemory &emptyUniformBlockStorage);
         vk::Error updateTexturesDescriptorSet(ContextVk *contextVk, const gl::ProgramState &state);
+        void updateDriverUniformsDescriptorSet(VkDescriptorSet driverUniformsDescriptorSet);
 
         void bindDescriptorSets(vk::CommandBuffer *commandBuffer,
                                 const vk::ShaderMap<uint32_t> &uniformBlocksOffsets) const;
+        void bindDriverUniformsDescriptorSet(vk::CommandBuffer *commandBuffer,
+                                             VkDescriptorSet driverUniformsDescriptorSet);
 
         void invalidateTextures();
 
@@ -203,6 +208,7 @@ class ProgramVk : public ProgramImpl
     };
 
     ShaderInfo mDefaultShaderInfo;
+    ShaderInfo mLineRasterShaderInfo;
 
     // We keep the translated linked shader sources to use with shader draw call patching.
     std::string mVertexSource;
