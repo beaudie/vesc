@@ -341,7 +341,7 @@ gl::Error FramebufferVk::readPixels(const gl::Context *context,
     params.type        = type;
     params.outputPitch = outputPitch;
     params.packBuffer  = glState.getTargetBuffer(gl::BufferBinding::PixelPack);
-    params.pack        = glState.getPackState();
+    params.pack        = packState;
 
     ANGLE_TRY(readPixelsImpl(context, flippedArea, params,
                              static_cast<uint8_t *>(pixels) + outputSkipBytes));
