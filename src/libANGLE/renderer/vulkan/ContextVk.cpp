@@ -223,7 +223,8 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
     mCurrentPipeline->updateSerial(queueSerial);
 
     // Bind the graphics descriptor sets.
-    programVk->updateDescriptorSets(this, drawCallParams, *commandBufferOut);
+    programVk->updateDescriptorSets(this, drawCallParams, mDriverUniformsDescriptorSet,
+                                    *commandBufferOut);
     return gl::NoError();
 }
 

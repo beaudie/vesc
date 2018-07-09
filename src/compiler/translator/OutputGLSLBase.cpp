@@ -46,6 +46,10 @@ bool isSingleStatement(TIntermNode *node)
     {
         return false;
     }
+    else if (node->getAsRawNode())
+    {
+        return false;
+    }
     return true;
 }
 
@@ -595,8 +599,6 @@ bool TOutputGLSLBase::visitBinary(Visit visit, TIntermBinary *node)
                     node->getLeft()->getType().getInterfaceBlock();
                 const TIntermConstantUnion *index = node->getRight()->getAsConstantUnion();
                 const TField *field               = interfaceBlock->fields()[index->getIConst(0)];
-                ASSERT(interfaceBlock->symbolType() == SymbolType::UserDefined ||
-                       interfaceBlock->name() == "gl_PerVertex");
                 out << hashFieldName(field);
                 visitChildren = false;
             }
@@ -1259,6 +1261,12 @@ void TOutputGLSLBase::declareInterfaceBlock(const TInterfaceBlock *interfaceBloc
         out << ";\n";
     }
     out << "}";
+}
+
+void TOutputGLSLBase::visitRaw(TIntermRaw *node)
+{
+    TInfoSinkBase &out = objSink();
+    out << node->getRawText() << "\n";
 }
 
 void WriteGeometryShaderLayoutQualifiers(TInfoSinkBase &out,
