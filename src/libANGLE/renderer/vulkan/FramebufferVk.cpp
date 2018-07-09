@@ -448,6 +448,7 @@ gl::Error FramebufferVk::blit(const gl::Context *context,
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(beginWriteResource(renderer, &commandBuffer));
     FramebufferVk *sourceFramebufferVk = vk::GetImpl(sourceFramebuffer);
+    bool flipSource = sourceFramebuffer->isDefault() && renderer->getFeatures().flipViewportY;
     if (blitColorBuffer)
     {
         RenderTargetVk *readRenderTarget = sourceFramebufferVk->getColorReadRenderTarget();
@@ -458,8 +459,9 @@ gl::Error FramebufferVk::blit(const gl::Context *context,
             ASSERT(drawRenderTarget);
             ASSERT(HasSrcAndDstBlitProperties(renderer->getPhysicalDevice(), readRenderTarget,
                                               drawRenderTarget));
-            ANGLE_TRY(blitImpl(commandBuffer, sourceArea, destArea, readRenderTarget,
-                               drawRenderTarget, filter, scissor, true, false, false));
+            ANGLE_TRY(blitImpl(contextVk, commandBuffer, sourceArea, destArea, readRenderTarget,
+                               drawRenderTarget, filter, scissor, true, false, false, flipSource,
+                               contextVk->isViewportFlipEnabled()));
         }
     }
 
@@ -473,12 +475,22 @@ gl::Error FramebufferVk::blit(const gl::Context *context,
         if (HasSrcAndDstBlitProperties(renderer->getPhysicalDevice(), readRenderTarget,
                                        drawRenderTarget))
         {
-            ANGLE_TRY(blitImpl(commandBuffer, sourceArea, destArea, readRenderTarget,
+            ANGLE_TRY(blitImpl(contextVk, commandBuffer, sourceArea, destArea, readRenderTarget,
                                drawRenderTarget, filter, scissor, false, blitDepthBuffer,
-                               blitStencilBuffer));
+                               blitStencilBuffer, flipSource, contextVk->isViewportFlipEnabled()));
         }
         else
         {
+            if (flipSource || contextVk->isViewportFlipEnabled())
+            {
+                // The tests in BlitFramebufferANGLETest are passing, but they are wrong since they
+                // use a single color for the depth / stencil buffers, it looks like its working,
+                // but if it was a gradient or a checked board, you would realize the flip isn't
+                // happening with this copy.
+                UNIMPLEMENTED();
+                return gl::InternalError();
+            }
+
             ASSERT(filter == GL_NEAREST);
             ANGLE_TRY(blitUsingCopy(renderer, commandBuffer, sourceArea, destArea, readRenderTarget,
                                     drawRenderTarget, scissor, blitDepthBuffer, blitStencilBuffer));
@@ -488,7 +500,8 @@ gl::Error FramebufferVk::blit(const gl::Context *context,
     return gl::NoError();
 }
 
-gl::Error FramebufferVk::blitImpl(vk::CommandBuffer *commandBuffer,
+gl::Error FramebufferVk::blitImpl(ContextVk *contextVk,
+                                  vk::CommandBuffer *commandBuffer,
                                   const gl::Rectangle &readRectIn,
                                   const gl::Rectangle &drawRectIn,
                                   RenderTargetVk *readRenderTarget,
@@ -497,7 +510,9 @@ gl::Error FramebufferVk::blitImpl(vk::CommandBuffer *commandBuffer,
                                   const gl::Rectangle *scissor,
                                   bool colorBlit,
                                   bool depthBlit,
-                                  bool stencilBlit)
+                                  bool stencilBlit,
+                                  bool flipSource,
+                                  bool flipDest)
 {
     // Since blitRenderbufferRect is called for each render buffer that needs to be blitted,
     // it should never be the case that both color and depth/stencil need to be blitted at
@@ -537,9 +552,17 @@ gl::Error FramebufferVk::blitImpl(vk::CommandBuffer *commandBuffer,
     vk::ImageHelper *srcImage = readRenderTarget->getImageForRead(
         this, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, aspectMask, commandBuffer);
 
+    if (flipSource)
+    {
+        scissoredReadRect.y =
+            sourceFrameBufferExtents.height - scissoredReadRect.y - scissoredReadRect.height;
+    }
+
     VkImageBlit blit                   = {};
-    blit.srcOffsets[0]                 = {scissoredReadRect.x0(), scissoredReadRect.y0(), 0};
-    blit.srcOffsets[1]                 = {scissoredReadRect.x1(), scissoredReadRect.y1(), 1};
+    blit.srcOffsets[0]                 = {scissoredReadRect.x0(),
+                          flipSource ? scissoredReadRect.y1() : scissoredReadRect.y0(), 0};
+    blit.srcOffsets[1]                 = {scissoredReadRect.x1(),
+                          flipSource ? scissoredReadRect.y0() : scissoredReadRect.y1(), 1};
     blit.srcSubresource.aspectMask     = aspectMask;
     blit.srcSubresource.mipLevel       = 0;
     blit.srcSubresource.baseArrayLayer = 0;
@@ -557,8 +580,16 @@ gl::Error FramebufferVk::blitImpl(vk::CommandBuffer *commandBuffer,
         return gl::NoError();
     }
 
-    blit.dstOffsets[0] = {scissoredDrawRect.x0(), scissoredDrawRect.y0(), 0};
-    blit.dstOffsets[1] = {scissoredDrawRect.x1(), scissoredDrawRect.y1(), 1};
+    if (flipDest)
+    {
+        scissoredDrawRect.y =
+            drawFrameBufferBounds.height - scissoredDrawRect.y - scissoredDrawRect.height;
+    }
+
+    blit.dstOffsets[0] = {scissoredDrawRect.x0(),
+                          flipDest ? scissoredDrawRect.y1() : scissoredDrawRect.y0(), 0};
+    blit.dstOffsets[1] = {scissoredDrawRect.x1(),
+                          flipDest ? scissoredDrawRect.y0() : scissoredDrawRect.y1(), 1};
 
     vk::ImageHelper *dstImage = drawRenderTarget->getImageForWrite(this);
 
