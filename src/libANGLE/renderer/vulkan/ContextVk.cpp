@@ -387,9 +387,8 @@ void ContextVk::popDebugGroup()
     UNIMPLEMENTED();
 }
 
-bool ContextVk::isViewportFlipEnabled() const
+bool ContextVk::isViewportFlipEnabled(const gl::Framebuffer *framebuffer) const
 {
-    gl::Framebuffer *framebuffer = mState.getState().getDrawFramebuffer();
     return framebuffer->isDefault() && mFlipYForCurrentSurface;
 }
 
@@ -409,17 +408,20 @@ void ContextVk::updateScissor(const gl::State &glState)
     FramebufferVk *framebufferVk = vk::GetImpl(getGLState().getDrawFramebuffer());
     gl::Box dimensions           = framebufferVk->getState().getDimensions();
     gl::Rectangle renderArea(0, 0, dimensions.width, dimensions.height);
+    const gl::Framebuffer *framebuffer = mState.getState().getDrawFramebuffer();
 
     if (glState.isScissorTestEnabled())
     {
-        mPipelineDesc->updateScissor(glState.getScissor(), isViewportFlipEnabled(), renderArea);
+        mPipelineDesc->updateScissor(glState.getScissor(), isViewportFlipEnabled(framebuffer),
+                                     renderArea);
     }
     else
     {
         // If the scissor test isn't enabled, we can simply use a really big scissor that's
         // certainly larger than the current surface using the maximum size of a 2D texture
         // for the width and height.
-        mPipelineDesc->updateScissor(kMaxSizedScissor, isViewportFlipEnabled(), renderArea);
+        mPipelineDesc->updateScissor(kMaxSizedScissor, isViewportFlipEnabled(framebuffer),
+                                     renderArea);
     }
 }
 
@@ -445,10 +447,11 @@ gl::Error ContextVk::syncState(const gl::Context *context, const gl::State::Dirt
                 break;
             case gl::State::DIRTY_BIT_VIEWPORT:
             {
-                FramebufferVk *framebufferVk = vk::GetImpl(glState.getDrawFramebuffer());
+                gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
+                FramebufferVk *framebufferVk = vk::GetImpl(framebuffer);
                 mPipelineDesc->updateViewport(framebufferVk, glState.getViewport(),
                                               glState.getNearPlane(), glState.getFarPlane(),
-                                              isViewportFlipEnabled());
+                                              isViewportFlipEnabled(framebuffer));
                 ANGLE_TRY(updateDriverUniforms());
                 break;
             }
@@ -519,9 +522,12 @@ gl::Error ContextVk::syncState(const gl::Context *context, const gl::State::Dirt
                 break;
             case gl::State::DIRTY_BIT_CULL_FACE_ENABLED:
             case gl::State::DIRTY_BIT_CULL_FACE:
+            {
+                gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
                 mPipelineDesc->updateCullMode(glState.getRasterizerState(),
-                                              isViewportFlipEnabled());
+                                              isViewportFlipEnabled(framebuffer));
                 break;
+            }
             case gl::State::DIRTY_BIT_FRONT_FACE:
                 mPipelineDesc->updateFrontFace(glState.getRasterizerState());
                 break;
@@ -581,13 +587,14 @@ gl::Error ContextVk::syncState(const gl::Context *context, const gl::State::Dirt
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
             {
-                FramebufferVk *framebufferVk = vk::GetImpl(glState.getDrawFramebuffer());
+                gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
+                FramebufferVk *framebufferVk = vk::GetImpl(framebuffer);
                 mPipelineDesc->updateViewport(framebufferVk, glState.getViewport(),
                                               glState.getNearPlane(), glState.getFarPlane(),
-                                              isViewportFlipEnabled());
+                                              isViewportFlipEnabled(framebuffer));
                 updateColorMask(glState.getBlendState());
                 mPipelineDesc->updateCullMode(glState.getRasterizerState(),
-                                              isViewportFlipEnabled());
+                                              isViewportFlipEnabled(framebuffer));
                 updateScissor(glState);
                 break;
             }
