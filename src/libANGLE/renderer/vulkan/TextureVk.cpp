@@ -211,7 +211,7 @@ gl::Error PixelBuffer::stageSubresourceUpdateFromFramebuffer(const gl::Context *
         // buffer instead so its an even slower path.
         size_t bufferSize = storageFormat.pixelBytes * sourceArea.width * sourceArea.height;
         angle::MemoryBuffer *memoryBuffer = nullptr;
-        ANGLE_TRY(context->getScratchBuffer(bufferSize, &memoryBuffer));
+        ANGLE_TRY_ALLOCATION(context->getScratchBuffer(bufferSize, &memoryBuffer));
 
         // Read into the scratch buffer
         ANGLE_TRY(framebufferVk->readPixelsImpl(context, sourceArea, params, memoryBuffer->data()));
