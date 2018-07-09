@@ -198,6 +198,15 @@ class ProgramD3D : public ProgramImpl
     gl::LinkResult link(const gl::Context *context,
                         const gl::ProgramLinkedResources &resources,
                         gl::InfoLog &infoLog) override;
+
+    gl::LinkEvent *asyncLink(const gl::Context *context,
+                             const gl::ProgramLinkedResources &resources,
+                             gl::InfoLog &infoLog) override;
+
+    void didLink(const gl::Context *context,
+                 const gl::ProgramLinkedResources &resources,
+                 gl::InfoLog &infoLog) override;
+
     GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) override;
 
     void setPathFragmentInputGen(const std::string &inputName,
@@ -304,13 +313,13 @@ class ProgramD3D : public ProgramImpl
         return mState.getLinkedShaderStages()[shaderType];
     }
 
-  private:
     // These forward-declared tasks are used for multi-thread shader compiles.
     class GetExecutableTask;
     class GetVertexExecutableTask;
     class GetPixelExecutableTask;
     class GetGeometryExecutableTask;
 
+  private:
     class VertexExecutable
     {
       public:
@@ -452,6 +461,9 @@ class ProgramD3D : public ProgramImpl
 
     gl::LinkResult compileProgramExecutables(const gl::Context *context, gl::InfoLog &infoLog);
     gl::LinkResult compileComputeExecutable(const gl::Context *context, gl::InfoLog &infoLog);
+
+    gl::LinkEvent *asyncCompileRenderingExecutables(const gl::Context *context,
+                                                    gl::InfoLog &infoLog);
 
     void gatherTransformFeedbackVaryings(const gl::VaryingPacking &varyings,
                                          const BuiltinInfo &builtins);
