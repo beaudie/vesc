@@ -520,7 +520,8 @@ gl::Error ContextVk::syncState(const gl::Context *context, const gl::State::Dirt
                                               isViewportFlipEnabled());
                 break;
             case gl::State::DIRTY_BIT_FRONT_FACE:
-                mPipelineDesc->updateFrontFace(glState.getRasterizerState());
+                mPipelineDesc->updateFrontFace(glState.getRasterizerState(),
+                                               isViewportFlipEnabled());
                 break;
             case gl::State::DIRTY_BIT_POLYGON_OFFSET_FILL_ENABLED:
                 WARN() << "DIRTY_BIT_POLYGON_OFFSET_FILL_ENABLED unimplemented";
