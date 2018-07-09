@@ -20,10 +20,16 @@
 #include "common/platform.h"
 #include "common/string_utils.h"
 #include "gpu_test_expectations_parser.h"
+#include "platform/Platform.h"
 #include "system_utils.h"
 
 namespace
 {
+void HandlePlatformError(angle::PlatformMethods *platform, const char *errorMessage)
+{
+    FAIL() << errorMessage;
+}
+
 std::string DrawElementsToGoogleTestName(const std::string &dEQPName)
 {
     std::string gTestName = dEQPName.substr(dEQPName.find('.') + 1);
@@ -397,7 +403,8 @@ void dEQPTest<TestModuleIndex>::SetUpTestCase()
     argv.push_back(configArgString.c_str());
 
     // Init the platform.
-    if (!deqp_libtester_init_platform(static_cast<int>(argv.size()), argv.data()))
+    if (!deqp_libtester_init_platform(static_cast<int>(argv.size()), argv.data(),
+                                      reinterpret_cast<void *>(&HandlePlatformError)))
     {
         std::cout << "Aborting test due to dEQP initialization error." << std::endl;
         exit(1);
