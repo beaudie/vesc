@@ -186,10 +186,8 @@ vk::Error ProgramVk::reset(ContextVk *contextVk)
     renderer->releaseObject(currentSerial, &mEmptyUniformBlockStorage.memory);
     renderer->releaseObject(currentSerial, &mEmptyUniformBlockStorage.buffer);
 
-    mLinkedFragmentModule.destroy(device);
-    mLinkedVertexModule.destroy(device);
-    mVertexModuleSerial   = Serial();
-    mFragmentModuleSerial = Serial();
+    mDefaultVertexShaderAndSerial.destroy(device);
+    mDefaultFragmentShaderAndSerial.destroy(device);
 
     mDescriptorSets.clear();
     mUsedDescriptorSetRange.invalidate();
@@ -225,18 +223,21 @@ gl::LinkResult ProgramVk::link(const gl::Context *glContext,
                                const gl::ProgramLinkedResources &resources,
                                gl::InfoLog &infoLog)
 {
-    ContextVk *contextVk           = vk::GetImpl(glContext);
-    RendererVk *renderer           = contextVk->getRenderer();
-    GlslangWrapper *glslangWrapper = renderer->getGlslangWrapper();
-    VkDevice device                = renderer->getDevice();
+    ContextVk *contextVk = vk::GetImpl(glContext);
+    RendererVk *renderer = contextVk->getRenderer();
+    VkDevice device      = renderer->getDevice();
 
     ANGLE_TRY(reset(contextVk));
+
+    std::string vertexSource;
+    std::string fragmentSource;
+    GlslangWrapper::GetShaderSource(glContext, mState, resources, &vertexSource, &fragmentSource);
 
     std::vector<uint32_t> vertexCode;
     std::vector<uint32_t> fragmentCode;
     bool linkSuccess = false;
-    ANGLE_TRY_RESULT(glslangWrapper->linkProgram(glContext, mState, resources, glContext->getCaps(),
-                                                 &vertexCode, &fragmentCode),
+    ANGLE_TRY_RESULT(GlslangWrapper::GetShaderCode(glContext->getCaps(), vertexSource,
+                                                   fragmentSource, &vertexCode, &fragmentCode),
                      linkSuccess);
     if (!linkSuccess)
     {
@@ -251,8 +252,8 @@ gl::LinkResult ProgramVk::link(const gl::Context *glContext,
         vertexShaderInfo.codeSize = vertexCode.size() * sizeof(uint32_t);
         vertexShaderInfo.pCode    = vertexCode.data();
 
-        ANGLE_TRY(mLinkedVertexModule.init(device, vertexShaderInfo));
-        mVertexModuleSerial = renderer->issueShaderSerial();
+        ANGLE_TRY(mDefaultVertexShaderAndSerial.get().init(device, vertexShaderInfo));
+        mDefaultVertexShaderAndSerial.updateSerial(renderer->issueShaderSerial());
     }
 
     {
@@ -263,8 +264,8 @@ gl::LinkResult ProgramVk::link(const gl::Context *glContext,
         fragmentShaderInfo.codeSize = fragmentCode.size() * sizeof(uint32_t);
         fragmentShaderInfo.pCode    = fragmentCode.data();
 
-        ANGLE_TRY(mLinkedFragmentModule.init(device, fragmentShaderInfo));
-        mFragmentModuleSerial = renderer->issueShaderSerial();
+        ANGLE_TRY(mDefaultFragmentShaderAndSerial.get().init(device, fragmentShaderInfo));
+        mDefaultFragmentShaderAndSerial.updateSerial(renderer->issueShaderSerial());
     }
 
     ANGLE_TRY(initDefaultUniformBlocks(glContext));
@@ -711,26 +712,18 @@ void ProgramVk::setPathFragmentInputGen(const std::string &inputName,
     UNIMPLEMENTED();
 }
 
-const vk::ShaderModule &ProgramVk::getLinkedVertexModule() const
+gl::Error ProgramVk::initShaders(const ContextVk *contextVk,
+                                 const gl::DrawCallParams &drawCallParams,
+                                 const vk::ShaderAndSerial **vertexShaderAndSerialOut,
+                                 const vk::ShaderAndSerial **fragmentShaderAndSerialOut)
 {
-    ASSERT(mLinkedVertexModule.getHandle() != VK_NULL_HANDLE);
-    return mLinkedVertexModule;
-}
-
-Serial ProgramVk::getVertexModuleSerial() const
-{
-    return mVertexModuleSerial;
-}
-
-const vk::ShaderModule &ProgramVk::getLinkedFragmentModule() const
-{
-    ASSERT(mLinkedFragmentModule.getHandle() != VK_NULL_HANDLE);
-    return mLinkedFragmentModule;
-}
-
-Serial ProgramVk::getFragmentModuleSerial() const
-{
-    return mFragmentModuleSerial;
+    // TODO(jmadill): Move more init into this method. http://anglebug.com/2598
+    // TODO(jmadill): Line rasterization emulation shaders. http://anglebug.com/2598
+    ASSERT(mDefaultVertexShaderAndSerial.valid());
+    ASSERT(mDefaultFragmentShaderAndSerial.valid());
+    *vertexShaderAndSerialOut   = &mDefaultVertexShaderAndSerial;
+    *fragmentShaderAndSerialOut = &mDefaultFragmentShaderAndSerial;
+    return gl::NoError();
 }
 
 vk::Error ProgramVk::allocateDescriptorSet(ContextVk *contextVk, uint32_t descriptorSetIndex)

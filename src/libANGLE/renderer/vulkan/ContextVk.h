@@ -170,7 +170,7 @@ class ContextVk : public ContextImpl
     void updateColorMask(const gl::BlendState &blendState);
 
   private:
-    gl::Error initPipeline();
+    gl::Error initPipeline(const gl::DrawCallParams &drawCallParams);
     gl::Error setupDraw(const gl::Context *context,
                         const gl::DrawCallParams &drawCallParams,
                         vk::CommandBuffer **commandBufferOut,
