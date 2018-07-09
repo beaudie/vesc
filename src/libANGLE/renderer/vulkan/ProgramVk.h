@@ -12,7 +12,6 @@
 
 #include <array>
 
-#include "libANGLE/Constants.h"
 #include "libANGLE/renderer/ProgramImpl.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
@@ -103,26 +102,16 @@ class ProgramVk : public ProgramImpl
     gl::Error initShaders(const ContextVk *contextVk,
                           const gl::DrawCallParams &drawCallParams,
                           const vk::ShaderAndSerial **vertexShaderAndSerialOut,
-                          const vk::ShaderAndSerial **fragmentShaderAndSerialOut);
+                          const vk::ShaderAndSerial **fragmentShaderAndSerialOut,
+                          const vk::PipelineLayout **pipelineLayoutOut);
 
     vk::Error updateUniforms(ContextVk *contextVk);
 
-    const std::vector<VkDescriptorSet> &getDescriptorSets() const;
-    const uint32_t *getDynamicOffsets();
-    uint32_t getDynamicOffsetsCount();
-
-    // In Vulkan, it is invalid to pass in a NULL descriptor set to vkCmdBindDescriptorSets.
-    // However, it's valid to leave them in an undefined, unbound state, if they are never used.
-    // This means when we want to ignore a descriptor set index, we need to pass in an offset
-    // parameter to BindDescriptorSets, which is an offset into the getDescriptorSets array.
-    // This allows us to skip binding blank descriptor sets when the Program doesn't use Uniforms
-    // or Textures.
-    const gl::RangeUI &getUsedDescriptorSetRange() const;
-
-    gl::Error updateTexturesDescriptorSet(const gl::Context *context);
     void invalidateTextures();
 
-    const vk::PipelineLayout &getPipelineLayout() const;
+    vk::Error updateDescriptorSets(ContextVk *contextVk,
+                                   const gl::DrawCallParams &drawCallParams,
+                                   vk::CommandBuffer *commandBuffer);
 
     // For testing only.
     void setDefaultUniformBlocksMinSizeForTesting(size_t minSize);
@@ -135,18 +124,13 @@ class ProgramVk : public ProgramImpl
                             const GLfloat *value);
 
     vk::Error reset(ContextVk *contextVk);
-    vk::Error allocateDescriptorSet(ContextVk *contextVk, uint32_t descriptorSetIndex);
     gl::Error initDefaultUniformBlocks(const gl::Context *glContext);
-    vk::Error updateDefaultUniformsDescriptorSet(ContextVk *contextVk);
 
     template <class T>
     void getUniformImpl(GLint location, T *v, GLenum entryPointType) const;
 
     template <typename T>
     void setUniformImpl(GLint location, GLsizei count, const T *v, GLenum entryPointType);
-
-    vk::ShaderAndSerial mDefaultVertexShaderAndSerial;
-    vk::ShaderAndSerial mDefaultFragmentShaderAndSerial;
 
     // State for the default uniform blocks.
     struct DefaultUniformBlock final : private angle::NonCopyable
@@ -173,15 +157,56 @@ class ProgramVk : public ProgramImpl
     // and Vulkan does not tolerate having null handles in a descriptor set.
     vk::BufferAndMemory mEmptyUniformBlockStorage;
 
-    // Descriptor sets for uniform blocks and textures for this program.
-    std::vector<VkDescriptorSet> mDescriptorSets;
-    gl::RangeUI mUsedDescriptorSetRange;
-    bool mDirtyTextures;
+    class ShaderInfo final : angle::NonCopyable
+    {
+      public:
+        ShaderInfo();
+        ~ShaderInfo();
 
-    // We keep a reference to the pipeline and descriptor set layouts. This ensures they don't get
-    // deleted while this program is in use.
-    vk::BindingPointer<vk::PipelineLayout> mPipelineLayout;
-    vk::DescriptorSetLayoutPointerArray mDescriptorSetLayouts;
+        vk::Error getShadersAndPipeline(const ContextVk *contextVk,
+                                        const gl::ProgramState &state,
+                                        const std::string &vertexSource,
+                                        const std::string &fragmentSource,
+                                        const vk::ShaderAndSerial **vertexShaderAndSerialOut,
+                                        const vk::ShaderAndSerial **fragmentShaderAndSerialOut,
+                                        const vk::PipelineLayout **pipelineLayoutOut);
+        void destroy(VkDevice device);
+
+        bool valid() const;
+
+        vk::Error updateDefaultUniformsDescriptorSet(
+            ContextVk *contextVk,
+            const vk::ShaderMap<DefaultUniformBlock> &defaultUniformBlocks,
+            const vk::BufferAndMemory &emptyUniformBlockStorage);
+        vk::Error updateTexturesDescriptorSet(ContextVk *contextVk, const gl::ProgramState &state);
+
+        void bindDescriptorSets(vk::CommandBuffer *commandBuffer,
+                                const vk::ShaderMap<uint32_t> &uniformBlocksOffsets) const;
+
+        void invalidateTextures();
+
+      private:
+        vk::Error allocateDescriptorSet(ContextVk *contextVk, uint32_t descriptorSetIndex);
+
+        vk::ShaderAndSerial mVertexShaderAndSerial;
+        vk::ShaderAndSerial mFragmentShaderAndSerial;
+
+        // We keep a reference to the pipeline and descriptor set layouts. This ensures they don't
+        // get deleted while this program is in use.
+        vk::BindingPointer<vk::PipelineLayout> mPipelineLayout;
+        vk::DescriptorSetLayoutPointerArray mDescriptorSetLayouts;
+
+        // Descriptor sets for uniform blocks and textures for this program.
+        std::vector<VkDescriptorSet> mDescriptorSets;
+        gl::RangeUI mUsedDescriptorSetRange;
+        bool mDirtyTextures;
+    };
+
+    ShaderInfo mDefaultShaderInfo;
+
+    // We keep the translated linked shader sources to use with shader draw call patching.
+    std::string mVertexSource;
+    std::string mFragmentSource;
 };
 
 }  // namespace rx
