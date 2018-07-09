@@ -10,6 +10,7 @@
 #define LIBANGLE_RENDERER_VULKAN_GLSLANG_WRAPPER_H_
 
 #include "libANGLE/renderer/ProgramImpl.h"
+#include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace rx
 {
@@ -27,11 +28,11 @@ class GlslangWrapper
                                 std::string *vertexSourceOut,
                                 std::string *fragmentSourceOut);
 
-    static gl::LinkResult GetShaderCode(const gl::Caps &glCaps,
-                                        const std::string &vertexSource,
-                                        const std::string &fragmentSource,
-                                        std::vector<uint32_t> *vertexCodeOut,
-                                        std::vector<uint32_t> *fragmentCodeOut);
+    static vk::Error GetShaderCode(const gl::Caps &glCaps,
+                                   const std::string &vertexSource,
+                                   const std::string &fragmentSource,
+                                   std::vector<uint32_t> *vertexCodeOut,
+                                   std::vector<uint32_t> *fragmentCodeOut);
 };
 
 }  // namespace rx
