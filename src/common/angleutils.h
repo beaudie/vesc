@@ -253,6 +253,9 @@ std::string ToString(const T &value)
 // TODO(jmadill): Clean this up at some point.
 #define EGL_PLATFORM_ANGLE_PLATFORM_METHODS_ANGLEX 0x9999
 
+// TODO(jmadill): Remove this.
+#define GL_INTERNAL_ERROR_ANGLEX 0x6AEE
+
 #define ANGLE_TRY_CHECKED_MATH(result)                     \
     if (!result)                                           \
     {                                                      \
