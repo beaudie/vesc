@@ -180,7 +180,8 @@ gl::Error PixelBuffer::stageSubresourceUpdateFromFramebuffer(const gl::Context *
         return gl::NoError();
     }
 
-    if (contextVk->isViewportFlipEnabled())
+    bool isViewportFlipEnabled = contextVk->isViewportFlipEnabled(context->getGLState().getDrawFramebuffer());
+    if (isViewportFlipEnabled)
     {
         clippedRectangle.y = readExtents.height - clippedRectangle.y - clippedRectangle.height;
     }
@@ -207,7 +208,7 @@ gl::Error PixelBuffer::stageSubresourceUpdateFromFramebuffer(const gl::Context *
                             &stagingOffset, &newBufferAllocated);
 
     gl::PixelPackState pixelPackState = gl::PixelPackState();
-    if (contextVk->isViewportFlipEnabled())
+    if (isViewportFlipEnabled)
     {
         pixelPackState.reverseRowOrder = !pixelPackState.reverseRowOrder;
     }

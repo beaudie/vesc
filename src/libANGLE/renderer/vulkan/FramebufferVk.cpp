@@ -924,7 +924,7 @@ gl::Error FramebufferVk::clearWithDraw(const gl::Context *context,
     ANGLE_TRY(getCommandBufferForDraw(contextVk, &drawCommands, &recordingMode));
 
     const gl::Rectangle &renderArea = getRenderPassRenderArea();
-    gl::Framebuffer *framebuffer    = context->getGLState().getDrawFramebuffer();
+    gl::Framebuffer *framebuffer = context->getGLState().getDrawFramebuffer();
 
     // This pipeline desc could be cached.
     vk::PipelineDesc pipelineDesc;
@@ -933,7 +933,6 @@ gl::Error FramebufferVk::clearWithDraw(const gl::Context *context,
     pipelineDesc.updateRenderPassDesc(getRenderPassDesc());
     pipelineDesc.updateShaders(fullScreenQuad->queueSerial(), pushConstantColor->queueSerial());
     bool invertViewport = contextVk->isViewportFlipEnabled(framebuffer);
-
     pipelineDesc.updateViewport(this, renderArea, 0.0f, 1.0f, invertViewport);
 
     const gl::State &glState = contextVk->getGLState();
