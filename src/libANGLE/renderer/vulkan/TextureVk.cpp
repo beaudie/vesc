@@ -180,8 +180,7 @@ gl::Error PixelBuffer::stageSubresourceUpdateFromFramebuffer(const gl::Context *
         return gl::NoError();
     }
 
-    bool isViewportFlipEnabled =
-        contextVk->isViewportFlipEnabled(context->getGLState().getDrawFramebuffer());
+    bool isViewportFlipEnabled = contextVk->isViewportFlipEnabledForDrawFBO();
     if (isViewportFlipEnabled)
     {
         clippedRectangle.y = readExtents.height - clippedRectangle.y - clippedRectangle.height;
