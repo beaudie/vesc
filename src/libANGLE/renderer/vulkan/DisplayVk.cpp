@@ -19,7 +19,7 @@
 namespace rx
 {
 
-DisplayVk::DisplayVk(const egl::DisplayState &state) : DisplayImpl(state), mRenderer(nullptr)
+DisplayVk::DisplayVk(const egl::DisplayState &state) : DisplayImpl(state)
 {
 }
 
@@ -30,14 +30,19 @@ DisplayVk::~DisplayVk()
 egl::Error DisplayVk::initialize(egl::Display *display)
 {
     ASSERT(!mRenderer && display != nullptr);
-    mRenderer.reset(new RendererVk());
-    return mRenderer->initialize(display->getAttributeMap(), getWSIName())
-        .toEGL(EGL_NOT_INITIALIZED);
+    mRenderer            = new RendererVk();
+    angle::Result result = mRenderer->initialize(this, display->getAttributeMap(), getWSIName());
+    ANGLE_TRY(angle::ToEGL(result, this, EGL_NOT_INITIALIZED));
+    return egl::NoError();
 }
 
 void DisplayVk::terminate()
 {
-    mRenderer.reset(nullptr);
+    if (mRenderer)
+    {
+        mRenderer->onDestroy(this);
+        SafeDelete(mRenderer);
+    }
 }
 
 egl::Error DisplayVk::makeCurrent(egl::Surface * /*drawSurface*/,
@@ -142,7 +147,7 @@ ContextImpl *DisplayVk::createContext(const gl::ContextState &state,
                                       const gl::Context *shareContext,
                                       const egl::AttributeMap &attribs)
 {
-    return new ContextVk(state, mRenderer.get());
+    return new ContextVk(state, mRenderer);
 }
 
 StreamProducerImpl *DisplayVk::createStreamProducerD3DTexture(
@@ -168,4 +173,17 @@ void DisplayVk::generateCaps(egl::Caps *outCaps) const
     outCaps->textureNPOT = true;
 }
 
+void DisplayVk::handleError(VkResult result, const char *file, unsigned int line)
+{
+    std::stringstream errorStream;
+    errorStream << "Internal Vulkan error: " << VulkanResultString(result) << ", in " << file
+                << ", line " << line << ".";
+    mStoredErrorString = errorStream.str();
+}
+
+// TODO(jmadill): Remove this.
+egl::Error DisplayVk::getEGLError(EGLint errorCode)
+{
+    return egl::Error(errorCode, 0, std::move(mStoredErrorString));
+}
 }  // namespace rx
