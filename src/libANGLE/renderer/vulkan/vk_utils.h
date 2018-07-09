@@ -732,7 +732,7 @@ VkSamplerMipmapMode GetSamplerMipmapMode(const GLenum filter);
 VkSamplerAddressMode GetSamplerAddressMode(const GLenum wrap);
 VkPrimitiveTopology GetPrimitiveTopology(gl::PrimitiveMode mode);
 VkCullModeFlags GetCullMode(const gl::RasterizerState &rasterState, bool invertCullMode);
-VkFrontFace GetFrontFace(GLenum frontFace);
+VkFrontFace GetFrontFace(GLenum frontFace, bool invertFrontFace);
 VkSampleCountFlagBits GetSamples(GLint sampleCount);
 VkComponentSwizzle GetSwizzle(const GLenum swizzle);
 VkIndexType GetIndexType(GLenum elementType);
