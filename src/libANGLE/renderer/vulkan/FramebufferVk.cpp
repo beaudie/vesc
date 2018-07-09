@@ -933,7 +933,6 @@ gl::Error FramebufferVk::clearWithDraw(const gl::Context *context,
     pipelineDesc.updateRenderPassDesc(getRenderPassDesc());
     pipelineDesc.updateShaders(fullScreenQuad->queueSerial(), pushConstantColor->queueSerial());
     bool invertViewport = contextVk->isViewportFlipEnabled(framebuffer);
-
     pipelineDesc.updateViewport(this, renderArea, 0.0f, 1.0f, invertViewport);
 
     const gl::State &glState = contextVk->getGLState();
