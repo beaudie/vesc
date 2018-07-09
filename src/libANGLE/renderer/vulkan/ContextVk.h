@@ -87,6 +87,9 @@ class ContextVk : public ContextImpl
     void pushDebugGroup(GLenum source, GLuint id, GLsizei length, const char *message) override;
     void popDebugGroup() override;
 
+    bool isViewportFlipEnabled(const gl::Framebuffer *framebuffer) const;
+
+    // Verifies if we should be flipping the viewport for the default framebuffer.
     bool isViewportFlipEnabled() const;
 
     // State sync with dirty bits.
