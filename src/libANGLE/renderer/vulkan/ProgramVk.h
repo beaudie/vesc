@@ -168,6 +168,7 @@ class ProgramVk : public ProgramImpl
                                         const gl::ProgramState &state,
                                         const std::string &vertexSource,
                                         const std::string &fragmentSource,
+                                        bool enableLineRasterEmulation,
                                         const vk::ShaderAndSerial **vertexShaderAndSerialOut,
                                         const vk::ShaderAndSerial **fragmentShaderAndSerialOut,
                                         const vk::PipelineLayout **pipelineLayoutOut);
@@ -205,6 +206,7 @@ class ProgramVk : public ProgramImpl
     };
 
     ShaderInfo mDefaultShaderInfo;
+    ShaderInfo mLineRasterShaderInfo;
 
     // We keep the translated linked shader sources to use with shader draw call patching.
     std::string mVertexSource;
