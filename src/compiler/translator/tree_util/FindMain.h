@@ -9,6 +9,8 @@
 #ifndef COMPILER_TRANSLATOR_TREEUTIL_FINDMAIN_H_
 #define COMPILER_TRANSLATOR_TREEUTIL_FINDMAIN_H_
 
+#include <cstddef>
+
 namespace sh
 {
 
