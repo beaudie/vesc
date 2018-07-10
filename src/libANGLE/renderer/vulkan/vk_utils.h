@@ -697,6 +697,11 @@ using ShaderMap = angle::PackedEnumMap<ShaderType, T>;
 
 using AllShaderTypes = angle::AllEnums<vk::ShaderType>;
 
+Error InitShaderAndSerial(RendererVk *renderer,
+                          ShaderAndSerial *shaderAndSerial,
+                          const uint32_t *shaderCode,
+                          size_t shaderCodeSize);
+
 enum class RecordingMode
 {
     Start,

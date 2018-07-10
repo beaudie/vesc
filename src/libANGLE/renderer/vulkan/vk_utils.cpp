@@ -1140,6 +1140,23 @@ Error AllocateImageMemory(VkDevice device,
                                        deviceMemoryOut);
 }
 
+Error InitShaderAndSerial(RendererVk *renderer,
+                          ShaderAndSerial *shaderAndSerial,
+                          const uint32_t *shaderCode,
+                          size_t shaderCodeSize)
+{
+    VkShaderModuleCreateInfo createInfo;
+    createInfo.sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+    createInfo.pNext    = nullptr;
+    createInfo.flags    = 0;
+    createInfo.codeSize = shaderCodeSize;
+    createInfo.pCode    = shaderCode;
+
+    ANGLE_TRY(shaderAndSerial->get().init(renderer->getDevice(), createInfo));
+    shaderAndSerial->updateSerial(renderer->issueShaderSerial());
+    return NoError();
+}
+
 // GarbageObject implementation.
 GarbageObject::GarbageObject()
     : mSerial(), mHandleType(HandleType::Invalid), mHandle(VK_NULL_HANDLE)

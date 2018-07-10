@@ -43,18 +43,7 @@ Error ShaderLibrary::getShader(RendererVk *renderer,
     }
 
     const priv::ShaderBlob &shaderCode = priv::GetInternalShaderBlob(shaderID);
-
-    // Create shader lazily. Access will need to be locked for multi-threading.
-    VkShaderModuleCreateInfo createInfo;
-    createInfo.sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-    createInfo.pNext    = nullptr;
-    createInfo.flags    = 0;
-    createInfo.codeSize = shaderCode.codeSize;
-    createInfo.pCode    = shaderCode.code;
-
-    ANGLE_TRY(shader.get().init(renderer->getDevice(), createInfo));
-    shader.updateSerial(renderer->issueShaderSerial());
-    return NoError();
+    return InitShaderAndSerial(renderer, &shader, shaderCode.code, shaderCode.codeSize);
 }
 }  // namespace vk
 }  // namespace rx
