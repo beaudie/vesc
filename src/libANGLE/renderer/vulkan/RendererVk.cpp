@@ -648,7 +648,7 @@ void RendererVk::initFeatures()
     // For now, set this manually to true to enable viewport flipping. A couple of features are not
     // working well like copyTexImage, copySubTexImage, blit, and probably some more. Until
     // everything is fixed, we will keep the viewport flipping feature disabled.
-    mFeatures.flipViewportY = false;
+    mFeatures.flipViewportY = true;
 }
 
 void RendererVk::ensureCapsInitialized() const
