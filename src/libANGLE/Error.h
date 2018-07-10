@@ -262,6 +262,32 @@ inline Error NoError()
 #undef ANGLE_CONCAT2
 #undef ANGLE_CONCAT1
 
+namespace angle
+{
+// TODO(jmadill): Make into plain enum.
+class ANGLE_NO_DISCARD Result
+{
+  public:
+    bool isError() const { return mIsError; }
+
+    static Result Stop() { return Result(true); }
+    static Result Continue() { return Result(false); }
+
+    // TODO(jmadill): Remove this.
+    operator gl::Error() const;
+
+    template <typename T>
+    operator gl::ErrorOrResult<T>() const
+    {
+        return operator gl::Error();
+    }
+
+  private:
+    Result(bool isError) : mIsError(isError) {}
+    bool mIsError;
+};
+}  // namespace angle
+
 #include "Error.inl"
 
 #endif // LIBANGLE_ERROR_H_

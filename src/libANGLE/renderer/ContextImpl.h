@@ -18,6 +18,7 @@
 
 namespace gl
 {
+class ErrorSet;
 class MemoryProgramCache;
 class Path;
 struct Workarounds;
@@ -181,9 +182,14 @@ class ContextImpl : public GLImplFactory
     // on draw calls we can store the refreshed shaders in the cache.
     void setMemoryProgramCache(gl::MemoryProgramCache *memoryProgramCache);
 
+    // TODO(jmadill): Move this into the constructor.
+    void setErrorSet(gl::ErrorSet *errorSet);
+    void handleError(const gl::Error &error);
+
   protected:
     const gl::ContextState &mState;
     gl::MemoryProgramCache *mMemoryProgramCache;
+    gl::ErrorSet *mErrors;
 };
 
 }  // namespace rx
