@@ -572,6 +572,49 @@ gl::Error TextureVk::copySubImage(const gl::Context *context,
     return copySubImageImpl(context, index, destOffset, sourceArea, currentFormat, source);
 }
 
+gl::Error TextureVk::copyTexture(const gl::Context *context,
+                                 const gl::ImageIndex &index,
+                                 GLenum internalFormat,
+                                 GLenum type,
+                                 size_t sourceLevel,
+                                 bool unpackFlipY,
+                                 bool unpackPremultiplyAlpha,
+                                 bool unpackUnmultiplyAlpha,
+                                 const gl::Texture *source)
+{
+    TextureVk *sourceVk = vk::GetImpl(source);
+    const gl::ImageDesc &sourceImageDesc =
+        sourceVk->mState.getImageDesc(NonCubeTextureTypeToTarget(source->getType()), sourceLevel);
+    gl::Rectangle sourceArea(0, 0, sourceImageDesc.size.width, sourceImageDesc.size.height);
+
+    const gl::InternalFormat &destFormatInfo = gl::GetInternalFormatInfo(internalFormat, type);
+
+    ANGLE_TRY(setImage(context, index, internalFormat, sourceImageDesc.size, destFormatInfo.format,
+                       type, gl::PixelUnpackState(), nullptr));
+
+    return copySubTextureImpl(context, index, gl::Offset(0, 0, 0), destFormatInfo, sourceLevel,
+                              sourceArea, unpackFlipY, unpackPremultiplyAlpha,
+                              unpackUnmultiplyAlpha, sourceVk);
+}
+
+gl::Error TextureVk::copySubTexture(const gl::Context *context,
+                                    const gl::ImageIndex &index,
+                                    const gl::Offset &destOffset,
+                                    size_t sourceLevel,
+                                    const gl::Rectangle &sourceArea,
+                                    bool unpackFlipY,
+                                    bool unpackPremultiplyAlpha,
+                                    bool unpackUnmultiplyAlpha,
+                                    const gl::Texture *source)
+{
+    gl::TextureTarget target                 = index.getTarget();
+    size_t level                             = static_cast<size_t>(index.getLevelIndex());
+    const gl::InternalFormat &destFormatInfo = *mState.getImageDesc(target, level).format.info;
+    return copySubTextureImpl(context, index, destOffset, destFormatInfo, sourceLevel, sourceArea,
+                              unpackFlipY, unpackPremultiplyAlpha, unpackUnmultiplyAlpha,
+                              vk::GetImpl(source));
+}
+
 gl::Error TextureVk::copySubImageImpl(const gl::Context *context,
                                       const gl::ImageIndex &index,
                                       const gl::Offset &destOffset,
@@ -605,6 +648,111 @@ gl::Error TextureVk::copySubImageImpl(const gl::Context *context,
 
     onResourceChanged(renderer);
     framebufferVk->addReadDependency(this);
+    return gl::NoError();
+}
+
+gl::Error TextureVk::copySubTextureImpl(const gl::Context *context,
+                                        const gl::ImageIndex &index,
+                                        const gl::Offset &destOffset,
+                                        const gl::InternalFormat &destFormat,
+                                        size_t sourceLevel,
+                                        const gl::Rectangle &sourceArea,
+                                        bool unpackFlipY,
+                                        bool unpackPremultiplyAlpha,
+                                        bool unpackUnmultiplyAlpha,
+                                        TextureVk *source)
+{
+    if (sourceLevel != 0)
+    {
+        WARN() << "glCopyTextureCHROMIUM with sourceLevel != 0 not implemented.";
+        return gl::NoError();
+    }
+
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+
+    // Make sure the source is initialized and it's images are flushed.
+    ANGLE_TRY(source->ensureImageInitialized(contextVk));
+
+    ANGLE_TRY(renderer->finish(context));
+
+    const angle::Format &sourceAngleFormat = source->getImage().getFormat().textureFormat();
+    const gl::Extents &sourceImageSize =
+        source->mState
+            .getImageDesc(NonCubeTextureTypeToTarget(source->mState.getType()), sourceLevel)
+            .size;
+    size_t sourceCopyAllocationSize =
+        sourceArea.width * sourceArea.height * sourceAngleFormat.pixelBytes;
+
+    vk::CommandBuffer *sourceCommandBuffer = nullptr;
+    ANGLE_TRY(source->getCommandBufferForWrite(renderer, &sourceCommandBuffer));
+
+    // Requirement of the copyImageToBuffer, the source image must be in SRC_OPTIMAL layout.
+    bool newBufferAllocated = false;
+    source->mImage.changeLayoutWithStages(VK_IMAGE_ASPECT_COLOR_BIT,
+                                          VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                          VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+                                          VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, sourceCommandBuffer);
+
+    // Allocate enough memory to copy the sourceArea region of the source texture into its pixel
+    // buffer.
+    VkBuffer copyBufferHandle;
+    uint8_t *sourceData       = nullptr;
+    uint32_t sourceCopyOffset = 0;
+    ANGLE_TRY(source->mPixelBuffer.allocate(renderer, sourceCopyAllocationSize, &sourceData,
+                                            &copyBufferHandle, &sourceCopyOffset,
+                                            &newBufferAllocated));
+
+    // Do only one copy for all layers at once.
+    VkBufferImageCopy region;
+    region.bufferOffset                    = static_cast<VkDeviceSize>(sourceCopyOffset);
+    region.bufferRowLength                 = sourceImageSize.width;
+    region.bufferImageHeight               = sourceImageSize.height;
+    region.imageExtent.width               = sourceArea.width;
+    region.imageExtent.height              = sourceArea.height;
+    region.imageExtent.depth               = 1;
+    region.imageOffset.x                   = sourceArea.x;
+    region.imageOffset.y                   = sourceArea.y;
+    region.imageOffset.z                   = 0;
+    region.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    region.imageSubresource.baseArrayLayer = 0;
+    region.imageSubresource.layerCount     = 1;
+    region.imageSubresource.mipLevel       = sourceLevel;
+
+    sourceCommandBuffer->copyImageToBuffer(
+        source->mImage.getImage(), source->mImage.getCurrentLayout(), copyBufferHandle, 1, &region);
+
+    ANGLE_TRY(renderer->finish(context));
+    sourceCommandBuffer = nullptr;
+
+    const angle::Format &destAngleFormat = mImage.getFormat().textureFormat();
+    size_t destinationAllocationSize =
+        sourceArea.width * sourceArea.height * destAngleFormat.pixelBytes;
+
+    // Allocate memory in the destination texture for the copy/conversion
+    uint8_t *destData = nullptr;
+    ANGLE_TRY(mPixelBuffer.stageSubresourceUpdateAndGetData(
+        renderer, destinationAllocationSize, index,
+        gl::Extents(sourceArea.width, sourceArea.height, 1), destOffset, &destData));
+
+    // Source and dest data is tightly packed
+    GLuint sourceDataRowPitch = sourceArea.width * sourceAngleFormat.pixelBytes;
+    GLuint destDataRowPitch   = sourceArea.width * destAngleFormat.pixelBytes;
+
+    CopyImageCHROMIUM(sourceData, sourceDataRowPitch, sourceAngleFormat.pixelBytes,
+                      sourceAngleFormat.colorReadFunction, destData, destDataRowPitch,
+                      destAngleFormat.pixelBytes, destAngleFormat.colorWriteFunction,
+                      destFormat.format, destFormat.componentType, sourceArea.width,
+                      sourceArea.height, unpackFlipY, unpackPremultiplyAlpha,
+                      unpackUnmultiplyAlpha);
+
+    // Get a new command buffer for the upload
+    vk::CommandBuffer *destCommandBuffer = nullptr;
+    ANGLE_TRY(getCommandBufferForWrite(renderer, &destCommandBuffer));
+
+    const uint32_t destLevelCount = getLevelCount();
+    ANGLE_TRY(
+        mPixelBuffer.flushUpdatesToImage(renderer, destLevelCount, &mImage, destCommandBuffer));
     return gl::NoError();
 }
 
