@@ -29,6 +29,7 @@ class GlslangWrapper
                                 std::string *fragmentSourceOut);
 
     static vk::Error GetShaderCode(const gl::Caps &glCaps,
+                                   bool enableLineRasterEmulation,
                                    const std::string &vertexSource,
                                    const std::string &fragmentSource,
                                    std::vector<uint32_t> *vertexCodeOut,
