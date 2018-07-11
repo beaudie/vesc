@@ -45,6 +45,8 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
     outExtensions->textureStorage = true;
     outExtensions->framebufferBlit = true;
 
+    outExtensions->copyTexture = true;
+
     // TODO(lucferron): Eventually remove everything above this line in this function as the caps
     // get implemented.
     // https://vulkan.lunarg.com/doc/view/1.0.30.0/linux/vkspec.chunked/ch31s02.html
