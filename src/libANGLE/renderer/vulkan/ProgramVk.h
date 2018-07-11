@@ -180,8 +180,10 @@ class ProgramVk : public ProgramImpl
         vk::Error getShaders(const ContextVk *contextVk,
                              const std::string &vertexSource,
                              const std::string &fragmentSource,
+                             bool enableLineRasterEmulation,
                              const vk::ShaderAndSerial **vertexShaderAndSerialOut,
                              const vk::ShaderAndSerial **fragmentShaderAndSerialOut);
+
         void destroy(VkDevice device);
         bool valid() const;
 
@@ -190,8 +192,8 @@ class ProgramVk : public ProgramImpl
         vk::ShaderAndSerial mFragmentShaderAndSerial;
     };
 
-    // TODO(jmadill): Line rasterization emulation shaders. http://anglebug.com/2598
     ShaderInfo mDefaultShaderInfo;
+    ShaderInfo mLineRasterShaderInfo;
 
     // We keep the translated linked shader sources to use with shader draw call patching.
     std::string mVertexSource;
