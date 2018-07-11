@@ -216,6 +216,8 @@ class ContextVk : public ContextImpl
     struct DriverUniforms
     {
         std::array<float, 4> viewport;
+        std::array<float, 4> viewportScaleFactor;
+        std::array<float, 4> viewportTranslate;
     };
     vk::DynamicBuffer mDriverUniformsBuffer;
     VkDescriptorSet mDriverUniformsDescriptorSet;
