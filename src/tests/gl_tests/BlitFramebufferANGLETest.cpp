@@ -576,44 +576,49 @@ TEST_P(BlitFramebufferANGLETest, BlitWithDepthUserToDefault)
 {
     ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_ANGLE_framebuffer_blit"));
 
-    glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
+    for (int i = 0; i < 10; i++)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
 
-    glDepthMask(GL_TRUE);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        glDepthMask(GL_TRUE);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-    glEnable(GL_DEPTH_TEST);
+        glEnable(GL_DEPTH_TEST);
 
-    EXPECT_GL_NO_ERROR();
+        EXPECT_GL_NO_ERROR();
 
-    // Clear the first half of the screen
-    glEnable(GL_SCISSOR_TEST);
-    glScissor(0, 0, getWindowWidth(), getWindowHeight() / 2);
+        // Clear the first half of the screen
+        glEnable(GL_SCISSOR_TEST);
+        glScissor(0, 0, getWindowWidth(), getWindowHeight() / 2);
 
-    glClearDepthf(0.1f);
-    glClearColor(1.0, 0.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearDepthf(0.1f);
+        glClearColor(1.0, 0.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Scissor the second half of the screen
-    glScissor(0, getWindowHeight() / 2, getWindowWidth(), getWindowHeight() / 2);
+        // Scissor the second half of the screen
+        glScissor(0, getWindowHeight() / 2, getWindowWidth(), getWindowHeight() / 2);
 
-    glClearDepthf(0.9f);
-    glClearColor(0.0, 1.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearDepthf(0.9f);
+        glClearColor(0.0, 1.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glDisable(GL_SCISSOR_TEST);
+        glDisable(GL_SCISSOR_TEST);
 
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER_ANGLE, mOriginalFBO);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER_ANGLE, mUserFBO);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER_ANGLE, mOriginalFBO);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER_ANGLE, mUserFBO);
 
-    glBlitFramebufferANGLE(0, 0, getWindowWidth(), getWindowHeight(), 0, 0, getWindowWidth(), getWindowHeight(), 
-                           GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-    EXPECT_GL_NO_ERROR();
+        glBlitFramebufferANGLE(0, 0, getWindowWidth(), getWindowHeight(), 0, 0, getWindowWidth(),
+                               getWindowHeight(), GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT,
+                               GL_NEAREST);
+        EXPECT_GL_NO_ERROR();
 
-    glBindFramebuffer(GL_FRAMEBUFFER, mOriginalFBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, mOriginalFBO);
 
-    // if blit is happening correctly, this quad will draw only on the bottom half since it will be
-    // behind on the first half and in front on the second half.
-    drawQuad(mBlueProgram, essl1_shaders::PositionAttrib(), 0.5f);
+        // if blit is happening correctly, this quad will draw only on the bottom half since it will
+        // be behind on the first half and in front on the second half.
+        drawQuad(mBlueProgram, essl1_shaders::PositionAttrib(), 0.5f);
+        swapBuffers();
+    }
 
     glDisable(GL_DEPTH_TEST);
 
