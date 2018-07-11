@@ -3499,4 +3499,13 @@ TConstantUnion *TIntermConstantUnion::FoldAggregateBuiltIn(TIntermAggregate *agg
     return resultArray;
 }
 
+// TIntermPreprocessorDirective implementation.
+TIntermPreprocessorDirective::TIntermPreprocessorDirective(PreprocessorDirective directive,
+                                                           const char *command)
+    : mDirective(directive), mCommand(command)
+{
+}
+
+TIntermPreprocessorDirective::~TIntermPreprocessorDirective() = default;
+
 }  // namespace sh

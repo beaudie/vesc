@@ -24,14 +24,13 @@
 #include "common/angleutils.h"
 #include "compiler/translator/Common.h"
 #include "compiler/translator/ConstantUnion.h"
+#include "compiler/translator/ImmutableString.h"
 #include "compiler/translator/Operator.h"
 #include "compiler/translator/SymbolUniqueId.h"
 #include "compiler/translator/Types.h"
 
 namespace sh
 {
-
-class ImmutableString;
 
 class TDiagnostics;
 
@@ -56,6 +55,7 @@ class TIntermLoop;
 class TInfoSink;
 class TInfoSinkBase;
 class TIntermBranch;
+class TIntermPreprocessorDirective;
 
 class TSymbolTable;
 class TFunction;
@@ -81,24 +81,25 @@ class TIntermNode : angle::NonCopyable
     void setLine(const TSourceLoc &l) { mLine = l; }
 
     virtual void traverse(TIntermTraverser *) = 0;
-    virtual TIntermTyped *getAsTyped() { return 0; }
-    virtual TIntermConstantUnion *getAsConstantUnion() { return 0; }
+    virtual TIntermTyped *getAsTyped() { return nullptr; }
+    virtual TIntermConstantUnion *getAsConstantUnion() { return nullptr; }
     virtual TIntermFunctionDefinition *getAsFunctionDefinition() { return nullptr; }
-    virtual TIntermAggregate *getAsAggregate() { return 0; }
+    virtual TIntermAggregate *getAsAggregate() { return nullptr; }
     virtual TIntermBlock *getAsBlock() { return nullptr; }
     virtual TIntermFunctionPrototype *getAsFunctionPrototypeNode() { return nullptr; }
     virtual TIntermInvariantDeclaration *getAsInvariantDeclarationNode() { return nullptr; }
     virtual TIntermDeclaration *getAsDeclarationNode() { return nullptr; }
     virtual TIntermSwizzle *getAsSwizzleNode() { return nullptr; }
-    virtual TIntermBinary *getAsBinaryNode() { return 0; }
-    virtual TIntermUnary *getAsUnaryNode() { return 0; }
+    virtual TIntermBinary *getAsBinaryNode() { return nullptr; }
+    virtual TIntermUnary *getAsUnaryNode() { return nullptr; }
     virtual TIntermTernary *getAsTernaryNode() { return nullptr; }
     virtual TIntermIfElse *getAsIfElseNode() { return nullptr; }
-    virtual TIntermSwitch *getAsSwitchNode() { return 0; }
-    virtual TIntermCase *getAsCaseNode() { return 0; }
-    virtual TIntermSymbol *getAsSymbolNode() { return 0; }
-    virtual TIntermLoop *getAsLoopNode() { return 0; }
-    virtual TIntermBranch *getAsBranchNode() { return 0; }
+    virtual TIntermSwitch *getAsSwitchNode() { return nullptr; }
+    virtual TIntermCase *getAsCaseNode() { return nullptr; }
+    virtual TIntermSymbol *getAsSymbolNode() { return nullptr; }
+    virtual TIntermLoop *getAsLoopNode() { return nullptr; }
+    virtual TIntermBranch *getAsBranchNode() { return nullptr; }
+    virtual TIntermPreprocessorDirective *getAsPreprocessorDirective() { return nullptr; }
 
     // Replace a child node. Return true if |original| is a child
     // node and it is replaced; otherwise, return false.
@@ -826,6 +827,39 @@ class TIntermCase : public TIntermNode
 
   protected:
     TIntermTyped *mCondition;
+};
+
+//
+// Preprocessor Directive.
+//  #ifdef, #define, #if, #endif, etc.
+//
+
+enum class PreprocessorDirective
+{
+    Define,
+    Ifdef,
+    If,
+    Endif,
+};
+
+class TIntermPreprocessorDirective : public TIntermNode
+{
+  public:
+    // This could also take an ImmutbleString as an argument.
+    TIntermPreprocessorDirective(PreprocessorDirective directive, const char *command);
+    ~TIntermPreprocessorDirective();
+
+    void traverse(TIntermTraverser *it) override;
+    bool replaceChildNode(TIntermNode *, TIntermNode *) override { return false; }
+
+    TIntermPreprocessorDirective *getAsPreprocessorDirective() override { return this; }
+
+    PreprocessorDirective getDirective() const { return mDirective; }
+    const ImmutableString &getCommand() const { return mCommand; }
+
+  private:
+    PreprocessorDirective mDirective;
+    ImmutableString mCommand;
 };
 
 }  // namespace sh
