@@ -605,14 +605,15 @@ TEST_P(BlitFramebufferANGLETest, BlitWithDepthUserToDefault)
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER_ANGLE, mOriginalFBO);
     glBindFramebuffer(GL_READ_FRAMEBUFFER_ANGLE, mUserFBO);
 
-    glBlitFramebufferANGLE(0, 0, getWindowWidth(), getWindowHeight(), 0, 0, getWindowWidth(), getWindowHeight(), 
-                           GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+    glBlitFramebufferANGLE(0, 0, getWindowWidth(), getWindowHeight(), 0, 0, getWindowWidth(),
+                           getWindowHeight(), GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT,
+                           GL_NEAREST);
     EXPECT_GL_NO_ERROR();
 
     glBindFramebuffer(GL_FRAMEBUFFER, mOriginalFBO);
 
-    // if blit is happening correctly, this quad will draw only on the bottom half since it will be
-    // behind on the first half and in front on the second half.
+    // if blit is happening correctly, this quad will draw only on the bottom half since it will
+    // be behind on the first half and in front on the second half.
     drawQuad(mBlueProgram, essl1_shaders::PositionAttrib(), 0.5f);
 
     glDisable(GL_DEPTH_TEST);
