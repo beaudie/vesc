@@ -130,6 +130,12 @@ vk::Error SyncDefaultUniformBlock(RendererVk *renderer,
     ANGLE_TRY(dynamicBuffer->flush(renderer->getDevice()));
     return vk::NoError();
 }
+
+bool UseLineRaster(const ContextVk *contextVk, const gl::DrawCallParams &drawCallParams)
+{
+    return contextVk->getFeatures().basicGLLineRasterization &&
+           gl::IsLineMode(drawCallParams.mode());
+}
 }  // anonymous namespace
 
 // ProgramVk::ShaderInfo implementation.
@@ -145,6 +151,7 @@ vk::Error ProgramVk::ShaderInfo::getShadersAndPipeline(
     const gl::ProgramState &state,
     const std::string &vertexSource,
     const std::string &fragmentSource,
+    bool enableLineRasterEmulation,
     const vk::ShaderAndSerial **vertexShaderAndSerialOut,
     const vk::ShaderAndSerial **fragmentShaderAndSerialOut,
     const vk::PipelineLayout **pipelineLayoutOut)
@@ -219,8 +226,9 @@ vk::Error ProgramVk::ShaderInfo::getShadersAndPipeline(
 
     std::vector<uint32_t> vertexCode;
     std::vector<uint32_t> fragmentCode;
-    ANGLE_TRY(GlslangWrapper::GetShaderCode(contextVk->getCaps(), vertexSource, fragmentSource,
-                                            &vertexCode, &fragmentCode));
+    ANGLE_TRY(GlslangWrapper::GetShaderCode(contextVk->getCaps(), enableLineRasterEmulation,
+                                            vertexSource, fragmentSource, &vertexCode,
+                                            &fragmentCode));
 
     vk::InitShaderAndSerial(renderer, &mVertexShaderAndSerial, vertexCode.data(),
                             vertexCode.size() * sizeof(uint32_t));
@@ -418,6 +426,7 @@ vk::Error ProgramVk::ShaderInfo::allocateDescriptorSet(ContextVk *contextVk,
 
     const vk::DescriptorSetLayout &descriptorSetLayout =
         mDescriptorSetLayouts[descriptorSetIndex].get();
+    ASSERT(descriptorSetLayout.valid());
     ANGLE_TRY(dynamicDescriptorPool->allocateSets(contextVk, descriptorSetLayout.ptr(), 1,
                                                   &mDescriptorSets[descriptorSetIndex]));
     return vk::NoError();
@@ -456,8 +465,8 @@ vk::Error ProgramVk::reset(ContextVk *contextVk)
         uniformBlock.storage.release(renderer);
     }
 
-    // TODO(jmadill): Line rasterization emulation shaders. http://anglebug.com/2598
     mDefaultShaderInfo.destroy(device);
+    mLineRasterShaderInfo.destroy(device);
 
     Serial currentSerial = renderer->getCurrentQueueSerial();
     renderer->releaseObject(currentSerial, &mEmptyUniformBlockStorage.memory);
@@ -904,11 +913,20 @@ gl::Error ProgramVk::initShaders(const ContextVk *contextVk,
                                  const vk::ShaderAndSerial **fragmentShaderAndSerialOut,
                                  const vk::PipelineLayout **pipelineLayoutOut)
 {
-    // TODO(jmadill): Line rasterization emulation shaders. http://anglebug.com/2598
-    ANGLE_TRY(mDefaultShaderInfo.getShadersAndPipeline(
-        contextVk, mState, mVertexSource, mFragmentSource, vertexShaderAndSerialOut,
-        fragmentShaderAndSerialOut, pipelineLayoutOut));
-    ASSERT(mDefaultShaderInfo.valid());
+    if (UseLineRaster(contextVk, drawCallParams))
+    {
+        ANGLE_TRY(mLineRasterShaderInfo.getShadersAndPipeline(
+            contextVk, mState, mVertexSource, mFragmentSource, true, vertexShaderAndSerialOut,
+            fragmentShaderAndSerialOut, pipelineLayoutOut));
+        ASSERT(mLineRasterShaderInfo.valid());
+    }
+    else
+    {
+        ANGLE_TRY(mDefaultShaderInfo.getShadersAndPipeline(
+            contextVk, mState, mVertexSource, mFragmentSource, false, vertexShaderAndSerialOut,
+            fragmentShaderAndSerialOut, pipelineLayoutOut));
+        ASSERT(mDefaultShaderInfo.valid());
+    }
     return gl::NoError();
 }
 
@@ -960,8 +978,16 @@ vk::Error ProgramVk::updateUniforms(ContextVk *contextVk)
     {
         // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
         // modify the descriptor sets once initialized.
-        ANGLE_TRY(mDefaultShaderInfo.updateDefaultUniformsDescriptorSet(
-            contextVk, mDefaultUniformBlocks, mEmptyUniformBlockStorage));
+        if (mDefaultShaderInfo.valid())
+        {
+            ANGLE_TRY(mDefaultShaderInfo.updateDefaultUniformsDescriptorSet(
+                contextVk, mDefaultUniformBlocks, mEmptyUniformBlockStorage));
+        }
+        if (mLineRasterShaderInfo.valid())
+        {
+            ANGLE_TRY(mLineRasterShaderInfo.updateDefaultUniformsDescriptorSet(
+                contextVk, mDefaultUniformBlocks, mEmptyUniformBlockStorage));
+        }
     }
 
     return vk::NoError();
@@ -969,8 +995,8 @@ vk::Error ProgramVk::updateUniforms(ContextVk *contextVk)
 
 void ProgramVk::invalidateTextures()
 {
-    // TODO(jmadill): Line rasterization emulation shaders. http://anglebug.com/2598
     mDefaultShaderInfo.invalidateTextures();
+    mLineRasterShaderInfo.invalidateTextures();
 }
 
 void ProgramVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize)
@@ -986,13 +1012,22 @@ vk::Error ProgramVk::updateDescriptorSets(ContextVk *contextVk,
                                           VkDescriptorSet driverUniformsDescriptorSet,
                                           vk::CommandBuffer *commandBuffer)
 {
-    // TODO(jmadill): Line rasterization emulation shaders. http://anglebug.com/2598
     // Can probably use better dirty bits here.
     ANGLE_TRY(updateUniforms(contextVk));
-    ANGLE_TRY(mDefaultShaderInfo.updateTexturesDescriptorSet(contextVk, mState));
 
-    mDefaultShaderInfo.bindDescriptorSets(commandBuffer, mUniformBlocksOffsets,
-                                          driverUniformsDescriptorSet);
+    if (UseLineRaster(contextVk, drawCallParams))
+    {
+        ANGLE_TRY(mLineRasterShaderInfo.updateTexturesDescriptorSet(contextVk, mState));
+        mLineRasterShaderInfo.bindDescriptorSets(commandBuffer, mUniformBlocksOffsets,
+                                                 driverUniformsDescriptorSet);
+    }
+    else
+    {
+        ANGLE_TRY(mDefaultShaderInfo.updateTexturesDescriptorSet(contextVk, mState));
+        mDefaultShaderInfo.bindDescriptorSets(commandBuffer, mUniformBlocksOffsets,
+                                              driverUniformsDescriptorSet);
+    }
+
     return vk::NoError();
 }
 }  // namespace rx

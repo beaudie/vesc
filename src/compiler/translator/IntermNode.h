@@ -228,7 +228,7 @@ class TIntermBranch : public TIntermNode
 
   protected:
     TOperator mFlowOp;
-    TIntermTyped *mExpression;  // non-zero except for "return exp;" statements
+    TIntermTyped *mExpression;  // zero except for "return exp;" statements
 };
 
 // Nodes that correspond to variable symbols in the source code. These may be regular variables or
@@ -658,6 +658,7 @@ class TIntermBlock : public TIntermNode, public TIntermAggregateBase
 
     // Only intended for initially building the block.
     void appendStatement(TIntermNode *statement);
+    void insertStatement(size_t insertPosition, TIntermNode *statement);
 
     TIntermSequence *getSequence() override { return &mStatements; }
     const TIntermSequence *getSequence() const override { return &mStatements; }
