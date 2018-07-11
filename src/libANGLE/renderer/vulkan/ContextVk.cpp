@@ -867,8 +867,9 @@ vk::Error ContextVk::updateDriverUniforms()
 
     // Copy and flush to the device.
     DriverUniforms *driverUniforms = reinterpret_cast<DriverUniforms *>(ptr);
-    *driverUniforms = {static_cast<float>(glViewport.x), static_cast<float>(glViewport.y),
-                       static_cast<float>(glViewport.width), static_cast<float>(glViewport.height)};
+    *driverUniforms                = {
+        {{static_cast<float>(glViewport.x), static_cast<float>(glViewport.y),
+          static_cast<float>(glViewport.width), static_cast<float>(glViewport.height)}}};
 
     ANGLE_TRY(mDriverUniformsBuffer.flush(getDevice()));
 

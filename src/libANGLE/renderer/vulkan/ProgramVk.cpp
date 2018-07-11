@@ -379,6 +379,10 @@ void ProgramVk::ShaderInfo::bindDescriptorSets(vk::CommandBuffer *commandBuffer,
                                                const vk::ShaderMap<uint32_t> &uniformBlocksOffsets,
                                                VkDescriptorSet driverUniformsDescriptorSet) const
 {
+    commandBuffer->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, mPipelineLayout.get(),
+                                      kDriverUniformsDescriptorSetIndex, 1,
+                                      &driverUniformsDescriptorSet, 0, nullptr);
+
     if (mUsedDescriptorSetRange.empty())
         return;
 
@@ -400,10 +404,6 @@ void ProgramVk::ShaderInfo::bindDescriptorSets(vk::CommandBuffer *commandBuffer,
                                           low, mUsedDescriptorSetRange.length(),
                                           &mDescriptorSets[low], 0, nullptr);
     }
-
-    commandBuffer->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, mPipelineLayout.get(),
-                                      kDriverUniformsDescriptorSetIndex, 1,
-                                      &driverUniformsDescriptorSet, 0, nullptr);
 }
 
 void ProgramVk::ShaderInfo::invalidateTextures()
