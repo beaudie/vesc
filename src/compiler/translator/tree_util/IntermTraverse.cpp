@@ -98,6 +98,11 @@ void TIntermBranch::traverse(TIntermTraverser *it)
     it->traverseBranch(this);
 }
 
+void TIntermPreprocessorDirective::traverse(TIntermTraverser *it)
+{
+    it->traversePreprocessorDirective(this);
+}
+
 TIntermTraverser::TIntermTraverser(bool preVisit,
                                    bool inVisit,
                                    bool postVisit,
@@ -852,4 +857,9 @@ void TIntermTraverser::traverseBranch(TIntermBranch *node)
         visitBranch(PostVisit, node);
 }
 
+void TIntermTraverser::traversePreprocessorDirective(TIntermPreprocessorDirective *node)
+{
+    ScopedNodeInTraversalPath addToPath(this, node);
+    visitPreprocessorDirective(node);
+}
 }  // namespace sh

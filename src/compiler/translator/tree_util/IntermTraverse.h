@@ -69,6 +69,7 @@ class TIntermTraverser : angle::NonCopyable
     virtual bool visitDeclaration(Visit visit, TIntermDeclaration *node) { return true; }
     virtual bool visitLoop(Visit visit, TIntermLoop *node) { return true; }
     virtual bool visitBranch(Visit visit, TIntermBranch *node) { return true; }
+    virtual void visitPreprocessorDirective(TIntermPreprocessorDirective *node) {}
 
     // The traverse functions contain logic for iterating over the children of the node
     // and calling the visit functions in the appropriate places. They also track some
@@ -90,6 +91,7 @@ class TIntermTraverser : angle::NonCopyable
     virtual void traverseDeclaration(TIntermDeclaration *node);
     virtual void traverseLoop(TIntermLoop *node);
     virtual void traverseBranch(TIntermBranch *node);
+    virtual void traversePreprocessorDirective(TIntermPreprocessorDirective *node);
 
     int getMaxDepth() const { return mMaxDepth; }
 
