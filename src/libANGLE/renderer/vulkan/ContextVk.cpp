@@ -151,16 +151,15 @@ gl::Error ContextVk::initPipeline(const gl::DrawCallParams &drawCallParams)
     // Trigger draw call shader patching and fill out the pipeline desc.
     const vk::ShaderAndSerial *vertexShaderAndSerial   = nullptr;
     const vk::ShaderAndSerial *fragmentShaderAndSerial = nullptr;
+    const vk::PipelineLayout *pipelineLayout           = nullptr;
     ANGLE_TRY(programVk->initShaders(this, drawCallParams, &vertexShaderAndSerial,
-                                     &fragmentShaderAndSerial));
+                                     &fragmentShaderAndSerial, &pipelineLayout));
 
     mPipelineDesc->updateShaders(vertexShaderAndSerial->getSerial(),
                                  fragmentShaderAndSerial->getSerial());
 
-    const vk::PipelineLayout &pipelineLayout = programVk->getPipelineLayout();
-
     ANGLE_TRY(mRenderer->getPipeline(*vertexShaderAndSerial, *fragmentShaderAndSerial,
-                                     pipelineLayout, *mPipelineDesc, activeAttribLocationsMask,
+                                     *pipelineLayout, *mPipelineDesc, activeAttribLocationsMask,
                                      &mCurrentPipeline));
 
     return gl::NoError();
@@ -223,30 +222,9 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
     ASSERT(mCurrentPipeline && mCurrentPipeline->valid());
     mCurrentPipeline->updateSerial(queueSerial);
 
-    // TODO(jmadill): Can probably use more dirty bits here.
-    ANGLE_TRY(programVk->updateUniforms(this));
-    ANGLE_TRY(programVk->updateTexturesDescriptorSet(context));
-
     // Bind the graphics descriptor sets.
-    // TODO(jmadill): Handle multiple command buffers.
-    const auto &descriptorSets   = programVk->getDescriptorSets();
-    const gl::RangeUI &usedRange = programVk->getUsedDescriptorSetRange();
-    const vk::PipelineLayout &pipelineLayout = programVk->getPipelineLayout();
-    if (!usedRange.empty())
-    {
-        ASSERT(!descriptorSets.empty());
-        (*commandBufferOut)
-            ->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, usedRange.low(),
-                                 usedRange.length(), &descriptorSets[usedRange.low()],
-                                 programVk->getDynamicOffsetsCount(),
-                                 programVk->getDynamicOffsets());
-    }
-
-    (*commandBufferOut)
-        ->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout,
-                             kDriverUniformsDescriptorSetIndex, 1, &mDriverUniformsDescriptorSet, 0,
-                             nullptr);
-
+    programVk->updateDescriptorSets(this, drawCallParams, mDriverUniformsDescriptorSet,
+                                    *commandBufferOut);
     return gl::NoError();
 }
 
@@ -889,8 +867,9 @@ vk::Error ContextVk::updateDriverUniforms()
 
     // Copy and flush to the device.
     DriverUniforms *driverUniforms = reinterpret_cast<DriverUniforms *>(ptr);
-    *driverUniforms = {static_cast<float>(glViewport.x), static_cast<float>(glViewport.y),
-                       static_cast<float>(glViewport.width), static_cast<float>(glViewport.height)};
+    *driverUniforms                = {
+        {{static_cast<float>(glViewport.x), static_cast<float>(glViewport.y),
+          static_cast<float>(glViewport.width), static_cast<float>(glViewport.height)}}};
 
     ANGLE_TRY(mDriverUniformsBuffer.flush(getDevice()));
 
