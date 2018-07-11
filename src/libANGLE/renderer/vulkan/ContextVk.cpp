@@ -591,6 +591,7 @@ gl::Error ContextVk::syncState(const gl::Context *context, const gl::State::Dirt
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
             {
+                ANGLE_TRY(updateDriverUniforms());
                 updateFlipViewportDrawFramebuffer(context->getGLState());
                 FramebufferVk *framebufferVk = vk::GetImpl(glState.getDrawFramebuffer());
                 mPipelineDesc->updateViewport(framebufferVk, glState.getViewport(),
@@ -703,6 +704,7 @@ void ContextVk::onMakeCurrent(const gl::Context *context)
     const gl::State &glState = context->getGLState();
     updateFlipViewportDrawFramebuffer(glState);
     updateFlipViewportReadFramebuffer(glState);
+    updateDriverUniforms();
 }
 
 void ContextVk::updateFlipViewportDrawFramebuffer(const gl::State &glState)
@@ -893,10 +895,21 @@ vk::Error ContextVk::updateDriverUniforms()
     ANGLE_TRY(mDriverUniformsBuffer.allocate(mRenderer, sizeof(DriverUniforms), &ptr, &buffer,
                                              &offset, &newBufferAllocated));
 
+    float scaleY     = 1.0;
+    float translateY = 1.0;
+    if (isViewportFlipEnabledForDrawFBO())
+    {
+        scaleY     = -1.0;
+        translateY = 0.0;
+    }
+
     // Copy and flush to the device.
     DriverUniforms *driverUniforms = reinterpret_cast<DriverUniforms *>(ptr);
-    *driverUniforms = {static_cast<float>(glViewport.x), static_cast<float>(glViewport.y),
-                       static_cast<float>(glViewport.width), static_cast<float>(glViewport.height)};
+    *driverUniforms                = {
+        {static_cast<float>(glViewport.x), static_cast<float>(glViewport.y),
+         static_cast<float>(glViewport.width), static_cast<float>(glViewport.height)},
+        {1.0f, scaleY, 1.0f, 1.0f},
+        {0.0f, translateY, 0.0f, 0.0f}};
 
     ANGLE_TRY(mDriverUniformsBuffer.flush(getDevice()));
 
