@@ -9,6 +9,7 @@
 
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 
+#include "../../../../third_party/zlib/inflate.h"
 #include "common/bitset_utils.h"
 #include "common/debug.h"
 #include "common/utilities.h"
@@ -31,7 +32,6 @@
 #include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/TransformFeedbackVk.h"
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
-#include "../../../../third_party/zlib/inflate.h"
 
 namespace rx
 {
@@ -592,6 +592,7 @@ gl::Error ContextVk::syncState(const gl::Context *context, const gl::State::Dirt
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
             {
+                ANGLE_TRY(updateDriverUniforms());
                 updateFlipViewportDrawFramebuffer(context->getGLState());
                 FramebufferVk *framebufferVk = vk::GetImpl(glState.getDrawFramebuffer());
                 mPipelineDesc->updateViewport(framebufferVk, glState.getViewport(),
@@ -704,6 +705,7 @@ gl::Error ContextVk::onMakeCurrent(const gl::Context *context)
     const gl::State &glState = context->getGLState();
     updateFlipViewportDrawFramebuffer(glState);
     updateFlipViewportReadFramebuffer(glState);
+    ANGLE_TRY(updateDriverUniforms());
     return gl::NoError();
 }
 
@@ -894,11 +896,14 @@ vk::Error ContextVk::updateDriverUniforms()
     bool newBufferAllocated = false;
     ANGLE_TRY(mDriverUniformsBuffer.allocate(mRenderer, sizeof(DriverUniforms), &ptr, &buffer,
                                              &offset, &newBufferAllocated));
+    float scaleY = isViewportFlipEnabledForDrawFBO() ? 1.0f : -1.0f;
 
     // Copy and flush to the device.
     DriverUniforms *driverUniforms = reinterpret_cast<DriverUniforms *>(ptr);
-    *driverUniforms = {static_cast<float>(glViewport.x), static_cast<float>(glViewport.y),
-                       static_cast<float>(glViewport.width), static_cast<float>(glViewport.height)};
+    *driverUniforms                = {
+        {static_cast<float>(glViewport.x), static_cast<float>(glViewport.y),
+         static_cast<float>(glViewport.width), static_cast<float>(glViewport.height)},
+        {1.0f, scaleY, 1.0f, 1.0f}};
 
     ANGLE_TRY(mDriverUniformsBuffer.flush(getDevice()));
 
