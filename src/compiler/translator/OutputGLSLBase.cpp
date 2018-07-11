@@ -46,6 +46,10 @@ bool isSingleStatement(TIntermNode *node)
     {
         return false;
     }
+    else if (node->getAsRawNode())
+    {
+        return false;
+    }
     return true;
 }
 
@@ -1265,6 +1269,12 @@ void TOutputGLSLBase::declareInterfaceBlock(const TInterfaceBlock *interfaceBloc
         out << ";\n";
     }
     out << "}";
+}
+
+void TOutputGLSLBase::visitRaw(TIntermRaw *node)
+{
+    TInfoSinkBase &out = objSink();
+    out << node->getRawText() << "\n";
 }
 
 void WriteGeometryShaderLayoutQualifiers(TInfoSinkBase &out,
