@@ -262,6 +262,32 @@ inline Error NoError()
 #undef ANGLE_CONCAT2
 #undef ANGLE_CONCAT1
 
+namespace angle
+{
+class ANGLE_NO_DISCARD Result
+{
+  public:
+    bool isError() const { return mIsError; }
+
+    static Result Stop() { return Result(true); }
+    static Result Continue() { return Result(false); }
+
+    // TODO(jmadill): Remove when refactor is complete. http://anglebug.com/2491
+    operator gl::Error() const;
+
+    // TODO(jmadill): Remove when refactor is complete. http://anglebug.com/2491
+    template <typename T>
+    operator gl::ErrorOrResult<T>() const
+    {
+        return operator gl::Error();
+    }
+
+  private:
+    Result(bool isError) : mIsError(isError) {}
+    bool mIsError;
+};
+}  // namespace angle
+
 #include "Error.inl"
 
 #endif // LIBANGLE_ERROR_H_
