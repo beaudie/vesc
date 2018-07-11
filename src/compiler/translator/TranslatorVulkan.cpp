@@ -153,7 +153,9 @@ constexpr ImmutableString kFlippedPointCoordName = ImmutableString("flippedPoint
 
 // Declares a new variable to replace gl_PointCoord with a version that is flipping the Y
 // coordinate.
-void FlipGLPointCoord(TIntermBlock *root, TSymbolTable *symbolTable)
+void FlipGLPointCoord(TIntermBlock *root,
+                      const TVariable *driverUniforms,
+                      TSymbolTable *symbolTable)
 {
     // Create a symbol reference to "gl_PointCoord"
     const TVariable *pointCoord  = BuiltInVariable::gl_PointCoord();
@@ -177,25 +179,51 @@ void FlipGLPointCoord(TIntermBlock *root, TSymbolTable *symbolTable)
     DeclareGlobalVariable(root, replacementVar);
     TIntermSymbol *flippedPointCoordsRef = new TIntermSymbol(replacementVar);
 
-    // Create a constant "-1.0"
     const TType *constantType             = StaticType::GetBasic<EbtFloat>();
+
+    // Create a constant "0.5"
+    TConstantUnion *constantValuePointFive = new TConstantUnion();
+    constantValuePointFive->setFConst(0.5f);
+    TIntermConstantUnion *pointFive =
+        new TIntermConstantUnion(constantValuePointFive, *constantType);
+
+    // Create a constant "-0.5"
+    TConstantUnion *constantValueMinusPointFive = new TConstantUnion();
+    constantValueMinusPointFive->setFConst(-0.5f);
+    TIntermConstantUnion *minusPointFive =
+        new TIntermConstantUnion(constantValueMinusPointFive, *constantType);
+
+    // Create a constant "-1.0"
     TConstantUnion *constantValueMinusOne = new TConstantUnion();
     constantValueMinusOne->setFConst(-1.0f);
     TIntermConstantUnion *minusOne = new TIntermConstantUnion(constantValueMinusOne, *constantType);
 
-    // Create a constant "1.0"
-    TConstantUnion *constantValueOne = new TConstantUnion();
-    constantValueOne->setFConst(1.0f);
-    TIntermConstantUnion *one = new TIntermConstantUnion(constantValueOne, *constantType);
+    // ANGLEUniforms.viewportScaleFactor
+    TIntermSymbol *angleUniformsRef             = new TIntermSymbol(driverUniforms);
+    TConstantUnion *viewportScaleFactorConstant = new TConstantUnion;
+    viewportScaleFactorConstant->setIConst(1);
+    TIntermConstantUnion *viewportScaleFactorIndex =
+        new TIntermConstantUnion(viewportScaleFactorConstant, *StaticType::GetBasic<EbtInt>());
+    TIntermBinary *viewportScaleFactorRef =
+        new TIntermBinary(EOpIndexDirectInterfaceBlock, angleUniformsRef, viewportScaleFactorIndex);
 
-    // Create the expression "gl_PointCoord.y * -1.0 + 1.0"
-    TIntermBinary *inverseY = new TIntermBinary(EOpMul, pointCoordY, minusOne);
-    TIntermBinary *plusOne  = new TIntermBinary(EOpAdd, inverseY, one);
+    // Creates a swizzle to ANGLEUniforms.viewportScaleFactor.y
+    TVector<int> viewportScaleSwizzleOffsetY;
+    viewportScaleSwizzleOffsetY.push_back(1);
+    TIntermSwizzle *viewportScaleY =
+        new TIntermSwizzle(viewportScaleFactorRef->deepCopy(), viewportScaleSwizzleOffsetY);
+
+    // Create the expression "(gl_PointCoord.y - 0.5) * -1.0 * ANGLEUniforms.viewportScaleFactor.y +
+    // 0.5
+    TIntermBinary *removePointFive = new TIntermBinary(EOpAdd, pointCoordY, minusPointFive);
+    TIntermBinary *inverseY        = new TIntermBinary(EOpMul, removePointFive, minusOne);
+    TIntermBinary *scaleY          = new TIntermBinary(EOpMul, inverseY, viewportScaleY);
+    TIntermBinary *plusPointFive   = new TIntermBinary(EOpAdd, scaleY, pointFive);
 
     // Create the new vec2 using the modified Y
     TIntermSequence *sequence = new TIntermSequence();
     sequence->push_back(pointCoordX);
-    sequence->push_back(plusOne);
+    sequence->push_back(plusPointFive);
     TIntermAggregate *aggregate =
         TIntermAggregate::CreateConstructor(BuiltInVariable::gl_PointCoord()->getType(), sequence);
 
@@ -270,6 +298,13 @@ const TVariable *AddDriverUniformsToShader(TIntermBlock *root, TSymbolTable *sym
     TField *driverViewportSize = new TField(driverViewportType, ImmutableString("viewport"),
                                             TSourceLoc(), SymbolType::AngleInternal);
     driverFieldList->push_back(driverViewportSize);
+
+    // Add a vec4 field "viewportScaleFactor" to the driver uniform fields.
+    TType *driverViewportScaleFactorType = new TType(EbtFloat, 4);
+    TField *driverViewportScaleFactorSize =
+        new TField(driverViewportScaleFactorType, ImmutableString("viewportScaleFactor"),
+                   TSourceLoc(), SymbolType::AngleInternal);
+    driverFieldList->push_back(driverViewportScaleFactorSize);
 
     // Define a driver uniform block "ANGLEUniformBlock".
     TLayoutQualifier driverLayoutQualifier = TLayoutQualifier::Create();
@@ -353,7 +388,7 @@ void TranslatorVulkan::translate(TIntermBlock *root,
         sink << "};\n";
     }
 
-    AddDriverUniformsToShader(root, &getSymbolTable());
+    const TVariable *driverUniformsVariable = AddDriverUniformsToShader(root, &getSymbolTable());
 
     // Declare gl_FragColor and glFragData as webgl_FragColor and webgl_FragData
     // if it's core profile shaders and they are used.
@@ -397,7 +432,7 @@ void TranslatorVulkan::translate(TIntermBlock *root,
 
             if (inputVarying.name == "gl_PointCoord")
             {
-                FlipGLPointCoord(root, &getSymbolTable());
+                FlipGLPointCoord(root, driverUniformsVariable, &getSymbolTable());
                 break;
             }
         }
