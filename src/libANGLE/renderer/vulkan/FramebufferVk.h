@@ -97,6 +97,7 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
     gl::Error readPixelsImpl(const gl::Context *context,
                              const gl::Rectangle &area,
                              const PackPixelsParams &packPixelsParams,
+                             const VkImageAspectFlags &copyAspectFlags,
                              void *pixels);
 
     const gl::Extents &getReadImageExtents() const;
@@ -107,8 +108,7 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
     FramebufferVk(const gl::FramebufferState &state);
     FramebufferVk(const gl::FramebufferState &state, WindowSurfaceVk *backbuffer);
 
-    gl::Error blitUsingCopy(RendererVk *renderer,
-                            vk::CommandBuffer *commandBuffer,
+    gl::Error blitUsingCopy(vk::CommandBuffer *commandBuffer,
                             const gl::Rectangle &rectangle,
                             const gl::Rectangle &destArea,
                             RenderTargetVk *renderTargetVk,

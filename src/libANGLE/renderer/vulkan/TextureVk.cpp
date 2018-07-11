@@ -235,8 +235,8 @@ gl::Error PixelBuffer::stageSubresourceUpdateFromFramebuffer(const gl::Context *
         ANGLE_TRY(context->getScratchBuffer(bufferSize, &memoryBuffer));
 
         // Read into the scratch buffer
-        ANGLE_TRY(
-            framebufferVk->readPixelsImpl(context, clippedRectangle, params, memoryBuffer->data()));
+        ANGLE_TRY(framebufferVk->readPixelsImpl(context, clippedRectangle, params,
+                                                VK_IMAGE_ASPECT_COLOR_BIT, memoryBuffer->data()));
 
         // Load from scratch buffer to our pixel buffer
         loadFunction.loadFunction(clippedRectangle.width, clippedRectangle.height, 1,
@@ -246,7 +246,8 @@ gl::Error PixelBuffer::stageSubresourceUpdateFromFramebuffer(const gl::Context *
     else
     {
         // We read directly from the framebuffer into our pixel buffer.
-        ANGLE_TRY(framebufferVk->readPixelsImpl(context, clippedRectangle, params, stagingPointer));
+        ANGLE_TRY(framebufferVk->readPixelsImpl(context, clippedRectangle, params,
+                                                VK_IMAGE_ASPECT_COLOR_BIT, stagingPointer));
     }
 
     // 3- enqueue the destination image subresource update
