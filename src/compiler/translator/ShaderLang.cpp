@@ -17,8 +17,8 @@
 #ifdef ANGLE_ENABLE_HLSL
 #include "compiler/translator/TranslatorHLSL.h"
 #endif  // ANGLE_ENABLE_HLSL
-#include "compiler/translator/VariablePacker.h"
 #include "angle_gl.h"
+#include "compiler/translator/VariablePacker.h"
 
 namespace sh
 {
@@ -269,7 +269,7 @@ void InitBuiltInResources(ShBuiltInResources *resources)
     resources->MaxCombinedAtomicCounterBuffers = 1;
     resources->MaxAtomicCounterBufferSize      = 32;
 
-    resources->MaxUniformBufferBindings = 32;
+    resources->MaxUniformBufferBindings       = 32;
     resources->MaxShaderStorageBufferBindings = 4;
 
     resources->MaxGeometryUniformComponents     = 1024;
@@ -524,6 +524,54 @@ const std::map<std::string, unsigned int> *GetUniformRegisterMap(const ShHandle 
     ASSERT(translator);
 
     return translator->getUniformRegisterMap();
+#else
+    return nullptr;
+#endif  // ANGLE_ENABLE_HLSL
+}
+
+unsigned int GetReadonlyImage2DRegisterIndex(const ShHandle handle)
+{
+#ifdef ANGLE_ENABLE_HLSL
+    TranslatorHLSL *translator = GetTranslatorHLSLFromHandle(handle);
+    ASSERT(translator);
+
+    return translator->getReadonlyImage2DRegisterIndex();
+#else
+    return 0;
+#endif  // ANGLE_ENABLE_HLSL
+}
+
+unsigned int GetImage2DRegisterIndex(const ShHandle handle)
+{
+#ifdef ANGLE_ENABLE_HLSL
+    TranslatorHLSL *translator = GetTranslatorHLSLFromHandle(handle);
+    ASSERT(translator);
+
+    return translator->getImage2DRegisterIndex();
+#else
+    return 0;
+#endif  // ANGLE_ENABLE_HLSL
+}
+
+unsigned int GetImage2DUniformIndex(const ShHandle handle)
+{
+#ifdef ANGLE_ENABLE_HLSL
+    TranslatorHLSL *translator = GetTranslatorHLSLFromHandle(handle);
+    ASSERT(translator);
+
+    return translator->getImage2DUniformIndex();
+#else
+    return 0;
+#endif  // ANGLE_ENABLE_HLSL
+}
+
+const std::set<std::string> *GetUsesImage2DFunctionNames(const ShHandle handle)
+{
+#ifdef ANGLE_ENABLE_HLSL
+    TranslatorHLSL *translator = GetTranslatorHLSLFromHandle(handle);
+    ASSERT(translator);
+
+    return translator->getUsesImage2DFunctionNames();
 #else
     return nullptr;
 #endif  // ANGLE_ENABLE_HLSL

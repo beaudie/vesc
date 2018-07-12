@@ -39,6 +39,30 @@ namespace rx
 class ProgramD3DMetadata;
 class ShaderD3D;
 
+enum Image2DToHLSLTexture2DGroup
+{
+    IMAGE2D_R_TEXTURE_2D_FLOAT4,
+    IMAGE2D_TEXTURE_2D_MIN = IMAGE2D_R_TEXTURE_2D_FLOAT4,
+    IMAGE2D_R_TEXTURE_2D_UNORM,
+    IMAGE2D_R_TEXTURE_2D_SNORM,
+    IMAGE2D_R_TEXTURE_2D_UINT4,
+    IMAGE2D_R_TEXTURE_2D_INT4,
+    IMAGE2D_W_TEXTURE_2D_FLOAT4,
+    IMAGE2D_W_TEXTURE_2D_UNORM,
+    IMAGE2D_W_TEXTURE_2D_SNORM,
+    IMAGE2D_W_TEXTURE_2D_UINT4,
+    IMAGE2D_W_TEXTURE_2D_INT4,
+    IMAGE2D_TEXTURE_2D_UNKNOWN,
+    IMAGE2D_TEXTURE_2D_MAX = IMAGE2D_TEXTURE_2D_UNKNOWN
+};
+
+enum Image2DMethod
+{
+    IMAGE2DSIZE,
+    IMAGE2DLOAD,
+    IMAGE2DSTORE
+};
+
 struct PixelShaderOutputVariable
 {
     PixelShaderOutputVariable() {}
@@ -128,14 +152,22 @@ class DynamicHLSL : angle::NonCopyable
         const std::vector<PixelShaderOutputVariable> &outputVariables,
         bool usesFragDepth,
         const std::vector<GLenum> &outputLayout) const;
+    std::string generateComputeShaderForImage2DBoundSignature(
+        ProgramD3D &programD3D,
+        const gl::ProgramState &programData,
+        const std::string &sourceShader,
+        std::vector<sh::Uniform> &image2DUniforms,
+        const std::map<unsigned int, gl::TextureType> &image2DBoundLayout,
+        std::map<unsigned int, unsigned int> &imageLayerIndexMap) const;
     void generateShaderLinkHLSL(const gl::Context *context,
                                 const gl::ProgramState &programData,
                                 const ProgramD3DMetadata &programMetadata,
                                 const gl::VaryingPacking &varyingPacking,
                                 const BuiltinVaryingsD3D &builtinsD3D,
                                 gl::ShaderMap<std::string> *shaderHLSL) const;
-    std::string generateComputeShaderLinkHLSL(const gl::Context *context,
-                                              const gl::ProgramState &programData) const;
+    void generateComputeShaderLinkHLSL(const gl::Context *context,
+                                       const gl::ProgramState &programData,
+                                       std::string *shaderHLSL) const;
 
     std::string generateGeometryShaderPreamble(const gl::VaryingPacking &varyingPacking,
                                                const BuiltinVaryingsD3D &builtinsD3D,

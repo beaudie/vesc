@@ -284,6 +284,26 @@ const std::map<std::string, unsigned int> &OutputHLSL::getUniformRegisterMap() c
     return mUniformHLSL->getUniformRegisterMap();
 }
 
+unsigned int OutputHLSL::getReadonlyImage2DRegisterIndex() const
+{
+    return mUniformHLSL->getReadonlyImage2DRegisterIndex();
+}
+
+unsigned int OutputHLSL::getImage2DRegisterIndex() const
+{
+    return mUniformHLSL->getImage2DRegisterIndex();
+}
+
+unsigned int OutputHLSL::getImage2DUniformIndex() const
+{
+    return mUniformHLSL->getImage2DUniformIndex();
+}
+
+const std::set<std::string> &OutputHLSL::getUsesImage2DFunctionNames() const
+{
+    return mImageFunctionHLSL->getUsesImage2DFunctionNames();
+}
+
 TString OutputHLSL::structInitializerString(int indent,
                                             const TType &type,
                                             const TString &name) const

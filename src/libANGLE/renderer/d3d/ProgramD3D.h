@@ -53,6 +53,7 @@ struct D3DUniform : private angle::NonCopyable
 
     bool isSampler() const;
     bool isImage() const;
+    bool isImage2D() const;
     bool isArray() const { return !arraySizes.empty(); }
     unsigned int getArraySizeProduct() const;
     bool isReferencedByShader(gl::ShaderType shaderType) const;
@@ -194,7 +195,8 @@ class ProgramD3D : public ProgramImpl
                                                     gl::InfoLog *infoLog);
     gl::Error getPixelExecutableForCachedOutputLayout(ShaderExecutableD3D **outExectuable,
                                                       gl::InfoLog *infoLog);
-    gl::Error getComputeExecutable(ShaderExecutableD3D **outExecutable);
+    gl::Error getComputeExecutableForImage2DBoundLayout(ShaderExecutableD3D **outExecutable,
+                                                        gl::InfoLog *infoLog);
     gl::LinkResult link(const gl::Context *context,
                         const gl::ProgramLinkedResources &resources,
                         gl::InfoLog &infoLog) override;
@@ -304,6 +306,11 @@ class ProgramD3D : public ProgramImpl
         return mState.getLinkedShaderStages()[shaderType];
     }
 
+    void assignImage2DRegisters(unsigned int startImageIndex,
+                                int startLogicalImageUnit,
+                                bool readonly);
+    D3DUniform *getD3DUniformByName(const std::string &name);
+
   private:
     // These forward-declared tasks are used for multi-thread shader compiles.
     class GetExecutableTask;
@@ -365,6 +372,26 @@ class ProgramD3D : public ProgramImpl
         ShaderExecutableD3D *mShaderExecutable;
     };
 
+    class ComputeExecutable
+    {
+      public:
+        ComputeExecutable(const std::map<unsigned int, gl::TextureType> &signature,
+                          ShaderExecutableD3D *shaderExecutable);
+        ~ComputeExecutable();
+
+        bool matchesSignature(const std::map<unsigned int, gl::TextureType> &signature) const
+        {
+            return mSignature == signature;
+        }
+
+        const std::map<unsigned int, gl::TextureType> &signature() const { return mSignature; }
+        ShaderExecutableD3D *shaderExecutable() const { return mShaderExecutable; }
+
+      private:
+        std::map<unsigned int, gl::TextureType> mSignature;
+        ShaderExecutableD3D *mShaderExecutable;
+    };
+
     struct Sampler
     {
         Sampler();
@@ -379,6 +406,7 @@ class ProgramD3D : public ProgramImpl
         Image();
         bool active;
         GLint logicalImageUnit;
+        std::vector<unsigned int> registers;
     };
 
     typedef std::map<std::string, D3DUniform *> D3DUniformMap;
@@ -455,7 +483,6 @@ class ProgramD3D : public ProgramImpl
 
     void gatherTransformFeedbackVaryings(const gl::VaryingPacking &varyings,
                                          const BuiltinInfo &builtins);
-    D3DUniform *getD3DUniformByName(const std::string &name);
     D3DUniform *getD3DUniformFromLocation(GLint location);
     const D3DUniform *getD3DUniformFromLocation(GLint location) const;
 
@@ -466,8 +493,10 @@ class ProgramD3D : public ProgramImpl
 
     void updateCachedInputLayoutFromShader(const gl::Context *context);
     void updateCachedOutputLayoutFromShader();
+    void updateCachedImage2DBoundLayoutFromComputeShader();
     void updateCachedVertexExecutableIndex();
     void updateCachedPixelExecutableIndex();
+    void updateCachedComputeExecutableIndex();
 
     void linkResources(const gl::Context *context, const gl::ProgramLinkedResources &resources);
 
@@ -478,7 +507,7 @@ class ProgramD3D : public ProgramImpl
     std::vector<std::unique_ptr<PixelExecutable>> mPixelExecutables;
     angle::PackedEnumMap<gl::PrimitiveMode, std::unique_ptr<ShaderExecutableD3D>>
         mGeometryExecutables;
-    std::unique_ptr<ShaderExecutableD3D> mComputeExecutable;
+    std::vector<std::unique_ptr<ComputeExecutable>> mComputeExecutables;
 
     gl::ShaderMap<std::string> mShaderHLSL;
     gl::ShaderMap<angle::CompilerWorkaroundsD3D> mShaderWorkarounds;
@@ -524,6 +553,12 @@ class ProgramD3D : public ProgramImpl
     std::vector<D3DUniform *> mD3DUniforms;
     std::map<std::string, int> mImageBindingMap;
     std::vector<D3DUniformBlock> mD3DUniformBlocks;
+
+    std::string mComputeHLSL;
+    std::vector<sh::Uniform> mImage2DUniforms;
+    std::map<unsigned int, gl::TextureType> mComputeShaderImage2DBoundLayoutCache;
+    Optional<size_t> mCachedComputeExecutableIndex;
+    std::map<unsigned int, unsigned int> mComputeShaderImageLayerIndexCache;
 
     gl::ShaderBitSet mShaderUniformsDirty;
 
