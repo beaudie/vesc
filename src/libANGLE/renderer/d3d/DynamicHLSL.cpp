@@ -28,27 +28,6 @@ namespace rx
 namespace
 {
 
-// This class needs to match OutputHLSL::decorate
-class DecorateVariable final : angle::NonCopyable
-{
-  public:
-    explicit DecorateVariable(const std::string &str) : mName(str) {}
-    const std::string &getName() const { return mName; }
-
-  private:
-    const std::string &mName;
-};
-
-std::ostream &operator<<(std::ostream &o, const DecorateVariable &dv)
-{
-    if (dv.getName().compare(0, 3, "gl_") != 0)
-    {
-        o << "_";
-    }
-    o << dv.getName();
-    return o;
-}
-
 const char *HLSLComponentTypeString(GLenum componentType)
 {
     switch (componentType)
@@ -353,8 +332,9 @@ std::string DynamicHLSL::generatePixelShaderForOutputSignature(
                          "PS_OUTPUT generateOutput()\n"
                          "{\n"
                          "    PS_OUTPUT output;\n"
-                      << copyStream.str() << "    return output;\n"
-                                             "}\n";
+                      << copyStream.str()
+                      << "    return output;\n"
+                         "}\n";
 
     std::string pixelHLSL(sourceShader);
 
@@ -363,6 +343,28 @@ std::string DynamicHLSL::generatePixelShaderForOutputSignature(
     ASSERT(success);
 
     return pixelHLSL;
+}
+
+std::string DynamicHLSL::generateComputeShaderForImage2DBoundSignature(
+    const d3d::Context *context,
+    ProgramD3D &programD3D,
+    const gl::ProgramState &programData,
+    std::vector<sh::Uniform> &image2DUniforms,
+    const std::map<unsigned int, gl::TextureType> &image2DBoundLayout,
+    std::map<unsigned int, unsigned int> &readonlyImage2DImageIndexCS,
+    std::map<unsigned int, unsigned int> &image2DImageIndexCS) const
+{
+    std::string computeHLSL(
+        programData.getAttachedShader(ShaderType::Compute)->getTranslatedSource());
+
+    if (image2DUniforms.empty())
+    {
+        return computeHLSL;
+    }
+
+    return DynamicImage2DHLSL::generateComputeShaderForImage2DBoundSignature(
+        context, programD3D, programData, image2DUniforms, image2DBoundLayout,
+        readonlyImage2DImageIndexCS, image2DImageIndexCS);
 }
 
 void DynamicHLSL::generateVaryingLinkHLSL(const VaryingPacking &varyingPacking,
@@ -407,7 +409,7 @@ void DynamicHLSL::generateVaryingLinkHLSL(const VaryingPacking &varyingPacking,
     for (GLuint registerIndex = 0u; registerIndex < registerInfos.size(); ++registerIndex)
     {
         const PackedVaryingRegister &registerInfo = registerInfos[registerIndex];
-        const auto &varying = *registerInfo.packedVarying->varying;
+        const auto &varying                       = *registerInfo.packedVarying->varying;
         ASSERT(!varying.isStruct());
 
         // TODO: Add checks to ensure D3D interpolation modifiers don't result in too many
@@ -468,10 +470,10 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Caps &caps,
     ASSERT((*shaderHLSL)[gl::ShaderType::Vertex].empty() &&
            (*shaderHLSL)[gl::ShaderType::Fragment].empty());
 
-    gl::Shader *vertexShaderGL         = programData.getAttachedShader(ShaderType::Vertex);
-    gl::Shader *fragmentShaderGL       = programData.getAttachedShader(ShaderType::Fragment);
-    const ShaderD3D *fragmentShader    = GetImplAs<ShaderD3D>(fragmentShaderGL);
-    const int shaderModel              = mRenderer->getMajorShaderModel();
+    gl::Shader *vertexShaderGL      = programData.getAttachedShader(ShaderType::Vertex);
+    gl::Shader *fragmentShaderGL    = programData.getAttachedShader(ShaderType::Fragment);
+    const ShaderD3D *fragmentShader = GetImplAs<ShaderD3D>(fragmentShaderGL);
+    const int shaderModel           = mRenderer->getMajorShaderModel();
 
     // usesViewScale() isn't supported in the D3D9 renderer
     ASSERT(shaderModel >= 4 || !programMetadata.usesViewScale());
@@ -586,8 +588,8 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Caps &caps,
     for (GLuint registerIndex = 0u; registerIndex < registerInfos.size(); ++registerIndex)
     {
         const PackedVaryingRegister &registerInfo = registerInfos[registerIndex];
-        const auto &packedVarying = *registerInfo.packedVarying;
-        const auto &varying = *packedVarying.varying;
+        const auto &packedVarying                 = *registerInfo.packedVarying;
+        const auto &varying                       = *packedVarying.varying;
         ASSERT(!varying.isStruct());
 
         vertexGenerateOutput << "    output.v" << registerIndex << " = ";
@@ -782,8 +784,8 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Caps &caps,
     for (GLuint registerIndex = 0u; registerIndex < registerInfos.size(); ++registerIndex)
     {
         const PackedVaryingRegister &registerInfo = registerInfos[registerIndex];
-        const auto &packedVarying = *registerInfo.packedVarying;
-        const auto &varying = *packedVarying.varying;
+        const auto &packedVarying                 = *registerInfo.packedVarying;
+        const auto &varying                       = *packedVarying.varying;
         ASSERT(!varying.isBuiltIn() && !varying.isStruct());
 
         // Don't reference VS-only transform feedback varyings in the PS. Note that we're relying on
@@ -978,8 +980,8 @@ std::string DynamicHLSL::generateGeometryShaderHLSL(const gl::Caps &caps,
     switch (primitiveType)
     {
         case gl::PrimitiveMode::Points:
-            inputPT         = "point";
-            inputSize       = 1;
+            inputPT   = "point";
+            inputSize = 1;
 
             if (pointSprites)
             {
@@ -1230,8 +1232,8 @@ void DynamicHLSL::getPixelShaderOutputKey(const gl::ContextState &data,
             ASSERT(outputVariable.active);
 
             PixelShaderOutputVariable outputKeyVariable;
-            outputKeyVariable.type        = outputVariable.type;
-            outputKeyVariable.name        = variableName + elementString;
+            outputKeyVariable.type = outputVariable.type;
+            outputKeyVariable.name = variableName + elementString;
             outputKeyVariable.source =
                 variableName +
                 (outputVariable.isArray() ? ArrayString(outputLocation.arrayIndex) : "");
