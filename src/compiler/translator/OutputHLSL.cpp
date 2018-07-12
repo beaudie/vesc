@@ -35,6 +35,9 @@ namespace sh
 namespace
 {
 
+constexpr const char *IMAGE2D_DECLARATION_FUNCTION_STRING =
+    "// @@ IMAGE2D DECLARATION FUNCTION STRING @@";
+
 TString ArrayHelperFunctionName(const char *prefix, const TType &type)
 {
     TStringStream fnName;
@@ -368,6 +371,21 @@ const std::map<std::string, unsigned int> &OutputHLSL::getUniformBlockRegisterMa
 const std::map<std::string, unsigned int> &OutputHLSL::getUniformRegisterMap() const
 {
     return mResourcesHLSL->getUniformRegisterMap();
+}
+
+unsigned int OutputHLSL::getReadonlyImage2DRegisterIndex() const
+{
+    return mResourcesHLSL->getReadonlyImage2DRegisterIndex();
+}
+
+unsigned int OutputHLSL::getImage2DRegisterIndex() const
+{
+    return mResourcesHLSL->getImage2DRegisterIndex();
+}
+
+const std::set<std::string> &OutputHLSL::getUsedImage2DFunctionNames() const
+{
+    return mImageFunctionHLSL->getUsedImage2DFunctionNames();
 }
 
 TString OutputHLSL::structInitializerString(int indent,
@@ -705,7 +723,7 @@ void OutputHLSL::header(TInfoSinkBase &out,
 
             if (mOutputType == SH_HLSL_4_1_OUTPUT)
             {
-                mResourcesHLSL->samplerMetadataUniforms(out, "c4");
+                mResourcesHLSL->samplerMetadataUniforms(out, 4);
             }
 
             out << "};\n";
@@ -817,7 +835,7 @@ void OutputHLSL::header(TInfoSinkBase &out,
 
             if (mOutputType == SH_HLSL_4_1_OUTPUT)
             {
-                mResourcesHLSL->samplerMetadataUniforms(out, "c4");
+                mResourcesHLSL->samplerMetadataUniforms(out, 4);
             }
 
             out << "};\n"
@@ -853,8 +871,14 @@ void OutputHLSL::header(TInfoSinkBase &out,
             out << "    uint3 gl_NumWorkGroups : packoffset(c0);\n";
         }
         ASSERT(mOutputType == SH_HLSL_4_1_OUTPUT);
-        mResourcesHLSL->samplerMetadataUniforms(out, "c1");
+        unsigned int registerIndex = 1;
+        mResourcesHLSL->samplerMetadataUniforms(out, registerIndex);
+        // Sampler metadata struct must be two 4-vec, 32 bytes.
+        registerIndex += mResourcesHLSL->getSamplerCount() * 2;
+        mResourcesHLSL->imageMetadataUniforms(out, registerIndex);
         out << "};\n";
+
+        out << IMAGE2D_DECLARATION_FUNCTION_STRING << "\n";
 
         std::ostringstream systemValueDeclaration;
         std::ostringstream glBuiltinInitialization;
