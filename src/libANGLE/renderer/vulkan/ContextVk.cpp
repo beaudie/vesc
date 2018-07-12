@@ -31,6 +31,7 @@
 #include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/TransformFeedbackVk.h"
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
+#include "../../../../third_party/zlib/inflate.h"
 
 namespace rx
 {
@@ -691,7 +692,7 @@ GLint64 ContextVk::getTimestamp()
     return GLint64();
 }
 
-void ContextVk::onMakeCurrent(const gl::Context *context)
+gl::Error ContextVk::onMakeCurrent(const gl::Context *context)
 {
     // Flip viewports if FeaturesVk::flipViewportY is enabled and the user did not request that the
     // surface is flipped.
@@ -703,6 +704,7 @@ void ContextVk::onMakeCurrent(const gl::Context *context)
     const gl::State &glState = context->getGLState();
     updateFlipViewportDrawFramebuffer(glState);
     updateFlipViewportReadFramebuffer(glState);
+    return gl::NoError();
 }
 
 void ContextVk::updateFlipViewportDrawFramebuffer(const gl::State &glState)
