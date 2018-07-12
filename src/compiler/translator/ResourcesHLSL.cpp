@@ -274,7 +274,6 @@ void ResourcesHLSL::outputHLSLImageUniformIndices(TInfoSinkBase &out,
 
         assignUniformRegister(type, name, &registerCount);
         *groupRegisterCount += registerCount;
-
         if (type.isArray())
         {
             out << "static const uint " << DecorateVariableIfNeeded(*uniform) << ArrayString(type)
@@ -394,6 +393,7 @@ void ResourcesHLSL::uniformsHeader(TInfoSinkBase &out,
     TMap<const TVariable *, TString> samplerInStructSymbolsToAPINames;
     TVector<TVector<const TVariable *>> groupedReadonlyImageUniforms(HLSL_TEXTURE_MAX + 1);
     TVector<TVector<const TVariable *>> groupedImageUniforms(HLSL_RWTEXTURE_MAX + 1);
+    unsigned int reservedReadonlyImageRegisterCount = 0, reservedImageRegisterCount = 0;
     for (auto &uniformIt : referencedUniforms)
     {
         // Output regular uniforms. Group sampler uniforms by type.
@@ -412,6 +412,20 @@ void ResourcesHLSL::uniformsHeader(TInfoSinkBase &out,
         }
         else if (outputType == SH_HLSL_4_1_OUTPUT && IsImage(type.getBasicType()))
         {
+            if (IsImage2D(type.getBasicType()))
+            {
+                const Uniform *uniform = findUniformByName(variable.name());
+                if (type.getMemoryQualifier().readonly)
+                {
+                    reservedReadonlyImageRegisterCount +=
+                        HLSLVariableRegisterCount(*uniform, mOutputType);
+                }
+                else
+                {
+                    reservedImageRegisterCount += HLSLVariableRegisterCount(*uniform, mOutputType);
+                }
+                continue;
+            }
             if (type.getMemoryQualifier().readonly)
             {
                 HLSLTextureGroup group = TextureGroup(
@@ -480,7 +494,10 @@ void ResourcesHLSL::uniformsHeader(TInfoSinkBase &out,
                 out, HLSLTextureGroup(groupId), groupedSamplerUniforms[groupId],
                 samplerInStructSymbolsToAPINames, &groupTextureRegisterIndex);
         }
-        mSamplerCount = groupTextureRegisterIndex;
+        mSamplerCount                 = groupTextureRegisterIndex;
+        mReadonlyImage2DRegisterIndex = mTextureRegister;
+        groupTextureRegisterIndex += reservedReadonlyImageRegisterCount;
+        mTextureRegister += reservedReadonlyImageRegisterCount;
 
         for (int groupId = HLSL_TEXTURE_MIN; groupId < HLSL_TEXTURE_MAX; ++groupId)
         {
@@ -488,6 +505,9 @@ void ResourcesHLSL::uniformsHeader(TInfoSinkBase &out,
                 out, HLSLTextureGroup(groupId), groupedReadonlyImageUniforms[groupId],
                 &groupTextureRegisterIndex, &imageUniformGroupIndex);
         }
+        mImage2DRegisterIndex = mRWTextureRegister;
+        groupRWTextureRegisterIndex += reservedImageRegisterCount;
+        mRWTextureRegister += reservedImageRegisterCount;
 
         for (int groupId = HLSL_RWTEXTURE_MIN; groupId < HLSL_RWTEXTURE_MAX; ++groupId)
         {
@@ -495,6 +515,7 @@ void ResourcesHLSL::uniformsHeader(TInfoSinkBase &out,
                                         groupedImageUniforms[groupId], &groupRWTextureRegisterIndex,
                                         &imageUniformGroupIndex);
         }
+        mImage2DUniformIndex = imageUniformGroupIndex;
     }
 }
 
