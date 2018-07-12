@@ -53,10 +53,15 @@ class ResourcesHLSL : angle::NonCopyable
     {
         return mUniformBlockRegisterMap;
     }
+
     const std::map<std::string, unsigned int> &getUniformRegisterMap() const
     {
         return mUniformRegisterMap;
     }
+
+    unsigned int getReadonlyImage2DRegisterIndex() const { return mReadonlyImage2DRegisterIndex; }
+    unsigned int getImage2DRegisterIndex() const { return mImage2DRegisterIndex; }
+    unsigned int getSamplerUniformsCount() const { return mSamplerCount; }
 
   private:
     TString uniformBlockString(const TInterfaceBlock &interfaceBlock,
@@ -127,6 +132,8 @@ class ResourcesHLSL : angle::NonCopyable
     std::map<std::string, unsigned int> mUniformBlockRegisterMap;
     std::map<std::string, unsigned int> mShaderStorageBlockRegisterMap;
     std::map<std::string, unsigned int> mUniformRegisterMap;
+    unsigned int mReadonlyImage2DRegisterIndex;
+    unsigned int mImage2DRegisterIndex;
 };
 }
 

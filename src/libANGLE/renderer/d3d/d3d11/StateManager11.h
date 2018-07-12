@@ -45,6 +45,7 @@ class ShaderConstants11 : angle::NonCopyable
                           const D3D11_VIEWPORT &dxViewport,
                           bool is9_3,
                           bool presentPathFast);
+    void onImageLayerChange(gl::ShaderType shaderType, unsigned int imageIndex, int layer);
     void onSamplerChange(gl::ShaderType shaderType,
                          unsigned int samplerIndex,
                          const gl::Texture &texture,
@@ -131,6 +132,17 @@ class ShaderConstants11 : angle::NonCopyable
     static_assert(sizeof(SamplerMetadata) == 32u,
                   "Sampler metadata struct must be two 4-vec --> 32 bytes.");
 
+    struct ImageMetadata
+    {
+        ImageMetadata() : layer(-1), padding{0} {}
+
+        int layer;
+        int padding[3];  // This just pads the struct to 16 bytes
+    };
+
+    static_assert(sizeof(ImageMetadata) == 16u,
+                  "Image metadata struct must be one 4-vec / 16 bytes.");
+
     static size_t GetShaderConstantsStructSize(gl::ShaderType shaderType);
 
     // Return true if dirty.
@@ -138,12 +150,15 @@ class ShaderConstants11 : angle::NonCopyable
                                const gl::Texture &texture,
                                const gl::SamplerState &samplerState);
 
+    void updateImageLayer(ImageMetadata *data, int layer);
+
     Vertex mVertex;
     Pixel mPixel;
     Compute mCompute;
     gl::ShaderBitSet mShaderConstantsDirty;
 
     gl::ShaderMap<std::vector<SamplerMetadata>> mShaderSamplerMetadata;
+    gl::ShaderMap<std::vector<ImageMetadata>> mShaderImageMetadata;
     gl::ShaderMap<int> mNumActiveShaderSamplers;
 };
 
@@ -317,6 +332,10 @@ class StateManager11 final : angle::NonCopyable
                                        int index,
                                        gl::Texture *texture,
                                        const gl::SamplerState &sampler);
+    angle::Result setImageState(const gl::Context *context,
+                                gl::ShaderType type,
+                                int imageIndex,
+                                const gl::ImageUnit &imageUnit);
     angle::Result setTextureForImage(const gl::Context *context,
                                      gl::ShaderType type,
                                      int index,
