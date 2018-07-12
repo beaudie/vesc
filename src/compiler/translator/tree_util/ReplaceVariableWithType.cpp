@@ -54,8 +54,8 @@ void ReplaceVariable(TIntermBlock *root,
 
 // Replaces every occurrence of a variable with a TIntermNode.
 void ReplaceVariableWithTyped(TIntermBlock *root,
-                              const TVariable *toBeReplaced,
-                              const TIntermTyped *replacement)
+                     const TVariable *toBeReplaced,
+                     const TIntermTyped *replacement)
 {
     ReplaceVariableTraverser traverser(toBeReplaced, replacement);
     root->traverse(&traverser);

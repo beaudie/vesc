@@ -667,6 +667,21 @@ void PipelineDesc::updateDepthRange(float nearPlane, float farPlane)
     mViewport.maxDepth = gl::clamp01(farPlane);
 }
 
+float PipelineDesc::getNearPlane()
+{
+    return mViewport.minDepth;
+}
+
+float PipelineDesc::getFarPlane()
+{
+    return mViewport.maxDepth;
+}
+
+float PipelineDesc::getDepthRangeDiff()
+{
+    return mViewport.maxDepth - mViewport.minDepth;
+}
+
 void PipelineDesc::updateVertexInputInfo(const VertexInputBindings &bindings,
                                          const VertexInputAttributes &attribs)
 {
