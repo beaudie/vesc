@@ -75,6 +75,34 @@ void GetDefaultOutputLayoutFromShader(
     }
 }
 
+void GetDefaultImage2DBoundLayoutFromComputeShader(
+    const std::vector<sh::Uniform> &image2DUniforms,
+    std::map<unsigned int, gl::TextureType> *image2DBoundLayout)
+{
+    image2DBoundLayout->clear();
+
+    for (auto &image2D : image2DUniforms)
+    {
+        if (gl::IsImage2DType(image2D.type))
+        {
+            if (image2D.binding == -1)
+            {
+                image2DBoundLayout->insert(
+                    std::pair<unsigned int, gl::TextureType>(0, gl::TextureType::_2D));
+            }
+            else
+            {
+                for (unsigned int index = 0; index < image2D.getArraySizeProduct(); index++)
+                {
+                    image2DBoundLayout->insert(std::pair<unsigned int, gl::TextureType>(
+
+                        image2D.binding + index, gl::TextureType::_2D));
+                }
+            }
+        }
+    }
+}
+
 gl::PrimitiveMode GetGeometryShaderTypeFromDrawMode(gl::PrimitiveMode drawMode)
 {
     switch (drawMode)
@@ -304,6 +332,11 @@ bool D3DUniform::isSampler() const
 bool D3DUniform::isImage() const
 {
     return typeInfo.isImageType;
+}
+
+bool D3DUniform::isImage2D() const
+{
+    return gl::IsImage2DType(typeInfo.type);
 }
 
 bool D3DUniform::isReferencedByShader(gl::ShaderType shaderType) const
@@ -541,6 +574,18 @@ ProgramD3D::PixelExecutable::~PixelExecutable()
     SafeDelete(mShaderExecutable);
 }
 
+ProgramD3D::ComputeExecutable::ComputeExecutable(
+    const std::map<unsigned int, gl::TextureType> &signature,
+    ShaderExecutableD3D *shaderExecutable)
+    : mSignature(signature), mShaderExecutable(shaderExecutable)
+{
+}
+
+ProgramD3D::ComputeExecutable::~ComputeExecutable()
+{
+    SafeDelete(mShaderExecutable);
+}
+
 ProgramD3D::Sampler::Sampler()
     : active(false), logicalTextureUnit(0), textureType(gl::TextureType::_2D)
 {
@@ -556,7 +601,6 @@ ProgramD3D::ProgramD3D(const gl::ProgramState &state, RendererD3D *renderer)
     : ProgramImpl(state),
       mRenderer(renderer),
       mDynamicHLSL(nullptr),
-      mComputeExecutable(nullptr),
       mUsesPointSize(false),
       mUsesFlatInterpolation(false),
       mUsedShaderSamplerRanges({}),
@@ -721,6 +765,54 @@ GLint ProgramD3D::getImageMapping(gl::ShaderType type,
     }
 
     return -1;
+}
+
+bool ProgramD3D::hasActiveImage(gl::ShaderType type, unsigned int imageUnit, bool *readonly)
+{
+    switch (type)
+    {
+        case gl::ShaderType::Compute:
+            if (mReadonlyImagesCS[imageUnit].active)
+            {
+                *readonly = true;
+                return true;
+            }
+            else if (mImagesCS[imageUnit].active)
+            {
+                *readonly = false;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            break;
+        // TODO(xinghua.cao@intel.com): add image mapping for vertex shader and pixel shader.
+        default:
+            UNREACHABLE();
+    }
+
+    return false;
+}
+
+void ProgramD3D::getImageUnitRegisters(gl::ShaderType type,
+                                       unsigned int imageUnit,
+                                       bool readonly,
+                                       std::vector<unsigned int> &registers)
+{
+    switch (type)
+    {
+        case gl::ShaderType::Compute:
+
+        {
+            registers =
+                readonly ? mReadonlyImagesCS[imageUnit].registers : mImagesCS[imageUnit].registers;
+        }
+        break;
+        // TODO(xinghua.cao@intel.com): add image mapping for vertex shader and pixel shader.
+        default:
+            UNREACHABLE();
+    }
 }
 
 gl::RangeUI ProgramD3D::getUsedImageRange(gl::ShaderType type, bool readonly) const
@@ -1018,9 +1110,22 @@ angle::Result ProgramD3D::load(const gl::Context *context,
         stream->skip(geometryShaderSize);
     }
 
-    unsigned int computeShaderSize = stream->readInt<unsigned int>();
-    if (computeShaderSize > 0)
+    const size_t computeShaderCount = stream->readInt<unsigned int>();
+    for (size_t computeShaderIndex = 0; computeShaderIndex < computeShaderCount;
+         computeShaderIndex++)
     {
+        const size_t signatureCount = stream->readInt<unsigned int>();
+        std::map<unsigned int, gl::TextureType> signatures;
+        for (size_t signatureIndex = 0; signatureIndex < signatureCount; signatureIndex++)
+        {
+            unsigned int imageUint;
+            gl::TextureType textureType;
+            stream->readInt<unsigned int>(&imageUint);
+            stream->readInt<gl::TextureType>(&textureType);
+            signatures.insert(std::pair<unsigned int, gl::TextureType>(imageUint, textureType));
+        }
+
+        const size_t computeShaderSize             = stream->readInt<unsigned int>();
         const unsigned char *computeShaderFunction = binary + stream->offset();
 
         ShaderExecutableD3D *computeExecutable = nullptr;
@@ -1034,7 +1139,18 @@ angle::Result ProgramD3D::load(const gl::Context *context,
             return angle::Result::Incomplete();
         }
 
-        mComputeExecutable.reset(computeExecutable);
+        // add new binary
+        mComputeExecutables.push_back(std::unique_ptr<ComputeExecutable>(
+            new ComputeExecutable(signatures, computeExecutable)));
+
+        stream->skip(computeShaderSize);
+    }
+
+    const size_t boundLayoutCount = stream->readInt<unsigned int>();
+    for (size_t boundLayoutIndex = 0; boundLayoutIndex < boundLayoutCount; boundLayoutIndex++)
+    {
+        mComputeShaderImage2DBoundLayoutCache.insert(std::pair<unsigned int, gl::TextureType>(
+            stream->readInt<unsigned int>(), gl::TextureType::_2D));
     }
 
     initializeUniformStorage(mState.getLinkedShaderStages());
@@ -1214,15 +1330,31 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
         stream->writeBytes(geometryExecutable->getFunction(), geometryShaderSize);
     }
 
-    if (mComputeExecutable)
+    stream->writeInt(mComputeExecutables.size());
+    for (size_t computeExecutableIndex = 0; computeExecutableIndex < mComputeExecutables.size();
+         computeExecutableIndex++)
     {
-        size_t computeShaderSize = mComputeExecutable->getLength();
+        ComputeExecutable *computeExecutable = mComputeExecutables[computeExecutableIndex].get();
+
+        const std::map<unsigned int, gl::TextureType> signatures = computeExecutable->signature();
+        stream->writeInt(signatures.size());
+        for (const auto &signature : signatures)
+        {
+            stream->writeInt(signature.first);
+            stream->writeInt(static_cast<unsigned int>(signature.second));
+        }
+
+        size_t computeShaderSize = computeExecutable->shaderExecutable()->getLength();
         stream->writeInt(computeShaderSize);
-        stream->writeBytes(mComputeExecutable->getFunction(), computeShaderSize);
+
+        const uint8_t *computeBlob = computeExecutable->shaderExecutable()->getFunction();
+        stream->writeBytes(computeBlob, computeShaderSize);
     }
-    else
+
+    stream->writeInt(mComputeShaderImage2DBoundLayoutCache.size());
+    for (auto &image2DBoundLayout : mComputeShaderImage2DBoundLayoutCache)
     {
-        stream->writeInt(0);
+        stream->writeInt(image2DBoundLayout.first);
     }
 }
 
@@ -1464,6 +1596,13 @@ void ProgramD3D::updateCachedOutputLayoutFromShader()
     updateCachedPixelExecutableIndex();
 }
 
+void ProgramD3D::updateCachedImage2DBoundLayoutFromComputeShader()
+{
+    GetDefaultImage2DBoundLayoutFromComputeShader(mImage2DUniforms,
+                                                  &mComputeShaderImage2DBoundLayoutCache);
+    updateCachedComputeExecutableIndex();
+}
+
 class ProgramD3D::GetGeometryExecutableTask : public ProgramD3D::GetExecutableTask
 {
   public:
@@ -1488,16 +1627,6 @@ class ProgramD3D::GetGeometryExecutableTask : public ProgramD3D::GetExecutableTa
   private:
     const gl::Caps &mCaps;
 };
-
-angle::Result ProgramD3D::getComputeExecutable(ShaderExecutableD3D **outExecutable)
-{
-    if (outExecutable)
-    {
-        *outExecutable = mComputeExecutable.get();
-    }
-
-    return angle::Result::Continue();
-}
 
 // The LinkEvent implementation for linking a rendering(VS, FS, GS) program.
 class ProgramD3D::GraphicsProgramLinkEvent final : public LinkEvent
@@ -1639,34 +1768,59 @@ std::unique_ptr<LinkEvent> ProgramD3D::compileProgramExecutables(const gl::Conte
                                                       vertexShaderD3D, fragmentShaderD3D);
 }
 
+angle::Result ProgramD3D::getComputeExecutableForImage2DBoundLayout(
+    d3d::Context *context,
+    ShaderExecutableD3D **outExecutable,
+    gl::InfoLog *infoLog)
+{
+    if (mCachedComputeExecutableIndex.valid())
+    {
+        *outExecutable =
+            mComputeExecutables[mCachedComputeExecutableIndex.value()]->shaderExecutable();
+        return angle::Result::Continue();
+    }
+
+    std::string finalComputeHLSL = mDynamicHLSL->generateComputeShaderForImage2DBoundSignature(
+        context, *this, mState, mImage2DUniforms, mComputeShaderImage2DBoundLayoutCache,
+        mReadonlyImage2DIndexMapCS, mImage2DIndexMapCS);
+
+    // Generate new compute executable
+    ShaderExecutableD3D *computeExecutable = nullptr;
+
+    gl::InfoLog tempInfoLog;
+    gl::InfoLog *currentInfoLog = infoLog ? infoLog : &tempInfoLog;
+
+    ANGLE_TRY(mRenderer->compileToExecutable(
+        context, *currentInfoLog, finalComputeHLSL, gl::ShaderType::Compute,
+        std::vector<D3DVarying>(), false, angle::CompilerWorkaroundsD3D(), &computeExecutable));
+
+    if (computeExecutable)
+    {
+        mComputeExecutables.push_back(std::unique_ptr<ComputeExecutable>(
+            new ComputeExecutable(mComputeShaderImage2DBoundLayoutCache, computeExecutable)));
+        mCachedComputeExecutableIndex = mComputeExecutables.size() - 1;
+    }
+    else if (!infoLog)
+    {
+        ERR() << "Error compiling dynamic compute executable:" << std::endl
+              << tempInfoLog.str() << std::endl;
+    }
+    *outExecutable = computeExecutable;
+
+    return angle::Result::Continue();
+}
+
 angle::Result ProgramD3D::compileComputeExecutable(d3d::Context *context, gl::InfoLog &infoLog)
 {
     // Ensure the compiler is initialized to avoid race conditions.
     ANGLE_TRY(mRenderer->ensureHLSLCompilerInitialized(context));
 
-    gl::Shader *computeShaderGL = mState.getAttachedShader(gl::ShaderType::Compute);
-    ASSERT(computeShaderGL);
-    std::string computeShader = computeShaderGL->getTranslatedSource();
+    updateCachedImage2DBoundLayoutFromComputeShader();
 
     ShaderExecutableD3D *computeExecutable = nullptr;
-    ANGLE_TRY(mRenderer->compileToExecutable(
-        context, infoLog, computeShader, gl::ShaderType::Compute, std::vector<D3DVarying>(), false,
-        angle::CompilerWorkaroundsD3D(), &computeExecutable));
+    ANGLE_TRY(getComputeExecutableForImage2DBoundLayout(context, &computeExecutable, &infoLog));
 
-    if (computeExecutable == nullptr)
-    {
-        ERR() << "Error compiling dynamic compute executable:" << std::endl
-              << infoLog.str() << std::endl;
-    }
-    else
-    {
-        const ShaderD3D *computeShaderD3D =
-            GetImplAs<ShaderD3D>(mState.getAttachedShader(gl::ShaderType::Compute));
-        computeShaderD3D->appendDebugInfo(computeExecutable->getDebugInfo());
-        mComputeExecutable.reset(computeExecutable);
-    }
-
-    return mComputeExecutable.get() ? angle::Result::Continue() : angle::Result::Incomplete();
+    return computeExecutable ? angle::Result::Continue() : angle::Result::Incomplete();
 }
 
 std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
@@ -1686,9 +1840,18 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
         mReadonlyImagesCS.resize(data.getCaps().maxImageUnits);
 
         mShaderUniformsDirty.set(gl::ShaderType::Compute);
-        defineUniformsAndAssignRegisters();
 
         linkResources(resources);
+
+        for (const auto &uniform : computeShader->getUniforms())
+        {
+            if (gl::IsImageType(uniform.type) && gl::IsImage2DType(uniform.type))
+            {
+                mImage2DUniforms.push_back(uniform);
+            }
+        }
+
+        defineUniformsAndAssignRegisters();
 
         angle::Result result = compileComputeExecutable(GetImplAs<ContextD3D>(context), infoLog);
         if (result != angle::Result::Continue())
@@ -2527,7 +2690,7 @@ void ProgramD3D::assignAllImageRegisters()
 {
     for (size_t uniformIndex = 0; uniformIndex < mD3DUniforms.size(); ++uniformIndex)
     {
-        if (mD3DUniforms[uniformIndex]->isImage())
+        if (mD3DUniforms[uniformIndex]->isImage() && !mD3DUniforms[uniformIndex]->isImage2D())
         {
             assignImageRegisters(uniformIndex);
         }
@@ -2624,17 +2787,31 @@ void ProgramD3D::AssignImages(unsigned int startImageIndex,
     *outUsedRange = gl::RangeUI(low, high);
 }
 
+void ProgramD3D::assignImage2DRegisters(unsigned int startImageIndex,
+                                        int startLogicalImageUnit,
+                                        bool readonly)
+{
+    if (readonly)
+    {
+        AssignImages(startImageIndex, startLogicalImageUnit, 1, mReadonlyImagesCS,
+                     &mUsedComputeReadonlyImageRange);
+    }
+    else
+    {
+        AssignImages(startImageIndex, startLogicalImageUnit, 1, mImagesCS, &mUsedComputeImageRange);
+    }
+}
+
 void ProgramD3D::reset()
 {
     mVertexExecutables.clear();
     mPixelExecutables.clear();
+    mComputeExecutables.clear();
 
     for (auto &geometryExecutable : mGeometryExecutables)
     {
         geometryExecutable.reset(nullptr);
     }
-
-    mComputeExecutable.reset(nullptr);
 
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
@@ -2769,6 +2946,25 @@ void ProgramD3D::updateCachedOutputLayout(const gl::Context *context,
     updateCachedPixelExecutableIndex();
 }
 
+void ProgramD3D::updateCachedComputeImage2DBoundLayout(const gl::Context *context)
+{
+    const auto &glState = context->getGLState();
+    for (auto &image2DBoundLayout : mComputeShaderImage2DBoundLayoutCache)
+    {
+        const auto &imageUnit = glState.getImageUnit(image2DBoundLayout.first);
+        if (imageUnit.texture.get())
+        {
+            image2DBoundLayout.second = imageUnit.texture->getType();
+        }
+        else
+        {
+            image2DBoundLayout.second = gl::TextureType::_2D;
+        }
+    }
+
+    updateCachedComputeExecutableIndex();
+}
+
 void ProgramD3D::gatherTransformFeedbackVaryings(const gl::VaryingPacking &varyingPacking,
                                                  const BuiltinInfo &builtins)
 {
@@ -2869,6 +3065,11 @@ bool ProgramD3D::hasPixelExecutableForCachedOutputLayout()
     return mCachedPixelExecutableIndex.valid();
 }
 
+bool ProgramD3D::hasComputeExecutableForCachedImage2DBoundLayout()
+{
+    return mCachedComputeExecutableIndex.valid();
+}
+
 template <typename DestT>
 void ProgramD3D::getUniformInternal(GLint location, DestT *dataOut) const
 {
@@ -2924,6 +3125,21 @@ void ProgramD3D::updateCachedPixelExecutableIndex()
         if (mPixelExecutables[executableIndex]->matchesSignature(mPixelShaderOutputLayoutCache))
         {
             mCachedPixelExecutableIndex = executableIndex;
+            break;
+        }
+    }
+}
+
+void ProgramD3D::updateCachedComputeExecutableIndex()
+{
+    mCachedComputeExecutableIndex.reset();
+    for (size_t executableIndex = 0; executableIndex < mComputeExecutables.size();
+         executableIndex++)
+    {
+        if (mComputeExecutables[executableIndex]->matchesSignature(
+                mComputeShaderImage2DBoundLayoutCache))
+        {
+            mCachedComputeExecutableIndex = executableIndex;
             break;
         }
     }
