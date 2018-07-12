@@ -234,8 +234,8 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
 
     // Bind the graphics descriptor sets.
     // TODO(jmadill): Handle multiple command buffers.
-    const auto &descriptorSets   = programVk->getDescriptorSets();
-    const gl::RangeUI &usedRange = programVk->getUsedDescriptorSetRange();
+    const auto &descriptorSets               = programVk->getDescriptorSets();
+    const gl::RangeUI &usedRange             = programVk->getUsedDescriptorSetRange();
     const vk::PipelineLayout &pipelineLayout = programVk->getPipelineLayout();
     if (!usedRange.empty())
     {
@@ -464,6 +464,7 @@ gl::Error ContextVk::syncState(const gl::Context *context, const gl::State::Dirt
             }
             case gl::State::DIRTY_BIT_DEPTH_RANGE:
                 mPipelineDesc->updateDepthRange(glState.getNearPlane(), glState.getFarPlane());
+                ANGLE_TRY(updateDriverUniforms());
                 break;
             case gl::State::DIRTY_BIT_BLEND_ENABLED:
                 mPipelineDesc->updateBlendEnabled(glState.isBlendEnabled());
@@ -897,12 +898,17 @@ vk::Error ContextVk::updateDriverUniforms()
                                              &offset, &newBufferAllocated));
     float scaleY = isViewportFlipEnabledForDrawFBO() ? 1.0f : -1.0f;
 
+    float depthRangeNear = mPipelineDesc->getNearPlane();
+    float depthRangeFar  = mPipelineDesc->getFarPlane();
+    float depthRangeDiff = mPipelineDesc->getDepthRangeDiff();
+
     // Copy and flush to the device.
     DriverUniforms *driverUniforms = reinterpret_cast<DriverUniforms *>(ptr);
     *driverUniforms                = {
         {static_cast<float>(glViewport.x), static_cast<float>(glViewport.y),
          static_cast<float>(glViewport.width), static_cast<float>(glViewport.height)},
-        {1.0f, scaleY, 1.0f, 1.0f}};
+        {1.0f, scaleY, 1.0f, 1.0f},
+        {depthRangeNear, depthRangeFar, depthRangeDiff, 0.0f}};
 
     ANGLE_TRY(mDriverUniformsBuffer.flush(getDevice()));
 

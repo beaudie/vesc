@@ -356,6 +356,9 @@ class PipelineDesc final
                         float farPlane,
                         bool invertViewport);
     void updateDepthRange(float nearPlane, float farPlane);
+    float getNearPlane();
+    float getFarPlane();
+    float getDepthRangeDiff();
 
     // Shader stage info
     const ShaderStageInfo &getShaderStageInfo() const;
