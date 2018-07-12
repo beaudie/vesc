@@ -53,6 +53,7 @@ struct D3DUniform : private angle::NonCopyable
 
     bool isSampler() const;
     bool isImage() const;
+    bool isImage2D() const;
     bool isArray() const { return !arraySizes.empty(); }
     unsigned int getArraySizeProduct() const;
     bool isReferencedByShader(gl::ShaderType shaderType) const;
@@ -171,6 +172,12 @@ class ProgramD3D : public ProgramImpl
                           bool readonly,
                           const gl::Caps &caps) const;
     gl::RangeUI getUsedImageRange(gl::ShaderType type, bool readonly) const;
+    bool hasActiveImage(gl::ShaderType type, unsigned int imageUnit, bool *readonly);
+    void getImageUnitRegisters(gl::ShaderType type,
+                               unsigned int imageUnit,
+                               bool readonly,
+                               std::vector<unsigned int> &registers);
+    GLenum getImageTextureType(gl::ShaderType type, unsigned int imageIndex, bool readonly) const;
 
     bool usesPointSize() const { return mUsesPointSize; }
     bool usesPointSpriteEmulation() const;
@@ -196,7 +203,9 @@ class ProgramD3D : public ProgramImpl
     angle::Result getPixelExecutableForCachedOutputLayout(d3d::Context *context,
                                                           ShaderExecutableD3D **outExectuable,
                                                           gl::InfoLog *infoLog);
-    angle::Result getComputeExecutable(ShaderExecutableD3D **outExecutable);
+    angle::Result getComputeExecutableForImage2DBoundLayout(d3d::Context *context,
+                                                            ShaderExecutableD3D **outExecutable,
+                                                            gl::InfoLog *infoLog);
     std::unique_ptr<LinkEvent> link(const gl::Context *context,
                                     const gl::ProgramLinkedResources &resources,
                                     gl::InfoLog &infoLog) override;
@@ -283,6 +292,7 @@ class ProgramD3D : public ProgramImpl
 
     void updateCachedInputLayout(Serial associatedSerial, const gl::State &state);
     void updateCachedOutputLayout(const gl::Context *context, const gl::Framebuffer *framebuffer);
+    void updateCachedComputeImage2DBoundLayout(const gl::Context *context);
 
     bool isSamplerMappingDirty() { return mDirtySamplerMapping; }
 
@@ -290,6 +300,7 @@ class ProgramD3D : public ProgramImpl
     bool hasVertexExecutableForCachedInputLayout();
     bool hasGeometryExecutableForPrimitiveType(gl::PrimitiveMode drawMode);
     bool hasPixelExecutableForCachedOutputLayout();
+    bool hasComputeExecutableForCachedImage2DBoundLayout();
 
     bool anyShaderUniformsDirty() const { return mShaderUniformsDirty.any(); }
 
@@ -305,6 +316,19 @@ class ProgramD3D : public ProgramImpl
     bool hasShaderStage(gl::ShaderType shaderType) const
     {
         return mState.getLinkedShaderStages()[shaderType];
+    }
+
+    void assignImage2DRegisters(unsigned int startImageIndex,
+                                int startLogicalImageUnit,
+                                bool readonly);
+    D3DUniform *getD3DUniformByName(const std::string &name);
+    const std::map<unsigned int, unsigned int> &getComputeShaderReadonlyImage2DIndex() const
+    {
+        return mReadonlyImage2DIndexMapCS;
+    }
+    const std::map<unsigned int, unsigned int> &getComputeShaderImage2DIndex() const
+    {
+        return mImage2DIndexMapCS;
     }
 
   private:
@@ -369,6 +393,26 @@ class ProgramD3D : public ProgramImpl
         ShaderExecutableD3D *mShaderExecutable;
     };
 
+    class ComputeExecutable
+    {
+      public:
+        ComputeExecutable(const std::map<unsigned int, gl::TextureType> &signature,
+                          ShaderExecutableD3D *shaderExecutable);
+        ~ComputeExecutable();
+
+        bool matchesSignature(const std::map<unsigned int, gl::TextureType> &signature) const
+        {
+            return mSignature == signature;
+        }
+
+        const std::map<unsigned int, gl::TextureType> &signature() const { return mSignature; }
+        ShaderExecutableD3D *shaderExecutable() const { return mShaderExecutable; }
+
+      private:
+        std::map<unsigned int, gl::TextureType> mSignature;
+        ShaderExecutableD3D *mShaderExecutable;
+    };
+
     struct Sampler
     {
         Sampler();
@@ -383,6 +427,7 @@ class ProgramD3D : public ProgramImpl
         Image();
         bool active;
         GLint logicalImageUnit;
+        std::vector<unsigned int> registers;
     };
 
     typedef std::map<std::string, D3DUniform *> D3DUniformMap;
@@ -460,7 +505,6 @@ class ProgramD3D : public ProgramImpl
 
     void gatherTransformFeedbackVaryings(const gl::VaryingPacking &varyings,
                                          const BuiltinInfo &builtins);
-    D3DUniform *getD3DUniformByName(const std::string &name);
     D3DUniform *getD3DUniformFromLocation(GLint location);
     const D3DUniform *getD3DUniformFromLocation(GLint location) const;
 
@@ -472,8 +516,10 @@ class ProgramD3D : public ProgramImpl
 
     void updateCachedInputLayoutFromShader();
     void updateCachedOutputLayoutFromShader();
+    void updateCachedImage2DBoundLayoutFromComputeShader();
     void updateCachedVertexExecutableIndex();
     void updateCachedPixelExecutableIndex();
+    void updateCachedComputeExecutableIndex();
 
     void linkResources(const gl::ProgramLinkedResources &resources);
 
@@ -484,7 +530,7 @@ class ProgramD3D : public ProgramImpl
     std::vector<std::unique_ptr<PixelExecutable>> mPixelExecutables;
     angle::PackedEnumMap<gl::PrimitiveMode, std::unique_ptr<ShaderExecutableD3D>>
         mGeometryExecutables;
-    std::unique_ptr<ShaderExecutableD3D> mComputeExecutable;
+    std::vector<std::unique_ptr<ComputeExecutable>> mComputeExecutables;
 
     gl::ShaderMap<std::string> mShaderHLSL;
     gl::ShaderMap<angle::CompilerWorkaroundsD3D> mShaderWorkarounds;
@@ -531,6 +577,12 @@ class ProgramD3D : public ProgramImpl
     std::map<std::string, int> mImageBindingMap;
     std::vector<D3DInterfaceBlock> mD3DUniformBlocks;
     std::vector<D3DInterfaceBlock> mD3DShaderStorageBlocks;
+
+    std::vector<sh::Uniform> mImage2DUniforms;
+    std::map<unsigned int, gl::TextureType> mComputeShaderImage2DBoundLayoutCache;
+    Optional<size_t> mCachedComputeExecutableIndex;
+    std::map<unsigned int, unsigned int> mReadonlyImage2DIndexMapCS;
+    std::map<unsigned int, unsigned int> mImage2DIndexMapCS;
 
     gl::ShaderBitSet mShaderUniformsDirty;
 

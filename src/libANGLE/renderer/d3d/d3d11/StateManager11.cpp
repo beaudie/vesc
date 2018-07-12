@@ -266,6 +266,7 @@ void ShaderConstants11::init(const gl::Caps &caps)
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         mShaderSamplerMetadata[shaderType].resize(caps.maxShaderTextureImageUnits[shaderType]);
+        mShaderImageMetadata[shaderType].resize(caps.maxImageUnits);
     }
 }
 
@@ -294,7 +295,8 @@ size_t ShaderConstants11::getRequiredBufferSize(gl::ShaderType shaderType) const
 {
     ASSERT(shaderType != gl::ShaderType::InvalidEnum);
     return GetShaderConstantsStructSize(shaderType) +
-           mShaderSamplerMetadata[shaderType].size() * sizeof(SamplerMetadata);
+           mShaderSamplerMetadata[shaderType].size() * sizeof(SamplerMetadata) +
+           mShaderImageMetadata[shaderType].size() * sizeof(ImageMetadata);
 }
 
 void ShaderConstants11::markDirty()
@@ -402,6 +404,11 @@ bool ShaderConstants11::updateSamplerMetadata(SamplerMetadata *data,
     return dirty;
 }
 
+void ShaderConstants11::updateImageLayer(ImageMetadata *data, int layer)
+{
+    data->layer = layer;
+}
+
 void ShaderConstants11::setComputeWorkGroups(GLuint numGroupsX,
                                              GLuint numGroupsY,
                                              GLuint numGroupsZ)
@@ -490,6 +497,13 @@ void ShaderConstants11::onSamplerChange(gl::ShaderType shaderType,
     }
 }
 
+void ShaderConstants11::onImageLayerChange(gl::ShaderType shaderType,
+                                           unsigned int imageIndex,
+                                           int layer)
+{
+    updateImageLayer(&mShaderImageMetadata[shaderType][imageIndex], layer);
+}
+
 angle::Result ShaderConstants11::updateBuffer(const gl::Context *context,
                                               Renderer11 *renderer,
                                               gl::ShaderType shaderType,
@@ -499,6 +513,8 @@ angle::Result ShaderConstants11::updateBuffer(const gl::Context *context,
     // Re-upload the sampler meta-data if the current program uses more samplers
     // than we previously uploaded.
     const int numSamplers = programD3D.getUsedSamplerRange(shaderType).length();
+    const int numimage2DLayers = programD3D.getComputeShaderReadonlyImage2DIndex().size() +
+                                 programD3D.getComputeShaderImage2DIndex().size();
 
     const bool dirty =
         mShaderConstantsDirty[shaderType] || (mNumActiveShaderSamplers[shaderType] < numSamplers);
@@ -506,6 +522,8 @@ angle::Result ShaderConstants11::updateBuffer(const gl::Context *context,
     const size_t dataSize = GetShaderConstantsStructSize(shaderType);
     const uint8_t *samplerData =
         reinterpret_cast<const uint8_t *>(mShaderSamplerMetadata[shaderType].data());
+    const uint8_t *imageData =
+        reinterpret_cast<const uint8_t *>(mShaderImageMetadata[shaderType].data());
     mNumActiveShaderSamplers[shaderType] = numSamplers;
     mShaderConstantsDirty.set(shaderType, false);
 
@@ -542,6 +560,8 @@ angle::Result ShaderConstants11::updateBuffer(const gl::Context *context,
     memcpy(static_cast<uint8_t *>(mapping.pData) + dataSize, samplerData,
            sizeof(SamplerMetadata) * numSamplers);
 
+    memcpy(static_cast<uint8_t *>(mapping.pData) + dataSize + sizeof(SamplerMetadata) * numSamplers,
+           imageData, sizeof(ImageMetadata) * numimage2DLayers);
     renderer->getDeviceContext()->Unmap(driverConstantBuffer.get(), 0);
 
     return angle::Result::Continue();
@@ -2582,6 +2602,16 @@ angle::Result StateManager11::setTextureForSampler(const gl::Context *context,
     return angle::Result::Continue();
 }
 
+angle::Result StateManager11::setImageState(const gl::Context *context,
+                                            gl::ShaderType type,
+                                            int imageIndex,
+                                            const gl::ImageUnit &imageUnit)
+{
+    mShaderConstants.onImageLayerChange(type, imageIndex, imageUnit.layer);
+
+    return angle::Result::Continue();
+}
+
 // For each Direct3D sampler of either the pixel or vertex stage,
 // looks up the corresponding OpenGL texture image unit and texture type,
 // and sets the texture and its addressing/filtering state (or NULL when inactive).
@@ -2641,6 +2671,18 @@ angle::Result StateManager11::applyTexturesForSRVs(const gl::Context *context,
             mProgramD3D->getImageMapping(shaderType, readonlyImageIndex, true, caps);
         ASSERT(imageUnitIndex != -1);
         const gl::ImageUnit &imageUnit = glState.getImageUnit(imageUnitIndex);
+        std::map<unsigned int, unsigned int> readonlyImage2DIndexMapCS =
+            mProgramD3D->getComputeShaderReadonlyImage2DIndex();
+        if (!imageUnit.layered)
+        {
+            auto indexInter = readonlyImage2DIndexMapCS.find(readonlyImageIndex);
+            if (indexInter != readonlyImage2DIndexMapCS.end())
+            {
+                ANGLE_TRY(
+                    setImageState(context, gl::ShaderType::Compute, indexInter->second, imageUnit));
+                invalidateProgramUniforms();
+            }
+        }
         ANGLE_TRY(setTextureForImage(context, shaderType, readonlyImageIndex, true, imageUnit));
     }
 
@@ -2669,6 +2711,18 @@ angle::Result StateManager11::applyTexturesForUAVs(const gl::Context *context,
         GLint imageUnitIndex = mProgramD3D->getImageMapping(shaderType, imageIndex, false, caps);
         ASSERT(imageUnitIndex != -1);
         const gl::ImageUnit &imageUnit = glState.getImageUnit(imageUnitIndex);
+        std::map<unsigned int, unsigned int> image2DIndexMapCS =
+            mProgramD3D->getComputeShaderImage2DIndex();
+        if (!imageUnit.layered)
+        {
+            auto indexInter = image2DIndexMapCS.find(imageIndex);
+            if (indexInter != image2DIndexMapCS.end())
+            {
+                ANGLE_TRY(
+                    setImageState(context, gl::ShaderType::Compute, indexInter->second, imageUnit));
+                invalidateProgramUniforms();
+            }
+        }
         ANGLE_TRY(setTextureForImage(context, shaderType, imageIndex, false, imageUnit));
     }
 
@@ -2686,6 +2740,7 @@ angle::Result StateManager11::syncTexturesForCompute(const gl::Context *context)
     // still bound on output! Forcing to NULL.
     ANGLE_TRY(applyTexturesForUAVs(context, gl::ShaderType::Compute));
     ANGLE_TRY(applyTexturesForSRVs(context, gl::ShaderType::Compute));
+
     return angle::Result::Continue();
 }
 
@@ -2798,10 +2853,21 @@ angle::Result StateManager11::syncProgram(const gl::Context *context, gl::Primit
 
 angle::Result StateManager11::syncProgramForCompute(const gl::Context *context)
 {
+    Context11 *context11 = GetImplAs<Context11>(context);
+    ANGLE_TRY(context11->triggerDispatchCallProgramRecompilation(context));
+
+    mProgramD3D->updateCachedComputeImage2DBoundLayout(context);
+
+    // Binaries must be compiled before the sync.
+    ASSERT(mProgramD3D->hasComputeExecutableForCachedImage2DBoundLayout());
+
     ShaderExecutableD3D *computeExe = nullptr;
-    ANGLE_TRY(mProgramD3D->getComputeExecutable(&computeExe));
-    ASSERT(computeExe != nullptr);
-    setComputeShader(&GetAs<ShaderExecutable11>(computeExe)->getComputeShader());
+    ANGLE_TRY(
+        mProgramD3D->getComputeExecutableForImage2DBoundLayout(context11, &computeExe, nullptr));
+
+    const d3d11::ComputeShader *computeShader =
+        (computeExe ? &GetAs<ShaderExecutable11>(computeExe)->getComputeShader() : nullptr);
+    setComputeShader(computeShader);
     // Explicitly clear the shaders dirty bit.
     mInternalDirtyBits.reset(DIRTY_BIT_SHADERS);
 
@@ -3340,7 +3406,7 @@ angle::Result StateManager11::applyComputeUniforms(const gl::Context *context,
     }
 
     ANGLE_TRY(mShaderConstants.updateBuffer(context, mRenderer, gl::ShaderType::Compute,
-                                            *programD3D,
+                                            *mProgramD3D,
                                             mShaderDriverConstantBuffers[gl::ShaderType::Compute]));
 
     return angle::Result::Continue();
