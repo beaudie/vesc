@@ -274,7 +274,6 @@ void UniformHLSL::outputHLSLImageUniformIndices(TInfoSinkBase &out,
 
         assignUniformRegister(type, name, &registerCount);
         *groupRegisterCount += registerCount;
-
         if (type.isArray())
         {
             out << "static const uint " << DecorateVariableIfNeeded(*uniform) << ArrayString(type)
@@ -412,6 +411,10 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
         }
         else if (outputType == SH_HLSL_4_1_OUTPUT && IsImage(type.getBasicType()))
         {
+            if (IsImage2D(type.getBasicType()))
+            {
+                continue;
+            }
             if (type.getMemoryQualifier().readonly)
             {
                 HLSLTextureGroup group = TextureGroup(
@@ -488,6 +491,7 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
                 out, HLSLTextureGroup(groupId), groupedReadonlyImageUniforms[groupId],
                 &groupTextureRegisterIndex, &imageUniformGroupIndex);
         }
+        mReadonlyImage2DRegisterIndex = groupTextureRegisterIndex;
 
         for (int groupId = HLSL_RWTEXTURE_MIN; groupId < HLSL_RWTEXTURE_MAX; ++groupId)
         {
@@ -495,6 +499,8 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
                                         groupedImageUniforms[groupId], &groupRWTextureRegisterIndex,
                                         &imageUniformGroupIndex);
         }
+        mImage2DRegisterIndex = groupRWTextureRegisterIndex;
+        mImage2DUniformIndex  = imageUniformGroupIndex;
     }
 }
 
