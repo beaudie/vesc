@@ -178,9 +178,6 @@ class ProgramVk : public ProgramImpl
     gl::RangeUI mUsedDescriptorSetRange;
     bool mDirtyTextures;
 
-    template <typename T>
-    using ShaderTextureArray = std::array<T, gl::IMPLEMENTATION_MAX_SHADER_TEXTURES>;
-
     // We keep a reference to the pipeline and descriptor set layouts. This ensures they don't get
     // deleted while this program is in use.
     vk::BindingPointer<vk::PipelineLayout> mPipelineLayout;
