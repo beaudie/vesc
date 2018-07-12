@@ -135,6 +135,11 @@ void TranslatorHLSL::translate(TIntermBlock *root,
 
     mUniformBlockRegisterMap   = outputHLSL.getUniformBlockRegisterMap();
     mUniformRegisterMap        = outputHLSL.getUniformRegisterMap();
+    mReadonlyImage2DRegisterIndex = outputHLSL.getReadonlyImage2DRegisterIndex();
+    mImage2DRegisterIndex         = outputHLSL.getImage2DRegisterIndex();
+    mImage2DUniformIndex          = outputHLSL.getImage2DUniformIndex();
+    mSamplerUniformsCount         = outputHLSL.getSamplerUniformsCount();
+    mUsesImage2DFunctionNames     = outputHLSL.getUsesImage2DFunctionNames();
 }
 
 bool TranslatorHLSL::shouldFlattenPragmaStdglInvariantAll()
@@ -157,6 +162,31 @@ unsigned int TranslatorHLSL::getUniformBlockRegister(const std::string &uniformB
 const std::map<std::string, unsigned int> *TranslatorHLSL::getUniformRegisterMap() const
 {
     return &mUniformRegisterMap;
+}
+
+unsigned int TranslatorHLSL::getReadonlyImage2DRegisterIndex() const
+{
+    return mReadonlyImage2DRegisterIndex;
+}
+
+unsigned int TranslatorHLSL::getImage2DRegisterIndex() const
+{
+    return mImage2DRegisterIndex;
+}
+
+unsigned int TranslatorHLSL::getImage2DUniformIndex() const
+{
+    return mImage2DUniformIndex;
+}
+
+unsigned int TranslatorHLSL::getSamplerUniformsCount() const
+{
+    return mSamplerUniformsCount;
+}
+
+const std::set<std::string> *TranslatorHLSL::getUsesImage2DFunctionNames() const
+{
+    return &mUsesImage2DFunctionNames;
 }
 
 }  // namespace sh
