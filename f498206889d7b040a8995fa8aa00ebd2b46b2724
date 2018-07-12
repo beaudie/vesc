@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c134bcb9_9e73791e",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-12T18:06:04Z",
+      "side": 1,
+      "message": "how about we standardize on renaming things from gl_* to ANGLE*. So ANGLEDepthRangeParams?",
+      "range": {
+        "startLine": 153,
+        "startChar": 26,
+        "endLine": 153,
+        "endChar": 52
+      },
+      "revId": "f498206889d7b040a8995fa8aa00ebd2b46b2724",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0ece9e7_aac5a80e",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-12T18:06:04Z",
+      "side": 1,
+      "message": "update comment.",
+      "range": {
+        "startLine": 255,
+        "startChar": 36,
+        "endLine": 255,
+        "endChar": 50
+      },
+      "revId": "f498206889d7b040a8995fa8aa00ebd2b46b2724",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ec05e54_adc285d4",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-12T18:06:04Z",
+      "side": 1,
+      "message": "just depthRange.",
+      "range": {
+        "startLine": 326,
+        "startChar": 31,
+        "endLine": 326,
+        "endChar": 49
+      },
+      "revId": "f498206889d7b040a8995fa8aa00ebd2b46b2724",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2926ddd1_9534a6b6",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-12T18:06:04Z",
+      "side": 1,
+      "message": "I think you want ANGLEInternal instead of BuiltIn? same for the other two instances.",
+      "range": {
+        "startLine": 331,
+        "startChar": 61,
+        "endLine": 331,
+        "endChar": 68
+      },
+      "revId": "f498206889d7b040a8995fa8aa00ebd2b46b2724",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca89960a_b1d69cc7",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-12T18:06:04Z",
+      "side": 1,
+      "message": "can you add a fourth dummy float field to preserve the packing of the struct?",
+      "range": {
+        "startLine": 335,
+        "startChar": 4,
+        "endLine": 335,
+        "endChar": 26
+      },
+      "revId": "f498206889d7b040a8995fa8aa00ebd2b46b2724",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49b93189_8e843de6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-12T18:06:04Z",
+      "side": 1,
+      "message": "could you complete these from the GL state? you will have to apply the clamp again, but I\u0027d prefer avoiding any queries of state from pipeline desc. In fact we don\u0027t have any such queries right now.",
+      "range": {
+        "startLine": 901,
+        "startChar": 0,
+        "endLine": 903,
+        "endChar": 62
+      },
+      "revId": "f498206889d7b040a8995fa8aa00ebd2b46b2724",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
