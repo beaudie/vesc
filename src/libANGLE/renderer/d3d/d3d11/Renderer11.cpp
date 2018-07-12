@@ -3658,7 +3658,7 @@ angle::Result Renderer11::applyComputeShader(const gl::Context *context)
     ProgramD3D *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
 
     ShaderExecutableD3D *computeExe = nullptr;
-    ANGLE_TRY(programD3D->getComputeExecutable(&computeExe));
+    ANGLE_TRY(programD3D->getComputeExecutableForImage2DBoundLayout(context, &computeExe, nullptr));
     ASSERT(computeExe != nullptr);
 
     mStateManager.setComputeShader(&GetAs<ShaderExecutable11>(computeExe)->getComputeShader());

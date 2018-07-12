@@ -174,6 +174,7 @@ struct Uniform : public VariableWithLocation
     }
 
     int binding;
+    GLenum imageUnitFormat;
     int offset;
     bool readonly;
     bool writeonly;
