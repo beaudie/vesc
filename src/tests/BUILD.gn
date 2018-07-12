@@ -189,6 +189,10 @@ if (is_win || is_linux || is_mac || is_android) {
              angle_root + ":preprocessor",
              angle_root + ":translator",
            ]
+
+    if (angle_enable_vulkan_validation_layers) {
+      deps += [ "$angle_root/third_party/vulkan-validation-layers:vulkan_validation_layers" ]
+    }
   }
 
   white_box_gypi = exec_script("//build/gypi_to_gn.py",
