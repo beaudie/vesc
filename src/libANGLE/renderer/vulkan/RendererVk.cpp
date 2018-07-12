@@ -420,6 +420,8 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *w
     ChoosePhysicalDevice(physicalDevices, enableMockICD, &mPhysicalDevice,
                          &mPhysicalDeviceProperties);
 
+    vkGetPhysicalDeviceFeatures(mPhysicalDevice, &mPhysicalDeviceFeatures);
+
     // Ensure we can find a graphics queue family.
     uint32_t queueCount = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueCount, nullptr);
@@ -650,8 +652,8 @@ void RendererVk::ensureCapsInitialized() const
 {
     if (!mCapsInitialized)
     {
-        vk::GenerateCaps(mPhysicalDeviceProperties, mNativeTextureCaps, &mNativeCaps,
-                         &mNativeExtensions, &mNativeLimitations);
+        vk::GenerateCaps(mPhysicalDeviceProperties, mPhysicalDeviceFeatures, mNativeTextureCaps,
+                         &mNativeCaps, &mNativeExtensions, &mNativeLimitations);
         mCapsInitialized = true;
     }
 }
