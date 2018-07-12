@@ -16,6 +16,47 @@ namespace sh
 {
 namespace
 {
+TIntermSymbol *ReplaceTypeOfSymbolNode(TIntermSymbol *symbolNode, TType *newType)
+{
+    const TVariable &oldVariable = symbolNode->variable();
+    TVariable *newVariable =
+        new TVariable(oldVariable.uniqueId(), oldVariable.name(), oldVariable.symbolType(),
+                      oldVariable.extension(), newType);
+    return new TIntermSymbol(newVariable);
+}
+
+TIntermTyped *ReplaceTypeOfTypedStructNode(TIntermTyped *argument, TType *newType)
+{
+    TIntermSymbol *asSymbol = argument->getAsSymbolNode();
+    if (asSymbol)
+    {
+        ASSERT(asSymbol->getType().getStruct());
+        return ReplaceTypeOfSymbolNode(asSymbol, newType);
+    }
+
+    TIntermTyped *replacement = argument->deepCopy();
+    TIntermBinary *binary     = replacement->getAsBinaryNode();
+    ASSERT(binary);
+
+    while (binary)
+    {
+        asSymbol = binary->getLeft()->getAsSymbolNode();
+
+        if (asSymbol)
+        {
+            ASSERT(asSymbol->getType().getStruct());
+            TIntermSymbol *newSymbol = ReplaceTypeOfSymbolNode(asSymbol, newType);
+            binary->replaceChildNode(binary->getLeft(), newSymbol);
+            return replacement;
+        }
+
+        binary = binary->getLeft()->getAsBinaryNode();
+    }
+
+    UNREACHABLE();
+    return nullptr;
+}
+
 // Maximum string size of a hex unsigned int.
 constexpr size_t kHexSize = ImmutableStringBuilder::GetHexCharCount<unsigned int>();
 
@@ -588,10 +629,14 @@ class Traverser final : public TIntermTraverser
 
         void visitStructParam(const TFunction *function, size_t paramIndex) override
         {
-            // The prior struct type is left intact. This leaves the tree in an inconsistent state.
-            // TODO(jmadill): Fix tree structure. http://anglebug.com/2494
+            // The tree structure of the parameter is modified to point to the new type. This leaves
+            // the tree in a consistent state.
             TIntermTyped *argument = (*mArguments)[paramIndex]->getAsTyped();
-            mNewArguments->push_back(argument);
+            const TVariable *param = function->getParam(paramIndex);
+
+            TType *structType         = getStructSamplerParameterType(mSymbolTable, param);
+            TIntermTyped *replacement = ReplaceTypeOfTypedStructNode(argument, structType);
+            mNewArguments->push_back(replacement);
         }
 
         void visitNonStructParam(const TFunction *function, size_t paramIndex) override
