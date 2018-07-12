@@ -35,6 +35,10 @@ namespace sh
 namespace
 {
 
+constexpr const char *IMAGE2D_DECLARATION_FUNCTION_STRING =
+    "// @@ IMAGE2D DECLARATION FUNCTION STRING @@";
+constexpr const char *IMAGE2D_LAYER_OF_TEXTURE_STRING = "// @@ IMAGE2D LAYER OF TEXTURE STRING @@";
+
 TString ArrayHelperFunctionName(const char *prefix, const TType &type)
 {
     TStringStream fnName;
@@ -330,6 +334,26 @@ const std::map<std::string, unsigned int> &OutputHLSL::getUniformBlockRegisterMa
 const std::map<std::string, unsigned int> &OutputHLSL::getUniformRegisterMap() const
 {
     return mResourcesHLSL->getUniformRegisterMap();
+}
+
+unsigned int OutputHLSL::getReadonlyImage2DRegisterIndex() const
+{
+    return mResourcesHLSL->getReadonlyImage2DRegisterIndex();
+}
+
+unsigned int OutputHLSL::getImage2DRegisterIndex() const
+{
+    return mResourcesHLSL->getImage2DRegisterIndex();
+}
+
+unsigned int OutputHLSL::getSamplerUniformsCount() const
+{
+    return mResourcesHLSL->getSamplerUniformsCount();
+}
+
+const std::set<std::string> &OutputHLSL::getUsesImage2DFunctionNames() const
+{
+    return mImageFunctionHLSL->getUsesImage2DFunctionNames();
 }
 
 TString OutputHLSL::structInitializerString(int indent,
@@ -811,7 +835,10 @@ void OutputHLSL::header(TInfoSinkBase &out,
         }
         ASSERT(mOutputType == SH_HLSL_4_1_OUTPUT);
         mResourcesHLSL->samplerMetadataUniforms(out, "c1");
+        out << IMAGE2D_LAYER_OF_TEXTURE_STRING << "\n";
         out << "};\n";
+
+        out << IMAGE2D_DECLARATION_FUNCTION_STRING << "\n";
 
         std::ostringstream systemValueDeclaration;
         std::ostringstream glBuiltinInitialization;

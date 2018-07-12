@@ -282,7 +282,6 @@ void ResourcesHLSL::outputHLSLImageUniformIndices(TInfoSinkBase &out,
 
         assignUniformRegister(type, name, &registerCount);
         *groupRegisterCount += registerCount;
-
         if (type.isArray())
         {
             out << "static const uint " << DecorateVariableIfNeeded(*uniform) << ArrayString(type)
@@ -410,8 +409,8 @@ void ResourcesHLSL::uniformsHeader(TInfoSinkBase &out,
     TMap<const TVariable *, TString> samplerInStructSymbolsToAPINames;
     TVector<TVector<const TVariable *>> groupedReadonlyImageUniforms(HLSL_TEXTURE_MAX + 1);
     TVector<TVector<const TVariable *>> groupedImageUniforms(HLSL_RWTEXTURE_MAX + 1);
-
     TUnorderedMap<int, unsigned int> assignedAtomicCounterBindings;
+    unsigned int reservedReadonlyImageRegisterCount = 0, reservedImageRegisterCount = 0;
     for (auto &uniformIt : referencedUniforms)
     {
         // Output regular uniforms. Group sampler uniforms by type.
@@ -430,6 +429,20 @@ void ResourcesHLSL::uniformsHeader(TInfoSinkBase &out,
         }
         else if (outputType == SH_HLSL_4_1_OUTPUT && IsImage(type.getBasicType()))
         {
+            if (IsImage2D(type.getBasicType()))
+            {
+                const Uniform *uniform = findUniformByName(variable.name());
+                if (type.getMemoryQualifier().readonly)
+                {
+                    reservedReadonlyImageRegisterCount +=
+                        HLSLVariableRegisterCount(*uniform, mOutputType);
+                }
+                else
+                {
+                    reservedImageRegisterCount += HLSLVariableRegisterCount(*uniform, mOutputType);
+                }
+                continue;
+            }
             if (type.getMemoryQualifier().readonly)
             {
                 HLSLTextureGroup group = TextureGroup(
@@ -509,7 +522,6 @@ void ResourcesHLSL::uniformsHeader(TInfoSinkBase &out,
         // Atomic counters and RW texture share the same resources. Therefore, RW texture need to
         // start counting after the last atomic counter.
         unsigned int groupRWTextureRegisterIndex = mUAVRegister;
-        unsigned int imageUniformGroupIndex      = 0;
         // TEXTURE_2D is special, index offset is assumed to be 0 and omitted in that case.
         ASSERT(HLSL_TEXTURE_MIN == HLSL_TEXTURE_2D);
         for (int groupId = HLSL_TEXTURE_MIN; groupId < HLSL_TEXTURE_MAX; ++groupId)
@@ -519,6 +531,11 @@ void ResourcesHLSL::uniformsHeader(TInfoSinkBase &out,
                 samplerInStructSymbolsToAPINames, &groupTextureRegisterIndex);
         }
         mSamplerCount = groupTextureRegisterIndex;
+        unsigned int imageUniformGroupIndex =
+            reservedReadonlyImageRegisterCount + reservedImageRegisterCount;
+        mReadonlyImage2DRegisterIndex = mTextureRegister;
+        groupTextureRegisterIndex += reservedReadonlyImageRegisterCount;
+        mTextureRegister += reservedReadonlyImageRegisterCount;
 
         for (int groupId = HLSL_TEXTURE_MIN; groupId < HLSL_TEXTURE_MAX; ++groupId)
         {
@@ -526,6 +543,9 @@ void ResourcesHLSL::uniformsHeader(TInfoSinkBase &out,
                 out, HLSLTextureGroup(groupId), groupedReadonlyImageUniforms[groupId],
                 &groupTextureRegisterIndex, &imageUniformGroupIndex);
         }
+        mImage2DRegisterIndex = mUAVRegister;
+        groupRWTextureRegisterIndex += reservedImageRegisterCount;
+        mUAVRegister += reservedImageRegisterCount;
 
         for (int groupId = HLSL_RWTEXTURE_MIN; groupId < HLSL_RWTEXTURE_MAX; ++groupId)
         {
