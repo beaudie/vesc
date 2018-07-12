@@ -291,7 +291,7 @@ size_t ShaderConstants11::getRequiredBufferSize(gl::ShaderType shaderType) const
 {
     ASSERT(shaderType != gl::ShaderType::InvalidEnum);
     return GetShaderConstantsStructSize(shaderType) +
-           mShaderSamplerMetadata[shaderType].size() * sizeof(SamplerMetadata);
+           mShaderSamplerMetadata[shaderType].size() * sizeof(SamplerMetadata) + 16;
 }
 
 void ShaderConstants11::markDirty()
@@ -520,7 +520,11 @@ gl::Error ShaderConstants11::updateBuffer(Renderer11 *renderer,
     memcpy(mapping.pData, data, dataSize);
     memcpy(static_cast<uint8_t *>(mapping.pData) + dataSize, samplerData,
            sizeof(SamplerMetadata) * numSamplers);
+    unsigned int arr[4]    = {1, 1, 1, 1};
+    const uint8_t *arrData = reinterpret_cast<const uint8_t *>(arr);
 
+    memcpy(static_cast<uint8_t *>(mapping.pData) + dataSize + sizeof(SamplerMetadata) * numSamplers,
+           arrData, 16);
     renderer->getDeviceContext()->Unmap(driverConstantBuffer.get(), 0);
 
     return gl::NoError();
@@ -713,6 +717,9 @@ gl::Error StateManager11::updateStateForCompute(const gl::Context *context,
                                                 GLuint numGroupsZ)
 {
     mShaderConstants.setComputeWorkGroups(numGroupsX, numGroupsY, numGroupsZ);
+
+    // TODO(xinghua.cao@intel.com): Use dirty bits.
+    ANGLE_TRY(syncProgramForCompute(context));
 
     // TODO(jmadill): Use dirty bits.
     mProgramD3D->updateSamplerMapping();
@@ -2650,6 +2657,42 @@ gl::Error StateManager11::syncProgram(const gl::Context *context, gl::PrimitiveM
 
     // Explicitly clear the shaders dirty bit.
     mInternalDirtyBits.reset(DIRTY_BIT_SHADERS);
+
+    return gl::NoError();
+}
+
+gl::Error StateManager11::syncProgramForCompute(const gl::Context *context)
+{
+    const auto &glState    = context->getGLState();
+    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
+
+    programD3D->updateCachedComputeImage2DBoundLayout(context);
+
+    bool recompileCS = !programD3D->hasComputeExecutableForCachedImage2DBoundLayout();
+
+    if (!recompileCS)
+    {
+        return gl::NoError();
+    }
+
+    // Load the compiler if necessary and recompile the programs.
+    ANGLE_TRY(mRenderer->ensureHLSLCompilerInitialized());
+
+    gl::InfoLog infoLog;
+
+    ShaderExecutableD3D *computeExe = nullptr;
+    ANGLE_TRY(programD3D->getComputeExecutableForImage2DBoundLayout(&computeExe, &infoLog));
+    if (!programD3D->hasComputeExecutableForCachedImage2DBoundLayout())
+    {
+        ASSERT(infoLog.getLength() > 0);
+        ERR() << "Dynamic recompilation error log: " << infoLog.str();
+        return gl::InternalError()
+               << "Error compiling dynamic compute executable:" << infoLog.str();
+    }
+
+    const d3d11::ComputeShader *computeShader =
+        (computeExe ? &GetAs<ShaderExecutable11>(computeExe)->getComputeShader() : nullptr);
+    setComputeShader(computeShader);
 
     return gl::NoError();
 }

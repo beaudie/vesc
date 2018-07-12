@@ -999,7 +999,7 @@ TEST_P(ComputeShaderTest, BindImageTextureWithOneLayerTexture2DArray)
 // contents.
 TEST_P(ComputeShaderTest, BindImageTextureWithOneLayerTexture3D)
 {
-    ANGLE_SKIP_TEST_IF(IsD3D11());
+    // ANGLE_SKIP_TEST_IF(IsD3D11());
     GLTexture texture[2];
     GLFramebuffer framebuffer;
     const std::string csSource =
