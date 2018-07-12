@@ -117,6 +117,8 @@ Error GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context, State 
 
         std::vector<int> tex2DFormats = {GL_RGBA, GL_RGBA, GL_RGBA, GL_RGBA};
 
+        Vec4Uniform *cropRectBuffer = uniformBuffers.texCropRects.data();
+
         for (int i = 0; i < kTexUnitCount; i++)
         {
             // GL_OES_cube_map allows only one of TEXTURE_2D / TEXTURE_CUBE_MAP
@@ -146,6 +148,32 @@ Error GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context, State 
             {
                 tex2DFormats[i] = gl::GetUnsizedFormat(
                     curr2DTexture->getFormat(TextureTarget::_2D, 0).info->internalFormat);
+
+                const gl::Rectangle &cropRect = curr2DTexture->getCrop();
+                cropRectBuffer[i][0]          = cropRect.x;
+                cropRectBuffer[i][1]          = cropRect.y;
+
+                cropRectBuffer[i][2] = 0.0f;
+                cropRectBuffer[i][3] = 0.0f;
+
+                GLfloat textureWidth =
+                    static_cast<GLfloat>(curr2DTexture->getWidth(TextureTarget::_2D, 0));
+                GLfloat textureHeight =
+                    static_cast<GLfloat>(curr2DTexture->getHeight(TextureTarget::_2D, 0));
+
+                if (textureWidth > 0.0f && textureHeight > 0.0f)
+                {
+                    cropRectBuffer[i][0] = cropRect.x / textureWidth;
+                    cropRectBuffer[i][1] = cropRect.y / textureHeight;
+                    cropRectBuffer[i][2] = cropRect.width / textureWidth;
+                    cropRectBuffer[i][3] = cropRect.height / textureHeight;
+                    fprintf(stderr,
+                            "%s: crop rect: unnormalized: %d %d %d %d texwh %f %f normzlied: %f %f "
+                            "%f %f\n",
+                            __func__, cropRect.x, cropRect.y, cropRect.width, cropRect.height,
+                            textureWidth, textureHeight, cropRectBuffer[i][0], cropRectBuffer[i][1],
+                            cropRectBuffer[i][2], cropRectBuffer[i][3]);
+                }
             }
         }
 
@@ -156,6 +184,9 @@ Error GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context, State 
 
         setUniform1iv(programObject, mProgramState.textureFormatLoc, kTexUnitCount,
                       tex2DFormats.data());
+
+        setUniform4fv(programObject, mProgramState.drawTextureNormalizedCropRectLoc, kTexUnitCount,
+                      reinterpret_cast<GLfloat *>(cropRectBuffer));
 
         for (int i = 0; i < kTexUnitCount; i++)
         {
@@ -363,6 +394,14 @@ Error GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context, State 
                       pointParams.pointDistanceAttenuation.data());
     }
 
+    // Draw texture
+    {
+        setUniform1i(programObject, mProgramState.enableDrawTextureLoc,
+                     mDrawTextureEnabled ? 1 : 0);
+        setUniform4fv(programObject, mProgramState.drawTextureCoordsLoc, 1, mDrawTextureCoords);
+        setUniform2fv(programObject, mProgramState.drawTextureDimsLoc, 1, mDrawTextureDims);
+    }
+
     // None of those are changes in sampler, so there is no need to set the GL_PROGRAM dirty.
     // Otherwise, put the dirtying here.
 
@@ -416,6 +455,56 @@ AttributesMask GLES1Renderer::getVertexArraysAttributeMask(const State *glState)
     }
 
     return res;
+}
+
+void GLES1Renderer::drawTexture(Context *context,
+                                const State *glState,
+                                float x,
+                                float y,
+                                float z,
+                                float width,
+                                float height)
+{
+
+    // get viewport
+    const gl::Rectangle &viewport = glState->getViewport();
+
+    // Compute screen coordinates for our texture.
+    // Recenter, rescale. (e.g., [0, 0, 1080, 1920] -> [~-1, ~-1, ~1, ~1])
+    float midpointX = 0.0f / viewport.width;
+    float midpointY = 0.0f / viewport.height;
+
+    float xNdc =
+        midpointX + 2.0f * (float)(x - viewport.x - viewport.width / 2) / (float)viewport.width;
+    float yNdc =
+        midpointY + 2.0f * (float)(y - viewport.y - viewport.height / 2) / (float)viewport.height;
+    float wNdc = 2.0f * (float)width / (float)viewport.width;
+    float hNdc = 2.0f * (float)height / (float)viewport.height;
+
+    float zClamped;
+    zClamped   = z >= 1.0f ? 1.0f : z;
+    zClamped   = zClamped <= 0.0f ? 0.0f : zClamped;
+    float zNdc = zClamped * 2.0f - 1.0f;
+
+    mDrawTextureCoords[0] = xNdc;
+    mDrawTextureCoords[1] = yNdc;
+    mDrawTextureCoords[2] = zNdc;
+
+    mDrawTextureDims[0] = wNdc;
+    mDrawTextureDims[1] = hNdc;
+
+    mDrawTextureEnabled = true;
+
+    fprintf(
+        stderr,
+        "%s: vp %d %d %d %d drawTextureCoords %f %f %f dims %f %f normalized: %f %f %f, %f %f\n",
+        __func__, viewport.x, viewport.y, viewport.width, viewport.height, x, y, z, width, height,
+        mDrawTextureCoords[0], mDrawTextureCoords[1], mDrawTextureCoords[2], mDrawTextureDims[0],
+        mDrawTextureDims[1]);
+
+    context->drawArrays(PrimitiveMode::Triangles, 0, 6);
+
+    mDrawTextureEnabled = false;
 }
 
 Shader *GLES1Renderer::getShader(GLuint handle) const
@@ -656,6 +745,12 @@ Error GLES1Renderer::initializeRendererProgram(Context *context, State *glState)
         programObject->getUniformLocation("point_distance_attenuation");
     mProgramState.pointSpriteEnabledLoc = programObject->getUniformLocation("point_sprite_enabled");
 
+    mProgramState.enableDrawTextureLoc = programObject->getUniformLocation("enable_draw_texture");
+    mProgramState.drawTextureCoordsLoc = programObject->getUniformLocation("draw_texture_coords");
+    mProgramState.drawTextureDimsLoc   = programObject->getUniformLocation("draw_texture_dims");
+    mProgramState.drawTextureNormalizedCropRectLoc =
+        programObject->getUniformLocation("draw_texture_normalized_crop_rect");
+
     glState->setProgram(context, programObject);
 
     for (int i = 0; i < kTexUnitCount; i++)
@@ -716,6 +811,16 @@ void GLES1Renderer::setUniform3fv(Program *programObject,
     if (loc == -1)
         return;
     programObject->setUniform3fv(loc, count, value);
+}
+
+void GLES1Renderer::setUniform2fv(Program *programObject,
+                                  GLint loc,
+                                  GLint count,
+                                  const GLfloat *value)
+{
+    if (loc == -1)
+        return;
+    programObject->setUniform2fv(loc, count, value);
 }
 
 void GLES1Renderer::setUniform1f(Program *programObject, GLint loc, GLfloat value)
