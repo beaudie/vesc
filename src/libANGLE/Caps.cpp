@@ -857,6 +857,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_OES_point_size_array"] = enableableExtension(&Extensions::pointSizeArray);
         map["GL_OES_texture_cube_map"] = enableableExtension(&Extensions::textureCubeMap);
         map["GL_OES_point_sprite"] = enableableExtension(&Extensions::pointSprite);
+        map["GL_OES_draw_texture"] = enableableExtension(&Extensions::drawTexture);
         // clang-format on
 
         return map;
