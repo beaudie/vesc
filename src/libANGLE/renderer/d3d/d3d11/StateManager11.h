@@ -283,6 +283,7 @@ class StateManager11 final : angle::NonCopyable
 
     gl::Error syncFramebuffer(const gl::Context *context);
     gl::Error syncProgram(const gl::Context *context, gl::PrimitiveMode drawMode);
+    gl::Error syncProgramForCompute(const gl::Context *context);
 
     gl::Error syncTextures(const gl::Context *context);
     gl::Error applyTextures(const gl::Context *context, gl::ShaderType shaderType);

@@ -334,6 +334,11 @@ void ImageFunctionHLSL::imageFunctionHeader(TInfoSinkBase &out)
 {
     for (const ImageFunction &imageFunction : mUsesImage)
     {
+        if (IsImage2D(imageFunction.image))
+        {
+            mUsesImage2DFunctionNames.insert(imageFunction.name().data());
+            continue;
+        }
         // Function header
         out << imageFunction.getReturnType() << " " << imageFunction.name() << "(";
 
