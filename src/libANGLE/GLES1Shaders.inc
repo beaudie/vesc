@@ -23,7 +23,7 @@ in vec4 texcoord3;
 uniform mat4 projection;
 uniform mat4 modelview;
 uniform mat4 modelview_invtr;
-uniform mat4 texture_matrix[4];
+uniform mat4 texture_matrix[kMaxTexUnits];
 
 uniform bool enable_rescale_normal;
 uniform bool enable_normalize;
@@ -34,6 +34,15 @@ uniform bool point_rasterization;
 uniform float point_size_min;
 uniform float point_size_max;
 uniform vec3 point_distance_attenuation;
+
+// GL_OES_draw_texture uniforms/////////////////////////////////////////////////
+
+uniform bool enable_draw_texture;
+uniform vec4 draw_texture_coords;
+uniform vec2 draw_texture_dims;
+uniform vec4 draw_texture_normalized_crop_rect[kMaxTexUnits];
+
+// Varyings/////////////////////////////////////////////////////////////////////
 
 out vec4 pos_varying;
 out vec3 normal_varying;
@@ -47,48 +56,139 @@ out vec4 texcoord3_varying;
 
 void main()
 {
-    pos_varying    = modelview * pos;
-    mat3 mvInvTr3  = mat3(modelview_invtr);
-    normal_varying = mvInvTr3 * normal;
-
-    if (enable_rescale_normal)
-    {
-        float rescale   = 1.0;
-        vec3 rescaleVec = vec3(mvInvTr3[2]);
-        float len       = length(rescaleVec);
-        if (len > 0.0)
-        {
-            rescale = 1.0 / len;
-        }
-        normal_varying *= rescale;
-    }
-
-    if (enable_normalize)
-    {
-        normal_varying = normalize(normal_varying);
-    }
-
     color_varying      = color;
     color_varying_flat = color;
     pointsize_varying  = pointsize;
-    texcoord0_varying  = texture_matrix[0] * texcoord0;
-    texcoord1_varying  = texture_matrix[1] * texcoord1;
-    texcoord2_varying  = texture_matrix[2] * texcoord2;
-    texcoord3_varying  = texture_matrix[3] * texcoord3;
 
-    vec4 vertexPos = projection * modelview * pos;
-    gl_Position    = vertexPos;
+    if (enable_draw_texture) {
+        vec4 pos;
+        pos.w = 1.0;
 
-    if (point_rasterization)
-    {
-        float dist         = length(vertexPos.z);
-        float attConst     = point_distance_attenuation[0];
-        float attLinear    = point_distance_attenuation[1];
-        float attQuad      = point_distance_attenuation[2];
-        float attPart      = attConst + attLinear * dist + attQuad * dist * dist;
-        float attPointSize = pointsize / pow(attPart, 0.5);
+        float drawTexX = draw_texture_coords[0];
+        float drawTexY = draw_texture_coords[1];
+        float drawTexZ = draw_texture_coords[2];
 
-        gl_PointSize = clamp(attPointSize, point_size_min, point_size_max);
+        float drawTexWidth = draw_texture_dims[0];
+        float drawTexHeight = draw_texture_dims[1];
+
+        switch (gl_VertexID) {
+        case 0:
+        case 3:
+            pos.x = drawTexX;
+            pos.y = drawTexY;
+            pos.z = drawTexZ;
+            break;
+        case 1:
+            pos.x = drawTexX + drawTexWidth;
+            pos.y = drawTexY;
+            pos.z = drawTexZ;
+            break;
+        case 2:
+        case 4:
+            pos.x = drawTexX + drawTexWidth;
+            pos.y = drawTexY + drawTexHeight;
+            pos.z = drawTexZ;
+            break;
+        case 5:
+            pos.x = drawTexX;
+            pos.y = drawTexY + drawTexHeight;
+            pos.z = drawTexZ;
+            break;
+        default:
+            break;
+        }
+
+        pos_varying = pos;
+        gl_Position = pos;
+        gl_PointSize = 1.0;
+
+        for (int i = 0; i < kMaxTexUnits; i++) {
+            vec2 texcoord;
+            float texCropU = draw_texture_normalized_crop_rect[i].x;
+            float texCropV = draw_texture_normalized_crop_rect[i].y;
+            float texCropW = draw_texture_normalized_crop_rect[i].z;
+            float texCropH = draw_texture_normalized_crop_rect[i].w;
+
+            switch (gl_VertexID) {
+            case 0:
+            case 3:
+                texcoord.x = texCropU;
+                texcoord.y = texCropV;
+                break;
+            case 1:
+                texcoord.x = (texCropU + texCropW);
+                texcoord.y = texCropV;
+                break;
+            case 2:
+            case 4:
+                texcoord.x = (texCropU + texCropW);
+                texcoord.y = (texCropV + texCropH);
+                break;
+            case 5:
+                texcoord.x = texCropU;
+                texcoord.y = (texCropV + texCropH);
+                break;
+            default:
+                break;
+            }
+
+            switch (i) {
+            case 0:
+                texcoord0_varying = vec4(texcoord, 0.0, 0.0);
+                break;
+            case 1:
+                texcoord1_varying = vec4(texcoord, 0.0, 0.0);
+                break;
+            case 2:
+                texcoord2_varying = vec4(texcoord, 0.0, 0.0);
+                break;
+            case 3:
+                texcoord3_varying = vec4(texcoord, 0.0, 0.0);
+            default:
+                break;
+            }
+        }
+    } else {
+        pos_varying    = modelview * pos;
+        mat3 mvInvTr3  = mat3(modelview_invtr);
+        normal_varying = mvInvTr3 * normal;
+
+        if (enable_rescale_normal)
+        {
+            float rescale   = 1.0;
+            vec3 rescaleVec = vec3(mvInvTr3[2]);
+            float len       = length(rescaleVec);
+            if (len > 0.0)
+            {
+                rescale = 1.0 / len;
+            }
+            normal_varying *= rescale;
+        }
+
+        if (enable_normalize)
+        {
+            normal_varying = normalize(normal_varying);
+        }
+
+        texcoord0_varying  = texture_matrix[0] * texcoord0;
+        texcoord1_varying  = texture_matrix[1] * texcoord1;
+        texcoord2_varying  = texture_matrix[2] * texcoord2;
+        texcoord3_varying  = texture_matrix[3] * texcoord3;
+
+        vec4 vertexPos = projection * modelview * pos;
+        gl_Position    = vertexPos;
+
+        if (point_rasterization)
+        {
+            float dist         = length(vertexPos.z);
+            float attConst     = point_distance_attenuation[0];
+            float attLinear    = point_distance_attenuation[1];
+            float attQuad      = point_distance_attenuation[2];
+            float attPart      = attConst + attLinear * dist + attQuad * dist * dist;
+            float attPointSize = pointsize / pow(attPart, 0.5);
+
+            gl_PointSize = clamp(attPointSize, point_size_min, point_size_max);
+        }
     }
 }
 )";
