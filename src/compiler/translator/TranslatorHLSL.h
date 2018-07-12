@@ -25,6 +25,10 @@ class TranslatorHLSL : public TCompiler
     unsigned int getUniformBlockRegister(const std::string &interfaceBlockName) const;
 
     const std::map<std::string, unsigned int> *getUniformRegisterMap() const;
+    unsigned int getReadonlyImage2DRegisterIndex() const;
+    unsigned int getImage2DRegisterIndex() const;
+    unsigned int getSamplerUniformsCount() const;
+    const std::set<std::string> *getUsesImage2DFunctionNames() const;
 
   protected:
     void translate(TIntermBlock *root,
@@ -38,6 +42,10 @@ class TranslatorHLSL : public TCompiler
     std::map<std::string, unsigned int> mShaderStorageBlockRegisterMap;
     std::map<std::string, unsigned int> mUniformBlockRegisterMap;
     std::map<std::string, unsigned int> mUniformRegisterMap;
+    unsigned int mReadonlyImage2DRegisterIndex;
+    unsigned int mImage2DRegisterIndex;
+    unsigned int mSamplerUniformsCount;
+    std::set<std::string> mUsesImage2DFunctionNames;
 };
 
 }  // namespace sh
