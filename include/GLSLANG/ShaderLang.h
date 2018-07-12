@@ -12,6 +12,7 @@
 
 #include <array>
 #include <map>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -627,6 +628,10 @@ bool GetUniformBlockRegister(const ShHandle handle,
 // Gives a map from uniform names to compiler-assigned registers in the default uniform block.
 // Note that the map contains also registers of samplers that have been extracted from structs.
 const std::map<std::string, unsigned int> *GetUniformRegisterMap(const ShHandle handle);
+unsigned int GetReadonlyImage2DRegisterIndex(const ShHandle handle);
+unsigned int GetImage2DRegisterIndex(const ShHandle handle);
+unsigned int GetSamplerUniformsCount(const ShHandle handle);
+const std::set<std::string> *GetUsesImage2DFunctionNames(const ShHandle handle);
 
 bool HasValidGeometryShaderInputPrimitiveType(const ShHandle handle);
 bool HasValidGeometryShaderOutputPrimitiveType(const ShHandle handle);
