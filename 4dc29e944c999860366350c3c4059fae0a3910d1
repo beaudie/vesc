@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "692303bd_fef48780",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1262827
+      },
+      "writtenOn": "2018-07-13T19:02:13Z",
+      "side": 1,
+      "message": "Can you not just give it nullptr and forget about it if we don\u0027t use this output?",
+      "range": {
+        "startLine": 1010,
+        "startChar": 9,
+        "endLine": 1010,
+        "endChar": 28
+      },
+      "revId": "4dc29e944c999860366350c3c4059fae0a3910d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b29ec3d9_6793b1fb",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1262827
+      },
+      "writtenOn": "2018-07-13T19:02:13Z",
+      "side": 1,
+      "message": "replace with random.*?",
+      "range": {
+        "startLine": 277,
+        "startChar": 0,
+        "endLine": 284,
+        "endChar": 57
+      },
+      "revId": "4dc29e944c999860366350c3c4059fae0a3910d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
