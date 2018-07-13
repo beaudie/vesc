@@ -14,6 +14,7 @@
 
 #include <EGL/eglext.h>
 
+#include <iostream>
 #include "common/debug.h"
 #include "common/system_utils.h"
 #include "libANGLE/renderer/driver_utils.h"
@@ -179,7 +180,14 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
         }
         if (mChangedICDPath)
         {
-            angle::SetEnvironmentVar(g_VkICDPathEnv, mPreviousICDPath.value().c_str());
+            if (mPreviousICDPath.value().empty())
+            {
+                angle::UnsetEnvironmentVar(g_VkICDPathEnv);
+            }
+            else
+            {
+                angle::SetEnvironmentVar(g_VkICDPathEnv, mPreviousICDPath.value().c_str());
+            }
         }
     }
 
