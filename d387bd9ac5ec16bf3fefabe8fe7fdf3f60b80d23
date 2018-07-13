@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e001c673_407dcd92",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-13T17:30:05Z",
+      "side": 1,
+      "message": "nit: static_casts",
+      "range": {
+        "startLine": 464,
+        "startChar": 26,
+        "endLine": 464,
+        "endChar": 32
+      },
+      "revId": "d387bd9ac5ec16bf3fefabe8fe7fdf3f60b80d23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40606e55_ec0fd54e",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-13T17:30:05Z",
+      "side": 1,
+      "message": "Any way you could refactor this into a screenCoordToNDC and/or screenSizeToNDC? Would help with the repeated similar lines.",
+      "range": {
+        "startLine": 464,
+        "startChar": 0,
+        "endLine": 476,
+        "endChar": 38
+      },
+      "revId": "d387bd9ac5ec16bf3fefabe8fe7fdf3f60b80d23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77c3652f_870792c4",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-13T17:30:05Z",
+      "side": 1,
+      "message": "We have a clamp function that can do this.",
+      "range": {
+        "startLine": 478,
+        "startChar": 0,
+        "endLine": 480,
+        "endChar": 52
+      },
+      "revId": "d387bd9ac5ec16bf3fefabe8fe7fdf3f60b80d23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efe974fb_64eb0f38",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-13T17:30:05Z",
+      "side": 1,
+      "message": "I\u0027m worried about other state that might affect this, I can think of:\n  - Won\u0027t this depend on there being enough vertices in the currently enabled vertex buffer or does this potentially read off the end?  It could disable all vertex attributes.\n  - The spec says that clip planes should be ignored.",
+      "range": {
+        "startLine": 491,
+        "startChar": 0,
+        "endLine": 492,
+        "endChar": 56
+      },
+      "revId": "d387bd9ac5ec16bf3fefabe8fe7fdf3f60b80d23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5109b243_11adb96f",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-13T17:30:05Z",
+      "side": 1,
+      "message": "Either skip the tests if OES_draw_texture is not available or assert that it is always available.",
+      "revId": "d387bd9ac5ec16bf3fefabe8fe7fdf3f60b80d23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
