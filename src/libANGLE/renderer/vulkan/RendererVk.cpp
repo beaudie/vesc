@@ -179,7 +179,10 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
         }
         if (mChangedICDPath)
         {
-            angle::SetEnvironmentVar(g_VkICDPathEnv, mPreviousICDPath.value().c_str());
+            if (mPreviousICDPath == "")
+                unsetenv(g_VkICDPathEnv);
+            else
+                angle::SetEnvironmentVar(g_VkICDPathEnv, mPreviousICDPath.value().c_str());
         }
     }
 
@@ -323,6 +326,7 @@ angle::Result RendererVk::initialize(vk::Context *context,
     mEnableValidationLayers = scopedEnvironment.canEnableValidationLayers();
     bool enableMockICD      = scopedEnvironment.canEnableMockICD();
 
+    // angle::SetEnvironmentVar("VK_ICD_FILENAMES", "/usr/share/vulkan/icd.d/nvidia_icd.json");
     // Gather global layer properties.
     uint32_t instanceLayerCount = 0;
     ANGLE_VK_TRY(context, vkEnumerateInstanceLayerProperties(&instanceLayerCount, nullptr));
