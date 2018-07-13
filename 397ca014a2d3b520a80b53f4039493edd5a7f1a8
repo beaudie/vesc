@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67068223_81d3be3b",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-13T18:35:11Z",
+      "side": 1,
+      "message": "these should already be pulled in via angle_vulkan. angle_vulkan is a dep of libANGLE. let\u0027s diagnose why they aren\u0027t being pulled in rather than hack them in a second time.",
+      "range": {
+        "startLine": 193,
+        "startChar": 0,
+        "endLine": 196,
+        "endChar": 3
+      },
+      "revId": "397ca014a2d3b520a80b53f4039493edd5a7f1a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
