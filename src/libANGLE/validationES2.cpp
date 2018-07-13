@@ -6129,11 +6129,11 @@ bool ValidateGenerateMipmap(Context *context, TextureType target)
         return false;
     }
 
-    // ES3 and WebGL grant mipmap generation for sRGBA (with alpha) textures but GL_EXT_sRGB does
-    // not.  Differentiate the ES3 format from the extension format by checking if the format is
-    // sized, GL_EXT_sRGB does not add any sized formats.
-    bool supportsSRGBMipmapGeneration = context->getExtensions().webglCompatibility;
-    if (!supportsSRGBMipmapGeneration && !format.sized && format.colorEncoding == GL_SRGB)
+    // ES3 and WebGL 2.0 grant mipmap generation for sRGBA (with alpha) textures but GL_EXT_sRGB
+    // does not.  Differentiate the ES3 format from the extension format by checking if the format
+    // is sized, GL_EXT_sRGB does not add any sized formats.
+    if (context->getClientVersion() < Version(3, 0) && !format.sized &&
+        (format.internalFormat == GL_SRGB || format.internalFormat == GL_SRGB_ALPHA_EXT))
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), GenerateMipmapNotAllowed);
         return false;
