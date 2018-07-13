@@ -1555,6 +1555,8 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
         mShaderUniformsDirty.set(gl::ShaderType::Compute);
         defineUniformsAndAssignRegisters(context);
 
+        linkResources(context, resources);
+
         gl::LinkResult result = compileComputeExecutable(context, infoLog);
         if (result.isError())
         {
@@ -1622,6 +1624,8 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
 
         gatherTransformFeedbackVaryings(resources.varyingPacking, builtins[gl::ShaderType::Vertex]);
 
+        linkResources(context, resources);
+
         gl::LinkResult result = compileProgramExecutables(context, infoLog);
         if (result.isError())
         {
@@ -1634,8 +1638,6 @@ gl::LinkResult ProgramD3D::link(const gl::Context *context,
             return result;
         }
     }
-
-    linkResources(context, resources);
 
     return true;
 }

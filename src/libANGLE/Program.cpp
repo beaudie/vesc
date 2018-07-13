@@ -1215,13 +1215,13 @@ Error Program::link(const gl::Context *context)
             return NoError();
         }
 
+        gatherTransformFeedbackVaryings(mergedVaryings);
+
         ANGLE_TRY_RESULT(mProgram->link(context, resources, mInfoLog), mLinked);
         if (!mLinked)
         {
             return NoError();
         }
-
-        gatherTransformFeedbackVaryings(mergedVaryings);
     }
 
     initInterfaceBlockBindings();
