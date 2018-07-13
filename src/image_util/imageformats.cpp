@@ -1759,4 +1759,122 @@ void R11G11B10F::average(R11G11B10F *dst, const R11G11B10F *src1, const R11G11B1
     dst->B = gl::averageFloat10(src1->B, src2->B);
 }
 
+void D24S8::readColor(gl::ColorF *dst, const D24S8 *src)
+{
+    dst->red   = gl::normalizedToFloat<24>(src->D);
+    dst->green = gl::normalizedToFloat<8>(src->S);
+}
+
+void D24S8::writeColor(D24S8 *dst, const gl::ColorF *src)
+{
+    dst->D = gl::floatToNormalized<24, uint32_t>(src->red);
+    dst->S = gl::getShiftedData<8, 0, uint32_t>(src->green);
+}
+
+void D24S8::average(D24S8 *dst, const D24S8 *src1, const D24S8 *src2)
+{
+    dst->D = gl::average(src1->D, src2->D);
+    dst->S = gl::average(src1->S, src2->S);
+}
+
+void S8::readColor(gl::ColorF *dst, const S8 *src)
+{
+    UNIMPLEMENTED();
+}
+
+void S8::writeColor(S8 *dst, const gl::ColorF *src)
+{
+    UNIMPLEMENTED();
+}
+
+void S8::readColor(gl::ColorUI *dst, const S8 *src)
+{
+    UNIMPLEMENTED();
+}
+
+void S8::writeColor(S8 *dst, const gl::ColorUI *src)
+{
+    UNIMPLEMENTED();
+}
+
+void S8::average(S8 *dst, const S8 *src1, const S8 *src2)
+{
+    UNIMPLEMENTED();
+}
+
+void D16::readColor(gl::ColorF *dst, const D16 *src)
+{
+    UNIMPLEMENTED();
+}
+
+void D16::writeColor(D16 *dst, const gl::ColorF *src)
+{
+    UNIMPLEMENTED();
+}
+
+void D16::average(D16 *dst, const D16 *src1, const D16 *src2)
+{
+    UNIMPLEMENTED();
+}
+
+void D24::readColor(gl::ColorF *dst, const D24 *src)
+{
+    UNIMPLEMENTED();
+}
+
+void D24::writeColor(D24 *dst, const gl::ColorF *src)
+{
+    UNIMPLEMENTED();
+}
+
+void D24::average(D24 *dst, const D24 *src1, const D24 *src2)
+{
+    UNIMPLEMENTED();
+}
+
+void D32F::readColor(gl::ColorF *dst, const D32F *src)
+{
+    UNIMPLEMENTED();
+}
+
+void D32F::writeColor(D32F *dst, const gl::ColorF *src)
+{
+    UNIMPLEMENTED();
+}
+
+void D32F::average(D32F *dst, const D32F *src1, const D32F *src2)
+{
+    UNIMPLEMENTED();
+}
+
+void D32::readColor(gl::ColorF *dst, const D32 *src)
+{
+    UNIMPLEMENTED();
+}
+
+void D32::writeColor(D32 *dst, const gl::ColorF *src)
+{
+    UNIMPLEMENTED();
+}
+
+void D32::average(D32 *dst, const D32 *src1, const D32 *src2)
+{
+    UNIMPLEMENTED();
+}
+
+void D32S8F::readColor(gl::ColorF *dst, const D32S8F *src)
+{
+    dst->red   = gl::normalizedToFloat(src->D);
+    dst->green = gl::getShiftedData<8, 0>(src->S);
+}
+
+void D32S8F::writeColor(D32S8F *dst, const gl::ColorF *src)
+{
+    UNIMPLEMENTED();
+}
+
+void D32S8F::average(D32S8F *dst, const D32S8F *src1, const D32S8F *src2)
+{
+    UNIMPLEMENTED();
+}
 }  // namespace angle

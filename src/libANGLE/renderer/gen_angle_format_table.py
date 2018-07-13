@@ -91,8 +91,6 @@ def get_channel_struct(angle_format):
     if 'BLOCK' in angle_format['id']:
         return None
     bits = angle_format['bits']
-    if 'D' in bits or 'S' in bits:
-        return None
 
     if 'channelStruct' in angle_format:
         return angle_format['channelStruct']
@@ -109,6 +107,10 @@ def get_channel_struct(angle_format):
             struct_name += 'A{}'.format(bits['A'])
         if channel == 'l':
             struct_name += 'L{}'.format(bits['L'])
+        if channel == 'd':
+            struct_name += 'D{}'.format(bits['D'])
+        if channel == 's':
+            struct_name += 'S{}'.format(bits['S'])
     if angle_format['componentType'] == 'float':
         struct_name += 'F'
     if angle_format['componentType'] == 'int' or angle_format['componentType'] == 'snorm':

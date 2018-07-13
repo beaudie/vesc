@@ -6,7 +6,7 @@
   "ANGLE format:src/libANGLE/renderer/angle_format_map.json":
     "82d80c3be2cdfcc17aec07cf2223907f",
   "ANGLE format:src/libANGLE/renderer/gen_angle_format_table.py":
-    "dcb81c64e2c89f57a7105ab07ef0ffd0",
+    "f6af24eaf8212c9b0bc2640f17526b20",
   "ANGLE load functions table:src/libANGLE/renderer/gen_load_functions_table.py":
     "3fa54bf0a8911fa0cb102e569f1facbb",
   "ANGLE load functions table:src/libANGLE/renderer/load_functions_data.json":
@@ -32,7 +32,7 @@
   "DXGI format:src/libANGLE/renderer/d3d/d3d11/gen_dxgi_format_table.py":
     "2932a5e1c3c846be0169e29a4f9c72e8",
   "ESSL static builtins:src/compiler/translator/builtin_function_declarations.txt":
-    "338ae4863ccaab54adccee8e3f7971cf",
+    "39b92f5a4d982873d3595b70049d5160",
   "ESSL static builtins:src/compiler/translator/builtin_variables.json":
     "2c0e86ff9f92f79ada03f04206e63fba",
   "ESSL static builtins:src/compiler/translator/gen_builtin_symbols.py":

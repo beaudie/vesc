@@ -710,6 +710,73 @@ struct R11G11B10F
 };
 static_assert(sizeof(R11G11B10F) == 4, "R11G11B10F struct not 32-bits.");
 
+struct D24S8
+{
+    uint32_t D : 24;
+    uint32_t S : 8;
+
+    static void readColor(gl::ColorF *dst, const D24S8 *src);
+    static void writeColor(D24S8 *dst, const gl::ColorF *src);
+    static void average(D24S8 *dst, const D24S8 *src1, const D24S8 *src2);
+};
+
+struct S8
+{
+    uint8_t S;
+
+    static void readColor(gl::ColorF *dst, const S8 *src);
+    static void writeColor(S8 *dst, const gl::ColorF *src);
+    static void readColor(gl::ColorUI *dst, const S8 *src);
+    static void writeColor(S8 *dst, const gl::ColorUI *src);
+    static void average(S8 *dst, const S8 *src1, const S8 *src2);
+};
+
+struct D16
+{
+    uint16_t D;
+
+    static void readColor(gl::ColorF *dst, const D16 *src);
+    static void writeColor(D16 *dst, const gl::ColorF *src);
+    static void average(D16 *dst, const D16 *src1, const D16 *src2);
+};
+
+struct D24
+{
+    uint32_t D;
+
+    static void readColor(gl::ColorF *dst, const D24 *src);
+    static void writeColor(D24 *dst, const gl::ColorF *src);
+    static void average(D24 *dst, const D24 *src1, const D24 *src2);
+};
+
+struct D32F
+{
+    float D;
+
+    static void readColor(gl::ColorF *dst, const D32F *src);
+    static void writeColor(D32F *dst, const gl::ColorF *src);
+    static void average(D32F *dst, const D32F *src1, const D32F *src2);
+};
+
+struct D32
+{
+    uint32_t D;
+
+    static void readColor(gl::ColorF *dst, const D32 *src);
+    static void writeColor(D32 *dst, const gl::ColorF *src);
+    static void average(D32 *dst, const D32 *src1, const D32 *src2);
+};
+
+struct D32S8F
+{
+    uint32_t D;
+    uint32_t S;
+
+    static void readColor(gl::ColorF *dst, const D32S8F *src);
+    static void writeColor(D32S8F *dst, const gl::ColorF *src);
+    static void average(D32S8F *dst, const D32S8F *src1, const D32S8F *src2);
+};
+
 }  // namespace angle
 
 #endif  // IMAGEUTIL_IMAGEFORMATS_H_
