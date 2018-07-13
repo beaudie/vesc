@@ -179,7 +179,10 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
         }
         if (mChangedICDPath)
         {
-            angle::SetEnvironmentVar(g_VkICDPathEnv, mPreviousICDPath.value().c_str());
+            if (mPreviousICDPath == "")
+                unsetenv(g_VkICDPathEnv);
+            else
+                angle::SetEnvironmentVar(g_VkICDPathEnv, mPreviousICDPath.value().c_str());
         }
     }
 
