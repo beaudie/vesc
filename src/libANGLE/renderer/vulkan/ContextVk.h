@@ -157,6 +157,7 @@ class ContextVk : public ContextImpl, public vk::Context
     const FeaturesVk &getFeatures() const;
 
     void invalidateCurrentPipeline();
+    void invalidateDefaultAttribute(size_t attribIndex);
 
     vk::DynamicDescriptorPool *getDynamicDescriptorPool(uint32_t descriptorSetIndex);
 
@@ -183,6 +184,8 @@ class ContextVk : public ContextImpl, public vk::Context
     void updateFlipViewportReadFramebuffer(const gl::State &glState);
 
     angle::Result updateDriverUniforms();
+    angle::Result updateDefaultAttributes();
+    angle::Result updateDefaultAttribute(size_t attribIndex);
 
     vk::PipelineAndSerial *mCurrentPipeline;
     gl::PrimitiveMode mCurrentDrawMode;
@@ -221,6 +224,10 @@ class ContextVk : public ContextImpl, public vk::Context
     vk::DynamicBuffer mDriverUniformsBuffer;
     VkDescriptorSet mDriverUniformsDescriptorSet;
     vk::BindingPointer<vk::DescriptorSetLayout> mDriverUniformsSetLayout;
+
+    // "Current Value" aka default vertex attribute state.
+    gl::AttributesMask mDirtyDefaultAttribs;
+    gl::AttribArray<vk::DynamicBuffer> mDefaultAttribBuffers;
 };
 }  // namespace rx
 
