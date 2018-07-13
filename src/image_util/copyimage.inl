@@ -23,6 +23,20 @@ inline void WriteColor(const uint8_t *source, uint8_t *dest)
                          reinterpret_cast<const Color<colorDataType>*>(source));
 }
 
+template <typename sourceType, typename depthStencilDataType>
+inline void ReadDepthStencil(const uint8_t *source, uint8_t *dest)
+{
+    sourceType::readDepthStencil(reinterpret_cast<DepthStencil<depthStencilDataType>*>(dest),
+                          reinterpret_cast<const sourceType*>(source));
+}
+
+template <typename destType, typename depthStencilDataType>
+inline void WriteDepthStencil(const uint8_t *source, uint8_t *dest)
+{
+    destType::writeDepthStencil(reinterpret_cast<destType*>(dest),
+                         reinterpret_cast<const DepthStencil<depthStencilDataType>*>(source));
+}
+
 template <typename sourceType, typename destType, typename colorDataType>
 inline void CopyPixel(const uint8_t *source, uint8_t *dest)
 {

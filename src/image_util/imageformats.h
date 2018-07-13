@@ -710,6 +710,16 @@ struct R11G11B10F
 };
 static_assert(sizeof(R11G11B10F) == 4, "R11G11B10F struct not 32-bits.");
 
+struct D24S8
+{
+    uint32_t D;
+    uint32_t S;
+
+    static void readDepthStencil(gl::DepthStencilF *dst, const D24S8 *src);
+    static void writeDepthStencil(D24S8 *dst, const gl::DepthStencilF *src);
+    static void average(D24S8 *dst, const D24S8 *src1, const D24S8 *src2);
+};
+
 }  // namespace angle
 
 #endif  // IMAGEUTIL_IMAGEFORMATS_H_

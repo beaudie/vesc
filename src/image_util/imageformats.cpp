@@ -1759,4 +1759,22 @@ void R11G11B10F::average(R11G11B10F *dst, const R11G11B10F *src1, const R11G11B1
     dst->B = gl::averageFloat10(src1->B, src2->B);
 }
 
+void D24S8::readDepthStencil(gl::DepthStencilF *dst, const D24S8 *src)
+{
+    dst->depth = gl::normalizedToFloat(src->D);
+    dst->stencil = gl::getShiftedData<8, 0>(static_cast<uint32_t>(src->S));
+}
+
+void D24S8::writeDepthStencil(D24S8 *dst, const gl::DepthStencilF *src)
+{
+    dst->D = gl::floatToNormalized<24, uint32_t>(src->depth);
+    dst->S = gl::floatToNormalized(src->stencil);
+}
+
+void D24S8::average(D24S8 *dst, const D24S8 *src1, const D24S8 *src2)
+{
+    dst->D = gl::average(src1->D, src2->D);
+    dst->S = gl::average(src1->S, src2->S);
+}
+
 }  // namespace angle
