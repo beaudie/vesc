@@ -65,6 +65,8 @@ class VertexArrayVk : public VertexArrayImpl
                            vk::CommandBuffer *commandBuffer,
                            bool shouldApplyVertexArray);
 
+    void updateDefaultAttrib(size_t attribIndex, VkBuffer bufferHandle, uint32_t offset);
+
   private:
     // This will update any dirty packed input descriptions, regardless if they're used by the
     // active program. This could lead to slight inefficiencies when the app would repeatedly
@@ -101,7 +103,8 @@ class VertexArrayVk : public VertexArrayImpl
                             vk::CommandBuffer *commandBuffer,
                             bool newCommandBuffer);
 
-    void syncDirtyAttrib(const gl::VertexAttribute &attrib,
+    void syncDirtyAttrib(ContextVk *contextVk,
+                         const gl::VertexAttribute &attrib,
                          const gl::VertexBinding &binding,
                          size_t attribIndex);
 

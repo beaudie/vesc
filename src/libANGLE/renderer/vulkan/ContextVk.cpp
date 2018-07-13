@@ -45,7 +45,17 @@ constexpr gl::Rectangle kMaxSizedScissor(0,
 constexpr VkColorComponentFlags kAllColorChannelsMask =
     (VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
      VK_COLOR_COMPONENT_A_BIT);
+
+constexpr VkBufferUsageFlags kVertexBufferUsage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+constexpr size_t kDefaultValueSize              = sizeof(float) * 4;
+constexpr size_t kDefaultBufferSize             = kDefaultValueSize * 16;
 }  // anonymous namespace
+
+// std::array only uses aggregate init. Thus we make a helper macro to reduce on code duplication.
+#define INIT                                   \
+    {                                          \
+        kVertexBufferUsage, kDefaultBufferSize \
+    }
 
 ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
     : ContextImpl(state),
@@ -56,7 +66,9 @@ ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
       mClearColorMask(kAllColorChannelsMask),
       mFlipYForCurrentSurface(false),
       mDriverUniformsBuffer(VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, sizeof(DriverUniforms) * 16),
-      mDriverUniformsDescriptorSet(VK_NULL_HANDLE)
+      mDriverUniformsDescriptorSet(VK_NULL_HANDLE),
+      mDefaultAttribBuffers{{INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT,
+                             INIT, INIT, INIT, INIT}}
 {
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
     memset(&mClearDepthStencilValue, 0, sizeof(mClearDepthStencilValue));
@@ -75,6 +87,11 @@ void ContextVk::onDestroy(const gl::Context *context)
     for (vk::DynamicDescriptorPool &descriptorPool : mDynamicDescriptorPools)
     {
         descriptorPool.destroy(getDevice());
+    }
+
+    for (vk::DynamicBuffer &defaultBuffer : mDefaultAttribBuffers)
+    {
+        defaultBuffer.destroy(getDevice());
     }
 }
 
@@ -110,6 +127,12 @@ gl::Error ContextVk::initialize()
 
     mPipelineDesc.reset(new vk::PipelineDesc());
     mPipelineDesc->initDefaults();
+
+    // Initialize current value/default attribute buffers.
+    for (vk::DynamicBuffer &buffer : mDefaultAttribBuffers)
+    {
+        buffer.init(1, mRenderer);
+    }
 
     return gl::NoError();
 }
@@ -166,6 +189,11 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
     {
         invalidateCurrentPipeline();
         mCurrentDrawMode = drawCallParams.mode();
+    }
+
+    if (mDirtyDefaultAttribs.any())
+    {
+        ANGLE_TRY(updateDefaultAttributes());
     }
 
     if (!mCurrentPipeline)
@@ -591,9 +619,12 @@ gl::Error ContextVk::syncState(const gl::Context *context, const gl::State::Dirt
             case gl::State::DIRTY_BIT_RENDERBUFFER_BINDING:
                 break;
             case gl::State::DIRTY_BIT_VERTEX_ARRAY_BINDING:
+            {
                 invalidateCurrentPipeline();
                 mVertexArrayBindingHasChanged = true;
+                mDirtyDefaultAttribs.set();
                 break;
+            }
             case gl::State::DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING:
                 break;
             case gl::State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING:
@@ -635,7 +666,14 @@ gl::Error ContextVk::syncState(const gl::Context *context, const gl::State::Dirt
             case gl::State::DIRTY_BIT_FRAMEBUFFER_SRGB:
                 break;
             case gl::State::DIRTY_BIT_CURRENT_VALUES:
+            {
+                for (size_t attribIndex : glState.getAndResetDirtyCurrentValues())
+                {
+                    invalidateDefaultAttribute(attribIndex);
+                }
                 break;
+            }
+            break;
             default:
                 UNREACHABLE();
                 break;
@@ -911,6 +949,58 @@ vk::Error ContextVk::updateDriverUniforms()
 
     vkUpdateDescriptorSets(getDevice(), 1, &writeInfo, 0, nullptr);
 
+    return vk::NoError();
+}
+
+void ContextVk::invalidateDefaultAttribute(size_t attribIndex)
+{
+    mDirtyDefaultAttribs.set(attribIndex);
+}
+
+vk::Error ContextVk::updateDefaultAttributes()
+{
+    ASSERT(mDirtyDefaultAttribs.any());
+
+    const gl::Program *program = mState.getState().getProgram();
+    ASSERT(program);
+
+    const gl::AttributesMask &programAttribs  = program->getActiveAttribLocationsMask();
+    const gl::AttributesMask &attribsToUpdate = (programAttribs & mDirtyDefaultAttribs);
+
+    for (size_t attribIndex : attribsToUpdate)
+    {
+        ANGLE_TRY(updateDefaultAttribute(attribIndex))
+    }
+
+    mDirtyDefaultAttribs &= ~attribsToUpdate;
+    return vk::NoError();
+}
+
+vk::Error ContextVk::updateDefaultAttribute(size_t attribIndex)
+{
+    vk::DynamicBuffer &defaultBuffer = mDefaultAttribBuffers[attribIndex];
+
+    defaultBuffer.releaseRetainedBuffers(mRenderer);
+
+    uint8_t *ptr;
+    VkBuffer bufferHandle   = VK_NULL_HANDLE;
+    uint32_t offset         = 0;
+    bool newBufferAllocated = false;
+    ANGLE_TRY(defaultBuffer.allocate(mRenderer, kDefaultValueSize, &ptr, &bufferHandle, &offset,
+                                     &newBufferAllocated));
+
+    const gl::State &glState = mState.getState();
+    const gl::VertexAttribCurrentValueData &defaultValue =
+        glState.getVertexAttribCurrentValues()[attribIndex];
+
+    ASSERT(defaultValue.Type == GL_FLOAT);
+
+    memcpy(ptr, defaultValue.FloatValues, kDefaultValueSize);
+
+    defaultBuffer.flush(getDevice());
+
+    VertexArrayVk *vertexArrayVk = vk::GetImpl(glState.getVertexArray());
+    vertexArrayVk->updateDefaultAttrib(attribIndex, bufferHandle, offset);
     return vk::NoError();
 }
 }  // namespace rx
