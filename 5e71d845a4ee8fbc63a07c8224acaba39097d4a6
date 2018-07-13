@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a60f000_060d8b07",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-07-13T12:52:20Z",
+      "side": 1,
+      "message": "What if the symbol is an array? I don\u0027t think that this handles that case correctly, but will replace the array type with a non-array type. Also to make the tree completely consistent the types of the binary nodes should be changed as well.",
+      "revId": "5e71d845a4ee8fbc63a07c8224acaba39097d4a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
