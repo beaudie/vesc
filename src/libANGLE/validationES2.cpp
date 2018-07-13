@@ -6133,7 +6133,9 @@ bool ValidateGenerateMipmap(Context *context, TextureType target)
     // not.  Differentiate the ES3 format from the extension format by checking if the format is
     // sized, GL_EXT_sRGB does not add any sized formats.
     bool supportsSRGBMipmapGeneration = context->getExtensions().webglCompatibility;
-    if (!supportsSRGBMipmapGeneration && !format.sized && format.colorEncoding == GL_SRGB)
+    if (context->getClientVersion() < Version(3, 0) && !supportsSRGBMipmapGeneration &&
+        !format.sized &&
+        (format.internalFormat == GL_SRGB || format.internalFormat == GL_SRGB_ALPHA_EXT))
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), GenerateMipmapNotAllowed);
         return false;
