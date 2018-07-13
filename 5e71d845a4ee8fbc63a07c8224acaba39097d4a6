@@ -16,6 +16,24 @@
       "revId": "5e71d845a4ee8fbc63a07c8224acaba39097d4a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8529d4c_1bdfc217",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-13T13:01:35Z",
+      "side": 1,
+      "message": "Maybe it would just be easier to make setType public in TIntermExpression. What do you think?\n\nAll the tests pass so it\u0027s a bit difficult to verify any change I make.",
+      "parentUuid": "5a60f000_060d8b07",
+      "revId": "5e71d845a4ee8fbc63a07c8224acaba39097d4a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
