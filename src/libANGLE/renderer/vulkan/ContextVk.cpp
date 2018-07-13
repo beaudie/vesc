@@ -234,8 +234,8 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
 
     // Bind the graphics descriptor sets.
     // TODO(jmadill): Handle multiple command buffers.
-    const auto &descriptorSets   = programVk->getDescriptorSets();
-    const gl::RangeUI &usedRange = programVk->getUsedDescriptorSetRange();
+    const auto &descriptorSets               = programVk->getDescriptorSets();
+    const gl::RangeUI &usedRange             = programVk->getUsedDescriptorSetRange();
     const vk::PipelineLayout &pipelineLayout = programVk->getPipelineLayout();
     if (!usedRange.empty())
     {

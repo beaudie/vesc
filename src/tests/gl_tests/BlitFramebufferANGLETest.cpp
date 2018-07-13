@@ -14,8 +14,8 @@ class BlitFramebufferANGLETest : public ANGLETest
   protected:
     BlitFramebufferANGLETest()
     {
-        setWindowWidth(256);
-        setWindowHeight(256);
+        setWindowWidth(32);
+        setWindowHeight(32);
         setConfigRedBits(8);
         setConfigGreenBits(8);
         setConfigBlueBits(8);
@@ -824,7 +824,7 @@ TEST_P(BlitFramebufferANGLETest, BlitStencil)
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
 
     glClearColor(0.0, 1.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearStencil(0x0);
 
     // Scissor half the screen so we fill the stencil only halfway

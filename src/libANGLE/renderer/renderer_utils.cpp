@@ -145,7 +145,7 @@ static FormatWriteFunctionMap BuildFormatWriteFunctionMap()
 
     InsertFormatWriteFunctionMapping(&map, GL_STENCIL,            GL_UNSIGNED_BYTE,                  nullptr                              );
 
-    InsertFormatWriteFunctionMapping(&map, GL_DEPTH_STENCIL,      GL_UNSIGNED_INT_24_8,              nullptr                              );
+    InsertFormatWriteFunctionMapping(&map, GL_DEPTH_STENCIL,      GL_UNSIGNED_INT_24_8,              WriteColor<D24S8, GLfloat>           );
     InsertFormatWriteFunctionMapping(&map, GL_DEPTH_STENCIL,      GL_FLOAT_32_UNSIGNED_INT_24_8_REV, nullptr                              );
     // clang-format on
 
@@ -375,12 +375,13 @@ void PackPixels(const PackPixelsParams &params,
                   "Unexpected size of gl::Color struct.");
 
     const auto &colorReadFunction = sourceFormat.colorReadFunction;
+    ASSERT(colorReadFunction != nullptr);
 
     for (int y = 0; y < params.area.height; ++y)
     {
         for (int x = 0; x < params.area.width; ++x)
         {
-            uint8_t *dest      = destWithOffset + y * params.outputPitch + x * destFormatInfo.pixelBytes;
+            uint8_t *dest = destWithOffset + y * params.outputPitch + x * destFormatInfo.pixelBytes;
             const uint8_t *src = source + y * inputPitch + x * sourceFormat.pixelBytes;
 
             // readFunc and writeFunc will be using the same type of color, CopyTexImage
@@ -394,7 +395,7 @@ void PackPixels(const PackPixelsParams &params,
 ColorWriteFunction GetColorWriteFunction(const gl::FormatType &formatType)
 {
     static const FormatWriteFunctionMap formatTypeMap = BuildFormatWriteFunctionMap();
-    auto iter = formatTypeMap.find(formatType);
+    auto iter                                         = formatTypeMap.find(formatType);
     ASSERT(iter != formatTypeMap.end());
     if (iter != formatTypeMap.end())
     {
