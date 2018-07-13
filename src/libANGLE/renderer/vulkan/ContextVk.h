@@ -170,6 +170,8 @@ class ContextVk : public ContextImpl
                                    gl::Texture **textureOut);
     void updateColorMask(const gl::BlendState &blendState);
 
+    void invalidateDefaultAttribute(size_t attribIndex);
+
   private:
     gl::Error initPipeline();
     gl::Error setupDraw(const gl::Context *context,
@@ -182,6 +184,8 @@ class ContextVk : public ContextImpl
     void updateFlipViewportReadFramebuffer(const gl::State &glState);
 
     vk::Error updateDriverUniforms();
+    vk::Error updateDefaultAttributes();
+    vk::Error updateDefaultAttribute(size_t attribIndex);
 
     RendererVk *mRenderer;
     vk::PipelineAndSerial *mCurrentPipeline;
@@ -221,6 +225,10 @@ class ContextVk : public ContextImpl
     vk::DynamicBuffer mDriverUniformsBuffer;
     VkDescriptorSet mDriverUniformsDescriptorSet;
     vk::BindingPointer<vk::DescriptorSetLayout> mDriverUniformsSetLayout;
+
+    // "Current Value" aka default vertex attribute state.
+    gl::AttributesMask mDirtyDefaultAttribs;
+    gl::AttribArray<vk::DynamicBuffer> mDefaultAttribBuffers;
 };
 }  // namespace rx
 
