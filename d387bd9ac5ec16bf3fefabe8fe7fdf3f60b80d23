@@ -94,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "46e57b75_aa7da042",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-13T18:13:16Z",
+      "side": 1,
+      "message": "Good catch; yeah we do want to disable all teh vertex array client states for the draw. Clip plane test can be ignored in the shader.\n\nI read the spec again and the only attribute that might interact with the draw texture pipeline is the color attribute, which it says to use the \u0027current color\u0027 (here, means to disable that attribute as well)",
+      "parentUuid": "efe974fb_64eb0f38",
+      "range": {
+        "startLine": 491,
+        "startChar": 0,
+        "endLine": 492,
+        "endChar": 56
+      },
+      "revId": "d387bd9ac5ec16bf3fefabe8fe7fdf3f60b80d23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5109b243_11adb96f",
         "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
         "patchSetId": 5
