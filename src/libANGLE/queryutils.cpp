@@ -2823,6 +2823,12 @@ void SetSurfaceAttrib(Surface *surface, EGLint attribute, EGLint value)
         case EGL_SWAP_BEHAVIOR:
             surface->setSwapBehavior(value);
             break;
+        case EGL_WIDTH:
+            surface->setFixedWidth(value);
+            break;
+        case EGL_HEIGHT:
+            surface->setFixedHeight(value);
+            break;
         default:
             UNREACHABLE();
             break;
