@@ -2776,6 +2776,20 @@ Error ValidateSurfaceAttrib(const Display *display,
             }
             break;
 
+        case EGL_WIDTH:
+        case EGL_HEIGHT:
+            if (!display->getExtensions().windowFixedSize)
+            {
+                return EglBadAttribute() << "EGL_WIDTH or EGL_HEIGHT cannot be set without "
+                                            "EGL_ANGLE_window_fixed_size support.";
+            }
+            if (!surface->fixedSize())
+            {
+                return EglBadMatch() << "EGL_WIDTH or EGL_HEIGHT cannot be set without "
+                                        "EGL_FIXED_SIZE_ANGLE being enabled on the surface.";
+            }
+            break;
+
         default:
             return EglBadAttribute() << "Invalid surface attribute.";
     }
