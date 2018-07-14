@@ -2776,6 +2776,12 @@ Error ValidateSurfaceAttrib(const Display *display,
             }
             break;
 
+        case EGL_WIDTH:
+            break;
+
+        case EGL_HEIGHT:
+            break;
+
         default:
             return EglBadAttribute() << "Invalid surface attribute.";
     }

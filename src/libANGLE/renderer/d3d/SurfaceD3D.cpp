@@ -56,6 +56,12 @@ SurfaceD3D::SurfaceD3D(const egl::SurfaceState &state,
         mHeight = -1;
     }
 
+    if (mFixedSize)
+    {
+        mFixedWidth  = mWidth;
+        mFixedHeight = mHeight;
+    }
+
     switch (buftype)
     {
         case EGL_D3D_TEXTURE_2D_SHARE_HANDLE_ANGLE:
@@ -177,8 +183,8 @@ egl::Error SurfaceD3D::resetSwapChain(const egl::Display *display)
     else
     {
         // non-window surface - size is determined at creation
-        width = mWidth;
-        height = mHeight;
+        width = mFixedWidth;
+        height = mFixedHeight;
     }
 
     mSwapChain =
@@ -316,6 +322,12 @@ egl::Error SurfaceD3D::checkForOutOfDateSwapChain(DisplayD3D *displayD3D)
         clientHeight = client.bottom - client.top;
         sizeDirty = clientWidth != getWidth() || clientHeight != getHeight();
     }
+    else if (mFixedSize)
+    {
+        clientWidth = mFixedWidth;
+        clientHeight = mFixedHeight;
+        sizeDirty = mFixedWidth != getWidth() || mFixedHeight != getHeight();
+    }
 
     if (mSwapIntervalDirty)
     {
@@ -359,6 +371,16 @@ void SurfaceD3D::setSwapInterval(EGLint interval)
 
     mSwapInterval = interval;
     mSwapIntervalDirty = true;
+}
+
+void SurfaceD3D::setFixedWidth(EGLint width)
+{
+    mFixedWidth = width;
+}
+
+void SurfaceD3D::setFixedHeight(EGLint height)
+{
+    mFixedHeight = height;
 }
 
 EGLint SurfaceD3D::getWidth() const
