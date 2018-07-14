@@ -84,6 +84,9 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     void setMultisampleResolve(EGLenum resolve);
     void setSwapBehavior(EGLenum behavior);
 
+    void setFixedWidth(EGLint width);
+    void setFixedHeight(EGLint height);
+
     gl::Framebuffer *createDefaultFramebuffer(const gl::Context *context);
 
     const Config *getConfig() const;
@@ -133,6 +136,8 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     bool isRobustResourceInitEnabled() const { return mRobustResourceInitialization; }
 
     const gl::Format &getBindTexImageFormat() const { return mColorFormat; }
+
+    bool fixedSize() const { return mFixedSize; }
 
   protected:
     Surface(EGLint surfaceType,
