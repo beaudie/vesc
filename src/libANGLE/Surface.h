@@ -148,9 +148,11 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     friend class gl::Texture;
     void releaseTexImageFromTexture(const gl::Context *context);
 
+    Error releaseRef(const Display *display);
+
     SurfaceState mState;
     rx::SurfaceImpl *mImplementation;
-    int mCurrentCount;
+    int mRefCount;
     bool mDestroyed;
 
     EGLint mType;
