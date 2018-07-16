@@ -134,19 +134,19 @@ static FormatWriteFunctionMap BuildFormatWriteFunctionMap()
     InsertFormatWriteFunctionMapping(&map, GL_SRGB_EXT,           GL_UNSIGNED_BYTE,                  WriteColor<R8G8B8, GLfloat>       );
     InsertFormatWriteFunctionMapping(&map, GL_SRGB_ALPHA_EXT,     GL_UNSIGNED_BYTE,                  WriteColor<R8G8B8A8, GLfloat>     );
 
-    InsertFormatWriteFunctionMapping(&map, GL_COMPRESSED_RGB_S3TC_DXT1_EXT,    GL_UNSIGNED_BYTE,     nullptr                              );
-    InsertFormatWriteFunctionMapping(&map, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,   GL_UNSIGNED_BYTE,     nullptr                              );
-    InsertFormatWriteFunctionMapping(&map, GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE, GL_UNSIGNED_BYTE,     nullptr                              );
-    InsertFormatWriteFunctionMapping(&map, GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE, GL_UNSIGNED_BYTE,     nullptr                              );
+    InsertFormatWriteFunctionMapping(&map, GL_COMPRESSED_RGB_S3TC_DXT1_EXT,    GL_UNSIGNED_BYTE,     nullptr                           );
+    InsertFormatWriteFunctionMapping(&map, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,   GL_UNSIGNED_BYTE,     nullptr                           );
+    InsertFormatWriteFunctionMapping(&map, GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE, GL_UNSIGNED_BYTE,     nullptr                           );
+    InsertFormatWriteFunctionMapping(&map, GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE, GL_UNSIGNED_BYTE,     nullptr                           );
 
-    InsertFormatWriteFunctionMapping(&map, GL_DEPTH_COMPONENT,    GL_UNSIGNED_SHORT,                 nullptr                              );
-    InsertFormatWriteFunctionMapping(&map, GL_DEPTH_COMPONENT,    GL_UNSIGNED_INT,                   nullptr                              );
-    InsertFormatWriteFunctionMapping(&map, GL_DEPTH_COMPONENT,    GL_FLOAT,                          nullptr                              );
+    InsertFormatWriteFunctionMapping(&map, GL_DEPTH_COMPONENT,    GL_UNSIGNED_SHORT,                 nullptr                           );
+    InsertFormatWriteFunctionMapping(&map, GL_DEPTH_COMPONENT,    GL_UNSIGNED_INT,                   nullptr                           );
+    InsertFormatWriteFunctionMapping(&map, GL_DEPTH_COMPONENT,    GL_FLOAT,                          nullptr                           );
 
-    InsertFormatWriteFunctionMapping(&map, GL_STENCIL,            GL_UNSIGNED_BYTE,                  nullptr                              );
+    InsertFormatWriteFunctionMapping(&map, GL_STENCIL,            GL_UNSIGNED_BYTE,                  nullptr                           );
 
-    InsertFormatWriteFunctionMapping(&map, GL_DEPTH_STENCIL,      GL_UNSIGNED_INT_24_8,              nullptr                              );
-    InsertFormatWriteFunctionMapping(&map, GL_DEPTH_STENCIL,      GL_FLOAT_32_UNSIGNED_INT_24_8_REV, nullptr                              );
+    InsertFormatWriteFunctionMapping(&map, GL_DEPTH_STENCIL,      GL_UNSIGNED_INT_24_8,              WriteDepthStencil<D24S8>          );
+    InsertFormatWriteFunctionMapping(&map, GL_DEPTH_STENCIL,      GL_FLOAT_32_UNSIGNED_INT_24_8_REV, WriteDepthStencil<D32FS8>         );
     // clang-format on
 
     return map;
@@ -375,12 +375,13 @@ void PackPixels(const PackPixelsParams &params,
                   "Unexpected size of gl::Color struct.");
 
     const auto &colorReadFunction = sourceFormat.colorReadFunction;
+    ASSERT(colorReadFunction != nullptr);
 
     for (int y = 0; y < params.area.height; ++y)
     {
         for (int x = 0; x < params.area.width; ++x)
         {
-            uint8_t *dest      = destWithOffset + y * params.outputPitch + x * destFormatInfo.pixelBytes;
+            uint8_t *dest = destWithOffset + y * params.outputPitch + x * destFormatInfo.pixelBytes;
             const uint8_t *src = source + y * inputPitch + x * sourceFormat.pixelBytes;
 
             // readFunc and writeFunc will be using the same type of color, CopyTexImage
@@ -394,7 +395,7 @@ void PackPixels(const PackPixelsParams &params,
 ColorWriteFunction GetColorWriteFunction(const gl::FormatType &formatType)
 {
     static const FormatWriteFunctionMap formatTypeMap = BuildFormatWriteFunctionMap();
-    auto iter = formatTypeMap.find(formatType);
+    auto iter                                         = formatTypeMap.find(formatType);
     ASSERT(iter != formatTypeMap.end());
     if (iter != formatTypeMap.end())
     {

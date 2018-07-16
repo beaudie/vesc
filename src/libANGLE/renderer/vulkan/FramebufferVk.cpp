@@ -58,6 +58,40 @@ bool HasSrcAndDstBlitProperties(const VkPhysicalDevice &physicalDevice,
             IsMaskFlagSet<VkFormatFeatureFlags>(readImageProperties.optimalTilingFeatures,
                                                 VK_FORMAT_FEATURE_BLIT_SRC_BIT));
 }
+
+// Special rules apply to VkBufferImageCopy with depth/stencil. The components are tightly packed
+// into a depth or stencil section of the destination buffer. See the spec:
+// https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferImageCopy.html
+const angle::Format &GetDepthStencilImageToBufferFormat(const angle::Format &imageFormat,
+                                                        VkImageAspectFlagBits copyAspect)
+{
+    if (copyAspect == VK_IMAGE_ASPECT_STENCIL_BIT)
+    {
+        ASSERT(imageFormat.id == angle::Format::ID::D24_UNORM_S8_UINT ||
+               imageFormat.id == angle::Format::ID::D32_FLOAT_S8X24_UINT ||
+               imageFormat.id == angle::Format::ID::S8_UINT);
+        return angle::Format::Get(angle::Format::ID::S8_UINT);
+    }
+
+    ASSERT(copyAspect == VK_IMAGE_ASPECT_DEPTH_BIT);
+
+    switch (imageFormat.id)
+    {
+        case angle::Format::ID::D16_UNORM:
+            return imageFormat;
+        case angle::Format::ID::D24_UNORM_X8_UINT:
+            return imageFormat;
+        case angle::Format::ID::D24_UNORM_S8_UINT:
+            return angle::Format::Get(angle::Format::ID::D24_UNORM_X8_UINT);
+        case angle::Format::ID::D32_FLOAT:
+            return imageFormat;
+        case angle::Format::ID::D32_FLOAT_S8X24_UINT:
+            return angle::Format::Get(angle::Format::ID::D32_FLOAT);
+        default:
+            UNREACHABLE();
+            return imageFormat;
+    }
+}
 }  // anonymous namespace
 
 // static
@@ -437,14 +471,14 @@ angle::Result FramebufferVk::blitWithReadback(ContextVk *contextVk,
                                               RenderTargetVk *readRenderTarget,
                                               RenderTargetVk *drawRenderTarget)
 {
-    RendererVk *renderer          = contextVk->getRenderer();
-    vk::ImageHelper *imageForRead = readRenderTarget->getImageForRead(
-        this, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, commandBuffer);
-    const angle::Format &drawFormat = drawRenderTarget->getImageFormat().angleFormat();
+    RendererVk *renderer            = contextVk->getRenderer();
+    const angle::Format &destFormat = drawRenderTarget->getImageFormat().textureFormat();
     const gl::InternalFormat &sizedInternalDrawFormat =
-        gl::GetSizedInternalFormatInfo(drawFormat.glInternalFormat);
+        gl::GetSizedInternalFormatInfo(destFormat.glInternalFormat);
 
     GLuint outputPitch = 0;
+
+    ASSERT(blitDepthBuffer || blitStencilBuffer);
 
     if (blitStencilBuffer)
     {
@@ -452,11 +486,11 @@ angle::Result FramebufferVk::blitWithReadback(ContextVk *contextVk,
         // because in Vulkan, if we copy the stencil out of a any texture, the stencil
         // will be tightly packed in an S8 buffer (as specified in the spec here
         // https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferImageCopy.html)
-        outputPitch = destArea.width * (drawFormat.stencilBits / 8);
+        outputPitch = destArea.width * (destFormat.stencilBits / 8);
     }
     else
     {
-        outputPitch = destArea.width * drawFormat.pixelBytes;
+        outputPitch = destArea.width * destFormat.pixelBytes;
     }
 
     PackPixelsParams packPixelsParams;
@@ -470,8 +504,7 @@ angle::Result FramebufferVk::blitWithReadback(ContextVk *contextVk,
     packPixelsParams.area.y               = destArea.y;
     packPixelsParams.outputPitch          = outputPitch;
 
-    GLuint pixelBytes    = imageForRead->getFormat().angleFormat().pixelBytes;
-    GLuint sizeToRequest = sourceArea.width * sourceArea.height * pixelBytes;
+    GLuint sizeToWrite = sourceArea.width * sourceArea.height * destFormat.pixelBytes;
 
     uint8_t *copyPtr   = nullptr;
     VkBuffer handleOut = VK_NULL_HANDLE;
@@ -486,7 +519,7 @@ angle::Result FramebufferVk::blitWithReadback(ContextVk *contextVk,
     VkImageAspectFlags copyFlags =
         vk::GetDepthStencilAspectFlagsForCopy(blitDepthBuffer, blitStencilBuffer);
 
-    ANGLE_TRY(mBlitPixelBuffer.allocate(contextVk, sizeToRequest, &copyPtr, &handleOut, &offsetOut,
+    ANGLE_TRY(mBlitPixelBuffer.allocate(contextVk, sizeToWrite, &copyPtr, &handleOut, &offsetOut,
                                         nullptr));
     ANGLE_TRY(readPixelsImpl(contextVk, sourceArea, packPixelsParams, copyFlags, readRenderTarget,
                              copyPtr));
@@ -1181,11 +1214,11 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
         pixelBytes = angleFormat.stencilBits / 8;
     }
 
-    VkBuffer bufferHandle            = VK_NULL_HANDLE;
-    uint8_t *readPixelBuffer         = nullptr;
-    bool newBufferAllocated          = false;
-    uint32_t stagingOffset           = 0;
-    size_t allocationSize            = area.width * pixelBytes * area.height;
+    VkBuffer bufferHandle    = VK_NULL_HANDLE;
+    uint8_t *readPixelBuffer = nullptr;
+    bool newBufferAllocated  = false;
+    uint32_t stagingOffset   = 0;
+    size_t allocationSize    = area.width * pixelBytes * area.height;
 
     ANGLE_TRY(mReadPixelsBuffer.allocate(contextVk, allocationSize, &readPixelBuffer, &bufferHandle,
                                          &stagingOffset, &newBufferAllocated));
