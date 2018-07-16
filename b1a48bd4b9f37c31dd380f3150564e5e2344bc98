@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "040d3999_a6ecd701",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-16T12:57:40Z",
+      "side": 1,
+      "message": "nit: maybe mPreviousICDPath.value().empty() ?",
+      "range": {
+        "startLine": 182,
+        "startChar": 16,
+        "endLine": 182,
+        "endChar": 33
+      },
+      "revId": "b1a48bd4b9f37c31dd380f3150564e5e2344bc98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa11c3ac_d5b1ee6d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-16T12:57:40Z",
+      "side": 1,
+      "message": "can you make a new method in system_utils called UnsetEnvironmentVariable? And implement it differently in Windows/Posix? Side-by-side with angle::SetEnvironmentVar. On Windows it would call SetEnvironmentVariableA with nullptr. See https://docs.microsoft.com/en-us/windows/desktop/api/winbase/nf-winbase-setenvironmentvariable. This would make the code more consistent.",
+      "range": {
+        "startLine": 183,
+        "startChar": 16,
+        "endLine": 183,
+        "endChar": 24
+      },
+      "revId": "b1a48bd4b9f37c31dd380f3150564e5e2344bc98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8004e7ab_d89e952c",
+        "filename": "src/tests/perf_tests/DrawCallPerf.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-16T12:57:40Z",
+      "side": 1,
+      "message": "this is a bit unfortunate that the draw call tests are broken. Could you help look into why these aren\u0027t working?",
+      "range": {
+        "startLine": 192,
+        "startChar": 23,
+        "endLine": 192,
+        "endChar": 33
+      },
+      "revId": "b1a48bd4b9f37c31dd380f3150564e5e2344bc98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
