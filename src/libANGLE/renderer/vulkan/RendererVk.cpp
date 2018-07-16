@@ -650,7 +650,9 @@ void RendererVk::initFeatures()
 
     // TODO(lucferron): Currently disabled on Intel only since many tests are failing and need
     // investigation. http://anglebug.com/2728
-    mFeatures.flipViewportY = !IsIntel(mPhysicalDeviceProperties.vendorID);
+    // TODO(lucferron): Also disabled on Qualcomm as tests are failing on Pixel 2 bots.
+    mFeatures.flipViewportY = !IsIntel(mPhysicalDeviceProperties.vendorID) &&
+                              !IsQualcomm(mPhysicalDeviceProperties.vendorID);
 }
 
 void RendererVk::ensureCapsInitialized() const
