@@ -80,6 +80,30 @@
       "revId": "0663ecea746916b324cbe9ba88985c27b3ff6995",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d15b6c8_6fd918d4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-16T15:53:46Z",
+      "side": 1,
+      "message": "I\u0027ll leave a comment. We don\u0027t support changing the Vertex Array until ES 3.0 and we should make a perf test for this case. It would require a bit more logic as I don\u0027t have a way to distinguish between dirty data and dirty VAO state ATM.",
+      "parentUuid": "53e476d1_3bee458e",
+      "range": {
+        "startLine": 233,
+        "startChar": 20,
+        "endLine": 233,
+        "endChar": 37
+      },
+      "revId": "0663ecea746916b324cbe9ba88985c27b3ff6995",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
