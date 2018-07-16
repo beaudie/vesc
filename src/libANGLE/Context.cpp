@@ -502,6 +502,11 @@ egl::Error Context::onDestroy(const egl::Display *display)
     // Delete the Surface first to trigger a finish() in Vulkan.
     ANGLE_TRY(releaseSurface(display));
 
+    while (!mImageSet.empty())
+    {
+        removeImage(*mImageSet.begin());
+    }
+
     for (auto fence : mFenceNVMap)
     {
         SafeDelete(fence.second);
@@ -7529,6 +7534,26 @@ GLenum Context::getConvertedRenderbufferFormat(GLenum internalformat) const
 void Context::maxShaderCompilerThreads(GLuint count)
 {
     mGLState.setMaxShaderCompilerThreads(count);
+}
+
+bool Context::isValidImage(const egl::Image *image) const
+{
+    return mImageSet.find(const_cast<egl::Image *>(image)) != mImageSet.end();
+}
+
+void Context::addImage(egl::Image *image)
+{
+    // Add this image to the list of all images and hold a ref to it.
+    image->addRef();
+    mImageSet.insert(image);
+}
+
+void Context::removeImage(egl::Image *image)
+{
+    auto iter = mImageSet.find(image);
+    ASSERT(iter != mImageSet.end());
+    image->release(this);
+    mImageSet.erase(iter);
 }
 
 // ErrorSet implementation.

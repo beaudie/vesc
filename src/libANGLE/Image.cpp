@@ -118,7 +118,11 @@ void ImageSibling::setSourceEGLImageInitState(gl::InitState initState) const
 }
 
 ImageState::ImageState(EGLenum target, ImageSibling *buffer, const AttributeMap &attribs)
-    : label(nullptr), imageIndex(GetImageIndex(target, attribs)), source(buffer), targets()
+    : label(nullptr),
+      imageIndex(GetImageIndex(target, attribs)),
+      source(buffer),
+      targets(),
+      owningContext(nullptr)
 {
 }
 

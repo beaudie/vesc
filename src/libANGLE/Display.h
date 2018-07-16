@@ -93,7 +93,7 @@ class Display final : public LabeledObject, angle::NonCopyable
                               const AttributeMap &attribs,
                               Surface **outSurface);
 
-    Error createImage(const gl::Context *context,
+    Error createImage(gl::Context *context,
                       EGLenum target,
                       EGLClientBuffer buffer,
                       const AttributeMap &attribs,
@@ -188,9 +188,6 @@ class Display final : public LabeledObject, angle::NonCopyable
 
     typedef std::set<gl::Context *> ContextSet;
     ContextSet mContextSet;
-
-    typedef std::set<Image *> ImageSet;
-    ImageSet mImageSet;
 
     typedef std::set<Stream *> StreamSet;
     StreamSet mStreamSet;

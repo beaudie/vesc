@@ -71,6 +71,7 @@ struct ImageState : private angle::NonCopyable
     gl::ImageIndex imageIndex;
     gl::BindingPointer<ImageSibling> source;
     std::set<ImageSibling *> targets;
+    gl::Context *owningContext;
 };
 
 class Image final : public gl::RefCountObject, public LabeledObject

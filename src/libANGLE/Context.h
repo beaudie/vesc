@@ -1489,6 +1489,11 @@ class Context final : public egl::LabeledObject, angle::NonCopyable
     // GL_KHR_parallel_shader_compile
     void maxShaderCompilerThreads(GLuint count);
 
+    // EGL image related routines.
+    bool isValidImage(const egl::Image *image) const;
+    void addImage(egl::Image *image);
+    void removeImage(egl::Image *image);
+
   private:
     void initialize();
 
@@ -1625,6 +1630,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable
     // Not really a property of context state. The size and contexts change per-api-call.
     mutable angle::ScratchBuffer mScratchBuffer;
     mutable angle::ScratchBuffer mZeroFilledBuffer;
+
+    typedef std::set<egl::Image *> ImageSet;
+    ImageSet mImageSet;
 };
 
 template <typename T>
