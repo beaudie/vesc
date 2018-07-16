@@ -78,6 +78,24 @@
     },
     {
       "key": {
+        "uuid": "a4cec537_7259edd7",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-16T15:04:08Z",
+      "side": 1,
+      "message": "That\u0027s true, we would only need to set the VAO ourselves here, but it has additional consequences. If we use a VAO, we can\u0027t legally draw without having nonzero buffers backing the attributes (or if we could, we would continue to use gl_VertexID in addition).\n\nSo, having a VAO would also mean having our own private buffer objects as well, and those will definitely touch GLES1 user-side buffers, with the need to translate all calls in glGet*, and the buffer interface, and make stuff like glIsBuffer(arbitraryName) -\u003e GL_FALSE; glBindBuffer(GL_ARRAY_BUFFER, arbitraryName); glIsBuffer(arbitraryName) -\u003e GL_TRUE work as well.",
+      "parentUuid": "91479272_98eb891c",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "981a550e_a9453ccf",
         "filename": "src/libANGLE/GLES1Shaders.inc",
         "patchSetId": 8
