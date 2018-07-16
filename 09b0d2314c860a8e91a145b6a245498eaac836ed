@@ -60,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "91479272_98eb891c",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T14:43:44Z",
+      "side": 1,
+      "message": "But GLES1 doesn\u0027t have VAOs right? So we only need to have the default VAO, and the drawTexture VAO. Then we can set the VAO back to the default VAO here like the code does right now.\n\nAm I missing something?",
+      "parentUuid": "125d5fa0_5813c4e6",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "981a550e_a9453ccf",
         "filename": "src/libANGLE/GLES1Shaders.inc",
         "patchSetId": 8
