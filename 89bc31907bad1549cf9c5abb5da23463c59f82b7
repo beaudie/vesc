@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3a75a8df_7f6d3943",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-07-16T17:04:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8dbf9150_5ebc7103",
+      "range": {
+        "startLine": 183,
+        "startChar": 11,
+        "endLine": 186,
+        "endChar": 91
+      },
+      "revId": "89bc31907bad1549cf9c5abb5da23463c59f82b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4007116e_ec909caa",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2018-07-16T16:43:52Z",
       "side": 1,
       "message": "probably should remove this.",
+      "range": {
+        "startLine": 330,
+        "startChar": 4,
+        "endLine": 330,
+        "endChar": 95
+      },
+      "revId": "89bc31907bad1549cf9c5abb5da23463c59f82b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd1533a6_49282800",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-07-16T17:04:51Z",
+      "side": 1,
+      "message": "Oh good catch that came back because I think my git repo was not up to date with the HEAD of this CL haha",
+      "parentUuid": "4007116e_ec909caa",
       "range": {
         "startLine": 330,
         "startChar": 4,
