@@ -1,0 +1,305 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77dab053_9702c91f",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1156,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "what is ndc?",
+      "range": {
+        "startLine": 1156,
+        "startChar": 35,
+        "endLine": 1156,
+        "endChar": 38
+      },
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27f62bc6_ee42719e",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "Could this be done via a VAO switch instead of modifying the default VAO? It would also remove the need for gl_VertexID",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "981a550e_a9453ccf",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 8
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "Can this code and the regular vertex pipeline be moved in functions that don\u0027t have side effects? It would make it easier to follow what\u0027s going on.",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f005da2d_7b2292de",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 8
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "This could index into a constant array that contain a full quad, then scale the coordinate. Or use a different VAO.",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59498d2b_aa167102",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 8
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "ditto about indexing in a constant array then scaling.",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fca2ddc_f7e2b848",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "nit: Can you reformat this with one line per vertex, and surround it with clang-format guards?",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "083fe2dd_9ad73462",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "nit: Can we have a valid 0, 0, 0, 0 control case?",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2868a999_68795ff8",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "nit: make it RGBA and pass it GLColor::green.data()",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9b0785f_a7d9dc45",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "Do we need a crop rect for this test? Shouldn\u0027t the default value be ok?",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d49d8e2_9322c701",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "nit: you don\u0027t need the viewport for this test, just 0, 0, 1, 1",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17520d20_e8a8273d",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "nit: Odd as in even/odd or odd as in \"weird\"? Can the comment be clarified (and the test name if needed too)?",
+      "range": {
+        "startLine": 79,
+        "startChar": 14,
+        "endLine": 79,
+        "endChar": 17
+      },
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71f3ed6e_d3f45343",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "nit: ditto std::array\u003cGLColor\u003e textureData \u003d {GLColor::green, GLColor::green}",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f97a8dca_30265c82",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "ultra-nit: The comment could probably fit on one line.",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a122b88_b42eec60",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "ditto use GLColor::green instead.",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "870b3063_4d286ec4",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "This is testing something different then what the test name implies. Should we have two tests?",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25ccc056_b52f8643",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "nit: here and in other tests, use the GLTexture helper in gl_raii.h",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9376543_fda51fc1",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-16T09:34:08Z",
+      "side": 1,
+      "message": "ditto: no need to check the viewport.",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
