@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "65a7831c_ecf200e3",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1156,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-16T15:20:56Z",
+      "side": 1,
+      "message": "normalized device coordinate",
+      "parentUuid": "77dab053_9702c91f",
+      "range": {
+        "startLine": 1156,
+        "startChar": 35,
+        "endLine": 1156,
+        "endChar": 38
+      },
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "27f62bc6_ee42719e",
         "filename": "src/libANGLE/GLES1Renderer.cpp",
         "patchSetId": 8
