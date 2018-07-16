@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4aa4bea2_555616ff",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-16T03:00:48Z",
+      "side": 1,
+      "message": "My first thought would be to use a single DynamicBuffer to hold values for all attributes.\nThough I\u0027m not sure how much that would complicate things, or what is gained.\nDid you consider it?",
+      "revId": "0663ecea746916b324cbe9ba88985c27b3ff6995",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
