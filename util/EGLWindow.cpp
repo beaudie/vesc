@@ -29,14 +29,9 @@ EGLPlatformParameters::EGLPlatformParameters(EGLint renderer)
     : renderer(renderer),
       majorVersion(EGL_DONT_CARE),
       minorVersion(EGL_DONT_CARE),
-      deviceType(EGL_DONT_CARE),
+      deviceType(EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE),
       presentPath(EGL_DONT_CARE)
 {
-    if (renderer == EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE ||
-        renderer == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
-    {
-        deviceType = EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE;
-    }
 }
 
 EGLPlatformParameters::EGLPlatformParameters(EGLint renderer,
