@@ -172,6 +172,24 @@
     },
     {
       "key": {
+        "uuid": "172968c0_55340dd7",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 8
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-17T16:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a6ee6f4_3cb01282",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "59498d2b_aa167102",
         "filename": "src/libANGLE/GLES1Shaders.inc",
         "patchSetId": 8
@@ -207,6 +225,24 @@
     },
     {
       "key": {
+        "uuid": "f01b82f1_ccac058e",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 8
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-17T16:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44bc4076_32360a02",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2fca2ddc_f7e2b848",
         "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
         "patchSetId": 8
@@ -221,6 +257,24 @@
       "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51cd94db_1d706f7a",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-17T16:44:24Z",
+      "side": 1,
+      "message": "Done (didn\u0027t need this variable)",
+      "parentUuid": "2fca2ddc_f7e2b848",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -241,6 +295,24 @@
     },
     {
       "key": {
+        "uuid": "d9032647_bd17fc2f",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-17T16:44:24Z",
+      "side": 1,
+      "message": "Added for all 0\u0027s, but it looks like it\u0027s going to be an invalid case:\n\nhttps://www.khronos.org/registry/OpenGL/extensions/OES/OES_draw_texture.txt\n\n    The functions \n\n    void DrawTex{sifx}OES(T Xs, T Ys, T Zs, T Ws, T Hs);\n    void DrawTex{sifx}vOES(T *coords);\n\n    draw a texture rectangle to the screen.  Xs, Ys, and Zs\n    specify the position of the affected screen rectangle.\n    Xs and Ys are given directly in window (viewport)\n    coordinates.  Zs is mapped to window depth Zw as follows:\n\n                 { n,                 if z \u003c\u003d 0\n            Zw \u003d { f,                 if z \u003e\u003d 1\n                 { n + z * (f - n),   otherwise\n\n    where \u003cn\u003e and \u003cf\u003e are the near and far values of\n    DEPTH_RANGE.  Ws and Hs specify the width and height of\n    the affected screen rectangle in pixels.  These values\n    may be positive or negative; however, if either (Ws \u003c\u003d\n    0) or (Hs \u003c\u003d 0), the INVALID_VALUE error is generated.",
+      "parentUuid": "083fe2dd_9ad73462",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2868a999_68795ff8",
         "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
         "patchSetId": 8
@@ -255,6 +327,24 @@
       "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0dfbfd8_2599744d",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-17T16:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2868a999_68795ff8",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -275,6 +365,24 @@
     },
     {
       "key": {
+        "uuid": "3c060d41_2e1cd78d",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-17T16:44:24Z",
+      "side": 1,
+      "message": "Good catch, that\u0027s right, thanks!",
+      "parentUuid": "c9b0785f_a7d9dc45",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0d49d8e2_9322c701",
         "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
         "patchSetId": 8
@@ -289,6 +397,24 @@
       "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f13fa1b_58683228",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-17T16:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d49d8e2_9322c701",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -315,6 +441,30 @@
     },
     {
       "key": {
+        "uuid": "1703f84f_a22a93e9",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-17T16:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17520d20_e8a8273d",
+      "range": {
+        "startLine": 79,
+        "startChar": 14,
+        "endLine": 79,
+        "endChar": 17
+      },
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71f3ed6e_d3f45343",
         "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
         "patchSetId": 8
@@ -329,6 +479,24 @@
       "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e54f23a2_6543583e",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-17T16:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71f3ed6e_d3f45343",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -349,6 +517,24 @@
     },
     {
       "key": {
+        "uuid": "034eb43c_eeaab23e",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-17T16:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f97a8dca_30265c82",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a122b88_b42eec60",
         "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
         "patchSetId": 8
@@ -363,6 +549,24 @@
       "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff418dd8_dd57f4e4",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-17T16:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a122b88_b42eec60",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -383,6 +587,24 @@
     },
     {
       "key": {
+        "uuid": "71de391f_fd98cc1b",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-17T16:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "870b3063_4d286ec4",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "25ccc056_b52f8643",
         "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
         "patchSetId": 8
@@ -400,6 +622,24 @@
     },
     {
       "key": {
+        "uuid": "1b359bc9_110228a3",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-17T16:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25ccc056_b52f8643",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e9376543_fda51fc1",
         "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
         "patchSetId": 8
@@ -414,6 +654,24 @@
       "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b09a2ec_58e4bc5e",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-17T16:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9376543_fda51fc1",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
