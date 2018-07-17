@@ -562,11 +562,6 @@ Error Display::terminate(const Thread *thread)
     // The global texture manager should be deleted with the last context that uses it.
     ASSERT(mGlobalTextureShareGroupUsers == 0 && mTextureManager == nullptr);
 
-    while (!mImageSet.empty())
-    {
-        destroyImage(*mImageSet.begin());
-    }
-
     while (!mStreamSet.empty())
     {
         destroyStream(*mStreamSet.begin());
@@ -701,7 +696,7 @@ Error Display::createPixmapSurface(const Config *configuration,
     return NoError();
 }
 
-Error Display::createImage(const gl::Context *context,
+Error Display::createImage(gl::Context *context,
                            EGLenum target,
                            EGLClientBuffer buffer,
                            const AttributeMap &attribs,
@@ -734,13 +729,10 @@ Error Display::createImage(const gl::Context *context,
     ANGLE_TRY(imagePtr->initialize());
 
     Image *image = imagePtr.release();
+    context->addImage(image);
 
     ASSERT(outImage != nullptr);
     *outImage = image;
-
-    // Add this image to the list of all images and hold a ref to it.
-    image->addRef();
-    mImageSet.insert(image);
 
     return NoError();
 }
@@ -874,10 +866,13 @@ Error Display::destroySurface(Surface *surface)
 
 void Display::destroyImage(egl::Image *image)
 {
-    auto iter = mImageSet.find(image);
-    ASSERT(iter != mImageSet.end());
-    (*iter)->release(mProxyContext.get());
-    mImageSet.erase(iter);
+    for (gl::Context *context : mContextSet)
+    {
+        if (context->isValidImage(image))
+        {
+            context->removeImage(image);
+        }
+    }
 }
 
 void Display::destroyStream(egl::Stream *stream)
@@ -996,7 +991,15 @@ bool Display::isValidSurface(const Surface *surface) const
 
 bool Display::isValidImage(const Image *image) const
 {
-    return mImageSet.find(const_cast<Image *>(image)) != mImageSet.end();
+    for (gl::Context *context : mContextSet)
+    {
+        if (context->isValidImage(image))
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool Display::isValidStream(const Stream *stream) const
