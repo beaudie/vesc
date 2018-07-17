@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "526917c5_44f0df4a",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-07-17T21:49:39Z",
+      "side": 1,
+      "message": "Hmm I got rid of the if statement and that seemed to break the openGL and Vulkan test, are there different deviceTypes that I need to pass in for those maybe?\n\nJust as a heads up I got this section from the EGLInitializePerf.cpp file",
+      "parentUuid": "cd11fa65_a1d7a760",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 5
+      },
+      "revId": "5bedd8599ece83fabd22513194181d752e970b0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d15207d2_ec282f06",
         "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "564b5ec4_c925edda",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-07-17T21:49:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d15207d2_ec282f06",
+      "range": {
+        "startLine": 93,
+        "startChar": 71,
+        "endLine": 93,
+        "endChar": 75
+      },
+      "revId": "5bedd8599ece83fabd22513194181d752e970b0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b01ddfc5_b86815f1",
         "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
         "patchSetId": 5
@@ -68,6 +116,30 @@
       "revId": "5bedd8599ece83fabd22513194181d752e970b0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15465372_877060e6",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-07-17T21:49:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b01ddfc5_b86815f1",
+      "range": {
+        "startLine": 114,
+        "startChar": 24,
+        "endLine": 114,
+        "endChar": 26
+      },
+      "revId": "5bedd8599ece83fabd22513194181d752e970b0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +189,54 @@
     },
     {
       "key": {
+        "uuid": "d4c47012_7350d4a0",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-07-17T21:49:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a58e9da6_5d8e5b59",
+      "range": {
+        "startLine": 116,
+        "startChar": 8,
+        "endLine": 116,
+        "endChar": 21
+      },
+      "revId": "5bedd8599ece83fabd22513194181d752e970b0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "51d723ac_fd64fb12",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-07-17T21:49:39Z",
+      "side": 1,
+      "message": "That\u0027s a good idea! Yea I decided on the bit flip since there were only two contexts, but this makes it just a little easier to modify the test to arbitrary context counts in the future if needed.",
+      "parentUuid": "3f8d39cc_42d3ee8a",
+      "range": {
+        "startLine": 116,
+        "startChar": 23,
+        "endLine": 116,
+        "endChar": 36
+      },
+      "revId": "5bedd8599ece83fabd22513194181d752e970b0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6a310de_48a7970f",
         "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
         "patchSetId": 5
@@ -137,6 +257,30 @@
       "revId": "5bedd8599ece83fabd22513194181d752e970b0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f958a7d_c80b945c",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-07-17T21:49:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6a310de_48a7970f",
+      "range": {
+        "startLine": 127,
+        "startChar": 23,
+        "endLine": 129,
+        "endChar": 42
+      },
+      "revId": "5bedd8599ece83fabd22513194181d752e970b0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
