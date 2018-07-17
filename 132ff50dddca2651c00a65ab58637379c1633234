@@ -331,6 +331,30 @@
     },
     {
       "key": {
+        "uuid": "9fed918f_88a5cd18",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-07-17T20:02:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e03c84ce_0544f48f",
+      "range": {
+        "startLine": 59,
+        "startChar": 7,
+        "endLine": 59,
+        "endChar": 31
+      },
+      "revId": "132ff50dddca2651c00a65ab58637379c1633234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "221b0cde_2a5a75b7",
         "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
         "patchSetId": 2
@@ -446,6 +470,30 @@
       "revId": "132ff50dddca2651c00a65ab58637379c1633234",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15ec876c_cb4587e6",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-07-17T20:02:55Z",
+      "side": 1,
+      "message": "Cool, I hardcoded to 100 since that gave the GL run a score in the hundreds (388 to be exact) which is around the same order of magnitude that other tests usually give score wise\n\nThe Vulkan backend gave a score of 47 just in case you were curious, so there might be some perf work to be done haha",
+      "parentUuid": "f53daf03_a587bc0a",
+      "range": {
+        "startLine": 105,
+        "startChar": 2,
+        "endLine": 105,
+        "endChar": 16
+      },
+      "revId": "132ff50dddca2651c00a65ab58637379c1633234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
