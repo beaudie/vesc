@@ -331,6 +331,24 @@
     },
     {
       "key": {
+        "uuid": "c515ea01_fa11373a",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2018-07-17T16:50:18Z",
+      "side": 1,
+      "message": "Done (the  invalid case is already in, and the Basic test already tests for width \u003d height \u003d 1)",
+      "parentUuid": "43988b3a_5e46f6db",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2868a999_68795ff8",
         "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
         "patchSetId": 8
