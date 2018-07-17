@@ -344,12 +344,14 @@ InstancingPerfParams InstancingPerfD3D9Params()
     return params;
 }
 
+#if !defined(ANGLE_PLATFORM_ANDROID)
 InstancingPerfParams InstancingPerfOpenGLOrGLESParams()
 {
     InstancingPerfParams params;
     params.eglParameters = OPENGL_OR_GLES(false);
     return params;
 }
+#endif
 
 TEST_P(InstancingPerfBenchmark, Run)
 {
@@ -359,6 +361,9 @@ TEST_P(InstancingPerfBenchmark, Run)
 ANGLE_INSTANTIATE_TEST(InstancingPerfBenchmark,
                        InstancingPerfD3D11Params(),
                        InstancingPerfD3D9Params(),
-                       InstancingPerfOpenGLOrGLESParams());
+#if !defined(ANGLE_PLATFORM_ANDROID)
+                       InstancingPerfOpenGLOrGLESParams()
+#endif
+                           );
 
 }  // anonymous namespace
