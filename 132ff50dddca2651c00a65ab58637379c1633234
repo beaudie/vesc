@@ -307,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "e03c84ce_0544f48f",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-17T19:54:10Z",
+      "side": 1,
+      "message": "Makes sense.",
+      "parentUuid": "7ddb8905_e4fbcc00",
+      "range": {
+        "startLine": 59,
+        "startChar": 7,
+        "endLine": 59,
+        "endChar": 31
+      },
+      "revId": "132ff50dddca2651c00a65ab58637379c1633234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "221b0cde_2a5a75b7",
         "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
         "patchSetId": 2
@@ -389,6 +413,30 @@
       "side": 1,
       "message": "Oh wow wait this is a slightly older version that was missing the update to currentContext, that should be resolved now though! \n\nAlso for that inner loop iteration count, would you want that to be hard coded into the test or should I create a params object like in other tests where the loop iterations can be specified there?",
       "parentUuid": "0abe1ed9_6d119fe8",
+      "range": {
+        "startLine": 105,
+        "startChar": 2,
+        "endLine": 105,
+        "endChar": 16
+      },
+      "revId": "132ff50dddca2651c00a65ab58637379c1633234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f53daf03_a587bc0a",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-17T19:54:10Z",
+      "side": 1,
+      "message": "Probably just a hard coded amount is fine for now.",
+      "parentUuid": "c0066254_56438fea",
       "range": {
         "startLine": 105,
         "startChar": 2,
