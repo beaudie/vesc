@@ -22,6 +22,30 @@
       "revId": "b83af0dbe870e21d39995c0fcc08dbc487696079",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b5b5d1c_cce4222a",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6136,
+      "author": {
+        "id": 1167049
+      },
+      "writtenOn": "2018-07-17T06:10:52Z",
+      "side": 1,
+      "message": "Yes, they should be the same if the texture is valid.",
+      "parentUuid": "4b1a0df7_a6c34602",
+      "range": {
+        "startLine": 6136,
+        "startChar": 9,
+        "endLine": 6136,
+        "endChar": 87
+      },
+      "revId": "b83af0dbe870e21d39995c0fcc08dbc487696079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
