@@ -313,6 +313,24 @@
     },
     {
       "key": {
+        "uuid": "43988b3a_5e46f6db",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-07-17T16:48:34Z",
+      "side": 1,
+      "message": "Oh, can we have these tested too then? And a 0, 0, 1, 1 control case?",
+      "parentUuid": "d9032647_bd17fc2f",
+      "revId": "09b0d2314c860a8e91a145b6a245498eaac836ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2868a999_68795ff8",
         "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
         "patchSetId": 8
