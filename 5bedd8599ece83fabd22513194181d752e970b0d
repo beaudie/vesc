@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd11fa65_a1d7a760",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-17T21:21:12Z",
+      "side": 1,
+      "message": "I think the device type applies to all backends.",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 5
+      },
+      "revId": "5bedd8599ece83fabd22513194181d752e970b0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d15207d2_ec282f06",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-17T21:21:12Z",
+      "side": 1,
+      "message": "nit: nullptr (and below)",
+      "range": {
+        "startLine": 93,
+        "startChar": 71,
+        "endLine": 93,
+        "endChar": 75
+      },
+      "revId": "5bedd8599ece83fabd22513194181d752e970b0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b01ddfc5_b86815f1",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-17T21:21:12Z",
+      "side": 1,
+      "message": "Maybe put this into a constant or config variable.",
+      "range": {
+        "startLine": 114,
+        "startChar": 24,
+        "endLine": 114,
+        "endChar": 26
+      },
+      "revId": "5bedd8599ece83fabd22513194181d752e970b0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a58e9da6_5d8e5b59",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-17T21:21:12Z",
+      "side": 1,
+      "message": "nit: this can be a local variable instead of a member.",
+      "range": {
+        "startLine": 116,
+        "startChar": 8,
+        "endLine": 116,
+        "endChar": 21
+      },
+      "revId": "5bedd8599ece83fabd22513194181d752e970b0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f8d39cc_42d3ee8a",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-17T21:21:12Z",
+      "side": 1,
+      "message": "The code could support more than 2 contexts \u0027for free\u0027 by using\n\n    mCurrContext \u003d (mCurrContext + 1) % mContexts.size()",
+      "range": {
+        "startLine": 116,
+        "startChar": 23,
+        "endLine": 116,
+        "endChar": 36
+      },
+      "revId": "5bedd8599ece83fabd22513194181d752e970b0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6a310de_48a7970f",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-17T21:21:12Z",
+      "side": 1,
+      "message": "Let\u0027s run it against D3D9 and D3D11 too.",
+      "range": {
+        "startLine": 127,
+        "startChar": 23,
+        "endLine": 129,
+        "endChar": 42
+      },
+      "revId": "5bedd8599ece83fabd22513194181d752e970b0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
