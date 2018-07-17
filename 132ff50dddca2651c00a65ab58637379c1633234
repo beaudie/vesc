@@ -1,0 +1,199 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05ac5f89_9386d256",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-17T17:11:15Z",
+      "side": 1,
+      "message": "needs a bug tag",
+      "revId": "132ff50dddca2651c00a65ab58637379c1633234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "668b5958_8b5a6905",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-17T17:11:15Z",
+      "side": 1,
+      "message": "use the standard copyright header and top level comment. see the angle project docs:\n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#comments",
+      "revId": "132ff50dddca2651c00a65ab58637379c1633234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6ce3525_cdda9eff",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-17T17:11:15Z",
+      "side": 1,
+      "message": "remember to run git cl format before uploading to fix style issues.",
+      "range": {
+        "startLine": 18,
+        "startChar": 2,
+        "endLine": 18,
+        "endChar": 24
+      },
+      "revId": "132ff50dddca2651c00a65ab58637379c1633234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a362be19_f78f76be",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-17T17:11:15Z",
+      "side": 1,
+      "message": "mCurrentContext",
+      "range": {
+        "startLine": 29,
+        "startChar": 8,
+        "endLine": 29,
+        "endChar": 19
+      },
+      "revId": "132ff50dddca2651c00a65ab58637379c1633234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6059262b_50cb6b41",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-17T17:11:15Z",
+      "side": 1,
+      "message": "std::array and also mContexts.",
+      "range": {
+        "startLine": 30,
+        "startChar": 15,
+        "endLine": 30,
+        "endChar": 23
+      },
+      "revId": "132ff50dddca2651c00a65ab58637379c1633234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01cf0076_f784d7ab",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-17T17:11:15Z",
+      "side": 1,
+      "message": "can you also init all the other members? just for safety.",
+      "range": {
+        "startLine": 36,
+        "startChar": 6,
+        "endLine": 36,
+        "endChar": 14
+      },
+      "revId": "132ff50dddca2651c00a65ab58637379c1633234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc7e32b3_5f6a1b96",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-17T17:11:15Z",
+      "side": 1,
+      "message": "I\u0027m not sure if you need to do this. We should export this entry point statically.",
+      "range": {
+        "startLine": 59,
+        "startChar": 7,
+        "endLine": 59,
+        "endChar": 31
+      },
+      "revId": "132ff50dddca2651c00a65ab58637379c1633234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "221b0cde_2a5a75b7",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-17T17:11:15Z",
+      "side": 1,
+      "message": "I think some of these methods have return values. Make sure to validate every return value.",
+      "range": {
+        "startLine": 74,
+        "startChar": 2,
+        "endLine": 74,
+        "endChar": 15
+      },
+      "revId": "132ff50dddca2651c00a65ab58637379c1633234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0abe1ed9_6d119fe8",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-17T17:11:15Z",
+      "side": 1,
+      "message": "you might also want to run this in an inner loop to increase the iteration count. Also I don\u0027t see where you update currentContext.",
+      "range": {
+        "startLine": 105,
+        "startChar": 2,
+        "endLine": 105,
+        "endChar": 16
+      },
+      "revId": "132ff50dddca2651c00a65ab58637379c1633234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
