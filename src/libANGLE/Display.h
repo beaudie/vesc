@@ -166,8 +166,6 @@ class Display final : public LabeledObject, angle::NonCopyable
 
     const DisplayState &getState() const { return mState; }
 
-    gl::Context *getProxyContext() const { return mProxyContext.get(); }
-
   private:
     Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice);
 
@@ -209,10 +207,6 @@ class Display final : public LabeledObject, angle::NonCopyable
     gl::TextureManager *mTextureManager;
     gl::MemoryProgramCache mMemoryProgramCache;
     size_t mGlobalTextureShareGroupUsers;
-
-    // This gl::Context is a simple proxy to the Display for the GL back-end entry points
-    // that need access to implementation-specific data, like a Renderer object.
-    angle::UniqueObjectPointer<gl::Context, Display> mProxyContext;
 };
 
 }  // namespace egl
