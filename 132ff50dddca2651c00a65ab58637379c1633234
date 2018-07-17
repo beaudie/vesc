@@ -518,6 +518,30 @@
       "revId": "132ff50dddca2651c00a65ab58637379c1633234",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff73592d_5d3a2484",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-07-17T21:05:20Z",
+      "side": 1,
+      "message": "So at 20 that puts us up a good order of magnitude, so GL \u003d ~1900 and Vulkan \u003d ~200\n\nThat seems pretty good to me, thoughts?",
+      "parentUuid": "41af6823_07cf8ba8",
+      "range": {
+        "startLine": 105,
+        "startChar": 2,
+        "endLine": 105,
+        "endChar": 16
+      },
+      "revId": "132ff50dddca2651c00a65ab58637379c1633234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
