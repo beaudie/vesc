@@ -148,6 +148,7 @@ void Format::initBufferFallback(VkPhysicalDevice physicalDevice,
         vkBufferFormat               = vkFormat;
         vertexLoadFunction           = function;
         vertexLoadRequiresConversion = functionConverts;
+        vertexLoadRequiresConversion = true;
     }
     else
     {

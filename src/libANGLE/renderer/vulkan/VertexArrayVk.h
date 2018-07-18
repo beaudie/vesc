@@ -26,7 +26,6 @@ class BufferVk;
 namespace vk
 {
 class CommandGraphResource;
-class DynamicBuffer;
 }  // namespace vk
 
 class VertexArrayVk : public VertexArrayImpl
@@ -98,7 +97,7 @@ class VertexArrayVk : public VertexArrayImpl
                             vk::CommandBuffer *commandBuffer,
                             bool newCommandBuffer);
 
-    void syncDirtyAttrib(ContextVk *contextVk,
+    void syncDirtyAttrib(const gl::Context *context,
                          const gl::VertexAttribute &attrib,
                          const gl::VertexBinding &binding,
                          size_t attribIndex);
@@ -108,6 +107,7 @@ class VertexArrayVk : public VertexArrayImpl
     gl::AttribArray<vk::CommandGraphResource *> mCurrentArrayBufferResources;
     gl::AttribArray<const vk::Format *> mCurrentArrayBufferFormats;
     gl::AttribArray<GLuint> mCurrentArrayBufferStrides;
+    gl::AttribArray<vk::DynamicBuffer> mCurrentArrayBufferConversion;
     VkBuffer mCurrentElementArrayBufferHandle;
     VkDeviceSize mCurrentElementArrayBufferOffset;
     vk::CommandGraphResource *mCurrentElementArrayBufferResource;
