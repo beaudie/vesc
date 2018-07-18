@@ -1016,7 +1016,12 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
             break;
 
         case angle::Format::ID::R32G32B32A32_FIXED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGBA32_FIXED_ANGLEX;
+
+            bufferFormatID               = angle::Format::ID::R32G32B32A32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32G32B32A32_SFLOAT;
+            vertexLoadFunction           = Copy32FixedTo32FVertexData<4, 4>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::Format::ID::R32G32B32A32_FLOAT:
@@ -1069,7 +1074,12 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
             break;
 
         case angle::Format::ID::R32G32B32_FIXED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB32_FIXED_ANGLEX;
+
+            bufferFormatID               = angle::Format::ID::R32G32B32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32G32B32_SFLOAT;
+            vertexLoadFunction           = Copy32FixedTo32FVertexData<3, 3>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::Format::ID::R32G32B32_FLOAT:
@@ -1122,7 +1132,12 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
             break;
 
         case angle::Format::ID::R32G32_FIXED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RG32_FIXED_ANGLEX;
+
+            bufferFormatID               = angle::Format::ID::R32G32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32G32_SFLOAT;
+            vertexLoadFunction           = Copy32FixedTo32FVertexData<2, 2>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::Format::ID::R32G32_FLOAT:
@@ -1175,7 +1190,12 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
             break;
 
         case angle::Format::ID::R32_FIXED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_R32_FIXED_ANGLEX;
+
+            bufferFormatID               = angle::Format::ID::R32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32_SFLOAT;
+            vertexLoadFunction           = Copy32FixedTo32FVertexData<1, 1>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::Format::ID::R32_FLOAT:
