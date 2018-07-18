@@ -215,13 +215,8 @@ angle::Result PixelBuffer::stageSubresourceUpdateFromFramebuffer(
         pixelPackState.reverseRowOrder = !pixelPackState.reverseRowOrder;
     }
 
-    PackPixelsParams params;
-    params.area        = clippedRectangle;
-    params.format      = formatInfo.format;
-    params.type        = formatInfo.type;
-    params.outputPitch = static_cast<GLuint>(outputRowPitch);
-    params.packBuffer  = nullptr;
-    params.pack        = pixelPackState;
+    PackPixelsParams params(clippedRectangle, storageFormat, static_cast<GLuint>(outputRowPitch),
+                            pixelPackState, nullptr, 0);
 
     // 2- copy the source image region to the pixel buffer using a cpu readback
     if (loadFunction.requiresConversion)
