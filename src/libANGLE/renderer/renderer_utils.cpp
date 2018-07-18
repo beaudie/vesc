@@ -254,6 +254,7 @@ void PackPixels(const PackPixelsParams &params,
                   "Unexpected size of gl::Color struct.");
 
     const auto &colorReadFunction = sourceFormat.colorReadFunction;
+    ASSERT(colorReadFunction != nullptr);
 
     for (int y = 0; y < params.area.height; ++y)
     {
