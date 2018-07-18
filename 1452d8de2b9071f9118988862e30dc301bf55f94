@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f526d455_3b8f54f6",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2783,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-18T16:50:09Z",
+      "side": 1,
+      "message": "This needs to check that the windowFixedSize extension is present on the display and that the surface is fixed size.  You can group the two case statements together.",
+      "range": {
+        "startLine": 2779,
+        "startChar": 0,
+        "endLine": 2783,
+        "endChar": 18
+      },
+      "revId": "1452d8de2b9071f9118988862e30dc301bf55f94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
