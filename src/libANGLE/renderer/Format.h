@@ -14,6 +14,8 @@
 
 #include "libANGLE/renderer/renderer_utils.h"
 
+#include <unordered_map>
+
 namespace angle
 {
 enum class FormatID;
@@ -41,6 +43,8 @@ struct Format final : private angle::NonCopyable
     static FormatID InternalFormatToID(GLenum internalFormat);
 
     constexpr bool hasDepthOrStencilBits() const;
+
+    bool operator==(const Format &other) const { return this == &other; }
 
     FormatID id;
 
