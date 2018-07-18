@@ -370,6 +370,8 @@ void AttributeLayoutTest::GetTestCases(void)
     std::shared_ptr<Container> B0 = std::make_shared<Buffer>();
     std::shared_ptr<Container> B1 = std::make_shared<Buffer>();
 
+    mTestCases.push_back({SByte(B0, 0, 20, mCoord), UByte(B1, 0, 20, mColor)});
+
     // 0. two buffers
     mTestCases.push_back({Float(B0, 0, 8, mCoord), Float(B1, 0, 12, mColor)});
 
@@ -455,6 +457,7 @@ class AttributeLayoutBufferIndexed : public AttributeLayoutTest
 TEST_P(AttributeLayoutNonIndexed, Test)
 {
     Run(true);
+    return;
     ANGLE_SKIP_TEST_IF(IsWindows() && IsAMD() && IsOpenGL());
     Run(false);
 }
