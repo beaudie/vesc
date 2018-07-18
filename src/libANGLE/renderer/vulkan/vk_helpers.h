@@ -57,6 +57,7 @@ class DynamicBuffer : angle::NonCopyable
 
     // This releases resources when they might currently be in use.
     void release(RendererVk *renderer);
+    void releaseAndReset(RendererVk *renderer);
 
     // This releases all the buffers that have been allocated since this was last called.
     void releaseRetainedBuffers(RendererVk *renderer);

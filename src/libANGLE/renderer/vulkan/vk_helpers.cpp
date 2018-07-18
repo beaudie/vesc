@@ -211,6 +211,22 @@ angle::Result DynamicBuffer::invalidate(Context *context)
     return angle::Result::Continue();
 }
 
+void DynamicBuffer::releaseAndReset(RendererVk *renderer)
+{
+    size_t alignment = mAlignment;
+
+    if (mMappedMemory)
+    {
+        mMemory.unmap(renderer->getDevice());
+        mMappedMemory = nullptr;
+    }
+
+    release(renderer);
+    init(alignment, renderer);
+
+    mSize = 0;
+}
+
 void DynamicBuffer::release(RendererVk *renderer)
 {
     releaseRetainedBuffers(renderer);
