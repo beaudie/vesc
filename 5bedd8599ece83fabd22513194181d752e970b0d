@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "90efbedc_2c912232",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-18T00:44:48Z",
+      "side": 1,
+      "message": "Actually, cancel that. We should make the default value for deviceType be HARDWARE in EGLWindow.cpp.",
+      "parentUuid": "4d6a2d04_6c48d776",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 5
+      },
+      "revId": "5bedd8599ece83fabd22513194181d752e970b0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d15207d2_ec282f06",
         "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
         "patchSetId": 5
