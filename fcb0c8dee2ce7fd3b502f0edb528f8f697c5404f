@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01d48e07_97cd893d",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-18T20:24:49Z",
+      "side": 1,
+      "message": "probably want to change it here too",
+      "range": {
+        "startLine": 23,
+        "startChar": 17,
+        "endLine": 23,
+        "endChar": 30
+      },
+      "revId": "fcb0c8dee2ce7fd3b502f0edb528f8f697c5404f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "295ebaa7_058414c3",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-18T20:24:49Z",
+      "side": 1,
+      "message": "might as well fix the naming here too (deviceType rather than useWarp)",
+      "range": {
+        "startLine": 40,
+        "startChar": 52,
+        "endLine": 40,
+        "endChar": 59
+      },
+      "revId": "fcb0c8dee2ce7fd3b502f0edb528f8f697c5404f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff3bb167_a404dc1f",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-18T20:24:49Z",
+      "side": 1,
+      "message": "might as well fix the naming here too (deviceType rather than useWarp)",
+      "revId": "fcb0c8dee2ce7fd3b502f0edb528f8f697c5404f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
