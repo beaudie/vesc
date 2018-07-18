@@ -504,7 +504,8 @@ gl::Error ContextVk::syncState(const gl::Context *context, const gl::State::Dirt
             case gl::State::DIRTY_BIT_SAMPLE_MASK:
                 break;
             case gl::State::DIRTY_BIT_DEPTH_TEST_ENABLED:
-                mPipelineDesc->updateDepthTestEnabled(glState.getDepthStencilState());
+                mPipelineDesc->updateDepthTestEnabled(glState.getDepthStencilState(),
+                                                      glState.getDrawFramebuffer());
                 break;
             case gl::State::DIRTY_BIT_DEPTH_FUNC:
                 mPipelineDesc->updateDepthFunc(glState.getDepthStencilState());
@@ -513,7 +514,8 @@ gl::Error ContextVk::syncState(const gl::Context *context, const gl::State::Dirt
                 mPipelineDesc->updateDepthWriteEnabled(glState.getDepthStencilState());
                 break;
             case gl::State::DIRTY_BIT_STENCIL_TEST_ENABLED:
-                mPipelineDesc->updateStencilTestEnabled(glState.getDepthStencilState());
+                mPipelineDesc->updateStencilTestEnabled(glState.getDepthStencilState(),
+                                                        glState.getDrawFramebuffer());
                 break;
             case gl::State::DIRTY_BIT_STENCIL_FUNCS_FRONT:
                 mPipelineDesc->updateStencilFrontFuncs(glState.getStencilRef(),
@@ -599,6 +601,10 @@ gl::Error ContextVk::syncState(const gl::Context *context, const gl::State::Dirt
                 updateColorMask(glState.getBlendState());
                 mPipelineDesc->updateCullMode(glState.getRasterizerState());
                 updateScissor(glState);
+                mPipelineDesc->updateDepthTestEnabled(glState.getDepthStencilState(),
+                                                      glState.getDrawFramebuffer());
+                mPipelineDesc->updateStencilTestEnabled(glState.getDepthStencilState(),
+                                                        glState.getDrawFramebuffer());
                 break;
             }
             case gl::State::DIRTY_BIT_RENDERBUFFER_BINDING:
