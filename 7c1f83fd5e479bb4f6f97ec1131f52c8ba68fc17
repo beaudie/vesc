@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3a3b3f3_63c17f8b",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-19T17:20:32Z",
+      "side": 1,
+      "message": "If these are only used in the check functions below, can we merge them?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 72
+      },
+      "revId": "7c1f83fd5e479bb4f6f97ec1131f52c8ba68fc17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
