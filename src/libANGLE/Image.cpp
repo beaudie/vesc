@@ -130,8 +130,7 @@ Image::Image(rx::EGLImplFactory *factory,
              EGLenum target,
              ImageSibling *buffer,
              const AttributeMap &attribs)
-    : RefCountObject(0),
-      mState(target, buffer, attribs),
+    : mState(target, buffer, attribs),
       mImplementation(factory->createImage(mState, target, attribs)),
       mOrphanedAndNeedsInit(false)
 {
@@ -141,23 +140,19 @@ Image::Image(rx::EGLImplFactory *factory,
     mState.source->addImageSource(this);
 }
 
-gl::Error Image::onDestroy(const gl::Context *context)
+Image::~Image()
 {
     // All targets should hold a ref to the egl image and it should not be deleted until there are
     // no siblings left.
     ASSERT(mState.targets.empty());
 
     // Tell the source that it is no longer used by this image
-    if (mState.source.get() != nullptr)
+    if (mState.source)
     {
         mState.source->removeImageSource(this);
-        mState.source.set(context, nullptr);
+        mState.source = nullptr;
     }
-    return gl::NoError();
-}
 
-Image::~Image()
-{
     SafeDelete(mImplementation);
 }
 
@@ -181,11 +176,11 @@ gl::Error Image::orphanSibling(const gl::Context *context, ImageSibling *sibling
     // notify impl
     ANGLE_TRY(mImplementation->orphan(context, sibling));
 
-    if (mState.source.get() == sibling)
+    if (mState.source == sibling)
     {
         // If the sibling is the source, it cannot be a target.
         ASSERT(mState.targets.find(sibling) == mState.targets.end());
-        mState.source.set(context, nullptr);
+        mState.source = nullptr;
         mOrphanedAndNeedsInit =
             (sibling->initState(mState.imageIndex) == gl::InitState::MayNeedInit);
     }
@@ -229,7 +224,7 @@ Error Image::initialize()
 
 bool Image::orphaned() const
 {
-    return (mState.source.get() == nullptr);
+    return (mState.source == nullptr);
 }
 
 gl::InitState Image::sourceInitState() const
