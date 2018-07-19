@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "100cefda_44c773dc",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 13
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-19T17:45:04Z",
+      "side": 0,
+      "message": "these failures might be from a different root cause.",
+      "range": {
+        "startLine": 355,
+        "startChar": 0,
+        "endLine": 360,
+        "endChar": 0
+      },
+      "revId": "38971fd135992a2abfbc57bb08ec43ecade178ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

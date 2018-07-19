@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10206e1f_0c38524b",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-19T17:45:04Z",
+      "side": 1,
+      "message": "this could be affecting the tests? You can fix this by also making the call syncDirtyAttrib. I don\u0027t think you would have the invalidate the pipeline. It would be a bit sub optimal but should be safe.",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 177,
+        "endChar": 25
+      },
+      "revId": "94481649377ff54717e12e9a90c73ef4d8c2de77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "548efda7_206042c8",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-19T17:45:04Z",
+      "side": 1,
+      "message": "I always worry about % and brackets. better to add them.",
+      "range": {
+        "startLine": 273,
+        "startChar": 37,
+        "endLine": 274,
+        "endChar": 70
+      },
+      "revId": "94481649377ff54717e12e9a90c73ef4d8c2de77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

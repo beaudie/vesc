@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d163d42c_cdc19e54",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-19T17:45:04Z",
+      "side": 1,
+      "message": "in a post-process we should maybe change the semantics of the DynamicBuffer init to take these parameters instead of passing them to the constructor.",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 0
+      },
+      "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "77c5c406_cd88eaa6",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-19T17:45:04Z",
+      "side": 1,
+      "message": "please use more descriptive index names in general. Makes it easier to understand as a reader.",
+      "range": {
+        "startLine": 65,
+        "startChar": 28,
+        "endLine": 65,
+        "endChar": 29
+      },
+      "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fb609f1_c05581f8",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-19T17:45:04Z",
+      "side": 1,
+      "message": "nit: {} for clarity",
+      "range": {
+        "startLine": 66,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 28
+      },
+      "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0e7cc23_7d5d364b",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-19T17:45:04Z",
+      "side": 1,
+      "message": "same comments.",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 26
+      },
+      "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a989bc24_18686920",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-19T17:45:04Z",
+      "side": 1,
+      "message": "maybe make this a helper method that takes a binding and component size",
+      "range": {
+        "startLine": 278,
+        "startChar": 90,
+        "endLine": 278,
+        "endChar": 99
+      },
+      "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "810b3f29_c81e4fb1",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-19T17:45:04Z",
+      "side": 1,
+      "message": "nit: can we put this in a helper method to aid readability?",
+      "range": {
+        "startLine": 280,
+        "startChar": 16,
+        "endLine": 310,
+        "endChar": 66
+      },
+      "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "493ae805_d2103409",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-19T17:45:04Z",
+      "side": 1,
+      "message": "nit: {} for clarity",
+      "range": {
+        "startLine": 343,
+        "startChar": 8,
+        "endLine": 343,
+        "endChar": 37
+      },
+      "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2e7ca6f_02a5d9b1",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 13
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-19T17:45:04Z",
+      "side": 1,
+      "message": "can you please clean these up?",
+      "range": {
+        "startLine": 322,
+        "startChar": 0,
+        "endLine": 322,
+        "endChar": 109
+      },
+      "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
