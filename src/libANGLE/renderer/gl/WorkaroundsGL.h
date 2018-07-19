@@ -152,6 +152,10 @@ struct WorkaroundsGL
     // GLSL user-defined function have incorrect results. Rewrite this type of statements to fix
     // this.
     bool rewriteRepeatedAssignToSwizzled = false;
+
+    // Some Andriod drivers do not orphan EGL images if the source texture is respecified to have
+    // the same size and format.  These images need to be forcefully orphaned.
+    bool forceEGLImageTextureOrphaning = false;
 };
 
 inline WorkaroundsGL::WorkaroundsGL() = default;
