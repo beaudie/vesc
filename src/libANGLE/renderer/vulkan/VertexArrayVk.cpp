@@ -330,7 +330,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
 
     if (attrib.enabled)
     {
-        gl::Buffer *bufferGL = binding.getBuffer().get();
+        gl::Buffer *bufferGL                    = binding.getBuffer().get();
         mCurrentArrayBufferFormats[attribIndex] = &renderer->getFormat(GetVertexFormatID(attrib));
 
         if (bufferGL)
