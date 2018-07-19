@@ -458,6 +458,9 @@ class ImageTestES3 : public ImageTest
 // you change extension availability.
 TEST_P(ImageTest, ANGLEExtensionAvailability)
 {
+    // Android support is based on driver extension availability.
+    ANGLE_SKIP_TEST_IF(IsOpenGLES() && IsAndroid());
+
     if (IsD3D11() || IsD3D9())
     {
         EXPECT_TRUE(hasOESExt());

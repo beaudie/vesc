@@ -941,6 +941,11 @@ void GenerateCaps(const FunctionsGL *functions,
                               functions->isAtLeastGLES(gl::Version(3, 2)) ||
                               functions->hasGLESExtension("GL_KHR_debug") ||
                               functions->hasGLESExtension("GL_EXT_debug_marker");
+    extensions->eglImage = functions->hasGLESExtension("GL_OES_EGL_image");
+    // extensions->eglImageExternal = functions->hasGLESExtension("GL_OES_EGL_image_external");
+    // extensions->eglImageExternalEssl3 =
+    //    functions->hasGLESExtension("GL_OES_EGL_image_external_essl3");
+
     if (functions->isAtLeastGL(gl::Version(3, 3)) ||
         functions->hasGLExtension("GL_ARB_timer_query") ||
         functions->hasGLESExtension("GL_EXT_disjoint_timer_query"))
@@ -1193,6 +1198,9 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
     workarounds->clampPointSize = true;
 
     workarounds->dontUseLoopsToInitializeVariables = !IsNvidia(vendor);
+
+    // Only seen on Qualcomm devices so far.
+    workarounds->forceEGLImageTextureOrphaning = IsQualcomm(vendor);
 #endif
 }
 
