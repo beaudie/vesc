@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "libANGLE/Error.h"
+#include "libANGLE/Version.h"
 
 namespace rx
 {
@@ -28,8 +29,7 @@ class FunctionsEGL
     FunctionsEGL();
     virtual ~FunctionsEGL();
 
-    int majorVersion;
-    int minorVersion;
+    gl::Version version;
 
     egl::Error initialize(EGLNativeDisplayType nativeDisplay);
     egl::Error terminate();
@@ -38,6 +38,7 @@ class FunctionsEGL
 
     FunctionsGL *makeFunctionsGL() const;
     bool hasExtension(const char *extension) const;
+    bool isAtLeastEGL(const gl::Version &eglVersion) const;
     EGLDisplay getDisplay() const;
     EGLint getError() const;
 

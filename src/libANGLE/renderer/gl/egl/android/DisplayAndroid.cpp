@@ -63,13 +63,13 @@ egl::Error DisplayAndroid::initialize(egl::Display *display)
         reinterpret_cast<void *>(mDisplayAttributes.get(EGL_PLATFORM_ANGLE_EGL_HANDLE_ANGLE, 0));
     ANGLE_TRY(egl->initialize(display->getNativeDisplayId(), GetEGLPath(), eglHandle));
 
-    gl::Version eglVersion(mEGL->majorVersion, mEGL->minorVersion);
-    ASSERT(eglVersion >= gl::Version(1, 4));
+    ASSERT(mEGL->isAtLeastEGL(gl::Version(1, 4)));
 
     static_assert(EGL_OPENGL_ES3_BIT == EGL_OPENGL_ES3_BIT_KHR, "Extension define must match core");
-    EGLint esBit = (eglVersion >= gl::Version(1, 5) || mEGL->hasExtension("EGL_KHR_create_context"))
-                       ? EGL_OPENGL_ES3_BIT
-                       : EGL_OPENGL_ES2_BIT;
+    EGLint esBit =
+        (mEGL->isAtLeastEGL(gl::Version(1, 5)) || mEGL->hasExtension("EGL_KHR_create_context"))
+            ? EGL_OPENGL_ES3_BIT
+            : EGL_OPENGL_ES2_BIT;
 
     // clang-format off
     std::vector<EGLint> configAttribListBase =

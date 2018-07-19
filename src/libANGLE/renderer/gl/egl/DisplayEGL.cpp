@@ -8,6 +8,7 @@
 
 #include "libANGLE/renderer/gl/egl/DisplayEGL.h"
 
+#include "libANGLE/renderer/gl/egl/ImageEGL.h"
 #include "libANGLE/renderer/gl/egl/egl_utils.h"
 
 namespace rx
@@ -24,6 +25,14 @@ DisplayEGL::~DisplayEGL()
 {
 }
 
+ImageImpl *DisplayEGL::createImage(const egl::ImageState &state,
+                                   const gl::Context *context,
+                                   EGLenum target,
+                                   const egl::AttributeMap &attribs)
+{
+    return new ImageEGL(state, context, target, attribs, mEGL);
+}
+
 std::string DisplayEGL::getVendorString() const
 {
     const char *vendor = mEGL->queryString(EGL_VENDOR);
@@ -35,8 +44,6 @@ egl::Error DisplayEGL::initializeContext(EGLContext shareContext,
                                          const egl::AttributeMap &eglAttributes,
                                          EGLContext *outContext) const
 {
-    gl::Version eglVersion(mEGL->majorVersion, mEGL->minorVersion);
-
     EGLint requestedMajor =
         eglAttributes.getAsInt(EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE, EGL_DONT_CARE);
     EGLint requestedMinor =
@@ -49,7 +56,7 @@ egl::Error DisplayEGL::initializeContext(EGLContext shareContext,
                   "Minor Version define should match");
 
     std::vector<native_egl::AttributeVector> contextAttribLists;
-    if (eglVersion >= gl::Version(1, 5) || mEGL->hasExtension("EGL_KHR_create_context"))
+    if (mEGL->isAtLeastEGL(gl::Version(1, 5)) || mEGL->hasExtension("EGL_KHR_create_context"))
     {
         if (initializeRequested)
         {
@@ -112,6 +119,20 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
     // We will fallback to regular swap if swapBuffersWithDamage isn't
     // supported, so indicate support here to keep validation happy.
     outExtensions->swapBuffersWithDamage = true;
+
+    bool eglImageIsCore      = mEGL->isAtLeastEGL(gl::Version(1, 5));
+    outExtensions->image     = eglImageIsCore || mEGL->hasExtension("EGL_KHR_image");
+    outExtensions->imageBase = eglImageIsCore || mEGL->hasExtension("EGL_KHR_image_base");
+    // Pixmaps are not supported in ANGLE's EGL implementation.
+    // outExtensions->imagePixmap = mEGL->hasExtension("EGL_KHR_image_pixmap");
+    outExtensions->glTexture2DImage =
+        eglImageIsCore || mEGL->hasExtension("EGL_KHR_gl_texture_2D_image");
+    outExtensions->glTextureCubemapImage =
+        eglImageIsCore || mEGL->hasExtension("EGL_KHR_gl_texture_cubemap_image");
+    outExtensions->glTexture3DImage =
+        eglImageIsCore || mEGL->hasExtension("EGL_KHR_gl_texture_3D_image");
+    outExtensions->glRenderbufferImage =
+        eglImageIsCore || mEGL->hasExtension("EGL_KHR_gl_renderbuffer_image");
 
     DisplayGL::generateExtensions(outExtensions);
 }

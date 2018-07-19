@@ -111,7 +111,7 @@ struct FunctionsEGL::EGLDispatchTable
 };
 
 FunctionsEGL::FunctionsEGL()
-    : majorVersion(0), minorVersion(0), mFnPtrs(new EGLDispatchTable()), mEGLDisplay(EGL_NO_DISPLAY)
+    : version(0, 0), mFnPtrs(new EGLDispatchTable()), mEGLDisplay(EGL_NO_DISPLAY)
 {
 }
 
@@ -154,14 +154,26 @@ egl::Error FunctionsEGL::initialize(EGLNativeDisplayType nativeDisplay)
     {
         return egl::EglNotInitialized() << "Failed to get system egl display";
     }
-    if (mFnPtrs->initializePtr(mEGLDisplay, &majorVersion, &minorVersion) != EGL_TRUE)
+
+    EGLint major = 0;
+    EGLint minor = 0;
+    if (mFnPtrs->initializePtr(mEGLDisplay, &major, &minor) != EGL_TRUE)
     {
         return egl::Error(mFnPtrs->getErrorPtr(), "Failed to initialize system egl");
     }
-    if (majorVersion < 1 || (majorVersion == 1 && minorVersion < 4))
+
+    if (major < 0 || minor < 0)
+    {
+        return egl::EglNotInitialized() << "Unexpected negative EGL version numbers.";
+    }
+
+    version.major = static_cast<unsigned int>(major);
+    version.minor = static_cast<unsigned int>(minor);
+    if (version < gl::Version(1, 4))
     {
         return egl::EglNotInitialized() << "Unsupported EGL version (require at least 1.4).";
     }
+
     if (mFnPtrs->bindAPIPtr(EGL_OPENGL_ES_API) != EGL_TRUE)
     {
         return egl::Error(mFnPtrs->getErrorPtr(), "Failed to bind API in system egl");
@@ -236,6 +248,11 @@ FunctionsGL *FunctionsEGL::makeFunctionsGL(void) const
 bool FunctionsEGL::hasExtension(const char *extension) const
 {
     return std::find(mExtensions.begin(), mExtensions.end(), extension) != mExtensions.end();
+}
+
+bool FunctionsEGL::isAtLeastEGL(const gl::Version &eglVersion) const
+{
+    return version >= eglVersion;
 }
 
 EGLDisplay FunctionsEGL::getDisplay() const
