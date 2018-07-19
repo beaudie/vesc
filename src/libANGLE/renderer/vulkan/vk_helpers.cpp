@@ -97,8 +97,8 @@ void DynamicBuffer::init(size_t alignment, RendererVk *renderer)
         alignment,
         static_cast<size_t>(renderer->getPhysicalDeviceProperties().limits.nonCoherentAtomSize));
 
-    mSize = 0;
-    mNextAllocationOffset = 0;
+    mSize                        = 0;
+    mNextAllocationOffset        = 0;
     mLastFlushOrInvalidateOffset = 0;
 }
 
@@ -346,7 +346,7 @@ angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
     descriptorPoolInfo.pPoolSizes    = &mPoolSize;
 
     mFreeDescriptorSets = mPoolSize.descriptorCount;
-    mCurrentSetsCount = 0;
+    mCurrentSetsCount   = 0;
 
     ANGLE_TRY(mCurrentDescriptorPool.init(context, descriptorPoolInfo));
     return angle::Result::Continue();
@@ -501,10 +501,7 @@ void LineLoopHelper::Draw(uint32_t count, CommandBuffer *commandBuffer)
 
 // ImageHelper implementation.
 ImageHelper::ImageHelper()
-    : mFormat(nullptr),
-      mSamples(0),
-      mCurrentLayout(VK_IMAGE_LAYOUT_UNDEFINED),
-      mLayerCount(0)
+    : mFormat(nullptr), mSamples(0), mCurrentLayout(VK_IMAGE_LAYOUT_UNDEFINED), mLayerCount(0)
 {
 }
 
