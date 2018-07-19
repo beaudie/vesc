@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4fbb372_a211571b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-19T20:36:44Z",
+      "side": 1,
+      "message": "git cl format lose it\u0027s mind?",
+      "revId": "940471aef1f15116f0a86bc2e71060b3ba6c8200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
