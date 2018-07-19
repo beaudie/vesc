@@ -97,8 +97,8 @@ void DynamicBuffer::init(size_t alignment, RendererVk *renderer)
         alignment,
         static_cast<size_t>(renderer->getPhysicalDeviceProperties().limits.nonCoherentAtomSize));
 
-    mSize = 0;
-    mNextAllocationOffset = 0;
+    mSize                        = 0;
+    mNextAllocationOffset        = 0;
     mLastFlushOrInvalidateOffset = 0;
 }
 
