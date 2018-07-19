@@ -1,0 +1,127 @@
+//
+// Copyright 2018 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+
+// ImageEGL.cpp: Implements the rx::ImageEGL class.
+
+#include "libANGLE/renderer/gl/egl/ImageEGL.h"
+#include "libANGLE/renderer/gl/RenderbufferGL.h"
+#include "libANGLE/renderer/gl/TextureGL.h"
+#include "libANGLE/renderer/gl/egl/ContextEGL.h"
+
+namespace rx
+{
+
+ImageEGL::ImageEGL(const egl::ImageState &state,
+                   const gl::Context *context,
+                   EGLenum target,
+                   const egl::AttributeMap &attribs,
+                   const FunctionsEGL *egl)
+    : ImageImpl(state),
+      mEGL(egl),
+      mContext(EGL_NO_CONTEXT),
+      mTarget(target),
+      mPreserveImage(false),
+      mImage(EGL_NO_IMAGE)
+{
+    if (context)
+    {
+        mContext = GetImplAs<ContextEGL>(context)->getContext();
+    }
+    mPreserveImage = attribs.get(EGL_IMAGE_PRESERVED, EGL_FALSE) == EGL_TRUE;
+}
+
+~ImageEGL::ImageEGL()
+{
+}
+
+egl::Error ImageEGL::initialize(const egl::Display *display)
+{
+    EGLClientBuffer buffer = nullptr;
+    std::vector<EGLint> attributes;
+
+    if (IsTextureTarget(mTarget))
+    {
+        attributes.push_back(EGL_GL_TEXTURE_LEVEL);
+        attributes.push_back(mState.imageIndex.getLevelIndex());
+
+        if (mState.imageIndex.has3DLayer())
+        {
+            attributes.push_back(EGL_GL_TEXTURE_ZOFFSET);
+            attributes.push_back(mState.imageIndex.getLayerIndex());
+        }
+
+        const TextureGL *textureGL = GetImplAs<TextureGL>(GetAs<gl::Texture>(mState.source.get()));
+        buffer                     = gl_egl(textureGL->getTextureID());
+        mNativeInternalFormat      = textureGL->getNativeInternalFormat(mState.imageIndex);
+    }
+    else if (IsRenderbufferTarget(target))
+    {
+        const RenderbufferGL *renderbufferGL =
+            GetImplAs<RenderbufferGL>(GetAs<gl::Renderbuffer>(mState.source.get()));
+        buffer                = gl_egl(renderbufferGL->getRenderbufferID());
+        mNativeInternalFormat = renderbufferGL->getNativeInternalFormat();
+    }
+    else
+    {
+        UNREACHABLE();
+    }
+
+    attributes.push_back(EGL_IMAGE_PRESERVED);
+    attributes.push_back(mPreserveImage ? EGL_TRUE : EGL_FALSE);
+
+    attributes.push_back(EGL_NONE);
+
+    mImage = mEGL->createImageKHR(mContext, mTarget, buffer, attributes.data());
+    if (mImage == EGL_NO_IMAGE)
+    {
+        return egl::EglBadAlloc() << "eglCreateImage failed with " << egl::Error(mEGL->getError());
+    }
+
+    return egl::NoError();
+}
+
+gl::Error ImageEGL::orphan(const gl::Context *context, egl::ImageSibling *sibling)
+{
+    // Nothing to do, EGL does this automatically
+    return gl::NoError();
+}
+
+gl::Error setTexture2D(const gl::Context *context,
+                       gl::TextureType type,
+                       TextureGL *texture,
+                       GLenum *outInternalFormat)
+{
+    const FunctionsGL *functionsGL = GetFunctionsGL(context);
+    StateManagerGL *stateManager   = GetStateManagerGL(context);
+
+    // Make sure this texture is bound
+    stateManager->bindTexture(type, texture->getTextureID());
+
+    // Bind the image to the texture
+    functionsGL->eGLImageTargetTexture2DOES(ToGLenum(type), mImage);
+    *outInternalFormat = mNativeInternalFormat;
+
+    return gl::NoError();
+}
+
+gl::Error setRenderbufferStorage(const gl::Context *context,
+                                 RenderbufferGL *renderbuffer,
+                                 GLenum *outInternalFormat)
+{
+    const FunctionsGL *functionsGL = GetFunctionsGL(context);
+    StateManagerGL *stateManager   = GetStateManagerGL(context);
+
+    // Make sure this renderbuffer is bound
+    stateManager->bindRenderbuffer(renderbuffer->getRenderbufferID());
+
+    // Bind the image to the renderbuffer
+    functionsGL->eGLImageTargetRenderbufferStorageOES(GL_RENDERBUFFER, mImage);
+    *outInternalFormat = mNativeInternalFormat;
+
+    return gl::NoError();
+}
+
+}  // namespace rx

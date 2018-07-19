@@ -8,6 +8,7 @@
 
 #include "libANGLE/renderer/gl/egl/DisplayEGL.h"
 
+#include "libANGLE/renderer/gl/egl/ImageEGL.h"
 #include "libANGLE/renderer/gl/egl/egl_utils.h"
 
 namespace rx
@@ -22,6 +23,14 @@ DisplayEGL::DisplayEGL(const egl::DisplayState &state)
 
 DisplayEGL::~DisplayEGL()
 {
+}
+
+ImageImpl *DisplayEGL::createImage(const egl::ImageState &state,
+                                   const gl::Context *context,
+                                   EGLenum target,
+                                   const egl::AttributeMap &attribs)
+{
+    return new ImageEGL(state, context, target, attribs, mEGL);
 }
 
 std::string DisplayEGL::getVendorString() const
