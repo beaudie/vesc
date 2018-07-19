@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "7e528bf4_ea040f84",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-19T20:45:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77c5c406_cd88eaa6",
+      "range": {
+        "startLine": 65,
+        "startChar": 28,
+        "endLine": 65,
+        "endChar": 29
+      },
+      "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6fb609f1_c05581f8",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 13
@@ -68,6 +92,30 @@
       "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcc6c844_b615118f",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-19T20:45:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6fb609f1_c05581f8",
+      "range": {
+        "startLine": 66,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 28
+      },
+      "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "da647491_d06ad803",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-19T20:45:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0e7cc23_7d5d364b",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 26
+      },
+      "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a989bc24_18686920",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 13
@@ -114,6 +186,30 @@
       "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d076e26b_9d5a8956",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-19T20:45:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a989bc24_18686920",
+      "range": {
+        "startLine": 278,
+        "startChar": 90,
+        "endLine": 278,
+        "endChar": 99
+      },
+      "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "665f55b4_478f8954",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-19T20:45:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "810b3f29_c81e4fb1",
+      "range": {
+        "startLine": 280,
+        "startChar": 16,
+        "endLine": 310,
+        "endChar": 66
+      },
+      "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "493ae805_d2103409",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 13
@@ -163,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "250ec9e1_c4e0b784",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-19T20:45:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "493ae805_d2103409",
+      "range": {
+        "startLine": 343,
+        "startChar": 8,
+        "endLine": 343,
+        "endChar": 37
+      },
+      "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c2e7ca6f_02a5d9b1",
         "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
         "patchSetId": 13
@@ -174,6 +318,30 @@
       "writtenOn": "2018-07-19T17:45:04Z",
       "side": 1,
       "message": "can you please clean these up?",
+      "range": {
+        "startLine": 322,
+        "startChar": 0,
+        "endLine": 322,
+        "endChar": 109
+      },
+      "revId": "022d09f684a400d23c21700a5d1c256fa6e30572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe17fde4_5043d817",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 13
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-19T20:45:07Z",
+      "side": 1,
+      "message": "this part is wip",
+      "parentUuid": "c2e7ca6f_02a5d9b1",
       "range": {
         "startLine": 322,
         "startChar": 0,
