@@ -308,12 +308,12 @@ gl::Error VertexArrayVk::syncDirtyAttrib(const gl::Context *context,
     mDirtyPackedInputs.set(attribIndex);
 
     ContextVk *contextVk   = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
+    RendererVk *renderer   = contextVk->getRenderer();
     bool releaseConversion = true;
 
     if (attrib.enabled)
     {
-        gl::Buffer *bufferGL = binding.getBuffer().get();
+        gl::Buffer *bufferGL                    = binding.getBuffer().get();
         mCurrentArrayBufferFormats[attribIndex] = &renderer->getFormat(GetVertexFormatID(attrib));
 
         if (bufferGL)
