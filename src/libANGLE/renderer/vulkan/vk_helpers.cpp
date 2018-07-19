@@ -96,6 +96,10 @@ void DynamicBuffer::init(size_t alignment, RendererVk *renderer)
     mAlignment = std::max(
         alignment,
         static_cast<size_t>(renderer->getPhysicalDeviceProperties().limits.nonCoherentAtomSize));
+
+    mSize = 0;
+    mNextAllocationOffset = 0;
+    mLastFlushOrInvalidateOffset = 0;
 }
 
 DynamicBuffer::~DynamicBuffer()
@@ -127,8 +131,7 @@ angle::Result DynamicBuffer::allocate(Context *context,
         if (mMappedMemory)
         {
             ANGLE_TRY(flush(context));
-            mMemory.unmap(context->getDevice());
-            mMappedMemory = nullptr;
+            unmap(context->getDevice());
         }
 
         mRetainedBuffers.emplace_back(std::move(mBuffer), std::move(mMemory));
@@ -213,6 +216,7 @@ angle::Result DynamicBuffer::invalidate(Context *context)
 
 void DynamicBuffer::release(RendererVk *renderer)
 {
+    unmap(renderer->getDevice());
     releaseRetainedBuffers(renderer);
 
     mAlignment           = 0;
@@ -235,6 +239,8 @@ void DynamicBuffer::releaseRetainedBuffers(RendererVk *renderer)
 
 void DynamicBuffer::destroy(VkDevice device)
 {
+    unmap(device);
+
     for (BufferAndMemory &toFree : mRetainedBuffers)
     {
         toFree.buffer.destroy(device);
@@ -260,6 +266,15 @@ void DynamicBuffer::setMinimumSizeForTesting(size_t minSize)
 
     // Forces a new allocation on the next allocate.
     mSize = 0;
+}
+
+void DynamicBuffer::unmap(VkDevice device)
+{
+    if (mMappedMemory)
+    {
+        mMemory.unmap(device);
+        mMappedMemory = nullptr;
+    }
 }
 
 // DynamicDescriptorPool implementation.
