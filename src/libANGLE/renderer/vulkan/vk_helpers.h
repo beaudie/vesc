@@ -70,6 +70,8 @@ class DynamicBuffer : angle::NonCopyable
     void setMinimumSizeForTesting(size_t minSize);
 
   private:
+    void unmap(VkDevice device);
+
     VkBufferUsageFlags mUsage;
     size_t mMinSize;
     Buffer mBuffer;
