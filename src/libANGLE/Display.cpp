@@ -876,7 +876,7 @@ void Display::destroyImage(egl::Image *image)
 {
     auto iter = mImageSet.find(image);
     ASSERT(iter != mImageSet.end());
-    (*iter)->release(mProxyContext.get());
+    (*iter)->release();
     mImageSet.erase(iter);
 }
 

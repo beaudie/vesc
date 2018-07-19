@@ -69,11 +69,11 @@ struct ImageState : private angle::NonCopyable
 
     EGLLabelKHR label;
     gl::ImageIndex imageIndex;
-    gl::BindingPointer<ImageSibling> source;
+    ImageSibling *source;
     std::set<ImageSibling *> targets;
 };
 
-class Image final : public gl::RefCountObject, public LabeledObject
+class Image final : public gl::RefCountObjectNoID, public LabeledObject
 {
   public:
     Image(rx::EGLImplFactory *factory,
@@ -81,7 +81,6 @@ class Image final : public gl::RefCountObject, public LabeledObject
           ImageSibling *buffer,
           const AttributeMap &attribs);
 
-    gl::Error onDestroy(const gl::Context *context) override;
     ~Image() override;
 
     void setLabel(EGLLabelKHR label) override;
