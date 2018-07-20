@@ -2515,34 +2515,34 @@ gl::Error StateManager11::syncTexturesForCompute(const gl::Context *context)
     const auto &caps    = context->getCaps();
 
     // TODO(xinghua.cao@intel.com): Implement sampler feature in compute shader.
-    unsigned int readonlyImageRange = mProgramD3D->getUsedImageRange(gl::ShaderType::Compute, true);
-    for (unsigned int readonlyImageIndex = 0; readonlyImageIndex < readonlyImageRange;
-         readonlyImageIndex++)
+    for (size_t index = 0; index < caps.maxImageUnits; index++)
     {
-        GLint imageUnitIndex =
-            mProgramD3D->getImageMapping(gl::ShaderType::Compute, readonlyImageIndex, true, caps);
-        ASSERT(imageUnitIndex != -1);
-        const gl::ImageUnit &imageUnit = glState.getImageUnit(imageUnitIndex);
-        ANGLE_TRY(setTextureForImage(context, gl::ShaderType::Compute, readonlyImageIndex, true,
-                                     imageUnit));
-    }
+        bool readonlyImages;
+        bool active = mProgramD3D->IsImageUnitWithActiveImages(gl::ShaderType::Compute, index,
+                                                               &readonlyImages);
+        if (!active)
+        {
+            continue;
+        }
 
-    unsigned int imageRange = mProgramD3D->getUsedImageRange(gl::ShaderType::Compute, false);
-    for (unsigned int imageIndex = 0; imageIndex < imageRange; imageIndex++)
-    {
-        GLint imageUnitIndex =
-            mProgramD3D->getImageMapping(gl::ShaderType::Compute, imageIndex, false, caps);
-        ASSERT(imageUnitIndex != -1);
-        const gl::ImageUnit &imageUnit = glState.getImageUnit(imageUnitIndex);
-        ANGLE_TRY(
-            setTextureForImage(context, gl::ShaderType::Compute, imageIndex, false, imageUnit));
+        std::vector<unsigned int> registers;
+        mProgramD3D->getImageUnitRegisters(gl::ShaderType::Compute, index, readonlyImages,
+                                           registers);
+        const gl::ImageUnit &imageUnit = glState.getImageUnit(index);
+        for (auto &reg : registers)
+        {
+            ANGLE_TRY(setTextureForImage(context, gl::ShaderType::Compute, reg, readonlyImages,
+                                         imageUnit));
+        }
     }
 
     // Set all the remaining textures to NULL
+    unsigned int readonlyImageRange = mProgramD3D->getUsedImageRange(gl::ShaderType::Compute, true);
+    unsigned int imageRange   = mProgramD3D->getUsedImageRange(gl::ShaderType::Compute, false);
     size_t readonlyImageCount = caps.maxImageUnits;
     size_t imageCount         = caps.maxImageUnits;
-    ANGLE_TRY(clearSRVs(gl::ShaderType::Compute, readonlyImageRange, readonlyImageCount));
-    ANGLE_TRY(clearUAVs(gl::ShaderType::Compute, imageRange, imageCount));
+    ANGLE_TRY(clearSRVs(gl::ShaderType::Compute, readonlyImageRange + 1, readonlyImageCount));
+    ANGLE_TRY(clearUAVs(gl::ShaderType::Compute, imageRange + 1, imageCount));
 
     return gl::NoError();
 }
