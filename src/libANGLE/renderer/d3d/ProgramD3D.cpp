@@ -550,8 +550,13 @@ ProgramD3D::Sampler::Sampler()
 {
 }
 
-ProgramD3D::Image::Image() : active(false), logicalImageUnit(0)
+ProgramD3D::Image::Image() : active(false)
 {
+}
+
+ProgramD3D::Image::~Image()
+{
+    registers.clear();
 }
 
 unsigned int ProgramD3D::mCurrentSerial = 1;
@@ -694,37 +699,24 @@ ProgramD3D::SamplerMapping ProgramD3D::updateSamplerMapping()
     return SamplerMapping::WasDirty;
 }
 
-GLint ProgramD3D::getImageMapping(gl::ShaderType type,
-                                  unsigned int imageIndex,
-                                  bool readonly,
-                                  const gl::Caps &caps) const
+void ProgramD3D::getImageUnitRegisters(gl::ShaderType type,
+                                       unsigned int imageUnit,
+                                       bool readonly,
+                                       std::vector<unsigned int> &registers) const
 {
-    GLint logicalImageUnit = -1;
-    ASSERT(imageIndex < caps.maxImageUnits);
     switch (type)
     {
         case gl::ShaderType::Compute:
-            if (readonly && imageIndex < mReadonlyImagesCS.size() &&
-                mReadonlyImagesCS[imageIndex].active)
-            {
-                logicalImageUnit = mReadonlyImagesCS[imageIndex].logicalImageUnit;
-            }
-            else if (imageIndex < mImagesCS.size() && mImagesCS[imageIndex].active)
-            {
-                logicalImageUnit = mImagesCS[imageIndex].logicalImageUnit;
-            }
-            break;
-        // TODO(xinghua.cao@intel.com): add image mapping for vertex shader and pixel shader.
+
+        {
+            registers =
+                readonly ? mReadonlyImagesCS[imageUnit].registers : mImagesCS[imageUnit].registers;
+        }
+        break;
+        // TODO(xinghua.cao@intel.com): add implementation for vertex shader and pixel shader.
         default:
             UNREACHABLE();
     }
-
-    if (logicalImageUnit >= 0 && logicalImageUnit < static_cast<GLint>(caps.maxImageUnits))
-    {
-        return logicalImageUnit;
-    }
-
-    return -1;
 }
 
 GLuint ProgramD3D::getUsedImageRange(gl::ShaderType type, bool readonly) const
@@ -738,6 +730,36 @@ GLuint ProgramD3D::getUsedImageRange(gl::ShaderType type, bool readonly) const
             UNREACHABLE();
             return 0u;
     }
+}
+
+bool ProgramD3D::IsImageUnitWithActiveImages(gl::ShaderType type,
+                                             unsigned int imageUnit,
+                                             bool *readonly) const
+{
+    switch (type)
+    {
+        case gl::ShaderType::Compute:
+            if (mReadonlyImagesCS[imageUnit].active)
+            {
+                *readonly = true;
+                return true;
+            }
+            else if (mImagesCS[imageUnit].active)
+            {
+                *readonly = false;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            break;
+        // TODO(xinghua.cao@intel.com): add implementation for vertex shader and pixel shader.
+        default:
+            UNREACHABLE();
+    }
+
+    return false;
 }
 
 gl::LinkResult ProgramD3D::load(const gl::Context *context,
@@ -791,7 +813,12 @@ gl::LinkResult ProgramD3D::load(const gl::Context *context,
     {
         Image image;
         stream->readBool(&image.active);
-        stream->readInt(&image.logicalImageUnit);
+        unsigned int registerCount = stream->readInt<unsigned int>();
+        for (unsigned int i = 0; i < registerCount; ++i)
+        {
+            image.registers.push_back(stream->readInt<unsigned int>());
+        }
+
         mImagesCS.push_back(image);
     }
 
@@ -800,7 +827,11 @@ gl::LinkResult ProgramD3D::load(const gl::Context *context,
     {
         Image image;
         stream->readBool(&image.active);
-        stream->readInt(&image.logicalImageUnit);
+        unsigned int registerCount = stream->readInt<unsigned int>();
+        for (unsigned int i = 0; i < registerCount; ++i)
+        {
+            image.registers.push_back(stream->readInt<unsigned int>());
+        }
         mReadonlyImagesCS.push_back(image);
     }
 
@@ -1048,14 +1079,22 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
     for (unsigned int i = 0; i < mImagesCS.size(); ++i)
     {
         stream->writeInt(mImagesCS[i].active);
-        stream->writeInt(mImagesCS[i].logicalImageUnit);
+        stream->writeInt(mImagesCS[i].registers.size());
+        for (auto &reg : mImagesCS[i].registers)
+        {
+            stream->writeInt(reg);
+        }
     }
 
     stream->writeInt(mReadonlyImagesCS.size());
     for (unsigned int i = 0; i < mReadonlyImagesCS.size(); ++i)
     {
         stream->writeInt(mReadonlyImagesCS[i].active);
-        stream->writeInt(mReadonlyImagesCS[i].logicalImageUnit);
+        stream->writeInt(mReadonlyImagesCS[i].registers.size());
+        for (auto &reg : mReadonlyImagesCS[i].registers)
+        {
+            stream->writeInt(reg);
+        }
     }
 
     stream->writeInt(mUsedComputeImageRange);
@@ -2263,7 +2302,7 @@ void ProgramD3D::setUniformMatrixfvInternal(GLint location,
                                             GLboolean transpose,
                                             const GLfloat *value)
 {
-    D3DUniform *targetUniform = getD3DUniformFromLocation(location);
+    D3DUniform *targetUniform                   = getD3DUniformFromLocation(location);
     const gl::VariableLocation &uniformLocation = mState.getUniformLocations()[location];
     unsigned int arrayElementOffset             = uniformLocation.arrayIndex;
     unsigned int elementCount                   = targetUniform->getArraySizeProduct();
@@ -2419,30 +2458,32 @@ void ProgramD3D::AssignImages(unsigned int startImageIndex,
                               std::vector<Image> &outImages,
                               GLuint *outUsedRange)
 {
-    unsigned int imageIndex = startImageIndex;
     // If declare without a binding qualifier, any uniform image variable (include all elements of
     // unbound image array) shoud be bound to unit zero.
     if (startLogicalImageUnit == -1)
     {
-        ASSERT(imageIndex < outImages.size());
-        Image *image            = &outImages[imageIndex];
-        image->active           = true;
-        image->logicalImageUnit = 0;
-        *outUsedRange           = std::max(imageIndex + 1, *outUsedRange);
+        Image *image  = &outImages[0];
+        image->active = true;
+        for (size_t index = 0; index < imageCount; index++)
+        {
+            image->registers.push_back(startImageIndex + index);
+        }
+        *outUsedRange = std::max(startImageIndex + imageCount - 1, *outUsedRange);
         return;
     }
 
+    unsigned int imageIndex      = startImageIndex;
     unsigned int logcalImageUnit = startLogicalImageUnit;
     do
     {
-        ASSERT(imageIndex < outImages.size());
-        Image *image            = &outImages[imageIndex];
-        image->active           = true;
-        image->logicalImageUnit = logcalImageUnit;
-        *outUsedRange           = std::max(imageIndex + 1, *outUsedRange);
+        ASSERT(logcalImageUnit < outImages.size());
+        Image *image  = &outImages[logcalImageUnit];
+        image->active = true;
+        image->registers.push_back(imageIndex);
         imageIndex++;
         logcalImageUnit++;
     } while (imageIndex < startImageIndex + imageCount);
+    *outUsedRange = std::max(imageIndex - 1, *outUsedRange);
 }
 
 void ProgramD3D::reset()
@@ -2632,9 +2673,9 @@ void ProgramD3D::gatherTransformFeedbackVaryings(const gl::VaryingPacking &varyi
             for (GLuint registerIndex = 0u; registerIndex < registerInfos.size(); ++registerIndex)
             {
                 const auto &registerInfo = registerInfos[registerIndex];
-                const auto &varying   = *registerInfo.packedVarying->varying;
-                GLenum transposedType = gl::TransposeMatrixType(varying.type);
-                int componentCount    = gl::VariableColumnCount(transposedType);
+                const auto &varying      = *registerInfo.packedVarying->varying;
+                GLenum transposedType    = gl::TransposeMatrixType(varying.type);
+                int componentCount       = gl::VariableColumnCount(transposedType);
                 ASSERT(!varying.isBuiltIn() && !varying.isStruct());
 
                 // There can be more than one register assigned to a particular varying, and each
