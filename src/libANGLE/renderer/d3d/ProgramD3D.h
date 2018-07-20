@@ -166,12 +166,15 @@ class ProgramD3D : public ProgramImpl
 
     SamplerMapping updateSamplerMapping();
 
-    GLint getImageMapping(gl::ShaderType type,
-                          unsigned int imageIndex,
-                          bool readonly,
-                          const gl::Caps &caps) const;
     GLuint getUsedImageRange(gl::ShaderType type, bool readonly) const;
     GLenum getImageTextureType(gl::ShaderType type, unsigned int imageIndex, bool readonly) const;
+    void getImageUnitRegisters(gl::ShaderType type,
+                               unsigned int imageUnit,
+                               bool readonly,
+                               std::vector<unsigned int> &registers) const;
+    bool IsImageUnitWithActiveImages(gl::ShaderType type,
+                                     unsigned int imageUnit,
+                                     bool *readonly) const;
 
     bool usesPointSize() const { return mUsesPointSize; }
     bool usesPointSpriteEmulation() const;
@@ -377,8 +380,9 @@ class ProgramD3D : public ProgramImpl
     struct Image
     {
         Image();
+        ~Image();
         bool active;
-        GLint logicalImageUnit;
+        std::vector<unsigned int> registers;
     };
 
     typedef std::map<std::string, D3DUniform *> D3DUniformMap;
