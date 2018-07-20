@@ -22,6 +22,30 @@
       "revId": "8b17a0f924a6b678aa3d992b92cd866e953b48b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad9c658a_cda9eec9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-20T15:06:31Z",
+      "side": 1,
+      "message": "I think it depends what semantics we want.  If we require init() after release() or destroy() and before reuse then it may as well be here.  If we don\u0027t require init() then we should reset everything in release() and destroy(), and not clobber mAlignment like we do now.\nI think you were ok with release() not clobbering mAlignment, but wanted destroy() to clobber it, but shouldn\u0027t they be consistent, if the only difference between them is the timing of when resources get released?\nDo we even need the business with mAlignment?  We don\u0027t seem to make any real use of valid().  There\u0027s a few asserts and one place that says \"if(!foo.valid()) foo.init()\" which could just say \"foo.init().\"",
+      "parentUuid": "c4707f9d_94ad5c10",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 37
+      },
+      "revId": "8b17a0f924a6b678aa3d992b92cd866e953b48b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
