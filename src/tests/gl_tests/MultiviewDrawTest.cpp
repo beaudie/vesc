@@ -2070,6 +2070,57 @@ TEST_P(MultiviewRenderTest, FlatInterpolation)
     EXPECT_EQ(GLColor::green, GetViewColor(0, 0, 1));
 }
 
+// This test assigns gl_ViewID_OVR to a flat int varying and then sets the color based on that
+// varying in the fragment shader.
+TEST_P(MultiviewRenderTest, FlatInterpolation2)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    // ANGLE_SKIP_TEST_IF(IsWindows() && IsD3D11() && IsNVIDIA());
+
+    // Suspecting that this fails on Intel similarly to the other flat varying test.
+    // ANGLE_SKIP_TEST_IF(IsWindows() && IsIntel() && IsD3D11());
+
+    const std::string vsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "layout(num_views = 2) in;\n"
+        "in vec3 vPosition;\n"
+        "flat out int flatVarying;\n"
+        "void main()\n"
+        "{\n"
+        "   gl_Position = vec4(vPosition, 1.);\n"
+        "   flatVarying = int(gl_ViewID_OVR);\n"
+        "}\n";
+
+    const std::string fsSource =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview : require\n"
+        "precision mediump float;\n"
+        "flat in int flatVarying;\n"
+        "out vec4 col;\n"
+        "void main()\n"
+        "{\n"
+        "    if (flatVarying == 0) {\n"
+        "       col = vec4(1,0,0,1);\n"
+        "    } else {\n"
+        "       col = vec4(0,1,0,1);\n"
+        "    }\n"
+        "}\n";
+
+    createFBO(1, 1, 2);
+    ANGLE_GL_PROGRAM(program, vsSource, fsSource);
+
+    drawQuad(program, "vPosition", 0.0f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_EQ(GLColor::red, GetViewColor(0, 0, 0));
+    EXPECT_EQ(GLColor::green, GetViewColor(0, 0, 1));
+}
+
 // The test is added to cover a bug which resulted in the viewport/scissor and viewport offsets not
 // being correctly applied.
 TEST_P(MultiviewSideBySideRenderTest, ViewportOffsetsAppliedBugCoverage)
