@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d06ba6b_8bb6c148",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-07-20T08:56:13Z",
+      "side": 0,
+      "message": "This function does can be simplified like the right one.\nYou can add an ASSERT(imageIndex \u003c mReadonlyImagesCS.size() || imageIndex \u003c mImagesCS.size()) at the beginning.",
+      "range": {
+        "startLine": 702,
+        "startChar": 0,
+        "endLine": 727,
+        "endChar": 14
+      },
+      "revId": "0be37b44499672aa5f86d50f7087ff6e2de1c4fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7545d6e9_2df45f62",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2445,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-07-20T08:56:13Z",
+      "side": 0,
+      "message": "I think you only need to change above code like below:\n    unsigned int logcalImageUnit \u003d startLogicalImageUnit;\n    do\n    {\n        ASSERT(imageIndex \u003c outImages.size());\n        Image *image            \u003d \u0026outImages[imageIndex];\n        image-\u003eactive           \u003d true;\n        if (startLogicalImageUnit \u003d\u003d -1)\n        { \n            image-\u003elogicalImageUnit \u003d 0 Or startImageIndex?;\n        }\n        else\n        {\n            image-\u003elogicalImageUnit \u003d logcalImageUnit;\n        }\n        imageIndex++;\n        logcalImageUnit++;\n    } while (imageIndex \u003c startImageIndex + imageCount);\n\n    *outUsedRange \u003d std::max(imageIndex, *outUsedRange);\n\nThen, you can keep the old code in other places if I understand correctly.",
+      "range": {
+        "startLine": 2425,
+        "startChar": 0,
+        "endLine": 2445,
+        "endChar": 56
+      },
+      "revId": "0be37b44499672aa5f86d50f7087ff6e2de1c4fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
