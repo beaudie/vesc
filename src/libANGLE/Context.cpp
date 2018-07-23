@@ -7532,6 +7532,29 @@ void Context::maxShaderCompilerThreads(GLuint count)
     mGLState.setMaxShaderCompilerThreads(count);
 }
 
+bool Context::isGLES1() const
+{
+    return mState.getClientVersion() < Version(2, 0);
+}
+
+AttributesMask Context::getActiveBufferedAttribsMask() const
+{
+    // TODO(jmadill): Cache this. http://anglebug.com/1391
+    const Program *program = mGLState.getProgram();
+    ASSERT(program);
+
+    const AttributesMask &activeAttribs = isGLES1()
+                                              ? mGLState.gles1().getVertexArraysAttributeMask()
+                                              : program->getActiveAttribLocationsMask();
+
+    const VertexArray *vao = mGLState.getVertexArray();
+    ASSERT(vao);
+
+    const AttributesMask &clientAttribs = vao->getEnabledClientMemoryAttribsMask();
+
+    return (activeAttribs & vao->getEnabledAttributesMask() & ~clientAttribs);
+}
+
 // ErrorSet implementation.
 ErrorSet::ErrorSet(Context *context) : mContext(context)
 {
