@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fbf173e4_c614361d",
+        "filename": "src/libANGLE/renderer/Format.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-23T19:02:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "601ec42d_904e180b",
+      "range": {
+        "startLine": 45,
+        "startChar": 56,
+        "endLine": 45,
+        "endChar": 71
+      },
+      "revId": "940471aef1f15116f0a86bc2e71060b3ba6c8200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4fbb372_a211571b",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp",
         "patchSetId": 6
@@ -39,6 +63,24 @@
       "revId": "940471aef1f15116f0a86bc2e71060b3ba6c8200",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f7022b2_2dc49a2e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-23T19:02:10Z",
+      "side": 1,
+      "message": "Yeah.. the equals signs alignment stuff isn\u0027t very well supported by the clang team. It was an externally contributed feature. Has many glitches.",
+      "parentUuid": "e4fbb372_a211571b",
+      "revId": "940471aef1f15116f0a86bc2e71060b3ba6c8200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
