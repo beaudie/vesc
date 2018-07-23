@@ -264,10 +264,21 @@ inline void DefaultCacheProgram(PlatformMethods *platform,
 
 #define ANGLE_PLATFORM_METHOD_DEF(Name, CapsName) CapsName##Func Name = Default##CapsName;
 
+// The version of the PlatformMethods structure:
+//  If any modifications are made to the above list of function pointers included in the
+//  PlatformMethods structure then a new version, incremented by 1 should be added, the version
+//  within the struct should use the updated version, and any code related to the modifications
+//  should be guarded according to the version that the features were added in.
+//  This is to allow for back-ward compatibility with older struct versions.
+#define PLATFORM_METHODS_STRUCT_REV_1 1
+
 struct ANGLE_PLATFORM_EXPORT PlatformMethods
 {
     PlatformMethods() {}
 
+    // The version of the platform methods struct, should be updated if this strut interface
+    //  changes as discussed in comment above.
+    int version = PLATFORM_METHODS_STRUCT_REV_1;
     // User data pointer for any implementation specific members. Put it at the start of the
     // platform structure so it doesn't become overwritten if one version of the platform
     // adds or removes new members.
