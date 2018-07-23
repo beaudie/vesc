@@ -27,6 +27,8 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "platform/Platform.h"
 
+#define IN_FLIGHT_LIMIT 50000u
+
 // Consts
 namespace
 {
@@ -808,7 +810,10 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     mInFlightCommands.emplace_back(scopedBatch.release());
 
     // Sanity check.
-    ASSERT(mInFlightCommands.size() < 1000u);
+    if (mInFlightCommands.size() > IN_FLIGHT_LIMIT)
+    {
+        vkQueueWaitIdle(mQueue);
+    }
 
     // Increment the queue serial. If this fails, we should restart ANGLE.
     // TODO(jmadill): Overflow check.
