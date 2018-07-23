@@ -34,6 +34,24 @@
       "revId": "5e71d845a4ee8fbc63a07c8224acaba39097d4a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01052591_f7c15dcd",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-07-23T13:24:35Z",
+      "side": 1,
+      "message": "I\u0027m a bit hesitant to make setType completely public, as disabling access to it helps to keep the tree consistent. However, maybe we could make promote() public and re-run it in when the type of the children of a node change, that would be a bit more foolproof. It would be neat if this could be always done automatically in case a child node is replaced with one that has a different type, but because nodes don\u0027t know about their parents it\u0027s not straightforward to do it recursively.\n\nMaybe writing that AST validator should come sooner rather than later, so this kind of changes to the AST could be tested easier. Did you have someone in mind that could work on that?",
+      "parentUuid": "d8529d4c_1bdfc217",
+      "revId": "5e71d845a4ee8fbc63a07c8224acaba39097d4a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
