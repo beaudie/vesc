@@ -52,6 +52,24 @@
       "revId": "5e71d845a4ee8fbc63a07c8224acaba39097d4a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c35e5c3e_ee89075b",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-23T14:40:18Z",
+      "side": 1,
+      "message": "No one right now. We\u0027re all pretty busy. I didn\u0027t implement the setType change in this CL. Could you review the change?",
+      "parentUuid": "01052591_f7c15dcd",
+      "revId": "5e71d845a4ee8fbc63a07c8224acaba39097d4a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
