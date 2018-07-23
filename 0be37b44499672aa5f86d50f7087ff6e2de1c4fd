@@ -45,6 +45,53 @@
       "revId": "0be37b44499672aa5f86d50f7087ff6e2de1c4fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b39d317c_526bbdcd",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2445,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-07-23T03:55:22Z",
+      "side": 0,
+      "message": "If I understand struct Image as an image uniform, it seems that the changes are very small:\n     do\n    {\n        ASSERT(imageIndex \u003c outImages.size());\n        Image *image            \u003d \u0026outImages[imageIndex];\n        image-\u003eactive           \u003d true;\n        if (startLogicalImageUnit \u003d\u003d -1)\n        { \n            image-\u003elogicalImageUnit \u003d 0;\n        }\n        else\n        {\n            image-\u003elogicalImageUnit \u003d logicalImageUnit;\n        }\n        imageIndex++;\n        logcalImageUnit++;\n    } while (imageIndex \u003c startImageIndex + imageCount);\n\n    *outUsedRange \u003d range(startImageIndex, imageIndex);\n\nWhich means one image uniform will corresponding one d3d register. Also you need to reset m*ImagesCS\u0027s size to MAX_COMPUTE_IMAGE_UNIFORMS not MAX_COMPUTE_IMAGE_UNITS",
+      "parentUuid": "7545d6e9_2df45f62",
+      "range": {
+        "startLine": 2425,
+        "startChar": 0,
+        "endLine": 2445,
+        "endChar": 56
+      },
+      "revId": "0be37b44499672aa5f86d50f7087ff6e2de1c4fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2f7193d_75639a47",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2518,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-07-23T03:55:22Z",
+      "side": 0,
+      "message": "I think readonlyImageRange should be a range not a max value. You should fix it in a separate patch or in this one.",
+      "range": {
+        "startLine": 2518,
+        "startChar": 17,
+        "endLine": 2518,
+        "endChar": 36
+      },
+      "revId": "0be37b44499672aa5f86d50f7087ff6e2de1c4fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

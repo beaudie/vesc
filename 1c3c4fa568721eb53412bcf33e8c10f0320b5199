@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ea04602_a1737175",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2518,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-07-23T03:55:22Z",
+      "side": 1,
+      "message": "I don\u0027t like iterating all max image units. I prefer only access the used image range like the old one.",
+      "range": {
+        "startLine": 2518,
+        "startChar": 4,
+        "endLine": 2518,
+        "endChar": 63
+      },
+      "revId": "1c3c4fa568721eb53412bcf33e8c10f0320b5199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
