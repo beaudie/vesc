@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "601ec42d_904e180b",
+        "filename": "src/libANGLE/renderer/Format.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-23T16:49:26Z",
+      "side": 1,
+      "message": "Could we have the same behaviour by comparing the ids?  I think it would be more future proof.",
+      "range": {
+        "startLine": 45,
+        "startChar": 56,
+        "endLine": 45,
+        "endChar": 71
+      },
+      "revId": "940471aef1f15116f0a86bc2e71060b3ba6c8200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4fbb372_a211571b",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp",
         "patchSetId": 6
