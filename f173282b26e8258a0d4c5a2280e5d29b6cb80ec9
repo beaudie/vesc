@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "68759c26_7f23f046",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-07-24T15:57:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55cf57ab_aac08fc8",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 5
+      },
+      "revId": "f173282b26e8258a0d4c5a2280e5d29b6cb80ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4c34191f_ee11a01f",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-07-24T14:25:14Z",
       "side": 1,
       "message": "can you make this a constexpr size_t kInFlightCommandsLimit \u003d 50000u; in the anonymous namespace block just below this? this will match our style.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 30
+      },
+      "revId": "f173282b26e8258a0d4c5a2280e5d29b6cb80ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4436e87_af0dfe31",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-07-24T15:57:37Z",
+      "side": 1,
+      "message": "Can do, wasn\u0027t sure if that anonymous namespace was meant to be just for those device properties before",
+      "parentUuid": "4c34191f_ee11a01f",
       "range": {
         "startLine": 30,
         "startChar": 0,
@@ -68,6 +116,30 @@
       "revId": "f173282b26e8258a0d4c5a2280e5d29b6cb80ec9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec6145a4_36496e00",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-07-24T15:57:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7167fe9a_0c5bc175",
+      "range": {
+        "startLine": 812,
+        "startChar": 7,
+        "endLine": 812,
+        "endChar": 20
+      },
+      "revId": "f173282b26e8258a0d4c5a2280e5d29b6cb80ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
