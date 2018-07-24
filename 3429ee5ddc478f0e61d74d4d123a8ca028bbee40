@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a31695b_edc62b9e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-24T21:02:54Z",
+      "side": 1,
+      "message": "I think it would read better as \"used only for\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 44,
+        "endLine": 7,
+        "endChar": 60
+      },
+      "revId": "3429ee5ddc478f0e61d74d4d123a8ca028bbee40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05e4c62b_88af5697",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-24T21:02:54Z",
+      "side": 1,
+      "message": "EGL_GL_TEXTURE_ZOFFSET",
+      "range": {
+        "startLine": 7,
+        "startChar": 19,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "3429ee5ddc478f0e61d74d4d123a8ca028bbee40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "faded085_5f1942c8",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1846,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-24T21:02:54Z",
+      "side": 1,
+      "message": "Do you need to check here as well?\nMaybe just check if EGL_GL_TEXTURE_ZOFFSET_KHR \u003d\u003e EGL_GL_TEXTURE_3D_KHR in one place.",
+      "range": {
+        "startLine": 1846,
+        "startChar": 13,
+        "endLine": 1846,
+        "endChar": 36
+      },
+      "revId": "3429ee5ddc478f0e61d74d4d123a8ca028bbee40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
