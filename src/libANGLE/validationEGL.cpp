@@ -1705,6 +1705,12 @@ Error ValidateCreateImageKHR(const Display *display,
                 return EglBadParameter() << "KHR_gl_texture_2D_image not supported.";
             }
 
+            if (attributes.contains(EGL_GL_TEXTURE_ZOFFSET_KHR))
+            {
+                return EglBadParameter() << "EGL_GL_TEXTURE_ZOFFSET_KHR cannot be used in "
+                                            "conjunction with a 2D texture target.";
+            }
+
             if (buffer == 0)
             {
                 return EglBadParameter() << "buffer cannot reference a 2D texture with the name 0.";
@@ -1744,6 +1750,12 @@ Error ValidateCreateImageKHR(const Display *display,
             if (!displayExtensions.glTextureCubemapImage)
             {
                 return EglBadParameter() << "KHR_gl_texture_cubemap_image not supported.";
+            }
+
+            if (attributes.contains(EGL_GL_TEXTURE_ZOFFSET_KHR))
+            {
+                return EglBadParameter() << "EGL_GL_TEXTURE_ZOFFSET_KHR cannot be used in "
+                                            "conjunction with a cube map texture target.";
             }
 
             if (buffer == 0)
