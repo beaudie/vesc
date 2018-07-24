@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30082036_075ffb09",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-24T23:55:03Z",
+      "side": 1,
+      "message": "Android doesn\u0027t support pixmaps, but I think Ozone is able to.",
+      "range": {
+        "startLine": 127,
+        "startChar": 7,
+        "endLine": 127,
+        "endChar": 62
+      },
+      "revId": "af85bfbc4c7b9b6d7a3290e88ba2304066a4b413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "185eb154_a3b24842",
+        "filename": "src/libANGLE/renderer/gl/egl/ImageEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-24T23:55:03Z",
+      "side": 1,
+      "message": "Why this particular error?\nSince createImageKHR doesn\u0027t return an error, it makes sense to me not to return any error from this function either, but instead set the current error state to mEGL-\u003egetError().",
+      "range": {
+        "startLine": 87,
+        "startChar": 20,
+        "endLine": 87,
+        "endChar": 31
+      },
+      "revId": "af85bfbc4c7b9b6d7a3290e88ba2304066a4b413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
