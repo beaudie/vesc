@@ -305,15 +305,15 @@ class Renderer11 : public RendererD3D
     ID3D11DeviceContext1 *getDeviceContext1IfSupported() { return mDeviceContext1; };
     IDXGIFactory *getDxgiFactory() { return mDxgiFactory; };
 
-    gl::Error getBlendState(const d3d11::BlendStateKey &key,
-                            const d3d11::BlendState **outBlendState);
-    gl::Error getRasterizerState(const gl::RasterizerState &rasterState,
-                                 bool scissorEnabled,
-                                 ID3D11RasterizerState **outRasterizerState);
-    gl::Error getDepthStencilState(const gl::DepthStencilState &dsState,
-                                   const d3d11::DepthStencilState **outDSState);
-    gl::Error getSamplerState(const gl::SamplerState &samplerState,
-                              ID3D11SamplerState **outSamplerState);
+    angle::Result getBlendState(const d3d11::BlendStateKey &key,
+                                const d3d11::BlendState **outBlendState);
+    angle::Result getRasterizerState(const gl::RasterizerState &rasterState,
+                                     bool scissorEnabled,
+                                     ID3D11RasterizerState **outRasterizerState);
+    angle::Result getDepthStencilState(const gl::DepthStencilState &dsState,
+                                       const d3d11::DepthStencilState **outDSState);
+    angle::Result getSamplerState(const gl::SamplerState &samplerState,
+                                  ID3D11SamplerState **outSamplerState);
 
     Blit11 *getBlitter() { return mBlit; }
     Clear11 *getClearer() { return mClear; }
@@ -329,9 +329,9 @@ class Renderer11 : public RendererD3D
                                       GLenum sourcePixelsType,
                                       const gl::Box &destArea) override;
 
-    gl::Error packPixels(const TextureHelper11 &textureHelper,
-                         const PackPixelsParams &params,
-                         uint8_t *pixelsOut);
+    angle::Result packPixels(const TextureHelper11 &textureHelper,
+                             const PackPixelsParams &params,
+                             uint8_t *pixelsOut);
 
     bool getLUID(LUID *adapterLuid) const override;
     VertexConversionType getVertexConversionType(
@@ -395,47 +395,47 @@ class Renderer11 : public RendererD3D
                               GLuint numGroupsZ);
     gl::Error applyComputeShader(const gl::Context *context);
 
-    gl::Error createStagingTexture(ResourceType textureType,
-                                   const d3d11::Format &formatSet,
-                                   const gl::Extents &size,
-                                   StagingAccess readAndWriteAccess,
-                                   TextureHelper11 *textureOut);
+    angle::Result createStagingTexture(ResourceType textureType,
+                                       const d3d11::Format &formatSet,
+                                       const gl::Extents &size,
+                                       StagingAccess readAndWriteAccess,
+                                       TextureHelper11 *textureOut);
 
     template <typename DescT, typename ResourceT>
-    gl::Error allocateResource(const DescT &desc, ResourceT *resourceOut)
+    angle::Result allocateResource(const DescT &desc, ResourceT *resourceOut)
     {
         return mResourceManager11.allocate(this, &desc, nullptr, resourceOut);
     }
 
     template <typename DescT, typename InitDataT, typename ResourceT>
-    gl::Error allocateResource(const DescT &desc, InitDataT *initData, ResourceT *resourceOut)
+    angle::Result allocateResource(const DescT &desc, InitDataT *initData, ResourceT *resourceOut)
     {
         return mResourceManager11.allocate(this, &desc, initData, resourceOut);
     }
 
     template <typename InitDataT, typename ResourceT>
-    gl::Error allocateResourceNoDesc(InitDataT *initData, ResourceT *resourceOut)
+    angle::Result allocateResourceNoDesc(InitDataT *initData, ResourceT *resourceOut)
     {
         return mResourceManager11.allocate(this, nullptr, initData, resourceOut);
     }
 
     template <typename DescT>
-    gl::Error allocateTexture(const DescT &desc,
-                              const d3d11::Format &format,
-                              TextureHelper11 *textureOut)
+    angle::Result allocateTexture(const DescT &desc,
+                                  const d3d11::Format &format,
+                                  TextureHelper11 *textureOut)
     {
         return allocateTexture(desc, format, nullptr, textureOut);
     }
 
-    gl::Error allocateTexture(const D3D11_TEXTURE2D_DESC &desc,
-                              const d3d11::Format &format,
-                              const D3D11_SUBRESOURCE_DATA *initData,
-                              TextureHelper11 *textureOut);
+    angle::Result allocateTexture(const D3D11_TEXTURE2D_DESC &desc,
+                                  const d3d11::Format &format,
+                                  const D3D11_SUBRESOURCE_DATA *initData,
+                                  TextureHelper11 *textureOut);
 
-    gl::Error allocateTexture(const D3D11_TEXTURE3D_DESC &desc,
-                              const d3d11::Format &format,
-                              const D3D11_SUBRESOURCE_DATA *initData,
-                              TextureHelper11 *textureOut);
+    angle::Result allocateTexture(const D3D11_TEXTURE3D_DESC &desc,
+                                  const d3d11::Format &format,
+                                  const D3D11_SUBRESOURCE_DATA *initData,
+                                  TextureHelper11 *textureOut);
 
     gl::Error clearRenderTarget(RenderTargetD3D *renderTarget,
                                 const gl::ColorF &clearColorValue,
@@ -446,11 +446,11 @@ class Renderer11 : public RendererD3D
 
     void onDirtyUniformBlockBinding(GLuint uniformBlockIndex) override;
 
-    gl::Error mapResource(ID3D11Resource *resource,
-                          UINT subResource,
-                          D3D11_MAP mapType,
-                          UINT mapFlags,
-                          D3D11_MAPPED_SUBRESOURCE *mappedResource);
+    angle::Result mapResource(ID3D11Resource *resource,
+                              UINT subResource,
+                              D3D11_MAP mapType,
+                              UINT mapFlags,
+                              D3D11_MAPPED_SUBRESOURCE *mappedResource);
 
     gl::Error getIncompleteTexture(const gl::Context *context,
                                    gl::TextureType type,

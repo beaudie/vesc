@@ -294,21 +294,21 @@ class ResourceManager11 final : angle::NonCopyable
     ~ResourceManager11();
 
     template <typename T>
-    gl::Error allocate(Renderer11 *renderer,
-                       const GetDescFromD3D11<T> *desc,
-                       GetInitDataFromD3D11<T> *initData,
-                       Resource11<T> *resourceOut);
+    angle::Result allocate(Renderer11 *renderer,
+                           const GetDescFromD3D11<T> *desc,
+                           GetInitDataFromD3D11<T> *initData,
+                           Resource11<T> *resourceOut);
 
     template <typename T>
-    gl::Error allocate(Renderer11 *renderer,
-                       const GetDescFromD3D11<T> *desc,
-                       GetInitDataFromD3D11<T> *initData,
-                       SharedResource11<T> *sharedRes)
+    angle::Result allocate(Renderer11 *renderer,
+                           const GetDescFromD3D11<T> *desc,
+                           GetInitDataFromD3D11<T> *initData,
+                           SharedResource11<T> *sharedRes)
     {
         Resource11<T> res;
         ANGLE_TRY(allocate(renderer, desc, initData, &res));
         *sharedRes = std::move(res);
-        return gl::NoError();
+        return angle::Result::Continue();
     }
 
     template <typename T>

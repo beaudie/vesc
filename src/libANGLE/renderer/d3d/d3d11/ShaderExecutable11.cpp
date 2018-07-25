@@ -100,7 +100,8 @@ UniformStorage11::~UniformStorage11()
 {
 }
 
-gl::Error UniformStorage11::getConstantBuffer(Renderer11 *renderer, const d3d11::Buffer **bufferOut)
+angle::Result UniformStorage11::getConstantBuffer(Renderer11 *renderer,
+                                                  const d3d11::Buffer **bufferOut)
 {
     if (size() > 0 && !mConstantBuffer.valid())
     {
@@ -113,7 +114,7 @@ gl::Error UniformStorage11::getConstantBuffer(Renderer11 *renderer, const d3d11:
     }
 
     *bufferOut = &mConstantBuffer;
-    return gl::NoError();
+    return angle::Result::Continue();
 }
 
 }  // namespace rx

@@ -113,7 +113,7 @@ void InputLayoutCache::clear()
     mLayoutCache.Clear();
 }
 
-gl::Error InputLayoutCache::getInputLayout(
+angle::Result InputLayoutCache::getInputLayout(
     Renderer11 *renderer,
     const gl::State &state,
     const std::vector<const TranslatedAttribute *> &currentAttributes,
@@ -189,10 +189,10 @@ gl::Error InputLayoutCache::getInputLayout(
         }
     }
 
-    return gl::NoError();
+    return angle::Result::Continue();
 }
 
-gl::Error InputLayoutCache::createInputLayout(
+angle::Result InputLayoutCache::createInputLayout(
     Renderer11 *renderer,
     const AttribIndexArray &sortedSemanticIndices,
     const std::vector<const TranslatedAttribute *> &currentAttributes,
@@ -299,7 +299,7 @@ gl::Error InputLayoutCache::createInputLayout(
     ShaderData vertexShaderData(shader11->getFunction(), shader11->getLength());
 
     ANGLE_TRY(renderer->allocateResource(inputElementArray, &vertexShaderData, inputLayoutOut));
-    return gl::NoError();
+    return angle::Result::Continue();
 }
 
 void InputLayoutCache::setCacheSize(size_t newCacheSize)

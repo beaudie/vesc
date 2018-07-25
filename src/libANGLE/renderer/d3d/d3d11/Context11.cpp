@@ -485,8 +485,8 @@ gl::Error Context11::dispatchComputeIndirect(const gl::Context *context, GLintpt
     return gl::InternalError();
 }
 
-gl::Error Context11::triggerDrawCallProgramRecompilation(const gl::Context *context,
-                                                         gl::PrimitiveMode drawMode)
+angle::Result Context11::triggerDrawCallProgramRecompilation(const gl::Context *context,
+                                                             gl::PrimitiveMode drawMode)
 {
     const auto &glState    = context->getGLState();
     const auto *va11       = GetImplAs<VertexArray11>(glState.getVertexArray());
@@ -503,51 +503,51 @@ gl::Error Context11::triggerDrawCallProgramRecompilation(const gl::Context *cont
 
     if (!recompileVS && !recompileGS && !recompilePS)
     {
-        return gl::NoError();
+        return angle::Result::Continue();
     }
 
     // Load the compiler if necessary and recompile the programs.
-    ANGLE_TRY(mRenderer->ensureHLSLCompilerInitialized());
+    ANGLE_TRY_HANDLE(context, mRenderer->ensureHLSLCompilerInitialized());
 
     gl::InfoLog infoLog;
 
     if (recompileVS)
     {
         ShaderExecutableD3D *vertexExe = nullptr;
-        ANGLE_TRY(programD3D->getVertexExecutableForCachedInputLayout(&vertexExe, &infoLog));
+        ANGLE_TRY_HANDLE(context,
+                         programD3D->getVertexExecutableForCachedInputLayout(&vertexExe, &infoLog));
         if (!programD3D->hasVertexExecutableForCachedInputLayout())
         {
             ASSERT(infoLog.getLength() > 0);
-            ERR() << "Dynamic recompilation error log: " << infoLog.str();
-            return gl::InternalError()
-                   << "Error compiling dynamic vertex executable:" << infoLog.str();
+            ERR() << "Error compiling dynamic vertex executable: " << infoLog.str();
+            ANGLE_TRY_11(this, E_FAIL, "Error compiling dynamic vertex executable");
+            return angle::Result::Stop();
         }
     }
 
     if (recompileGS)
     {
         ShaderExecutableD3D *geometryExe = nullptr;
-        ANGLE_TRY(programD3D->getGeometryExecutableForPrimitiveType(context, drawMode, &geometryExe,
-                                                                    &infoLog));
+        ANGLE_TRY_HANDLE(context, programD3D->getGeometryExecutableForPrimitiveType(
+                                      context, drawMode, &geometryExe, &infoLog));
         if (!programD3D->hasGeometryExecutableForPrimitiveType(drawMode))
         {
             ASSERT(infoLog.getLength() > 0);
-            ERR() << "Dynamic recompilation error log: " << infoLog.str();
-            return gl::InternalError()
-                   << "Error compiling dynamic geometry executable:" << infoLog.str();
+            ERR() << "Error compiling dynamic geometry executable: " << infoLog.str();
+            ANGLE_TRY_11(this, E_FAIL, "Error compiling dynamic vertex executable");
         }
     }
 
     if (recompilePS)
     {
         ShaderExecutableD3D *pixelExe = nullptr;
-        ANGLE_TRY(programD3D->getPixelExecutableForCachedOutputLayout(&pixelExe, &infoLog));
+        ANGLE_TRY_HANDLE(context,
+                         programD3D->getPixelExecutableForCachedOutputLayout(&pixelExe, &infoLog));
         if (!programD3D->hasPixelExecutableForCachedOutputLayout())
         {
             ASSERT(infoLog.getLength() > 0);
-            ERR() << "Dynamic recompilation error log: " << infoLog.str();
-            return gl::InternalError()
-                   << "Error compiling dynamic pixel executable:" << infoLog.str();
+            ERR() << "Error compiling dynamic pixel executable: " << infoLog.str();
+            ANGLE_TRY_11(this, E_FAIL, "Error compiling dynamic pixel executable");
         }
     }
 
@@ -557,14 +557,14 @@ gl::Error Context11::triggerDrawCallProgramRecompilation(const gl::Context *cont
         mMemoryProgramCache->updateProgram(context, program);
     }
 
-    return gl::NoError();
+    return angle::Result::Continue();
 }
 
-gl::Error Context11::prepareForDrawCall(const gl::Context *context,
-                                        const gl::DrawCallParams &drawCallParams)
+angle::Result Context11::prepareForDrawCall(const gl::Context *context,
+                                            const gl::DrawCallParams &drawCallParams)
 {
     ANGLE_TRY(mRenderer->getStateManager()->updateState(context, drawCallParams));
-    return gl::NoError();
+    return angle::Result::Continue();
 }
 
 gl::Error Context11::memoryBarrier(const gl::Context *context, GLbitfield barriers)

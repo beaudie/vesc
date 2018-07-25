@@ -72,6 +72,9 @@ class DisplayD3D : public DisplayImpl
     egl::Error waitNative(const gl::Context *context, EGLint engine) override;
     gl::Version getMaxSupportedESVersion() const override;
 
+    // TODO(jmadill): Remove this once refactor is complete. http://anglebug.com/2738
+    void handleError(const egl::Error &error);
+
   private:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
     void generateCaps(egl::Caps *outCaps) const override;
