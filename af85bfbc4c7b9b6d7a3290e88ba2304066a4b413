@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "78125d4d_069667bd",
+        "filename": "src/libANGLE/renderer/gl/ImageGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-25T15:02:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a7c2068_afcdf6bd",
+      "range": {
+        "startLine": 20,
+        "startChar": 1,
+        "endLine": 20,
+        "endChar": 0
+      },
+      "revId": "af85bfbc4c7b9b6d7a3290e88ba2304066a4b413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "30082036_075ffb09",
         "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
         "patchSetId": 7
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "ec298ad7_ca6a1b13",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-25T15:02:32Z",
+      "side": 1,
+      "message": "Ok, it\u0027s unlikely that this will ever be implemented then.",
+      "parentUuid": "30082036_075ffb09",
+      "range": {
+        "startLine": 127,
+        "startChar": 7,
+        "endLine": 127,
+        "endChar": 62
+      },
+      "revId": "af85bfbc4c7b9b6d7a3290e88ba2304066a4b413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4e5efaa4_4e02a11a",
         "filename": "src/libANGLE/renderer/gl/egl/ImageEGL.cpp",
         "patchSetId": 7
@@ -59,6 +107,30 @@
       "writtenOn": "2018-07-25T14:21:10Z",
       "side": 1,
       "message": "could any of this class be used for a potential desktop GL implementation?",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 8
+      },
+      "revId": "af85bfbc4c7b9b6d7a3290e88ba2304066a4b413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6b6ee55c_6f7947f9",
+        "filename": "src/libANGLE/renderer/gl/egl/ImageEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-25T15:02:32Z",
+      "side": 1,
+      "message": "Yea, we would just have to implement the ImageGL interface. I\u0027m pretty sure we can\u0027t implement EGL Images 100% with desktop GL alone though.",
+      "parentUuid": "4e5efaa4_4e02a11a",
       "range": {
         "startLine": 23,
         "startChar": 0,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "74584568_5fc568a7",
+        "filename": "src/libANGLE/renderer/gl/egl/ImageEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-25T15:02:32Z",
+      "side": 1,
+      "message": "I only needed this parameter to query the native EGLContext to use in the initialize call, the context isn\u0027t guaranteed to be valid through for the lifetime of the image.",
+      "parentUuid": "1c2b0632_210f24a8",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 5
+      },
+      "revId": "af85bfbc4c7b9b6d7a3290e88ba2304066a4b413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "185eb154_a3b24842",
         "filename": "src/libANGLE/renderer/gl/egl/ImageEGL.cpp",
         "patchSetId": 7
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "29dc12c1_2eff76a8",
+        "filename": "src/libANGLE/renderer/gl/egl/ImageEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-25T15:02:32Z",
+      "side": 1,
+      "message": "The impl functions that return errors are used to set the GL or EGL error state and the function will return EGL_NO_IMAGE. That logic is here: https://cs.chromium.org/chromium/src/third_party/angle/src/libGLESv2/entry_points_egl_ext.cpp?l\u003d400 and here: https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/Display.cpp?g\u003d0\u0026l\u003d732\n\nI chose EGL_BAD_ALLOC because if an error is generated here, it is unexpected and likely an internal driver such as out-of-memory.  The frontend validation should have handled any bad display, bad context or bad parameter.  EGL_BAD_ACCESS would probably be acceptable here too.  Maybe we should have an egl::InternalError to handle these cases?",
+      "parentUuid": "185eb154_a3b24842",
+      "range": {
+        "startLine": 87,
+        "startChar": 20,
+        "endLine": 87,
+        "endChar": 31
+      },
+      "revId": "af85bfbc4c7b9b6d7a3290e88ba2304066a4b413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3d8e0810_2a33132f",
         "filename": "src/libANGLE/renderer/gl/egl/ImageEGL.cpp",
         "patchSetId": 7
@@ -128,6 +248,30 @@
       "writtenOn": "2018-07-25T14:21:10Z",
       "side": 1,
       "message": "we might need to cache the size/format/etc in the front end so we don\u0027t have to query them on an orphaned image. better done as a follow up though.",
+      "range": {
+        "startLine": 95,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 68
+      },
+      "revId": "af85bfbc4c7b9b6d7a3290e88ba2304066a4b413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac0117cc_5d751673",
+        "filename": "src/libANGLE/renderer/gl/egl/ImageEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-25T15:02:32Z",
+      "side": 1,
+      "message": "Yes, that is the null-dereference issue you saw, right?",
+      "parentUuid": "3d8e0810_2a33132f",
       "range": {
         "startLine": 95,
         "startChar": 4,
