@@ -115,9 +115,9 @@ bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex, GLi
     const gl::State &state     = context->getGLState();
     const gl::Program *program = state.getProgram();
 
-    if (!ValidateDrawClientAttribs(context))
+    if (context->vetexArrayHasActiveClientAttribs())
     {
-        return false;
+        return ValidateDrawClientAttribs(context);
     }
 
     // If we're drawing zero vertices, we have enough data.
@@ -3128,9 +3128,9 @@ bool ValidateDrawElementsCommon(Context *context,
     if (context->getExtensions().robustBufferAccessBehavior || count == 0)
     {
         // Special checks are needed for client attribs. But we don't need to validate overflows.
-        if (!ValidateDrawClientAttribs(context))
+        if (context->vetexArrayHasActiveClientAttribs())
         {
-            return false;
+            return ValidateDrawClientAttribs(context);
         }
     }
     else

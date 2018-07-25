@@ -1497,6 +1497,11 @@ class Context final : public egl::LabeledObject, angle::NonCopyable
     // 5. Vertex Array: vertexAttrib[I]Pointer/enableAttribArray/disableAttribArray.
     AttributesMask getActiveBufferedAttribsMask() const { return mCachedActiveBufferedAttribsMask; }
 
+    // Cached for speed. Places that can cause an update:
+    // 1. Context: bindVertexArray.
+    // 2. Vertex Array: vertexAttrib[I]Pointer/enableAttribArray/disableAttribArray.
+    bool vetexArrayHasActiveClientAttribs() const { return mCachedVertexArrayHasAciveClientAttribs; }
+
   private:
     void initialize();
 
@@ -1541,6 +1546,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable
     gl::LabeledObject *getLabeledObjectFromPtr(const void *ptr) const;
 
     void updateActiveBufferedAttribsMask();
+    void updateVertexArrayHasActiveClientAttribs();
 
     ContextState mState;
     bool mSkipValidation;
@@ -1620,6 +1626,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable
     MemoryProgramCache *mMemoryProgramCache;
 
     AttributesMask mCachedActiveBufferedAttribsMask;
+    bool mCachedVertexArrayHasAciveClientAttribs;
 
     State::DirtyBits mTexImageDirtyBits;
     State::DirtyObjects mTexImageDirtyObjects;
