@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72c27d36_d36b5be2",
+        "filename": "extensions/EGL_ANGLE_window_fixed_size.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1294598
+      },
+      "writtenOn": "2018-07-25T20:03:06Z",
+      "side": 1,
+      "message": "\"allied\"? Is that some piece of obscure GL terminology that i am unfamiliar with?",
+      "range": {
+        "startLine": 117,
+        "startChar": 21,
+        "endLine": 117,
+        "endChar": 28
+      },
+      "revId": "cb6dc1eff95a3b58df53063005257533ed84cea0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
