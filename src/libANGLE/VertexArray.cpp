@@ -53,18 +53,24 @@ void VertexArrayState::setAttribBinding(size_t attribIndex, GLuint newBindingInd
 {
     ASSERT(attribIndex < MAX_VERTEX_ATTRIBS && newBindingIndex < MAX_VERTEX_ATTRIB_BINDINGS);
 
+    VertexAttribute &attrib = mVertexAttributes[attribIndex];
+
     // Update the binding-attribute map.
-    const GLuint oldBindingIndex = mVertexAttributes[attribIndex].bindingIndex;
+    const GLuint oldBindingIndex = attrib.bindingIndex;
     ASSERT(oldBindingIndex != newBindingIndex);
 
-    ASSERT(mVertexBindings[oldBindingIndex].mBoundAttributesMask.test(attribIndex) &&
-           !mVertexBindings[newBindingIndex].mBoundAttributesMask.test(attribIndex));
+    VertexBinding &oldBinding = mVertexBindings[oldBindingIndex];
+    VertexBinding &newBinding = mVertexBindings[newBindingIndex];
 
-    mVertexBindings[oldBindingIndex].mBoundAttributesMask.reset(attribIndex);
-    mVertexBindings[newBindingIndex].mBoundAttributesMask.set(attribIndex);
+    ASSERT(oldBinding.mBoundAttributesMask.test(attribIndex) &&
+           !newBinding.mBoundAttributesMask.test(attribIndex));
+
+    oldBinding.mBoundAttributesMask.reset(attribIndex);
+    newBinding.mBoundAttributesMask.set(attribIndex);
 
     // Set the attribute using the new binding.
-    mVertexAttributes[attribIndex].bindingIndex = newBindingIndex;
+    attrib.bindingIndex = newBindingIndex;
+    attrib.updateCachedElementLimit(newBinding);
 }
 
 // VertexArray implementation.
@@ -187,7 +193,7 @@ void VertexArray::bindVertexBufferImpl(const Context *context,
     binding->setStride(stride);
 
     updateObserverBinding(bindingIndex);
-    updateCachedBufferBindingSize(bindingIndex);
+    updateCachedBufferBindingSize(binding);
     updateCachedTransformFeedbackBindingValidation(bindingIndex, boundBuffer);
 }
 
@@ -243,7 +249,6 @@ void VertexArray::setVertexAttribFormatImpl(size_t attribIndex,
     attrib->pureInteger    = pureInteger;
     attrib->relativeOffset = relativeOffset;
     mState.mVertexAttributesTypeMask.setIndex(GetVertexAttributeBaseType(*attrib), attribIndex);
-    attrib->updateCachedSizePlusRelativeOffset();
 }
 
 void VertexArray::setVertexAttribFormat(size_t attribIndex,
@@ -255,6 +260,9 @@ void VertexArray::setVertexAttribFormat(size_t attribIndex,
 {
     setVertexAttribFormatImpl(attribIndex, size, type, normalized, pureInteger, relativeOffset);
     setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_FORMAT);
+
+    VertexAttribute &attrib = mState.mVertexAttributes[attribIndex];
+    attrib.updateCachedElementLimit(mState.mVertexBindings[attrib.bindingIndex]);
 }
 
 void VertexArray::setVertexAttribDivisor(const Context *context, size_t attribIndex, GLuint divisor)
@@ -388,7 +396,7 @@ void VertexArray::onSubjectStateChange(const gl::Context *context,
             setDependentDirtyBit(context, false, index);
             if (index < mArrayBufferObserverBindings.size())
             {
-                updateCachedBufferBindingSize(index);
+                updateCachedBufferBindingSize(&mState.mVertexBindings[index]);
             }
             break;
 
@@ -423,14 +431,12 @@ void VertexArray::updateObserverBinding(size_t bindingIndex)
                                                                 : nullptr);
 }
 
-void VertexArray::updateCachedVertexAttributeSize(size_t attribIndex)
+void VertexArray::updateCachedBufferBindingSize(VertexBinding *binding)
 {
-    mState.mVertexAttributes[attribIndex].updateCachedSizePlusRelativeOffset();
-}
-
-void VertexArray::updateCachedBufferBindingSize(size_t bindingIndex)
-{
-    mState.mVertexBindings[bindingIndex].updateCachedBufferSizeMinusOffset();
+    for (size_t boundAttribute : binding->getBoundAttributesMask())
+    {
+        mState.mVertexAttributes[boundAttribute].updateCachedElementLimit(*binding);
+    }
 }
 
 void VertexArray::updateCachedTransformFeedbackBindingValidation(size_t bindingIndex,
