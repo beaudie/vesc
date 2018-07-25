@@ -243,7 +243,8 @@ void VertexArray::setVertexAttribFormatImpl(size_t attribIndex,
     attrib->pureInteger    = pureInteger;
     attrib->relativeOffset = relativeOffset;
     mState.mVertexAttributesTypeMask.setIndex(GetVertexAttributeBaseType(*attrib), attribIndex);
-    attrib->updateCachedSizePlusRelativeOffset();
+
+    attrib->updateCachedElementLimit(mState.mVertexBindings[attrib->bindingIndex]);
 }
 
 void VertexArray::setVertexAttribFormat(size_t attribIndex,
@@ -423,14 +424,13 @@ void VertexArray::updateObserverBinding(size_t bindingIndex)
                                                                 : nullptr);
 }
 
-void VertexArray::updateCachedVertexAttributeSize(size_t attribIndex)
-{
-    mState.mVertexAttributes[attribIndex].updateCachedSizePlusRelativeOffset();
-}
-
 void VertexArray::updateCachedBufferBindingSize(size_t bindingIndex)
 {
-    mState.mVertexBindings[bindingIndex].updateCachedBufferSizeMinusOffset();
+    const VertexBinding &binding = mState.mVertexBindings[bindingIndex];
+    for (size_t boundAttribute : binding.getBoundAttributesMask())
+    {
+        mState.mVertexAttributes[boundAttribute].updateCachedElementLimit(binding);
+    }
 }
 
 void VertexArray::updateCachedTransformFeedbackBindingValidation(size_t bindingIndex,
