@@ -22,6 +22,30 @@
       "revId": "81db23ed8bc63bda6a6452e7ca350a430686e8e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2abef507_68105dad",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Blit11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-25T04:21:58Z",
+      "side": 0,
+      "message": "I removed the comment because it doesn\u0027t apply any more. The textures can delete themselves (RAII).",
+      "parentUuid": "f67bf328_0befd7a3",
+      "range": {
+        "startLine": 2226,
+        "startChar": 42,
+        "endLine": 2226,
+        "endChar": 71
+      },
+      "revId": "81db23ed8bc63bda6a6452e7ca350a430686e8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
