@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f67bf328_0befd7a3",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Blit11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-25T00:48:22Z",
+      "side": 0,
+      "message": "Who should release the depth texture if it was allocated by createStagingTexture, but copyAndConvertImpl failed?",
+      "range": {
+        "startLine": 2226,
+        "startChar": 42,
+        "endLine": 2226,
+        "endChar": 71
+      },
+      "revId": "81db23ed8bc63bda6a6452e7ca350a430686e8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
