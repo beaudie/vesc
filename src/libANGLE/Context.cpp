@@ -344,6 +344,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mWebGLContext(GetWebGLContext(attribs)),
       mExtensionsEnabled(GetExtensionsEnabled(attribs, mWebGLContext)),
       mMemoryProgramCache(memoryProgramCache),
+      mCachedVertexArrayHasAciveClientAttribs(false),
       mScratchBuffer(1000u),
       mZeroFilledBuffer(1000u)
 {
@@ -1086,6 +1087,7 @@ void Context::bindVertexArray(GLuint vertexArrayHandle)
     VertexArray *vertexArray = checkVertexArrayAllocation(vertexArrayHandle);
     mGLState.setVertexArrayBinding(this, vertexArray);
     updateActiveBufferedAttribsMask();
+    updateVertexArrayHasActiveClientAttribs();
 }
 
 void Context::bindVertexBuffer(GLuint bindingIndex,
@@ -4393,6 +4395,7 @@ void Context::disableVertexAttribArray(GLuint index)
 {
     mGLState.setEnableVertexAttribArray(index, false);
     updateActiveBufferedAttribsMask();
+    updateVertexArrayHasActiveClientAttribs();
 }
 
 void Context::enable(GLenum cap)
@@ -4404,6 +4407,7 @@ void Context::enableVertexAttribArray(GLuint index)
 {
     mGLState.setEnableVertexAttribArray(index, true);
     updateActiveBufferedAttribsMask();
+    updateVertexArrayHasActiveClientAttribs();
 }
 
 void Context::frontFace(GLenum mode)
@@ -4612,6 +4616,7 @@ void Context::vertexAttribPointer(GLuint index,
     mGLState.setVertexAttribPointer(this, index, mGLState.getTargetBuffer(BufferBinding::Array),
                                     size, type, ConvertToBool(normalized), false, stride, ptr);
     updateActiveBufferedAttribsMask();
+    updateVertexArrayHasActiveClientAttribs();
 }
 
 void Context::vertexAttribFormat(GLuint attribIndex,
@@ -4656,6 +4661,7 @@ void Context::vertexAttribIPointer(GLuint index,
     mGLState.setVertexAttribPointer(this, index, mGLState.getTargetBuffer(BufferBinding::Array),
                                     size, type, false, true, stride, pointer);
     updateActiveBufferedAttribsMask();
+    updateVertexArrayHasActiveClientAttribs();
 }
 
 void Context::vertexAttribI4i(GLuint index, GLint x, GLint y, GLint z, GLint w)
@@ -7564,6 +7570,20 @@ void Context::updateActiveBufferedAttribsMask()
 
     mCachedActiveBufferedAttribsMask =
         (activeAttribs & vao->getEnabledAttributesMask() & ~clientAttribs);
+}
+
+void Context::updateVertexArrayHasActiveClientAttribs()
+{
+    const VertexArray *vao = mGLState.getVertexArray();
+
+    if (!vao)
+    {
+        mCachedVertexArrayHasAciveClientAttribs = false;
+        return;
+    }
+
+    const AttributesMask &clientAttribs = vao->getEnabledClientMemoryAttribsMask();
+    mCachedVertexArrayHasAciveClientAttribs = clientAttribs.any();
 }
 
 // ErrorSet implementation.
