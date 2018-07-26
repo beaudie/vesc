@@ -1068,7 +1068,7 @@ angle::Result Buffer11::NativeStorage::resize(const gl::Context *context,
     FillBufferDesc(&bufferDesc, mRenderer, mUsage, static_cast<unsigned int>(size));
 
     d3d11::Buffer newBuffer;
-    ANGLE_TRY_HANDLE(context, mRenderer->allocateResource(bufferDesc, &newBuffer));
+    ANGLE_TRY(mRenderer->allocateResource(GetImplAs<Context11>(context), bufferDesc, &newBuffer));
     newBuffer.setDebugName("Buffer11::NativeStorage");
 
     if (mBuffer.valid() && preserveData)
@@ -1222,8 +1222,9 @@ angle::Result Buffer11::NativeStorage::getSRVForFormat(const gl::Context *contex
     bufferSRVDesc.ViewDimension        = D3D11_SRV_DIMENSION_BUFFER;
     bufferSRVDesc.Format               = srvFormat;
 
-    ANGLE_TRY_HANDLE(context, mRenderer->allocateResource(bufferSRVDesc, mBuffer.get(),
-                                                          &mBufferResourceViews[srvFormat]));
+    ANGLE_TRY_HANDLE(context,
+                     mRenderer->allocateResource(GetImplAs<Context11>(context), bufferSRVDesc,
+                                                 mBuffer.get(), &mBufferResourceViews[srvFormat]));
 
     *srvOut = &mBufferResourceViews[srvFormat];
     return angle::Result::Continue();
@@ -1279,7 +1280,7 @@ angle::Result Buffer11::EmulatedIndexedStorage::getBuffer(const gl::Context *con
                 break;
         }
 
-        ANGLE_CHECK_11_ALLOC(context11, mIndicesMemoryBuffer.resize(indicesDataSize));
+        ANGLE_CHECK_D3D_ALLOC(context11, mIndicesMemoryBuffer.resize(indicesDataSize));
 
         memcpy(mIndicesMemoryBuffer.data(), indexInfo->srcIndices, indicesDataSize);
 
@@ -1295,7 +1296,7 @@ angle::Result Buffer11::EmulatedIndexedStorage::getBuffer(const gl::Context *con
         unsigned int expandedDataSize =
             static_cast<unsigned int>((indexInfo->srcCount * attribute.stride) + offset);
         angle::MemoryBuffer expandedData;
-        ANGLE_CHECK_11_ALLOC(context11, expandedData.resize(expandedDataSize));
+        ANGLE_CHECK_D3D_ALLOC(context11, expandedData.resize(expandedDataSize));
 
         // Clear the contents of the allocated buffer
         ZeroMemory(expandedData.data(), expandedDataSize);
@@ -1343,7 +1344,8 @@ angle::Result Buffer11::EmulatedIndexedStorage::getBuffer(const gl::Context *con
         D3D11_SUBRESOURCE_DATA subResourceData = {expandedData.data(), 0, 0};
 
         ANGLE_TRY_HANDLE(context,
-                         mRenderer->allocateResource(bufferDesc, &subResourceData, &mBuffer));
+                         mRenderer->allocateResource(GetImplAs<Context11>(context), bufferDesc,
+                                                     &subResourceData, &mBuffer));
         mBuffer.setDebugName("Buffer11::EmulatedIndexedStorage");
     }
 
@@ -1375,7 +1377,7 @@ angle::Result Buffer11::EmulatedIndexedStorage::resize(const gl::Context *contex
     if (mMemoryBuffer.size() < size)
     {
         Context11 *context11 = GetImplAs<Context11>(context);
-        ANGLE_CHECK_11_ALLOC(context11, mMemoryBuffer.resize(size));
+        ANGLE_CHECK_D3D_ALLOC(context11, mMemoryBuffer.resize(size));
         mBufferSize = size;
     }
 
@@ -1436,7 +1438,7 @@ angle::Result Buffer11::PackStorage::resize(const gl::Context *context,
     if (size != mBufferSize)
     {
         Context11 *context11 = GetImplAs<Context11>(context);
-        ANGLE_CHECK_11_ALLOC(context11, mMemoryBuffer.resize(size));
+        ANGLE_CHECK_D3D_ALLOC(context11, mMemoryBuffer.resize(size));
         mBufferSize = size;
     }
 
@@ -1562,7 +1564,7 @@ angle::Result Buffer11::SystemMemoryStorage::resize(const gl::Context *context,
     if (mSystemCopy.size() < size)
     {
         Context11 *context11 = GetImplAs<Context11>(context);
-        ANGLE_CHECK_11_ALLOC(context11, mSystemCopy.resize(size));
+        ANGLE_CHECK_D3D_ALLOC(context11, mSystemCopy.resize(size));
         mBufferSize = size;
     }
 
