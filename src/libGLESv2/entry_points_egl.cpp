@@ -652,50 +652,26 @@ EGLBoolean EGLAPIENTRY WaitNative(EGLint engine)
 EGLBoolean EGLAPIENTRY SwapBuffers(EGLDisplay dpy, EGLSurface surface)
 {
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLSurface surface = 0x%0.8p)", dpy, surface);
+
+    // TODO: Should we migrate EGL to pulling Context at top-level here like GLES does?
     Thread *thread = GetCurrentThread();
-
-    Display *display    = static_cast<Display *>(dpy);
-    Surface *eglSurface = (Surface *)surface;
-
-    Error error = ValidateSurface(display, eglSurface);
-    if (error.isError())
+    if (thread)
     {
-        thread->setError(error, GetDebug(), "eglSwapBuffers",
-                         GetSurfaceIfValid(display, eglSurface));
-        return EGL_FALSE;
+        Display *display    = static_cast<Display *>(dpy);
+        Surface *eglSurface = (Surface *)surface;
+
+        if (thread->getContext()->skipValidation() ||
+            ValidateSwapBuffers(thread, display, eglSurface))
+        {
+            return eglSurface->swap(thread->getContext());
+            // TODO: This causes us to look a final setError case if swap() return error. How to
+            // handle that case?
+        }
     }
 
-    if (display->isDeviceLost())
-    {
-        thread->setError(EglContextLost(), GetDebug(), "eglSwapBuffers",
-                         GetSurfaceIfValid(display, eglSurface));
-        return EGL_FALSE;
-    }
-
-    if (surface == EGL_NO_SURFACE)
-    {
-        thread->setError(EglBadSurface(), GetDebug(), "eglSwapBuffers",
-                         GetSurfaceIfValid(display, eglSurface));
-        return EGL_FALSE;
-    }
-
-    if (!thread->getContext() || thread->getCurrentDrawSurface() != eglSurface)
-    {
-        thread->setError(EglBadSurface(), GetDebug(), "eglSwapBuffers",
-                         GetSurfaceIfValid(display, eglSurface));
-        return EGL_FALSE;
-    }
-
-    error = eglSurface->swap(thread->getContext());
-    if (error.isError())
-    {
-        thread->setError(error, GetDebug(), "eglSwapBuffers",
-                         GetSurfaceIfValid(display, eglSurface));
-        return EGL_FALSE;
-    }
-
+    // TODO: Do we need something like GL's GetDefaultReturnValue() here?
     thread->setSuccess();
-    return EGL_TRUE;
+    return EGL_FALSE;
 }
 
 EGLBoolean EGLAPIENTRY CopyBuffers(EGLDisplay dpy, EGLSurface surface, EGLNativePixmapType target)

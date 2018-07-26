@@ -220,11 +220,19 @@ EGLint Surface::getType() const
     return mType;
 }
 
-Error Surface::swap(const gl::Context *context)
+EGLBoolean Surface::swap(const gl::Context *context)
 {
-    ANGLE_TRY(mImplementation->swap(context));
+    // ANGLE_TRY(mImplementation->swap(context));
+    // TODO: Could use a MACRO to do this
+    if (mImplementation->swap(context).isError())
+    {
+        // TODO: Not calling thread->setError()
+        return EGL_FALSE;
+    }
     postSwap(context);
-    return NoError();
+    // TODO: Not calling thread->setSuccess()
+    return EGL_TRUE;
+    // return NoError();
 }
 
 Error Surface::swapWithDamage(const gl::Context *context, EGLint *rects, EGLint n_rects)
