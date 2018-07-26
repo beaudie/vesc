@@ -165,7 +165,7 @@ angle::Result Query11::resume(Context11 *context11)
         queryDesc.Query     = d3dQueryType;
         queryDesc.MiscFlags = 0;
 
-        ANGLE_TRY_HANDLE(context11, mRenderer->allocateResource(queryDesc, &mActiveQuery->query));
+        ANGLE_TRY(mRenderer->allocateResource(context11, queryDesc, &mActiveQuery->query));
 
         // If we are doing time elapsed we also need a query to actually query the timestamp
         if (type == gl::QueryType::TimeElapsed)
@@ -174,10 +174,8 @@ angle::Result Query11::resume(Context11 *context11)
             desc.Query     = D3D11_QUERY_TIMESTAMP;
             desc.MiscFlags = 0;
 
-            ANGLE_TRY_HANDLE(context11,
-                             mRenderer->allocateResource(desc, &mActiveQuery->beginTimestamp));
-            ANGLE_TRY_HANDLE(context11,
-                             mRenderer->allocateResource(desc, &mActiveQuery->endTimestamp));
+            ANGLE_TRY(mRenderer->allocateResource(context11, desc, &mActiveQuery->beginTimestamp));
+            ANGLE_TRY(mRenderer->allocateResource(context11, desc, &mActiveQuery->endTimestamp));
         }
 
         ID3D11DeviceContext *context = mRenderer->getDeviceContext();
@@ -233,7 +231,7 @@ angle::Result Query11::testQuery(Context11 *context11, QueryState *queryState)
                 UINT64 numPixels = 0;
                 HRESULT result =
                     context->GetData(queryState->query.get(), &numPixels, sizeof(numPixels), 0);
-                ANGLE_TRY_11(context11, result, "Failed to get the data of an internal query");
+                ANGLE_TRY_D3D(context11, result, "Failed to get the data of an internal query");
 
                 if (result == S_OK)
                 {
@@ -249,7 +247,7 @@ angle::Result Query11::testQuery(Context11 *context11, QueryState *queryState)
                 D3D11_QUERY_DATA_SO_STATISTICS soStats = {0};
                 HRESULT result =
                     context->GetData(queryState->query.get(), &soStats, sizeof(soStats), 0);
-                ANGLE_TRY_11(context11, result, "Failed to get the data of an internal query");
+                ANGLE_TRY_D3D(context11, result, "Failed to get the data of an internal query");
 
                 if (result == S_OK)
                 {
@@ -267,20 +265,20 @@ angle::Result Query11::testQuery(Context11 *context11, QueryState *queryState)
                 D3D11_QUERY_DATA_TIMESTAMP_DISJOINT timeStats = {0};
                 HRESULT result =
                     context->GetData(queryState->query.get(), &timeStats, sizeof(timeStats), 0);
-                ANGLE_TRY_11(context11, result, "Failed to get the data of an internal query");
+                ANGLE_TRY_D3D(context11, result, "Failed to get the data of an internal query");
 
                 if (result == S_OK)
                 {
                     UINT64 beginTime = 0;
                     HRESULT beginRes = context->GetData(queryState->beginTimestamp.get(),
                                                         &beginTime, sizeof(UINT64), 0);
-                    ANGLE_TRY_11(context11, beginRes,
-                                 "Failed to get the data of an internal query");
+                    ANGLE_TRY_D3D(context11, beginRes,
+                                  "Failed to get the data of an internal query");
 
                     UINT64 endTime = 0;
                     HRESULT endRes = context->GetData(queryState->endTimestamp.get(), &endTime,
                                                       sizeof(UINT64), 0);
-                    ANGLE_TRY_11(context11, endRes, "Failed to get the data of an internal query");
+                    ANGLE_TRY_D3D(context11, endRes, "Failed to get the data of an internal query");
 
                     if (beginRes == S_OK && endRes == S_OK)
                     {
@@ -329,7 +327,7 @@ angle::Result Query11::testQuery(Context11 *context11, QueryState *queryState)
                 BOOL completed = 0;
                 HRESULT result =
                     context->GetData(queryState->query.get(), &completed, sizeof(completed), 0);
-                ANGLE_TRY_11(context11, result, "Failed to get the data of an internal query");
+                ANGLE_TRY_D3D(context11, result, "Failed to get the data of an internal query");
 
                 if (result == S_OK)
                 {
@@ -351,8 +349,8 @@ angle::Result Query11::testQuery(Context11 *context11, QueryState *queryState)
         if (!queryState->finished && checkDeviceLost && mRenderer->testDeviceLost())
         {
             mRenderer->notifyDeviceLost();
-            ANGLE_TRY_11(context11, E_OUTOFMEMORY,
-                         "Failed to test get query result, device is lost.");
+            ANGLE_TRY_D3D(context11, E_OUTOFMEMORY,
+                          "Failed to test get query result, device is lost.");
         }
     }
 

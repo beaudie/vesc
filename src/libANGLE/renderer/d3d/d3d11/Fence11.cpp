@@ -32,7 +32,7 @@ angle::Result FenceSetHelper(const gl::Context *context, FenceClass *fence)
 
         Context11 *context11 = GetImplAs<Context11>(context);
         HRESULT result = fence->mRenderer->getDevice()->CreateQuery(&queryDesc, &fence->mQuery);
-        ANGLE_TRY_11(context11, result, "Failed to create event query");
+        ANGLE_TRY_D3D(context11, result, "Failed to create event query");
     }
 
     fence->mRenderer->getDeviceContext()->End(fence->mQuery);
@@ -52,7 +52,7 @@ angle::Result FenceTestHelper(const gl::Context *context,
     Context11 *context11 = GetImplAs<Context11>(context);
     HRESULT result =
         fence->mRenderer->getDeviceContext()->GetData(fence->mQuery, nullptr, 0, getDataFlags);
-    ANGLE_TRY_11(context11, result, "Failed to get query data");
+    ANGLE_TRY_D3D(context11, result, "Failed to get query data");
 
     ASSERT(result == S_OK || result == S_FALSE);
     *outFinished = ((result == S_OK) ? GL_TRUE : GL_FALSE);
