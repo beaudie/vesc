@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e1baf7e_869b446f",
+        "filename": "src/libGLESv2/entry_points_egl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-26T16:54:08Z",
+      "side": 1,
+      "message": "you can omit this - we\u0027d need a separate extension for EGL",
+      "range": {
+        "startLine": 663,
+        "startChar": 12,
+        "endLine": 663,
+        "endChar": 50
+      },
+      "revId": "f35866afd35a3af354f8cf14a588dd452e35ba4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d7ff49c_2c062545",
+        "filename": "src/libGLESv2/entry_points_egl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-26T16:54:08Z",
+      "side": 1,
+      "message": "you\u0027ll need to return an error from swap still. I think generally you can do what the prior code did and assume no error is success and an error is failure.",
+      "range": {
+        "startLine": 667,
+        "startChar": 11,
+        "endLine": 668,
+        "endChar": 32
+      },
+      "revId": "f35866afd35a3af354f8cf14a588dd452e35ba4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
