@@ -207,10 +207,8 @@ VertexDataManager::~VertexDataManager()
 
 gl::Error VertexDataManager::initialize()
 {
-    mStreamingBuffer.reset(
-        new StreamingVertexBufferInterface(mFactory, INITIAL_STREAM_BUFFER_SIZE));
-    ANGLE_TRY_ALLOCATION(mStreamingBuffer);
-    return gl::NoError();
+    mStreamingBuffer.reset(new StreamingVertexBufferInterface(mFactory));
+    return mStreamingBuffer->initialize(INITIAL_STREAM_BUFFER_SIZE);
 }
 
 void VertexDataManager::deinitialize()
@@ -554,7 +552,8 @@ gl::Error VertexDataManager::storeCurrentValue(const gl::VertexAttribCurrentValu
 
     if (!buffer)
     {
-        buffer.reset(new StreamingVertexBufferInterface(mFactory, CONSTANT_VERTEX_BUFFER_SIZE));
+        buffer.reset(new StreamingVertexBufferInterface(mFactory));
+        ANGLE_TRY(buffer->initialize(CONSTANT_VERTEX_BUFFER_SIZE));
     }
 
     if (cachedState->data != currentValue)

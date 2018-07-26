@@ -103,8 +103,10 @@ class VertexBufferInterface : angle::NonCopyable
 class StreamingVertexBufferInterface : public VertexBufferInterface
 {
   public:
-    StreamingVertexBufferInterface(BufferFactoryD3D *factory, std::size_t initialSize);
+    StreamingVertexBufferInterface(BufferFactoryD3D *factory);
     ~StreamingVertexBufferInterface() override;
+
+    gl::Error initialize(std::size_t initialSize);
 
     gl::Error storeDynamicAttribute(const gl::VertexAttribute &attrib,
                                     const gl::VertexBinding &binding,
