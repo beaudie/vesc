@@ -7,6 +7,7 @@
 // validationEGL.cpp: Validation functions for generic EGL entry point parameters
 
 #include "libANGLE/validationEGL.h"
+#include "libGLESv2/global_state.h"
 
 #include "common/utilities.h"
 #include "libANGLE/Config.h"
@@ -2469,6 +2470,40 @@ Error ValidateGetSyncValuesCHROMIUM(const Display *display,
     }
 
     return NoError();
+}
+
+bool ValidateSwapBuffers(Thread *thread, const Display *display, const Surface *eglSurface)
+{
+    Error error = ValidateSurface(display, eglSurface);
+    if (error.isError())
+    {
+        thread->setError(error, GetDebug(), "eglSwapBuffers",
+                         GetSurfaceIfValid(display, eglSurface));
+        return false;
+    }
+
+    if (display->isDeviceLost())
+    {
+        thread->setError(EglContextLost(), GetDebug(), "eglSwapBuffers",
+                         GetSurfaceIfValid(display, eglSurface));
+        return false;
+    }
+
+    if (eglSurface == EGL_NO_SURFACE)
+    {
+        thread->setError(EglBadSurface(), GetDebug(), "eglSwapBuffers",
+                         GetSurfaceIfValid(display, eglSurface));
+        return false;
+    }
+
+    if (!thread->getContext() || thread->getCurrentDrawSurface() != eglSurface)
+    {
+        thread->setError(EglBadSurface(), GetDebug(), "eglSwapBuffers",
+                         GetSurfaceIfValid(display, eglSurface));
+        return false;
+    }
+
+    return true;
 }
 
 Error ValidateSwapBuffersWithDamageKHR(const Display *display,
