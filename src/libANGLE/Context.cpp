@@ -2547,7 +2547,7 @@ void Context::getProgramInterfaceivRobust(GLuint program,
     UNIMPLEMENTED();
 }
 
-void Context::handleError(const Error &error)
+void Context::handleError(const Error &error) const
 {
     mErrors.handleError(error);
 }
@@ -7542,7 +7542,7 @@ ErrorSet::ErrorSet(Context *context) : mContext(context)
 
 ErrorSet::~ErrorSet() = default;
 
-void ErrorSet::handleError(const Error &error)
+void ErrorSet::handleError(const Error &error) const
 {
     // This internal enum is used to filter internal errors that are already handled.
     // TODO(jmadill): Remove this when refactor is done. http://anglebug.com/2491
