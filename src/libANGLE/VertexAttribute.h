@@ -10,6 +10,7 @@
 #define LIBANGLE_VERTEXATTRIBUTE_H_
 
 #include "libANGLE/Buffer.h"
+#include "libANGLE/angletypes.h"
 
 namespace gl
 {
@@ -23,6 +24,7 @@ class VertexBinding final : angle::NonCopyable
 {
   public:
     VertexBinding();
+    explicit VertexBinding(GLuint boundAttribute);
     VertexBinding(VertexBinding &&binding);
     ~VertexBinding();
     VertexBinding &operator=(VertexBinding &&binding);
@@ -46,15 +48,22 @@ class VertexBinding final : angle::NonCopyable
         return mCachedBufferSizeMinusOffset;
     }
 
+    const AttributesMask &getBoundAttributesMask() const { return mBoundAttributesMask; }
+
     // Called from VertexArray.
     void updateCachedBufferSizeMinusOffset();
 
   private:
+    friend class VertexArrayState;
+
     GLuint mStride;
     GLuint mDivisor;
     GLintptr mOffset;
 
     BindingPointer<Buffer> mBuffer;
+
+    // Records the mappings from each binding to all of the attributes that are using that binding.
+    AttributesMask mBoundAttributesMask;
 
     // This is kept in sync by the VertexArray. It is used to optimize draw call validation.
     GLuint64 mCachedBufferSizeMinusOffset;
