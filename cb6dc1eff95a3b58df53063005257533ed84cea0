@@ -22,6 +22,30 @@
       "revId": "cb6dc1eff95a3b58df53063005257533ed84cea0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c886828_c32d0f23",
+        "filename": "extensions/EGL_ANGLE_window_fixed_size.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-26T13:53:11Z",
+      "side": 1,
+      "message": "Nope, a typo, should be applied.",
+      "parentUuid": "72c27d36_d36b5be2",
+      "range": {
+        "startLine": 117,
+        "startChar": 21,
+        "endLine": 117,
+        "endChar": 28
+      },
+      "revId": "cb6dc1eff95a3b58df53063005257533ed84cea0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
