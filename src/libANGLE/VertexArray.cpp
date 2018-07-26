@@ -26,6 +26,9 @@ VertexArrayState::VertexArrayState(size_t maxAttribs, size_t maxAttribBindings)
         mVertexAttributes.emplace_back(static_cast<GLuint>(i));
         mBindingToAttributeMasks[i].set(i);
     }
+
+    // Initially all attributes start as "client" with no buffer bound.
+    mClientMemoryAttribsMask.set();
 }
 
 VertexArrayState::~VertexArrayState()
