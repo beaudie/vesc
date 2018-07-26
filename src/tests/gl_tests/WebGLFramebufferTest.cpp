@@ -850,12 +850,55 @@ TEST_P(WebGLFramebufferTest, TextureAttachmentCommitBug)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test to cover a bug where the read framebuffer affects the completeness of the draw framebuffer.
+TEST_P(WebGLFramebufferTest, ReadDrawCompleteness)
+{
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
+
+    GLTexture incompleteTexture;
+    glBindTexture(GL_TEXTURE_2D, incompleteTexture);
+
+    GLFramebuffer incompleteFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, incompleteFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, incompleteTexture,
+                           0);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT,
+                     glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    GLTexture completeTexture;
+    glBindTexture(GL_TEXTURE_2D, completeTexture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, getWindowWidth(), getWindowHeight());
+
+    GLFramebuffer completeFBO;
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, completeFBO);
+    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                           completeTexture, 0);
+
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT,
+                     glCheckFramebufferStatus(GL_READ_FRAMEBUFFER));
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER));
+
+    ASSERT_GL_NO_ERROR();
+
+    // Simple draw program.
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, completeFBO);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+}
+
 // Only run against WebGL 1 validation, since much was changed in 2.
 ANGLE_INSTANTIATE_TEST(WebGLFramebufferTest,
                        ES2_D3D9(),
                        ES2_D3D11(),
                        ES2_D3D11_FL9_3(),
                        ES2_OPENGL(),
-                       ES2_OPENGLES());
+                       ES2_OPENGLES(),
+                       ES3_D3D11(),
+                       ES3_OPENGL(),
+                       ES3_OPENGLES());
 
 }  // namespace
