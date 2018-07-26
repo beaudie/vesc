@@ -87,7 +87,7 @@ bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex, GLi
     bool webglCompatibility = context->getExtensions().webglCompatibility;
 
     const VertexArray *vao              = state.getVertexArray();
-    const AttributesMask &clientAttribs = vao->getEnabledClientMemoryAttribsMask();
+    const AttributesMask &clientAttribs = context->getActiveClientAttribsMask();
 
     if (clientAttribs.any())
     {
