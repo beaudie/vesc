@@ -241,12 +241,12 @@ std::vector<PathImpl *> Context11::createPaths(GLsizei)
 
 gl::Error Context11::flush(const gl::Context *context)
 {
-    return mRenderer->flush();
+    return mRenderer->flush(this);
 }
 
 gl::Error Context11::finish(const gl::Context *context)
 {
-    return mRenderer->finish();
+    return mRenderer->finish(this);
 }
 
 gl::Error Context11::drawArrays(const gl::Context *context,
@@ -530,7 +530,7 @@ angle::Result Context11::triggerDrawCallProgramRecompilation(const gl::Context *
         {
             ASSERT(infoLog.getLength() > 0);
             ERR() << "Error compiling dynamic vertex executable: " << infoLog.str();
-            ANGLE_TRY_11(this, E_FAIL, "Error compiling dynamic vertex executable");
+            ANGLE_TRY_D3D(this, E_FAIL, "Error compiling dynamic vertex executable");
             return angle::Result::Stop();
         }
     }
@@ -544,7 +544,7 @@ angle::Result Context11::triggerDrawCallProgramRecompilation(const gl::Context *
         {
             ASSERT(infoLog.getLength() > 0);
             ERR() << "Error compiling dynamic geometry executable: " << infoLog.str();
-            ANGLE_TRY_11(this, E_FAIL, "Error compiling dynamic vertex executable");
+            ANGLE_TRY_D3D(this, E_FAIL, "Error compiling dynamic vertex executable");
         }
     }
 
@@ -557,7 +557,7 @@ angle::Result Context11::triggerDrawCallProgramRecompilation(const gl::Context *
         {
             ASSERT(infoLog.getLength() > 0);
             ERR() << "Error compiling dynamic pixel executable: " << infoLog.str();
-            ANGLE_TRY_11(this, E_FAIL, "Error compiling dynamic pixel executable");
+            ANGLE_TRY_D3D(this, E_FAIL, "Error compiling dynamic pixel executable");
         }
     }
 
