@@ -255,7 +255,7 @@ class VertexArray final : public angle::ObserverInterface, public LabeledObject
     AttributesMask getAttributesMask() const { return mState.mEnabledAttributesMask; }
 
     void onBindingChanged(const Context *context, bool bound);
-    bool hasTransformFeedbackBindingConflict(const AttributesMask &activeAttribues) const;
+    bool hasTransformFeedbackBindingConflict(const gl::Context *context) const;
 
   private:
     ~VertexArray() override;
