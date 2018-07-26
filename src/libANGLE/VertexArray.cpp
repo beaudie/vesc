@@ -17,14 +17,14 @@ namespace gl
 {
 // VertexArrayState implementation.
 VertexArrayState::VertexArrayState(size_t maxAttribs, size_t maxAttribBindings)
-    : mLabel(), mVertexBindings(maxAttribBindings)
+    : mLabel(), mVertexBindings()
 {
     ASSERT(maxAttribs <= maxAttribBindings);
 
     for (size_t i = 0; i < maxAttribs; i++)
     {
         mVertexAttributes.emplace_back(static_cast<GLuint>(i));
-        mBindingToAttributeMasks[i].set(i);
+        mVertexBindings.emplace_back(static_cast<GLuint>(i));
     }
 
     // Initially all attributes start as "client" with no buffer bound.
@@ -45,10 +45,10 @@ bool VertexArrayState::hasEnabledNullPointerClientArray() const
     return (mNullPointerClientMemoryAttribsMask & mEnabledAttributesMask).any();
 }
 
-AttributesMask VertexArrayState::getBindingToAttributeMasks(GLuint bindingIndex) const
+AttributesMask VertexArrayState::getBindingToAttributesMask(GLuint bindingIndex) const
 {
     ASSERT(bindingIndex < MAX_VERTEX_ATTRIB_BINDINGS);
-    return mBindingToAttributeMasks[bindingIndex];
+    return mVertexBindings[bindingIndex].getBoundAttributesMask();
 }
 
 // Set an attribute using a new binding.
@@ -60,11 +60,11 @@ void VertexArrayState::setAttribBinding(size_t attribIndex, GLuint newBindingInd
     const GLuint oldBindingIndex = mVertexAttributes[attribIndex].bindingIndex;
     ASSERT(oldBindingIndex != newBindingIndex);
 
-    ASSERT(mBindingToAttributeMasks[oldBindingIndex].test(attribIndex) &&
-           !mBindingToAttributeMasks[newBindingIndex].test(attribIndex));
+    ASSERT(mVertexBindings[oldBindingIndex].mBoundAttributesMask.test(attribIndex) &&
+           !mVertexBindings[newBindingIndex].mBoundAttributesMask.test(attribIndex));
 
-    mBindingToAttributeMasks[oldBindingIndex].reset(attribIndex);
-    mBindingToAttributeMasks[newBindingIndex].set(attribIndex);
+    mVertexBindings[oldBindingIndex].mBoundAttributesMask.reset(attribIndex);
+    mVertexBindings[newBindingIndex].mBoundAttributesMask.set(attribIndex);
 
     // Set the attribute using the new binding.
     mVertexAttributes[attribIndex].bindingIndex = newBindingIndex;
@@ -194,7 +194,7 @@ void VertexArray::bindVertexBufferImpl(const Context *context,
     updateCachedTransformFeedbackBindingValidation(bindingIndex, boundBuffer);
 
     // Update client memory attribute pointers. Affects all bound attributes.
-    mState.mClientMemoryAttribsMask &= ~mState.mBindingToAttributeMasks[bindingIndex];
+    mState.mClientMemoryAttribsMask &= ~binding->getBoundAttributesMask();
 }
 
 void VertexArray::bindVertexBuffer(const Context *context,
