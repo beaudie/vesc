@@ -112,9 +112,6 @@ bool ValidateDrawClientAttribs(Context *context)
 
 bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex, GLint vertexCount)
 {
-    const gl::State &state     = context->getGLState();
-    const gl::Program *program = state.getProgram();
-
     if (context->vetexArrayHasActiveClientAttribs())
     {
         return ValidateDrawClientAttribs(context);
@@ -126,39 +123,24 @@ bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex, GLi
         return true;
     }
 
-    const VertexArray *vao     = state.getVertexArray();
-    const auto &vertexAttribs  = vao->getVertexAttributes();
-    const auto &vertexBindings = vao->getVertexBindings();
-
-    const AttributesMask &activeAttribs = context->getActiveBufferedAttribsMask();
-
-    for (size_t attributeIndex : activeAttribs)
+    if (maxVertex < context->getNonInstancedVertexElementLimit() &&
+        (primcount - 1) < context->getInstancedVertexElementLimit())
     {
-        const VertexAttribute &attrib = vertexAttribs[attributeIndex];
-        ASSERT(attrib.enabled);
-
-        const VertexBinding &binding = vertexBindings[attrib.bindingIndex];
-        ASSERT(context->isGLES1() || program->isAttribLocationActive(attributeIndex));
-
-        GLint maxVertexElement = binding.getDivisor() != 0 ? (primcount - 1) : maxVertex;
-
-        if (maxVertexElement >= attrib.getCachedElementLimit())
-        {
-            // An overflow can happen when adding the offset. Negative indicates overflow.
-            if (attrib.getCachedElementLimit() < 0)
-            {
-                ANGLE_VALIDATION_ERR(context, InvalidOperation(), IntegerOverflow);
-                return false;
-            }
-
-            // [OpenGL ES 3.0.2] section 2.9.4 page 40:
-            // We can return INVALID_OPERATION if our buffer does not have enough backing data.
-            ANGLE_VALIDATION_ERR(context, InvalidOperation(), InsufficientVertexBufferSize);
-            return false;
-        }
+        return true;
     }
 
-    return true;
+    // An overflow can happen when adding the offset. Negative indicates overflow.
+    if (context->getNonInstancedVertexElementLimit() < 0 ||
+        context->getInstancedVertexElementLimit() < 0)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), IntegerOverflow);
+        return false;
+    }
+
+    // [OpenGL ES 3.0.2] section 2.9.4 page 40:
+    // We can return INVALID_OPERATION if our buffer does not have enough backing data.
+    ANGLE_VALIDATION_ERR(context, InvalidOperation(), InsufficientVertexBufferSize);
+    return false;
 }
 
 bool ValidReadPixelsTypeEnum(Context *context, GLenum type)
