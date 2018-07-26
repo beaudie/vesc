@@ -107,18 +107,10 @@ bool ValidateDrawClientAttribs(Context *context)
     return true;
 }
 
-bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex, GLint vertexCount)
+bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex)
 {
-    if (!ValidateDrawClientAttribs(context))
-    {
-        return false;
-    }
-
     // If we're drawing zero vertices, we have enough data.
-    if (vertexCount <= 0 || primcount <= 0)
-    {
-        return true;
-    }
+    ASSERT(primcount > 0);
 
     if (maxVertex < context->getNonInstancedVertexElementLimit() &&
         (primcount - 1) < context->getInstancedVertexElementLimit())
@@ -2687,6 +2679,11 @@ bool ValidateDrawBase(Context *context, PrimitiveMode mode, GLsizei count)
         return false;
     }
 
+    if (context->getActiveClientAttribsMask().any())
+    {
+        return ValidateDrawClientAttribs(context);
+    }
+
     // If we are running GLES1, there is no current program.
     if (context->getClientVersion() >= Version(2, 0))
     {
@@ -2889,7 +2886,7 @@ bool ValidateDrawArraysCommon(Context *context,
     // - if count < 0, skip validating no-op draw calls.
     // From this we know maxVertex will be positive, and only need to check if it overflows GLint.
     ASSERT(first >= 0);
-    if (count > 0)
+    if (count > 0 && primcount > 0)
     {
         int64_t maxVertex = static_cast<int64_t>(first) + static_cast<int64_t>(count) - 1;
         if (maxVertex > static_cast<int64_t>(std::numeric_limits<GLint>::max()))
@@ -2898,7 +2895,7 @@ bool ValidateDrawArraysCommon(Context *context,
             return false;
         }
 
-        if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(maxVertex), count))
+        if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(maxVertex)))
         {
             return false;
         }
@@ -3104,15 +3101,7 @@ bool ValidateDrawElementsCommon(Context *context,
         }
     }
 
-    if (context->getExtensions().robustBufferAccessBehavior || count == 0)
-    {
-        // Special checks are needed for client attribs. But we don't need to validate overflows.
-        if (!ValidateDrawClientAttribs(context))
-        {
-            return false;
-        }
-    }
-    else
+    if (!context->getExtensions().robustBufferAccessBehavior && count == 0 && primcount == 0)
     {
         // Use the parameter buffer to retrieve and cache the index range.
         const DrawCallParams &params = context->getParams<DrawCallParams>();
@@ -3128,8 +3117,7 @@ bool ValidateDrawElementsCommon(Context *context,
             return false;
         }
 
-        if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(indexRange.end),
-                                 static_cast<GLint>(indexRange.vertexCount())))
+        if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(indexRange.end)))
         {
             return false;
         }
