@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6dc6ab85_52031f3e",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-26T18:04:09Z",
+      "side": 1,
+      "message": "nit: isFixedSize to be consistent with our naming conventions",
+      "range": {
+        "startLine": 140,
+        "startChar": 9,
+        "endLine": 140,
+        "endChar": 18
+      },
+      "revId": "4ba847fc9501d5ea61985cd7f078ef72ad8f7378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fea7b499_67b95aef",
+        "filename": "src/libANGLE/renderer/d3d/SurfaceD3D.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-26T18:04:09Z",
+      "side": 1,
+      "message": "should probably default init mFixedWidth and mFixedHeight to zero or mWidth/mHeight just to be safe.",
+      "range": {
+        "startLine": 51,
+        "startChar": 6,
+        "endLine": 51,
+        "endChar": 14
+      },
+      "revId": "4ba847fc9501d5ea61985cd7f078ef72ad8f7378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
