@@ -472,4 +472,21 @@ bool VertexArray::hasTransformFeedbackBindingConflict(const gl::Context *context
     return false;
 }
 
+bool VertexArray::hasMappedArrayBuffer() const
+{
+    // TODO(jmadill): Cache this.
+    for (size_t attribIndex : mState.mEnabledAttributesMask)
+    {
+        const VertexAttribute &vertexAttrib = mState.mVertexAttributes[attribIndex];
+        ASSERT(vertexAttrib.enabled);
+        const VertexBinding &vertexBinding = mState.mVertexBindings[vertexAttrib.bindingIndex];
+        gl::Buffer *boundBuffer            = vertexBinding.getBuffer().get();
+        if (boundBuffer && boundBuffer->isMapped())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
 }  // namespace gl
