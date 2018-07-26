@@ -97,14 +97,15 @@ ANGLED3D11DeviceType GetDeviceType(ID3D11Device *device);
 
 void MakeValidSize(bool isImage, DXGI_FORMAT format, GLsizei *requestWidth, GLsizei *requestHeight, int *levelOffset);
 
-gl::Error GenerateInitialTextureData(const gl::Context *context,
-                                     GLint internalFormat,
-                                     const Renderer11DeviceCaps &renderer11DeviceCaps,
-                                     GLuint width,
-                                     GLuint height,
-                                     GLuint depth,
-                                     GLuint mipLevels,
-                                     gl::TexLevelArray<D3D11_SUBRESOURCE_DATA> *outSubresourceData);
+angle::Result GenerateInitialTextureData(
+    const gl::Context *context,
+    GLint internalFormat,
+    const Renderer11DeviceCaps &renderer11DeviceCaps,
+    GLuint width,
+    GLuint height,
+    GLuint depth,
+    GLuint mipLevels,
+    gl::TexLevelArray<D3D11_SUBRESOURCE_DATA> *outSubresourceData);
 
 UINT GetPrimitiveRestartIndex();
 
@@ -303,6 +304,18 @@ enum ReservedConstantBufferSlot
 };
 
 void InitConstantBufferDesc(D3D11_BUFFER_DESC *constantBufferDescription, size_t byteWidth);
+
+// Helper class for RAII patterning.
+template <typename T>
+class ScopedUnmapper final : angle::NonCopyable
+{
+  public:
+    ScopedUnmapper(T *object) : mObject(object) {}
+    ~ScopedUnmapper() { mObject->unmap(); }
+
+  private:
+    T *mObject;
+};
 }  // namespace d3d11
 
 struct GenericData
@@ -422,5 +435,30 @@ IndexStorageType ClassifyIndexStorage(const gl::State &glState,
                                       unsigned int offset);
 
 }  // namespace rx
+
+#define ANGLE_TRY_11(CONTEXT, EXPR, MESSAGE)                                                    \
+    \
+{                                                                                        \
+        auto ANGLE_LOCAL_VAR = (EXPR);                                                          \
+        if (FAILED(ANGLE_LOCAL_VAR))                                                            \
+        {                                                                                       \
+            CONTEXT->handleError(ANGLE_LOCAL_VAR, MESSAGE, __FILE__, ANGLE_FUNCTION, __LINE__); \
+            return angle::Result::Stop();                                                       \
+        }                                                                                       \
+    \
+}
+
+#define ANGLE_CHECK_11(CONTEXT, EXPR, MESSAGE, ERROR)                                 \
+                                                                                      \
+    {                                                                                 \
+        if (!(EXPR))                                                                  \
+        {                                                                             \
+            CONTEXT->handleError(ERROR, MESSAGE, __FILE__, ANGLE_FUNCTION, __LINE__); \
+            return angle::Result::Stop();                                             \
+        }                                                                             \
+    }
+
+#define ANGLE_CHECK_11_ALLOC(context, result) \
+    ANGLE_CHECK_11(context, result, "Failed to allocate host memory", E_OUTOFMEMORY)
 
 #endif // LIBANGLE_RENDERER_D3D_D3D11_RENDERER11_UTILS_H_
