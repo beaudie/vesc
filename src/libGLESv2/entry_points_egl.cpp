@@ -657,31 +657,10 @@ EGLBoolean EGLAPIENTRY SwapBuffers(EGLDisplay dpy, EGLSurface surface)
     Display *display    = static_cast<Display *>(dpy);
     Surface *eglSurface = (Surface *)surface;
 
-    Error error = ValidateSurface(display, eglSurface);
+    Error error = ValidateSwapBuffers(thread, display, eglSurface);
     if (error.isError())
     {
         thread->setError(error, GetDebug(), "eglSwapBuffers",
-                         GetSurfaceIfValid(display, eglSurface));
-        return EGL_FALSE;
-    }
-
-    if (display->isDeviceLost())
-    {
-        thread->setError(EglContextLost(), GetDebug(), "eglSwapBuffers",
-                         GetSurfaceIfValid(display, eglSurface));
-        return EGL_FALSE;
-    }
-
-    if (surface == EGL_NO_SURFACE)
-    {
-        thread->setError(EglBadSurface(), GetDebug(), "eglSwapBuffers",
-                         GetSurfaceIfValid(display, eglSurface));
-        return EGL_FALSE;
-    }
-
-    if (!thread->getContext() || thread->getCurrentDrawSurface() != eglSurface)
-    {
-        thread->setError(EglBadSurface(), GetDebug(), "eglSwapBuffers",
                          GetSurfaceIfValid(display, eglSurface));
         return EGL_FALSE;
     }
