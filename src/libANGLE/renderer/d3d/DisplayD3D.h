@@ -12,11 +12,11 @@
 #include "libANGLE/renderer/DisplayImpl.h"
 #include "libANGLE/Device.h"
 
+#include "libANGLE/renderer/d3d/RendererD3D.h"
+
 namespace rx
 {
-class RendererD3D;
-
-class DisplayD3D : public DisplayImpl
+class DisplayD3D : public DisplayImpl, public d3d::Context
 {
   public:
     DisplayD3D(const egl::DisplayState &state);
