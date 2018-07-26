@@ -7567,7 +7567,7 @@ void Context::updateActiveAttribsMask()
     const VertexArray *vao = mGLState.getVertexArray();
     ASSERT(vao);
 
-    const AttributesMask &clientAttribs = vao->getClientAttribsMask();
+    const AttributesMask &clientAttribs  = vao->getClientAttribsMask();
     const AttributesMask &enabledAttribs = vao->getEnabledAttributesMask();
 
     activeAttribs &= enabledAttribs;
