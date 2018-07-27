@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "e3c8b36f_98c39729",
+        "filename": "src/libANGLE/Error.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-27T17:35:02Z",
+      "side": 1,
+      "message": "Does it make sense to also have this in ANGLE_TRY_HANDLE and ANGLE_TRY_11, ANGLE_CHECK_11?",
+      "range": {
+        "startLine": 229,
+        "startChar": 12,
+        "endLine": 229,
+        "endChar": 26
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89cc21c3_ce4ff33f",
+        "filename": "src/libANGLE/Error.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-27T17:35:02Z",
+      "side": 1,
+      "message": "Did git cl format do this? Weird.",
+      "range": {
+        "startLine": 241,
+        "startChar": 0,
+        "endLine": 241,
+        "endChar": 5
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f214685e_0bea3aad",
         "filename": "src/libANGLE/Error.h",
         "patchSetId": 5
@@ -18,6 +64,144 @@
         "startChar": 20,
         "endLine": 301,
         "endChar": 32
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f16970a5_2e7b2d67",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Blit11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-27T17:35:02Z",
+      "side": 1,
+      "message": "You could have used \"ANGLE_TRY_HANDLE(context, \" instead, right?\nWould have saved the return line.\nBut maybe you want to be explicit here?",
+      "range": {
+        "startLine": 1292,
+        "startChar": 12,
+        "endLine": 1292,
+        "endChar": 33
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "044a3029_b726e5dd",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-27T17:35:02Z",
+      "side": 1,
+      "message": "Redundant",
+      "range": {
+        "startLine": 534,
+        "startChar": 12,
+        "endLine": 534,
+        "endChar": 41
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bec25678_0fdcddcf",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-27T17:35:02Z",
+      "side": 1,
+      "message": "geometry",
+      "range": {
+        "startLine": 547,
+        "startChar": 64,
+        "endLine": 547,
+        "endChar": 70
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae3ec835_14762495",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-27T17:35:02Z",
+      "side": 1,
+      "message": "Would you like to print it as well?",
+      "range": {
+        "startLine": 610,
+        "startChar": 40,
+        "endLine": 610,
+        "endChar": 47
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e669ae86_337fcf4c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-27T17:35:02Z",
+      "side": 1,
+      "message": "So, now you have:\nANGLE_TRY_11 for HRESULT\nANGLE_CHECK_11 for bool\nANGLE_TRY for gl::Error.\nI think it would be clearer if the types would be a part of the name.",
+      "range": {
+        "startLine": 439,
+        "startChar": 8,
+        "endLine": 439,
+        "endChar": 20
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dad74aff_0425b6a0",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-27T17:35:02Z",
+      "side": 1,
+      "message": "Consider:\nANGLE_TRY_11(context, result ? S_OK : E_OUTOFMEMORY, \"Failed to allocate host memory\")",
+      "range": {
+        "startLine": 462,
+        "startChar": 4,
+        "endLine": 462,
+        "endChar": 18
       },
       "revId": "17636531abc98a063517531d9123d694038b436e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
