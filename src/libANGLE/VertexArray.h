@@ -178,6 +178,8 @@ class VertexArray final : public angle::ObserverInterface,
         return mState.hasEnabledNullPointerClientArray();
     }
 
+    bool hasMappedArrayBuffer() const;
+
     // Observer implementation
     void onSubjectStateChange(const gl::Context *context,
                               angle::SubjectIndex index,
