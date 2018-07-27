@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "f4cb182c_643f37d5",
+        "filename": "src/libANGLE/Error.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-27T21:22:57Z",
+      "side": 1,
+      "message": "My bad. Can fix in a follow up.",
+      "parentUuid": "7e0a92b1_b77b680b",
+      "range": {
+        "startLine": 229,
+        "startChar": 12,
+        "endLine": 229,
+        "endChar": 26
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "89cc21c3_ce4ff33f",
         "filename": "src/libANGLE/Error.h",
         "patchSetId": 5
@@ -202,6 +226,30 @@
       "side": 1,
       "message": "I\u0027ve actually meant ANGLE_TRY_HANDLE, not ANGLE_TRY_HR, it should be more similar right?\nAlso, I though you could use it not just here, but everywhere you call handleError().\nThis makes things look more similar and allows you to easily rename handleError() if needed.",
       "parentUuid": "08b929b3_47e714b6",
+      "range": {
+        "startLine": 1292,
+        "startChar": 12,
+        "endLine": 1292,
+        "endChar": 33
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef8d2098_b9c4b46a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Blit11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-27T21:22:57Z",
+      "side": 1,
+      "message": "I tried using ANGLE_TRY_HANDLE but it wouldn\u0027t accept the error. Probably a missing implicit cast. ANGLE_TRY_HANDLE is only temporary so bear with me. It\u0027ll be deleted at the end of the refactor.",
+      "parentUuid": "84b93dea_b179c392",
       "range": {
         "startLine": 1292,
         "startChar": 12,
