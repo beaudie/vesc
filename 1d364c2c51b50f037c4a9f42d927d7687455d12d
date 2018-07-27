@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bff7f99c_e3c70f97",
+        "filename": "src/libANGLE/renderer/d3d/DisplayD3D.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-27T20:27:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eecc8594_0cbe60a3",
+      "range": {
+        "startLine": 363,
+        "startChar": 41,
+        "endLine": 363,
+        "endChar": 48
+      },
+      "revId": "1d364c2c51b50f037c4a9f42d927d7687455d12d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "efca080c_004c960e",
         "filename": "src/libANGLE/renderer/d3d/RendererD3D.h",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2018-07-27T15:22:00Z",
       "side": 1,
       "message": "I\u0027d prefer ErrorHandler",
+      "range": {
+        "startLine": 79,
+        "startChar": 6,
+        "endLine": 79,
+        "endChar": 14
+      },
+      "revId": "1d364c2c51b50f037c4a9f42d927d7687455d12d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b35183d1_9e3b1e7d",
+        "filename": "src/libANGLE/renderer/d3d/RendererD3D.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-27T20:27:24Z",
+      "side": 1,
+      "message": "Understood but maybe I could explain. This can be used for any \"global\" values such as the global platform and display handle. Or the RendererD3D/Renderer9/Renderer11. That\u0027s the longer term thinking about it anyway. Given this are you ok with Context?\n\nAlso mirrors the use in the Vulkan renderer currently. (vk::Context which holds a RendererVk)",
+      "parentUuid": "efca080c_004c960e",
       "range": {
         "startLine": 79,
         "startChar": 6,
