@@ -45,8 +45,7 @@ gl::ImageIndex GetImageIndex(EGLenum eglTarget, const egl::AttributeMap &attribs
 }
 }  // anonymous namespace
 
-ImageSibling::ImageSibling(GLuint id)
-    : RefCountObject(id), FramebufferAttachmentObject(), mSourcesOf(), mTargetOf()
+ImageSibling::ImageSibling() : FramebufferAttachmentObject(), mSourcesOf(), mTargetOf()
 {
 }
 
@@ -131,8 +130,7 @@ Image::Image(rx::EGLImplFactory *factory,
              EGLenum target,
              ImageSibling *buffer,
              const AttributeMap &attribs)
-    : RefCountObject(0),
-      mState(target, buffer, attribs),
+    : mState(target, buffer, attribs),
       mImplementation(factory->createImage(mState, context, target, attribs)),
       mOrphanedAndNeedsInit(false)
 {
@@ -142,18 +140,18 @@ Image::Image(rx::EGLImplFactory *factory,
     mState.source->addImageSource(this);
 }
 
-gl::Error Image::onDestroy(const gl::Context *context)
+Error Image::onDestroy(const Display *display)
 {
     // All targets should hold a ref to the egl image and it should not be deleted until there are
     // no siblings left.
     ASSERT(mState.targets.empty());
 
     // Tell the source that it is no longer used by this image
-    if (mState.source.get() != nullptr)
+    if (mState.source != nullptr)
     {
         mState.source->removeImageSource(this);
-        mState.source.set(context, nullptr);
     }
+
     return gl::NoError();
 }
 
