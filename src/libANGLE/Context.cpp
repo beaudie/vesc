@@ -298,6 +298,9 @@ static_assert(static_cast<gl::PrimitiveMode>(10) == gl::PrimitiveMode::TriangleS
 static_assert(static_cast<gl::PrimitiveMode>(11) == gl::PrimitiveMode::EnumCount,
               "gl::PrimitiveMode enum values have changed, update kMinimumPrimitiveCounts.");
 
+constexpr angle::SubjectIndex kVertexArraySubjectIndex     = 0;
+constexpr angle::SubjectIndex kReadFramebufferSubjectIndex = 1;
+constexpr angle::SubjectIndex kDrawFramebufferSubjectIndex = 2;
 }  // anonymous namespace
 
 namespace gl
@@ -348,6 +351,9 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mExtensionsEnabled(GetExtensionsEnabled(attribs, mWebGLContext)),
       mMemoryProgramCache(memoryProgramCache),
       mCachedHasAnyEnabledClientAttrib(false),
+      mVertexArrayObserverBinding(this, kVertexArraySubjectIndex),
+      mDrawFramebufferObserverBinding(this, kDrawFramebufferSubjectIndex),
+      mReadFramebufferObserverBinding(this, kReadFramebufferSubjectIndex),
       mScratchBuffer(1000u),
       mZeroFilledBuffer(1000u)
 {
@@ -627,15 +633,15 @@ egl::Error Context::makeCurrent(egl::Display *display, egl::Surface *surface)
     // Update default framebuffer, the binding of the previous default
     // framebuffer (or lack of) will have a nullptr.
     {
+        mState.mFramebuffers->setDefaultFramebuffer(newDefault);
         if (mGLState.getReadFramebuffer() == nullptr)
         {
-            mGLState.setReadFramebufferBinding(newDefault);
+            bindReadFramebuffer(0);
         }
         if (mGLState.getDrawFramebuffer() == nullptr)
         {
-            mGLState.setDrawFramebufferBinding(newDefault);
+            bindDrawFramebuffer(0);
         }
-        mState.mFramebuffers->setDefaultFramebuffer(newDefault);
     }
 
     // Notify the renderer of a context switch
@@ -651,11 +657,13 @@ egl::Error Context::releaseSurface(const egl::Display *display)
     if (mGLState.getReadFramebuffer() == defaultFramebuffer)
     {
         mGLState.setReadFramebufferBinding(nullptr);
+        mReadFramebufferObserverBinding.bind(nullptr);
     }
 
     if (mGLState.getDrawFramebuffer() == defaultFramebuffer)
     {
         mGLState.setDrawFramebufferBinding(nullptr);
+        mDrawFramebufferObserverBinding.bind(nullptr);
     }
 
     if (defaultFramebuffer)
@@ -1076,6 +1084,7 @@ void Context::bindReadFramebuffer(GLuint framebufferHandle)
     Framebuffer *framebuffer = mState.mFramebuffers->checkFramebufferAllocation(
         mImplementation.get(), mCaps, framebufferHandle);
     mGLState.setReadFramebufferBinding(framebuffer);
+    mReadFramebufferObserverBinding.bind(framebuffer);
 }
 
 void Context::bindDrawFramebuffer(GLuint framebufferHandle)
@@ -1083,12 +1092,14 @@ void Context::bindDrawFramebuffer(GLuint framebufferHandle)
     Framebuffer *framebuffer = mState.mFramebuffers->checkFramebufferAllocation(
         mImplementation.get(), mCaps, framebufferHandle);
     mGLState.setDrawFramebufferBinding(framebuffer);
+    mDrawFramebufferObserverBinding.bind(framebuffer);
 }
 
 void Context::bindVertexArray(GLuint vertexArrayHandle)
 {
     VertexArray *vertexArray = checkVertexArrayAllocation(vertexArrayHandle);
     mGLState.setVertexArrayBinding(this, vertexArray);
+    mVertexArrayObserverBinding.bind(vertexArray);
     updateActiveAttribsMask();
 }
 
@@ -7575,6 +7586,31 @@ void Context::updateActiveAttribsMask()
     mCachedActiveClientAttribsMask   = activeAttribs & clientAttribs;
     mCachedActiveBufferedAttribsMask = activeAttribs & ~clientAttribs;
     mCachedHasAnyEnabledClientAttrib = (clientAttribs & enabledAttribs).any();
+}
+
+void Context::onSubjectStateChange(const Context *context,
+                                   angle::SubjectIndex index,
+                                   angle::SubjectMessage message)
+{
+    ASSERT(message == angle::SubjectMessage::CONTENTS_CHANGED);
+    switch (index)
+    {
+        case kVertexArraySubjectIndex:
+            mGLState.setObjectDirty(GL_VERTEX_ARRAY);
+            break;
+
+        case kReadFramebufferSubjectIndex:
+            mGLState.setObjectDirty(GL_READ_FRAMEBUFFER);
+            break;
+
+        case kDrawFramebufferSubjectIndex:
+            mGLState.setObjectDirty(GL_DRAW_FRAMEBUFFER);
+            break;
+
+        default:
+            UNREACHABLE();
+            break;
+    }
 }
 
 // ErrorSet implementation.
