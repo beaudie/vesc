@@ -1489,7 +1489,15 @@ class Context final : public egl::LabeledObject, angle::NonCopyable
     // GL_KHR_parallel_shader_compile
     void maxShaderCompilerThreads(GLuint count);
 
-    AttributesMask getActiveBufferedAttribsMask() const;
+    // Cached for speed. Places that can trigger updateActiveAttribsMask:
+    // 1. GLES1: clientActiveTexture.
+    // 2. GLES1: disableClientState/enableClientState.
+    // 3. Context: linkProgram/useProgram/programBinary. Note: should check programBinary bits.
+    // 4. Context: bindVertexArray.
+    // 5. Vertex Array: most any state change.
+    AttributesMask getActiveBufferedAttribsMask() const { return mCachedActiveBufferedAttribsMask; }
+    AttributesMask getActiveClientAttribsMask() const { return mCachedActiveClientAttribsMask; }
+    bool hasAnyEnabledClientAttrib() const { return mCachedHasAnyEnabledClientAttrib; }
 
   private:
     void initialize();
@@ -1533,6 +1541,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable
 
     gl::LabeledObject *getLabeledObject(GLenum identifier, GLuint name) const;
     gl::LabeledObject *getLabeledObjectFromPtr(const void *ptr) const;
+
+    // Validation cache update functions.
+    void updateActiveAttribsMask();
 
     ContextState mState;
     bool mSkipValidation;
@@ -1610,6 +1621,11 @@ class Context final : public egl::LabeledObject, angle::NonCopyable
     const bool mWebGLContext;
     const bool mExtensionsEnabled;
     MemoryProgramCache *mMemoryProgramCache;
+
+    // Validation cache variables.
+    AttributesMask mCachedActiveBufferedAttribsMask;
+    AttributesMask mCachedActiveClientAttribsMask;
+    bool mCachedHasAnyEnabledClientAttrib;
 
     State::DirtyBits mTexImageDirtyBits;
     State::DirtyObjects mTexImageDirtyObjects;
