@@ -468,20 +468,15 @@ gl::Error VertexArrayVk::onDraw(const gl::Context *context,
     ContextVk *contextVk                    = vk::GetImpl(context);
     const gl::State &state                  = context->getGLState();
     const gl::Program *programGL            = state.getProgram();
-    const gl::AttributesMask &clientAttribs = mState.getEnabledClientMemoryAttribsMask();
-    const gl::AttributesMask &activeAttribs = programGL->getActiveAttribLocationsMask();
+    const gl::AttributesMask &clientAttribs = context->getActiveClientAttribsMask();
     uint32_t maxAttrib                      = programGL->getState().getMaxActiveAttribLocation();
 
     if (clientAttribs.any())
     {
-        const gl::AttributesMask &attribsToStream = (clientAttribs & activeAttribs);
-        if (attribsToStream.any())
-        {
-            ANGLE_TRY(drawCallParams.ensureIndexRangeResolved(context));
-            ANGLE_TRY(streamVertexData(contextVk, attribsToStream, drawCallParams));
-            commandBuffer->bindVertexBuffers(0, maxAttrib, mCurrentArrayBufferHandles.data(),
-                                             mCurrentArrayBufferOffsets.data());
-        }
+        ANGLE_TRY(drawCallParams.ensureIndexRangeResolved(context));
+        ANGLE_TRY(streamVertexData(contextVk, clientAttribs, drawCallParams));
+        commandBuffer->bindVertexBuffers(0, maxAttrib, mCurrentArrayBufferHandles.data(),
+                                         mCurrentArrayBufferOffsets.data());
     }
     else if (mVertexBuffersDirty || newCommandBuffer)
     {
@@ -490,8 +485,10 @@ gl::Error VertexArrayVk::onDraw(const gl::Context *context,
             commandBuffer->bindVertexBuffers(0, maxAttrib, mCurrentArrayBufferHandles.data(),
                                              mCurrentArrayBufferOffsets.data());
 
+            const gl::AttributesMask &bufferedAttribs = context->getActiveBufferedAttribsMask();
+
             vk::CommandGraphResource *drawFramebuffer = vk::GetImpl(state.getDrawFramebuffer());
-            updateArrayBufferReadDependencies(drawFramebuffer, activeAttribs,
+            updateArrayBufferReadDependencies(drawFramebuffer, bufferedAttribs,
                                               contextVk->getRenderer()->getCurrentQueueSerial());
         }
 
