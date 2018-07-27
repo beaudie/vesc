@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "62dfbf22_89f90666",
+        "filename": "src/libANGLE/Error.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-27T20:27:14Z",
+      "side": 1,
+      "message": "Yep. Probably because of line endings on Windows. It\u0027s a known issue.",
+      "parentUuid": "89cc21c3_ce4ff33f",
+      "range": {
+        "startLine": 241,
+        "startChar": 0,
+        "endLine": 241,
+        "endChar": 5
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f214685e_0bea3aad",
         "filename": "src/libANGLE/Error.h",
         "patchSetId": 5
@@ -68,6 +92,30 @@
       "revId": "17636531abc98a063517531d9123d694038b436e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c780d07_cdddf7dc",
+        "filename": "src/libANGLE/Error.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-27T20:27:14Z",
+      "side": 1,
+      "message": "Should be pretty much the same or faster. Result should be sizeof(bool).",
+      "parentUuid": "f214685e_0bea3aad",
+      "range": {
+        "startLine": 301,
+        "startChar": 20,
+        "endLine": 301,
+        "endChar": 32
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "08b929b3_47e714b6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Blit11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-27T20:27:14Z",
+      "side": 1,
+      "message": "Done. Slightly different implementation.",
+      "parentUuid": "f16970a5_2e7b2d67",
+      "range": {
+        "startLine": 1292,
+        "startChar": 12,
+        "endLine": 1292,
+        "endChar": 33
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "044a3029_b726e5dd",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
         "patchSetId": 5
@@ -114,6 +186,30 @@
       "revId": "17636531abc98a063517531d9123d694038b436e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cd93e49_387f28cb",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-27T20:27:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "044a3029_b726e5dd",
+      "range": {
+        "startLine": 534,
+        "startChar": 12,
+        "endLine": 534,
+        "endChar": 41
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "2a5ca75c_f7151943",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-27T20:27:14Z",
+      "side": 1,
+      "message": "Done, good catch.",
+      "parentUuid": "bec25678_0fdcddcf",
+      "range": {
+        "startLine": 547,
+        "startChar": 64,
+        "endLine": 547,
+        "endChar": 70
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae3ec835_14762495",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
         "patchSetId": 5
@@ -160,6 +280,30 @@
       "revId": "17636531abc98a063517531d9123d694038b436e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa8b5a84_decfdb9a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-27T20:27:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae3ec835_14762495",
+      "range": {
+        "startLine": 610,
+        "startChar": 40,
+        "endLine": 610,
+        "endChar": 47
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -186,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "a005eb14_263e9b67",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-27T20:27:14Z",
+      "side": 1,
+      "message": "I moved these to RendererD3D.h and clarified they are for HRESULTs. HRESULT is what they have in common.",
+      "parentUuid": "e669ae86_337fcf4c",
+      "range": {
+        "startLine": 439,
+        "startChar": 8,
+        "endLine": 439,
+        "endChar": 20
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dad74aff_0425b6a0",
         "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.h",
         "patchSetId": 5
@@ -206,6 +374,30 @@
       "revId": "17636531abc98a063517531d9123d694038b436e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78794e47_4b045d33",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-27T20:27:14Z",
+      "side": 1,
+      "message": "Left it to keep it more concise.",
+      "parentUuid": "dad74aff_0425b6a0",
+      "range": {
+        "startLine": 462,
+        "startChar": 4,
+        "endLine": 462,
+        "endChar": 18
+      },
+      "revId": "17636531abc98a063517531d9123d694038b436e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
