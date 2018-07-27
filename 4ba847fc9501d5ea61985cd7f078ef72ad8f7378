@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b474c254_9d33d0fd",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1294598
+      },
+      "writtenOn": "2018-07-27T10:36:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6dc6ab85_52031f3e",
+      "range": {
+        "startLine": 140,
+        "startChar": 9,
+        "endLine": 140,
+        "endChar": 18
+      },
+      "revId": "4ba847fc9501d5ea61985cd7f078ef72ad8f7378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fea7b499_67b95aef",
         "filename": "src/libANGLE/renderer/d3d/SurfaceD3D.cpp",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "4ba847fc9501d5ea61985cd7f078ef72ad8f7378",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ef1a863_e840b037",
+        "filename": "src/libANGLE/renderer/d3d/SurfaceD3D.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1294598
+      },
+      "writtenOn": "2018-07-27T10:36:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fea7b499_67b95aef",
+      "range": {
+        "startLine": 51,
+        "startChar": 6,
+        "endLine": 51,
+        "endChar": 14
+      },
+      "revId": "4ba847fc9501d5ea61985cd7f078ef72ad8f7378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
