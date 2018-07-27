@@ -88,6 +88,32 @@ class Context : angle::NonCopyable
                              const char *function,
                              unsigned int line) = 0;
 };
+
+#define ANGLE_TRY_D3D(CONTEXT, EXPR, MESSAGE)                                                   \
+    \
+{                                                                                        \
+        auto ANGLE_LOCAL_VAR = (EXPR);                                                          \
+        if (FAILED(ANGLE_LOCAL_VAR))                                                            \
+        {                                                                                       \
+            CONTEXT->handleError(ANGLE_LOCAL_VAR, MESSAGE, __FILE__, ANGLE_FUNCTION, __LINE__); \
+            return angle::Result::Stop();                                                       \
+        }                                                                                       \
+    \
+}
+
+#define ANGLE_CHECK_D3D(CONTEXT, EXPR, MESSAGE, ERROR)                                \
+                                                                                      \
+    {                                                                                 \
+        if (!(EXPR))                                                                  \
+        {                                                                             \
+            CONTEXT->handleError(ERROR, MESSAGE, __FILE__, ANGLE_FUNCTION, __LINE__); \
+            return angle::Result::Stop();                                             \
+        }                                                                             \
+    }
+
+#define ANGLE_CHECK_D3D_ALLOC(context, result) \
+    ANGLE_CHECK_D3D(context, result, "Failed to allocate host memory", E_OUTOFMEMORY)
+
 }  // namespace d3d
 
 // ANGLE_TRY for HRESULT errors.
