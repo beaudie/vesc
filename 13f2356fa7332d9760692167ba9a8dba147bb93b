@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f44441c_fb09a3f0",
+        "filename": "src/libANGLE/renderer/d3d/RendererD3D.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-27T23:10:01Z",
+      "side": 1,
+      "message": "Use ANGLE_TRY_HR, ANGLE_CHECK_HR, ANGLE_CHECK_HR_ALLOC?",
+      "range": {
+        "startLine": 92,
+        "startChar": 8,
+        "endLine": 92,
+        "endChar": 21
+      },
+      "revId": "13f2356fa7332d9760692167ba9a8dba147bb93b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36c1bb20_a7aa7ada",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-27T23:10:01Z",
+      "side": 1,
+      "message": "Were you going to change to ANGLE_TRY here and in the next one?",
+      "range": {
+        "startLine": 1226,
+        "startChar": 4,
+        "endLine": 1226,
+        "endChar": 20
+      },
+      "revId": "13f2356fa7332d9760692167ba9a8dba147bb93b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

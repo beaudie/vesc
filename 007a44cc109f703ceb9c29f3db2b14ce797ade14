@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8cd8f08e_b46ffeea",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ResourceManager11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-27T23:10:01Z",
+      "side": 0,
+      "message": "You don\u0027t think this is useful?",
+      "range": {
+        "startLine": 389,
+        "startChar": 36,
+        "endLine": 389,
+        "endChar": 91
+      },
+      "revId": "007a44cc109f703ceb9c29f3db2b14ce797ade14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
