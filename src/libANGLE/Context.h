@@ -78,7 +78,7 @@ class ErrorSet : angle::NonCopyable
     std::set<GLenum> mErrors;
 };
 
-class Context final : public egl::LabeledObject, angle::NonCopyable
+class Context final : public egl::LabeledObject, angle::NonCopyable, public angle::ObserverInterface
 {
   public:
     Context(rx::EGLImplFactory *implFactory,
@@ -1489,6 +1489,10 @@ class Context final : public egl::LabeledObject, angle::NonCopyable
     // GL_KHR_parallel_shader_compile
     void maxShaderCompilerThreads(GLuint count);
 
+    void onSubjectStateChange(const Context *context,
+                              angle::SubjectIndex index,
+                              angle::SubjectMessage message) override;
+
     // Cached for speed. Places that can trigger updateActiveAttribsMask:
     // 1. GLES1: clientActiveTexture.
     // 2. GLES1: disableClientState/enableClientState.
@@ -1641,6 +1645,11 @@ class Context final : public egl::LabeledObject, angle::NonCopyable
     State::DirtyObjects mComputeDirtyObjects;
 
     Workarounds mWorkarounds;
+
+    // Binding to container objects that use dependent state updates.
+    angle::ObserverBinding mVertexArrayObserverBinding;
+    angle::ObserverBinding mDrawFramebufferObserverBinding;
+    angle::ObserverBinding mReadFramebufferObserverBinding;
 
     // Not really a property of context state. The size and contexts change per-api-call.
     mutable angle::ScratchBuffer mScratchBuffer;
