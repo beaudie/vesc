@@ -69,6 +69,10 @@ void VertexArrayState::setAttribBinding(size_t attribIndex, GLuint newBindingInd
     // Set the attribute using the new binding.
     attrib.bindingIndex = newBindingIndex;
     attrib.updateCachedElementLimit(newBinding);
+
+    bool isMapped = newBinding.getBuffer().get() && newBinding.getBuffer()->isMapped();
+    mCachedMappedArrayBuffers.set(attribIndex, isMapped);
+    mCachedEnabledMappedArrayBuffers.set(attribIndex, isMapped && attrib.enabled);
 }
 
 // VertexArray implementation.
@@ -193,6 +197,7 @@ void VertexArray::bindVertexBufferImpl(const Context *context,
     updateObserverBinding(bindingIndex);
     updateCachedBufferBindingSize(binding);
     updateCachedTransformFeedbackBindingValidation(bindingIndex, boundBuffer);
+    updateCachedMappedArrayBuffers(binding);
 
     // Update client memory attribute pointers. Affects all bound attributes.
     if (boundBuffer)
@@ -306,6 +311,8 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
 
     // Update state cache
     mState.mEnabledAttributesMask.set(attribIndex, enabledState);
+    mState.mCachedEnabledMappedArrayBuffers =
+        mState.mCachedMappedArrayBuffers & mState.mEnabledAttributesMask;
 }
 
 void VertexArray::setVertexAttribPointer(const Context *context,
@@ -428,6 +435,22 @@ void VertexArray::onSubjectStateChange(const gl::Context *context,
             }
             break;
 
+        case angle::SubjectMessage::RESOURCE_MAPPED:
+            if (index < mArrayBufferObserverBindings.size())
+            {
+                updateCachedMappedArrayBuffers(&mState.mVertexBindings[index]);
+            }
+            break;
+
+        case angle::SubjectMessage::RESOURCE_UNMAPPED:
+            setDependentDirtyBit(context, true, index);
+
+            if (index < mArrayBufferObserverBindings.size())
+            {
+                updateCachedMappedArrayBuffers(&mState.mVertexBindings[index]);
+            }
+            break;
+
         default:
             UNREACHABLE();
             break;
@@ -489,21 +512,19 @@ bool VertexArray::hasTransformFeedbackBindingConflict(const gl::Context *context
     return false;
 }
 
-bool VertexArray::hasMappedEnabledArrayBuffer() const
+void VertexArray::updateCachedMappedArrayBuffers(VertexBinding *binding)
 {
-    // TODO(jmadill): Cache this. http://anglebug.com/2746
-    for (size_t attribIndex : mState.mEnabledAttributesMask)
+    Buffer *buffer = binding->getBuffer().get();
+    if (buffer && buffer->isMapped())
     {
-        const VertexAttribute &vertexAttrib = mState.mVertexAttributes[attribIndex];
-        ASSERT(vertexAttrib.enabled);
-        const VertexBinding &vertexBinding = mState.mVertexBindings[vertexAttrib.bindingIndex];
-        gl::Buffer *boundBuffer            = vertexBinding.getBuffer().get();
-        if (boundBuffer && boundBuffer->isMapped())
-        {
-            return true;
-        }
+        mState.mCachedMappedArrayBuffers |= binding->getBoundAttributesMask();
+    }
+    else
+    {
+        mState.mCachedMappedArrayBuffers &= ~binding->getBoundAttributesMask();
     }
 
-    return false;
+    mState.mCachedEnabledMappedArrayBuffers =
+        mState.mCachedMappedArrayBuffers & mState.mEnabledAttributesMask;
 }
 }  // namespace gl
