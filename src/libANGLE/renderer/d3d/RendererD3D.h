@@ -73,6 +73,23 @@ enum RendererClass
     RENDERER_D3D9
 };
 
+// A d3d::Context wraps error handling.
+namespace d3d
+{
+class Context : angle::NonCopyable
+{
+  public:
+    Context() {}
+    virtual ~Context() {}
+
+    virtual void handleError(HRESULT hr,
+                             const char *message,
+                             const char *file,
+                             const char *function,
+                             unsigned int line) = 0;
+};
+}  // namespace d3d
+
 // Check if the device is lost every 10 failures to get the query data
 constexpr unsigned int kPollingD3DDeviceLostCheckFrequency = 10;
 
