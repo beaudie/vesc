@@ -1503,6 +1503,17 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     AttributesMask getActiveClientAttribsMask() const { return mCachedActiveClientAttribsMask; }
     bool hasAnyEnabledClientAttrib() const { return mCachedHasAnyEnabledClientAttrib; }
 
+    // Cached for speed. Places that can trigger updateVertexElementLimits:
+    // 1. Context: bindVertexArray.
+    // 2. Context: any executable change (linkProgram/useProgram/programBinary).
+    // 3. Vertex Array: any state change call.
+    // 4. Buffer: a dependent buffer resize.
+    GLint64 getNonInstancedVertexElementLimit() const
+    {
+        return mCachedNonInstancedVertexElementLimit;
+    }
+    GLint64 getInstancedVertexElementLimit() const { return mCachedInstancedVertexElementLimit; }
+
   private:
     void initialize();
 
@@ -1548,6 +1559,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     // Validation cache update functions.
     void updateActiveAttribsMask();
+    void updateVertexElementLimits();
 
     ContextState mState;
     bool mSkipValidation;
@@ -1630,6 +1642,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     AttributesMask mCachedActiveBufferedAttribsMask;
     AttributesMask mCachedActiveClientAttribsMask;
     bool mCachedHasAnyEnabledClientAttrib;
+    GLint64 mCachedNonInstancedVertexElementLimit;
+    GLint64 mCachedInstancedVertexElementLimit;
 
     State::DirtyBits mTexImageDirtyBits;
     State::DirtyObjects mTexImageDirtyObjects;
