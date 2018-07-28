@@ -347,6 +347,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mWebGLContext(GetWebGLContext(attribs)),
       mExtensionsEnabled(GetExtensionsEnabled(attribs, mWebGLContext)),
       mMemoryProgramCache(memoryProgramCache),
+      mCachedHasAnyEnabledClientAttrib(false),
       mScratchBuffer(1000u),
       mZeroFilledBuffer(1000u)
 {
@@ -1096,6 +1097,7 @@ void Context::bindVertexArray(GLuint vertexArrayHandle)
 {
     VertexArray *vertexArray = checkVertexArrayAllocation(vertexArrayHandle);
     mGLState.setVertexArrayBinding(this, vertexArray);
+    updateActiveAttribsMask();
 }
 
 void Context::bindVertexBuffer(GLuint bindingIndex,
@@ -1105,6 +1107,7 @@ void Context::bindVertexBuffer(GLuint bindingIndex,
 {
     Buffer *buffer = mState.mBuffers->checkBufferAllocation(mImplementation.get(), bufferHandle);
     mGLState.bindVertexBuffer(this, bindingIndex, buffer, offset, stride);
+    updateActiveAttribsMask();
 }
 
 void Context::bindSampler(GLuint textureUnit, GLuint samplerHandle)
@@ -1130,6 +1133,7 @@ void Context::bindImageTexture(GLuint unit,
 void Context::useProgram(GLuint program)
 {
     mGLState.setProgram(this, getProgram(program));
+    updateActiveAttribsMask();
 }
 
 void Context::useProgramStages(GLuint pipeline, GLbitfield stages, GLuint program)
@@ -4389,6 +4393,7 @@ void Context::disable(GLenum cap)
 void Context::disableVertexAttribArray(GLuint index)
 {
     mGLState.setEnableVertexAttribArray(index, false);
+    updateActiveAttribsMask();
 }
 
 void Context::enable(GLenum cap)
@@ -4399,6 +4404,7 @@ void Context::enable(GLenum cap)
 void Context::enableVertexAttribArray(GLuint index)
 {
     mGLState.setEnableVertexAttribArray(index, true);
+    updateActiveAttribsMask();
 }
 
 void Context::frontFace(GLenum mode)
@@ -4606,6 +4612,7 @@ void Context::vertexAttribPointer(GLuint index,
 {
     mGLState.setVertexAttribPointer(this, index, mGLState.getTargetBuffer(BufferBinding::Array),
                                     size, type, ConvertToBool(normalized), false, stride, ptr);
+    updateActiveAttribsMask();
 }
 
 void Context::vertexAttribFormat(GLuint attribIndex,
@@ -4629,6 +4636,7 @@ void Context::vertexAttribIFormat(GLuint attribIndex,
 void Context::vertexAttribBinding(GLuint attribIndex, GLuint bindingIndex)
 {
     mGLState.setVertexAttribBinding(this, attribIndex, bindingIndex);
+    updateActiveAttribsMask();
 }
 
 void Context::vertexBindingDivisor(GLuint bindingIndex, GLuint divisor)
@@ -4649,6 +4657,7 @@ void Context::vertexAttribIPointer(GLuint index,
 {
     mGLState.setVertexAttribPointer(this, index, mGLState.getTargetBuffer(BufferBinding::Array),
                                     size, type, false, true, stride, pointer);
+    updateActiveAttribsMask();
 }
 
 void Context::vertexAttribI4i(GLuint index, GLint x, GLint y, GLint z, GLint w)
@@ -5534,6 +5543,7 @@ void Context::linkProgram(GLuint program)
     ASSERT(programObject);
     handleError(programObject->link(this));
     mGLState.onProgramExecutableChange(programObject);
+    updateActiveAttribsMask();
 }
 
 void Context::releaseShaderCompiler()
@@ -5741,6 +5751,7 @@ void Context::programBinary(GLuint program, GLenum binaryFormat, const void *bin
     ASSERT(programObject != nullptr);
 
     handleError(programObject->loadBinary(this, binaryFormat, binary, length));
+    updateActiveAttribsMask();
 }
 
 void Context::uniform1ui(GLint location, GLuint v0)
@@ -7536,21 +7547,30 @@ bool Context::isGLES1() const
     return mState.getClientVersion() < Version(2, 0);
 }
 
-AttributesMask Context::getActiveBufferedAttribsMask() const
+void Context::updateActiveAttribsMask()
 {
-    // TODO(jmadill): Cache this. http://anglebug.com/1391
-    ASSERT(mGLState.getProgram() || isGLES1());
+    if (!isGLES1() && !mGLState.getProgram())
+    {
+        mCachedActiveBufferedAttribsMask = AttributesMask();
+        mCachedActiveClientAttribsMask   = AttributesMask();
+        return;
+    }
 
-    const AttributesMask &activeAttribs =
-        isGLES1() ? mGLState.gles1().getVertexArraysAttributeMask()
-                  : mGLState.getProgram()->getActiveAttribLocationsMask();
+    AttributesMask activeAttribs = isGLES1()
+                                       ? mGLState.gles1().getVertexArraysAttributeMask()
+                                       : mGLState.getProgram()->getActiveAttribLocationsMask();
 
     const VertexArray *vao = mGLState.getVertexArray();
     ASSERT(vao);
 
-    const AttributesMask &clientAttribs = vao->getEnabledClientMemoryAttribsMask();
+    const AttributesMask &clientAttribs = vao->getClientAttribsMask();
+    const AttributesMask &enabledAttribs = vao->getEnabledAttributesMask();
 
-    return (activeAttribs & vao->getEnabledAttributesMask() & ~clientAttribs);
+    activeAttribs &= enabledAttribs;
+
+    mCachedActiveClientAttribsMask   = activeAttribs & clientAttribs;
+    mCachedActiveBufferedAttribsMask = activeAttribs & ~clientAttribs;
+    mCachedHasAnyEnabledClientAttrib = (clientAttribs & enabledAttribs).any();
 }
 
 // ErrorSet implementation.
