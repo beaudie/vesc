@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cccc0eac_9795b92a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-30T18:51:41Z",
+      "side": 1,
+      "message": "Does it or doesn\u0027t it?  The commit message should make the case for the change if possible.",
+      "range": {
+        "startLine": 17,
+        "startChar": 5,
+        "endLine": 17,
+        "endChar": 11
+      },
+      "revId": "63ab36af68eae3f160a0ac4ac39a9f1aa13424bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
