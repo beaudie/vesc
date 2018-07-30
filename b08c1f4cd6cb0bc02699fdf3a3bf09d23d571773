@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ade5f5d9_2b7282ce",
+        "filename": "src/libANGLE/VertexAttribute.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-30T19:10:02Z",
+      "side": 1,
+      "message": "Confused me for a moment.  Is it clearer to say \"mappings from *this* binding to ... using *this* binding?\"",
+      "range": {
+        "startLine": 65,
+        "startChar": 33,
+        "endLine": 65,
+        "endChar": 37
+      },
+      "revId": "b08c1f4cd6cb0bc02699fdf3a3bf09d23d571773",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
