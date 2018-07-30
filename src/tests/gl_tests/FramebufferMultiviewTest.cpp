@@ -587,7 +587,7 @@ TEST_P(FramebufferMultiviewTest, IncompleteViewTargetsSideBySide)
 }
 
 // Test that the active read framebuffer cannot be read from through glCopyTex* if it has multi-view
-// attachments.
+// attachments with a side-by-side layout.
 TEST_P(FramebufferMultiviewTest, InvalidCopyTex)
 {
     if (!requestMultiviewExtension())
@@ -631,8 +631,77 @@ TEST_P(FramebufferMultiviewTest, InvalidCopyTex)
     }
 }
 
+// Test that the active read framebuffer can be read with glCopyTex* if it only has one layered
+// view.
+TEST_P(FramebufferMultiviewTest, CopyTex)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D_ARRAY, tex);
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, 1, 1, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    glFramebufferTextureMultiviewLayeredANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 0, 1);
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    ASSERT_GL_NO_ERROR();
+
+    // Test glCopyTexImage2D and glCopyTexSubImage2D.
+    {
+        GLTexture tex2;
+        glBindTexture(GL_TEXTURE_2D, tex2);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 0, 0, 1, 1, 0);
+        ASSERT_GL_NO_ERROR();
+
+        // Test texture contents.
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        draw2DTexturedQuad(0.0f, 1.0f, true);
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 1, 1);
+        ASSERT_GL_NO_ERROR();
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        draw2DTexturedQuad(0.0f, 1.0f, true);
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::cyan);
+    }
+
+    // Test glCopyTexSubImage3D.
+    {
+        GLTexture tex2;
+        glBindTexture(GL_TEXTURE_3D, tex2);
+        glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA8, 1, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glCopyTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, 0, 0, 1, 1);
+        ASSERT_GL_NO_ERROR();
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        draw3DTexturedQuad(0.0f, 1.0f, true, 0.0f);
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::yellow);
+    }
+}
+
 // Test that glBlitFramebuffer generates an invalid framebuffer operation when either the current
-// draw framebuffer, or current read framebuffer have multiview attachments.
+// draw framebuffer, or current read framebuffer have multiview attachments with a side-by-side
+// layout.
 TEST_P(FramebufferMultiviewTest, InvalidBlit)
 {
     if (!requestMultiviewExtension())
@@ -670,8 +739,42 @@ TEST_P(FramebufferMultiviewTest, InvalidBlit)
     }
 }
 
+// Test that glBlitFramebuffer succeeds if the current read framebuffer has just one layered view.
+TEST_P(FramebufferMultiviewTest, Blit)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D_ARRAY, tex);
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, 1, 1, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    glFramebufferTextureMultiviewLayeredANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 0, 1);
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    ASSERT_GL_NO_ERROR();
+
+    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBlitFramebuffer(0, 0, 1, 1, 0, 0, 1, 1, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    ASSERT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 // Test that glReadPixels generates an invalid framebuffer operation error if the current read
-// framebuffer has a multi-view layout.
+// framebuffer has a side-by-side multi-view layout.
 TEST_P(FramebufferMultiviewTest, InvalidReadPixels)
 {
     if (!requestMultiviewExtension())
@@ -695,6 +798,34 @@ TEST_P(FramebufferMultiviewTest, InvalidReadPixels)
     GLColor pixelColor;
     glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &pixelColor.R);
     EXPECT_GL_ERROR(GL_INVALID_FRAMEBUFFER_OPERATION);
+}
+
+// Test that glReadPixels succeeds from a layered multiview framebuffer with just one view.
+TEST_P(FramebufferMultiviewTest, ReadPixels)
+{
+    if (!requestMultiviewExtension())
+    {
+        return;
+    }
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D_ARRAY, tex);
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, 1, 1, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    glFramebufferTextureMultiviewLayeredANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 0, 1);
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    ASSERT_GL_NO_ERROR();
+
+    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    GLColor pixelColor;
+    glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &pixelColor.R);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_COLOR_NEAR(GLColor::green, pixelColor, 2);
 }
 
 // Test that glClear clears only the contents of each view if the scissor test is enabled.
@@ -1346,6 +1477,6 @@ TEST_P(FramebufferMultiviewLayeredClearTest, ColorBufferClearAllLayersAttached)
     EXPECT_EQ(GLColor::green, getLayerColor(1, GL_COLOR_ATTACHMENT0));
 }
 
-ANGLE_INSTANTIATE_TEST(FramebufferMultiviewTest, ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST(FramebufferMultiviewTest, ES3_OPENGL(), ES3_D3D11());
 ANGLE_INSTANTIATE_TEST(FramebufferMultiviewSideBySideClearTest, ES3_OPENGL(), ES3_D3D11());
 ANGLE_INSTANTIATE_TEST(FramebufferMultiviewLayeredClearTest, ES3_OPENGL(), ES3_D3D11());
