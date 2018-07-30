@@ -34,6 +34,47 @@
       "revId": "a42298a0eccf23ce65d5f2fb7ac06b0345e98676",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0de042f9_b5dc4c76",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-30T19:56:56Z",
+      "side": 1,
+      "message": "anglebug.com/new which redirects to the issue tracker. Also linked from the main project website http://angleproject.org under \u0027issue tracker\u0027.",
+      "parentUuid": "087882d0_62a15fd8",
+      "revId": "a42298a0eccf23ce65d5f2fb7ac06b0345e98676",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc522fba_01dd4908",
+        "filename": "src/gpu_info_util/SystemInfo.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-30T19:56:56Z",
+      "side": 1,
+      "message": "I don\u0027t see why we can\u0027t use this on other platforms. Even if we only parse it on Android to start.",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 38
+      },
+      "revId": "a42298a0eccf23ce65d5f2fb7ac06b0345e98676",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
