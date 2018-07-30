@@ -16,6 +16,24 @@
       "revId": "a42298a0eccf23ce65d5f2fb7ac06b0345e98676",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "087882d0_62a15fd8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-07-30T19:51:30Z",
+      "side": 1,
+      "message": "Okay.  BTW, where do I go to create the bug?",
+      "parentUuid": "2ebae367_998935ba",
+      "revId": "a42298a0eccf23ce65d5f2fb7ac06b0345e98676",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
