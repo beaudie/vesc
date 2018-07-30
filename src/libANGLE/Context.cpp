@@ -1100,6 +1100,7 @@ void Context::bindDrawFramebuffer(GLuint framebufferHandle)
         mImplementation.get(), mCaps, framebufferHandle);
     mGLState.setDrawFramebufferBinding(framebuffer);
     mDrawFramebufferObserverBinding.bind(framebuffer);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::bindVertexArray(GLuint vertexArrayHandle)
@@ -1109,6 +1110,7 @@ void Context::bindVertexArray(GLuint vertexArrayHandle)
     mVertexArrayObserverBinding.bind(vertexArray);
     mStateCache.updateActiveAttribsMask(this);
     mStateCache.updateVertexElementLimits(this);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::bindVertexBuffer(GLuint bindingIndex,
@@ -1146,6 +1148,7 @@ void Context::useProgram(GLuint program)
     mGLState.setProgram(this, getProgram(program));
     mStateCache.updateActiveAttribsMask(this);
     mStateCache.updateVertexElementLimits(this);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::useProgramStages(GLuint pipeline, GLbitfield stages, GLuint program)
@@ -4402,6 +4405,7 @@ void Context::depthRangef(GLfloat zNear, GLfloat zFar)
 void Context::disable(GLenum cap)
 {
     mGLState.setEnableFeature(cap, false);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::disableVertexAttribArray(GLuint index)
@@ -4409,11 +4413,13 @@ void Context::disableVertexAttribArray(GLuint index)
     mGLState.setEnableVertexAttribArray(index, false);
     mStateCache.updateActiveAttribsMask(this);
     mStateCache.updateVertexElementLimits(this);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::enable(GLenum cap)
 {
     mGLState.setEnableFeature(cap, true);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::enableVertexAttribArray(GLuint index)
@@ -4421,6 +4427,7 @@ void Context::enableVertexAttribArray(GLuint index)
     mGLState.setEnableVertexAttribArray(index, true);
     mStateCache.updateActiveAttribsMask(this);
     mStateCache.updateVertexElementLimits(this);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::frontFace(GLenum mode)
@@ -4544,6 +4551,8 @@ void Context::stencilFuncSeparate(GLenum face, GLenum func, GLint ref, GLuint ma
     {
         mGLState.setStencilBackParams(func, ref, mask);
     }
+
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::stencilMaskSeparate(GLenum face, GLuint mask)
@@ -4557,6 +4566,8 @@ void Context::stencilMaskSeparate(GLenum face, GLuint mask)
     {
         mGLState.setStencilBackWritemask(mask);
     }
+
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::stencilOpSeparate(GLenum face, GLenum fail, GLenum zfail, GLenum zpass)
@@ -4576,47 +4587,55 @@ void Context::vertexAttrib1f(GLuint index, GLfloat x)
 {
     GLfloat vals[4] = {x, 0, 0, 1};
     mGLState.setVertexAttribf(index, vals);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::vertexAttrib1fv(GLuint index, const GLfloat *values)
 {
     GLfloat vals[4] = {values[0], 0, 0, 1};
     mGLState.setVertexAttribf(index, vals);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::vertexAttrib2f(GLuint index, GLfloat x, GLfloat y)
 {
     GLfloat vals[4] = {x, y, 0, 1};
     mGLState.setVertexAttribf(index, vals);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::vertexAttrib2fv(GLuint index, const GLfloat *values)
 {
     GLfloat vals[4] = {values[0], values[1], 0, 1};
     mGLState.setVertexAttribf(index, vals);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::vertexAttrib3f(GLuint index, GLfloat x, GLfloat y, GLfloat z)
 {
     GLfloat vals[4] = {x, y, z, 1};
     mGLState.setVertexAttribf(index, vals);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::vertexAttrib3fv(GLuint index, const GLfloat *values)
 {
     GLfloat vals[4] = {values[0], values[1], values[2], 1};
     mGLState.setVertexAttribf(index, vals);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::vertexAttrib4f(GLuint index, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
     GLfloat vals[4] = {x, y, z, w};
     mGLState.setVertexAttribf(index, vals);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::vertexAttrib4fv(GLuint index, const GLfloat *values)
 {
     mGLState.setVertexAttribf(index, values);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::vertexAttribPointer(GLuint index,
@@ -4630,6 +4649,7 @@ void Context::vertexAttribPointer(GLuint index,
                                     size, type, ConvertToBool(normalized), false, stride, ptr);
     mStateCache.updateActiveAttribsMask(this);
     mStateCache.updateVertexElementLimits(this);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::vertexAttribFormat(GLuint attribIndex,
@@ -4680,28 +4700,33 @@ void Context::vertexAttribIPointer(GLuint index,
                                     size, type, false, true, stride, pointer);
     mStateCache.updateActiveAttribsMask(this);
     mStateCache.updateVertexElementLimits(this);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::vertexAttribI4i(GLuint index, GLint x, GLint y, GLint z, GLint w)
 {
     GLint vals[4] = {x, y, z, w};
     mGLState.setVertexAttribi(index, vals);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::vertexAttribI4ui(GLuint index, GLuint x, GLuint y, GLuint z, GLuint w)
 {
     GLuint vals[4] = {x, y, z, w};
     mGLState.setVertexAttribu(index, vals);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::vertexAttribI4iv(GLuint index, const GLint *v)
 {
     mGLState.setVertexAttribi(index, v);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::vertexAttribI4uiv(GLuint index, const GLuint *v)
 {
     mGLState.setVertexAttribu(index, v);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::getVertexAttribiv(GLuint index, GLenum pname, GLint *params)
@@ -5567,6 +5592,7 @@ void Context::linkProgram(GLuint program)
     mGLState.onProgramExecutableChange(programObject);
     mStateCache.updateActiveAttribsMask(this);
     mStateCache.updateVertexElementLimits(this);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::releaseShaderCompiler()
@@ -5776,6 +5802,7 @@ void Context::programBinary(GLuint program, GLenum binaryFormat, const void *bin
     handleError(programObject->loadBinary(this, binaryFormat, binary, length));
     mStateCache.updateActiveAttribsMask(this);
     mStateCache.updateVertexElementLimits(this);
+    mStateCache.updateBasicDrawStatesError();
 }
 
 void Context::uniform1ui(GLint location, GLuint v0)
@@ -7575,20 +7602,38 @@ void Context::onSubjectStateChange(const Context *context,
                                    angle::SubjectIndex index,
                                    angle::SubjectMessage message)
 {
-    ASSERT(message == angle::SubjectMessage::CONTENTS_CHANGED);
     switch (index)
     {
         case kVertexArraySubjectIndex:
-            mGLState.setObjectDirty(GL_VERTEX_ARRAY);
-            mStateCache.updateVertexElementLimits(this);
+            switch (message)
+            {
+                case angle::SubjectMessage::CONTENTS_CHANGED:
+                    mGLState.setObjectDirty(GL_VERTEX_ARRAY);
+                    mStateCache.updateVertexElementLimits(this);
+                    mStateCache.updateBasicDrawStatesError();
+                    break;
+                case angle::SubjectMessage::RESOURCE_MAPPED:
+                case angle::SubjectMessage::RESOURCE_UNMAPPED:
+                    mStateCache.updateBasicDrawStatesError();
+                    break;
+                default:
+                    break;
+            }
             break;
 
         case kReadFramebufferSubjectIndex:
-            mGLState.setObjectDirty(GL_READ_FRAMEBUFFER);
+            if (message == angle::SubjectMessage::STORAGE_CHANGED)
+            {
+                mGLState.setObjectDirty(GL_READ_FRAMEBUFFER);
+            }
             break;
 
         case kDrawFramebufferSubjectIndex:
-            mGLState.setObjectDirty(GL_DRAW_FRAMEBUFFER);
+            if (message == angle::SubjectMessage::STORAGE_CHANGED)
+            {
+                mGLState.setObjectDirty(GL_DRAW_FRAMEBUFFER);
+            }
+            mStateCache.updateBasicDrawStatesError();
             break;
 
         default:
@@ -7646,7 +7691,8 @@ GLenum ErrorSet::popError()
 StateCache::StateCache()
     : mCachedHasAnyEnabledClientAttrib(false),
       mCachedNonInstancedVertexElementLimit(0),
-      mCachedInstancedVertexElementLimit(0)
+      mCachedInstancedVertexElementLimit(0),
+      mCachedBasicDrawStatesErrorMessage("")
 {
 }
 
@@ -7716,5 +7762,16 @@ void StateCache::updateVertexElementLimits(Context *context)
                 std::min(mCachedNonInstancedVertexElementLimit, limit);
         }
     }
+}
+
+void StateCache::updateBasicDrawStatesError()
+{
+    mCachedBasicDrawStatesErrorMessage.reset();
+}
+
+const char *StateCache::getBasicDrawStatesErrorMessageImpl(Context *context) const
+{
+    mCachedBasicDrawStatesErrorMessage = ValidateDrawStates(context);
+    return mCachedBasicDrawStatesErrorMessage.value();
 }
 }  // namespace gl

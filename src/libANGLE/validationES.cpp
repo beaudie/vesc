@@ -2557,7 +2557,13 @@ const char *ValidateDrawStates(Context *context)
     // WebGL buffers cannot be mapped/unmapped because the MapBufferRange, FlushMappedBufferRange,
     // and UnmapBuffer entry points are removed from the WebGL 2.0 API.
     // https://www.khronos.org/registry/webgl/specs/latest/2.0/#5.14
-    if (!extensions.webglCompatibility && state.getVertexArray()->hasMappedEnabledArrayBuffer())
+    VertexArray *vertexArray = state.getVertexArray();
+    if (!vertexArray)
+    {
+        return "";
+    }
+
+    if (!extensions.webglCompatibility && vertexArray->hasMappedEnabledArrayBuffer())
     {
         return "";
     }
@@ -2565,6 +2571,11 @@ const char *ValidateDrawStates(Context *context)
     // Note: these separate values are not supported in WebGL, due to D3D's limitations. See
     // Section 6.10 of the WebGL 1.0 spec.
     Framebuffer *framebuffer = state.getDrawFramebuffer();
+    if (!framebuffer)
+    {
+        return "";
+    }
+
     if (context->getLimitations().noSeparateStencilRefsAndMasks || extensions.webglCompatibility)
     {
         ASSERT(framebuffer);
@@ -2775,7 +2786,7 @@ bool ValidateDrawBase(Context *context, PrimitiveMode mode, GLsizei count)
 
     const State &state = context->getGLState();
 
-    const char *errorMsg = ValidateDrawStates(context);
+    const char *errorMsg = context->getStateCache().getBasicDrawStatesErrorMessage(context);
     if (errorMsg)
     {
         // An incomplete framebuffer triggers INVALID_FRAMEBUFFER_OPERATION.
