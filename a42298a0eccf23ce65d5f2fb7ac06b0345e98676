@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "4c01be76_9249ae4a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-07-30T20:05:46Z",
+      "side": 1,
+      "message": "Great, thanks.  I\u0027ll create and reference the bug.",
+      "parentUuid": "0de042f9_b5dc4c76",
+      "revId": "a42298a0eccf23ce65d5f2fb7ac06b0345e98676",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fc522fba_01dd4908",
         "filename": "src/gpu_info_util/SystemInfo.h",
         "patchSetId": 1
@@ -66,6 +84,30 @@
       "writtenOn": "2018-07-30T19:56:56Z",
       "side": 1,
       "message": "I don\u0027t see why we can\u0027t use this on other platforms. Even if we only parse it on Android to start.",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 38
+      },
+      "revId": "a42298a0eccf23ce65d5f2fb7ac06b0345e98676",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f53d8ec_a4936bd7",
+        "filename": "src/gpu_info_util/SystemInfo.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-07-30T20:05:46Z",
+      "side": 1,
+      "message": "I agree.  Should I change the comment, or leave it alone until it\u0027s parsed for another OS?",
+      "parentUuid": "fc522fba_01dd4908",
       "range": {
         "startLine": 44,
         "startChar": 0,
