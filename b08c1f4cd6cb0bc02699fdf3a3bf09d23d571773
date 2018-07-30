@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "e630a19a_172fec43",
+        "filename": "src/libANGLE/VertexAttribute.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-30T21:57:56Z",
+      "side": 1,
+      "message": "Can you add methods for Adding and remove attributes from the mask instead of using friend classes?",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 34
+      },
+      "revId": "b08c1f4cd6cb0bc02699fdf3a3bf09d23d571773",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ade5f5d9_2b7282ce",
         "filename": "src/libANGLE/VertexAttribute.h",
         "patchSetId": 12
