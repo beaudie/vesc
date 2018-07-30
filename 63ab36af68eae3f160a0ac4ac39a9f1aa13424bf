@@ -22,6 +22,29 @@
       "revId": "63ab36af68eae3f160a0ac4ac39a9f1aa13424bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1891c52e_ce21249c",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-07-30T21:47:46Z",
+      "side": 1,
+      "message": "If we start caching lots of validation stuff, would it make sense to at least put it in it\u0027s own struct or class with methods for invalidating or events like.. onVertexArrayBindChange()?",
+      "range": {
+        "startLine": 1631,
+        "startChar": 1,
+        "endLine": 1634,
+        "endChar": 42
+      },
+      "revId": "63ab36af68eae3f160a0ac4ac39a9f1aa13424bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
