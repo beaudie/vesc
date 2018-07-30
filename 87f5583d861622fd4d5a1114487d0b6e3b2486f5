@@ -22,6 +22,30 @@
       "revId": "87f5583d861622fd4d5a1114487d0b6e3b2486f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59fbc1a9_e9adaab1",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-30T17:51:49Z",
+      "side": 1,
+      "message": "\u0027fraid not but I can look into it after landing",
+      "parentUuid": "8e4422a0_8c420ebb",
+      "range": {
+        "startLine": 241,
+        "startChar": 1,
+        "endLine": 244,
+        "endChar": 65
+      },
+      "revId": "87f5583d861622fd4d5a1114487d0b6e3b2486f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
