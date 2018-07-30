@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a241d1a_72277267",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-30T04:37:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d80629ec_cc517253",
+      "range": {
+        "startLine": 176,
+        "startChar": 0,
+        "endLine": 176,
+        "endChar": 72
+      },
+      "revId": "acd7f20423a7c455f8396aba0a0d34eaa2c6d5b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1952fc3f_51d2408e",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 21
@@ -45,6 +69,30 @@
       "revId": "acd7f20423a7c455f8396aba0a0d34eaa2c6d5b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df25a032_55a97112",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-30T04:37:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1952fc3f_51d2408e",
+      "range": {
+        "startLine": 204,
+        "startChar": 25,
+        "endLine": 204,
+        "endChar": 30
+      },
+      "revId": "acd7f20423a7c455f8396aba0a0d34eaa2c6d5b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "01a41bb8_53d6565a",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-30T04:37:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c12c05a4_f25574dc",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 302,
+        "endChar": 68
+      },
+      "revId": "acd7f20423a7c455f8396aba0a0d34eaa2c6d5b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "80926514_9cdab0c9",
         "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
         "patchSetId": 21
@@ -91,6 +163,30 @@
       "revId": "acd7f20423a7c455f8396aba0a0d34eaa2c6d5b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b61b2673_ad6fed73",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 21
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-07-30T04:37:31Z",
+      "side": 1,
+      "message": "yep, that\u0027s why they\u0027re here with the other fixed tests.  :)",
+      "parentUuid": "80926514_9cdab0c9",
+      "range": {
+        "startLine": 272,
+        "startChar": 0,
+        "endLine": 279,
+        "endChar": 57
+      },
+      "revId": "acd7f20423a7c455f8396aba0a0d34eaa2c6d5b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
