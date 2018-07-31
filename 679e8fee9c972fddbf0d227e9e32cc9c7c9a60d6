@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "746cffed_5961eb54",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-07-31T14:55:55Z",
+      "side": 1,
+      "message": "Following the link that Jamie gave me, I created Issue 2749, and updated the commit message with \"Bug: 2749\".  However, when I click on the link, it\u0027s not my issue, but another/Chromium issue.  Is there something else I\u0027m supposed to do (e.g. a prefix for ANGLE bug namespace)?",
+      "revId": "679e8fee9c972fddbf0d227e9e32cc9c7c9a60d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
