@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08bca952_8611d440",
+        "filename": "src/libANGLE/Image_unittest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-31T22:08:57Z",
+      "side": 0,
+      "message": "Looks like you are missing this check now. Maybe add a new case where you do not release the texture?",
+      "range": {
+        "startLine": 82,
+        "startChar": 4,
+        "endLine": 82,
+        "endChar": 42
+      },
+      "revId": "e7f545a4ad2fd438175b561053ec30e835b73bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40926617_d562e751",
+        "filename": "src/libANGLE/Image_unittest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-07-31T22:08:57Z",
+      "side": 0,
+      "message": "This one, too.",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 75
+      },
+      "revId": "e7f545a4ad2fd438175b561053ec30e835b73bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
