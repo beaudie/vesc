@@ -16,6 +16,24 @@
       "revId": "679e8fee9c972fddbf0d227e9e32cc9c7c9a60d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82638620_b98d623d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-07-31T15:07:10Z",
+      "side": 1,
+      "message": "Use Bug: angleproject: 2749\n\nSee git log for examples.",
+      "parentUuid": "746cffed_5961eb54",
+      "revId": "679e8fee9c972fddbf0d227e9e32cc9c7c9a60d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
