@@ -22,6 +22,30 @@
       "revId": "8cc28946a6dec85eb1a4bb43486fca62478a8237",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94aba2ea_06532c73",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-01T20:53:14Z",
+      "side": 1,
+      "message": "No, because it can affect the element array buffer too. I made this a helper function to make it very semantically clear.",
+      "parentUuid": "49f2e13d_a8e5bf66",
+      "range": {
+        "startLine": 439,
+        "startChar": 12,
+        "endLine": 439,
+        "endChar": 60
+      },
+      "revId": "8cc28946a6dec85eb1a4bb43486fca62478a8237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
