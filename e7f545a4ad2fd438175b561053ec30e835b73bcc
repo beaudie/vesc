@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9242d1fa_25d2aa3c",
+        "filename": "src/libANGLE/Image_unittest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-01T14:16:26Z",
+      "side": 0,
+      "message": "The texture is deleted at this point and the test makes sure that the image doesn\u0027t hold a ref to the texture so both cases are reasonably covered.",
+      "parentUuid": "08bca952_8611d440",
+      "range": {
+        "startLine": 82,
+        "startChar": 4,
+        "endLine": 82,
+        "endChar": 42
+      },
+      "revId": "e7f545a4ad2fd438175b561053ec30e835b73bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "40926617_d562e751",
         "filename": "src/libANGLE/Image_unittest.cpp",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2018-07-31T22:08:57Z",
       "side": 0,
       "message": "This one, too.",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 75
+      },
+      "revId": "e7f545a4ad2fd438175b561053ec30e835b73bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3d2b793_b5591c09",
+        "filename": "src/libANGLE/Image_unittest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-01T14:16:26Z",
+      "side": 0,
+      "message": "This moved up to when the texture is deleted.",
+      "parentUuid": "40926617_d562e751",
       "range": {
         "startLine": 91,
         "startChar": 0,

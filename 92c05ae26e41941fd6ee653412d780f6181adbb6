@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9410208f_991cf803",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-01T14:16:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e58eaec_f6cb6e9a",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 36
+      },
+      "revId": "92c05ae26e41941fd6ee653412d780f6181adbb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eb8d71dd_912b6b2b",
         "filename": "src/libANGLE/Image.cpp",
         "patchSetId": 6
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "7f5d8842_c6cd2166",
+        "filename": "src/libANGLE/Image.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-01T14:16:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb8d71dd_912b6b2b",
+      "range": {
+        "startLine": 165,
+        "startChar": 15,
+        "endLine": 165,
+        "endChar": 21
+      },
+      "revId": "92c05ae26e41941fd6ee653412d780f6181adbb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e26ce0f_95ed1ad3",
         "filename": "src/libANGLE/Image_unittest.cpp",
         "patchSetId": 6
@@ -59,6 +107,30 @@
       "writtenOn": "2018-07-31T23:19:05Z",
       "side": 1,
       "message": "I would probably delete this entire file.",
+      "range": {
+        "startLine": 31,
+        "startChar": 16,
+        "endLine": 31,
+        "endChar": 27
+      },
+      "revId": "92c05ae26e41941fd6ee653412d780f6181adbb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4db922ec_ec46e94f",
+        "filename": "src/libANGLE/Image_unittest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-01T14:16:26Z",
+      "side": 1,
+      "message": "I think it still had enough useful tests that verify that deletion happens when we expect it.",
+      "parentUuid": "8e26ce0f_95ed1ad3",
       "range": {
         "startLine": 31,
         "startChar": 16,
