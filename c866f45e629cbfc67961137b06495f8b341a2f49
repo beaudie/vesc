@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "653a70d0_29097c78",
+        "filename": "src/libANGLE/VertexAttribute.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-01T14:05:58Z",
+      "side": 1,
+      "message": "this could be \u003c 0 but this is intentional. It signals that the buffer is too small. What particular math was it that could lead to zero that might be a problem? Note that usually when drawing zero elements we don\u0027t validate the buffer sizes.",
+      "parentUuid": "063a86fc_9326a001",
+      "range": {
+        "startLine": 123,
+        "startChar": 35,
+        "endLine": 123,
+        "endChar": 47
+      },
+      "revId": "c866f45e629cbfc67961137b06495f8b341a2f49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ea1f279c_5d98d95e",
         "filename": "src/libANGLE/VertexAttribute.cpp",
         "patchSetId": 16
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "8e3835b8_9531942e",
+        "filename": "src/libANGLE/VertexAttribute.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-01T14:05:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ea1f279c_5d98d95e",
+      "revId": "c866f45e629cbfc67961137b06495f8b341a2f49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5e5cbe6_f16d8252",
         "filename": "src/libANGLE/VertexAttribute.h",
         "patchSetId": 16
@@ -56,6 +98,24 @@
       "revId": "c866f45e629cbfc67961137b06495f8b341a2f49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36fca99c_5bd38c7c",
+        "filename": "src/libANGLE/VertexAttribute.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-01T14:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5e5cbe6_f16d8252",
+      "revId": "c866f45e629cbfc67961137b06495f8b341a2f49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
