@@ -953,11 +953,6 @@ void State::setFragmentShaderDerivativeHint(GLenum hint)
     // Ignore for now. It is valid for implementations to ignore hint.
 }
 
-bool State::isBindGeneratesResourceEnabled() const
-{
-    return mBindGeneratesResource;
-}
-
 bool State::areClientArraysEnabled() const
 {
     return mClientArraysEnabled;
@@ -997,12 +992,6 @@ void State::setSamplerTexture(const Context *context, TextureType type, Texture 
 Texture *State::getTargetTexture(TextureType type) const
 {
     return getSamplerTexture(static_cast<unsigned int>(mActiveSampler), type);
-}
-
-Texture *State::getSamplerTexture(unsigned int sampler, TextureType type) const
-{
-    ASSERT(sampler < mSamplerTextures[type].size());
-    return mSamplerTextures[type][sampler].get();
 }
 
 GLuint State::getSamplerTextureId(unsigned int sampler, TextureType type) const
