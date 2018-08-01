@@ -12,6 +12,7 @@
 
 #include <vector>
 
+#include "common/FixedVector.h"
 #include "common/Optional.h"
 #include "common/angleutils.h"
 #include "libANGLE/Constants.h"
@@ -405,7 +406,10 @@ class Framebuffer final : public angle::ObserverInterface, public LabeledObject
     Optional<DirtyBits> mDirtyBitsGuard;
 
     // A cache of attached textures for quick validation of feedback loops.
-    mutable Optional<std::set<const FramebufferAttachmentObject *>> mAttachedTextures;
+    using FramebufferTextureAttachmentVector =
+        angle::FixedVector<const FramebufferAttachmentObject *,
+                           IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS>;
+    mutable Optional<FramebufferTextureAttachmentVector> mAttachedTextures;
 };
 
 }  // namespace gl
