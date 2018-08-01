@@ -2059,7 +2059,7 @@ bool Program::validateSamplersImpl(InfoLog *infoLog, const Caps &caps)
     // if any two active samplers in a program are of different types, but refer to the same
     // texture image unit, and this is the current program, then ValidateProgram will fail, and
     // DrawArrays and DrawElements will issue the INVALID_OPERATION error.
-    for (const auto &samplerBinding : mState.mSamplerBindings)
+    for (const SamplerBinding &samplerBinding : mState.mSamplerBindings)
     {
         if (samplerBinding.unreferenced)
             continue;
