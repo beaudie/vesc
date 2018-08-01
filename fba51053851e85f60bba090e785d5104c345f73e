@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7d11ca3_e958a4f1",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 7690,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-01T14:49:21Z",
+      "side": 1,
+      "message": "I think you can assert that vao is non-null",
+      "range": {
+        "startLine": 7690,
+        "startChar": 8,
+        "endLine": 7690,
+        "endChar": 12
+      },
+      "revId": "fba51053851e85f60bba090e785d5104c345f73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06f20601_b48a6c49",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 7692,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-01T14:49:21Z",
+      "side": 1,
+      "message": "If we early-exit here, wont that leave the cached limits at large values, allowing any sized draw call?",
+      "range": {
+        "startLine": 7692,
+        "startChar": 8,
+        "endLine": 7692,
+        "endChar": 15
+      },
+      "revId": "fba51053851e85f60bba090e785d5104c345f73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
