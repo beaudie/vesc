@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6089b688_5bcd4658",
+        "filename": "src/compiler/translator/BaseTypes.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2018-08-01T09:53:43Z",
+      "side": 1,
+      "message": "Not sure that it is reasonable here.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 21
+      },
+      "revId": "47af082f6675ae91066e051976ffb0974bdb4d53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
