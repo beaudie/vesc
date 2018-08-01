@@ -109,16 +109,28 @@ class StateCache final : angle::NonCopyable
     }
     GLint64 getInstancedVertexElementLimit() const { return mCachedInstancedVertexElementLimit; }
 
+    // Cached for speed. Places that can trigger updateBasicDrawStatesError:
+    const char *getBasicDrawStatesErrorMessage(Context *context) const
+    {
+        return mCachedBasicDrawStatesErrorMessage.valid()
+                   ? mCachedBasicDrawStatesErrorMessage.value()
+                   : getBasicDrawStatesErrorMessageImpl(context);
+    }
+
     // Cache update functions.
     void updateActiveAttribsMask(Context *context);
     void updateVertexElementLimits(Context *context);
+    void updateBasicDrawStatesError();
 
   private:
+    const char *getBasicDrawStatesErrorMessageImpl(Context *context) const;
+
     AttributesMask mCachedActiveBufferedAttribsMask;
     AttributesMask mCachedActiveClientAttribsMask;
     bool mCachedHasAnyEnabledClientAttrib;
     GLint64 mCachedNonInstancedVertexElementLimit;
     GLint64 mCachedInstancedVertexElementLimit;
+    mutable Optional<const char *> mCachedBasicDrawStatesErrorMessage;
 };
 
 class Context final : public egl::LabeledObject, angle::NonCopyable, public angle::ObserverInterface
