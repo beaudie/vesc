@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49f2e13d_a8e5bf66",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-01T19:51:52Z",
+      "side": 1,
+      "message": "Can we assert this?",
+      "range": {
+        "startLine": 439,
+        "startChar": 12,
+        "endLine": 439,
+        "endChar": 60
+      },
+      "revId": "8cc28946a6dec85eb1a4bb43486fca62478a8237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
