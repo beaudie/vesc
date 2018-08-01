@@ -2558,7 +2558,13 @@ ErrorAndMessage ValidateDrawStates(Context *context)
     // WebGL buffers cannot be mapped/unmapped because the MapBufferRange, FlushMappedBufferRange,
     // and UnmapBuffer entry points are removed from the WebGL 2.0 API.
     // https://www.khronos.org/registry/webgl/specs/latest/2.0/#5.14
-    if (!extensions.webglCompatibility && state.getVertexArray()->hasMappedEnabledArrayBuffer())
+    VertexArray *vertexArray = state.getVertexArray();
+    if (!vertexArray)
+    {
+        return kGenericDrawStatesError;
+    }
+
+    if (!extensions.webglCompatibility && vertexArray->hasMappedEnabledArrayBuffer())
     {
         return {GL_INVALID_OPERATION, nullptr};
     }
@@ -2566,6 +2572,11 @@ ErrorAndMessage ValidateDrawStates(Context *context)
     // Note: these separate values are not supported in WebGL, due to D3D's limitations. See
     // Section 6.10 of the WebGL 1.0 spec.
     Framebuffer *framebuffer = state.getDrawFramebuffer();
+    if (!framebuffer)
+    {
+        return kGenericDrawStatesError;
+    }
+
     if (context->getLimitations().noSeparateStencilRefsAndMasks || extensions.webglCompatibility)
     {
         ASSERT(framebuffer);
@@ -2726,6 +2737,11 @@ ErrorAndMessage ValidateDrawStates(Context *context)
             {
                 return {GL_INVALID_OPERATION, kErrorDrawBufferTypeMismatch};
             }
+
+            if (vertexArray->hasTransformFeedbackBindingConflict(context))
+            {
+                return kErrorVertexBufferBoundForTransformFeedback;
+            }
         }
     }
 
@@ -2770,10 +2786,8 @@ bool ValidateDrawBase(Context *context, PrimitiveMode mode, GLsizei count)
 
     const State &state = context->getGLState();
 
-    const ErrorAndMessage &errorAndMessage = ValidateDrawStates(context);
-    if (errorAndMessage.errorType != GL_NO_ERROR)
+    if (context->getStateCache().getBasicDrawStatesError(context))
     {
-        context->handleError(Error(errorAndMessage.errorType, errorAndMessage.message));
         return false;
     }
 
@@ -2791,17 +2805,6 @@ bool ValidateDrawBase(Context *context, PrimitiveMode mode, GLsizei count)
             {
                 ANGLE_VALIDATION_ERR(context, InvalidOperation(),
                                      IncompatibleDrawModeAgainstGeometryShader);
-                return false;
-            }
-        }
-
-        if (extensions.webglCompatibility)
-        {
-            const VertexArray *vao = context->getGLState().getVertexArray();
-            if (vao->hasTransformFeedbackBindingConflict(context))
-            {
-                ANGLE_VALIDATION_ERR(context, InvalidOperation(),
-                                     VertexBufferBoundForTransformFeedback);
                 return false;
             }
         }
