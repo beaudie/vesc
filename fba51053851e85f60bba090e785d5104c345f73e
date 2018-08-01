@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "61e136ea_376c83b1",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 7690,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-01T17:07:19Z",
+      "side": 1,
+      "message": "This triggers on context init before a framebuffer/vao are bound. If we make it a lazy computation at some point we could ASSERT vao is valid. Left it as is.",
+      "parentUuid": "e7d11ca3_e958a4f1",
+      "range": {
+        "startLine": 7690,
+        "startChar": 8,
+        "endLine": 7690,
+        "endChar": 12
+      },
+      "revId": "fba51053851e85f60bba090e785d5104c345f73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "06f20601_b48a6c49",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 19
@@ -45,6 +69,30 @@
       "revId": "fba51053851e85f60bba090e785d5104c345f73e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b1935a0_3dca4053",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 7692,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-01T17:07:19Z",
+      "side": 1,
+      "message": "Leaving aside a nullptr vao which is probably an implementation error the behaviour is correct. If there are no buffered attributes the shader could be using SV_VertexID or client attribs in which case there\u0027s no defined upper limit.",
+      "parentUuid": "06f20601_b48a6c49",
+      "range": {
+        "startLine": 7692,
+        "startChar": 8,
+        "endLine": 7692,
+        "endChar": 15
+      },
+      "revId": "fba51053851e85f60bba090e785d5104c345f73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
