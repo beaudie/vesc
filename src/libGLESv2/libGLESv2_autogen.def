@@ -594,6 +594,7 @@ EXPORTS
     glFlushMappedBufferRangeEXT                       @534
     glMapBufferRangeEXT                               @535
 
+
     ; GL_EXT_occlusion_query_boolean
 
     ; GL_EXT_robustness
@@ -1334,3 +1335,8 @@ EXPORTS
     glMultiDrawArraysInstancedANGLEContextANGLE                   @1236
     glMultiDrawElementsANGLEContextANGLE                          @1237
     glMultiDrawElementsInstancedANGLEContextANGLE                 @1238
+
+    ; GL_EXT_multiview_draw_buffers
+    glDrawBuffersIndexedEXT                                       @1239
+    glGetIntegeri_vEXT                                            @1240
+    glReadBufferIndexedEXT                                        @1241

@@ -99,6 +99,12 @@ EGLint SurfaceNULL::getSwapBehavior() const
     return EGL_BUFFER_PRESERVED;
 }
 
+EGLint SurfaceNULL::getCreatedMultiviewViewCount() const
+{
+    // Let NULL surface be a stereo surface
+    return 2;
+}
+
 angle::Result SurfaceNULL::initializeContents(const gl::Context *context,
                                               const gl::ImageIndex &imageIndex)
 {

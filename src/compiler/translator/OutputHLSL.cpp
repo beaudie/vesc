@@ -556,7 +556,8 @@ void OutputHLSL::header(TInfoSinkBase &out,
     if (mShaderType == GL_FRAGMENT_SHADER)
     {
         const bool usingMRTExtension =
-            IsExtensionEnabled(mExtensionBehavior, TExtension::EXT_draw_buffers);
+            IsExtensionEnabled(mExtensionBehavior, TExtension::EXT_draw_buffers) ||
+            IsExtensionEnabled(mExtensionBehavior, TExtension::EXT_multiview_draw_buffers);
 
         out << "// Varyings\n";
         writeReferencedVaryings(out);

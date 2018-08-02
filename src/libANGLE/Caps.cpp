@@ -246,6 +246,7 @@ Extensions::Extensions()
       programCacheControl(false),
       textureRectangle(false),
       geometryShader(false),
+      multiviewDrawBuffers(false),
       pointSizeArray(false),
       textureCubeMap(false),
       pointSprite(false),
@@ -888,6 +889,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_ANGLE_program_cache_control"] = esOnlyExtension(&Extensions::programCacheControl);
         map["GL_ANGLE_texture_rectangle"] = enableableExtension(&Extensions::textureRectangle);
         map["GL_EXT_geometry_shader"] = enableableExtension(&Extensions::geometryShader);
+        map["GL_EXT_multiview_draw_buffers"] = enableableExtension(&Extensions::multiviewDrawBuffers);
         map["GL_ANGLE_explicit_context_gles1"] = enableableExtension(&Extensions::explicitContextGles1);
         map["GL_ANGLE_explicit_context"] = enableableExtension(&Extensions::explicitContext);
         map["GL_KHR_parallel_shader_compile"] = enableableExtension(&Extensions::parallelShaderCompile);
@@ -1359,6 +1361,7 @@ DisplayExtensions::DisplayExtensions()
       programCacheControl(false),
       robustResourceInitialization(false),
       iosurfaceClientBuffer(false),
+      multiviewWindow(false),
       createContextExtensionsEnabled(false),
       presentationTime(false),
       blobCache(false),
@@ -1415,6 +1418,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_ANDROID_blob_cache",                              blobCache,                          &extensionStrings);
     InsertExtensionString("EGL_ANDROID_image_native_buffer",                     imageNativeBuffer,                  &extensionStrings);
     InsertExtensionString("EGL_ANDROID_get_frame_timestamps",                    getFrameTimestamps,                 &extensionStrings);
+    InsertExtensionString("EGL_EXT_multiview_window",                            multiviewWindow,                    &extensionStrings);
     // TODO(jmadill): Enable this when complete.
     //InsertExtensionString("KHR_create_context_no_error",                       createContextNoError,               &extensionStrings);
     // clang-format on

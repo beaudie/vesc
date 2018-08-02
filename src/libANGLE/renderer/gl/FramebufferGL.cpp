@@ -102,10 +102,6 @@ void BindFramebufferAttachment(const FunctionsGL *functions,
             functions->framebufferRenderbuffer(GL_FRAMEBUFFER, attachmentPoint, GL_RENDERBUFFER,
                                                renderbufferGL->getRenderbufferID());
         }
-        else
-        {
-            UNREACHABLE();
-        }
     }
     else
     {
@@ -446,7 +442,7 @@ angle::Result FramebufferGL::readPixels(const gl::Context *context,
         return angle::Result::Continue();
     }
 
-    PixelPackState packState     = context->getGLState().getPackState();
+    PixelPackState packState = context->getGLState().getPackState();
     const gl::Buffer *packBuffer =
         context->getGLState().getTargetBuffer(gl::BufferBinding::PixelPack);
 
@@ -625,12 +621,6 @@ bool FramebufferGL::checkStatus(const gl::Context *context) const
 angle::Result FramebufferGL::syncState(const gl::Context *context,
                                        const gl::Framebuffer::DirtyBits &dirtyBits)
 {
-    // Don't need to sync state for the default FBO.
-    if (mIsDefault)
-    {
-        return angle::Result::Continue();
-    }
-
     const FunctionsGL *functions = GetFunctionsGL(context);
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
@@ -665,14 +655,64 @@ angle::Result FramebufferGL::syncState(const gl::Context *context,
             }
             case Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
             {
-                const auto &drawBuffers = mState.getDrawBufferStates();
-                functions->drawBuffers(static_cast<GLsizei>(drawBuffers.size()),
-                                       drawBuffers.data());
+                if (functions->drawBuffersIndexedEXT != nullptr)
+                {
+                    functions->drawBuffersIndexedEXT(mState.getDrawBufferCount(),
+                                                     &mState.getDrawBufferStateLocations()[0],
+                                                     &mState.getDrawBufferStateIndices()[0]);
+                }
+                else
+                {
+                    const auto &drawBuffers = mState.getDrawBufferStateLocations();
+                    if (mState.getEnabledDrawBuffers().count() == 1 &&
+                        drawBuffers[0] == GL_MULTIVIEW_EXT)
+                    {
+                        GLenum buffer = GL_BACK_LEFT;
+                        if (mState.getDrawBufferStateIndices()[0] == 1)
+                        {
+                            buffer = GL_BACK_RIGHT;
+                        }
+                        functions->drawBuffers(1, &buffer);
+                    }
+                    else if (mState.getEnabledDrawBuffers().count() == 2 &&
+                             drawBuffers[0] == GL_MULTIVIEW_EXT &&
+                             drawBuffers[1] == GL_MULTIVIEW_EXT)
+                    {
+                        functions->drawBuffer(GL_BACK);
+                    }
+                    else
+                    {
+                        functions->drawBuffers(static_cast<GLsizei>(drawBuffers.size()),
+                                               drawBuffers.data());
+                    }
+                }
                 mAppliedEnabledDrawBuffers = mState.getEnabledDrawBuffers();
                 break;
             }
             case Framebuffer::DIRTY_BIT_READ_BUFFER:
-                functions->readBuffer(mState.getReadBufferState());
+                if (functions->readBufferIndexedEXT != nullptr)
+                {
+                    functions->readBufferIndexedEXT(mState.getReadBufferStateLocation(),
+                                                    mState.getReadBufferStateIndex());
+                }
+                else
+                {
+                    if (mState.getReadBufferStateLocation() == GL_MULTIVIEW_EXT)
+                    {
+                        if (mState.getReadBufferStateIndex() == 0)
+                        {
+                            functions->readBuffer(GL_BACK_LEFT);
+                        }
+                        else
+                        {
+                            functions->readBuffer(GL_BACK_RIGHT);
+                        }
+                    }
+                    else
+                    {
+                        functions->readBuffer(mState.getReadBufferStateLocation());
+                    }
+                }
                 break;
             case Framebuffer::DIRTY_BIT_DEFAULT_WIDTH:
                 functions->framebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH,
@@ -742,7 +782,7 @@ void FramebufferGL::maskOutInactiveOutputDrawBuffersImpl(const gl::Context *cont
     ASSERT(mAppliedEnabledDrawBuffers != targetAppliedDrawBuffers);
     mAppliedEnabledDrawBuffers = targetAppliedDrawBuffers;
 
-    const auto &stateDrawBuffers = mState.getDrawBufferStates();
+    const auto &stateDrawBuffers = mState.getDrawBufferStateLocations();
     GLsizei drawBufferCount      = static_cast<GLsizei>(stateDrawBuffers.size());
     ASSERT(drawBufferCount <= IMPLEMENTATION_MAX_DRAW_BUFFERS);
 
@@ -806,7 +846,7 @@ void FramebufferGL::syncClearBufferState(const gl::Context *context,
         {
             // If doing a clear on a color buffer, set SRGB blend enabled only if the color buffer
             // is an SRGB format.
-            const auto &drawbufferState  = mState.getDrawBufferStates();
+            const auto &drawbufferState  = mState.getDrawBufferStateLocations();
             const auto &colorAttachments = mState.getColorAttachments();
 
             const FramebufferAttachment *attachment = nullptr;
@@ -889,7 +929,7 @@ angle::Result FramebufferGL::readPixelsRowByRow(const gl::Context *context,
                         glFormat.computeSkipBytes(type, rowBytes, 0, pack, false, &skipBytes));
 
     gl::PixelPackState directPack;
-    directPack.alignment   = 1;
+    directPack.alignment = 1;
     stateManager->setPixelPackState(directPack);
 
     pixels += skipBytes;

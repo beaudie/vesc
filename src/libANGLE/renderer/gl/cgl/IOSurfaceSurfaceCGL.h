@@ -61,6 +61,8 @@ class IOSurfaceSurfaceCGL : public SurfaceGL
 
     static bool validateAttributes(EGLClientBuffer buffer, const egl::AttributeMap &attribs);
 
+    EGLint getCreatedMultiviewViewCount() const override;
+
   private:
     CGLContextObj mCGLContext;
     IOSurfaceRef mIOSurface;

@@ -243,4 +243,9 @@ bool WindowSurfaceGLX::getWindowDimensions(Window window, unsigned int *width, u
     return XGetGeometry(mDisplay, window, &root, &x, &y, width, height, &border, &depth) != 0;
 }
 
+EGLint WindowSurfaceGLX::getCreatedMultiviewViewCount() const
+{
+    return 1;
+}
+
 }  // namespace rx

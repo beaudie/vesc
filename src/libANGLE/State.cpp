@@ -2219,12 +2219,14 @@ Error State::getIntegerv(const Context *context, GLenum pname, GLint *params)
         size_t drawBuffer = (pname - GL_DRAW_BUFFER0_EXT);
         ASSERT(drawBuffer < mMaxDrawBuffers);
         Framebuffer *framebuffer = mDrawFramebuffer;
+
         // The default framebuffer may have fewer draw buffer states than a user-created one. The
         // user is always allowed to query up to GL_MAX_DRAWBUFFERS so just return GL_NONE here if
         // the draw buffer is out of range for this framebuffer.
         *params = drawBuffer < framebuffer->getDrawbufferStateCount()
-                      ? framebuffer->getDrawBufferState(drawBuffer)
+                      ? framebuffer->getDrawBufferStateLocation(drawBuffer)
                       : GL_NONE;
+
         return NoError();
     }
 
@@ -2554,7 +2556,7 @@ Error State::getIntegerv(const Context *context, GLenum pname, GLint *params)
             *params = mBoundBuffers[BufferBinding::PixelUnpack].id();
             break;
         case GL_READ_BUFFER:
-            *params = mReadFramebuffer->getReadBufferState();
+            *params = mReadFramebuffer->getReadBufferStateLocation();
             break;
         case GL_SAMPLER_BINDING:
             ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
@@ -2711,6 +2713,16 @@ void State::getIntegeri_v(GLenum target, GLuint index, GLint *data)
         case GL_IMAGE_BINDING_FORMAT:
             ASSERT(static_cast<size_t>(index) < mImageUnits.size());
             *data = mImageUnits[index].format;
+            break;
+        case GL_DRAW_BUFFER_EXT:
+            ASSERT(index < mDrawFramebuffer->getDrawBufferStateLocations().size());
+            ASSERT(index < mDrawFramebuffer->getDrawBufferStateIndices().size());
+            *data       = mDrawFramebuffer->getDrawBufferStateLocations()[index];
+            *(data + 1) = mDrawFramebuffer->getDrawBufferStateIndices()[index];
+            break;
+        case GL_READ_BUFFER_EXT:
+            *data = mReadFramebuffer->getReadBufferStateLocation();
+            *(data + 1) = mReadFramebuffer->getReadBufferStateIndex();
             break;
         default:
             UNREACHABLE();

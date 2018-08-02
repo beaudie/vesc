@@ -343,6 +343,34 @@ angle::Result FramebufferD3D::syncState(const gl::Context *context,
     return angle::Result::Continue();
 }
 
+bool FramebufferD3D::checkValidLocationAndIndex(GLenum drawBufferLocation, size_t attachmentIndex)
+{
+    // If the location is the back buffer or a valid color attachment, it's good.
+    if (drawBufferLocation == GL_BACK ||
+        drawBufferLocation == (GL_COLOR_ATTACHMENT0_EXT + attachmentIndex))
+    {
+        return true;
+    }
+
+    // If it is the multiview case in the multiview window extension, and the index
+    // is valid, we are okay.
+    if (drawBufferLocation == GL_MULTIVIEW_EXT &&
+        mState.getDrawBufferStateIndices()[attachmentIndex] >= 0)
+    {
+        return true;
+    }
+
+    // This checks the color attachment case for the multiview window extension.
+    if (drawBufferLocation == GL_COLOR_ATTACHMENT_EXT &&
+        mState.getDrawBufferStateIndices()[attachmentIndex] >= 0 &&
+        static_cast<size_t>(mState.getDrawBufferStateIndices()[attachmentIndex]) == attachmentIndex)
+    {
+        return true;
+    }
+
+    return false;
+}
+
 const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl::Context *context)
 {
     gl::DrawBufferMask activeProgramOutputs =
@@ -357,19 +385,18 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl:
     gl::AttachmentList colorAttachmentsForRender;
 
     const auto &colorAttachments = mState.getColorAttachments();
-    const auto &drawBufferStates = mState.getDrawBufferStates();
+    const auto &drawBufferStateLocations = mState.getDrawBufferStateLocations();
     const auto &workarounds      = mRenderer->getWorkarounds();
 
     for (size_t attachmentIndex = 0; attachmentIndex < colorAttachments.size(); ++attachmentIndex)
     {
-        GLenum drawBufferState                           = drawBufferStates[attachmentIndex];
+        GLenum drawBufferLocation                        = drawBufferStateLocations[attachmentIndex];
         const gl::FramebufferAttachment &colorAttachment = colorAttachments[attachmentIndex];
 
-        if (colorAttachment.isAttached() && drawBufferState != GL_NONE &&
+        if (colorAttachment.isAttached() && drawBufferLocation != GL_NONE &&
             activeProgramOutputs[attachmentIndex])
         {
-            ASSERT(drawBufferState == GL_BACK ||
-                   drawBufferState == (GL_COLOR_ATTACHMENT0_EXT + attachmentIndex));
+            ASSERT(checkValidLocationAndIndex(drawBufferLocation, attachmentIndex));
             colorAttachmentsForRender.push_back(&colorAttachment);
         }
         else if (!workarounds.mrtPerfWorkaround)
@@ -390,7 +417,7 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl:
             gl::ScanForward(static_cast<uint32_t>(activeProgramOutputs.bits())));
 
         if (mDummyAttachment.isAttached() &&
-            (mDummyAttachment.getBinding() - GL_COLOR_ATTACHMENT0) == activeProgramLocation)
+            (mDummyAttachment.getBindingLocation() - GL_COLOR_ATTACHMENT0) == activeProgramLocation)
         {
             colorAttachmentsForRender.push_back(&mDummyAttachment);
         }
@@ -411,7 +438,7 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl:
 
                 gl::ImageIndex index = gl::ImageIndex::Make2D(0);
                 mDummyAttachment     = gl::FramebufferAttachment(
-                    context, GL_TEXTURE, GL_COLOR_ATTACHMENT0_EXT + activeProgramLocation, index,
+                    context, GL_TEXTURE, GL_COLOR_ATTACHMENT0_EXT + activeProgramLocation, 0, index,
                     dummyTex);
                 colorAttachmentsForRender.push_back(&mDummyAttachment);
             }

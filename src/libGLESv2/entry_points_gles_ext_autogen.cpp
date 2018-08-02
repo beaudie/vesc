@@ -3128,6 +3128,55 @@ void *GL_APIENTRY MapBufferRangeEXT(GLenum target,
     return GetDefaultReturnValue<EntryPoint::MapBufferRangeEXT, void *>();
 }
 
+// GL_EXT_multiview_draw_buffers
+void GL_APIENTRY DrawBuffersIndexedEXT(GLint n, const GLenum *location, const GLint *indices)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT("(GLint n = %d, const GLenum *location = 0x%016" PRIxPTR ", const GLint *indices =  0x%016" PRIxPTR ")",
+          n, (uintptr_t)location, (uintptr_t)indices);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() ||
+            ValidateDrawBuffersIndexedEXT(context, n, location, indices))
+        {
+            context->drawBuffersIndexed(n, location, indices);
+        }
+    }
+}
+
+void GL_APIENTRY GetIntegeri_vEXT(GLenum target, GLuint index, GLint *data)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT("(GLenum target = 0x%X, GLuint index = %u, GLint *data = 0x%016" PRIxPTR ")", target,
+          index, (uintptr_t)data);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() || ValidateGetIntegeri_vEXT(context, target, index, data))
+        {
+            context->getIntegeri_v(target, index, data);
+        }
+    }
+}
+
+void GL_APIENTRY ReadBufferIndexedEXT(GLenum src, GLint index)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT("(GLenum src = 0x%X, GLint index = %d)", src, index);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() || ValidateReadBufferIndexedEXT(context, src, index))
+        {
+            context->readBufferIndexed(src, index);
+        }
+    }
+}
+
 // GL_EXT_occlusion_query_boolean
 // BeginQueryEXT is already defined.
 
@@ -6774,6 +6823,28 @@ void GL_APIENTRY DrawBuffersEXTContextANGLE(GLeglContext ctx, GLsizei n, const G
     }
 }
 
+void GL_APIENTRY DrawBuffersIndexedEXTContextANGLE(GLeglContext ctx,
+                                                   GLint n,
+                                                   const GLenum *location,
+                                                   const GLint *indices)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT("(GLint n = %d, const GLenum *location = 0x%016" PRIxPTR
+          ", const GLint *indices = 0x%016" PRIxPTR ")",
+          n, (uintptr_t)location, (uintptr_t)indices);
+
+    Context *context = static_cast<gl::Context *>(ctx);
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        if (context->skipValidation() ||
+            ValidateDrawBuffersIndexedEXT(context, n, location, indices))
+        {
+            context->drawBuffersIndexed(n, location, indices);
+        }
+    }
+}
+
 void GL_APIENTRY DrawElementsContextANGLE(GLeglContext ctx,
                                           GLenum mode,
                                           GLsizei count,
@@ -8484,6 +8555,26 @@ void GL_APIENTRY GetIntegeri_vContextANGLE(GLeglContext ctx,
     {
         ASSERT(context == GetValidGlobalContext());
         if (context->skipValidation() || ValidateGetIntegeri_v(context, target, index, data))
+        {
+            context->getIntegeri_v(target, index, data);
+        }
+    }
+}
+
+void GL_APIENTRY GetIntegeri_vEXTContextANGLE(GLeglContext ctx,
+                                              GLenum target,
+                                              GLuint index,
+                                              GLint *data)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT("(GLenum target = 0x%X, GLuint index = %u, GLint *data = 0x%016" PRIxPTR ")", target,
+          index, (uintptr_t)data);
+
+    Context *context = static_cast<gl::Context *>(ctx);
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        if (context->skipValidation() || ValidateGetIntegeri_vEXT(context, target, index, data))
         {
             context->getIntegeri_v(target, index, data);
         }
@@ -12394,6 +12485,22 @@ void GL_APIENTRY ReadBufferContextANGLE(GLeglContext ctx, GLenum src)
         if (context->skipValidation() || ValidateReadBuffer(context, src))
         {
             context->readBuffer(src);
+        }
+    }
+}
+
+void GL_APIENTRY ReadBufferIndexedEXTContextANGLE(GLeglContext ctx, GLenum src, GLint index)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT("(GLenum src = 0x%X, GLint index = %d)", src, index);
+
+    Context *context = static_cast<gl::Context *>(ctx);
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        if (context->skipValidation() || ValidateReadBufferIndexedEXT(context, src, index))
+        {
+            context->readBufferIndexed(src, index);
         }
     }
 }

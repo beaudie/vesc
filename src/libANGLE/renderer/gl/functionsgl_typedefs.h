@@ -911,6 +911,12 @@ typedef void(INTERNAL_GL_APIENTRY *PFNGLINSERTEVENTMARKEREXTPROC)(GLsizei length
 typedef void(INTERNAL_GL_APIENTRY *PFNGLPUSHGROUPMARKEREXTPROC)(GLsizei length,
                                                                 const GLchar *marker);
 typedef void(INTERNAL_GL_APIENTRY *PFNGLPOPGROUPMARKEREXTPROC)(void);
+
+// GL_EXT_multiview_draw_buffers
+typedef void(INTERNAL_GL_APIENTRY *PFNGLDRAWBUFFERSINDEXEDEXTPROC)(GLint n,
+                                                                   const GLenum *location,
+                                                                   const GLint *indices);
+typedef void(INTERNAL_GL_APIENTRY *PFNGLREADBUFFERINDEXEDEXTPROC)(GLenum src, GLint index);
 }
 
 #endif // LIBANGLE_RENDERER_GL_FUNCTIONSGLTYPEDEFS_H_

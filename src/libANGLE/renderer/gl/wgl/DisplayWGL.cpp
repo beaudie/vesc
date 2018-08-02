@@ -79,7 +79,8 @@ DisplayWGL::DisplayWGL(const egl::DisplayState &state)
       mDxgiModule(nullptr),
       mD3d11Module(nullptr),
       mD3D11DeviceHandle(nullptr),
-      mD3D11Device(nullptr)
+      mD3D11Device(nullptr),
+      mStereo(false)
 {
 }
 
@@ -157,13 +158,24 @@ egl::Error DisplayWGL::initializeImpl(egl::Display *display)
                << "Failed to get the device context of the dummy OpenGL window.";
     }
 
-    const PIXELFORMATDESCRIPTOR pixelFormatDescriptor = wgl::GetDefaultPixelFormatDescriptor();
+    bool requestStereo = mDisplayAttributes.contains(EGL_MULTIVIEW_VIEW_COUNT_EXT);
+    PIXELFORMATDESCRIPTOR pixelFormatDescriptor =
+        wgl::GetDefaultPixelFormatDescriptor(requestStereo);
 
     int dummyPixelFormat = ChoosePixelFormat(dummyDeviceContext, &pixelFormatDescriptor);
     if (dummyPixelFormat == 0)
     {
-        return egl::EglNotInitialized()
-               << "Could not find a compatible pixel format for the dummy OpenGL window.";
+        pixelFormatDescriptor = wgl::GetDefaultPixelFormatDescriptor(false);
+        dummyPixelFormat      = ChoosePixelFormat(dummyDeviceContext, &pixelFormatDescriptor);
+        if (dummyPixelFormat == 0)
+        {
+            return egl::EglNotInitialized()
+                   << "Could not find a compatible pixel format for the dummy OpenGL window.";
+        }
+    }
+    else
+    {
+        mStereo = requestStereo;
     }
 
     if (!SetPixelFormat(dummyDeviceContext, dummyPixelFormat, &pixelFormatDescriptor))
@@ -226,11 +238,21 @@ egl::Error DisplayWGL::initializeImpl(egl::Display *display)
 
     if (mFunctionsWGL->choosePixelFormatARB)
     {
-        std::vector<int> attribs = wgl::GetDefaultPixelFormatAttributes(false);
+        std::vector<int> attribs = wgl::GetDefaultPixelFormatAttributes(false, requestStereo);
 
         UINT matchingFormats = 0;
         mFunctionsWGL->choosePixelFormatARB(mDeviceContext, &attribs[0], nullptr, 1u, &mPixelFormat,
                                             &matchingFormats);
+        if (mPixelFormat == 0)
+        {
+            attribs = wgl::GetDefaultPixelFormatAttributes(false, false);
+            mFunctionsWGL->choosePixelFormatARB(mDeviceContext, &attribs[0], nullptr, 1u,
+                                                &mPixelFormat, &matchingFormats);
+        }
+        else
+        {
+            mStereo = requestStereo;
+        }
     }
 
     if (mPixelFormat == 0)
@@ -634,6 +656,8 @@ void DisplayWGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->displayTextureShareGroup = true;
 
     outExtensions->surfacelessContext = true;
+
+    outExtensions->multiviewWindow = mStereo;
 
     DisplayGL::generateExtensions(outExtensions);
 }

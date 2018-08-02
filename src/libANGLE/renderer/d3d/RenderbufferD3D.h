@@ -42,7 +42,8 @@ class RenderbufferD3D : public RenderbufferImpl
 
     angle::Result getRenderTarget(const gl::Context *context, RenderTargetD3D **outRenderTarget);
     angle::Result getAttachmentRenderTarget(const gl::Context *context,
-                                            GLenum binding,
+                                            GLenum bindingLocation,
+                                            GLint bindingIndex,
                                             const gl::ImageIndex &imageIndex,
                                             FramebufferAttachmentRenderTarget **rtOut) override;
 

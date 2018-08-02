@@ -138,7 +138,8 @@ class Renderer11 : public RendererD3D
                                   GLenum backBufferFormat,
                                   GLenum depthBufferFormat,
                                   EGLint orientation,
-                                  EGLint samples) override;
+                                  EGLint samples,
+                                  EGLint multiviewCount) override;
     egl::Error getD3DTextureInfo(const egl::Config *configuration,
                                  IUnknown *d3dTexture,
                                  EGLint *width,
@@ -423,11 +424,13 @@ class Renderer11 : public RendererD3D
 
     gl::Version getMaxSupportedESVersion() const override;
 
+    EGLint getMultiviewCount() const override;
     angle::Result dispatchCompute(const gl::Context *context,
                                   GLuint numGroupsX,
                                   GLuint numGroupsY,
                                   GLuint numGroupsZ);
     angle::Result dispatchComputeIndirect(const gl::Context *context, GLintptr indirect);
+
 
     angle::Result createStagingTexture(const gl::Context *context,
                                        ResourceType textureType,

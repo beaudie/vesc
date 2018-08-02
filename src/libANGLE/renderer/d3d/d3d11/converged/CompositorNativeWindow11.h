@@ -88,6 +88,7 @@ class CompositorNativeWindow11 : public NativeWindow11
                             UINT width,
                             UINT height,
                             UINT samples,
+                            UINT multiviewCount,
                             IDXGISwapChain **swapChain) override;
 
     void commitChange() override;

@@ -53,6 +53,7 @@ class SwapChain9 : public SwapChainD3D
     EGLint getHeight() const { return mHeight; }
 
     void *getKeyedMutex() override;
+    EGLint getMultiviewCount() override;
 
     egl::Error getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc) override;
 
@@ -75,6 +76,5 @@ class SwapChain9 : public SwapChainD3D
     SurfaceRenderTarget9 mColorRenderTarget;
     SurfaceRenderTarget9 mDepthStencilRenderTarget;
 };
-
 }
 #endif // LIBANGLE_RENDERER_D3D_D3D9_SWAPCHAIN9_H_

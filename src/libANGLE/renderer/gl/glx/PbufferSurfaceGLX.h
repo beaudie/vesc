@@ -53,6 +53,8 @@ class PbufferSurfaceGLX : public SurfaceGLX
     egl::Error checkForResize() override;
     glx::Drawable getDrawable() const override;
 
+    EGLint getCreatedMultiviewViewCount() const override;
+
   private:
     unsigned mWidth;
     unsigned mHeight;
