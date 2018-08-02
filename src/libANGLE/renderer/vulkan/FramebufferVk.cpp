@@ -770,7 +770,7 @@ gl::Error FramebufferVk::syncState(const gl::Context *context,
 
     // Will freeze the current set of dependencies on this FBO. The next time we render we will
     // create a new entry in the command graph.
-    onResourceChanged(renderer);
+    onResourceChanged(contextVk);
 
     contextVk->invalidateCurrentPipeline();
 
@@ -877,7 +877,7 @@ angle::Result FramebufferVk::clearWithClearAttachments(ContextVk *contextVk,
                                                        bool clearStencil)
 {
     // Trigger a new command node to ensure overlapping writes happen sequentially.
-    onResourceChanged(contextVk->getRenderer());
+    onResourceChanged(contextVk);
 
     // This command can only happen inside a render pass, so obtain one if its already happening
     // or create a new one if not.
@@ -981,7 +981,7 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
     vk::ShaderLibrary *shaderLibrary = renderer->getShaderLibrary();
 
     // Trigger a new command node to ensure overlapping writes happen sequentially.
-    onResourceChanged(renderer);
+    onResourceChanged(contextVk);
 
     const vk::ShaderAndSerial *fullScreenQuad = nullptr;
     ANGLE_TRY(shaderLibrary->getShader(contextVk, vk::InternalShaderID::FullScreenQuad_vert,
@@ -1145,8 +1145,6 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
                                             RenderTargetVk *renderTarget,
                                             void *pixels)
 {
-    RendererVk *renderer = contextVk->getRenderer();
-
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(beginWriteResource(contextVk, &commandBuffer));
 
@@ -1191,7 +1189,7 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
 
     // Triggers a full finish.
     // TODO(jmadill): Don't block on asynchronous readback.
-    ANGLE_TRY(renderer->finish(contextVk));
+    ANGLE_TRY(contextVk->finish());
 
     // The buffer we copied to needs to be invalidated before we read from it because its not been
     // created with the host coherent bit.

@@ -102,7 +102,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL DebugReportCallback(VkDebugReportFlagsEXT flags,
     else
     {
         // Uncomment this if you want Vulkan spam.
-        // WARN() << message;
+        WARN() << message;
     }
 
     return VK_FALSE;
@@ -278,11 +278,7 @@ RendererVk::~RendererVk()
 
 void RendererVk::onDestroy(vk::Context *context)
 {
-    if (!mInFlightCommands.empty() || !mGarbage.empty())
-    {
-        // TODO(jmadill): Not nice to pass nullptr here, but shouldn't be a problem.
-        (void)finish(context);
-    }
+    (void)finishInFlightCommands(context);
 
     mPipelineLayoutCache.destroy(mDevice);
     mDescriptorSetLayoutCache.destroy(mDevice);
@@ -292,11 +288,6 @@ void RendererVk::onDestroy(vk::Context *context)
     mShaderLibrary.destroy(mDevice);
 
     GlslangWrapper::Release();
-
-    if (mCommandPool.valid())
-    {
-        mCommandPool.destroy(mDevice);
-    }
 
     if (mDevice)
     {
@@ -558,15 +549,6 @@ angle::Result RendererVk::initializeDevice(vk::Context *context, uint32_t queueF
 
     vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, 0, &mQueue);
 
-    // Initialize the command pool now that we know the queue family index.
-    VkCommandPoolCreateInfo commandPoolInfo;
-    commandPoolInfo.sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    commandPoolInfo.pNext            = nullptr;
-    commandPoolInfo.flags            = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
-    commandPoolInfo.queueFamilyIndex = mCurrentQueueFamilyIndex;
-
-    ANGLE_TRY(mCommandPool.init(context, commandPoolInfo));
-
     return angle::Result::Continue();
 }
 
@@ -617,6 +599,18 @@ angle::Result RendererVk::selectPresentQueueForSurface(vk::Context *context,
     ANGLE_TRY(initializeDevice(context, newPresentQueue.value()));
 
     *presentQueueOut = newPresentQueue.value();
+    return angle::Result::Continue();
+}
+
+angle::Result RendererVk::finishInFlightCommands(vk::Context *context)
+
+{
+    if (!mInFlightCommands.empty() || !mGarbage.empty())
+    {
+        ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueue));
+        freeAllInFlightResources();
+    }
+
     return angle::Result::Continue();
 }
 
@@ -703,17 +697,13 @@ uint32_t RendererVk::getMaxActiveTextures()
                               gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES);
 }
 
-const vk::CommandPool &RendererVk::getCommandPool() const
-{
-    return mCommandPool;
-}
-
-angle::Result RendererVk::finish(vk::Context *context)
+angle::Result RendererVk::finish(vk::Context *context,
+                                 vk::CommandPool &&commandPool)
 {
     if (!mCommandGraph.empty())
     {
         vk::Scoped<vk::CommandBuffer> commandBatch(mDevice);
-        ANGLE_TRY(flushCommandGraph(context, &commandBatch.get()));
+        ANGLE_TRY(flushCommandGraph(context, &commandPool, &commandBatch.get()));
 
         VkSubmitInfo submitInfo;
         submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -726,7 +716,8 @@ angle::Result RendererVk::finish(vk::Context *context)
         submitInfo.signalSemaphoreCount = 0;
         submitInfo.pSignalSemaphores    = nullptr;
 
-        ANGLE_TRY(submitFrame(context, submitInfo, std::move(commandBatch.get())));
+        ANGLE_TRY(submitFrame(context, std::move(commandPool), submitInfo,
+                              std::move(commandBatch.get())));
     }
 
     ASSERT(mQueue != VK_NULL_HANDLE);
@@ -789,6 +780,7 @@ angle::Result RendererVk::checkInFlightCommands(vk::Context *context)
 }
 
 angle::Result RendererVk::submitFrame(vk::Context *context,
+                                      vk::CommandPool &&commandPool,
                                       const VkSubmitInfo &submitInfo,
                                       vk::CommandBuffer &&commandBuffer)
 {
@@ -804,7 +796,7 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     ANGLE_VK_TRY(context, vkQueueSubmit(mQueue, 1, &submitInfo, batch.fence.getHandle()));
 
     // Store this command buffer in the in-flight list.
-    batch.commandPool = std::move(mCommandPool);
+    batch.commandPool = std::move(commandPool);
     batch.serial      = mCurrentQueueSerial;
 
     mInFlightCommands.emplace_back(scopedBatch.release());
@@ -824,16 +816,6 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
 
     // Simply null out the command buffer here - it was allocated using the command pool.
     commandBuffer.releaseHandle();
-
-    // Reallocate the command pool for next frame.
-    // TODO(jmadill): Consider reusing command pools.
-    VkCommandPoolCreateInfo poolInfo;
-    poolInfo.sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    poolInfo.pNext            = nullptr;
-    poolInfo.flags            = 0;
-    poolInfo.queueFamilyIndex = mCurrentQueueFamilyIndex;
-
-    ANGLE_TRY(mCommandPool.init(context, poolInfo));
 
     return angle::Result::Continue();
 }
@@ -870,18 +852,21 @@ vk::CommandGraph *RendererVk::getCommandGraph()
     return &mCommandGraph;
 }
 
-angle::Result RendererVk::flushCommandGraph(vk::Context *context, vk::CommandBuffer *commandBatch)
+angle::Result RendererVk::flushCommandGraph(vk::Context *context,
+                                            vk::CommandPool *commandPool,
+                                            vk::CommandBuffer *commandBatch)
 {
     return mCommandGraph.submitCommands(context, mCurrentQueueSerial, &mRenderPassCache,
-                                        &mCommandPool, commandBatch);
+                                        commandPool, commandBatch);
 }
 
 angle::Result RendererVk::flush(vk::Context *context,
+                                vk::CommandPool &&commandPool,
                                 const vk::Semaphore &waitSemaphore,
                                 const vk::Semaphore &signalSemaphore)
 {
     vk::Scoped<vk::CommandBuffer> commandBatch(mDevice);
-    ANGLE_TRY(flushCommandGraph(context, &commandBatch.get()));
+    ANGLE_TRY(flushCommandGraph(context, &commandPool, &commandBatch.get()));
 
     VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
 
@@ -896,7 +881,7 @@ angle::Result RendererVk::flush(vk::Context *context,
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores    = signalSemaphore.ptr();
 
-    ANGLE_TRY(submitFrame(context, submitInfo, commandBatch.release()));
+    ANGLE_TRY(submitFrame(context, std::move(commandPool), submitInfo, commandBatch.release()));
     return angle::Result::Continue();
 }
 

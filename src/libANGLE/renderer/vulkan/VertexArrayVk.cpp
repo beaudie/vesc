@@ -181,7 +181,7 @@ angle::Result VertexArrayVk::convertVertexBuffer(ContextVk *context,
 {
 
     // Preparation for mapping source buffer.
-    ANGLE_TRY(context->getRenderer()->finish(context));
+    ANGLE_TRY(context->finish());
 
     unsigned srcFormatSize = mCurrentArrayBufferFormats[attribIndex]->angleFormat().pixelBytes;
     unsigned dstFormatSize = mCurrentArrayBufferFormats[attribIndex]->bufferFormat().pixelBytes;

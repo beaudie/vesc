@@ -301,6 +301,19 @@ CommandPool::CommandPool()
 {
 }
 
+CommandPool::CommandPool(CommandPool &&other)
+{
+    mHandle = other.mHandle;
+    other.mHandle = VK_NULL_HANDLE;
+}
+
+CommandPool &CommandPool::operator=(CommandPool &&other)
+{
+    ASSERT(!valid());
+    std::swap(mHandle, other.mHandle);
+    return *this;
+}
+
 void CommandPool::destroy(VkDevice device)
 {
     if (valid())

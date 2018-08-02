@@ -166,9 +166,9 @@ bool CommandGraphResource::hasStartedWriteResource() const
 angle::Result CommandGraphResource::beginWriteResource(Context *context,
                                                        CommandBuffer **commandBufferOut)
 {
-    onResourceChanged(context->getRenderer());
-    return mCurrentWritingNode->beginOutsideRenderPassRecording(
-        context, context->getRenderer()->getCommandPool(), commandBufferOut);
+    onResourceChanged(context);
+    return mCurrentWritingNode->beginOutsideRenderPassRecording(context, context->getCommandPool(),
+                                                                commandBufferOut);
 }
 
 angle::Result CommandGraphResource::appendWriteResource(Context *context,
@@ -185,7 +185,7 @@ angle::Result CommandGraphResource::appendWriteResource(Context *context,
     if (!outsideRenderPassCommands->valid())
     {
         ANGLE_TRY(mCurrentWritingNode->beginOutsideRenderPassRecording(
-            context, context->getRenderer()->getCommandPool(), commandBufferOut));
+            context, context->getCommandPool(), commandBufferOut));
     }
     else
     {
@@ -235,8 +235,9 @@ angle::Result CommandGraphResource::beginRenderPass(Context *context,
     return mCurrentWritingNode->beginInsideRenderPassRecording(context, commandBufferOut);
 }
 
-void CommandGraphResource::onResourceChanged(RendererVk *renderer)
+void CommandGraphResource::onResourceChanged(Context *context)
 {
+    RendererVk* renderer = context->getRenderer();
     CommandGraphNode *newCommands = renderer->getCommandGraph()->allocateNode();
     onWriteImpl(newCommands, renderer->getCurrentQueueSerial());
 }
@@ -356,9 +357,9 @@ angle::Result CommandGraphNode::beginInsideRenderPassRecording(Context *context,
     inheritanceInfo.queryFlags           = 0;
     inheritanceInfo.pipelineStatistics   = 0;
 
-    ANGLE_TRY(InitAndBeginCommandBuffer(
-        context, context->getRenderer()->getCommandPool(), inheritanceInfo,
-        VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT, &mInsideRenderPassCommands));
+    ANGLE_TRY(InitAndBeginCommandBuffer(context, context->getCommandPool(), inheritanceInfo,
+                                        VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT,
+                                        &mInsideRenderPassCommands));
 
     *commandsOut = &mInsideRenderPassCommands;
     return angle::Result::Continue();

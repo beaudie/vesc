@@ -34,12 +34,19 @@ egl::Error DisplayVk::initialize(egl::Display *display)
     ASSERT(mRenderer != nullptr && display != nullptr);
     angle::Result result = mRenderer->initialize(this, display->getAttributeMap(), getWSIName());
     ANGLE_TRY(angle::ToEGL(result, this, EGL_NOT_INITIALIZED));
+    ANGLE_TRY(angle::ToEGL(initCommandPool(), this, EGL_NOT_INITIALIZED));
     return egl::NoError();
 }
 
 void DisplayVk::terminate()
 {
     ASSERT(mRenderer);
+
+    // TODO(geofflang): Is this neccessary? Can any remaining commands be flushed instead?
+    (void)mRenderer->finish(this, std::move(mCommandPool));
+
+    mCommandPool.destroy(mRenderer->getDevice());
+
     mRenderer->onDestroy(this);
 }
 
@@ -85,7 +92,9 @@ egl::Error DisplayVk::waitClient(const gl::Context *context)
     // http://anglebug.com/2504
     UNIMPLEMENTED();
 
-    return angle::ToEGL(mRenderer->finish(this), this, EGL_BAD_ACCESS);
+    vk::Context *contextVK = vk::GetImpl(context);
+
+    return angle::ToEGL(contextVK->finish(), this, EGL_BAD_ACCESS);
 }
 
 egl::Error DisplayVk::waitNative(const gl::Context *context, EGLint engine)
@@ -178,6 +187,18 @@ void DisplayVk::generateCaps(egl::Caps *outCaps) const
     outCaps->textureNPOT = true;
 }
 
+angle::Result DisplayVk::initCommandPool()
+{
+    // TODO(jmadill): Consider reusing command pools.
+    VkCommandPoolCreateInfo poolInfo;
+    poolInfo.sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    poolInfo.pNext            = nullptr;
+    poolInfo.flags            = 0;
+    poolInfo.queueFamilyIndex = mRenderer->getQueueFamilyIndex();
+
+    return mCommandPool.init(this, poolInfo);
+}
+
 void DisplayVk::handleError(VkResult result, const char *file, unsigned int line)
 {
     std::stringstream errorStream;
@@ -191,4 +212,31 @@ egl::Error DisplayVk::getEGLError(EGLint errorCode)
 {
     return egl::Error(errorCode, 0, std::move(mStoredErrorString));
 }
+
+angle::Result DisplayVk::flush(const vk::Semaphore &waitSemaphore,
+                               const vk::Semaphore &signalSemaphore)
+{
+    // Create a new command pool first so that even if the finish fails, we aren't left with an
+    // uninitialized command pool
+    vk::CommandPool &&oldCommandPool = std::move(mCommandPool);
+    ANGLE_TRY(initCommandPool());
+
+    ANGLE_TRY(mRenderer->flush(this, std::move(oldCommandPool), waitSemaphore,
+                               signalSemaphore));
+
+    return angle::Result::Continue();
+}
+
+angle::Result DisplayVk::finish()
+{
+    // Create a new command pool first so that even if the finish fails, we aren't left with an
+    // uninitialized command pool
+    vk::CommandPool &&oldCommandPool = std::move(mCommandPool);
+    ANGLE_TRY(initCommandPool());
+
+    ANGLE_TRY(mRenderer->finish(this,std::move(oldCommandPool)));
+
+    return angle::Result::Continue();
+}
+
 }  // namespace rx

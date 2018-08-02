@@ -91,6 +91,9 @@ ContextVk::~ContextVk() = default;
 
 void ContextVk::onDestroy(const gl::Context *context)
 {
+    // TODO(geofflang): Is this neccessary? Can any remaining commands be flushed instead?
+    (void)mRenderer->finish(this, std::move(mCommandPool));
+
     mDriverUniformsSetLayout.reset();
     mIncompleteTextures.onDestroy(context);
     mDriverUniformsBuffer.destroy(getDevice());
@@ -104,6 +107,8 @@ void ContextVk::onDestroy(const gl::Context *context)
     {
         defaultBuffer.destroy(getDevice());
     }
+
+    mCommandPool.destroy(getDevice());
 }
 
 gl::Error ContextVk::getIncompleteTexture(const gl::Context *context,
@@ -147,6 +152,8 @@ gl::Error ContextVk::initialize()
         buffer.init(1, mRenderer);
     }
 
+    ANGLE_TRY(initCommandPool());
+
     return gl::NoError();
 }
 
@@ -161,9 +168,35 @@ gl::Error ContextVk::flush(const gl::Context *context)
     return gl::NoError();
 }
 
+angle::Result ContextVk::flush(const vk::Semaphore &waitSemaphore,
+    const vk::Semaphore &signalSemaphore)
+{
+    // Create a new command pool first so that even if the finish fails, we aren't left with an
+    // uninitialized command pool
+    vk::CommandPool &&oldCommandPool = std::move(mCommandPool);
+    ANGLE_TRY(initCommandPool());
+
+    ANGLE_TRY(mRenderer->flush(this, std::move(oldCommandPool), waitSemaphore,
+        signalSemaphore));
+
+    return angle::Result::Continue();
+}
+
 gl::Error ContextVk::finish(const gl::Context *context)
 {
-    return mRenderer->finish(this);
+    return finish();
+}
+
+angle::Result ContextVk::finish()
+{
+    // Create a new command pool first so that even if the finish fails, we aren't left with an
+    // uninitialized command pool
+    vk::CommandPool &&oldCommandPool = std::move(mCommandPool);
+    ANGLE_TRY(initCommandPool());
+
+    ANGLE_TRY(mRenderer->finish(this, std::move(oldCommandPool)));
+
+    return angle::Result::Continue();
 }
 
 gl::Error ContextVk::initPipeline(const gl::DrawCallParams &drawCallParams)
@@ -1050,4 +1083,17 @@ angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
     vertexArrayVk->updateDefaultAttrib(mRenderer, attribIndex, bufferHandle, offset);
     return angle::Result::Continue();
 }
+
+angle::Result ContextVk::initCommandPool()
+{
+    // TODO(jmadill): Consider reusing command pools.
+    VkCommandPoolCreateInfo poolInfo;
+    poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    poolInfo.pNext = nullptr;
+    poolInfo.flags = 0;
+    poolInfo.queueFamilyIndex = mRenderer->getQueueFamilyIndex();
+
+    return mCommandPool.init(this, poolInfo);
+}
+
 }  // namespace rx

@@ -173,6 +173,12 @@ class ContextVk : public ContextImpl, public vk::Context
     void handleError(VkResult errorCode, const char *file, unsigned int line) override;
     const gl::ActiveTextureArray<TextureVk *> &getActiveTextures() const;
 
+    const vk::CommandPool &getCommandPool() const override { return mCommandPool; }
+
+    angle::Result flush(const vk::Semaphore &waitSemaphore,
+                        const vk::Semaphore &signalSemaphore) override;
+    angle::Result finish() override;
+
   private:
     gl::Error initPipeline(const gl::DrawCallParams &drawCallParams);
     gl::Error setupDraw(const gl::Context *context,
@@ -188,6 +194,8 @@ class ContextVk : public ContextImpl, public vk::Context
     gl::Error updateActiveTextures(const gl::Context *context);
     angle::Result updateDefaultAttributes();
     angle::Result updateDefaultAttribute(size_t attribIndex);
+
+    angle::Result initCommandPool();
 
     vk::PipelineAndSerial *mCurrentPipeline;
     gl::PrimitiveMode mCurrentDrawMode;
@@ -237,6 +245,8 @@ class ContextVk : public ContextImpl, public vk::Context
     // "Current Value" aka default vertex attribute state.
     gl::AttributesMask mDirtyDefaultAttribs;
     gl::AttribArray<vk::DynamicBuffer> mDefaultAttribBuffers;
+
+    vk::CommandPool mCommandPool;
 };
 }  // namespace rx
 
