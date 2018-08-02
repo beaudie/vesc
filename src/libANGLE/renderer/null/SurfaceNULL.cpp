@@ -99,6 +99,13 @@ EGLint SurfaceNULL::getSwapBehavior() const
     return EGL_BUFFER_PRESERVED;
 }
 
+EGLint SurfaceNULL::getCreatedMultiviewViewCount() const
+{
+    // The NULL back end does not currently support the EGL_EXT_multiview_window extension, so
+    // the number of multiview views is always 1.
+    return 1;
+}
+
 gl::Error SurfaceNULL::initializeContents(const gl::Context *context,
                                           const gl::ImageIndex &imageIndex)
 {

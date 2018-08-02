@@ -30,6 +30,7 @@ class NativeWindow11 : public NativeWindowD3D
                                     UINT width,
                                     UINT height,
                                     UINT samples,
+                                    BOOL isStereo,
                                     IDXGISwapChain **swapChain) = 0;
     virtual void commitChange() = 0;
 };

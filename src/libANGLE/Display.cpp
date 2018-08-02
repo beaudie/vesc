@@ -500,6 +500,7 @@ Error Display::initialize()
         config.second.renderableType |= EGL_OPENGL_ES_BIT;
     }
 
+    initIsStereoSupported();
     initDisplayExtensions();
     initVendorString();
 
@@ -1104,6 +1105,9 @@ void Display::initDisplayExtensions()
     // Request extension is implemented in the ANGLE frontend
     mDisplayExtensions.createContextExtensionsEnabled = true;
 
+    // Enable multiview only is stereo is available
+    mDisplayExtensions.multiviewWindow = mIsStereoSupported;
+
     mDisplayExtensionString = GenerateExtensionsString(mDisplayExtensions);
 }
 
@@ -1181,6 +1185,16 @@ const std::string &Display::getExtensionString() const
 const std::string &Display::getVendorString() const
 {
     return mVendorString;
+}
+
+void Display::initIsStereoSupported()
+{
+    mIsStereoSupported = mImplementation->isStereoSupported();
+}
+
+bool Display::isStereoSupported() const
+{
+    return mIsStereoSupported;
 }
 
 Device *Display::getDevice() const

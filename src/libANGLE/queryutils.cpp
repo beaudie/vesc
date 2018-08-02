@@ -856,7 +856,7 @@ void QueryFramebufferAttachmentParameteriv(const Context *context,
 {
     ASSERT(framebuffer);
 
-    const FramebufferAttachment *attachmentObject = framebuffer->getAttachment(context, attachment);
+    const FramebufferAttachment *attachmentObject = framebuffer->getAttachment(context, attachment, -1);
 
     if (attachmentObject == nullptr)
     {
@@ -2785,6 +2785,14 @@ void QuerySurfaceAttrib(const Surface *surface, EGLint attribute, EGLint *value)
             break;
         case EGL_WIDTH:
             *value = surface->getWidth();
+            break;
+        case EGL_MULTIVIEW_VIEW_COUNT_EXT:
+            // The EGL_EXT_multiview_window spec states that value is not written if the surface
+            // is a pbuffer or pixmap surface
+            if ((surface->getType() != EGL_PBUFFER_BIT) && (surface->getType() != EGL_PIXMAP_BIT))
+            {
+                *value = surface->getMultiviewViewCount();
+            }
             break;
         case EGL_POST_SUB_BUFFER_SUPPORTED_NV:
             *value = surface->isPostSubBufferSupported();

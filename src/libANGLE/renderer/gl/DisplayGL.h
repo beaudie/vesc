@@ -40,6 +40,8 @@ class DisplayGL : public DisplayImpl
 
     egl::Error makeCurrent(egl::Surface *drawSurface, egl::Surface *readSurface, gl::Context *context) override;
 
+    bool isStereoSupported() const override;
+
   protected:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
 

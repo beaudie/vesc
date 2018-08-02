@@ -199,7 +199,7 @@ gl::Error Image::orphanSibling(const gl::Context *context, ImageSibling *sibling
 
 gl::Format Image::getFormat() const
 {
-    return mState.source->getAttachmentFormat(GL_NONE, mState.imageIndex);
+    return mState.source->getAttachmentFormat(GL_NONE, -1, mState.imageIndex);
 }
 
 size_t Image::getWidth() const

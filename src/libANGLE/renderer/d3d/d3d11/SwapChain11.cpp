@@ -56,7 +56,8 @@ SwapChain11::SwapChain11(Renderer11 *renderer,
                          GLenum backBufferFormat,
                          GLenum depthBufferFormat,
                          EGLint orientation,
-                         EGLint samples)
+                         EGLint samples,
+                         bool requestStereo)
     : SwapChainD3D(shareHandle, d3dTexture, backBufferFormat, depthBufferFormat),
       mRenderer(renderer),
       mWidth(-1),
@@ -90,7 +91,9 @@ SwapChain11::SwapChain11(Renderer11 *renderer,
       mPassThroughRS(),
       mColorRenderTarget(this, renderer, false),
       mDepthStencilRenderTarget(this, renderer, true),
-      mEGLSamples(samples)
+      mEGLSamples(samples),
+      mIsStereoRequested(requestStereo),
+      mIsStereo(false)
 {
     // Sanity check that if present path fast is active then we're using the default orientation
     ASSERT(!mRenderer->presentPathFastEnabled() || orientation == 0);
@@ -600,7 +603,7 @@ EGLint SwapChain11::reset(DisplayD3D *displayD3D,
     {
         HRESULT result = mNativeWindow->createSwapChain(
             device, mRenderer->getDxgiFactory(), getSwapChainNativeFormat(), backbufferWidth,
-            backbufferHeight, getD3DSamples(), &mSwapChain);
+            backbufferHeight, getD3DSamples(), mIsStereoRequested, &mSwapChain);
 
         if (FAILED(result))
         {
@@ -1061,6 +1064,11 @@ egl::Error SwapChain11::getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLu
 UINT SwapChain11::getD3DSamples() const
 {
     return (mEGLSamples == 0) ? 1 : mEGLSamples;
+}
+
+bool SwapChain11::isStereo() const
+{
+    return mIsStereo;
 }
 
 }  // namespace rx

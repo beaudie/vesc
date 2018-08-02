@@ -65,6 +65,7 @@ class DisplayVk : public DisplayImpl, public vk::Context
     StreamProducerImpl *createStreamProducerD3DTexture(egl::Stream::ConsumerType consumerType,
                                                        const egl::AttributeMap &attribs) override;
     gl::Version getMaxSupportedESVersion() const override;
+    bool isStereoSupported() const override;
 
     virtual const char *getWSIName() const = 0;
 

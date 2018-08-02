@@ -143,6 +143,8 @@ class Display final : public LabeledObject, angle::NonCopyable
     const std::string &getExtensionString() const;
     const std::string &getVendorString() const;
 
+    bool isStereoSupported() const;
+
     EGLint programCacheGetAttrib(EGLenum attrib) const;
     Error programCacheQuery(EGLint index,
                             void *key,
@@ -175,6 +177,7 @@ class Display final : public LabeledObject, angle::NonCopyable
 
     Error restoreLostDevice();
 
+    void initIsStereoSupported();
     void initDisplayExtensions();
     void initVendorString();
 
@@ -200,6 +203,7 @@ class Display final : public LabeledObject, angle::NonCopyable
 
     Caps mCaps;
 
+    bool mIsStereoSupported;
     DisplayExtensions mDisplayExtensions;
     std::string mDisplayExtensionString;
 

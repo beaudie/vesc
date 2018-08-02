@@ -162,6 +162,11 @@ gl::Version DisplayVk::getMaxSupportedESVersion() const
     return gl::Version(0, 0);
 }
 
+bool DisplayVk::isStereoSupported() const
+{
+    return false;
+}
+
 void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
     outExtensions->surfaceOrientation       = true;

@@ -600,7 +600,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
 
     if (shaderType == GL_FRAGMENT_SHADER && shaderVersion == 100 &&
         compileResources.EXT_draw_buffers && compileResources.MaxDrawBuffers > 1 &&
-        IsExtensionEnabled(extensionBehavior, TExtension::EXT_draw_buffers))
+        IsExtensionEnabled(extensionBehavior, TExtension::EXT_draw_buffers) &&
+        !compileResources.EXT_multiview_draw_buffers)
     {
         EmulateGLFragColorBroadcast(root, compileResources.MaxDrawBuffers, &outputVariables,
                                     &symbolTable, shaderVersion);

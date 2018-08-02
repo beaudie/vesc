@@ -134,7 +134,8 @@ class RendererD3D : public BufferFactoryD3D
                                           GLenum backBufferFormat,
                                           GLenum depthBufferFormat,
                                           EGLint orientation,
-                                          EGLint samples)                          = 0;
+                                          EGLint samples,
+                                          bool isStereo)                           = 0;
     virtual egl::Error getD3DTextureInfo(const egl::Config *configuration,
                                          IUnknown *d3dTexture,
                                          EGLint *width,
@@ -324,6 +325,8 @@ class RendererD3D : public BufferFactoryD3D
     virtual FramebufferImpl *createDefaultFramebuffer(const gl::FramebufferState &state) = 0;
 
     virtual gl::Version getMaxSupportedESVersion() const = 0;
+
+    virtual bool isStereoSupported() const = 0;
 
     gl::Error initRenderTarget(RenderTargetD3D *renderTarget);
 

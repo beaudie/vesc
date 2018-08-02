@@ -16,7 +16,7 @@ namespace rx
 namespace wgl
 {
 
-PIXELFORMATDESCRIPTOR GetDefaultPixelFormatDescriptor()
+PIXELFORMATDESCRIPTOR GetDefaultPixelFormatDescriptor(bool stereo)
 {
     PIXELFORMATDESCRIPTOR pixelFormatDescriptor = { 0 };
     pixelFormatDescriptor.nSize = sizeof(pixelFormatDescriptor);
@@ -29,10 +29,15 @@ PIXELFORMATDESCRIPTOR GetDefaultPixelFormatDescriptor()
     pixelFormatDescriptor.cStencilBits = 8;
     pixelFormatDescriptor.iLayerType = PFD_MAIN_PLANE;
 
+    if (stereo)
+    {
+        pixelFormatDescriptor.dwFlags |= PFD_STEREO;
+    }
+
     return pixelFormatDescriptor;
 }
 
-std::vector<int> GetDefaultPixelFormatAttributes(bool preservedSwap)
+std::vector<int> GetDefaultPixelFormatAttributes(bool preservedSwap, bool stereo)
 {
     std::vector<int> attribs;
     attribs.push_back(WGL_DRAW_TO_WINDOW_ARB);
@@ -64,6 +69,12 @@ std::vector<int> GetDefaultPixelFormatAttributes(bool preservedSwap)
 
     attribs.push_back(WGL_SWAP_METHOD_ARB);
     attribs.push_back(preservedSwap ? WGL_SWAP_COPY_ARB : WGL_SWAP_UNDEFINED_ARB);
+
+    if (stereo)
+    {
+        attribs.push_back(WGL_STEREO_ARB);
+        attribs.push_back(GL_TRUE);
+    }
 
     attribs.push_back(0);
 

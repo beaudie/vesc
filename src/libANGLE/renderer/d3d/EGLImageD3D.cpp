@@ -59,7 +59,7 @@ gl::Error EGLImageD3D::getRenderTarget(const gl::Context *context, RenderTargetD
         ASSERT(!mRenderTarget);
         FramebufferAttachmentRenderTarget *rt = nullptr;
         ANGLE_TRY(
-            mState.source->getAttachmentRenderTarget(context, GL_NONE, mState.imageIndex, &rt));
+            mState.source->getAttachmentRenderTarget(context, GL_NONE, -1, mState.imageIndex, &rt));
         *outRT = static_cast<RenderTargetD3D *>(rt);
         return gl::NoError();
     }

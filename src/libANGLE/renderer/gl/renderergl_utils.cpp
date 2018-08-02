@@ -977,6 +977,8 @@ void GenerateCaps(const FunctionsGL *functions,
     extensions->copyTexture = true;
     extensions->syncQuery   = SyncQueryGL::IsSupported(functions);
 
+    extensions->multiviewDrawBuffers = functions->isAtLeastGL(gl::Version(2, 0));
+
     // NV_path_rendering
     // We also need interface query which is available in
     // >= 4.3 core or ARB_interface_query or >= GLES 3.1

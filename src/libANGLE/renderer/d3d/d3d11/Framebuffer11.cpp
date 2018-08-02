@@ -288,14 +288,13 @@ gl::Error Framebuffer11::blitImpl(const gl::Context *context,
         ASSERT(readRenderTarget);
 
         const auto &colorAttachments = mState.getColorAttachments();
-        const auto &drawBufferStates = mState.getDrawBufferStates();
+        const auto &drawBufferStateLocations = mState.getDrawBufferStateLocations();
 
         for (size_t colorAttachment = 0; colorAttachment < colorAttachments.size(); colorAttachment++)
         {
             const gl::FramebufferAttachment &drawBuffer = colorAttachments[colorAttachment];
 
-            if (drawBuffer.isAttached() &&
-                drawBufferStates[colorAttachment] != GL_NONE)
+            if (drawBuffer.isAttached() && drawBufferStateLocations[colorAttachment] != GL_NONE)
             {
                 RenderTargetD3D *drawRenderTarget = nullptr;
                 ANGLE_TRY(drawBuffer.getRenderTarget(context, &drawRenderTarget));

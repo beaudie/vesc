@@ -52,6 +52,7 @@ class SurfaceD3D : public SurfaceImpl
 
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;
+    EGLint getCreatedMultiviewViewCount() const override;
 
     // D3D implementations
     SwapChainD3D *getSwapChain() const;
@@ -61,7 +62,8 @@ class SurfaceD3D : public SurfaceImpl
     egl::Error checkForOutOfDateSwapChain(DisplayD3D *displayD3D);
 
     gl::Error getAttachmentRenderTarget(const gl::Context *context,
-                                        GLenum binding,
+                                        GLenum bindingLocation,
+                                        GLint bindingIndex,
                                         const gl::ImageIndex &imageIndex,
                                         FramebufferAttachmentRenderTarget **rtOut) override;
     gl::Error initializeContents(const gl::Context *context,
@@ -105,6 +107,7 @@ class SurfaceD3D : public SurfaceImpl
     IUnknown *mD3DTexture;
 
     EGLenum mBuftype;
+    bool mIsStereoRequested;
 };
 
 class WindowSurfaceD3D : public SurfaceD3D
