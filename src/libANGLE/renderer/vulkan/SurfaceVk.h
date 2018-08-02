@@ -70,7 +70,7 @@ class OffscreenSurfaceVk : public SurfaceImpl, public vk::CommandGraphResource
                                  EGLint width,
                                  EGLint height,
                                  const vk::Format &vkFormat);
-        void destroy(const egl::Display *display, Serial storedQueueSerial);
+        void destroy(const egl::Display *display, const vk::ContextSerialMap &serials);
 
         vk::ImageHelper image;
         vk::ImageView imageView;
@@ -142,7 +142,7 @@ class WindowSurfaceVk : public SurfaceImpl, public vk::CommandGraphResource
     virtual angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut) = 0;
     angle::Result initializeImpl(DisplayVk *displayVk);
     angle::Result nextSwapchainImage(DisplayVk *displayVk);
-    angle::Result swapImpl(DisplayVk *displayVk);
+    angle::Result swapImpl(vk::Context *context, DisplayVk *displayVk);
 
     VkSwapchainKHR mSwapchain;
 

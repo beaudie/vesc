@@ -19,6 +19,7 @@ namespace rx
 {
 namespace vk
 {
+class Context;
 class CommandBuffer;
 class CommandGraphResource;
 struct Format;
@@ -39,20 +40,24 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     ~RenderTargetVk();
 
     // Note: RenderTargets should be called in order, with the depth/stencil onRender last.
-    void onColorDraw(vk::CommandGraphResource *framebufferVk,
+    void onColorDraw(vk::Context *context,
+                     vk::CommandGraphResource *framebufferVk,
                      vk::CommandBuffer *commandBuffer,
                      vk::RenderPassDesc *renderPassDesc);
-    void onDepthStencilDraw(vk::CommandGraphResource *framebufferVk,
+    void onDepthStencilDraw(vk::Context *context,
+                            vk::CommandGraphResource *framebufferVk,
                             vk::CommandBuffer *commandBuffer,
                             vk::RenderPassDesc *renderPassDesc);
 
     const vk::ImageHelper &getImage() const;
 
     // getImageForRead will also transition the resource to the given layout.
-    vk::ImageHelper *getImageForRead(vk::CommandGraphResource *readingResource,
+    vk::ImageHelper *getImageForRead(vk::Context *context,
+                                     vk::CommandGraphResource *readingResource,
                                      VkImageLayout layout,
                                      vk::CommandBuffer *commandBuffer);
-    vk::ImageHelper *getImageForWrite(vk::CommandGraphResource *writingResource) const;
+    vk::ImageHelper *getImageForWrite(vk::Context *context,
+                                      vk::CommandGraphResource *writingResource) const;
     vk::ImageView *getImageView() const;
     vk::CommandGraphResource *getResource() const;
 

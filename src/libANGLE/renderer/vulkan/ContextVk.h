@@ -173,6 +173,42 @@ class ContextVk : public ContextImpl, public vk::Context
     void handleError(VkResult errorCode, const char *file, unsigned int line) override;
     const gl::ActiveTextureArray<TextureVk *> &getActiveTextures() const;
 
+    const vk::CommandPool &getCommandPool() const override { return mCommandPool; }
+
+    // This should only be called from ResourceVk.
+    vk::CommandGraph *getCommandGraph() override { return &mCommandGraph; }
+
+    angle::Result flush(const vk::Semaphore &waitSemaphore,
+                        const vk::Semaphore &signalSemaphore) override;
+    angle::Result finish() override;
+
+    Serial getCurrentQueueSerial() const override { return mCurrentQueueSerial; }
+    Serial getLastCompletedQueueSerial() const override { return mLastCompletedQueueSerial; }
+
+    angle::Result getCompatibleRenderPass(const vk::RenderPassDesc &desc,
+                                          vk::RenderPass **renderPassOut) override;
+    angle::Result getRenderPassWithOps(const vk::RenderPassDesc &desc,
+                                       const vk::AttachmentOpsArray &ops,
+                                       vk::RenderPass **renderPassOut);
+
+    // For getting a vk::Pipeline and checking the pipeline cache.
+    angle::Result getPipeline(const vk::ShaderAndSerial &vertexShader,
+                              const vk::ShaderAndSerial &fragmentShader,
+                              const vk::PipelineLayout &pipelineLayout,
+                              const vk::PipelineDesc &pipelineDesc,
+                              const gl::AttributesMask &activeAttribLocationsMask,
+                              vk::PipelineAndSerial **pipelineOut);
+
+    // Queries the descriptor set layout cache. Creates the layout if not present.
+    angle::Result getDescriptorSetLayout(
+        const vk::DescriptorSetLayoutDesc &desc,
+        vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut);
+
+    // Queries the pipeline layout cache. Creates the layout if not present.
+    angle::Result getPipelineLayout(const vk::PipelineLayoutDesc &desc,
+                                    const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
+                                    vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
+
   private:
     gl::Error initPipeline(const gl::DrawCallParams &drawCallParams);
     gl::Error setupDraw(const gl::Context *context,
@@ -188,6 +224,17 @@ class ContextVk : public ContextImpl, public vk::Context
     gl::Error updateActiveTextures(const gl::Context *context);
     angle::Result updateDefaultAttributes();
     angle::Result updateDefaultAttribute(size_t attribIndex);
+
+    angle::Result initCommandPool();
+
+    angle::Result flushCommandGraph(vk::CommandBuffer *commandBatch);
+
+    angle::Result submitFrame(vk::CommandPool &&commandPool,
+                              const VkSubmitInfo &submitInfo,
+                              vk::CommandBuffer &&commandBuffer);
+
+    angle::Result checkInFlightCommands();
+    angle::Result freeInFlightResources();
 
     vk::PipelineAndSerial *mCurrentPipeline;
     gl::PrimitiveMode mCurrentDrawMode;
@@ -237,6 +284,40 @@ class ContextVk : public ContextImpl, public vk::Context
     // "Current Value" aka default vertex attribute state.
     gl::AttributesMask mDirtyDefaultAttribs;
     gl::AttribArray<vk::DynamicBuffer> mDefaultAttribBuffers;
+
+    vk::CommandPool mCommandPool;
+
+    // See CommandGraph.h for a desription of the Command Graph.
+    vk::CommandGraph mCommandGraph;
+
+    SerialFactory mQueueSerialFactory;
+    Serial mLastCompletedQueueSerial;
+    Serial mCurrentQueueSerial;
+
+    RenderPassCache mRenderPassCache;
+    PipelineCache mPipelineCache;
+
+    // ANGLE uses a PipelineLayout cache to store compatible pipeline layouts.
+    PipelineLayoutCache mPipelineLayoutCache;
+
+    // DescriptorSetLayouts are also managed in a cache.
+    DescriptorSetLayoutCache mDescriptorSetLayoutCache;
+
+    struct CommandBatch final : angle::NonCopyable
+    {
+        CommandBatch();
+        ~CommandBatch();
+        CommandBatch(CommandBatch &&other);
+        CommandBatch &operator=(CommandBatch &&other);
+
+        void destroy(VkDevice device);
+
+        vk::CommandPool commandPool;
+        vk::Fence fence;
+        Serial serial;
+    };
+
+    std::vector<CommandBatch> mInFlightCommands;
 };
 }  // namespace rx
 

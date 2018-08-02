@@ -11,6 +11,7 @@
 #define LIBANGLE_RENDERER_VULKAN_DISPLAYVK_H_
 
 #include "libANGLE/renderer/DisplayImpl.h"
+#include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace rx
@@ -79,6 +80,39 @@ class DisplayVk : public DisplayImpl, public vk::Context
     // TODO(jmadill): Remove this once refactor is done. http://anglebug.com/2491
     egl::Error getEGLError(EGLint errorCode);
 
+    angle::Result flush(const vk::Semaphore &waitSemaphore,
+                        const vk::Semaphore &signalSemaphore) override;
+    angle::Result finish() override;
+
+    const vk::CommandPool &getCommandPool() const override
+    {
+        UNREACHABLE();
+        return mCommandPool;
+    }
+    vk::CommandGraph *getCommandGraph() override
+    {
+        UNREACHABLE();
+        return &mCommandGraph;
+    }
+
+    Serial getCurrentQueueSerial() const override
+    {
+        UNREACHABLE();
+        return Serial();
+    }
+    Serial getLastCompletedQueueSerial() const override
+    {
+        UNREACHABLE();
+        return Serial();
+    }
+
+    angle::Result getCompatibleRenderPass(const vk::RenderPassDesc &desc,
+                                          vk::RenderPass **renderPassOut) override
+    {
+        UNREACHABLE();
+        return angle::Result::Stop();
+    }
+
   private:
     virtual SurfaceImpl *createWindowSurfaceVk(const egl::SurfaceState &state,
                                                EGLNativeWindowType window,
@@ -88,6 +122,13 @@ class DisplayVk : public DisplayImpl, public vk::Context
     void generateCaps(egl::Caps *outCaps) const override;
 
     std::string mStoredErrorString;
+
+    angle::Result initCommandPool();
+
+    vk::CommandPool mCommandPool;
+
+    // See CommandGraph.h for a desription of the Command Graph.
+    vk::CommandGraph mCommandGraph;
 };
 
 }  // namespace rx

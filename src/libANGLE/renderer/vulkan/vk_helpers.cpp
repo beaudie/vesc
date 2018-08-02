@@ -202,24 +202,36 @@ angle::Result DynamicBuffer::invalidate(Context *context)
     return angle::Result::Continue();
 }
 
-void DynamicBuffer::release(RendererVk *renderer)
+void DynamicBuffer::release(Context *context, Serial serial)
 {
-    unmap(renderer->getDevice());
-    reset();
-    releaseRetainedBuffers(renderer);
-
-    Serial currentSerial = renderer->getCurrentQueueSerial();
-    renderer->releaseObject(currentSerial, &mBuffer);
-    renderer->releaseObject(currentSerial, &mMemory);
+    // TODO: Maybe duplicate some code and call dumpResources with the single serial directly
+    // instead of constructing a map
+    release(context, {{context, serial}});
 }
 
-void DynamicBuffer::releaseRetainedBuffers(RendererVk *renderer)
+void DynamicBuffer::release(Context *context, const ContextSerialMap &serials)
+{
+    unmap(context->getDevice());
+    reset();
+    releaseRetainedBuffers(context, serials);
+
+    mBuffer.dumpResources(context, serials);
+    mMemory.dumpResources(context, serials);
+}
+
+void DynamicBuffer::releaseRetainedBuffers(Context *context, Serial serial)
+{
+    // TODO: Maybe duplicate some code and call dumpResources with the single serial directly
+    // instead of constructing a map
+    releaseRetainedBuffers(context, {{context, serial}});
+}
+
+void DynamicBuffer::releaseRetainedBuffers(Context *context, const ContextSerialMap &serials)
 {
     for (BufferAndMemory &toFree : mRetainedBuffers)
     {
-        Serial currentSerial = renderer->getCurrentQueueSerial();
-        renderer->releaseObject(currentSerial, &toFree.buffer);
-        renderer->releaseObject(currentSerial, &toFree.memory);
+        toFree.buffer.dumpResources(context, serials);
+        toFree.memory.dumpResources(context, serials);
     }
 
     mRetainedBuffers.clear();
@@ -304,12 +316,9 @@ angle::Result DynamicDescriptorPool::allocateSets(Context *context,
 {
     if (mFreeDescriptorSets < descriptorSetCount || mCurrentSetsCount >= mMaxSetsPerPool)
     {
-        RendererVk *renderer = context->getRenderer();
-        Serial currentSerial = renderer->getCurrentQueueSerial();
-
         // We will bust the limit of descriptor set with this allocation so we need to get a new
         // pool for it.
-        renderer->releaseObject(currentSerial, &mCurrentDescriptorPool);
+        mCurrentDescriptorPool.dumpResources(context, context->getCurrentQueueSerial());
         ANGLE_TRY(allocateNewPool(context));
     }
 
@@ -375,7 +384,8 @@ angle::Result LineLoopHelper::getIndexBufferForDrawArrays(Context *context,
     size_t allocateBytes = sizeof(uint32_t) * (drawCallParams.vertexCount() + 1);
     uint32_t offset      = 0;
 
-    mDynamicIndexBuffer.releaseRetainedBuffers(context->getRenderer());
+    // mDynamicIndexBuffer is not shared
+    mDynamicIndexBuffer.releaseRetainedBuffers(context, context->getCurrentQueueSerial());
     ANGLE_TRY(mDynamicIndexBuffer.allocate(context, allocateBytes,
                                            reinterpret_cast<uint8_t **>(&indices), bufferHandleOut,
                                            &offset, nullptr));
@@ -416,7 +426,8 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(Context *conte
     auto unitSize = (indexType == VK_INDEX_TYPE_UINT16 ? sizeof(uint16_t) : sizeof(uint32_t));
     size_t allocateBytes = unitSize * (indexCount + 1);
 
-    mDynamicIndexBuffer.releaseRetainedBuffers(context->getRenderer());
+    // mDynamicIndexBuffer is not shared
+    mDynamicIndexBuffer.releaseRetainedBuffers(context, context->getCurrentQueueSerial());
     ANGLE_TRY(mDynamicIndexBuffer.allocate(context, allocateBytes,
                                            reinterpret_cast<uint8_t **>(&indices), bufferHandleOut,
                                            &destinationOffset, nullptr));
@@ -431,7 +442,7 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(Context *conte
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(beginWriteResource(context, &commandBuffer));
 
-    elementArrayBufferVk->addReadDependency(this);
+    elementArrayBufferVk->addReadDependency(context, this);
     commandBuffer->copyBuffer(elementArrayBufferVk->getVkBuffer().getHandle(), *bufferHandleOut, 2,
                               copies.data());
 
@@ -484,6 +495,11 @@ angle::Result LineLoopHelper::getIndexBufferForClientElementArray(
 void LineLoopHelper::destroy(VkDevice device)
 {
     mDynamicIndexBuffer.destroy(device);
+}
+
+void LineLoopHelper::release(Context *context, const ContextSerialMap &serials)
+{
+    mDynamicIndexBuffer.release(context, serials);
 }
 
 // static
@@ -563,10 +579,10 @@ angle::Result ImageHelper::init(Context *context,
     return angle::Result::Continue();
 }
 
-void ImageHelper::release(Serial serial, RendererVk *renderer)
+void ImageHelper::release(Context *context, const ContextSerialMap &serials)
 {
-    renderer->releaseObject(serial, &mImage);
-    renderer->releaseObject(serial, &mDeviceMemory);
+    mImage.dumpResources(context, serials);
+    mDeviceMemory.dumpResources(context, serials);
 }
 
 void ImageHelper::resetImageWeakReference()
@@ -698,12 +714,6 @@ angle::Result ImageHelper::init2DStaging(Context *context,
 VkImageAspectFlags ImageHelper::getAspectFlags() const
 {
     return GetFormatAspectFlags(mFormat->textureFormat());
-}
-
-void ImageHelper::dumpResources(Serial serial, std::vector<GarbageObject> *garbageQueue)
-{
-    mImage.dumpResources(serial, garbageQueue);
-    mDeviceMemory.dumpResources(serial, garbageQueue);
 }
 
 const Image &ImageHelper::getImage() const

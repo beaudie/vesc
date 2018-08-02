@@ -33,7 +33,6 @@ namespace
 const uint32_t kMockVendorID     = 0xba5eba11;
 const uint32_t kMockDeviceID     = 0xf005ba11;
 constexpr char kMockDeviceName[] = "Vulkan Mock Device";
-constexpr size_t kInFlightCommandsLimit = 50000u;
 }  // anonymous namespace
 
 namespace rx
@@ -235,30 +234,6 @@ void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
 }
 }  // anonymous namespace
 
-// CommandBatch implementation.
-RendererVk::CommandBatch::CommandBatch() = default;
-
-RendererVk::CommandBatch::~CommandBatch() = default;
-
-RendererVk::CommandBatch::CommandBatch(CommandBatch &&other)
-    : commandPool(std::move(other.commandPool)), fence(std::move(other.fence)), serial(other.serial)
-{
-}
-
-RendererVk::CommandBatch &RendererVk::CommandBatch::operator=(CommandBatch &&other)
-{
-    std::swap(commandPool, other.commandPool);
-    std::swap(fence, other.fence);
-    std::swap(serial, other.serial);
-    return *this;
-}
-
-void RendererVk::CommandBatch::destroy(VkDevice device)
-{
-    commandPool.destroy(device);
-    fence.destroy(device);
-}
-
 // RendererVk implementation.
 RendererVk::RendererVk()
     : mCapsInitialized(false),
@@ -268,9 +243,7 @@ RendererVk::RendererVk()
       mPhysicalDevice(VK_NULL_HANDLE),
       mQueue(VK_NULL_HANDLE),
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
-      mDevice(VK_NULL_HANDLE),
-      mLastCompletedQueueSerial(mQueueSerialFactory.generate()),
-      mCurrentQueueSerial(mQueueSerialFactory.generate())
+      mDevice(VK_NULL_HANDLE)
 {
 }
 
@@ -280,25 +253,11 @@ RendererVk::~RendererVk()
 
 void RendererVk::onDestroy(vk::Context *context)
 {
-    if (!mInFlightCommands.empty() || !mGarbage.empty())
-    {
-        // TODO(jmadill): Not nice to pass nullptr here, but shouldn't be a problem.
-        (void)finish(context);
-    }
+    // TODO(geofflang): Wait for the queue if there is any pending garbage and free the garbage
 
-    mPipelineLayoutCache.destroy(mDevice);
-    mDescriptorSetLayoutCache.destroy(mDevice);
-
-    mRenderPassCache.destroy(mDevice);
-    mPipelineCache.destroy(mDevice);
     mShaderLibrary.destroy(mDevice);
 
     GlslangWrapper::Release();
-
-    if (mCommandPool.valid())
-    {
-        mCommandPool.destroy(mDevice);
-    }
 
     if (mDevice)
     {
@@ -560,15 +519,6 @@ angle::Result RendererVk::initializeDevice(vk::Context *context, uint32_t queueF
 
     vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, 0, &mQueue);
 
-    // Initialize the command pool now that we know the queue family index.
-    VkCommandPoolCreateInfo commandPoolInfo;
-    commandPoolInfo.sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    commandPoolInfo.pNext            = nullptr;
-    commandPoolInfo.flags            = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
-    commandPoolInfo.queueFamilyIndex = mCurrentQueueFamilyIndex;
-
-    ANGLE_TRY(mCommandPool.init(context, commandPoolInfo));
-
     return angle::Result::Continue();
 }
 
@@ -705,252 +655,31 @@ uint32_t RendererVk::getMaxActiveTextures()
                               gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES);
 }
 
-const vk::CommandPool &RendererVk::getCommandPool() const
-{
-    return mCommandPool;
-}
-
-angle::Result RendererVk::finish(vk::Context *context)
-{
-    if (!mCommandGraph.empty())
-    {
-        vk::Scoped<vk::CommandBuffer> commandBatch(mDevice);
-        ANGLE_TRY(flushCommandGraph(context, &commandBatch.get()));
-
-        VkSubmitInfo submitInfo;
-        submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        submitInfo.pNext                = nullptr;
-        submitInfo.waitSemaphoreCount   = 0;
-        submitInfo.pWaitSemaphores      = nullptr;
-        submitInfo.pWaitDstStageMask    = nullptr;
-        submitInfo.commandBufferCount   = 1;
-        submitInfo.pCommandBuffers      = commandBatch.get().ptr();
-        submitInfo.signalSemaphoreCount = 0;
-        submitInfo.pSignalSemaphores    = nullptr;
-
-        ANGLE_TRY(submitFrame(context, submitInfo, std::move(commandBatch.get())));
-    }
-
-    ASSERT(mQueue != VK_NULL_HANDLE);
-    ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueue));
-    freeAllInFlightResources();
-    return angle::Result::Continue();
-}
-
-void RendererVk::freeAllInFlightResources()
-{
-    for (CommandBatch &batch : mInFlightCommands)
-    {
-        batch.fence.destroy(mDevice);
-        batch.commandPool.destroy(mDevice);
-    }
-    mInFlightCommands.clear();
-
-    for (auto &garbage : mGarbage)
-    {
-        garbage.destroy(mDevice);
-    }
-    mGarbage.clear();
-}
-
-angle::Result RendererVk::checkInFlightCommands(vk::Context *context)
-{
-    int finishedCount = 0;
-
-    for (CommandBatch &batch : mInFlightCommands)
-    {
-        VkResult result = batch.fence.getStatus(mDevice);
-        if (result == VK_NOT_READY)
-            break;
-
-        ANGLE_VK_TRY(context, result);
-        ASSERT(batch.serial > mLastCompletedQueueSerial);
-        mLastCompletedQueueSerial = batch.serial;
-
-        batch.fence.destroy(mDevice);
-        batch.commandPool.destroy(mDevice);
-        ++finishedCount;
-    }
-
-    mInFlightCommands.erase(mInFlightCommands.begin(), mInFlightCommands.begin() + finishedCount);
-
-    size_t freeIndex = 0;
-    for (; freeIndex < mGarbage.size(); ++freeIndex)
-    {
-        if (!mGarbage[freeIndex].destroyIfComplete(mDevice, mLastCompletedQueueSerial))
-            break;
-    }
-
-    // Remove the entries from the garbage list - they should be ready to go.
-    if (freeIndex > 0)
-    {
-        mGarbage.erase(mGarbage.begin(), mGarbage.begin() + freeIndex);
-    }
-
-    return angle::Result::Continue();
-}
-
-angle::Result RendererVk::submitFrame(vk::Context *context,
-                                      const VkSubmitInfo &submitInfo,
-                                      vk::CommandBuffer &&commandBuffer)
-{
-    VkFenceCreateInfo fenceInfo;
-    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-    fenceInfo.pNext = nullptr;
-    fenceInfo.flags = 0;
-
-    vk::Scoped<CommandBatch> scopedBatch(mDevice);
-    CommandBatch &batch = scopedBatch.get();
-    ANGLE_TRY(batch.fence.init(context, fenceInfo));
-
-    ANGLE_VK_TRY(context, vkQueueSubmit(mQueue, 1, &submitInfo, batch.fence.getHandle()));
-
-    // Store this command buffer in the in-flight list.
-    batch.commandPool = std::move(mCommandPool);
-    batch.serial      = mCurrentQueueSerial;
-
-    mInFlightCommands.emplace_back(scopedBatch.release());
-
-    // Check that mInFlightCommands isn't growing too fast
-    // If it is, wait for the queue to complete work it has alread been assigned
-    if (mInFlightCommands.size() > kInFlightCommandsLimit)
-    {
-        vkQueueWaitIdle(mQueue);
-    }
-
-    // Increment the queue serial. If this fails, we should restart ANGLE.
-    // TODO(jmadill): Overflow check.
-    mCurrentQueueSerial = mQueueSerialFactory.generate();
-
-    ANGLE_TRY(checkInFlightCommands(context));
-
-    // Simply null out the command buffer here - it was allocated using the command pool.
-    commandBuffer.releaseHandle();
-
-    // Reallocate the command pool for next frame.
-    // TODO(jmadill): Consider reusing command pools.
-    VkCommandPoolCreateInfo poolInfo;
-    poolInfo.sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    poolInfo.pNext            = nullptr;
-    poolInfo.flags            = 0;
-    poolInfo.queueFamilyIndex = mCurrentQueueFamilyIndex;
-
-    ANGLE_TRY(mCommandPool.init(context, poolInfo));
-
-    return angle::Result::Continue();
-}
-
-Serial RendererVk::getCurrentQueueSerial() const
-{
-    return mCurrentQueueSerial;
-}
-
-bool RendererVk::isSerialInUse(Serial serial) const
-{
-    return serial > mLastCompletedQueueSerial;
-}
-
-angle::Result RendererVk::getCompatibleRenderPass(vk::Context *context,
-                                                  const vk::RenderPassDesc &desc,
-                                                  vk::RenderPass **renderPassOut)
-{
-    return mRenderPassCache.getCompatibleRenderPass(context, mCurrentQueueSerial, desc,
-                                                    renderPassOut);
-}
-
-angle::Result RendererVk::getRenderPassWithOps(vk::Context *context,
-                                               const vk::RenderPassDesc &desc,
-                                               const vk::AttachmentOpsArray &ops,
-                                               vk::RenderPass **renderPassOut)
-{
-    return mRenderPassCache.getRenderPassWithOps(context, mCurrentQueueSerial, desc, ops,
-                                                 renderPassOut);
-}
-
-vk::CommandGraph *RendererVk::getCommandGraph()
-{
-    return &mCommandGraph;
-}
-
-angle::Result RendererVk::flushCommandGraph(vk::Context *context, vk::CommandBuffer *commandBatch)
-{
-    return mCommandGraph.submitCommands(context, mCurrentQueueSerial, &mRenderPassCache,
-                                        &mCommandPool, commandBatch);
-}
-
-angle::Result RendererVk::flush(vk::Context *context,
-                                const vk::Semaphore &waitSemaphore,
-                                const vk::Semaphore &signalSemaphore)
-{
-    vk::Scoped<vk::CommandBuffer> commandBatch(mDevice);
-    ANGLE_TRY(flushCommandGraph(context, &commandBatch.get()));
-
-    VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
-
-    VkSubmitInfo submitInfo;
-    submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.pNext                = nullptr;
-    submitInfo.waitSemaphoreCount   = 1;
-    submitInfo.pWaitSemaphores      = waitSemaphore.ptr();
-    submitInfo.pWaitDstStageMask    = &waitStageMask;
-    submitInfo.commandBufferCount   = 1;
-    submitInfo.pCommandBuffers      = commandBatch.get().ptr();
-    submitInfo.signalSemaphoreCount = 1;
-    submitInfo.pSignalSemaphores    = signalSemaphore.ptr();
-
-    ANGLE_TRY(submitFrame(context, submitInfo, commandBatch.release()));
-    return angle::Result::Continue();
-}
-
 Serial RendererVk::issueShaderSerial()
 {
     return mShaderSerialFactory.generate();
 }
 
-angle::Result RendererVk::getPipeline(vk::Context *context,
-                                      const vk::ShaderAndSerial &vertexShader,
-                                      const vk::ShaderAndSerial &fragmentShader,
-                                      const vk::PipelineLayout &pipelineLayout,
-                                      const vk::PipelineDesc &pipelineDesc,
-                                      const gl::AttributesMask &activeAttribLocationsMask,
-                                      vk::PipelineAndSerial **pipelineOut)
-{
-    ASSERT(vertexShader.getSerial() ==
-           pipelineDesc.getShaderStageInfo()[vk::ShaderType::VertexShader].moduleSerial);
-    ASSERT(fragmentShader.getSerial() ==
-           pipelineDesc.getShaderStageInfo()[vk::ShaderType::FragmentShader].moduleSerial);
-
-    // Pull in a compatible RenderPass.
-    vk::RenderPass *compatibleRenderPass = nullptr;
-    ANGLE_TRY(
-        getCompatibleRenderPass(context, pipelineDesc.getRenderPassDesc(), &compatibleRenderPass));
-
-    return mPipelineCache.getPipeline(context, *compatibleRenderPass, pipelineLayout,
-                                      activeAttribLocationsMask, vertexShader.get(),
-                                      fragmentShader.get(), pipelineDesc, pipelineOut);
-}
-
-angle::Result RendererVk::getDescriptorSetLayout(
-    vk::Context *context,
-    const vk::DescriptorSetLayoutDesc &desc,
-    vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut)
-{
-    return mDescriptorSetLayoutCache.getDescriptorSetLayout(context, desc, descriptorSetLayoutOut);
-}
-
-angle::Result RendererVk::getPipelineLayout(
-    vk::Context *context,
-    const vk::PipelineLayoutDesc &desc,
-    const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
-    vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
-{
-    return mPipelineLayoutCache.getPipelineLayout(context, desc, descriptorSetLayouts,
-                                                  pipelineLayoutOut);
-}
-
 vk::ShaderLibrary *RendererVk::getShaderLibrary()
 {
     return &mShaderLibrary;
+}
+
+angle::Result RendererVk::submitToQueue(vk::Context *context,
+                                        const VkSubmitInfo &submitInfo,
+                                        const vk::Fence &fence)
+{
+    // TODO(geofflang): Lock around queue access?
+    ANGLE_VK_TRY(context, vkQueueSubmit(mQueue, 1, &submitInfo, fence.getHandle()));
+    return angle::Result::Continue();
+}
+
+angle::Result RendererVk::waitForQueue(vk::Context *context)
+{
+    // TODO(geofflang): Lock around queue access?
+    ASSERT(mQueue != nullptr);
+    ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueue));
+    return angle::Result::Continue();
 }
 
 uint32_t GetUniformBufferDescriptorCount()

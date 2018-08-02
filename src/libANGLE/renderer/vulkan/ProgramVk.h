@@ -13,12 +13,13 @@
 #include <array>
 
 #include "libANGLE/renderer/ProgramImpl.h"
+#include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 namespace rx
 {
-class ProgramVk : public ProgramImpl
+class ProgramVk : public ProgramImpl, public vk::CommandGraphResource
 {
   public:
     ProgramVk(const gl::ProgramState &state);

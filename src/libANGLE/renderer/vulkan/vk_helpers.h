@@ -54,10 +54,12 @@ class DynamicBuffer : angle::NonCopyable
     angle::Result invalidate(Context *context);
 
     // This releases resources when they might currently be in use.
-    void release(RendererVk *renderer);
+    void release(Context *context, Serial serial);
+    void release(Context *context, const ContextSerialMap &serials);
 
     // This releases all the buffers that have been allocated since this was last called.
-    void releaseRetainedBuffers(RendererVk *renderer);
+    void releaseRetainedBuffers(Context *context, Serial serial);
+    void releaseRetainedBuffers(Context *context, const ContextSerialMap &serials);
 
     // This frees resources immediately.
     void destroy(VkDevice device);
@@ -154,6 +156,7 @@ class LineLoopHelper final : public vk::CommandGraphResource
                                                       VkDeviceSize *bufferOffsetOut);
 
     void destroy(VkDevice device);
+    void release(Context *context, const ContextSerialMap &serials);
 
     static void Draw(uint32_t count, CommandBuffer *commandBuffer);
 
@@ -193,9 +196,8 @@ class ImageHelper final : angle::NonCopyable
                                 StagingUsage usage);
 
     VkImageAspectFlags getAspectFlags() const;
-    void release(Serial serial, RendererVk *renderer);
+    void release(Context *context, const ContextSerialMap &serials);
     void destroy(VkDevice device);
-    void dumpResources(Serial serial, std::vector<GarbageObject> *garbageQueue);
 
     void init2DWeakReference(VkImage handle,
                              const gl::Extents &extents,

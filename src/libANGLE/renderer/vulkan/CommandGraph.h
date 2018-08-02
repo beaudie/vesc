@@ -32,13 +32,13 @@ class CommandGraphResource
     virtual ~CommandGraphResource();
 
     // Returns true if the resource is in use by the renderer.
-    bool isResourceInUse(RendererVk *renderer) const;
+    bool isResourceInUse(Context *context) const;
 
     // Sets up dependency relations. 'this' resource is the resource being written to.
-    void addWriteDependency(CommandGraphResource *writingResource);
+    void addWriteDependency(Context *context, CommandGraphResource *writingResource);
 
     // Sets up dependency relations. 'this' resource is the resource being read.
-    void addReadDependency(CommandGraphResource *readingResource);
+    void addReadDependency(Context *context, CommandGraphResource *readingResource);
 
   protected:
     // Allocates a write node via getNewWriteNode and returns a started command buffer.
@@ -46,7 +46,7 @@ class CommandGraphResource
     angle::Result beginWriteResource(Context *context, CommandBuffer **commandBufferOut);
 
     // Check if we have started writing outside a RenderPass.
-    bool hasStartedWriteResource() const;
+    bool hasStartedWriteResource(Context *context) const;
 
     // Starts rendering to an existing command buffer for the resource.
     // The started command buffer will render outside of a RenderPass.
@@ -64,33 +64,65 @@ class CommandGraphResource
 
     // Checks if we're in a RenderPass, returning true if so. Updates serial internally.
     // Returns the started command buffer in commandBufferOut.
-    bool appendToStartedRenderPass(RendererVk *renderer, CommandBuffer **commandBufferOut);
+    bool appendToStartedRenderPass(Context *context, CommandBuffer **commandBufferOut);
 
     // Accessor for RenderPass RenderArea.
-    const gl::Rectangle &getRenderPassRenderArea() const;
+    const gl::Rectangle &getRenderPassRenderArea(Context *context) const;
 
     // Called when 'this' object changes, but we'd like to start a new command buffer later.
-    void onResourceChanged(RendererVk *renderer);
+    void onResourceChanged(Context *context);
 
     // Get the current queue serial for this resource. Only used to release resources.
-    Serial getStoredQueueSerial() const;
+    Serial getStoredQueueSerial(Context *context) const;
+
+    ContextSerialMap getStoredQueueSerials() const;
 
   private:
-    void onWriteImpl(CommandGraphNode *writingNode, Serial currentSerial);
+    struct PerContextData
+    {
+      public:
+        Serial getStoredQueueSerial() const;
 
-    // Returns true if this node has a current writing node with no children.
-    bool hasChildlessWritingNode() const;
+        bool isResourceInUse(Context *context) const;
 
-    // Checks if we're in a RenderPass without children.
-    bool hasStartedRenderPass() const;
+        void addWriteDependency(PerContextData *writingResource);
 
-    // Updates the in-use serial tracked for this resource. Will clear dependencies if the resource
-    // was not used in this set of command nodes.
-    void updateQueueSerial(Serial queueSerial);
+        void addReadDependency(PerContextData *readingResource);
 
-    Serial mStoredQueueSerial;
-    std::vector<CommandGraphNode *> mCurrentReadingNodes;
-    CommandGraphNode *mCurrentWritingNode;
+        angle::Result beginWriteResource(Context *context, CommandBuffer **commandBufferOut);
+
+        angle::Result appendWriteResource(Context *context, CommandBuffer **commandBufferOut);
+
+        bool hasStartedWriteResource() const;
+
+        angle::Result beginRenderPass(Context *context,
+                                      const Framebuffer &framebuffer,
+                                      const gl::Rectangle &renderArea,
+                                      const RenderPassDesc &renderPassDesc,
+                                      const std::vector<VkClearValue> &clearValues,
+                                      CommandBuffer **commandBufferOut) const;
+
+        bool appendToStartedRenderPass(Context *context, CommandBuffer **commandBufferOut);
+
+        const gl::Rectangle &getRenderPassRenderArea() const;
+
+        void onResourceChanged(Context *context);
+
+      private:
+        void onWriteImpl(CommandGraphNode *writingNode, Serial currentSerial);
+
+        bool hasChildlessWritingNode() const;
+
+        bool hasStartedRenderPass() const;
+
+        void updateQueueSerial(Serial queueSerial);
+
+        Serial serial;
+        std::vector<CommandGraphNode *> currentReadingNodes;
+        CommandGraphNode *currentWritingNode = nullptr;
+    };
+
+    std::map<Context *, PerContextData> mContextData;
 };
 
 enum class VisitedState
@@ -133,7 +165,6 @@ class CommandGraph final : angle::NonCopyable
     CommandGraphNode *allocateNode();
 
     angle::Result submitCommands(Context *context,
-                                 Serial serial,
                                  RenderPassCache *renderPassCache,
                                  CommandPool *commandPool,
                                  CommandBuffer *primaryCommandBufferOut);
