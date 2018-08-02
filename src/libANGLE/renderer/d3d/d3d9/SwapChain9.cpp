@@ -419,6 +419,11 @@ egl::Error SwapChain9::getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLui
     return egl::EglBadSurface();
 }
 
+bool SwapChain9::isStereo() const
+{
+    return false;
+}
+
 void SwapChain9::recreate()
 {
     if (!mSwapChain)

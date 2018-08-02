@@ -29,6 +29,8 @@ class SurfaceGL : public SurfaceImpl
 
     virtual egl::Error makeCurrent() = 0;
     virtual egl::Error unMakeCurrent();
+
+    EGLint getCreatedMultiviewViewCount() const override;
 };
 
 }

@@ -66,6 +66,13 @@ FramebufferTextureMultiviewSideBySideANGLE(GLenum target,
                                            GLsizei numViews,
                                            const GLint *viewportOffsets);
 
+// GL_EXT_multiview_draw_buffers
+ANGLE_EXPORT void GL_APIENTRY ReadBufferIndexedEXT(GLenum src, GLint index);
+ANGLE_EXPORT void GL_APIENTRY DrawBuffersIndexedEXT(GLint n,
+                                                    const GLenum *location,
+                                                    const GLint *indices);
+ANGLE_EXPORT void GL_APIENTRY GetIntegeri_vEXT(GLenum target, GLuint index, GLint *data);
+
 // GL_ANGLE_request_extension
 ANGLE_EXPORT void GL_APIENTRY RequestExtensionANGLE(const GLchar *name);
 

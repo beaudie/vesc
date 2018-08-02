@@ -29,7 +29,8 @@ class SampleApplication
                       EGLint glesMajorVersion = 2,
                       EGLint glesMinorVersion = 0,
                       size_t width            = 1280,
-                      size_t height           = 720);
+                      size_t height           = 720,
+                      bool enableStereo       = false);
     virtual ~SampleApplication();
 
     virtual bool initialize();
