@@ -459,7 +459,6 @@ gl::Error TextureVk::setImage(const gl::Context *context,
                               const uint8_t *pixels)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
 
     // Convert internalFormat to sized internal format.
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat, type);
@@ -473,7 +472,7 @@ gl::Error TextureVk::setImage(const gl::Context *context,
     }
 
     // Create a new graph node to store image initialization commands.
-    onResourceChanged(renderer);
+    onResourceChanged(contextVk);
 
     // Handle initial data.
     if (pixels)
@@ -500,7 +499,7 @@ gl::Error TextureVk::setSubImage(const gl::Context *context,
         gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels));
 
     // Create a new graph node to store image initialization commands.
-    onResourceChanged(contextVk->getRenderer());
+    onResourceChanged(contextVk);
 
     return gl::NoError();
 }
@@ -614,7 +613,6 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
                                         destOffset.y + sourceArea.y - sourceArea.y, 0);
 
     ContextVk *contextVk         = vk::GetImpl(context);
-    RendererVk *renderer         = contextVk->getRenderer();
     FramebufferVk *framebufferVk = vk::GetImpl(source);
 
     // For now, favor conformance. We do a CPU readback that does the conversion, and then stage the
@@ -626,7 +624,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
         gl::Extents(clippedSourceArea.width, clippedSourceArea.height, 1), internalFormat,
         framebufferVk));
 
-    onResourceChanged(renderer);
+    onResourceChanged(contextVk);
     framebufferVk->addReadDependency(this);
     return angle::Result::Continue();
 }
@@ -648,7 +646,7 @@ gl::Error TextureVk::copySubTextureImpl(ContextVk *contextVk,
     uint8_t *sourceData = nullptr;
     ANGLE_TRY(source->copyImageDataToBuffer(contextVk, sourceLevel, sourceArea, &sourceData));
 
-    ANGLE_TRY(renderer->finish(contextVk));
+    ANGLE_TRY(contextVk->finish());
 
     // Using the front-end ANGLE format for the colorRead and colorWrite functions.  Otherwise
     // emulated formats like luminance-alpha would not know how to interpret the data.
@@ -676,7 +674,7 @@ gl::Error TextureVk::copySubTextureImpl(ContextVk *contextVk,
                       unpackUnmultiplyAlpha);
 
     // Create a new graph node to store image initialization commands.
-    onResourceChanged(contextVk->getRenderer());
+    onResourceChanged(contextVk);
 
     return angle::Result::Continue();
 }
@@ -886,7 +884,6 @@ angle::Result TextureVk::generateMipmapWithBlit(ContextVk *contextVk)
 angle::Result TextureVk::generateMipmapWithCPU(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
 
     bool newBufferAllocated            = false;
     const gl::Extents baseLevelExtents = mImage.getExtents();
@@ -932,7 +929,7 @@ angle::Result TextureVk::generateMipmapWithCPU(const gl::Context *context)
     commandBuffer->copyImageToBuffer(mImage.getImage(), mImage.getCurrentLayout(), copyBufferHandle,
                                      1, &region);
 
-    ANGLE_TRY(renderer->finish(contextVk));
+    ANGLE_TRY(contextVk->finish());
 
     const uint32_t levelCount = getLevelCount();
 
@@ -990,7 +987,7 @@ gl::Error TextureVk::generateMipmap(const gl::Context *context)
     }
 
     // We're changing this textureVk content, make sure we let the graph know.
-    onResourceChanged(renderer);
+    onResourceChanged(contextVk);
 
     return gl::NoError();
 }

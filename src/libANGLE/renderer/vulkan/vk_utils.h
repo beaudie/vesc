@@ -93,6 +93,9 @@ enum class TextureDimension
 namespace vk
 {
 struct Format;
+class CommandPool;
+class CommandGraph;
+class Semaphore;
 
 // Abstracts error handling. Implemented by both ContextVk for GL and RendererVk for EGL errors.
 class Context : angle::NonCopyable
@@ -104,6 +107,13 @@ class Context : angle::NonCopyable
     virtual void handleError(VkResult result, const char *file, unsigned int line) = 0;
     VkDevice getDevice() const;
     RendererVk *getRenderer() const { return mRenderer; }
+
+    virtual angle::Result flush(const Semaphore &waitSemaphore,
+                                const Semaphore &signalSemaphore) = 0;
+    virtual angle::Result finish()                                = 0;
+
+    virtual const CommandPool &getCommandPool() const = 0;
+    virtual CommandGraph *getCommandGraph()           = 0;
 
   protected:
     RendererVk *const mRenderer;
