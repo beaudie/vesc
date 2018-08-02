@@ -88,6 +88,12 @@ class FramebufferImpl : angle::NonCopyable
 
     const gl::FramebufferState &getState() const { return mState; }
 
+    virtual void setDrawBuffersIndexed(const gl::Context *context,
+                                       size_t count,
+                                       const GLenum *locations,
+                                       const GLint *indices){};
+    virtual void setReadBufferIndexed(const gl::Context *context, GLenum location, GLint index){};
+
   protected:
     const gl::FramebufferState &mState;
 };

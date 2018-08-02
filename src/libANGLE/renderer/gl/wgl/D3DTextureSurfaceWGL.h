@@ -70,6 +70,8 @@ class D3DTextureSurfaceWGL : public SurfaceWGL
 
     const angle::Format *getD3DTextureColorFormat() const override;
 
+    EGLint getCreatedMultiviewViewCount() const override;
+
   private:
     EGLenum mBuftype;
     EGLClientBuffer mClientBuffer;

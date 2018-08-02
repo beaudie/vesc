@@ -124,7 +124,8 @@ void ImageSibling::setSourceEGLImageInitState(gl::InitState initState) const
 }
 
 bool ImageSibling::isRenderable(const gl::Context *context,
-                                GLenum binding,
+                                GLenum bindingLocation,
+                                GLint bindingIndex,
                                 const gl::ImageIndex &imageIndex) const
 {
     ASSERT(isEGLImageTarget());
@@ -136,7 +137,7 @@ ImageState::ImageState(EGLenum target, ImageSibling *buffer, const AttributeMap 
       imageIndex(GetImageIndex(target, attribs)),
       source(buffer),
       targets(),
-      format(buffer->getAttachmentFormat(GL_NONE, imageIndex)),
+      format(buffer->getAttachmentFormat(GL_NONE, 0, imageIndex)),
       size(buffer->getAttachmentSize(imageIndex)),
       samples(buffer->getAttachmentSamples(imageIndex)),
       sourceType(target)

@@ -80,6 +80,12 @@ class FramebufferGL : public FramebufferImpl
     gl::Error syncState(const gl::Context *context,
                         const gl::Framebuffer::DirtyBits &dirtyBits) override;
 
+    void setDrawBuffersIndexed(const gl::Context *context,
+                               size_t count,
+                               const GLenum *locations,
+                               const GLint *indices) override;
+    void setReadBufferIndexed(const gl::Context *context, GLenum location, GLint index) override;
+
     GLuint getFramebufferID() const;
     bool isDefault() const;
 
