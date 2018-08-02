@@ -2756,9 +2756,21 @@ void ProgramD3D::updateCachedOutputLayout(const gl::Context *context,
 
         if (colorbuffer)
         {
-            auto binding = colorbuffer->getBinding() == GL_BACK ? GL_COLOR_ATTACHMENT0
-                                                                : colorbuffer->getBinding();
-            mPixelShaderOutputLayoutCache.push_back(binding);
+            GLenum bindingLocation = GL_NONE;
+            switch (colorbuffer->getBindingLocation())
+            {
+                case GL_BACK:
+                    bindingLocation = GL_COLOR_ATTACHMENT0;
+                    break;
+                case GL_MULTIVIEW_EXT:
+                case GL_COLOR_ATTACHMENT_EXT:
+                    bindingLocation = GL_COLOR_ATTACHMENT0 + colorbuffer->getBindingIndex();
+                    break;
+                default:
+                    bindingLocation = colorbuffer->getBindingLocation();
+                    break;
+            }
+            mPixelShaderOutputLayoutCache.push_back(bindingLocation);
         }
         else
         {

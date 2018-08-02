@@ -810,6 +810,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     void drawBuffers(GLsizei n, const GLenum *bufs);
     void readBuffer(GLenum mode);
 
+    void drawBuffersIndexed(GLint n, const GLenum *locations, const GLint *indices);
+    void readBufferIndexed(GLenum src, GLint index);
+
     void discardFramebuffer(GLenum target, GLsizei numAttachments, const GLenum *attachments);
     void invalidateFramebuffer(GLenum target, GLsizei numAttachments, const GLenum *attachments);
     void invalidateSubFramebuffer(GLenum target,

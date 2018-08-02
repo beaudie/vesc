@@ -235,4 +235,9 @@ bool IOSurfaceSurfaceCGL::validateAttributes(EGLClientBuffer buffer,
     return true;
 }
 
+EGLint IOSurfaceSurfaceCGL::getCreatedMultiviewViewCount() const
+{
+    return 1;
+}
+
 }  // namespace rx

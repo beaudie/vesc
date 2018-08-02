@@ -93,7 +93,8 @@ class Renderer9 : public RendererD3D
                                   GLenum backBufferFormat,
                                   GLenum depthBufferFormat,
                                   EGLint orientation,
-                                  EGLint samples) override;
+                                  EGLint samples,
+                                  EGLint multiviewCount) override;
     egl::Error getD3DTextureInfo(const egl::Config *configuration,
                                  IUnknown *d3dTexture,
                                  EGLint *width,
@@ -400,6 +401,8 @@ class Renderer9 : public RendererD3D
     DebugAnnotator9 *getAnnotator() { return &mAnnotator; }
 
     gl::Version getMaxSupportedESVersion() const override;
+
+    EGLint getMultiviewCount() const override;
 
     angle::Result clearRenderTarget(const gl::Context *context,
                                     RenderTargetD3D *renderTarget,

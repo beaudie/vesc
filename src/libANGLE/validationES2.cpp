@@ -2714,11 +2714,140 @@ bool ValidateDrawBuffersEXT(Context *context, GLsizei n, const GLenum *bufs)
 {
     if (!context->getExtensions().drawBuffers)
     {
-        context->handleError(InvalidOperation() << "Extension not supported.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ExtensionNotSupported);
         return false;
     }
 
     return ValidateDrawBuffersBase(context, n, bufs);
+}
+
+bool ValidateDrawBuffersIndexedEXT(Context *context,
+                                   GLint n,
+                                   const GLenum *location,
+                                   const GLint *indices)
+{
+    if (!context->getExtensions().multiviewDrawBuffers)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ExtensionNotSupported);
+        return false;
+    }
+
+    if (n < 0)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidNegativeNumber);
+        return false;
+    }
+
+    Framebuffer *framebuffer = context->getGLState().getDrawFramebuffer();
+    GLuint frameBufferId     = framebuffer->id();
+
+    for (GLint i = 0; i < n; i++)
+    {
+        switch (location[i])
+        {
+            case GL_MULTIVIEW_EXT:
+                if (frameBufferId == 0)
+                {
+                    if (indices[i] < 0 || indices[i] >= framebuffer->getMultiviewViewCount())
+                    {
+                        ANGLE_VALIDATION_ERR(context, InvalidOperation(),
+                                             InvalidIndexRangeMultiview);
+                        return false;
+                    }
+                }
+                else
+                {
+                    ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidLocationColorAttach);
+                    return false;
+                }
+                break;
+
+            case GL_COLOR_ATTACHMENT_EXT:
+                if (frameBufferId == 0)
+                {
+                    ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidLocationMultiview);
+                    return false;
+                }
+                else
+                {
+                    if (indices[i] < 0 ||
+                        indices[i] >= (GLint)context->getCaps().maxColorAttachments)
+                    {
+                        ANGLE_VALIDATION_ERR(context, InvalidOperation(),
+                                             InvalidIndexRangeColorAttach);
+                        return false;
+                    }
+                }
+                break;
+
+            case GL_NONE:
+                break;
+        }
+    }
+    return true;
+}
+
+bool ValidateReadBufferIndexedEXT(Context *context, GLenum src, GLint index)
+{
+    if (!context->getExtensions().multiviewDrawBuffers)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ExtensionNotSupported);
+        return false;
+    }
+
+    gl::Framebuffer *framebuffer = context->getGLState().getDrawFramebuffer();
+    GLuint frameBufferId         = framebuffer->id();
+
+    switch (src)
+    {
+        case GL_MULTIVIEW_EXT:
+            if (frameBufferId == 0)
+            {
+                if (index < 0 || index >= framebuffer->getMultiviewViewCount())
+                {
+                    ANGLE_VALIDATION_ERR(context, InvalidOperation(), InvalidIndexRangeMultiview);
+                    return false;
+                }
+            }
+            else
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidLocationColorAttach);
+                return false;
+            }
+            break;
+
+        case GL_COLOR_ATTACHMENT_EXT:
+            if (frameBufferId == 0)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidLocationMultiview);
+                return false;
+            }
+            else
+            {
+                if (index < 0 || index >= (GLint)context->getCaps().maxColorAttachments)
+                {
+                    ANGLE_VALIDATION_ERR(context, InvalidOperation(), InvalidIndexRangeColorAttach);
+                    return false;
+                }
+            }
+            break;
+
+        case GL_NONE:
+            break;
+    }
+
+    return true;
+}
+
+bool ValidateGetIntegeri_vEXT(Context *context, GLenum target, GLuint index, GLint *data)
+{
+    if (!context->getExtensions().multiviewDrawBuffers)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ExtensionNotSupported);
+        return false;
+    }
+
+    return ValidateIndexedStateQuery(context, target, index, nullptr);
 }
 
 bool ValidateTexImage2D(Context *context,

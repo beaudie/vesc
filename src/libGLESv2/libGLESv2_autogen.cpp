@@ -3634,6 +3634,22 @@ void *GL_APIENTRY glMapBufferRangeEXT(GLenum target,
     return gl::MapBufferRangeEXT(target, offset, length, access);
 }
 
+// GL_EXT_multiview_draw_buffers
+void GL_APIENTRY glDrawBuffersIndexedEXT(GLint n, const GLenum *location, const GLint *indices)
+{
+    return gl::DrawBuffersIndexedEXT(n, location, indices);
+}
+
+void GL_APIENTRY glGetIntegeri_vEXT(GLenum target, GLuint index, GLint *data)
+{
+    return gl::GetIntegeri_vEXT(target, index, data);
+}
+
+void GL_APIENTRY glReadBufferIndexedEXT(GLenum src, GLint index)
+{
+    return gl::ReadBufferIndexedEXT(src, index);
+}
+
 // GL_EXT_occlusion_query_boolean
 
 // GL_EXT_robustness
@@ -4918,6 +4934,14 @@ void GL_APIENTRY glDrawBuffersEXTContextANGLE(GLeglContext ctx, GLsizei n, const
     return gl::DrawBuffersEXTContextANGLE(ctx, n, bufs);
 }
 
+void GL_APIENTRY glDrawBuffersIndexedEXTContextANGLE(GLeglContext ctx,
+                                                     GLint n,
+                                                     const GLenum *location,
+                                                     const GLint *indices)
+{
+    return gl::DrawBuffersIndexedEXTContextANGLE(ctx, n, location, indices);
+}
+
 void GL_APIENTRY glDrawElementsContextANGLE(GLeglContext ctx,
                                             GLenum mode,
                                             GLsizei count,
@@ -5528,6 +5552,14 @@ void GL_APIENTRY glGetIntegeri_vContextANGLE(GLeglContext ctx,
                                              GLint *data)
 {
     return gl::GetIntegeri_vContextANGLE(ctx, target, index, data);
+}
+
+void GL_APIENTRY glGetIntegeri_vEXTContextANGLE(GLeglContext ctx,
+                                                GLenum target,
+                                                GLuint index,
+                                                GLint *data)
+{
+    return gl::GetIntegeri_vEXTContextANGLE(ctx, target, index, data);
 }
 
 void GL_APIENTRY glGetIntegervContextANGLE(GLeglContext ctx, GLenum pname, GLint *data)
@@ -6949,6 +6981,11 @@ GLbitfield GL_APIENTRY glQueryMatrixxOESContextANGLE(GLeglContext ctx,
 void GL_APIENTRY glReadBufferContextANGLE(GLeglContext ctx, GLenum src)
 {
     return gl::ReadBufferContextANGLE(ctx, src);
+}
+
+void GL_APIENTRY glReadBufferIndexedEXTContextANGLE(GLeglContext ctx, GLenum src, GLint index)
+{
+    return gl::ReadBufferIndexedEXTContextANGLE(ctx, src, index);
 }
 
 void GL_APIENTRY glReadPixelsContextANGLE(GLeglContext ctx,

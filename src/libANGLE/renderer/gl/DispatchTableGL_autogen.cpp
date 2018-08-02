@@ -5125,6 +5125,8 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
     if (extensions.count("GL_EXT_multiview_draw_buffers") != 0)
     {
         getIntegeri_v = &glGetIntegeri_vNULL;
+        drawBuffersIndexedEXT = &glDrawBuffersIndexedEXTNULL;
+        readBufferIndexedEXT  = &glReadBufferIndexedEXTNULL;
     }
 
     if (extensions.count("GL_EXT_occlusion_query_boolean") != 0)

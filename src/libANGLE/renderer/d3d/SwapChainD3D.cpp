@@ -31,4 +31,5 @@ SwapChainD3D::~SwapChainD3D()
 {
     SafeRelease(mD3DTexture);
 }
+
 }  // namespace rx

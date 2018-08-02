@@ -101,7 +101,8 @@ angle::Result RenderbufferD3D::getRenderTarget(const gl::Context *context,
 }
 
 angle::Result RenderbufferD3D::getAttachmentRenderTarget(const gl::Context *context,
-                                                         GLenum binding,
+                                                         GLenum /*bindingLocation*/,
+                                                         GLint /*bindingIndex*/,
                                                          const gl::ImageIndex &imageIndex,
                                                          FramebufferAttachmentRenderTarget **rtOut)
 {

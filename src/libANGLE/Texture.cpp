@@ -1479,7 +1479,9 @@ Extents Texture::getAttachmentSize(const ImageIndex &imageIndex) const
     return mState.getImageDesc(imageIndex).size;
 }
 
-Format Texture::getAttachmentFormat(GLenum /*binding*/, const ImageIndex &imageIndex) const
+Format Texture::getAttachmentFormat(GLenum /*bindingLocation*/,
+                                    GLint /*bindingIndex*/,
+                                    const ImageIndex &imageIndex) const
 {
     // As an ImageIndex that represents an entire level of a cube map corresponds to 6 ImageDescs,
     // we only allow querying ImageDesc on a complete cube map, and this ImageDesc is exactly the
@@ -1509,14 +1511,15 @@ GLsizei Texture::getAttachmentSamples(const ImageIndex &imageIndex) const
 }
 
 bool Texture::isRenderable(const Context *context,
-                           GLenum binding,
+                           GLenum bindingLocation,
+                           GLint bindingIndex,
                            const ImageIndex &imageIndex) const
 {
     if (isEGLImageTarget())
     {
-        return ImageSibling::isRenderable(context, binding, imageIndex);
+        return ImageSibling::isRenderable(context, bindingLocation, bindingIndex, imageIndex);
     }
-    return getAttachmentFormat(binding, imageIndex)
+    return getAttachmentFormat(bindingLocation, bindingIndex, imageIndex)
         .info->textureAttachmentSupport(context->getClientVersion(), context->getExtensions());
 }
 

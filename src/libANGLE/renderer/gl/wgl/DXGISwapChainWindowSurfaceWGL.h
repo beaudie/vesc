@@ -64,6 +64,8 @@ class DXGISwapChainWindowSurfaceWGL : public SurfaceWGL
 
     HDC getDC() const override;
 
+    EGLint getCreatedMultiviewViewCount() const override;
+
   private:
     egl::Error setObjectsLocked(bool locked);
     egl::Error checkForResize();

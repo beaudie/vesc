@@ -1057,6 +1057,31 @@ void GenerateCaps(const FunctionsGL *functions,
     extensions->textureMultisample = functions->isAtLeastGL(gl::Version(3, 2)) ||
                                      functions->hasGLExtension("GL_ARB_texture_multisample");
 
+    // See if glDrawBuffers on the back right buffer works.
+    // Some GPU drivers allow a stereo pixel format, but don't
+    // allow using stereo buffers.  This checks for that, and
+    // disables multiview draw buffers if it doesn't work.
+    if (functions->drawBuffers)
+    {
+        // Clear any errors
+        GLenum err    = functions->getError();
+
+        // Try to set the back right buffer.
+        GLenum buffer = GL_BACK_RIGHT;
+        functions->drawBuffers(1, &buffer);
+        err = functions->getError();
+
+        // Reset the default
+        buffer = GL_BACK;
+        functions->drawBuffers(1, &buffer);
+        extensions->multiviewDrawBuffers =
+            functions->isAtLeastGL(gl::Version(2, 0)) && err == GL_NO_ERROR;
+    }
+    else
+    {
+        extensions->multiviewDrawBuffers = false;
+    }
+
     // NV_path_rendering
     // We also need interface query which is available in
     // >= 4.3 core or ARB_interface_query or >= GLES 3.1

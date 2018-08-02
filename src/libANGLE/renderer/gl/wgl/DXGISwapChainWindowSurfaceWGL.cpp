@@ -305,6 +305,11 @@ HDC DXGISwapChainWindowSurfaceWGL::getDC() const
     return mWGLDevice;
 }
 
+EGLint DXGISwapChainWindowSurfaceWGL::getCreatedMultiviewViewCount() const
+{
+    return 1;
+}
+
 egl::Error DXGISwapChainWindowSurfaceWGL::setObjectsLocked(bool locked)
 {
     if (mRenderbufferBufferHandle == nullptr)
