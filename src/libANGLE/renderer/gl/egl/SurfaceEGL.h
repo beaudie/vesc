@@ -45,6 +45,8 @@ class SurfaceEGL : public SurfaceGL
 
     EGLSurface getSurface() const;
 
+    EGLint getCreatedMultiviewViewCount() const override;
+
   protected:
     const FunctionsEGL *mEGL;
     EGLConfig mConfig;

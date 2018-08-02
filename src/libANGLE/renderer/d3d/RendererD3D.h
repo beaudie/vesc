@@ -184,7 +184,8 @@ class RendererD3D : public BufferFactoryD3D
                                           GLenum backBufferFormat,
                                           GLenum depthBufferFormat,
                                           EGLint orientation,
-                                          EGLint samples)                          = 0;
+                                          EGLint samples,
+                                          EGLint multiviewCount)                   = 0;
     virtual egl::Error getD3DTextureInfo(const egl::Config *configuration,
                                          IUnknown *d3dTexture,
                                          EGLint *width,
@@ -388,8 +389,10 @@ class RendererD3D : public BufferFactoryD3D
 
     virtual gl::Version getMaxSupportedESVersion() const = 0;
 
-    angle::Result initRenderTarget(const gl::Context *context, RenderTargetD3D *renderTarget);
+    virtual EGLint getMultiviewCount() const             = 0;
 
+    angle::Result initRenderTarget(const gl::Context *context, RenderTargetD3D *renderTarget);
+    
     virtual angle::Result getIncompleteTexture(const gl::Context *context,
                                                gl::TextureType type,
                                                gl::Texture **textureOut) = 0;

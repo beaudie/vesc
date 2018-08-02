@@ -1186,6 +1186,9 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
 
     // All D3D feature levels support robust resource init
     outExtensions->robustResourceInitialization = true;
+
+    // No multiview window yet.
+    outExtensions->multiviewWindow = false;
 }
 
 angle::Result Renderer11::flush(Context11 *context11)
@@ -1383,10 +1386,12 @@ SwapChainD3D *Renderer11::createSwapChain(NativeWindowD3D *nativeWindow,
                                           GLenum backBufferFormat,
                                           GLenum depthBufferFormat,
                                           EGLint orientation,
-                                          EGLint samples)
+                                          EGLint samples,
+                                          EGLint multiviewCount)
 {
     return new SwapChain11(this, GetAs<NativeWindow11>(nativeWindow), shareHandle, d3dTexture,
-                           backBufferFormat, depthBufferFormat, orientation, samples);
+                           backBufferFormat, depthBufferFormat, orientation, samples,
+                           multiviewCount);
 }
 
 void *Renderer11::getD3DDevice()
@@ -3656,6 +3661,12 @@ angle::Result Renderer11::getScratchMemoryBuffer(Context11 *context11,
 gl::Version Renderer11::getMaxSupportedESVersion() const
 {
     return d3d11_gl::GetMaximumClientVersion(mRenderer11DeviceCaps.featureLevel);
+}
+
+EGLint Renderer11::getMultiviewCount() const
+{
+    // TODO: Support EGL_multiview_window with D3D11.  anglebug.com/2754
+    return 0;
 }
 
 gl::DebugAnnotator *Renderer11::getAnnotator()

@@ -1157,6 +1157,22 @@ Error ValidateCreateWindowSurface(Display *display,
                 }
                 break;
 
+            case EGL_MULTIVIEW_VIEW_COUNT_EXT:
+                if (!display->getExtensions().multiviewWindow)
+                {
+                    return EglBadAttribute() << "Attribute EGL_MULTIVIEW_VIEW_COUNT_EXT requires "
+                                                "EGL_EXT_multiview_window.";
+                }
+                {
+                    const EGLint viewCount = static_cast<EGLint>(value);
+                    if (viewCount < 1)
+                    {
+                        return EglBadParameter()
+                               << "EGL_MULTIVIEW_VIEW_COUNT_EXT must be at least 1.";
+                    }
+                }
+                break;
+
             default:
                 return EglBadAttribute();
         }
@@ -3042,6 +3058,7 @@ Error ValidateQuerySurface(const Display *display,
         case EGL_TEXTURE_TARGET:
         case EGL_VERTICAL_RESOLUTION:
         case EGL_WIDTH:
+        case EGL_MULTIVIEW_VIEW_COUNT_EXT:
             break;
 
         case EGL_POST_SUB_BUFFER_SUPPORTED_NV:
@@ -3117,6 +3134,7 @@ Error ValidateQueryContext(const Display *display,
         case EGL_CONTEXT_CLIENT_TYPE:
         case EGL_CONTEXT_CLIENT_VERSION:
         case EGL_RENDER_BUFFER:
+        case EGL_MULTIVIEW_VIEW_COUNT_EXT:
             break;
 
         case EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE:

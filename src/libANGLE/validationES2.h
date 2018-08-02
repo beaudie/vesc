@@ -33,6 +33,13 @@ bool ValidateDiscardFramebufferEXT(Context *context,
 
 bool ValidateDrawBuffersEXT(Context *context, GLsizei n, const GLenum *bufs);
 
+bool ValidateDrawBuffersIndexedEXT(Context *context,
+                                   GLint n,
+                                   const GLenum *location,
+                                   const GLint *indices);
+bool ValidateReadBufferIndexedEXT(Context *context, GLenum src, GLint index);
+bool ValidateGetIntegeri_vEXT(Context *context, GLenum target, GLuint index, GLint *data);
+
 bool ValidateBindVertexArrayOES(Context *context, GLuint array);
 bool ValidateDeleteVertexArraysOES(Context *context, GLsizei n, const GLuint *arrays);
 bool ValidateGenVertexArraysOES(Context *context, GLsizei n, GLuint *arrays);

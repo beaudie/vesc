@@ -334,4 +334,9 @@ FramebufferImpl *WindowSurfaceCGL::createDefaultFramebuffer(const gl::Context *c
     return new FramebufferGL(state, framebuffer, true);
 }
 
+EGLint WindowSurfaceCGL::getCreatedMultiviewViewCount() const
+{
+    return 1;
+}
+
 }  // namespace rx

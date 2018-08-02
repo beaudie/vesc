@@ -82,6 +82,12 @@ class SurfaceImpl : public FramebufferAttachmentObjectImpl
         return nullptr;
     }
 
+    virtual EGLint getCreatedMultiviewViewCount() const
+    {
+        UNREACHABLE();
+        return 1;
+    }
+
   protected:
     const egl::SurfaceState &mState;
 };

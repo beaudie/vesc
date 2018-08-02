@@ -373,4 +373,5 @@ void DisplayD3D::handleError(HRESULT hr,
 
     mStoredErrorString = errorStream.str();
 }
+
 }  // namespace rx

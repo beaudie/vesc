@@ -57,7 +57,8 @@ SwapChain11::SwapChain11(Renderer11 *renderer,
                          GLenum backBufferFormat,
                          GLenum depthBufferFormat,
                          EGLint orientation,
-                         EGLint samples)
+                         EGLint samples,
+                         EGLint multiviewCount)
     : SwapChainD3D(shareHandle, d3dTexture, backBufferFormat, depthBufferFormat),
       mRenderer(renderer),
       mWidth(-1),
@@ -91,7 +92,8 @@ SwapChain11::SwapChain11(Renderer11 *renderer,
       mPassThroughRS(),
       mColorRenderTarget(this, renderer, false),
       mDepthStencilRenderTarget(this, renderer, true),
-      mEGLSamples(samples)
+      mEGLSamples(samples),
+      mMultiviewCount(1)  // This gets changed to multiviewCount when DX11 stereo support is added.
 {
     // Sanity check that if present path fast is active then we're using the default orientation
     ASSERT(!mRenderer->presentPathFastEnabled() || orientation == 0);
@@ -604,9 +606,12 @@ EGLint SwapChain11::reset(DisplayD3D *displayD3D,
 
     if (mNativeWindow->getNativeWindow())
     {
-        HRESULT hr = mNativeWindow->createSwapChain(device, mRenderer->getDxgiFactory(),
-                                                    getSwapChainNativeFormat(), backbufferWidth,
-                                                    backbufferHeight, getD3DSamples(), &mSwapChain);
+        HRESULT hr = mNativeWindow->createSwapChain(
+            device, mRenderer->getDxgiFactory(), getSwapChainNativeFormat(), backbufferWidth,
+            backbufferHeight, getD3DSamples(), mMultiviewCount, &mSwapChain);
+
+        // TODO: add this when DX11 Stereo is added
+        // mMultiviewCount = mNativeWindow->getMultiviewCount();
 
         if (FAILED(hr))
         {
@@ -1067,6 +1072,11 @@ egl::Error SwapChain11::getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLu
 UINT SwapChain11::getD3DSamples() const
 {
     return (mEGLSamples == 0) ? 1 : mEGLSamples;
+}
+
+EGLint SwapChain11::getMultiviewCount()
+{
+    return mMultiviewCount;
 }
 
 }  // namespace rx

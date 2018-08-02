@@ -573,6 +573,7 @@ EXPORTS
     glFlushMappedBufferRangeEXT                       @521
     glMapBufferRangeEXT                               @522
 
+
     ; GL_EXT_occlusion_query_boolean
 
     ; GL_EXT_robustness
@@ -1282,3 +1283,8 @@ EXPORTS
     glGetQueryObjectui64vRobustANGLEContextANGLE                  @1194
     glFramebufferTextureMultiviewLayeredANGLEContextANGLE         @1195
     glFramebufferTextureMultiviewSideBySideANGLEContextANGLE      @1196
+
+    ; GL_EXT_multiview_draw_buffers
+    glDrawBuffersIndexedEXT                           @1197
+    glGetIntegeri_vEXT                                @1198
+    glReadBufferIndexedEXT                            @1199

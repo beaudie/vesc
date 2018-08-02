@@ -72,7 +72,7 @@ void ClearMultiviewGL::clearLayeredFBO(const gl::FramebufferState &state,
     const gl::FramebufferAttachment *firstAttachment = state.getFirstNonNullAttachment();
     ASSERT(firstAttachment->getMultiviewLayout() == GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE);
 
-    const auto &drawBuffers = state.getDrawBufferStates();
+    const auto &drawBuffers = state.getDrawBufferStateLocations();
     mFunctions->drawBuffers(static_cast<GLsizei>(drawBuffers.size()), drawBuffers.data());
 
     // Attach the new attachments and clear.

@@ -512,4 +512,9 @@ const angle::Format *D3DTextureSurfaceWGL::getD3DTextureColorFormat() const
     return mColorFormat;
 }
 
+EGLint D3DTextureSurfaceWGL::getCreatedMultiviewViewCount() const
+{
+    return 1;
+}
+
 }  // namespace rx

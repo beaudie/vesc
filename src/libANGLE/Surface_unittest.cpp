@@ -44,11 +44,13 @@ class MockSurfaceImpl : public rx::SurfaceImpl
     MOCK_CONST_METHOD0(getHeight, EGLint());
     MOCK_CONST_METHOD0(isPostSubBufferSupported, EGLint(void));
     MOCK_CONST_METHOD0(getSwapBehavior, EGLint(void));
-    MOCK_METHOD4(getAttachmentRenderTarget,
+    MOCK_METHOD5(getAttachmentRenderTarget,
                  gl::Error(const gl::Context *,
                            GLenum,
+                           GLint,
                            const gl::ImageIndex &,
                            rx::FramebufferAttachmentRenderTarget **));
+    MOCK_CONST_METHOD0(getCreatedMultiviewViewCount, EGLint());
 
     MOCK_METHOD0(destructor, void());
 

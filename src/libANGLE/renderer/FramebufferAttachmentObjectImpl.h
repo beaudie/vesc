@@ -24,7 +24,8 @@ class FramebufferAttachmentObjectImpl : public angle::Subject
     virtual ~FramebufferAttachmentObjectImpl() {}
 
     virtual gl::Error getAttachmentRenderTarget(const gl::Context *context,
-                                                GLenum binding,
+                                                GLenum bindingLocation,
+                                                GLint bindingIndex,
                                                 const gl::ImageIndex &imageIndex,
                                                 FramebufferAttachmentRenderTarget **rtOut);
 
@@ -34,7 +35,8 @@ class FramebufferAttachmentObjectImpl : public angle::Subject
 
 inline gl::Error FramebufferAttachmentObjectImpl::getAttachmentRenderTarget(
     const gl::Context *context,
-    GLenum binding,
+    GLenum bindingLocation,
+    GLint bindingIndex,
     const gl::ImageIndex &imageIndex,
     FramebufferAttachmentRenderTarget **rtOut)
 {
