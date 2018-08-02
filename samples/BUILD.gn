@@ -125,6 +125,12 @@ angle_sample("simple_instancing") {
   ]
 }
 
+angle_sample("simple_stereo") {
+  sources = [
+    "simple_stereo/SimpleStereo.cpp",
+  ]
+}
+
 angle_sample("simple_texture_2d") {
   sources = [
     "simple_texture_2d/SimpleTexture2D.cpp",

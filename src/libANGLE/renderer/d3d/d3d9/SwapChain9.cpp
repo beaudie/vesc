@@ -419,6 +419,11 @@ egl::Error SwapChain9::getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLui
     return egl::EglBadSurface();
 }
 
+EGLint SwapChain9::getMultiviewCount()
+{
+    return 1;
+}
+
 void SwapChain9::recreate()
 {
     if (!mSwapChain)

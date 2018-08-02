@@ -44,6 +44,8 @@ struct ANGLE_EXPORT Matrix4
     static Matrix4 perspective(float fov, float aspectRatio, float n, float f);
     static Matrix4 ortho(float l, float r, float b, float t, float n, float f);
     static Matrix4 rollPitchYaw(float roll, float pitch, float yaw);
+    static Matrix4 lookAt(const angle::Vector3 &eye, const angle::Vector3 &center,
+                          const angle::Vector3 &up);
 
     static Matrix4 invert(const Matrix4 &mat);
     static Matrix4 transpose(const Matrix4 &mat);

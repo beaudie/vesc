@@ -174,7 +174,8 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
     gl::Error releaseTexImage(const gl::Context *context) override;
 
     gl::Error getAttachmentRenderTarget(const gl::Context *context,
-                                        GLenum binding,
+                                        GLenum bindingLocation,
+                                        GLint bindingIndex,
                                         const gl::ImageIndex &imageIndex,
                                         FramebufferAttachmentRenderTarget **rtOut) override;
 
