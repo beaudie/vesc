@@ -206,6 +206,50 @@ void GL_APIENTRY FramebufferTextureMultiviewSideBySideANGLE(GLenum target,
     }
 }
 
+void GL_APIENTRY ReadBufferIndexedEXT(GLenum src, GLint index)
+{
+    EVENT("(GLenum src = 0x%X, GLint index = %d)", src, index);
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!context->skipValidation() && !ValidateReadBufferIndexedEXT(context, src, index))
+        {
+            return;
+        }
+        context->readBufferIndexedEXT(src, index);
+    }
+}
+
+void GL_APIENTRY DrawBuffersIndexedEXT(GLint n, const GLenum *location, const GLint *indices)
+{
+    EVENT("(GLint n = %d, cosnt GLenum *location = 0x%0.8p, const GLint *indices = 0x%0.8p)", n,
+          location, indices);
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!context->skipValidation() &&
+            !ValidateDrawBuffersIndexedEXT(context, n, location, indices))
+        {
+            return;
+        }
+        context->drawBuffersIndexedEXT(n, location, indices);
+    }
+}
+
+void GL_APIENTRY GetIntegeri_vEXT(GLenum target, GLuint index, GLint *data)
+{
+    EVENT("(GLenum target = 0x%X, GLuint index = %u, GLint *data = 0x%0.8p)", target, index, data);
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        context->gatherParams<EntryPoint::GetIntegeri_v>(target, index, data);
+        if (context->skipValidation() || ValidateGetIntegeri_vEXT(context, target, index, data))
+        {
+            context->getIntegeri_v(target, index, data);
+        }
+    }
+}
+
 // GL_ANGLE_request_extension
 void GL_APIENTRY RequestExtensionANGLE(const GLchar *name)
 {

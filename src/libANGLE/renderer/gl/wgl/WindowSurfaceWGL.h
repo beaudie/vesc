@@ -52,6 +52,8 @@ class WindowSurfaceWGL : public SurfaceWGL
 
     HDC getDC() const override;
 
+    EGLint getCreatedMultiviewViewCount() const override;
+
   private:
     int mPixelFormat;
 
@@ -61,6 +63,8 @@ class WindowSurfaceWGL : public SurfaceWGL
     const FunctionsWGL *mFunctionsWGL;
 
     EGLint mSwapBehavior;
+
+    bool mStereo;
 };
 
 }

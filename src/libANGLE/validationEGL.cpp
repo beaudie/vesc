@@ -1139,6 +1139,40 @@ Error ValidateCreateWindowSurface(Display *display,
                 }
                 break;
 
+            case EGL_MULTIVIEW_VIEW_COUNT_EXT:
+                if (!display->getExtensions().multiviewWindow)
+                {
+                    return EglBadAttribute() << "Attribute EGL_MULTIVIEW_VIEW_COUNT_EXT requires "
+                                                "EGL_EXT_multiview_window.";
+                }
+                {
+                    const EGLint viewCount = static_cast<EGLint>(value);
+                    if (viewCount < 1)
+                    {
+                        return EglBadParameter()
+                               << "EGL_MULTIVIEW_VIEW_COUNT_EXT must be at least 1.";
+                    }
+                    if (viewCount > 1)
+                    {
+                        if (display->isStereoSupported())
+                        {
+                            if (viewCount > 2)
+                            {
+                                return EglBadMatch() << "EGL_MULTIVIEW_VIEW_COUNT_EXT values "
+                                                        "greater than 2 are not supported by the "
+                                                        "specified display and config.";
+                            }
+                        }
+                        else
+                        {
+                            return EglBadMatch() << "EGL_MULTIVIEW_VIEW_COUNT_EXT values greater "
+                                                    "than 1 are not supported by the specified "
+                                                    "display and config.";
+                        }
+                    }
+                }
+                break;
+
             default:
                 return EglBadAttribute();
         }

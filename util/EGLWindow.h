@@ -91,6 +91,9 @@ class ANGLE_EXPORT EGLWindow : angle::NonCopyable
     void setContextProgramCacheEnabled(bool enabled) { mContextProgramCacheEnabled = enabled; }
     void setContextVirtualization(bool enabled) { mContextVirtualization = enabled; }
 
+    void setMultiviewWindowViewCount(EGLint count) { mMultiviewWindowViewCount = count; }
+    EGLint getMultiviewWindowViewCount() const { return mMultiviewWindowViewCount; }
+
     static EGLBoolean FindEGLConfig(EGLDisplay dpy, const EGLint *attrib_list, EGLConfig *config);
 
     void swap();
@@ -165,6 +168,7 @@ class ANGLE_EXPORT EGLWindow : angle::NonCopyable
     Optional<bool> mContextProgramCacheEnabled;
     Optional<bool> mContextVirtualization;
     angle::PlatformMethods *mPlatformMethods;
+    EGLint mMultiviewWindowViewCount;
 };
 
 ANGLE_EXPORT bool CheckExtensionExists(const char *allExtensions, const std::string &extName);

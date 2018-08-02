@@ -138,7 +138,8 @@ class Renderer11 : public RendererD3D
                                   GLenum backBufferFormat,
                                   GLenum depthBufferFormat,
                                   EGLint orientation,
-                                  EGLint samples) override;
+                                  EGLint samples,
+                                  bool isStereo) override;
     egl::Error getD3DTextureInfo(const egl::Config *configuration,
                                  IUnknown *d3dTexture,
                                  EGLint *width,
@@ -400,6 +401,8 @@ class Renderer11 : public RendererD3D
     gl::Error getScratchMemoryBuffer(size_t requestedSize, angle::MemoryBuffer **bufferOut);
 
     gl::Version getMaxSupportedESVersion() const override;
+
+    bool isStereoSupported() const override;
 
     gl::Error dispatchCompute(const gl::Context *context,
                               GLuint numGroupsX,

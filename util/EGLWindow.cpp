@@ -123,7 +123,8 @@ EGLWindow::EGLWindow(EGLint glesMajorVersion,
       mDebugLayersEnabled(),
       mContextProgramCacheEnabled(),
       mContextVirtualization(),
-      mPlatformMethods(nullptr)
+      mPlatformMethods(nullptr),
+      mMultiviewWindowViewCount(-1)
 {
 }
 
@@ -214,6 +215,12 @@ bool EGLWindow::initializeDisplayAndSurface(OSWindow *osWindow)
         displayAttributes.push_back(reinterpret_cast<EGLAttrib>(mPlatformMethods));
     }
 
+    if (mMultiviewWindowViewCount > 0)
+    {
+        displayAttributes.push_back(EGL_MULTIVIEW_VIEW_COUNT_EXT);
+        displayAttributes.push_back(mMultiviewWindowViewCount);
+    }
+
     displayAttributes.push_back(EGL_NONE);
 
     mDisplay = eglGetPlatformDisplay(EGL_PLATFORM_ANGLE_ANGLE,
@@ -288,6 +295,13 @@ bool EGLWindow::initializeDisplayAndSurface(OSWindow *osWindow)
     {
         surfaceAttributes.push_back(EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE);
         surfaceAttributes.push_back(mRobustResourceInit.value() ? EGL_TRUE : EGL_FALSE);
+    }
+
+    bool hasMultiviewWindow = strstr(displayExtensions, "EGL_EXT_multiview_window") != nullptr;
+    if (hasMultiviewWindow && (mMultiviewWindowViewCount > 0))
+    {
+        surfaceAttributes.push_back(EGL_MULTIVIEW_VIEW_COUNT_EXT);
+        surfaceAttributes.push_back(mMultiviewWindowViewCount);
     }
 
     surfaceAttributes.push_back(EGL_NONE);

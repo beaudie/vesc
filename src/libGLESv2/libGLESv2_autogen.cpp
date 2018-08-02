@@ -2490,6 +2490,22 @@ void GL_APIENTRY glFramebufferTextureMultiviewSideBySideANGLE(GLenum target,
                                                           numViews, viewportOffsets);
 }
 
+// GL_EXT_multiview_draw_buffers
+void GL_APIENTRY glReadBufferIndexedEXT(GLenum src, GLint index)
+{
+    gl::ReadBufferIndexedEXT(src, index);
+}
+
+void GL_APIENTRY glDrawBuffersIndexedEXT(GLint n, const GLenum *location, const GLint *indices)
+{
+    gl::DrawBuffersIndexedEXT(n, location, indices);
+}
+
+void GL_APIENTRY glGetIntegeri_vEXT(GLenum target, GLuint index, GLint *data)
+{
+    gl::GetIntegeri_vEXT(target, index, data);
+}
+
 // GL_ANGLE_request_extension
 void GL_APIENTRY glRequestExtensionANGLE(const GLchar *name)
 {

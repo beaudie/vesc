@@ -1278,3 +1278,7 @@ EXPORTS
     glGetQueryObjectui64vRobustANGLEContextANGLE                  @1192
     glFramebufferTextureMultiviewLayeredANGLEContextANGLE         @1193
     glFramebufferTextureMultiviewSideBySideANGLEContextANGLE      @1194
+
+	glReadBufferIndexedEXT										  @1195
+    glDrawBuffersIndexedEXT							              @1196
+    glGetIntegeri_vEXT								              @1197

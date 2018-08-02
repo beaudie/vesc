@@ -37,7 +37,8 @@ class RenderbufferVk : public RenderbufferImpl, public vk::CommandGraphResource
     gl::Error setStorageEGLImageTarget(const gl::Context *context, egl::Image *image) override;
 
     gl::Error getAttachmentRenderTarget(const gl::Context *context,
-                                        GLenum binding,
+                                        GLenum bindingLocation,
+                                        GLint bindingIndex,
                                         const gl::ImageIndex &imageIndex,
                                         FramebufferAttachmentRenderTarget **rtOut) override;
 

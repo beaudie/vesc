@@ -76,6 +76,7 @@ class DisplayImpl : public EGLImplFactory
     const egl::Caps &getCaps() const;
 
     const egl::DisplayExtensions &getExtensions() const;
+    virtual bool isStereoSupported() const = 0;
 
   protected:
     const egl::DisplayState &mState;
