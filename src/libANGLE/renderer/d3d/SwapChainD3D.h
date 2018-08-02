@@ -71,6 +71,8 @@ class SwapChainD3D : angle::NonCopyable
 
     virtual egl::Error getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc) = 0;
 
+    virtual EGLint getMultiviewCount() = 0;
+
   protected:
     const GLenum mOffscreenRenderTargetFormat;
     const GLenum mDepthBufferFormat;

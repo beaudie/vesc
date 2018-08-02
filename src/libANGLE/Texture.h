@@ -375,7 +375,9 @@ class Texture final : public RefCountObject, public egl::ImageSibling, public La
 
     // FramebufferAttachmentObject implementation
     Extents getAttachmentSize(const ImageIndex &imageIndex) const override;
-    Format getAttachmentFormat(GLenum binding, const ImageIndex &imageIndex) const override;
+    Format getAttachmentFormat(GLenum bindingLocation,
+                               GLint bindingIndex,
+                               const ImageIndex &imageIndex) const override;
     GLsizei getAttachmentSamples(const ImageIndex &imageIndex) const override;
 
     bool getAttachmentFixedSampleLocations(const ImageIndex &imageIndex) const;
