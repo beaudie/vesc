@@ -127,6 +127,7 @@ class FramebufferD3D : public FramebufferImpl
                                    const gl::Framebuffer *sourceFramebuffer) = 0;
 
     virtual GLenum getRenderTargetImplementationFormat(RenderTargetD3D *renderTarget) const = 0;
+    bool checkValidLocationAndIndex(GLenum drawBufferLocation, size_t attachmentIndex);
 
     RendererD3D *mRenderer;
     Optional<gl::AttachmentList> mColorAttachmentsForRender;

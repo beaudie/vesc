@@ -131,6 +131,8 @@ class DisplayWGL : public DisplayGL
         size_t refCount;
     };
     std::map<IUnknown *, D3DObjectHandle> mRegisteredD3DDevices;
+
+    bool mStereo;
 };
 
 }

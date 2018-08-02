@@ -21,8 +21,8 @@ class FunctionsWGL;
 namespace wgl
 {
 
-PIXELFORMATDESCRIPTOR GetDefaultPixelFormatDescriptor();
-std::vector<int> GetDefaultPixelFormatAttributes(bool preservedSwap);
+PIXELFORMATDESCRIPTOR GetDefaultPixelFormatDescriptor(bool stereo);
+std::vector<int> GetDefaultPixelFormatAttributes(bool preservedSwap, bool stereo);
 
 int QueryWGLFormatAttrib(HDC dc, int format, int attribName, const FunctionsWGL *functions);
 }

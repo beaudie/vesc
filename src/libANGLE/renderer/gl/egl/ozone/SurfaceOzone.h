@@ -47,6 +47,8 @@ class SurfaceOzone : public SurfaceGL
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;
 
+    EGLint getCreatedMultiviewViewCount() const override;
+
   private:
     DisplayOzone::Buffer *mBuffer;
 

@@ -47,7 +47,8 @@ SampleApplication::SampleApplication(std::string name,
                                      EGLint glesMajorVersion,
                                      EGLint glesMinorVersion,
                                      size_t width,
-                                     size_t height)
+                                     size_t height,
+                                     EGLint multiviewWindowViewCount)
     : mName(std::move(name)), mWidth(width), mHeight(height), mRunning(false)
 {
     EGLint requestedRenderer = EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE;
@@ -71,6 +72,8 @@ SampleApplication::SampleApplication(std::string name,
 
     // Disable vsync
     mEGLWindow->setSwapInterval(0);
+
+    mEGLWindow->setMultiviewWindowViewCount(multiviewWindowViewCount);
 }
 
 SampleApplication::~SampleApplication()

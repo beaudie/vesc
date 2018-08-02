@@ -368,6 +368,8 @@ class StateManager11 final : angle::NonCopyable
     angle::Result applyIndexBuffer(const gl::Context *context,
                                    const gl::DrawCallParams &drawCallParams);
 
+    size_t getAttachmentIndex(size_t location, size_t index);
+
     enum DirtyBitType
     {
         DIRTY_BIT_RENDER_TARGET,

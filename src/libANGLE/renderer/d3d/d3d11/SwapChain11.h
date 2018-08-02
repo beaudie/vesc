@@ -28,7 +28,8 @@ class SwapChain11 final : public SwapChainD3D
                 GLenum backBufferFormat,
                 GLenum depthBufferFormat,
                 EGLint orientation,
-                EGLint samples);
+                EGLint samples,
+                EGLint multiviewCount);
     ~SwapChain11() override;
 
     EGLint resize(DisplayD3D *displayD3D, EGLint backbufferWidth, EGLint backbufferHeight) override;
@@ -58,6 +59,8 @@ class SwapChain11 final : public SwapChainD3D
     EGLint getHeight() const { return mHeight; }
     void *getKeyedMutex() override;
     EGLint getSamples() const { return mEGLSamples; }
+
+    EGLint getMultiviewCount() override;
 
     egl::Error getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc) override;
 
@@ -127,6 +130,7 @@ class SwapChain11 final : public SwapChainD3D
 
     EGLint mEGLSamples;
     LONGLONG mQPCFrequency;
+    EGLint mMultiviewCount;
 };
 
 }  // namespace rx
