@@ -70,7 +70,7 @@ class CommandGraphResource
     const gl::Rectangle &getRenderPassRenderArea() const;
 
     // Called when 'this' object changes, but we'd like to start a new command buffer later.
-    void onResourceChanged(RendererVk *renderer);
+    void onResourceChanged(Context *context);
 
     // Get the current queue serial for this resource. Only used to release resources.
     Serial getStoredQueueSerial() const;

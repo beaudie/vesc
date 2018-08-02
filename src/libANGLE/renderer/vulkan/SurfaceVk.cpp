@@ -288,7 +288,7 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     VkInstance instance  = renderer->getInstance();
 
     // We might not need to flush the pipe here.
-    (void)renderer->finish(displayVk);
+    (void)renderer->finishInFlightCommands(displayVk);
 
     mAcquireNextImageSemaphore.destroy(device);
 
@@ -546,12 +546,13 @@ FramebufferImpl *WindowSurfaceVk::createDefaultFramebuffer(const gl::Context *co
 
 egl::Error WindowSurfaceVk::swap(const gl::Context *context)
 {
+    vk::Context *contextVk = vk::GetImpl(context);
     DisplayVk *displayVk = vk::GetImpl(context->getCurrentDisplay());
-    angle::Result result = swapImpl(displayVk);
+    angle::Result result   = swapImpl(contextVk, displayVk);
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 
-angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk)
+angle::Result WindowSurfaceVk::swapImpl(vk::Context *context, DisplayVk *displayVk)
 {
     RendererVk *renderer = displayVk->getRenderer();
 
@@ -564,8 +565,7 @@ angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk)
                                        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                        VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, swapCommands);
 
-    ANGLE_TRY(
-        renderer->flush(displayVk, image.imageAcquiredSemaphore, image.commandsCompleteSemaphore));
+    ANGLE_TRY(context->flush(image.imageAcquiredSemaphore, image.commandsCompleteSemaphore));
 
     VkPresentInfoKHR presentInfo;
     presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;

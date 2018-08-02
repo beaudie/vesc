@@ -61,12 +61,16 @@ class RendererVk : angle::NonCopyable
                                                VkSurfaceKHR surface,
                                                uint32_t *presentQueueOut);
 
-    angle::Result finish(vk::Context *context);
+    angle::Result finishInFlightCommands(vk::Context *context);
+
+    angle::Result finish(vk::Context *context,
+                         vk::CommandGraph *commandGraph,
+                         vk::CommandPool &&commandPool);
     angle::Result flush(vk::Context *context,
+                        vk::CommandGraph *commandGraph,
+                        vk::CommandPool &&commandPool,
                         const vk::Semaphore &waitSemaphore,
                         const vk::Semaphore &signalSemaphore);
-
-    const vk::CommandPool &getCommandPool() const;
 
     const gl::Caps &getNativeCaps() const;
     const gl::TextureCapsMap &getNativeTextureCaps() const;
@@ -132,10 +136,6 @@ class RendererVk : angle::NonCopyable
                                     const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
                                     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
 
-    // This should only be called from ResourceVk.
-    // TODO(jmadill): Keep in ContextVk to enable threaded rendering.
-    vk::CommandGraph *getCommandGraph();
-
     // Issues a new serial for linked shader modules. Used in the pipeline cache.
     Serial issueShaderSerial();
 
@@ -146,11 +146,15 @@ class RendererVk : angle::NonCopyable
     angle::Result initializeDevice(vk::Context *context, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
     angle::Result submitFrame(vk::Context *context,
+                              vk::CommandPool &&commandPool,
                               const VkSubmitInfo &submitInfo,
                               vk::CommandBuffer &&commandBuffer);
     angle::Result checkInFlightCommands(vk::Context *context);
     void freeAllInFlightResources();
-    angle::Result flushCommandGraph(vk::Context *context, vk::CommandBuffer *commandBatch);
+    angle::Result flushCommandGraph(vk::Context *context,
+                                    vk::CommandGraph *commandGraph,
+                                    vk::CommandPool *commandPool,
+                                    vk::CommandBuffer *commandBatch);
     void initFeatures();
 
     mutable bool mCapsInitialized;
@@ -169,7 +173,6 @@ class RendererVk : angle::NonCopyable
     VkQueue mQueue;
     uint32_t mCurrentQueueFamilyIndex;
     VkDevice mDevice;
-    vk::CommandPool mCommandPool;
     SerialFactory mQueueSerialFactory;
     SerialFactory mShaderSerialFactory;
     Serial mLastCompletedQueueSerial;
@@ -196,9 +199,6 @@ class RendererVk : angle::NonCopyable
 
     RenderPassCache mRenderPassCache;
     PipelineCache mPipelineCache;
-
-    // See CommandGraph.h for a desription of the Command Graph.
-    vk::CommandGraph mCommandGraph;
 
     // ANGLE uses a PipelineLayout cache to store compatible pipeline layouts.
     PipelineLayoutCache mPipelineLayoutCache;
