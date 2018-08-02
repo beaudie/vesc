@@ -100,9 +100,10 @@ class MockTextureImpl : public TextureImpl
     MOCK_METHOD2(bindTexImage, gl::Error(const gl::Context *, egl::Surface *));
     MOCK_METHOD1(releaseTexImage, gl::Error(const gl::Context *));
 
-    MOCK_METHOD4(getAttachmentRenderTarget,
+    MOCK_METHOD5(getAttachmentRenderTarget,
                  gl::Error(const gl::Context *,
                            GLenum,
+                           GLint,
                            const gl::ImageIndex &,
                            FramebufferAttachmentRenderTarget **));
 
