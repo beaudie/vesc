@@ -42,7 +42,8 @@ class RenderbufferD3D : public RenderbufferImpl
 
     gl::Error getRenderTarget(const gl::Context *context, RenderTargetD3D **outRenderTarget);
     gl::Error getAttachmentRenderTarget(const gl::Context *context,
-                                        GLenum binding,
+                                        GLenum bindingLocation,
+                                        GLint bindingIndex,
                                         const gl::ImageIndex &imageIndex,
                                         FramebufferAttachmentRenderTarget **rtOut) override;
 

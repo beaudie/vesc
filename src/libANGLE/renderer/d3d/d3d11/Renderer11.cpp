@@ -1186,6 +1186,9 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
 
     // All D3D feature levels support robust resource init
     outExtensions->robustResourceInitialization = true;
+
+    // No multiview window yet.
+    outExtensions->multiviewWindow = false;
 }
 
 gl::Error Renderer11::flush(Context11 *context11)
@@ -1385,10 +1388,11 @@ SwapChainD3D *Renderer11::createSwapChain(NativeWindowD3D *nativeWindow,
                                           GLenum backBufferFormat,
                                           GLenum depthBufferFormat,
                                           EGLint orientation,
-                                          EGLint samples)
+                                          EGLint samples,
+                                          bool isStereo)
 {
     return new SwapChain11(this, GetAs<NativeWindow11>(nativeWindow), shareHandle, d3dTexture,
-                           backBufferFormat, depthBufferFormat, orientation, samples);
+                           backBufferFormat, depthBufferFormat, orientation, samples, isStereo);
 }
 
 void *Renderer11::getD3DDevice()
@@ -3653,6 +3657,12 @@ gl::Error Renderer11::getScratchMemoryBuffer(size_t requestedSize, angle::Memory
 gl::Version Renderer11::getMaxSupportedESVersion() const
 {
     return d3d11_gl::GetMaximumClientVersion(mRenderer11DeviceCaps.featureLevel);
+}
+
+bool Renderer11::isStereoSupported() const
+{
+    // Not yet
+    return false;
 }
 
 gl::DebugAnnotator *Renderer11::getAnnotator()

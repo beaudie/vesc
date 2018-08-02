@@ -84,6 +84,7 @@
             '<(angle_path)/src/tests/gl_tests/MultisampleCompatibilityTest.cpp',
             '<(angle_path)/src/tests/gl_tests/MultithreadingTest.cpp',
             '<(angle_path)/src/tests/gl_tests/MultiviewDrawTest.cpp',
+			'<(angle_path)/src/tests/gl_tests/MultiviewDrawBuffersTest.cpp',
             '<(angle_path)/src/tests/gl_tests/media/pixel.inl',
             '<(angle_path)/src/tests/gl_tests/PackUnpackTest.cpp',
             '<(angle_path)/src/tests/gl_tests/PathRenderingTest.cpp',

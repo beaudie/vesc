@@ -31,4 +31,9 @@ SwapChainD3D::~SwapChainD3D()
 {
     SafeRelease(mD3DTexture);
 }
+
+bool SwapChainD3D::isStereo() const
+{
+    return false;
+}
 }  // namespace rx
