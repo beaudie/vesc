@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/gl/wgl/WindowSurfaceWGL.h"
 
 #include "common/debug.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/renderer/gl/RendererGL.h"
 #include "libANGLE/renderer/gl/wgl/FunctionsWGL.h"
 #include "libANGLE/renderer/gl/wgl/wgl_utils.h"
@@ -26,7 +27,8 @@ WindowSurfaceWGL::WindowSurfaceWGL(const egl::SurfaceState &state,
       mWindow(window),
       mDeviceContext(nullptr),
       mFunctionsWGL(functions),
-      mSwapBehavior(0)
+      mSwapBehavior(0),
+      mStereo(false)
 {
     // EGL_ANGLE_surface_orientation is not supported for regular WGL window surfaces
     ASSERT(orientation == 0);
@@ -86,6 +88,8 @@ egl::Error WindowSurfaceWGL::initialize(const egl::Display *display)
             mSwapBehavior = EGL_BUFFER_DESTROYED;
             break;
     }
+
+    mStereo = display->getExtensions().multiviewWindow;
 
     return egl::NoError();
 }
@@ -180,4 +184,10 @@ HDC WindowSurfaceWGL::getDC() const
 {
     return mDeviceContext;
 }
+
+EGLint WindowSurfaceWGL::getCreatedMultiviewViewCount() const
+{
+    return mStereo ? 2 : 1;
+}
+
 }

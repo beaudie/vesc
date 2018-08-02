@@ -45,6 +45,8 @@ class DisplayNULL : public DisplayImpl
     egl::Error waitNative(const gl::Context *context, EGLint engine) override;
     gl::Version getMaxSupportedESVersion() const override;
 
+    bool isStereoSupported() const override;
+
     SurfaceImpl *createWindowSurface(const egl::SurfaceState &state,
                                      EGLNativeWindowType window,
                                      const egl::AttributeMap &attribs) override;
