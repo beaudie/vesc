@@ -26,7 +26,8 @@ RenderTargetVk::~RenderTargetVk()
 {
 }
 
-void RenderTargetVk::onColorDraw(vk::CommandGraphResource *framebufferVk,
+void RenderTargetVk::onColorDraw(vk::Context *context,
+                                 vk::CommandGraphResource *framebufferVk,
                                  vk::CommandBuffer *commandBuffer,
                                  vk::RenderPassDesc *renderPassDesc)
 {
@@ -43,10 +44,11 @@ void RenderTargetVk::onColorDraw(vk::CommandGraphResource *framebufferVk,
                                    VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, commandBuffer);
 
     // Set up dependencies between the RT resource and the Framebuffer.
-    mResource->addWriteDependency(framebufferVk);
+    mResource->addWriteDependency(context, framebufferVk);
 }
 
-void RenderTargetVk::onDepthStencilDraw(vk::CommandGraphResource *framebufferVk,
+void RenderTargetVk::onDepthStencilDraw(vk::Context *context,
+                                        vk::CommandGraphResource *framebufferVk,
                                         vk::CommandBuffer *commandBuffer,
                                         vk::RenderPassDesc *renderPassDesc)
 {
@@ -65,7 +67,7 @@ void RenderTargetVk::onDepthStencilDraw(vk::CommandGraphResource *framebufferVk,
                                    VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT, commandBuffer);
 
     // Set up dependencies between the RT resource and the Framebuffer.
-    mResource->addWriteDependency(framebufferVk);
+    mResource->addWriteDependency(context, framebufferVk);
 }
 
 const vk::ImageHelper &RenderTargetVk::getImage() const
@@ -104,14 +106,15 @@ void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image, vk::ImageView 
     mImageView = imageView;
 }
 
-vk::ImageHelper *RenderTargetVk::getImageForRead(vk::CommandGraphResource *readingResource,
+vk::ImageHelper *RenderTargetVk::getImageForRead(vk::Context *context,
+                                                 vk::CommandGraphResource *readingResource,
                                                  VkImageLayout layout,
                                                  vk::CommandBuffer *commandBuffer)
 {
     ASSERT(mImage && mImage->valid());
 
     // TODO(jmadill): Better simultaneous resource access. http://anglebug.com/2679
-    mResource->addWriteDependency(readingResource);
+    mResource->addWriteDependency(context, readingResource);
 
     mImage->changeLayoutWithStages(mImage->getAspectFlags(), layout,
                                    VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
@@ -120,10 +123,11 @@ vk::ImageHelper *RenderTargetVk::getImageForRead(vk::CommandGraphResource *readi
     return mImage;
 }
 
-vk::ImageHelper *RenderTargetVk::getImageForWrite(vk::CommandGraphResource *writingResource) const
+vk::ImageHelper *RenderTargetVk::getImageForWrite(vk::Context *context,
+                                                  vk::CommandGraphResource *writingResource) const
 {
     ASSERT(mImage && mImage->valid());
-    mResource->addWriteDependency(writingResource);
+    mResource->addWriteDependency(context, writingResource);
     return mImage;
 }
 

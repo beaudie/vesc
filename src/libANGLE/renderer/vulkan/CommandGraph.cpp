@@ -90,7 +90,6 @@ class CommandGraphNode final : angle::NonCopyable
     VisitedState visitedState() const;
     void visitParents(std::vector<CommandGraphNode *> *stack);
     angle::Result visitAndExecute(Context *context,
-                                  Serial serial,
                                   RenderPassCache *renderPassCache,
                                   CommandBuffer *primaryCommandBuffer);
 
@@ -123,69 +122,68 @@ class CommandGraphNode final : angle::NonCopyable
     VisitedState mVisitedState;
 };
 
-// CommandGraphResource implementation.
-CommandGraphResource::CommandGraphResource() : mCurrentWritingNode(nullptr)
+// CommmandGraphResource::PerContextData implementation
+
+Serial CommandGraphResource::PerContextData::getStoredQueueSerial() const
 {
+    return serial;
 }
 
-CommandGraphResource::~CommandGraphResource() = default;
-
-void CommandGraphResource::updateQueueSerial(Serial queueSerial)
+bool CommandGraphResource::PerContextData::isResourceInUse(Context *context) const
 {
-    ASSERT(queueSerial >= mStoredQueueSerial);
+    return context->isSerialInUse(serial);
+}
 
-    if (queueSerial > mStoredQueueSerial)
+void CommandGraphResource::PerContextData::addWriteDependency(PerContextData *writingResource)
+{
+    CommandGraphNode *writingNode = writingResource->currentWritingNode;
+    ASSERT(writingNode);
+
+    onWriteImpl(writingNode, writingResource->serial);
+}
+
+void CommandGraphResource::PerContextData::addReadDependency(PerContextData *readingResource)
+{
+    updateQueueSerial(readingResource->serial);
+
+    CommandGraphNode *readingNode = readingResource->currentWritingNode;
+    ASSERT(readingNode);
+
+    if (hasChildlessWritingNode())
     {
-        mCurrentWritingNode = nullptr;
-        mCurrentReadingNodes.clear();
-        mStoredQueueSerial = queueSerial;
+        // Ensure 'readingNode' happens after the current writing node.
+        CommandGraphNode::SetHappensBeforeDependency(currentWritingNode, readingNode);
     }
+
+    // Add the read node to the list of nodes currently reading this resource.
+    currentReadingNodes.push_back(readingNode);
 }
 
-bool CommandGraphResource::isResourceInUse(RendererVk *renderer) const
+angle::Result CommandGraphResource::PerContextData::beginWriteResource(
+    Context *context,
+    CommandBuffer **commandBufferOut)
 {
-    return renderer->isSerialInUse(mStoredQueueSerial);
+    onResourceChanged(context);
+    return currentWritingNode->beginOutsideRenderPassRecording(context, context->getCommandPool(),
+                                                               commandBufferOut);
 }
 
-Serial CommandGraphResource::getStoredQueueSerial() const
+angle::Result CommandGraphResource::PerContextData::appendWriteResource(
+    Context *context,
+    CommandBuffer **commandBufferOut)
 {
-    return mStoredQueueSerial;
-}
-
-bool CommandGraphResource::hasChildlessWritingNode() const
-{
-    return (mCurrentWritingNode != nullptr && !mCurrentWritingNode->hasChildren());
-}
-
-bool CommandGraphResource::hasStartedWriteResource() const
-{
-    return hasChildlessWritingNode() &&
-           mCurrentWritingNode->getOutsideRenderPassCommands()->valid();
-}
-
-angle::Result CommandGraphResource::beginWriteResource(Context *context,
-                                                       CommandBuffer **commandBufferOut)
-{
-    onResourceChanged(context->getRenderer());
-    return mCurrentWritingNode->beginOutsideRenderPassRecording(
-        context, context->getRenderer()->getCommandPool(), commandBufferOut);
-}
-
-angle::Result CommandGraphResource::appendWriteResource(Context *context,
-                                                        CommandBuffer **commandBufferOut)
-{
-    updateQueueSerial(context->getRenderer()->getCurrentQueueSerial());
+    updateQueueSerial(context->getCurrentQueueSerial());
 
     if (!hasChildlessWritingNode())
     {
         return beginWriteResource(context, commandBufferOut);
     }
 
-    CommandBuffer *outsideRenderPassCommands = mCurrentWritingNode->getOutsideRenderPassCommands();
+    CommandBuffer *outsideRenderPassCommands = currentWritingNode->getOutsideRenderPassCommands();
     if (!outsideRenderPassCommands->valid())
     {
-        ANGLE_TRY(mCurrentWritingNode->beginOutsideRenderPassRecording(
-            context, context->getRenderer()->getCommandPool(), commandBufferOut));
+        ANGLE_TRY(currentWritingNode->beginOutsideRenderPassRecording(
+            context, context->getCommandPool(), commandBufferOut));
     }
     else
     {
@@ -195,13 +193,29 @@ angle::Result CommandGraphResource::appendWriteResource(Context *context,
     return angle::Result::Continue();
 }
 
-bool CommandGraphResource::appendToStartedRenderPass(RendererVk *renderer,
-                                                     CommandBuffer **commandBufferOut)
+angle::Result CommandGraphResource::PerContextData::beginRenderPass(
+    Context *context,
+    const Framebuffer &framebuffer,
+    const gl::Rectangle &renderArea,
+    const RenderPassDesc &renderPassDesc,
+    const std::vector<VkClearValue> &clearValues,
+    CommandBuffer **commandBufferOut) const
 {
-    updateQueueSerial(renderer->getCurrentQueueSerial());
+    // Hard-code RenderPass to clear the first render target to the current clear value.
+    // TODO(jmadill): Proper clear value implementation. http://anglebug.com/2361
+    currentWritingNode->storeRenderPassInfo(framebuffer, renderArea, renderPassDesc, clearValues);
+
+    return currentWritingNode->beginInsideRenderPassRecording(context, commandBufferOut);
+}
+
+bool CommandGraphResource::PerContextData::appendToStartedRenderPass(
+    Context *context,
+    CommandBuffer **commandBufferOut)
+{
+    updateQueueSerial(context->getCurrentQueueSerial());
     if (hasStartedRenderPass())
     {
-        *commandBufferOut = mCurrentWritingNode->getInsideRenderPassCommands();
+        *commandBufferOut = currentWritingNode->getInsideRenderPassCommands();
         return true;
     }
     else
@@ -210,15 +224,126 @@ bool CommandGraphResource::appendToStartedRenderPass(RendererVk *renderer,
     }
 }
 
-bool CommandGraphResource::hasStartedRenderPass() const
+void CommandGraphResource::PerContextData::onResourceChanged(Context *context)
 {
-    return hasChildlessWritingNode() && mCurrentWritingNode->getInsideRenderPassCommands()->valid();
+    CommandGraphNode *newCommands = context->getCommandGraph()->allocateNode();
+    onWriteImpl(newCommands, context->getCurrentQueueSerial());
 }
 
-const gl::Rectangle &CommandGraphResource::getRenderPassRenderArea() const
+void CommandGraphResource::PerContextData::onWriteImpl(CommandGraphNode *writingNode,
+                                                       Serial currentSerial)
+{
+    updateQueueSerial(currentSerial);
+
+    // Make sure any open reads and writes finish before we execute 'writingNode'.
+    if (!currentReadingNodes.empty())
+    {
+        CommandGraphNode::SetHappensBeforeDependencies(currentReadingNodes, writingNode);
+        currentReadingNodes.clear();
+    }
+
+    if (currentWritingNode && currentWritingNode != writingNode)
+    {
+        CommandGraphNode::SetHappensBeforeDependency(currentWritingNode, writingNode);
+    }
+
+    currentWritingNode = writingNode;
+}
+
+bool CommandGraphResource::PerContextData::hasChildlessWritingNode() const
+{
+    return currentWritingNode != nullptr && !currentWritingNode->hasChildren();
+}
+
+bool CommandGraphResource::PerContextData::hasStartedRenderPass() const
+{
+    return hasChildlessWritingNode() && currentWritingNode->getInsideRenderPassCommands()->valid();
+}
+
+bool CommandGraphResource::PerContextData::hasStartedWriteResource() const
+{
+    return hasChildlessWritingNode() && currentWritingNode->getOutsideRenderPassCommands()->valid();
+}
+
+void CommandGraphResource::PerContextData::updateQueueSerial(Serial queueSerial)
+{
+    ASSERT(queueSerial >= serial);
+
+    if (queueSerial > serial)
+    {
+        currentWritingNode = nullptr;
+        currentReadingNodes.clear();
+        serial = queueSerial;
+    }
+}
+
+const gl::Rectangle &CommandGraphResource::PerContextData::getRenderPassRenderArea() const
 {
     ASSERT(hasStartedRenderPass());
-    return mCurrentWritingNode->getRenderPassRenderArea();
+    return currentWritingNode->getRenderPassRenderArea();
+}
+
+// CommandGraphResource implementation.
+CommandGraphResource::CommandGraphResource()
+{
+}
+
+CommandGraphResource::~CommandGraphResource() = default;
+
+bool CommandGraphResource::isResourceInUse(Context *context) const
+{
+    auto iter = mContextData.find(context);
+    return iter != mContextData.end() && iter->second.isResourceInUse(context);
+}
+
+Serial CommandGraphResource::getStoredQueueSerial(Context *context) const
+{
+    auto iter = mContextData.find(context);
+    return iter != mContextData.end() ? iter->second.getStoredQueueSerial() : Serial();
+}
+
+ContextSerialMap CommandGraphResource::getStoredQueueSerials() const
+{
+    // TODO: don't build this on the fly, store it so it can be returned by const ref
+    ContextSerialMap result;
+    for (const auto &contextData : mContextData)
+    {
+        result[contextData.first] = contextData.second.getStoredQueueSerial();
+    }
+    return result;
+}
+
+bool CommandGraphResource::hasStartedWriteResource(Context *context) const
+{
+    auto iter = mContextData.find(context);
+    return iter != mContextData.end() && iter->second.hasStartedWriteResource();
+}
+
+angle::Result CommandGraphResource::beginWriteResource(Context *context,
+                                                       CommandBuffer **commandBufferOut)
+{
+    PerContextData &contextData = mContextData[context];
+    return contextData.beginWriteResource(context, commandBufferOut);
+}
+
+angle::Result CommandGraphResource::appendWriteResource(Context *context,
+                                                        CommandBuffer **commandBufferOut)
+{
+    PerContextData &contextData = mContextData[context];
+    return contextData.appendWriteResource(context, commandBufferOut);
+}
+
+bool CommandGraphResource::appendToStartedRenderPass(Context *context,
+                                                     CommandBuffer **commandBufferOut)
+{
+    PerContextData &contextData = mContextData[context];
+    return contextData.appendToStartedRenderPass(context, commandBufferOut);
+}
+
+const gl::Rectangle &CommandGraphResource::getRenderPassRenderArea(Context *context) const
+{
+    const PerContextData &contextData = mContextData.at(context);
+    return contextData.getRenderPassRenderArea();
 }
 
 angle::Result CommandGraphResource::beginRenderPass(Context *context,
@@ -228,61 +353,29 @@ angle::Result CommandGraphResource::beginRenderPass(Context *context,
                                                     const std::vector<VkClearValue> &clearValues,
                                                     CommandBuffer **commandBufferOut) const
 {
-    // Hard-code RenderPass to clear the first render target to the current clear value.
-    // TODO(jmadill): Proper clear value implementation. http://anglebug.com/2361
-    mCurrentWritingNode->storeRenderPassInfo(framebuffer, renderArea, renderPassDesc, clearValues);
-
-    return mCurrentWritingNode->beginInsideRenderPassRecording(context, commandBufferOut);
+    const PerContextData &contextData = mContextData.at(context);
+    return contextData.beginRenderPass(context, framebuffer, renderArea, renderPassDesc,
+                                       clearValues, commandBufferOut);
 }
 
-void CommandGraphResource::onResourceChanged(RendererVk *renderer)
+void CommandGraphResource::onResourceChanged(Context *context)
 {
-    CommandGraphNode *newCommands = renderer->getCommandGraph()->allocateNode();
-    onWriteImpl(newCommands, renderer->getCurrentQueueSerial());
+    PerContextData &contextData = mContextData[context];
+    contextData.onResourceChanged(context);
 }
 
-void CommandGraphResource::addWriteDependency(CommandGraphResource *writingResource)
+void CommandGraphResource::addWriteDependency(Context *context,
+                                              CommandGraphResource *writingResource)
 {
-    CommandGraphNode *writingNode = writingResource->mCurrentWritingNode;
-    ASSERT(writingNode);
-
-    onWriteImpl(writingNode, writingResource->getStoredQueueSerial());
+    PerContextData &contextData = mContextData[context];
+    contextData.addWriteDependency(&writingResource->mContextData[context]);
 }
 
-void CommandGraphResource::onWriteImpl(CommandGraphNode *writingNode, Serial currentSerial)
+void CommandGraphResource::addReadDependency(Context *context,
+                                             CommandGraphResource *readingResource)
 {
-    updateQueueSerial(currentSerial);
-
-    // Make sure any open reads and writes finish before we execute 'writingNode'.
-    if (!mCurrentReadingNodes.empty())
-    {
-        CommandGraphNode::SetHappensBeforeDependencies(mCurrentReadingNodes, writingNode);
-        mCurrentReadingNodes.clear();
-    }
-
-    if (mCurrentWritingNode && mCurrentWritingNode != writingNode)
-    {
-        CommandGraphNode::SetHappensBeforeDependency(mCurrentWritingNode, writingNode);
-    }
-
-    mCurrentWritingNode = writingNode;
-}
-
-void CommandGraphResource::addReadDependency(CommandGraphResource *readingResource)
-{
-    updateQueueSerial(readingResource->getStoredQueueSerial());
-
-    CommandGraphNode *readingNode = readingResource->mCurrentWritingNode;
-    ASSERT(readingNode);
-
-    if (hasChildlessWritingNode())
-    {
-        // Ensure 'readingNode' happens after the current writing node.
-        CommandGraphNode::SetHappensBeforeDependency(mCurrentWritingNode, readingNode);
-    }
-
-    // Add the read node to the list of nodes currently reading this resource.
-    mCurrentReadingNodes.push_back(readingNode);
+    PerContextData &contextData = mContextData[context];
+    contextData.addReadDependency(&readingResource->mContextData[context]);
 }
 
 // CommandGraphNode implementation.
@@ -343,8 +436,7 @@ angle::Result CommandGraphNode::beginInsideRenderPassRecording(Context *context,
     // Get a compatible RenderPass from the cache so we can initialize the inheritance info.
     // TODO(jmadill): Support query for compatible/conformant render pass. htto://anglebug.com/2361
     RenderPass *compatibleRenderPass;
-    ANGLE_TRY(context->getRenderer()->getCompatibleRenderPass(context, mRenderPassDesc,
-                                                              &compatibleRenderPass));
+    ANGLE_TRY(context->getCompatibleRenderPass(mRenderPassDesc, &compatibleRenderPass));
 
     VkCommandBufferInheritanceInfo inheritanceInfo;
     inheritanceInfo.sType                = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
@@ -356,9 +448,9 @@ angle::Result CommandGraphNode::beginInsideRenderPassRecording(Context *context,
     inheritanceInfo.queryFlags           = 0;
     inheritanceInfo.pipelineStatistics   = 0;
 
-    ANGLE_TRY(InitAndBeginCommandBuffer(
-        context, context->getRenderer()->getCommandPool(), inheritanceInfo,
-        VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT, &mInsideRenderPassCommands));
+    ANGLE_TRY(InitAndBeginCommandBuffer(context, context->getCommandPool(), inheritanceInfo,
+                                        VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT,
+                                        &mInsideRenderPassCommands));
 
     *commandsOut = &mInsideRenderPassCommands;
     return angle::Result::Continue();
@@ -452,7 +544,6 @@ void CommandGraphNode::visitParents(std::vector<CommandGraphNode *> *stack)
 }
 
 angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
-                                                Serial serial,
                                                 RenderPassCache *renderPassCache,
                                                 CommandBuffer *primaryCommandBuffer)
 {
@@ -467,8 +558,7 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
         // Pull a compatible RenderPass from the cache.
         // TODO(jmadill): Insert real ops and layout transitions.
         RenderPass *renderPass = nullptr;
-        ANGLE_TRY(renderPassCache->getCompatibleRenderPass(context, serial, mRenderPassDesc,
-                                                           &renderPass));
+        ANGLE_TRY(renderPassCache->getCompatibleRenderPass(context, mRenderPassDesc, &renderPass));
 
         ANGLE_TRY(mInsideRenderPassCommands.end(context));
 
@@ -516,7 +606,6 @@ CommandGraphNode *CommandGraph::allocateNode()
 }
 
 angle::Result CommandGraph::submitCommands(Context *context,
-                                           Serial serial,
                                            RenderPassCache *renderPassCache,
                                            CommandPool *commandPool,
                                            CommandBuffer *primaryCommandBufferOut)
@@ -564,8 +653,8 @@ angle::Result CommandGraph::submitCommands(Context *context,
                     node->visitParents(&nodeStack);
                     break;
                 case VisitedState::Ready:
-                    ANGLE_TRY(node->visitAndExecute(context, serial, renderPassCache,
-                                                    primaryCommandBufferOut));
+                    ANGLE_TRY(
+                        node->visitAndExecute(context, renderPassCache, primaryCommandBufferOut));
                     nodeStack.pop_back();
                     break;
                 case VisitedState::Visited:

@@ -11,6 +11,7 @@
 #define LIBANGLE_RENDERER_VULKAN_VK_UTILS_H_
 
 #include <limits>
+#include <mutex>
 
 #include <vulkan/vulkan.h>
 
@@ -93,6 +94,11 @@ enum class TextureDimension
 namespace vk
 {
 struct Format;
+class CommandPool;
+class CommandGraph;
+class Semaphore;
+class RenderPassDesc;
+class RenderPass;
 
 // Abstracts error handling. Implemented by both ContextVk for GL and RendererVk for EGL errors.
 class Context : angle::NonCopyable
@@ -104,6 +110,20 @@ class Context : angle::NonCopyable
     virtual void handleError(VkResult result, const char *file, unsigned int line) = 0;
     VkDevice getDevice() const;
     RendererVk *getRenderer() const { return mRenderer; }
+
+    virtual angle::Result flush(const Semaphore &waitSemaphore,
+                                const Semaphore &signalSemaphore) = 0;
+    virtual angle::Result finish()                                = 0;
+
+    virtual const CommandPool &getCommandPool() const = 0;
+    virtual CommandGraph *getCommandGraph()           = 0;
+
+    virtual Serial getCurrentQueueSerial() const       = 0;
+    virtual Serial getLastCompletedQueueSerial() const = 0;
+    bool isSerialInUse(Serial serial) const { return serial < getLastCompletedQueueSerial(); }
+
+    virtual angle::Result getCompatibleRenderPass(const RenderPassDesc &desc,
+                                                  RenderPass **renderPassOut) = 0;
 
   protected:
     RendererVk *const mRenderer;
@@ -201,12 +221,73 @@ ANGLE_HANDLE_TYPES_X(ANGLE_HANDLE_TYPE_HELPER_FUNC)
 
 #undef ANGLE_HANDLE_TYPE_HELPER_FUNC
 
+class GarbageObject;
+
+struct GarbageBindingPointer final : angle::NonCopyable
+{
+  public:
+    GarbageBindingPointer() = default;
+    GarbageBindingPointer(Serial serial, GarbageObject *garbage);
+    GarbageBindingPointer(GarbageBindingPointer &&other);
+    GarbageBindingPointer &operator=(GarbageBindingPointer &&other);
+    ~GarbageBindingPointer();
+
+    Serial getSerial() const { return mSerial; }
+    void destroy(VkDevice device);
+
+  private:
+    // TODO(jmadill): Since many objects will have the same serial, it might be more efficient to
+    // store the serial outside of the garbage object itself. We could index ranges of garbage
+    // objects in the Renderer, using a circular buffer.
+    Serial mSerial;
+    GarbageObject *mGarbage;
+};
+
+using ContextSerialMap = std::map<Context *, Serial>;
+
+class GarbageQueue final
+{
+  public:
+    void onContextCreated(Context *context);
+    angle::Result onContextDestroyed(Context *context);
+
+    angle::Result collectGarbage(Context *context);
+    angle::Result freeAllGarbage(Context *context);
+
+    void addGarbage(Context *context, Serial serial, GarbageObject *garbage);
+    void addGarbage(Context *context,
+                    const ContextSerialMap &perContextSerials,
+                    GarbageObject *garbage);
+
+  private:
+    struct PerContextGarbage final : angle::NonCopyable
+    {
+      public:
+        // PerContextGarbage() = default;
+        // PerContextGarbage(PerContextGarbage&& other) = default;
+        // PerContextGarbage &operator=(PerContextGarbage &&other) = default;
+
+        void addGarbage(Serial serial, GarbageObject *garbage);
+        angle::Result collectGarbage(VkDevice device, Serial lastCompletedSerial);
+        angle::Result freeAllGarbage(VkDevice device);
+
+      private:
+        Serial mLastCompletedSerial;
+        std::vector<GarbageBindingPointer> mGarbage;
+    };
+
+    std::mutex mMutex;
+    std::map<Context *, PerContextGarbage> mPerContextGarbage;
+};
+
+GarbageQueue *GetGarbageQueue(Context *context);
+
 class GarbageObject final
 {
   public:
     template <typename ObjectT>
-    GarbageObject(Serial serial, const ObjectT &object)
-        : mSerial(serial),
+    GarbageObject(const ObjectT &object)
+        : mRefCount(0),
           mHandleType(HandleTypeHelper<ObjectT>::kHandleType),
           mHandle(reinterpret_cast<VkDevice>(object.getHandle()))
     {
@@ -215,15 +296,15 @@ class GarbageObject final
     GarbageObject();
     GarbageObject(const GarbageObject &other);
     GarbageObject &operator=(const GarbageObject &other);
+    ~GarbageObject();
 
-    bool destroyIfComplete(VkDevice device, Serial completedSerial);
-    void destroy(VkDevice device);
+    void addRef();
+    void release(VkDevice device);
 
   private:
-    // TODO(jmadill): Since many objects will have the same serial, it might be more efficient to
-    // store the serial outside of the garbage object itself. We could index ranges of garbage
-    // objects in the Renderer, using a circular buffer.
-    Serial mSerial;
+    void destroy(VkDevice device);
+
+    size_t mRefCount;
     HandleType mHandleType;
     VkDevice mHandle;
 };
@@ -237,11 +318,24 @@ class WrappedObject : angle::NonCopyable
 
     const HandleT *ptr() const { return &mHandle; }
 
-    void dumpResources(Serial serial, std::vector<GarbageObject> *garbageQueue)
+    void release(Context *context, const ContextSerialMap &serials)
     {
         if (valid())
         {
-            garbageQueue->emplace_back(serial, *static_cast<DerivedT *>(this));
+            vk::GarbageQueue *garbageQueue = GetGarbageQueue(context);
+            garbageQueue->addGarbage(context, serials,
+                                     new GarbageObject(*static_cast<DerivedT *>(this)));
+            mHandle = VK_NULL_HANDLE;
+        }
+    }
+
+    void release(Context *context, Serial serial)
+    {
+        if (valid())
+        {
+            vk::GarbageQueue *garbageQueue = GetGarbageQueue(context);
+            garbageQueue->addGarbage(context, serial,
+                                     new GarbageObject(*static_cast<DerivedT *>(this)));
             mHandle = VK_NULL_HANDLE;
         }
     }
@@ -598,7 +692,8 @@ class StagingBuffer final : angle::NonCopyable
     const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
     size_t getSize() const { return mSize; }
 
-    void dumpResources(Serial serial, std::vector<GarbageObject> *garbageQueue);
+    void dumpResources(Context *context, const ContextSerialMap &serials);
+    void dumpResources(Context *context, Serial serial);
 
   private:
     Buffer mBuffer;

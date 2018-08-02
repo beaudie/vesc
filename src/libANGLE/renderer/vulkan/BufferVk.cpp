@@ -29,15 +29,13 @@ BufferVk::~BufferVk()
 void BufferVk::destroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
-
-    release(renderer);
+    release(contextVk);
 }
 
-void BufferVk::release(RendererVk *renderer)
+void BufferVk::release(ContextVk *contextVk)
 {
-    renderer->releaseObject(getStoredQueueSerial(), &mBuffer);
-    renderer->releaseObject(getStoredQueueSerial(), &mBufferMemory);
+    mBuffer.release(contextVk, getStoredQueueSerials());
+    mBufferMemory.release(contextVk, getStoredQueueSerials());
 }
 
 gl::Error BufferVk::setData(const gl::Context *context,
@@ -51,7 +49,7 @@ gl::Error BufferVk::setData(const gl::Context *context,
     if (size > static_cast<size_t>(mState.getSize()))
     {
         // Release and re-create the memory and buffer.
-        release(contextVk->getRenderer());
+        release(contextVk);
 
         const VkImageUsageFlags usageFlags =
             (VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
@@ -192,11 +190,10 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
                                     size_t size,
                                     size_t offset)
 {
-    RendererVk *renderer = contextVk->getRenderer();
     VkDevice device      = contextVk->getDevice();
 
     // Use map when available.
-    if (isResourceInUse(renderer))
+    if (isResourceInUse(contextVk))
     {
         vk::StagingBuffer stagingBuffer;
         ANGLE_TRY(stagingBuffer.init(contextVk, static_cast<VkDeviceSize>(size),
@@ -256,8 +253,8 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
                                            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, bufferBarrier);
 
         // Immediately release staging buffer.
-        // TODO(jmadill): Staging buffer re-use.
-        renderer->releaseObject(getStoredQueueSerial(), &stagingBuffer);
+        // TODO(jmadill): Staging buffer re-use.  If re-used make sure to pass a serial map.
+        stagingBuffer.dumpResources(contextVk, contextVk->getCurrentQueueSerial());
     }
     else
     {

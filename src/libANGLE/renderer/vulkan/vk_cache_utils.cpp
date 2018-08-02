@@ -1032,7 +1032,6 @@ void RenderPassCache::destroy(VkDevice device)
 }
 
 angle::Result RenderPassCache::getCompatibleRenderPass(vk::Context *context,
-                                                       Serial serial,
                                                        const vk::RenderPassDesc &desc,
                                                        vk::RenderPass **renderPassOut)
 {
@@ -1043,7 +1042,7 @@ angle::Result RenderPassCache::getCompatibleRenderPass(vk::Context *context,
         ASSERT(!innerCache.empty());
 
         // Find the first element and return it.
-        innerCache.begin()->second.updateSerial(serial);
+        innerCache.begin()->second.updateSerial(context->getCurrentQueueSerial());
         *renderPassOut = &innerCache.begin()->second.get();
         return angle::Result::Continue();
     }
@@ -1064,11 +1063,10 @@ angle::Result RenderPassCache::getCompatibleRenderPass(vk::Context *context,
                         VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
     }
 
-    return getRenderPassWithOps(context, serial, desc, ops, renderPassOut);
+    return getRenderPassWithOps(context, desc, ops, renderPassOut);
 }
 
 angle::Result RenderPassCache::getRenderPassWithOps(vk::Context *context,
-                                                    Serial serial,
                                                     const vk::RenderPassDesc &desc,
                                                     const vk::AttachmentOpsArray &attachmentOps,
                                                     vk::RenderPass **renderPassOut)
@@ -1083,7 +1081,7 @@ angle::Result RenderPassCache::getRenderPassWithOps(vk::Context *context,
         {
             // Update the serial before we return.
             // TODO(jmadill): Could possibly use an MRU cache here.
-            innerIt->second.updateSerial(serial);
+            innerIt->second.updateSerial(context->getCurrentQueueSerial());
             *renderPassOut = &innerIt->second.get();
             return angle::Result::Continue();
         }
@@ -1097,7 +1095,7 @@ angle::Result RenderPassCache::getRenderPassWithOps(vk::Context *context,
     vk::RenderPass newRenderPass;
     ANGLE_TRY(vk::InitializeRenderPassFromDesc(context, desc, attachmentOps, &newRenderPass));
 
-    vk::RenderPassAndSerial withSerial(std::move(newRenderPass), serial);
+    vk::RenderPassAndSerial withSerial(std::move(newRenderPass), context->getCurrentQueueSerial());
 
     InnerCache &innerCache = outerIt->second;
     auto insertPos         = innerCache.emplace(attachmentOps, std::move(withSerial));

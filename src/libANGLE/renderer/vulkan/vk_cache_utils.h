@@ -582,11 +582,9 @@ class RenderPassCache final : angle::NonCopyable
     void destroy(VkDevice device);
 
     angle::Result getCompatibleRenderPass(vk::Context *context,
-                                          Serial serial,
                                           const vk::RenderPassDesc &desc,
                                           vk::RenderPass **renderPassOut);
     angle::Result getRenderPassWithOps(vk::Context *context,
-                                       Serial serial,
                                        const vk::RenderPassDesc &desc,
                                        const vk::AttachmentOpsArray &attachmentOps,
                                        vk::RenderPass **renderPassOut);

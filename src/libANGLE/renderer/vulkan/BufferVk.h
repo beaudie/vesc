@@ -66,7 +66,7 @@ class BufferVk : public BufferImpl, public vk::CommandGraphResource
                               const uint8_t *data,
                               size_t size,
                               size_t offset);
-    void release(RendererVk *renderer);
+    void release(ContextVk *contextVk);
 
     vk::Buffer mBuffer;
     vk::DeviceMemory mBufferMemory;
