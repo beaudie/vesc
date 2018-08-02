@@ -50,7 +50,9 @@ SurfaceD3D::SurfaceD3D(const egl::SurfaceState &state,
       mSwapInterval(1),
       mShareHandle(0),
       mD3DTexture(nullptr),
-      mBuftype(buftype)
+      mBuftype(buftype),
+      // Consider a request for 2 multiview views to be a request for stereo.
+      mIsStereoRequested(attribs.get(EGL_MULTIVIEW_VIEW_COUNT_EXT, 1) == 2)
 {
     if (window != nullptr && !mFixedSize)
     {
@@ -190,8 +192,8 @@ egl::Error SurfaceD3D::resetSwapChain(const egl::Display *display)
     }
 
     mSwapChain =
-        mRenderer->createSwapChain(mNativeWindow, mShareHandle, mD3DTexture, mRenderTargetFormat,
-                                   mDepthStencilFormat, mOrientation, mState.config->samples);
+        mRenderer->createSwapChain(mNativeWindow, mShareHandle, mD3DTexture, mRenderTargetFormat, mDepthStencilFormat, mOrientation,
+                                            mState.config->samples, mIsStereoRequested);
     if (!mSwapChain)
     {
         return egl::EglBadAlloc();
@@ -407,6 +409,12 @@ EGLint SurfaceD3D::getSwapBehavior() const
     return EGL_BUFFER_PRESERVED;
 }
 
+EGLint SurfaceD3D::getCreatedMultiviewViewCount() const
+{
+    ASSERT(mSwapChain);
+    return mSwapChain->isStereo() ? 2 : 1;
+}
+
 egl::Error SurfaceD3D::querySurfacePointerANGLE(EGLint attribute, void **value)
 {
     if (attribute == EGL_D3D_TEXTURE_2D_SHARE_HANDLE_ANGLE)
@@ -429,13 +437,31 @@ const angle::Format *SurfaceD3D::getD3DTextureColorFormat() const
 }
 
 gl::Error SurfaceD3D::getAttachmentRenderTarget(const gl::Context *context,
-                                                GLenum binding,
+                                                GLenum bindingLocation,
+                                                GLint bindingIndex,
                                                 const gl::ImageIndex &imageIndex,
                                                 FramebufferAttachmentRenderTarget **rtOut)
 {
-    if (binding == GL_BACK)
+    if (bindingLocation == GL_BACK)
     {
         *rtOut = mSwapChain->getColorRenderTarget();
+    }
+    else if (bindingLocation == GL_MULTIVIEW_EXT)
+    {
+        if (bindingIndex == 0)
+        {
+            *rtOut = mSwapChain->getColorRenderTarget();
+        }
+        else if (bindingIndex == 1)
+        {
+            // Until we add D3D support, return the same target
+            ASSERT(mSwapChain->isStereo());
+            *rtOut = mSwapChain->getColorRenderTarget();
+        }
+        else
+        {
+            UNREACHABLE();
+        }
     }
     else
     {

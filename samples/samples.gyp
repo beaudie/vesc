@@ -174,6 +174,14 @@
         },
 
         {
+            'target_name': 'simple_stereo',
+            'type': 'executable',
+            'dependencies': [ 'sample_util' ],
+            'includes': [ '../gyp/common_defines.gypi', ],
+            'sources': [ 'simple_stereo/SimpleStereo.cpp', ],
+        },
+
+        {
             'target_name': 'simple_texture_2d',
             'type': 'executable',
             'dependencies': [ 'sample_util' ],

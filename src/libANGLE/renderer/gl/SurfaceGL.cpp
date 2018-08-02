@@ -43,6 +43,13 @@ egl::Error SurfaceGL::unMakeCurrent()
     return egl::NoError();
 }
 
+EGLint SurfaceGL::getCreatedMultiviewViewCount() const
+{
+    // Different windows systems implement this differently, so each one will override
+    // this appropriately.
+    return 1;
+}
+
 gl::Error SurfaceGL::initializeContents(const gl::Context *context,
                                         const gl::ImageIndex &imageIndex)
 {

@@ -222,18 +222,27 @@ EGLint OffscreenSurfaceVk::getSwapBehavior() const
     return EGL_BUFFER_PRESERVED;
 }
 
+EGLint OffscreenSurfaceVk::getCreatedMultiviewViewCount() const
+{
+    // The Vulkan back end does not currently support the EGL_EXT_multiview_window extension, so
+    // the number of multiview views is always 1.
+    return 1;
+}
+
 gl::Error OffscreenSurfaceVk::getAttachmentRenderTarget(const gl::Context * /*context*/,
-                                                        GLenum binding,
+                                                        GLenum bindingLocation,
+                                                        GLint /*bindingIndex*/,
                                                         const gl::ImageIndex & /*imageIndex*/,
                                                         FramebufferAttachmentRenderTarget **rtOut)
 {
-    if (binding == GL_BACK)
+    if (bindingLocation == GL_BACK)
     {
         *rtOut = &mColorAttachment.renderTarget;
     }
     else
     {
-        ASSERT(binding == GL_DEPTH || binding == GL_STENCIL || binding == GL_DEPTH_STENCIL);
+        ASSERT(bindingLocation == GL_DEPTH || bindingLocation == GL_STENCIL ||
+               bindingLocation == GL_DEPTH_STENCIL);
         *rtOut = &mDepthStencilAttachment.renderTarget;
     }
 
@@ -666,18 +675,27 @@ EGLint WindowSurfaceVk::getSwapBehavior() const
     return EGL_BUFFER_DESTROYED;
 }
 
+EGLint WindowSurfaceVk::getCreatedMultiviewViewCount() const
+{
+    // The Vulkan back end does not currently support the EGL_EXT_multiview_window extension, so
+    // the number of multiview views is always 1.
+    return 1;
+}
+
 gl::Error WindowSurfaceVk::getAttachmentRenderTarget(const gl::Context * /*context*/,
-                                                     GLenum binding,
+                                                     GLenum bindingLocation,
+                                                     GLint /*bindingIndex*/,
                                                      const gl::ImageIndex & /*target*/,
                                                      FramebufferAttachmentRenderTarget **rtOut)
 {
-    if (binding == GL_BACK)
+    if (bindingLocation == GL_BACK)
     {
         *rtOut = &mColorRenderTarget;
     }
     else
     {
-        ASSERT(binding == GL_DEPTH || binding == GL_STENCIL || binding == GL_DEPTH_STENCIL);
+        ASSERT(bindingLocation == GL_DEPTH || bindingLocation == GL_STENCIL ||
+               bindingLocation == GL_DEPTH_STENCIL);
         *rtOut = &mDepthStencilRenderTarget;
     }
 

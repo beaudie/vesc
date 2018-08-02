@@ -911,6 +911,11 @@ void ANGLETestBase::setSamples(EGLint samples)
     mEGLWindow->setSamples(samples);
 }
 
+void ANGLETestBase::setMultiviewWindowViewCount(EGLint numViews)
+{
+    mEGLWindow->setMultiviewWindowViewCount(numViews);
+}
+
 void ANGLETestBase::setDebugEnabled(bool enabled)
 {
     mEGLWindow->setDebugEnabled(enabled);

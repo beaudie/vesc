@@ -77,6 +77,8 @@ class DisplayWGL : public DisplayGL
 
     gl::Version getMaxSupportedESVersion() const override;
 
+    bool isStereoSupported() const override;
+
     void destroyNativeContext(HGLRC context);
 
   private:
@@ -131,6 +133,8 @@ class DisplayWGL : public DisplayGL
         size_t refCount;
     };
     std::map<IUnknown *, D3DObjectHandle> mRegisteredD3DDevices;
+
+    bool mStereo;
 };
 
 }

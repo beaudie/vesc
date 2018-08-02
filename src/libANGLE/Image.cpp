@@ -128,7 +128,7 @@ ImageState::ImageState(EGLenum target, ImageSibling *buffer, const AttributeMap 
       imageIndex(GetImageIndex(target, attribs)),
       source(buffer),
       targets(),
-      format(buffer->getAttachmentFormat(GL_NONE, imageIndex)),
+      format(buffer->getAttachmentFormat(GL_NONE, -1, imageIndex)),
       size(buffer->getAttachmentSize(imageIndex)),
       samples(buffer->getAttachmentSamples(imageIndex))
 {

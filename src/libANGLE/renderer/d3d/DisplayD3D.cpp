@@ -373,4 +373,9 @@ void DisplayD3D::handleError(HRESULT hr,
 
     mStoredErrorString = errorStream.str();
 }
+
+bool DisplayD3D::isStereoSupported() const
+{
+    return mRenderer->isStereoSupported();
+}
 }  // namespace rx
