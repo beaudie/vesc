@@ -156,4 +156,9 @@ EGLSurface SurfaceEGL::getSurface() const
     return mSurface;
 }
 
+EGLint SurfaceEGL::getCreatedMultiviewViewCount() const
+{
+    return 1;
+}
+
 }  // namespace rx

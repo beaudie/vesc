@@ -140,4 +140,9 @@ FramebufferImpl *PbufferSurfaceCGL::createDefaultFramebuffer(const gl::Context *
     return new FramebufferGL(state, framebuffer, true);
 }
 
+EGLint PbufferSurfaceCGL::getCreatedMultiviewViewCount() const
+{
+    return 1;
+}
+
 }  // namespace rx
