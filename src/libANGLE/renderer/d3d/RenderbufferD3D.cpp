@@ -103,7 +103,8 @@ gl::Error RenderbufferD3D::getRenderTarget(const gl::Context *context,
 }
 
 gl::Error RenderbufferD3D::getAttachmentRenderTarget(const gl::Context *context,
-                                                     GLenum /*binding*/,
+                                                     GLenum /*bindingLocation*/,
+                                                     GLint /*bindingIndex*/,
                                                      const gl::ImageIndex & /*imageIndex*/,
                                                      FramebufferAttachmentRenderTarget **rtOut)
 {

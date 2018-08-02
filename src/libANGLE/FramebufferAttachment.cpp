@@ -53,26 +53,34 @@ std::vector<Offset> FramebufferAttachment::GetDefaultViewportOffsetVector()
         FramebufferAttachment::kDefaultViewportOffsets, FramebufferAttachment::kDefaultNumViews);
 }
 
-FramebufferAttachment::Target::Target() : mBinding(GL_NONE), mTextureIndex()
+FramebufferAttachment::Target::Target()
+    : mBindingLocation(GL_NONE), mBindingIndex(-1), mTextureIndex()
 {
 }
 
-FramebufferAttachment::Target::Target(GLenum binding, const ImageIndex &imageIndex)
-    : mBinding(binding),
-      mTextureIndex(imageIndex)
+FramebufferAttachment::Target::Target(GLenum bindingLocation,
+                                      GLint bindingIndex,
+                                      const ImageIndex &imageIndex)
+    : mBindingLocation(bindingLocation), mBindingIndex(bindingIndex), mTextureIndex(imageIndex)
 {
+    ASSERT(mBindingIndex == -1 || mBindingLocation == GL_MULTIVIEW_EXT ||
+           mBindingLocation == GL_COLOR_ATTACHMENT_EXT);
+    ASSERT((mBindingLocation != GL_MULTIVIEW_EXT && mBindingLocation != GL_COLOR_ATTACHMENT_EXT) ||
+           mBindingIndex >= 0);
 }
 
 FramebufferAttachment::Target::Target(const Target &other)
-    : mBinding(other.mBinding),
+    : mBindingLocation(other.mBindingLocation),
+      mBindingIndex(other.mBindingIndex),
       mTextureIndex(other.mTextureIndex)
 {
 }
 
 FramebufferAttachment::Target &FramebufferAttachment::Target::operator=(const Target &other)
 {
-    this->mBinding = other.mBinding;
-    this->mTextureIndex = other.mTextureIndex;
+    this->mBindingLocation = other.mBindingLocation;
+    this->mBindingIndex    = other.mBindingIndex;
+    this->mTextureIndex    = other.mTextureIndex;
     return *this;
 }
 
@@ -90,13 +98,14 @@ FramebufferAttachment::FramebufferAttachment()
 
 FramebufferAttachment::FramebufferAttachment(const Context *context,
                                              GLenum type,
-                                             GLenum binding,
+                                             GLenum bindingLocation,
+                                             GLint bindingIndex,
                                              const ImageIndex &textureIndex,
                                              FramebufferAttachmentObject *resource)
     : mResource(nullptr)
 {
-    attach(context, type, binding, textureIndex, resource, kDefaultNumViews, kDefaultBaseViewIndex,
-           kDefaultMultiviewLayout, kDefaultViewportOffsets);
+    attach(context, type, bindingLocation, bindingIndex, textureIndex, resource, kDefaultNumViews,
+           kDefaultBaseViewIndex, kDefaultMultiviewLayout, kDefaultViewportOffsets);
 }
 
 FramebufferAttachment::FramebufferAttachment(FramebufferAttachment &&other)
@@ -141,7 +150,8 @@ void FramebufferAttachment::detach(const Context *context)
 
 void FramebufferAttachment::attach(const Context *context,
                                    GLenum type,
-                                   GLenum binding,
+                                   GLenum bindingLocation,
+                                   GLint bindingIndex,
                                    const ImageIndex &textureIndex,
                                    FramebufferAttachmentObject *resource,
                                    GLsizei numViews,
@@ -156,7 +166,7 @@ void FramebufferAttachment::attach(const Context *context,
     }
 
     mType = type;
-    mTarget = Target(binding, textureIndex);
+    mTarget          = Target(bindingLocation, bindingIndex, textureIndex);
     mNumViews        = numViews;
     mBaseViewIndex   = baseViewIndex;
     mMultiviewLayout = multiviewLayout;
@@ -349,11 +359,13 @@ FramebufferAttachmentObject::~FramebufferAttachmentObject()
 
 Error FramebufferAttachmentObject::getAttachmentRenderTarget(
     const Context *context,
-    GLenum binding,
+    GLenum bindingLocation,
+    GLint bindingIndex,
     const ImageIndex &imageIndex,
     rx::FramebufferAttachmentRenderTarget **rtOut) const
 {
-    return getAttachmentImpl()->getAttachmentRenderTarget(context, binding, imageIndex, rtOut);
+    return getAttachmentImpl()->getAttachmentRenderTarget(context, bindingLocation, bindingIndex,
+                                                          imageIndex, rtOut);
 }
 
 void FramebufferAttachmentObject::onStorageChange(const gl::Context *context) const

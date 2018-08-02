@@ -670,14 +670,14 @@ gl::Error FramebufferGL::syncState(const gl::Context *context,
             }
             case Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
             {
-                const auto &drawBuffers = mState.getDrawBufferStates();
+                const auto &drawBuffers = mState.getDrawBufferStateLocations();
                 functions->drawBuffers(static_cast<GLsizei>(drawBuffers.size()),
                                        drawBuffers.data());
                 mAppliedEnabledDrawBuffers = mState.getEnabledDrawBuffers();
                 break;
             }
             case Framebuffer::DIRTY_BIT_READ_BUFFER:
-                functions->readBuffer(mState.getReadBufferState());
+                functions->readBuffer(mState.getReadBufferStateLocation());
                 break;
             case Framebuffer::DIRTY_BIT_DEFAULT_WIDTH:
                 functions->framebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH,
@@ -731,6 +731,59 @@ gl::Error FramebufferGL::syncState(const gl::Context *context,
     return gl::NoError();
 }
 
+void FramebufferGL::setDrawBuffersIndexed(const gl::Context *context,
+                                          size_t count,
+                                          const GLenum *locations,
+                                          const GLint *indices)
+{
+    const FunctionsGL *functions = GetFunctionsGL(context);
+    if (!mIsDefault)
+    {
+        return;
+    }
+
+    if (mState.getMultiviewViewCount() == 2 && count == 1)
+    {
+        if (indices[0] == 0)
+        {
+            functions->drawBuffer(GL_BACK_LEFT);
+        }
+        else
+        {
+            functions->drawBuffer(GL_BACK_RIGHT);
+        }
+    }
+    else
+    {
+        functions->drawBuffer(GL_BACK);
+    }
+}
+
+void FramebufferGL::setReadBufferIndexed(const gl::Context *context, GLenum location, GLint index)
+{
+    const FunctionsGL *functions = GetFunctionsGL(context);
+    if (!mIsDefault)
+    {
+        return;
+    }
+
+    if (mState.getMultiviewViewCount() == 2)
+    {
+        if (index == 0)
+        {
+            functions->readBuffer(GL_BACK_LEFT);
+        }
+        else
+        {
+            functions->readBuffer(GL_BACK_RIGHT);
+        }
+    }
+    else
+    {
+        functions->readBuffer(GL_BACK);
+    }
+}
+
 GLuint FramebufferGL::getFramebufferID() const
 {
     return mFramebufferID;
@@ -751,7 +804,7 @@ void FramebufferGL::maskOutInactiveOutputDrawBuffers(const gl::Context *context,
     {
         mAppliedEnabledDrawBuffers = targetAppliedDrawBuffers;
 
-        const auto &stateDrawBuffers = mState.getDrawBufferStates();
+        const auto &stateDrawBuffers = mState.getDrawBufferStateLocations();
         GLsizei drawBufferCount      = static_cast<GLsizei>(stateDrawBuffers.size());
         ASSERT(drawBufferCount <= IMPLEMENTATION_MAX_DRAW_BUFFERS);
 
@@ -816,7 +869,7 @@ void FramebufferGL::syncClearBufferState(const gl::Context *context,
         {
             // If doing a clear on a color buffer, set SRGB blend enabled only if the color buffer
             // is an SRGB format.
-            const auto &drawbufferState  = mState.getDrawBufferStates();
+            const auto &drawbufferState  = mState.getDrawBufferStateLocations();
             const auto &colorAttachments = mState.getColorAttachments();
 
             const FramebufferAttachment *attachment = nullptr;

@@ -331,6 +331,7 @@ class ANGLETestBase
     void setConfigComponentType(EGLenum componentType);
     void setMultisampleEnabled(bool enabled);
     void setSamples(EGLint samples);
+    void setMultiviewWindowViewCount(EGLint numViews);
     void setDebugEnabled(bool enabled);
     void setNoErrorEnabled(bool enabled);
     void setWebGLCompatibilityEnabled(bool webglCompatibility);

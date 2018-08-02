@@ -31,10 +31,7 @@ class MultiviewDrawBuffersTest : public ANGLETestBase
     }
     virtual ~MultiviewDrawBuffersTest() {}
 
-    void DrawTestSetUp()
-    {
-        ANGLETestBase::ANGLETestSetUp();
-    }
+    void DrawTestSetUp() { ANGLETestBase::ANGLETestSetUp(); }
 
     // Checks for the GL_EXT_multiview_draw_buffers extension and returns true if the
     // extension is enabled.
@@ -68,12 +65,12 @@ class MultiviewDrawBuffersTest : public ANGLETestBase
     }
 
     void getBufferCounts()
-    { 
-      glGetIntegerv(GL_MAX_MULTIVIEW_BUFFERS_EXT, &mNumBuffers);
-      ASSERT_GL_NO_ERROR();
+    {
+        glGetIntegerv(GL_MAX_MULTIVIEW_BUFFERS_EXT, &mNumBuffers);
+        ASSERT_GL_NO_ERROR();
 
-      glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &mMaxColorAttachments);
-      ASSERT_GL_NO_ERROR();
+        glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &mMaxColorAttachments);
+        ASSERT_GL_NO_ERROR();
     }
 
     GLuint mFramebuffer;
@@ -90,27 +87,17 @@ class MultiviewDrawBuffersValidationTest : public MultiviewDrawBuffersTest,
   protected:
     MultiviewDrawBuffersValidationTest() : MultiviewDrawBuffersTest(GetParam()) {}
 
-    void SetUp() override
-    {
-        MultiviewDrawBuffersTest::DrawTestSetUp();
-    }
+    void SetUp() override { MultiviewDrawBuffersTest::DrawTestSetUp(); }
 };
 
 class MultiviewDrawBuffersRenderTest : public MultiviewDrawBuffersTest,
                                        public ::testing::TestWithParam<PlatformParameters>
 {
   protected:
-    MultiviewDrawBuffersRenderTest()
-        : MultiviewDrawBuffersTest(GetParam())
-    {
-    }
+    MultiviewDrawBuffersRenderTest() : MultiviewDrawBuffersTest(GetParam()) {}
 
-    void SetUp() override
-    {
-        MultiviewDrawBuffersTest::DrawTestSetUp();
-    }
+    void SetUp() override { MultiviewDrawBuffersTest::DrawTestSetUp(); }
 };
-
 
 // The test verifies Valid API usage and error conditions for the default framebuffer.
 TEST_P(MultiviewDrawBuffersValidationTest, DefaultFramebuffer)
@@ -140,7 +127,7 @@ TEST_P(MultiviewDrawBuffersValidationTest, DefaultFramebuffer)
     }
 
     GLenum bothLocations[] = {GL_MULTIVIEW_EXT, GL_MULTIVIEW_EXT};
-    GLint bothIndices[] = { 0, 1 };
+    GLint bothIndices[]    = {0, 1};
     glDrawBuffersIndexedEXT(2, bothLocations, bothIndices);
     EXPECT_GL_NO_ERROR();
 
@@ -170,17 +157,17 @@ TEST_P(MultiviewDrawBuffersValidationTest, DefaultFramebuffer)
     glDrawBuffersIndexedEXT(1, locations, indices);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 
-    indices[0] = 0;
+    indices[0]   = 0;
     locations[0] = GL_COLOR_ATTACHMENT_EXT;
     glDrawBuffersIndexedEXT(1, locations, indices);
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
 
-    bothIndices[1]  = mNumBuffers;
+    bothIndices[1] = mNumBuffers;
     glDrawBuffersIndexedEXT(2, bothLocations, bothIndices);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 
     bothLocations[1] = GL_COLOR_ATTACHMENT_EXT;
-    bothIndices[1]  = 1;
+    bothIndices[1]   = 1;
     glDrawBuffersIndexedEXT(2, bothLocations, bothIndices);
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
 

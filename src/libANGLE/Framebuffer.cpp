@@ -270,13 +270,16 @@ bool IsClearBufferMaskedOut(const Context *context, GLenum buffer)
 }  // anonymous namespace
 
 // This constructor is only used for default framebuffers.
-FramebufferState::FramebufferState()
+FramebufferState::FramebufferState(EGLint multiviewViewCount)
     : mId(0),
       mLabel(),
-      mColorAttachments(1),
-      mDrawBufferStates(1, GL_BACK),
-      mReadBufferState(GL_BACK),
+      mColorAttachments(multiviewViewCount),
+      mDrawBufferStateLocations(multiviewViewCount, GL_NONE),
+      mDrawBufferStateIndices(multiviewViewCount, -1),
+      mReadBufferStateLocation(GL_BACK),
+      mReadBufferStateIndex(-1),
       mDrawBufferTypeMask(),
+      mMultiviewViewCount(multiviewViewCount),
       mDefaultWidth(0),
       mDefaultHeight(0),
       mDefaultSamples(0),
@@ -284,7 +287,21 @@ FramebufferState::FramebufferState()
       mDefaultLayers(0),
       mWebGLDepthStencilConsistent(true)
 {
-    ASSERT(mDrawBufferStates.size() > 0);
+    ASSERT(multiviewViewCount > 0);
+    ASSERT(mDrawBufferStateLocations.size() > 0);
+    ASSERT(mDrawBufferStateIndices.size() == mDrawBufferStateLocations.size());
+    if (multiviewViewCount == 1)
+    {
+        mDrawBufferStateLocations[0] = GL_BACK;
+    }
+    else
+    {
+        ASSERT(multiviewViewCount > 1);
+        mDrawBufferStateLocations[0] = GL_MULTIVIEW_EXT;
+        mDrawBufferStateIndices[0]   = 0;
+        mReadBufferStateLocation     = GL_MULTIVIEW_EXT;
+        mReadBufferStateIndex        = 0;
+    }
     mEnabledDrawBuffers.set(0);
 }
 
@@ -292,8 +309,10 @@ FramebufferState::FramebufferState(const Caps &caps, GLuint id)
     : mId(id),
       mLabel(),
       mColorAttachments(caps.maxColorAttachments),
-      mDrawBufferStates(caps.maxDrawBuffers, GL_NONE),
-      mReadBufferState(GL_COLOR_ATTACHMENT0_EXT),
+      mDrawBufferStateLocations(caps.maxDrawBuffers, GL_NONE),
+      mDrawBufferStateIndices(caps.maxDrawBuffers, -1),
+      mReadBufferStateLocation(GL_COLOR_ATTACHMENT0_EXT),
+      mReadBufferStateIndex(-1),
       mDrawBufferTypeMask(),
       mDefaultWidth(0),
       mDefaultHeight(0),
@@ -303,8 +322,9 @@ FramebufferState::FramebufferState(const Caps &caps, GLuint id)
       mWebGLDepthStencilConsistent(true)
 {
     ASSERT(mId != 0);
-    ASSERT(mDrawBufferStates.size() > 0);
-    mDrawBufferStates[0] = GL_COLOR_ATTACHMENT0_EXT;
+    ASSERT(mDrawBufferStateLocations.size() > 0);
+    ASSERT(mDrawBufferStateLocations.size() == mDrawBufferStateIndices.size());
+    mDrawBufferStateLocations[0] = GL_COLOR_ATTACHMENT0_EXT;
 }
 
 FramebufferState::~FramebufferState()
@@ -317,7 +337,8 @@ const std::string &FramebufferState::getLabel()
 }
 
 const FramebufferAttachment *FramebufferState::getAttachment(const Context *context,
-                                                             GLenum attachment) const
+                                                             GLenum attachment,
+                                                             GLint index) const
 {
     if (attachment >= GL_COLOR_ATTACHMENT0 && attachment <= GL_COLOR_ATTACHMENT15)
     {
@@ -331,9 +352,11 @@ const FramebufferAttachment *FramebufferState::getAttachment(const Context *cont
     {
         case GL_COLOR:
         case GL_BACK:
+            ASSERT(index == -1);
             return getColorAttachment(0);
         case GL_DEPTH:
         case GL_DEPTH_ATTACHMENT:
+            ASSERT(index == -1);
             if (context->isWebGL1())
             {
                 return getWebGLDepthAttachment();
@@ -344,6 +367,7 @@ const FramebufferAttachment *FramebufferState::getAttachment(const Context *cont
             }
         case GL_STENCIL:
         case GL_STENCIL_ATTACHMENT:
+            ASSERT(index == -1);
             if (context->isWebGL1())
             {
                 return getWebGLStencilAttachment();
@@ -354,6 +378,7 @@ const FramebufferAttachment *FramebufferState::getAttachment(const Context *cont
             }
         case GL_DEPTH_STENCIL:
         case GL_DEPTH_STENCIL_ATTACHMENT:
+            ASSERT(index == -1);
             if (context->isWebGL1())
             {
                 return getWebGLDepthStencilAttachment();
@@ -362,6 +387,12 @@ const FramebufferAttachment *FramebufferState::getAttachment(const Context *cont
             {
                 return getDepthStencilAttachment();
             }
+        case GL_MULTIVIEW_EXT:
+            ASSERT(index >= 0);
+            return getColorAttachment(index);
+        case GL_COLOR_ATTACHMENT_EXT:
+            ASSERT(index >= 0);
+            return getColorAttachment(index);
         default:
             UNREACHABLE();
             return nullptr;
@@ -370,19 +401,32 @@ const FramebufferAttachment *FramebufferState::getAttachment(const Context *cont
 
 size_t FramebufferState::getReadIndex() const
 {
-    ASSERT(mReadBufferState == GL_BACK ||
-           (mReadBufferState >= GL_COLOR_ATTACHMENT0 && mReadBufferState <= GL_COLOR_ATTACHMENT15));
-    size_t readIndex = (mReadBufferState == GL_BACK
-                            ? 0
-                            : static_cast<size_t>(mReadBufferState - GL_COLOR_ATTACHMENT0));
+    size_t readIndex = 0;
+    if (mReadBufferStateLocation != GL_MULTIVIEW_EXT &&
+        mReadBufferStateLocation != GL_COLOR_ATTACHMENT_EXT)
+    {
+        ASSERT(mReadBufferStateLocation == GL_BACK ||
+               (mReadBufferStateLocation >= GL_COLOR_ATTACHMENT0 &&
+                mReadBufferStateLocation <= GL_COLOR_ATTACHMENT15));
+        ASSERT(mReadBufferStateIndex == -1);
+        readIndex = (mReadBufferStateLocation == GL_BACK
+                         ? 0
+                         : static_cast<size_t>(mReadBufferStateLocation - GL_COLOR_ATTACHMENT0));
+    }
+    else
+    {
+        ASSERT(mReadBufferStateIndex >= 0);
+        readIndex = mReadBufferStateIndex;
+    }
     ASSERT(readIndex < mColorAttachments.size());
     return readIndex;
 }
 
 const FramebufferAttachment *FramebufferState::getReadAttachment() const
 {
-    if (mReadBufferState == GL_NONE)
+    if (mReadBufferStateLocation == GL_NONE)
     {
+        ASSERT(mReadBufferStateIndex == -1);
         return nullptr;
     }
     size_t readIndex = getReadIndex();
@@ -526,21 +570,32 @@ bool FramebufferState::hasSeparateDepthAndStencilAttachments() const
 
 const FramebufferAttachment *FramebufferState::getDrawBuffer(size_t drawBufferIdx) const
 {
-    ASSERT(drawBufferIdx < mDrawBufferStates.size());
-    if (mDrawBufferStates[drawBufferIdx] != GL_NONE)
+    ASSERT(drawBufferIdx < mDrawBufferStateLocations.size());
+    ASSERT(mDrawBufferStateLocations.size() == mDrawBufferStateIndices.size());
+    if (mDrawBufferStateLocations[drawBufferIdx] != GL_NONE)
     {
         // ES3 spec: "If the GL is bound to a draw framebuffer object, the ith buffer listed in bufs
         // must be COLOR_ATTACHMENTi or NONE"
-        ASSERT(mDrawBufferStates[drawBufferIdx] == GL_COLOR_ATTACHMENT0 + drawBufferIdx ||
-               (drawBufferIdx == 0 && mDrawBufferStates[drawBufferIdx] == GL_BACK));
-
-        if (mDrawBufferStates[drawBufferIdx] == GL_BACK)
+        ASSERT((mDrawBufferStateLocations[drawBufferIdx] == GL_COLOR_ATTACHMENT0 + drawBufferIdx) ||
+               (drawBufferIdx == 0 && mDrawBufferStateLocations[drawBufferIdx] == GL_BACK) ||
+               (mDrawBufferStateLocations[drawBufferIdx] == GL_MULTIVIEW_EXT &&
+                mDrawBufferStateIndices[drawBufferIdx] >= 0) ||
+               (mDrawBufferStateLocations[drawBufferIdx] == GL_COLOR_ATTACHMENT_EXT &&
+                mDrawBufferStateIndices[drawBufferIdx] >= 0));
+        const GLenum drawBufferStateLocation = mDrawBufferStateLocations[drawBufferIdx];
+        if (drawBufferStateLocation == GL_BACK)
         {
             return getColorAttachment(0);
         }
+        else if (drawBufferStateLocation == GL_MULTIVIEW_EXT ||
+                 drawBufferStateLocation == GL_COLOR_ATTACHMENT_EXT)
+        {
+            return getColorAttachment(mDrawBufferStateIndices[drawBufferIdx]);
+        }
         else
         {
-            return getColorAttachment(mDrawBufferStates[drawBufferIdx] - GL_COLOR_ATTACHMENT0);
+            return getColorAttachment(mDrawBufferStateLocations[drawBufferIdx] -
+                                      GL_COLOR_ATTACHMENT0);
         }
     }
     else
@@ -551,7 +606,8 @@ const FramebufferAttachment *FramebufferState::getDrawBuffer(size_t drawBufferId
 
 size_t FramebufferState::getDrawBufferCount() const
 {
-    return mDrawBufferStates.size();
+    ASSERT(mDrawBufferStateLocations.size() == mDrawBufferStateIndices.size());
+    return mDrawBufferStateLocations.size();
 }
 
 bool FramebufferState::colorAttachmentsAreUniqueImages() const
@@ -660,7 +716,7 @@ Framebuffer::Framebuffer(const Caps &caps, rx::GLImplFactory *factory, GLuint id
 }
 
 Framebuffer::Framebuffer(const Context *context, egl::Surface *surface)
-    : mState(),
+    : mState(surface->getCreatedMultiviewViewCount()),
       mImpl(surface->getImplementation()->createDefaultFramebuffer(context, mState)),
       mCachedStatus(GL_FRAMEBUFFER_COMPLETE),
       mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
@@ -669,15 +725,32 @@ Framebuffer::Framebuffer(const Context *context, egl::Surface *surface)
     ASSERT(mImpl != nullptr);
     mDirtyColorAttachmentBindings.emplace_back(this, DIRTY_BIT_COLOR_ATTACHMENT_0);
 
-    setAttachmentImpl(context, GL_FRAMEBUFFER_DEFAULT, GL_BACK, ImageIndex(), surface,
-                      FramebufferAttachment::kDefaultNumViews,
-                      FramebufferAttachment::kDefaultBaseViewIndex,
-                      FramebufferAttachment::kDefaultMultiviewLayout,
-                      FramebufferAttachment::kDefaultViewportOffsets);
+    EGLint multiviewViewCount = surface->getCreatedMultiviewViewCount();
+    ASSERT(multiviewViewCount > 0);
+    if (multiviewViewCount == 1)
+    {
+        setAttachmentImpl(context, GL_FRAMEBUFFER_DEFAULT, GL_BACK, -1, ImageIndex(), surface,
+                          FramebufferAttachment::kDefaultNumViews,
+                          FramebufferAttachment::kDefaultBaseViewIndex,
+                          FramebufferAttachment::kDefaultMultiviewLayout,
+                          FramebufferAttachment::kDefaultViewportOffsets);
+    }
+    else
+    {
+        for (int index = 0; index < multiviewViewCount; ++index)
+        {
+            setAttachmentImpl(context, GL_FRAMEBUFFER_DEFAULT, GL_MULTIVIEW_EXT, index,
+                              gl::ImageIndex::Make2DArray(0, index), surface,
+                              FramebufferAttachment::kDefaultNumViews,
+                              FramebufferAttachment::kDefaultBaseViewIndex,
+                              FramebufferAttachment::kDefaultMultiviewLayout,
+                              FramebufferAttachment::kDefaultViewportOffsets);
+        }
+    }
 
     if (surface->getConfig()->depthSize > 0)
     {
-        setAttachmentImpl(context, GL_FRAMEBUFFER_DEFAULT, GL_DEPTH, ImageIndex(), surface,
+        setAttachmentImpl(context, GL_FRAMEBUFFER_DEFAULT, GL_DEPTH, -1, ImageIndex(), surface,
                           FramebufferAttachment::kDefaultNumViews,
                           FramebufferAttachment::kDefaultBaseViewIndex,
                           FramebufferAttachment::kDefaultMultiviewLayout,
@@ -686,7 +759,7 @@ Framebuffer::Framebuffer(const Context *context, egl::Surface *surface)
 
     if (surface->getConfig()->stencilSize > 0)
     {
-        setAttachmentImpl(context, GL_FRAMEBUFFER_DEFAULT, GL_STENCIL, ImageIndex(), surface,
+        setAttachmentImpl(context, GL_FRAMEBUFFER_DEFAULT, GL_STENCIL, -1, ImageIndex(), surface,
                           FramebufferAttachment::kDefaultNumViews,
                           FramebufferAttachment::kDefaultBaseViewIndex,
                           FramebufferAttachment::kDefaultMultiviewLayout,
@@ -696,7 +769,7 @@ Framebuffer::Framebuffer(const Context *context, egl::Surface *surface)
 }
 
 Framebuffer::Framebuffer(rx::GLImplFactory *factory)
-    : mState(),
+    : mState(1),
       mImpl(factory->createFramebuffer(mState)),
       mCachedStatus(GL_FRAMEBUFFER_UNDEFINED_OES),
       mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
@@ -769,7 +842,8 @@ bool Framebuffer::detachResourceById(const Context *context, GLenum resourceType
             if (attachment->isAttached() && attachment->type() == resourceType &&
                 attachment->id() == resourceId)
             {
-                resetAttachment(context, attachment->getBinding());
+                resetAttachment(context, attachment->getBindingLocation(),
+                                attachment->getBindingIndex());
                 found = true;
             }
         }
@@ -862,32 +936,53 @@ const FramebufferAttachment *Framebuffer::getFirstNonNullAttachment() const
 const FramebufferAttachment *Framebuffer::getAttachment(const Context *context,
                                                         GLenum attachment) const
 {
-    return mState.getAttachment(context, attachment);
+    return mState.getAttachment(context, attachment, -1);
+}
+
+const FramebufferAttachment *Framebuffer::getAttachment(const Context *context,
+                                                        GLenum location,
+                                                        GLint index) const
+{
+    return mState.getAttachment(context, location, index);
 }
 
 size_t Framebuffer::getDrawbufferStateCount() const
 {
-    return mState.mDrawBufferStates.size();
+    ASSERT(mState.mDrawBufferStateLocations.size() == mState.mDrawBufferStateIndices.size());
+    return mState.mDrawBufferStateLocations.size();
 }
 
-GLenum Framebuffer::getDrawBufferState(size_t drawBuffer) const
+GLenum Framebuffer::getDrawBufferStateLocation(size_t drawBuffer) const
 {
-    ASSERT(drawBuffer < mState.mDrawBufferStates.size());
-    return mState.mDrawBufferStates[drawBuffer];
+    ASSERT(drawBuffer < mState.mDrawBufferStateLocations.size());
+    ASSERT(mState.mDrawBufferStateLocations.size() == mState.mDrawBufferStateIndices.size());
+    return mState.mDrawBufferStateLocations[drawBuffer];
 }
 
-const std::vector<GLenum> &Framebuffer::getDrawBufferStates() const
+const std::vector<GLenum> &Framebuffer::getDrawBufferStateLocations() const
 {
-    return mState.getDrawBufferStates();
+    ASSERT(mState.mDrawBufferStateLocations.size() == mState.mDrawBufferStateIndices.size());
+    return mState.getDrawBufferStateLocations();
+}
+
+const std::vector<GLint> &Framebuffer::getDrawBufferStateIndices() const
+{
+    ASSERT(mState.mDrawBufferStateLocations.size() == mState.mDrawBufferStateIndices.size());
+    return mState.getDrawBufferStateIndices();
 }
 
 void Framebuffer::setDrawBuffers(size_t count, const GLenum *buffers)
 {
-    auto &drawStates = mState.mDrawBufferStates;
-
-    ASSERT(count <= drawStates.size());
-    std::copy(buffers, buffers + count, drawStates.begin());
-    std::fill(drawStates.begin() + count, drawStates.end(), GL_NONE);
+    auto &drawStateLocations = mState.mDrawBufferStateLocations;
+    auto &drawStateIndices   = mState.mDrawBufferStateIndices;
+    ASSERT(count <= drawStateLocations.size());
+    ASSERT(drawStateLocations.size() == drawStateIndices.size());
+    ASSERT(std::all_of(buffers, buffers + count, [](GLenum buffer) {
+        return buffer != GL_MULTIVIEW_EXT && buffer != GL_COLOR_ATTACHMENT_EXT;
+    }));
+    std::copy(buffers, buffers + count, drawStateLocations.begin());
+    std::fill(drawStateLocations.begin() + count, drawStateLocations.end(), GL_NONE);
+    std::fill(drawStateIndices.begin(), drawStateIndices.end(), -1);
     mDirtyBits.set(DIRTY_BIT_DRAW_BUFFERS);
 
     mState.mEnabledDrawBuffers.reset();
@@ -897,11 +992,42 @@ void Framebuffer::setDrawBuffers(size_t count, const GLenum *buffers)
     {
         mState.mDrawBufferTypeMask.setIndex(getDrawbufferWriteType(index), index);
 
-        if (drawStates[index] != GL_NONE && mState.mColorAttachments[index].isAttached())
+        if (drawStateLocations[index] != GL_NONE && mState.mColorAttachments[index].isAttached())
         {
+            ASSERT(drawStateIndices[index] == -1);
             mState.mEnabledDrawBuffers.set(index);
         }
     }
+}
+
+void Framebuffer::setDrawBuffersIndexed(const Context *context,
+                                        size_t count,
+                                        const GLenum *locations,
+                                        const GLint *indices)
+{
+    auto &drawStateLocations = mState.mDrawBufferStateLocations;
+    auto &drawStateIndices   = mState.mDrawBufferStateIndices;
+    ASSERT(count <= drawStateLocations.size());
+    ASSERT(drawStateLocations.size() == drawStateIndices.size());
+    std::copy(locations, locations + count, drawStateLocations.begin());
+    std::fill(drawStateLocations.begin() + count, drawStateLocations.end(), GL_NONE);
+    std::copy(indices, indices + count, drawStateIndices.begin());
+    std::fill(drawStateIndices.begin() + count, drawStateIndices.end(), -1);
+    mDirtyBits.set(DIRTY_BIT_DRAW_BUFFERS);
+    mState.mEnabledDrawBuffers.reset();
+    for (size_t index = 0; index < count; ++index)
+    {
+        auto colorAttachmentIndex = drawStateIndices[index];
+        ASSERT(colorAttachmentIndex >= 0);
+        ASSERT(static_cast<size_t>(colorAttachmentIndex) < mState.mColorAttachments.size());
+        ASSERT(static_cast<size_t>(colorAttachmentIndex) < mState.mEnabledDrawBuffers.size());
+        if (drawStateLocations[index] != GL_NONE &&
+            mState.mColorAttachments[colorAttachmentIndex].isAttached())
+        {
+            mState.mEnabledDrawBuffers.set(colorAttachmentIndex);
+        }
+    }
+    mImpl->setDrawBuffersIndexed(context, count, locations, indices);
 }
 
 const FramebufferAttachment *Framebuffer::getDrawBuffer(size_t drawBuffer) const
@@ -941,7 +1067,9 @@ DrawBufferMask Framebuffer::getDrawBufferMask() const
 
 bool Framebuffer::hasEnabledDrawBuffer() const
 {
-    for (size_t drawbufferIdx = 0; drawbufferIdx < mState.mDrawBufferStates.size(); ++drawbufferIdx)
+    ASSERT(mState.mDrawBufferStateLocations.size() == mState.mDrawBufferStateIndices.size());
+    for (size_t drawbufferIdx = 0; drawbufferIdx < mState.mDrawBufferStateLocations.size();
+         ++drawbufferIdx)
     {
         if (getDrawBuffer(drawbufferIdx) != nullptr)
         {
@@ -952,9 +1080,14 @@ bool Framebuffer::hasEnabledDrawBuffer() const
     return false;
 }
 
-GLenum Framebuffer::getReadBufferState() const
+GLenum Framebuffer::getReadBufferStateLocation() const
 {
-    return mState.mReadBufferState;
+    return mState.mReadBufferStateLocation;
+}
+
+GLint Framebuffer::getReadBufferStateIndex() const
+{
+    return mState.mReadBufferStateIndex;
 }
 
 void Framebuffer::setReadBuffer(GLenum buffer)
@@ -962,8 +1095,18 @@ void Framebuffer::setReadBuffer(GLenum buffer)
     ASSERT(buffer == GL_BACK || buffer == GL_NONE ||
            (buffer >= GL_COLOR_ATTACHMENT0 &&
             (buffer - GL_COLOR_ATTACHMENT0) < mState.mColorAttachments.size()));
-    mState.mReadBufferState = buffer;
+    mState.mReadBufferStateLocation = buffer;
+    mState.mReadBufferStateIndex    = -1;
     mDirtyBits.set(DIRTY_BIT_READ_BUFFER);
+}
+
+void Framebuffer::setReadBufferIndexed(const Context *context, GLenum location, GLint index)
+{
+    ASSERT(location == GL_MULTIVIEW_EXT || location == GL_COLOR_ATTACHMENT_EXT);
+    ASSERT(index >= 0 && static_cast<size_t>(index) < mState.mColorAttachments.size());
+    mState.mReadBufferStateLocation = location;
+    mState.mReadBufferStateIndex    = index;
+    mImpl->setReadBufferIndexed(context, location, index);
 }
 
 size_t Framebuffer::getNumColorBuffers() const
@@ -983,7 +1126,9 @@ bool Framebuffer::hasStencil() const
 
 bool Framebuffer::usingExtendedDrawBuffers() const
 {
-    for (size_t drawbufferIdx = 1; drawbufferIdx < mState.mDrawBufferStates.size(); ++drawbufferIdx)
+    ASSERT(mState.mDrawBufferStateLocations.size() == mState.mDrawBufferStateIndices.size());
+    for (size_t drawbufferIdx = 1; drawbufferIdx < mState.mDrawBufferStateLocations.size();
+         ++drawbufferIdx)
     {
         if (getDrawBuffer(drawbufferIdx) != nullptr)
         {
@@ -1563,11 +1708,14 @@ bool Framebuffer::hasValidDepthStencil() const
 
 void Framebuffer::setAttachment(const Context *context,
                                 GLenum type,
-                                GLenum binding,
+                                GLenum bindingLocation,
+                                GLint bindingIndex,
                                 const ImageIndex &textureIndex,
                                 FramebufferAttachmentObject *resource)
 {
-    setAttachment(context, type, binding, textureIndex, resource,
+    ASSERT(bindingLocation != GL_MULTIVIEW_EXT && bindingLocation != GL_COLOR_ATTACHMENT_EXT);
+    ASSERT(bindingIndex == -1);
+    setAttachment(context, type, bindingLocation, bindingIndex, textureIndex, resource,
                   FramebufferAttachment::kDefaultNumViews,
                   FramebufferAttachment::kDefaultBaseViewIndex,
                   FramebufferAttachment::kDefaultMultiviewLayout,
@@ -1576,7 +1724,8 @@ void Framebuffer::setAttachment(const Context *context,
 
 void Framebuffer::setAttachment(const Context *context,
                                 GLenum type,
-                                GLenum binding,
+                                GLenum bindingLocation,
+                                GLint bindingIndex,
                                 const ImageIndex &textureIndex,
                                 FramebufferAttachmentObject *resource,
                                 GLsizei numViews,
@@ -1587,34 +1736,34 @@ void Framebuffer::setAttachment(const Context *context,
     // Context may be null in unit tests.
     if (!context || !context->isWebGL1())
     {
-        setAttachmentImpl(context, type, binding, textureIndex, resource, numViews, baseViewIndex,
-                          multiviewLayout, viewportOffsets);
+        setAttachmentImpl(context, type, bindingLocation, bindingIndex, textureIndex, resource,
+                          numViews, baseViewIndex, multiviewLayout, viewportOffsets);
         return;
     }
 
-    switch (binding)
+    switch (bindingLocation)
     {
         case GL_DEPTH_STENCIL:
         case GL_DEPTH_STENCIL_ATTACHMENT:
-            mState.mWebGLDepthStencilAttachment.attach(context, type, binding, textureIndex,
-                                                       resource, numViews, baseViewIndex,
-                                                       multiviewLayout, viewportOffsets);
+            mState.mWebGLDepthStencilAttachment.attach(
+                context, type, bindingLocation, bindingIndex, textureIndex, resource, numViews,
+                baseViewIndex, multiviewLayout, viewportOffsets);
             break;
         case GL_DEPTH:
         case GL_DEPTH_ATTACHMENT:
-            mState.mWebGLDepthAttachment.attach(context, type, binding, textureIndex, resource,
-                                                numViews, baseViewIndex, multiviewLayout,
-                                                viewportOffsets);
+            mState.mWebGLDepthAttachment.attach(context, type, bindingLocation, bindingIndex,
+                                                textureIndex, resource, numViews, baseViewIndex,
+                                                multiviewLayout, viewportOffsets);
             break;
         case GL_STENCIL:
         case GL_STENCIL_ATTACHMENT:
-            mState.mWebGLStencilAttachment.attach(context, type, binding, textureIndex, resource,
-                                                  numViews, baseViewIndex, multiviewLayout,
-                                                  viewportOffsets);
+            mState.mWebGLStencilAttachment.attach(context, type, bindingLocation, bindingIndex,
+                                                  textureIndex, resource, numViews, baseViewIndex,
+                                                  multiviewLayout, viewportOffsets);
             break;
         default:
-            setAttachmentImpl(context, type, binding, textureIndex, resource, numViews,
-                              baseViewIndex, multiviewLayout, viewportOffsets);
+            setAttachmentImpl(context, type, bindingLocation, bindingIndex, textureIndex, resource,
+                              numViews, baseViewIndex, multiviewLayout, viewportOffsets);
             return;
     }
 
@@ -1630,7 +1779,8 @@ void Framebuffer::setAttachmentMultiviewLayered(const Context *context,
                                                 GLsizei numViews,
                                                 GLint baseViewIndex)
 {
-    setAttachment(context, type, binding, textureIndex, resource, numViews, baseViewIndex,
+    ASSERT(binding != GL_MULTIVIEW_EXT && binding != GL_COLOR_ATTACHMENT_EXT);
+    setAttachment(context, type, binding, -1, textureIndex, resource, numViews, baseViewIndex,
                   GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE,
                   FramebufferAttachment::kDefaultViewportOffsets);
 }
@@ -1643,7 +1793,8 @@ void Framebuffer::setAttachmentMultiviewSideBySide(const Context *context,
                                                    GLsizei numViews,
                                                    const GLint *viewportOffsets)
 {
-    setAttachment(context, type, binding, textureIndex, resource, numViews,
+    ASSERT(binding != GL_MULTIVIEW_EXT && binding != GL_COLOR_ATTACHMENT_EXT);
+    setAttachment(context, type, binding, -1, textureIndex, resource, numViews,
                   FramebufferAttachment::kDefaultBaseViewIndex,
                   GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE, viewportOffsets);
 }
@@ -1688,45 +1839,46 @@ void Framebuffer::commitWebGL1DepthStencilIfConsistent(const Context *context,
     if (mState.mWebGLDepthAttachment.isAttached())
     {
         const auto &depth = mState.mWebGLDepthAttachment;
-        setAttachmentImpl(context, depth.type(), GL_DEPTH_ATTACHMENT,
+        setAttachmentImpl(context, depth.type(), GL_DEPTH_ATTACHMENT, -1,
                           getImageIndexIfTextureAttachment(depth), depth.getResource(), numViews,
                           baseViewIndex, multiviewLayout, viewportOffsets);
-        setAttachmentImpl(context, GL_NONE, GL_STENCIL_ATTACHMENT, ImageIndex(), nullptr, numViews,
-                          baseViewIndex, multiviewLayout, viewportOffsets);
+        setAttachmentImpl(context, GL_NONE, GL_STENCIL_ATTACHMENT, -1, ImageIndex(), nullptr,
+                          numViews, baseViewIndex, multiviewLayout, viewportOffsets);
     }
     else if (mState.mWebGLStencilAttachment.isAttached())
     {
         const auto &stencil = mState.mWebGLStencilAttachment;
-        setAttachmentImpl(context, GL_NONE, GL_DEPTH_ATTACHMENT, ImageIndex(), nullptr, numViews,
-                          baseViewIndex, multiviewLayout, viewportOffsets);
-        setAttachmentImpl(context, stencil.type(), GL_STENCIL_ATTACHMENT,
+        setAttachmentImpl(context, GL_NONE, GL_DEPTH_ATTACHMENT, -1, ImageIndex(), nullptr,
+                          numViews, baseViewIndex, multiviewLayout, viewportOffsets);
+        setAttachmentImpl(context, stencil.type(), GL_STENCIL_ATTACHMENT, -1,
                           getImageIndexIfTextureAttachment(stencil), stencil.getResource(),
                           numViews, baseViewIndex, multiviewLayout, viewportOffsets);
     }
     else if (mState.mWebGLDepthStencilAttachment.isAttached())
     {
         const auto &depthStencil = mState.mWebGLDepthStencilAttachment;
-        setAttachmentImpl(context, depthStencil.type(), GL_DEPTH_ATTACHMENT,
+        setAttachmentImpl(context, depthStencil.type(), GL_DEPTH_ATTACHMENT, -1,
                           getImageIndexIfTextureAttachment(depthStencil),
                           depthStencil.getResource(), numViews, baseViewIndex, multiviewLayout,
                           viewportOffsets);
-        setAttachmentImpl(context, depthStencil.type(), GL_STENCIL_ATTACHMENT,
+        setAttachmentImpl(context, depthStencil.type(), GL_STENCIL_ATTACHMENT, -1,
                           getImageIndexIfTextureAttachment(depthStencil),
                           depthStencil.getResource(), numViews, baseViewIndex, multiviewLayout,
                           viewportOffsets);
     }
     else
     {
-        setAttachmentImpl(context, GL_NONE, GL_DEPTH_ATTACHMENT, ImageIndex(), nullptr, numViews,
-                          baseViewIndex, multiviewLayout, viewportOffsets);
-        setAttachmentImpl(context, GL_NONE, GL_STENCIL_ATTACHMENT, ImageIndex(), nullptr, numViews,
-                          baseViewIndex, multiviewLayout, viewportOffsets);
+        setAttachmentImpl(context, GL_NONE, GL_DEPTH_ATTACHMENT, -1, ImageIndex(), nullptr,
+                          numViews, baseViewIndex, multiviewLayout, viewportOffsets);
+        setAttachmentImpl(context, GL_NONE, GL_STENCIL_ATTACHMENT, -1, ImageIndex(), nullptr,
+                          numViews, baseViewIndex, multiviewLayout, viewportOffsets);
     }
 }
 
 void Framebuffer::setAttachmentImpl(const Context *context,
                                     GLenum type,
-                                    GLenum binding,
+                                    GLenum bindingLocation,
+                                    GLint bindingIndex,
                                     const ImageIndex &textureIndex,
                                     FramebufferAttachmentObject *resource,
                                     GLsizei numViews,
@@ -1734,7 +1886,7 @@ void Framebuffer::setAttachmentImpl(const Context *context,
                                     GLenum multiviewLayout,
                                     const GLint *viewportOffsets)
 {
-    switch (binding)
+    switch (bindingLocation)
     {
         case GL_DEPTH_STENCIL:
         case GL_DEPTH_STENCIL_ATTACHMENT:
@@ -1743,7 +1895,8 @@ void Framebuffer::setAttachmentImpl(const Context *context,
             FramebufferAttachmentObject *attachmentObj = resource;
             if (resource)
             {
-                const Format &format = resource->getAttachmentFormat(binding, textureIndex);
+                const Format &format =
+                    resource->getAttachmentFormat(bindingLocation, bindingIndex, textureIndex);
                 if (format.info->depthBits == 0 || format.info->stencilBits == 0)
                 {
                     // Attaching nullptr detaches the current attachment.
@@ -1752,12 +1905,12 @@ void Framebuffer::setAttachmentImpl(const Context *context,
             }
 
             updateAttachment(context, &mState.mDepthAttachment, DIRTY_BIT_DEPTH_ATTACHMENT,
-                             &mDirtyDepthAttachmentBinding, type, binding, textureIndex,
-                             attachmentObj, numViews, baseViewIndex, multiviewLayout,
+                             &mDirtyDepthAttachmentBinding, type, bindingLocation, bindingIndex,
+                             textureIndex, attachmentObj, numViews, baseViewIndex, multiviewLayout,
                              viewportOffsets);
             updateAttachment(context, &mState.mStencilAttachment, DIRTY_BIT_STENCIL_ATTACHMENT,
-                             &mDirtyStencilAttachmentBinding, type, binding, textureIndex,
-                             attachmentObj, numViews, baseViewIndex, multiviewLayout,
+                             &mDirtyStencilAttachmentBinding, type, bindingLocation, bindingIndex,
+                             textureIndex, attachmentObj, numViews, baseViewIndex, multiviewLayout,
                              viewportOffsets);
             break;
         }
@@ -1765,36 +1918,56 @@ void Framebuffer::setAttachmentImpl(const Context *context,
         case GL_DEPTH:
         case GL_DEPTH_ATTACHMENT:
             updateAttachment(context, &mState.mDepthAttachment, DIRTY_BIT_DEPTH_ATTACHMENT,
-                             &mDirtyDepthAttachmentBinding, type, binding, textureIndex, resource,
-                             numViews, baseViewIndex, multiviewLayout, viewportOffsets);
+                             &mDirtyDepthAttachmentBinding, type, bindingLocation, bindingIndex,
+                             textureIndex, resource, numViews, baseViewIndex, multiviewLayout,
+                             viewportOffsets);
             break;
 
         case GL_STENCIL:
         case GL_STENCIL_ATTACHMENT:
             updateAttachment(context, &mState.mStencilAttachment, DIRTY_BIT_STENCIL_ATTACHMENT,
-                             &mDirtyStencilAttachmentBinding, type, binding, textureIndex, resource,
-                             numViews, baseViewIndex, multiviewLayout, viewportOffsets);
+                             &mDirtyStencilAttachmentBinding, type, bindingLocation, bindingIndex,
+                             textureIndex, resource, numViews, baseViewIndex, multiviewLayout,
+                             viewportOffsets);
             break;
 
         case GL_BACK:
             updateAttachment(context, &mState.mColorAttachments[0], DIRTY_BIT_COLOR_ATTACHMENT_0,
-                             &mDirtyColorAttachmentBindings[0], type, binding, textureIndex,
-                             resource, numViews, baseViewIndex, multiviewLayout, viewportOffsets);
+                             &mDirtyColorAttachmentBindings[0], type, bindingLocation, bindingIndex,
+                             textureIndex, resource, numViews, baseViewIndex, multiviewLayout,
+                             viewportOffsets);
+            break;
+
+        case GL_MULTIVIEW_EXT:
+            ASSERT(bindingIndex >= 0 &&
+                   static_cast<size_t>(bindingIndex) < mState.mColorAttachments.size());
+            mState.mColorAttachments[bindingIndex].attach(
+                context, type, bindingLocation, bindingIndex, textureIndex, resource, numViews,
+                baseViewIndex, multiviewLayout, viewportOffsets);
+            ASSERT(static_cast<size_t>(bindingIndex) < DIRTY_BIT_COLOR_ATTACHMENT_MAX);
+            mDirtyBits.set(DIRTY_BIT_COLOR_ATTACHMENT_0 + bindingIndex);
+            // No need for a resource binding for the default FBO, it's always complete.
             break;
 
         default:
         {
-            size_t colorIndex = binding - GL_COLOR_ATTACHMENT0;
+            ASSERT((bindingLocation != GL_COLOR_ATTACHMENT_EXT && bindingIndex == -1) ||
+                   (bindingLocation == GL_COLOR_ATTACHMENT_EXT && bindingIndex >= 0 &&
+                    static_cast<size_t>(bindingIndex) < mState.mColorAttachments.size() &&
+                    static_cast<size_t>(bindingIndex) < DIRTY_BIT_COLOR_ATTACHMENT_MAX));
+            size_t colorIndex = bindingLocation != GL_COLOR_ATTACHMENT_EXT
+                                    ? bindingLocation - GL_COLOR_ATTACHMENT0
+                                    : static_cast<size_t>(bindingIndex);
             ASSERT(colorIndex < mState.mColorAttachments.size());
             size_t dirtyBit = DIRTY_BIT_COLOR_ATTACHMENT_0 + colorIndex;
             updateAttachment(context, &mState.mColorAttachments[colorIndex], dirtyBit,
-                             &mDirtyColorAttachmentBindings[colorIndex], type, binding,
-                             textureIndex, resource, numViews, baseViewIndex, multiviewLayout,
-                             viewportOffsets);
+                             &mDirtyColorAttachmentBindings[colorIndex], type, bindingLocation,
+                             bindingIndex, textureIndex, resource, numViews, baseViewIndex,
+                             multiviewLayout, viewportOffsets);
 
             // TODO(jmadill): ASSERT instead of checking the attachment exists in
             // formsRenderingFeedbackLoopWith
-            bool enabled = (type != GL_NONE && getDrawBufferState(colorIndex) != GL_NONE);
+            bool enabled = (type != GL_NONE && getDrawBufferStateLocation(colorIndex) != GL_NONE);
             mState.mEnabledDrawBuffers.set(colorIndex, enabled);
             mState.mDrawBufferTypeMask.setIndex(getDrawbufferWriteType(colorIndex), colorIndex);
         }
@@ -1809,7 +1982,8 @@ void Framebuffer::updateAttachment(const Context *context,
                                    size_t dirtyBit,
                                    angle::ObserverBinding *onDirtyBinding,
                                    GLenum type,
-                                   GLenum binding,
+                                   GLenum bindingLocation,
+                                   GLint bindingIndex,
                                    const ImageIndex &textureIndex,
                                    FramebufferAttachmentObject *resource,
                                    GLsizei numViews,
@@ -1817,8 +1991,8 @@ void Framebuffer::updateAttachment(const Context *context,
                                    GLenum multiviewLayout,
                                    const GLint *viewportOffsets)
 {
-    attachment->attach(context, type, binding, textureIndex, resource, numViews, baseViewIndex,
-                       multiviewLayout, viewportOffsets);
+    attachment->attach(context, type, bindingLocation, bindingIndex, textureIndex, resource,
+                       numViews, baseViewIndex, multiviewLayout, viewportOffsets);
     mDirtyBits.set(dirtyBit);
     mState.mResourceNeedsInit.set(dirtyBit, attachment->initState() == InitState::MayNeedInit);
     onDirtyBinding->bind(resource ? resource->getSubject() : nullptr);
@@ -1826,9 +2000,11 @@ void Framebuffer::updateAttachment(const Context *context,
     invalidateCompletenessCache();
 }
 
-void Framebuffer::resetAttachment(const Context *context, GLenum binding)
+void Framebuffer::resetAttachment(const Context *context,
+                                  GLenum bindingLocation,
+                                  GLint bindingIndex)
 {
-    setAttachment(context, GL_NONE, binding, ImageIndex(), nullptr);
+    setAttachment(context, GL_NONE, bindingLocation, bindingIndex, ImageIndex(), nullptr);
 }
 
 Error Framebuffer::syncState(const Context *context)
@@ -2149,7 +2325,7 @@ Error Framebuffer::ensureReadAttachmentInitialized(const Context *context, GLbit
         return NoError();
     }
 
-    if ((blitMask & GL_COLOR_BUFFER_BIT) != 0 && mState.mReadBufferState != GL_NONE)
+    if ((blitMask & GL_COLOR_BUFFER_BIT) != 0 && mState.mReadBufferStateLocation != GL_NONE)
     {
         size_t readIndex = mState.getReadIndex();
         if (mState.mResourceNeedsInit[readIndex])

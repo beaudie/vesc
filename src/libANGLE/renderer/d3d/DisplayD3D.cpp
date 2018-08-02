@@ -358,4 +358,9 @@ gl::Version DisplayD3D::getMaxSupportedESVersion() const
     return mRenderer->getMaxSupportedESVersion();
 }
 
+bool DisplayD3D::isStereoSupported() const
+{
+    return mRenderer->isStereoSupported();
+}
+
 }  // namespace rx

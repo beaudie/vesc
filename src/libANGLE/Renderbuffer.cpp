@@ -221,7 +221,8 @@ Extents Renderbuffer::getAttachmentSize(const gl::ImageIndex & /*imageIndex*/) c
     return Extents(mState.mWidth, mState.mHeight, 1);
 }
 
-Format Renderbuffer::getAttachmentFormat(GLenum /*binding*/,
+Format Renderbuffer::getAttachmentFormat(GLenum /*bindingLocation*/,
+                                         GLint /*bindingIndex*/,
                                          const ImageIndex & /*imageIndex*/) const
 {
     return getFormat();

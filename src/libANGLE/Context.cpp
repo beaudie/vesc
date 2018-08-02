@@ -1786,6 +1786,10 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
             *params = mGLState.getMaxShaderCompilerThreads();
             break;
 
+        case GL_MAX_MULTIVIEW_BUFFERS_EXT:
+            *params = getGLState().getDrawFramebuffer()->getMultiviewViewCount();
+            break;
+
         default:
             handleError(mGLState.getIntegerv(this, pname, params));
             break;
@@ -2643,7 +2647,7 @@ EGLenum Context::getRenderBuffer() const
         return EGL_NONE;
     }
 
-    const FramebufferAttachment *backAttachment = framebuffer->getAttachment(this, GL_BACK);
+    const FramebufferAttachment *backAttachment = framebuffer->getAttachment(this, GL_BACK, -1);
     ASSERT(backAttachment != nullptr);
     return backAttachment->getSurface()->getRenderBuffer();
 }
@@ -3658,11 +3662,11 @@ void Context::framebufferTexture2D(GLenum target,
     {
         Texture *textureObj = getTexture(texture);
         ImageIndex index    = ImageIndex::MakeFromTarget(textarget, level);
-        framebuffer->setAttachment(this, GL_TEXTURE, attachment, index, textureObj);
+        framebuffer->setAttachment(this, GL_TEXTURE, attachment, -1, index, textureObj);
     }
     else
     {
-        framebuffer->resetAttachment(this, attachment);
+        framebuffer->resetAttachment(this, attachment, -1);
     }
 
     mGLState.setObjectDirty(target);
@@ -3680,12 +3684,12 @@ void Context::framebufferRenderbuffer(GLenum target,
     {
         Renderbuffer *renderbufferObject = getRenderbuffer(renderbuffer);
 
-        framebuffer->setAttachment(this, GL_RENDERBUFFER, attachment, gl::ImageIndex(),
+        framebuffer->setAttachment(this, GL_RENDERBUFFER, attachment, -1, gl::ImageIndex(),
                                    renderbufferObject);
     }
     else
     {
-        framebuffer->resetAttachment(this, attachment);
+        framebuffer->resetAttachment(this, attachment, -1);
     }
 
     mGLState.setObjectDirty(target);
@@ -3704,11 +3708,11 @@ void Context::framebufferTextureLayer(GLenum target,
     {
         Texture *textureObject = getTexture(texture);
         ImageIndex index       = ImageIndex::MakeFromType(textureObject->getType(), level, layer);
-        framebuffer->setAttachment(this, GL_TEXTURE, attachment, index, textureObject);
+        framebuffer->setAttachment(this, GL_TEXTURE, attachment, -1, index, textureObject);
     }
     else
     {
-        framebuffer->resetAttachment(this, attachment);
+        framebuffer->resetAttachment(this, attachment, -1);
     }
 
     mGLState.setObjectDirty(target);
@@ -3734,7 +3738,7 @@ void Context::framebufferTextureMultiviewLayered(GLenum target,
     }
     else
     {
-        framebuffer->resetAttachment(this, attachment);
+        framebuffer->resetAttachment(this, attachment, -1);
     }
 
     mGLState.setObjectDirty(target);
@@ -3760,7 +3764,7 @@ void Context::framebufferTextureMultiviewSideBySide(GLenum target,
     }
     else
     {
-        framebuffer->resetAttachment(this, attachment);
+        framebuffer->resetAttachment(this, attachment, -1);
     }
 
     mGLState.setObjectDirty(target);
@@ -3777,11 +3781,11 @@ void Context::framebufferTexture(GLenum target, GLenum attachment, GLuint textur
 
         ImageIndex index = ImageIndex::MakeFromType(
             textureObj->getType(), level, ImageIndex::kEntireLevel, ImageIndex::kEntireLevel);
-        framebuffer->setAttachment(this, GL_TEXTURE, attachment, index, textureObj);
+        framebuffer->setAttachment(this, GL_TEXTURE, attachment, -1, index, textureObj);
     }
     else
     {
-        framebuffer->resetAttachment(this, attachment);
+        framebuffer->resetAttachment(this, attachment, -1);
     }
 
     mGLState.setObjectDirty(target);
@@ -3799,6 +3803,22 @@ void Context::readBuffer(GLenum mode)
 {
     Framebuffer *readFBO = mGLState.getReadFramebuffer();
     readFBO->setReadBuffer(mode);
+    mGLState.setObjectDirty(GL_READ_FRAMEBUFFER);
+}
+
+void Context::drawBuffersIndexedEXT(GLint n, const GLenum *locations, const GLint *indices)
+{
+    Framebuffer *framebuffer = mGLState.getDrawFramebuffer();
+    ASSERT(framebuffer);
+    ASSERT(n >= 0);
+    framebuffer->setDrawBuffersIndexed(this, static_cast<size_t>(n), locations, indices);
+    mGLState.setObjectDirty(GL_DRAW_FRAMEBUFFER);
+}
+
+void Context::readBufferIndexedEXT(GLenum src, GLint index)
+{
+    Framebuffer *readFBO = mGLState.getReadFramebuffer();
+    readFBO->setReadBufferIndexed(this, src, index);
     mGLState.setObjectDirty(GL_READ_FRAMEBUFFER);
 }
 
@@ -6832,6 +6852,12 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
             *numParams = 1;
             return true;
         }
+        case GL_MAX_MULTIVIEW_BUFFERS_EXT:
+        {
+            *type      = GL_INT;
+            *numParams = 1;
+            return true;
+        }
         case GL_MAX_VIEWPORT_DIMS:
         {
             *type      = GL_INT;
@@ -7427,6 +7453,13 @@ bool Context::getIndexedQueryParameterInfo(GLenum target, GLenum *type, unsigned
         case GL_UNIFORM_BUFFER_SIZE:
         {
             *type      = GL_INT_64_ANGLEX;
+            *numParams = 1;
+            return true;
+        }
+        case GL_DRAW_BUFFER_EXT:
+        case GL_READ_BUFFER_EXT:
+        {
+            *type      = GL_INT;
             *numParams = 1;
             return true;
         }

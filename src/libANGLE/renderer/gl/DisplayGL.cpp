@@ -88,6 +88,12 @@ egl::Error DisplayGL::makeCurrent(egl::Surface *drawSurface, egl::Surface *readS
     }
 }
 
+bool DisplayGL::isStereoSupported() const
+{
+    // The subclasses of this class override this to provide this answer.
+    return false;
+}
+
 void DisplayGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
     // Advertise robust resource initialization on all OpenGL backends for testing even though it is

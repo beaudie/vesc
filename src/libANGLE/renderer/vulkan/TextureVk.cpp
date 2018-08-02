@@ -1017,7 +1017,8 @@ gl::Error TextureVk::releaseTexImage(const gl::Context *context)
 }
 
 gl::Error TextureVk::getAttachmentRenderTarget(const gl::Context *context,
-                                               GLenum binding,
+                                               GLenum bindingLocation,
+                                               GLint bindingIndex,
                                                const gl::ImageIndex &imageIndex,
                                                FramebufferAttachmentRenderTarget **rtOut)
 {

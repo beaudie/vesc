@@ -2596,6 +2596,151 @@ bool ValidateDrawBuffersEXT(Context *context, GLsizei n, const GLenum *bufs)
     return ValidateDrawBuffersBase(context, n, bufs);
 }
 
+bool ValidateDrawBuffersIndexedEXT(Context *context,
+                                   GLint n,
+                                   const GLenum *location,
+                                   const GLint *indices)
+{
+    if (!context->getExtensions().multiviewDrawBuffers)
+    {
+        context->handleError(InvalidOperation() << "Extension not supported.");
+        return false;
+    }
+
+    if (n < 0)
+    {
+        context->handleError(InvalidValue() << "Number of values must be positive.");
+        return false;
+    }
+
+    gl::Framebuffer *framebuffer = context->getGLState().getDrawFramebuffer();
+    GLuint frameBufferId         = framebuffer->id();
+
+    for (GLint i = 0; i < n; i++)
+    {
+        // Check if it's the default framebuffer
+        if (frameBufferId == 0)
+        {
+            if (location[i] != GL_MULTIVIEW_EXT && location[i] != GL_NONE)
+            {
+                context->handleError(InvalidEnum()
+                                     << "location must be GL_MULTIVIEW_EXT, or GL_NONE.");
+                return false;
+            }
+            if (location[i] == GL_MULTIVIEW_EXT)
+            {
+                if (indices[i] < 0 || indices[i] >= framebuffer->getMultiviewViewCount())
+                {
+                    context->handleError(InvalidOperation() << "indices must be positive and "
+                                                               "less than "
+                                                               "GL_MAX_MULTIVIEW_BUFFERS_EXT.");
+                    return false;
+                }
+            }
+        }
+        else
+        {
+            if (location[i] != GL_COLOR_ATTACHMENT_EXT && location[i] != GL_NONE)
+            {
+                context->handleError(InvalidEnum()
+                                     << "location must be GL_COLOR_ATTACHMENT_EXT, or GL_NONE.");
+                return false;
+            }
+            if (location[i] == GL_COLOR_ATTACHMENT_EXT)
+            {
+                if (indices[i] < 0 || indices[i] >= (GLint)context->getCaps().maxColorAttachments)
+                {
+                    context->handleError(
+                        InvalidOperation()
+                        << "indices must be positive and less than GL_MAX_COLOR_ATTACHMENTS.");
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+bool ValidateReadBufferIndexedEXT(Context *context, GLenum src, GLint index)
+{
+    if (!context->getExtensions().multiviewDrawBuffers)
+    {
+        context->handleError(InvalidOperation() << "Extension not supported.");
+        return false;
+    }
+
+    gl::Framebuffer *framebuffer = context->getGLState().getDrawFramebuffer();
+    GLuint frameBufferId         = framebuffer->id();
+
+    // Check if it's the default framebuffer
+    if (frameBufferId == 0)
+    {
+        if (src != GL_MULTIVIEW_EXT && src != GL_NONE)
+        {
+            context->handleError(InvalidEnum() << "src must be GL_MULTIVIEW_EXT, or GL_NONE.");
+            return false;
+        }
+        if (src == GL_MULTIVIEW_EXT)
+        {
+            if (index < 0 || index >= framebuffer->getMultiviewViewCount())
+            {
+                context->handleError(
+                    InvalidOperation()
+                    << "index must be positive and less than GL_MAX_MULTIVIEW_BUFFERS_EXT.");
+                return false;
+            }
+        }
+    }
+    else
+    {
+        if (src != GL_COLOR_ATTACHMENT_EXT && src != GL_NONE)
+        {
+            context->handleError(InvalidEnum()
+                                 << "src must be GL_COLOR_ATTACHMENT_EXT, or GL_NONE.");
+            return false;
+        }
+        if (src == GL_COLOR_ATTACHMENT_EXT)
+        {
+            if (index < 0 || index >= (GLint)context->getCaps().maxColorAttachments)
+            {
+                context->handleError(
+                    InvalidOperation()
+                    << "index must be positive and less than GL_MAX_COLOR_ATTACHMENTS.");
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool ValidateGetIntegeri_vEXT(Context *context, GLenum target, GLuint index, GLint *data)
+{
+    if (!context->getExtensions().multiviewDrawBuffers)
+    {
+        context->handleError(InvalidOperation() << "Extension not supported.");
+        return false;
+    }
+
+    gl::Framebuffer *framebuffer = context->getGLState().getDrawFramebuffer();
+
+    if (target != GL_DRAW_BUFFER_EXT && target != GL_READ_BUFFER_EXT)
+    {
+        context->handleError(InvalidEnum()
+                             << "target must be GL_DRAW_BUFFER_EXT or GL_READ_BUFFER_EXT.");
+        return false;
+    }
+    if (index < 0 ||
+        (framebuffer->id() == 0 && index > (GLuint)framebuffer->getMultiviewViewCount()) ||
+        (framebuffer->id() != 0 && index > (GLuint)framebuffer->getColorAttachmentCount()))
+    {
+        context
+            ->handleError(InvalidOperation()
+                          << "index must be positive and less than GL_MAX_MULTIVIEW_BUFFERS_EXT.");
+        return false;
+    }
+    return true;
+}
+
 bool ValidateTexImage2D(Context *context,
                         TextureTarget target,
                         GLint level,

@@ -92,7 +92,8 @@ class TextureD3D : public TextureImpl
     ImageD3D *getBaseLevelImage() const;
 
     gl::Error getAttachmentRenderTarget(const gl::Context *context,
-                                        GLenum binding,
+                                        GLenum bindingLocation,
+                                        GLint bindingIndex,
                                         const gl::ImageIndex &imageIndex,
                                         FramebufferAttachmentRenderTarget **rtOut) override;
 

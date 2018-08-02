@@ -353,19 +353,25 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl:
     gl::AttachmentList colorAttachmentsForRender;
 
     const auto &colorAttachments = mState.getColorAttachments();
-    const auto &drawBufferStates = mState.getDrawBufferStates();
+    const auto &drawBufferStateLocations = mState.getDrawBufferStateLocations();
     const auto &workarounds      = mRenderer->getWorkarounds();
 
     for (size_t attachmentIndex = 0; attachmentIndex < colorAttachments.size(); ++attachmentIndex)
     {
-        GLenum drawBufferState                           = drawBufferStates[attachmentIndex];
+        GLenum drawBufferLocation = drawBufferStateLocations[attachmentIndex];
         const gl::FramebufferAttachment &colorAttachment = colorAttachments[attachmentIndex];
 
-        if (colorAttachment.isAttached() && drawBufferState != GL_NONE &&
+        if (colorAttachment.isAttached() && drawBufferLocation != GL_NONE &&
             activeProgramOutputs[attachmentIndex])
         {
-            ASSERT(drawBufferState == GL_BACK ||
-                   drawBufferState == (GL_COLOR_ATTACHMENT0_EXT + attachmentIndex));
+            ASSERT(drawBufferLocation == GL_BACK ||
+                   drawBufferLocation == (GL_COLOR_ATTACHMENT0_EXT + attachmentIndex) ||
+                   (drawBufferLocation == GL_MULTIVIEW_EXT &&
+                    mState.getDrawBufferStateIndices()[attachmentIndex] >= 0) ||
+                   (drawBufferLocation == GL_COLOR_ATTACHMENT_EXT &&
+                    mState.getDrawBufferStateIndices()[attachmentIndex] >= 0 &&
+                    static_cast<size_t>(mState.getDrawBufferStateIndices()[attachmentIndex]) ==
+                        attachmentIndex));
             colorAttachmentsForRender.push_back(&colorAttachment);
         }
         else if (!workarounds.mrtPerfWorkaround)
@@ -386,7 +392,7 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl:
             gl::ScanForward(static_cast<uint32_t>(activeProgramOutputs.bits())));
 
         if (mDummyAttachment.isAttached() &&
-            (mDummyAttachment.getBinding() - GL_COLOR_ATTACHMENT0) == activeProgramLocation)
+            (mDummyAttachment.getBindingLocation() - GL_COLOR_ATTACHMENT0) == activeProgramLocation)
         {
             colorAttachmentsForRender.push_back(&mDummyAttachment);
         }
@@ -408,8 +414,8 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl:
 
                 gl::ImageIndex index = gl::ImageIndex::Make2D(0);
                 mDummyAttachment     = gl::FramebufferAttachment(
-                    context, GL_TEXTURE, GL_COLOR_ATTACHMENT0_EXT + activeProgramLocation, index,
-                    dummyTex);
+                    context, GL_TEXTURE, GL_COLOR_ATTACHMENT0_EXT + activeProgramLocation, -1,
+                    index, dummyTex);
                 colorAttachmentsForRender.push_back(&mDummyAttachment);
             }
         }

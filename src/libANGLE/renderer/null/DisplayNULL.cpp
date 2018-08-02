@@ -130,6 +130,11 @@ gl::Version DisplayNULL::getMaxSupportedESVersion() const
     return gl::Version(3, 2);
 }
 
+bool DisplayNULL::isStereoSupported() const
+{
+    return false;
+}
+
 SurfaceImpl *DisplayNULL::createWindowSurface(const egl::SurfaceState &state,
                                               EGLNativeWindowType window,
                                               const egl::AttributeMap &attribs)
