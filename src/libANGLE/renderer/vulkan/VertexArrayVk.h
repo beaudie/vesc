@@ -75,12 +75,12 @@ class VertexArrayVk : public VertexArrayImpl
                                const gl::VertexBinding &binding,
                                const gl::VertexAttribute &attrib);
 
-    void updateArrayBufferReadDependencies(vk::CommandGraphResource *drawFramebuffer,
-                                           const gl::AttributesMask &activeAttribsMask,
-                                           Serial serial);
+    void updateArrayBufferReadDependencies(vk::Context *context,
+                                           vk::CommandGraphResource *drawFramebuffer,
+                                           const gl::AttributesMask &activeAttribsMask);
 
-    void updateElementArrayBufferReadDependency(vk::CommandGraphResource *drawFramebuffer,
-                                                Serial serial);
+    void updateElementArrayBufferReadDependency(vk::Context *context,
+                                                vk::CommandGraphResource *drawFramebuffer);
 
     angle::Result streamVertexData(ContextVk *contextVk,
                                    const gl::AttributesMask &attribsToStream,
@@ -91,7 +91,7 @@ class VertexArrayVk : public VertexArrayImpl
                                       BufferVk *srcBuffer,
                                       const gl::VertexBinding &binding,
                                       size_t attribIndex);
-    void ensureConversionReleased(RendererVk *renderer, size_t attribIndex);
+    void ensureConversionReleased(ContextVk *contextVk, size_t attribIndex);
 
     gl::Error onDraw(const gl::Context *context,
                      const gl::DrawCallParams &drawCallParams,

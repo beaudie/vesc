@@ -1078,10 +1078,16 @@ angle::Result StagingBuffer::init(Context *context, VkDeviceSize size, StagingUs
     return angle::Result::Continue();
 }
 
-void StagingBuffer::dumpResources(Serial serial, std::vector<vk::GarbageObject> *garbageQueue)
+void StagingBuffer::dumpResources(Context *context, const ContextSerialMap &serials)
 {
-    mBuffer.dumpResources(serial, garbageQueue);
-    mDeviceMemory.dumpResources(serial, garbageQueue);
+    mBuffer.dumpResources(context, serials);
+    mDeviceMemory.dumpResources(context, serials);
+}
+
+void StagingBuffer::dumpResources(Context *context, Serial serial)
+{
+    mBuffer.dumpResources(context, serial);
+    mDeviceMemory.dumpResources(context, serial);
 }
 
 angle::Result AllocateBufferMemory(vk::Context *context,
@@ -1117,9 +1123,151 @@ angle::Result InitShaderAndSerial(Context *context,
     return angle::Result::Continue();
 }
 
+// GarbageBindingPointer implementation.
+GarbageBindingPointer::GarbageBindingPointer(Serial serial, GarbageObject *garbage)
+    : mSerial(serial), mGarbage(garbage)
+{
+    ASSERT(mGarbage != nullptr);
+    mGarbage->addRef();
+}
+
+GarbageBindingPointer::GarbageBindingPointer(GarbageBindingPointer &&other)
+    : mSerial(std::move(other.mSerial)), mGarbage(std::move(other.mGarbage))
+{
+}
+
+GarbageBindingPointer &GarbageBindingPointer::operator=(GarbageBindingPointer &&other)
+{
+    std::swap(mSerial, other.mSerial);
+    std::swap(mGarbage, other.mGarbage);
+    return *this;
+}
+
+GarbageBindingPointer::~GarbageBindingPointer()
+{
+    ASSERT(mGarbage == nullptr);
+}
+
+bool GarbageBindingPointer::isSerialInUse(Serial lastCompletedSerial) const
+{
+    return lastCompletedSerial >= mSerial;
+}
+
+void GarbageBindingPointer::destroy(VkDevice device)
+{
+    mGarbage->release(device);
+    mGarbage = nullptr;
+}
+
+// GarbageQueue implementation.
+void GarbageQueue::PerContextGarbage::addGarbage(Serial serial, GarbageObject *garbage)
+{
+    if (serial > mLastCompletedSerial)
+    {
+        ASSERT(mGarbage.empty() || serial >= mGarbage.back().getSerial());
+        mGarbage.push_back(GarbageBindingPointer(serial, garbage));
+    }
+}
+
+angle::Result GarbageQueue::PerContextGarbage::collectGarbage(VkDevice device,
+                                                              Serial lastCompletedSerial)
+{
+    ASSERT(lastCompletedSerial >= mLastCompletedSerial);
+    mLastCompletedSerial = lastCompletedSerial;
+
+    size_t freeIndex = 0;
+    for (; freeIndex < mGarbage.size(); freeIndex++)
+    {
+        if (mGarbage[freeIndex].isSerialInUse(mLastCompletedSerial))
+        {
+            break;
+        }
+
+        mGarbage[freeIndex].destroy(device);
+    }
+
+    if (freeIndex > 0)
+    {
+        mGarbage.erase(mGarbage.begin(), mGarbage.begin() + freeIndex);
+    }
+
+    return angle::Result::Continue();
+}
+
+void GarbageQueue::onContextCreated(Context *context)
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+
+    ASSERT(mPerContextGarbage.find(context) == mPerContextGarbage.end());
+
+    // Initialize the per context data for this context
+    mPerContextGarbage[context];
+}
+
+angle::Result GarbageQueue::onContextDestroyed(Context *context)
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    ASSERT(mPerContextGarbage.find(context) != mPerContextGarbage.end());
+
+    ANGLE_TRY(mPerContextGarbage[context].collectGarbage(context->getDevice(),
+                                                         context->getLastCompletedQueueSerial()));
+    mPerContextGarbage.erase(context);
+
+    return angle::Result::Continue();
+}
+
+angle::Result GarbageQueue::collectGarbage(Context *context)
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+
+    ASSERT(mPerContextGarbage.find(context) != mPerContextGarbage.end());
+
+    return mPerContextGarbage[context].collectGarbage(context->getDevice(),
+                                                      context->getLastCompletedQueueSerial());
+}
+
+void GarbageQueue::addGarbage(Context *context, Serial serial, GarbageObject *garbage)
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+
+    ASSERT(garbage != nullptr);
+    ASSERT(mPerContextGarbage.find(context) != mPerContextGarbage.end());
+
+    return mPerContextGarbage[context].addGarbage(serial, garbage);
+}
+
+void GarbageQueue::addGarbage(Context *context,
+                              const ContextSerialMap &perContextSerials,
+                              GarbageObject *garbage)
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+
+    ASSERT(garbage != nullptr);
+
+    // addRef and release the garbage so that if all contexts are finished using it, it will be
+    // destroyed here.
+    garbage->addRef();
+
+    for (const auto &contextSerial : perContextSerials)
+    {
+        // If the context does not exist in mPerContextGarbage, don't track it.  The context has
+        // already been deleted.
+        auto perContextIter = mPerContextGarbage.find(contextSerial.first);
+        if (perContextIter != mPerContextGarbage.end())
+        {
+            perContextIter->second.addGarbage(contextSerial.second, garbage);
+        }
+
+        ASSERT(mPerContextGarbage.find(contextSerial.first) != mPerContextGarbage.end());
+        mPerContextGarbage[contextSerial.first].addGarbage(contextSerial.second, garbage);
+    }
+
+    garbage->release(context->getDevice());
+}
+
 // GarbageObject implementation.
 GarbageObject::GarbageObject()
-    : mSerial(), mHandleType(HandleType::Invalid), mHandle(VK_NULL_HANDLE)
+    : mRefCount(0), mHandleType(HandleType::Invalid), mHandle(VK_NULL_HANDLE)
 {
 }
 
@@ -1127,19 +1275,9 @@ GarbageObject::GarbageObject(const GarbageObject &other) = default;
 
 GarbageObject &GarbageObject::operator=(const GarbageObject &other) = default;
 
-bool GarbageObject::destroyIfComplete(VkDevice device, Serial completedSerial)
-{
-    if (completedSerial >= mSerial)
-    {
-        destroy(device);
-        return true;
-    }
-
-    return false;
-}
-
 void GarbageObject::destroy(VkDevice device)
 {
+    ASSERT(mHandle != VK_NULL_HANDLE);
     switch (mHandleType)
     {
         case HandleType::Semaphore:
@@ -1196,7 +1334,30 @@ void GarbageObject::destroy(VkDevice device)
             UNREACHABLE();
             break;
     }
+
+    mHandle = VK_NULL_HANDLE;
 }
+
+GarbageObject::~GarbageObject()
+{
+    ASSERT(mHandle == VK_NULL_HANDLE);
+}
+
+void GarbageObject::addRef()
+{
+    mRefCount++;
+}
+
+void GarbageObject::release(VkDevice device)
+{
+    ASSERT(mRefCount > 0);
+    mRefCount--;
+    if (mRefCount == 0)
+    {
+        destroy(device);
+    }
+}
+
 }  // namespace vk
 
 namespace gl_vk

@@ -113,7 +113,8 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
                   WindowSurfaceVk *backbuffer);
 
     // The 'in' rectangles must be clipped to the scissor and FBO. The clipping is done in 'blit'.
-    void blitWithCommand(vk::CommandBuffer *commandBuffer,
+    void blitWithCommand(ContextVk *contextVk,
+                         vk::CommandBuffer *commandBuffer,
                          const gl::Rectangle &readRectIn,
                          const gl::Rectangle &drawRectIn,
                          RenderTargetVk *readRenderTarget,
@@ -126,7 +127,8 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
                          bool flipDest);
 
     // Note that 'copyArea' must be clipped to the scissor and FBO. The clipping is done in 'blit'.
-    void blitWithCopy(vk::CommandBuffer *commandBuffer,
+    void blitWithCopy(ContextVk *contextVk,
+                      vk::CommandBuffer *commandBuffer,
                       const gl::Rectangle &copyArea,
                       RenderTargetVk *readRenderTarget,
                       RenderTargetVk *drawRenderTarget,

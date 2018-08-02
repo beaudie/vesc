@@ -35,10 +35,10 @@ RenderbufferVk::~RenderbufferVk()
 gl::Error RenderbufferVk::onDestroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
 
-    mImage.release(renderer->getCurrentQueueSerial(), renderer);
-    renderer->releaseObject(getStoredQueueSerial(), &mImageView);
+    vk::ContextSerialMap queueSerials = getStoredQueueSerials();
+    mImage.release(contextVk, queueSerials);
+    mImageView.dumpResources(contextVk, queueSerials);
 
     onStateChange(context, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 
@@ -61,8 +61,9 @@ gl::Error RenderbufferVk::setStorage(const gl::Context *context,
             static_cast<GLsizei>(width) != mState.getWidth() ||
             static_cast<GLsizei>(height) != mState.getHeight())
         {
-            mImage.release(renderer->getCurrentQueueSerial(), renderer);
-            renderer->releaseObject(getStoredQueueSerial(), &mImageView);
+            vk::ContextSerialMap queueSerials = getStoredQueueSerials();
+            mImage.release(contextVk, queueSerials);
+            mImageView.dumpResources(contextVk, queueSerials);
             onStateChange(context, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
         }
     }

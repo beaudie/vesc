@@ -133,7 +133,8 @@ angle::Result VertexArrayVk::streamVertexData(ContextVk *contextVk,
     }
 
     ANGLE_TRY(mDynamicVertexData.flush(contextVk));
-    mDynamicVertexData.releaseRetainedBuffers(contextVk->getRenderer());
+    // mDynamicVertexData is not shared
+    mDynamicVertexData.releaseRetainedBuffers(contextVk, contextVk->getCurrentQueueSerial());
     return angle::Result::Continue();
 }
 
@@ -165,7 +166,8 @@ angle::Result VertexArrayVk::streamIndexData(ContextVk *contextVk,
         memcpy(dst, drawCallParams.indices(), amount);
     }
     ANGLE_TRY(mDynamicIndexData.flush(contextVk));
-    mDynamicIndexData.releaseRetainedBuffers(contextVk->getRenderer());
+    // mDynamicIndexData is not shared
+    mDynamicIndexData.releaseRetainedBuffers(contextVk, contextVk->getCurrentQueueSerial());
     mCurrentElementArrayBufferOffset = offset;
     return angle::Result::Continue();
 }
@@ -181,7 +183,7 @@ angle::Result VertexArrayVk::convertVertexBuffer(ContextVk *context,
 {
 
     // Preparation for mapping source buffer.
-    ANGLE_TRY(context->getRenderer()->finish(context));
+    ANGLE_TRY(context->finish());
 
     unsigned srcFormatSize = mCurrentArrayBufferFormats[attribIndex]->angleFormat().pixelBytes;
     unsigned dstFormatSize = mCurrentArrayBufferFormats[attribIndex]->bufferFormat().pixelBytes;
@@ -220,11 +222,13 @@ angle::Result VertexArrayVk::convertVertexBuffer(ContextVk *context,
     return angle::Result::Continue();
 }
 
-void VertexArrayVk::ensureConversionReleased(RendererVk *renderer, size_t attribIndex)
+void VertexArrayVk::ensureConversionReleased(ContextVk *contextVk, size_t attribIndex)
 {
     if (mCurrentArrayBufferConversionCanRelease[attribIndex])
     {
-        mCurrentArrayBufferConversion[attribIndex].release(renderer);
+        // mCurrentArrayBufferConversion is not shared
+        mCurrentArrayBufferConversion[attribIndex].release(contextVk,
+                                                           contextVk->getCurrentQueueSerial());
         mCurrentArrayBufferConversionCanRelease[attribIndex] = false;
     }
 }
@@ -344,7 +348,9 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
             {
                 ANGLE_TRY(convertVertexBuffer(contextVk, bufferVk, binding, attribIndex));
 
-                mCurrentArrayBufferConversion[attribIndex].releaseRetainedBuffers(renderer);
+                // mCurrentArrayBufferConversion is not shared
+                mCurrentArrayBufferConversion[attribIndex].releaseRetainedBuffers(
+                    contextVk, contextVk->getCurrentQueueSerial());
                 mCurrentArrayBufferResources[attribIndex] = nullptr;
                 releaseConversion                         = false;
             }
@@ -379,31 +385,31 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
     }
 
     if (releaseConversion)
-        ensureConversionReleased(renderer, attribIndex);
+        ensureConversionReleased(contextVk, attribIndex);
 
     return angle::Result::Continue();
 }
 
-void VertexArrayVk::updateArrayBufferReadDependencies(vk::CommandGraphResource *drawFramebuffer,
-                                                      const gl::AttributesMask &activeAttribsMask,
-                                                      Serial serial)
+void VertexArrayVk::updateArrayBufferReadDependencies(vk::Context *context,
+                                                      vk::CommandGraphResource *drawFramebuffer,
+                                                      const gl::AttributesMask &activeAttribsMask)
 {
     // Handle the bound array buffers.
     for (size_t attribIndex : activeAttribsMask)
     {
         if (mCurrentArrayBufferResources[attribIndex])
-            mCurrentArrayBufferResources[attribIndex]->addReadDependency(drawFramebuffer);
+            mCurrentArrayBufferResources[attribIndex]->addReadDependency(context, drawFramebuffer);
     }
 }
 
 void VertexArrayVk::updateElementArrayBufferReadDependency(
-    vk::CommandGraphResource *drawFramebuffer,
-    Serial serial)
+    vk::Context *context,
+    vk::CommandGraphResource *drawFramebuffer)
 {
     // Handle the bound element array buffer.
     if (mCurrentElementArrayBufferResource)
     {
-        mCurrentElementArrayBufferResource->addReadDependency(drawFramebuffer);
+        mCurrentElementArrayBufferResource->addReadDependency(context, drawFramebuffer);
     }
 }
 
@@ -587,8 +593,7 @@ gl::Error VertexArrayVk::onDraw(const gl::Context *context,
                 context->getStateCache().getActiveBufferedAttribsMask();
 
             vk::CommandGraphResource *drawFramebuffer = vk::GetImpl(state.getDrawFramebuffer());
-            updateArrayBufferReadDependencies(drawFramebuffer, bufferedAttribs,
-                                              contextVk->getRenderer()->getCurrentQueueSerial());
+            updateArrayBufferReadDependencies(contextVk, drawFramebuffer, bufferedAttribs);
         }
 
         mVertexBuffersDirty = false;
@@ -680,8 +685,7 @@ gl::Error VertexArrayVk::onIndexedDraw(const gl::Context *context,
 
         const gl::State &glState                  = context->getGLState();
         vk::CommandGraphResource *drawFramebuffer = vk::GetImpl(glState.getDrawFramebuffer());
-        updateElementArrayBufferReadDependency(drawFramebuffer,
-                                               contextVk->getRenderer()->getCurrentQueueSerial());
+        updateElementArrayBufferReadDependency(contextVk, drawFramebuffer);
         mIndexBufferDirty = false;
 
         // If we've had a drawArrays call with a line loop before, we want to make sure this is

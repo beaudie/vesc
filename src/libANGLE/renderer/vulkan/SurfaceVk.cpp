@@ -92,13 +92,13 @@ angle::Result OffscreenSurfaceVk::AttachmentImage::initialize(DisplayVk *display
 }
 
 void OffscreenSurfaceVk::AttachmentImage::destroy(const egl::Display *display,
-                                                  Serial storedQueueSerial)
+                                                  const vk::ContextSerialMap &serials)
 {
-    const DisplayVk *displayVk = vk::GetImpl(display);
-    RendererVk *renderer       = displayVk->getRenderer();
+    DisplayVk *displayVk = vk::GetImpl(display);
 
-    image.release(renderer->getCurrentQueueSerial(), renderer);
-    renderer->releaseObject(storedQueueSerial, &imageView);
+    // TODO: pass VkDevice directly into this instead of inheriting displayVk from vk::Context
+    image.release(displayVk, serials);
+    imageView.dumpResources(displayVk, serials);
 }
 
 OffscreenSurfaceVk::OffscreenSurfaceVk(const egl::SurfaceState &surfaceState,
@@ -145,8 +145,8 @@ angle::Result OffscreenSurfaceVk::initializeImpl(DisplayVk *displayVk)
 
 void OffscreenSurfaceVk::destroy(const egl::Display *display)
 {
-    mColorAttachment.destroy(display, getStoredQueueSerial());
-    mDepthStencilAttachment.destroy(display, getStoredQueueSerial());
+    mColorAttachment.destroy(display, getStoredQueueSerials());
+    mDepthStencilAttachment.destroy(display, getStoredQueueSerials());
 }
 
 FramebufferImpl *OffscreenSurfaceVk::createDefaultFramebuffer(const gl::Context *context,
@@ -287,13 +287,15 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     VkDevice device      = renderer->getDevice();
     VkInstance instance  = renderer->getInstance();
 
+    // TODO: release the semaphores and image views instead of destorying them
     // We might not need to flush the pipe here.
-    (void)renderer->finish(displayVk);
+    //(void)renderer->finishInFlightCommands(displayVk);
 
     mAcquireNextImageSemaphore.destroy(device);
 
-    mDepthStencilImage.release(renderer->getCurrentQueueSerial(), renderer);
-    mDepthStencilImageView.destroy(device);
+    // TODO: Pass the device directly into dumpResources instead of a vk::Context?
+    mDepthStencilImage.release(displayVk, getStoredQueueSerials());
+    mDepthStencilImageView.dumpResources(displayVk, getStoredQueueSerials());
 
     for (SwapchainImage &swapchainImage : mSwapchainImages)
     {
@@ -546,12 +548,13 @@ FramebufferImpl *WindowSurfaceVk::createDefaultFramebuffer(const gl::Context *co
 
 egl::Error WindowSurfaceVk::swap(const gl::Context *context)
 {
+    vk::Context *contextVk = vk::GetImpl(context);
     DisplayVk *displayVk = vk::GetImpl(context->getCurrentDisplay());
-    angle::Result result = swapImpl(displayVk);
+    angle::Result result   = swapImpl(contextVk, displayVk);
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 
-angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk)
+angle::Result WindowSurfaceVk::swapImpl(vk::Context *context, DisplayVk *displayVk)
 {
     RendererVk *renderer = displayVk->getRenderer();
 
@@ -564,8 +567,7 @@ angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk)
                                        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                        VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, swapCommands);
 
-    ANGLE_TRY(
-        renderer->flush(displayVk, image.imageAcquiredSemaphore, image.commandsCompleteSemaphore));
+    ANGLE_TRY(context->flush(image.imageAcquiredSemaphore, image.commandsCompleteSemaphore));
 
     VkPresentInfoKHR presentInfo;
     presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;

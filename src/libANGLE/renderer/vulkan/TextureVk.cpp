@@ -72,9 +72,9 @@ PixelBuffer::~PixelBuffer()
 {
 }
 
-void PixelBuffer::release(RendererVk *renderer)
+void PixelBuffer::release(ContextVk *context, const vk::ContextSerialMap &serials)
 {
-    mStagingBuffer.release(renderer);
+    mStagingBuffer.release(context, serials);
 }
 
 void PixelBuffer::removeStagedUpdates(const gl::ImageIndex &index)
@@ -277,6 +277,7 @@ angle::Result PixelBuffer::allocate(ContextVk *contextVk,
 }
 
 angle::Result PixelBuffer::flushUpdatesToImage(ContextVk *contextVk,
+                                               const vk::ContextSerialMap &serials,
                                                uint32_t levelCount,
                                                vk::ImageHelper *image,
                                                vk::CommandBuffer *commandBuffer)
@@ -321,7 +322,7 @@ angle::Result PixelBuffer::flushUpdatesToImage(ContextVk *contextVk,
 
     if (mSubresourceUpdates.empty())
     {
-        mStagingBuffer.releaseRetainedBuffers(contextVk->getRenderer());
+        mStagingBuffer.releaseRetainedBuffers(contextVk, serials);
     }
     else
     {
@@ -440,12 +441,11 @@ TextureVk::~TextureVk()
 gl::Error TextureVk::onDestroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
 
-    releaseImage(context, renderer);
-    renderer->releaseObject(getStoredQueueSerial(), &mSampler);
+    releaseImage(context);
+    mSampler.dumpResources(contextVk, getStoredQueueSerials());
 
-    mPixelBuffer.release(renderer);
+    mPixelBuffer.release(contextVk, getStoredQueueSerials());
     return gl::NoError();
 }
 
@@ -459,7 +459,6 @@ gl::Error TextureVk::setImage(const gl::Context *context,
                               const uint8_t *pixels)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
 
     // Convert internalFormat to sized internal format.
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat, type);
@@ -473,7 +472,7 @@ gl::Error TextureVk::setImage(const gl::Context *context,
     }
 
     // Create a new graph node to store image initialization commands.
-    onResourceChanged(renderer);
+    onResourceChanged(contextVk);
 
     // Handle initial data.
     if (pixels)
@@ -500,7 +499,7 @@ gl::Error TextureVk::setSubImage(const gl::Context *context,
         gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels));
 
     // Create a new graph node to store image initialization commands.
-    onResourceChanged(contextVk->getRenderer());
+    onResourceChanged(contextVk);
 
     return gl::NoError();
 }
@@ -614,7 +613,6 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
                                         destOffset.y + sourceArea.y - sourceArea.y, 0);
 
     ContextVk *contextVk         = vk::GetImpl(context);
-    RendererVk *renderer         = contextVk->getRenderer();
     FramebufferVk *framebufferVk = vk::GetImpl(source);
 
     // For now, favor conformance. We do a CPU readback that does the conversion, and then stage the
@@ -626,8 +624,8 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
         gl::Extents(clippedSourceArea.width, clippedSourceArea.height, 1), internalFormat,
         framebufferVk));
 
-    onResourceChanged(renderer);
-    framebufferVk->addReadDependency(this);
+    onResourceChanged(contextVk);
+    framebufferVk->addReadDependency(contextVk, this);
     return angle::Result::Continue();
 }
 
@@ -648,7 +646,7 @@ gl::Error TextureVk::copySubTextureImpl(ContextVk *contextVk,
     uint8_t *sourceData = nullptr;
     ANGLE_TRY(source->copyImageDataToBuffer(contextVk, sourceLevel, sourceArea, &sourceData));
 
-    ANGLE_TRY(renderer->finish(contextVk));
+    ANGLE_TRY(contextVk->finish());
 
     // Using the front-end ANGLE format for the colorRead and colorWrite functions.  Otherwise
     // emulated formats like luminance-alpha would not know how to interpret the data.
@@ -676,7 +674,7 @@ gl::Error TextureVk::copySubTextureImpl(ContextVk *contextVk,
                       unpackUnmultiplyAlpha);
 
     // Create a new graph node to store image initialization commands.
-    onResourceChanged(contextVk->getRenderer());
+    onResourceChanged(contextVk);
 
     return angle::Result::Continue();
 }
@@ -741,7 +739,7 @@ angle::Result TextureVk::redefineImage(const gl::Context *context,
         // release it.
         if (mImage.getFormat() != vkFormat || size != mImage.getSize(index))
         {
-            releaseImage(context, renderer);
+            releaseImage(context);
         }
     }
 
@@ -886,7 +884,6 @@ angle::Result TextureVk::generateMipmapWithBlit(ContextVk *contextVk)
 angle::Result TextureVk::generateMipmapWithCPU(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
 
     bool newBufferAllocated            = false;
     const gl::Extents baseLevelExtents = mImage.getExtents();
@@ -932,7 +929,7 @@ angle::Result TextureVk::generateMipmapWithCPU(const gl::Context *context)
     commandBuffer->copyImageToBuffer(mImage.getImage(), mImage.getCurrentLayout(), copyBufferHandle,
                                      1, &region);
 
-    ANGLE_TRY(renderer->finish(contextVk));
+    ANGLE_TRY(contextVk->finish());
 
     const uint32_t levelCount = getLevelCount();
 
@@ -950,7 +947,8 @@ angle::Result TextureVk::generateMipmapWithCPU(const gl::Context *context)
             sourceRowPitch, baseLevelBuffers + bufferOffset));
     }
 
-    return mPixelBuffer.flushUpdatesToImage(contextVk, levelCount, &mImage, commandBuffer);
+    return mPixelBuffer.flushUpdatesToImage(contextVk, getStoredQueueSerials(), levelCount, &mImage,
+                                            commandBuffer);
 }
 
 gl::Error TextureVk::generateMipmap(const gl::Context *context)
@@ -990,7 +988,7 @@ gl::Error TextureVk::generateMipmap(const gl::Context *context)
     }
 
     // We're changing this textureVk content, make sure we let the graph know.
-    onResourceChanged(renderer);
+    onResourceChanged(contextVk);
 
     return gl::NoError();
 }
@@ -1053,7 +1051,8 @@ angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk)
         ANGLE_TRY(initImage(contextVk, format, baseLevelExtents, levelCount, commandBuffer));
     }
 
-    ANGLE_TRY(mPixelBuffer.flushUpdatesToImage(contextVk, levelCount, &mImage, commandBuffer));
+    ANGLE_TRY(mPixelBuffer.flushUpdatesToImage(contextVk, getStoredQueueSerials(), levelCount,
+                                               &mImage, commandBuffer));
     return angle::Result::Continue();
 }
 
@@ -1067,8 +1066,7 @@ gl::Error TextureVk::syncState(const gl::Context *context, const gl::Texture::Di
     ContextVk *contextVk = vk::GetImpl(context);
     if (mSampler.valid())
     {
-        RendererVk *renderer = contextVk->getRenderer();
-        renderer->releaseObject(getStoredQueueSerial(), &mSampler);
+        mSampler.dumpResources(contextVk, getStoredQueueSerials());
     }
 
     const gl::SamplerState &samplerState = mState.getSamplerState();
@@ -1178,11 +1176,12 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     return angle::Result::Continue();
 }
 
-void TextureVk::releaseImage(const gl::Context *context, RendererVk *renderer)
+void TextureVk::releaseImage(const gl::Context *context)
 {
-    mImage.release(renderer->getCurrentQueueSerial(), renderer);
-    renderer->releaseObject(getStoredQueueSerial(), &mBaseLevelImageView);
-    renderer->releaseObject(getStoredQueueSerial(), &mMipmapImageView);
+    ContextVk *contextVk = vk::GetImpl(context);
+    mImage.release(contextVk, getStoredQueueSerials());
+    mBaseLevelImageView.dumpResources(contextVk, getStoredQueueSerials());
+    mMipmapImageView.dumpResources(contextVk, getStoredQueueSerials());
     onStateChange(context, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 }
 

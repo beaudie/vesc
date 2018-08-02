@@ -29,7 +29,10 @@ class MultithreadingTest : public ANGLETest
         setContextVirtualization(false);
     }
 
-    bool platformSupportsMultithreading() const { return (IsOpenGLES() && IsAndroid()); }
+    bool platformSupportsMultithreading() const
+    {
+        return (IsOpenGLES() && IsAndroid()) || IsVulkan();
+    }
 };
 
 // Test that it's possible to make one context current on different threads
@@ -155,12 +158,98 @@ TEST_P(MultithreadingTest, MakeCurrentMultiContext)
     }
 }
 
+// Test that it's possible to make one multiple contexts current on different threads simultaneously
+// and render without sharing or synchronization
+TEST_P(MultithreadingTest, MultiContextRendering)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+
+    std::mutex mutex;
+
+    EGLWindow *window = getEGLWindow();
+    EGLDisplay dpy    = window->getDisplay();
+    EGLConfig config  = window->getConfig();
+
+    constexpr size_t kThreadCount         = 16;
+    constexpr size_t kIterationsPerThread = 1000;
+
+    constexpr EGLint kPBufferSize = 256;
+
+    // Initialize the pbuffer and context
+    EGLint pbufferAttributes[] = {
+        EGL_WIDTH, kPBufferSize, EGL_HEIGHT, kPBufferSize, EGL_NONE, EGL_NONE,
+    };
+
+    struct ThreadInfo
+    {
+        std::thread thread;
+        EGLSurface pbuffer = EGL_NO_SURFACE;
+        EGLConfig ctx      = EGL_NO_CONTEXT;
+    };
+
+    std::array<ThreadInfo, kThreadCount> threads;
+
+    // Create the contexts and pbuffers
+    for (ThreadInfo &thread : threads)
+    {
+        thread.pbuffer = eglCreatePbufferSurface(dpy, config, pbufferAttributes);
+        EXPECT_EGL_SUCCESS();
+
+        thread.ctx = window->createContext(EGL_NO_CONTEXT);
+        EXPECT_EGL_SUCCESS();
+    }
+
+    // Start some long-running tasks on each thread
+    for (ThreadInfo &thread : threads)
+    {
+        thread.thread = std::thread([&]() {
+            {
+                std::lock_guard<decltype(mutex)> lock(mutex);
+                EXPECT_EGL_TRUE(eglMakeCurrent(dpy, thread.pbuffer, thread.pbuffer, thread.ctx));
+                EXPECT_EGL_SUCCESS();
+            }
+
+            priv::GLProgram program;
+            {
+                std::lock_guard<decltype(mutex)> lock(mutex);
+
+                // Simple draw program.
+                program.makeRaster(essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+            }
+
+            for (size_t iterIdx = 0; iterIdx < kIterationsPerThread; iterIdx++)
+            {
+                std::lock_guard<decltype(mutex)> lock(mutex);
+                drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+            }
+
+            {
+                std::lock_guard<decltype(mutex)> lock(mutex);
+                EXPECT_EGL_TRUE(
+                    eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+            }
+        });
+    }
+
+    for (ThreadInfo &thread : threads)
+    {
+        thread.thread.join();
+    }
+
+    for (ThreadInfo &thread : threads)
+    {
+        eglDestroySurface(dpy, thread.pbuffer);
+        eglDestroyContext(dpy, thread.ctx);
+    }
+}
+
 // TODO(geofflang): Test sharing a program between multiple shared contexts on multiple threads
 
 ANGLE_INSTANTIATE_TEST(MultithreadingTest,
                        ES2_OPENGL(),
                        ES3_OPENGL(),
                        ES2_OPENGLES(),
-                       ES3_OPENGLES());
+                       ES3_OPENGLES(),
+                       ES2_VULKAN());
 
 }  // namespace angle

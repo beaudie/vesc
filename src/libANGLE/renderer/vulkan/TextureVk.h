@@ -24,7 +24,7 @@ class PixelBuffer final : angle::NonCopyable
     PixelBuffer(RendererVk *renderer);
     ~PixelBuffer();
 
-    void release(RendererVk *renderer);
+    void release(ContextVk *context, const vk::ContextSerialMap &serials);
 
     void removeStagedUpdates(const gl::ImageIndex &index);
 
@@ -62,6 +62,7 @@ class PixelBuffer final : angle::NonCopyable
                            bool *newBufferAllocatedOut);
 
     angle::Result flushUpdatesToImage(ContextVk *contextVk,
+                                      const vk::ContextSerialMap &serials,
                                       uint32_t levelCount,
                                       vk::ImageHelper *image,
                                       vk::CommandBuffer *commandBuffer);
@@ -245,7 +246,7 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
                             const gl::Extents &extents,
                             const uint32_t levelCount,
                             vk::CommandBuffer *commandBuffer);
-    void releaseImage(const gl::Context *context, RendererVk *renderer);
+    void releaseImage(const gl::Context *context);
     angle::Result getCommandBufferForWrite(ContextVk *contextVk,
                                            vk::CommandBuffer **commandBufferOut);
     uint32_t getLevelCount() const;
