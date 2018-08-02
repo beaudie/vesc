@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4b0fa63_515e8775",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2018-08-02T02:05:22Z",
+      "side": 1,
+      "message": "As I know the performance of \"if\" is not good on GPU, so could you try to avoid using it when necessary? \nFor example:\n1. we can avoid using \"if\" when all the \"image2D\" are 2DArrays.\n2. We can just use one \"if\" in some places we can ensure imageIndex can always match a valid image. For example, if there are two \"image2D\"s, and one is bound to 2D and another is bound to 3D, we can translate it into:(imageLoad)\nif (imageIndex \u003c imageIndexOffsetRW2D_uint4_3D)\n{\n    // Load data from image2D   \n}\nelse\n{\n    // Load data from image3D\n}",
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a47a588_bd02eb6b",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1674,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2018-08-02T02:05:22Z",
+      "side": 1,
+      "message": "In this patch all the code about image2D load/store are moved to link time. I think we only need to re-compile compute shader at the dispatch time, so I think it better to add image2D load/store at compile time, do nothing at link time, and do re-compile at the dispatch time when necessary. Do you think so?",
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49c442fe_099bed71",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2948,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2018-08-02T02:05:22Z",
+      "side": 1,
+      "message": "Is it better to use a map here whose key is signature?",
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
