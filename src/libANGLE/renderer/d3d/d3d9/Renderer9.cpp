@@ -717,8 +717,12 @@ SwapChainD3D *Renderer9::createSwapChain(NativeWindowD3D *nativeWindow,
                                          GLenum backBufferFormat,
                                          GLenum depthBufferFormat,
                                          EGLint orientation,
-                                         EGLint samples)
+                                         EGLint samples,
+                                         bool isStereo)
 {
+    // D3D9 does not support stereo rendering. Checks above this level should prevent client code
+    // from ever requesting a D3D9 swap chain with stereo support.
+    ASSERT(!isStereo);
     return new SwapChain9(this, GetAs<NativeWindow9>(nativeWindow), shareHandle, d3dTexture,
                           backBufferFormat, depthBufferFormat, orientation);
 }
@@ -3094,6 +3098,12 @@ FramebufferImpl *Renderer9::createDefaultFramebuffer(const gl::FramebufferState 
 gl::Version Renderer9::getMaxSupportedESVersion() const
 {
     return gl::Version(2, 0);
+}
+
+bool Renderer9::isStereoSupported() const
+{
+    // D3D9 does not support stereo rendering.
+    return false;
 }
 
 gl::Error Renderer9::clearRenderTarget(const gl::Context *context,

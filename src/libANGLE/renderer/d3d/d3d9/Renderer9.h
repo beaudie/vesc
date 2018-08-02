@@ -93,7 +93,8 @@ class Renderer9 : public RendererD3D
                                   GLenum backBufferFormat,
                                   GLenum depthBufferFormat,
                                   EGLint orientation,
-                                  EGLint samples) override;
+                                  EGLint samples,
+                                  bool isStereo) override;
     egl::Error getD3DTextureInfo(const egl::Config *configuration,
                                  IUnknown *d3dTexture,
                                  EGLint *width,
@@ -389,6 +390,8 @@ class Renderer9 : public RendererD3D
     DebugAnnotator9 *getAnnotator() { return &mAnnotator; }
 
     gl::Version getMaxSupportedESVersion() const override;
+
+    bool isStereoSupported() const override;
 
     gl::Error clearRenderTarget(const gl::Context *context,
                                 RenderTargetD3D *renderTarget,

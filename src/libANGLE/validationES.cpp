@@ -1416,9 +1416,9 @@ bool ValidateBlitFramebufferParameters(Context *context,
         if (mask & masks[i])
         {
             const FramebufferAttachment *readBuffer =
-                readFramebuffer->getAttachment(context, attachments[i]);
+                readFramebuffer->getAttachment(context, attachments[i], -1);
             const FramebufferAttachment *drawBuffer =
-                drawFramebuffer->getAttachment(context, attachments[i]);
+                drawFramebuffer->getAttachment(context, attachments[i], -1);
 
             if (readBuffer && drawBuffer)
             {
@@ -2260,8 +2260,9 @@ bool ValidateStateQuery(Context *context, GLenum pname, GLenum *nativeType, unsi
                 return false;
             }
 
-            if (readFramebuffer->getReadBufferState() == GL_NONE)
+            if (readFramebuffer->getReadBufferStateLocation() == GL_NONE)
             {
+                ASSERT(readFramebuffer->getReadBufferStateIndex() == -1);
                 ANGLE_VALIDATION_ERR(context, InvalidOperation(), ReadBufferNone);
                 return false;
             }
@@ -2453,8 +2454,9 @@ bool ValidateCopyTexImageParametersBase(Context *context,
         return false;
     }
 
-    if (readFramebuffer->getReadBufferState() == GL_NONE)
+    if (readFramebuffer->getReadBufferStateLocation() == GL_NONE)
     {
+        ASSERT(readFramebuffer->getReadBufferStateIndex() == -1);
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), ReadBufferNone);
         return false;
     }
@@ -4181,7 +4183,7 @@ bool ValidateGetFramebufferAttachmentParameterivBase(Context *context,
         }
     }
 
-    const FramebufferAttachment *attachmentObject = framebuffer->getAttachment(context, attachment);
+    const FramebufferAttachment *attachmentObject = framebuffer->getAttachment(context, attachment, -1);
     if (attachmentObject)
     {
         ASSERT(attachmentObject->type() == GL_RENDERBUFFER ||
@@ -5626,7 +5628,7 @@ bool ValidateReadPixelsBase(Context *context,
     Framebuffer *framebuffer = context->getGLState().getReadFramebuffer();
     ASSERT(framebuffer);
 
-    if (framebuffer->getReadBufferState() == GL_NONE)
+    if (framebuffer->getReadBufferStateLocation() == GL_NONE)
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), ReadBufferNone);
         return false;

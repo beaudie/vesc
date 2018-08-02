@@ -71,6 +71,7 @@ class DisplayD3D : public DisplayImpl, public d3d::Context
     egl::Error waitClient(const gl::Context *context) override;
     egl::Error waitNative(const gl::Context *context, EGLint engine) override;
     gl::Version getMaxSupportedESVersion() const override;
+    bool isStereoSupported() const override;
 
     void handleError(HRESULT hr,
                      const char *message,
