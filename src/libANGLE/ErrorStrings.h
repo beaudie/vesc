@@ -105,6 +105,7 @@ ERRMSG(ExceedsMaxElement, "Element value exceeds maximum element index.");
 ERRMSG(ExpectedProgramName, "Expected a program name, but found a shader name.");
 ERRMSG(ExpectedShaderName, "Expected a shader name, but found a program name.");
 ERRMSG(ExtensionNotEnabled, "Extension is not enabled.");
+ERRMSG(ExtensionNotSupported, "Extension is not supported.");
 ERRMSG(FeedbackLoop, "Feedback loop formed between Framebuffer and active Texture.");
 ERRMSG(FragDataBindingIndexOutOfRange, "Fragment output color index must be zero or one.");
 ERRMSG(FramebufferIncompleteAttachment,
@@ -170,11 +171,17 @@ ERRMSG(InvalidFramebufferLayer,
        "Framebuffer layer cannot be less than 0 or greater than GL_MAX_FRAMEBUFFER_LAYERS_EXT.");
 ERRMSG(InvalidImageUnit,
        "Image unit cannot be greater than or equal to the value of MAX_IMAGE_UNITS.");
+ERRMSG(InvalidIndexRangeMultiview,
+       "indices must be positive and less than GL_MAX_MULTIVIEW_BUFFERS_EXT.");
+ERRMSG(InvalidIndexRangeColorAttach,
+       "indices must be positive and less than GL_MAX_COLOR_ATTACHMENTS.");
 ERRMSG(InvalidInternalFormat, "Invalid internal format.");
 ERRMSG(InvalidLight, "Invalid light.");
 ERRMSG(InvalidLightModelParameter, "Invalid light model parameter.");
 ERRMSG(InvalidLightParameter, "Invalid light parameter.");
 ERRMSG(InvalidLogicOp, "Invalid logical operation.");
+ERRMSG(InvalidLocationMultiview, "location must be GL_MULTIVIEW_EXT, or GL_NONE.");
+ERRMSG(InvalidLocationColorAttach, "location must be GL_COLOR_ATTACHMENT_EXT, or GL_NONE.");
 ERRMSG(InvalidMaterialFace, "Invalid material face.");
 ERRMSG(InvalidMaterialParameter, "Invalid material parameter.");
 ERRMSG(InvalidMatrixMode, "Invalid matrix mode.");
@@ -185,6 +192,7 @@ ERRMSG(InvalidMultitextureUnit,
 ERRMSG(InvalidMultisampledFramebufferOperation, "Invalid operation on multisampled framebuffer");
 ERRMSG(InvalidName, "Invalid name.");
 ERRMSG(InvalidNameCharacters, "Name contains invalid characters.");
+ERRMSG(InvalidNegativeNumber, "Number of values must be positive.");
 ERRMSG(InvalidPname, "Invalid pname.");
 ERRMSG(InvalidPointerQuery, "Invalid pointer query.");
 ERRMSG(InvalidPointParameter, "Invalid point parameter.");

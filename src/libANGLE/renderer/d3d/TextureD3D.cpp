@@ -603,7 +603,8 @@ angle::Result TextureD3D::commitRegion(const gl::Context *context,
 }
 
 angle::Result TextureD3D::getAttachmentRenderTarget(const gl::Context *context,
-                                                    GLenum binding,
+                                                    GLenum /*bindingLocation*/,
+                                                    GLint /*bindingIndex*/,
                                                     const gl::ImageIndex &imageIndex,
                                                     FramebufferAttachmentRenderTarget **rtOut)
 {

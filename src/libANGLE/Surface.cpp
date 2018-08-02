@@ -400,6 +400,12 @@ EGLint Surface::getHeight() const
     return mFixedSize ? static_cast<EGLint>(mFixedHeight) : mImplementation->getHeight();
 }
 
+EGLint Surface::getCreatedMultiviewViewCount() const
+{
+    ASSERT(mImplementation);
+    return mImplementation->getCreatedMultiviewViewCount();
+}
+
 Error Surface::bindTexImage(const gl::Context *context, gl::Texture *texture, EGLint buffer)
 {
     ASSERT(!mTexture);
@@ -449,9 +455,13 @@ gl::Extents Surface::getAttachmentSize(const gl::ImageIndex & /*target*/) const
     return gl::Extents(getWidth(), getHeight(), 1);
 }
 
-gl::Format Surface::getAttachmentFormat(GLenum binding, const gl::ImageIndex &target) const
+gl::Format Surface::getAttachmentFormat(GLenum bindingLocation,
+                                        GLint bindingIndex,
+                                        const gl::ImageIndex &target) const
 {
-    return (binding == GL_BACK ? mColorFormat : mDSFormat);
+    ASSERT(bindingLocation != GL_MULTIVIEW_EXT || bindingIndex >= 0);
+    return ((bindingLocation == GL_BACK || bindingLocation == GL_MULTIVIEW_EXT) ? mColorFormat
+                                                                                : mDSFormat);
 }
 
 GLsizei Surface::getAttachmentSamples(const gl::ImageIndex &target) const
@@ -460,7 +470,8 @@ GLsizei Surface::getAttachmentSamples(const gl::ImageIndex &target) const
 }
 
 bool Surface::isRenderable(const gl::Context *context,
-                           GLenum binding,
+                           GLenum bindingLocation,
+                           GLint bindingIndex,
                            const gl::ImageIndex &imageIndex) const
 {
     return true;

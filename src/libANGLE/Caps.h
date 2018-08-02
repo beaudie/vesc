@@ -418,6 +418,9 @@ struct Extensions
     // GL_EXT_geometry_shader
     bool geometryShader;
 
+    // GL_EXT_multiview_draw_buffers
+    bool multiviewDrawBuffers;
+
     // GLES1 emulation: GLES1 extensions
     // GL_OES_point_size_array
     bool pointSizeArray;
@@ -801,6 +804,9 @@ struct DisplayExtensions
 
     // EGL_ANGLE_iosurface_client_buffer
     bool iosurfaceClientBuffer;
+
+    // EGL_EXT_multiview_window
+    bool multiviewWindow;
 
     // EGL_ANGLE_create_context_extensions_enabled
     bool createContextExtensionsEnabled;

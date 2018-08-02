@@ -118,14 +118,19 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
 
     gl::Texture *getBoundTexture() const { return mTexture; }
 
+    EGLint getCreatedMultiviewViewCount() const;
+
     EGLint isFixedSize() const;
 
     // FramebufferAttachmentObject implementation
     gl::Extents getAttachmentSize(const gl::ImageIndex &imageIndex) const override;
-    gl::Format getAttachmentFormat(GLenum binding, const gl::ImageIndex &imageIndex) const override;
+    gl::Format getAttachmentFormat(GLenum bindingLocation,
+                                   GLint bindingIndex,
+                                   const gl::ImageIndex &imageIndex) const override;
     GLsizei getAttachmentSamples(const gl::ImageIndex &imageIndex) const override;
     bool isRenderable(const gl::Context *context,
-                      GLenum binding,
+                      GLenum bindingLocation,
+                      GLint bindingIndex,
                       const gl::ImageIndex &imageIndex) const override;
 
     void onAttach(const gl::Context *context) override {}

@@ -2219,7 +2219,7 @@ Error State::getIntegerv(const Context *context, GLenum pname, GLint *params)
         unsigned int colorAttachment = (pname - GL_DRAW_BUFFER0_EXT);
         ASSERT(colorAttachment < mMaxDrawBuffers);
         Framebuffer *framebuffer = mDrawFramebuffer;
-        *params                  = framebuffer->getDrawBufferState(colorAttachment);
+        *params                  = framebuffer->getDrawBufferStateLocation(colorAttachment);
         return NoError();
     }
 
@@ -2549,7 +2549,7 @@ Error State::getIntegerv(const Context *context, GLenum pname, GLint *params)
             *params = mBoundBuffers[BufferBinding::PixelUnpack].id();
             break;
         case GL_READ_BUFFER:
-            *params = mReadFramebuffer->getReadBufferState();
+            *params = mReadFramebuffer->getReadBufferStateLocation();
             break;
         case GL_SAMPLER_BINDING:
             ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
@@ -2706,6 +2706,16 @@ void State::getIntegeri_v(GLenum target, GLuint index, GLint *data)
         case GL_IMAGE_BINDING_FORMAT:
             ASSERT(static_cast<size_t>(index) < mImageUnits.size());
             *data = mImageUnits[index].format;
+            break;
+        case GL_DRAW_BUFFER_EXT:
+            ASSERT(index < mDrawFramebuffer->getDrawBufferStateLocations().size());
+            ASSERT(index < mDrawFramebuffer->getDrawBufferStateIndices().size());
+            *data       = mDrawFramebuffer->getDrawBufferStateLocations()[index];
+            *(data + 1) = mDrawFramebuffer->getDrawBufferStateIndices()[index];
+            break;
+        case GL_READ_BUFFER_EXT:
+            *data = mReadFramebuffer->getReadBufferStateLocation();
+            *(data + 1) = mReadFramebuffer->getReadBufferStateIndex();
             break;
         default:
             UNREACHABLE();

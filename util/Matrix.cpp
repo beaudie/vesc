@@ -116,7 +116,7 @@ Matrix4 Matrix4::frustum(float l, float r, float b, float t, float n, float f)
 Matrix4 Matrix4::perspective(float fovY, float aspectRatio, float nearZ, float farZ)
 {
     const float frustumHeight = tanf(static_cast<float>(fovY / 360.0f * M_PI)) * nearZ;
-    const float frustumWidth = frustumHeight * aspectRatio;
+    const float frustumWidth  = frustumHeight * aspectRatio;
     return frustum(-frustumWidth, frustumWidth, -frustumHeight, frustumHeight, nearZ, farZ);
 }
 
@@ -131,6 +131,34 @@ Matrix4 Matrix4::rollPitchYaw(float roll, float pitch, float yaw)
 {
     return rotate(yaw, Vector3(0, 0, 1)) * rotate(pitch, Vector3(0, 1, 0)) *
            rotate(roll, Vector3(1, 0, 0));
+}
+
+Matrix4 Matrix4::lookAt(const angle::Vector3 &eye,
+                        const angle::Vector3 &center,
+                        const angle::Vector3 &up)
+{
+    Matrix4 lookAtMatrix;
+    auto zAxis            = (center - eye).normalized();
+    auto xAxis            = zAxis.cross(up.normalized()).normalized();
+    auto yAxis            = xAxis.cross(zAxis).normalized();
+    lookAtMatrix.data[0]  = xAxis.x();
+    lookAtMatrix.data[1]  = yAxis.x();
+    lookAtMatrix.data[2]  = -zAxis.x();
+    lookAtMatrix.data[3]  = 0.0;
+    lookAtMatrix.data[4]  = xAxis.y();
+    lookAtMatrix.data[5]  = yAxis.y();
+    lookAtMatrix.data[6]  = -zAxis.y();
+    lookAtMatrix.data[7]  = 0.0;
+    lookAtMatrix.data[8]  = xAxis.z();
+    lookAtMatrix.data[9]  = yAxis.z();
+    lookAtMatrix.data[10] = -zAxis.z();
+    lookAtMatrix.data[11] = 0.0;
+    lookAtMatrix.data[12] = -(xAxis.dot(eye));
+    lookAtMatrix.data[13] = -(yAxis.dot(eye));
+    lookAtMatrix.data[14] = zAxis.dot(eye);
+    lookAtMatrix.data[15] = 1.0;
+
+    return lookAtMatrix;
 }
 
 Matrix4 Matrix4::invert(const Matrix4 &mat)

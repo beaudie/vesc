@@ -790,5 +790,11 @@
         "InsertEventMarkerEXT",
         "PushGroupMarkerEXT",
         "PopGroupMarkerEXT"
+    ],
+
+    "GL_EXT_multiview_draw_buffers": 
+    [
+        "DrawBuffersIndexedEXT",
+        "ReadBufferIndexedEXT"
     ]
 }

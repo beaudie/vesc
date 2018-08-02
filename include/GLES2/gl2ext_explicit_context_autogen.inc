@@ -164,6 +164,7 @@ typedef void (GL_APIENTRYP PFNGLDELETEVERTEXARRAYSOESCONTEXTANGLE)(GLeglContext 
 typedef void (GL_APIENTRYP PFNGLDISCARDFRAMEBUFFEREXTCONTEXTANGLE)(GLeglContext ctx, GLenum target, GLsizei numAttachments, const GLenum *attachments);
 typedef void (GL_APIENTRYP PFNGLDRAWARRAYSINSTANCEDANGLECONTEXTANGLE)(GLeglContext ctx, GLenum mode, GLint first, GLsizei count, GLsizei primcount);
 typedef void (GL_APIENTRYP PFNGLDRAWBUFFERSEXTCONTEXTANGLE)(GLeglContext ctx, GLsizei n, const GLenum *bufs);
+typedef void (GL_APIENTRYP PFNGLDRAWBUFFERSINDEXEDEXTCONTEXTANGLE)(GLeglContext ctx, GLint n, const GLenum *location, const GLint *indices);
 typedef void (GL_APIENTRYP PFNGLDRAWELEMENTSINSTANCEDANGLECONTEXTANGLE)(GLeglContext ctx, GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei primcount);
 typedef void (GL_APIENTRYP PFNGLEGLIMAGETARGETRENDERBUFFERSTORAGEOESCONTEXTANGLE)(GLeglContext ctx, GLenum target, GLeglImageOES image);
 typedef void (GL_APIENTRYP PFNGLEGLIMAGETARGETTEXTURE2DOESCONTEXTANGLE)(GLeglContext ctx, GLenum target, GLeglImageOES image);
@@ -179,6 +180,7 @@ typedef GLuint (GL_APIENTRYP PFNGLGETDEBUGMESSAGELOGKHRCONTEXTANGLE)(GLeglContex
 typedef void (GL_APIENTRYP PFNGLGETFENCEIVNVCONTEXTANGLE)(GLeglContext ctx, GLuint fence, GLenum pname, GLint *params);
 typedef GLint (GL_APIENTRYP PFNGLGETFRAGDATAINDEXEXTCONTEXTANGLE)(GLeglContext ctx, GLuint program, const GLchar *name);
 typedef GLenum (GL_APIENTRYP PFNGLGETGRAPHICSRESETSTATUSEXTCONTEXTANGLE)(GLeglContext ctx);
+typedef void (GL_APIENTRYP PFNGLGETINTEGERI_VEXTCONTEXTANGLE)(GLeglContext ctx, GLenum target, GLuint index, GLint *data);
 typedef void (GL_APIENTRYP PFNGLGETOBJECTLABELKHRCONTEXTANGLE)(GLeglContext ctx, GLenum identifier, GLuint name, GLsizei bufSize, GLsizei *length, GLchar *label);
 typedef void (GL_APIENTRYP PFNGLGETOBJECTPTRLABELKHRCONTEXTANGLE)(GLeglContext ctx, const void *ptr, GLsizei bufSize, GLsizei *length, GLchar *label);
 typedef void (GL_APIENTRYP PFNGLGETPOINTERVKHRCONTEXTANGLE)(GLeglContext ctx, GLenum pname, void **params);
@@ -211,6 +213,7 @@ typedef void (GL_APIENTRYP PFNGLPROGRAMBINARYOESCONTEXTANGLE)(GLeglContext ctx, 
 typedef void (GL_APIENTRYP PFNGLPUSHDEBUGGROUPKHRCONTEXTANGLE)(GLeglContext ctx, GLenum source, GLuint id, GLsizei length, const GLchar *message);
 typedef void (GL_APIENTRYP PFNGLPUSHGROUPMARKEREXTCONTEXTANGLE)(GLeglContext ctx, GLsizei length, const GLchar *marker);
 typedef void (GL_APIENTRYP PFNGLQUERYCOUNTEREXTCONTEXTANGLE)(GLeglContext ctx, GLuint id, GLenum target);
+typedef void (GL_APIENTRYP PFNGLREADBUFFERINDEXEDEXTCONTEXTANGLE)(GLeglContext ctx, GLenum src, GLint index);
 typedef void (GL_APIENTRYP PFNGLREADNPIXELSEXTCONTEXTANGLE)(GLeglContext ctx, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei bufSize, void *data);
 typedef void (GL_APIENTRYP PFNGLRENDERBUFFERSTORAGEMULTISAMPLEANGLECONTEXTANGLE)(GLeglContext ctx, GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height);
 typedef void (GL_APIENTRYP PFNGLSAMPLERPARAMETERIIVOESCONTEXTANGLE)(GLeglContext ctx, GLuint sampler, GLenum pname, const GLint *param);
@@ -488,6 +491,7 @@ GL_APICALL void GL_APIENTRY glDeleteVertexArraysOESContextANGLE(GLeglContext ctx
 GL_APICALL void GL_APIENTRY glDiscardFramebufferEXTContextANGLE(GLeglContext ctx, GLenum target, GLsizei numAttachments, const GLenum *attachments);
 GL_APICALL void GL_APIENTRY glDrawArraysInstancedANGLEContextANGLE(GLeglContext ctx, GLenum mode, GLint first, GLsizei count, GLsizei primcount);
 GL_APICALL void GL_APIENTRY glDrawBuffersEXTContextANGLE(GLeglContext ctx, GLsizei n, const GLenum *bufs);
+GL_APICALL void GL_APIENTRY glDrawBuffersIndexedEXTContextANGLE(GLeglContext ctx, GLint n, const GLenum *location, const GLint *indices);
 GL_APICALL void GL_APIENTRY glDrawElementsInstancedANGLEContextANGLE(GLeglContext ctx, GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei primcount);
 GL_APICALL void GL_APIENTRY glEGLImageTargetRenderbufferStorageOESContextANGLE(GLeglContext ctx, GLenum target, GLeglImageOES image);
 GL_APICALL void GL_APIENTRY glEGLImageTargetTexture2DOESContextANGLE(GLeglContext ctx, GLenum target, GLeglImageOES image);
@@ -503,6 +507,7 @@ GL_APICALL GLuint GL_APIENTRY glGetDebugMessageLogKHRContextANGLE(GLeglContext c
 GL_APICALL void GL_APIENTRY glGetFenceivNVContextANGLE(GLeglContext ctx, GLuint fence, GLenum pname, GLint *params);
 GL_APICALL GLint GL_APIENTRY glGetFragDataIndexEXTContextANGLE(GLeglContext ctx, GLuint program, const GLchar *name);
 GL_APICALL GLenum GL_APIENTRY glGetGraphicsResetStatusEXTContextANGLE(GLeglContext ctx);
+GL_APICALL void GL_APIENTRY glGetIntegeri_vEXTContextANGLE(GLeglContext ctx, GLenum target, GLuint index, GLint *data);
 GL_APICALL void GL_APIENTRY glGetObjectLabelKHRContextANGLE(GLeglContext ctx, GLenum identifier, GLuint name, GLsizei bufSize, GLsizei *length, GLchar *label);
 GL_APICALL void GL_APIENTRY glGetObjectPtrLabelKHRContextANGLE(GLeglContext ctx, const void *ptr, GLsizei bufSize, GLsizei *length, GLchar *label);
 GL_APICALL void GL_APIENTRY glGetPointervKHRContextANGLE(GLeglContext ctx, GLenum pname, void **params);
@@ -535,6 +540,7 @@ GL_APICALL void GL_APIENTRY glProgramBinaryOESContextANGLE(GLeglContext ctx, GLu
 GL_APICALL void GL_APIENTRY glPushDebugGroupKHRContextANGLE(GLeglContext ctx, GLenum source, GLuint id, GLsizei length, const GLchar *message);
 GL_APICALL void GL_APIENTRY glPushGroupMarkerEXTContextANGLE(GLeglContext ctx, GLsizei length, const GLchar *marker);
 GL_APICALL void GL_APIENTRY glQueryCounterEXTContextANGLE(GLeglContext ctx, GLuint id, GLenum target);
+GL_APICALL void GL_APIENTRY glReadBufferIndexedEXTContextANGLE(GLeglContext ctx, GLenum src, GLint index);
 GL_APICALL void GL_APIENTRY glReadnPixelsEXTContextANGLE(GLeglContext ctx, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei bufSize, void *data);
 GL_APICALL void GL_APIENTRY glRenderbufferStorageMultisampleANGLEContextANGLE(GLeglContext ctx, GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height);
 GL_APICALL void GL_APIENTRY glSamplerParameterIivOESContextANGLE(GLeglContext ctx, GLuint sampler, GLenum pname, const GLint *param);

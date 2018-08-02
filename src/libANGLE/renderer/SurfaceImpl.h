@@ -106,11 +106,13 @@ class SurfaceImpl : public FramebufferAttachmentObjectImpl
         UNREACHABLE();
         return egl::EglBadDisplay();
     }
+
     virtual egl::SupportedTimestamps getSupportedTimestamps() const
     {
         UNREACHABLE();
         return egl::SupportedTimestamps();
     }
+
     virtual egl::Error getFrameTimestamps(EGLuint64KHR frameId,
                                           EGLint numTimestamps,
                                           const EGLint *timestamps,
@@ -118,6 +120,12 @@ class SurfaceImpl : public FramebufferAttachmentObjectImpl
     {
         UNREACHABLE();
         return egl::EglBadDisplay();
+    }
+
+    virtual EGLint getCreatedMultiviewViewCount() const
+    {
+        UNREACHABLE();
+        return 1;
     }
 
   protected:

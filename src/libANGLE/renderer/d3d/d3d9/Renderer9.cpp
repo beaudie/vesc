@@ -585,6 +585,9 @@ void Renderer9::generateDisplayExtensions(egl::DisplayExtensions *outExtensions)
     outExtensions->surfacelessContext = true;
 
     outExtensions->robustResourceInitialization = true;
+
+    // No multiview window in D3D9.
+    outExtensions->multiviewWindow = false;
 }
 
 void Renderer9::startScene()
@@ -700,8 +703,12 @@ SwapChainD3D *Renderer9::createSwapChain(NativeWindowD3D *nativeWindow,
                                          GLenum backBufferFormat,
                                          GLenum depthBufferFormat,
                                          EGLint orientation,
-                                         EGLint samples)
+                                         EGLint samples,
+                                         EGLint multiviewCount)
 {
+    // D3D9 does not support stereo rendering. Checks above this level should prevent client code
+    // from ever requesting a D3D9 swap chain with stereo support.
+    ASSERT(multiviewCount == 1);
     return new SwapChain9(this, GetAs<NativeWindow9>(nativeWindow), shareHandle, d3dTexture,
                           backBufferFormat, depthBufferFormat, orientation);
 }
@@ -3041,6 +3048,12 @@ FramebufferImpl *Renderer9::createDefaultFramebuffer(const gl::FramebufferState 
 gl::Version Renderer9::getMaxSupportedESVersion() const
 {
     return gl::Version(2, 0);
+}
+
+EGLint Renderer9::getMultiviewCount() const
+{
+    // D3D9 does not support stereo rendering.
+    return 1;
 }
 
 angle::Result Renderer9::clearRenderTarget(const gl::Context *context,

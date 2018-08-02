@@ -237,7 +237,8 @@ Extents Renderbuffer::getAttachmentSize(const gl::ImageIndex & /*imageIndex*/) c
     return Extents(mState.mWidth, mState.mHeight, 1);
 }
 
-Format Renderbuffer::getAttachmentFormat(GLenum /*binding*/,
+Format Renderbuffer::getAttachmentFormat(GLenum /*bindingLocation*/,
+                                         GLint /*bindingIndex*/,
                                          const ImageIndex & /*imageIndex*/) const
 {
     return getFormat();
@@ -248,12 +249,13 @@ GLsizei Renderbuffer::getAttachmentSamples(const ImageIndex & /*imageIndex*/) co
 }
 
 bool Renderbuffer::isRenderable(const Context *context,
-                                GLenum binding,
+                                GLenum bindingLocation,
+                                GLint bindingIndex,
                                 const ImageIndex &imageIndex) const
 {
     if (isEGLImageTarget())
     {
-        return ImageSibling::isRenderable(context, binding, imageIndex);
+        return ImageSibling::isRenderable(context, bindingLocation, bindingIndex, imageIndex);
     }
     return getFormat().info->renderbufferSupport(context->getClientVersion(),
                                                  context->getExtensions());

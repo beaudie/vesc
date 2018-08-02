@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/gl/wgl/WindowSurfaceWGL.h"
 
 #include "common/debug.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/renderer/gl/RendererGL.h"
 #include "libANGLE/renderer/gl/wgl/FunctionsWGL.h"
 #include "libANGLE/renderer/gl/wgl/wgl_utils.h"
@@ -179,5 +180,22 @@ EGLint WindowSurfaceWGL::getSwapBehavior() const
 HDC WindowSurfaceWGL::getDC() const
 {
     return mDeviceContext;
+}
+
+EGLint WindowSurfaceWGL::getCreatedMultiviewViewCount() const
+{
+    EGLint multiviewCount = 1;
+
+    PIXELFORMATDESCRIPTOR pixelFormatDescriptor = {0};
+    if (DescribePixelFormat(mDeviceContext, mPixelFormat, sizeof(pixelFormatDescriptor),
+                            &pixelFormatDescriptor))
+    {
+        if (pixelFormatDescriptor.dwFlags & PFD_STEREO)
+        {
+            multiviewCount = 2;
+        }
+    }
+
+    return multiviewCount;
 }
 }

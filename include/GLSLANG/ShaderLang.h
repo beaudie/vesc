@@ -324,6 +324,7 @@ struct ShBuiltInResources
     int OES_texture_storage_multisample_2d_array;
     int ANGLE_texture_multisample;
     int ANGLE_multi_draw;
+    int EXT_multiview_draw_buffers;
 
     // Set to 1 to enable replacing GL_EXT_draw_buffers #extension directives
     // with GL_NV_draw_buffers in ESSL output. This flag can be used to emulate

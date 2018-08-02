@@ -2688,6 +2688,19 @@ bool ValidateIndexedStateQuery(Context *context, GLenum pname, GLuint index, GLs
                 return false;
             }
             break;
+        case GL_DRAW_BUFFER_EXT:
+            if (index > (GLuint)context->getGLState()
+                            .getDrawFramebuffer()
+                            ->getDrawBufferStateIndices()
+                            .size())
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidOperation(), InvalidIndexRangeMultiview);
+                return false;
+            }
+            break;
+        case GL_READ_BUFFER_EXT:
+            // index is ignored
+            break;
         default:
             context->handleError(InvalidEnum());
             return false;
