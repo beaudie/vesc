@@ -385,7 +385,8 @@ config("vulkan_core_validation_config") {
 
 source_set("vulkan_core_validation_glslang") {
   public_deps = [
-    "$angle_root/third_party/spirv-tools:spirv_tools",
+    "$angle_root/third_party/spirv-tools/src:spvtools",
+    "$angle_root/third_party/spirv-tools/src:spvtools_val",
   ]
   public_configs = [ ":vulkan_core_validation_config" ]
 }
