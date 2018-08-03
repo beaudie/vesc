@@ -153,6 +153,7 @@ class LineLoopHelper final : public vk::CommandGraphResource
                                                       VkBuffer *bufferHandleOut,
                                                       VkDeviceSize *bufferOffsetOut);
 
+    void release(RendererVk *renderer);
     void destroy(VkDevice device);
 
     static void Draw(uint32_t count, CommandBuffer *commandBuffer);

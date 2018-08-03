@@ -481,6 +481,11 @@ angle::Result LineLoopHelper::getIndexBufferForClientElementArray(
     return angle::Result::Continue();
 }
 
+void LineLoopHelper::release(RendererVk *renderer)
+{
+    mDynamicIndexBuffer.release(renderer);
+}
+
 void LineLoopHelper::destroy(VkDevice device)
 {
     mDynamicIndexBuffer.destroy(device);
