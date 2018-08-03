@@ -147,6 +147,14 @@ bool IntermNodePatternMatcher::match(TIntermAggregate *node, TIntermNode *parent
             }
         }
     }
+    if ((mMask & kAtomicExchangeAndAtomicCompSwapWithoutReturnValue) != 0)
+    {
+        if ((node->getOp() == EOpAtomicExchange || node->getOp() == EOpAtomicCompSwap) &&
+            parentNode && parentNode->getAsBlock())
+        {
+            return true;
+        }
+    }
     return false;
 }
 
