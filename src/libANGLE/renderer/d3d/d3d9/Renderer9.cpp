@@ -3171,8 +3171,9 @@ gl::Error Renderer9::applyTextures(const gl::Context *context, gl::ShaderType sh
     // TODO(jmadill): Use the Program's sampler bindings.
     const auto &completeTextures = glState.getCompleteTextureCache();
 
-    unsigned int samplerRange = programD3D->getUsedSamplerRange(shaderType);
-    for (unsigned int samplerIndex = 0; samplerIndex < samplerRange; samplerIndex++)
+    const gl::RangeUI samplerRange = programD3D->getUsedSamplerRange(shaderType);
+    for (unsigned int samplerIndex = samplerRange.low(); samplerIndex < samplerRange.high();
+         samplerIndex++)
     {
         GLint textureUnit = programD3D->getSamplerMapping(shaderType, samplerIndex, caps);
         ASSERT(textureUnit != -1);
@@ -3210,7 +3211,7 @@ gl::Error Renderer9::applyTextures(const gl::Context *context, gl::ShaderType sh
                               : caps.maxShaderTextureImageUnits[gl::ShaderType::Vertex];
 
     // TODO(jmadill): faster way?
-    for (size_t samplerIndex = samplerRange; samplerIndex < samplerCount; samplerIndex++)
+    for (size_t samplerIndex = samplerRange.high(); samplerIndex < samplerCount; samplerIndex++)
     {
         ANGLE_TRY(setTexture(context, shaderType, static_cast<int>(samplerIndex), nullptr));
     }
