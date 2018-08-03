@@ -18,7 +18,7 @@ vars = {
   'spirv_headers_revision': 'ff684ffc6a35d2a58f0f63108877d0064ea33feb',
 
   # Current revision of SPIRV-Tools for Vulkan.
-  'spirv_tools_revision': '48326d443e434f55eb50a7cfc9acdc968daad5e3',
+  'spirv_tools_revision': 'eda2cfbe128e5b71e9a0131f816ade5186ad6420',
 
   # Current revision of Khronos Vulkan-Headers.
   'vulkan_headers_revision': 'ec4eff88f79b74c4865f41bef0d6af9a46d53896',
@@ -76,10 +76,12 @@ deps = {
 
   '{angle_root}/third_party/spirv-headers/src': {
     'url': '{android_git}/platform/external/shaderc/spirv-headers@{spirv_headers_revision}',
+    'condition': 'not build_with_chromium',
   },
 
   '{angle_root}/third_party/spirv-tools/src': {
     'url': '{android_git}/platform/external/shaderc/spirv-tools@{spirv_tools_revision}',
+    'condition': 'not build_with_chromium',
   },
 
   '{angle_root}/third_party/vulkan-headers/src': {
