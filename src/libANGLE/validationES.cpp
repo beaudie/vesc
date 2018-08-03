@@ -79,13 +79,18 @@ bool DifferenceCanOverflow(GLint a, GLint b)
     return !checkedA.IsValid();
 }
 
+ANGLE_INLINE bool FastValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex)
+{
+    return (maxVertex <= context->getStateCache().getNonInstancedVertexElementLimit() &&
+            (primcount - 1) <= context->getStateCache().getInstancedVertexElementLimit());
+}
+
 bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex)
 {
     // If we're drawing zero vertices, we have enough data.
     ASSERT(primcount > 0);
 
-    if (maxVertex <= context->getStateCache().getNonInstancedVertexElementLimit() &&
-        (primcount - 1) <= context->getStateCache().getInstancedVertexElementLimit())
+    if (FastValidateDrawAttribs(context, primcount, maxVertex))
     {
         return true;
     }
@@ -2748,7 +2753,7 @@ ErrorAndMessage ValidateDrawStates(Context *context)
     return {GL_NO_ERROR, nullptr};
 }
 
-bool ValidateDrawBase(Context *context, PrimitiveMode mode, GLsizei count)
+bool ValidateDrawMode(Context *context, PrimitiveMode mode)
 {
     const Extensions &extensions = context->getExtensions();
 
@@ -2778,22 +2783,11 @@ bool ValidateDrawBase(Context *context, PrimitiveMode mode, GLsizei count)
             return false;
     }
 
-    if (count < 0)
-    {
-        ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeCount);
-        return false;
-    }
-
-    const State &state = context->getGLState();
-
-    if (context->getStateCache().getBasicDrawStatesError(context))
-    {
-        return false;
-    }
-
     // If we are running GLES1, there is no current program.
     if (context->getClientVersion() >= Version(2, 0))
     {
+        const State &state = context->getGLState();
+
         Program *program = state.getProgram();
         ASSERT(program);
 
@@ -2813,6 +2807,22 @@ bool ValidateDrawBase(Context *context, PrimitiveMode mode, GLsizei count)
     return true;
 }
 
+bool ValidateDrawBase(Context *context, PrimitiveMode mode, GLsizei count)
+{
+    if (!context->getStateCache().isValidDrawMode(mode))
+    {
+        return ValidateDrawMode(context, mode);
+    }
+
+    if (count < 0)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeCount);
+        return false;
+    }
+
+    return !context->getStateCache().getBasicDrawStatesError(context);
+}
+
 bool ValidateDrawArraysCommon(Context *context,
                               PrimitiveMode mode,
                               GLint first,
@@ -2822,6 +2832,12 @@ bool ValidateDrawArraysCommon(Context *context,
     if (first < 0)
     {
         ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeStart);
+        return false;
+    }
+
+    if (count < 0)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeCount);
         return false;
     }
 
@@ -2844,7 +2860,12 @@ bool ValidateDrawArraysCommon(Context *context,
         }
     }
 
-    if (!ValidateDrawBase(context, mode, count))
+    if (!context->getStateCache().isValidDrawMode(mode))
+    {
+        return ValidateDrawMode(context, mode);
+    }
+
+    if (context->getStateCache().getBasicDrawStatesError(context))
     {
         return false;
     }
@@ -2863,9 +2884,9 @@ bool ValidateDrawArraysCommon(Context *context,
             return false;
         }
 
-        if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(maxVertex)))
+        if (!FastValidateDrawAttribs(context, primcount, static_cast<GLint>(maxVertex)))
         {
-            return false;
+            return ValidateDrawAttribs(context, primcount, static_cast<GLint>(maxVertex));
         }
     }
 
