@@ -2810,7 +2810,7 @@ bool ValidateDrawBase(Context *context, PrimitiveMode mode, GLsizei count)
             }
         }
 
-        if (extensions.webglCompatibility && count > 0)
+        if (extensions.webglCompatibility)
         {
             const VertexArray *vao = context->getGLState().getVertexArray();
             if (vao->hasTransformFeedbackBindingConflict(context))
