@@ -565,8 +565,8 @@ ProgramD3D::ProgramD3D(const gl::ProgramState &state, RendererD3D *renderer)
       mUsesFlatInterpolation(false),
       mUsedShaderSamplerRanges({}),
       mDirtySamplerMapping(true),
-      mUsedComputeImageRange(0),
-      mUsedComputeReadonlyImageRange(0),
+      mUsedComputeImageRange(0, 0),
+      mUsedComputeReadonlyImageRange(0, 0),
       mSerial(issueSerial())
 {
     mDynamicHLSL = new DynamicHLSL(renderer);
@@ -645,7 +645,7 @@ gl::TextureType ProgramD3D::getSamplerTextureType(gl::ShaderType type,
     return samplers[samplerIndex].textureType;
 }
 
-GLuint ProgramD3D::getUsedSamplerRange(gl::ShaderType type) const
+gl::RangeUI ProgramD3D::getUsedSamplerRange(gl::ShaderType type) const
 {
     ASSERT(type != gl::ShaderType::InvalidEnum);
     return mUsedShaderSamplerRanges[type];
@@ -727,7 +727,7 @@ GLint ProgramD3D::getImageMapping(gl::ShaderType type,
     return -1;
 }
 
-GLuint ProgramD3D::getUsedImageRange(gl::ShaderType type, bool readonly) const
+gl::RangeUI ProgramD3D::getUsedImageRange(gl::ShaderType type, bool readonly) const
 {
     switch (type)
     {
@@ -736,7 +736,7 @@ GLuint ProgramD3D::getUsedImageRange(gl::ShaderType type, bool readonly) const
         // TODO(xinghua.cao@intel.com): add image range of vertex shader and pixel shader.
         default:
             UNREACHABLE();
-            return 0u;
+            return {0, 0};
     }
 }
 
@@ -783,7 +783,10 @@ gl::LinkResult ProgramD3D::load(const gl::Context *context,
             mShaderSamplers[shaderType].push_back(sampler);
         }
 
-        stream->readInt(&mUsedShaderSamplerRanges[shaderType]);
+        unsigned int samplerRangeLow, samplerRangeHigh;
+        stream->readInt(&samplerRangeLow);
+        stream->readInt(&samplerRangeHigh);
+        mUsedShaderSamplerRanges[shaderType] = gl::RangeUI(samplerRangeLow, samplerRangeHigh);
     }
 
     const unsigned int csImageCount = stream->readInt<unsigned int>();
@@ -804,8 +807,15 @@ gl::LinkResult ProgramD3D::load(const gl::Context *context,
         mReadonlyImagesCS.push_back(image);
     }
 
-    stream->readInt(&mUsedComputeImageRange);
-    stream->readInt(&mUsedComputeReadonlyImageRange);
+    unsigned int computeImageRangeLow, computeImageRangeHigh, computeReadonlyImageRangeLow,
+        computeReadonlyImageRangeHigh;
+    stream->readInt(&computeImageRangeLow);
+    stream->readInt(&computeImageRangeHigh);
+    stream->readInt(&computeReadonlyImageRangeLow);
+    stream->readInt(&computeReadonlyImageRangeHigh);
+    mUsedComputeImageRange = gl::RangeUI(computeImageRangeLow, computeImageRangeHigh);
+    mUsedComputeReadonlyImageRange =
+        gl::RangeUI(computeReadonlyImageRangeLow, computeReadonlyImageRangeHigh);
 
     const unsigned int uniformCount = stream->readInt<unsigned int>();
     if (stream->error())
@@ -1041,7 +1051,8 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
             stream->writeEnum(mShaderSamplers[shaderType][i].textureType);
         }
 
-        stream->writeInt(mUsedShaderSamplerRanges[shaderType]);
+        stream->writeInt(mUsedShaderSamplerRanges[shaderType].low());
+        stream->writeInt(mUsedShaderSamplerRanges[shaderType].high());
     }
 
     stream->writeInt(mImagesCS.size());
@@ -1058,8 +1069,10 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
         stream->writeInt(mReadonlyImagesCS[i].logicalImageUnit);
     }
 
-    stream->writeInt(mUsedComputeImageRange);
-    stream->writeInt(mUsedComputeReadonlyImageRange);
+    stream->writeInt(mUsedComputeImageRange.low());
+    stream->writeInt(mUsedComputeImageRange.high());
+    stream->writeInt(mUsedComputeReadonlyImageRange.low());
+    stream->writeInt(mUsedComputeReadonlyImageRange.high());
 
     stream->writeInt(mD3DUniforms.size());
     for (const D3DUniform *uniform : mD3DUniforms)
@@ -1978,6 +1991,11 @@ void ProgramD3D::defineUniformsAndAssignRegisters(const gl::Context *context)
     }
 
     assignAllSamplerRegisters();
+    // Samplers and readonly images share shader input resource slot, adjust low value of
+    // readonly image range.
+    mUsedComputeReadonlyImageRange =
+        gl::RangeUI(mUsedShaderSamplerRanges[gl::ShaderType::Compute].high(),
+                    mUsedShaderSamplerRanges[gl::ShaderType::Compute].high());
     assignAllImageRegisters();
     initializeUniformStorage(attachedShaders);
 }
@@ -2265,7 +2283,7 @@ void ProgramD3D::setUniformMatrixfvInternal(GLint location,
                                             GLboolean transpose,
                                             const GLfloat *value)
 {
-    D3DUniform *targetUniform = getD3DUniformFromLocation(location);
+    D3DUniform *targetUniform                   = getD3DUniformFromLocation(location);
     const gl::VariableLocation &uniformLocation = mState.getUniformLocations()[location];
     unsigned int arrayElementOffset             = uniformLocation.arrayIndex;
     unsigned int elementCount                   = targetUniform->getArraySizeProduct();
@@ -2340,9 +2358,11 @@ void ProgramD3D::AssignSamplers(unsigned int startSamplerIndex,
                                 const gl::UniformTypeInfo &typeInfo,
                                 unsigned int samplerCount,
                                 std::vector<Sampler> &outSamplers,
-                                GLuint *outUsedRange)
+                                gl::RangeUI *outUsedRange)
 {
     unsigned int samplerIndex = startSamplerIndex;
+    unsigned int low          = outUsedRange->low();
+    unsigned int high         = outUsedRange->high();
 
     do
     {
@@ -2351,9 +2371,13 @@ void ProgramD3D::AssignSamplers(unsigned int startSamplerIndex,
         sampler->active             = true;
         sampler->textureType        = gl::FromGLenum<gl::TextureType>(typeInfo.textureType);
         sampler->logicalTextureUnit = 0;
-        *outUsedRange               = std::max(samplerIndex + 1, *outUsedRange);
+        low                         = std::min(samplerIndex, low);
+        high                        = std::max(samplerIndex + 1, high);
         samplerIndex++;
     } while (samplerIndex < startSamplerIndex + samplerCount);
+
+    ASSERT(low < high);
+    *outUsedRange = gl::RangeUI(low, high);
 }
 
 void ProgramD3D::assignAllImageRegisters()
@@ -2419,9 +2443,12 @@ void ProgramD3D::AssignImages(unsigned int startImageIndex,
                               int startLogicalImageUnit,
                               unsigned int imageCount,
                               std::vector<Image> &outImages,
-                              GLuint *outUsedRange)
+                              gl::RangeUI *outUsedRange)
 {
     unsigned int imageIndex = startImageIndex;
+    unsigned int low        = outUsedRange->low();
+    unsigned int high       = outUsedRange->high();
+
     // If declare without a binding qualifier, any uniform image variable (include all elements of
     // unbound image array) shoud be bound to unit zero.
     if (startLogicalImageUnit == -1)
@@ -2430,7 +2457,10 @@ void ProgramD3D::AssignImages(unsigned int startImageIndex,
         Image *image            = &outImages[imageIndex];
         image->active           = true;
         image->logicalImageUnit = 0;
-        *outUsedRange           = std::max(imageIndex + 1, *outUsedRange);
+        low                     = std::min(imageIndex, low);
+        high                    = std::max(imageIndex + 1, high);
+        ASSERT(low < high);
+        *outUsedRange = gl::RangeUI(low, high);
         return;
     }
 
@@ -2441,10 +2471,14 @@ void ProgramD3D::AssignImages(unsigned int startImageIndex,
         Image *image            = &outImages[imageIndex];
         image->active           = true;
         image->logicalImageUnit = logcalImageUnit;
-        *outUsedRange           = std::max(imageIndex + 1, *outUsedRange);
+        low                     = std::min(imageIndex, low);
+        high                    = std::max(imageIndex + 1, high);
         imageIndex++;
         logcalImageUnit++;
     } while (imageIndex < startImageIndex + imageCount);
+
+    ASSERT(low < high);
+    *outUsedRange = gl::RangeUI(low, high);
 }
 
 void ProgramD3D::reset()
@@ -2484,10 +2518,10 @@ void ProgramD3D::reset()
     mImagesCS.clear();
     mReadonlyImagesCS.clear();
 
-    mUsedShaderSamplerRanges.fill(0);
+    mUsedShaderSamplerRanges.fill({0, 0});
     mDirtySamplerMapping           = true;
-    mUsedComputeImageRange         = 0;
-    mUsedComputeReadonlyImageRange = 0;
+    mUsedComputeImageRange         = {0, 0};
+    mUsedComputeReadonlyImageRange = {0, 0};
 
     mAttribLocationToD3DSemantic.fill(-1);
 
@@ -2634,9 +2668,9 @@ void ProgramD3D::gatherTransformFeedbackVaryings(const gl::VaryingPacking &varyi
             for (GLuint registerIndex = 0u; registerIndex < registerInfos.size(); ++registerIndex)
             {
                 const auto &registerInfo = registerInfos[registerIndex];
-                const auto &varying   = *registerInfo.packedVarying->varying;
-                GLenum transposedType = gl::TransposeMatrixType(varying.type);
-                int componentCount    = gl::VariableColumnCount(transposedType);
+                const auto &varying      = *registerInfo.packedVarying->varying;
+                GLenum transposedType    = gl::TransposeMatrixType(varying.type);
+                int componentCount       = gl::VariableColumnCount(transposedType);
                 ASSERT(!varying.isBuiltIn() && !varying.isStruct());
 
                 // There can be more than one register assigned to a particular varying, and each
