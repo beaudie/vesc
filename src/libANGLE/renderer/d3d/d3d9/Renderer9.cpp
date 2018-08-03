@@ -388,7 +388,7 @@ egl::Error Renderer9::initializeDevice()
     mBlit = new Blit9(this);
 
     ASSERT(!mVertexDataManager && !mIndexDataManager);
-    mIndexDataManager  = new IndexDataManager(this);
+    mIndexDataManager = new IndexDataManager(this);
 
     mTranslatedAttribCache.resize(getNativeCaps().maxVertexAttributes);
 
@@ -1001,7 +1001,7 @@ angle::Result Renderer9::setTexture(const gl::Context *context,
                                     gl::Texture *texture)
 {
     int d3dSamplerOffset = (type == gl::ShaderType::Fragment) ? 0 : D3DVERTEXTEXTURESAMPLER0;
-    int d3dSampler                    = index + d3dSamplerOffset;
+    int d3dSampler       = index + d3dSamplerOffset;
     IDirect3DBaseTexture9 *d3dTexture = nullptr;
     bool forceSetTexture              = false;
 

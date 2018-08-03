@@ -35,9 +35,9 @@ VertexBinding &VertexBinding::operator=(VertexBinding &&binding)
 {
     if (this != &binding)
     {
-        mStride  = binding.mStride;
-        mDivisor = binding.mDivisor;
-        mOffset  = binding.mOffset;
+        mStride              = binding.mStride;
+        mDivisor             = binding.mDivisor;
+        mOffset              = binding.mOffset;
         mBoundAttributesMask = binding.mBoundAttributesMask;
         std::swap(binding.mBuffer, mBuffer);
     }
@@ -160,23 +160,36 @@ void VertexAttribute::updateCachedElementLimit(const VertexBinding &binding)
     mCachedElementLimit = elementLimit.ValueOrDefault(kIntegerOverflow);
 }
 
-size_t ComputeVertexAttributeTypeSize(const VertexAttribute& attrib)
+size_t ComputeVertexAttributeTypeSize(const VertexAttribute &attrib)
 {
     GLuint size = attrib.size;
     switch (attrib.type)
     {
-      case GL_BYTE:                        return size * sizeof(GLbyte);
-      case GL_UNSIGNED_BYTE:               return size * sizeof(GLubyte);
-      case GL_SHORT:                       return size * sizeof(GLshort);
-      case GL_UNSIGNED_SHORT:              return size * sizeof(GLushort);
-      case GL_INT:                         return size * sizeof(GLint);
-      case GL_UNSIGNED_INT:                return size * sizeof(GLuint);
-      case GL_INT_2_10_10_10_REV:          return 4;
-      case GL_UNSIGNED_INT_2_10_10_10_REV: return 4;
-      case GL_FIXED:                       return size * sizeof(GLfixed);
-      case GL_HALF_FLOAT:                  return size * sizeof(GLhalf);
-      case GL_FLOAT:                       return size * sizeof(GLfloat);
-      default: UNREACHABLE();              return size * sizeof(GLfloat);
+        case GL_BYTE:
+            return size * sizeof(GLbyte);
+        case GL_UNSIGNED_BYTE:
+            return size * sizeof(GLubyte);
+        case GL_SHORT:
+            return size * sizeof(GLshort);
+        case GL_UNSIGNED_SHORT:
+            return size * sizeof(GLushort);
+        case GL_INT:
+            return size * sizeof(GLint);
+        case GL_UNSIGNED_INT:
+            return size * sizeof(GLuint);
+        case GL_INT_2_10_10_10_REV:
+            return 4;
+        case GL_UNSIGNED_INT_2_10_10_10_REV:
+            return 4;
+        case GL_FIXED:
+            return size * sizeof(GLfixed);
+        case GL_HALF_FLOAT:
+            return size * sizeof(GLhalf);
+        case GL_FLOAT:
+            return size * sizeof(GLfloat);
+        default:
+            UNREACHABLE();
+            return size * sizeof(GLfloat);
     }
 }
 

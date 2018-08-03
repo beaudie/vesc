@@ -336,12 +336,12 @@ gl::Error TextureGL::setSubImageRowByRowWorkaround(const gl::Context *context,
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
     gl::PixelUnpackState directUnpack;
-    directUnpack.alignment   = 1;
+    directUnpack.alignment = 1;
     stateManager->setPixelUnpackState(directUnpack);
     stateManager->setPixelUnpackBuffer(unpackBuffer);
 
-    const gl::InternalFormat &glFormat   = gl::GetInternalFormatInfo(format, type);
-    GLuint rowBytes                      = 0;
+    const gl::InternalFormat &glFormat = gl::GetInternalFormatInfo(format, type);
+    GLuint rowBytes                    = 0;
     ANGLE_TRY_CHECKED_MATH(
         glFormat.computeRowPitch(type, area.width, unpack.alignment, unpack.rowLength, &rowBytes));
     GLuint imageBytes = 0;
@@ -397,7 +397,7 @@ gl::Error TextureGL::setSubImagePaddingWorkaround(const gl::Context *context,
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
     const gl::InternalFormat &glFormat = gl::GetInternalFormatInfo(format, type);
-    GLuint rowBytes = 0;
+    GLuint rowBytes                    = 0;
     ANGLE_TRY_CHECKED_MATH(
         glFormat.computeRowPitch(type, area.width, unpack.alignment, unpack.rowLength, &rowBytes));
     GLuint imageBytes = 0;
@@ -412,7 +412,7 @@ gl::Error TextureGL::setSubImagePaddingWorkaround(const gl::Context *context,
     stateManager->setPixelUnpackBuffer(unpackBuffer);
 
     gl::PixelUnpackState directUnpack;
-    directUnpack.alignment   = 1;
+    directUnpack.alignment = 1;
 
     if (useTexImage3D)
     {
@@ -572,7 +572,7 @@ gl::Error TextureGL::copyImage(const gl::Context *context,
 
     gl::TextureTarget target = index.getTarget();
     size_t level             = static_cast<size_t>(index.getLevelIndex());
-    GLenum type = GL_NONE;
+    GLenum type              = GL_NONE;
     ANGLE_TRY(source->getImplementationColorReadType(context, &type));
     nativegl::CopyTexImageImageFormat copyTexImageFormat =
         nativegl::GetCopyTexImageImageFormat(functions, workarounds, internalFormat, type);
@@ -742,9 +742,9 @@ gl::Error TextureGL::copyTexture(const gl::Context *context,
                                  bool unpackUnmultiplyAlpha,
                                  const gl::Texture *source)
 {
-    gl::TextureTarget target             = index.getTarget();
-    size_t level                         = static_cast<size_t>(index.getLevelIndex());
-    const TextureGL *sourceGL            = GetImplAs<TextureGL>(source);
+    gl::TextureTarget target  = index.getTarget();
+    size_t level              = static_cast<size_t>(index.getLevelIndex());
+    const TextureGL *sourceGL = GetImplAs<TextureGL>(source);
     const gl::ImageDesc &sourceImageDesc =
         sourceGL->mState.getImageDesc(NonCubeTextureTypeToTarget(source->getType()), sourceLevel);
     gl::Rectangle sourceArea(0, 0, sourceImageDesc.size.width, sourceImageDesc.size.height);
@@ -791,7 +791,7 @@ gl::Error TextureGL::copySubTextureHelper(const gl::Context *context,
     const FunctionsGL *functions = GetFunctionsGL(context);
     BlitGL *blitter              = GetBlitGL(context);
 
-    TextureGL *sourceGL                  = GetImplAs<TextureGL>(source);
+    TextureGL *sourceGL = GetImplAs<TextureGL>(source);
     const gl::ImageDesc &sourceImageDesc =
         sourceGL->mState.getImageDesc(NonCubeTextureTypeToTarget(source->getType()), sourceLevel);
 
@@ -799,7 +799,7 @@ gl::Error TextureGL::copySubTextureHelper(const gl::Context *context,
     ASSERT(sourceGL->getType() == gl::TextureType::_2D);
     const LevelInfoGL &sourceLevelInfo =
         sourceGL->getLevelInfo(NonCubeTextureTypeToTarget(source->getType()), sourceLevel);
-    bool needsLumaWorkaround           = sourceLevelInfo.lumaWorkaround.enabled;
+    bool needsLumaWorkaround = sourceLevelInfo.lumaWorkaround.enabled;
 
     GLenum sourceFormat = sourceImageDesc.format.info->format;
     bool sourceFormatContainSupersetOfDestFormat =
@@ -884,8 +884,7 @@ gl::Error TextureGL::setStorage(const gl::Context *context,
             for (size_t level = 0; level < levels; level++)
             {
                 gl::Extents levelSize(std::max(size.width >> level, 1),
-                                      std::max(size.height >> level, 1),
-                                      1);
+                                      std::max(size.height >> level, 1), 1);
 
                 if (getType() == gl::TextureType::_2D || getType() == gl::TextureType::Rectangle)
                 {
@@ -1336,64 +1335,64 @@ void TextureGL::syncTextureStateSwizzle(const FunctionsGL *functions,
         {
             switch (value)
             {
-            case GL_RED:
-            case GL_GREEN:
-            case GL_BLUE:
-                if (levelInfo.sourceFormat == GL_LUMINANCE ||
-                    levelInfo.sourceFormat == GL_LUMINANCE_ALPHA)
-                {
-                    // Texture is backed by a RED or RG texture, point all color channels at the red
-                    // channel.
-                    ASSERT(levelInfo.lumaWorkaround.workaroundFormat == GL_RED ||
-                           levelInfo.lumaWorkaround.workaroundFormat == GL_RG);
-                    resultSwizzle = GL_RED;
-                }
-                else if (levelInfo.sourceFormat == GL_ALPHA)
-                {
-                    // Color channels are not supposed to exist, make them always sample 0.
-                    resultSwizzle = GL_ZERO;
-                }
-                else
-                {
+                case GL_RED:
+                case GL_GREEN:
+                case GL_BLUE:
+                    if (levelInfo.sourceFormat == GL_LUMINANCE ||
+                        levelInfo.sourceFormat == GL_LUMINANCE_ALPHA)
+                    {
+                        // Texture is backed by a RED or RG texture, point all color channels at the
+                        // red channel.
+                        ASSERT(levelInfo.lumaWorkaround.workaroundFormat == GL_RED ||
+                               levelInfo.lumaWorkaround.workaroundFormat == GL_RG);
+                        resultSwizzle = GL_RED;
+                    }
+                    else if (levelInfo.sourceFormat == GL_ALPHA)
+                    {
+                        // Color channels are not supposed to exist, make them always sample 0.
+                        resultSwizzle = GL_ZERO;
+                    }
+                    else
+                    {
+                        UNREACHABLE();
+                    }
+                    break;
+
+                case GL_ALPHA:
+                    if (levelInfo.sourceFormat == GL_LUMINANCE)
+                    {
+                        // Alpha channel is not supposed to exist, make it always sample 1.
+                        resultSwizzle = GL_ONE;
+                    }
+                    else if (levelInfo.sourceFormat == GL_ALPHA)
+                    {
+                        // Texture is backed by a RED texture, point the alpha channel at the red
+                        // channel.
+                        ASSERT(levelInfo.lumaWorkaround.workaroundFormat == GL_RED);
+                        resultSwizzle = GL_RED;
+                    }
+                    else if (levelInfo.sourceFormat == GL_LUMINANCE_ALPHA)
+                    {
+                        // Texture is backed by an RG texture, point the alpha channel at the green
+                        // channel.
+                        ASSERT(levelInfo.lumaWorkaround.workaroundFormat == GL_RG);
+                        resultSwizzle = GL_GREEN;
+                    }
+                    else
+                    {
+                        UNREACHABLE();
+                    }
+                    break;
+
+                case GL_ZERO:
+                case GL_ONE:
+                    // Don't modify the swizzle state when requesting ZERO or ONE.
+                    resultSwizzle = value;
+                    break;
+
+                default:
                     UNREACHABLE();
-                }
-                break;
-
-            case GL_ALPHA:
-                if (levelInfo.sourceFormat == GL_LUMINANCE)
-                {
-                    // Alpha channel is not supposed to exist, make it always sample 1.
-                    resultSwizzle = GL_ONE;
-                }
-                else if (levelInfo.sourceFormat == GL_ALPHA)
-                {
-                    // Texture is backed by a RED texture, point the alpha channel at the red
-                    // channel.
-                    ASSERT(levelInfo.lumaWorkaround.workaroundFormat == GL_RED);
-                    resultSwizzle = GL_RED;
-                }
-                else if (levelInfo.sourceFormat == GL_LUMINANCE_ALPHA)
-                {
-                    // Texture is backed by an RG texture, point the alpha channel at the green
-                    // channel.
-                    ASSERT(levelInfo.lumaWorkaround.workaroundFormat == GL_RG);
-                    resultSwizzle = GL_GREEN;
-                }
-                else
-                {
-                    UNREACHABLE();
-                }
-                break;
-
-            case GL_ZERO:
-            case GL_ONE:
-                // Don't modify the swizzle state when requesting ZERO or ONE.
-                resultSwizzle = value;
-                break;
-
-            default:
-                UNREACHABLE();
-                break;
+                    break;
             }
         }
         else if (levelInfo.depthStencilWorkaround)
@@ -1431,7 +1430,6 @@ void TextureGL::syncTextureStateSwizzle(const FunctionsGL *functions,
         {
             UNREACHABLE();
         }
-
     }
 
     *outValue = resultSwizzle;
