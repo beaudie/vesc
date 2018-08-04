@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e18007f_83fe4d53",
+        "filename": "src/libANGLE/VertexAttribute.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-04T04:43:30Z",
+      "side": 1,
+      "message": "I looked at this three times and thought it was wrong.  The next two times I thought it was right.  Ultimately I think it\u0027s wrong as follows:\n  elementLimit gets -4 for example\n  mCachedElementLimit gets -4, because there was no overflow\n  we enter the \"Special case for zero stride\" block\n  we return with mCachedElementLimit \u003d\u003d -4 when it should be kElementLimitOverflow\n\nI think this can be considerably clearer, something like:\n  elementLimit \u003d ...\n  if !elementLimit.IsValid() || elementLimit\u003c0\n    mCachedElementLimit \u003d kElementLimitOverflow\n    return\n  if stride\u003d\u003d0\n    mCachedElementLimit \u003d max\n    return\n  elementLimit /\u003d stride\n  // divisor stuff - no changes from here down",
+      "revId": "035fdc4e0bafd83a657382f5d1f6dec9281d228e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84f1847b_3dc20e7c",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-04T04:43:30Z",
+      "side": 1,
+      "message": "maybe update the comment",
+      "range": {
+        "startLine": 120,
+        "startChar": 54,
+        "endLine": 120,
+        "endChar": 62
+      },
+      "revId": "035fdc4e0bafd83a657382f5d1f6dec9281d228e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
