@@ -267,12 +267,12 @@ if (is_win || is_linux || is_android || is_mac) {
       "../../util",
     ]
 
+    sources = rebase_path(perftests_gypi.angle_perf_tests_sources, ".", "../..")
+
     if (is_android) {
       use_native_activity = true
       configs -= [ "//build/config/android:hide_all_but_jni" ]
     }
-
-    sources = rebase_path(perftests_gypi.angle_perf_tests_sources, ".", "../..")
 
     if (is_win) {
       sources +=
@@ -283,6 +283,12 @@ if (is_win || is_linux || is_android || is_mac) {
       sources += rebase_path(perftests_gypi.angle_perf_tests_vulkan_sources,
                              ".",
                              "../..")
+      if (is_android || (is_linux && !is_mac)) {
+        sources += rebase_path(
+                perftests_gypi.angle_perf_tests_vulkan_command_buffer_sources,
+                ".",
+                "../..")
+      }
     }
 
     if (build_with_chromium) {
@@ -302,6 +308,12 @@ if (is_win || is_linux || is_android || is_mac) {
              angle_root + ":libEGL_static",
              angle_root + ":libGLESv2_static",
            ]
+	   
+    if (!is_mac){
+      deps += [ "$angle_root/third_party/glslang:glslang" ]
+      public_configs = [ "$angle_root/third_party/glslang:glslang_config" ]
+    }
+    
   }
 }
 
