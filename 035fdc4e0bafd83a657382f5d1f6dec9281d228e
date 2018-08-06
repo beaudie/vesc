@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "12db8381_10733c60",
+        "filename": "src/libANGLE/VertexAttribute.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-06T21:48:33Z",
+      "side": 1,
+      "message": "Yes I thought the intention was to have \u003e\u003d0, or the sentinel value, and no other negative values.  I see there\u0027s a comment for that now.\nI still think it could be clearer but do what you like.\n\nelementLimit \u003d ...\nif !elementLimit.IsValid()\n  mCachedElementLimit \u003d sentinel\n  return\nif elementLimit \u003c 0\n  // conceivably this could equal the sentinel, but we can let that slide\n  mCachedElementLimit \u003d elementLimit\n  return\nif stride \u003d\u003d 0\n  mCachedElementLimit \u003d max\n  return\nelementLimit /\u003d stride\n// divisor stuff - no changes from here down",
+      "parentUuid": "48367740_704c0393",
+      "revId": "035fdc4e0bafd83a657382f5d1f6dec9281d228e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "84f1847b_3dc20e7c",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 1
