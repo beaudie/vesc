@@ -43,12 +43,15 @@
             '<(angle_path)/src/tests/perf_tests/UniformsPerf.cpp',
             '<(angle_path)/src/tests/perf_tests/third_party/perf/perf_test.cc',
             '<(angle_path)/src/tests/perf_tests/third_party/perf/perf_test.h',
-            '<(angle_path)/src/tests/test_utils/angle_test_configs.cpp',
+            '<(angle_path)/src/tests/perf_tests/VulkanCommandBufferPerf.cpp',
+            '<(angle_path)/src/tests/perf_tests/VulkanCommandBufferPerfParams.cpp',
+            '<(angle_path)/src/tests/perf_tests/VulkanCommandBufferPerfParams.h',
+	    '<(angle_path)/src/tests/test_utils/angle_test_configs.cpp',
             '<(angle_path)/src/tests/test_utils/angle_test_configs.h',
             '<(angle_path)/src/tests/test_utils/angle_test_instantiate.cpp',
             '<(angle_path)/src/tests/test_utils/angle_test_instantiate.h',
             '<(angle_path)/src/tests/test_utils/draw_call_perf_utils.cpp',
-            '<(angle_path)/src/tests/test_utils/draw_call_perf_utils.h',
+            '<(angle_path)/src/tests/test_utils/draw_call_perf_utils.h'
         ],
         'angle_perf_tests_win_sources':
         [
