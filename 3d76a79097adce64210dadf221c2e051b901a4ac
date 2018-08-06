@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5eef661d_9e90b5c5",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2566,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-06T20:08:33Z",
+      "side": 1,
+      "message": "Possible to keep the old pattern of recording the error on the context and returning a bool?",
+      "range": {
+        "startLine": 2566,
+        "startChar": 8,
+        "endLine": 2566,
+        "endChar": 39
+      },
+      "revId": "3d76a79097adce64210dadf221c2e051b901a4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
