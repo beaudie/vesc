@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c62baeaf_5f0c6383",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-08-06T06:46:46Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 26
+      },
+      "revId": "ef67a3839c0caf2460f925b1b24c61359f656d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84af2557_b602dcaf",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-08-06T06:46:46Z",
+      "side": 1,
+      "message": "Why not private?",
+      "range": {
+        "startLine": 28,
+        "startChar": 2,
+        "endLine": 28,
+        "endChar": 11
+      },
+      "revId": "ef67a3839c0caf2460f925b1b24c61359f656d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "184e627c_717c939f",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-08-06T06:46:46Z",
+      "side": 1,
+      "message": "May be we can directly use \u0027Copyright 2018\u0027?",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 26
+      },
+      "revId": "ef67a3839c0caf2460f925b1b24c61359f656d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
