@@ -46,6 +46,30 @@
       "revId": "3d76a79097adce64210dadf221c2e051b901a4ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fe3a712_f933669e",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2566,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-06T20:29:22Z",
+      "side": 1,
+      "message": "Given that we\u0027re only going to have to update the storage with the heavier error object when there is an error, I think the cost could be made very small for the regular case.  Then we wouldn\u0027t need the special-casing for framebuffer/invalid op errors below.",
+      "parentUuid": "3cf94ba6_83242d78",
+      "range": {
+        "startLine": 2566,
+        "startChar": 8,
+        "endLine": 2566,
+        "endChar": 39
+      },
+      "revId": "3d76a79097adce64210dadf221c2e051b901a4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
