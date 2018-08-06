@@ -43,7 +43,7 @@
             '<(angle_path)/src/tests/perf_tests/UniformsPerf.cpp',
             '<(angle_path)/src/tests/perf_tests/third_party/perf/perf_test.cc',
             '<(angle_path)/src/tests/perf_tests/third_party/perf/perf_test.h',
-            '<(angle_path)/src/tests/test_utils/angle_test_configs.cpp',
+	    '<(angle_path)/src/tests/test_utils/angle_test_configs.cpp',
             '<(angle_path)/src/tests/test_utils/angle_test_configs.h',
             '<(angle_path)/src/tests/test_utils/angle_test_instantiate.cpp',
             '<(angle_path)/src/tests/test_utils/angle_test_instantiate.h',
@@ -59,6 +59,15 @@
         [
             '<(angle_path)/src/tests/perf_tests/VulkanPipelineCachePerf.cpp',
         ],
+	# Currently Vulkan Command Buffer Perf Tests compile on Android/Linux
+	'angle_perf_tests_vulkan_command_buffer_sources':
+	[
+            '<(angle_path)/src/tests/perf_tests/VulkanCommandBufferPerf.cpp',
+            '<(angle_path)/src/tests/perf_tests/VulkanCommandBufferPerfParams.cpp',
+            '<(angle_path)/src/tests/perf_tests/VulkanCommandBufferPerfParams.h',
+            '<(angle_path)/src/tests/test_utils/vulkan_command_buffer_utils.cpp',
+            '<(angle_path)/src/tests/test_utils/vulkan_command_buffer_utils.h'
+	],
     },
     # Everything below (except WinRT-related config) must be also maintained for GN.
     # If you change anything below, also update angle/src/tests/BUILD.gn.
