@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "48367740_704c0393",
+        "filename": "src/libANGLE/VertexAttribute.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-06T17:19:22Z",
+      "side": 1,
+      "message": "hey Frank, I\u0027m not sure if I agree with you when you say \n\n\"we return with mCachedElementLimit \u003d\u003d -4 when it should be kElementLimitOverflow\"\n\nThe confusion is that overflow is overloaded. When mCachedElementOverflow is negative there is a buffer overflow. But when mCachedElementOverflow is kElementLimitOverflow then there is an integer overflow. So I think the code may be correct. But it was confusing so I renamed kElementLimitOverflow to kIntegerOverflow. LMK if you agree.",
+      "parentUuid": "8e18007f_83fe4d53",
+      "revId": "035fdc4e0bafd83a657382f5d1f6dec9281d228e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "84f1847b_3dc20e7c",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 1
