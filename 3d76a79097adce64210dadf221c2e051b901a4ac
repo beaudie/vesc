@@ -22,6 +22,30 @@
       "revId": "3d76a79097adce64210dadf221c2e051b901a4ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cf94ba6_83242d78",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2566,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-06T20:15:26Z",
+      "side": 1,
+      "message": "Maybe.. agree this is a bit weird. I did this because in a later patch \"StateCache\" stores a light pointer to the error string in the upcoming patch. This avoids storing the \"heavy\" error object with allocated string and error code. Ties in with the error refactor. Open to other ideas though.",
+      "parentUuid": "5eef661d_9e90b5c5",
+      "range": {
+        "startLine": 2566,
+        "startChar": 8,
+        "endLine": 2566,
+        "endChar": 39
+      },
+      "revId": "3d76a79097adce64210dadf221c2e051b901a4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
