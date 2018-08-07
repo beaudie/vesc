@@ -45,7 +45,7 @@ class State : angle::NonCopyable
           bool programBinaryCacheEnabled);
     ~State();
 
-    void initialize(const Context *context);
+    void initialize(Context *context);
     void reset(const Context *context);
 
     // State chunk getters

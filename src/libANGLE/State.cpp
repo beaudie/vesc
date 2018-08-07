@@ -123,7 +123,7 @@ State::~State()
 {
 }
 
-void State::initialize(const Context *context)
+void State::initialize(Context *context)
 {
     const Caps &caps                   = context->getCaps();
     const Extensions &extensions       = context->getExtensions();
