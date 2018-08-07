@@ -327,6 +327,7 @@ class StateManager11 final : angle::NonCopyable
     angle::Result applyUniformsForShader(const gl::Context *context, gl::ShaderType shaderType);
 
     angle::Result syncUniformBuffers(const gl::Context *context);
+    angle::Result syncUniformBuffersForCompute(const gl::Context *context);
     angle::Result syncUniformBuffersForShader(const gl::Context *context,
                                               gl::ShaderType shaderType);
     angle::Result syncTransformFeedbackBuffers(const gl::Context *context);
@@ -546,6 +547,14 @@ class StateManager11 final : angle::NonCopyable
     FragmentConstantBufferArray<ResourceSerial> mCurrentConstantBufferPS;
     FragmentConstantBufferArray<GLintptr> mCurrentConstantBufferPSOffset;
     FragmentConstantBufferArray<GLsizeiptr> mCurrentConstantBufferPSSize;
+
+    template <typename T>
+    using ComputeConstantBufferArray =
+        std::array<T, gl::IMPLEMENTATION_MAX_COMPUTE_SHADER_UNIFORM_BUFFERS>;
+
+    ComputeConstantBufferArray<ResourceSerial> mCurrentConstantBufferCS;
+    ComputeConstantBufferArray<GLintptr> mCurrentConstantBufferCSOffset;
+    ComputeConstantBufferArray<GLsizeiptr> mCurrentConstantBufferCSSize;
 
     class ConstantBufferObserver : public angle::ObserverInterface
     {
