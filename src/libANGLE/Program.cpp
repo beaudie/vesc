@@ -794,9 +794,11 @@ ProgramState::ProgramState()
       mGeometryShaderInputPrimitiveType(PrimitiveMode::Triangles),
       mGeometryShaderOutputPrimitiveType(PrimitiveMode::TriangleStrip),
       mGeometryShaderInvocations(1),
-      mGeometryShaderMaxVertices(0)
+      mGeometryShaderMaxVertices(0),
+      mActiveSamplerRefCounts{}
 {
     mComputeShaderLocalSize.fill(1);
+    mActiveSamplerTypes.fill(TextureType::InvalidEnum);
 }
 
 ProgramState::~ProgramState()
@@ -2046,60 +2048,22 @@ void Program::validate(const Caps &caps)
 
 bool Program::validateSamplersImpl(InfoLog *infoLog, const Caps &caps)
 {
-    if (mTextureUnitTypesCache.empty())
-    {
-        mTextureUnitTypesCache.resize(caps.maxCombinedTextureImageUnits, TextureType::InvalidEnum);
-    }
-    else
-    {
-        std::fill(mTextureUnitTypesCache.begin(), mTextureUnitTypesCache.end(),
-                  TextureType::InvalidEnum);
-    }
-
     // if any two active samplers in a program are of different types, but refer to the same
     // texture image unit, and this is the current program, then ValidateProgram will fail, and
     // DrawArrays and DrawElements will issue the INVALID_OPERATION error.
-    for (const auto &samplerBinding : mState.mSamplerBindings)
+    for (size_t textureUnit : mState.mActiveSamplersMask)
     {
-        if (samplerBinding.unreferenced)
-            continue;
-
-        TextureType textureType = samplerBinding.textureType;
-
-        for (GLuint textureUnit : samplerBinding.boundTextureUnits)
+        if (mState.mActiveSamplerTypes[textureUnit] == TextureType::InvalidEnum)
         {
-            if (textureUnit >= caps.maxCombinedTextureImageUnits)
+            if (infoLog)
             {
-                if (infoLog)
-                {
-                    (*infoLog) << "Sampler uniform (" << textureUnit
-                               << ") exceeds GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS ("
-                               << caps.maxCombinedTextureImageUnits << ")";
-                }
-
-                mCachedValidateSamplersResult = false;
-                return false;
+                (*infoLog) << "Samplers of conflicting types refer to the same texture "
+                              "image unit ("
+                           << textureUnit << ").";
             }
 
-            if (mTextureUnitTypesCache[textureUnit] != TextureType::InvalidEnum)
-            {
-                if (textureType != mTextureUnitTypesCache[textureUnit])
-                {
-                    if (infoLog)
-                    {
-                        (*infoLog) << "Samplers of conflicting types refer to the same texture "
-                                      "image unit ("
-                                   << textureUnit << ").";
-                    }
-
-                    mCachedValidateSamplersResult = false;
-                    return false;
-                }
-            }
-            else
-            {
-                mTextureUnitTypesCache[textureUnit] = textureType;
-            }
+            mCachedValidateSamplersResult = false;
+            return false;
         }
     }
 
@@ -2651,8 +2615,16 @@ void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
     {
         const auto &samplerUniform = mState.mUniforms[samplerIndex];
         TextureType textureType    = SamplerTypeToTextureType(samplerUniform.type);
-        mState.mSamplerBindings.emplace_back(
-            SamplerBinding(textureType, samplerUniform.getBasicTypeElementCount(), false));
+        unsigned int elementCount  = samplerUniform.getBasicTypeElementCount();
+        mState.mSamplerBindings.emplace_back(textureType, elementCount, false);
+        mState.mActiveSamplerRefCounts[0] += elementCount;
+    }
+
+    // Since all sampler bindings start at zero we only need to check this sampler index.
+    if (mState.mActiveSamplerRefCounts[0] > 0)
+    {
+        mState.mActiveSamplerTypes[0] = mState.getSamplerUniformTextureType(0);
+        mState.mActiveSamplersMask.set(0);
     }
 }
 
@@ -3469,13 +3441,87 @@ void Program::updateSamplerUniform(const VariableLocation &locationInfo,
 {
     ASSERT(mState.isSamplerUniformIndex(locationInfo.index));
     GLuint samplerIndex = mState.getSamplerIndexFromUniformIndex(locationInfo.index);
-    std::vector<GLuint> *boundTextureUnits =
-        &mState.mSamplerBindings[samplerIndex].boundTextureUnits;
+    SamplerBinding &samplerBinding = mState.mSamplerBindings[samplerIndex];
+    std::vector<GLuint> &boundTextureUnits = samplerBinding.boundTextureUnits;
 
-    std::copy(v, v + clampedCount, boundTextureUnits->begin() + locationInfo.arrayIndex);
+    if (samplerBinding.unreferenced)
+        return;
+
+    // Update the sampler uniforms.
+    for (GLsizei arrayIndex = 0; arrayIndex < clampedCount; ++arrayIndex)
+    {
+        GLint oldSamplerIndex = boundTextureUnits[arrayIndex + locationInfo.arrayIndex];
+        GLint newSamplerIndex = v[arrayIndex];
+
+        if (oldSamplerIndex == newSamplerIndex)
+            continue;
+
+        boundTextureUnits[arrayIndex + locationInfo.arrayIndex] = newSamplerIndex;
+
+        // Update the reference counts.
+        uint32_t &oldRefCount = mState.mActiveSamplerRefCounts[oldSamplerIndex];
+        uint32_t &newRefCount = mState.mActiveSamplerRefCounts[newSamplerIndex];
+        oldRefCount--;
+        newRefCount++;
+
+        // Check for binding type change.
+        TextureType &newSamplerType = mState.mActiveSamplerTypes[newSamplerIndex];
+        TextureType &oldSamplerType = mState.mActiveSamplerTypes[oldSamplerIndex];
+
+        if (newRefCount == 1)
+        {
+            newSamplerType = samplerBinding.textureType;
+            mState.mActiveSamplersMask.set(newSamplerIndex);
+        }
+        else if (newSamplerType != samplerBinding.textureType)
+        {
+            // Conflict detected. Ensure we reset it properly.
+            newSamplerType = TextureType::InvalidEnum;
+        }
+
+        // Unset previously active sampler.
+        if (oldRefCount == 0)
+        {
+            oldSamplerType = TextureType::InvalidEnum;
+            mState.mActiveSamplersMask.reset(oldSamplerIndex);
+        }
+        else if (oldSamplerType == TextureType::InvalidEnum)
+        {
+            // Previous conflict. Check if this new change fixed the conflict.
+            oldSamplerType = mState.getSamplerUniformTextureType(oldSamplerIndex);
+        }
+    }
 
     // Invalidate the validation cache.
     mCachedValidateSamplersResult.reset();
+}
+
+TextureType ProgramState::getSamplerUniformTextureType(size_t textureUnitIndex) const
+{
+    TextureType foundType = TextureType::InvalidEnum;
+
+    for (const SamplerBinding &binding : mSamplerBindings)
+    {
+        if (binding.unreferenced)
+            continue;
+
+        for (GLuint textureUnit : binding.boundTextureUnits)
+        {
+            if (textureUnit == textureUnitIndex)
+            {
+                if (foundType == TextureType::InvalidEnum)
+                {
+                    foundType = binding.textureType;
+                }
+                else if (foundType != binding.textureType)
+                {
+                    return TextureType::InvalidEnum;
+                }
+            }
+        }
+    }
+
+    return foundType;
 }
 
 template <typename T>
