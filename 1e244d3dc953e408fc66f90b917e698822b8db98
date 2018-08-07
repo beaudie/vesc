@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c374cb7d_3e8a1ea3",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-08-07T11:15:43Z",
+      "side": 1,
+      "message": "I\u0027m not sure the complexity of the detection requires using the matcher here. Is the same matcher going to be used for a different purpose in follow-up patches?",
+      "revId": "1e244d3dc953e408fc66f90b917e698822b8db98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
