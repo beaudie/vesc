@@ -447,7 +447,7 @@ class DestroyThenDelete
 
     void operator()(ObjT *obj)
     {
-        ANGLE_SWALLOW_ERR(obj->onDestroy(mContext));
+        (void)(obj->onDestroy(mContext));
         delete obj;
     }
 
