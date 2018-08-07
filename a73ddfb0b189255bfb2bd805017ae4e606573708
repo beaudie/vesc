@@ -1,0 +1,222 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "003d740d_b59c8b52",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-07T21:20:38Z",
+      "side": 1,
+      "message": "is_linux should be false for mac.",
+      "range": {
+        "startLine": 286,
+        "startChar": 25,
+        "endLine": 286,
+        "endChar": 34
+      },
+      "revId": "a73ddfb0b189255bfb2bd805017ae4e606573708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6413e0f8_6b1bf2ca",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-07T21:20:38Z",
+      "side": 1,
+      "message": "this should probably go in the vulkan block",
+      "range": {
+        "startLine": 312,
+        "startChar": 0,
+        "endLine": 315,
+        "endChar": 5
+      },
+      "revId": "a73ddfb0b189255bfb2bd805017ae4e606573708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2c8ca7a_b398d310",
+        "filename": "src/tests/angle_perftests.gypi",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-07T21:20:38Z",
+      "side": 1,
+      "message": "tab",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 1
+      },
+      "revId": "a73ddfb0b189255bfb2bd805017ae4e606573708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e9f29bc_8eff8662",
+        "filename": "src/tests/angle_perftests.gypi",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-07T21:20:38Z",
+      "side": 1,
+      "message": "more tabs",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 1
+      },
+      "revId": "a73ddfb0b189255bfb2bd805017ae4e606573708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80f9665b_4c2cef1d",
+        "filename": "src/tests/perf_tests/VulkanCommandBufferPerf.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-07T21:20:38Z",
+      "side": 1,
+      "message": "nit: use constexpr char [] \u003d R\"(..shader...)\";",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 33
+      },
+      "revId": "a73ddfb0b189255bfb2bd805017ae4e606573708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21fe0532_283a4ee8",
+        "filename": "src/tests/perf_tests/VulkanCommandBufferPerf.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-07T21:20:38Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 33
+      },
+      "revId": "a73ddfb0b189255bfb2bd805017ae4e606573708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ca1b29a_c387b32a",
+        "filename": "src/tests/perf_tests/VulkanCommandBufferPerfParams.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-07T21:20:38Z",
+      "side": 1,
+      "message": "You probably don\u0027t need a separate file for this stuff. Can put it in your benchmark.",
+      "revId": "a73ddfb0b189255bfb2bd805017ae4e606573708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c75bd9be_9c936eb3",
+        "filename": "src/tests/perf_tests/VulkanCommandBufferPerfParams.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-07T21:20:38Z",
+      "side": 1,
+      "message": "static functions should be capitalized according to the style guide\n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#variable-names",
+      "range": {
+        "startLine": 10,
+        "startChar": 5,
+        "endLine": 10,
+        "endChar": 34
+      },
+      "revId": "a73ddfb0b189255bfb2bd805017ae4e606573708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3eb11bf_e0279f9e",
+        "filename": "src/tests/perf_tests/VulkanCommandBufferPerfParams.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-07T21:20:38Z",
+      "side": 1,
+      "message": "can probably use ASSERT_EQ(VK_SUCCESS, res) for these once you move this back into the benchmark file. same for the other \"assert\"s.",
+      "range": {
+        "startLine": 287,
+        "startChar": 4,
+        "endLine": 287,
+        "endChar": 10
+      },
+      "revId": "a73ddfb0b189255bfb2bd805017ae4e606573708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "361df1c9_1707f96e",
+        "filename": "src/tests/test_utils/vulkan_command_buffer_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-07T21:20:38Z",
+      "side": 1,
+      "message": "Probably put this in src/tests/test_utils/third_party/ and include the original license header if possible. also add README.angle and LICENSE.",
+      "revId": "a73ddfb0b189255bfb2bd805017ae4e606573708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
