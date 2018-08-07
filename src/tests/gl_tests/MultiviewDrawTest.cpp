@@ -2207,7 +2207,7 @@ MultiviewTestParams LayeredVertexShaderD3D11()
     return MultiviewTestParams(GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE, VertexShaderD3D11());
 }
 
-ANGLE_INSTANTIATE_TEST(MultiviewDrawValidationTest, ES31_OPENGL());
+ANGLE_INSTANTIATE_TEST(MultiviewDrawValidationTest, ES31_OPENGL(), SideBySideVertexShaderD3D11());
 ANGLE_INSTANTIATE_TEST(MultiviewRenderDualViewTest,
                        SideBySideVertexShaderOpenGL(),
                        LayeredVertexShaderOpenGL(),
