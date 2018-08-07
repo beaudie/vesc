@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "945dac80_0a6430cc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-07T22:27:38Z",
+      "side": 1,
+      "message": "too many \"also\"",
+      "range": {
+        "startLine": 11,
+        "startChar": 24,
+        "endLine": 11,
+        "endChar": 38
+      },
+      "revId": "d48d8109955706aa1034b6484fafdd47fbb4547e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1619dc8_3393a579",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-07T22:27:38Z",
+      "side": 1,
+      "message": "small improvement?",
+      "range": {
+        "startLine": 14,
+        "startChar": 11,
+        "endLine": 14,
+        "endChar": 19
+      },
+      "revId": "d48d8109955706aa1034b6484fafdd47fbb4547e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45d4c743_cbac5b0a",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-07T22:27:38Z",
+      "side": 1,
+      "message": "Should I know what \u0027samplerIndex\u0027 is?\nIt doesn\u0027t seem to appear in the implementation either.",
+      "range": {
+        "startLine": 358,
+        "startChar": 66,
+        "endLine": 358,
+        "endChar": 80
+      },
+      "revId": "d48d8109955706aa1034b6484fafdd47fbb4547e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
