@@ -100,31 +100,64 @@ class StateCache final : angle::NonCopyable
     // Places that can trigger updateVertexElementLimits:
     // 1. onVertexArrayBindingChange.
     // 2. onProgramExecutableChange.
-    // 3. onVertexArraySizeChange.
-    // 4. onVertexArrayStateChange.
+    // 3. onVertexArrayFormatChange.
+    // 4. onVertexArrayBufferChange.
+    // 5. onVertexArrayStateChange.
     GLint64 getNonInstancedVertexElementLimit() const
     {
         return mCachedNonInstancedVertexElementLimit;
     }
     GLint64 getInstancedVertexElementLimit() const { return mCachedInstancedVertexElementLimit; }
 
+    // Places that can trigger updateBasicDrawStatesError:
+    // 1. onVertexArrayBindingChange.
+    // 2. onProgramExecutableChange.
+    // 3. onVertexArrayBufferChange.
+    // 4. onVertexArrayStateChange.
+    // 5. onVertexArrayBufferMappedChange.
+    // 6. onDrawFramebufferChange.
+    // 7. onContextCapChange.
+    // 8. onStencilStateChange.
+    // 9. onDefaultVertexAttributeChange.
+    bool getBasicDrawStatesError(Context *context) const
+    {
+        if (mCachedBasicDrawStatesError.errorType == GL_NO_ERROR)
+        {
+            return false;
+        }
+
+        return getBasicDrawStatesErrorImpl(context);
+    }
+
     // State change notifications.
     void onVertexArrayBindingChange(Context *context);
     void onProgramExecutableChange(Context *context);
-    void onVertexArraySizeChange(Context *context);
+    void onVertexArrayFormatChange(Context *context);
+    void onVertexArrayBufferChange(Context *context);
     void onVertexArrayStateChange(Context *context);
+    void onVertexArrayBufferMappedChange(Context *context);
     void onGLES1ClientStateChange(Context *context);
+    void onDrawFramebufferChange(Context *context);
+    void onContextCapChange(Context *context);
+    void onStencilStateChange(Context *context);
+    void onDefaultVertexAttributeChange(Context *context);
 
   private:
     // Cache update functions.
     void updateActiveAttribsMask(Context *context);
     void updateVertexElementLimits(Context *context);
+    void updateBasicDrawStatesError();
+
+    bool getBasicDrawStatesErrorImpl(Context *context) const;
+
+    static constexpr GLenum kCacheInvalid = std::numeric_limits<GLenum>::max();
 
     AttributesMask mCachedActiveBufferedAttribsMask;
     AttributesMask mCachedActiveClientAttribsMask;
     bool mCachedHasAnyEnabledClientAttrib;
     GLint64 mCachedNonInstancedVertexElementLimit;
     GLint64 mCachedInstancedVertexElementLimit;
+    mutable ErrorAndMessage mCachedBasicDrawStatesError;
 };
 
 class Context final : public egl::LabeledObject, angle::NonCopyable, public angle::ObserverInterface
