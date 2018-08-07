@@ -5152,6 +5152,117 @@ foo
     ANGLE_GL_PROGRAM(program, kVS, kFS);
 }
 
+TEST_P(GLSLTest_ES3, Flat)
+{
+    constexpr char kVS[] = R"(#version 300 es
+precision mediump float;
+
+in vec3 in_vertexPosition;
+in vec3 in_color;
+
+uniform mat4 u_matrix;
+
+flat out vec3 pass_fragColor;
+
+void main() {
+    gl_Position = u_matrix * vec4(in_vertexPosition, 1.0);
+
+    pass_fragColor = in_color;
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+
+flat in vec3 pass_fragColor;
+
+out vec4 out_fragColor;
+
+void main() {
+     out_fragColor = vec4(pass_fragColor, 1.0);
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+
+    GLint vertLoc = glGetAttribLocation(program, "in_vertexPosition");
+    ASSERT_NE(-1, vertLoc);
+    GLint colorLoc = glGetAttribLocation(program, "in_color");
+    ASSERT_NE(-1, colorLoc);
+    GLint matLoc = glGetUniformLocation(program, "u_matrix");
+    ASSERT_NE(-1, matLoc);
+
+    GLfloat vertices[8] = {
+        -1, -1,  // bottom left
+        1,  -1,  // bottom right
+        1,  1,   // top right
+        -1, 1,   // top left
+    };
+
+#if 0
+    GLfloat colors[12] = {
+        1, 1, 0,  // bottom left
+        0, 1, 0,  // bottom right
+        0, 0, 1,  // top right
+        1, 0, 0,  // top left
+    };
+#endif
+    GLfloat colors[12] = {
+        1, 1, 1,  // bottom left
+        1, 1, 1,  // bottom right
+        0, 0, 0,  // top right
+        1, 1, 1,  // top left
+    };
+
+    GLshort indices[6] = {
+        0, 1, 3,  // bl, br, tl
+        3, 1, 2,  // tl, br, tr
+    };
+
+    GLBuffer positionBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
+    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(vertLoc);
+    glVertexAttribPointer(vertLoc, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+    GLBuffer colorBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
+    glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(GLfloat), colors, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(colorLoc);
+    glVertexAttribPointer(colorLoc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+    GLBuffer indexBuffer;
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(GLfloat), indices, GL_STATIC_DRAW);
+
+    GLfloat matrixData[16] = {
+      1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
+    };
+
+    ASSERT_GL_NO_ERROR();
+    glClearColor(0, 0, 0, 1);
+    glUseProgram(program);
+    glUniformMatrix4fv(matLoc, 1, GL_FALSE, matrixData);
+    angle::Sleep(1000); // so GPU debugger can start.
+    int repro = 0;
+
+    for (int i = 0; i < 1000; ++i)
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+        if (repro == 0) {
+          // Top triangle flickers.
+          glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, (void*)(sizeof(GLshort)*3));
+        } else if (repro == 1) {
+          // Top triangle flickers, bottom triangle does not.
+          glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+        } else if (repro == 2) {
+          // Bottom triangle does not flicker.
+          glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0);
+        }
+        swapBuffers();
+    }
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(GLSLTest,
