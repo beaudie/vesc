@@ -725,7 +725,8 @@ angle::Result StateManager11::updateStateForCompute(const gl::Context *context,
     // TODO(jmadill): More complete implementation.
     ANGLE_TRY(syncTexturesForCompute(context));
 
-    // TODO(Xinghua): applyUniformBuffers for compute shader.
+    // TODO(Xinghua): Use dirty bits.
+    ANGLE_TRY(syncUniformBuffersForCompute(context));
 
     return angle::Result::Continue();
 }
@@ -3303,6 +3304,33 @@ angle::Result StateManager11::syncUniformBuffersForShader(const gl::Context *con
                 break;
             }
 
+            case gl::ShaderType::Compute:
+            {
+                if (mCurrentConstantBufferCS[bufferIndex] == constantBuffer->getSerial() &&
+                    mCurrentConstantBufferCSOffset[bufferIndex] == uniformBufferOffset &&
+                    mCurrentConstantBufferCSSize[bufferIndex] == uniformBufferSize)
+                {
+                    continue;
+                }
+
+                if (firstConstant != 0 && uniformBufferSize != 0)
+                {
+                    deviceContext1->CSSetConstantBuffers1(appliedIndex, 1,
+                                                          constantBuffer->getPointer(),
+                                                          &firstConstant, &numConstants);
+                }
+                else
+                {
+                    deviceContext->CSSetConstantBuffers(appliedIndex, 1,
+                                                        constantBuffer->getPointer());
+                }
+
+                mCurrentConstantBufferCS[appliedIndex]       = constantBuffer->getSerial();
+                mCurrentConstantBufferCSOffset[appliedIndex] = uniformBufferOffset;
+                mCurrentConstantBufferCSSize[appliedIndex]   = uniformBufferSize;
+                break;
+            }
+
             // TODO(jiawei.shao@intel.com): update geometry shader uniform buffers.
             case gl::ShaderType::Geometry:
                 UNIMPLEMENTED();
@@ -3331,6 +3359,18 @@ angle::Result StateManager11::syncUniformBuffers(const gl::Context *context)
     {
         ANGLE_TRY(syncUniformBuffersForShader(context, gl::ShaderType::Geometry));
     }
+
+    return angle::Result::Continue();
+}
+
+angle::Result StateManager11::syncUniformBuffersForCompute(const gl::Context *context)
+{
+    gl::ShaderMap<unsigned int> shaderReservedUBOs = mRenderer->getReservedShaderUniformBuffers();
+    mProgramD3D->updateUniformBufferCache(context->getCaps(), shaderReservedUBOs);
+
+    mConstantBufferObserver.reset();
+
+    ANGLE_TRY(syncUniformBuffersForShader(context, gl::ShaderType::Compute));
 
     return angle::Result::Continue();
 }
@@ -3385,6 +3425,12 @@ StateManager11::ConstantBufferObserver::ConstantBufferObserver()
          ++fsIndex)
     {
         mShaderBindings[gl::ShaderType::Fragment].emplace_back(this, fsIndex);
+    }
+
+    for (size_t csIndex = 0; csIndex < gl::IMPLEMENTATION_MAX_COMPUTE_SHADER_UNIFORM_BUFFERS;
+         ++csIndex)
+    {
+        mShaderBindings[gl::ShaderType::Compute].emplace_back(this, csIndex);
     }
 }
 
