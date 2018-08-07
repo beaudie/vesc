@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe89938b_912c7ce8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-07T21:54:58Z",
+      "side": 1,
+      "message": "I think you left out a word or don\u0027t want the \u0027the\u0027",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 9
+      },
+      "revId": "3f16e78c3ca225b4fc57ee30d86ef8a19f84082b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
