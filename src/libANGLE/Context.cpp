@@ -298,9 +298,11 @@ static_assert(static_cast<gl::PrimitiveMode>(10) == gl::PrimitiveMode::TriangleS
 static_assert(static_cast<gl::PrimitiveMode>(11) == gl::PrimitiveMode::EnumCount,
               "gl::PrimitiveMode enum values have changed, update kMinimumPrimitiveCounts.");
 
-constexpr angle::SubjectIndex kVertexArraySubjectIndex     = 0;
-constexpr angle::SubjectIndex kReadFramebufferSubjectIndex = 1;
-constexpr angle::SubjectIndex kDrawFramebufferSubjectIndex = 2;
+constexpr angle::SubjectIndex kVertexArraySubjectIndex = gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES + 0;
+constexpr angle::SubjectIndex kReadFramebufferSubjectIndex =
+    gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES + 1;
+constexpr angle::SubjectIndex kDrawFramebufferSubjectIndex =
+    gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES + 2;
 }  // anonymous namespace
 
 namespace gl
@@ -7578,7 +7580,7 @@ void Context::onSubjectStateChange(const Context *context,
             break;
 
         default:
-            UNREACHABLE();
+            mGLState.onActiveTextureStateChange(index);
             break;
     }
 }
