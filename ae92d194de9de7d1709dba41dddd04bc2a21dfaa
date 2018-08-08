@@ -22,6 +22,30 @@
       "revId": "ae92d194de9de7d1709dba41dddd04bc2a21dfaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2a73ff6_a5f59dca",
+        "filename": "src/libANGLE/VertexAttribute.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-08T17:08:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32623234_121f3c62",
+      "range": {
+        "startLine": 128,
+        "startChar": 36,
+        "endLine": 128,
+        "endChar": 59
+      },
+      "revId": "ae92d194de9de7d1709dba41dddd04bc2a21dfaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
