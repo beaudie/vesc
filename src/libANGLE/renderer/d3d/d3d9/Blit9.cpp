@@ -13,6 +13,7 @@
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/d3d/TextureD3D.h"
+#include "libANGLE/renderer/d3d/d3d9/Framebuffer9.h"
 #include "libANGLE/renderer/d3d/d3d9/RenderTarget9.h"
 #include "libANGLE/renderer/d3d/d3d9/Renderer9.h"
 #include "libANGLE/renderer/d3d/d3d9/TextureStorage9.h"
@@ -235,14 +236,10 @@ angle::Result Blit9::copy2D(const gl::Context *context,
                             GLint level)
 {
     Context9 *context9 = GetImplAs<Context9>(context);
-
     ANGLE_TRY(initialize(context9));
 
-    const gl::FramebufferAttachment *colorbuffer = framebuffer->getColorbuffer(0);
-    ASSERT(colorbuffer);
-
-    RenderTarget9 *renderTarget9 = nullptr;
-    ANGLE_TRY_HANDLE(context, colorbuffer->getRenderTarget(context, &renderTarget9));
+    Framebuffer9 *framebuffer9   = GetImplAs<Framebuffer9>(framebuffer);
+    RenderTarget9 *renderTarget9 = framebuffer9->getCachedColorRenderTargets()[0];
     ASSERT(renderTarget9);
 
     angle::ComPtr<IDirect3DSurface9> source = renderTarget9->getSurface();
@@ -269,14 +266,10 @@ angle::Result Blit9::copyCube(const gl::Context *context,
                               GLint level)
 {
     Context9 *context9 = GetImplAs<Context9>(context);
-
     ANGLE_TRY(initialize(context9));
 
-    const gl::FramebufferAttachment *colorbuffer = framebuffer->getColorbuffer(0);
-    ASSERT(colorbuffer);
-
-    RenderTarget9 *renderTarget9 = nullptr;
-    ANGLE_TRY_HANDLE(context, colorbuffer->getRenderTarget(context, &renderTarget9));
+    Framebuffer9 *framebuffer9   = GetImplAs<Framebuffer9>(framebuffer);
+    RenderTarget9 *renderTarget9 = framebuffer9->getCachedColorRenderTargets()[0];
     ASSERT(renderTarget9);
 
     angle::ComPtr<IDirect3DSurface9> source = renderTarget9->getSurface();
