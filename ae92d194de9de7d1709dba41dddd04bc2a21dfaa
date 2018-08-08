@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32623234_121f3c62",
+        "filename": "src/libANGLE/VertexAttribute.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-08T15:57:06Z",
+      "side": 1,
+      "message": "Can this compare to kIntegerOverflow instead? Or a static_assert that kIntegerOverflow is less than 0.",
+      "range": {
+        "startLine": 128,
+        "startChar": 36,
+        "endLine": 128,
+        "endChar": 59
+      },
+      "revId": "ae92d194de9de7d1709dba41dddd04bc2a21dfaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
