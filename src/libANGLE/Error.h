@@ -147,6 +147,11 @@ inline Error NoError()
 
 using LinkResult = ErrorOrResult<bool>;
 
+struct ErrorAndMessage
+{
+    GLenum errorType;
+    const char *message;
+};
 }  // namespace gl
 
 namespace egl
