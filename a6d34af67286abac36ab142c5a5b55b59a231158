@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "740ed9d8_b917f525",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Blit9.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-08-08T01:44:23Z",
+      "side": 0,
+      "message": "Is it OK to remove this? Maybe you need to change mQuadVertexBuffer type to angle::ComPtr?",
+      "range": {
+        "startLine": 116,
+        "startChar": 8,
+        "endLine": 116,
+        "endChar": 39
+      },
+      "revId": "a6d34af67286abac36ab142c5a5b55b59a231158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7abd3095_834e25c6",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-08-08T01:44:23Z",
+      "side": 0,
+      "message": "Why is this not needed?",
+      "range": {
+        "startLine": 375,
+        "startChar": 4,
+        "endLine": 375,
+        "endChar": 34
+      },
+      "revId": "a6d34af67286abac36ab142c5a5b55b59a231158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c82366d0_cb36d9e2",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1881,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-08-08T01:44:23Z",
+      "side": 0,
+      "message": "Can you keep this comment, and the next one, too?",
+      "range": {
+        "startLine": 1881,
+        "startChar": 8,
+        "endLine": 1881,
+        "endChar": 90
+      },
+      "revId": "a6d34af67286abac36ab142c5a5b55b59a231158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

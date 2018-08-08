@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d36c1995_5558aae1",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Context9.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-08-08T01:44:23Z",
+      "side": 1,
+      "message": "9?",
+      "range": {
+        "startLine": 354,
+        "startChar": 29,
+        "endLine": 354,
+        "endChar": 34
+      },
+      "revId": "d940fbe1697749340b5b5f395b1f180798bb9e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8daef845_54acc144",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1699,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-08-08T01:44:23Z",
+      "side": 1,
+      "message": "Could you have used\nANGLE_TRY_HR(GetImplAs\u003cContext9\u003e(context), E_OUTOFMEMORY, \"Could not create a counting index buffer for glDrawArraysInstanced.\");\n?",
+      "range": {
+        "startLine": 1699,
+        "startChar": 8,
+        "endLine": 1699,
+        "endChar": 22
+      },
+      "revId": "d940fbe1697749340b5b5f395b1f180798bb9e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
