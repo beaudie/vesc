@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "18cfb0ef_d0f75eb7",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Blit9.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-08T13:16:30Z",
+      "side": 0,
+      "message": "I think it\u0027s fine. It\u0027ll get auto-released in the destructor. Which should be called if there\u0027s an unexpected internal error.",
+      "parentUuid": "740ed9d8_b917f525",
+      "range": {
+        "startLine": 116,
+        "startChar": 8,
+        "endLine": 116,
+        "endChar": 39
+      },
+      "revId": "a6d34af67286abac36ab142c5a5b55b59a231158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7abd3095_834e25c6",
         "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "d60bd083_f328c3de",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-08T13:16:30Z",
+      "side": 0,
+      "message": "Blit9::initialize is called already from each public API in Blit9. So this was redundant.",
+      "parentUuid": "7abd3095_834e25c6",
+      "range": {
+        "startLine": 375,
+        "startChar": 4,
+        "endLine": 375,
+        "endChar": 34
+      },
+      "revId": "a6d34af67286abac36ab142c5a5b55b59a231158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c82366d0_cb36d9e2",
         "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "a6d34af67286abac36ab142c5a5b55b59a231158",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e32bfe9_1dc4cd9c",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1881,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-08T13:16:30Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "c82366d0_cb36d9e2",
+      "range": {
+        "startLine": 1881,
+        "startChar": 8,
+        "endLine": 1881,
+        "endChar": 90
+      },
+      "revId": "a6d34af67286abac36ab142c5a5b55b59a231158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
