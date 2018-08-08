@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8da9e45_407d1f3f",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2482,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-08T17:14:00Z",
+      "side": 1,
+      "message": "nit: you can use the ANGLE_TRY macro to replace the isError check.",
+      "range": {
+        "startLine": 2477,
+        "startChar": 0,
+        "endLine": 2482,
+        "endChar": 0
+      },
+      "revId": "229810a342401f31588aeb98cccc0611cd231069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
