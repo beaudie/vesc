@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec2ce433_452bdc58",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7582,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-08T21:25:33Z",
+      "side": 1,
+      "message": "nit: assert that the index is in the right range",
+      "range": {
+        "startLine": 7582,
+        "startChar": 11,
+        "endLine": 7582,
+        "endChar": 55
+      },
+      "revId": "45bb6b7f8c76d2caf6946432b9f49d9f65cad85f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
