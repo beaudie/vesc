@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf2411fa_8033f3bd",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3530,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-08T21:22:08Z",
+      "side": 1,
+      "message": "nit: comment about how this needs to check all samplers to see if there were conflicting types",
+      "range": {
+        "startLine": 3523,
+        "startChar": 16,
+        "endLine": 3530,
+        "endChar": 17
+      },
+      "revId": "490763207136f51d86481ccf0a229d659dcfbb91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

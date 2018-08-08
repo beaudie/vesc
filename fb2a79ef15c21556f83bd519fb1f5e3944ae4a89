@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "135dbb55_aca176ff",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3475,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-08T21:22:08Z",
+      "side": 1,
+      "message": "nit: assert that oldRefCount \u003e 0",
+      "range": {
+        "startLine": 3475,
+        "startChar": 8,
+        "endLine": 3475,
+        "endChar": 22
+      },
+      "revId": "fb2a79ef15c21556f83bd519fb1f5e3944ae4a89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
