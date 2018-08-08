@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c631b4b9_f72b8116",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-08T18:52:47Z",
+      "side": 1,
+      "message": "This indexing is wrong, it is probably returning a function pointer",
+      "range": {
+        "startLine": 1040,
+        "startChar": 48,
+        "endLine": 1040,
+        "endChar": 78
+      },
+      "revId": "73c584da29f562d1445356afcca4d1232acbf294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfef5df0_2a23e218",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-08T18:52:47Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 1074,
+        "startChar": 48,
+        "endLine": 1074,
+        "endChar": 78
+      },
+      "revId": "73c584da29f562d1445356afcca4d1232acbf294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
