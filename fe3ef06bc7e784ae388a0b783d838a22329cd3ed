@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "089348dc_bc6f54fc",
+        "filename": "src/tests/gl_tests/MultiviewDrawTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2018-08-09T21:19:58Z",
+      "side": 1,
+      "message": "Nifty, didn\u0027t know about raw string literals. Useful for multi-line shaders.",
+      "revId": "fe3ef06bc7e784ae388a0b783d838a22329cd3ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
