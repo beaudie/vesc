@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5214ee73_4987ae42",
+        "filename": "src/libANGLE/renderer/d3d/VertexBuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-08-09T20:55:18Z",
+      "side": 1,
+      "message": "I\u0027ve read a discussion on Chrome-dev once about the usefulness of ASSERT in such cases.\nBasically, all this does is making the crash appear one line earlier, so not really useful.",
+      "range": {
+        "startLine": 75,
+        "startChar": 4,
+        "endLine": 75,
+        "endChar": 10
+      },
+      "revId": "5e10cd3457955e74a8a0c440951bcfb37993dcb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44749b4e_d2fc7797",
+        "filename": "src/libANGLE/renderer/d3d/VertexBuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-08-09T20:55:18Z",
+      "side": 1,
+      "message": "Not sure, is this what reset is supposed to do?",
+      "range": {
+        "startLine": 149,
+        "startChar": 24,
+        "endLine": 149,
+        "endChar": 52
+      },
+      "revId": "5e10cd3457955e74a8a0c440951bcfb37993dcb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
