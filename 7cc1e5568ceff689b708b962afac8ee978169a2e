@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a2a7d425_9e430248",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-09T13:19:35Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "9114dee6_711020ce",
+      "range": {
+        "startLine": 363,
+        "startChar": 16,
+        "endLine": 363,
+        "endChar": 23
+      },
+      "revId": "7cc1e5568ceff689b708b962afac8ee978169a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ec86217_37f90572",
         "filename": "src/libANGLE/renderer/d3d/VertexBuffer.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "7cc1e5568ceff689b708b962afac8ee978169a2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16fb9877_7bc3edf5",
+        "filename": "src/libANGLE/renderer/d3d/VertexBuffer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-09T13:19:35Z",
+      "side": 0,
+      "message": "I think \"integer overflow\" is correct.",
+      "parentUuid": "7ec86217_37f90572",
+      "range": {
+        "startLine": 110,
+        "startChar": 19,
+        "endLine": 110,
+        "endChar": 84
+      },
+      "revId": "7cc1e5568ceff689b708b962afac8ee978169a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "e7cde8cb_26a0e14d",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-09T13:19:35Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "1d6fb424_03e66546",
+      "range": {
+        "startLine": 664,
+        "startChar": 8,
+        "endLine": 664,
+        "endChar": 22
+      },
+      "revId": "7cc1e5568ceff689b708b962afac8ee978169a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e48741b_6d2e1464",
         "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
         "patchSetId": 4
@@ -91,6 +163,30 @@
       "revId": "7cc1e5568ceff689b708b962afac8ee978169a2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4578528_53ee6ea1",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-09T13:19:35Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "2e48741b_6d2e1464",
+      "range": {
+        "startLine": 697,
+        "startChar": 12,
+        "endLine": 697,
+        "endChar": 26
+      },
+      "revId": "7cc1e5568ceff689b708b962afac8ee978169a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
