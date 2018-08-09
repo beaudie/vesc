@@ -17,6 +17,7 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/copyvertex.h"
 #include "libANGLE/renderer/d3d/d3d9/Context9.h"
+#include "libANGLE/renderer/d3d/d3d9/Framebuffer9.h"
 #include "libANGLE/renderer/d3d/d3d9/RenderTarget9.h"
 #include "libANGLE/renderer/d3d/d3d9/Renderer9.h"
 #include "libANGLE/renderer/d3d/d3d9/TextureStorage9.h"
@@ -792,8 +793,9 @@ angle::Result Image9::copyFromFramebuffer(const gl::Context *context,
     const gl::FramebufferAttachment *srcAttachment = source->getReadColorbuffer();
     ASSERT(srcAttachment);
 
-    RenderTargetD3D *renderTarget = nullptr;
-    ANGLE_TRY_HANDLE(context, srcAttachment->getRenderTarget(context, &renderTarget));
+    Framebuffer9 *framebuffer9 = GetImplAs<Framebuffer9>(source);
+
+    RenderTargetD3D *renderTarget = framebuffer9->getCachedReadRenderTarget();
     ASSERT(renderTarget);
     return copyFromRTInternal(GetImplAs<Context9>(context), destOffset, sourceArea, renderTarget);
 }

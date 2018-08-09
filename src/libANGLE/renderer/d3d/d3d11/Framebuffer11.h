@@ -43,9 +43,15 @@ class Framebuffer11 : public FramebufferD3D
     {
         return mRenderTargetCache.getColors();
     }
-    const RenderTarget11 *getCachedDepthStencilRenderTarget() const
+
+    RenderTarget11 *getCachedDepthStencilRenderTarget() const
     {
         return mRenderTargetCache.getDepthStencil();
+    }
+
+    RenderTarget11 *getCachedReadRenderTarget() const
+    {
+        return mRenderTargetCache.getColorRead(mState);
     }
 
     RenderTarget11 *getFirstRenderTarget() const;
@@ -76,12 +82,11 @@ class Framebuffer11 : public FramebufferD3D
                            GLenum filter,
                            const gl::Framebuffer *sourceFramebuffer) override;
 
-    angle::Result invalidateBase(const gl::Context *context,
-                                 size_t count,
-                                 const GLenum *attachments,
-                                 bool useEXTBehavior) const;
-    angle::Result invalidateAttachment(const gl::Context *context,
-                                       const gl::FramebufferAttachment *attachment) const;
+    void invalidateBase(const gl::Context *context,
+                        size_t count,
+                        const GLenum *attachments,
+                        bool useEXTBehavior) const;
+    void invalidateRenderTarget(RenderTarget11 *renderTarget11) const;
 
     GLenum getRenderTargetImplementationFormat(RenderTargetD3D *renderTarget) const override;
 
