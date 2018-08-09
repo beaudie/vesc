@@ -15,6 +15,7 @@
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/d3d/d3d11/Context11.h"
+#include "libANGLE/renderer/d3d/d3d11/Framebuffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/TextureStorage11.h"
@@ -378,11 +379,11 @@ angle::Result Image11::copyFromFramebuffer(const gl::Context *context,
     GLenum sourceInternalFormat = srcAttachment->getFormat().info->sizedInternalFormat;
     const auto &d3d11Format =
         d3d11::Format::Get(sourceInternalFormat, mRenderer->getRenderer11DeviceCaps());
+    Framebuffer11 *framebuffer11 = GetImplAs<Framebuffer11>(sourceFBO);
 
     if (d3d11Format.texFormat == mDXGIFormat && sourceInternalFormat == mInternalFormat)
     {
-        RenderTarget11 *rt11 = nullptr;
-        ANGLE_TRY_HANDLE(context, srcAttachment->getRenderTarget(context, &rt11));
+        RenderTarget11 *rt11 = framebuffer11->getCachedReadRenderTarget();
         ASSERT(rt11->getTexture().get());
 
         TextureHelper11 textureHelper  = rt11->getTexture();
