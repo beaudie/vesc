@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dab683fb_0b211a8a",
+        "filename": "src/libANGLE/renderer/d3d/VertexBuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-09T21:06:38Z",
+      "side": 1,
+      "message": "It also makes it clearer when you\u0027re debugging. They are no-oped in released builds.",
+      "parentUuid": "5214ee73_4987ae42",
+      "range": {
+        "startLine": 75,
+        "startChar": 4,
+        "endLine": 75,
+        "endChar": 10
+      },
+      "revId": "5e10cd3457955e74a8a0c440951bcfb37993dcb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "44749b4e_d2fc7797",
         "filename": "src/libANGLE/renderer/d3d/VertexBuffer.cpp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "5e10cd3457955e74a8a0c440951bcfb37993dcb8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "390d9ebe_c9b23b4d",
+        "filename": "src/libANGLE/renderer/d3d/VertexBuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-09T21:06:38Z",
+      "side": 1,
+      "message": "Calls the destructor which forces the D3D9/D3D11 resources to be freed. Could also be implemented via a virtual method but this was easier.",
+      "parentUuid": "44749b4e_d2fc7797",
+      "range": {
+        "startLine": 149,
+        "startChar": 24,
+        "endLine": 149,
+        "endChar": 52
+      },
+      "revId": "5e10cd3457955e74a8a0c440951bcfb37993dcb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
