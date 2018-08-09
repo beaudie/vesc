@@ -1038,17 +1038,16 @@ angle::Result Renderer9::updateState(const gl::Context *context, gl::PrimitiveMo
     // Setting scissors state
     setScissorRectangle(glState.getScissor(), glState.isScissorTestEnabled());
 
+    Framebuffer9 *framebuffer9 = GetImplAs<Framebuffer9>(framebuffer);
+
     // Setting blend, depth stencil, and rasterizer states
     // Since framebuffer->getSamples will return the original samples which may be different with
     // the sample counts that we set in render target view, here we use renderTarget->getSamples to
     // get the actual samples.
-    GLsizei samples                                       = 0;
-    const gl::FramebufferAttachment *firstColorAttachment = framebuffer->getFirstColorbuffer();
-    if (firstColorAttachment)
+    GLsizei samples             = 0;
+    RenderTarget9 *renderTarget = framebuffer9->getCachedColorRenderTargets()[0];
+    if (renderTarget)
     {
-        ASSERT(firstColorAttachment->isAttached());
-        RenderTarget9 *renderTarget = nullptr;
-        ANGLE_TRY_HANDLE(context, firstColorAttachment->getRenderTarget(context, &renderTarget));
         samples = renderTarget->getSamples();
     }
     gl::RasterizerState rasterizer = glState.getRasterizerState();
@@ -1073,16 +1072,16 @@ angle::Result Renderer9::setBlendDepthRasterStates(const gl::Context *context,
     const auto &glState              = context->getGLState();
     gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
     ASSERT(!drawFramebuffer->hasAnyDirtyBit());
+
+    Framebuffer9 *framebuffer9 = GetImplAs<Framebuffer9>(drawFramebuffer);
+
     // Since framebuffer->getSamples will return the original samples which may be different with
     // the sample counts that we set in render target view, here we use renderTarget->getSamples to
     // get the actual samples.
-    GLsizei samples                                       = 0;
-    const gl::FramebufferAttachment *firstColorAttachment = drawFramebuffer->getFirstColorbuffer();
-    if (firstColorAttachment)
+    GLsizei samples             = 0;
+    RenderTarget9 *renderTarget = framebuffer9->getCachedColorRenderTargets()[0];
+    if (renderTarget)
     {
-        ASSERT(firstColorAttachment->isAttached());
-        RenderTarget9 *renderTarget = nullptr;
-        ANGLE_TRY_HANDLE(context, firstColorAttachment->getRenderTarget(context, &renderTarget));
         samples = renderTarget->getSamples();
     }
     gl::RasterizerState rasterizer = glState.getRasterizerState();
