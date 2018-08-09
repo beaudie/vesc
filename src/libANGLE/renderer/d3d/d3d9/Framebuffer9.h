@@ -44,10 +44,17 @@ class Framebuffer9 : public FramebufferD3D
         return mRenderTargetCache.getColors();
     }
 
-    const RenderTarget9 *getCachedDepthStencilRenderTarget() const
+    RenderTarget9 *getCachedDepthStencilRenderTarget() const
     {
         return mRenderTargetCache.getDepthStencil();
     }
+
+    RenderTarget9 *getCachedReadRenderTarget() const
+    {
+        return mRenderTargetCache.getColorRead(mState);
+    }
+
+    RenderTarget9 *getFirstRenderTarget() const;
 
   private:
     angle::Result clearImpl(const gl::Context *context,
