@@ -52,7 +52,11 @@ class IntermNodePatternMatcher
 
         // Matches a vector or matrix constructor whose arguments are scalarized by the
         // SH_SCALARIZE_VEC_OR_MAT_CONSTRUCTOR_ARGUMENTS workaround.
-        kScalarizedVecOrMatConstructor = 0x0001 << 7
+        kScalarizedVecOrMatConstructor = 0x0001 << 7,
+
+        // Matches a single assignment expression whose left operand is an atomic function
+        // call.
+        kSingleAtomicFunctionAssignment = 0x0001 << 8
     };
     IntermNodePatternMatcher(const unsigned int mask);
 
