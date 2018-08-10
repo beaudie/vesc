@@ -297,6 +297,10 @@ class RobustResourceInitTestES3 : public RobustResourceInitTest
                                 GLenum type);
 };
 
+class RobustResourceInitTestES31 : public RobustResourceInitTest
+{
+};
+
 // Robust resource initialization is not based on hardware support or native extensions, check that
 // it only works on the implemented renderers
 TEST_P(RobustResourceInitTest, ExpectedRendererSupport)
@@ -1004,6 +1008,62 @@ TEST_P(RobustResourceInitTestES3, TextureInit_IntRGB32)
     testIntegerTextureInit<int32_t>("i", GL_RGBA32I, GL_RGB32I, GL_INT);
 }
 
+// Test that uninitialized image texture works well.
+TEST_P(RobustResourceInitTestES31, ImageTextureInit_R32UI)
+{
+    ANGLE_SKIP_TEST_IF(!hasGLExtension());
+    GLTexture texture[2];
+    GLFramebuffer framebuffer;
+    const std::string csSource =
+        R"(#version 310 es
+        layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+        layout(r32ui, binding = 0) readonly uniform highp uimage2D uImage_1;
+        layout(r32ui, binding = 1) writeonly uniform highp uimage2D uImage_2;
+        void main()
+        {
+            uvec4 value = imageLoad(uImage_1, ivec2(gl_LocalInvocationID.xy));
+            imageStore(uImage_2, ivec2(gl_LocalInvocationID.xy), value);
+        })";
+
+    constexpr int kWidth = 1, kHeight = 1;
+    constexpr GLuint kInputValue = 200u;
+
+    glBindTexture(GL_TEXTURE_2D, texture[0]);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_R32UI, kWidth, kHeight);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kWidth, kHeight, GL_RED_INTEGER, GL_UNSIGNED_INT,
+                    &kInputValue);
+    EXPECT_GL_NO_ERROR();
+
+    // Don't upload data to texture[1].
+    glBindTexture(GL_TEXTURE_2D, texture[1]);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_R32UI, kWidth, kHeight);
+    EXPECT_GL_NO_ERROR();
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+    glUseProgram(program.get());
+
+    glBindImageTexture(0, texture[0], 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
+    glBindImageTexture(1, texture[1], 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI);
+
+    glDispatchCompute(1, 1, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glUseProgram(0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture[1], 0);
+    EXPECT_GL_NO_ERROR();
+
+    GLuint outputValues[kWidth * kHeight];
+    glReadPixels(0, 0, kWidth, kHeight, GL_RED_INTEGER, GL_UNSIGNED_INT, outputValues);
+    EXPECT_GL_NO_ERROR();
+
+    for (int i = 0; i < kWidth * kHeight; i++)
+    {
+        EXPECT_EQ(kInputValue, outputValues[i]);
+    }
+}
+
 // Basic test that renderbuffers are initialized correctly.
 TEST_P(RobustResourceInitTest, Renderbuffer)
 {
@@ -1696,5 +1756,7 @@ ANGLE_INSTANTIATE_TEST(RobustResourceInitTest,
                        ES3_OPENGLES());
 
 ANGLE_INSTANTIATE_TEST(RobustResourceInitTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
+
+ANGLE_INSTANTIATE_TEST(RobustResourceInitTestES31, ES31_OPENGL(), ES31_D3D11());
 
 }  // namespace
