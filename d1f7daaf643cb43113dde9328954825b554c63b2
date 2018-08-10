@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "b820ac24_14ffada0",
+        "filename": "src/compiler/translator/UniformHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-08-10T04:26:51Z",
+      "side": 1,
+      "message": "I think you should save the current available UAVRegisterIndex(mRWTextureRegister) in case other resources occupy the register.",
+      "range": {
+        "startLine": 502,
+        "startChar": 8,
+        "endLine": 502,
+        "endChar": 60
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18eb5f8c_710a3e79",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-08-10T04:26:51Z",
+      "side": 1,
+      "message": "Same to [1].",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 2
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fc5a225_55a87928",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-08-10T04:26:51Z",
+      "side": 1,
+      "message": "[1] Put these into an ImageTextureUtils.h/cpp file so that they can be reused by DynamicHLSL.cpp and ImageFunctionHLSL.cpp.",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 488,
+        "endChar": 1
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4b0fa63_515e8775",
         "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
         "patchSetId": 9
@@ -13,6 +82,144 @@
       "writtenOn": "2018-08-02T02:05:22Z",
       "side": 1,
       "message": "As I know the performance of \"if\" is not good on GPU, so could you try to avoid using it when necessary? \nFor example:\n1. we can avoid using \"if\" when all the \"image2D\" are 2DArrays.\n2. We can just use one \"if\" in some places we can ensure imageIndex can always match a valid image. For example, if there are two \"image2D\"s, and one is bound to 2D and another is bound to 3D, we can translate it into:(imageLoad)\nif (imageIndex \u003c imageIndexOffsetRW2D_uint4_3D)\n{\n    // Load data from image2D   \n}\nelse\n{\n    // Load data from image3D\n}",
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "313be82b_349cc6c2",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-08-10T04:26:51Z",
+      "side": 1,
+      "message": "It seems that this part is repeated with the calculation of image2DUniformTexture2DCount, image2DUniformTexture3DCount, image2DUniformTexture2DArrayCount in generateComputeShaderForImage2DBoundSignature. Can you reuse them?",
+      "range": {
+        "startLine": 695,
+        "startChar": 0,
+        "endLine": 720,
+        "endChar": 5
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53a8d401_ea36d7d9",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-08-10T04:26:51Z",
+      "side": 1,
+      "message": "DecorateVariable(uniform.name)?",
+      "range": {
+        "startLine": 743,
+        "startChar": 34,
+        "endLine": 743,
+        "endChar": 52
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a51c62a_0a9f9488",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-08-10T04:26:51Z",
+      "side": 1,
+      "message": "Prefix? Can you change all related places?",
+      "range": {
+        "startLine": 804,
+        "startChar": 22,
+        "endLine": 804,
+        "endChar": 28
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b8cc73a_d380f490",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-08-10T04:26:51Z",
+      "side": 1,
+      "message": "Prefix",
+      "range": {
+        "startLine": 806,
+        "startChar": 27,
+        "endLine": 806,
+        "endChar": 33
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad88931b_9ce3ec5b",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-08-10T04:26:51Z",
+      "side": 1,
+      "message": "Can you use the value of \u0027image2DUniformTexture3DCount + image2DUniformTexture2DArrayCount\u0027 as the length?",
+      "range": {
+        "startLine": 1154,
+        "startChar": 63,
+        "endLine": 1154,
+        "endChar": 95
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "806db348_388180d5",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-08-10T04:26:51Z",
+      "side": 1,
+      "message": "ASSERT(gl::IsImage2DType(image2D.type))?",
+      "range": {
+        "startLine": 87,
+        "startChar": 8,
+        "endLine": 87,
+        "endChar": 44
+      },
       "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -47,6 +254,29 @@
       "writtenOn": "2018-08-02T02:05:22Z",
       "side": 1,
       "message": "Is it better to use a map here whose key is signature?",
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae70f770_32e368f5",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-08-10T04:26:51Z",
+      "side": 1,
+      "message": "It seems that pass an int \u0027layer\u0027 is enough.",
+      "range": {
+        "startLine": 484,
+        "startChar": 38,
+        "endLine": 484,
+        "endChar": 68
+      },
       "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
