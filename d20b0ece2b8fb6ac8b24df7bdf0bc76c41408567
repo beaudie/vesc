@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8958d657_e36e01a3",
+        "filename": "src/tests/angle_perftests.gypi",
+        "patchSetId": 8
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-10T15:37:17Z",
+      "side": 1,
+      "message": "nit: spaces",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 1
+      },
+      "revId": "d20b0ece2b8fb6ac8b24df7bdf0bc76c41408567",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8af7ba25_e16ee71d",
+        "filename": "src/tests/angle_perftests.gypi",
+        "patchSetId": 8
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-10T15:37:17Z",
+      "side": 1,
+      "message": "here too.",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 1
+      },
+      "revId": "d20b0ece2b8fb6ac8b24df7bdf0bc76c41408567",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c093f3b3_536567ac",
+        "filename": "src/tests/perf_tests/VulkanCommandBufferPerf.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-10T15:37:17Z",
+      "side": 1,
+      "message": "nit: camel case (rest of the file too)",
+      "range": {
+        "startLine": 172,
+        "startChar": 26,
+        "endLine": 172,
+        "endChar": 34
+      },
+      "revId": "d20b0ece2b8fb6ac8b24df7bdf0bc76c41408567",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86bfa8cf_dd49c87b",
+        "filename": "src/tests/perf_tests/VulkanCommandBufferPerf.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-10T15:37:17Z",
+      "side": 1,
+      "message": "Would be nice to configure this, but that\u0027s probably difficult because it comes from the third party files.",
+      "range": {
+        "startLine": 190,
+        "startChar": 24,
+        "endLine": 190,
+        "endChar": 35
+      },
+      "revId": "d20b0ece2b8fb6ac8b24df7bdf0bc76c41408567",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f076fd5_153f2429",
+        "filename": "src/tests/perf_tests/VulkanCommandBufferPerfParams.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-10T15:37:17Z",
+      "side": 1,
+      "message": "I think this header could be removed, just put this code right into the cpp file.",
+      "revId": "d20b0ece2b8fb6ac8b24df7bdf0bc76c41408567",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
