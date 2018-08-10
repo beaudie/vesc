@@ -16,6 +16,11 @@ namespace sh
 {
 namespace
 {
+bool IsAtomicExchangeOrCompSwap(TOperator op)
+{
+    return op == EOpAtomicExchange || op == EOpAtomicCompSwap;
+}
+
 // Traverser that simplifies all the atomic function expressions into the ones that can be directly
 // translated into HLSL.
 class RewriteAtomicFunctionExpressionsTraverser : public TIntermTraverser
@@ -24,22 +29,35 @@ class RewriteAtomicFunctionExpressionsTraverser : public TIntermTraverser
     RewriteAtomicFunctionExpressionsTraverser(TSymbolTable *symbolTable);
 
     bool visitAggregate(Visit visit, TIntermAggregate *node) override;
+    bool visitBinary(Visit visit, TIntermBinary *node) override;
+
+    void nextIteration();
+    bool foundAtomicFunctionInComplexExpression() const
+    {
+        return mFoundAtomicfunctionInComplexExpression;
+    }
 
   private:
-    static bool IsAtomicExchangeOrCompSwapNoReturnValue(TIntermAggregate *node,
-                                                        TIntermNode *parentNode);
+    void separateAtomicFunctionCallNode(TIntermAggregate *oldAtomicFunctionNode,
+                                        bool useTempSymbolNode);
 
-    void separateAtomicFunctionCallNode(TIntermAggregate *oldAtomicFunctionNode);
+    // We need more iterations to handle atomic function calls in complex expressions.
+    bool mFoundAtomicfunctionInComplexExpression;
+    IntermNodePatternMatcher mPatternToSingleAtomicFunctionAssignment;
 };
 
 RewriteAtomicFunctionExpressionsTraverser::RewriteAtomicFunctionExpressionsTraverser(
     TSymbolTable *symbolTable)
-    : TIntermTraverser(true, false, false, symbolTable)
+    : TIntermTraverser(true, false, true, symbolTable),
+      mFoundAtomicfunctionInComplexExpression(false),
+      mPatternToSingleAtomicFunctionAssignment(
+          IntermNodePatternMatcher::kSingleAtomicFunctionAssignment)
 {
 }
 
 void RewriteAtomicFunctionExpressionsTraverser::separateAtomicFunctionCallNode(
-    TIntermAggregate *oldAtomicFunctionNode)
+    TIntermAggregate *oldAtomicFunctionNode,
+    bool useTempSymbolNode)
 {
     ASSERT(oldAtomicFunctionNode);
 
@@ -55,35 +73,93 @@ void RewriteAtomicFunctionExpressionsTraverser::separateAtomicFunctionCallNode(
     TIntermBinary *atomicFunctionAssignment = new TIntermBinary(
         TOperator::EOpAssign, CreateTempSymbolNode(returnVariable), oldAtomicFunctionNode);
 
-    insertStatementsInParentBlock(insertions);
-    queueReplacement(atomicFunctionAssignment, OriginalNode::IS_DROPPED);
-}
-
-bool RewriteAtomicFunctionExpressionsTraverser::IsAtomicExchangeOrCompSwapNoReturnValue(
-    TIntermAggregate *node,
-    TIntermNode *parentNode)
-{
-    ASSERT(node);
-    return (node->getOp() == EOpAtomicExchange || node->getOp() == EOpAtomicCompSwap) &&
-           parentNode && parentNode->getAsBlock();
-}
-
-bool RewriteAtomicFunctionExpressionsTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
-{
-    if (IsAtomicExchangeOrCompSwapNoReturnValue(node, getParentNode()))
+    TIntermTyped *newNode = nullptr;
+    if (useTempSymbolNode)
     {
-        separateAtomicFunctionCallNode(node);
+        insertions.push_back(atomicFunctionAssignment);
+        newNode = CreateTempSymbolNode(returnVariable);
+    }
+    else
+    {
+        newNode = atomicFunctionAssignment;
+    }
+
+    insertStatementsInParentBlock(insertions);
+    queueReplacement(newNode, OriginalNode::IS_DROPPED);
+}
+
+bool RewriteAtomicFunctionExpressionsTraverser::visitBinary(Visit visit, TIntermBinary *node)
+{
+    if (mFoundAtomicfunctionInComplexExpression)
+    {
+        return false;
+    }
+
+    if (visit == Visit::PreVisit &&
+        mPatternToSingleAtomicFunctionAssignment.match(node, getParentNode()))
+    {
         return false;
     }
 
     return true;
+}
+
+bool RewriteAtomicFunctionExpressionsTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
+{
+    // We should use post-traversal to ensure the right execution order of the separated atomic
+    // function expressions.
+    // e.g. value = (atomicAdd(mem, val) - 1) * atomicAnd(mem, val) should be modified into:
+    //      int temp1; temp1 = atomicAdd(mem, val);
+    //      int temp2; temp2 = atomicAnd(mem, val);
+    //      value = (temp1 - 1) * temp2;
+    if (visit == Visit::PreVisit)
+    {
+        return true;
+    }
+
+    if (mFoundAtomicfunctionInComplexExpression)
+    {
+        return false;
+    }
+
+    if (!IsAtomicFunction(node->getOp()))
+    {
+        return true;
+    }
+
+    // For a single atomic function call without return value, we only need to handle atomicExchange
+    // and atomicCompSwap.
+    if (getParentNode() && getParentNode()->getAsBlock())
+    {
+        if (IsAtomicExchangeOrCompSwap(node->getOp()))
+        {
+            separateAtomicFunctionCallNode(node, false);
+        }
+        return true;
+    }
+    else
+    {
+        separateAtomicFunctionCallNode(node, true);
+
+        mFoundAtomicfunctionInComplexExpression = true;
+        return false;
+    }
+}
+
+void RewriteAtomicFunctionExpressionsTraverser::nextIteration()
+{
+    mFoundAtomicfunctionInComplexExpression = false;
 }
 }  // anonymous namespace
 
 void RewriteAtomicFunctionExpressions(TIntermNode *root, TSymbolTable *symbolTable)
 {
     RewriteAtomicFunctionExpressionsTraverser traverser(symbolTable);
-    traverser.traverse(root);
-    traverser.updateTree();
+    do
+    {
+        traverser.nextIteration();
+        root->traverse(&traverser);
+        traverser.updateTree();
+    } while (traverser.foundAtomicFunctionInComplexExpression());
 }
 }  // namespace sh

@@ -41,6 +41,12 @@ bool ContainsVectorNode(const TIntermSequence &sequence)
     return false;
 }
 
+bool IsAtomicFunctionCall(TIntermTyped *node)
+{
+    ASSERT(node);
+    return node->getAsAggregate() && IsAtomicFunction(node->getAsAggregate()->getOp());
+}
+
 }  // anonymous namespace
 
 IntermNodePatternMatcher::IntermNodePatternMatcher(const unsigned int mask) : mMask(mask)
@@ -69,6 +75,16 @@ bool IntermNodePatternMatcher::matchInternal(TIntermBinary *node, TIntermNode *p
     {
         if (node->getRight()->hasSideEffects() &&
             (node->getOp() == EOpLogicalOr || node->getOp() == EOpLogicalAnd))
+        {
+            return true;
+        }
+    }
+
+    // Matches a single assignment expression whose left operand is only an atomic function call.
+    if ((mMask & kSingleAtomicFunctionAssignment) != 0)
+    {
+        if (node->getOp() == EOpAssign && IsAtomicFunctionCall(node->getRight()) && parentNode &&
+            parentNode->getAsBlock())
         {
             return true;
         }
