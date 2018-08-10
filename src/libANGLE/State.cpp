@@ -108,6 +108,7 @@ State::State(bool debug,
       mActiveSampler(0),
       mActiveTexturesCache{},
       mCachedTexturesInitState(InitState::MayNeedInit),
+      mCachedImageTexturesInitState(InitState::MayNeedInit),
       mPrimitiveRestart(false),
       mDebug(debug),
       mMultiSampling(false),
@@ -220,7 +221,7 @@ void State::initialize(Context *context)
     {
         mCompleteTextureBindings.emplace_back(context, textureIndex);
     }
-
+    mCachedImageTexturesInitState = InitState::MayNeedInit;
     mSamplers.resize(caps.maxCombinedTextureImageUnits);
 
     for (QueryType type : angle::AllEnums<QueryType>())
@@ -279,6 +280,7 @@ void State::reset(const Context *context)
         imageUnit.access  = GL_READ_ONLY;
         imageUnit.format  = GL_R32UI;
     }
+    mActiveImageTexturesMask.reset();
 
     mRenderbuffer.set(context, nullptr);
 
@@ -1038,16 +1040,17 @@ void State::detachTexture(const Context *context, const TextureMap &zeroTextures
         }
     }
 
-    for (auto &bindingImageUnit : mImageUnits)
+    for (size_t imageUnitIdx = 0; imageUnitIdx < mImageUnits.size(); imageUnitIdx++)
     {
-        if (bindingImageUnit.texture.id() == texture)
+        if (mImageUnits[imageUnitIdx].texture.id() == texture)
         {
-            bindingImageUnit.texture.set(context, nullptr);
-            bindingImageUnit.level   = 0;
-            bindingImageUnit.layered = false;
-            bindingImageUnit.layer   = 0;
-            bindingImageUnit.access  = GL_READ_ONLY;
-            bindingImageUnit.format  = GL_R32UI;
+            mImageUnits[imageUnitIdx].texture.set(context, nullptr);
+            mImageUnits[imageUnitIdx].level   = 0;
+            mImageUnits[imageUnitIdx].layered = false;
+            mImageUnits[imageUnitIdx].layer   = 0;
+            mImageUnits[imageUnitIdx].access  = GL_READ_ONLY;
+            mImageUnits[imageUnitIdx].format  = GL_R32UI;
+            mActiveImageTexturesMask.reset(imageUnitIdx);
             break;
         }
     }
@@ -2648,6 +2651,7 @@ Error State::syncProgramTextures(const Context *context)
     // Initialize to the 'Initialized' state and set to 'MayNeedInit' if any texture is not
     // initialized.
     mCachedTexturesInitState = InitState::Initialized;
+    mCachedImageTexturesInitState = InitState::Initialized;
 
     const ActiveTextureMask &activeTextures             = mProgram->getActiveSamplersMask();
     const ActiveTextureArray<TextureType> &textureTypes = mProgram->getActiveSamplerTypes();
@@ -2699,6 +2703,15 @@ Error State::syncProgramTextures(const Context *context)
         {
             mCompleteTextureBindings[textureIndex].reset();
             mActiveTexturesCache[textureIndex] = nullptr;
+        }
+    }
+
+    for (auto textureIndex : mActiveImageTexturesMask)
+    {
+        Texture *texture = mImageUnits[textureIndex].texture.get();
+        if (texture && texture->initState() == InitState::MayNeedInit)
+        {
+            mCachedImageTexturesInitState = InitState::MayNeedInit;
         }
     }
 
@@ -2788,6 +2801,7 @@ void State::setImageUnit(const Context *context,
     mImageUnits[unit].layer   = layer;
     mImageUnits[unit].access  = access;
     mImageUnits[unit].format  = format;
+    mActiveImageTexturesMask.set(unit);
 }
 
 const ImageUnit &State::getImageUnit(GLuint unit) const
@@ -2812,28 +2826,35 @@ void State::onActiveTextureStateChange(size_t textureIndex)
 Error State::clearUnclearedActiveTextures(const Context *context)
 {
     ASSERT(mRobustResourceInit);
-
-    if (mCachedTexturesInitState == InitState::Initialized)
-    {
-        return NoError();
-    }
-
     ASSERT(!mDirtyObjects[DIRTY_OBJECT_PROGRAM_TEXTURES]);
 
     if (!mProgram)
         return NoError();
 
-    for (auto textureIndex : mProgram->getActiveSamplersMask())
+    if (mCachedTexturesInitState != InitState::Initialized)
     {
-        Texture *texture = mActiveTexturesCache[textureIndex];
-        if (texture)
+        for (auto textureIndex : mProgram->getActiveSamplersMask())
         {
-            ANGLE_TRY(texture->ensureInitialized(context));
+            Texture *texture = mActiveTexturesCache[textureIndex];
+            if (texture)
+            {
+                ANGLE_TRY(texture->ensureInitialized(context));
+            }
         }
+        mCachedTexturesInitState = InitState::Initialized;
     }
-
-    mCachedTexturesInitState = InitState::Initialized;
-
+    if (mCachedImageTexturesInitState != InitState::Initialized)
+    {
+        for (auto textureIndex : mActiveImageTexturesMask)
+        {
+            Texture *texture = mImageUnits[textureIndex].texture.get();
+            if (texture)
+            {
+                ANGLE_TRY(texture->ensureInitialized(context));
+            }
+        }
+        mCachedImageTexturesInitState = InitState::Initialized;
+    }
     return NoError();
 }
 

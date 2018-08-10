@@ -558,6 +558,10 @@ class State : angle::NonCopyable
     std::vector<angle::ObserverBinding> mCompleteTextureBindings;
     InitState mCachedTexturesInitState;
 
+    // Cached mask of active image unit index.
+    ActiveTextureMask mActiveImageTexturesMask;
+    InitState mCachedImageTexturesInitState;
+
     using SamplerBindingVector = std::vector<BindingPointer<Sampler>>;
     SamplerBindingVector mSamplers;
 
