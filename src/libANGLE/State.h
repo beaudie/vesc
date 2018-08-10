@@ -555,8 +555,10 @@ class State : angle::NonCopyable
     // Don't use BindingPointer because this cache is only valid within a draw call.
     // Also stores a notification channel to the texture itself to handle texture change events.
     ActiveTexturePointerArray mActiveTexturesCache;
+    ActiveTexturePointerArray mActiveImageTextureCache;
     std::vector<angle::ObserverBinding> mCompleteTextureBindings;
     InitState mCachedTexturesInitState;
+    InitState mCachedImageTexturesInitState;
 
     using SamplerBindingVector = std::vector<BindingPointer<Sampler>>;
     SamplerBindingVector mSamplers;
