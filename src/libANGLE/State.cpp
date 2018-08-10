@@ -108,6 +108,7 @@ State::State(bool debug,
       mActiveSampler(0),
       mActiveTexturesCache{},
       mCachedTexturesInitState(InitState::MayNeedInit),
+      mCachedImageTexturesInitState(InitState::MayNeedInit),
       mPrimitiveRestart(false),
       mDebug(debug),
       mMultiSampling(false),
@@ -215,6 +216,7 @@ void State::initialize(Context *context)
     }
     mCompleteTextureBindings.reserve(caps.maxCombinedTextureImageUnits);
     mCachedTexturesInitState = InitState::MayNeedInit;
+    mCachedImageTexturesInitState = InitState::MayNeedInit;
     for (uint32_t textureIndex = 0; textureIndex < caps.maxCombinedTextureImageUnits;
          ++textureIndex)
     {
@@ -2648,6 +2650,7 @@ Error State::syncProgramTextures(const Context *context)
     // Initialize to the 'Initialized' state and set to 'MayNeedInit' if any texture is not
     // initialized.
     mCachedTexturesInitState = InitState::Initialized;
+    mCachedImageTexturesInitState = InitState::Initialized;
 
     const ActiveTextureMask &activeTextures             = mProgram->getActiveSamplersMask();
     const ActiveTextureArray<TextureType> &textureTypes = mProgram->getActiveSamplerTypes();
@@ -2699,6 +2702,23 @@ Error State::syncProgramTextures(const Context *context)
         {
             mCompleteTextureBindings[textureIndex].reset();
             mActiveTexturesCache[textureIndex] = nullptr;
+        }
+    }
+
+    for (size_t imageUnitIndex : mProgram->getActiveImagesMask())
+    {
+        Texture *texture = mImageUnits[imageUnitIndex].texture.get();
+        if (!texture)
+        {
+            continue;
+        }
+        if (!mDrawFramebuffer->hasTextureAttachment(texture))
+        {
+            ANGLE_TRY(texture->syncState(context));
+        }
+        if (texture->initState() == InitState::MayNeedInit)
+        {
+            mCachedImageTexturesInitState = InitState::MayNeedInit;
         }
     }
 
@@ -2812,28 +2832,35 @@ void State::onActiveTextureStateChange(size_t textureIndex)
 Error State::clearUnclearedActiveTextures(const Context *context)
 {
     ASSERT(mRobustResourceInit);
-
-    if (mCachedTexturesInitState == InitState::Initialized)
-    {
-        return NoError();
-    }
-
     ASSERT(!mDirtyObjects[DIRTY_OBJECT_PROGRAM_TEXTURES]);
 
     if (!mProgram)
         return NoError();
 
-    for (auto textureIndex : mProgram->getActiveSamplersMask())
+    if (mCachedTexturesInitState != InitState::Initialized)
     {
-        Texture *texture = mActiveTexturesCache[textureIndex];
-        if (texture)
+        for (size_t textureUnitIndex : mProgram->getActiveSamplersMask())
         {
-            ANGLE_TRY(texture->ensureInitialized(context));
+            Texture *texture = mActiveTexturesCache[textureUnitIndex];
+            if (texture)
+            {
+                ANGLE_TRY(texture->ensureInitialized(context));
+            }
         }
+        mCachedTexturesInitState = InitState::Initialized;
     }
-
-    mCachedTexturesInitState = InitState::Initialized;
-
+    if (mCachedImageTexturesInitState != InitState::Initialized)
+    {
+        for (size_t imageUnitIndex : mProgram->getActiveImagesMask())
+        {
+            Texture *texture = mImageUnits[imageUnitIndex].texture.get();
+            if (texture)
+            {
+                ANGLE_TRY(texture->ensureInitialized(context));
+            }
+        }
+        mCachedImageTexturesInitState = InitState::Initialized;
+    }
     return NoError();
 }
 
