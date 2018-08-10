@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e0bc98c_265dbdd4",
+        "filename": "src/tests/perf_tests/VulkanCommandBufferPerf.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-10T17:25:01Z",
+      "side": 1,
+      "message": "nit: use \"using\" and Capitalize the type.",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 8
+      },
+      "revId": "95ebd48705c9df085b7bb880c1f2dcbed5e49384",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
