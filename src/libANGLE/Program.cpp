@@ -1308,6 +1308,17 @@ void ProgramState::updateActiveSamplers()
     }
 }
 
+void ProgramState::updateActiveImageUnits()
+{
+    for (ImageBinding &imageBinding : mImageBindings)
+    {
+        for (GLint imageUnit : imageBinding.boundImageUnits)
+        {
+            mActiveImageUnitsMask.set(imageUnit);
+        }
+    }
+}
+
 // Returns the program object to an unlinked state, before re-linking, or at destruction
 void Program::unlink()
 {
@@ -1330,6 +1341,7 @@ void Program::unlink()
     mState.mComputeShaderLocalSize.fill(1);
     mState.mSamplerBindings.clear();
     mState.mImageBindings.clear();
+    mState.mActiveImageUnitsMask.reset();
     mState.mNumViews                          = -1;
     mState.mGeometryShaderInputPrimitiveType  = PrimitiveMode::Triangles;
     mState.mGeometryShaderOutputPrimitiveType = PrimitiveMode::TriangleStrip;
@@ -2618,6 +2630,7 @@ void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
         GLuint arraySize = imageUniform.isArray() ? imageUniform.arraySizes[0] : 1u;
         *combinedImageUniforms += imageUniform.activeShaderCount() * arraySize;
     }
+    mState.updateActiveImageUnits();
 
     high = low;
 

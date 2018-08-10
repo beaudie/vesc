@@ -354,6 +354,7 @@ class ProgramState final : angle::NonCopyable
 
     void updateTransformFeedbackStrides();
     void updateActiveSamplers();
+    void updateActiveImageUnits();
 
     // Scans the sampler bindings for type conflicts with sampler 'textureUnitIndex'.
     TextureType getSamplerUniformTextureType(size_t textureUnitIndex) const;
@@ -436,6 +437,9 @@ class ProgramState final : angle::NonCopyable
     ActiveTextureMask mActiveSamplersMask;
     ActiveTextureArray<uint32_t> mActiveSamplerRefCounts;
     ActiveTextureArray<TextureType> mActiveSamplerTypes;
+
+    // Cached mask of active image unit indices.
+    ActiveTextureMask mActiveImageUnitsMask;
 };
 
 class ProgramBindings final : angle::NonCopyable
@@ -762,6 +766,10 @@ class Program final : angle::NonCopyable, public LabeledObject
     }
 
     const ActiveTextureMask &getActiveSamplersMask() const { return mState.mActiveSamplersMask; }
+    const ActiveTextureMask &getActiveImageUnitsMask() const
+    {
+        return mState.mActiveImageUnitsMask;
+    }
 
     const ActiveTextureArray<TextureType> &getActiveSamplerTypes() const
     {
