@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f2b6b93f_0851792d",
+        "filename": "src/tests/angle_perftests.gypi",
+        "patchSetId": 8
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-08-10T16:49:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8958d657_e36e01a3",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 1
+      },
+      "revId": "d20b0ece2b8fb6ac8b24df7bdf0bc76c41408567",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8af7ba25_e16ee71d",
         "filename": "src/tests/angle_perftests.gypi",
         "patchSetId": 8
@@ -45,6 +69,30 @@
       "revId": "d20b0ece2b8fb6ac8b24df7bdf0bc76c41408567",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c9987c1_2497e86d",
+        "filename": "src/tests/angle_perftests.gypi",
+        "patchSetId": 8
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-08-10T16:49:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8af7ba25_e16ee71d",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 1
+      },
+      "revId": "d20b0ece2b8fb6ac8b24df7bdf0bc76c41408567",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9b7bf149_6ebff4ee",
+        "filename": "src/tests/perf_tests/VulkanCommandBufferPerf.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-08-10T16:49:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c093f3b3_536567ac",
+      "range": {
+        "startLine": 172,
+        "startChar": 26,
+        "endLine": 172,
+        "endChar": 34
+      },
+      "revId": "d20b0ece2b8fb6ac8b24df7bdf0bc76c41408567",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "86bfa8cf_dd49c87b",
         "filename": "src/tests/perf_tests/VulkanCommandBufferPerf.cpp",
         "patchSetId": 8
@@ -82,6 +154,30 @@
       "writtenOn": "2018-08-10T15:37:17Z",
       "side": 1,
       "message": "Would be nice to configure this, but that\u0027s probably difficult because it comes from the third party files.",
+      "range": {
+        "startLine": 190,
+        "startChar": 24,
+        "endLine": 190,
+        "endChar": 35
+      },
+      "revId": "d20b0ece2b8fb6ac8b24df7bdf0bc76c41408567",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2109c77b_2f9389fb",
+        "filename": "src/tests/perf_tests/VulkanCommandBufferPerf.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-08-10T16:49:03Z",
+      "side": 1,
+      "message": "Just a couple of changes in the utils file and now it\u0027s a perf test parameter you can change as needed!",
+      "parentUuid": "86bfa8cf_dd49c87b",
       "range": {
         "startLine": 190,
         "startChar": 24,
@@ -108,6 +204,24 @@
       "revId": "d20b0ece2b8fb6ac8b24df7bdf0bc76c41408567",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92a52dc9_f8827621",
+        "filename": "src/tests/perf_tests/VulkanCommandBufferPerfParams.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1287062
+      },
+      "writtenOn": "2018-08-10T16:49:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f076fd5_153f2429",
+      "revId": "d20b0ece2b8fb6ac8b24df7bdf0bc76c41408567",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
