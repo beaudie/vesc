@@ -1555,6 +1555,106 @@ TEST_P(ComputeShaderTest, AtomicFunctionsInNonInitializerSingleAssignment)
     runSharedMemoryTest<GLint, 9, 1>(kCSShader, GL_R32I, GL_INT, inputData, expectedValues);
 }
 
+// Verify using atomic functions as the operators of binary operations can work correctly.
+TEST_P(ComputeShaderTest, AtomicFunctionsInBinaryOperations)
+{
+    const char kCSShader[] =
+        R"(#version 310 es
+        layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+        layout (r32i, binding = 0) readonly uniform highp iimage2D srcImage;
+        layout (r32i, binding = 1) writeonly uniform highp iimage2D dstImage;
+
+        shared highp int sharedVariable;
+
+        void main()
+        {
+            sharedVariable = imageLoad(srcImage, ivec2(gl_LocalInvocationID.xy)).x;
+            memoryBarrierShared();
+            barrier();
+
+            int oldValue1 = atomicAdd(sharedVariable, 1);
+            memoryBarrierShared();
+            barrier();
+            imageStore(dstImage, ivec2(0, 0), ivec4(sharedVariable));
+
+            int oldValue2 = atomicOr(sharedVariable, 1) + oldValue1;
+            memoryBarrierShared();
+            barrier();
+            imageStore(dstImage, ivec2(1, 0), ivec4(sharedVariable));
+
+            int oldValue3 = oldValue2 + atomicMin(sharedVariable, 1);
+            memoryBarrierShared();
+            barrier();
+            imageStore(dstImage, ivec2(2, 0), ivec4(sharedVariable));
+
+            int oldValue4 = atomicMax(sharedVariable, 8) + atomicXor(sharedVariable, 16);
+            memoryBarrierShared();
+            barrier();
+            imageStore(dstImage, ivec2(3, 0), ivec4(sharedVariable));
+
+            int oldValue6 = oldValue2 = atomicAdd(sharedVariable, oldValue4);
+            memoryBarrierShared();
+            barrier();
+            imageStore(dstImage, ivec2(4, 0), ivec4(sharedVariable));
+
+            oldValue6 += atomicAdd(sharedVariable, oldValue2);
+            memoryBarrierShared();
+            barrier();
+            imageStore(dstImage, ivec2(5, 0), ivec4(sharedVariable));
+
+            int oldValue7 = atomicMax(sharedVariable, 8) + oldValue6 + atomicXor(sharedVariable, 16);
+            memoryBarrierShared();
+            barrier();
+            imageStore(dstImage, ivec2(6, 0), ivec4(sharedVariable));
+
+            atomicAdd(sharedVariable, oldValue7);
+            memoryBarrierShared();
+            barrier();
+            imageStore(dstImage, ivec2(7, 0), ivec4(sharedVariable));
+        })";
+
+    const std::array<GLint, 8> inputData      = {{1, 0, 0, 0, 0, 0, 0, 0}};
+    const std::array<GLint, 8> expectedValues = {{2, 3, 1, 24, 33, 57, 41, 212}};
+    runSharedMemoryTest<GLint, 8, 1>(kCSShader, GL_R32I, GL_INT, inputData, expectedValues);
+}
+
+TEST_P(ComputeShaderTest, AtomicFunctionsInComplexExpressions)
+{
+    const char kCSShader[] =
+        R"(#version 310 es
+        layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+        layout (r32i, binding = 0) readonly uniform highp iimage2D srcImage;
+        layout (r32i, binding = 1) writeonly uniform highp iimage2D dstImage;
+
+        shared highp int sharedVariable;
+
+        int fun(int value)
+        {
+            int incr = (value == 10) ? (atomicAdd(sharedVariable, 1) + 1) : 10;
+            return atomicAdd(sharedVariable, incr);
+        }
+
+        void main()
+        {
+            sharedVariable = imageLoad(srcImage, ivec2(gl_LocalInvocationID.xy)).x;
+
+            if (atomicMax(sharedVariable, 2) == 1)
+            {
+                atomicAdd(sharedVariable, 2);
+            }
+
+            int oldValue1 = -atomicAdd(sharedVariable, 1) + 2;
+
+            fun(atomicAdd(sharedVariable, oldValue1));
+
+            imageStore(dstImage, ivec2(gl_LocalInvocationID.xy), ivec4(fun(10)));
+        })";
+
+    const std::array<GLint, 1> inputData      = {{1}};
+    const std::array<GLint, 1> expectedValues = {{14}};
+    runSharedMemoryTest<GLint, 1, 1>(kCSShader, GL_R32I, GL_INT, inputData, expectedValues);
+}
+
 // Check that it is not possible to create a compute shader when the context does not support ES
 // 3.10
 TEST_P(ComputeShaderTestES3, NotSupported)
