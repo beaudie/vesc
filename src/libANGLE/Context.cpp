@@ -7887,6 +7887,7 @@ void StateCache::onProgramExecutableChange(Context *context)
     updateActiveAttribsMask(context);
     updateVertexElementLimits(context);
     updateBasicDrawStatesError();
+    updateValidDrawModes(context);
 }
 
 void StateCache::onVertexArrayFormatChange(Context *context)
@@ -7960,5 +7961,48 @@ void StateCache::onUniformBufferStateChange(Context *context)
 void StateCache::onBufferBindingChange(Context *context)
 {
     updateBasicDrawStatesError();
+}
+
+void StateCache::updateValidDrawModes(Context *context)
+{
+    Program *program = context->getGLState().getProgram();
+    if (!program || !program->hasLinkedShaderStage(ShaderType::Geometry))
+    {
+        mCachedValidDrawModes = {{
+            /* Points */ true,
+            /* Lines */ true,
+            /* LineLoop */ true,
+            /* LineStrip */ true,
+            /* Triangles */ true,
+            /* TriangleStrip */ true,
+            /* TriangleFan */ true,
+            /* LinesAdjacency */ false,
+            /* LineStripAdjacency */ false,
+            /* TrianglesAdjacency */ false,
+            /* TriangleStripAdjacency */ false,
+            /* InvalidEnum */ false,
+        }};
+    }
+    else
+    {
+        ASSERT(program && program->hasLinkedShaderStage(ShaderType::Geometry));
+
+        PrimitiveMode gsMode = program->getGeometryShaderInputPrimitiveType();
+
+        mCachedValidDrawModes = {{
+            /* Points */ gsMode == PrimitiveMode::Points,
+            /* Lines */ gsMode == PrimitiveMode::Lines,
+            /* LineLoop */ gsMode == PrimitiveMode::Lines,
+            /* LineStrip */ gsMode == PrimitiveMode::Lines,
+            /* Triangles */ gsMode == PrimitiveMode::Triangles,
+            /* TriangleStrip */ gsMode == PrimitiveMode::Triangles,
+            /* TriangleFan */ gsMode == PrimitiveMode::Triangles,
+            /* LinesAdjacency */ gsMode == PrimitiveMode::LinesAdjacency,
+            /* LineStripAdjacency */ gsMode == PrimitiveMode::LinesAdjacency,
+            /* TrianglesAdjacency */ gsMode == PrimitiveMode::TrianglesAdjacency,
+            /* TriangleStripAdjacency */ gsMode == PrimitiveMode::TrianglesAdjacency,
+            /* InvalidEnum */ false,
+        }};
+    }
 }
 }  // namespace gl
