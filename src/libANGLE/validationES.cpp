@@ -79,13 +79,18 @@ bool DifferenceCanOverflow(GLint a, GLint b)
     return !checkedA.IsValid();
 }
 
+ANGLE_INLINE bool FastValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex)
+{
+    return (maxVertex <= context->getStateCache().getNonInstancedVertexElementLimit() &&
+            (primcount - 1) <= context->getStateCache().getInstancedVertexElementLimit());
+}
+
 bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex)
 {
     // If we're drawing zero vertices, we have enough data.
     ASSERT(primcount > 0);
 
-    if (maxVertex <= context->getStateCache().getNonInstancedVertexElementLimit() &&
-        (primcount - 1) <= context->getStateCache().getInstancedVertexElementLimit())
+    if (FastValidateDrawAttribs(context, primcount, maxVertex))
     {
         return true;
     }
@@ -2752,7 +2757,7 @@ const char *ValidateDrawStates(Context *context)
     return nullptr;
 }
 
-bool ValidateDrawBase(Context *context, PrimitiveMode mode, GLsizei count)
+bool ValidateDrawMode(Context *context, PrimitiveMode mode)
 {
     const Extensions &extensions = context->getExtensions();
 
@@ -2782,31 +2787,11 @@ bool ValidateDrawBase(Context *context, PrimitiveMode mode, GLsizei count)
             return false;
     }
 
-    if (count < 0)
-    {
-        ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeCount);
-        return false;
-    }
-
-    const State &state = context->getGLState();
-
-    intptr_t drawStatesError = context->getStateCache().getBasicDrawStatesError(context);
-    if (drawStatesError)
-    {
-        const char *errorMessage = reinterpret_cast<const char *>(drawStatesError);
-
-        // All errors from ValidateDrawStates should return INVALID_OPERATION except Framebuffer
-        // Incomplete.
-        GLenum errorCode =
-            (errorMessage == kErrorDrawFramebufferIncomplete ? GL_INVALID_FRAMEBUFFER_OPERATION
-                                                             : GL_INVALID_OPERATION);
-        context->handleError(Error(errorCode, errorMessage));
-        return false;
-    }
-
     // If we are running GLES1, there is no current program.
     if (context->getClientVersion() >= Version(2, 0))
     {
+        const State &state = context->getGLState();
+
         Program *program = state.getProgram();
         ASSERT(program);
 
@@ -2826,6 +2811,36 @@ bool ValidateDrawBase(Context *context, PrimitiveMode mode, GLsizei count)
     return true;
 }
 
+bool ValidateDrawBase(Context *context, PrimitiveMode mode, GLsizei count)
+{
+    if (!context->getStateCache().isValidDrawMode(mode))
+    {
+        return ValidateDrawMode(context, mode);
+    }
+
+    if (count < 0)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeCount);
+        return false;
+    }
+
+    intptr_t drawStatesError = context->getStateCache().getBasicDrawStatesError(context);
+    if (drawStatesError)
+    {
+        const char *errorMessage = reinterpret_cast<const char *>(drawStatesError);
+
+        // All errors from ValidateDrawStates should return INVALID_OPERATION except Framebuffer
+        // Incomplete.
+        GLenum errorCode =
+            (errorMessage == kErrorDrawFramebufferIncomplete ? GL_INVALID_FRAMEBUFFER_OPERATION
+                                                             : GL_INVALID_OPERATION);
+        context->handleError(Error(errorCode, errorMessage));
+        return false;
+    }
+
+    return true;
+}
+
 bool ValidateDrawArraysCommon(Context *context,
                               PrimitiveMode mode,
                               GLint first,
@@ -2835,6 +2850,12 @@ bool ValidateDrawArraysCommon(Context *context,
     if (first < 0)
     {
         ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeStart);
+        return false;
+    }
+
+    if (count < 0)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeCount);
         return false;
     }
 
@@ -2857,8 +2878,22 @@ bool ValidateDrawArraysCommon(Context *context,
         }
     }
 
-    if (!ValidateDrawBase(context, mode, count))
+    if (!context->getStateCache().isValidDrawMode(mode))
     {
+        return ValidateDrawMode(context, mode);
+    }
+
+    intptr_t drawStatesError = context->getStateCache().getBasicDrawStatesError(context);
+    if (drawStatesError)
+    {
+        const char *errorMessage = reinterpret_cast<const char *>(drawStatesError);
+
+        // All errors from ValidateDrawStates should return INVALID_OPERATION except Framebuffer
+        // Incomplete.
+        GLenum errorCode =
+            (errorMessage == kErrorDrawFramebufferIncomplete ? GL_INVALID_FRAMEBUFFER_OPERATION
+                                                             : GL_INVALID_OPERATION);
+        context->handleError(Error(errorCode, errorMessage));
         return false;
     }
 
@@ -2876,9 +2911,9 @@ bool ValidateDrawArraysCommon(Context *context,
             return false;
         }
 
-        if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(maxVertex)))
+        if (!FastValidateDrawAttribs(context, primcount, static_cast<GLint>(maxVertex)))
         {
-            return false;
+            return ValidateDrawAttribs(context, primcount, static_cast<GLint>(maxVertex));
         }
     }
 
