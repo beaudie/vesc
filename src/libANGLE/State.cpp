@@ -1317,6 +1317,7 @@ void State::setProgram(const Context *context, Program *newProgram)
         }
         mDirtyBits.set(DIRTY_BIT_PROGRAM_EXECUTABLE);
         mDirtyBits.set(DIRTY_BIT_PROGRAM_BINDING);
+        mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
     }
 }
 
@@ -2621,6 +2622,9 @@ Error State::syncDirtyObjects(const Context *context, const DirtyObjects &bitset
             case DIRTY_OBJECT_PROGRAM_TEXTURES:
                 ANGLE_TRY(syncProgramTextures(context));
                 break;
+            case DIRTY_OBJECT_PROGRAM:
+                ANGLE_TRY(mProgram->syncState(context));
+                break;
 
             default:
                 UNREACHABLE();
@@ -2726,8 +2730,11 @@ Error State::syncDirtyObject(const Context *context, GLenum target)
             break;
         case GL_TEXTURE:
         case GL_SAMPLER:
+            localSet.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
+            break;
         case GL_PROGRAM:
             localSet.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
+            localSet.set(DIRTY_OBJECT_PROGRAM);
             break;
     }
 
@@ -2753,8 +2760,12 @@ void State::setObjectDirty(GLenum target)
             break;
         case GL_TEXTURE:
         case GL_SAMPLER:
+            mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
+            mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
+            break;
         case GL_PROGRAM:
             mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
+            mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
             mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
             break;
     }
@@ -2770,6 +2781,7 @@ void State::onProgramExecutableChange(Program *program)
     {
         mDirtyBits.set(DIRTY_BIT_PROGRAM_EXECUTABLE);
         mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
+        mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
     }
 }
 

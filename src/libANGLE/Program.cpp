@@ -2440,7 +2440,7 @@ void Program::bindUniformBlock(GLuint uniformBlockIndex, GLuint uniformBlockBind
     resolveLink();
     mState.mUniformBlocks[uniformBlockIndex].binding = uniformBlockBinding;
     mState.mActiveUniformBlockBindings.set(uniformBlockIndex, uniformBlockBinding != 0);
-    mProgram->setUniformBlockBinding(uniformBlockIndex, uniformBlockBinding);
+    mDirtyBits.set(DIRTY_BIT_UNIFORM_BLOCK_BINDING_0 + uniformBlockIndex);
 }
 
 GLuint Program::getUniformBlockBinding(GLuint uniformBlockIndex) const
@@ -3930,4 +3930,15 @@ bool Program::samplesFromTexture(const gl::State &state, GLuint textureID) const
     return false;
 }
 
+Error Program::syncState(const Context *context)
+{
+    if (mDirtyBits.any())
+    {
+        resolveLink();
+        ANGLE_TRY(mProgram->syncState(context, mDirtyBits));
+        mDirtyBits.reset();
+    }
+
+    return NoError();
+}
 }  // namespace gl

@@ -461,10 +461,12 @@ void Context::initialize()
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_VERTEX_ARRAY);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_TEXTURES);
+    mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
 
     mPathOperationDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
     mPathOperationDirtyObjects.set(State::DIRTY_OBJECT_VERTEX_ARRAY);
     mPathOperationDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_TEXTURES);
+    mPathOperationDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
 
     mTexImageDirtyBits.set(State::DIRTY_BIT_UNPACK_STATE);
     mTexImageDirtyBits.set(State::DIRTY_BIT_UNPACK_BUFFER_BINDING);
@@ -506,6 +508,7 @@ void Context::initialize()
     mComputeDirtyBits.set(State::DIRTY_BIT_SAMPLER_BINDINGS);
     mComputeDirtyBits.set(State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_TEXTURES);
+    mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
 
     mImplementation->setErrorSet(&mErrors);
 
@@ -6154,6 +6157,11 @@ void Context::uniformBlockBinding(GLuint program,
 {
     Program *programObject = getProgram(program);
     programObject->bindUniformBlock(uniformBlockIndex, uniformBlockBinding);
+
+    if (programObject == mGLState.getProgram())
+    {
+        mGLState.setObjectDirty(GL_PROGRAM);
+    }
 }
 
 GLsync Context::fenceSync(GLenum condition, GLbitfield flags)
