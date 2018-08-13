@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46c1a82a_ebefff3f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-13T23:08:28Z",
+      "side": 1,
+      "message": "git cl format might align these \u003d signs",
+      "range": {
+        "startLine": 838,
+        "startChar": 49,
+        "endLine": 838,
+        "endChar": 51
+      },
+      "revId": "979a31b48d7ceb4b471f0bf2d701bd45c3ecc1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
