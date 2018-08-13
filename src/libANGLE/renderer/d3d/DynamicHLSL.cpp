@@ -456,7 +456,7 @@ void DynamicHLSL::generateVaryingLinkHLSL(const VaryingPacking &varyingPacking,
     hlslStream << "};\n";
 }
 
-void DynamicHLSL::generateShaderLinkHLSL(const gl::Context *context,
+void DynamicHLSL::generateShaderLinkHLSL(const gl::Caps &caps,
                                          const gl::ProgramState &programData,
                                          const ProgramD3DMetadata &programMetadata,
                                          const VaryingPacking &varyingPacking,
@@ -467,7 +467,6 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Context *context,
     ASSERT((*shaderHLSL)[gl::ShaderType::Vertex].empty() &&
            (*shaderHLSL)[gl::ShaderType::Fragment].empty());
 
-    const auto &data                   = context->getContextState();
     gl::Shader *vertexShaderGL         = programData.getAttachedShader(ShaderType::Vertex);
     gl::Shader *fragmentShaderGL       = programData.getAttachedShader(ShaderType::Fragment);
     const ShaderD3D *fragmentShader    = GetImplAs<ShaderD3D>(fragmentShaderGL);
@@ -494,9 +493,9 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Context *context,
     if (useInstancedPointSpriteEmulation)
     {
         vertexStream << "static float minPointSize = "
-                     << static_cast<int>(data.getCaps().minAliasedPointSize) << ".0f;\n"
+                     << static_cast<int>(caps.minAliasedPointSize) << ".0f;\n"
                      << "static float maxPointSize = "
-                     << static_cast<int>(data.getCaps().maxAliasedPointSize) << ".0f;\n";
+                     << static_cast<int>(caps.maxAliasedPointSize) << ".0f;\n";
     }
 
     std::ostringstream vertexGenerateOutput;
@@ -663,7 +662,7 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Context *context,
                          << "    return output;\n"
                          << "}";
 
-    std::string vertexSource = vertexShaderGL->getTranslatedSource(context);
+    std::string vertexSource = vertexShaderGL->getTranslatedSource();
     angle::ReplaceSubstring(&vertexSource, std::string(MAIN_PROLOGUE_STUB_STRING),
                             "    initAttributes(input);\n");
     angle::ReplaceSubstring(&vertexSource, std::string(VERTEX_OUTPUT_STUB_STRING),
@@ -832,7 +831,7 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Context *context,
         pixelPrologue << ";\n";
     }
 
-    std::string pixelSource = fragmentShaderGL->getTranslatedSource(context);
+    std::string pixelSource = fragmentShaderGL->getTranslatedSource();
 
     if (fragmentShader->usesFrontFacing())
     {
@@ -954,7 +953,7 @@ std::string DynamicHLSL::generateGeometryShaderPreamble(const VaryingPacking &va
     return preambleStream.str();
 }
 
-std::string DynamicHLSL::generateGeometryShaderHLSL(const gl::Context *context,
+std::string DynamicHLSL::generateGeometryShaderHLSL(const gl::Caps &caps,
                                                     gl::PrimitiveMode primitiveType,
                                                     const gl::ProgramState &programData,
                                                     const bool useViewScale,
@@ -1062,10 +1061,10 @@ std::string DynamicHLSL::generateGeometryShaderHLSL(const gl::Context *context,
                         "};\n"
                         "\n"
                         "static float minPointSize = "
-                     << static_cast<int>(context->getCaps().minAliasedPointSize)
+                     << static_cast<int>(caps.minAliasedPointSize)
                      << ".0f;\n"
                         "static float maxPointSize = "
-                     << static_cast<int>(context->getCaps().maxAliasedPointSize) << ".0f;\n"
+                     << static_cast<int>(caps.maxAliasedPointSize) << ".0f;\n"
                      << "\n";
     }
 
