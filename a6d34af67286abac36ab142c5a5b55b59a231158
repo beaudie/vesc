@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d8960e0f_5abe8812",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-08-13T09:10:40Z",
+      "side": 0,
+      "message": "Why not keep it here?",
+      "range": {
+        "startLine": 2414,
+        "startChar": 0,
+        "endLine": 2416,
+        "endChar": 65
+      },
+      "revId": "a6d34af67286abac36ab142c5a5b55b59a231158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
