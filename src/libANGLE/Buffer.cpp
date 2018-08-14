@@ -264,13 +264,19 @@ void Buffer::onTFBindingChanged(const Context *context, bool bound, bool indexed
     {
         ASSERT(bound || mState.mTransformFeedbackIndexedBindingCount > 0);
         mState.mTransformFeedbackIndexedBindingCount += bound ? 1 : -1;
-
-        mImpl->onStateChange(context, angle::SubjectMessage::BINDING_CHANGED);
     }
     else
     {
         mState.mTransformFeedbackGenericBindingCount += bound ? 1 : -1;
     }
+
+    mImpl->onStateChange(context, angle::SubjectMessage::BINDING_CHANGED);
+}
+
+void Buffer::onNonTFBindingChanged(const Context *context, int incr)
+{
+    mState.mBindingCount += incr;
+    mImpl->onStateChange(context, angle::SubjectMessage::BINDING_CHANGED);
 }
 
 }  // namespace gl

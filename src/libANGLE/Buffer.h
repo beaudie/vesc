@@ -118,7 +118,7 @@ class Buffer final : public RefCountObject, public LabeledObject
     bool isBound() const;
     bool isBoundForTransformFeedbackAndOtherUse() const;
     void onTFBindingChanged(const Context *context, bool bound, bool indexed);
-    void onNonTFBindingChanged(const Context *context, int incr) { mState.mBindingCount += incr; }
+    void onNonTFBindingChanged(const Context *context, int incr);
 
   private:
     BufferState mState;
