@@ -269,14 +269,14 @@ void Buffer::onBindingChanged(const Context *context,
         {
             ASSERT(bound || mState.mTransformFeedbackIndexedBindingCount > 0);
             mState.mTransformFeedbackIndexedBindingCount += bound ? 1 : -1;
-
-            mImpl->onStateChange(context, angle::SubjectMessage::BINDING_CHANGED);
         }
         else
         {
             mState.mTransformFeedbackGenericBindingCount += bound ? 1 : -1;
         }
     }
+
+    mImpl->onStateChange(context, angle::SubjectMessage::BINDING_CHANGED);
 }
 
 }  // namespace gl

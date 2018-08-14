@@ -362,10 +362,11 @@ void VertexArray::setElementArrayBuffer(const Context *context, Buffer *buffer)
         mState.mElementArrayBuffer->onBindingChanged(context, false, BufferBinding::ElementArray,
                                                      false);
     mState.mElementArrayBuffer.set(context, buffer);
+    mElementArrayBufferObserverBinding.bind(buffer ? buffer->getImplementation() : nullptr);
+
     if (isBound && mState.mElementArrayBuffer.get())
         mState.mElementArrayBuffer->onBindingChanged(context, true, BufferBinding::ElementArray,
                                                      false);
-    mElementArrayBufferObserverBinding.bind(buffer ? buffer->getImplementation() : nullptr);
     mDirtyBits.set(DIRTY_BIT_ELEMENT_ARRAY_BUFFER);
 }
 
@@ -441,12 +442,14 @@ void VertexArray::onSubjectStateChange(const gl::Context *context,
                 const Buffer *buffer = mState.mVertexBindings[index].getBuffer().get();
                 updateCachedTransformFeedbackBindingValidation(index, buffer);
             }
+            onStateChange(context, angle::SubjectMessage::BINDING_CHANGED);
             break;
 
         case angle::SubjectMessage::RESOURCE_MAPPED:
             if (!IsElementArrayBufferSubjectIndex(index))
             {
                 updateCachedMappedArrayBuffers(&mState.mVertexBindings[index]);
+                onStateChange(context, angle::SubjectMessage::RESOURCE_MAPPED);
             }
             break;
 
@@ -456,6 +459,7 @@ void VertexArray::onSubjectStateChange(const gl::Context *context,
             if (!IsElementArrayBufferSubjectIndex(index))
             {
                 updateCachedMappedArrayBuffers(&mState.mVertexBindings[index]);
+                onStateChange(context, angle::SubjectMessage::RESOURCE_UNMAPPED);
             }
             break;
 
