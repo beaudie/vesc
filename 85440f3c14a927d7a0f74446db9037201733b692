@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "aba8b0a0_731d834c",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-08-14T02:00:58Z",
+      "side": 1,
+      "message": "Good naming. Thanks.",
+      "parentUuid": "57f0ee48_1fc110c2",
+      "range": {
+        "startLine": 333,
+        "startChar": 4,
+        "endLine": 333,
+        "endChar": 36
+      },
+      "revId": "85440f3c14a927d7a0f74446db9037201733b692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7920f024_be33fce6",
         "filename": "src/libANGLE/Shader.h",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2018-08-13T20:49:52Z",
       "side": 1,
       "message": "Many of these methods can now be const.",
+      "revId": "85440f3c14a927d7a0f74446db9037201733b692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6027c09_33b141e5",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-08-14T02:00:58Z",
+      "side": 1,
+      "message": "If resolveCompile were const, these methods could be const then. Did you mean to further refactor it using const_cast?",
+      "parentUuid": "7920f024_be33fce6",
       "revId": "85440f3c14a927d7a0f74446db9037201733b692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
