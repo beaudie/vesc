@@ -235,13 +235,15 @@ bool ValidateLightSingleComponent(Context *context,
 }
 
 bool ValidateMaterialCommon(Context *context,
+                            bool isQuery,
                             GLenum face,
                             MaterialParameter pname,
                             const GLfloat *params)
 {
     ANGLE_VALIDATE_IS_GLES1(context);
 
-    if (face != GL_FRONT_AND_BACK)
+    if ((isQuery && (face != GL_FRONT) && (face != GL_BACK)) ||
+        (!isQuery && (face != GL_FRONT_AND_BACK)))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidMaterialFace);
         return false;
@@ -272,7 +274,7 @@ bool ValidateMaterialSingleComponent(Context *context,
                                      MaterialParameter pname,
                                      GLfloat param)
 {
-    if (!ValidateMaterialCommon(context, face, pname, &param))
+    if (!ValidateMaterialCommon(context, false /* not query */, face, pname, &param))
     {
         return false;
     }
@@ -801,13 +803,13 @@ bool ValidateGetLightxv(Context *context, GLenum light, LightParameter pname, GL
 bool ValidateGetMaterialfv(Context *context, GLenum face, MaterialParameter pname, GLfloat *params)
 {
     GLfloat dummyParams[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-    return ValidateMaterialCommon(context, face, pname, dummyParams);
+    return ValidateMaterialCommon(context, true /* is query */, face, pname, dummyParams);
 }
 
 bool ValidateGetMaterialxv(Context *context, GLenum face, MaterialParameter pname, GLfixed *params)
 {
     GLfloat dummyParams[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-    return ValidateMaterialCommon(context, face, pname, dummyParams);
+    return ValidateMaterialCommon(context, true /* is query */, face, pname, dummyParams);
 }
 
 bool ValidateGetPointerv(Context *context, GLenum pname, void **params)
@@ -933,10 +935,32 @@ bool ValidateLoadMatrixx(Context *context, const GLfixed *m)
     return true;
 }
 
-bool ValidateLogicOp(Context *context, GLenum opcode)
+bool ValidateLogicOp(Context *context, LogicalOperation opcode)
 {
-    UNIMPLEMENTED();
-    return true;
+    ANGLE_VALIDATE_IS_GLES1(context);
+    switch (opcode)
+    {
+        case LogicalOperation::And:
+        case LogicalOperation::AndInverted:
+        case LogicalOperation::AndReverse:
+        case LogicalOperation::Clear:
+        case LogicalOperation::Copy:
+        case LogicalOperation::CopyInverted:
+        case LogicalOperation::Equiv:
+        case LogicalOperation::Invert:
+        case LogicalOperation::Nand:
+        case LogicalOperation::Noop:
+        case LogicalOperation::Nor:
+        case LogicalOperation::Or:
+        case LogicalOperation::OrInverted:
+        case LogicalOperation::OrReverse:
+        case LogicalOperation::Set:
+        case LogicalOperation::Xor:
+            return true;
+        default:
+            ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidLogicOp);
+            return false;
+    }
 }
 
 bool ValidateMaterialf(Context *context, GLenum face, MaterialParameter pname, GLfloat param)
@@ -949,7 +973,7 @@ bool ValidateMaterialfv(Context *context,
                         MaterialParameter pname,
                         const GLfloat *params)
 {
-    return ValidateMaterialCommon(context, face, pname, params);
+    return ValidateMaterialCommon(context, false /* not query */, face, pname, params);
 }
 
 bool ValidateMaterialx(Context *context, GLenum face, MaterialParameter pname, GLfixed param)
@@ -969,7 +993,7 @@ bool ValidateMaterialxv(Context *context,
         paramsf[i] = FixedToFloat(params[i]);
     }
 
-    return ValidateMaterialCommon(context, face, pname, paramsf);
+    return ValidateMaterialCommon(context, false /* not query */, face, pname, paramsf);
 }
 
 bool ValidateMatrixMode(Context *context, MatrixType mode)
