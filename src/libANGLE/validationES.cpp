@@ -1206,13 +1206,13 @@ bool ValidateBlitFramebufferParameters(Context *context,
         case GL_LINEAR:
             break;
         default:
-            context->handleError(InvalidEnum());
+            context->handleError(InvalidEnum() << "Invalid blit filter.");
             return false;
     }
 
     if ((mask & ~(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)) != 0)
     {
-        context->handleError(InvalidValue());
+        context->handleError(InvalidValue() << "Invalid blit mask.");
         return false;
     }
 
@@ -1220,7 +1220,8 @@ bool ValidateBlitFramebufferParameters(Context *context,
     // color buffer, leaving only nearest being unfiltered from above
     if ((mask & ~GL_COLOR_BUFFER_BIT) != 0 && filter != GL_NEAREST)
     {
-        context->handleError(InvalidOperation());
+        context->handleError(InvalidOperation() << "Only nearest filtering can be used when "
+                                                   "blitting buffers other than the color buffer.");
         return false;
     }
 
@@ -1230,7 +1231,9 @@ bool ValidateBlitFramebufferParameters(Context *context,
 
     if (!readFramebuffer || !drawFramebuffer)
     {
-        context->handleError(InvalidFramebufferOperation());
+        context->handleError(
+            InvalidFramebufferOperation()
+            << "Read and draw framebuffers must both exist for a blit to succeed.");
         return false;
     }
 
@@ -1246,7 +1249,8 @@ bool ValidateBlitFramebufferParameters(Context *context,
 
     if (readFramebuffer->id() == drawFramebuffer->id())
     {
-        context->handleError(InvalidOperation());
+        context->handleError(InvalidOperation()
+                             << "Blit feedback loop: the read and draw framebuffers are the same.");
         return false;
     }
 
@@ -1324,20 +1328,27 @@ bool ValidateBlitFramebufferParameters(Context *context,
                     if (readComponentType == GL_UNSIGNED_INT &&
                         drawComponentType != GL_UNSIGNED_INT)
                     {
-                        context->handleError(InvalidOperation());
+                        context->handleError(InvalidOperation() << "If the read buffer contains "
+                                                                   "unsigned integer values the "
+                                                                   "draw buffer must as well.");
                         return false;
                     }
 
                     if (readComponentType == GL_INT && drawComponentType != GL_INT)
                     {
-                        context->handleError(InvalidOperation());
+                        context->handleError(InvalidOperation() << "If the read buffer contains "
+                                                                   "signed integer values the draw "
+                                                                   "buffer must as well.");
                         return false;
                     }
 
                     if (readColorBuffer->getSamples() > 0 &&
                         (!Format::EquivalentForBlit(readFormat, drawFormat) || !sameBounds))
                     {
-                        context->handleError(InvalidOperation());
+                        context->handleError(InvalidOperation()
+                                             << "Attempt to blit from a multisampled framebuffer "
+                                                "and the bounds or format of the color buffer "
+                                                "don't match with the draw framebuffer.");
                         return false;
                     }
 
@@ -1356,7 +1367,9 @@ bool ValidateBlitFramebufferParameters(Context *context,
                  readFormat.info->componentType == GL_UNSIGNED_INT) &&
                 filter == GL_LINEAR)
             {
-                context->handleError(InvalidOperation());
+                context->handleError(
+                    InvalidOperation()
+                    << "Cannot use GL_LINEAR filter when blitting a integer framebuffer.");
                 return false;
             }
         }
@@ -1388,13 +1401,17 @@ bool ValidateBlitFramebufferParameters(Context *context,
             {
                 if (!Format::EquivalentForBlit(readBuffer->getFormat(), drawBuffer->getFormat()))
                 {
-                    context->handleError(InvalidOperation());
+                    context->handleError(
+                        InvalidOperation()
+                        << "Depth/stencil buffer format combination not allowed for blit.");
                     return false;
                 }
 
                 if (readBuffer->getSamples() > 0 && !sameBounds)
                 {
-                    context->handleError(InvalidOperation());
+                    context->handleError(InvalidOperation()
+                                         << "Attempt to blit from a multisampled framebuffer and "
+                                            "the bounds don't match with the draw framebuffer.");
                     return false;
                 }
 

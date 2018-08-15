@@ -2455,7 +2455,7 @@ bool ValidateBlitFramebufferANGLE(Context *context,
 
     if (filter == GL_LINEAR)
     {
-        context->handleError(InvalidEnum() << "Linear blit not supported in this extension");
+        context->handleError(InvalidEnum() << "Linear blit not supported in this extension.");
         return false;
     }
 
@@ -2474,7 +2474,10 @@ bool ValidateBlitFramebufferANGLE(Context *context,
                 readColorAttachment->type() != GL_RENDERBUFFER &&
                 readColorAttachment->type() != GL_FRAMEBUFFER_DEFAULT)
             {
-                context->handleError(InvalidOperation());
+                context->handleError(InvalidOperation()
+                                     << "Blits are only supported from 2D "
+                                        "texture, renderbuffer or default "
+                                        "framebuffer attachments in this extension.");
                 return false;
             }
 
@@ -2490,7 +2493,10 @@ bool ValidateBlitFramebufferANGLE(Context *context,
                         attachment->type() != GL_RENDERBUFFER &&
                         attachment->type() != GL_FRAMEBUFFER_DEFAULT)
                     {
-                        context->handleError(InvalidOperation());
+                        context->handleError(InvalidOperation()
+                                             << "Blits are only supported to 2D texture, "
+                                                "renderbuffer or default framebuffer attachments "
+                                                "in this extension.");
                         return false;
                     }
 
@@ -2498,7 +2504,9 @@ bool ValidateBlitFramebufferANGLE(Context *context,
                     if (!Format::EquivalentForBlit(attachment->getFormat(),
                                                    readColorAttachment->getFormat()))
                     {
-                        context->handleError(InvalidOperation());
+                        context->handleError(InvalidOperation() << "Attempting to blit and the "
+                                                                   "read and draw buffer formats "
+                                                                   "don't match.");
                         return false;
                     }
                 }
@@ -2509,7 +2517,9 @@ bool ValidateBlitFramebufferANGLE(Context *context,
                 IsPartialBlit(context, readColorAttachment, drawColorAttachment, srcX0, srcY0,
                               srcX1, srcY1, dstX0, dstY0, dstX1, dstY1))
             {
-                context->handleError(InvalidOperation());
+                context->handleError(InvalidOperation() << "Only whole-buffer blit is supported "
+                                                           "from a multisampled read buffer in "
+                                                           "this extension.");
                 return false;
             }
         }
@@ -2540,7 +2550,9 @@ bool ValidateBlitFramebufferANGLE(Context *context,
 
                 if (readBuffer->getSamples() != 0 || drawBuffer->getSamples() != 0)
                 {
-                    context->handleError(InvalidOperation());
+                    context->handleError(
+                        InvalidOperation()
+                        << "Multisampled depth/stencil blit is not supported by this extension.");
                     return false;
                 }
             }
