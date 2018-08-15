@@ -99,6 +99,24 @@
       "revId": "85440f3c14a927d7a0f74446db9037201733b692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b76672f7_afe41344",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-15T14:13:20Z",
+      "side": 1,
+      "message": "Sorry, it\u0027s fine to leave the methods as non-const if they have to call the resolveCompile.",
+      "parentUuid": "4070fcff_29d27e77",
+      "revId": "85440f3c14a927d7a0f74446db9037201733b692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
