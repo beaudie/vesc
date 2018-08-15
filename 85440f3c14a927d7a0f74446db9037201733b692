@@ -81,6 +81,24 @@
       "revId": "85440f3c14a927d7a0f74446db9037201733b692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4070fcff_29d27e77",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-08-15T07:29:15Z",
+      "side": 1,
+      "message": "Geoff, could you clarify your comment? Thanks!",
+      "parentUuid": "c6027c09_33b141e5",
+      "revId": "85440f3c14a927d7a0f74446db9037201733b692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
