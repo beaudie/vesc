@@ -24,16 +24,15 @@ class GLImplFactory;
 namespace gl
 {
 class ContextState;
+class CompilerInstance;
 
 class Compiler final : public RefCountObjectNoID
 {
   public:
     Compiler(rx::GLImplFactory *implFactory, const ContextState &data);
 
-    ShHandle getCompilerHandle(ShaderType shaderType);
-    void putCompilerHandle(ShHandle handle);
+    std::unique_ptr<CompilerInstance> createInstance(ShaderType shaderType);
     ShShaderOutput getShaderOutputType() const { return mOutputType; }
-    const std::string &getBuiltinResourcesString(ShaderType type);
 
   private:
     ~Compiler() override;
@@ -41,8 +40,21 @@ class Compiler final : public RefCountObjectNoID
     ShShaderSpec mSpec;
     ShShaderOutput mOutputType;
     ShBuiltInResources mResources;
+};
 
-    ShaderMap<ShHandle> mShaderCompilers;
+class CompilerInstance final : public angle::NonCopyable
+{
+  public:
+    CompilerInstance(ShHandle handle, Compiler *compiler);
+    ~CompilerInstance();
+
+    ShHandle getHandle();
+    const std::string &getBuiltinResourcesString();
+    ShShaderOutput getShaderOutputType() const;
+
+  private:
+    ShHandle mHandle;
+    Compiler *mCompiler;
 };
 
 }  // namespace gl

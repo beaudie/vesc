@@ -29,7 +29,7 @@ class ShaderImpl : angle::NonCopyable
                                                            std::string *sourcePath) = 0;
     // Returns success for compiling on the driver. Returns success.
     virtual bool postTranslateCompile(const gl::Context *context,
-                                      gl::Compiler *compiler,
+                                      gl::CompilerInstance *compiler,
                                       std::string *infoLog) = 0;
 
     virtual std::string getDebugInfo(const gl::Context *context) const = 0;

@@ -58,8 +58,7 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
                              state.getClientMinorVersion(),
                              state.getExtensions().webglCompatibility)),
       mOutputType(mImplementation->getTranslatorOutputType()),
-      mResources(),
-      mShaderCompilers({})
+      mResources()
 {
     ASSERT(state.getClientMajorVersion() == 1 || state.getClientMajorVersion() == 2 ||
            state.getClientMajorVersion() == 3);
@@ -166,21 +165,39 @@ Compiler::~Compiler()
     ANGLE_SWALLOW_ERR(mImplementation->release());
 }
 
-ShHandle Compiler::getCompilerHandle(ShaderType type)
+std::unique_ptr<CompilerInstance> Compiler::createInstance(ShaderType type)
 {
     ASSERT(type != ShaderType::InvalidEnum);
 
-    return sh::ConstructCompiler(ToGLenum(type), mSpec, mOutputType, &mResources);
+    auto handle = sh::ConstructCompiler(ToGLenum(type), mSpec, mOutputType, &mResources);
+    ASSERT(handle);
+
+    return std::make_unique<CompilerInstance>(handle, this);
 }
 
-void Compiler::putCompilerHandle(ShHandle handle)
+CompilerInstance::CompilerInstance(ShHandle handle, Compiler *compiler)
+    : mHandle(handle), mCompiler(compiler)
 {
-    sh::Destruct(handle);
 }
 
-const std::string &Compiler::getBuiltinResourcesString(ShaderType type)
+CompilerInstance::~CompilerInstance()
 {
-    return sh::GetBuiltInResourcesString(getCompilerHandle(type));
+    sh::Destruct(mHandle);
+}
+
+ShHandle CompilerInstance::getHandle()
+{
+    return mHandle;
+}
+
+const std::string &CompilerInstance::getBuiltinResourcesString()
+{
+    return sh::GetBuiltInResourcesString(mHandle);
+}
+
+ShShaderOutput CompilerInstance::getShaderOutputType() const
+{
+    return mCompiler->getShaderOutputType();
 }
 
 }  // namespace gl
