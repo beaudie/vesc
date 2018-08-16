@@ -10,6 +10,8 @@
 #ifndef LIBANGLE_COMPILER_H_
 #define LIBANGLE_COMPILER_H_
 
+#include <list>
+
 #include "GLSLANG/ShaderLang.h"
 #include "common/PackedEnums.h"
 #include "libANGLE/Error.h"
@@ -24,15 +26,16 @@ class GLImplFactory;
 namespace gl
 {
 class ContextState;
+class CompilerInstance;
 
 class Compiler final : public RefCountObjectNoID
 {
   public:
     Compiler(rx::GLImplFactory *implFactory, const ContextState &data);
 
-    ShHandle getCompilerHandle(ShaderType shaderType);
+    std::unique_ptr<CompilerInstance> getInstance(ShaderType shaderType);
+    void putInstance(std::unique_ptr<CompilerInstance> instance);
     ShShaderOutput getShaderOutputType() const { return mOutputType; }
-    const std::string &getBuiltinResourcesString(ShaderType type);
 
   private:
     ~Compiler() override;
@@ -40,8 +43,27 @@ class Compiler final : public RefCountObjectNoID
     ShShaderSpec mSpec;
     ShShaderOutput mOutputType;
     ShBuiltInResources mResources;
+    ShaderMap<std::list<std::unique_ptr<CompilerInstance>>> mPools;
+    static constexpr size_t kMaxPoolSize = 32;
+    // To know when to call sh::Initialize and sh::Finalize.
+    static unsigned int mActiveCompilers;
+};
 
-    ShaderMap<ShHandle> mShaderCompilers;
+class CompilerInstance final : public angle::NonCopyable
+{
+  public:
+    CompilerInstance(ShHandle handle, Compiler *compiler, ShaderType shaderType);
+    ~CompilerInstance();
+
+    ShHandle getHandle();
+    ShaderType getShaderType() const;
+    const std::string &getBuiltinResourcesString();
+    ShShaderOutput getShaderOutputType() const;
+
+  private:
+    ShHandle mHandle;
+    Compiler *mCompiler;
+    ShaderType mShaderType;
 };
 
 }  // namespace gl
