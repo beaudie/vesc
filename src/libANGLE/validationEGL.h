@@ -35,6 +35,7 @@ class Thread;
 class LabeledObject;
 
 // Object validation
+Error ValidateDisplayCommon(const Display *display);
 Error ValidateDisplay(const Display *display);
 Error ValidateSurface(const Display *display, const Surface *surface);
 Error ValidateConfig(const Display *display, const Config *config);
@@ -56,6 +57,10 @@ LabeledObject *GetLabeledObjectIfValid(Thread *thread,
                                        EGLObjectKHR object);
 
 // Entry point validation
+Error ValidateInitialize(const Display *display);
+
+Error ValidateTerminate(const Display *display);
+
 Error ValidateCreateContext(Display *display,
                             Config *configuration,
                             gl::Context *shareContext,
@@ -130,7 +135,17 @@ Error ValidateGetSyncValuesCHROMIUM(const Display *display,
                                     const EGLuint64KHR *msc,
                                     const EGLuint64KHR *sbc);
 
+Error ValidateDestroySurface(const Display *display,
+                             const Surface *surface,
+                             const EGLSurface eglSurface);
+
+Error ValidateDestroyContext(const Display *display,
+                             const gl::Context *glCtx,
+                             const EGLContext eglCtx);
+
 Error ValidateSwapBuffers(Thread *thread, const Display *display, const Surface *surface);
+
+Error ValidateWaitNative(const Display *display, const EGLint engine);
 
 Error ValidateSwapBuffersWithDamageKHR(const Display *display,
                                        const Surface *surface,
