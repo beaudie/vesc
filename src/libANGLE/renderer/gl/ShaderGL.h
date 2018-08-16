@@ -32,7 +32,7 @@ class ShaderGL : public ShaderImpl
                                                    std::stringstream *sourceStream,
                                                    std::string *sourcePath) override;
     bool postTranslateCompile(const gl::Context *context,
-                              gl::Compiler *compiler,
+                              gl::CompilerInstance *compiler,
                               std::string *infoLog) override;
     std::string getDebugInfo(const gl::Context *context) const override;
 

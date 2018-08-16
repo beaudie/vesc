@@ -142,7 +142,7 @@ ShCompileOptions ShaderGL::prepareSourceAndReturnOptions(const gl::Context *cont
 }
 
 bool ShaderGL::postTranslateCompile(const gl::Context *context,
-                                    gl::Compiler *compiler,
+                                    gl::CompilerInstance *compiler,
                                     std::string *infoLog)
 {
     // Translate the ESSL into GLSL

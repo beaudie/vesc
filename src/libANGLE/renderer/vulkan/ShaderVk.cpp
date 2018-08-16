@@ -31,7 +31,7 @@ ShCompileOptions ShaderVk::prepareSourceAndReturnOptions(const gl::Context *cont
 }
 
 bool ShaderVk::postTranslateCompile(const gl::Context *context,
-                                    gl::Compiler *compiler,
+                                    gl::CompilerInstance *compiler,
                                     std::string *infoLog)
 {
     // No work to do here.
