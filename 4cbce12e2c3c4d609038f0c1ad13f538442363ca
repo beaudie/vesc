@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "007d5b96_6820b7cb",
+        "filename": "src/libANGLE/validationES1.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-08-16T08:49:03Z",
+      "side": 1,
+      "message": "Instead of passing a boolean, maybe this could be split in two functions?",
+      "revId": "4cbce12e2c3c4d609038f0c1ad13f538442363ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
