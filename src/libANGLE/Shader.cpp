@@ -19,6 +19,7 @@
 #include "libANGLE/Constants.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/ResourceManager.h"
+#include "libANGLE/WorkerThread.h"
 #include "libANGLE/renderer/GLImplFactory.h"
 #include "libANGLE/renderer/ShaderImpl.h"
 
@@ -96,6 +97,40 @@ const char *GetShaderTypeString(ShaderType type)
     }
 }
 
+class CompileTask : public angle::Closure
+{
+  public:
+    CompileTask(ShHandle handle,
+                std::string &&sourcePath,
+                std::string &&source,
+                ShCompileOptions options)
+        : mHandle(handle),
+          mSourcePath(sourcePath),
+          mSource(source),
+          mOptions(options),
+          mResult(false)
+    {
+    }
+    void operator()() override
+    {
+        std::vector<const char *> srcStrings;
+        if (!mSourcePath.empty())
+        {
+            srcStrings.push_back(mSourcePath.c_str());
+        }
+        srcStrings.push_back(mSource.c_str());
+        mResult = sh::Compile(mHandle, &srcStrings[0], srcStrings.size(), mOptions);
+    }
+    bool getResult() { return mResult; }
+
+  private:
+    ShHandle mHandle;
+    std::string mSourcePath;
+    std::string mSource;
+    ShCompileOptions mOptions;
+    bool mResult;
+};
+
 ShaderState::ShaderState(ShaderType shaderType)
     : mLabel(),
       mShaderType(shaderType),
@@ -131,7 +166,12 @@ Shader::Shader(ShaderProgramManager *manager,
 
 void Shader::onDestroy(const gl::Context *context)
 {
+    resolveCompile();
     mImplementation->destroy();
+    if (mCompilerInstance.get() != nullptr)
+    {
+        mBoundCompiler->putInstance(std::move(mCompilerInstance));
+    }
     mBoundCompiler.set(context, nullptr);
     mImplementation.reset(nullptr);
     delete this;
@@ -284,6 +324,8 @@ void Shader::getTranslatedSourceWithDebugInfo(GLsizei bufSize, GLsizei *length, 
 
 void Shader::compile(const Context *context)
 {
+    resolveCompile();
+
     mState.mTranslatedSource.clear();
     mInfoLog.clear();
     mState.mShaderVersion = 100;
@@ -307,19 +349,19 @@ void Shader::compile(const Context *context)
     // can change before the link call or another call that resolves the compile.
 
     std::stringstream sourceStream;
-
-    mLastCompileOptions = mImplementation->prepareSourceAndReturnOptions(context, &sourceStream,
-                                                                         &mLastCompiledSourcePath);
-    mLastCompileOptions |= (SH_OBJECT_CODE | SH_VARIABLES);
-    mLastCompiledSource = sourceStream.str();
+    std::string sourcePath;
+    auto options =
+        mImplementation->prepareSourceAndReturnOptions(context, &sourceStream, &sourcePath);
+    options |= (SH_OBJECT_CODE | SH_VARIABLES);
+    auto source = sourceStream.str();
 
     // Add default options to WebGL shaders to prevent unexpected behavior during compilation.
     if (context->getExtensions().webglCompatibility)
     {
-        mLastCompileOptions |= SH_INIT_GL_POSITION;
-        mLastCompileOptions |= SH_LIMIT_CALL_STACK_DEPTH;
-        mLastCompileOptions |= SH_LIMIT_EXPRESSION_COMPLEXITY;
-        mLastCompileOptions |= SH_ENFORCE_PACKING_RESTRICTIONS;
+        options |= SH_INIT_GL_POSITION;
+        options |= SH_LIMIT_CALL_STACK_DEPTH;
+        options |= SH_LIMIT_EXPRESSION_COMPLEXITY;
+        options |= SH_ENFORCE_PACKING_RESTRICTIONS;
     }
 
     // Some targets (eg D3D11 Feature Level 9_3 and below) do not support non-constant loop indexes
@@ -327,10 +369,20 @@ void Shader::compile(const Context *context)
     // instruct the compiler to pre-validate.
     if (mRendererLimitations.shadersRequireIndexedLoopValidation)
     {
-        mLastCompileOptions |= SH_VALIDATE_LOOP_INDEXING;
+        options |= SH_VALIDATE_LOOP_INDEXING;
     }
 
     mCurrentMaxComputeWorkGroupInvocations = context->getCaps().maxComputeWorkGroupInvocations;
+
+    ASSERT(mBoundCompiler.get());
+    mCompilerInstance       = mBoundCompiler->getInstance(mState.mShaderType);
+    ShHandle compilerHandle = mCompilerInstance->getHandle();
+    ASSERT(compilerHandle);
+
+    mCompileTask  = std::make_shared<CompileTask>(compilerHandle, std::move(sourcePath),
+                                                 std::move(source), options);
+    mWorkerPool   = context->getWorkerThreadPool();
+    mCompileEvent = mWorkerPool->postWorkerTask(mCompileTask);
 }
 
 void Shader::resolveCompile()
@@ -340,19 +392,19 @@ void Shader::resolveCompile()
         return;
     }
 
-    ASSERT(mBoundCompiler.get());
-    ShHandle compilerHandle = mBoundCompiler->getCompilerHandle(mState.mShaderType);
+    ASSERT(mCompileEvent.get());
+    ASSERT(mCompileTask.get());
 
-    std::vector<const char *> srcStrings;
+    mCompileEvent->wait();
 
-    if (!mLastCompiledSourcePath.empty())
-    {
-        srcStrings.push_back(mLastCompiledSourcePath.c_str());
-    }
+    mCompileEvent.reset();
+    mWorkerPool.reset();
 
-    srcStrings.push_back(mLastCompiledSource.c_str());
+    auto compiled = mCompileTask->getResult();
+    mCompileTask.reset();
 
-    if (!sh::Compile(compilerHandle, &srcStrings[0], srcStrings.size(), mLastCompileOptions))
+    ShHandle compilerHandle = mCompilerInstance->getHandle();
+    if (!compiled)
     {
         mInfoLog = sh::GetInfoLog(compilerHandle);
         WARN() << std::endl << mInfoLog;
@@ -469,7 +521,7 @@ void Shader::resolveCompile()
 
     ASSERT(!mState.mTranslatedSource.empty());
 
-    bool success          = mImplementation->postTranslateCompile(mBoundCompiler.get(), &mInfoLog);
+    bool success = mImplementation->postTranslateCompile(mCompilerInstance.get(), &mInfoLog);
     mState.mCompileStatus = success ? CompileStatus::COMPILED : CompileStatus::NOT_COMPILED;
 }
 
@@ -507,6 +559,11 @@ bool Shader::isCompiled()
 {
     resolveCompile();
     return mState.mCompileStatus == CompileStatus::COMPILED;
+}
+
+bool Shader::isCompleted()
+{
+    return (!mState.compilePending() || mCompileEvent->isReady());
 }
 
 int Shader::getShaderVersion()
@@ -640,8 +697,8 @@ Optional<GLint> Shader::getGeometryShaderMaxVertices()
 
 const std::string &Shader::getCompilerResourcesString() const
 {
-    ASSERT(mBoundCompiler.get());
-    return mBoundCompiler->getBuiltinResourcesString(mState.mShaderType);
+    ASSERT(mCompilerInstance.get());
+    return mCompilerInstance->getBuiltinResourcesString();
 }
 
 }  // namespace gl
