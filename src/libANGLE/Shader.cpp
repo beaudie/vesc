@@ -132,6 +132,7 @@ Shader::Shader(ShaderProgramManager *manager,
 void Shader::onDestroy(const gl::Context *context)
 {
     mImplementation->destroy();
+    mCompilerInstance.reset();
     mBoundCompiler.set(context, nullptr);
     mImplementation.reset(nullptr);
     delete this;
@@ -341,7 +342,9 @@ void Shader::resolveCompile()
     }
 
     ASSERT(mBoundCompiler.get());
-    ShHandle compilerHandle = mBoundCompiler->getCompilerHandle(mState.mShaderType);
+    mCompilerInstance       = mBoundCompiler->createInstance(mState.mShaderType);
+    ShHandle compilerHandle = mCompilerInstance->getHandle();
+    ASSERT(compilerHandle);
 
     std::vector<const char *> srcStrings;
 
@@ -469,7 +472,7 @@ void Shader::resolveCompile()
 
     ASSERT(!mState.mTranslatedSource.empty());
 
-    bool success          = mImplementation->postTranslateCompile(mBoundCompiler.get(), &mInfoLog);
+    bool success = mImplementation->postTranslateCompile(mCompilerInstance.get(), &mInfoLog);
     mState.mCompileStatus = success ? CompileStatus::COMPILED : CompileStatus::NOT_COMPILED;
 }
 
@@ -640,8 +643,8 @@ Optional<GLint> Shader::getGeometryShaderMaxVertices()
 
 const std::string &Shader::getCompilerResourcesString() const
 {
-    ASSERT(mBoundCompiler.get());
-    return mBoundCompiler->getBuiltinResourcesString(mState.mShaderType);
+    ASSERT(mCompilerInstance.get());
+    return mCompilerInstance->getBuiltinResourcesString();
 }
 
 }  // namespace gl

@@ -35,6 +35,7 @@ class ShaderSh;
 namespace gl
 {
 class Compiler;
+class CompilerInstance;
 class ContextState;
 struct Limitations;
 class ShaderProgramManager;
@@ -203,6 +204,7 @@ class Shader final : angle::NonCopyable, public LabeledObject
 
     // We keep a reference to the translator in order to defer compiles while preserving settings.
     BindingPointer<Compiler> mBoundCompiler;
+    std::unique_ptr<CompilerInstance> mCompilerInstance;
 
     ShaderProgramManager *mResourceManager;
 
