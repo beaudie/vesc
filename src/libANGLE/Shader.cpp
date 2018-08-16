@@ -345,6 +345,7 @@ void Shader::resolveCompile(const Context *context)
 
     ASSERT(mBoundCompiler.get());
     ShHandle compilerHandle = mBoundCompiler->getCompilerHandle(mState.mShaderType);
+    ASSERT(compilerHandle);
 
     std::vector<const char *> srcStrings;
 
@@ -474,6 +475,7 @@ void Shader::resolveCompile(const Context *context)
 
     bool success = mImplementation->postTranslateCompile(context, mBoundCompiler.get(), &mInfoLog);
     mState.mCompileStatus = success ? CompileStatus::COMPILED : CompileStatus::NOT_COMPILED;
+    mBoundCompiler->putCompilerHandle(compilerHandle);
 }
 
 void Shader::addRef()

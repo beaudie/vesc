@@ -19,9 +19,13 @@ namespace gl
 namespace
 {
 
-// Global count of active shader compiler handles. Needed to know when to call sh::Initialize and
-// sh::Finalize.
-size_t activeCompilerHandles = 0;
+// Handles when to call sh::Initialize and sh::Finalize.
+class ShaderLangHook
+{
+  public:
+    ShaderLangHook() { sh::Initialize(); }
+    ~ShaderLangHook() { sh::Finalize(); }
+} hook;
 
 ShShaderSpec SelectShaderSpec(GLint majorVersion, GLint minorVersion, bool isWebGL)
 {
@@ -159,45 +163,19 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
 
 Compiler::~Compiler()
 {
-    for (ShaderType shaderType : AllShaderTypes())
-    {
-        ShHandle compilerHandle = mShaderCompilers[shaderType];
-        if (compilerHandle)
-        {
-            sh::Destruct(compilerHandle);
-            mShaderCompilers[shaderType] = nullptr;
-
-            ASSERT(activeCompilerHandles > 0);
-            activeCompilerHandles--;
-        }
-    }
-
-    if (activeCompilerHandles == 0)
-    {
-        sh::Finalize();
-    }
-
     ANGLE_SWALLOW_ERR(mImplementation->release());
 }
 
 ShHandle Compiler::getCompilerHandle(ShaderType type)
 {
     ASSERT(type != ShaderType::InvalidEnum);
-    ShHandle *compiler = &mShaderCompilers[type];
 
-    if (!(*compiler))
-    {
-        if (activeCompilerHandles == 0)
-        {
-            sh::Initialize();
-        }
+    return sh::ConstructCompiler(ToGLenum(type), mSpec, mOutputType, &mResources);
+}
 
-        *compiler = sh::ConstructCompiler(ToGLenum(type), mSpec, mOutputType, &mResources);
-        ASSERT(*compiler);
-        activeCompilerHandles++;
-    }
-
-    return *compiler;
+void Compiler::putCompilerHandle(ShHandle handle)
+{
+    sh::Destruct(handle);
 }
 
 const std::string &Compiler::getBuiltinResourcesString(ShaderType type)

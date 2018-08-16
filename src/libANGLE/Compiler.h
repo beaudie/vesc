@@ -31,6 +31,7 @@ class Compiler final : public RefCountObjectNoID
     Compiler(rx::GLImplFactory *implFactory, const ContextState &data);
 
     ShHandle getCompilerHandle(ShaderType shaderType);
+    void putCompilerHandle(ShHandle handle);
     ShShaderOutput getShaderOutputType() const { return mOutputType; }
     const std::string &getBuiltinResourcesString(ShaderType type);
 
