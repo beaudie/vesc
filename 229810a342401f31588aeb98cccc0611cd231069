@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f490314c_b9573b91",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2482,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-08-16T16:14:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8da9e45_407d1f3f",
+      "range": {
+        "startLine": 2477,
+        "startChar": 0,
+        "endLine": 2482,
+        "endChar": 0
+      },
+      "revId": "229810a342401f31588aeb98cccc0611cd231069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1be1958f_a2f44f3b",
         "filename": "src/libGLESv2/entry_points_egl.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "229810a342401f31588aeb98cccc0611cd231069",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12dccea6_6e071c62",
+        "filename": "src/libGLESv2/entry_points_egl.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-08-16T16:14:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1be1958f_a2f44f3b",
+      "range": {
+        "startLine": 660,
+        "startChar": 3,
+        "endLine": 674,
+        "endChar": 5
+      },
+      "revId": "229810a342401f31588aeb98cccc0611cd231069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
