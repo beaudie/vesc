@@ -19,10 +19,6 @@ namespace gl
 namespace
 {
 
-// Global count of active shader compiler handles. Needed to know when to call sh::Initialize and
-// sh::Finalize.
-size_t activeCompilerHandles = 0;
-
 ShShaderSpec SelectShaderSpec(GLint majorVersion, GLint minorVersion, bool isWebGL)
 {
     if (majorVersion >= 3)
@@ -48,20 +44,26 @@ ShShaderSpec SelectShaderSpec(GLint majorVersion, GLint minorVersion, bool isWeb
 
 }  // anonymous namespace
 
+unsigned int Compiler::mActiveCompilers = 0;
 Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
     : mImplementation(implFactory->createCompiler()),
       mSpec(SelectShaderSpec(state.getClientMajorVersion(),
                              state.getClientMinorVersion(),
                              state.getExtensions().webglCompatibility)),
       mOutputType(mImplementation->getTranslatorOutputType()),
-      mResources(),
-      mShaderCompilers({})
+      mResources()
 {
     ASSERT(state.getClientMajorVersion() == 1 || state.getClientMajorVersion() == 2 ||
            state.getClientMajorVersion() == 3);
 
     const gl::Caps &caps             = state.getCaps();
     const gl::Extensions &extensions = state.getExtensions();
+
+    if (mActiveCompilers == 0)
+    {
+        sh::Initialize();
+    }
+    ++mActiveCompilers;
 
     sh::InitBuiltInResources(&mResources);
     mResources.MaxVertexAttribs             = caps.maxVertexAttributes;
@@ -159,50 +161,76 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
 
 Compiler::~Compiler()
 {
-    for (ShaderType shaderType : AllShaderTypes())
-    {
-        ShHandle compilerHandle = mShaderCompilers[shaderType];
-        if (compilerHandle)
-        {
-            sh::Destruct(compilerHandle);
-            mShaderCompilers[shaderType] = nullptr;
-
-            ASSERT(activeCompilerHandles > 0);
-            activeCompilerHandles--;
-        }
-    }
-
-    if (activeCompilerHandles == 0)
+    --mActiveCompilers;
+    if (mActiveCompilers == 0)
     {
         sh::Finalize();
     }
-
     ANGLE_SWALLOW_ERR(mImplementation->release());
 }
 
-ShHandle Compiler::getCompilerHandle(ShaderType type)
+std::unique_ptr<CompilerInstance> Compiler::getInstance(ShaderType type)
 {
     ASSERT(type != ShaderType::InvalidEnum);
-    ShHandle *compiler = &mShaderCompilers[type];
-
-    if (!(*compiler))
+    auto &pool = mPools[type];
+    if (pool.empty())
     {
-        if (activeCompilerHandles == 0)
-        {
-            sh::Initialize();
-        }
-
-        *compiler = sh::ConstructCompiler(ToGLenum(type), mSpec, mOutputType, &mResources);
-        ASSERT(*compiler);
-        activeCompilerHandles++;
+        auto handle = sh::ConstructCompiler(ToGLenum(type), mSpec, mOutputType, &mResources);
+        ASSERT(handle);
+        return std::make_unique<CompilerInstance>(handle, mOutputType, type);
     }
-
-    return *compiler;
+    else
+    {
+        auto instance = std::move(pool.front());
+        pool.pop_front();
+        return instance;
+    }
 }
 
-const std::string &Compiler::getBuiltinResourcesString(ShaderType type)
+void Compiler::putInstance(std::unique_ptr<CompilerInstance> instance)
 {
-    return sh::GetBuiltInResourcesString(getCompilerHandle(type));
+    static constexpr size_t kMaxPoolSize = 32;
+    auto &pool                           = mPools[instance->getShaderType()];
+    if (pool.size() < kMaxPoolSize)
+    {
+        pool.push_back(std::move(instance));
+    }
+    else
+    {
+        instance.reset();
+    }
+}
+
+CompilerInstance::CompilerInstance(ShHandle handle,
+                                   ShShaderOutput outputType,
+                                   ShaderType shaderType)
+    : mHandle(handle), mOutputType(outputType), mShaderType(shaderType)
+{
+}
+
+CompilerInstance::~CompilerInstance()
+{
+    sh::Destruct(mHandle);
+}
+
+ShHandle CompilerInstance::getHandle()
+{
+    return mHandle;
+}
+
+ShaderType CompilerInstance::getShaderType() const
+{
+    return mShaderType;
+}
+
+const std::string &CompilerInstance::getBuiltinResourcesString()
+{
+    return sh::GetBuiltInResourcesString(mHandle);
+}
+
+ShShaderOutput CompilerInstance::getShaderOutputType() const
+{
+    return mOutputType;
 }
 
 }  // namespace gl
