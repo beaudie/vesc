@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c42ae07_21e35b2e",
+        "filename": "src/tests/test_utils/MultiviewTest.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-17T14:44:23Z",
+      "side": 1,
+      "message": "nit: you can omit the (c)",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "35ac2b1dc807ab6b0bba0fd3f971f804635a6a83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
