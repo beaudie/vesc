@@ -73,23 +73,33 @@ class MultiviewFramebufferTestBase : public MultiviewTestBase
           mViewWidth(0),
           mViewHeight(0),
           mNumViews(0),
+          mColorTexture(0u),
+          mDepthTexture(0u),
+          mDrawFramebuffer(0u),
           mMultiviewLayout(multiviewLayout)
     {
     }
+
     void FramebufferTestSetUp() { MultiviewTestBase::MultiviewTestBaseSetUp(); }
-    void FramebufferTestTearDown() { MultiviewTestBase::MultiviewTestBaseTearDown(); }
+
+    void FramebufferTestTearDown()
+    {
+        freeFBOs();
+        MultiviewTestBase::MultiviewTestBaseTearDown();
+    }
+
     void updateFBOs(int viewWidth, int height, int numViews, int numLayers, int baseViewIndex)
     {
         ASSERT(numViews + baseViewIndex <= numLayers);
+
+        freeFBOs();
 
         mViewWidth  = viewWidth;
         mViewHeight = height;
         mNumViews   = numViews;
 
-        mColorTexture.reset();
-        mDepthTexture.reset();
-        mDrawFramebuffer.reset();
-        mReadFramebuffer.clear();
+        glGenTextures(1, &mColorTexture);
+        glGenTextures(1, &mDepthTexture);
 
         // Create color and depth textures.
         switch (mMultiviewLayout)
@@ -125,6 +135,8 @@ class MultiviewFramebufferTestBase : public MultiviewTestBase
                 UNREACHABLE();
         }
         ASSERT_GL_NO_ERROR();
+
+        glGenFramebuffers(1, &mDrawFramebuffer);
 
         // Create draw framebuffer to be used for multiview rendering.
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mDrawFramebuffer);
@@ -169,6 +181,7 @@ class MultiviewFramebufferTestBase : public MultiviewTestBase
         {
             case GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE:
                 mReadFramebuffer.resize(1);
+                glGenFramebuffers(1, mReadFramebuffer.data());
                 glBindFramebuffer(GL_READ_FRAMEBUFFER, mReadFramebuffer[0]);
                 glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
                                        mColorTexture, 0);
@@ -177,6 +190,7 @@ class MultiviewFramebufferTestBase : public MultiviewTestBase
                 break;
             case GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE:
                 mReadFramebuffer.resize(numLayers);
+                glGenFramebuffers(mReadFramebuffer.size(), mReadFramebuffer.data());
                 for (int i = 0; i < numLayers; ++i)
                 {
                     glBindFramebuffer(GL_FRAMEBUFFER, mReadFramebuffer[i]);
@@ -228,16 +242,41 @@ class MultiviewFramebufferTestBase : public MultiviewTestBase
         return GLColor(0, 0, 0, 0);
     }
 
-    GLTexture mColorTexture;
-    GLTexture mDepthTexture;
     int mViewWidth;
     int mViewHeight;
     int mNumViews;
 
+    GLuint mColorTexture;
+    GLuint mDepthTexture;
+
   private:
-    GLFramebuffer mDrawFramebuffer;
-    std::vector<GLFramebuffer> mReadFramebuffer;
+    GLuint mDrawFramebuffer;
+    std::vector<GLuint> mReadFramebuffer;
     GLenum mMultiviewLayout;
+
+    void freeFBOs()
+    {
+        if (mDrawFramebuffer)
+        {
+            glDeleteFramebuffers(1, &mDrawFramebuffer);
+            mDrawFramebuffer = 0;
+        }
+        if (!mReadFramebuffer.empty())
+        {
+            glDeleteFramebuffers(mReadFramebuffer.size(), mReadFramebuffer.data());
+            mReadFramebuffer.clear();
+        }
+        if (mDepthTexture)
+        {
+            glDeleteTextures(1, &mDepthTexture);
+            mDepthTexture = 0;
+        }
+        if (mColorTexture)
+        {
+            glDeleteTextures(1, &mColorTexture);
+            mColorTexture = 0;
+        }
+    }
 };
 
 class MultiviewRenderTest : public MultiviewFramebufferTestBase,
@@ -430,8 +469,10 @@ class MultiviewSideBySideRenderTest : public MultiviewFramebufferTestBase,
         : MultiviewFramebufferTestBase(GetParam(), GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE)
     {
     }
-    void SetUp() override { MultiviewFramebufferTestBase::FramebufferTestSetUp(); }
-    void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) override
+
+    void SetUp() final { MultiviewFramebufferTestBase::FramebufferTestSetUp(); }
+    void TearDown() final { MultiviewFramebufferTestBase::FramebufferTestTearDown(); }
+    void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) final
     {
         workarounds->selectViewInGeometryShader = GetParam().mForceUseGeometryShaderOnD3D;
     }
@@ -445,8 +486,9 @@ class MultiviewLayeredRenderTest : public MultiviewFramebufferTestBase,
         : MultiviewFramebufferTestBase(GetParam(), GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE)
     {
     }
-    void SetUp() override { MultiviewFramebufferTestBase::FramebufferTestSetUp(); }
-    void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) override
+    void SetUp() final { MultiviewFramebufferTestBase::FramebufferTestSetUp(); }
+    void TearDown() final { MultiviewFramebufferTestBase::FramebufferTestTearDown(); }
+    void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) final
     {
         workarounds->selectViewInGeometryShader = GetParam().mForceUseGeometryShaderOnD3D;
     }
