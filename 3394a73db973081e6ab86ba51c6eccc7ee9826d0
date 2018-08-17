@@ -22,6 +22,30 @@
       "revId": "3394a73db973081e6ab86ba51c6eccc7ee9826d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4002b92_70fa9318",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-08-17T05:40:24Z",
+      "side": 0,
+      "message": "Yes, much slower. From 2.08% to 0.97% with this optimization. And further to 0.88% with inline.",
+      "parentUuid": "e0f1ef35_b5657701",
+      "range": {
+        "startLine": 1274,
+        "startChar": 8,
+        "endLine": 1274,
+        "endChar": 27
+      },
+      "revId": "3394a73db973081e6ab86ba51c6eccc7ee9826d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
