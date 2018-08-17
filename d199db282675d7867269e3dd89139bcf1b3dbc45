@@ -1,0 +1,1308 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78126b8a_8de7e8b1",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Increment the version, we use it when caching the builtin resources.",
+      "range": {
+        "startLine": 28,
+        "startChar": 25,
+        "endLine": 28,
+        "endChar": 28
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "372e5dde_342a3aad",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "initialize in InitBuiltInResources.",
+      "range": {
+        "startLine": 316,
+        "startChar": 4,
+        "endLine": 316,
+        "endChar": 35
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f173d09b_2528c830",
+        "filename": "samples/sample_util/SampleApplication.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Could be an integer: multiview count",
+      "range": {
+        "startLine": 33,
+        "startChar": 22,
+        "endLine": 33,
+        "endChar": 53
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "757384cb_729deba7",
+        "filename": "samples/simple_stereo/SimpleStereo.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "This file needs formatting, run \u0027git cl format\u0027.  Maybe it wasn\u0027t added before you ran it last.",
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e242613b_bfda0615",
+        "filename": "samples/simple_stereo/SimpleStereo.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "use \u0027contexpr float\u0027 and variable names such as kCubeHalfSize.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 54
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22b95b1f_ad496753",
+        "filename": "samples/simple_stereo/SimpleStereo.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Add this function to the Matrix class, there are a bunch of similar ones already.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 28
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cddc1d58_50a08941",
+        "filename": "samples/simple_stereo/SimpleStereo.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "nit: remove the virtual and mark the function as override (others too)",
+      "range": {
+        "startLine": 28,
+        "startChar": 2,
+        "endLine": 28,
+        "endChar": 9
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84be0189_35696c68",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "This can be enableable.  Will make sure it\u0027s disabled by default for WebGL contexts.",
+      "range": {
+        "startLine": 855,
+        "startChar": 47,
+        "endLine": 855,
+        "endChar": 62
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b7c5589_381d381b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7495,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "READ_BUFFER_EXT is not an indexed query, only GL_DRAW_BUFFER_EXT.",
+      "range": {
+        "startLine": 7495,
+        "startChar": 8,
+        "endLine": 7495,
+        "endChar": 32
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "693331c7_cdad5b5f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7498,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "These are supposed to return two values, location and index.",
+      "range": {
+        "startLine": 7498,
+        "startChar": 25,
+        "endLine": 7498,
+        "endChar": 26
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9d3ee29_fc4087c7",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "This can be initialized by the backends in the  mImplementation-\u003egetExtensions(); call above.",
+      "range": {
+        "startLine": 1096,
+        "startChar": 0,
+        "endLine": 1097,
+        "endChar": 60
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2ceb0b3_f498ac25",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "You\u0027re using -1 as a constant a lot in this CL.  Is it possible to just use 0 and not special-case anything?  If a constant is absolutely required, we should name it.",
+      "range": {
+        "startLine": 278,
+        "startChar": 50,
+        "endLine": 278,
+        "endChar": 52
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e280db15_7deedd73",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2552,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Can you just assert that index \u003c mDrawFramebuffer-\u003egetDrawBufferStateIndices().size()?",
+      "range": {
+        "startLine": 2545,
+        "startChar": 0,
+        "endLine": 2552,
+        "endChar": 13
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26ed7752_ab725cc8",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2553,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "The spec says this returns the location AND index.  Please make sure this is covered in a test.",
+      "range": {
+        "startLine": 2553,
+        "startChar": 12,
+        "endLine": 2553,
+        "endChar": 73
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa7ff3cd_8a078348",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2563,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Same for this.",
+      "range": {
+        "startLine": 2556,
+        "startChar": 0,
+        "endLine": 2563,
+        "endChar": 13
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f822062_08ede954",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2564,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Same for this, location and index.",
+      "range": {
+        "startLine": 2564,
+        "startChar": 12,
+        "endLine": 2564,
+        "endChar": 64
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e3feca1_1e38f203",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Can you put this in SurfaceState above?  It will allow the backends access to it.  Many of them can return that value when queried for getCreatedMultiviewViewCount.",
+      "range": {
+        "startLine": 179,
+        "startChar": 4,
+        "endLine": 179,
+        "endChar": 31
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00ceca4f_c4a2792a",
+        "filename": "src/libANGLE/renderer/DisplayImpl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Instead of adding another method here, just initialize the DisplayExtensions member in the backends that can support the extension.",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 47
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88a2fb1e_92fdaf22",
+        "filename": "src/libANGLE/renderer/FramebufferImpl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "These should be synchronized using dirty bits in the syncState functions of the framebuffer implementations.  You can see how we do it with setting the drawbuffer states already.",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 98
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b92a411b_be2ee3ca",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "This can be implemented with the UNREACHABLE like above.  We tend to do this for extension entry points that wont be implemented in all the backends.  You can then remove all implementations on backends that don\u0027t support the extension.",
+      "range": {
+        "startLine": 84,
+        "startChar": 55,
+        "endLine": 84,
+        "endChar": 60
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b5a920f_ca9b578c",
+        "filename": "src/libANGLE/renderer/d3d/FramebufferD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Can this be an anonymous function returning a bool instead? It could use some comments.",
+      "range": {
+        "startLine": 367,
+        "startChar": 19,
+        "endLine": 374,
+        "endChar": 40
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac3c0b2b_02a09c08",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2591,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "No need for comparison with un-commented constants.",
+      "range": {
+        "startLine": 2590,
+        "startChar": 0,
+        "endLine": 2591,
+        "endChar": 65
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43935b97_e01c0622",
+        "filename": "src/libANGLE/renderer/d3d/RendererD3D.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Should these takes an integer multiview count instead of bool?",
+      "range": {
+        "startLine": 182,
+        "startChar": 42,
+        "endLine": 182,
+        "endChar": 55
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b505e34_4b47b1ca",
+        "filename": "src/libANGLE/renderer/d3d/RendererD3D.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Is stereo the best word?  Could it be isMultiviewWindowSupported?",
+      "range": {
+        "startLine": 379,
+        "startChar": 17,
+        "endLine": 379,
+        "endChar": 34
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "773d55fe_3f2e07e3",
+        "filename": "src/libANGLE/renderer/d3d/SurfaceD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "I think we can pipe this all the way down to the d3d surface creation instead of special-casing the stereo here.  You can add the getCreatedMultiviewViewCount query to the D3D SwapChain classes.",
+      "range": {
+        "startLine": 54,
+        "startChar": 6,
+        "endLine": 55,
+        "endChar": 75
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "784889d5_4ab3373e",
+        "filename": "src/libANGLE/renderer/d3d/SwapChainD3D.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Make this pure virtual, it\u0027s only implemented in two places.",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 34
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ed232e6_b74899e1",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1798,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Do you know what triggered this?  Seems like an error somewhere else if we got here.",
+      "range": {
+        "startLine": 1795,
+        "startChar": 0,
+        "endLine": 1798,
+        "endChar": 9
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e27d1ae1_894bd821",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1801,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "nit: give these a type if they\u0027re simple.",
+      "range": {
+        "startLine": 1801,
+        "startChar": 14,
+        "endLine": 1801,
+        "endChar": 18
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5762e3e_879a20a6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1805,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Can this be a helper function somewhere?",
+      "range": {
+        "startLine": 1802,
+        "startChar": 0,
+        "endLine": 1805,
+        "endChar": 26
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f5ae6af_26ff5b26",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Do we need two variables?",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 22
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55b5a3aa_57a78d70",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1077,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Doesn\u0027t look like this is ever assigned.",
+      "range": {
+        "startLine": 1077,
+        "startChar": 11,
+        "endLine": 1077,
+        "endChar": 20
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a05c0cff_abea0d0c",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Can you call glDrawBuffersIndexedEXT and glDrawBuffersIndexedEXT here if the extension is present and glDrawBuffers and glReadBuffer if they are not?",
+      "range": {
+        "startLine": 671,
+        "startChar": 11,
+        "endLine": 681,
+        "endChar": 22
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01c9fcd1_42ca7dd5",
+        "filename": "src/libANGLE/renderer/gl/SurfaceGL.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Don\u0027t override it here, we don\u0027t need to override at every level.",
+      "range": {
+        "startLine": 31,
+        "startChar": 39,
+        "endLine": 33,
+        "endChar": 57
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e8ab736_91ae9d20",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "This is not a display attribute, it looks like we will need to choose new pixel formats per surface created.  This might cause issues with sharing those surfaces between contexts.",
+      "range": {
+        "startLine": 161,
+        "startChar": 53,
+        "endLine": 161,
+        "endChar": 81
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24009c1c_6dbfd7c6",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "typo?",
+      "range": {
+        "startLine": 250,
+        "startChar": 63,
+        "endLine": 250,
+        "endChar": 64
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23a9b95b_d6432bf2",
+        "filename": "src/libANGLE/renderer/gl/wgl/WindowSurfaceWGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "This should read the surface attributes or the surface state to determine if it\u0027s multiview.",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 92,
+        "endChar": 55
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d6cb97a_9c545e08",
+        "filename": "src/libANGLE/renderer/gl/wgl/WindowSurfaceWGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "This should do a query on the surface or pixel format.",
+      "range": {
+        "startLine": 190,
+        "startChar": 4,
+        "endLine": 190,
+        "endChar": 27
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73f0cd74_91f969eb",
+        "filename": "src/libANGLE/renderer/null/SurfaceNULL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "This could be easily supported if you want, it\u0027s useful for testing.",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 13
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2ba23b1_ea3e7829",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1172,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "I don\u0027t think we can do this validation here.  The spec isn\u0027t very clear.. it says:\n\n        If the value\n        specified for EGL_MULTIVIEW_VIEW_COUNT_EXT is greater than one\n        and the \u003cconfig\u003e does not support multiple multiview color\n        buffers, an EGL_BAD_MATCH error is generated.\n\nBut there is no other mention of what \u003cconfig\u003e is in the spec so I assume it means some implementation defined limit.  If that\u0027s the case, then we should fail surface creation in the backends if the requested view count is too large, not here.",
+      "range": {
+        "startLine": 1155,
+        "startChar": 20,
+        "endLine": 1172,
+        "endChar": 21
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0690e038_7d121c3d",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2840,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "This function needs to accept the EGL_MULTIVIEW_VIEW_COUNT_EXT query.",
+      "range": {
+        "startLine": 2840,
+        "startChar": 6,
+        "endLine": 2840,
+        "endChar": 26
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d379bbd2_ada5f13c",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2933,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "This function also needs to support the EGL_MULTIVIEW_VIEW_COUNT_EXT query. Please make sure this is covered by a test.",
+      "range": {
+        "startLine": 2933,
+        "startChar": 6,
+        "endLine": 2933,
+        "endChar": 26
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22a720f3_41f56b45",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2627,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Please put the error messages in ErrorStrings.h, we\u0027re trying to consolidate all the errors strings.",
+      "range": {
+        "startLine": 2627,
+        "startChar": 47,
+        "endLine": 2627,
+        "endChar": 83
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13b580e9_7d659df2",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2631,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "nit: not needed.",
+      "range": {
+        "startLine": 2631,
+        "startChar": 4,
+        "endLine": 2631,
+        "endChar": 8
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecaed046_9e8f2e49",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2674,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "I think this can be simplified into a switch on location[i] instead.",
+      "range": {
+        "startLine": 2636,
+        "startChar": 8,
+        "endLine": 2674,
+        "endChar": 9
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20b4c76e_77106a03",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2727,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Same with this, you can switch on src.",
+      "range": {
+        "startLine": 2691,
+        "startChar": 4,
+        "endLine": 2727,
+        "endChar": 5
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9805215_956a46c3",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2731,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "This function should have the same behaviour as glGetIntegeri_v in ES 3+.  You can turn this function into:\n\n   \n    if (!context-\u003egetExtensions().multiviewDrawBuffers)\n    {\n        context-\u003ehandleError(InvalidOperation() \u003c\u003c \"Extension not supported.\");\n        return false;\n    }\n    return ValidateIndexedStateQuery(context, target, index, nullptr);\n\nAnd merge the new checks into ValidateIndexedStateQuery.",
+      "range": {
+        "startLine": 2731,
+        "startChar": 5,
+        "endLine": 2731,
+        "endChar": 29
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "715302eb_1cbc228c",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2746,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "index is a uint.",
+      "range": {
+        "startLine": 2746,
+        "startChar": 8,
+        "endLine": 2746,
+        "endChar": 17
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2b109b7_ed16c76b",
+        "filename": "src/libGLESv2/entry_points_gles_ext_autogen.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "This is an auto-gen file, you need to update generate_entry_points.py and run scripts/run_code_generation.py",
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30b4ff71_09431b02",
+        "filename": "src/libGLESv2/libGLESv2_autogen.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "This is an auto-gen file too.",
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b70bbd1c_b1dd1e25",
+        "filename": "src/libGLESv2/libGLESv2_autogen.def",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "This one too.",
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "838ca5fd_35a5e867",
+        "filename": "src/tests/angle_end2end_tests.gypi",
+        "patchSetId": 7
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "nit: spaces instead of tabs.",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 87,
+        "endChar": 3
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92afd6dc_83422cac",
+        "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Can\u0027t you inherit from ANGLETest?",
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f44845e_a1a40e84",
+        "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "I think this can go in the set up.",
+      "range": {
+        "startLine": 48,
+        "startChar": 3,
+        "endLine": 74,
+        "endChar": 5
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89f25c54_bb3fc919",
+        "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "I don\u0027t think this variable is needed, you can use EXPECT_PIXEL_COLOR_EQ.",
+      "range": {
+        "startLine": 81,
+        "startChar": 4,
+        "endLine": 81,
+        "endChar": 23
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55815d8a_d62832b5",
+        "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "You don\u0027t need all the extra fixtures.  Just the MultiviewDrawBuffersTest is fine.",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 0
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d70400e_f296761f",
+        "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "nit: extra scope not needed.",
+      "range": {
+        "startLine": 119,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 9
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91f81bba_909551b6",
+        "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Can you elaborate on this?  What calls are generating invalid operations? We should strive to never generate errors in the backend.",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 54
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4e54b5c_4b9e5a4e",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-17T17:57:54Z",
+      "side": 1,
+      "message": "Use Optional.",
+      "range": {
+        "startLine": 171,
+        "startChar": 4,
+        "endLine": 171,
+        "endChar": 11
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
