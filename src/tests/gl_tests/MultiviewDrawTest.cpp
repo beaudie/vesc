@@ -65,30 +65,41 @@ std::ostream &operator<<(std::ostream &os, const MultiviewRenderTestParams &para
     return os;
 }
 
-class MultiviewRenderTestBase : public MultiviewTestBase
+class MultiviewFramebufferTestBase : public MultiviewTestBase
 {
   protected:
-    MultiviewRenderTestBase(const PlatformParameters &params, GLenum multiviewLayout)
+    MultiviewFramebufferTestBase(const PlatformParameters &params, GLenum multiviewLayout)
         : MultiviewTestBase(params),
-          mMultiviewLayout(multiviewLayout),
           mViewWidth(0),
           mViewHeight(0),
-          mNumViews(0)
+          mNumViews(0),
+          mColorTexture(0u),
+          mDepthTexture(0u),
+          mDrawFramebuffer(0u),
+          mMultiviewLayout(multiviewLayout)
     {
     }
-    void RenderTestSetUp() { MultiviewTestBase::MultiviewTestBaseSetUp(); }
-    void createFBO(int viewWidth, int height, int numViews, int numLayers, int baseViewIndex)
+
+    void FramebufferTestSetUp() { MultiviewTestBase::MultiviewTestBaseSetUp(); }
+
+    void FramebufferTestTearDown()
+    {
+        freeFBOs();
+        MultiviewTestBase::MultiviewTestBaseTearDown();
+    }
+
+    void updateFBOs(int viewWidth, int height, int numViews, int numLayers, int baseViewIndex)
     {
         ASSERT(numViews + baseViewIndex <= numLayers);
+
+        freeFBOs();
 
         mViewWidth  = viewWidth;
         mViewHeight = height;
         mNumViews   = numViews;
 
-        mColorTexture.reset();
-        mDepthTexture.reset();
-        mDrawFramebuffer.reset();
-        mReadFramebuffer.clear();
+        glGenTextures(1, &mColorTexture);
+        glGenTextures(1, &mDepthTexture);
 
         // Create color and depth textures.
         switch (mMultiviewLayout)
@@ -124,6 +135,8 @@ class MultiviewRenderTestBase : public MultiviewTestBase
                 UNREACHABLE();
         }
         ASSERT_GL_NO_ERROR();
+
+        glGenFramebuffers(1, &mDrawFramebuffer);
 
         // Create draw framebuffer to be used for multiview rendering.
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mDrawFramebuffer);
@@ -168,6 +181,7 @@ class MultiviewRenderTestBase : public MultiviewTestBase
         {
             case GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE:
                 mReadFramebuffer.resize(1);
+                glGenFramebuffers(1, mReadFramebuffer.data());
                 glBindFramebuffer(GL_READ_FRAMEBUFFER, mReadFramebuffer[0]);
                 glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
                                        mColorTexture, 0);
@@ -176,6 +190,7 @@ class MultiviewRenderTestBase : public MultiviewTestBase
                 break;
             case GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE:
                 mReadFramebuffer.resize(numLayers);
+                glGenFramebuffers(mReadFramebuffer.size(), mReadFramebuffer.data());
                 for (int i = 0; i < numLayers; ++i)
                 {
                     glBindFramebuffer(GL_FRAMEBUFFER, mReadFramebuffer[i]);
@@ -204,10 +219,12 @@ class MultiviewRenderTestBase : public MultiviewTestBase
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void createFBO(int viewWidth, int height, int numViews)
+    void updateFBOs(int viewWidth, int height, int numViews)
     {
-        createFBO(viewWidth, height, numViews, numViews, 0);
+        updateFBOs(viewWidth, height, numViews, numViews, 0);
     }
+
+    void bindMemberDrawFramebuffer() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mDrawFramebuffer); }
 
     GLColor GetViewColor(int x, int y, int view)
     {
@@ -225,22 +242,50 @@ class MultiviewRenderTestBase : public MultiviewTestBase
         return GLColor(0, 0, 0, 0);
     }
 
-    GLTexture mColorTexture;
-    GLTexture mDepthTexture;
-    GLFramebuffer mDrawFramebuffer;
-    std::vector<GLFramebuffer> mReadFramebuffer;
-    GLenum mMultiviewLayout;
     int mViewWidth;
     int mViewHeight;
     int mNumViews;
+
+    GLuint mColorTexture;
+    GLuint mDepthTexture;
+
+  private:
+    GLuint mDrawFramebuffer;
+    std::vector<GLuint> mReadFramebuffer;
+    GLenum mMultiviewLayout;
+
+    void freeFBOs()
+    {
+        if (mDrawFramebuffer)
+        {
+            glDeleteFramebuffers(1, &mDrawFramebuffer);
+            mDrawFramebuffer = 0;
+        }
+        if (!mReadFramebuffer.empty())
+        {
+            glDeleteFramebuffers(mReadFramebuffer.size(), mReadFramebuffer.data());
+            mReadFramebuffer.clear();
+        }
+        if (mDepthTexture)
+        {
+            glDeleteTextures(1, &mDepthTexture);
+            mDepthTexture = 0;
+        }
+        if (mColorTexture)
+        {
+            glDeleteTextures(1, &mColorTexture);
+            mColorTexture = 0;
+        }
+    }
 };
 
-class MultiviewRenderTest : public MultiviewRenderTestBase,
+class MultiviewRenderTest : public MultiviewFramebufferTestBase,
                             public ::testing::TestWithParam<MultiviewRenderTestParams>
 {
   protected:
-    MultiviewRenderTest() : MultiviewRenderTestBase(GetParam(), GetParam().mMultiviewLayout) {}
-    void SetUp() override { MultiviewRenderTestBase::RenderTestSetUp(); }
+    MultiviewRenderTest() : MultiviewFramebufferTestBase(GetParam(), GetParam().mMultiviewLayout) {}
+    void SetUp() override { MultiviewFramebufferTestBase::FramebufferTestSetUp(); }
+    void TearDown() override { MultiviewFramebufferTestBase::FramebufferTestTearDown(); }
 
     void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) override
     {
@@ -271,13 +316,6 @@ class MultiviewRenderDualViewTest : public MultiviewRenderTest
 {
   protected:
     MultiviewRenderDualViewTest() : mProgram(0u) {}
-    ~MultiviewRenderDualViewTest()
-    {
-        if (mProgram != 0u)
-        {
-            glDeleteProgram(mProgram);
-        }
-    }
 
     void SetUp() override
     {
@@ -288,11 +326,20 @@ class MultiviewRenderDualViewTest : public MultiviewRenderTest
             return;
         }
 
-        createFBO(2, 1, 2);
+        updateFBOs(2, 1, 2);
         mProgram = CompileProgram(kDualViewVSSource, kDualViewFSSource);
         ASSERT_NE(mProgram, 0u);
         glUseProgram(mProgram);
         ASSERT_GL_NO_ERROR();
+    }
+
+    void TearDown() override
+    {
+        if (mProgram != 0u)
+        {
+            glDeleteProgram(mProgram);
+            mProgram = 0u;
+        }
     }
 
     void checkOutput()
@@ -412,31 +459,33 @@ class MultiviewRenderPrimitiveTest : public MultiviewRenderTest
     GLBuffer mVBO;
 };
 
-class MultiviewSideBySideRenderTest : public MultiviewRenderTestBase,
+class MultiviewSideBySideRenderTest : public MultiviewFramebufferTestBase,
                                       public ::testing::TestWithParam<MultiviewImplementationParams>
 {
   protected:
     MultiviewSideBySideRenderTest()
-        : MultiviewRenderTestBase(GetParam(), GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE)
+        : MultiviewFramebufferTestBase(GetParam(), GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE)
     {
     }
-    void SetUp() override { MultiviewRenderTestBase::RenderTestSetUp(); }
-    void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) override
+    void SetUp() final { MultiviewFramebufferTestBase::FramebufferTestSetUp(); }
+    void TearDown() final { MultiviewFramebufferTestBase::FramebufferTestTearDown(); }
+    void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) final
     {
         workarounds->selectViewInGeometryShader = GetParam().mForceUseGeometryShaderOnD3D;
     }
 };
 
-class MultiviewLayeredRenderTest : public MultiviewRenderTestBase,
+class MultiviewLayeredRenderTest : public MultiviewFramebufferTestBase,
                                    public ::testing::TestWithParam<MultiviewImplementationParams>
 {
   protected:
     MultiviewLayeredRenderTest()
-        : MultiviewRenderTestBase(GetParam(), GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE)
+        : MultiviewFramebufferTestBase(GetParam(), GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE)
     {
     }
-    void SetUp() override { MultiviewRenderTestBase::RenderTestSetUp(); }
-    void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) override
+    void SetUp() final { MultiviewFramebufferTestBase::FramebufferTestSetUp(); }
+    void TearDown() final { MultiviewFramebufferTestBase::FramebufferTestTearDown(); }
+    void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) final
     {
         workarounds->selectViewInGeometryShader = GetParam().mForceUseGeometryShaderOnD3D;
     }
@@ -859,7 +908,7 @@ TEST_P(MultiviewRenderTest, DrawArraysFourViews)
         "    col = vec4(0,1,0,1);\n"
         "}\n";
 
-    createFBO(4, 1, 4);
+    updateFBOs(4, 1, 4);
     ANGLE_GL_PROGRAM(program, vsSource, fsSource);
 
     drawQuad(program, "vPosition", 0.0f, 1.0f, true);
@@ -920,7 +969,7 @@ TEST_P(MultiviewRenderTest, DrawArraysInstanced)
     const int kViewWidth  = 2;
     const int kViewHeight = 2;
     const int kNumViews   = 2;
-    createFBO(kViewWidth, kViewHeight, kNumViews);
+    updateFBOs(kViewWidth, kViewHeight, kNumViews);
     ANGLE_GL_PROGRAM(program, vsSource, fsSource);
 
     drawQuadInstanced(program, "vPosition", 0.0f, 1.0f, true, 2u);
@@ -984,7 +1033,7 @@ TEST_P(MultiviewRenderTest, AttribDivisor)
     const int kViewWidth  = 4;
     const int kViewHeight = 4;
     const int kNumViews   = 2;
-    createFBO(kViewWidth, kViewHeight, kNumViews);
+    updateFBOs(kViewWidth, kViewHeight, kNumViews);
     ANGLE_GL_PROGRAM(program, vsSource, fsSource);
 
     GLBuffer xOffsetVBO;
@@ -1033,7 +1082,7 @@ TEST_P(MultiviewRenderTest, DivisorOrderOfOperation)
         return;
     }
 
-    createFBO(1, 1, 2);
+    updateFBOs(1, 1, 2);
 
     // Create multiview program.
     const std::string &vs =
@@ -1126,7 +1175,7 @@ TEST_P(MultiviewRenderTest, DivisorOrderOfOperation)
     ASSERT_GL_NO_ERROR();
 
     // Check that vertexAttribDivisor uses the number of views to update the divisor.
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mDrawFramebuffer);
+    bindMemberDrawFramebuffer();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(program);
     glVertexAttribDivisor(1, 1);
@@ -1146,7 +1195,7 @@ TEST_P(MultiviewRenderTest, DivisorOrderOfOperation)
     ASSERT_GL_NO_ERROR();
 
     // Check that useProgram uses the number of views to update the divisor.
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mDrawFramebuffer);
+    bindMemberDrawFramebuffer();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(program);
     glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1);
@@ -1166,7 +1215,7 @@ TEST_P(MultiviewRenderTest, DivisorOrderOfOperation)
     {
         // Call useProgram with vao[1] being active to guarantee that useProgram will adjust the
         // divisor for vao[1] only.
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mDrawFramebuffer);
+        bindMemberDrawFramebuffer();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glBindVertexArray(vao[1]);
         glUseProgram(program);
@@ -1211,7 +1260,7 @@ TEST_P(MultiviewOcclusionQueryTest, OcclusionQueryNothingVisible)
         "    col = vec4(1,0,0,0);\n"
         "}\n";
     ANGLE_GL_PROGRAM(program, vsSource, fsSource);
-    createFBO(1, 1, 2);
+    updateFBOs(1, 1, 2);
 
     GLuint result = drawAndRetrieveOcclusionQueryResult(program);
     ASSERT_GL_NO_ERROR();
@@ -1246,7 +1295,7 @@ TEST_P(MultiviewOcclusionQueryTest, OcclusionQueryOnlyLeftVisible)
         "    col = vec4(1,0,0,0);\n"
         "}\n";
     ANGLE_GL_PROGRAM(program, vsSource, fsSource);
-    createFBO(1, 1, 2);
+    updateFBOs(1, 1, 2);
 
     GLuint result = drawAndRetrieveOcclusionQueryResult(program);
     ASSERT_GL_NO_ERROR();
@@ -1281,7 +1330,7 @@ TEST_P(MultiviewOcclusionQueryTest, OcclusionQueryOnlyRightVisible)
         "    col = vec4(1,0,0,0);\n"
         "}\n";
     ANGLE_GL_PROGRAM(program, vsSource, fsSource);
-    createFBO(1, 1, 2);
+    updateFBOs(1, 1, 2);
 
     GLuint result = drawAndRetrieveOcclusionQueryResult(program);
     ASSERT_GL_NO_ERROR();
@@ -1429,7 +1478,7 @@ TEST_P(MultiviewRenderPrimitiveTest, Points)
     const int kViewWidth  = 4;
     const int kViewHeight = 2;
     const int kNumViews   = 2;
-    createFBO(kViewWidth, kViewHeight, kNumViews);
+    updateFBOs(kViewWidth, kViewHeight, kNumViews);
 
     std::vector<Vector2I> windowCoordinates = {Vector2I(0, 0), Vector2I(3, 1)};
     std::vector<Vector2> vertexDataInClipSpace =
@@ -1464,7 +1513,7 @@ TEST_P(MultiviewRenderPrimitiveTest, Lines)
     const int kViewWidth  = 4;
     const int kViewHeight = 2;
     const int kNumViews   = 2;
-    createFBO(kViewWidth, kViewHeight, kNumViews);
+    updateFBOs(kViewWidth, kViewHeight, kNumViews);
 
     std::vector<Vector2I> windowCoordinates = {Vector2I(0, 0), Vector2I(4, 0)};
     std::vector<Vector2> vertexDataInClipSpace =
@@ -1501,7 +1550,7 @@ TEST_P(MultiviewRenderPrimitiveTest, LineStrip)
     const int kViewWidth  = 4;
     const int kViewHeight = 2;
     const int kNumViews   = 2;
-    createFBO(kViewWidth, kViewHeight, kNumViews);
+    updateFBOs(kViewWidth, kViewHeight, kNumViews);
 
     std::vector<Vector2I> windowCoordinates = {Vector2I(0, 0), Vector2I(3, 0), Vector2I(3, 2)};
     std::vector<Vector2> vertexDataInClipSpace =
@@ -1538,7 +1587,7 @@ TEST_P(MultiviewRenderPrimitiveTest, LineLoop)
     const int kViewWidth  = 4;
     const int kViewHeight = 4;
     const int kNumViews   = 2;
-    createFBO(kViewWidth, kViewHeight, kNumViews);
+    updateFBOs(kViewWidth, kViewHeight, kNumViews);
 
     std::vector<Vector2I> windowCoordinates = {Vector2I(0, 0), Vector2I(3, 0), Vector2I(3, 3),
                                                Vector2I(0, 3)};
@@ -1576,7 +1625,7 @@ TEST_P(MultiviewRenderPrimitiveTest, TriangleStrip)
     const int kViewWidth  = 2;
     const int kViewHeight = 2;
     const int kNumViews   = 2;
-    createFBO(kViewWidth, kViewHeight, kNumViews);
+    updateFBOs(kViewWidth, kViewHeight, kNumViews);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
@@ -1607,7 +1656,7 @@ TEST_P(MultiviewRenderPrimitiveTest, TriangleFan)
     const int kViewWidth  = 2;
     const int kViewHeight = 2;
     const int kNumViews   = 2;
-    createFBO(kViewWidth, kViewHeight, kNumViews);
+    updateFBOs(kViewWidth, kViewHeight, kNumViews);
 
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
@@ -1630,7 +1679,7 @@ TEST_P(MultiviewSideBySideRenderTest, NoLeakingFragments)
         return;
     }
 
-    createFBO(2, 1, 2);
+    updateFBOs(2, 1, 2);
 
     GLint viewportOffsets[4] = {1, 0, 3, 0};
     glFramebufferTextureMultiviewSideBySideANGLE(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
@@ -1780,7 +1829,7 @@ TEST_P(MultiviewRenderTest, ProgramRelinkUpdatesAttribDivisor)
     }
 
     {
-        createFBO(kViewWidth, kViewHeight, kNumViews);
+        updateFBOs(kViewWidth, kViewHeight, kNumViews);
 
         drawQuadInstanced(program, "vPosition", 0.0f, 1.0f, true, 4u);
         ASSERT_GL_NO_ERROR();
@@ -1794,7 +1843,7 @@ TEST_P(MultiviewRenderTest, ProgramRelinkUpdatesAttribDivisor)
     {
         const int kNewNumViews = 3;
         vsSource               = generateVertexShaderSource(kNewNumViews);
-        createFBO(kViewWidth, kViewHeight, kNewNumViews);
+        updateFBOs(kViewWidth, kViewHeight, kNewNumViews);
 
         GLuint vs = CompileShader(GL_VERTEX_SHADER, vsSource);
         ASSERT_NE(0u, vs);
@@ -1867,7 +1916,7 @@ TEST_P(MultiviewRenderTest, DivisorUpdatedOnProgramChange)
     // Create a program and fbo with N views and draw N instances of a point horizontally.
     for (int numViews = 2; numViews <= 4; ++numViews)
     {
-        createFBO(4, 1, numViews);
+        updateFBOs(4, 1, numViews);
         ASSERT_GL_NO_ERROR();
 
         GLuint program = CreateSimplePassthroughProgram(numViews);
@@ -1929,7 +1978,7 @@ TEST_P(MultiviewRenderTest, SelectColorBasedOnViewIDOVR)
         "    }\n"
         "}\n";
 
-    createFBO(1, 1, 3);
+    updateFBOs(1, 1, 3);
     ANGLE_GL_PROGRAM(program, vsSource, fsSource);
 
     drawQuad(program, "vPosition", 0.0f, 1.0f, true);
@@ -1969,7 +2018,7 @@ TEST_P(MultiviewLayeredRenderTest, RenderToSubrageOfLayers)
         "     col = vec4(0,1,0,1);\n"
         "}\n";
 
-    createFBO(1, 1, 2, 4, 1);
+    updateFBOs(1, 1, 2, 4, 1);
     ANGLE_GL_PROGRAM(program, vsSource, fsSource);
 
     drawQuad(program, "vPosition", 0.0f, 1.0f, true);
@@ -2024,7 +2073,7 @@ TEST_P(MultiviewRenderTest, FlatInterpolation)
         "    }\n"
         "}\n";
 
-    createFBO(1, 1, 2);
+    updateFBOs(1, 1, 2);
     ANGLE_GL_PROGRAM(program, vsSource, fsSource);
 
     drawQuad(program, "vPosition", 0.0f, 1.0f, true);
@@ -2070,7 +2119,7 @@ TEST_P(MultiviewRenderTest, FlatInterpolation2)
         "    }\n"
         "}\n";
 
-    createFBO(1, 1, 2);
+    updateFBOs(1, 1, 2);
     ANGLE_GL_PROGRAM(program, vsSource, fsSource);
 
     drawQuad(program, "vPosition", 0.0f, 1.0f, true);
@@ -2089,7 +2138,7 @@ TEST_P(MultiviewSideBySideRenderTest, ViewportOffsetsAppliedBugCoverage)
         return;
     }
 
-    createFBO(1, 1, 2);
+    updateFBOs(1, 1, 2);
 
     // Create multiview program.
     const std::string &vs =
@@ -2125,7 +2174,7 @@ TEST_P(MultiviewSideBySideRenderTest, ViewportOffsetsAppliedBugCoverage)
     ASSERT_GL_NO_ERROR();
 
     // Draw and check that both views are rendered to.
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mDrawFramebuffer);
+    bindMemberDrawFramebuffer();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     drawQuad(program, "vPosition", 0.0f, 1.0f, true);
