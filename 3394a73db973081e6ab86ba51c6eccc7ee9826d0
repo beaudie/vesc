@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0f1ef35_b5657701",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-17T05:28:49Z",
+      "side": 0,
+      "message": "is this slower than using the boolean?",
+      "range": {
+        "startLine": 1274,
+        "startChar": 8,
+        "endLine": 1274,
+        "endChar": 27
+      },
+      "revId": "3394a73db973081e6ab86ba51c6eccc7ee9826d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
