@@ -353,38 +353,34 @@ class MultiviewRenderDualViewTest : public MultiviewRenderTest
     GLuint mProgram;
 };
 
-class MultiviewDrawValidationTest : public MultiviewRenderDualViewTest
+// Base class for tests that care mostly about draw call validity and not rendering results.
+class MultiviewDrawValidationTest : public MultiviewTest
 {
   protected:
-    MultiviewDrawValidationTest() {}
+    MultiviewDrawValidationTest() : MultiviewTest() {}
 
-    void SetUp() override
+    void initOnePixelColorTexture2D(GLuint texId)
     {
-        MultiviewRenderDualViewTest::SetUp();
-
-        glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
-
-        glBindTexture(GL_TEXTURE_2D, mTex2d);
+        glBindTexture(GL_TEXTURE_2D, texId);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    }
 
-        glBindVertexArray(mVao);
+    // This initializes a simple VAO with a valid vertex buffer and index buffer with three
+    // vertices.
+    void initVAO(GLuint vao, GLuint vertexBuffer, GLuint indexBuffer)
+    {
+        glBindVertexArray(vao);
 
         const float kVertexData[3] = {0.0f};
-        glBindBuffer(GL_ARRAY_BUFFER, mVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3u, &kVertexData[0], GL_STATIC_DRAW);
 
         const unsigned int kIndices[3] = {0u, 1u, 2u};
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIbo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 3, &kIndices[0],
                      GL_STATIC_DRAW);
         ASSERT_GL_NO_ERROR();
     }
-
-    GLTexture mTex2d;
-    GLVertexArray mVao;
-    GLBuffer mVbo;
-    GLBuffer mIbo;
-    GLFramebuffer mFramebuffer;
 };
 
 class MultiviewOcclusionQueryTest : public MultiviewRenderTest
@@ -511,11 +507,22 @@ TEST_P(MultiviewDrawValidationTest, IndirectDraw)
         "void main()\n"
         "{}\n";
 
+    GLVertexArray vao;
+    GLBuffer vertexBuffer;
+    GLBuffer indexBuffer;
+    initVAO(vao, vertexBuffer, indexBuffer);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
     GLBuffer commandBuffer;
     glBindBuffer(GL_DRAW_INDIRECT_BUFFER, commandBuffer);
     const GLuint commandData[] = {1u, 1u, 0u, 0u, 0u};
     glBufferData(GL_DRAW_INDIRECT_BUFFER, sizeof(GLuint) * 5u, &commandData[0], GL_STATIC_DRAW);
     ASSERT_GL_NO_ERROR();
+
+    GLTexture tex2D;
+    initOnePixelColorTexture2D(tex2D);
 
     // Check for a GL_INVALID_OPERATION error with the framebuffer having 2 views.
     {
@@ -528,8 +535,8 @@ TEST_P(MultiviewDrawValidationTest, IndirectDraw)
         ANGLE_GL_PROGRAM(program, vsSource, fsSource);
         glUseProgram(program);
 
-        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTex2d,
-                                                     0, 2, &viewportOffsets[0]);
+        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0,
+                                                     2, &viewportOffsets[0]);
 
         glDrawArraysIndirect(GL_TRIANGLES, nullptr);
         EXPECT_GL_ERROR(GL_INVALID_OPERATION);
@@ -549,8 +556,8 @@ TEST_P(MultiviewDrawValidationTest, IndirectDraw)
         ANGLE_GL_PROGRAM(program, vsSource, fsSource);
         glUseProgram(program);
 
-        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTex2d,
-                                                     0, 1, &viewportOffsets[0]);
+        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0,
+                                                     1, &viewportOffsets[0]);
 
         glDrawArraysIndirect(GL_TRIANGLES, nullptr);
         EXPECT_GL_NO_ERROR();
@@ -588,12 +595,23 @@ TEST_P(MultiviewDrawValidationTest, NumViewsMismatch)
     ANGLE_GL_PROGRAM(program, vsSource, fsSource);
     glUseProgram(program);
 
+    GLVertexArray vao;
+    GLBuffer vertexBuffer;
+    GLBuffer indexBuffer;
+    initVAO(vao, vertexBuffer, indexBuffer);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLTexture tex2D;
+    initOnePixelColorTexture2D(tex2D);
+
     // Check for a GL_INVALID_OPERATION error with the framebuffer and program having different
     // number of views.
     {
         // The framebuffer has only 1 view.
-        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTex2d,
-                                                     0, 1, &viewportOffsets[0]);
+        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0,
+                                                     1, &viewportOffsets[0]);
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_GL_ERROR(GL_INVALID_OPERATION);
@@ -605,8 +623,8 @@ TEST_P(MultiviewDrawValidationTest, NumViewsMismatch)
     // Check that no errors are generated if the number of views in both program and draw
     // framebuffer matches.
     {
-        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTex2d,
-                                                     0, 2, &viewportOffsets[0]);
+        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0,
+                                                     2, &viewportOffsets[0]);
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_GL_NO_ERROR();
@@ -637,8 +655,19 @@ TEST_P(MultiviewDrawValidationTest, NumViewsMismatchForNonMultiviewProgram)
     ANGLE_GL_PROGRAM(programNoMultiview, vsSourceNoMultiview, fsSourceNoMultiview);
     glUseProgram(programNoMultiview);
 
+    GLVertexArray vao;
+    GLBuffer vertexBuffer;
+    GLBuffer indexBuffer;
+    initVAO(vao, vertexBuffer, indexBuffer);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLTexture tex2D;
+    initOnePixelColorTexture2D(tex2D);
+
     const GLint viewportOffsets[4] = {0, 0, 2, 0};
-    glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTex2d, 0, 2,
+    glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0, 2,
                                                  &viewportOffsets[0]);
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -684,6 +713,11 @@ TEST_P(MultiviewDrawValidationTest, ActiveTransformFeedback)
     ANGLE_GL_PROGRAM_TRANSFORM_FEEDBACK(dualViewProgram, kDualViewVSSource, kDualViewFSSource,
                                         dualViewTFVaryings, GL_SEPARATE_ATTRIBS);
 
+    GLVertexArray vao;
+    GLBuffer vertexBuffer;
+    GLBuffer indexBuffer;
+    initVAO(vao, vertexBuffer, indexBuffer);
+
     GLBuffer tbo;
     glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, tbo);
     glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, sizeof(float) * 16u, nullptr, GL_STATIC_DRAW);
@@ -697,11 +731,17 @@ TEST_P(MultiviewDrawValidationTest, ActiveTransformFeedback)
     glBeginTransformFeedback(GL_TRIANGLES);
     ASSERT_GL_NO_ERROR();
 
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLTexture tex2D;
+    initOnePixelColorTexture2D(tex2D);
+
     // Check that drawArrays generates an error when there is an active transform feedback object
     // and the number of views in the draw framebuffer is greater than 1.
     {
-        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTex2d,
-                                                     0, 2, &viewportOffsets[0]);
+        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0,
+                                                     2, &viewportOffsets[0]);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_GL_ERROR(GL_INVALID_OPERATION);
     }
@@ -742,8 +782,8 @@ TEST_P(MultiviewDrawValidationTest, ActiveTransformFeedback)
     // Check that drawArrays does not generate an error when the number of views in the draw
     // framebuffer is 1.
     {
-        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTex2d,
-                                                     0, 1, &viewportOffsets[0]);
+        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0,
+                                                     1, &viewportOffsets[0]);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_GL_NO_ERROR();
     }
@@ -766,6 +806,8 @@ TEST_P(MultiviewDrawValidationTest, ActiveTimeElapsedQuery)
 
     ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_disjoint_timer_query"));
 
+    ANGLE_GL_PROGRAM(dualViewProgram, kDualViewVSSource, kDualViewFSSource);
+
     const GLint viewportOffsets[4] = {0, 0, 2, 0};
     const std::string &vsSource =
         "#version 300 es\n"
@@ -779,15 +821,26 @@ TEST_P(MultiviewDrawValidationTest, ActiveTimeElapsedQuery)
     ANGLE_GL_PROGRAM(singleViewProgram, vsSource, fsSource);
     glUseProgram(singleViewProgram);
 
+    GLVertexArray vao;
+    GLBuffer vertexBuffer;
+    GLBuffer indexBuffer;
+    initVAO(vao, vertexBuffer, indexBuffer);
+
     GLuint query = 0u;
     glGenQueriesEXT(1, &query);
     glBeginQueryEXT(GL_TIME_ELAPSED_EXT, query);
 
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLTexture tex2D;
+    initOnePixelColorTexture2D(tex2D);
+
     // Check first case.
     {
-        glUseProgram(mProgram);
-        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTex2d,
-                                                     0, 2, &viewportOffsets[0]);
+        glUseProgram(dualViewProgram);
+        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0,
+                                                     2, &viewportOffsets[0]);
         glClear(GL_COLOR_BUFFER_BIT);
         EXPECT_GL_ERROR(GL_INVALID_OPERATION);
         glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -797,8 +850,8 @@ TEST_P(MultiviewDrawValidationTest, ActiveTimeElapsedQuery)
     // Check second case.
     {
         glUseProgram(singleViewProgram);
-        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTex2d,
-                                                     0, 1, &viewportOffsets[0]);
+        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0,
+                                                     1, &viewportOffsets[0]);
         glClear(GL_COLOR_BUFFER_BIT);
         EXPECT_GL_NO_ERROR();
         glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -810,9 +863,9 @@ TEST_P(MultiviewDrawValidationTest, ActiveTimeElapsedQuery)
 
     // Check starting a query after a successful draw.
     {
-        glUseProgram(mProgram);
-        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTex2d,
-                                                     0, 2, &viewportOffsets[0]);
+        glUseProgram(dualViewProgram);
+        glFramebufferTextureMultiviewSideBySideANGLE(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0,
+                                                     2, &viewportOffsets[0]);
         glClear(GL_COLOR_BUFFER_BIT);
         EXPECT_GL_NO_ERROR();
         glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -2220,8 +2273,8 @@ MultiviewRenderTestParams LayeredVertexShaderD3D11()
 }
 
 ANGLE_INSTANTIATE_TEST(MultiviewDrawValidationTest,
-                       SideBySideVertexShaderOpenGL(3, 1),
-                       SideBySideVertexShaderD3D11(3, 1));
+                       VertexShaderOpenGL(3, 1),
+                       VertexShaderD3D11(3, 1));
 ANGLE_INSTANTIATE_TEST(MultiviewRenderDualViewTest,
                        SideBySideVertexShaderOpenGL(),
                        LayeredVertexShaderOpenGL(),
