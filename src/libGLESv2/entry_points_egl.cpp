@@ -558,20 +558,8 @@ EGLBoolean EGLAPIENTRY CopyBuffers(EGLDisplay dpy, EGLSurface surface, EGLNative
     Display *display    = static_cast<Display *>(dpy);
     Surface *eglSurface = static_cast<Surface *>(surface);
 
-    Error error = ValidateSurface(display, eglSurface);
-    if (error.isError())
-    {
-        thread->setError(error, GetDebug(), "eglCopyBuffers",
-                         GetSurfaceIfValid(display, eglSurface));
-        return EGL_FALSE;
-    }
-
-    if (display->testDeviceLost())
-    {
-        thread->setError(EglContextLost(), GetDebug(), "eglCopyBuffers",
-                         GetSurfaceIfValid(display, eglSurface));
-        return EGL_FALSE;
-    }
+    ANGLE_EGL_TRY_RETURN(thread, ValidateCopyBuffers(display, eglSurface), "eglCopyBuffers",
+                         GetSurfaceIfValid(display, eglSurface), EGL_FALSE);
 
     UNIMPLEMENTED();  // FIXME
 
@@ -588,65 +576,17 @@ EGLBoolean EGLAPIENTRY BindTexImage(EGLDisplay dpy, EGLSurface surface, EGLint b
 
     Display *display    = static_cast<Display *>(dpy);
     Surface *eglSurface = static_cast<Surface *>(surface);
+    gl::Context *context       = thread->getContext();
+    gl::Texture *textureObject = nullptr;
 
-    Error error = ValidateSurface(display, eglSurface);
-    if (error.isError())
-    {
-        thread->setError(error, GetDebug(), "eglBindTexImage",
-                         GetSurfaceIfValid(display, eglSurface));
-        return EGL_FALSE;
-    }
+    ANGLE_EGL_TRY_RETURN(
+        thread, ValidateBindTexImage(display, eglSurface, surface, buffer, context, &textureObject),
+        "eglBindTexImage", GetSurfaceIfValid(display, eglSurface), EGL_FALSE);
 
-    if (buffer != EGL_BACK_BUFFER)
-    {
-        thread->setError(EglBadParameter(), GetDebug(), "eglBindTexImage",
-                         GetSurfaceIfValid(display, eglSurface));
-        return EGL_FALSE;
-    }
-
-    if (surface == EGL_NO_SURFACE || eglSurface->getType() == EGL_WINDOW_BIT)
-    {
-        thread->setError(EglBadSurface(), GetDebug(), "eglBindTexImage",
-                         GetSurfaceIfValid(display, eglSurface));
-        return EGL_FALSE;
-    }
-
-    if (eglSurface->getBoundTexture())
-    {
-        thread->setError(EglBadAccess(), GetDebug(), "eglBindTexImage",
-                         GetSurfaceIfValid(display, eglSurface));
-        return EGL_FALSE;
-    }
-
-    if (eglSurface->getTextureFormat() == TextureFormat::NoTexture)
-    {
-        thread->setError(EglBadMatch(), GetDebug(), "eglBindTexImage",
-                         GetSurfaceIfValid(display, eglSurface));
-        return EGL_FALSE;
-    }
-
-    gl::Context *context = thread->getContext();
     if (context)
     {
-        gl::TextureType type =
-            egl_gl::EGLTextureTargetToTextureType(eglSurface->getTextureTarget());
-        gl::Texture *textureObject = context->getTargetTexture(type);
-        ASSERT(textureObject != nullptr);
-
-        if (textureObject->getImmutableFormat())
-        {
-            thread->setError(EglBadMatch(), GetDebug(), "eglBindTexImage",
-                             GetSurfaceIfValid(display, eglSurface));
-            return EGL_FALSE;
-        }
-
-        error = eglSurface->bindTexImage(context, textureObject, buffer);
-        if (error.isError())
-        {
-            thread->setError(error, GetDebug(), "eglBindTexImage",
-                             GetSurfaceIfValid(display, eglSurface));
-            return EGL_FALSE;
-        }
+        ANGLE_EGL_TRY_RETURN(thread, eglSurface->bindTexImage(context, textureObject, buffer),
+                             "eglBindTexImage", GetSurfaceIfValid(display, eglSurface), EGL_FALSE);
     }
 
     thread->setSuccess();
