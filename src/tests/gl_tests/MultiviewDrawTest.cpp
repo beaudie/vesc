@@ -277,13 +277,6 @@ class MultiviewRenderDualViewTest : public MultiviewRenderTest
 {
   protected:
     MultiviewRenderDualViewTest() : mProgram(0u) {}
-    ~MultiviewRenderDualViewTest()
-    {
-        if (mProgram != 0u)
-        {
-            glDeleteProgram(mProgram);
-        }
-    }
 
     void SetUp() override
     {
@@ -299,6 +292,17 @@ class MultiviewRenderDualViewTest : public MultiviewRenderTest
         ASSERT_NE(mProgram, 0u);
         glUseProgram(mProgram);
         ASSERT_GL_NO_ERROR();
+    }
+
+    void TearDown() override
+    {
+        if (mProgram != 0u)
+        {
+            glDeleteProgram(mProgram);
+            mProgram = 0u;
+        }
+
+        MultiviewRenderTest::TearDown();
     }
 
     void checkOutput()
