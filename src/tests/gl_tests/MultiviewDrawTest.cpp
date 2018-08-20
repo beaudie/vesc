@@ -77,6 +77,7 @@ class MultiviewFramebufferTestBase : public MultiviewTestBase
     {
     }
     void FramebufferTestSetUp() { MultiviewTestBase::MultiviewTestBaseSetUp(); }
+    void FramebufferTestTearDown() { MultiviewTestBase::MultiviewTestBaseTearDown(); }
     void updateFBOs(int viewWidth, int height, int numViews, int numLayers, int baseViewIndex)
     {
         ASSERT(numViews + baseViewIndex <= numLayers);
@@ -245,6 +246,7 @@ class MultiviewRenderTest : public MultiviewFramebufferTestBase,
   protected:
     MultiviewRenderTest() : MultiviewFramebufferTestBase(GetParam(), GetParam().mMultiviewLayout) {}
     void SetUp() override { MultiviewFramebufferTestBase::FramebufferTestSetUp(); }
+    void TearDown() override { MultiviewFramebufferTestBase::FramebufferTestTearDown(); }
 
     void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) override
     {
