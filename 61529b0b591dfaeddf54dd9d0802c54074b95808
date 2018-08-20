@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7366fa5a_47dd56ae",
+        "filename": "src/libANGLE/renderer/ProgramImpl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-20T21:52:33Z",
+      "side": 1,
+      "message": "is it bad style now to put function definition here?",
+      "revId": "61529b0b591dfaeddf54dd9d0802c54074b95808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
