@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adae602_5d28fc59",
+        "filename": "src/tests/perf_tests/BindingPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-20T22:18:04Z",
+      "side": 1,
+      "message": "I think this is easier to read but whatever.\n  if idx\u003esize\n    idx\u003d0",
+      "revId": "ab8c4ee4a772fd3e3a951d24be203432fd060c0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
