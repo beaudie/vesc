@@ -694,13 +694,15 @@ NativeWindowD3D *Renderer9::createNativeWindow(EGLNativeWindowType window,
     return new NativeWindow9(window);
 }
 
-SwapChainD3D *Renderer9::createSwapChain(NativeWindowD3D *nativeWindow,
-                                         HANDLE shareHandle,
-                                         IUnknown *d3dTexture,
-                                         GLenum backBufferFormat,
-                                         GLenum depthBufferFormat,
-                                         EGLint orientation,
-                                         EGLint samples)
+SwapChainD3D *Renderer9::createSwapChain(
+    NativeWindowD3D *nativeWindow,
+    HANDLE shareHandle,
+    IUnknown *d3dTexture,
+    GLenum backBufferFormat,
+    GLenum depthBufferFormat,
+    EGLint orientation,
+    EGLint samples,
+    bool /*doResolveMSAA currently not supported on D3D9 renderer*/)
 {
     return new SwapChain9(this, GetAs<NativeWindow9>(nativeWindow), shareHandle, d3dTexture,
                           backBufferFormat, depthBufferFormat, orientation);

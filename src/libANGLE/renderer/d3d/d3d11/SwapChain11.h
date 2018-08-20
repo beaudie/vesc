@@ -28,7 +28,8 @@ class SwapChain11 final : public SwapChainD3D
                 GLenum backBufferFormat,
                 GLenum depthBufferFormat,
                 EGLint orientation,
-                EGLint samples);
+                EGLint samples,
+                bool doResolveMSAA);
     ~SwapChain11() override;
 
     EGLint resize(DisplayD3D *displayD3D, EGLint backbufferWidth, EGLint backbufferHeight) override;
@@ -119,13 +120,15 @@ class SwapChain11 final : public SwapChainD3D
     d3d11::SamplerState mPassThroughSampler;
     d3d11::InputLayout mPassThroughIL;
     d3d11::VertexShader mPassThroughVS;
-    d3d11::PixelShader mPassThroughPS;
+    d3d11::PixelShader mPassThroughOrResolvePS;
     d3d11::RasterizerState mPassThroughRS;
 
     SurfaceRenderTarget11 mColorRenderTarget;
     SurfaceRenderTarget11 mDepthStencilRenderTarget;
 
     EGLint mEGLSamples;
+    bool mDoResolveMSAA;
+
     LONGLONG mQPCFrequency;
 };
 

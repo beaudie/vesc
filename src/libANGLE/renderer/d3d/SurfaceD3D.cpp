@@ -189,9 +189,9 @@ egl::Error SurfaceD3D::resetSwapChain(const egl::Display *display)
         height = mFixedHeight;
     }
 
-    mSwapChain =
-        mRenderer->createSwapChain(mNativeWindow, mShareHandle, mD3DTexture, mRenderTargetFormat,
-                                   mDepthStencilFormat, mOrientation, mState.config->samples);
+    mSwapChain = mRenderer->createSwapChain(
+        mNativeWindow, mShareHandle, mD3DTexture, mRenderTargetFormat, mDepthStencilFormat,
+        mOrientation, mState.config->samples, mBuftype != EGL_D3D_TEXTURE_ANGLE);
     if (!mSwapChain)
     {
         return egl::EglBadAlloc();
