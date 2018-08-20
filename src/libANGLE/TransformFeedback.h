@@ -51,9 +51,12 @@ class TransformFeedbackState final : angle::NonCopyable
     Program *mProgram;
 
     std::vector<OffsetBindingPointer<Buffer>> mIndexedBuffers;
+    angle::BitSet<IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS> mConflictedBuffersMask;
 };
 
-class TransformFeedback final : public RefCountObject, public LabeledObject
+class TransformFeedback final : public RefCountObject,
+                                public LabeledObject,
+                                public angle::ObserverInterface
 {
   public:
     TransformFeedback(rx::GLImplFactory *implFactory, GLuint id, const Caps &caps);
@@ -91,7 +94,7 @@ class TransformFeedback final : public RefCountObject, public LabeledObject
     size_t getIndexedBufferCount() const;
 
     // Returns true if any buffer bound to this object is also bound to another target.
-    bool buffersBoundForOtherUse() const;
+    bool buffersBoundForOtherUse() const { return mState.mConflictedBuffersMask.any(); }
 
     void detachBuffer(const Context *context, GLuint bufferName);
 
@@ -100,11 +103,17 @@ class TransformFeedback final : public RefCountObject, public LabeledObject
 
     void onBindingChanged(const Context *context, bool bound);
 
+    // Observer interface.
+    void onSubjectStateChange(const gl::Context *context,
+                              angle::SubjectIndex index,
+                              angle::SubjectMessage message) override;
+
   private:
     void bindProgram(const Context *context, Program *program);
 
     TransformFeedbackState mState;
     rx::TransformFeedbackImpl *mImplementation;
+    std::vector<angle::ObserverBinding> mBufferObserverBindings;
 };
 
 }  // namespace gl

@@ -78,6 +78,11 @@ TransformFeedback::TransformFeedback(rx::GLImplFactory *implFactory, GLuint id, 
       mImplementation(implFactory->createTransformFeedback(mState))
 {
     ASSERT(mImplementation != nullptr);
+    for (GLuint bufferIndex = 0; bufferIndex < caps.maxTransformFeedbackSeparateAttributes;
+         ++bufferIndex)
+    {
+        mBufferObserverBindings.emplace_back(this, bufferIndex);
+    }
 }
 
 Error TransformFeedback::onDestroy(const Context *context)
@@ -280,18 +285,6 @@ size_t TransformFeedback::getIndexedBufferCount() const
     return mState.mIndexedBuffers.size();
 }
 
-bool TransformFeedback::buffersBoundForOtherUse() const
-{
-    for (auto &buffer : mState.mIndexedBuffers)
-    {
-        if (buffer.get() && buffer->isBoundForTransformFeedbackAndOtherUse())
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
 rx::TransformFeedbackImpl *TransformFeedback::getImplementation()
 {
     return mImplementation;
@@ -310,6 +303,21 @@ void TransformFeedback::onBindingChanged(const Context *context, bool bound)
         {
             buffer->onBindingChanged(context, bound, BufferBinding::TransformFeedback, true);
         }
+    }
+}
+
+void TransformFeedback::onSubjectStateChange(const gl::Context *context,
+                                             angle::SubjectIndex index,
+                                             angle::SubjectMessage message)
+{
+    if (mState.mIndexedBuffers[index].get())
+    {
+        mState.mConflictedBuffersMask.set(
+            index, mState.mIndexedBuffers[index]->isBoundForTransformFeedbackAndOtherUse());
+    }
+    else
+    {
+        mState.mConflictedBuffersMask.reset(index);
     }
 }
 }  // namespace gl
