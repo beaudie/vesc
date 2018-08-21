@@ -16,6 +16,24 @@
       "revId": "61529b0b591dfaeddf54dd9d0802c54074b95808",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a59d7a81_7268bd7b",
+        "filename": "src/libANGLE/renderer/ProgramImpl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-21T19:53:25Z",
+      "side": 1,
+      "message": "Not really. There\u0027s a chromium warning to enforce this style but we don\u0027t have those enabled. Also I\u0027m paranoid and assume the compiler only inlines functions that are defined in the class for performance hotspots. This one I just felt like being more pretty. But there\u0027s no rule.",
+      "parentUuid": "7366fa5a_47dd56ae",
+      "revId": "61529b0b591dfaeddf54dd9d0802c54074b95808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
