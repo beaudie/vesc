@@ -107,11 +107,6 @@ deps = {
     'url': '{chromium_git}/chromium/src/tools/clang.git@c893c7eec4706f8c7fc244ee254b1dadd8f8d158',
     'condition': 'not build_with_chromium',
   },
-
-  '{angle_root}/tools/gyp': {
-    'url': '{chromium_git}/external/gyp@4d467626b0b9f59a85fb81ca4d7ea9eca99b9d8f',
-    'condition': 'not build_with_chromium',
-  },
 }
 
 hooks = [
@@ -230,13 +225,6 @@ hooks = [
                 '--bucket', 'chromium-browser-clang/rc',
                 '-s', '{angle_root}/build/toolchain/win/rc/win/rc.exe.sha1',
     ],
-  },
-
-  {
-    # A change to a .gyp, .gypi, or to GYP itself should run the generator.
-    'pattern': '.',
-    'action': ['python', '{angle_root}/gyp/gyp_angle'],
-    'condition': 'not build_with_chromium',
   },
 ]
 
