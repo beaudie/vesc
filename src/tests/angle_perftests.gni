@@ -1,0 +1,57 @@
+# Copyright 2018 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+_www_angle_path = "."
+angle_perf_tests_sources =
+[
+    "$_www_angle_path/src/tests/perf_tests/ANGLEPerfTest.cpp",
+    "$_www_angle_path/src/tests/perf_tests/ANGLEPerfTest.h",
+    "$_www_angle_path/src/tests/perf_tests/BlitFramebufferPerf.cpp",
+    "$_www_angle_path/src/tests/perf_tests/BindingPerf.cpp",
+    "$_www_angle_path/src/tests/perf_tests/BitSetIteratorPerf.cpp",
+    "$_www_angle_path/src/tests/perf_tests/BufferSubData.cpp",
+    "$_www_angle_path/src/tests/perf_tests/CompilerPerf.cpp",
+    "$_www_angle_path/src/tests/perf_tests/DispatchComputePerf.cpp",
+    "$_www_angle_path/src/tests/perf_tests/DrawCallPerf.cpp",
+    "$_www_angle_path/src/tests/perf_tests/DrawCallPerfParams.cpp",
+    "$_www_angle_path/src/tests/perf_tests/DrawCallPerfParams.h",
+    "$_www_angle_path/src/tests/perf_tests/DrawElementsPerf.cpp",
+    "$_www_angle_path/src/tests/perf_tests/DynamicPromotionPerfTest.cpp",
+    "$_www_angle_path/src/tests/perf_tests/EGLInitializePerf.cpp",
+    "$_www_angle_path/src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+    "$_www_angle_path/src/tests/perf_tests/ResultPerf.cpp",
+    "$_www_angle_path/src/tests/perf_tests/IndexConversionPerf.cpp",
+    "$_www_angle_path/src/tests/perf_tests/InstancingPerf.cpp",
+    "$_www_angle_path/src/tests/perf_tests/InterleavedAttributeData.cpp",
+    "$_www_angle_path/src/tests/perf_tests/LinkProgramPerfTest.cpp",
+    "$_www_angle_path/src/tests/perf_tests/MultiviewPerf.cpp",
+    "$_www_angle_path/src/tests/perf_tests/PointSprites.cpp",
+    "$_www_angle_path/src/tests/perf_tests/TexSubImage.cpp",
+    "$_www_angle_path/src/tests/perf_tests/TextureSampling.cpp",
+    "$_www_angle_path/src/tests/perf_tests/TexturesPerf.cpp",
+    "$_www_angle_path/src/tests/perf_tests/UniformsPerf.cpp",
+    "$_www_angle_path/src/tests/perf_tests/third_party/perf/perf_test.cc",
+    "$_www_angle_path/src/tests/perf_tests/third_party/perf/perf_test.h",
+    "$_www_angle_path/src/tests/test_utils/angle_test_configs.cpp",
+    "$_www_angle_path/src/tests/test_utils/angle_test_configs.h",
+    "$_www_angle_path/src/tests/test_utils/angle_test_instantiate.cpp",
+    "$_www_angle_path/src/tests/test_utils/angle_test_instantiate.h",
+    "$_www_angle_path/src/tests/test_utils/draw_call_perf_utils.cpp",
+    "$_www_angle_path/src/tests/test_utils/draw_call_perf_utils.h",
+]
+angle_perf_tests_win_sources =
+[
+    "$_www_angle_path/src/tests/perf_tests/IndexDataManagerTest.cpp",
+]
+angle_perf_tests_vulkan_sources =
+[
+    "$_www_angle_path/src/tests/perf_tests/VulkanPipelineCachePerf.cpp",
+]
+# Currently Vulkan Command Buffer Perf Tests compile on Android/Linux
+angle_perf_tests_vulkan_command_buffer_sources =
+[
+    "$_www_angle_path/src/tests/perf_tests/VulkanCommandBufferPerf.cpp",
+    "$_www_angle_path/src/tests/test_utils/third_party/vulkan_command_buffer_utils.cpp",
+    "$_www_angle_path/src/tests/test_utils/third_party/vulkan_command_buffer_utils.h"
+]
