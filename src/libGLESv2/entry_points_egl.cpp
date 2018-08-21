@@ -55,6 +55,7 @@ void ClipConfigs(const std::vector<const Config *> &filteredConfigs,
 // EGL 1.0
 EGLint EGLAPIENTRY GetError(void)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("()");
     Thread *thread = GetCurrentThread();
 
@@ -65,6 +66,7 @@ EGLint EGLAPIENTRY GetError(void)
 
 EGLDisplay EGLAPIENTRY GetDisplay(EGLNativeDisplayType display_id)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLNativeDisplayType display_id = 0x%0.8p)", display_id);
 
     return Display::GetDisplayFromNativeDisplay(display_id, AttributeMap());
@@ -72,6 +74,7 @@ EGLDisplay EGLAPIENTRY GetDisplay(EGLNativeDisplayType display_id)
 
 EGLBoolean EGLAPIENTRY Initialize(EGLDisplay dpy, EGLint *major, EGLint *minor)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLint *major = 0x%0.8p, EGLint *minor = 0x%0.8p)", dpy,
           major, minor);
     Thread *thread = GetCurrentThread();
@@ -94,6 +97,7 @@ EGLBoolean EGLAPIENTRY Initialize(EGLDisplay dpy, EGLint *major, EGLint *minor)
 
 EGLBoolean EGLAPIENTRY Terminate(EGLDisplay dpy)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLDisplay dpy = 0x%0.8p)", dpy);
     Thread *thread = GetCurrentThread();
 
@@ -115,6 +119,7 @@ EGLBoolean EGLAPIENTRY Terminate(EGLDisplay dpy)
 
 const char *EGLAPIENTRY QueryString(EGLDisplay dpy, EGLint name)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLint name = %d)", dpy, name);
     Thread *thread = GetCurrentThread();
 
@@ -162,6 +167,7 @@ EGLBoolean EGLAPIENTRY GetConfigs(EGLDisplay dpy,
                                   EGLint config_size,
                                   EGLint *num_config)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLConfig *configs = 0x%0.8p, "
         "EGLint config_size = %d, EGLint *num_config = 0x%0.8p)",
@@ -185,6 +191,7 @@ EGLBoolean EGLAPIENTRY ChooseConfig(EGLDisplay dpy,
                                     EGLint config_size,
                                     EGLint *num_config)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, const EGLint *attrib_list = 0x%0.8p, "
         "EGLConfig *configs = 0x%0.8p, EGLint config_size = %d, EGLint *num_config = 0x%0.8p)",
@@ -208,6 +215,7 @@ EGLBoolean EGLAPIENTRY GetConfigAttrib(EGLDisplay dpy,
                                        EGLint attribute,
                                        EGLint *value)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLConfig config = 0x%0.8p, EGLint attribute = %d, EGLint "
         "*value = 0x%0.8p)",
@@ -231,6 +239,7 @@ EGLSurface EGLAPIENTRY CreateWindowSurface(EGLDisplay dpy,
                                            EGLNativeWindowType win,
                                            const EGLint *attrib_list)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLConfig config = 0x%0.8p, EGLNativeWindowType win = 0x%0.8p, "
         "const EGLint *attrib_list = 0x%0.8p)",
@@ -257,6 +266,7 @@ EGLSurface EGLAPIENTRY CreatePbufferSurface(EGLDisplay dpy,
                                             EGLConfig config,
                                             const EGLint *attrib_list)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLConfig config = 0x%0.8p, const EGLint *attrib_list = "
         "0x%0.8p)",
@@ -282,6 +292,7 @@ EGLSurface EGLAPIENTRY CreatePixmapSurface(EGLDisplay dpy,
                                            EGLNativePixmapType pixmap,
                                            const EGLint *attrib_list)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLConfig config = 0x%0.8p, EGLNativePixmapType pixmap = "
         "0x%0.8p, "
@@ -303,6 +314,7 @@ EGLSurface EGLAPIENTRY CreatePixmapSurface(EGLDisplay dpy,
 
 EGLBoolean EGLAPIENTRY DestroySurface(EGLDisplay dpy, EGLSurface surface)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLSurface surface = 0x%0.8p)", dpy, surface);
     Thread *thread = GetCurrentThread();
 
@@ -324,6 +336,7 @@ EGLBoolean EGLAPIENTRY QuerySurface(EGLDisplay dpy,
                                     EGLint attribute,
                                     EGLint *value)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLSurface surface = 0x%0.8p, EGLint attribute = %d, EGLint "
         "*value = 0x%0.8p)",
@@ -347,6 +360,7 @@ EGLContext EGLAPIENTRY CreateContext(EGLDisplay dpy,
                                      EGLContext share_context,
                                      const EGLint *attrib_list)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLConfig config = 0x%0.8p, EGLContext share_context = "
         "0x%0.8p, "
@@ -374,6 +388,7 @@ EGLContext EGLAPIENTRY CreateContext(EGLDisplay dpy,
 
 EGLBoolean EGLAPIENTRY DestroyContext(EGLDisplay dpy, EGLContext ctx)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLContext ctx = 0x%0.8p)", dpy, ctx);
     Thread *thread = GetCurrentThread();
 
@@ -399,6 +414,7 @@ EGLBoolean EGLAPIENTRY DestroyContext(EGLDisplay dpy, EGLContext ctx)
 
 EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface read, EGLContext ctx)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLSurface draw = 0x%0.8p, EGLSurface read = 0x%0.8p, "
         "EGLContext ctx = 0x%0.8p)",
@@ -440,6 +456,7 @@ EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface r
 
 EGLSurface EGLAPIENTRY GetCurrentSurface(EGLint readdraw)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLint readdraw = %d)", readdraw);
     Thread *thread = GetCurrentThread();
 
@@ -462,6 +479,7 @@ EGLSurface EGLAPIENTRY GetCurrentSurface(EGLint readdraw)
 
 EGLDisplay EGLAPIENTRY GetCurrentDisplay(void)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("()");
     Thread *thread = GetCurrentThread();
 
@@ -475,6 +493,7 @@ EGLDisplay EGLAPIENTRY GetCurrentDisplay(void)
 
 EGLBoolean EGLAPIENTRY QueryContext(EGLDisplay dpy, EGLContext ctx, EGLint attribute, EGLint *value)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLContext ctx = 0x%0.8p, EGLint attribute = %d, EGLint *value "
         "= 0x%0.8p)",
@@ -495,6 +514,7 @@ EGLBoolean EGLAPIENTRY QueryContext(EGLDisplay dpy, EGLContext ctx, EGLint attri
 
 EGLBoolean EGLAPIENTRY WaitGL(void)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("()");
     Thread *thread = GetCurrentThread();
 
@@ -514,6 +534,7 @@ EGLBoolean EGLAPIENTRY WaitGL(void)
 
 EGLBoolean EGLAPIENTRY WaitNative(EGLint engine)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLint engine = %d)", engine);
     Thread *thread = GetCurrentThread();
 
@@ -531,6 +552,7 @@ EGLBoolean EGLAPIENTRY WaitNative(EGLint engine)
 
 EGLBoolean EGLAPIENTRY SwapBuffers(EGLDisplay dpy, EGLSurface surface)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLSurface surface = 0x%0.8p)", dpy, surface);
     Thread *thread = GetCurrentThread();
 
@@ -549,6 +571,7 @@ EGLBoolean EGLAPIENTRY SwapBuffers(EGLDisplay dpy, EGLSurface surface)
 
 EGLBoolean EGLAPIENTRY CopyBuffers(EGLDisplay dpy, EGLSurface surface, EGLNativePixmapType target)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLSurface surface = 0x%0.8p, EGLNativePixmapType target = "
         "0x%0.8p)",
@@ -570,6 +593,7 @@ EGLBoolean EGLAPIENTRY CopyBuffers(EGLDisplay dpy, EGLSurface surface, EGLNative
 // EGL 1.1
 EGLBoolean EGLAPIENTRY BindTexImage(EGLDisplay dpy, EGLSurface surface, EGLint buffer)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLSurface surface = 0x%0.8p, EGLint buffer = %d)", dpy,
           surface, buffer);
     Thread *thread = GetCurrentThread();
@@ -598,6 +622,7 @@ EGLBoolean EGLAPIENTRY SurfaceAttrib(EGLDisplay dpy,
                                      EGLint attribute,
                                      EGLint value)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLSurface surface = 0x%0.8p, EGLint attribute = %d, EGLint "
         "value = %d)",
@@ -618,6 +643,7 @@ EGLBoolean EGLAPIENTRY SurfaceAttrib(EGLDisplay dpy,
 
 EGLBoolean EGLAPIENTRY ReleaseTexImage(EGLDisplay dpy, EGLSurface surface, EGLint buffer)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLSurface surface = 0x%0.8p, EGLint buffer = %d)", dpy,
           surface, buffer);
     Thread *thread = GetCurrentThread();
@@ -643,6 +669,7 @@ EGLBoolean EGLAPIENTRY ReleaseTexImage(EGLDisplay dpy, EGLSurface surface, EGLin
 
 EGLBoolean EGLAPIENTRY SwapInterval(EGLDisplay dpy, EGLint interval)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLint interval = %d)", dpy, interval);
     Thread *thread = GetCurrentThread();
 
@@ -665,6 +692,7 @@ EGLBoolean EGLAPIENTRY SwapInterval(EGLDisplay dpy, EGLint interval)
 // EGL 1.2
 EGLBoolean EGLAPIENTRY BindAPI(EGLenum api)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLenum api = 0x%X)", api);
     Thread *thread = GetCurrentThread();
 
@@ -679,6 +707,7 @@ EGLBoolean EGLAPIENTRY BindAPI(EGLenum api)
 
 EGLenum EGLAPIENTRY QueryAPI(void)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("()");
     Thread *thread = GetCurrentThread();
 
@@ -694,6 +723,7 @@ EGLSurface EGLAPIENTRY CreatePbufferFromClientBuffer(EGLDisplay dpy,
                                                      EGLConfig config,
                                                      const EGLint *attrib_list)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLenum buftype = 0x%X, EGLClientBuffer buffer = 0x%0.8p, "
         "EGLConfig config = 0x%0.8p, const EGLint *attrib_list = 0x%0.8p)",
@@ -732,6 +762,7 @@ EGLBoolean EGLAPIENTRY ReleaseThread(void)
 
 EGLBoolean EGLAPIENTRY WaitClient(void)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("()");
     Thread *thread = GetCurrentThread();
 
@@ -751,6 +782,7 @@ EGLBoolean EGLAPIENTRY WaitClient(void)
 // EGL 1.4
 EGLContext EGLAPIENTRY GetCurrentContext(void)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("()");
     Thread *thread = GetCurrentThread();
 
@@ -763,6 +795,7 @@ EGLContext EGLAPIENTRY GetCurrentContext(void)
 // EGL 1.5
 EGLSync EGLAPIENTRY CreateSync(EGLDisplay dpy, EGLenum type, const EGLAttrib *attrib_list)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLenum type = 0x%X, const EGLint* attrib_list = 0x%0.8p)",
           dpy, type, attrib_list);
     Thread *thread   = GetCurrentThread();
@@ -777,6 +810,7 @@ EGLSync EGLAPIENTRY CreateSync(EGLDisplay dpy, EGLenum type, const EGLAttrib *at
 
 EGLBoolean EGLAPIENTRY DestroySync(EGLDisplay dpy, EGLSync sync)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLSync sync = 0x%0.8p)", dpy, sync);
     Thread *thread = GetCurrentThread();
 
@@ -789,6 +823,7 @@ EGLBoolean EGLAPIENTRY DestroySync(EGLDisplay dpy, EGLSync sync)
 
 EGLint EGLAPIENTRY ClientWaitSync(EGLDisplay dpy, EGLSync sync, EGLint flags, EGLTime timeout)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLSync sync = 0x%0.8p, EGLint flags = 0x%X, EGLTime timeout = "
         "%d)",
@@ -807,6 +842,7 @@ EGLBoolean EGLAPIENTRY GetSyncAttrib(EGLDisplay dpy,
                                      EGLint attribute,
                                      EGLAttrib *value)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLSync sync = 0x%0.8p, EGLint attribute = 0x%X, EGLAttrib "
         "*value = 0x%0.8p)",
@@ -826,6 +862,7 @@ EGLImage EGLAPIENTRY CreateImage(EGLDisplay dpy,
                                  EGLClientBuffer buffer,
                                  const EGLAttrib *attrib_list)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLContext ctx = 0x%0.8p, EGLenum target = 0x%X, "
         "EGLClientBuffer buffer = 0x%0.8p, const EGLAttrib *attrib_list = 0x%0.8p)",
@@ -841,6 +878,7 @@ EGLImage EGLAPIENTRY CreateImage(EGLDisplay dpy,
 
 EGLBoolean EGLAPIENTRY DestroyImage(EGLDisplay dpy, EGLImage image)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLImage image = 0x%0.8p)", dpy, image);
     Thread *thread   = GetCurrentThread();
     Display *display = static_cast<Display *>(dpy);
@@ -856,6 +894,7 @@ EGLDisplay EGLAPIENTRY GetPlatformDisplay(EGLenum platform,
                                           void *native_display,
                                           const EGLAttrib *attrib_list)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLenum platform = %d, void* native_display = 0x%0.8p, const EGLint* attrib_list = "
         "0x%0.8p)",
@@ -888,6 +927,7 @@ EGLSurface EGLAPIENTRY CreatePlatformWindowSurface(EGLDisplay dpy,
                                                    void *native_window,
                                                    const EGLAttrib *attrib_list)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLConfig config = 0x%0.8p, void* native_window = 0x%0.8p, "
         "const EGLint* attrib_list = 0x%0.8p)",
@@ -906,6 +946,7 @@ EGLSurface EGLAPIENTRY CreatePlatformPixmapSurface(EGLDisplay dpy,
                                                    void *native_pixmap,
                                                    const EGLAttrib *attrib_list)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT(
         "(EGLDisplay dpy = 0x%0.8p, EGLConfig config = 0x%0.8p, void* native_pixmap = 0x%0.8p, "
         "const EGLint* attrib_list = 0x%0.8p)",
@@ -921,6 +962,7 @@ EGLSurface EGLAPIENTRY CreatePlatformPixmapSurface(EGLDisplay dpy,
 
 EGLBoolean EGLAPIENTRY WaitSync(EGLDisplay dpy, EGLSync sync, EGLint flags)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLSync sync = 0x%0.8p, EGLint flags = 0x%X)", dpy, sync,
           flags);
     Thread *thread   = GetCurrentThread();
@@ -934,6 +976,7 @@ EGLBoolean EGLAPIENTRY WaitSync(EGLDisplay dpy, EGLSync sync, EGLint flags)
 
 __eglMustCastToProperFunctionPointerType EGLAPIENTRY GetProcAddress(const char *procname)
 {
+    std::lock_guard<std::mutex> lock(angle::GetGlobalMutex());
     EVENT("(const char *procname = \"%s\")", procname);
     Thread *thread = GetCurrentThread();
 
