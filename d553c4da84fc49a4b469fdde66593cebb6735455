@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e6def9f_2bdb7269",
+        "filename": "src/libANGLE/Compiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-21T14:55:57Z",
+      "side": 1,
+      "message": "Why we need this class?  The Compiler class is ref counted so if shaders need to hold a reference to it they can use a BindingPointer to ensure it is not deleted.",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 56
+      },
+      "revId": "d553c4da84fc49a4b469fdde66593cebb6735455",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
