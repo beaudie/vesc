@@ -93,6 +93,19 @@ Debug *GetDebug()
 
 }  // namespace egl
 
+namespace angle
+{
+namespace
+{
+std::mutex g_Mutex;
+}  // anonymous namespace
+
+std::mutex &GetGlobalMutex()
+{
+    return g_Mutex;
+}
+}  // namespace angle
+
 #ifdef ANGLE_PLATFORM_WINDOWS
 namespace egl
 {

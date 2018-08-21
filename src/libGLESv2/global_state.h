@@ -9,6 +9,8 @@
 #ifndef LIBGLESV2_GLOBALSTATE_H_
 #define LIBGLESV2_GLOBALSTATE_H_
 
+#include <mutex>
+
 namespace gl
 {
 class Context;
@@ -27,5 +29,10 @@ Thread *GetCurrentThread();
 Debug *GetDebug();
 
 }  // namespace egl
+
+namespace angle
+{
+std::mutex &GetGlobalMutex();
+}
 
 #endif  // LIBGLESV2_GLOBALSTATE_H_
