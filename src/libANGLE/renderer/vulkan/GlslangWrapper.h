@@ -30,12 +30,12 @@ class GlslangWrapper
 
     static angle::Result GetShaderCode(vk::Context *context,
                                        const gl::Caps &glCaps,
+                                       bool enableLineRasterEmulation,
                                        const std::string &vertexSource,
                                        const std::string &fragmentSource,
                                        std::vector<uint32_t> *vertexCodeOut,
                                        std::vector<uint32_t> *fragmentCodeOut);
 };
-
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_VULKAN_GLSLANG_WRAPPER_H_
