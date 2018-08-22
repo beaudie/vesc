@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "037a5d5b_9493a723",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-22T16:49:43Z",
+      "side": 1,
+      "message": "I think this can all be done without the need for a doResolveMSAA member/parameter.\n\nThis resolve step is only needed when:\n1. The surface is a window surface\n2. We are not using the direct-to-backbuffer rendering (mNeedsOffscreenTexture is false)\n\nI think doing these checks in SwapChain11 would be sufficient instead of passing this parameter around.",
+      "range": {
+        "startLine": 142,
+        "startChar": 34,
+        "endLine": 142,
+        "endChar": 52
+      },
+      "revId": "eaa9e52a93fed1dd6823d33cf341488ed1660e3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
