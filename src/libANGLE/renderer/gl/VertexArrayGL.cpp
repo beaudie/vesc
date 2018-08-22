@@ -417,7 +417,7 @@ GLuint VertexArrayGL::getAppliedElementArrayBufferID() const
 
 void VertexArrayGL::updateAttribEnabled(size_t attribIndex)
 {
-    const bool enabled = mState.getVertexAttribute(attribIndex).enabled;
+    const bool enabled = mState.getVertexAttribute(attribIndex).enabled & mProgramActiveAttribLocationsMask.test(attribIndex);
     if (mAppliedAttributes[attribIndex].enabled == enabled)
     {
         return;
@@ -728,6 +728,20 @@ void VertexArrayGL::applyNumViewsToDivisor(int numViews)
         {
             updateBindingDivisor(index);
         }
+    }
+}
+
+void VertexArrayGL::applyActiveAttribLocationsMask(const gl::AttributesMask &activeMask)
+{
+    gl::AttributesMask updateMask = mProgramActiveAttribLocationsMask ^ activeMask;
+    mProgramActiveAttribLocationsMask = activeMask;
+
+    for (size_t attribIndex : updateMask)
+    {
+        updateAttribEnabled(attribIndex);
+
+        // Remove the relevant dirty bit from this attribute to avoid resetting it to the same value again
+//        attribBits[VertexArray::DIRTY_BIT_ATTRIB_0 + attribIndex].reset(VertexArray::DIRTY_ATTRIB_ENABLED);
     }
 }
 
