@@ -309,9 +309,14 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
     ASSERT(attribIndex < getMaxAttribs());
 
     VertexAttribute &attrib = mState.mVertexAttributes[attribIndex];
+    mState.mVertexAttributesTypeMask.setIndex(GetVertexAttributeBaseType(attrib), attribIndex);
+
+    if (mState.mEnabledAttributesMask.test(attribIndex) == enabledState)
+    {
+        return;
+    }
 
     attrib.enabled = enabledState;
-    mState.mVertexAttributesTypeMask.setIndex(GetVertexAttributeBaseType(attrib), attribIndex);
 
     setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_ENABLED);
 
