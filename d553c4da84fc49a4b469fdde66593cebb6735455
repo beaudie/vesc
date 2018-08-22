@@ -22,6 +22,30 @@
       "revId": "d553c4da84fc49a4b469fdde66593cebb6735455",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01671c59_353d0741",
+        "filename": "src/libANGLE/Compiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-08-22T01:47:40Z",
+      "side": 1,
+      "message": "Currently Compiler reuses one sh compiler handle to translate many shaders. To be thread safe for parallel translation, we have to let each Shader have an exclusive ShHandle. CompilerInstance essentially is a wrapper for this handle, which can be passed to the background thread to compile.",
+      "parentUuid": "7e6def9f_2bdb7269",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 56
+      },
+      "revId": "d553c4da84fc49a4b469fdde66593cebb6735455",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
