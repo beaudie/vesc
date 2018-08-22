@@ -47,7 +47,8 @@ class VertexArrayGL : public VertexArrayImpl
     gl::Error syncState(const gl::Context *context,
                         const gl::VertexArray::DirtyBits &dirtyBits,
                         const gl::VertexArray::DirtyAttribBitsArray &attribBits,
-                        const gl::VertexArray::DirtyBindingBitsArray &bindingBits) override;
+                        const gl::VertexArray::DirtyBindingBitsArray &bindingBits,
+                        const gl::AttributesMask &enabledBits) override;
 
     void applyNumViewsToDivisor(int numViews);
 
@@ -86,13 +87,14 @@ class VertexArrayGL : public VertexArrayImpl
                                const gl::IndexRange &indexRange) const;
     void syncDirtyAttrib(const gl::Context *context,
                          size_t attribIndex,
-                         const gl::VertexArray::DirtyAttribBits &dirtyAttribBits);
+                         const gl::VertexArray::DirtyAttribBits &dirtyAttribBits,
+                         const gl::AttributesMask &enabledBits);
     void syncDirtyBinding(const gl::Context *context,
                           size_t bindingIndex,
                           const gl::VertexArray::DirtyBindingBits &dirtyBindingBits);
 
     void updateNeedsStreaming(size_t attribIndex);
-    void updateAttribEnabled(size_t attribIndex);
+    void updateAttribEnabled(size_t attribIndex, const bool enabled);
     void updateAttribPointer(const gl::Context *context, size_t attribIndex);
 
     bool supportVertexAttribBinding() const;

@@ -415,9 +415,8 @@ GLuint VertexArrayGL::getAppliedElementArrayBufferID() const
     return GetImplAs<BufferGL>(mAppliedElementArrayBuffer.get())->getBufferID();
 }
 
-void VertexArrayGL::updateAttribEnabled(size_t attribIndex)
+void VertexArrayGL::updateAttribEnabled(size_t attribIndex, const bool enabled)
 {
-    const bool enabled = mState.getVertexAttribute(attribIndex).enabled;
     if (mAppliedAttributes[attribIndex].enabled == enabled)
     {
         return;
@@ -614,7 +613,8 @@ void VertexArrayGL::updateBindingDivisor(size_t bindingIndex)
 
 void VertexArrayGL::syncDirtyAttrib(const gl::Context *context,
                                     size_t attribIndex,
-                                    const gl::VertexArray::DirtyAttribBits &dirtyAttribBits)
+                                    const gl::VertexArray::DirtyAttribBits &dirtyAttribBits,
+                                    const gl::AttributesMask &enabledBits)
 {
     ASSERT(dirtyAttribBits.any());
 
@@ -623,7 +623,7 @@ void VertexArrayGL::syncDirtyAttrib(const gl::Context *context,
         switch (dirtyBit)
         {
             case VertexArray::DIRTY_ATTRIB_ENABLED:
-                updateAttribEnabled(attribIndex);
+                updateAttribEnabled(attribIndex, enabledBits.test(attribIndex));
                 break;
 
             case VertexArray::DIRTY_ATTRIB_POINTER:
@@ -673,9 +673,9 @@ void VertexArrayGL::syncDirtyBinding(const gl::Context *context,
     }
 }
 
-#define ANGLE_DIRTY_ATTRIB_FUNC(INDEX)                      \
-    case VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:           \
-        syncDirtyAttrib(context, INDEX, attribBits[INDEX]); \
+#define ANGLE_DIRTY_ATTRIB_FUNC(INDEX)                                   \
+    case VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:                        \
+        syncDirtyAttrib(context, INDEX, attribBits[INDEX], enabledBits); \
         break;
 
 #define ANGLE_DIRTY_BINDING_FUNC(INDEX)                       \
@@ -690,7 +690,8 @@ void VertexArrayGL::syncDirtyBinding(const gl::Context *context,
 gl::Error VertexArrayGL::syncState(const gl::Context *context,
                                    const VertexArray::DirtyBits &dirtyBits,
                                    const gl::VertexArray::DirtyAttribBitsArray &attribBits,
-                                   const gl::VertexArray::DirtyBindingBitsArray &bindingBits)
+                                   const gl::VertexArray::DirtyBindingBitsArray &bindingBits,
+                                   const gl::AttributesMask &enabledBits)
 {
     mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
 

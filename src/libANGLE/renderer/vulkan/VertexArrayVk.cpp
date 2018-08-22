@@ -252,7 +252,8 @@ void VertexArrayVk::ensureConversionReleased(RendererVk *renderer, size_t attrib
 gl::Error VertexArrayVk::syncState(const gl::Context *context,
                                    const gl::VertexArray::DirtyBits &dirtyBits,
                                    const gl::VertexArray::DirtyAttribBitsArray &attribBits,
-                                   const gl::VertexArray::DirtyBindingBitsArray &bindingBits)
+                                   const gl::VertexArray::DirtyBindingBitsArray &bindingBits,
+                                   const gl::AttributesMask &enabledBits)
 {
     ASSERT(dirtyBits.any());
 
