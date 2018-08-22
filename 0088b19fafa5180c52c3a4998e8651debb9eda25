@@ -22,6 +22,30 @@
       "revId": "0088b19fafa5180c52c3a4998e8651debb9eda25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5c34ad0_3d7abc7e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2436,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2018-08-22T08:20:46Z",
+      "side": 1,
+      "message": "Hi, Jamie, I have not get your point here. I did not find there is a regression, the code was only moved from StateManager11::applyTextures.\nAnd in StateManager11::clearSRVs, \"clearRange\" variable ensures that there is no redundant calls， only set previous used SRVs to NULL.",
+      "parentUuid": "7a848b80_2fb4207a",
+      "range": {
+        "startLine": 2427,
+        "startChar": 0,
+        "endLine": 2436,
+        "endChar": 96
+      },
+      "revId": "0088b19fafa5180c52c3a4998e8651debb9eda25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
