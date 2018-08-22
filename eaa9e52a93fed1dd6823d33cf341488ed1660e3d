@@ -22,6 +22,30 @@
       "revId": "eaa9e52a93fed1dd6823d33cf341488ed1660e3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c60a7481_24be4cbe",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-08-22T22:58:52Z",
+      "side": 1,
+      "message": "I was confused that despite the comment https://chromium-review.googlesource.com/c/angle/angle/+/446907#message-2299acd97bb6c38fb0eb975e4b9fcb9e234fa613 and the one just below for Passthrough2D11.hlsl it passed that review without distinction if MSAA is needed for the swapchain or not. So I thought maybe it should remain like that for EGL_D3D_TEXTURE_ANGLE (which actually really makes no sense if EGL_D3D_TEXTURE_ANGLE if for PBuffers only) and this is why I wanted to propagate the info if buftype !\u003d EGL_D3D_TEXTURE_ANGLE down to the swap chain. But if that is not needed, then it\u0027s fine to just check for the native window handle and mNeedsOffscreenTexture, right!",
+      "parentUuid": "037a5d5b_9493a723",
+      "range": {
+        "startLine": 142,
+        "startChar": 34,
+        "endLine": 142,
+        "endChar": 52
+      },
+      "revId": "eaa9e52a93fed1dd6823d33cf341488ed1660e3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
