@@ -3522,9 +3522,7 @@ bool ValidateEGLImageTargetTexture2DOES(Context *context, TextureType type, GLeg
         return false;
     }
 
-    const TextureCaps &textureCaps =
-        context->getTextureCaps().get(imageObject->getFormat().info->sizedInternalFormat);
-    if (!textureCaps.texturable)
+    if (!imageObject->isTexturable(context))
     {
         context->handleError(InvalidOperation()
                              << "EGL image internal format is not supported as a texture.");
@@ -3563,9 +3561,7 @@ bool ValidateEGLImageTargetRenderbufferStorageOES(Context *context,
         return false;
     }
 
-    const TextureCaps &textureCaps =
-        context->getTextureCaps().get(imageObject->getFormat().info->sizedInternalFormat);
-    if (!textureCaps.renderbuffer)
+    if (!imageObject->isRenderable(context))
     {
         context->handleError(InvalidOperation()
                              << "EGL image internal format is not supported as a renderbuffer.");
