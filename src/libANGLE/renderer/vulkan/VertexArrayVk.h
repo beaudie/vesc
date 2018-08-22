@@ -39,7 +39,8 @@ class VertexArrayVk : public VertexArrayImpl
     gl::Error syncState(const gl::Context *context,
                         const gl::VertexArray::DirtyBits &dirtyBits,
                         const gl::VertexArray::DirtyAttribBitsArray &attribBits,
-                        const gl::VertexArray::DirtyBindingBitsArray &bindingBits) override;
+                        const gl::VertexArray::DirtyBindingBitsArray &bindingBits,
+                        const gl::AttributesMask &enabledBits) override;
 
     void updateDrawDependencies(vk::CommandGraphResource *drawFramebuffer,
                                 const gl::AttributesMask &activeAttribsMask,

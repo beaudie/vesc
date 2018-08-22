@@ -308,6 +308,11 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
 {
     ASSERT(attribIndex < getMaxAttribs());
 
+    if (mState.mEnabledAttributesMask.test(attribIndex) == enabledState)
+    {
+        return;
+    }
+
     VertexAttribute &attrib = mState.mVertexAttributes[attribIndex];
 
     attrib.enabled = enabledState;
@@ -376,8 +381,14 @@ gl::Error VertexArray::syncState(const Context *context)
     if (mDirtyBits.any())
     {
         mDirtyBitsGuard = mDirtyBits;
+        Program *currentProgram = context->getGLState().getProgram();
+        ASSERT(!currentProgram
+                || mState.mEnabledAttributesMask.size() == currentProgram->getActiveAttribLocationsMask().size());
+        AttributesMask enabledBits = currentProgram
+            ? mState.mEnabledAttributesMask & currentProgram->getActiveAttribLocationsMask()
+            : mState.mEnabledAttributesMask;
         ANGLE_TRY(
-            mVertexArray->syncState(context, mDirtyBits, mDirtyAttribBits, mDirtyBindingBits));
+            mVertexArray->syncState(context, mDirtyBits, mDirtyAttribBits, mDirtyBindingBits, enabledBits));
         mDirtyBits.reset();
         mDirtyBitsGuard.reset();
 
