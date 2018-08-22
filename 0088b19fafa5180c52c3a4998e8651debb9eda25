@@ -46,6 +46,30 @@
       "revId": "0088b19fafa5180c52c3a4998e8651debb9eda25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ff065d0_c0de371f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2436,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-22T15:48:35Z",
+      "side": 1,
+      "message": "You\u0027re right. Thanks for clarifying this. I even tested locally and your CL slightly improves performance on this test.",
+      "parentUuid": "e5c34ad0_3d7abc7e",
+      "range": {
+        "startLine": 2427,
+        "startChar": 0,
+        "endLine": 2436,
+        "endChar": 96
+      },
+      "revId": "0088b19fafa5180c52c3a4998e8651debb9eda25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
