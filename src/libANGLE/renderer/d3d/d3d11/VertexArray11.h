@@ -30,7 +30,8 @@ class VertexArray11 : public VertexArrayImpl
     gl::Error syncState(const gl::Context *context,
                         const gl::VertexArray::DirtyBits &dirtyBits,
                         const gl::VertexArray::DirtyAttribBitsArray &attribBits,
-                        const gl::VertexArray::DirtyBindingBitsArray &bindingBits) override;
+                        const gl::VertexArray::DirtyBindingBitsArray &bindingBits,
+                        const gl::AttributesMask &enabledBits) override;
 
     // Applied buffer pointers are updated here.
     angle::Result syncStateForDraw(const gl::Context *context,
