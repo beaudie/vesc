@@ -46,6 +46,53 @@
       "revId": "d553c4da84fc49a4b469fdde66593cebb6735455",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a6e50af_57188f15",
+        "filename": "src/libANGLE/Compiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-22T14:30:52Z",
+      "side": 1,
+      "message": "Ok, I see.  I\u0027m worried this will add a lot of cost, initializing the compilter, built-in symbols, etc for every compile.  Is there a way we can perf-test this?  We have a CompilerPerfTest but it uses the compiler directly instead of though GL.  It would be good to cover both cases: immediately checking GL_COMPILE_STATUS and poling GL_COMPLETION_STATUS_KHR.",
+      "parentUuid": "01671c59_353d0741",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 56
+      },
+      "revId": "d553c4da84fc49a4b469fdde66593cebb6735455",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09424ce6_3815539f",
+        "filename": "src/libANGLE/Compiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-22T14:30:52Z",
+      "side": 1,
+      "message": "We shouldn\u0027t hold a reference to the compiler, it may be deleted at any time via context deletion or glReleaseShaderCompiler.",
+      "range": {
+        "startLine": 60,
+        "startChar": 4,
+        "endLine": 60,
+        "endChar": 24
+      },
+      "revId": "d553c4da84fc49a4b469fdde66593cebb6735455",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
