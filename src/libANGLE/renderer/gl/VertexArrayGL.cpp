@@ -419,6 +419,9 @@ void VertexArrayGL::updateAttribEnabled(size_t attribIndex)
 {
     const bool enabled = mState.getVertexAttribute(attribIndex).enabled &
                          mProgramActiveAttribLocationsMask.test(attribIndex);
+    fprintf(stderr, "Attrib %zu, enabled? '%c', active? '%c', already enabled? '%c'\n", attribIndex, mState.getVertexAttribute(attribIndex).enabled ? 'Y' : 'N',
+            mProgramActiveAttribLocationsMask.test(attribIndex) ? 'Y' : 'N',
+            mAppliedAttributes[attribIndex].enabled ? 'Y' : 'N');
     if (mAppliedAttributes[attribIndex].enabled == enabled)
     {
         return;
@@ -426,10 +429,12 @@ void VertexArrayGL::updateAttribEnabled(size_t attribIndex)
 
     if (enabled)
     {
+        fprintf(stderr, " -- enabled\n");
         mFunctions->enableVertexAttribArray(static_cast<GLuint>(attribIndex));
     }
     else
     {
+        fprintf(stderr, " -- disabled\n");
         mFunctions->disableVertexAttribArray(static_cast<GLuint>(attribIndex));
     }
 
@@ -734,6 +739,14 @@ void VertexArrayGL::applyNumViewsToDivisor(int numViews)
 
 void VertexArrayGL::applyActiveAttribLocationsMask(const gl::AttributesMask &activeMask)
 {
+    fprintf(stderr, "Program update:\n");
+    fprintf(stderr, " Update Mask: 0b");
+    for (size_t i = 0; i < mProgramActiveAttribLocationsMask.size(); ++i)
+        fprintf(stderr, "%c", mProgramActiveAttribLocationsMask.test(i) ? '1' : '0');
+    fprintf(stderr, " -> 0b");
+    for (size_t i = 0; i < activeMask.size(); ++i)
+        fprintf(stderr, "%c", activeMask.test(i) ? '1' : '0');
+    fprintf(stderr, "\n");
     gl::AttributesMask updateMask     = mProgramActiveAttribLocationsMask ^ activeMask;
     mProgramActiveAttribLocationsMask = activeMask;
 

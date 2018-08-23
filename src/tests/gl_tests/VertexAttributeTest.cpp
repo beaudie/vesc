@@ -1649,6 +1649,121 @@ TEST_P(VertexAttributeTestES3, InactiveAttributeAliasing)
     EXPECT_GL_FALSE(linkStatus);
 }
 
+// Test that enabling inactive attributes doesn't cause a crash
+// shader version is >= 3.00
+TEST_P(VertexAttributeTestES3, EnabledButInactiveAttributes)
+{
+    // TODO syoussefi: this is similar to runtest(), and test is disabled there
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL());
+
+    const std::string testVertexShaderSource =
+        R"(#version 300 es
+        precision mediump float;
+        in vec4 position;
+        layout(location = 1) in vec4 test;
+        layout(location = 2) in vec4 unused1;
+        layout(location = 3) in vec4 unused2;
+        layout(location = 4) in vec4 unused3;
+        layout(location = 5) in vec4 expected;
+        out vec4 color;
+        void main(void)
+        {
+            gl_Position = position;
+            vec4 threshold = max(abs(expected) * 0.01, 1.0 / 64.0);
+            color = vec4(lessThanEqual(abs(test - expected), threshold));
+        })";
+
+    // Same as previous one, except it uses unused1/2 instead of test/expected, leaving unused3 unused
+    const std::string testVertexShader2Source =
+        R"(#version 300 es
+        precision mediump float;
+        in vec4 position;
+        layout(location = 1) in vec4 test;
+        layout(location = 2) in vec4 unused1;
+        layout(location = 3) in vec4 unused2;
+        layout(location = 4) in vec4 unused3;
+        layout(location = 5) in vec4 expected;
+        out vec4 color;
+        void main(void)
+        {
+            gl_Position = position;
+            vec4 threshold = max(abs(expected) * 0.01, 1.0 / 64.0);
+            color = vec4(lessThanEqual(abs(unused1 - unused2), threshold));
+        })";
+
+    const std::string testFragmentShaderSource =
+        R"(#version 300 es
+        precision mediump float;
+        in vec4 color;
+        out vec4 out_color;
+        void main()
+        {
+            out_color = color;
+        })";
+
+    std::array<GLubyte, kVertexCount> inputData = {
+        {0, 1, 2, 3, 4, 5, 6, 7, 125, 126, 127, 128, 129, 250, 251, 252, 253, 254, 255}};
+    std::array<GLfloat, kVertexCount> expectedData;
+    std::array<GLfloat, kVertexCount> inputData2;
+    std::array<GLfloat, kVertexCount> expectedData2;
+    for (size_t i = 0; i < kVertexCount; i++)
+    {
+        expectedData[i] = inputData[i];
+        inputData2[i] = inputData[i] > 128 ? inputData[i] - 1 : inputData[i] + 1;
+        expectedData2[i] = inputData2[i];
+    }
+
+    // Setup the program
+    mProgram = CompileProgram(testVertexShaderSource, testFragmentShaderSource);
+    ASSERT_NE(0u, mProgram);
+
+    mTestAttrib = glGetAttribLocation(mProgram, "test");
+    ASSERT(mTestAttrib == 1);
+    mExpectedAttrib = glGetAttribLocation(mProgram, "expected");
+    ASSERT(mExpectedAttrib == 5);
+
+    GLint unused1Attrib = 2;
+    GLint unused2Attrib = 3;
+    GLint unused3Attrib = 4;
+
+    // Test enabling an unused attribute before glUseProgram
+    glEnableVertexAttribArray(unused3Attrib);
+
+    glUseProgram(mProgram);
+
+    // Setup the test data
+    TestData data(GL_UNSIGNED_BYTE, GL_FALSE, Source::IMMEDIATE, inputData.data(),
+                  expectedData.data());
+    setupTest(data, 1);
+
+    // Test enabling an unused attribute after glUseProgram
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glVertexAttribPointer(unused1Attrib, 1, data.type, data.normalized, 0, inputData2.data());
+    glEnableVertexAttribArray(unused1Attrib);
+
+    glVertexAttribPointer(unused2Attrib, 1, GL_FLOAT, GL_FALSE, 0, expectedData2.data());
+    glEnableVertexAttribArray(unused2Attrib);
+
+    // Run the test.  This shouldn't use the unused attributes.  Note that one of them is nullptr which can cause a crash on certain platform-driver combination.
+    drawQuad(mProgram, "position", 0.5f);
+    checkPixels();
+
+#if 0
+    // Now test with the same attributes enabled, but with a program with different attributes active
+    mProgram = CompileProgram(testVertexShader2Source, testFragmentShaderSource);
+    ASSERT_NE(0u, mProgram);
+
+    // Make sure all the attributes are in the same location
+    ASSERT(glGetAttribLocation(mProgram, "unused1") == unused1Attrib);
+    ASSERT(glGetAttribLocation(mProgram, "unused2") == unused2Attrib);
+
+    // Run the test again.  unused1/2 were disabled in the previous run (as they were inactive in the shader), but should be re-enabled now.
+    drawQuad(mProgram, "position", 0.5f);
+    checkPixels();
+#endif
+}
+
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 // D3D11 Feature Level 9_3 uses different D3D formats for vertex attribs compared to Feature Levels
