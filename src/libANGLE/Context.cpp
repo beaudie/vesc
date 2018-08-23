@@ -7729,6 +7729,7 @@ void StateCache::updateActiveAttribsMask(Context *context)
     {
         mCachedActiveBufferedAttribsMask = AttributesMask();
         mCachedActiveClientAttribsMask   = AttributesMask();
+        mCachedActiveDefaultAttribsMask  = AttributesMask();
         return;
     }
 
@@ -7745,6 +7746,7 @@ void StateCache::updateActiveAttribsMask(Context *context)
 
     mCachedActiveClientAttribsMask   = activeAttribs & clientAttribs;
     mCachedActiveBufferedAttribsMask = activeAttribs & ~clientAttribs;
+    mCachedActiveDefaultAttribsMask  = activeAttribs & ~enabledAttribs;
     mCachedHasAnyEnabledClientAttrib = (clientAttribs & enabledAttribs).any();
 }
 
