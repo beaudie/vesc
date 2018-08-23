@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "99da9755_36f8f76b",
+        "filename": "src/libANGLE/Compiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-08-23T06:58:30Z",
+      "side": 1,
+      "message": "I extended LinkProgramPerfTest to measure the compilation cost only in a separate CL, so that we can use it to inspect the performance difference of this CL notably. The case itself is quite unfriendly to the CL, as the shaders are all very simple, and it doesn\u0027t concurrently compile them. Even though it only caused 10% regression. In real world, if an application has concern on shader complication, most likely it must have many complicated shaders. That\u0027s the situation where the CL would help a lot.\n\nThe perf results below by this CL: https://chromium-review.googlesource.com/c/angle/angle/+/1186159\n\n\nc:\\workspace\\angle\u003epython scripts\\perf_test_runner.py LinkProgram*compile_only*\nUsing test executable: c:\\workspace\\angle\\out\\ReleaseBefore\\angle_perftests.exe\nTest name: LinkProgram*compile_only*\nFound more than one test result in output:\nSkipping tests using configuration ES2_OPENGLES because it is not available.\nNote: Google Test filter \u003d LinkProgram*compile_only*\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] Running 4 tests from 1 test case.\n[----------] Global test environment set-up.\n[----------] 4 tests from LinkProgramBenchmark\n[ RUN      ] LinkProgramBenchmark.Run/d3d11_compile_only\n*RESULT LinkProgram_d3d11_compile_only: score\u003d 561 score\n[       OK ] LinkProgramBenchmark.Run/d3d11_compile_only (5014 ms)\n[ RUN      ] LinkProgramBenchmark.Run/d3d9_compile_only\n*RESULT LinkProgram_d3d9_compile_only: score\u003d 638 score\n[       OK ] LinkProgramBenchmark.Run/d3d9_compile_only (5018 ms)\n[ RUN      ] LinkProgramBenchmark.Run/gl_compile_only\n*RESULT LinkProgram_gl_compile_only: score\u003d 320 score\n[       OK ] LinkProgramBenchmark.Run/gl_compile_only (5030 ms)\n[ RUN      ] LinkProgramBenchmark.Run/vulkan_compile_only\n*RESULT LinkProgram_vulkan_compile_only: score\u003d 2593 score\n[       OK ] LinkProgramBenchmark.Run/vulkan_compile_only (5061 ms)\n[----------] 4 tests from LinkProgramBenchmark (20123 ms total)\n\n[----------] Global test environment tear-down\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] 4 tests from 1 test case ran. (20123 ms total)\n[  PASSED  ] 4 tests.\n\n\nc:\\workspace\\angle\u003epython scripts\\perf_test_runner.py LinkProgram*compile_only*\nUsing test executable: c:\\workspace\\angle\\out\\ReleaseAfter\\angle_perftests.exe\nTest name: LinkProgram*compile_only*\nFound more than one test result in output:\nSkipping tests using configuration ES2_OPENGLES because it is not available.\nNote: Google Test filter \u003d LinkProgram*compile_only*\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] Running 4 tests from 1 test case.\n[----------] Global test environment set-up.\n[----------] 4 tests from LinkProgramBenchmark\n[ RUN      ] LinkProgramBenchmark.Run/d3d11_compile_only\n*RESULT LinkProgram_d3d11_compile_only: score\u003d 514 score\n[       OK ] LinkProgramBenchmark.Run/d3d11_compile_only (5013 ms)\n[ RUN      ] LinkProgramBenchmark.Run/d3d9_compile_only\n*RESULT LinkProgram_d3d9_compile_only: score\u003d 578 score\n[       OK ] LinkProgramBenchmark.Run/d3d9_compile_only (5017 ms)\n[ RUN      ] LinkProgramBenchmark.Run/gl_compile_only\n*RESULT LinkProgram_gl_compile_only: score\u003d 307 score\n[       OK ] LinkProgramBenchmark.Run/gl_compile_only (5027 ms)\n[ RUN      ] LinkProgramBenchmark.Run/vulkan_compile_only\n*RESULT LinkProgram_vulkan_compile_only: score\u003d 2054 score\n[       OK ] LinkProgramBenchmark.Run/vulkan_compile_only (5058 ms)\n[----------] 4 tests from LinkProgramBenchmark (20115 ms total)\n\n[----------] Global test environment tear-down\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] 4 tests from 1 test case ran. (20115 ms total)\n[  PASSED  ] 4 tests.",
+      "parentUuid": "f0794f66_069a72b9",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 56
+      },
+      "revId": "d553c4da84fc49a4b469fdde66593cebb6735455",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "09424ce6_3815539f",
         "filename": "src/libANGLE/Compiler.h",
         "patchSetId": 5
@@ -108,6 +132,30 @@
       "writtenOn": "2018-08-22T14:30:52Z",
       "side": 1,
       "message": "We shouldn\u0027t hold a reference to the compiler, it may be deleted at any time via context deletion or glReleaseShaderCompiler.",
+      "range": {
+        "startLine": 60,
+        "startChar": 4,
+        "endLine": 60,
+        "endChar": 24
+      },
+      "revId": "d553c4da84fc49a4b469fdde66593cebb6735455",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "282ddf24_252c52f6",
+        "filename": "src/libANGLE/Compiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-08-23T06:58:30Z",
+      "side": 1,
+      "message": "Compiler is ref-counted. It can be jointly refereed by Context and Shader. Even Context is destroyed, it can be still alive in Shader. Shader only releases the reference in its onDestroy, where resolveCompile must have done. So it\u0027s a safe reference.",
+      "parentUuid": "09424ce6_3815539f",
       "range": {
         "startLine": 60,
         "startChar": 4,
