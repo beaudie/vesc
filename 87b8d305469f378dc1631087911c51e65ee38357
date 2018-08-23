@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a545802_0ca99ca3",
+        "filename": "src/tests/compiler_tests/SamplerMultisample_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-08-23T14:17:18Z",
+      "side": 1,
+      "message": "This is a bit late, but this block of code is so common, maybe we could make it checkFailsCompilation(std::string);",
+      "revId": "87b8d305469f378dc1631087911c51e65ee38357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12379caf_8e3efb8a",
+        "filename": "src/tests/compiler_tests/SamplerMultisample_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-08-23T14:17:18Z",
+      "side": 1,
+      "message": "typo: texturesize",
+      "range": {
+        "startLine": 259,
+        "startChar": 61,
+        "endLine": 259,
+        "endChar": 71
+      },
+      "revId": "87b8d305469f378dc1631087911c51e65ee38357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
