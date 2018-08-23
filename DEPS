@@ -36,7 +36,7 @@ vars = {
 deps = {
 
   '{angle_root}/build': {
-    'url': '{chromium_git}/chromium/src/build.git@b944b99e72923c5a6699235ed858e725db21f81f',
+    'url': '{chromium_git}/chromium/src/build.git@9748a63a01782c5383aad60eaa6fcdbf84da2274',
     'condition': 'not build_with_chromium',
   },
 
