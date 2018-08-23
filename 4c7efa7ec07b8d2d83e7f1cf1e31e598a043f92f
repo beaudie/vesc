@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7d3aee1_ff75aec6",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2547,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-23T17:27:51Z",
+      "side": 1,
+      "message": "It\u0027s not bad now that we have constant strings for all the errors.  What about an output variable though?\n\n   GLenum ValidateDrawStates(Context *context, const char** outErrorMsg)",
+      "range": {
+        "startLine": 2547,
+        "startChar": 0,
+        "endLine": 2547,
+        "endChar": 48
+      },
+      "revId": "4c7efa7ec07b8d2d83e7f1cf1e31e598a043f92f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
