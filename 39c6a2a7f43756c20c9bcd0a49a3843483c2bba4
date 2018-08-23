@@ -46,6 +46,30 @@
       "revId": "39c6a2a7f43756c20c9bcd0a49a3843483c2bba4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "419a6240_7abc1f99",
+        "filename": "DEPS",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-23T17:27:41Z",
+      "side": 1,
+      "message": "I\u0027m not too particular. Maybe like \"Roll Chromium DEPS for gyp downturn.\"",
+      "parentUuid": "10b3fc49_638ee24c",
+      "range": {
+        "startLine": 48,
+        "startChar": 3,
+        "endLine": 48,
+        "endChar": 23
+      },
+      "revId": "39c6a2a7f43756c20c9bcd0a49a3843483c2bba4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
