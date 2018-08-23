@@ -19,20 +19,41 @@ using namespace angle;
 namespace
 {
 
+enum class LinkProgramOption
+{
+    CompileOnly,
+    CompileAndLink,
+
+    Unspecified
+};
+
 struct LinkProgramParams final : public RenderTestParams
 {
-    LinkProgramParams()
+    LinkProgramParams(LinkProgramOption optionIn)
     {
         majorVersion = 2;
         minorVersion = 0;
         windowWidth  = 256;
         windowHeight = 256;
+        option       = optionIn;
     }
 
     std::string suffix() const override
     {
         std::stringstream strstr;
         strstr << RenderTestParams::suffix();
+
+        switch (option)
+        {
+            case LinkProgramOption::CompileOnly:
+                strstr << "_compile_only";
+                break;
+            case LinkProgramOption::CompileAndLink:
+                strstr << "_compile_and_link";
+                break;
+            default:
+                UNREACHABLE();
+        }
 
         if (eglParameters.deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE)
         {
@@ -41,6 +62,8 @@ struct LinkProgramParams final : public RenderTestParams
 
         return strstr.str();
     }
+
+    LinkProgramOption option;
 };
 
 std::ostream &operator<<(std::ostream &os, const LinkProgramParams &params)
@@ -99,6 +122,11 @@ void LinkProgramBenchmark::drawBenchmark()
 
     GLuint program = CompileProgram(vertexShader, fragmentShader);
     ASSERT_NE(0u, program);
+    if (GetParam().option == LinkProgramOption::CompileOnly)
+    {
+        glDeleteProgram(program);
+        return;
+    }
 
     glUseProgram(program);
 
@@ -114,30 +142,35 @@ void LinkProgramBenchmark::drawBenchmark()
 
 using namespace egl_platform;
 
-LinkProgramParams LinkProgramD3D11Params()
+LinkProgramOption getOption(bool compileOnly)
 {
-    LinkProgramParams params;
+    return (compileOnly ? LinkProgramOption::CompileOnly : LinkProgramOption::CompileAndLink);
+}
+
+LinkProgramParams LinkProgramD3D11Params(bool compileOnly)
+{
+    LinkProgramParams params(getOption(compileOnly));
     params.eglParameters = D3D11();
     return params;
 }
 
-LinkProgramParams LinkProgramD3D9Params()
+LinkProgramParams LinkProgramD3D9Params(bool compileOnly)
 {
-    LinkProgramParams params;
+    LinkProgramParams params(getOption(compileOnly));
     params.eglParameters = D3D9();
     return params;
 }
 
-LinkProgramParams LinkProgramOpenGLOrGLESParams()
+LinkProgramParams LinkProgramOpenGLOrGLESParams(bool compileOnly)
 {
-    LinkProgramParams params;
+    LinkProgramParams params(getOption(compileOnly));
     params.eglParameters = OPENGL_OR_GLES(false);
     return params;
 }
 
-LinkProgramParams LinkProgramVulkanParams()
+LinkProgramParams LinkProgramVulkanParams(bool compileOnly)
 {
-    LinkProgramParams params;
+    LinkProgramParams params(getOption(compileOnly));
     params.eglParameters = VULKAN();
     return params;
 }
@@ -148,9 +181,13 @@ TEST_P(LinkProgramBenchmark, Run)
 }
 
 ANGLE_INSTANTIATE_TEST(LinkProgramBenchmark,
-                       LinkProgramD3D11Params(),
-                       LinkProgramD3D9Params(),
-                       LinkProgramOpenGLOrGLESParams(),
-                       LinkProgramVulkanParams());
+                       LinkProgramD3D11Params(true),
+                       LinkProgramD3D9Params(true),
+                       LinkProgramOpenGLOrGLESParams(true),
+                       LinkProgramVulkanParams(true),
+                       LinkProgramD3D11Params(false),
+                       LinkProgramD3D9Params(false),
+                       LinkProgramOpenGLOrGLESParams(false),
+                       LinkProgramVulkanParams(false));
 
 }  // anonymous namespace
