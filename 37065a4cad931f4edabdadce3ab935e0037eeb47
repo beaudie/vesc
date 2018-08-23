@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2cc6168_49ad61c6",
+        "filename": "DEPS",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-23T17:47:43Z",
+      "side": 1,
+      "message": "looks like you might need to roll this too. could do libpng too. might want to run a build locally to see if there\u0027s anything else missing.",
+      "range": {
+        "startLine": 101,
+        "startChar": 28,
+        "endLine": 101,
+        "endChar": 32
+      },
+      "revId": "37065a4cad931f4edabdadce3ab935e0037eeb47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
