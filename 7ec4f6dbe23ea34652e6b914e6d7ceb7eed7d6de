@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "923ce800_8dea2145",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-23T20:40:27Z",
+      "side": 1,
+      "message": "this is going to affect upstream Skia. Can you start an email chain between me, you and  mtklein? He was originally the one who mentioned that Skia uses ANGLE\u0027s gyp and gypi stuff for this. We should give them a bit to prepare their migration.",
+      "range": {
+        "startLine": 9,
+        "startChar": 25,
+        "endLine": 9,
+        "endChar": 55
+      },
+      "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88670741_ac7bc7c8",
+        "filename": "doc/BuildingAngleForWindowsStore.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-23T20:40:27Z",
+      "side": 1,
+      "message": "you should also update the main README.md to remove the link to this file.",
+      "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8af08863_807e0108",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-23T20:40:27Z",
+      "side": 1,
+      "message": "the bots are sufficient for testing, technically. But reproducing a failure will require a local checkout.",
+      "range": {
+        "startLine": 19,
+        "startChar": 200,
+        "endLine": 19,
+        "endChar": 241
+      },
+      "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eec3415e_6951b4a3",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-23T20:40:27Z",
+      "side": 1,
+      "message": "can we remove this from the exec_script_whitelist in dotfile_settings.gni?",
+      "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cead47b_03213c63",
+        "filename": "src/tests/deqp.gypi",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-23T20:40:27Z",
+      "side": 1,
+      "message": "does this need to be a local variable?",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 11
+      },
+      "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07b503d1_c325cac2",
+        "filename": "util/util.gyp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-23T20:40:27Z",
+      "side": 1,
+      "message": "for most of these sources, when you rename them to gni, it will probably reformat them.",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 14
+      },
+      "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
