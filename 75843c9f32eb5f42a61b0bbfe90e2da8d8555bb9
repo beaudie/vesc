@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d0393269_0105820b",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2485,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-23T15:13:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13d07375_54d68aa2",
+      "range": {
+        "startLine": 2485,
+        "startChar": 7,
+        "endLine": 2485,
+        "endChar": 37
+      },
+      "revId": "75843c9f32eb5f42a61b0bbfe90e2da8d8555bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fb7e6940_be3a02c6",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "75843c9f32eb5f42a61b0bbfe90e2da8d8555bb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3221e42d_82ee2598",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2560,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-23T15:13:30Z",
+      "side": 1,
+      "message": "Added a couple more tests that use this.",
+      "parentUuid": "fb7e6940_be3a02c6",
+      "range": {
+        "startLine": 2560,
+        "startChar": 4,
+        "endLine": 2560,
+        "endChar": 79
+      },
+      "revId": "75843c9f32eb5f42a61b0bbfe90e2da8d8555bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
