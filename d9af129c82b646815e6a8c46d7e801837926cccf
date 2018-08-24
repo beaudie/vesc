@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7163b70_9f8fc8eb",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-24T19:19:17Z",
+      "side": 1,
+      "message": "another question - is it possible to do away with all this rebase_path stuff?",
+      "range": {
+        "startLine": 253,
+        "startChar": 17,
+        "endLine": 253,
+        "endChar": 28
+      },
+      "revId": "d9af129c82b646815e6a8c46d7e801837926cccf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
