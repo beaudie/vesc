@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "47bd736e_2e17c5b0",
+        "filename": "src/compiler/translator/builtin_symbols_hash_autogen.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-08-24T07:49:00Z",
+      "side": 1,
+      "message": "Done. This hash could be removed with a separate patch.",
+      "parentUuid": "a8a81be3_8ef6b2b4",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 32
+      },
+      "revId": "87b8d305469f378dc1631087911c51e65ee38357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a545802_0ca99ca3",
         "filename": "src/tests/compiler_tests/SamplerMultisample_test.cpp",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2018-08-23T14:17:18Z",
       "side": 1,
       "message": "This is a bit late, but this block of code is so common, maybe we could make it checkFailsCompilation(std::string);",
+      "revId": "87b8d305469f378dc1631087911c51e65ee38357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d99dd92_f2bbc2e7",
+        "filename": "src/tests/compiler_tests/SamplerMultisample_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-08-24T07:49:00Z",
+      "side": 1,
+      "message": "It\u0027s copied around mostly since then you see the line where the tests failed in logs. Maybe it could be a macro. Leaving this to be addressed by a separate patch if we want to do something about it.",
+      "parentUuid": "9a545802_0ca99ca3",
       "revId": "87b8d305469f378dc1631087911c51e65ee38357",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -62,6 +104,30 @@
       "revId": "87b8d305469f378dc1631087911c51e65ee38357",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9290c52c_ae4e81ea",
+        "filename": "src/tests/compiler_tests/SamplerMultisample_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-08-24T07:49:00Z",
+      "side": 1,
+      "message": "Whoops, fixed.",
+      "parentUuid": "12379caf_8e3efb8a",
+      "range": {
+        "startLine": 259,
+        "startChar": 61,
+        "endLine": 259,
+        "endChar": 71
+      },
+      "revId": "87b8d305469f378dc1631087911c51e65ee38357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
