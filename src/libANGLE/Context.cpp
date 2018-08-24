@@ -5805,6 +5805,16 @@ void Context::getProgramBinary(GLuint program,
                                GLenum *binaryFormat,
                                void *binary)
 {
+    if (mCaps.shaderBinaryFormats.empty())
+    {
+        if (length)
+        {
+            *length = 0;
+        }
+        handleError(gl::Error(GL_INVALID_OPERATION));
+        return;
+    }
+
     Program *programObject = getProgram(program);
     ASSERT(programObject != nullptr);
 
@@ -5815,6 +5825,8 @@ void Context::programBinary(GLuint program, GLenum binaryFormat, const void *bin
 {
     Program *programObject = getProgram(program);
     ASSERT(programObject != nullptr);
+    ASSERT(std::find(mCaps.shaderBinaryFormats.begin(), mCaps.shaderBinaryFormats.end(),
+                     binaryFormat) != mCaps.shaderBinaryFormats.end());
 
     handleError(programObject->loadBinary(this, binaryFormat, binary, length));
     mStateCache.onProgramExecutableChange(this);
