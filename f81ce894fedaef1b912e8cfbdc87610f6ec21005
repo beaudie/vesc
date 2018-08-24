@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bcbc9145_7bcdb82d",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1656,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-24T15:21:36Z",
+      "side": 1,
+      "message": "you can omit the TODO part and leave this as a comment. \"new\" policy is to have a bug associated with every open TODO so we don\u0027t accumulate TODOs in the code that we don\u0027t plan to address. or you could open a bug. up to you.",
+      "range": {
+        "startLine": 1656,
+        "startChar": 4,
+        "endLine": 1656,
+        "endChar": 79
+      },
+      "revId": "f81ce894fedaef1b912e8cfbdc87610f6ec21005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "235c0926_7ceae186",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-24T15:21:36Z",
+      "side": 1,
+      "message": "tiny nit but you can make this a constexpr char kTextVertexShaderSource[] \u003d",
+      "range": {
+        "startLine": 1659,
+        "startChar": 10,
+        "endLine": 1659,
+        "endChar": 21
+      },
+      "revId": "f81ce894fedaef1b912e8cfbdc87610f6ec21005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc846ab7_0b8aa1ff",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1674,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-24T15:21:36Z",
+      "side": 1,
+      "message": "also tiny nit but could you unindent the multi-line string? indentation doesn\u0027t apply inside the R\"()\" expression.",
+      "range": {
+        "startLine": 1661,
+        "startChar": 0,
+        "endLine": 1674,
+        "endChar": 9
+      },
+      "revId": "f81ce894fedaef1b912e8cfbdc87610f6ec21005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
