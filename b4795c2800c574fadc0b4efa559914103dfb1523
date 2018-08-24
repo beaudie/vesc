@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a5c210e_4ebf2078",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-24T17:12:01Z",
+      "side": 1,
+      "message": "add BUG\u003dangleproject:XXX",
+      "revId": "b4795c2800c574fadc0b4efa559914103dfb1523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
