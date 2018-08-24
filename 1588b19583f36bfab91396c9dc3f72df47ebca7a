@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fab8fdd_0f8e7ff5",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5808,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-24T18:58:24Z",
+      "side": 1,
+      "message": "nit: I think you can use shaderBinaryFormats.empty()",
+      "range": {
+        "startLine": 5808,
+        "startChar": 8,
+        "endLine": 5808,
+        "endChar": 45
+      },
+      "revId": "1588b19583f36bfab91396c9dc3f72df47ebca7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76016d4e_c14c878e",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-24T18:58:24Z",
+      "side": 1,
+      "message": "nit: same",
+      "range": {
+        "startLine": 1046,
+        "startChar": 22,
+        "endLine": 1046,
+        "endChar": 67
+      },
+      "revId": "1588b19583f36bfab91396c9dc3f72df47ebca7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
