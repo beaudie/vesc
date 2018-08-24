@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cac99bc8_123d5083",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5816,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-24T20:36:43Z",
+      "side": 1,
+      "message": "I checked the spec and couldn\u0027t find a defined error for glGetProgramBinary when NUM_PROGRAM_BINARY_FORMATS \u003d\u003d 0. See the spec:\n\nhttps://www.khronos.org/registry/OpenGL/specs/es/3.2/es_spec_3.2.pdf\n\nIt makes sense to return and error. Could you instead move this to the validation layer? This would be in ValidateGetProgramBinaryBase.",
+      "range": {
+        "startLine": 5808,
+        "startChar": 0,
+        "endLine": 5816,
+        "endChar": 5
+      },
+      "revId": "71d541041b2ef16ecd407555c15eac11f1d6809f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
