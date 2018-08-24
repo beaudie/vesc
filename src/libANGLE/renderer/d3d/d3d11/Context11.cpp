@@ -169,6 +169,9 @@ TextureImpl *Context11::createTexture(const gl::TextureState &state)
             return new TextureD3D_External(state, mRenderer);
         case gl::TextureType::_2DMultisample:
             return new TextureD3D_2DMultisample(state, mRenderer);
+        case gl::TextureType::_2DMultisampleArray:
+            UNIMPLEMENTED();
+            return nullptr;
         default:
             UNREACHABLE();
     }
