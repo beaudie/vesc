@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "053b99a1_7710cf13",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-24T14:13:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "313ad969_5488bd7e",
+      "range": {
+        "startLine": 9,
+        "startChar": 25,
+        "endLine": 9,
+        "endChar": 55
+      },
+      "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "88670741_ac7bc7c8",
         "filename": "doc/BuildingAngleForWindowsStore.md",
         "patchSetId": 1
@@ -210,6 +234,30 @@
       "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f0d7758_4fa4073b",
+        "filename": "src/tests/deqp.gypi",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-24T14:13:02Z",
+      "side": 1,
+      "message": "Seems fine.",
+      "parentUuid": "14e9ae52_ee543d80",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 11
+      },
+      "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
