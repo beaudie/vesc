@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "313ad969_5488bd7e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-24T01:59:15Z",
+      "side": 1,
+      "message": "will do",
+      "parentUuid": "923ce800_8dea2145",
+      "range": {
+        "startLine": 9,
+        "startChar": 25,
+        "endLine": 9,
+        "endChar": 55
+      },
+      "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "88670741_ac7bc7c8",
         "filename": "doc/BuildingAngleForWindowsStore.md",
         "patchSetId": 1
@@ -39,6 +63,24 @@
       "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b72ab247_508ce203",
+        "filename": "doc/BuildingAngleForWindowsStore.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-24T01:59:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88670741_ac7bc7c8",
+      "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "6e7ba006_fa324763",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-24T01:59:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8af08863_807e0108",
+      "range": {
+        "startLine": 19,
+        "startChar": 200,
+        "endLine": 19,
+        "endChar": 241
+      },
+      "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eec3415e_6951b4a3",
         "filename": "src/tests/BUILD.gn",
         "patchSetId": 1
@@ -79,6 +145,24 @@
       "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53f2c34f_cd0db639",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-24T01:59:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eec3415e_6951b4a3",
+      "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "14e9ae52_ee543d80",
+        "filename": "src/tests/deqp.gypi",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-24T01:59:15Z",
+      "side": 1,
+      "message": "no, but it\u0027s better than a global, right?",
+      "parentUuid": "5cead47b_03213c63",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 11
+      },
+      "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "07b503d1_c325cac2",
         "filename": "util/util.gyp",
         "patchSetId": 1
@@ -116,6 +224,30 @@
       "writtenOn": "2018-08-23T20:40:27Z",
       "side": 1,
       "message": "for most of these sources, when you rename them to gni, it will probably reformat them.",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 14
+      },
+      "revId": "7ec4f6dbe23ea34652e6b914e6d7ceb7eed7d6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c362306_300e622e",
+        "filename": "util/util.gyp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-24T01:59:15Z",
+      "side": 1,
+      "message": "yep.  I could have run gn format a bunch of times, but I think one git cl format will get them all after the rename.  And at this stage I like having the diffs line up as much as possible.",
+      "parentUuid": "07b503d1_c325cac2",
       "range": {
         "startLine": 4,
         "startChar": 0,
