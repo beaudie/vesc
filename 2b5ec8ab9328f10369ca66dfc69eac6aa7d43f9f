@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "493d680f_62f5d59e",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-24T19:18:07Z",
+      "side": 1,
+      "message": "I think you need to run \u0027git cl format\u0027, it will fix any lines that are over the 100 char limit.",
+      "range": {
+        "startLine": 1676,
+        "startChar": 0,
+        "endLine": 1676,
+        "endChar": 102
+      },
+      "revId": "2b5ec8ab9328f10369ca66dfc69eac6aa7d43f9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
