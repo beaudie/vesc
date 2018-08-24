@@ -140,6 +140,30 @@
       "revId": "f81ce894fedaef1b912e8cfbdc87610f6ec21005",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf8e901f_deb9e182",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1674,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-24T17:39:08Z",
+      "side": 1,
+      "message": "ANGLE is inconsistent which is bad but you can see my preferred formatting for example in SimpleOperationTest.DrawWithCubeTexture. It\u0027s a very minor thing though. You don\u0027t have to fix it systematically.",
+      "parentUuid": "f8972b5c_42a17ab5",
+      "range": {
+        "startLine": 1661,
+        "startChar": 0,
+        "endLine": 1674,
+        "endChar": 9
+      },
+      "revId": "f81ce894fedaef1b912e8cfbdc87610f6ec21005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
