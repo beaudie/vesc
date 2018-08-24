@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7525271d_3d0cf637",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1656,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-24T17:07:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bcbc9145_7bcdb82d",
+      "range": {
+        "startLine": 1656,
+        "startChar": 4,
+        "endLine": 1656,
+        "endChar": 79
+      },
+      "revId": "f81ce894fedaef1b912e8cfbdc87610f6ec21005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "235c0926_7ceae186",
         "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "1c5b4ed3_f4e02a09",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-24T17:07:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "235c0926_7ceae186",
+      "range": {
+        "startLine": 1659,
+        "startChar": 10,
+        "endLine": 1659,
+        "endChar": 21
+      },
+      "revId": "f81ce894fedaef1b912e8cfbdc87610f6ec21005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fc846ab7_0b8aa1ff",
         "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
         "patchSetId": 3
@@ -59,6 +107,30 @@
       "writtenOn": "2018-08-24T15:21:36Z",
       "side": 1,
       "message": "also tiny nit but could you unindent the multi-line string? indentation doesn\u0027t apply inside the R\"()\" expression.",
+      "range": {
+        "startLine": 1661,
+        "startChar": 0,
+        "endLine": 1674,
+        "endChar": 9
+      },
+      "revId": "f81ce894fedaef1b912e8cfbdc87610f6ec21005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8972b5c_42a17ab5",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1674,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-24T17:07:38Z",
+      "side": 1,
+      "message": "Are you sure? The test function right above this is formatted similarly.",
+      "parentUuid": "fc846ab7_0b8aa1ff",
       "range": {
         "startLine": 1661,
         "startChar": 0,
