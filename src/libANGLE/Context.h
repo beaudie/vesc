@@ -48,6 +48,7 @@ namespace gl
 {
 class Buffer;
 class Compiler;
+class Display;
 class FenceNV;
 class Framebuffer;
 class GLES1Renderer;

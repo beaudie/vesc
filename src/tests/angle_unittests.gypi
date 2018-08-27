@@ -26,6 +26,7 @@
             '<(angle_path)/src/common/vector_utils_unittest.cpp',
             '<(angle_path)/src/gpu_info_util/SystemInfo_unittest.cpp',
             '<(angle_path)/src/libANGLE/BinaryStream_unittest.cpp',
+            '<(angle_path)/src/libANGLE/BlobCache_unittest.cpp',
             '<(angle_path)/src/libANGLE/Config_unittest.cpp',
             '<(angle_path)/src/libANGLE/Fence_unittest.cpp',
             '<(angle_path)/src/libANGLE/HandleAllocator_unittest.cpp',
