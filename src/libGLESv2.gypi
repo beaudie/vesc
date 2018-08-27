@@ -147,6 +147,8 @@
             'libANGLE/AttributeMap.cpp',
             'libANGLE/AttributeMap.h',
             'libANGLE/BinaryStream.h',
+            'libANGLE/BlobCache.cpp',
+            'libANGLE/BlobCache.h',
             'libANGLE/Buffer.cpp',
             'libANGLE/Buffer.h',
             'libANGLE/Caps.cpp',

@@ -923,6 +923,25 @@ EGLBoolean EGLAPIENTRY PresentationTimeANDROID(EGLDisplay dpy,
     return EGL_TRUE;
 }
 
+ANGLE_EXPORT void EGLAPIENTRY SetBlobCacheFuncsANDROID(EGLDisplay dpy,
+                                                       EGLSetBlobFuncANDROID set,
+                                                       EGLGetBlobFuncANDROID get)
+{
+    EVENT(
+        "(EGLDisplay dpy = 0x%0.8p, EGLSetBlobFuncANDROID set = 0x%0.8p, EGLGetBlobFuncANDROID get "
+        "= 0x%0.8p)",
+        dpy, set, get);
+    Thread *thread = GetCurrentThread();
+
+    Display *display = static_cast<Display *>(dpy);
+
+    ANGLE_EGL_TRY(thread, ValidateSetBlobCacheANDROID(display, set, get),
+                  "eglSetBlobCacheFuncsANDROID", GetDisplayIfValid(display));
+
+    thread->setSuccess();
+    display->setBlobCacheFuncs(set, get);
+}
+
 EGLint EGLAPIENTRY ProgramCacheGetAttribANGLE(EGLDisplay dpy, EGLenum attrib)
 {
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLenum attrib = 0x%X)", dpy, attrib);

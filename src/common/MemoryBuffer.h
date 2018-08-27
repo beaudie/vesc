@@ -37,6 +37,9 @@ class MemoryBuffer final : NonCopyable
         return mData;
     }
 
+    uint8_t &operator[](size_t pos) { return mData[pos]; }
+    uint8_t operator[](size_t pos) const { return mData[pos]; }
+
     void fill(uint8_t datum);
 
   private:
