@@ -15,6 +15,7 @@
 #include <vector>
 
 #include "libANGLE/AttributeMap.h"
+#include "libANGLE/BlobCache.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Config.h"
 #include "libANGLE/Debug.h"
@@ -51,6 +52,9 @@ struct DisplayState final : private angle::NonCopyable
 
     EGLLabelKHR label;
     SurfaceSet surfaceSet;
+
+    EGLSetBlobFuncANDROID setBlobFunc;
+    EGLGetBlobFuncANDROID getBlobFunc;
 };
 
 // Constant coded here as a sanity limit.
@@ -134,6 +138,10 @@ class Display final : public LabeledObject, angle::NonCopyable
     bool testDeviceLost();
     void notifyDeviceLost();
 
+    void setBlobCacheFuncs(EGLSetBlobFuncANDROID set, EGLGetBlobFuncANDROID get);
+    bool areBlobCacheFuncsSet() const;
+    egl::BlobCache &getBlobCache() { return mBlobCache; }
+
     Error waitClient(const gl::Context *context);
     Error waitNative(const gl::Context *context, EGLint engine);
 
@@ -208,6 +216,7 @@ class Display final : public LabeledObject, angle::NonCopyable
     angle::LoggingAnnotator mAnnotator;
 
     gl::TextureManager *mTextureManager;
+    egl::BlobCache mBlobCache;
     gl::MemoryProgramCache mMemoryProgramCache;
     size_t mGlobalTextureShareGroupUsers;
 };
