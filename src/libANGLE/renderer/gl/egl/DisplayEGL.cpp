@@ -40,6 +40,22 @@ std::string DisplayEGL::getVendorString() const
     return vendor;
 }
 
+namespace blobCache
+{
+void setBlob(const void *key, EGLsizeiANDROID keySize, const void *value, EGLsizeiANDROID valueSize)
+{
+    // TODO syoussefi: for these to work, either blob cache has to turn into a singleton:
+    //   BlobCache::put(key, keySize, value, valueSize)
+    // or an update made to the extension that gives a userPointer:
+    //   egl::Display *display = (egl::Display *)userPointer;
+    //   display->getBlobCache().put(display, key, keySize, value, valueSize);
+}
+void getBlob(const void *key, EGLsizeiANDROID keySize, void *value, EGLsizeiANDROID valueSize)
+{
+    // TODO syoussefi: see setBlob
+}
+}
+
 egl::Error DisplayEGL::initializeContext(EGLContext shareContext,
                                          const egl::AttributeMap &eglAttributes,
                                          EGLContext *outContext) const
@@ -102,6 +118,12 @@ egl::Error DisplayEGL::initializeContext(EGLContext shareContext,
             *outContext = context;
             return egl::NoError();
         }
+    }
+
+    // Register the blob cache if extension is available
+    if (mEGL->hasExtension("EXT_ANDROID_blob_cache"))
+    {
+        mEGL->setBlobCacheFuncsANDROID(blobCache::setBlob, blobCache::getBlob);
     }
 
     return egl::Error(mEGL->getError(), "eglCreateContext failed");
