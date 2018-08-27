@@ -427,6 +427,32 @@ TEST_P(TextureMultisampleArrayWebGLTest, TexStorage3DMultisample)
     EXPECT_EQ(maxSamplesRGBA8, samples);
 }
 
+// Draw into a TEXTURE_2D_MULTISAMPLE_ARRAY texture.
+TEST_P(TextureMultisampleArrayWebGLTest, RenderTargetTest)
+{
+    if (!requestArrayExtension())
+    {
+        return;
+    }
+    GLint maxSamplesRGBA8 = 0;
+    glGetInternalformativ(GL_TEXTURE_2D_MULTISAMPLE_ARRAY_ANGLE, GL_RGBA8, GL_SAMPLES, 1,
+                          &maxSamplesRGBA8);
+
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE_ARRAY_ANGLE, mTexture);
+    ASSERT_GL_NO_ERROR();
+
+    glTexStorage3DMultisampleANGLE(GL_TEXTURE_2D_MULTISAMPLE_ARRAY_ANGLE, maxSamplesRGBA8, GL_RGBA8,
+                                   4, 4, 2, GL_TRUE);
+    ASSERT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTexture, 0, 0);
+    ASSERT_GL_NO_ERROR();
+
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, status);
+}
+
 ANGLE_INSTANTIATE_TEST(TextureMultisampleTest,
                        ES31_D3D11(),
                        ES3_OPENGL(),
