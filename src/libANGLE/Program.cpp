@@ -1471,7 +1471,7 @@ Error Program::saveBinary(const Context *context,
         *binaryFormat = GL_PROGRAM_BINARY_ANGLE;
     }
 
-    angle::MemoryBuffer memoryBuf;
+    std::vector<uint8_t> memoryBuf;
     MemoryProgramCache::Serialize(context, this, &memoryBuf);
 
     GLsizei streamLength       = static_cast<GLsizei>(memoryBuf.size());
