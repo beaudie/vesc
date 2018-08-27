@@ -616,6 +616,7 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     // Note that separate declarations need to be run before other AST transformations that
     // generate new statements from expressions.
     SeparateDeclarations(root);
+    mValidateASTOptions.validateMultiDeclarations = true;
 
     SplitSequenceOperator(root, IntermNodePatternMatcher::kArrayLengthMethod | simplifyScalarized,
                           &getSymbolTable());
