@@ -22,6 +22,30 @@
       "revId": "d9af129c82b646815e6a8c46d7e801837926cccf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bed18f93_82b0d009",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-27T20:09:43Z",
+      "side": 1,
+      "message": "I believe so, if all the paths in the file lists are adjusted.\nI\u0027ll prepare a separate CL for that so we (and Skia which could be impacted) can decide if it\u0027s really an improvement.",
+      "parentUuid": "f7163b70_9f8fc8eb",
+      "range": {
+        "startLine": 253,
+        "startChar": 17,
+        "endLine": 253,
+        "endChar": 28
+      },
+      "revId": "d9af129c82b646815e6a8c46d7e801837926cccf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
