@@ -105,7 +105,8 @@ bool ImageIndex::has3DLayer() const
 
 bool ImageIndex::usesTex3D() const
 {
-    return mType == TextureType::_3D || mType == TextureType::_2DArray;
+    return mType == TextureType::_3D || mType == TextureType::_2DArray ||
+           mType == TextureType::_2DMultisampleArray;
 }
 
 TextureTarget ImageIndex::getTarget() const
