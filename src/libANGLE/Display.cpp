@@ -274,7 +274,7 @@ void ANGLESetDefaultDisplayPlatform(angle::EGLDisplayType display)
 
 }  // anonymous namespace
 
-DisplayState::DisplayState() : label(nullptr)
+DisplayState::DisplayState() : label(nullptr), setBlobFunc(nullptr), getBlobFunc(nullptr)
 {
 }
 
@@ -386,7 +386,8 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
       mDevice(eglDevice),
       mPlatform(platform),
       mTextureManager(nullptr),
-      mMemoryProgramCache(gl::kDefaultMaxProgramCacheMemoryBytes),
+      mBlobCache(gl::kDefaultMaxProgramCacheMemoryBytes),
+      mMemoryProgramCache(mBlobCache),
       mGlobalTextureShareGroupUsers(0)
 {
 }
@@ -947,6 +948,20 @@ void Display::notifyDeviceLost()
     mDeviceLost = true;
 }
 
+void Display::setBlobCacheFuncs(EGLSetBlobFuncANDROID set, EGLGetBlobFuncANDROID get)
+{
+    mState.setBlobFunc = set;
+    mState.getBlobFunc = get;
+}
+
+bool Display::isBlobCacheFuncsSet() const
+{
+    // Either none or both of the callbacks should be set.
+    ASSERT((mState.setBlobFunc != nullptr) == (mState.getBlobFunc != nullptr));
+
+    return mState.setBlobFunc != nullptr;
+}
+
 Error Display::waitClient(const gl::Context *context)
 {
     return mImplementation->waitClient(context);
@@ -1092,6 +1107,9 @@ void Display::initDisplayExtensions()
     // Request extension is implemented in the ANGLE frontend
     mDisplayExtensions.createContextExtensionsEnabled = true;
 
+    // Blob cache extension is provided by the ANGLE frontend
+    mDisplayExtensions.blobCache = true;
+
     mDisplayExtensionString = GenerateExtensionsString(mDisplayExtensions);
 }
 
@@ -1186,7 +1204,7 @@ EGLint Display::programCacheGetAttrib(EGLenum attrib) const
     switch (attrib)
     {
         case EGL_PROGRAM_CACHE_KEY_LENGTH_ANGLE:
-            return static_cast<EGLint>(gl::kProgramHashLength);
+            return static_cast<EGLint>(gl::BlobCache::kKeyLength);
 
         case EGL_PROGRAM_CACHE_SIZE_ANGLE:
             return static_cast<EGLint>(mMemoryProgramCache.entryCount());
@@ -1206,7 +1224,7 @@ Error Display::programCacheQuery(EGLint index,
     ASSERT(index >= 0 && index < static_cast<EGLint>(mMemoryProgramCache.entryCount()));
 
     const angle::MemoryBuffer *programBinary = nullptr;
-    gl::ProgramHash programHash;
+    const gl::BlobCache::Key *programHash;
     // TODO(jmadill): Make this thread-safe.
     bool result =
         mMemoryProgramCache.getAt(static_cast<size_t>(index), &programHash, &programBinary);
@@ -1219,8 +1237,8 @@ Error Display::programCacheQuery(EGLint index,
 
     if (key)
     {
-        ASSERT(*keysize == static_cast<EGLint>(gl::kProgramHashLength));
-        memcpy(key, programHash.data(), gl::kProgramHashLength);
+        ASSERT(*keysize == static_cast<EGLint>(gl::BlobCache::kKeyLength));
+        memcpy(key, programHash->data(), gl::BlobCache::kKeyLength);
     }
 
     if (binary)
@@ -1237,7 +1255,7 @@ Error Display::programCacheQuery(EGLint index,
     }
 
     *binarysize = static_cast<EGLint>(programBinary->size());
-    *keysize    = static_cast<EGLint>(gl::kProgramHashLength);
+    *keysize    = static_cast<EGLint>(gl::BlobCache::kKeyLength);
 
     return NoError();
 }
@@ -1247,10 +1265,10 @@ Error Display::programCachePopulate(const void *key,
                                     const void *binary,
                                     EGLint binarysize)
 {
-    ASSERT(keysize == static_cast<EGLint>(gl::kProgramHashLength));
+    ASSERT(keysize == static_cast<EGLint>(gl::BlobCache::kKeyLength));
 
-    gl::ProgramHash programHash;
-    memcpy(programHash.data(), key, gl::kProgramHashLength);
+    gl::BlobCache::Key programHash;
+    memcpy(programHash.data(), key, gl::BlobCache::kKeyLength);
 
     mMemoryProgramCache.putBinary(programHash, reinterpret_cast<const uint8_t *>(binary),
                                   static_cast<size_t>(binarysize));

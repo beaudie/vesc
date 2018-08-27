@@ -1,5 +1,5 @@
 //
-// Copyright 2017 The ANGLE Project Authors. All rights reserved.
+// Copyright 2017-2018 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
@@ -13,34 +13,8 @@
 #include <array>
 
 #include "common/MemoryBuffer.h"
+#include "libANGLE/BlobCache.h"
 #include "libANGLE/Error.h"
-#include "libANGLE/SizedMRUCache.h"
-
-namespace gl
-{
-// 160-bit SHA-1 hash key.
-constexpr size_t kProgramHashLength = 20;
-using ProgramHash                   = std::array<uint8_t, kProgramHashLength>;
-}  // namespace gl
-
-namespace std
-{
-template <>
-struct hash<gl::ProgramHash>
-{
-    // Simple routine to hash four ints.
-    size_t operator()(const gl::ProgramHash &programHash) const
-    {
-        unsigned int hash = 0;
-        for (uint32_t num : programHash)
-        {
-            hash *= 37;
-            hash += num;
-        }
-        return hash;
-    }
-};
-}  // namespace std
 
 namespace gl
 {
@@ -52,7 +26,7 @@ class ProgramState;
 class MemoryProgramCache final : angle::NonCopyable
 {
   public:
-    MemoryProgramCache(size_t maxCacheSizeBytes);
+    MemoryProgramCache(BlobCache &blobCache);
     ~MemoryProgramCache();
 
     // Writes a program's binary to the output memory buffer.
@@ -68,32 +42,41 @@ class MemoryProgramCache final : angle::NonCopyable
                                   size_t length,
                                   InfoLog &infoLog);
 
-    static void ComputeHash(const Context *context, const Program *program, ProgramHash *hashOut);
+    static void ComputeHash(const Context *context,
+                            const Program *program,
+                            BlobCache::Key *hashOut);
 
     // Check if the cache contains a binary matching the specified program.
-    bool get(const ProgramHash &programHash, const angle::MemoryBuffer **programOut);
+    bool get(const BlobCache::Key &programHash,
+             const Context *context,
+             const angle::MemoryBuffer **programOut);
 
     // For querying the contents of the cache.
-    bool getAt(size_t index, ProgramHash *hashOut, const angle::MemoryBuffer **programOut);
+    bool getAt(size_t index,
+               const BlobCache::Key **hashOut,
+               const angle::MemoryBuffer **programOut);
 
     // Evict a program from the binary cache.
-    void remove(const ProgramHash &programHash);
+    void remove(const BlobCache::Key &programHash);
 
     // Helper method that serializes a program.
-    void putProgram(const ProgramHash &programHash, const Context *context, const Program *program);
+    void putProgram(const BlobCache::Key &programHash,
+                    const Context *context,
+                    const Program *program);
 
     // Same as putProgram but computes the hash.
     void updateProgram(const Context *context, const Program *program);
 
-    // Store a binary directly.
-    void putBinary(const ProgramHash &programHash, const uint8_t *binary, size_t length);
+    // Store a binary directly.  TODO syoussefi: deprecated.  Will be removed until Chrome supports
+    // EGL_ANDROID_blob_cache
+    void putBinary(const BlobCache::Key &programHash, const uint8_t *binary, size_t length);
 
     // Check the cache, and deserialize and load the program if found. Evict existing hash if load
     // fails.
     LinkResult getProgram(const Context *context,
                           const Program *program,
                           ProgramState *state,
-                          ProgramHash *hashOut);
+                          BlobCache::Key *hashOut);
 
     // Empty the cache.
     void clear();
@@ -114,14 +97,7 @@ class MemoryProgramCache final : angle::NonCopyable
     size_t maxSize() const;
 
   private:
-    enum class CacheSource
-    {
-        PutProgram,
-        PutBinary,
-    };
-
-    using CacheEntry = std::pair<angle::MemoryBuffer, CacheSource>;
-    angle::SizedMRUCache<ProgramHash, CacheEntry> mProgramBinaryCache;
+    BlobCache &mBlobCache;
     unsigned int mIssuedWarnings;
 };
 
