@@ -22,6 +22,30 @@
       "revId": "71d541041b2ef16ecd407555c15eac11f1d6809f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac0275f5_c2b8c366",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5816,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-27T15:39:29Z",
+      "side": 1,
+      "message": "Ok, turned out both this check and the one in `programBinary` were already present in the validation layer. Which means the error would have been caught by validation. I removed both checks.",
+      "parentUuid": "cac99bc8_123d5083",
+      "range": {
+        "startLine": 5808,
+        "startChar": 0,
+        "endLine": 5816,
+        "endChar": 5
+      },
+      "revId": "71d541041b2ef16ecd407555c15eac11f1d6809f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
