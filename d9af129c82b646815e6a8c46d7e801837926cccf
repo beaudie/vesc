@@ -46,6 +46,30 @@
       "revId": "d9af129c82b646815e6a8c46d7e801837926cccf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6518fca6_31cd2b9c",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-27T20:50:35Z",
+      "side": 1,
+      "message": "I think it would be a small improvement. SGTM as a follow up!",
+      "parentUuid": "bed18f93_82b0d009",
+      "range": {
+        "startLine": 253,
+        "startChar": 17,
+        "endLine": 253,
+        "endChar": 28
+      },
+      "revId": "d9af129c82b646815e6a8c46d7e801837926cccf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
