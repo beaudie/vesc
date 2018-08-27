@@ -89,6 +89,7 @@ ProcEntry g_procTable[] = {
     {"eglReleaseDeviceANGLE", P(egl::ReleaseDeviceANGLE)},
     {"eglReleaseTexImage", P(egl::ReleaseTexImage)},
     {"eglReleaseThread", P(egl::ReleaseThread)},
+    {"eglSetBlobCacheFuncsANDROID", P(egl::SetBlobCacheFuncsANDROID)},
     {"eglStreamAttribKHR", P(egl::StreamAttribKHR)},
     {"eglStreamConsumerAcquireKHR", P(egl::StreamConsumerAcquireKHR)},
     {"eglStreamConsumerGLTextureExternalAttribsNV",
@@ -1239,5 +1240,5 @@ ProcEntry g_procTable[] = {
     {"glWeightPointerOES", P(gl::WeightPointerOES)},
     {"glWeightPointerOESContextANGLE", P(gl::WeightPointerOESContextANGLE)}};
 
-size_t g_numProcs = 1171;
+size_t g_numProcs = 1172;
 }  // namespace egl
