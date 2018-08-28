@@ -22,6 +22,30 @@
       "revId": "e3e0b1a5677e3ead29e6b8506415aa74a3137124",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6968fc6_795e8ec2",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-08-28T08:12:48Z",
+      "side": 1,
+      "message": "No, this is not referring to GLES but OpenGL 3.2. texImage3DMultisample exists in all GL versions between 3.2 and 4.1, but the texStorage API was only added in 4.2.",
+      "parentUuid": "32a8981f_e0c24f32",
+      "range": {
+        "startLine": 986,
+        "startChar": 86,
+        "endLine": 986,
+        "endChar": 89
+      },
+      "revId": "e3e0b1a5677e3ead29e6b8506415aa74a3137124",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
