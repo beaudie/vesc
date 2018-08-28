@@ -478,6 +478,7 @@ static_library("libANGLE") {
   include_dirs = []
   libs = []
   defines = []
+  cflags = []
   if (angle_link_glx) {
     libs += [ "GL" ]
     defines += [ "ANGLE_LINK_GLX" ]
@@ -586,6 +587,7 @@ static_library("libANGLE") {
 
   if (is_debug) {
     defines += [ "ANGLE_GENERATE_SHADER_DEBUG_INFO" ]
+    cflags += [ "-O0" ]
   }
 
   if (angle_enable_debug_verbose) {
