@@ -9,7 +9,7 @@ Name Strings
 Contributors
 
     Olli Etuaho, NVIDIA Corporation
-    Contributors to OpenGL ES 3.2, on which this extension is based
+    Contributors to OpenGL ES 3.2 and OES_texture_storage_multisample_2d_array, on which this extension is based
 
 Contact
 
@@ -21,7 +21,7 @@ Status
 
 Version
 
-    Last Modified Date: August 23, 2018
+    Last Modified Date: August 28, 2018
     Author Revision: 1
 
 Number
@@ -56,7 +56,7 @@ New Tokens
     Accepted by the <target> parameter of BindTexture,
     TexStorage3DMultisampleANGLE, GetInternalformativ, TexParameter{if}*,
     GetTexParameter{if}v, GetTexLevelParameter{if}vANGLE and
-    by the <textarget> parameter of FramebufferTexture2D:
+    by the <textarget> parameter of FramebufferTextureLayer:
 
         TEXTURE_2D_MULTISAMPLE_ARRAY_ANGLE                0x9102
 
@@ -80,7 +80,26 @@ New Procedures and Functions
                                       sizei depth,
                                       boolean fixedsamplelocations);
 
+Additions to Chapter 7 of the OpenGL ES 3.1 Specification (Programs and Shaders)
+
+    Add to table 7.3 "OpenGL ES Shading Language type tokens" on p. 86:
+
+    Type Name Token                                 Keyword           Attrib   Xfb    Buffer
+    ----------------------------------------------- ----------------- ------- ------- -------
+    SAMPLER_2D_MULTISAMPLE_ARRAY_ANGLE              sampler2DMSArray  (empty) (empty) (empty)
+    INT_SAMPLER_2D_MULTISAMPLE_ARRAY_ANGLE          isampler2DMSArray (empty) (empty) (empty)
+    UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE_ARRAY_ANGLE usampler2DMSArray (empty) (empty) (empty)
+
 Additions to Chapter 8 of the OpenGL ES 3.1 Specification (Textures and Samplers)
+
+    Modify Section 8.1, "Texture Objects"
+
+    (Modify first paragraph of the section on p. 130, adding 2Dms array
+    textures)
+
+    Textures in GL are represented by ... The default texture object is
+    bound to each of ... and TEXTURE_2D_MULTISAMPLE_ARRAY_ANGLE targets during
+    context initialization.
 
     Modify Section 8.8, "Multisample Textures".
 
@@ -210,18 +229,18 @@ Additions to the AGL/EGL/GLX/WGL Specifications
 
     None
 
-Additions to the OpenGL ES Shading Language Specification, Version 3.10.
+Modifications to the OpenGL ES Shading Language Specification, Version 3.10.
 
     Including the following line in a shader can be used to control the
     language featured described in this extension:
 
-      #extension GL_ANGLE_texture_multisample_array : <behavior>
+      #extension GL_OES_texture_storage_multisample_2d_array : <behavior>
 
     where <behavior> is as specified in section 3.5.
 
     A new preprocessor #define is added to the OpenGL ES Shading Language:
 
-      #define GL_ANGLE_texture_multisample_array 1
+      #define GL_OES_texture_storage_multisample_2d_array 1
 
     Add to section 3.8 "Keywords":
 
