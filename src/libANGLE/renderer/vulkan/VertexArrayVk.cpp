@@ -51,6 +51,46 @@ angle::Result StreamVertexData(ContextVk *contextVk,
     ANGLE_TRY(dynamicBuffer->flush(contextVk));
     return angle::Result::Continue();
 }
+
+void BindNonNullVertexBufferRanges(vk::CommandBuffer *commandBuffer,
+                                   const gl::AttributesMask &nonNullAttribMask,
+                                   uint32_t maxAttrib,
+                                   const gl::AttribArray<VkBuffer> &arrayBufferHandles,
+                                   const gl::AttribArray<VkDeviceSize> &arrayBufferOffsets)
+{
+    // Vulkan does not allow binding a null vertex buffer but the default state of null buffers is
+    // valid.
+
+    // We can detect if there are no gaps in active attributes by using the mask of the program
+    // attribs and the max enabled attrib.
+    ASSERT(maxAttrib > 0);
+    if (nonNullAttribMask.to_ulong() == (maxAttrib - 1))
+    {
+        commandBuffer->bindVertexBuffers(0, maxAttrib, arrayBufferHandles.data(),
+                                         arrayBufferOffsets.data());
+        return;
+    }
+
+    // Find ranges of non-null buffers and bind them all together.
+    for (uint32_t attribIdx = 0; attribIdx < maxAttrib; attribIdx++)
+    {
+        if (arrayBufferHandles[attribIdx] != VK_NULL_HANDLE)
+        {
+            // Find the end of this range of non-null handles
+            uint32_t rangeCount = 1;
+            while (attribIdx + rangeCount < maxAttrib &&
+                   arrayBufferHandles[attribIdx + rangeCount] != VK_NULL_HANDLE)
+            {
+                rangeCount++;
+            }
+
+            commandBuffer->bindVertexBuffers(attribIdx, rangeCount, &arrayBufferHandles[attribIdx],
+                                             &arrayBufferOffsets[attribIdx]);
+            attribIdx += rangeCount;
+        }
+    }
+}
+
 }  // anonymous namespace
 
 #define INIT                                        \
@@ -541,57 +581,20 @@ gl::Error VertexArrayVk::onDraw(const gl::Context *context,
     ContextVk *contextVk                    = vk::GetImpl(context);
     const gl::State &state                  = context->getGLState();
     const gl::Program *programGL            = state.getProgram();
+    const gl::AttributesMask &programAttribsMask = programGL->getActiveAttribLocationsMask();
     const gl::AttributesMask &clientAttribs = context->getStateCache().getActiveClientAttribsMask();
     uint32_t maxAttrib                      = programGL->getState().getMaxActiveAttribLocation();
 
     if (clientAttribs.any())
     {
         ANGLE_TRY(drawCallParams.ensureIndexRangeResolved(context));
-
-        mDynamicVertexData.releaseRetainedBuffers(contextVk->getRenderer());
-
-        const auto &attribs  = mState.getVertexAttributes();
-        const auto &bindings = mState.getVertexBindings();
-
-        // TODO(fjhenigman): When we have a bunch of interleaved attributes, they end up
-        // un-interleaved, wasting space and copying time.  Consider improving on that.
-        for (size_t attribIndex : clientAttribs)
-        {
-            const gl::VertexAttribute &attrib = attribs[attribIndex];
-            const gl::VertexBinding &binding  = bindings[attrib.bindingIndex];
-            ASSERT(attrib.enabled && binding.getBuffer().get() == nullptr);
-
-            const size_t bytesToAllocate =
-                (drawCallParams.firstVertex() + drawCallParams.vertexCount()) *
-                mCurrentArrayBufferStrides[attribIndex];
-            const uint8_t *src = static_cast<const uint8_t *>(attrib.pointer) +
-                                 drawCallParams.firstVertex() * binding.getStride();
-
-            size_t destOffset =
-                drawCallParams.firstVertex() * mCurrentArrayBufferStrides[attribIndex];
-
-            // Only vertexCount() vertices will be used by the upcoming draw so that is all we copy,
-            // but we allocate space firstVertex() + vertexCount() so indexing will work.  If we
-            // don't start at zero all the indices will be off.
-            // TODO(fjhenigman): See if we can account for indices being off by adjusting the
-            // offset, thus avoiding wasted memory.
-            ANGLE_TRY(StreamVertexData(contextVk, &mDynamicVertexData, src, bytesToAllocate,
-                                       destOffset, drawCallParams.vertexCount(),
-                                       binding.getStride(),
-                                       mCurrentArrayBufferFormats[attribIndex]->vertexLoadFunction,
-                                       &mCurrentArrayBufferHandles[attribIndex],
-                                       &mCurrentArrayBufferOffsets[attribIndex]));
-        }
-
-        commandBuffer->bindVertexBuffers(0, maxAttrib, mCurrentArrayBufferHandles.data(),
-                                         mCurrentArrayBufferOffsets.data());
     }
     else if (mVertexBuffersDirty || newCommandBuffer)
     {
         if (maxAttrib > 0)
         {
-            commandBuffer->bindVertexBuffers(0, maxAttrib, mCurrentArrayBufferHandles.data(),
-                                             mCurrentArrayBufferOffsets.data());
+            BindNonNullVertexBufferRanges(commandBuffer, programAttribsMask, maxAttrib,
+                                          mCurrentArrayBufferHandles, mCurrentArrayBufferOffsets);
 
             const gl::AttributesMask &bufferedAttribs =
                 context->getStateCache().getActiveBufferedAttribsMask();
