@@ -17,6 +17,7 @@
 
 namespace rx
 {
+class ImageVk;
 
 class PixelBuffer final : angle::NonCopyable
 {
@@ -258,6 +259,8 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
     RenderTargetVk mRenderTarget;
 
     PixelBuffer mPixelBuffer;
+
+    ImageVk *mBoundEGLImage;
 };
 
 }  // namespace rx

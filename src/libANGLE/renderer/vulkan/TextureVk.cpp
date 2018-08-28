@@ -14,6 +14,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
+#include "libANGLE/renderer/vulkan/ImageVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
@@ -429,7 +430,10 @@ PixelBuffer::SubresourceUpdate::SubresourceUpdate(const SubresourceUpdate &other
 
 // TextureVk implementation.
 TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
-    : TextureImpl(state), mRenderTarget(&mImage, &mBaseLevelImageView, this), mPixelBuffer(renderer)
+    : TextureImpl(state),
+      mRenderTarget(&mImage, &mBaseLevelImageView, this),
+      mPixelBuffer(renderer),
+      mBoundEGLImage(nullptr)
 {
 }
 
@@ -727,6 +731,19 @@ angle::Result TextureVk::redefineImage(const gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
+
+    if (mBoundEGLImage != nullptr)
+    {
+        // If this texture is an image target, flush out any updates to the image before orphaning.
+
+        vk::CommandBuffer *commandBuffer = nullptr;
+        ANGLE_TRY(getCommandBufferForWrite(contextVk, &commandBuffer));
+
+        // levelCount is always 1 for EGL image targets
+        ANGLE_TRY(mPixelBuffer.flushUpdatesToImage(contextVk, 1, &mImage, commandBuffer));
+
+        mBoundEGLImage = nullptr;
+    }
 
     // If there is any staged changes for this index, we can remove them since we're going to
     // override them with this call.
@@ -1118,8 +1135,8 @@ gl::Error TextureVk::initializeContents(const gl::Context *context,
 
 const vk::ImageHelper &TextureVk::getImage() const
 {
-    ASSERT(mImage.valid());
-    return mImage;
+    ASSERT(mBoundEGLImage != nullptr || mImage.valid());
+    return mBoundEGLImage ? mBoundEGLImage->getImage() : mImage;
 }
 
 const vk::ImageView &TextureVk::getImageView() const

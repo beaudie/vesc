@@ -138,4 +138,10 @@ gl::Error RenderbufferVk::initializeContents(const gl::Context *context,
     return gl::NoError();
 }
 
+const vk::ImageHelper &RenderbufferVk::getImage() const
+{
+    ASSERT(mImage.valid());
+    return mImage;
+}
+
 }  // namespace rx

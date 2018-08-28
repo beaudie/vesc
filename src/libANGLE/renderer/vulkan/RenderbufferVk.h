@@ -44,6 +44,8 @@ class RenderbufferVk : public RenderbufferImpl, public vk::CommandGraphResource
     gl::Error initializeContents(const gl::Context *context,
                                  const gl::ImageIndex &imageIndex) override;
 
+    const vk::ImageHelper &getImage() const;
+
   private:
     vk::ImageHelper mImage;
     vk::ImageView mImageView;

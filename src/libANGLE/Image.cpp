@@ -125,6 +125,7 @@ void ImageSibling::setSourceEGLImageInitState(gl::InitState initState) const
 
 ImageState::ImageState(EGLenum target, ImageSibling *buffer, const AttributeMap &attribs)
     : label(nullptr),
+      target(target),
       imageIndex(GetImageIndex(target, attribs)),
       source(buffer),
       targets(),
