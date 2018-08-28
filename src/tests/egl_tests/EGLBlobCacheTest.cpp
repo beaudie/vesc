@@ -86,7 +86,8 @@ class EGLBlobCacheTest : public ANGLETest
 
         // Enable the program cache so that angle would do caching, which eventually lands in the
         // BlobCache
-        EGLDisplay display = getEGLWindow()->getDisplay();
+        EGLWindow *window  = getEGLWindow();
+        EGLDisplay display = window->getDisplay();
         if (eglDisplayExtensionEnabled(display, "EGL_ANGLE_program_cache_control"))
         {
             mHasProgramCache = true;

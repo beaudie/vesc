@@ -17,6 +17,7 @@
 
 namespace rx
 {
+class ImageVk;
 
 class PixelBuffer final : angle::NonCopyable
 {
@@ -192,8 +193,8 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
     gl::Error initializeContents(const gl::Context *context,
                                  const gl::ImageIndex &imageIndex) override;
 
-    const vk::ImageHelper &getImage() const;
-    const vk::ImageView &getImageView() const;
+    vk::ImageHelper &getImage();
+    vk::ImageView &getImageView();
     const vk::Sampler &getSampler() const;
 
     angle::Result ensureImageInitialized(ContextVk *contextVk);
@@ -262,6 +263,8 @@ class TextureVk : public TextureImpl, public vk::CommandGraphResource
     std::vector<RenderTargetVk> mCubeMapRenderTargets;
 
     PixelBuffer mPixelBuffer;
+
+    ImageVk *mBoundEGLImage;
 };
 
 }  // namespace rx

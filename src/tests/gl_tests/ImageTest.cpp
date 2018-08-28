@@ -508,6 +508,10 @@ TEST_P(ImageTest, ANGLEExtensionAvailability)
             EXPECT_FALSE(hasExternalESSL3Ext());
         }
     }
+    else if (IsVulkan())
+    {
+        // TODO: expectations
+    }
     else
     {
         EXPECT_FALSE(hasOESExt());

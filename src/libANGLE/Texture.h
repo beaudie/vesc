@@ -432,8 +432,11 @@ class Texture final : public RefCountObject, public egl::ImageSibling, public La
     };
     using DirtyBits = angle::BitSet<DIRTY_BIT_COUNT>;
 
-    Error syncState(const Context *context);
-    bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
+    Error syncState(const Context *context) override;
+    bool hasAnyDirtyBit() const override
+    {
+        return mDirtyBits.any() || (isEGLImageTarget() && getEGLImageTarget()->hasAnyDirtyBit());
+    }
 
   private:
     rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override;

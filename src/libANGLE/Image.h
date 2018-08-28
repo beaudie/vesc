@@ -40,12 +40,17 @@ class ImageSibling : public gl::FramebufferAttachmentObject
     ~ImageSibling() override;
 
     bool isEGLImageTarget() const;
+    Image *getEGLImageTarget() const;
+
     gl::InitState sourceEGLImageInitState() const;
     void setSourceEGLImageInitState(gl::InitState initState) const;
 
     bool isRenderable(const gl::Context *context,
                       GLenum binding,
                       const gl::ImageIndex &imageIndex) const override;
+
+    virtual bool hasAnyDirtyBit() const                     = 0;
+    virtual gl::Error syncState(const gl::Context *context) = 0;
 
   protected:
     // Set the image target of this sibling
@@ -73,6 +78,7 @@ struct ImageState : private angle::NonCopyable
     ~ImageState();
 
     EGLLabelKHR label;
+    EGLenum target;
     gl::ImageIndex imageIndex;
     ImageSibling *source;
     std::set<ImageSibling *> targets;
@@ -112,6 +118,16 @@ class Image final : public RefCountObject, public LabeledObject
     bool orphaned() const;
     gl::InitState sourceInitState() const;
     void setInitState(gl::InitState initState);
+
+    gl::Error syncState(const gl::Context *context)
+    {
+        if (mState.source)
+        {
+            ANGLE_TRY(mState.source->syncState(context));
+        }
+        return gl::NoError();
+    };
+    bool hasAnyDirtyBit() const { return mState.source && mState.source->hasAnyDirtyBit(); }
 
   private:
     friend class ImageSibling;

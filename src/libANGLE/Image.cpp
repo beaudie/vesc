@@ -111,6 +111,11 @@ bool ImageSibling::isEGLImageTarget() const
     return (mTargetOf.get() != nullptr);
 }
 
+Image *ImageSibling::getEGLImageTarget() const
+{
+    return mTargetOf.get();
+}
+
 gl::InitState ImageSibling::sourceEGLImageInitState() const
 {
     ASSERT(isEGLImageTarget());
@@ -133,6 +138,7 @@ bool ImageSibling::isRenderable(const gl::Context *context,
 
 ImageState::ImageState(EGLenum target, ImageSibling *buffer, const AttributeMap &attribs)
     : label(nullptr),
+      target(target),
       imageIndex(GetImageIndex(target, attribs)),
       source(buffer),
       targets(),

@@ -16,6 +16,7 @@
 
 namespace rx
 {
+class ImageVk;
 
 class RenderbufferVk : public RenderbufferImpl, public vk::CommandGraphResource
 {
@@ -44,10 +45,17 @@ class RenderbufferVk : public RenderbufferImpl, public vk::CommandGraphResource
     gl::Error initializeContents(const gl::Context *context,
                                  const gl::ImageIndex &imageIndex) override;
 
+    vk::ImageHelper &getImage();
+    vk::ImageView &getImageView();
+
   private:
+    void releaseImage(const gl::Context *context, RendererVk *renderer);
+
     vk::ImageHelper mImage;
     vk::ImageView mImageView;
     RenderTargetVk mRenderTarget;
+
+    ImageVk *mBoundEGLImage;
 };
 
 }  // namespace rx

@@ -13,6 +13,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/ImageVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
 
@@ -137,8 +138,7 @@ ImageImpl *DisplayVk::createImage(const egl::ImageState &state,
                                   EGLenum target,
                                   const egl::AttributeMap &attribs)
 {
-    UNIMPLEMENTED();
-    return static_cast<ImageImpl *>(0);
+    return new ImageVk(state);
 }
 
 ContextImpl *DisplayVk::createContext(const gl::ContextState &state,
@@ -174,6 +174,13 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     // Vulkan implementation will use regular swap for swapBuffersWithDamage.
     outExtensions->swapBuffersWithDamage = true;
+
+    outExtensions->image            = true;
+    outExtensions->imageBase        = true;
+    outExtensions->glTexture2DImage = true;
+    // outExtensions->glTextureCubemapImage = true;
+    // outExtensions->glTexture3DImage = true;
+    // outExtensions->glRenderbufferImage = true;
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const

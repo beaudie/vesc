@@ -11,6 +11,7 @@
 
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/ImageVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
 namespace rx
@@ -24,7 +25,7 @@ constexpr VkClearColorValue kBlackClearColorValue                 = {{0}};
 }  // anonymous namespace
 
 RenderbufferVk::RenderbufferVk(const gl::RenderbufferState &state)
-    : RenderbufferImpl(state), mRenderTarget(&mImage, &mImageView, this, 0)
+    : RenderbufferImpl(state), mRenderTarget(&mImage, &mImageView, this, 0), mBoundEGLImage(nullptr)
 {
 }
 
@@ -37,10 +38,7 @@ gl::Error RenderbufferVk::onDestroy(const gl::Context *context)
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
-    mImage.release(renderer->getCurrentQueueSerial(), renderer);
-    renderer->releaseObject(getStoredQueueSerial(), &mImageView);
-
-    onStateChange(context, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
+    releaseImage(context, renderer);
 
     return gl::NoError();
 }
@@ -54,6 +52,12 @@ gl::Error RenderbufferVk::setStorage(const gl::Context *context,
     RendererVk *renderer       = contextVk->getRenderer();
     const vk::Format &vkFormat = renderer->getFormat(internalformat);
 
+    if (mBoundEGLImage)
+    {
+        mBoundEGLImage = nullptr;
+        onStateChange(context, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
+    }
+
     if (mImage.valid())
     {
         // Check against the state if we need to recreate the storage.
@@ -61,9 +65,7 @@ gl::Error RenderbufferVk::setStorage(const gl::Context *context,
             static_cast<GLsizei>(width) != mState.getWidth() ||
             static_cast<GLsizei>(height) != mState.getHeight())
         {
-            mImage.release(renderer->getCurrentQueueSerial(), renderer);
-            renderer->releaseObject(getStoredQueueSerial(), &mImageView);
-            onStateChange(context, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
+            releaseImage(context, renderer);
         }
     }
 
@@ -117,15 +119,24 @@ gl::Error RenderbufferVk::setStorageMultisample(const gl::Context *context,
 
 gl::Error RenderbufferVk::setStorageEGLImageTarget(const gl::Context *context, egl::Image *image)
 {
-    UNIMPLEMENTED();
-    return gl::InternalError();
+    ContextVk *contextVk = GetAs<ContextVk>(context->getImplementation());
+    RendererVk *renderer = contextVk->getRenderer();
+
+    mBoundEGLImage = GetImplAs<ImageVk>(image);
+    releaseImage(context, renderer);
+    return gl::NoError();
 }
 
-gl::Error RenderbufferVk::getAttachmentRenderTarget(const gl::Context * /*context*/,
+gl::Error RenderbufferVk::getAttachmentRenderTarget(const gl::Context *context,
                                                     GLenum /*binding*/,
                                                     const gl::ImageIndex & /*imageIndex*/,
                                                     FramebufferAttachmentRenderTarget **rtOut)
 {
+    if (mBoundEGLImage)
+    {
+        return mBoundEGLImage->getRenderTarget(context, rtOut);
+    }
+
     ASSERT(mImage.valid());
     *rtOut = &mRenderTarget;
     return gl::NoError();
@@ -136,6 +147,28 @@ gl::Error RenderbufferVk::initializeContents(const gl::Context *context,
 {
     UNIMPLEMENTED();
     return gl::NoError();
+}
+
+vk::ImageHelper &RenderbufferVk::getImage()
+{
+    ASSERT(mBoundEGLImage != nullptr || mImage.valid());
+    return mBoundEGLImage ? mBoundEGLImage->getImage() : mImage;
+}
+
+vk::ImageView &RenderbufferVk::getImageView()
+{
+    ASSERT(mBoundEGLImage != nullptr || mImage.valid());
+    return mBoundEGLImage ? mBoundEGLImage->getImageView() : mImageView;
+}
+
+void RenderbufferVk::releaseImage(const gl::Context *context, RendererVk *renderer)
+{
+    if (mImage.valid())
+    {
+        mImage.release(renderer->getCurrentQueueSerial(), renderer);
+        renderer->releaseObject(getStoredQueueSerial(), &mImageView);
+        onStateChange(context, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
+    }
 }
 
 }  // namespace rx

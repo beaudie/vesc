@@ -108,6 +108,12 @@ class Renderbuffer final : public RefCountObject, public egl::ImageSibling, publ
     InitState initState(const ImageIndex &imageIndex) const override;
     void setInitState(const ImageIndex &imageIndex, InitState initState) override;
 
+    Error syncState(const Context *context) override;
+    bool hasAnyDirtyBit() const override
+    {
+        return isEGLImageTarget() && getEGLImageTarget()->hasAnyDirtyBit();
+    }
+
   private:
     rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override;
 

@@ -14,6 +14,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
+#include "libANGLE/renderer/vulkan/ImageVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
@@ -431,7 +432,8 @@ PixelBuffer::SubresourceUpdate::SubresourceUpdate(const SubresourceUpdate &other
 TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
     : TextureImpl(state),
       mRenderTarget(&mImage, &mBaseLevelImageView, this, 0),
-      mPixelBuffer(renderer)
+      mPixelBuffer(renderer),
+      mBoundEGLImage(nullptr)
 {
 }
 
@@ -716,8 +718,12 @@ gl::Error TextureVk::setEGLImageTarget(const gl::Context *context,
                                        gl::TextureType type,
                                        egl::Image *image)
 {
-    UNIMPLEMENTED();
-    return gl::InternalError();
+    ContextVk *contextVk = GetAs<ContextVk>(context->getImplementation());
+    RendererVk *renderer = contextVk->getRenderer();
+
+    mBoundEGLImage = GetImplAs<ImageVk>(image);
+    releaseImage(context, renderer);
+    return gl::NoError();
 }
 
 gl::Error TextureVk::setImageExternal(const gl::Context *context,
@@ -736,6 +742,20 @@ angle::Result TextureVk::redefineImage(const gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
+
+    if (mBoundEGLImage != nullptr)
+    {
+        // If this texture is an image target, flush out any updates to the image before orphaning.
+
+        vk::CommandBuffer *commandBuffer = nullptr;
+        ANGLE_TRY(getCommandBufferForWrite(contextVk, &commandBuffer));
+
+        // levelCount is always 1 for EGL image targets
+        ANGLE_TRY(mPixelBuffer.flushUpdatesToImage(contextVk, 1, &mImage, commandBuffer));
+
+        mBoundEGLImage = nullptr;
+        onStateChange(context, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
+    }
 
     // If there is any staged changes for this index, we can remove them since we're going to
     // override them with this call.
@@ -1051,7 +1071,13 @@ gl::Error TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
 angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk)
 {
-    if (mImage.valid() && mPixelBuffer.empty())
+    if (mBoundEGLImage)
+    {
+        ANGLE_TRY(mBoundEGLImage->ensureImageInitialized(contextVk));
+    }
+
+    vk::ImageHelper &image = mBoundEGLImage ? mBoundEGLImage->getImage() : mImage;
+    if (image.valid() && mPixelBuffer.empty())
     {
         return angle::Result::Continue();
     }
@@ -1063,15 +1089,16 @@ angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk)
     const gl::Extents &baseLevelExtents = baseLevelDesc.size;
     const uint32_t levelCount           = getLevelCount();
 
-    if (!mImage.valid())
+    if (!image.valid())
     {
+        ASSERT(mBoundEGLImage == nullptr);
         const vk::Format &format =
             renderer->getFormat(baseLevelDesc.format.info->sizedInternalFormat);
 
         ANGLE_TRY(initImage(contextVk, format, baseLevelExtents, levelCount, commandBuffer));
     }
 
-    return mPixelBuffer.flushUpdatesToImage(contextVk, levelCount, &mImage, commandBuffer);
+    return mPixelBuffer.flushUpdatesToImage(contextVk, levelCount, &image, commandBuffer);
 }
 
 angle::Result TextureVk::initCubeMapRenderTargets(ContextVk *contextVk)
@@ -1151,14 +1178,19 @@ gl::Error TextureVk::initializeContents(const gl::Context *context,
     return gl::NoError();
 }
 
-const vk::ImageHelper &TextureVk::getImage() const
+vk::ImageHelper &TextureVk::getImage()
 {
-    ASSERT(mImage.valid());
-    return mImage;
+    ASSERT(mBoundEGLImage != nullptr || mImage.valid());
+    return mBoundEGLImage ? mBoundEGLImage->getImage() : mImage;
 }
 
-const vk::ImageView &TextureVk::getImageView() const
+vk::ImageView &TextureVk::getImageView()
 {
+    if (mBoundEGLImage)
+    {
+        return mBoundEGLImage->getImageView();
+    }
+
     ASSERT(mImage.valid());
 
     const GLenum minFilter = mState.getSamplerState().getMinFilter();

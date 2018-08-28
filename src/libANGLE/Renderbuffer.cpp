@@ -271,4 +271,14 @@ rx::FramebufferAttachmentObjectImpl *Renderbuffer::getAttachmentImpl() const
     return mImplementation.get();
 }
 
+Error Renderbuffer::syncState(const Context *context)
+{
+    if (isEGLImageTarget())
+    {
+        ANGLE_TRY(getEGLImageTarget()->syncState(context));
+    }
+
+    return gl::NoError();
+}
+
 }  // namespace gl

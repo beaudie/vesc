@@ -1515,6 +1515,10 @@ GLuint Texture::getId() const
 
 Error Texture::syncState(const Context *context)
 {
+    if (isEGLImageTarget())
+    {
+        ANGLE_TRY(getEGLImageTarget()->syncState(context));
+    }
     ANGLE_TRY(mTexture->syncState(context, mDirtyBits));
     mDirtyBits.reset();
     return NoError();
