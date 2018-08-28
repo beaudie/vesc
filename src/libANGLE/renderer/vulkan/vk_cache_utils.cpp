@@ -472,22 +472,19 @@ angle::Result PipelineDesc::initializePipeline(vk::Context *context,
     shaderStages[1].pSpecializationInfo = nullptr;
 
     // TODO(jmadill): Possibly use different path for ES 3.1 split bindings/attribs.
-    gl::AttribArray<VkVertexInputBindingDescription> bindingDescs;
-    gl::AttribArray<VkVertexInputAttributeDescription> attributeDescs;
+    size_t activeAttribCount = activeAttribLocationsMask.count();
+    angle::FixedVector<VkVertexInputBindingDescription, gl::MAX_VERTEX_ATTRIBS> bindingDescs(activeAttribCount);
+    angle::FixedVector<VkVertexInputAttributeDescription, gl::MAX_VERTEX_ATTRIBS> attributeDescs(activeAttribCount);
 
-    uint32_t vertexAttribCount = 0;
-
+    uint32_t packedActiveAttribIdx = 0;
     for (size_t attribIndexSizeT : activeAttribLocationsMask)
     {
         const auto attribIndex = static_cast<uint32_t>(attribIndexSizeT);
 
-        VkVertexInputBindingDescription &bindingDesc       = bindingDescs[attribIndex];
-        VkVertexInputAttributeDescription &attribDesc      = attributeDescs[attribIndex];
+        VkVertexInputBindingDescription &bindingDesc       = bindingDescs[packedActiveAttribIdx];
+        VkVertexInputAttributeDescription &attribDesc      = attributeDescs[packedActiveAttribIdx];
         const PackedVertexInputBindingDesc &packedBinding  = mVertexInputBindings[attribIndex];
         const PackedVertexInputAttributeDesc &packedAttrib = mVertexInputAttribs[attribIndex];
-
-        // TODO(jmadill): Support for gaps in vertex attribute specification.
-        vertexAttribCount = attribIndex + 1;
 
         bindingDesc.binding   = attribIndex;
         bindingDesc.inputRate = static_cast<VkVertexInputRate>(packedBinding.inputRate);
@@ -497,15 +494,17 @@ angle::Result PipelineDesc::initializePipeline(vk::Context *context,
         attribDesc.format   = static_cast<VkFormat>(packedAttrib.format);
         attribDesc.location = static_cast<uint32_t>(packedAttrib.location);
         attribDesc.offset   = packedAttrib.offset;
+
+        packedActiveAttribIdx++;
     }
 
     // The binding descriptions are filled in at draw time.
     vertexInputState.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     vertexInputState.pNext = nullptr;
     vertexInputState.flags = 0;
-    vertexInputState.vertexBindingDescriptionCount   = vertexAttribCount;
+    vertexInputState.vertexBindingDescriptionCount   = activeAttribCount;
     vertexInputState.pVertexBindingDescriptions      = bindingDescs.data();
-    vertexInputState.vertexAttributeDescriptionCount = vertexAttribCount;
+    vertexInputState.vertexAttributeDescriptionCount = activeAttribCount;
     vertexInputState.pVertexAttributeDescriptions    = attributeDescs.data();
 
     // Primitive topology is filled in at draw time.
