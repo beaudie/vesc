@@ -585,6 +585,7 @@ angle_source_set("libANGLE_base") {
   include_dirs = []
   libs = []
   defines = []
+  cflags = []
   if (angle_link_glx) {
     libs += [ "GL" ]
     defines += [ "ANGLE_LINK_GLX" ]
@@ -710,6 +711,7 @@ angle_source_set("libANGLE_base") {
 
   if (is_debug) {
     defines += [ "ANGLE_GENERATE_SHADER_DEBUG_INFO" ]
+    cflags += [ "-O0" ]
   }
 
   configs += [ ":debug_annotations_config" ]
