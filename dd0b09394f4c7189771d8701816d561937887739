@@ -22,6 +22,30 @@
       "revId": "dd0b09394f4c7189771d8701816d561937887739",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2046e80a_a4e9d16f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-08-28T21:48:55Z",
+      "side": 1,
+      "message": "What this is solving is validation of renderbuffers created from textures via glTexImage2D()-\u003eeglCreateImageKHR()-\u003eglEGLImageTargetRenderbufferStorageOES() and textures created from renderbuffers via glRenderbufferStorage()-\u003eeglCreateImageKHR()-\u003eglEGLImageTargetTexture2DOES().\nThis gives you renderbuffers with unsized formats and textures with sized formats, which normally doesn\u0027t happen in ES2.\nThe tests that cover this are all of the ImageTest tests.\nI\u0027d rather not add a new one. The tests start failing once our format support tables conform to specs, as in https://chromium-review.googlesource.com/c/angle/angle/+/1105612",
+      "parentUuid": "24357754_7edceb3d",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 36
+      },
+      "revId": "dd0b09394f4c7189771d8701816d561937887739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
