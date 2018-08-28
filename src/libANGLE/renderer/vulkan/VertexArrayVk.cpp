@@ -30,6 +30,33 @@ bool BindingIsAligned(const gl::VertexBinding &binding, unsigned componentSize)
 {
     return (binding.getOffset() % componentSize == 0) && (binding.getStride() % componentSize == 0);
 }
+
+void BindNonNullVertexBufferRanges(vk::CommandBuffer *commandBuffer,
+                                   uint32_t maxAttrib,
+                                   const gl::AttribArray<VkBuffer> &arrayBufferHandles,
+                                   const gl::AttribArray<VkDeviceSize> &arrayBufferOffsets)
+{
+    // Find ranges of non-null buffers and bind them all together. Vulkan does not allow binding a
+    // null vertex buffer but the default state of null buffers is valid.
+    for (uint32_t attribIdx = 0; attribIdx < maxAttrib; attribIdx++)
+    {
+        if (arrayBufferHandles[attribIdx] != VK_NULL_HANDLE)
+        {
+            // Find the end of this range of non-null handles
+            uint32_t rangeCount = 1;
+            while (attribIdx + rangeCount < maxAttrib &&
+                   arrayBufferHandles[attribIdx + rangeCount] != VK_NULL_HANDLE)
+            {
+                rangeCount++;
+            }
+
+            commandBuffer->bindVertexBuffers(attribIdx, rangeCount, &arrayBufferHandles[attribIdx],
+                                             &arrayBufferOffsets[attribIdx]);
+            attribIdx += rangeCount;
+        }
+    }
+}
+
 }  // anonymous namespace
 
 #define INIT                                        \
@@ -573,15 +600,15 @@ gl::Error VertexArrayVk::onDraw(const gl::Context *context,
     {
         ANGLE_TRY(drawCallParams.ensureIndexRangeResolved(context));
         ANGLE_TRY(streamVertexData(contextVk, clientAttribs, drawCallParams));
-        commandBuffer->bindVertexBuffers(0, maxAttrib, mCurrentArrayBufferHandles.data(),
-                                         mCurrentArrayBufferOffsets.data());
+        BindNonNullVertexBufferRanges(commandBuffer, maxAttrib, mCurrentArrayBufferHandles,
+                                      mCurrentArrayBufferOffsets);
     }
     else if (mVertexBuffersDirty || newCommandBuffer)
     {
         if (maxAttrib > 0)
         {
-            commandBuffer->bindVertexBuffers(0, maxAttrib, mCurrentArrayBufferHandles.data(),
-                                             mCurrentArrayBufferOffsets.data());
+            BindNonNullVertexBufferRanges(commandBuffer, maxAttrib, mCurrentArrayBufferHandles,
+                                          mCurrentArrayBufferOffsets);
 
             const gl::AttributesMask &bufferedAttribs =
                 context->getStateCache().getActiveBufferedAttribsMask();
