@@ -3,11 +3,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// UniformHLSL.cpp:
-//   Methods for GLSL to HLSL translation for uniforms and uniform blocks.
+// ResourcesHLSL.cpp:
+//   Methods for GLSL to HLSL translation for uniforms and interface blocks.
 //
 
-#include "compiler/translator/UniformHLSL.h"
+#include "compiler/translator/ResourcesHLSL.h"
 
 #include "common/utilities.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
@@ -95,7 +95,7 @@ void OutputUniformIndexArrayInitializer(TInfoSinkBase &out,
 
 }  // anonymous namespace
 
-UniformHLSL::UniformHLSL(StructureHLSL *structureHLSL,
+ResourcesHLSL::ResourcesHLSL(StructureHLSL *structureHLSL,
                          ShShaderOutput outputType,
                          const std::vector<Uniform> &uniforms,
                          unsigned int firstUniformRegister)
@@ -110,17 +110,17 @@ UniformHLSL::UniformHLSL(StructureHLSL *structureHLSL,
 {
 }
 
-void UniformHLSL::reserveUniformRegisters(unsigned int registerCount)
+void ResourcesHLSL::reserveUniformRegisters(unsigned int registerCount)
 {
     mUniformRegister = registerCount;
 }
 
-void UniformHLSL::reserveUniformBlockRegisters(unsigned int registerCount)
+void ResourcesHLSL::reserveUniformBlockRegisters(unsigned int registerCount)
 {
     mUniformBlockRegister = registerCount;
 }
 
-const Uniform *UniformHLSL::findUniformByName(const ImmutableString &name) const
+const Uniform *ResourcesHLSL::findUniformByName(const ImmutableString &name) const
 {
     for (size_t uniformIndex = 0; uniformIndex < mUniforms.size(); ++uniformIndex)
     {
@@ -133,7 +133,7 @@ const Uniform *UniformHLSL::findUniformByName(const ImmutableString &name) const
     return nullptr;
 }
 
-unsigned int UniformHLSL::assignUniformRegister(const TType &type,
+unsigned int ResourcesHLSL::assignUniformRegister(const TType &type,
                                                 const ImmutableString &name,
                                                 unsigned int *outRegisterCount)
 {
@@ -179,7 +179,7 @@ unsigned int UniformHLSL::assignUniformRegister(const TType &type,
     return registerIndex;
 }
 
-unsigned int UniformHLSL::assignSamplerInStructUniformRegister(const TType &type,
+unsigned int ResourcesHLSL::assignSamplerInStructUniformRegister(const TType &type,
                                                                const TString &name,
                                                                unsigned int *outRegisterCount)
 {
@@ -196,7 +196,7 @@ unsigned int UniformHLSL::assignSamplerInStructUniformRegister(const TType &type
     return registerIndex;
 }
 
-void UniformHLSL::outputHLSLSamplerUniformGroup(
+void ResourcesHLSL::outputHLSLSamplerUniformGroup(
     TInfoSinkBase &out,
     const HLSLTextureGroup textureGroup,
     const TVector<const TVariable *> &group,
@@ -261,7 +261,7 @@ void UniformHLSL::outputHLSLSamplerUniformGroup(
     *groupTextureRegisterIndex += groupRegisterCount;
 }
 
-void UniformHLSL::outputHLSLImageUniformIndices(TInfoSinkBase &out,
+void ResourcesHLSL::outputHLSLImageUniformIndices(TInfoSinkBase &out,
                                                 const TVector<const TVariable *> &group,
                                                 unsigned int imageArrayIndex,
                                                 unsigned int *groupRegisterCount)
@@ -292,7 +292,7 @@ void UniformHLSL::outputHLSLImageUniformIndices(TInfoSinkBase &out,
     }
 }
 
-void UniformHLSL::outputHLSLReadonlyImageUniformGroup(TInfoSinkBase &out,
+void ResourcesHLSL::outputHLSLReadonlyImageUniformGroup(TInfoSinkBase &out,
                                                       const HLSLTextureGroup textureGroup,
                                                       const TVector<const TVariable *> &group,
                                                       unsigned int *groupTextureRegisterIndex,
@@ -316,7 +316,7 @@ void UniformHLSL::outputHLSLReadonlyImageUniformGroup(TInfoSinkBase &out,
     *imageUniformGroupIndex += groupRegisterCount;
 }
 
-void UniformHLSL::outputHLSLImageUniformGroup(TInfoSinkBase &out,
+void ResourcesHLSL::outputHLSLImageUniformGroup(TInfoSinkBase &out,
                                               const HLSLRWTextureGroup textureGroup,
                                               const TVector<const TVariable *> &group,
                                               unsigned int *groupTextureRegisterIndex,
@@ -340,7 +340,7 @@ void UniformHLSL::outputHLSLImageUniformGroup(TInfoSinkBase &out,
     *imageUniformGroupIndex += groupRegisterCount;
 }
 
-void UniformHLSL::outputHLSL4_0_FL9_3Sampler(TInfoSinkBase &out,
+void ResourcesHLSL::outputHLSL4_0_FL9_3Sampler(TInfoSinkBase &out,
                                              const TType &type,
                                              const TVariable &variable,
                                              const unsigned int registerIndex)
@@ -353,7 +353,7 @@ void UniformHLSL::outputHLSL4_0_FL9_3Sampler(TInfoSinkBase &out,
         << str(registerIndex) << ");\n";
 }
 
-void UniformHLSL::outputUniform(TInfoSinkBase &out,
+void ResourcesHLSL::outputUniform(TInfoSinkBase &out,
                                 const TType &type,
                                 const TVariable &variable,
                                 const unsigned int registerIndex)
@@ -378,7 +378,7 @@ void UniformHLSL::outputUniform(TInfoSinkBase &out,
     out << ArrayString(type) << " : " << registerString << ";\n";
 }
 
-void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
+void ResourcesHLSL::uniformsHeader(TInfoSinkBase &out,
                                  ShShaderOutput outputType,
                                  const ReferencedVariables &referencedUniforms,
                                  TSymbolTable *symbolTable)
@@ -498,7 +498,7 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
     }
 }
 
-void UniformHLSL::samplerMetadataUniforms(TInfoSinkBase &out, const char *reg)
+void ResourcesHLSL::samplerMetadataUniforms(TInfoSinkBase &out, const char *reg)
 {
     // If mSamplerCount is 0 the shader doesn't use any textures for samplers.
     if (mSamplerCount > 0)
@@ -515,7 +515,8 @@ void UniformHLSL::samplerMetadataUniforms(TInfoSinkBase &out, const char *reg)
     }
 }
 
-TString UniformHLSL::uniformBlocksHeader(const ReferencedInterfaceBlocks &referencedInterfaceBlocks)
+TString ResourcesHLSL::uniformBlocksHeader(
+    const ReferencedInterfaceBlocks &referencedInterfaceBlocks)
 {
     TString interfaceBlocks;
 
@@ -552,7 +553,7 @@ TString UniformHLSL::uniformBlocksHeader(const ReferencedInterfaceBlocks &refere
     return (interfaceBlocks.empty() ? "" : ("// Uniform Blocks\n\n" + interfaceBlocks));
 }
 
-TString UniformHLSL::uniformBlockString(const TInterfaceBlock &interfaceBlock,
+TString ResourcesHLSL::uniformBlockString(const TInterfaceBlock &interfaceBlock,
                                         const TVariable *instanceVariable,
                                         unsigned int registerIndex,
                                         unsigned int arrayIndex)
@@ -581,7 +582,7 @@ TString UniformHLSL::uniformBlockString(const TInterfaceBlock &interfaceBlock,
     return hlsl;
 }
 
-TString UniformHLSL::UniformBlockInstanceString(const ImmutableString &instanceName,
+TString ResourcesHLSL::UniformBlockInstanceString(const ImmutableString &instanceName,
                                                 unsigned int arrayIndex)
 {
     if (arrayIndex != GL_INVALID_INDEX)
@@ -594,7 +595,7 @@ TString UniformHLSL::UniformBlockInstanceString(const ImmutableString &instanceN
     }
 }
 
-TString UniformHLSL::uniformBlockMembersString(const TInterfaceBlock &interfaceBlock,
+TString ResourcesHLSL::uniformBlockMembersString(const TInterfaceBlock &interfaceBlock,
                                                TLayoutBlockStorage blockStorage)
 {
     TString hlsl;
@@ -628,7 +629,7 @@ TString UniformHLSL::uniformBlockMembersString(const TInterfaceBlock &interfaceB
     return hlsl;
 }
 
-TString UniformHLSL::uniformBlockStructString(const TInterfaceBlock &interfaceBlock)
+TString ResourcesHLSL::uniformBlockStructString(const TInterfaceBlock &interfaceBlock)
 {
     const TLayoutBlockStorage blockStorage = interfaceBlock.blockStorage();
 
