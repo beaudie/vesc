@@ -30,6 +30,21 @@ bool BindingIsAligned(const gl::VertexBinding &binding, unsigned componentSize)
 {
     return (binding.getOffset() % componentSize == 0) && (binding.getStride() % componentSize == 0);
 }
+
+void BindIndividualVertexBuffers(vk::CommandBuffer *commandBuffer,
+                                 uint32_t maxAttrib,
+                                 const gl::AttribArray<VkBuffer> &arrayBufferHandles,
+                                 const gl::AttribArray<VkDeviceSize> &arrayBufferOffsets)
+{
+    for (uint32_t i = 0; i < maxAttrib; i++)
+    {
+        if (arrayBufferHandles[i] != VK_NULL_HANDLE)
+        {
+            commandBuffer->bindVertexBuffers(i, 1, &arrayBufferHandles[i], &arrayBufferOffsets[i]);
+        }
+    }
+}
+
 }  // anonymous namespace
 
 #define INIT                                        \
@@ -573,15 +588,15 @@ gl::Error VertexArrayVk::onDraw(const gl::Context *context,
     {
         ANGLE_TRY(drawCallParams.ensureIndexRangeResolved(context));
         ANGLE_TRY(streamVertexData(contextVk, clientAttribs, drawCallParams));
-        commandBuffer->bindVertexBuffers(0, maxAttrib, mCurrentArrayBufferHandles.data(),
-                                         mCurrentArrayBufferOffsets.data());
+        BindIndividualVertexBuffers(commandBuffer, maxAttrib, mCurrentArrayBufferHandles,
+                                    mCurrentArrayBufferOffsets);
     }
     else if (mVertexBuffersDirty || newCommandBuffer)
     {
         if (maxAttrib > 0)
         {
-            commandBuffer->bindVertexBuffers(0, maxAttrib, mCurrentArrayBufferHandles.data(),
-                                             mCurrentArrayBufferOffsets.data());
+            BindIndividualVertexBuffers(commandBuffer, maxAttrib, mCurrentArrayBufferHandles,
+                                        mCurrentArrayBufferOffsets);
 
             const gl::AttributesMask &bufferedAttribs =
                 context->getStateCache().getActiveBufferedAttribsMask();
