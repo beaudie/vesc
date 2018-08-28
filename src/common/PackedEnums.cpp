@@ -142,6 +142,11 @@ TextureType SamplerTypeToTextureType(GLenum samplerType)
         case GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE:
             return TextureType::_2DMultisample;
 
+        case GL_SAMPLER_2D_MULTISAMPLE_ARRAY:
+        case GL_INT_SAMPLER_2D_MULTISAMPLE_ARRAY:
+        case GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE_ARRAY:
+            return TextureType::_2DMultisampleArray;
+
         case GL_SAMPLER_2D_RECT_ANGLE:
             return TextureType::Rectangle;
 
