@@ -270,7 +270,8 @@ RendererVk::RendererVk()
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
       mDevice(VK_NULL_HANDLE),
       mLastCompletedQueueSerial(mQueueSerialFactory.generate()),
-      mCurrentQueueSerial(mQueueSerialFactory.generate())
+      mCurrentQueueSerial(mQueueSerialFactory.generate()),
+      mDeviceLost(false)
 {
 }
 
@@ -323,6 +324,16 @@ void RendererVk::onDestroy(vk::Context *context)
 
     mMemoryProperties.destroy();
     mPhysicalDevice = VK_NULL_HANDLE;
+}
+
+void RendererVk::markDeviceLost()
+{
+    mDeviceLost = true;
+}
+
+bool RendererVk::isDeviceLost() const
+{
+    return mDeviceLost;
 }
 
 angle::Result RendererVk::initialize(vk::Context *context,
