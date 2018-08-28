@@ -22,6 +22,30 @@
       "revId": "66116ed26c910fe100dd55b89c08566dfd5211a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fdae7b9_05da6dd8",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3361,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2018-08-28T07:19:24Z",
+      "side": 1,
+      "message": "had merged syncUniformBuffersForCompute to this function. It is better to use dirty in other patch. Do you think so?",
+      "parentUuid": "30ff8282_ecb8d974",
+      "range": {
+        "startLine": 3356,
+        "startChar": 0,
+        "endLine": 3361,
+        "endChar": 5
+      },
+      "revId": "66116ed26c910fe100dd55b89c08566dfd5211a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
