@@ -74,7 +74,10 @@ class RendererVk : angle::NonCopyable
     const gl::Limitations &getNativeLimitations() const;
     uint32_t getMaxActiveTextures();
 
-    Serial getCurrentQueueSerial() const;
+    Serial getCurrentQueueSerial() const
+    {
+        return mCurrentQueueSerial;
+    }
 
     bool isSerialInUse(Serial serial) const;
 
