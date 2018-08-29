@@ -709,6 +709,130 @@ TEST_P(TextureMultisampleArrayWebGLTest, SimpleTexelFetch)
     }
 }
 
+// Test out-of-range texel fetches from a multisample array texture. Test with sample number out of
+// range.
+TEST_P(TextureMultisampleArrayWebGLTest, SampleNumOutOfRangeTexelFetch)
+{
+    ANGLE_SKIP_TEST_IF(!requestArrayExtension());
+
+    ANGLE_GL_PROGRAM(texelFetchProgram, essl31_shaders::vs::Passthrough(),
+                     blitArrayTextureLayerFragmentShader());
+
+    GLint texLocation = glGetUniformLocation(texelFetchProgram, "tex");
+    ASSERT_GE(texLocation, 0);
+    GLint layerLocation = glGetUniformLocation(texelFetchProgram, "layer");
+    ASSERT_GE(layerLocation, 0);
+    GLint sampleNumLocation = glGetUniformLocation(texelFetchProgram, "sampleNum");
+    ASSERT_GE(layerLocation, 0);
+
+    const GLsizei kWidth      = 4;
+    const GLsizei kHeight     = 4;
+    const GLsizei kLayerCount = 2;
+
+    std::vector<GLenum> testFormats = {GL_RGBA8};
+    GLint samplesToUse = getSamplesToUse(GL_TEXTURE_2D_MULTISAMPLE_ARRAY_OES, testFormats);
+
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE_ARRAY_OES, mTexture);
+    glTexStorage3DMultisampleOES(GL_TEXTURE_2D_MULTISAMPLE_ARRAY_OES, samplesToUse, GL_RGBA8,
+                                 kWidth, kHeight, 2, GL_TRUE);
+    ASSERT_GL_NO_ERROR();
+
+    // Clear all the layers to white one by one.
+    glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    for (GLint i = 0; static_cast<size_t>(i) < kLayerCount; ++i)
+    {
+        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTexture, 0, i);
+        GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, status);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ASSERT_GL_NO_ERROR();
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glUseProgram(texelFetchProgram);
+    glViewport(0, 0, kWidth, kHeight);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    for (GLint layer = 0; static_cast<size_t>(layer) < kLayerCount; ++layer)
+    {
+        glUniform1i(layerLocation, layer);
+        // Test sample number -1.
+        glClear(GL_COLOR_BUFFER_BIT);
+        glUniform1i(sampleNumLocation, -1);
+        drawQuad(texelFetchProgram, essl31_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+        ASSERT_GL_NO_ERROR();
+        EXPECT_PIXEL_RECT_EQ(0, 0, kWidth, kHeight, GLColor::transparentBlack);
+        // Test sample number that's one larger than max valid number.
+        glClear(GL_COLOR_BUFFER_BIT);
+        glUniform1i(sampleNumLocation, samplesToUse);
+        drawQuad(texelFetchProgram, essl31_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+        ASSERT_GL_NO_ERROR();
+        EXPECT_PIXEL_RECT_EQ(0, 0, kWidth, kHeight, GLColor::transparentBlack);
+    }
+}
+
+// Test out-of-range texel fetches from a multisample array texture. Test with layer index out of
+// range.
+TEST_P(TextureMultisampleArrayWebGLTest, LayerOutOfRangeTexelFetch)
+{
+    ANGLE_SKIP_TEST_IF(!requestArrayExtension());
+
+    ANGLE_GL_PROGRAM(texelFetchProgram, essl31_shaders::vs::Passthrough(),
+                     blitArrayTextureLayerFragmentShader());
+
+    GLint texLocation = glGetUniformLocation(texelFetchProgram, "tex");
+    ASSERT_GE(texLocation, 0);
+    GLint layerLocation = glGetUniformLocation(texelFetchProgram, "layer");
+    ASSERT_GE(layerLocation, 0);
+    GLint sampleNumLocation = glGetUniformLocation(texelFetchProgram, "sampleNum");
+    ASSERT_GE(layerLocation, 0);
+
+    const GLsizei kWidth      = 4;
+    const GLsizei kHeight     = 4;
+    const GLsizei kLayerCount = 2;
+
+    std::vector<GLenum> testFormats = {GL_RGBA8};
+    GLint samplesToUse = getSamplesToUse(GL_TEXTURE_2D_MULTISAMPLE_ARRAY_OES, testFormats);
+
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE_ARRAY_OES, mTexture);
+    glTexStorage3DMultisampleOES(GL_TEXTURE_2D_MULTISAMPLE_ARRAY_OES, samplesToUse, GL_RGBA8,
+                                 kWidth, kHeight, 2, GL_TRUE);
+    ASSERT_GL_NO_ERROR();
+
+    // Clear all the layers to white one by one.
+    glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    for (GLint i = 0; static_cast<size_t>(i) < kLayerCount; ++i)
+    {
+        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTexture, 0, i);
+        GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, status);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ASSERT_GL_NO_ERROR();
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glUseProgram(texelFetchProgram);
+    glViewport(0, 0, kWidth, kHeight);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    for (GLint sampleNum = 0; sampleNum < samplesToUse; ++sampleNum)
+    {
+        glUniform1i(sampleNumLocation, sampleNum);
+        // Test layer index -1.
+        glClear(GL_COLOR_BUFFER_BIT);
+        glUniform1i(layerLocation, -1);
+        drawQuad(texelFetchProgram, essl31_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+        ASSERT_GL_NO_ERROR();
+        EXPECT_PIXEL_RECT_EQ(0, 0, kWidth, kHeight, GLColor::transparentBlack);
+        // Test layer index num_layers (one larger than max valid layer).
+        glClear(GL_COLOR_BUFFER_BIT);
+        glUniform1i(layerLocation, kLayerCount);
+        drawQuad(texelFetchProgram, essl31_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+        ASSERT_GL_NO_ERROR();
+        EXPECT_PIXEL_RECT_EQ(0, 0, kWidth, kHeight, GLColor::transparentBlack);
+    }
+}
+
 ANGLE_INSTANTIATE_TEST(TextureMultisampleTest,
                        ES31_D3D11(),
                        ES3_OPENGL(),
