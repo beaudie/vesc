@@ -125,11 +125,11 @@ angle_undefine_configs = [ "//build/config/compiler:default_include_dirs" ]
 
 # Holds the shared includes so we only need to list them once.
 source_set("includes") {
-  sources = rebase_path(libangle_includes, ".", "src")
+  sources = libangle_includes
 }
 
 static_library("preprocessor") {
-  sources = rebase_path(angle_preprocessor_sources, ".", "src")
+  sources = angle_preprocessor_sources
 
   configs -= angle_undefine_configs
   configs += [
