@@ -219,6 +219,31 @@ static_library("angle_image_util") {
   ]
 }
 
+config("angle4android_opt_in_config") {
+  include_dirs = [
+    "include",
+    "src",
+  ]
+}
+
+static_library("angle4android_opt_in") {
+  sources = [
+    "src/a4a_opt_in/OptIn.cpp",
+  ]
+
+  configs -= angle_undefine_configs
+  configs += [
+    ":internal_config",
+    ":extra_warnings",
+  ]
+
+  public_configs = [ ":angle4android_opt_in_config" ]
+
+  public_deps = [
+    ":angle_common",
+  ]
+}
+
 config("angle_gpu_info_util_config") {
   include_dirs = [
     "include",
@@ -462,6 +487,7 @@ static_library("libANGLE") {
     ":angle_common",
   ]
   deps = [
+    ":angle4android_opt_in",
     ":angle_gpu_info_util",
     ":angle_image_util",
     ":commit_id",
