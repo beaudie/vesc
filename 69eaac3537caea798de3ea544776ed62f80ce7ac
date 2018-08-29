@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ed3ac6f_7467ec7f",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-29T20:27:24Z",
+      "side": 1,
+      "message": "Once `putBinary` is moved out of commission, the only caching done by angle would be for programs, so our only source is Memory. That would make `.second` redundant. However, that means the cache hit/miss histogram is going to be torn between ANGLE\u0027s and the application\u0027s caches. That\u0027s probably fine, but whatever tool outputs this info would need to become aware of that eventual change.",
+      "revId": "69eaac3537caea798de3ea544776ed62f80ce7ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09eb8a0a_83183ea8",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-29T20:27:24Z",
+      "side": 1,
+      "message": "When `put`ting into the cache, if an application provides callbacks, we don\u0027t try to keep a copy. This is so that if a corresponding `get` is never called, we won\u0027t be wasting a spot for it.\n\nWhen a blob is `get`ted (lol, that sounds weird), only then the `BlobCache` would keep a copy of it so a reference can be returned from then on.",
+      "revId": "69eaac3537caea798de3ea544776ed62f80ce7ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3643937c_2abf18b6",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-29T20:27:24Z",
+      "side": 1,
+      "message": "In case the entry changes in the meantime, or is evicted.",
+      "revId": "69eaac3537caea798de3ea544776ed62f80ce7ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3bea4a9_3368a716",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-29T20:27:24Z",
+      "side": 1,
+      "message": "A side effect of this is that changes to the value of this key in the application cache will not be reflected in ANGLE\u0027s. Not sure if that\u0027s a real problem.",
+      "revId": "69eaac3537caea798de3ea544776ed62f80ce7ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f46e4d6_e9bd68bd",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-29T20:27:24Z",
+      "side": 1,
+      "message": "Kinda ugly, but only way I can get `hash` overloaded for an internal type.",
+      "revId": "69eaac3537caea798de3ea544776ed62f80ce7ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb2002f0_0c1ff671",
+        "filename": "src/libANGLE/MemoryProgramCache.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-29T20:27:24Z",
+      "side": 1,
+      "message": "I could live with either `angle::MemoryBuffer` or `BlobCache::Value` here. If you have a preference, let me know.",
+      "revId": "69eaac3537caea798de3ea544776ed62f80ce7ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

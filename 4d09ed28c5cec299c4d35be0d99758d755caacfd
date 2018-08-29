@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "f9a4fb96_d0c9fb8e",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-29T20:27:24Z",
+      "side": 1,
+      "message": "Will add links. I generally prefer less parentheses, does `TODO syoussefi` trip up some tool or something?",
+      "parentUuid": "f99316cf_67d5e5fc",
+      "range": {
+        "startLine": 82,
+        "startChar": 11,
+        "endLine": 82,
+        "endChar": 25
+      },
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c2e9681f_3d310a14",
         "filename": "src/libANGLE/BlobCache.cpp",
         "patchSetId": 4
@@ -111,6 +135,30 @@
       "writtenOn": "2018-08-29T17:37:07Z",
       "side": 1,
       "message": "how about MemoryBlobCache? To distinguish this from any possible disk implementation.",
+      "range": {
+        "startLine": 39,
+        "startChar": 6,
+        "endLine": 39,
+        "endChar": 16
+      },
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfdf6d78_53959489",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-29T20:27:24Z",
+      "side": 1,
+      "message": "This _does_ call back into the application that could do disk caching.",
+      "parentUuid": "c6257cc2_4013197d",
       "range": {
         "startLine": 39,
         "startChar": 6,
@@ -215,6 +263,30 @@
       "writtenOn": "2018-08-29T17:37:07Z",
       "side": 1,
       "message": "grammar nit: should probably be \"areBlobCacheFuncsSet\"",
+      "range": {
+        "startLine": 142,
+        "startChar": 9,
+        "endLine": 142,
+        "endChar": 28
+      },
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82ac72ae_95f4c498",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-29T20:27:24Z",
+      "side": 1,
+      "message": "I wasn\u0027t sure which one would be weirder. It\u0027s not uncommon for grammar to be sacrificed in programming for the sake of consistency. Like you always have `isX()`, I\u0027ve never seen an `areX()` :D",
+      "parentUuid": "0e2ba3fd_feb95054",
       "range": {
         "startLine": 142,
         "startChar": 9,
