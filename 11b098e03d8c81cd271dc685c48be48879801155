@@ -22,6 +22,29 @@
       "revId": "11b098e03d8c81cd271dc685c48be48879801155",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a735fbd9_8a4aafb9",
+        "filename": "extensions/ANGLE_texture_multisample_array.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-29T14:54:42Z",
+      "side": 1,
+      "message": "I didn\u0027t realize that there was already an extension for this, I don\u0027t think it makes sense for us to have a nearly identical spec if we can support OES_texture_storage_multisample_2d_array instead.\n\nThe out-of-bounds texel fetching behaviour we can lump in with the out-of-bounds access guarantees ANGLE makes for other texture types instead of calling it out here specifically.",
+      "range": {
+        "startLine": 12,
+        "startChar": 38,
+        "endLine": 12,
+        "endChar": 78
+      },
+      "revId": "11b098e03d8c81cd271dc685c48be48879801155",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
