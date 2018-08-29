@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37f4da96_0f3f9746",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5015,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-29T14:52:32Z",
+      "side": 1,
+      "message": "there should be a new function for this since it comes from a different entry point. Can you add a new function to Texture.h/cpp and TextureImpl.h/cpp and all associated impl classes?",
+      "range": {
+        "startLine": 5015,
+        "startChar": 25,
+        "endLine": 5015,
+        "endChar": 46
+      },
+      "revId": "d438ca92fc6e0ac1fb079790dee926f87703cad8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
