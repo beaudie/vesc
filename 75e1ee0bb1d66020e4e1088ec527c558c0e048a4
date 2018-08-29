@@ -22,6 +22,30 @@
       "revId": "75e1ee0bb1d66020e4e1088ec527c558c0e048a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "175d8bef_3b1efbb9",
+        "filename": "src/compiler/translator/OutputHLSL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-08-29T03:25:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a466eee1_54258f71",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 20
+      },
+      "revId": "75e1ee0bb1d66020e4e1088ec527c558c0e048a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
