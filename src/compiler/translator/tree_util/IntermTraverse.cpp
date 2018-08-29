@@ -282,6 +282,27 @@ void TIntermTraverser::insertStatementInParentBlock(TIntermNode *statement)
     insertStatementsInParentBlock(insertions);
 }
 
+void TIntermTraverser::insertStatementsInBlockAtPosition(TIntermBlock *parent,
+                                                         size_t position,
+                                                         const TIntermSequence &insertions)
+{
+    TIntermSequence emptyInsertionsAfter;
+    insertStatementsInBlockAtPosition(parent, position, insertions, emptyInsertionsAfter);
+}
+
+void TIntermTraverser::insertStatementsInBlockAtPosition(TIntermBlock *parent,
+                                                         size_t position,
+                                                         const TIntermSequence &insertionsBefore,
+                                                         const TIntermSequence &insertionsAfter)
+{
+    ASSERT(parent);
+    ASSERT(position >= 0);
+    ASSERT(position < parent->getChildCount());
+
+    NodeInsertMultipleEntry insert(parent, position, insertionsBefore, insertionsAfter);
+    mInsertions.push_back(insert);
+}
+
 void TLValueTrackingTraverser::setInFunctionCallOutParameter(bool inOutParameter)
 {
     mInFunctionCallOutParameter = inOutParameter;
