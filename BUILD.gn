@@ -219,6 +219,32 @@ static_library("angle_image_util") {
   ]
 }
 
+config("angle_feature_support_util_config") {
+  include_dirs = [
+    "include",
+    "src",
+  ]
+}
+
+static_library("angle_feature_support_util") {
+  sources = [
+    "src/feature_support_util/feature_support_util.h",
+    "src/feature_support_util/feature_support_util.cpp",
+  ]
+
+  configs -= angle_undefine_configs
+  configs += [
+    ":internal_config",
+    ":extra_warnings",
+  ]
+
+  public_configs = [ ":angle_feature_support_util_config" ]
+
+  public_deps = [
+    ":angle_common",
+  ]
+}
+
 config("angle_gpu_info_util_config") {
   include_dirs = [
     "include",
@@ -462,6 +488,7 @@ static_library("libANGLE") {
     ":angle_common",
   ]
   deps = [
+    ":angle_feature_support_util",
     ":angle_gpu_info_util",
     ":angle_image_util",
     ":commit_id",
