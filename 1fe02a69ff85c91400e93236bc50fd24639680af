@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "439c2148_f95a7f70",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-29T18:42:50Z",
+      "side": 1,
+      "message": "no need for this variable in my opinion",
+      "range": {
+        "startLine": 318,
+        "startChar": 25,
+        "endLine": 318,
+        "endChar": 38
+      },
+      "revId": "1fe02a69ff85c91400e93236bc50fd24639680af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
