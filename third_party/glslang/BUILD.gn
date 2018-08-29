@@ -139,7 +139,10 @@ executable("glslang_validator") {
     "src/StandAlone/DirStackFileIncluder.h",
     "src/StandAlone/StandAlone.cpp",
   ]
-  defines = [ "ENABLE_OPT" ]
+  if (!is_win) {
+    cflags = [ "-Woverflow" ]
+  }
+  defines = [ "ENABLE_OPT=0" ]
   configs -= [ "//build/config/compiler:chromium_code" ]
   configs += [ "//build/config/compiler:no_chromium_code" ]
   public_deps = [
