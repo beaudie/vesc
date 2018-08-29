@@ -78,6 +78,24 @@ VkResult VerifyExtensionsPresent(const std::vector<VkExtensionProperties> &exten
     return VK_SUCCESS;
 }
 
+// Suppress validation errors that are known - should include bugID
+//  return "true" if given code/prefix/message is known, else return "false"
+bool SuppressKnownMessages(int32_t messageCode, const char *msgPrefix, const char *message)
+{
+    std::vector<const char *> skippedMessages = {
+        // Issue 2796
+        "Pipeline topology is set to POINT_LIST, but PointSize is not written to in the shader "
+        "corresponding to VK_SHADER_STAGE_VERTEX_BIT."};
+    for (const auto &msg : skippedMessages)
+    {
+        if (strcmp(msg, message) == 0)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 VKAPI_ATTR VkBool32 VKAPI_CALL DebugReportCallback(VkDebugReportFlagsEXT flags,
                                                    VkDebugReportObjectTypeEXT objectType,
                                                    uint64_t object,
@@ -87,6 +105,10 @@ VKAPI_ATTR VkBool32 VKAPI_CALL DebugReportCallback(VkDebugReportFlagsEXT flags,
                                                    const char *message,
                                                    void *userData)
 {
+    if (SuppressKnownMessages(messageCode, layerPrefix, message))
+    {
+        return VK_FALSE;
+    }
     if ((flags & VK_DEBUG_REPORT_ERROR_BIT_EXT) != 0)
     {
         ERR() << message;
