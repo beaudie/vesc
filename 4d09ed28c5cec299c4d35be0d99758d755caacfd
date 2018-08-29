@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "f99316cf_67d5e5fc",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-29T17:37:07Z",
+      "side": 1,
+      "message": "tiny nit: could you use the syntax TODO(syouseffi): and also add a comment of a http://anglebug.com/#### to track the open work?",
+      "range": {
+        "startLine": 82,
+        "startChar": 11,
+        "endLine": 82,
+        "endChar": 25
+      },
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c2e9681f_3d310a14",
         "filename": "src/libANGLE/BlobCache.cpp",
         "patchSetId": 4
@@ -36,6 +59,93 @@
     },
     {
       "key": {
+        "uuid": "d56452af_c5895bd3",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-29T17:37:07Z",
+      "side": 1,
+      "message": "NP, a lot of these kinds of queries work that way.",
+      "parentUuid": "c2e9681f_3d310a14",
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c1df449_5d863228",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-29T17:37:07Z",
+      "side": 1,
+      "message": "comment seems incorrect?",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 40
+      },
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6257cc2_4013197d",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-29T17:37:07Z",
+      "side": 1,
+      "message": "how about MemoryBlobCache? To distinguish this from any possible disk implementation.",
+      "range": {
+        "startLine": 39,
+        "startChar": 6,
+        "endLine": 39,
+        "endChar": 16
+      },
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "733c3e23_cd03f870",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-29T17:37:07Z",
+      "side": 1,
+      "message": "should probably be defined in the cpp since it\u0027s non-trivial. also could you capitalize as per the style guide: \n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#variable-names",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 96,
+        "endChar": 5
+      },
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ea61660e_e8cc516d",
         "filename": "src/libANGLE/BlobCache.h",
         "patchSetId": 4
@@ -47,6 +157,70 @@
       "writtenOn": "2018-08-29T15:51:51Z",
       "side": 1,
       "message": "I switched from `angle::MemoryBuffer` to `std::vector` as the extension requires inevitable copying. For example, if a key is not found in angle\u0027s cache, it can call in the application\u0027s callback which fills in a provided buffer, so we can\u0027t just return a `const angle::MemoryBuffer *` like we used to. There\u0027s a similar situation with key.\n\nInstead of making `angle::MemoryBuffer` copyable and all that, I opted for `std::vector`. Other than that, most of what\u0027s in this file (and the corresponding .cpp file) are functionality that used to reside in `MemoryProgramCache.*`.",
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cff1004c_d0bbd55d",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-29T17:37:07Z",
+      "side": 1,
+      "message": "summarizing discussion we had earlier in person:\n\n* we can avoid the copy on get if we duplicate the blob in the blobcache\n* we can assume a fixed length key since we\u0027re in control of what gets added to the blob cache. would still need to validate we get the right length of key on get.",
+      "parentUuid": "ea61660e_e8cc516d",
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a176c0d_42e3b8b4",
+        "filename": "src/libANGLE/BlobCache_unittest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-29T17:37:07Z",
+      "side": 1,
+      "message": "thanks for adding the unit tests!",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 21
+      },
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e2ba3fd_feb95054",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-29T17:37:07Z",
+      "side": 1,
+      "message": "grammar nit: should probably be \"areBlobCacheFuncsSet\"",
+      "range": {
+        "startLine": 142,
+        "startChar": 9,
+        "endLine": 142,
+        "endChar": 28
+      },
       "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -98,6 +272,52 @@
       "writtenOn": "2018-08-29T15:51:51Z",
       "side": 1,
       "message": "Th interface changes here need to propagate to Chromium at the same time as this patch to avoid breaking the build.\n\nA few functions are left for compatibility, like `get` without `Context` and `putBinary`, which can be removed once Chromium uses `BlobCache` directly.",
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aba0b7d_0a33daa0",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-29T17:37:07Z",
+      "side": 1,
+      "message": "nit: you can put this in the anonymous namespace instead of a new one.",
+      "range": {
+        "startLine": 43,
+        "startChar": 10,
+        "endLine": 43,
+        "endChar": 19
+      },
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7570f55_53adbef0",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-29T17:37:07Z",
+      "side": 1,
+      "message": "nit: caps as mentioned before about naming.",
+      "range": {
+        "startLine": 45,
+        "startChar": 5,
+        "endLine": 45,
+        "endChar": 12
+      },
       "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
