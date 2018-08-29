@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aee38c77_9e846362",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-29T15:51:51Z",
+      "side": 1,
+      "message": "Some memory copy being done here is redundant, which is an artifact of having a generic templated data structure for the cache (`SizedMRUCache`, in turn using `HashingMRUCache`). With some effort, perhaps the key can also be taken as `\u0026\u0026` and moved (with all users of `HashingMRUCache` adjusted).",
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2e9681f_3d310a14",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-29T15:51:51Z",
+      "side": 1,
+      "message": "Double-call unavoidable as there is no way to know the amount of memory needed for the value corresponding to this key.",
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea61660e_e8cc516d",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-29T15:51:51Z",
+      "side": 1,
+      "message": "I switched from `angle::MemoryBuffer` to `std::vector` as the extension requires inevitable copying. For example, if a key is not found in angle\u0027s cache, it can call in the application\u0027s callback which fills in a provided buffer, so we can\u0027t just return a `const angle::MemoryBuffer *` like we used to. There\u0027s a similar situation with key.\n\nInstead of making `angle::MemoryBuffer` copyable and all that, I opted for `std::vector`. Other than that, most of what\u0027s in this file (and the corresponding .cpp file) are functionality that used to reside in `MemoryProgramCache.*`.",
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b985738_4c8d0749",
+        "filename": "src/libANGLE/MemoryProgramCache.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-29T15:51:51Z",
+      "side": 1,
+      "message": "A side effect of supporting `EGL_ANDROID_blob_cache` is that we can\u0027t simply return a reference to the cache entry. This is because the cache data could come from the application (if not in angle\u0027s cache), and we would need to make a copy of it (as we don\u0027t know the lifetime).\n\nIncidentally, this also paves the way for making the `BlobCache` thread safe (a requirement of the extension that is being ignored for now).",
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e65b2750_dfc44179",
+        "filename": "src/libANGLE/MemoryProgramCache.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-29T15:51:51Z",
+      "side": 1,
+      "message": "The `put` call above already calls the callback set through `EGL_ANDROID_set_blob`. Once Chromium uses that, it should stop using the angle extension and this call removed.",
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "632649fb_bd4daa98",
+        "filename": "src/libANGLE/MemoryProgramCache.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-29T15:51:51Z",
+      "side": 1,
+      "message": "Th interface changes here need to propagate to Chromium at the same time as this patch to avoid breaking the build.\n\nA few functions are left for compatibility, like `get` without `Context` and `putBinary`, which can be removed once Chromium uses `BlobCache` directly.",
+      "revId": "4d09ed28c5cec299c4d35be0d99758d755caacfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
