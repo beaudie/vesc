@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a7ec403_b232e2ea",
+        "filename": "extensions/ANGLE_texture_multisample_array.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-29T14:50:50Z",
+      "side": 1,
+      "message": "nit: wrap to some number of chars?",
+      "range": {
+        "startLine": 12,
+        "startChar": 91,
+        "endLine": 12,
+        "endChar": 112
+      },
+      "revId": "11b098e03d8c81cd271dc685c48be48879801155",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
