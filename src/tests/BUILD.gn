@@ -89,10 +89,11 @@ if (build_with_chromium) {
 test("angle_unittests") {
   include_dirs = [ "$angle_root/src" ]
 
-  sources = rebase_path(angle_unittests_sources, ".", "../..")
+  #sources = rebase_path(angle_unittests_sources, ".", "../..")
+  sources = angle_unittests_sources
 
   if (angle_enable_hlsl) {
-    sources += rebase_path(angle_unittests_hlsl_sources, ".", "../..")
+    sources += angle_unittests_hlsl_sources
     defines = [ "ANGLE_ENABLE_HLSL" ]
   }
 
