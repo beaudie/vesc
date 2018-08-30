@@ -16,6 +16,24 @@
       "revId": "2bc3686e529c0efa96fdef7ec4ee74bf7c15bd8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b6627c5_da4166a1",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-30T18:27:45Z",
+      "side": 0,
+      "message": "I don\u0027t think so. I don\u0027t think we refer to any of the cached index range values in streamIndexData. So I removed it. Seems to work fine.",
+      "parentUuid": "c15bbe58_bf58c401",
+      "revId": "2bc3686e529c0efa96fdef7ec4ee74bf7c15bd8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
