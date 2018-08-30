@@ -236,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "0c036be3_f189ce55",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-30T20:33:54Z",
+      "side": 1,
+      "message": "I think to use the LIBANGLE_blah_IMPLEMENTATION macros correctly you need:\n\nFor the \"internal\" cpp files that implement the entry points, they should have the define enabled. ANGLE_EXPORT produces __declspec(dllexport) and __attribute__((visibility (\"default\"))). This ensures the dll / so exports get set up.\n\nFor \"external\" cpp files that call the APIs, we don\u0027t want the define. This makes ANGLE_EXPORT give __declspec(dllimport) and \u003cblank\u003e as appropriate per platform.\n\nThus putting it in the config should be good. As long as we don\u0027t inherit the define into the \"external\" app.\n\nAlso it looks like LIBANGLE_UTIL_IMPLEMENTATION isn\u0027t used right now, and we\u0027re not in libANGLE, so can you make a new define that is \u003clibraryname\u003e_IMPLEMENTATION (when we resolve on a name) and add that to export header. you can remove UTIL_IMPLEMENTATION, it\u0027s not used in ANGLE anywhere I can see.",
+      "parentUuid": "c32b7c0a_146f06a2",
+      "range": {
+        "startLine": 14,
+        "startChar": 8,
+        "endLine": 14,
+        "endChar": 36
+      },
+      "revId": "0847b2d13bf9c58dbb3d024116a52a84d327ad6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d088ff5e_eed3a30f",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 3
@@ -317,6 +341,30 @@
       "side": 1,
       "message": "\u003e do you want to make this ANGLEShouldEnableFeature(...\n\nNo.  If this were deciding on enabling some feature of ANGLE, that would seem more appropriate.  However, we are using this to decide whether or not to use ANGLE vs. a native GLES driver (i.e. all of nothing), and so \"feature\" doesn\u0027t seem right to me.  Perhaps I\u0027m missing something though.\n\n\u003e Also could we get a comment documenting the parameter uses?\n\nSure.  I\u0027m not sure how such comments are formatted, but I\u0027ll try to look it up.",
       "parentUuid": "c456561d_b39a00a4",
+      "range": {
+        "startLine": 26,
+        "startChar": 18,
+        "endLine": 26,
+        "endChar": 40
+      },
+      "revId": "0847b2d13bf9c58dbb3d024116a52a84d327ad6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5884dbc5_20f5358a",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-30T20:33:54Z",
+      "side": 1,
+      "message": "As Cody was asking, ANGLE itself is the feature. So the features list would be just one item right now, \"should we use ANGLE\". Though I\u0027m open to other terms. Maybe that piece of information was missing.",
+      "parentUuid": "4b8ac83a_792e24fa",
       "range": {
         "startLine": 26,
         "startChar": 18,
