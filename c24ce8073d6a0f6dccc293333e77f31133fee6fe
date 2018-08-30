@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4773f2d1_3e190756",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-08-30T17:58:07Z",
+      "side": 1,
+      "message": "Sure",
+      "parentUuid": "d761eaab_19d92c13",
+      "range": {
+        "startLine": 222,
+        "startChar": 8,
+        "endLine": 222,
+        "endChar": 35
+      },
+      "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a7a7b11_998237e1",
         "filename": "BUILD.gn",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb402229_e80ec2d5",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-08-30T17:58:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a7a7b11_998237e1",
+      "range": {
+        "startLine": 231,
+        "startChar": 4,
+        "endLine": 231,
+        "endChar": 31
+      },
+      "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "ec64c395_90a3ef7b",
+        "filename": "src/a4a_opt_in/OptIn.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-08-30T17:58:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c1a92f5_1b3a5990",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 12,
+        "endChar": 19
+      },
+      "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "089ce017_561f45bc",
         "filename": "src/a4a_opt_in/OptIn.h",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f30416f_0083338e",
+        "filename": "src/a4a_opt_in/OptIn.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-08-30T17:58:07Z",
+      "side": 1,
+      "message": "Yes, sorry for missing that.  Just to make sure, I should add this to both the header and .cpp file--correct?",
+      "parentUuid": "089ce017_561f45bc",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 15
+      },
+      "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -128,6 +224,54 @@
       "writtenOn": "2018-08-30T16:47:20Z",
       "side": 1,
       "message": "Our export macro requires a define when compiling the library so that it\u0027s marked as dll export when compiling and dll import when importing.  You can see the LIBGLESV2_IMPLEMENTATION, LIBANGLE_IMPLEMENTATION, etc macros in export.h.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 13
+      },
+      "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36d175b1_6f660eea",
+        "filename": "src/a4a_opt_in/OptIn.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-08-30T17:58:07Z",
+      "side": 1,
+      "message": "\u003e Let\u0027s prefix ...\n\nWe can make ANGLE the prefix.  Given the logic of the calling function, I\u0027d prefer ANGLEUseForApplication, if that\u0027s okay.\n\n\u003e Do we need two ...\n\nI was going to leave some logic in the EGL loader, but at breakfast we decided to put all of the logic into one function in this file.  All of the inputs will come down to the function (including things that can\u0027t be queried from this function, like the application name).",
+      "parentUuid": "04aa1d13_487d7532",
+      "range": {
+        "startLine": 17,
+        "startChar": 18,
+        "endLine": 17,
+        "endChar": 35
+      },
+      "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ca3c10d_65e24d6d",
+        "filename": "src/a4a_opt_in/OptIn.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-08-30T17:58:07Z",
+      "side": 1,
+      "message": "So, I should add a line like the following to the header?:\n\n#define LIBANGLE_UTIL_IMPLEMENTATION",
+      "parentUuid": "ad144cf0_b00ec728",
       "range": {
         "startLine": 17,
         "startChar": 0,
