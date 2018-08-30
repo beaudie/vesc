@@ -488,7 +488,7 @@ if (build_angle_deqp_tests) {
   import("deqp.gni")
 
   config("angle_deqp_support") {
-    include_dirs = rebase_path(deqp_include_dirs, ".", "../..")
+    include_dirs = deqp_include_dirs
     if (is_win && !is_clang) {
       include_dirs +=
           [ "$angle_root/third_party/deqp/src/framework/platform/win32" ]
@@ -580,7 +580,7 @@ if (build_angle_deqp_tests) {
       ]
     }
 
-    sources = rebase_path(deqp_libtester_decpp_sources, ".", "../..")
+    sources = deqp_libtester_decpp_sources
   }
 
   config("angle_deqp_libtester_config") {
@@ -613,15 +613,15 @@ if (build_angle_deqp_tests) {
 
     configs -= deqp_undefine_configs
     public_configs = [ ":angle_deqp_libtester_config" ]
-    sources = rebase_path(deqp_libtester_sources, ".", "../..")
+    sources = deqp_libtester_sources
     if (is_win) {
-      sources += rebase_path(deqp_libtester_sources_win, ".", "../..")
+      sources += deqp_libtester_sources_win
     }
     if (is_linux || is_android || is_mac) {
-      sources += rebase_path(deqp_libtester_sources_unix, ".", "../..")
+      sources += deqp_libtester_sources_unix
     }
     if (is_android) {
-      sources += rebase_path(deqp_libtester_sources_android, ".", "../..")
+      sources += deqp_libtester_sources_android
       libs = [ "log" ]
     }
   }
@@ -703,7 +703,7 @@ if (build_angle_deqp_tests) {
       }
       public_configs = [ ":${config_name}" ]
 
-      sources = rebase_path(target_sources[index], ".", "../..")
+      sources = target_sources[index]
       sources += [
         "deqp_support/angle_deqp_libtester_main.cpp",
         "deqp_support/tcuANGLEPlatform.cpp",
