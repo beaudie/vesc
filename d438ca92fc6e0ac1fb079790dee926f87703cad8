@@ -94,6 +94,30 @@
       "revId": "d438ca92fc6e0ac1fb079790dee926f87703cad8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0f6383c_5594a47a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5015,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-30T14:28:33Z",
+      "side": 1,
+      "message": "You\u0027re right. I didn\u0027t realize all of the texture functions were like this. The advantage is it maps API entry points to impl methods 1:1. Then you won\u0027t need an \"if\" to determine the correct texture set function to use for example. But you\u0027re right every texture set method is like this currently so it makes sense to be consistent. LGTM",
+      "parentUuid": "58c99cd9_a8fe80cf",
+      "range": {
+        "startLine": 5015,
+        "startChar": 25,
+        "endLine": 5015,
+        "endChar": 46
+      },
+      "revId": "d438ca92fc6e0ac1fb079790dee926f87703cad8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
