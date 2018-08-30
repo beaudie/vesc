@@ -22,6 +22,30 @@
       "revId": "d438ca92fc6e0ac1fb079790dee926f87703cad8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ef4885d_30ae00f5",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5015,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-08-30T05:58:01Z",
+      "side": 1,
+      "message": "This is handled the same way that texStorage2D and texStorage3D are, they also share the same entry point. I think we should keep it this way since it is simpler.",
+      "parentUuid": "37f4da96_0f3f9746",
+      "range": {
+        "startLine": 5015,
+        "startChar": 25,
+        "endLine": 5015,
+        "endChar": 46
+      },
+      "revId": "d438ca92fc6e0ac1fb079790dee926f87703cad8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
