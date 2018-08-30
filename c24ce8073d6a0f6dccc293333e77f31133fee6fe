@@ -281,6 +281,54 @@
       "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfcbcaa2_678943fb",
+        "filename": "src/a4a_opt_in/OptIn.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T18:24:31Z",
+      "side": 1,
+      "message": "Yes, that could work.",
+      "parentUuid": "5ca3c10d_65e24d6d",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 13
+      },
+      "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c3a00c0_1e84d918",
+        "filename": "src/a4a_opt_in/OptIn.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T18:24:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "36d175b1_6f660eea",
+      "range": {
+        "startLine": 17,
+        "startChar": 18,
+        "endLine": 17,
+        "endChar": 35
+      },
+      "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

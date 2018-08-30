@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c370917a_cd00359a",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T18:24:31Z",
+      "side": 1,
+      "message": "Let\u0027s rename these too: application_support_util/application_support_util.cpp/h",
+      "range": {
+        "startLine": 231,
+        "startChar": 9,
+        "endLine": 231,
+        "endChar": 25
+      },
+      "revId": "107a3f875a3289d8e1d4c3f014f8eb2424c795b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
