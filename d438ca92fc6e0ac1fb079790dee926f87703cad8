@@ -70,6 +70,30 @@
       "revId": "d438ca92fc6e0ac1fb079790dee926f87703cad8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58c99cd9_a8fe80cf",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5015,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-08-30T14:07:44Z",
+      "side": 1,
+      "message": "Ah yes, I meant the same impl method.\n\nWhat\u0027s the benefit from having different impl methods for these? If we had different impl methods they would just end up having mostly the same functionality, and would make the code more verbose, perhaps needlessly. Besides setStorage this is analoguous with TextureImpl functions setImage, setSubImage, setCompressedImage, setCompressedSubImage etc. that are also the same for different dimensional variants of textures. It makes sense that all of these cases are handled in a consistent way.\n\nMaybe it wouldn\u0027t be entirely unreasonable to change all of them, but it would be a fairly major refactoring of the texture code. I rather wouldn\u0027t block this fairly minor addition of functionality on the refactoring. It would make more sense if the refactoring was considered as a separate effort.",
+      "parentUuid": "817f845f_82f5efe0",
+      "range": {
+        "startLine": 5015,
+        "startChar": 25,
+        "endLine": 5015,
+        "endChar": 46
+      },
+      "revId": "d438ca92fc6e0ac1fb079790dee926f87703cad8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
