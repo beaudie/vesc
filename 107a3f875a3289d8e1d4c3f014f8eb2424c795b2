@@ -70,6 +70,30 @@
       "revId": "107a3f875a3289d8e1d4c3f014f8eb2424c795b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "674d6f96_57621141",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T19:03:16Z",
+      "side": 1,
+      "message": "feature is good if we\u0027re planning on being more general.",
+      "parentUuid": "41ed82ee_8629640d",
+      "range": {
+        "startLine": 231,
+        "startChar": 9,
+        "endLine": 231,
+        "endChar": 25
+      },
+      "revId": "107a3f875a3289d8e1d4c3f014f8eb2424c795b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
