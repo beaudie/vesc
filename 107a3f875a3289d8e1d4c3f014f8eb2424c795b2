@@ -214,6 +214,30 @@
       "revId": "107a3f875a3289d8e1d4c3f014f8eb2424c795b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9807531_f4b7d991",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-30T20:04:35Z",
+      "side": 1,
+      "message": "I\u0027d like to encompass the following use cases:\n\n* is ANGLE enabled?\n* what driver bug workarounds to apply?\n* what non-essential but optional features to enable (for perf or other reasons)\n\nHence feature_support_util. WDYT? I think we might want to expose some kind of these optional features for A4A at some point.",
+      "parentUuid": "712f8a73_fc53fbe2",
+      "range": {
+        "startLine": 231,
+        "startChar": 9,
+        "endLine": 231,
+        "endChar": 25
+      },
+      "revId": "107a3f875a3289d8e1d4c3f014f8eb2424c795b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
