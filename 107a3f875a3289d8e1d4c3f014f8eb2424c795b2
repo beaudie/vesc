@@ -166,6 +166,30 @@
       "revId": "107a3f875a3289d8e1d4c3f014f8eb2424c795b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3b68ba9f_7d2e671e",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T19:58:02Z",
+      "side": 1,
+      "message": "In this case ANGLE is the feature but it can extend to cover which ANGLE backend is supported (not necessarily for Android).",
+      "parentUuid": "a96ec41d_f6200cfc",
+      "range": {
+        "startLine": 231,
+        "startChar": 9,
+        "endLine": 231,
+        "endChar": 25
+      },
+      "revId": "107a3f875a3289d8e1d4c3f014f8eb2424c795b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
