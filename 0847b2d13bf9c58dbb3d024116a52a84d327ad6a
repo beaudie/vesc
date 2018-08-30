@@ -352,6 +352,30 @@
     },
     {
       "key": {
+        "uuid": "5d32ba5a_7f3c59a0",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-08-30T20:18:33Z",
+      "side": 1,
+      "message": "I\u0027m just going to remove it for now.  We\u0027ve talked about adding these in the future.  I\u0027ll just wait to see if we find we really need them, and add them then.",
+      "parentUuid": "78071510_434211f6",
+      "range": {
+        "startLine": 27,
+        "startChar": 44,
+        "endLine": 27,
+        "endChar": 48
+      },
+      "revId": "0847b2d13bf9c58dbb3d024116a52a84d327ad6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c819861_4cab0cbc",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 3
