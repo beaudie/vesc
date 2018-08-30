@@ -89,10 +89,10 @@ if (build_with_chromium) {
 test("angle_unittests") {
   include_dirs = [ "$angle_root/src" ]
 
-  sources = rebase_path(angle_unittests_sources, ".", "../..")
+  sources = angle_unittests_sources
 
   if (angle_enable_hlsl) {
-    sources += rebase_path(angle_unittests_hlsl_sources, ".", "../..")
+    sources += angle_unittests_hlsl_sources
     defines = [ "ANGLE_ENABLE_HLSL" ]
   }
 
@@ -126,21 +126,21 @@ if (is_win || is_linux || is_mac || is_android) {
       use_native_activity = true
     }
 
-    sources = rebase_path(angle_end2end_tests_sources, ".", "../..")
+    sources = angle_end2end_tests_sources
     libs = []
 
     if (is_mac) {
-      sources += rebase_path(angle_end2end_tests_mac_sources, ".", "../..")
+      sources += angle_end2end_tests_mac_sources
       libs += [
         "CoreFoundation.framework",
         "IOSurface.framework",
       ]
     }
     if (is_win) {
-      sources += rebase_path(angle_end2end_tests_win_sources, ".", "../..")
+      sources += angle_end2end_tests_win_sources
     }
     if (use_x11) {
-      sources += rebase_path(angle_end2end_tests_x11_sources, ".", "../..")
+      sources += angle_end2end_tests_x11_sources
     }
 
     if (build_with_chromium) {
@@ -182,10 +182,10 @@ if (is_win || is_linux || is_mac || is_android) {
       use_native_activity = true
     }
 
-    sources = rebase_path(angle_white_box_tests_sources, ".", "../..")
+    sources = angle_white_box_tests_sources
 
     if (is_win) {
-      sources += rebase_path(angle_white_box_tests_win_sources, ".", "../..")
+      sources += angle_white_box_tests_win_sources
     }
 
     # Share the same main file as end2end_tests.
@@ -231,7 +231,7 @@ if (is_win || is_linux || is_android || is_mac) {
       "../../util",
     ]
 
-    sources = rebase_path(angle_perf_tests_sources, ".", "../..")
+    sources = angle_perf_tests_sources
 
     deps = googletest_deps + [
              angle_root + ":angle_util_static",
@@ -246,15 +246,13 @@ if (is_win || is_linux || is_android || is_mac) {
     }
 
     if (is_win) {
-      sources += rebase_path(angle_perf_tests_win_sources, ".", "../..")
+      sources += angle_perf_tests_win_sources
     }
 
     if (angle_enable_vulkan) {
-      sources += rebase_path(angle_perf_tests_vulkan_sources, ".", "../..")
+      sources += angle_perf_tests_vulkan_sources
       if (is_android || is_linux) {
-        sources += rebase_path(angle_perf_tests_vulkan_command_buffer_sources,
-                               ".",
-                               "../..")
+        sources += angle_perf_tests_vulkan_command_buffer_sources
       }
       deps += [ "$angle_root/third_party/glslang:glslang" ]
       public_configs = [ "$angle_root/third_party/glslang:glslang_config" ]
