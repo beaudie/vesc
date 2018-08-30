@@ -22,6 +22,30 @@
       "revId": "107a3f875a3289d8e1d4c3f014f8eb2424c795b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d099566e_3b88d171",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-30T18:30:22Z",
+      "side": 1,
+      "message": "how do you guys feel about feature_support_util vs application_support_util? given that we\u0027re supporting features of ANGLE itself rather than applications.",
+      "parentUuid": "c370917a_cd00359a",
+      "range": {
+        "startLine": 231,
+        "startChar": 9,
+        "endLine": 231,
+        "endChar": 25
+      },
+      "revId": "107a3f875a3289d8e1d4c3f014f8eb2424c795b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
