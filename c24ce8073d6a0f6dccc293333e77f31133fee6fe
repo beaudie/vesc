@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d761eaab_19d92c13",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T16:47:20Z",
+      "side": 1,
+      "message": "What about angle_application_support_util?",
+      "range": {
+        "startLine": 222,
+        "startChar": 8,
+        "endLine": 222,
+        "endChar": 35
+      },
+      "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a7a7b11_998237e1",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T16:47:20Z",
+      "side": 1,
+      "message": "Include the header in the source list.",
+      "range": {
+        "startLine": 231,
+        "startChar": 4,
+        "endLine": 231,
+        "endChar": 31
+      },
+      "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c1a92f5_1b3a5990",
+        "filename": "src/a4a_opt_in/OptIn.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T16:47:20Z",
+      "side": 1,
+      "message": "Since this header is in ANGLE you can use quote includes.",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 12,
+        "endChar": 19
+      },
+      "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "089ce017_561f45bc",
+        "filename": "src/a4a_opt_in/OptIn.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T16:47:20Z",
+      "side": 1,
+      "message": "These should be exported as C functions with\n\n   #ifdef __cplusplus\n   extern \"C\" {\n   #endif\n\nand no namespace.  Otherwise the names will be mangled and may be inconsistent if we are updating ANGLE binaries.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 15
+      },
+      "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04aa1d13_487d7532",
+        "filename": "src/a4a_opt_in/OptIn.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T16:47:20Z",
+      "side": 1,
+      "message": "Let\u0027s prefix the function name with ANGLE given that we should remove the namespace.  What about ANGLEApplicationIsSupported(...)?\n\nDo we need two separate functions for this?  Either ANGLE can split support into a 2-tiered \u0027works well\u0027 and \u0027capable if requested\u0027 or we can simply return that we are capable of running an application and let the layers above us determine if it should be forced on via a user request.  If possible, I think only having one function is easier to support.",
+      "range": {
+        "startLine": 17,
+        "startChar": 18,
+        "endLine": 17,
+        "endChar": 35
+      },
+      "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad144cf0_b00ec728",
+        "filename": "src/a4a_opt_in/OptIn.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T16:47:20Z",
+      "side": 1,
+      "message": "Our export macro requires a define when compiling the library so that it\u0027s marked as dll export when compiling and dll import when importing.  You can see the LIBGLESV2_IMPLEMENTATION, LIBANGLE_IMPLEMENTATION, etc macros in export.h.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 13
+      },
+      "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
