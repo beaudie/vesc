@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "9ab5d33a_3ade1505",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-08-30T19:59:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "132f8267_af00a580",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "0847b2d13bf9c58dbb3d024116a52a84d327ad6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ada0f96_1c201b56",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 3
@@ -117,6 +141,54 @@
     },
     {
       "key": {
+        "uuid": "d7303f67_234b07fe",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-08-30T19:59:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "396510bf_11b8384a",
+      "range": {
+        "startLine": 7,
+        "startChar": 3,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "0847b2d13bf9c58dbb3d024116a52a84d327ad6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "73b096f6_3a7b86ce",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-08-30T19:59:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ada0f96_1c201b56",
+      "range": {
+        "startLine": 7,
+        "startChar": 20,
+        "endLine": 7,
+        "endChar": 97
+      },
+      "revId": "0847b2d13bf9c58dbb3d024116a52a84d327ad6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "932e48d7_a32bb4a7",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 3
@@ -128,6 +200,30 @@
       "writtenOn": "2018-08-30T19:35:23Z",
       "side": 1,
       "message": "this should go in the GN instead of the header. Though I\u0027m not sure you want to define this here if you are defining this as an export header.",
+      "range": {
+        "startLine": 14,
+        "startChar": 8,
+        "endLine": 14,
+        "endChar": 36
+      },
+      "revId": "0847b2d13bf9c58dbb3d024116a52a84d327ad6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c32b7c0a_146f06a2",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-08-30T19:59:39Z",
+      "side": 1,
+      "message": "I think that means adding the following line to the end of \"config(\"angle_feature_support_util_config\") {\":\n\n  defines +\u003d [ \"LIBANGLE_UTIL_IMPLEMENTATION\" ]\n\nTrue?  If not, can you show me how to add it please?",
+      "parentUuid": "932e48d7_a32bb4a7",
       "range": {
         "startLine": 14,
         "startChar": 8,
@@ -209,6 +305,30 @@
     },
     {
       "key": {
+        "uuid": "4b8ac83a_792e24fa",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-08-30T19:59:39Z",
+      "side": 1,
+      "message": "\u003e do you want to make this ANGLEShouldEnableFeature(...\n\nNo.  If this were deciding on enabling some feature of ANGLE, that would seem more appropriate.  However, we are using this to decide whether or not to use ANGLE vs. a native GLES driver (i.e. all of nothing), and so \"feature\" doesn\u0027t seem right to me.  Perhaps I\u0027m missing something though.\n\n\u003e Also could we get a comment documenting the parameter uses?\n\nSure.  I\u0027m not sure how such comments are formatted, but I\u0027ll try to look it up.",
+      "parentUuid": "c456561d_b39a00a4",
+      "range": {
+        "startLine": 26,
+        "startChar": 18,
+        "endLine": 26,
+        "endChar": 40
+      },
+      "revId": "0847b2d13bf9c58dbb3d024116a52a84d327ad6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "78071510_434211f6",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 3
@@ -252,6 +372,30 @@
       "revId": "0847b2d13bf9c58dbb3d024116a52a84d327ad6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "441e9776_b8ec8686",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-08-30T19:59:39Z",
+      "side": 1,
+      "message": "Okay, sorry (I live in too many worlds:-)",
+      "parentUuid": "2c819861_4cab0cbc",
+      "range": {
+        "startLine": 28,
+        "startChar": 53,
+        "endLine": 28,
+        "endChar": 63
+      },
+      "revId": "0847b2d13bf9c58dbb3d024116a52a84d327ad6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
