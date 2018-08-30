@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49a4fc22_63bf8edc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-30T19:35:23Z",
+      "side": 1,
+      "message": "can you add Bug: angleproject:#### associating this with the bug to the description?",
+      "revId": "766a13b6a012adb670926a32df5e6a76cda038f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
