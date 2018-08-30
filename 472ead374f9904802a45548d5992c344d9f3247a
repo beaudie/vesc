@@ -22,6 +22,30 @@
       "revId": "472ead374f9904802a45548d5992c344d9f3247a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1850834_c256b99f",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T21:24:39Z",
+      "side": 1,
+      "message": "The long term solution for EGL is to use a mutex in the display.  I\u0027ll start to work on that when I get back.",
+      "parentUuid": "d9590fa7_1b46e2a1",
+      "range": {
+        "startLine": 41,
+        "startChar": 8,
+        "endLine": 41,
+        "endChar": 32
+      },
+      "revId": "472ead374f9904802a45548d5992c344d9f3247a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
