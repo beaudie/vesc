@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9590fa7_1b46e2a1",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-30T21:04:51Z",
+      "side": 1,
+      "message": "could you make this enabled unconditionally for libEGL and scope the optional feature to libGLESv2/libGLESv1_cm?",
+      "range": {
+        "startLine": 41,
+        "startChar": 8,
+        "endLine": 41,
+        "endChar": 32
+      },
+      "revId": "472ead374f9904802a45548d5992c344d9f3247a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
