@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df50eb3a_f1b66d4f",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-30T20:30:44Z",
+      "side": 1,
+      "message": "Ended up adding a _few_ helper functions in the end",
+      "revId": "c6c710b85248aa8a867506ff469b46e7a2d51ab9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5586e27_ba7132dc",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-30T20:30:44Z",
+      "side": 1,
+      "message": "Kinda weird to take `angle::MemoryBuffer \u0026\u0026` when putting, but give `BlobCache::Value` when returning, but this would result in the least memory copying (none actually).",
+      "revId": "c6c710b85248aa8a867506ff469b46e7a2d51ab9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13f7a99e_27cf2d31",
+        "filename": "src/tests/egl_tests/EGLBlobCache.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-30T20:30:44Z",
+      "side": 1,
+      "message": "The inside of this `if` is not tested yet (we\u0027ll soon see if it fails right here)",
+      "revId": "c6c710b85248aa8a867506ff469b46e7a2d51ab9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
