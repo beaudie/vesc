@@ -1,0 +1,349 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "472f5350_c176974f",
+        "filename": "src/common/MemoryBuffer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T14:52:19Z",
+      "side": 1,
+      "message": "nit: how about throwing an assert that pos is less than mSize?",
+      "range": {
+        "startLine": 40,
+        "startChar": 37,
+        "endLine": 40,
+        "endChar": 38
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e95c17b_91eb1927",
+        "filename": "src/common/MemoryBuffer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T14:52:19Z",
+      "side": 1,
+      "message": "This should return a const ref so that we can take the address of it.",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 12
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2270e394_7405a3d0",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T14:52:19Z",
+      "side": 1,
+      "message": "Instead of passing the display, can we store the get and set functions in the BlobCache directly?",
+      "range": {
+        "startLine": 40,
+        "startChar": 20,
+        "endLine": 40,
+        "endChar": 41
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35ed025d_ee81d51e",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T14:52:19Z",
+      "side": 1,
+      "message": "Since the blob cache is held by the display, is it possible that the display is null here?",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 75
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c41c31e_4c5193d2",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T14:52:19Z",
+      "side": 1,
+      "message": "nit: merge this into the if-statement below and you won\u0027t need the result variable at all.",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 46
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1599d3a_475cf5e6",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T14:52:19Z",
+      "side": 1,
+      "message": "This is an unexpected case, you could add a WARN() \u003c\u003c \"message\" here.",
+      "range": {
+        "startLine": 122,
+        "startChar": 5,
+        "endLine": 123,
+        "endChar": 21
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7e325df_01feeccc",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T14:52:19Z",
+      "side": 1,
+      "message": "The BlobCache can be in the egl namespace because it implements egl functionality.",
+      "range": {
+        "startLine": 26,
+        "startChar": 10,
+        "endLine": 26,
+        "endChar": 12
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40ed0477_b0e3af3b",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T14:52:19Z",
+      "side": 1,
+      "message": "Could these live right in the BlobCache? I think the hash function could go after the class declaration.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 57
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18bdfc35_e741b57f",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T14:52:19Z",
+      "side": 1,
+      "message": "You can use angle::ComputeGenericHash",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 20
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22bb0ab9_b611cd5c",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T14:52:19Z",
+      "side": 1,
+      "message": "Do we want to support variable length keys?  Some backends may not want to constrain themselves to the size we decided on for program binaries.",
+      "range": {
+        "startLine": 66,
+        "startChar": 10,
+        "endLine": 66,
+        "endChar": 39
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a33e386e_3e6631da",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T14:52:19Z",
+      "side": 1,
+      "message": "nit: differentiate the name from the other getter, maybe getFromDisk or getFromUserCache",
+      "range": {
+        "startLine": 117,
+        "startChar": 9,
+        "endLine": 117,
+        "endChar": 12
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f82a9341_68b577cb",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T14:52:19Z",
+      "side": 1,
+      "message": "Instead of putting these in the DisplayState, we could put the BlobCache itself here.  This would let the backends using the caching it provides.",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 38
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f67b2038_47b7bc3a",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2718,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T14:52:19Z",
+      "side": 1,
+      "message": "Could you add a small angle end2end test that covers the validation?  Can also assert that the extension is always exposed.",
+      "range": {
+        "startLine": 2718,
+        "startChar": 6,
+        "endLine": 2718,
+        "endChar": 33
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "181fef67_839d8c31",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2727,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T14:52:19Z",
+      "side": 1,
+      "message": "nit: This can be a bit more explicit: Blob cache functions can only be set once during the lifetime of a Display.",
+      "range": {
+        "startLine": 2727,
+        "startChar": 19,
+        "endLine": 2727,
+        "endChar": 83
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eca077f5_8b5ae754",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2732,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-30T14:52:19Z",
+      "side": 1,
+      "message": "nit: Blob cache callbacks",
+      "range": {
+        "startLine": 2732,
+        "startChar": 37,
+        "endLine": 2732,
+        "endChar": 46
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
