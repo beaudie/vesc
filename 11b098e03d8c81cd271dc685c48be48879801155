@@ -45,6 +45,54 @@
       "revId": "11b098e03d8c81cd271dc685c48be48879801155",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df05cb40_b09314c2",
+        "filename": "extensions/ANGLE_texture_multisample_array.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-08-30T05:37:07Z",
+      "side": 1,
+      "message": "Rolled back the changes to this, this version of the extension can be removed in a separate patch.",
+      "parentUuid": "3a7ec403_b232e2ea",
+      "range": {
+        "startLine": 12,
+        "startChar": 91,
+        "endLine": 12,
+        "endChar": 112
+      },
+      "revId": "11b098e03d8c81cd271dc685c48be48879801155",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "03e7b3b7_570b677b",
+        "filename": "extensions/ANGLE_texture_multisample_array.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-08-30T05:37:07Z",
+      "side": 1,
+      "message": "OK, if you think going with OES_texture_storage_multisample_2d_array is better, then let\u0027s just do that. I\u0027ve removed the spec changes from this patch and will submit it with just the compiler changes. I\u0027ll make a separate patch to change the extension strings in the rest of the code.",
+      "parentUuid": "a735fbd9_8a4aafb9",
+      "range": {
+        "startLine": 12,
+        "startChar": 38,
+        "endLine": 12,
+        "endChar": 78
+      },
+      "revId": "11b098e03d8c81cd271dc685c48be48879801155",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
