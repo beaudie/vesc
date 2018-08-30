@@ -83,12 +83,12 @@ class TextureMultisampleArrayWebGLTest : public TextureMultisampleTest
     // succeeds.
     bool requestArrayExtension()
     {
-        if (extensionRequestable("GL_ANGLE_texture_multisample_array"))
+        if (extensionRequestable("GL_OES_texture_storage_multisample_2d_array"))
         {
-            glRequestExtensionANGLE("GL_ANGLE_texture_multisample_array");
+            glRequestExtensionANGLE("GL_OES_texture_storage_multisample_2d_array");
         }
 
-        if (!extensionEnabled("GL_ANGLE_texture_multisample_array"))
+        if (!extensionEnabled("GL_OES_texture_storage_multisample_2d_array"))
         {
             return false;
         }

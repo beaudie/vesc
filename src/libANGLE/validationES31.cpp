@@ -1964,7 +1964,7 @@ bool ValidateTexStorage3DMultisampleANGLE(Context *context,
                                           GLsizei depth,
                                           GLboolean fixedsamplelocations)
 {
-    if (!context->getExtensions().textureMultisampleArray)
+    if (!context->getExtensions().textureStorageMultisample2DArray)
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), MultisampleArrayExtensionRequired);
         return false;
