@@ -94,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "edc05b3e_cb25d992",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-30T19:06:25Z",
+      "side": 1,
+      "message": "Yes. `MemoryProgramCache`\u0027s `putBinary()` sets the display to `nullptr` specifically so that the callback to the application is not called. This is admittedly a hack to glue things together before Chromium is converted. This should answer your previous comment as well.",
+      "parentUuid": "35ed025d_ee81d51e",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 75
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8c41c31e_4c5193d2",
         "filename": "src/libANGLE/BlobCache.cpp",
         "patchSetId": 8
@@ -128,6 +152,30 @@
       "writtenOn": "2018-08-30T14:52:19Z",
       "side": 1,
       "message": "This is an unexpected case, you could add a WARN() \u003c\u003c \"message\" here.",
+      "range": {
+        "startLine": 122,
+        "startChar": 5,
+        "endLine": 123,
+        "endChar": 21
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1931c5a2_114d30f8",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-30T19:06:25Z",
+      "side": 1,
+      "message": "The extensions allows concurrent calls to the get/set functions, which may not be done by ANGLE, but hints at the fact that the application\u0027s cache is thread safe. If at the same time that ANGLE is trying to retrieve something from the cache, the application puts something in the cache that results in an eviction, you could have this behavior.\n\nA similar thing could happen if the application registers the same callbacks to multiple Display\u0027s (each on their own thread).\n\nA warning could be useful for debugging though, I see that. With the above explanation, do you still think I should put it?",
+      "parentUuid": "c1599d3a_475cf5e6",
       "range": {
         "startLine": 122,
         "startChar": 5,
@@ -186,6 +234,30 @@
     },
     {
       "key": {
+        "uuid": "b76eb4bf_f079e04c",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-30T19:06:25Z",
+      "side": 1,
+      "message": "That\u0027s what I did at first. I got a compile error though, saying that `hash` was not defined for the type. I believe it needed to see `hash` before the class declaration, and there is no way to forward declare that function (in particular because it depends on a type declared inside the class, which is not forward-declarable.\n\nThe contents of this namespace are my least favorite part of this CL.",
+      "parentUuid": "40ed0477_b0e3af3b",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 57
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "18bdfc35_e741b57f",
         "filename": "src/libANGLE/BlobCache.h",
         "patchSetId": 8
@@ -209,6 +281,30 @@
     },
     {
       "key": {
+        "uuid": "7f23f835_cb4c0d76",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-30T19:06:25Z",
+      "side": 1,
+      "message": "Sure I could. Do you know if there\u0027s already a way I can check which hash function is doing a better job? Like a test that\u0027s compiling a lot of programs (so I can measure the performance)?",
+      "parentUuid": "18bdfc35_e741b57f",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 20
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "22bb0ab9_b611cd5c",
         "filename": "src/libANGLE/BlobCache.h",
         "patchSetId": 8
@@ -220,6 +316,30 @@
       "writtenOn": "2018-08-30T14:52:19Z",
       "side": 1,
       "message": "Do we want to support variable length keys?  Some backends may not want to constrain themselves to the size we decided on for program binaries.",
+      "range": {
+        "startLine": 66,
+        "startChar": 10,
+        "endLine": 66,
+        "endChar": 39
+      },
+      "revId": "a5ece6b36d87bc5bdaa380407bd6a1918bd7c6e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2cbbc4c_d63eb818",
+        "filename": "src/libANGLE/BlobCache.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-08-30T19:06:25Z",
+      "side": 1,
+      "message": "That\u0027s what I did at first. The result was a series of unnecessary copies of the key. Jamie\u0027s suggestion was to keep the key fixed-length for simplicity. The idea here is that we are in control of the key generation, so we can enforce the size.\n\nThe only place where this can be a problem is egl\u0027s actual EGL_ANDROID_blob_cache use, where the real driver tries to set/get blobs (currently disabled as we talked about it), but there can be workarounds for that. For example, we can think about hashing the key to the fixed length size, and prepend (length, key) to the value for verification before returning.",
+      "parentUuid": "22bb0ab9_b611cd5c",
       "range": {
         "startLine": 66,
         "startChar": 10,
