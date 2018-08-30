@@ -329,6 +329,30 @@
       "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ce1909b9_1b32749a",
+        "filename": "src/a4a_opt_in/OptIn.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-08-30T18:59:41Z",
+      "side": 1,
+      "message": "Okay, I\u0027ll do that.  Thanks!",
+      "parentUuid": "cfcbcaa2_678943fb",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 13
+      },
+      "revId": "c24ce8073d6a0f6dccc293333e77f31133fee6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

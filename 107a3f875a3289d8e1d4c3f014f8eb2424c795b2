@@ -46,6 +46,30 @@
       "revId": "107a3f875a3289d8e1d4c3f014f8eb2424c795b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41ed82ee_8629640d",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-08-30T18:59:41Z",
+      "side": 1,
+      "message": "I\u0027m flexible on app vs. feature.  How about you two discuss it and pick, and I\u0027ll go with what you decide?",
+      "parentUuid": "d099566e_3b88d171",
+      "range": {
+        "startLine": 231,
+        "startChar": 9,
+        "endLine": 231,
+        "endChar": 25
+      },
+      "revId": "107a3f875a3289d8e1d4c3f014f8eb2424c795b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
