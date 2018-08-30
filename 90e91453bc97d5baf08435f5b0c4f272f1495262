@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd07ad82_e49d9597",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-30T20:52:26Z",
+      "side": 0,
+      "message": "can we keep this comment in some form?  if you do, fix it, there\u0027s a missing word",
+      "revId": "90e91453bc97d5baf08435f5b0c4f272f1495262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
