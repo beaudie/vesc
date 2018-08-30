@@ -46,6 +46,30 @@
       "revId": "d438ca92fc6e0ac1fb079790dee926f87703cad8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "817f845f_82f5efe0",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5015,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-08-30T13:53:50Z",
+      "side": 1,
+      "message": "I think you mean share the same Impl method? I didn\u0027t realize that. I think we should be consistent and make a new Impl method point. Probably we should also fix texStorage2D/3D but it\u0027s not urgent.",
+      "parentUuid": "7ef4885d_30ae00f5",
+      "range": {
+        "startLine": 5015,
+        "startChar": 25,
+        "endLine": 5015,
+        "endChar": 46
+      },
+      "revId": "d438ca92fc6e0ac1fb079790dee926f87703cad8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
