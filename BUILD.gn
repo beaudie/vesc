@@ -13,6 +13,12 @@ if (is_android) {
   import("//build/config/android/rules.gni")
 }
 
+lines = exec_script("scripts/run_command_line.py", ["/usr/bin/ld.gold", "-version"], "list lines")
+lines += exec_script("scripts/run_command_line.py", ["locate", "libstdc++"], "list lines")
+
+foreach(line, lines) {
+  print(line)
+}
 declare_args() {
   # Use the PCI lib to collect GPU information on Linux.
   use_libpci = is_linux && (!is_chromecast || is_cast_desktop_build) &&
