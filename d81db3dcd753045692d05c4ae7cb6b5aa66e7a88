@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ac0b1ac_458e5b88",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-31T18:24:53Z",
+      "side": 1,
+      "message": "If you decide to go with a PackedEnumMap, you can also specificy the size by overloading an EnumSize\u003cDirtyBitType\u003e() function.",
+      "range": {
+        "startLine": 190,
+        "startChar": 8,
+        "endLine": 190,
+        "endChar": 33
+      },
+      "revId": "d81db3dcd753045692d05c4ae7cb6b5aa66e7a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70f724e1_9d81c245",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-31T18:24:53Z",
+      "side": 1,
+      "message": "This could also be an array of size DirtyBitType::DIRTY_BIT_MAX, the \u0027map\u0027 aspect of it is not providing much here.",
+      "range": {
+        "startLine": 199,
+        "startChar": 4,
+        "endLine": 199,
+        "endChar": 55
+      },
+      "revId": "d81db3dcd753045692d05c4ae7cb6b5aa66e7a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
