@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "daa1620b_3fedbc33",
+        "filename": "src/libANGLE/Compiler.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-31T14:47:10Z",
+      "side": 1,
+      "message": "Instead of passing the compiler in, we can just store the ShShaderOutput in CompilerInstance.",
+      "range": {
+        "startLine": 203,
+        "startChar": 52,
+        "endLine": 203,
+        "endChar": 70
+      },
+      "revId": "478e88a61c39fcb0327bb3ac3495b00eca921881",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d3a0781_eb39c617",
+        "filename": "src/libANGLE/Compiler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-31T14:47:10Z",
+      "side": 1,
+      "message": "This can go in the cpp file.",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 46
+      },
+      "revId": "478e88a61c39fcb0327bb3ac3495b00eca921881",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a05d1068_700b6361",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-31T14:47:10Z",
+      "side": 1,
+      "message": "You could store the unique_ptr to the CompilerInstance right here instead of in the Shader.",
+      "range": {
+        "startLine": 127,
+        "startChar": 3,
+        "endLine": 130,
+        "endChar": 30
+      },
+      "revId": "478e88a61c39fcb0327bb3ac3495b00eca921881",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd3f85ec_c51a64a9",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-31T14:47:10Z",
+      "side": 1,
+      "message": "This should happen in the resolveCompile, there is no need to hold the compiler instance when the Shader is not compiling.",
+      "range": {
+        "startLine": 171,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 5
+      },
+      "revId": "478e88a61c39fcb0327bb3ac3495b00eca921881",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78e1d791_d6e3c134",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-31T14:47:10Z",
+      "side": 1,
+      "message": "Do we need to store the worker pool while compiling?",
+      "range": {
+        "startLine": 384,
+        "startChar": 3,
+        "endLine": 384,
+        "endChar": 51
+      },
+      "revId": "478e88a61c39fcb0327bb3ac3495b00eca921881",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
