@@ -49,6 +49,44 @@ namespace
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2di11ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2dui11ps.h"
 
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough3d11gs.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough3d11vs.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughlum3d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughlumalpha3d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughr3d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughr3di11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughr3dui11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrg3d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrg3di11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrg3dui11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb3d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb3d_565_11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb3di11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb3dui11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba3d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba3d_4444_11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba3d_5551_11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba3di11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba3dui11ps.h"
+
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughlum2darray11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughlumalpha2darray11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughr2darray11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughr2darrayi11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughr2darrayui11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrg2darray11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrg2darrayi11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrg2darrayui11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb2darray11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb2darray_565_11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb2darrayi11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb2darrayui11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2darray11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2darray_4444_11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2darray_5551_11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2darrayi11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2darrayui11ps.h"
+
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_luma_ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_lumaalpha_ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_rgb_565_ps.h"
@@ -70,22 +108,59 @@ namespace
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftou_um_rgb_ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftou_um_rgba_ps.h"
 
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough3d11gs.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough3d11vs.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughlum3d11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughlumalpha3d11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughr3d11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughr3di11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughr3dui11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrg3d11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrg3di11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrg3dui11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb3d11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb3di11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb3dui11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba3d11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba3di11ps.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba3dui11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_luma_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_lumaalpha_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_rgb_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_rgb_565_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_rgba_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_rgba_4444_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_rgba_5551_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_um_luma_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_um_lumaalpha_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_um_rgb_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_um_rgb_565_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_um_rgba_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_um_rgba_4444_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_um_rgba_5551_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftoi_pm_rgb_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftoi_pm_rgba_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftoi_pt_rgb_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftoi_pt_rgba_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftoi_um_rgb_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftoi_um_rgba_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftou_pm_rgb_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftou_pm_rgba_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftou_pt_rgb_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftou_pt_rgba_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftou_um_rgb_3d_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftou_um_rgba_3d_ps.h"
+
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_luma_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_lumaalpha_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_rgb_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_rgb_565_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_rgba_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_rgba_4444_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_rgba_5551_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_um_luma_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_um_lumaalpha_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_um_rgb_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_um_rgb_565_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_um_rgba_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_um_rgba_4444_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_um_rgba_5551_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftoi_pm_rgb_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftoi_pm_rgba_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftoi_pt_rgb_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftoi_pt_rgba_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftoi_um_rgb_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftoi_um_rgba_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftou_pm_rgb_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftou_pm_rgba_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftou_pt_rgb_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftou_pt_rgba_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftou_um_rgb_2darray_ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftou_um_rgba_2darray_ps.h"
 
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/resolvedepth11_ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/resolvedepthstencil11_ps.h"
@@ -743,80 +818,168 @@ angle::Result Blit11::initResources(const gl::Context *context)
 Blit11::BlitShaderType Blit11::GetBlitShaderType(GLenum destinationFormat,
                                                  GLenum sourceFormat,
                                                  bool isSigned,
+                                                 bool isSignedDest,
                                                  bool unpackPremultiplyAlpha,
                                                  bool unpackUnmultiplyAlpha,
                                                  GLenum destTypeForDownsampling,
                                                  ShaderDimension dimension)
 {
-    if (dimension == SHADER_3D)
+    bool floatToIntBlit =
+        !gl::IsIntegerFormat(sourceFormat) && gl::IsIntegerFormat(destinationFormat);
+
+    if (isSigned)
     {
         ASSERT(!unpackPremultiplyAlpha && !unpackUnmultiplyAlpha);
-
-        if (isSigned)
+        switch (destinationFormat)
         {
-            switch (destinationFormat)
-            {
-                case GL_RGBA_INTEGER:
-                    return BLITSHADER_3D_RGBAI;
-                case GL_RGB_INTEGER:
-                    return BLITSHADER_3D_RGBI;
-                case GL_RG_INTEGER:
-                    return BLITSHADER_3D_RGI;
-                case GL_RED_INTEGER:
-                    return BLITSHADER_3D_RI;
-                default:
-                    UNREACHABLE();
-                    return BLITSHADER_INVALID;
-            }
-        }
-        else
-        {
-            switch (destinationFormat)
-            {
-                case GL_RGBA:
-                    return BLITSHADER_3D_RGBAF;
-                case GL_RGBA_INTEGER:
-                    return BLITSHADER_3D_RGBAUI;
-                case GL_BGRA_EXT:
-                    return BLITSHADER_3D_BGRAF;
-                case GL_RGB:
-                    return BLITSHADER_3D_RGBF;
-                case GL_RGB_INTEGER:
-                    return BLITSHADER_3D_RGBUI;
-                case GL_RG:
-                    return BLITSHADER_3D_RGF;
-                case GL_RG_INTEGER:
-                    return BLITSHADER_3D_RGUI;
-                case GL_RED:
-                    return BLITSHADER_3D_RF;
-                case GL_RED_INTEGER:
-                    return BLITSHADER_3D_RUI;
-                case GL_ALPHA:
-                    return BLITSHADER_3D_ALPHA;
-                case GL_LUMINANCE:
-                    return BLITSHADER_3D_LUMA;
-                case GL_LUMINANCE_ALPHA:
-                    return BLITSHADER_3D_LUMAALPHA;
-                default:
-                    UNREACHABLE();
-                    return BLITSHADER_INVALID;
-            }
+            case GL_RGBA_INTEGER:
+                switch (dimension)
+                {
+                    case SHADER_2D:
+                        return BLITSHADER_2D_RGBAI;
+                    case SHADER_3D:
+                        return BLITSHADER_3D_RGBAI;
+                    case SHADER_ARRAY:
+                        return BLITSHADER_ARRAY_RGBAI;
+                    default:
+                        UNREACHABLE();
+                        return BLITSHADER_INVALID;
+                }
+            case GL_RGB_INTEGER:
+                switch (dimension)
+                {
+                    case SHADER_2D:
+                        return BLITSHADER_2D_RGBI;
+                    case SHADER_3D:
+                        return BLITSHADER_3D_RGBI;
+                    case SHADER_ARRAY:
+                        return BLITSHADER_ARRAY_RGBI;
+                    default:
+                        UNREACHABLE();
+                        return BLITSHADER_INVALID;
+                }
+            case GL_RG_INTEGER:
+                switch (dimension)
+                {
+                    case SHADER_2D:
+                        return BLITSHADER_2D_RGI;
+                    case SHADER_3D:
+                        return BLITSHADER_3D_RGI;
+                    case SHADER_ARRAY:
+                        return BLITSHADER_ARRAY_RGI;
+                    default:
+                        UNREACHABLE();
+                        return BLITSHADER_INVALID;
+                }
+            case GL_RED_INTEGER:
+                switch (dimension)
+                {
+                    case SHADER_2D:
+                        return BLITSHADER_2D_RI;
+                    case SHADER_3D:
+                        return BLITSHADER_3D_RI;
+                    case SHADER_ARRAY:
+                        return BLITSHADER_ARRAY_RI;
+                    default:
+                        UNREACHABLE();
+                        return BLITSHADER_INVALID;
+                }
+            default:
+                UNREACHABLE();
+                return BLITSHADER_INVALID;
         }
     }
-    else if (isSigned)
+    else if (isSignedDest)
     {
-        ASSERT(!unpackPremultiplyAlpha && !unpackUnmultiplyAlpha);
+        ASSERT(floatToIntBlit);
+        ASSERT(dimension != SHADER_2D);
 
         switch (destinationFormat)
         {
             case GL_RGBA_INTEGER:
-                return BLITSHADER_2D_RGBAI;
+                if (unpackPremultiplyAlpha == unpackUnmultiplyAlpha)
+                {
+                    switch (dimension)
+                    {
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBAF_TOI;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBAF_TOI;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
+                }
+                else if (unpackPremultiplyAlpha)
+                {
+                    switch (dimension)
+                    {
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBAF_TOI_PREMULTIPLY;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBAF_TOI_PREMULTIPLY;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
+                }
+                else
+                {
+                    switch (dimension)
+                    {
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBAF_TOI_UNMULTIPLY;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBAF_TOI_UNMULTIPLY;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
+                }
+                break;
             case GL_RGB_INTEGER:
-                return BLITSHADER_2D_RGBI;
             case GL_RG_INTEGER:
-                return BLITSHADER_2D_RGI;
             case GL_RED_INTEGER:
-                return BLITSHADER_2D_RI;
+                if (unpackPremultiplyAlpha == unpackUnmultiplyAlpha)
+                {
+                    switch (dimension)
+                    {
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBF_TOI;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBF_TOI;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
+                }
+                else if (unpackPremultiplyAlpha)
+                {
+                    switch (dimension)
+                    {
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBF_TOI_PREMULTIPLY;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBF_TOI_PREMULTIPLY;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
+                }
+                else
+                {
+                    switch (dimension)
+                    {
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBF_TOI_UNMULTIPLY;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBF_TOI_UNMULTIPLY;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
+                }
+                break;
             default:
                 UNREACHABLE();
                 return BLITSHADER_INVALID;
@@ -824,9 +987,6 @@ Blit11::BlitShaderType Blit11::GetBlitShaderType(GLenum destinationFormat,
     }
     else
     {
-        bool floatToIntBlit =
-            !gl::IsIntegerFormat(sourceFormat) && gl::IsIntegerFormat(destinationFormat);
-
         // Check for the downsample formats first
         switch (destTypeForDownsampling)
         {
@@ -834,50 +994,148 @@ Blit11::BlitShaderType Blit11::GetBlitShaderType(GLenum destinationFormat,
                 ASSERT(destinationFormat == GL_RGBA && !floatToIntBlit);
                 if (unpackPremultiplyAlpha == unpackUnmultiplyAlpha)
                 {
-                    return BLITSHADER_2D_RGBAF_4444;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RGBAF_4444;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBAF_4444;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBAF_4444;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 }
                 else if (unpackPremultiplyAlpha)
                 {
-                    return BLITSHADER_2D_RGBAF_4444_PREMULTIPLY;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RGBAF_4444_PREMULTIPLY;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBAF_4444_PREMULTIPLY;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBAF_4444_PREMULTIPLY;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 }
                 else
                 {
-                    return BLITSHADER_2D_RGBAF_4444_UNMULTIPLY;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RGBAF_4444_UNMULTIPLY;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBAF_4444_UNMULTIPLY;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBAF_4444_UNMULTIPLY;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 }
 
             case GL_UNSIGNED_SHORT_5_6_5:
                 ASSERT(destinationFormat == GL_RGB && !floatToIntBlit);
                 if (unpackPremultiplyAlpha == unpackUnmultiplyAlpha)
                 {
-                    return BLITSHADER_2D_RGBF_565;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RGBF_565;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBF_565;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBF_565;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 }
                 else if (unpackPremultiplyAlpha)
                 {
-                    return BLITSHADER_2D_RGBF_565_PREMULTIPLY;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RGBF_565_PREMULTIPLY;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBF_565_PREMULTIPLY;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBF_565_PREMULTIPLY;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 }
                 else
                 {
-                    return BLITSHADER_2D_RGBF_565_UNMULTIPLY;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RGBF_565_UNMULTIPLY;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBF_565_UNMULTIPLY;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBF_565_UNMULTIPLY;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 }
-
             case GL_UNSIGNED_SHORT_5_5_5_1:
                 ASSERT(destinationFormat == GL_RGBA && !floatToIntBlit);
                 if (unpackPremultiplyAlpha == unpackUnmultiplyAlpha)
                 {
-                    return BLITSHADER_2D_RGBAF_5551;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RGBAF_5551;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBAF_5551;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBAF_5551;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 }
                 else if (unpackPremultiplyAlpha)
                 {
-                    return BLITSHADER_2D_RGBAF_5551_PREMULTIPLY;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RGBAF_5551_PREMULTIPLY;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBAF_5551_PREMULTIPLY;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBAF_5551_PREMULTIPLY;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 }
                 else
                 {
-                    return BLITSHADER_2D_RGBAF_5551_UNMULTIPLY;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RGBAF_5551_UNMULTIPLY;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBAF_5551_UNMULTIPLY;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBAF_5551_UNMULTIPLY;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 }
 
             default:
-                // By default, use the regular passthrough/multiply/unmultiply shaders.  The above
-                // shaders are only needed for some emulated texture formats.
+                // By default, use the regular passthrough/multiply/unmultiply shaders.  The
+                // above shaders are only needed for some emulated texture formats.
                 break;
         }
 
@@ -888,50 +1146,178 @@ Blit11::BlitShaderType Blit11::GetBlitShaderType(GLenum destinationFormat,
                 case GL_RGBA:
                 case GL_BGRA_EXT:
                     ASSERT(!floatToIntBlit);
-                    return unpackPremultiplyAlpha ? BLITSHADER_2D_RGBAF_PREMULTIPLY
-                                                  : BLITSHADER_2D_RGBAF_UNMULTIPLY;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return unpackPremultiplyAlpha ? BLITSHADER_2D_RGBAF_PREMULTIPLY
+                                                          : BLITSHADER_2D_RGBAF_UNMULTIPLY;
+                        case SHADER_3D:
+                            return unpackPremultiplyAlpha ? BLITSHADER_3D_RGBAF_PREMULTIPLY
+                                                          : BLITSHADER_3D_RGBAF_UNMULTIPLY;
+                        case SHADER_ARRAY:
+                            return unpackPremultiplyAlpha ? BLITSHADER_ARRAY_RGBAF_PREMULTIPLY
+                                                          : BLITSHADER_ARRAY_RGBAF_UNMULTIPLY;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
 
                 case GL_RGB:
                 case GL_RG:
                 case GL_RED:
-                    ASSERT(!floatToIntBlit);
-                    return unpackPremultiplyAlpha ? BLITSHADER_2D_RGBF_PREMULTIPLY
-                                                  : BLITSHADER_2D_RGBF_UNMULTIPLY;
-
-                case GL_RGBA_INTEGER:
                     if (unpackPremultiplyAlpha == unpackUnmultiplyAlpha)
                     {
-                        return BLITSHADER_2D_RGBAF_TOUI;
+                        switch (dimension)
+                        {
+                            case SHADER_2D:
+                                return BLITSHADER_2D_RGBF_TOUI;
+                            case SHADER_3D:
+                                return BLITSHADER_3D_RGBF_TOUI;
+                            case SHADER_ARRAY:
+                                return BLITSHADER_ARRAY_RGBF_TOUI;
+                            default:
+                                UNREACHABLE();
+                                return BLITSHADER_INVALID;
+                        }
                     }
                     else
                     {
-                        return unpackPremultiplyAlpha ? BLITSHADER_2D_RGBAF_TOUI_PREMULTIPLY
-                                                      : BLITSHADER_2D_RGBAF_TOUI_UNMULTIPLY;
+                        switch (dimension)
+                        {
+                            case SHADER_2D:
+                                return unpackPremultiplyAlpha ? BLITSHADER_2D_RGBF_PREMULTIPLY
+                                                              : BLITSHADER_2D_RGBF_UNMULTIPLY;
+                            case SHADER_3D:
+                                return unpackPremultiplyAlpha ? BLITSHADER_3D_RGBF_PREMULTIPLY
+                                                              : BLITSHADER_3D_RGBF_UNMULTIPLY;
+                            case SHADER_ARRAY:
+                                return unpackPremultiplyAlpha ? BLITSHADER_ARRAY_RGBF_PREMULTIPLY
+                                                              : BLITSHADER_ARRAY_RGBF_UNMULTIPLY;
+                            default:
+                                UNREACHABLE();
+                                return BLITSHADER_INVALID;
+                        }
                     }
-
+                case GL_RGBA_INTEGER:
+                    if (unpackPremultiplyAlpha == unpackUnmultiplyAlpha)
+                    {
+                        switch (dimension)
+                        {
+                            case SHADER_2D:
+                                return BLITSHADER_2D_RGBAF_TOUI;
+                            case SHADER_3D:
+                                return BLITSHADER_3D_RGBAF_TOUI;
+                            case SHADER_ARRAY:
+                                return BLITSHADER_ARRAY_RGBAF_TOUI;
+                            default:
+                                UNREACHABLE();
+                                return BLITSHADER_INVALID;
+                        }
+                    }
+                    else
+                    {
+                        switch (dimension)
+                        {
+                            case SHADER_2D:
+                                return unpackPremultiplyAlpha ? BLITSHADER_2D_RGBAF_TOUI_PREMULTIPLY
+                                                              : BLITSHADER_2D_RGBAF_TOUI_UNMULTIPLY;
+                            case SHADER_3D:
+                                return unpackPremultiplyAlpha ? BLITSHADER_3D_RGBAF_TOUI_PREMULTIPLY
+                                                              : BLITSHADER_3D_RGBAF_TOUI_UNMULTIPLY;
+                            case SHADER_ARRAY:
+                                return unpackPremultiplyAlpha
+                                           ? BLITSHADER_ARRAY_RGBAF_TOUI_PREMULTIPLY
+                                           : BLITSHADER_ARRAY_RGBAF_TOUI_UNMULTIPLY;
+                            default:
+                                UNREACHABLE();
+                                return BLITSHADER_INVALID;
+                        }
+                    }
                 case GL_RGB_INTEGER:
                 case GL_RG_INTEGER:
                 case GL_RED_INTEGER:
                     if (unpackPremultiplyAlpha == unpackUnmultiplyAlpha)
                     {
-                        return BLITSHADER_2D_RGBF_TOUI;
+                        switch (dimension)
+                        {
+                            case SHADER_2D:
+                                return BLITSHADER_2D_RGBF_TOUI;
+                            case SHADER_3D:
+                                return BLITSHADER_3D_RGBF_TOUI;
+                            case SHADER_ARRAY:
+                                return BLITSHADER_ARRAY_RGBF_TOUI;
+                            default:
+                                UNREACHABLE();
+                                return BLITSHADER_INVALID;
+                        }
                     }
                     else
                     {
-                        return unpackPremultiplyAlpha ? BLITSHADER_2D_RGBF_TOUI_PREMULTIPLY
-                                                      : BLITSHADER_2D_RGBF_TOUI_UNMULTIPLY;
+                        switch (dimension)
+                        {
+                            case SHADER_2D:
+                                return unpackPremultiplyAlpha ? BLITSHADER_2D_RGBF_TOUI_PREMULTIPLY
+                                                              : BLITSHADER_2D_RGBF_TOUI_UNMULTIPLY;
+                            case SHADER_3D:
+                                return unpackPremultiplyAlpha ? BLITSHADER_3D_RGBF_TOUI_PREMULTIPLY
+                                                              : BLITSHADER_3D_RGBF_TOUI_UNMULTIPLY;
+                            case SHADER_ARRAY:
+                                return unpackPremultiplyAlpha
+                                           ? BLITSHADER_ARRAY_RGBF_TOUI_PREMULTIPLY
+                                           : BLITSHADER_ARRAY_RGBF_TOUI_UNMULTIPLY;
+                            default:
+                                UNREACHABLE();
+                                return BLITSHADER_INVALID;
+                        }
                     }
                 case GL_LUMINANCE:
                     ASSERT(!floatToIntBlit);
-                    return unpackPremultiplyAlpha ? BLITSHADER_2D_LUMAF_PREMULTIPLY
-                                                  : BLITSHADER_2D_LUMAF_UNMULTIPLY;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return unpackPremultiplyAlpha ? BLITSHADER_2D_LUMAF_PREMULTIPLY
+                                                          : BLITSHADER_2D_LUMAF_UNMULTIPLY;
+                        case SHADER_3D:
+                            return unpackPremultiplyAlpha ? BLITSHADER_3D_LUMAF_PREMULTIPLY
+                                                          : BLITSHADER_3D_LUMAF_UNMULTIPLY;
+                        case SHADER_ARRAY:
+                            return unpackPremultiplyAlpha ? BLITSHADER_ARRAY_LUMAF_PREMULTIPLY
+                                                          : BLITSHADER_ARRAY_LUMAF_UNMULTIPLY;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 case GL_LUMINANCE_ALPHA:
                     ASSERT(!floatToIntBlit);
-                    return unpackPremultiplyAlpha ? BLITSHADER_2D_LUMAALPHAF_PREMULTIPLY
-                                                  : BLITSHADER_2D_LUMAALPHAF_UNMULTIPLY;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return unpackPremultiplyAlpha ? BLITSHADER_2D_LUMAALPHAF_PREMULTIPLY
+                                                          : BLITSHADER_2D_LUMAALPHAF_UNMULTIPLY;
+                        case SHADER_3D:
+                            return unpackPremultiplyAlpha ? BLITSHADER_3D_LUMAALPHAF_PREMULTIPLY
+                                                          : BLITSHADER_3D_LUMAALPHAF_UNMULTIPLY;
+                        case SHADER_ARRAY:
+                            return unpackPremultiplyAlpha ? BLITSHADER_ARRAY_LUMAALPHAF_PREMULTIPLY
+                                                          : BLITSHADER_ARRAY_LUMAALPHAF_UNMULTIPLY;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 case GL_ALPHA:
                     ASSERT(!floatToIntBlit);
-                    return BLITSHADER_2D_ALPHA;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_ALPHA;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_ALPHA;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_ALPHA;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 default:
                     UNREACHABLE();
                     return BLITSHADER_INVALID;
@@ -942,29 +1328,161 @@ Blit11::BlitShaderType Blit11::GetBlitShaderType(GLenum destinationFormat,
             switch (destinationFormat)
             {
                 case GL_RGBA:
-                    return BLITSHADER_2D_RGBAF;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RGBAF;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBAF;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBAF;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 case GL_RGBA_INTEGER:
-                    return BLITSHADER_2D_RGBAUI;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RGBAUI;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBAUI;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBAUI;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 case GL_BGRA_EXT:
-                    return BLITSHADER_2D_BGRAF;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_BGRAF;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_BGRAF;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_BGRAF;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 case GL_RGB:
-                    return BLITSHADER_2D_RGBF;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RGBF;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBF;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBF;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 case GL_RGB_INTEGER:
-                    return BLITSHADER_2D_RGBUI;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RGBUI;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGBUI;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGBUI;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 case GL_RG:
-                    return BLITSHADER_2D_RGF;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RGF;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGF;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGF;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 case GL_RG_INTEGER:
-                    return BLITSHADER_2D_RGUI;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RGUI;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RGUI;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RGUI;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 case GL_RED:
-                    return BLITSHADER_2D_RF;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RF;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RF;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RF;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 case GL_RED_INTEGER:
-                    return BLITSHADER_2D_RUI;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_RUI;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_RUI;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_RUI;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 case GL_ALPHA:
-                    return BLITSHADER_2D_ALPHA;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_ALPHA;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_ALPHA;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_ALPHA;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 case GL_LUMINANCE:
-                    return BLITSHADER_2D_LUMA;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_LUMA;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_LUMA;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_LUMA;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 case GL_LUMINANCE_ALPHA:
-                    return BLITSHADER_2D_LUMAALPHA;
+                    switch (dimension)
+                    {
+                        case SHADER_2D:
+                            return BLITSHADER_2D_LUMAALPHA;
+                        case SHADER_3D:
+                            return BLITSHADER_3D_LUMAALPHA;
+                        case SHADER_ARRAY:
+                            return BLITSHADER_ARRAY_LUMAALPHA;
+                        default:
+                            UNREACHABLE();
+                            return BLITSHADER_INVALID;
+                    }
                 default:
                     UNREACHABLE();
                     return BLITSHADER_INVALID;
@@ -1053,11 +1571,10 @@ angle::Result Blit11::getShaderSupport(const gl::Context *context,
     }
     else
     {
-        ASSERT(shader.dimension == SHADER_3D);
         ANGLE_TRY(mQuad3DIL.resolve(context11, mRenderer));
         ANGLE_TRY(mQuad3DVS.resolve(context11, mRenderer));
         ANGLE_TRY(mQuad3DGS.resolve(context11, mRenderer));
-        supportOut->inputLayout         = &mQuad2DIL.getObj();
+        supportOut->inputLayout         = &mQuad3DIL.getObj();
         supportOut->vertexShader        = &mQuad3DVS.getObj();
         supportOut->geometryShader      = &mQuad3DGS.getObj();
         supportOut->vertexWriteFunction = Write3DVertices;
@@ -1215,12 +1732,32 @@ angle::Result Blit11::copyTexture(const gl::Context *context,
     ASSERT(componentType != GL_SIGNED_NORMALIZED);
     bool isSigned = (componentType == GL_INT);
 
-    ShaderDimension dimension =
-        (sourceSRVDesc.ViewDimension == D3D11_SRV_DIMENSION_TEXTURE3D) ? SHADER_3D : SHADER_2D;
+    D3D11_RENDER_TARGET_VIEW_DESC destRTVDesc;
+    dest.get()->GetDesc(&destRTVDesc);
+
+    GLenum destComponentType = d3d11::GetComponentType(destRTVDesc.Format);
+
+    ASSERT(componentType != GL_NONE);
+    bool isDestSigned = (destComponentType == GL_INT);
+
+    ShaderDimension dimension;
+
+    switch (sourceSRVDesc.ViewDimension)
+    {
+        case D3D11_SRV_DIMENSION_TEXTURE3D:
+            dimension = SHADER_3D;
+            break;
+        case D3D11_SRV_DIMENSION_TEXTURE2DARRAY:
+            dimension = SHADER_ARRAY;
+            break;
+        default:
+            dimension = SHADER_2D;
+    }
 
     const Shader *shader = nullptr;
-    ANGLE_TRY(getBlitShader(context, destFormat, sourceFormat, isSigned, unpackPremultiplyAlpha,
-                            unpackUnmultiplyAlpha, destTypeForDownsampling, dimension, &shader));
+    ANGLE_TRY(getBlitShader(context, destFormat, sourceFormat, isSigned, isDestSigned,
+                            unpackPremultiplyAlpha, unpackUnmultiplyAlpha, destTypeForDownsampling,
+                            dimension, &shader));
 
     ShaderSupport support;
     ANGLE_TRY(getShaderSupport(context, *shader, &support));
@@ -1633,6 +2170,7 @@ angle::Result Blit11::getBlitShader(const gl::Context *context,
                                     GLenum destFormat,
                                     GLenum sourceFormat,
                                     bool isSigned,
+                                    bool isSignedDest,
                                     bool unpackPremultiplyAlpha,
                                     bool unpackUnmultiplyAlpha,
                                     GLenum destTypeForDownsampling,
@@ -1640,7 +2178,7 @@ angle::Result Blit11::getBlitShader(const gl::Context *context,
                                     const Shader **shader)
 {
     BlitShaderType blitShaderType =
-        GetBlitShaderType(destFormat, sourceFormat, isSigned, unpackPremultiplyAlpha,
+        GetBlitShaderType(destFormat, sourceFormat, isSigned, isSignedDest, unpackPremultiplyAlpha,
                           unpackUnmultiplyAlpha, destTypeForDownsampling, dimension);
 
     if (blitShaderType == BLITSHADER_INVALID)
@@ -1820,7 +2358,86 @@ angle::Result Blit11::getBlitShader(const gl::Context *context,
                                          ShaderData(g_PS_PassthroughLumAlpha3D),
                                          "Blit11 3D luminance alpha pixel shader"));
             break;
-
+        case BLITSHADER_ARRAY_RGBAF:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughRGBA2DArray),
+                                         "Blit11 2DArray RGBA pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBAUI:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughRGBA2DArrayUI),
+                                         "Blit11 2DArray UI RGBA pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBAI:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughRGBA2DArrayI),
+                                         "Blit11 2DArray I RGBA pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_BGRAF:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughRGBA2DArray),
+                                         "Blit11 2DArray BGRA pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBF:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughRGB2DArray),
+                                         "Blit11 2DArray RGB pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBUI:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughRGB2DArrayUI),
+                                         "Blit11 2DArray RGB UI pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBI:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughRGB2DArrayI),
+                                         "Blit11 2DArray RGB I pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGF:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughRG2DArray),
+                                         "Blit11 2DArray RG pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGUI:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughRG2DArrayUI),
+                                         "Blit11 2DArray RG UI pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGI:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughRG2DArrayI),
+                                         "Blit11 2DArray RG I pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RF:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughR2DArray),
+                                         "Blit11 2DArray R pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RUI:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughR2DArrayUI),
+                                         "Blit11 2DArray R UI pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RI:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughR2DArrayI),
+                                         "Blit11 2DArray R I pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_ALPHA:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughRGBA2DArray),
+                                         "Blit11 2DArray alpha pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_LUMA:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughLum2DArray),
+                                         "Blit11 2DArray luminance pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_LUMAALPHA:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughLumAlpha2DArray),
+                                         "Blit11 2DArray luminance alpha pixel shader"));
+            break;
         case BLITSHADER_2D_RGBAF_PREMULTIPLY:
             ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_2D,
                                          ShaderData(g_PS_FtoF_PM_RGBA),
@@ -1944,6 +2561,323 @@ angle::Result Blit11::getBlitShader(const gl::Context *context,
             ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_2D,
                                          ShaderData(g_PS_FtoF_UM_RGBA_5551),
                                          "Blit11 2D RGBA 5551 unmultiply pixel shader"));
+            break;
+        case BLITSHADER_3D_RGBAF_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoF_PM_RGBA_3D),
+                                         "Blit11 3D RGBA premultiply pixel shader"));
+            break;
+
+        case BLITSHADER_3D_RGBAF_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoF_UM_RGBA_3D),
+                                         "Blit11 3D RGBA unmultiply pixel shader"));
+            break;
+
+        case BLITSHADER_3D_RGBF_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoF_PM_RGB_3D),
+                                         "Blit11 3D RGB premultiply pixel shader"));
+            break;
+
+        case BLITSHADER_3D_RGBF_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoF_UM_RGB_3D),
+                                         "Blit11 3D RGB unmultiply pixel shader"));
+            break;
+
+        case BLITSHADER_3D_RGBAF_TOUI:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoU_PT_RGBA_3D),
+                                         "Blit11 3D RGBA to uint pixel shader"));
+            break;
+
+        case BLITSHADER_3D_RGBAF_TOUI_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoU_PM_RGBA_3D),
+                                         "Blit11 3D RGBA to uint premultiply pixel shader"));
+            break;
+
+        case BLITSHADER_3D_RGBAF_TOUI_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoU_UM_RGBA_3D),
+                                         "Blit11 3D RGBA to uint unmultiply pixel shader"));
+            break;
+
+        case BLITSHADER_3D_RGBF_TOUI:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoU_PT_RGB_3D),
+                                         "Blit11 3D RGB to uint pixel shader"));
+            break;
+
+        case BLITSHADER_3D_RGBF_TOUI_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoU_PM_RGB_3D),
+                                         "Blit11 3D RGB to uint premultiply pixel shader"));
+            break;
+
+        case BLITSHADER_3D_RGBF_TOUI_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoU_UM_RGB_3D),
+                                         "Blit11 3D RGB to uint unmultiply pixel shader"));
+            break;
+        case BLITSHADER_3D_RGBAF_TOI:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoI_PT_RGBA_3D),
+                                         "Blit11 3D RGBA to int pixel shader"));
+            break;
+
+        case BLITSHADER_3D_RGBAF_TOI_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoI_PM_RGBA_3D),
+                                         "Blit11 3D RGBA to int premultiply pixel shader"));
+            break;
+
+        case BLITSHADER_3D_RGBAF_TOI_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoI_UM_RGBA_3D),
+                                         "Blit11 3D RGBA to int unmultiply pixel shader"));
+            break;
+
+        case BLITSHADER_3D_RGBF_TOI:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoI_PT_RGB_3D),
+                                         "Blit11 3D RGB to int pixel shader"));
+            break;
+
+        case BLITSHADER_3D_RGBF_TOI_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoI_PM_RGB_3D),
+                                         "Blit11 3D RGB to int premultiply pixel shader"));
+            break;
+
+        case BLITSHADER_3D_RGBF_TOI_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoI_UM_RGB_3D),
+                                         "Blit11 3D RGB to int unmultiply pixel shader"));
+            break;
+        case BLITSHADER_3D_LUMAF_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoF_PM_LUMA_3D),
+                                         "Blit11 3D LUMA premultiply pixel shader"));
+            break;
+        case BLITSHADER_3D_LUMAF_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoF_UM_LUMA_3D),
+                                         "Blit11 3D LUMA unmultiply pixel shader"));
+            break;
+        case BLITSHADER_3D_LUMAALPHAF_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoF_PM_LUMAALPHA_3D),
+                                         "Blit11 3D LUMAALPHA premultiply pixel shader"));
+            break;
+        case BLITSHADER_3D_LUMAALPHAF_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoF_UM_LUMAALPHA_3D),
+                                         "Blit11 3D LUMAALPHA unmultiply pixel shader"));
+            break;
+        case BLITSHADER_3D_RGBAF_4444:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_PassthroughRGBA3D_4444),
+                                         "Blit11 3D RGBA 4444 pixel shader"));
+            break;
+        case BLITSHADER_3D_RGBAF_4444_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoF_PM_RGBA_4444_3D),
+                                         "Blit11 3D RGBA 4444 premultiply pixel shader"));
+            break;
+        case BLITSHADER_3D_RGBAF_4444_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoF_UM_RGBA_4444_3D),
+                                         "Blit11 3D RGBA 4444 unmultiply pixel shader"));
+            break;
+        case BLITSHADER_3D_RGBF_565:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_PassthroughRGB3D_565),
+                                         "Blit11 3D RGB 565 pixel shader"));
+            break;
+        case BLITSHADER_3D_RGBF_565_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoF_PM_RGB_565_3D),
+                                         "Blit11 3D RGB 565 premultiply pixel shader"));
+            break;
+        case BLITSHADER_3D_RGBF_565_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoF_UM_RGB_565_3D),
+                                         "Blit11 3D RGB 565 unmultiply pixel shader"));
+            break;
+        case BLITSHADER_3D_RGBAF_5551:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_PassthroughRGBA3D_5551),
+                                         "Blit11 3D RGBA 5551 pixel shader"));
+            break;
+        case BLITSHADER_3D_RGBAF_5551_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoF_PM_RGBA_5551_3D),
+                                         "Blit11 3D RGBA 5551 premultiply pixel shader"));
+            break;
+        case BLITSHADER_3D_RGBAF_5551_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_3D,
+                                         ShaderData(g_PS_FtoF_UM_RGBA_5551_3D),
+                                         "Blit11 3D RGBA 5551 unmultiply pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBAF_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoF_PM_RGBA_2DArray),
+                                         "Blit11 2DArray RGBA premultiply pixel shader"));
+            break;
+
+        case BLITSHADER_ARRAY_RGBAF_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoF_UM_RGBA_2DArray),
+                                         "Blit11 2DArray RGBA unmultiply pixel shader"));
+            break;
+
+        case BLITSHADER_ARRAY_RGBF_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoF_PM_RGB_2DArray),
+                                         "Blit11 2DArray RGB premultiply pixel shader"));
+            break;
+
+        case BLITSHADER_ARRAY_RGBF_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoF_UM_RGB_2DArray),
+                                         "Blit11 2DArray RGB unmultiply pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBAF_TOUI:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoU_PT_RGBA_2DArray),
+                                         "Blit11 2DArray RGBA to uint pixel shader"));
+            break;
+
+        case BLITSHADER_ARRAY_RGBAF_TOUI_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoU_PM_RGBA_2DArray),
+                                         "Blit11 2DArray RGBA to uint premultiply pixel shader"));
+            break;
+
+        case BLITSHADER_ARRAY_RGBAF_TOUI_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoU_UM_RGBA_2DArray),
+                                         "Blit11 2DArray RGBA to uint unmultiply pixel shader"));
+            break;
+
+        case BLITSHADER_ARRAY_RGBF_TOUI:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoU_PT_RGB_2DArray),
+                                         "Blit11 2DArray RGB to uint pixel shader"));
+            break;
+
+        case BLITSHADER_ARRAY_RGBF_TOUI_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoU_PM_RGB_2DArray),
+                                         "Blit11 2DArray RGB to uint premultiply pixel shader"));
+            break;
+
+        case BLITSHADER_ARRAY_RGBF_TOUI_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoU_UM_RGB_2DArray),
+                                         "Blit11 2DArray RGB to uint unmultiply pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBAF_TOI:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoI_PT_RGBA_2DArray),
+                                         "Blit11 2DArray RGBA to int pixel shader"));
+            break;
+
+        case BLITSHADER_ARRAY_RGBAF_TOI_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoI_PM_RGBA_2DArray),
+                                         "Blit11 2DArray RGBA to int premultiply pixel shader"));
+            break;
+
+        case BLITSHADER_ARRAY_RGBAF_TOI_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoI_UM_RGBA_2DArray),
+                                         "Blit11 2DArray RGBA to int unmultiply pixel shader"));
+            break;
+
+        case BLITSHADER_ARRAY_RGBF_TOI:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoI_PT_RGB_2DArray),
+                                         "Blit11 2DArray RGB to int pixel shader"));
+            break;
+
+        case BLITSHADER_ARRAY_RGBF_TOI_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoI_PM_RGB_2DArray),
+                                         "Blit11 2DArray RGB to int premultiply pixel shader"));
+            break;
+
+        case BLITSHADER_ARRAY_RGBF_TOI_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoI_UM_RGB_2DArray),
+                                         "Blit11 2DArray RGB to int unmultiply pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_LUMAF_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoF_PM_LUMA_2DArray),
+                                         "Blit11 2DArray LUMA premultiply pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_LUMAF_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoF_UM_LUMA_2DArray),
+                                         "Blit11 2DArray LUMA unmultiply pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_LUMAALPHAF_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoF_PM_LUMAALPHA_2DArray),
+                                         "Blit11 2DArray LUMAALPHA premultiply pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_LUMAALPHAF_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoF_UM_LUMAALPHA_2DArray),
+                                         "Blit11 2DArray LUMAALPHA unmultiply pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBAF_4444:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughRGBA2DArray_4444),
+                                         "Blit11 2DArray RGBA 4444 pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBAF_4444_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoF_PM_RGBA_4444_2DArray),
+                                         "Blit11 2DArray RGBA 4444 premultiply pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBAF_4444_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoF_UM_RGBA_4444_2DArray),
+                                         "Blit11 2DArray RGBA 4444 unmultiply pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBF_565:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughRGB2DArray_565),
+                                         "Blit11 2DArray RGB 565 pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBF_565_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoF_PM_RGB_565_2DArray),
+                                         "Blit11 2DArray RGB 565 premultiply pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBF_565_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoF_UM_RGB_565_2DArray),
+                                         "Blit11 2DArray RGB 565 unmultiply pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBAF_5551:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_PassthroughRGBA2DArray_5551),
+                                         "Blit11 2DArray RGBA 5551 pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBAF_5551_PREMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoF_PM_RGBA_5551_2DArray),
+                                         "Blit11 2DArray RGBA 5551 premultiply pixel shader"));
+            break;
+        case BLITSHADER_ARRAY_RGBAF_5551_UNMULTIPLY:
+            ANGLE_TRY(addBlitShaderToMap(context, blitShaderType, SHADER_ARRAY,
+                                         ShaderData(g_PS_FtoF_UM_RGBA_5551_2DArray),
+                                         "Blit11 2DArray RGBA 5551 unmultiply pixel shader"));
             break;
 
         default:
