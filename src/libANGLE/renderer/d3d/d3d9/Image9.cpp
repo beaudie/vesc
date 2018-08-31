@@ -154,7 +154,7 @@ angle::Result Image9::CopyLockableSurfaces(Context9 *context9,
 angle::Result Image9::CopyImage(const gl::Context *context,
                                 Image9 *dest,
                                 Image9 *source,
-                                const gl::Rectangle &sourceRect,
+                                const gl::Box &sourceBox,
                                 const gl::Offset &destOffset,
                                 bool unpackFlipY,
                                 bool unpackPremultiplyAlpha,
@@ -196,18 +196,18 @@ angle::Result Image9::CopyImage(const gl::Context *context,
     ANGLE_TRY_HR(context9, result, "Failed to lock the destination surface for CopyImage");
 
     const uint8_t *sourceData = static_cast<const uint8_t *>(sourceLocked.pBits) +
-                                sourceRect.x * sourceD3DFormatInfo.pixelBytes +
-                                sourceRect.y * sourceLocked.Pitch;
+                                sourceBox.x * sourceD3DFormatInfo.pixelBytes +
+                                sourceBox.y * sourceLocked.Pitch;
     uint8_t *destData = static_cast<uint8_t *>(destLocked.pBits) +
                         destOffset.x * destD3DFormatInfo.pixelBytes +
                         destOffset.y * destLocked.Pitch;
     ASSERT(sourceData && destData);
 
-    CopyImageCHROMIUM(sourceData, sourceLocked.Pitch, sourceD3DFormatInfo.pixelBytes,
+    CopyImageCHROMIUM(sourceData, sourceLocked.Pitch, sourceD3DFormatInfo.pixelBytes, 0,
                       sourceD3DFormatInfo.info().pixelReadFunction, destData, destLocked.Pitch,
-                      destD3DFormatInfo.pixelBytes, destD3DFormatInfo.info().pixelWriteFunction,
+                      destD3DFormatInfo.pixelBytes, 0, destD3DFormatInfo.info().pixelWriteFunction,
                       gl::GetUnsizedFormat(dest->getInternalFormat()),
-                      destD3DFormatInfo.info().componentType, sourceRect.width, sourceRect.height,
+                      destD3DFormatInfo.info().componentType, sourceBox.width, sourceBox.height, 1,
                       unpackFlipY, unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
 
     destSurface->UnlockRect();
