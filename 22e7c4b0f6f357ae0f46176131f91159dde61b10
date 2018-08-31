@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b667d5b5_b8d71e7c",
+        "filename": "extensions/ANGLE_copy_texture_3d.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-08-31T14:55:16Z",
+      "side": 1,
+      "message": "It would be good to defer to the CHROMIUM_copy_texture wherever possible.  I think the descriptions of these commands can be simplified to something along the lines of\n\nCopyTexture3DANGLE has the same behaviour and validation as CopyTextureCHROMIUM except...\n\nIt will lessen the burden of maintaining two extensions that are mostly identical.",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 44
+      },
+      "revId": "22e7c4b0f6f357ae0f46176131f91159dde61b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
