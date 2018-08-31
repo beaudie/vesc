@@ -3921,13 +3921,13 @@ bool ValidateCopyTextureCHROMIUM(Context *context,
     const Texture *source = context->getTexture(sourceId);
     if (source == nullptr)
     {
-        context->handleError(InvalidValue() << "Source texture is not a valid texture object.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidSourceTexture);
         return false;
     }
 
     if (!IsValidCopyTextureSourceTarget(context, source->getType()))
     {
-        context->handleError(InvalidValue() << "Source texture a valid texture type.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidSourceTextureType);
         return false;
     }
 
@@ -3937,7 +3937,7 @@ bool ValidateCopyTextureCHROMIUM(Context *context,
 
     if (!IsValidCopyTextureSourceLevel(context, sourceType, sourceLevel))
     {
-        context->handleError(InvalidValue() << "Source texture level is not valid.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidSourceTextureLevel);
         return false;
     }
 
@@ -3945,14 +3945,14 @@ bool ValidateCopyTextureCHROMIUM(Context *context,
     GLsizei sourceHeight = static_cast<GLsizei>(source->getHeight(sourceTarget, sourceLevel));
     if (sourceWidth == 0 || sourceHeight == 0)
     {
-        ANGLE_VALIDATION_ERR(context, InvalidOperation(), InvalidInternalFormat);
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), InvalidSourceTextureSize);
         return false;
     }
 
     const InternalFormat &sourceFormat = *source->getFormat(sourceTarget, sourceLevel).info;
     if (!IsValidCopyTextureSourceInternalFormatEnum(sourceFormat.internalFormat))
     {
-        context->handleError(InvalidOperation() << "Source texture internal format is invalid.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), InvalidInternalFormat);
         return false;
     }
 
@@ -3965,14 +3965,13 @@ bool ValidateCopyTextureCHROMIUM(Context *context,
     const Texture *dest = context->getTexture(destId);
     if (dest == nullptr)
     {
-        context->handleError(InvalidValue()
-                             << "Destination texture is not a valid texture object.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidDestinationTexture);
         return false;
     }
 
     if (!IsValidCopyTextureDestinationTarget(context, dest->getType(), destTarget))
     {
-        context->handleError(InvalidValue() << "Destination texture a valid texture type.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidDestinationTextureType);
         return false;
     }
 
@@ -3998,7 +3997,7 @@ bool ValidateCopyTextureCHROMIUM(Context *context,
 
     if (dest->getImmutableFormat())
     {
-        context->handleError(InvalidOperation() << "Destination texture is immutable.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), DestinationImmutable);
         return false;
     }
 
@@ -4024,6 +4023,7 @@ bool ValidateCopySubTextureCHROMIUM(Context *context,
     if (!context->getExtensions().copyTexture)
     {
         context->handleError(InvalidOperation()
+
                              << "GL_CHROMIUM_copy_texture extension not available.");
         return false;
     }
@@ -4031,13 +4031,13 @@ bool ValidateCopySubTextureCHROMIUM(Context *context,
     const Texture *source = context->getTexture(sourceId);
     if (source == nullptr)
     {
-        context->handleError(InvalidValue() << "Source texture is not a valid texture object.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidSourceTexture);
         return false;
     }
 
     if (!IsValidCopyTextureSourceTarget(context, source->getType()))
     {
-        context->handleError(InvalidValue() << "Source texture a valid texture type.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidSourceTextureType);
         return false;
     }
 
@@ -4054,8 +4054,7 @@ bool ValidateCopySubTextureCHROMIUM(Context *context,
     if (source->getWidth(sourceTarget, sourceLevel) == 0 ||
         source->getHeight(sourceTarget, sourceLevel) == 0)
     {
-        context->handleError(InvalidValue()
-                             << "The source level of the source texture must be defined.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), SourceLevelNotDefined);
         return false;
     }
 
@@ -4094,37 +4093,33 @@ bool ValidateCopySubTextureCHROMIUM(Context *context,
     const Texture *dest = context->getTexture(destId);
     if (dest == nullptr)
     {
-        context->handleError(InvalidValue()
-                             << "Destination texture is not a valid texture object.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidDestinationTexture);
         return false;
     }
 
     if (!IsValidCopyTextureDestinationTarget(context, dest->getType(), destTarget))
     {
-        context->handleError(InvalidValue() << "Destination texture a valid texture type.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidDestinationTextureType);
         return false;
     }
 
     if (!IsValidCopyTextureDestinationLevel(context, dest->getType(), destLevel, width, height,
                                             true))
     {
-        context->handleError(InvalidValue() << "Destination texture level is not valid.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidDestinationLevel);
         return false;
     }
 
     if (dest->getWidth(destTarget, destLevel) == 0 || dest->getHeight(destTarget, destLevel) == 0)
     {
-        context
-            ->handleError(InvalidOperation()
-                          << "The destination level of the destination texture must be defined.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), DestinationLevelNotDefined);
         return false;
     }
 
     const InternalFormat &destFormat = *dest->getFormat(destTarget, destLevel).info;
     if (!IsValidCopySubTextureDestionationInternalFormat(destFormat.internalFormat))
     {
-        context->handleError(InvalidOperation()
-                             << "Destination internal format and type combination is not valid.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), InvalidTypeFormatCombination);
         return false;
     }
 
@@ -4137,7 +4132,7 @@ bool ValidateCopySubTextureCHROMIUM(Context *context,
     if (static_cast<size_t>(xoffset + width) > dest->getWidth(destTarget, destLevel) ||
         static_cast<size_t>(yoffset + height) > dest->getHeight(destTarget, destLevel))
     {
-        context->handleError(InvalidValue() << "Destination texture not large enough to copy to.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), DestinationTextureTooSmall);
         return false;
     }
 
@@ -4156,13 +4151,13 @@ bool ValidateCompressedCopyTextureCHROMIUM(Context *context, GLuint sourceId, GL
     const gl::Texture *source = context->getTexture(sourceId);
     if (source == nullptr)
     {
-        context->handleError(InvalidValue() << "Source texture is not a valid texture object.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidSourceTexture);
         return false;
     }
 
     if (source->getType() != TextureType::_2D)
     {
-        context->handleError(InvalidValue() << "Source texture must be of type GL_TEXTURE_2D.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidSourceTextureType);
         return false;
     }
 
@@ -4184,21 +4179,19 @@ bool ValidateCompressedCopyTextureCHROMIUM(Context *context, GLuint sourceId, GL
     const gl::Texture *dest = context->getTexture(destId);
     if (dest == nullptr)
     {
-        context->handleError(InvalidValue()
-                             << "Destination texture is not a valid texture object.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidDestinationTexture);
         return false;
     }
 
     if (dest->getType() != TextureType::_2D)
     {
-        context->handleError(InvalidValue()
-                             << "Destination texture must be of type GL_TEXTURE_2D.");
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidDestinationTextureType);
         return false;
     }
 
     if (dest->getImmutableFormat())
     {
-        context->handleError(InvalidOperation() << "Destination cannot be immutable.");
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), DestinationImmutable);
         return false;
     }
 
