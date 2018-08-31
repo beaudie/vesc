@@ -34,6 +34,24 @@
       "revId": "90e91453bc97d5baf08435f5b0c4f272f1495262",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e293a76b_3eba41ef",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-08-31T00:46:16Z",
+      "side": 0,
+      "message": "I think it\u0027s still valid, though some hot place might freeze over before this rises to the top of the list.  Either way is fine.",
+      "parentUuid": "b02c76d4_35c00c04",
+      "revId": "90e91453bc97d5baf08435f5b0c4f272f1495262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
