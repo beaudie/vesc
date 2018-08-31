@@ -39,7 +39,7 @@ class Image9 : public ImageD3D
     static angle::Result CopyImage(const gl::Context *context,
                                    Image9 *dest,
                                    Image9 *source,
-                                   const gl::Rectangle &sourceRect,
+                                   const gl::Box &sourceBox,
                                    const gl::Offset &destOffset,
                                    bool unpackFlipY,
                                    bool unpackPremultiplyAlpha,
