@@ -234,7 +234,6 @@
 
 // Vulkan failures
 2598 VULKAN : dEQP-GLES2.functional.rasterization.primitives.line* = SKIP
-2599 VULKAN : dEQP-GLES2.functional.rasterization.limits.points = SKIP
 
 // Vulkan AMD Windows specific failures
 2602 VULKAN WIN AMD : dEQP-GLES2.functional.buffer.write.* = SKIP
