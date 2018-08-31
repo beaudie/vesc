@@ -142,8 +142,24 @@ class Blit11 : angle::NonCopyable
         BLITSHADER_3D_ALPHA,
         BLITSHADER_3D_LUMA,
         BLITSHADER_3D_LUMAALPHA,
+        BLITSHADER_ARRAY_RGBAF,
+        BLITSHADER_ARRAY_RGBAUI,
+        BLITSHADER_ARRAY_RGBAI,
+        BLITSHADER_ARRAY_BGRAF,
+        BLITSHADER_ARRAY_RGBF,
+        BLITSHADER_ARRAY_RGBUI,
+        BLITSHADER_ARRAY_RGBI,
+        BLITSHADER_ARRAY_RGF,
+        BLITSHADER_ARRAY_RGUI,
+        BLITSHADER_ARRAY_RGI,
+        BLITSHADER_ARRAY_RF,
+        BLITSHADER_ARRAY_RUI,
+        BLITSHADER_ARRAY_RI,
+        BLITSHADER_ARRAY_ALPHA,
+        BLITSHADER_ARRAY_LUMA,
+        BLITSHADER_ARRAY_LUMAALPHA,
 
-        // Multiply alpha shaders
+        // 2D Multiply alpha shaders
         BLITSHADER_2D_RGBAF_PREMULTIPLY,
         BLITSHADER_2D_RGBAF_UNMULTIPLY,
 
@@ -164,7 +180,65 @@ class Blit11 : angle::NonCopyable
         BLITSHADER_2D_LUMAALPHAF_PREMULTIPLY,
         BLITSHADER_2D_LUMAALPHAF_UNMULTIPLY,
 
-        // Downsample 16-bit shaders
+        // 2DArray Multiply alpha shaders
+        BLITSHADER_ARRAY_RGBAF_PREMULTIPLY,
+        BLITSHADER_ARRAY_RGBAF_UNMULTIPLY,
+
+        BLITSHADER_ARRAY_RGBF_PREMULTIPLY,
+        BLITSHADER_ARRAY_RGBF_UNMULTIPLY,
+
+        BLITSHADER_ARRAY_RGBAF_TOUI,
+        BLITSHADER_ARRAY_RGBAF_TOUI_PREMULTIPLY,
+        BLITSHADER_ARRAY_RGBAF_TOUI_UNMULTIPLY,
+
+        BLITSHADER_ARRAY_RGBF_TOUI,
+        BLITSHADER_ARRAY_RGBF_TOUI_PREMULTIPLY,
+        BLITSHADER_ARRAY_RGBF_TOUI_UNMULTIPLY,
+
+        BLITSHADER_ARRAY_RGBAF_TOI,
+        BLITSHADER_ARRAY_RGBAF_TOI_PREMULTIPLY,
+        BLITSHADER_ARRAY_RGBAF_TOI_UNMULTIPLY,
+
+        BLITSHADER_ARRAY_RGBF_TOI,
+        BLITSHADER_ARRAY_RGBF_TOI_PREMULTIPLY,
+        BLITSHADER_ARRAY_RGBF_TOI_UNMULTIPLY,
+
+        BLITSHADER_ARRAY_LUMAF_PREMULTIPLY,
+        BLITSHADER_ARRAY_LUMAF_UNMULTIPLY,
+
+        BLITSHADER_ARRAY_LUMAALPHAF_PREMULTIPLY,
+        BLITSHADER_ARRAY_LUMAALPHAF_UNMULTIPLY,
+
+        // 3D Multiply alpha shaders
+        BLITSHADER_3D_RGBAF_PREMULTIPLY,
+        BLITSHADER_3D_RGBAF_UNMULTIPLY,
+
+        BLITSHADER_3D_RGBF_PREMULTIPLY,
+        BLITSHADER_3D_RGBF_UNMULTIPLY,
+
+        BLITSHADER_3D_RGBAF_TOUI,
+        BLITSHADER_3D_RGBAF_TOUI_PREMULTIPLY,
+        BLITSHADER_3D_RGBAF_TOUI_UNMULTIPLY,
+
+        BLITSHADER_3D_RGBF_TOUI,
+        BLITSHADER_3D_RGBF_TOUI_PREMULTIPLY,
+        BLITSHADER_3D_RGBF_TOUI_UNMULTIPLY,
+
+        BLITSHADER_3D_RGBAF_TOI,
+        BLITSHADER_3D_RGBAF_TOI_PREMULTIPLY,
+        BLITSHADER_3D_RGBAF_TOI_UNMULTIPLY,
+
+        BLITSHADER_3D_RGBF_TOI,
+        BLITSHADER_3D_RGBF_TOI_PREMULTIPLY,
+        BLITSHADER_3D_RGBF_TOI_UNMULTIPLY,
+
+        BLITSHADER_3D_LUMAF_PREMULTIPLY,
+        BLITSHADER_3D_LUMAF_UNMULTIPLY,
+
+        BLITSHADER_3D_LUMAALPHAF_PREMULTIPLY,
+        BLITSHADER_3D_LUMAALPHAF_UNMULTIPLY,
+
+        // 2D Downsample 16-bit shaders
         BLITSHADER_2D_RGBAF_4444,
         BLITSHADER_2D_RGBAF_4444_PREMULTIPLY,
         BLITSHADER_2D_RGBAF_4444_UNMULTIPLY,
@@ -176,6 +250,32 @@ class Blit11 : angle::NonCopyable
         BLITSHADER_2D_RGBAF_5551,
         BLITSHADER_2D_RGBAF_5551_PREMULTIPLY,
         BLITSHADER_2D_RGBAF_5551_UNMULTIPLY,
+
+        // 2DArray Downsample 16-bit shaders
+        BLITSHADER_ARRAY_RGBAF_4444,
+        BLITSHADER_ARRAY_RGBAF_4444_PREMULTIPLY,
+        BLITSHADER_ARRAY_RGBAF_4444_UNMULTIPLY,
+
+        BLITSHADER_ARRAY_RGBF_565,
+        BLITSHADER_ARRAY_RGBF_565_PREMULTIPLY,
+        BLITSHADER_ARRAY_RGBF_565_UNMULTIPLY,
+
+        BLITSHADER_ARRAY_RGBAF_5551,
+        BLITSHADER_ARRAY_RGBAF_5551_PREMULTIPLY,
+        BLITSHADER_ARRAY_RGBAF_5551_UNMULTIPLY,
+
+        // 3D Downsample 16-bit shaders
+        BLITSHADER_3D_RGBAF_4444,
+        BLITSHADER_3D_RGBAF_4444_PREMULTIPLY,
+        BLITSHADER_3D_RGBAF_4444_UNMULTIPLY,
+
+        BLITSHADER_3D_RGBF_565,
+        BLITSHADER_3D_RGBF_565_PREMULTIPLY,
+        BLITSHADER_3D_RGBF_565_UNMULTIPLY,
+
+        BLITSHADER_3D_RGBAF_5551,
+        BLITSHADER_3D_RGBAF_5551_PREMULTIPLY,
+        BLITSHADER_3D_RGBAF_5551_UNMULTIPLY,
     };
 
     enum SwizzleShaderType
@@ -208,6 +308,7 @@ class Blit11 : angle::NonCopyable
     {
         SHADER_2D,
         SHADER_3D,
+        SHADER_ARRAY
     };
 
     struct Shader
@@ -238,6 +339,7 @@ class Blit11 : angle::NonCopyable
     static BlitShaderType GetBlitShaderType(GLenum destinationFormat,
                                             GLenum sourceFormat,
                                             bool isSigned,
+                                            bool isSignedDest,
                                             bool unpackPremultiplyAlpha,
                                             bool unpackUnmultiplyAlpha,
                                             GLenum destTypeForDownsampling,
@@ -299,6 +401,7 @@ class Blit11 : angle::NonCopyable
                                 GLenum destFormat,
                                 GLenum sourceFormat,
                                 bool isSigned,
+                                bool isSignedDest,
                                 bool unpackPremultiplyAlpha,
                                 bool unpackUnmultiplyAlpha,
                                 GLenum destTypeForDownsampling,
