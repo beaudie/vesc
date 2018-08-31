@@ -1599,7 +1599,6 @@
 2432 NVIDIA OPENGL : dEQP-GLES31.functional.vertex_attribute_binding.usage.mixed_usage.mixed_api_change_binding_point = SKIP
 
 // OES_texture_storage_multisample_2d_array is exposed on OpenGL but not yet fully implemented.
-2775 OPENGL : dEQP-GLES31.functional.state_query.integer.texture_binding_2d_multisample_array* = FAIL
 2775 OPENGL : dEQP-GLES31.functional.state_query.shader.sampler_type_multisample_array = FAIL
 2775 OPENGL : dEQP-GLES31.functional.texture.multisample.samples_1.use_texture_color_2d_array = FAIL
 2775 OPENGL : dEQP-GLES31.functional.texture.multisample.samples_1.use_texture_int_2d_array = FAIL
