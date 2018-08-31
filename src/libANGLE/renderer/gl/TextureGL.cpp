@@ -762,7 +762,7 @@ gl::Error TextureGL::copySubTexture(const gl::Context *context,
                                     const gl::ImageIndex &index,
                                     const gl::Offset &destOffset,
                                     size_t sourceLevel,
-                                    const gl::Rectangle &sourceArea,
+                                    const gl::Rectangle &sourceRect,
                                     bool unpackFlipY,
                                     bool unpackPremultiplyAlpha,
                                     bool unpackUnmultiplyAlpha,
@@ -771,6 +771,7 @@ gl::Error TextureGL::copySubTexture(const gl::Context *context,
     gl::TextureTarget target                 = index.getTarget();
     size_t level                             = static_cast<size_t>(index.getLevelIndex());
     const gl::InternalFormat &destFormatInfo = *mState.getImageDesc(target, level).format.info;
+    gl::Rectangle sourceArea(sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height);
     return copySubTextureHelper(context, target, level, destOffset, sourceLevel, sourceArea,
                                 destFormatInfo, unpackFlipY, unpackPremultiplyAlpha,
                                 unpackUnmultiplyAlpha, source);

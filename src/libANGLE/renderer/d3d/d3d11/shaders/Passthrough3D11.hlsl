@@ -144,3 +144,25 @@ float4 PS_PassthroughLumAlpha3D(GS_OUTPUT input) : SV_TARGET0
 {
     return TextureF.Sample(Sampler, input.TexCoord).rrra;
 }
+
+float4 PS_PassthroughRGBA3D_4444(GS_OUTPUT input) : SV_TARGET0
+{
+    return round(TextureF.Sample(Sampler, input.TexCoord) * float4(15, 15, 15, 15)) / float4(15, 15, 15, 15);
+}
+
+float4 PS_PassthroughRGB3D_565(GS_OUTPUT input) : SV_TARGET0
+{
+    return float4(round(TextureF.Sample(Sampler, input.TexCoord).rgb * float3(31, 63, 31)) / float3(31, 63, 31), 1.0f);
+}
+
+float4 PS_PassthroughRGBA3D_5551(GS_OUTPUT input) : SV_TARGET0
+{
+    return round(TextureF.Sample(Sampler, input.TexCoord) * float4(31, 31, 31, 1)) / float4(31, 31, 31, 1);
+}
+
+float4 PS_PassthroughRGBA3D_2101010(GS_OUTPUT input) : SV_TARGET0
+{
+    return round(TextureF.Sample(Sampler, input.TexCoord) * float4(31, 31, 31, 1)) / float4(31, 31, 31, 1);
+}
+
+
