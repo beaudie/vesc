@@ -711,7 +711,7 @@ GLint ProgramD3D::getImageMapping(gl::ShaderType type,
             break;
         // TODO(xinghua.cao@intel.com): add image mapping for vertex shader and pixel shader.
         default:
-            UNREACHABLE();
+            UNIMPLEMENTED();
     }
 
     if (logicalImageUnit >= 0 && logicalImageUnit < static_cast<GLint>(caps.maxImageUnits))
@@ -730,7 +730,7 @@ gl::RangeUI ProgramD3D::getUsedImageRange(gl::ShaderType type, bool readonly) co
             return readonly ? mUsedComputeReadonlyImageRange : mUsedComputeImageRange;
         // TODO(xinghua.cao@intel.com): add image range of vertex shader and pixel shader.
         default:
-            UNREACHABLE();
+            UNIMPLEMENTED();
             return {0, 0};
     }
 }
