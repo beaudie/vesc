@@ -46,6 +46,30 @@
       "revId": "c70e64abc1ba7376337bdda44aeb06caf77c6252",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c69403c_aa6f2e1d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-02T17:12:27Z",
+      "side": 1,
+      "message": "well, the non indexed and indexed dirty bits masks can change. the new command buffer ones don\u0027t but we can\u0027t really easily initialize bitsets. FWIW we have the same pattern in Context.h.",
+      "parentUuid": "f9f47e17_48d952b6",
+      "range": {
+        "startLine": 230,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 41
+      },
+      "revId": "c70e64abc1ba7376337bdda44aeb06caf77c6252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
