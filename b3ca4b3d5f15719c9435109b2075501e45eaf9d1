@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2ab9d2e_6ad6b9a5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-09-02T04:21:23Z",
+      "side": 1,
+      "message": "I can\u0027t imagine how a map lookup and call through a function pointer is faster than the switch statement with cases inline.  If it really is, I\u0027d love to know how.\nIs it possible the improvement is all due to other things that changed?",
+      "revId": "b3ca4b3d5f15719c9435109b2075501e45eaf9d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
