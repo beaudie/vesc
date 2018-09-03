@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "300de279_a6815b9f",
+        "filename": "src/libANGLE/Compiler.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-03T12:27:16Z",
+      "side": 1,
+      "message": "Good point, thanks!",
+      "parentUuid": "daa1620b_3fedbc33",
+      "range": {
+        "startLine": 203,
+        "startChar": 52,
+        "endLine": 203,
+        "endChar": 70
+      },
+      "revId": "478e88a61c39fcb0327bb3ac3495b00eca921881",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d3a0781_eb39c617",
         "filename": "src/libANGLE/Compiler.h",
         "patchSetId": 8
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "83dfd29a_4e0f40e5",
+        "filename": "src/libANGLE/Compiler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-03T12:27:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d3a0781_eb39c617",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 46
+      },
+      "revId": "478e88a61c39fcb0327bb3ac3495b00eca921881",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a05d1068_700b6361",
         "filename": "src/libANGLE/Shader.cpp",
         "patchSetId": 8
@@ -59,6 +107,30 @@
       "writtenOn": "2018-08-31T14:47:10Z",
       "side": 1,
       "message": "You could store the unique_ptr to the CompilerInstance right here instead of in the Shader.",
+      "range": {
+        "startLine": 127,
+        "startChar": 3,
+        "endLine": 130,
+        "endChar": 30
+      },
+      "revId": "478e88a61c39fcb0327bb3ac3495b00eca921881",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "931a8280_560815ac",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-03T12:27:16Z",
+      "side": 1,
+      "message": "CompileTask is mainly for running in the background thread. But CompilerInstance has to be used in main thread to collect uniforms, attributes, etc. It is also passed to the implementation for post translate task. If we were to store it in CompileTask, Shader would still have to fetch it back from CompileTask. Probably it seems not favorable.",
+      "parentUuid": "a05d1068_700b6361",
       "range": {
         "startLine": 127,
         "startChar": 3,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "12b5bc6a_3a8bc456",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-03T12:27:16Z",
+      "side": 1,
+      "message": "Besides compiling, it\u0027s also needed by shader-\u003egetCompilerResourcesString() in MemoryProgramCache. I have eliminated such use by caching the string in Shader, so that this change now is moved in resolveCompile.",
+      "parentUuid": "dd3f85ec_c51a64a9",
+      "range": {
+        "startLine": 171,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 5
+      },
+      "revId": "478e88a61c39fcb0327bb3ac3495b00eca921881",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78e1d791_d6e3c134",
         "filename": "src/libANGLE/Shader.cpp",
         "patchSetId": 8
@@ -105,6 +201,30 @@
       "writtenOn": "2018-08-31T14:47:10Z",
       "side": 1,
       "message": "Do we need to store the worker pool while compiling?",
+      "range": {
+        "startLine": 384,
+        "startChar": 3,
+        "endLine": 384,
+        "endChar": 51
+      },
+      "revId": "478e88a61c39fcb0327bb3ac3495b00eca921881",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29b960aa_3a6a086f",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-03T12:27:16Z",
+      "side": 1,
+      "message": "Yes, we do. Assume that a shader is being compiled in one context, which happens to be the last reference to the worker pool. Meanwhile the shader is also being used in another context. Destroying the first context doesn\u0027t destroy the shader, but destroys the pool. It is not a correct situation that the shader is still compiling, but the pool has gone.",
+      "parentUuid": "78e1d791_d6e3c134",
       "range": {
         "startLine": 384,
         "startChar": 3,
