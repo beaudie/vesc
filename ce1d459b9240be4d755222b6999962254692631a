@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa792fc3_158c48b3",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-03T21:48:36Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand why this isn\u0027t available. Tobin put it in there. In what config was it failing?",
+      "range": {
+        "startLine": 13,
+        "startChar": 7,
+        "endLine": 13,
+        "endChar": 30
+      },
+      "revId": "ce1d459b9240be4d755222b6999962254692631a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "328f1e21_c5fe961e",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 1
@@ -13,6 +36,24 @@
       "writtenOn": "2018-09-03T20:08:53Z",
       "side": 1,
       "message": "I\u0027m wondering if I should use a namespace for most of this file, leaving the global/exported ANGLEUseForApplication function as not in the namespace.  Sound good?",
+      "revId": "ce1d459b9240be4d755222b6999962254692631a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3381142_2209cb9e",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-03T21:48:36Z",
+      "side": 1,
+      "message": "Yep, that sounds reasonable.",
+      "parentUuid": "328f1e21_c5fe961e",
       "revId": "ce1d459b9240be4d755222b6999962254692631a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -36,6 +77,41 @@
     },
     {
       "key": {
+        "uuid": "b5a7f7bf_ee510715",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-03T21:48:36Z",
+      "side": 1,
+      "message": "kJSONRules would be my preference.",
+      "parentUuid": "d05ef6da_7e4f3e0b",
+      "revId": "ce1d459b9240be4d755222b6999962254692631a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbe98098_7bb49e25",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-03T21:48:36Z",
+      "side": 1,
+      "message": "see naming rules for static methods:\n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#variable-names",
+      "revId": "ce1d459b9240be4d755222b6999962254692631a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "76e58aad_46dd9da8",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 1
@@ -47,6 +123,24 @@
       "writtenOn": "2018-09-03T20:08:53Z",
       "side": 1,
       "message": "Where and how should I put the comments for the parameters of this function?  Should they be in the header?  Should they be in-line (just above or just after the line that contains the parameter)?, or be like JavaDoc/doxygen comments--in a comment-block above the function declaration?",
+      "revId": "ce1d459b9240be4d755222b6999962254692631a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20cf08a8_d4538197",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-03T21:48:36Z",
+      "side": 1,
+      "message": "We don\u0027t have a policy for this. I think the header is the most visible place.",
+      "parentUuid": "76e58aad_46dd9da8",
       "revId": "ce1d459b9240be4d755222b6999962254692631a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
