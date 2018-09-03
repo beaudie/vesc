@@ -22,6 +22,53 @@
       "revId": "21c0b40cdadd1048e9b7bc1001997b62af2baddb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "451c0071_bf6aeec0",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-03T17:19:11Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "f20df90e_688bb843",
+      "range": {
+        "startLine": 339,
+        "startChar": 8,
+        "endLine": 339,
+        "endChar": 89
+      },
+      "revId": "21c0b40cdadd1048e9b7bc1001997b62af2baddb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba7a0fb3_d9304185",
+        "filename": "src/tests/gl_tests/TextureMultisampleTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-03T17:19:11Z",
+      "side": 1,
+      "message": "nit: unindent (for all the rest)\n\nunderstood that you aren\u0027t as much of a fan of uindenting these but it would be good to be consistent",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 11
+      },
+      "revId": "21c0b40cdadd1048e9b7bc1001997b62af2baddb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
