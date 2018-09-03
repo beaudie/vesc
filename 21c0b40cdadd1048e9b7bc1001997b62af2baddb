@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f20df90e_688bb843",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-03T12:55:57Z",
+      "side": 1,
+      "message": "nit: We could have a \"IsMultiSampled\" utility function.",
+      "range": {
+        "startLine": 339,
+        "startChar": 8,
+        "endLine": 339,
+        "endChar": 89
+      },
+      "revId": "21c0b40cdadd1048e9b7bc1001997b62af2baddb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
