@@ -16,6 +16,24 @@
       "revId": "b3ca4b3d5f15719c9435109b2075501e45eaf9d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7813fae_7199b7f2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-03T18:08:39Z",
+      "side": 1,
+      "message": "Yeah, the improvement is likely because of the other changes. The point that replacing an inlined switch with an array of function pointers is probably slower is probably right. I was noticing that the switch code gen was more complex than just a jump. Also I was trying to make this function avoid the register reallocation that happens in the function beginning and end. You can see this in the profiler in the { and } lines. It did reduce the stack space needed but didn\u0027t eliminate it. Possibly because the dirty bit iteration itself requires stack space. In the end I kept it because the extra indirection cost is relative to the number of dirty bits (roughly zero in the test I\u0027m optimizing) and I thought the new style looked good.\n\ntl,dr; you\u0027re probably right but it didn\u0027t slow down this test. totally open to reverting this design in the future if it speeds up other tests.",
+      "parentUuid": "c2ab9d2e_6ad6b9a5",
+      "revId": "b3ca4b3d5f15719c9435109b2075501e45eaf9d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

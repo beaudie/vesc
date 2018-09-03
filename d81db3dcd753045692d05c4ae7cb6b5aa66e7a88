@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2fafa166_6795b012",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-03T18:08:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8ac0b1ac_458e5b88",
+      "range": {
+        "startLine": 190,
+        "startChar": 8,
+        "endLine": 190,
+        "endChar": 33
+      },
+      "revId": "d81db3dcd753045692d05c4ae7cb6b5aa66e7a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70f724e1_9d81c245",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "d81db3dcd753045692d05c4ae7cb6b5aa66e7a88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f229e016_bafbc8f3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-03T18:08:39Z",
+      "side": 1,
+      "message": "Good suggestion. Done.",
+      "parentUuid": "70f724e1_9d81c245",
+      "range": {
+        "startLine": 199,
+        "startChar": 4,
+        "endLine": 199,
+        "endChar": 55
+      },
+      "revId": "d81db3dcd753045692d05c4ae7cb6b5aa66e7a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
