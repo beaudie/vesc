@@ -8,16 +8,15 @@
 
 #include "windows/WindowsTimer.h"
 
-WindowsTimer::WindowsTimer() : mRunning(false), mStartTime(0), mStopTime(0)
-{
-}
-
-void WindowsTimer::start()
+WindowsTimer::WindowsTimer() : mRunning(false), mStartTime(0), mStopTime(0), mFrequency(0)
 {
     LARGE_INTEGER frequency;
     QueryPerformanceFrequency(&frequency);
     mFrequency = frequency.QuadPart;
+}
 
+void WindowsTimer::start()
+{
     LARGE_INTEGER curTime;
     QueryPerformanceCounter(&curTime);
     mStartTime = curTime.QuadPart;
