@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "21ace44d_0f20c328",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "78126b8a_8de7e8b1",
+      "range": {
+        "startLine": 28,
+        "startChar": 25,
+        "endLine": 28,
+        "endChar": 28
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "372e5dde_342a3aad",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9ac603e_e0c1518c",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "372e5dde_342a3aad",
+      "range": {
+        "startLine": 316,
+        "startChar": 4,
+        "endLine": 316,
+        "endChar": 35
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "58a0dccf_2a16182e",
+        "filename": "samples/sample_util/SampleApplication.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "I changed almost all stereo references to multiview counts throughout the whole patch.",
+      "parentUuid": "f173d09b_2528c830",
+      "range": {
+        "startLine": 33,
+        "startChar": 22,
+        "endLine": 33,
+        "endChar": 53
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "757384cb_729deba7",
         "filename": "samples/simple_stereo/SimpleStereo.cpp",
         "patchSetId": 7
@@ -85,6 +157,24 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38f1b74a_784f3ff4",
+        "filename": "samples/simple_stereo/SimpleStereo.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "757384cb_729deba7",
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "c4e38aad_10752035",
+        "filename": "samples/simple_stereo/SimpleStereo.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "e242613b_bfda0615",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 54
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "22b95b1f_ad496753",
         "filename": "samples/simple_stereo/SimpleStereo.cpp",
         "patchSetId": 7
@@ -131,6 +245,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c17615c4_bd624cc5",
+        "filename": "samples/simple_stereo/SimpleStereo.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "22b95b1f_ad496753",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 28
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -157,6 +295,30 @@
     },
     {
       "key": {
+        "uuid": "4d5cc26b_862a643f",
+        "filename": "samples/simple_stereo/SimpleStereo.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "cddc1d58_50a08941",
+      "range": {
+        "startLine": 28,
+        "startChar": 2,
+        "endLine": 28,
+        "endChar": 9
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84be0189_35696c68",
         "filename": "src/libANGLE/Caps.cpp",
         "patchSetId": 7
@@ -180,6 +342,30 @@
     },
     {
       "key": {
+        "uuid": "b54a6180_9f2f06e8",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "84be0189_35696c68",
+      "range": {
+        "startLine": 855,
+        "startChar": 47,
+        "endLine": 855,
+        "endChar": 62
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b7c5589_381d381b",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 7
@@ -191,6 +377,30 @@
       "writtenOn": "2018-08-17T17:57:54Z",
       "side": 1,
       "message": "READ_BUFFER_EXT is not an indexed query, only GL_DRAW_BUFFER_EXT.",
+      "range": {
+        "startLine": 7495,
+        "startChar": 8,
+        "endLine": 7495,
+        "endChar": 32
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c67e57c_eb2cd2ab",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7495,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "I have gone back and forth on this one.  The spec contradicts itself.  In one section is says that READ_BUFFER_EXT is a valid argument for GetIntegeri_vEXT, while the state table indicates that GetInteger should be used.  If GetInteger is used, you need to assume that the location is implied by whether or not the framebuffer is the default framebuffer.  If GetIntegeri_vEXT is used, both the location and index can be returned, but the index passed in is ignored.  \n\nWhat is your interpretation?",
+      "parentUuid": "3b7c5589_381d381b",
       "range": {
         "startLine": 7495,
         "startChar": 8,
@@ -226,6 +436,30 @@
     },
     {
       "key": {
+        "uuid": "87e54f2f_0ed8786b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7498,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "693331c7_cdad5b5f",
+      "range": {
+        "startLine": 7498,
+        "startChar": 25,
+        "endLine": 7498,
+        "endChar": 26
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9d3ee29_fc4087c7",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 7
@@ -246,6 +480,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "080b9e3d_e4a7e251",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "a9d3ee29_fc4087c7",
+      "range": {
+        "startLine": 1096,
+        "startChar": 0,
+        "endLine": 1097,
+        "endChar": 60
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -272,6 +530,30 @@
     },
     {
       "key": {
+        "uuid": "a707fabd_f9f90383",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "I switched to having everything default to 0, and that works fine.",
+      "parentUuid": "f2ceb0b3_f498ac25",
+      "range": {
+        "startLine": 278,
+        "startChar": 50,
+        "endLine": 278,
+        "endChar": 52
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e280db15_7deedd73",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 7
@@ -292,6 +574,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93349291_ae3499aa",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2552,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "e280db15_7deedd73",
+      "range": {
+        "startLine": 2545,
+        "startChar": 0,
+        "endLine": 2552,
+        "endChar": 13
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -318,6 +624,30 @@
     },
     {
       "key": {
+        "uuid": "6b91761c_54e1eea5",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2553,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "26ed7752_ab725cc8",
+      "range": {
+        "startLine": 2553,
+        "startChar": 12,
+        "endLine": 2553,
+        "endChar": 73
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa7ff3cd_8a078348",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 7
@@ -338,6 +668,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bd88be0_2846c186",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2563,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "fa7ff3cd_8a078348",
+      "range": {
+        "startLine": 2556,
+        "startChar": 0,
+        "endLine": 2563,
+        "endChar": 13
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -364,6 +718,30 @@
     },
     {
       "key": {
+        "uuid": "88db653f_d5a445ea",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2564,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "0f822062_08ede954",
+      "range": {
+        "startLine": 2564,
+        "startChar": 12,
+        "endLine": 2564,
+        "endChar": 64
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e3feca1_1e38f203",
         "filename": "src/libANGLE/Surface.h",
         "patchSetId": 7
@@ -384,6 +762,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e16470cf_90ae6723",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "7e3feca1_1e38f203",
+      "range": {
+        "startLine": 179,
+        "startChar": 4,
+        "endLine": 179,
+        "endChar": 31
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -410,6 +812,30 @@
     },
     {
       "key": {
+        "uuid": "8f07d3a3_49f7aaae",
+        "filename": "src/libANGLE/renderer/DisplayImpl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "00ceca4f_c4a2792a",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 47
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "88a2fb1e_92fdaf22",
         "filename": "src/libANGLE/renderer/FramebufferImpl.h",
         "patchSetId": 7
@@ -421,6 +847,30 @@
       "writtenOn": "2018-08-17T17:57:54Z",
       "side": 1,
       "message": "These should be synchronized using dirty bits in the syncState functions of the framebuffer implementations.  You can see how we do it with setting the drawbuffer states already.",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 98
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20e84cfc_40426007",
+        "filename": "src/libANGLE/renderer/FramebufferImpl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "I did that to start with, but in syncState for FramebufferGL, there is the following check:\n\n    // Don\u0027t need to sync state for the default FBO.\n    if (mIsDefault)\n    {\n        return gl::NoError();\n    }\n\nI tried to find where the read/draw buffers were set for the default framebuffer, but couldn\u0027t follow it.  Where should that update occur?",
+      "parentUuid": "88a2fb1e_92fdaf22",
       "range": {
         "startLine": 91,
         "startChar": 0,
@@ -456,6 +906,30 @@
     },
     {
       "key": {
+        "uuid": "19590490_db9a908b",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "b92a411b_be2ee3ca",
+      "range": {
+        "startLine": 84,
+        "startChar": 55,
+        "endLine": 84,
+        "endChar": 60
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b5a920f_ca9b578c",
         "filename": "src/libANGLE/renderer/d3d/FramebufferD3D.cpp",
         "patchSetId": 7
@@ -476,6 +950,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12c02d58_956ab88c",
+        "filename": "src/libANGLE/renderer/d3d/FramebufferD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "5b5a920f_ca9b578c",
+      "range": {
+        "startLine": 367,
+        "startChar": 19,
+        "endLine": 374,
+        "endChar": 40
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -502,6 +1000,30 @@
     },
     {
       "key": {
+        "uuid": "24be064e_eaee6ea2",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2591,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "ac3c0b2b_02a09c08",
+      "range": {
+        "startLine": 2590,
+        "startChar": 0,
+        "endLine": 2591,
+        "endChar": 65
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "43935b97_e01c0622",
         "filename": "src/libANGLE/renderer/d3d/RendererD3D.h",
         "patchSetId": 7
@@ -522,6 +1044,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "682ea2f6_335d08a3",
+        "filename": "src/libANGLE/renderer/d3d/RendererD3D.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "43935b97_e01c0622",
+      "range": {
+        "startLine": 182,
+        "startChar": 42,
+        "endLine": 182,
+        "endChar": 55
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -548,6 +1094,30 @@
     },
     {
       "key": {
+        "uuid": "4cac047a_95849145",
+        "filename": "src/libANGLE/renderer/d3d/RendererD3D.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "I switched to multiviewCount.",
+      "parentUuid": "3b505e34_4b47b1ca",
+      "range": {
+        "startLine": 379,
+        "startChar": 17,
+        "endLine": 379,
+        "endChar": 34
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "773d55fe_3f2e07e3",
         "filename": "src/libANGLE/renderer/d3d/SurfaceD3D.cpp",
         "patchSetId": 7
@@ -568,6 +1138,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67a6c5ed_8a0a16b4",
+        "filename": "src/libANGLE/renderer/d3d/SurfaceD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "773d55fe_3f2e07e3",
+      "range": {
+        "startLine": 54,
+        "startChar": 6,
+        "endLine": 55,
+        "endChar": 75
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -594,6 +1188,30 @@
     },
     {
       "key": {
+        "uuid": "4a6d63ac_d64d64cf",
+        "filename": "src/libANGLE/renderer/d3d/SwapChainD3D.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "784889d5_4ab3373e",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 34
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ed232e6_b74899e1",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 7
@@ -605,6 +1223,30 @@
       "writtenOn": "2018-08-17T17:57:54Z",
       "side": 1,
       "message": "Do you know what triggered this?  Seems like an error somewhere else if we got here.",
+      "range": {
+        "startLine": 1795,
+        "startChar": 0,
+        "endLine": 1798,
+        "endChar": 9
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d2a8747_b7ef156b",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1798,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "This is in the original code.  As far as I can tell, colorRTs is a cache and not current state, so it can have null entries.",
+      "parentUuid": "0ed232e6_b74899e1",
       "range": {
         "startLine": 1795,
         "startChar": 0,
@@ -640,6 +1282,30 @@
     },
     {
       "key": {
+        "uuid": "7e9fbe29_4abe92fd",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1801,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "e27d1ae1_894bd821",
+      "range": {
+        "startLine": 1801,
+        "startChar": 14,
+        "endLine": 1801,
+        "endChar": 18
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a5762e3e_879a20a6",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 7
@@ -660,6 +1326,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bcfb16d_d433bd6e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1805,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "a5762e3e_879a20a6",
+      "range": {
+        "startLine": 1802,
+        "startChar": 0,
+        "endLine": 1805,
+        "endChar": 26
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -686,6 +1376,30 @@
     },
     {
       "key": {
+        "uuid": "ab527c84_accb92f4",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "2f5ae6af_26ff5b26",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 22
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55b5a3aa_57a78d70",
         "filename": "src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp",
         "patchSetId": 7
@@ -697,6 +1411,30 @@
       "writtenOn": "2018-08-17T17:57:54Z",
       "side": 1,
       "message": "Doesn\u0027t look like this is ever assigned.",
+      "range": {
+        "startLine": 1077,
+        "startChar": 11,
+        "endLine": 1077,
+        "endChar": 20
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6df36b6_a4bfd2dc",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1077,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "I switched this to multiviewCount and added a comment after create swapchain to assign this once DX11 support is added.",
+      "parentUuid": "55b5a3aa_57a78d70",
       "range": {
         "startLine": 1077,
         "startChar": 11,
@@ -732,6 +1470,30 @@
     },
     {
       "key": {
+        "uuid": "e9a9c742_fb712236",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Do I need to extend DispatchTableGL to support this?  Those entry points don\u0027t exist right now.",
+      "parentUuid": "a05c0cff_abea0d0c",
+      "range": {
+        "startLine": 671,
+        "startChar": 11,
+        "endLine": 681,
+        "endChar": 22
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01c9fcd1_42ca7dd5",
         "filename": "src/libANGLE/renderer/gl/SurfaceGL.h",
         "patchSetId": 7
@@ -755,6 +1517,30 @@
     },
     {
       "key": {
+        "uuid": "12f561e8_5c0f5081",
+        "filename": "src/libANGLE/renderer/gl/SurfaceGL.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "01c9fcd1_42ca7dd5",
+      "range": {
+        "startLine": 31,
+        "startChar": 39,
+        "endLine": 33,
+        "endChar": 57
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e8ab736_91ae9d20",
         "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
         "patchSetId": 7
@@ -766,6 +1552,30 @@
       "writtenOn": "2018-08-17T17:57:54Z",
       "side": 1,
       "message": "This is not a display attribute, it looks like we will need to choose new pixel formats per surface created.  This might cause issues with sharing those surfaces between contexts.",
+      "range": {
+        "startLine": 161,
+        "startChar": 53,
+        "endLine": 161,
+        "endChar": 81
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "758c5040_6e95cdc0",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "I\u0027m not sure how to resolve this one.  At one point, I treated it like a display attribute and created a stereo pixel format no matter what if it was available.  Unfortunately, I ran into too many OpenGL driver issues that causes regressions for contexts that didn\u0027t need stereo.  So, I went with the current code which only tries to get a stereo context when asked.  This prevents regressions, but also can run into context sharing issues.  \n\nAny advise you can suggest would be helpful.",
+      "parentUuid": "5e8ab736_91ae9d20",
       "range": {
         "startLine": 161,
         "startChar": 53,
@@ -801,6 +1611,30 @@
     },
     {
       "key": {
+        "uuid": "8e06c0be_69210be0",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "24009c1c_6dbfd7c6",
+      "range": {
+        "startLine": 250,
+        "startChar": 63,
+        "endLine": 250,
+        "endChar": 64
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23a9b95b_d6432bf2",
         "filename": "src/libANGLE/renderer/gl/wgl/WindowSurfaceWGL.cpp",
         "patchSetId": 7
@@ -821,6 +1655,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf069714_8ef8845f",
+        "filename": "src/libANGLE/renderer/gl/wgl/WindowSurfaceWGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "23a9b95b_d6432bf2",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 92,
+        "endChar": 55
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -847,6 +1705,30 @@
     },
     {
       "key": {
+        "uuid": "71c1f8f7_f4182b70",
+        "filename": "src/libANGLE/renderer/gl/wgl/WindowSurfaceWGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "6d6cb97a_9c545e08",
+      "range": {
+        "startLine": 190,
+        "startChar": 4,
+        "endLine": 190,
+        "endChar": 27
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "73f0cd74_91f969eb",
         "filename": "src/libANGLE/renderer/null/SurfaceNULL.cpp",
         "patchSetId": 7
@@ -867,6 +1749,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f600142_994be35a",
+        "filename": "src/libANGLE/renderer/null/SurfaceNULL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "73f0cd74_91f969eb",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 13
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -893,6 +1799,30 @@
     },
     {
       "key": {
+        "uuid": "716b9a79_e3fa700c",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1172,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "e2ba23b1_ea3e7829",
+      "range": {
+        "startLine": 1155,
+        "startChar": 20,
+        "endLine": 1172,
+        "endChar": 21
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0690e038_7d121c3d",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 7
@@ -913,6 +1843,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a14b6b60_516d0769",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2840,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "0690e038_7d121c3d",
+      "range": {
+        "startLine": 2840,
+        "startChar": 6,
+        "endLine": 2840,
+        "endChar": 26
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -939,6 +1893,30 @@
     },
     {
       "key": {
+        "uuid": "a8fa21fc_a6d2a916",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2933,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "d379bbd2_ada5f13c",
+      "range": {
+        "startLine": 2933,
+        "startChar": 6,
+        "endLine": 2933,
+        "endChar": 26
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "22a720f3_41f56b45",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 7
@@ -959,6 +1937,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aae10e72_ab21bf02",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2627,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "22a720f3_41f56b45",
+      "range": {
+        "startLine": 2627,
+        "startChar": 47,
+        "endLine": 2627,
+        "endChar": 83
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -985,6 +1987,30 @@
     },
     {
       "key": {
+        "uuid": "49fe0ded_3be5132d",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2631,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "13b580e9_7d659df2",
+      "range": {
+        "startLine": 2631,
+        "startChar": 4,
+        "endLine": 2631,
+        "endChar": 8
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ecaed046_9e8f2e49",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 7
@@ -1005,6 +2031,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bbe7a22_22533ad7",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2674,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "ecaed046_9e8f2e49",
+      "range": {
+        "startLine": 2636,
+        "startChar": 8,
+        "endLine": 2674,
+        "endChar": 9
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1031,6 +2081,30 @@
     },
     {
       "key": {
+        "uuid": "037d4feb_bb92bb1f",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2727,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "20b4c76e_77106a03",
+      "range": {
+        "startLine": 2691,
+        "startChar": 4,
+        "endLine": 2727,
+        "endChar": 5
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e9805215_956a46c3",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 7
@@ -1051,6 +2125,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2eb6579_669ee28b",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2731,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "e9805215_956a46c3",
+      "range": {
+        "startLine": 2731,
+        "startChar": 5,
+        "endLine": 2731,
+        "endChar": 29
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1077,6 +2175,30 @@
     },
     {
       "key": {
+        "uuid": "0331f4fb_00715946",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2746,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "715302eb_1cbc228c",
+      "range": {
+        "startLine": 2746,
+        "startChar": 8,
+        "endLine": 2746,
+        "endChar": 17
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d2b109b7_ed16c76b",
         "filename": "src/libGLESv2/entry_points_gles_ext_autogen.cpp",
         "patchSetId": 7
@@ -1091,6 +2213,24 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd3c13c0_62239057",
+        "filename": "src/libGLESv2/entry_points_gles_ext_autogen.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "d2b109b7_ed16c76b",
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1111,6 +2251,24 @@
     },
     {
       "key": {
+        "uuid": "6dd204ad_c2dea97e",
+        "filename": "src/libGLESv2/libGLESv2_autogen.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "30b4ff71_09431b02",
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b70bbd1c_b1dd1e25",
         "filename": "src/libGLESv2/libGLESv2_autogen.def",
         "patchSetId": 7
@@ -1125,6 +2283,24 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afd9a0f5_2bb434c5",
+        "filename": "src/libGLESv2/libGLESv2_autogen.def",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "b70bbd1c_b1dd1e25",
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1151,6 +2327,30 @@
     },
     {
       "key": {
+        "uuid": "1c23e69c_188934d6",
+        "filename": "src/tests/angle_end2end_tests.gypi",
+        "patchSetId": 7
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "838ca5fd_35a5e867",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 87,
+        "endChar": 3
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "92afd6dc_83422cac",
         "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
         "patchSetId": 7
@@ -1165,6 +2365,24 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9da44b07_bc35013f",
+        "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "92afd6dc_83422cac",
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1191,6 +2409,30 @@
     },
     {
       "key": {
+        "uuid": "ca46d06b_ed5e06a3",
+        "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "8f44845e_a1a40e84",
+      "range": {
+        "startLine": 48,
+        "startChar": 3,
+        "endLine": 74,
+        "endChar": 5
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "89f25c54_bb3fc919",
         "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
         "patchSetId": 7
@@ -1211,6 +2453,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b6db8e0_07841d72",
+        "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "89f25c54_bb3fc919",
+      "range": {
+        "startLine": 81,
+        "startChar": 4,
+        "endLine": 81,
+        "endChar": 23
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1237,6 +2503,30 @@
     },
     {
       "key": {
+        "uuid": "b68e2857_4ca072ed",
+        "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "55815d8a_d62832b5",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 0
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8d70400e_f296761f",
         "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
         "patchSetId": 7
@@ -1260,6 +2550,30 @@
     },
     {
       "key": {
+        "uuid": "17f5af59_9955ad8d",
+        "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "8d70400e_f296761f",
+      "range": {
+        "startLine": 119,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 9
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "91f81bba_909551b6",
         "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
         "patchSetId": 7
@@ -1271,6 +2585,30 @@
       "writtenOn": "2018-08-17T17:57:54Z",
       "side": 1,
       "message": "Can you elaborate on this?  What calls are generating invalid operations? We should strive to never generate errors in the backend.",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 54
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dabc2b0_418f33cf",
+        "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "I ran into this problem on Geforce and possibly Intel GPU\u0027s.  Specifically, setting a stereo pixel format succeeds, but calling glDrawBuffer(GL_BACK_RIGHT) causes and INVALID_OPERATION error.  For Geforce, this is due to their 3D Vision technology which will always potentially allow stereo (ie: setting the pixel format works), but really only allows it if the display is a licensed display (ie: the draw buffer failure).\n\nIn release mode, the draw buffer error is silently ignored, but in debug mode I get the test failure.  I could have excluded nVidia and Intel GPU\u0027s from this test, but it is somewhat complicated by the fact that nVidia Quadro GPU\u0027s don\u0027t have the 3D Vision issue.  If I could just exclude Geforce, that would work.\n\nI could go either way (GPU exclusion or the current way), so just let me know which is preferred.",
+      "parentUuid": "91f81bba_909551b6",
       "range": {
         "startLine": 120,
         "startChar": 0,
@@ -1303,6 +2641,30 @@
       "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73444de2_7d52263b",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-09-04T22:32:12Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "c4e54b5c_4b9e5a4e",
+      "range": {
+        "startLine": 171,
+        "startChar": 4,
+        "endLine": 171,
+        "endChar": 11
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
