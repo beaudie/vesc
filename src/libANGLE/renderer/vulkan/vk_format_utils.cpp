@@ -105,58 +105,44 @@ Format::Format()
 }
 
 void Format::initTextureFallback(VkPhysicalDevice physicalDevice,
-                                 angle::FormatID format,
-                                 VkFormat vkFormat,
-                                 InitializeTextureDataFunction initializer,
-                                 angle::FormatID fallbackFormat,
-                                 VkFormat fallbackVkFormat,
-                                 InitializeTextureDataFunction fallbackInitializer)
+                                 const std::vector<TextureInfo> &textures)
 {
-    ASSERT(format != angle::FormatID::NONE);
-    ASSERT(fallbackFormat != angle::FormatID::NONE);
+    ASSERT(textures.size() > 1);
 
-    if (HasFullTextureFormatSupport(physicalDevice, vkFormat))
+    for (const TextureInfo &texture : textures)
     {
-        textureFormatID            = format;
-        vkTextureFormat            = vkFormat;
-        textureInitializerFunction = initializer;
+        ASSERT(texture.format != angle::FormatID::NONE);
+        if (HasFullTextureFormatSupport(physicalDevice, texture.vkFormat))
+        {
+            textureFormatID            = texture.format;
+            vkTextureFormat            = texture.vkFormat;
+            textureInitializerFunction = texture.initializer;
+            return;
+        }
     }
-    else
-    {
-        textureFormatID            = fallbackFormat;
-        vkTextureFormat            = fallbackVkFormat;
-        textureInitializerFunction = fallbackInitializer;
-        ASSERT(HasFullTextureFormatSupport(physicalDevice, vkTextureFormat));
-    }
+
+    UNREACHABLE();
 }
 
 void Format::initBufferFallback(VkPhysicalDevice physicalDevice,
-                                angle::FormatID format,
-                                VkFormat vkFormat,
-                                VertexCopyFunction function,
-                                bool functionConverts,
-                                angle::FormatID fallbackFormat,
-                                VkFormat fallbackVkFormat,
-                                VertexCopyFunction fallbackFunction)
+                                const std::vector<BufferInfo> &buffers)
 {
-    ASSERT(format != angle::FormatID::NONE);
-    ASSERT(fallbackFormat != angle::FormatID::NONE);
+    ASSERT(buffers.size() > 1);
 
-    if (HasFullBufferFormatSupport(physicalDevice, vkFormat))
+    for (const BufferInfo &buffer : buffers)
     {
-        bufferFormatID               = format;
-        vkBufferFormat               = vkFormat;
-        vertexLoadFunction           = function;
-        vertexLoadRequiresConversion = functionConverts;
+        ASSERT(buffer.format != angle::FormatID::NONE);
+        if (HasFullBufferFormatSupport(physicalDevice, buffer.vkFormat))
+        {
+            bufferFormatID               = buffer.format;
+            vkBufferFormat               = buffer.vkFormat;
+            vertexLoadFunction           = buffer.vertexLoadFunction;
+            vertexLoadRequiresConversion = buffer.vertexLoadRequiresConversion;
+            return;
+        }
     }
-    else
-    {
-        bufferFormatID               = fallbackFormat;
-        vkBufferFormat               = fallbackVkFormat;
-        vertexLoadFunction           = fallbackFunction;
-        vertexLoadRequiresConversion = true;
-        ASSERT(HasFullBufferFormatSupport(physicalDevice, vkBufferFormat));
-    }
+
+    UNREACHABLE();
 }
 
 const angle::Format &Format::textureFormat() const
