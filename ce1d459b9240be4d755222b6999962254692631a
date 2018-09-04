@@ -95,6 +95,24 @@
     },
     {
       "key": {
+        "uuid": "3ad3c51a_2c839865",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-09-04T02:25:32Z",
+      "side": 1,
+      "message": "I\u0027ll do that, thanks",
+      "parentUuid": "b5a7f7bf_ee510715",
+      "revId": "ce1d459b9240be4d755222b6999962254692631a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bbe98098_7bb49e25",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 1
@@ -106,6 +124,24 @@
       "writtenOn": "2018-09-03T21:48:36Z",
       "side": 1,
       "message": "see naming rules for static methods:\n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#variable-names",
+      "revId": "ce1d459b9240be4d755222b6999962254692631a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7370d10_18cd3995",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-09-04T02:25:32Z",
+      "side": 1,
+      "message": "Sorry, I don\u0027t see any rules for static methods; just rules for member vs. non-member functions.  I followed the rules for member functions.\n\nI do see a rule for constants, that start with a \"k\".  Is that what I should do?",
+      "parentUuid": "bbe98098_7bb49e25",
       "revId": "ce1d459b9240be4d755222b6999962254692631a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -141,6 +177,24 @@
       "side": 1,
       "message": "We don\u0027t have a policy for this. I think the header is the most visible place.",
       "parentUuid": "76e58aad_46dd9da8",
+      "revId": "ce1d459b9240be4d755222b6999962254692631a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6e9d0ba_6e2fdd18",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-09-04T02:25:32Z",
+      "side": 1,
+      "message": "Okay.  I added comments to the header.  Please take a look and see what you think.",
+      "parentUuid": "20cf08a8_d4538197",
       "revId": "ce1d459b9240be4d755222b6999962254692631a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
