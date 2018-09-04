@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05738617_f2ff6a0c",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-04T14:05:36Z",
+      "side": 1,
+      "message": "remember what we talked about? you should update DEPS to use the Chromium jsoncpp.",
+      "range": {
+        "startLine": 252,
+        "startChar": 2,
+        "endLine": 252,
+        "endChar": 48
+      },
+      "revId": "dfb67900b8d3f515679b2258668be50c42ac1cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8a21c3e_1a7c5614",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-04T14:05:36Z",
+      "side": 1,
+      "message": "note this all would change when you revisit this in the TODO",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 60
+      },
+      "revId": "dfb67900b8d3f515679b2258668be50c42ac1cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02431c0d_2c09c96e",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-04T14:05:36Z",
+      "side": 1,
+      "message": "spelling",
+      "range": {
+        "startLine": 30,
+        "startChar": 3,
+        "endLine": 30,
+        "endChar": 13
+      },
+      "revId": "dfb67900b8d3f515679b2258668be50c42ac1cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
