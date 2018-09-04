@@ -104,6 +104,49 @@ Format::Format()
 {
 }
 
+#if 1
+void Format::initTextureFallback(VkPhysicalDevice physicalDevice,
+                                 const std::vector<TextureInfo> &textures)
+{
+    ASSERT(textures.size() > 1);
+
+    for (const auto &texture : textures)
+    {
+        ASSERT(texture.format != angle::FormatID::NONE);
+        if (HasFullTextureFormatSupport(physicalDevice, texture.vkFormat))
+        {
+            textureFormatID            = texture.format;
+            vkTextureFormat            = texture.vkFormat;
+            textureInitializerFunction = texture.initializer;
+            return;
+        }
+    }
+
+    UNREACHABLE();
+}
+
+void Format::initBufferFallback(VkPhysicalDevice physicalDevice,
+                                const std::vector<BufferInfo> &buffers)
+{
+    ASSERT(buffers.size() > 1);
+
+    for (const auto &buffer : buffers)
+    {
+        ASSERT(buffer.format != angle::FormatID::NONE);
+        if (HasFullBufferFormatSupport(physicalDevice, buffer.vkFormat))
+        {
+            bufferFormatID               = buffer.format;
+            vkBufferFormat               = buffer.vkFormat;
+            vertexLoadFunction           = buffer.vertexLoadFunction;
+            vertexLoadRequiresConversion = buffer.vertexLoadRequiresConversion;
+            return;
+        }
+    }
+
+    UNREACHABLE();
+}
+#else
+
 void Format::initTextureFallback(VkPhysicalDevice physicalDevice,
                                  angle::FormatID format,
                                  VkFormat vkFormat,
@@ -112,8 +155,6 @@ void Format::initTextureFallback(VkPhysicalDevice physicalDevice,
                                  VkFormat fallbackVkFormat,
                                  InitializeTextureDataFunction fallbackInitializer)
 {
-    ASSERT(format != angle::FormatID::NONE);
-    ASSERT(fallbackFormat != angle::FormatID::NONE);
 
     if (HasFullTextureFormatSupport(physicalDevice, vkFormat))
     {
@@ -158,6 +199,7 @@ void Format::initBufferFallback(VkPhysicalDevice physicalDevice,
         ASSERT(HasFullBufferFormatSupport(physicalDevice, vkBufferFormat));
     }
 }
+#endif
 
 const angle::Format &Format::textureFormat() const
 {

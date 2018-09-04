@@ -11,6 +11,10 @@
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 
+static void br0()
+{
+}
+
 using namespace angle;
 
 namespace
@@ -234,16 +238,24 @@ TEST_P(StateChangeTest, FramebufferIncompleteStencilAttachment)
 {
     // TODO(lucferron): Figure out why this fails on android and Intel/Windows and fix.
     // http://anglebug.com/2655
-    ANGLE_SKIP_TEST_IF(IsVulkan() && (IsAndroid() || (IsIntel() && IsWindows())));
+    // ANGLE_SKIP_TEST_IF(IsVulkan() && (IsAndroid() || (IsIntel() && IsWindows())));
 
     glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+    ASSERT_GL_NO_ERROR();
     glBindTexture(GL_TEXTURE_2D, mTextures[0]);
+    ASSERT_GL_NO_ERROR();
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    ASSERT_GL_NO_ERROR();
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTextures[0], 0);
+    ASSERT_GL_NO_ERROR();
     glBindRenderbuffer(GL_RENDERBUFFER, mRenderbuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, 16, 16);
+    ASSERT_GL_NO_ERROR();
+    br0();
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, 16, 16);  // ERROR HERE **************
+    ASSERT_GL_NO_ERROR();
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
                               mRenderbuffer);
+    ASSERT_GL_NO_ERROR();
     EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
 
     // Change the texture at the stencil attachment to be non-stencil-renderable.
@@ -522,7 +534,7 @@ class StateChangeRenderTest : public StateChangeTest
     {
         glUseProgram(mProgram);
         const Vector4 &normalizedColor = color.toNormalizedVector();
-        GLint uniformLocation = glGetUniformLocation(mProgram, "uniformColor");
+        GLint uniformLocation          = glGetUniformLocation(mProgram, "uniformColor");
         ASSERT_NE(-1, uniformLocation);
         glUniform4fv(uniformLocation, 1, normalizedColor.data());
     }

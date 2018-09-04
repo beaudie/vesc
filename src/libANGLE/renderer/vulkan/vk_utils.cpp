@@ -15,6 +15,10 @@
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+static void br1()
+{
+    printf("BR1\n");
+}
 
 namespace
 {
@@ -616,7 +620,9 @@ void Image::destroy(VkDevice device)
 angle::Result Image::init(Context *context, const VkImageCreateInfo &createInfo)
 {
     ASSERT(!valid());
+    br1();
     ANGLE_VK_TRY(context, vkCreateImage(context->getDevice(), &createInfo, nullptr, &mHandle));
+    printf("worked\n");
     return angle::Result::Continue();
 }
 
