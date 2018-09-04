@@ -1189,7 +1189,6 @@ void TextureVk::releaseImage(const gl::Context *context, RendererVk *renderer)
     mImage.release(renderer->getCurrentQueueSerial(), renderer);
     renderer->releaseObject(getStoredQueueSerial(), &mBaseLevelImageView);
     renderer->releaseObject(getStoredQueueSerial(), &mMipmapImageView);
-    onStateChange(context, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 }
 
 uint32_t TextureVk::getLevelCount() const
