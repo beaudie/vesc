@@ -166,6 +166,24 @@
     },
     {
       "key": {
+        "uuid": "fe5b42dc_18ca77f3",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-09-04T16:56:18Z",
+      "side": 1,
+      "message": "Okay, I fixed this for all static methods.",
+      "parentUuid": "fc312735_422ac475",
+      "revId": "ce1d459b9240be4d755222b6999962254692631a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "76e58aad_46dd9da8",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 1

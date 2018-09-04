@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "282ece41_6f0e2bc1",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-09-04T16:56:18Z",
+      "side": 1,
+      "message": "Yes.  I\u0027m going to work with Tobin to fix this, but wanted to save all of the changes that I had.",
+      "parentUuid": "05738617_f2ff6a0c",
+      "range": {
+        "startLine": 252,
+        "startChar": 2,
+        "endLine": 252,
+        "endChar": 48
+      },
+      "revId": "dfb67900b8d3f515679b2258668be50c42ac1cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d8a21c3e_1a7c5614",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "602ef05d_ad7f848b",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-09-04T16:56:18Z",
+      "side": 1,
+      "message": "Yes.  In essence, I documented what I have, and have the TODO to say it will change:-).",
+      "parentUuid": "d8a21c3e_1a7c5614",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 60
+      },
+      "revId": "dfb67900b8d3f515679b2258668be50c42ac1cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "02431c0d_2c09c96e",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 4
@@ -68,6 +116,30 @@
       "revId": "dfb67900b8d3f515679b2258668be50c42ac1cc0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6215e019_f55940b5",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-09-04T16:56:18Z",
+      "side": 1,
+      "message": "Fixed, thanks",
+      "parentUuid": "02431c0d_2c09c96e",
+      "range": {
+        "startLine": 30,
+        "startChar": 3,
+        "endLine": 30,
+        "endChar": 13
+      },
+      "revId": "dfb67900b8d3f515679b2258668be50c42ac1cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
