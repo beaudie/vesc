@@ -114,6 +114,7 @@ class ANGLERenderTest : public ANGLEPerfTest
 
     void step() override;
     void finishTest() override;
+    void printMeanAndStdDev();
 
     bool areExtensionPrerequisitesFulfilled() const;
 
@@ -123,6 +124,8 @@ class ANGLERenderTest : public ANGLEPerfTest
     OSWindow *mOSWindow;
     std::vector<std::string> mExtensionPrerequisites;
     angle::PlatformMethods mPlatformMethods;
+    std::vector<double> mSortedSamples;
+    Timer *mStepTimer;
 };
 
 extern bool g_OnlyOneRunFrame;

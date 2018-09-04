@@ -124,7 +124,8 @@ ANGLERenderTest::ANGLERenderTest(const std::string &name, const RenderTestParams
     : ANGLEPerfTest(name, testParams.suffix()),
       mTestParams(testParams),
       mEGLWindow(createEGLWindow(testParams)),
-      mOSWindow(nullptr)
+      mOSWindow(nullptr),
+      mStepTimer(nullptr)
 {
 }
 
@@ -135,7 +136,8 @@ ANGLERenderTest::ANGLERenderTest(const std::string &name,
       mTestParams(testParams),
       mEGLWindow(createEGLWindow(testParams)),
       mOSWindow(nullptr),
-      mExtensionPrerequisites(extensionPrerequisites)
+      mExtensionPrerequisites(extensionPrerequisites),
+      mStepTimer(nullptr)
 {
 }
 
@@ -143,11 +145,14 @@ ANGLERenderTest::~ANGLERenderTest()
 {
     SafeDelete(mOSWindow);
     SafeDelete(mEGLWindow);
+    SafeDelete(mStepTimer);
 }
 
 void ANGLERenderTest::SetUp()
 {
     ANGLEPerfTest::SetUp();
+
+    mStepTimer = CreateTimer();
 
     mOSWindow = CreateOSWindow();
     ASSERT(mEGLWindow != nullptr);
@@ -193,6 +198,8 @@ void ANGLERenderTest::TearDown()
     mEGLWindow->destroyGL();
     mOSWindow->destroy();
 
+    printMeanAndStdDev();
+
     ANGLEPerfTest::TearDown();
 }
 
@@ -216,6 +223,7 @@ void ANGLERenderTest::step()
     }
     else
     {
+        mStepTimer->start();
         drawBenchmark();
         // Swap is needed so that the GPU driver will occasionally flush its internal command queue
         // to the GPU. The null device benchmarks are only testing CPU overhead, so they don't need
@@ -224,8 +232,45 @@ void ANGLERenderTest::step()
         {
             mEGLWindow->swap();
         }
+        mStepTimer->stop();
+
         mOSWindow->messageLoop();
+
+        double sample = mStepTimer->getElapsedTime();
+        auto iter     = std::upper_bound(mSortedSamples.begin(), mSortedSamples.end(), sample);
+        mSortedSamples.insert(iter, sample);
     }
+}
+
+void ANGLERenderTest::printMeanAndStdDev()
+{
+    constexpr double kTrimFactor = 0.1;
+
+    size_t trimCount  = mSortedSamples.size() * kTrimFactor;
+    size_t numSamples = mSortedSamples.size() - trimCount * 2;
+
+    double mean = 0.0;
+
+    for (size_t index = trimCount; index < mSortedSamples.size() - trimCount; ++index)
+    {
+        mean += mSortedSamples[index];
+    }
+
+    mean /= static_cast<double>(numSamples);
+
+    double stddev = 0.0;
+
+    for (size_t index = trimCount; index < mSortedSamples.size() - trimCount; ++index)
+    {
+        double deviation = mSortedSamples[index] - mean;
+        stddev += deviation * deviation;
+    }
+
+    stddev /= static_cast<double>(numSamples);
+    stddev = sqrt(stddev);
+
+    printResult("mean", mean * 1000, "ms", false);
+    printResult("stddev", stddev * 1000, "ms", false);
 }
 
 void ANGLERenderTest::finishTest()
