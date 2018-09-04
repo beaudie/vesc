@@ -148,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "fc312735_422ac475",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-04T14:03:03Z",
+      "side": 1,
+      "message": "Hah, you\u0027re right. But it is our policy to give static methods caps CamelCase. I\u0027ll make a note to clarify this in the style guide.",
+      "parentUuid": "e7370d10_18cd3995",
+      "revId": "ce1d459b9240be4d755222b6999962254692631a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "76e58aad_46dd9da8",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 1
