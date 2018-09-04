@@ -22,6 +22,30 @@
       "revId": "22e7c4b0f6f357ae0f46176131f91159dde61b10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c00b2580_a8abe0f6",
+        "filename": "extensions/ANGLE_copy_texture_3d.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-09-04T21:16:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b667d5b5_b8d71e7c",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 44
+      },
+      "revId": "22e7c4b0f6f357ae0f46176131f91159dde61b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
