@@ -45,6 +45,30 @@
       "revId": "d4ba48b1b92f7127281a313556a5bbac191f025b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e528d7b7_a406611d",
+        "filename": "BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-09-05T17:59:12Z",
+      "side": 1,
+      "message": "Yes, I saw that blew up the try-jobs.  Tobin\u0027s change landed, and so I\u0027m rebasing/sync\u0027ing/fixing this.",
+      "parentUuid": "9e391a69_69e55393",
+      "range": {
+        "startLine": 253,
+        "startChar": 4,
+        "endLine": 253,
+        "endChar": 40
+      },
+      "revId": "d4ba48b1b92f7127281a313556a5bbac191f025b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
