@@ -2700,19 +2700,13 @@ const char *ValidateDrawStates(Context *context)
                 // undefined behaviour
                 return kErrorUniformBufferTooSmall;
             }
-
-            if (extensions.webglCompatibility &&
-                uniformBuffer->isBoundForTransformFeedbackAndOtherUse())
-            {
-                return kErrorUniformBufferBoundForTransformFeedback;
-            }
         }
 
         // Do some additonal WebGL-specific validation
         if (extensions.webglCompatibility)
         {
             const TransformFeedback *transformFeedbackObject = state.getCurrentTransformFeedback();
-            if (transformFeedbackObject != nullptr && transformFeedbackObject->isActive() &&
+            if (transformFeedbackObject != nullptr &&
                 transformFeedbackObject->buffersBoundForOtherUse())
             {
                 return kErrorTransformFeedbackBufferDoubleBound;
@@ -2734,12 +2728,6 @@ const char *ValidateDrawStates(Context *context)
             if (!ValidateFragmentShaderColorBufferTypeMatch(context))
             {
                 return kErrorDrawBufferTypeMismatch;
-            }
-
-            const VertexArray *vao = context->getGLState().getVertexArray();
-            if (vao->hasTransformFeedbackBindingConflict(context))
-            {
-                return kErrorVertexBufferBoundForTransformFeedback;
             }
         }
     }

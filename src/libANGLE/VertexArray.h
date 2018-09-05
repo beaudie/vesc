@@ -255,7 +255,6 @@ class VertexArray final : public angle::ObserverInterface,
     AttributesMask getAttributesMask() const { return mState.mEnabledAttributesMask; }
 
     void onBindingChanged(const Context *context, int incr);
-    bool hasTransformFeedbackBindingConflict(const gl::Context *context) const;
 
   private:
     ~VertexArray() override;
@@ -271,7 +270,6 @@ class VertexArray final : public angle::ObserverInterface,
 
     // These are used to optimize draw call validation.
     void updateCachedBufferBindingSize(VertexBinding *binding);
-    void updateCachedTransformFeedbackBindingValidation(size_t bindingIndex, const Buffer *buffer);
     void updateCachedMappedArrayBuffers(VertexBinding *binding);
 
     GLuint mId;
@@ -286,8 +284,6 @@ class VertexArray final : public angle::ObserverInterface,
 
     std::vector<angle::ObserverBinding> mArrayBufferObserverBindings;
     angle::ObserverBinding mElementArrayBufferObserverBinding;
-
-    AttributesMask mCachedTransformFeedbackConflictedBindingsMask;
 };
 
 }  // namespace gl

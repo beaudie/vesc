@@ -315,16 +315,14 @@ ERRMSG(TextureTypeConflict, "Two textures of different types use the same sample
 ERRMSG(TextureWidthOrHeightOutOfRange,
        "Width and height must be less than or equal to GL_MAX_TEXTURE_SIZE.");
 ERRMSG(TransformFeedbackBufferDoubleBound,
-       "A transform feedback buffer that would be written to is also bound to a "
-       "non-transform-feedback target, which would cause undefined behavior.");
+       "A transform feedback buffer is also bound to a "
+       "non-transform-feedback target, which could cause undefined behavior.");
 ERRMSG(TransformFeedbackBufferTooSmall, "Not enough space in bound transform feedback buffers.");
 ERRMSG(TransformFeedbackDoesNotExist, "Transform feedback object that does not exist.");
 ERRMSG(TypeMismatch,
        "Passed in texture target and format must match the one originally used to define the "
        "texture.");
 ERRMSG(TypeNotUnsignedShortByte, "Only UNSIGNED_SHORT and UNSIGNED_BYTE types are supported.");
-ERRMSG(UniformBufferBoundForTransformFeedback,
-       "It is undefined behavior to use an uniform buffer that is bound for transform feedback.");
 ERRMSG(UniformBufferTooSmall,
        "It is undefined behaviour to use a uniform buffer that is too small.");
 ERRMSG(UniformBufferUnbound,

@@ -202,7 +202,6 @@ void VertexArray::bindVertexBufferImpl(const Context *context,
 
     updateObserverBinding(bindingIndex);
     updateCachedBufferBindingSize(binding);
-    updateCachedTransformFeedbackBindingValidation(bindingIndex, boundBuffer);
     updateCachedMappedArrayBuffers(binding);
 
     // Update client memory attribute pointers. Affects all bound attributes.
@@ -442,14 +441,6 @@ void VertexArray::onSubjectStateChange(const gl::Context *context,
             setDependentDirtyBit(context, false, index);
             break;
 
-        case angle::SubjectMessage::BINDING_CHANGED:
-            if (!IsElementArrayBufferSubjectIndex(index))
-            {
-                const Buffer *buffer = mState.mVertexBindings[index].getBuffer().get();
-                updateCachedTransformFeedbackBindingValidation(index, buffer);
-            }
-            break;
-
         case angle::SubjectMessage::RESOURCE_MAPPED:
             if (!IsElementArrayBufferSubjectIndex(index))
             {
@@ -495,36 +486,6 @@ void VertexArray::updateCachedBufferBindingSize(VertexBinding *binding)
     {
         mState.mVertexAttributes[boundAttribute].updateCachedElementLimit(*binding);
     }
-}
-
-void VertexArray::updateCachedTransformFeedbackBindingValidation(size_t bindingIndex,
-                                                                 const Buffer *buffer)
-{
-    const bool hasConflict = buffer && buffer->isBoundForTransformFeedbackAndOtherUse();
-    mCachedTransformFeedbackConflictedBindingsMask.set(bindingIndex, hasConflict);
-}
-
-bool VertexArray::hasTransformFeedbackBindingConflict(const gl::Context *context) const
-{
-    // Fast check first.
-    if (!mCachedTransformFeedbackConflictedBindingsMask.any())
-    {
-        return false;
-    }
-
-    const AttributesMask &activeAttribues = context->getStateCache().getActiveBufferedAttribsMask();
-
-    // Slow check. We must ensure that the conflicting attributes are enabled/active.
-    for (size_t attribIndex : activeAttribues)
-    {
-        const VertexAttribute &attrib = mState.mVertexAttributes[attribIndex];
-        if (mCachedTransformFeedbackConflictedBindingsMask[attrib.bindingIndex])
-        {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 void VertexArray::updateCachedMappedArrayBuffers(VertexBinding *binding)
