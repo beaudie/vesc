@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31fbae60_918bffca",
+        "filename": "BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-05T17:57:05Z",
+      "side": 1,
+      "message": "see below",
+      "range": {
+        "startLine": 230,
+        "startChar": 3,
+        "endLine": 230,
+        "endChar": 47
+      },
+      "revId": "d4ba48b1b92f7127281a313556a5bbac191f025b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e391a69_69e55393",
+        "filename": "BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-05T17:57:05Z",
+      "side": 1,
+      "message": "this is still not updated. same with the config above.",
+      "range": {
+        "startLine": 253,
+        "startChar": 4,
+        "endLine": 253,
+        "endChar": 40
+      },
+      "revId": "d4ba48b1b92f7127281a313556a5bbac191f025b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
