@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "931bf468_22876efe",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1518,
+      "author": {
+        "id": 1160859
+      },
+      "writtenOn": "2018-09-05T23:23:17Z",
+      "side": 1,
+      "message": "I don\u0027t think all these static casts are needed, but I did not clean them up.",
+      "range": {
+        "startLine": 1518,
+        "startChar": 11,
+        "endLine": 1518,
+        "endChar": 22
+      },
+      "revId": "8b88b0b26cdbbf93e83057940fb5e08ee0835c61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "223aa262_8bad10b2",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2540,
+      "author": {
+        "id": 1160859
+      },
+      "writtenOn": "2018-09-05T23:23:17Z",
+      "side": 1,
+      "message": "or these.",
+      "range": {
+        "startLine": 2540,
+        "startChar": 19,
+        "endLine": 2540,
+        "endChar": 30
+      },
+      "revId": "8b88b0b26cdbbf93e83057940fb5e08ee0835c61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
