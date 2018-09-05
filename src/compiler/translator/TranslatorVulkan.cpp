@@ -150,35 +150,34 @@ class DeclareDefaultUniformsTraverser : public TIntermTraverser
 };
 
 constexpr ImmutableString kFlippedPointCoordName = ImmutableString("flippedPointCoord");
+constexpr ImmutableString kFlippedFragCoordName     = ImmutableString("flippedFragCoord");
 constexpr ImmutableString kEmulatedDepthRangeParams = ImmutableString("ANGLEDepthRangeParams");
 
-// Declares a new variable to replace gl_PointCoord with a version that is flipping the Y
-// coordinate.
-void FlipGLPointCoord(TIntermBlock *root,
-                      const TVariable *driverUniforms,
-                      TSymbolTable *symbolTable)
+// Replaces a builtin variable with a version that corrects the Y coordinate.
+void FlipBuiltinVariable(TIntermBlock *root,
+                         const TVariable *driverUniforms,
+                         TSymbolTable *symbolTable,
+                         const TVariable *builtin,
+                         const ImmutableString &flippedVariableName)
 {
-    // Create a symbol reference to "gl_PointCoord"
-    const TVariable *pointCoord  = BuiltInVariable::gl_PointCoord();
-    TIntermSymbol *pointCoordRef = new TIntermSymbol(pointCoord);
+    // Create a symbol reference to 'builtin'.
+    TIntermSymbol *builtinRef = new TIntermSymbol(builtin);
 
-    // Create a swizzle to "gl_PointCoord.x"
-    TVector<int> swizzleOffsetX;
-    swizzleOffsetX.push_back(0);
-    TIntermSwizzle *pointCoordX = new TIntermSwizzle(pointCoordRef, swizzleOffsetX);
-
-    // Create a swizzle to "gl_PointCoord.y"
+    // Create a swizzle to "builtin.y"
     TVector<int> swizzleOffsetY;
     swizzleOffsetY.push_back(1);
-    TIntermSwizzle *pointCoordY = new TIntermSwizzle(pointCoordRef, swizzleOffsetY);
+    TIntermSwizzle *builtinY = new TIntermSwizzle(builtinRef, swizzleOffsetY);
 
-    // Create a symbol reference to our new variable that will hold the modified gl_PointCoord.
+    // Create a symbol reference to our new variable that will hold the modified builtin.
+    const TType *type =
+        StaticType::GetForVec<EbtFloat>(EvqGlobal, builtin->getType().getNominalSize());
     TVariable *replacementVar =
-        new TVariable(symbolTable, kFlippedPointCoordName,
-                      StaticType::Helpers::GetForVecMatHelper<EbtFloat, EbpMedium, EvqGlobal, 1>(2),
-                      SymbolType::UserDefined);
+        new TVariable(symbolTable, flippedVariableName, type, SymbolType::AngleInternal);
     DeclareGlobalVariable(root, replacementVar);
-    TIntermSymbol *flippedPointCoordsRef = new TIntermSymbol(replacementVar);
+    TIntermSymbol *flippedBuiltinRef = new TIntermSymbol(replacementVar);
+
+    // Use this new variable instead of 'builtin' everywhere.
+    ReplaceVariable(root, builtin, replacementVar);
 
     const TType *constantType             = StaticType::GetBasic<EbtFloat>();
 
@@ -203,28 +202,26 @@ void FlipGLPointCoord(TIntermBlock *root,
     TIntermSwizzle *viewportScaleY =
         new TIntermSwizzle(viewportScaleFactorRef->deepCopy(), viewportScaleSwizzleOffsetY);
 
-    // Create the expression "(gl_PointCoord.y - 0.5) * ANGLEUniforms.viewportScaleFactor.y +
+    // Create the expression "(builtin.y - 0.5) * ANGLEUniforms.viewportScaleFactor.y +
     // 0.5
-    TIntermBinary *removePointFive = new TIntermBinary(EOpSub, pointCoordY, pointFive);
+    TIntermBinary *removePointFive = new TIntermBinary(EOpSub, builtinY, pointFive);
     TIntermBinary *inverseY        = new TIntermBinary(EOpMul, removePointFive, viewportScaleY);
     TIntermBinary *plusPointFive   = new TIntermBinary(EOpAdd, inverseY, pointFive->deepCopy());
 
-    // Create the new vec2 using the modified Y
+    // Create the corrected variable and copy the value of the original builtin.
     TIntermSequence *sequence = new TIntermSequence();
-    sequence->push_back(pointCoordX);
-    sequence->push_back(plusPointFive);
-    TIntermAggregate *aggregate =
-        TIntermAggregate::CreateConstructor(BuiltInVariable::gl_PointCoord()->getType(), sequence);
+    sequence->push_back(builtinRef);
+    TIntermAggregate *aggregate = TIntermAggregate::CreateConstructor(builtin->getType(), sequence);
+    TIntermBinary *assignment   = new TIntermBinary(EOpInitialize, flippedBuiltinRef, aggregate);
 
-    // Use this new variable instead of gl_PointCoord everywhere.
-    ReplaceVariable(root, pointCoord, replacementVar);
-
-    // Assign this new value to flippedPointCoord
-    TIntermBinary *assignment = new TIntermBinary(EOpInitialize, flippedPointCoordsRef, aggregate);
+    // Create an assignment to the replaced variable's y.
+    TIntermSwizzle *correctedY = new TIntermSwizzle(flippedBuiltinRef, swizzleOffsetY);
+    TIntermBinary *assignToY   = new TIntermBinary(EOpAssign, correctedY, plusPointFive);
 
     // Add this assigment at the beginning of the main function
     TIntermFunctionDefinition *main = FindMain(root);
     TIntermSequence *mainSequence   = main->getBody()->getSequence();
+    mainSequence->insert(mainSequence->begin(), assignToY);
     mainSequence->insert(mainSequence->begin(), assignment);
 }
 
@@ -470,7 +467,15 @@ void TranslatorVulkan::translate(TIntermBlock *root,
 
             if (inputVarying.name == "gl_PointCoord")
             {
-                FlipGLPointCoord(root, driverUniformsVariable, &getSymbolTable());
+                FlipBuiltinVariable(root, driverUniformsVariable, &getSymbolTable(),
+                                    BuiltInVariable::gl_PointCoord(), kFlippedPointCoordName);
+                break;
+            }
+
+            if (inputVarying.name == "gl_FragCoord")
+            {
+                FlipBuiltinVariable(root, driverUniformsVariable, &getSymbolTable(),
+                                    BuiltInVariable::gl_FragCoord(), kFlippedFragCoordName);
                 break;
             }
         }
