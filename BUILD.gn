@@ -227,16 +227,12 @@ config("angle_feature_support_util_config") {
   include_dirs = [
     "include",
     "src",
+    "third_party/jsoncpp/source/include",
   ]
   defines = [ "LIBANGLE_UTIL_IMPLEMENTATION" ]
 }
 
 static_library("angle_feature_support_util") {
-  sources = [
-    "src/feature_support_util/feature_support_util.cpp",
-    "src/feature_support_util/feature_support_util.h",
-  ]
-
   configs -= angle_undefine_configs
   configs += [
     ":internal_config",
@@ -247,6 +243,14 @@ static_library("angle_feature_support_util") {
 
   public_deps = [
     ":angle_common",
+  ]
+
+  sources = [
+    "src/feature_support_util/feature_support_util.cpp",
+    "src/feature_support_util/feature_support_util.h",
+  ]
+  deps = [
+    "../../third_party/jsoncpp:jsoncpp",
   ]
 }
 
