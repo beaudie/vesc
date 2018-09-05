@@ -4,6 +4,8 @@
 // found in the LICENSE file.
 //
 
+#include <limits>
+
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 
@@ -1077,7 +1079,9 @@ class VertexAttributeTestES31 : public VertexAttributeTestES3
         glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
         glBufferData(GL_ARRAY_BUFFER, inputSize, nullptr, GL_STATIC_DRAW);
         glBufferSubData(GL_ARRAY_BUFFER, 0, inputSize, inputData.data());
-        glVertexAttribFormat(mTestAttrib, 1, GL_FLOAT, GL_FALSE, inputRelativeOffset);
+        ASSERT_GE(static_cast<GLsizeiptr>(std::numeric_limits<GLuint>::max()), inputRelativeOffset);
+        glVertexAttribFormat(mTestAttrib, 1, GL_FLOAT, GL_FALSE,
+                             static_cast<GLuint>(inputRelativeOffset));
         glBindVertexBuffer(mTestAttrib, mBuffer, 0, inputStride);
         glEnableVertexAttribArray(mTestAttrib);
 
