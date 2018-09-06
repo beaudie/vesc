@@ -657,11 +657,15 @@ ProcEntry g_procTable[] = {
     {"glGetTexEnvxv", P(gl::GetTexEnvxv)},
     {"glGetTexEnvxvContextANGLE", P(gl::GetTexEnvxvContextANGLE)},
     {"glGetTexLevelParameterfv", P(gl::GetTexLevelParameterfv)},
+    {"glGetTexLevelParameterfvANGLE", P(gl::GetTexLevelParameterfvANGLE)},
+    {"glGetTexLevelParameterfvANGLEContextANGLE", P(gl::GetTexLevelParameterfvANGLEContextANGLE)},
     {"glGetTexLevelParameterfvContextANGLE", P(gl::GetTexLevelParameterfvContextANGLE)},
     {"glGetTexLevelParameterfvRobustANGLE", P(gl::GetTexLevelParameterfvRobustANGLE)},
     {"glGetTexLevelParameterfvRobustANGLEContextANGLE",
      P(gl::GetTexLevelParameterfvRobustANGLEContextANGLE)},
     {"glGetTexLevelParameteriv", P(gl::GetTexLevelParameteriv)},
+    {"glGetTexLevelParameterivANGLE", P(gl::GetTexLevelParameterivANGLE)},
+    {"glGetTexLevelParameterivANGLEContextANGLE", P(gl::GetTexLevelParameterivANGLEContextANGLE)},
     {"glGetTexLevelParameterivContextANGLE", P(gl::GetTexLevelParameterivContextANGLE)},
     {"glGetTexLevelParameterivRobustANGLE", P(gl::GetTexLevelParameterivRobustANGLE)},
     {"glGetTexLevelParameterivRobustANGLEContextANGLE",
@@ -1096,6 +1100,8 @@ ProcEntry g_procTable[] = {
     {"glTexStorage2DEXT", P(gl::TexStorage2DEXT)},
     {"glTexStorage2DEXTContextANGLE", P(gl::TexStorage2DEXTContextANGLE)},
     {"glTexStorage2DMultisample", P(gl::TexStorage2DMultisample)},
+    {"glTexStorage2DMultisampleANGLE", P(gl::TexStorage2DMultisampleANGLE)},
+    {"glTexStorage2DMultisampleANGLEContextANGLE", P(gl::TexStorage2DMultisampleANGLEContextANGLE)},
     {"glTexStorage2DMultisampleContextANGLE", P(gl::TexStorage2DMultisampleContextANGLE)},
     {"glTexStorage3D", P(gl::TexStorage3D)},
     {"glTexStorage3DContextANGLE", P(gl::TexStorage3DContextANGLE)},
@@ -1246,5 +1252,5 @@ ProcEntry g_procTable[] = {
     {"glWeightPointerOES", P(gl::WeightPointerOES)},
     {"glWeightPointerOESContextANGLE", P(gl::WeightPointerOESContextANGLE)}};
 
-size_t g_numProcs = 1178;
+size_t g_numProcs = 1184;
 }  // namespace egl
