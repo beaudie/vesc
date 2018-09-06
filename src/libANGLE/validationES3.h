@@ -592,7 +592,15 @@ bool ValidateGetInternalformativ(Context *context,
                                  GLenum pname,
                                  GLsizei bufSize,
                                  GLint *params);
-
+bool ValidateTexStorage2DMultisampleANGLE(Context *context,
+                                          TextureType target,
+                                          GLsizei samples,
+                                          GLint internalFormat,
+                                          GLsizei width,
+                                          GLsizei height,
+                                          GLboolean fixedSampleLocations);
+bool ValidateGetMultisamplefvANGLE(Context *context, GLenum pname, GLuint index, GLfloat *val);
+bool ValidateSampleMaskiANGLE(Context *context, GLuint maskNumber, GLbitfield mask);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES3_H_

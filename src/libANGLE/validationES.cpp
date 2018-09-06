@@ -499,7 +499,8 @@ bool ValidTextureTarget(const Context *context, TextureType type)
             return (context->getClientMajorVersion() >= 3);
 
         case TextureType::_2DMultisample:
-            return (context->getClientVersion() >= Version(3, 1));
+            return (context->getClientVersion() >= Version(3, 1) ||
+                    context->getExtensions().textureMultisample);
         case TextureType::_2DMultisampleArray:
             return context->getExtensions().textureStorageMultisample2DArray;
 
@@ -890,8 +891,8 @@ bool ValidImageDataSize(Context *context,
     const Extents size(width, height, depth);
     const auto &unpack = context->getGLState().getUnpackState();
 
-    bool targetIs3D   = texType == TextureType::_3D || texType == TextureType::_2DArray;
-    GLuint endByte    = 0;
+    bool targetIs3D = texType == TextureType::_3D || texType == TextureType::_2DArray;
+    GLuint endByte  = 0;
     if (!formatInfo.computePackUnpackEndByte(type, size, unpack, targetIs3D, &endByte))
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), IntegerOverflow);
@@ -1231,9 +1232,9 @@ bool ValidateBlitFramebufferParameters(Context *context,
         return false;
     }
 
-    const auto &glState              = context->getGLState();
-    Framebuffer *readFramebuffer     = glState.getReadFramebuffer();
-    Framebuffer *drawFramebuffer     = glState.getDrawFramebuffer();
+    const auto &glState          = context->getGLState();
+    Framebuffer *readFramebuffer = glState.getReadFramebuffer();
+    Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
 
     if (!readFramebuffer || !drawFramebuffer)
     {
@@ -1275,8 +1276,8 @@ bool ValidateBlitFramebufferParameters(Context *context,
 
     if (mask & GL_COLOR_BUFFER_BIT)
     {
-        const FramebufferAttachment *readColorBuffer     = readFramebuffer->getReadColorbuffer();
-        const Extensions &extensions                     = context->getExtensions();
+        const FramebufferAttachment *readColorBuffer = readFramebuffer->getReadColorbuffer();
+        const Extensions &extensions                 = context->getExtensions();
 
         if (readColorBuffer)
         {
@@ -2561,7 +2562,7 @@ bool ValidateCopyTexImageParametersBase(Context *context,
 const char *ValidateDrawStates(Context *context)
 {
     const Extensions &extensions = context->getExtensions();
-    const State &state = context->getGLState();
+    const State &state           = context->getGLState();
 
     // WebGL buffers cannot be mapped/unmapped because the MapBufferRange, FlushMappedBufferRange,
     // and UnmapBuffer entry points are removed from the WebGL 2.0 API.
@@ -2684,7 +2685,7 @@ const char *ValidateDrawStates(Context *context)
              uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
         {
             const InterfaceBlock &uniformBlock = program->getUniformBlockByIndex(uniformBlockIndex);
-            GLuint blockBinding = program->getUniformBlockBinding(uniformBlockIndex);
+            GLuint blockBinding                = program->getUniformBlockBinding(uniformBlockIndex);
             const OffsetBindingPointer<Buffer> &uniformBuffer =
                 state.getIndexedUniformBuffer(blockBinding);
 
@@ -2831,8 +2832,8 @@ bool ValidateDrawArraysCommon(Context *context,
         return false;
     }
 
-    const State &state                          = context->getGLState();
-    TransformFeedback *curTransformFeedback     = state.getCurrentTransformFeedback();
+    const State &state                      = context->getGLState();
+    TransformFeedback *curTransformFeedback = state.getCurrentTransformFeedback();
     if (curTransformFeedback && curTransformFeedback->isActive() &&
         !curTransformFeedback->isPaused())
     {
@@ -6325,9 +6326,10 @@ bool ValidateGetInternalFormativBase(Context *context,
             break;
 
         case GL_TEXTURE_2D_MULTISAMPLE:
-            if (context->getClientVersion() < ES_3_1)
+            if (context->getClientVersion() < ES_3_1 &&
+                !context->getExtensions().textureMultisample)
             {
-                ANGLE_VALIDATION_ERR(context, InvalidEnum(), TextureTargetRequiresES31);
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), MultisampleTextureExtensionRequired);
                 return false;
             }
             break;
@@ -6449,6 +6451,37 @@ bool ValidateTexStorageMultisample(Context *context,
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), ImmutableTextureBound);
         return false;
     }
+    return true;
+}
+
+bool ValidateGetMultisamplefvBase(Context *context, GLenum pname, GLuint index, GLfloat *val)
+{
+    if (pname != GL_SAMPLE_POSITION)
+    {
+        context->handleError(InvalidEnum() << "Pname must be SAMPLE_POSITION.");
+        return false;
+    }
+
+    Framebuffer *framebuffer = context->getGLState().getDrawFramebuffer();
+    GLint samples            = framebuffer->getSamples(context);
+
+    if (index >= static_cast<GLuint>(samples))
+    {
+        context->handleError(InvalidValue() << "Index must be less than the value of SAMPLES.");
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateSampleMaskiBase(Context *context, GLuint maskNumber, GLbitfield mask)
+{
+    if (maskNumber >= context->getCaps().maxSampleMaskWords)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidSampleMaskNumber);
+        return false;
+    }
+
     return true;
 }
 

@@ -15,6 +15,8 @@
 #include <GLES/glext.h>
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
+#include <GLES3/gl3.h>
+#include <GLES3/gl3ext.h>
 #include <export.h>
 
 namespace gl
@@ -436,6 +438,16 @@ ANGLE_EXPORT void GL_APIENTRY GetQueryObjectui64vRobustANGLE(GLuint id,
                                                              GLsizei bufSize,
                                                              GLsizei *length,
                                                              GLuint64 *params);
+
+// GL_ANGLE_texture_multisample
+ANGLE_EXPORT void GL_APIENTRY TexStorage2DMultisampleANGLE(GLenum target,
+                                                           GLsizei samples,
+                                                           GLenum internalformat,
+                                                           GLsizei width,
+                                                           GLsizei height,
+                                                           GLboolean fixedsamplelocations);
+ANGLE_EXPORT void GL_APIENTRY GetMultisamplefvANGLE(GLenum pname, GLuint index, GLfloat *val);
+ANGLE_EXPORT void GL_APIENTRY SampleMaskiANGLE(GLuint maskNumber, GLbitfield mask);
 
 // GL_ANGLE_translated_shader_source
 ANGLE_EXPORT void GL_APIENTRY GetTranslatedShaderSourceANGLE(GLuint shader,
@@ -3290,6 +3302,21 @@ FramebufferTextureMultiviewSideBySideANGLEContextANGLE(GLeglContext ctx,
                                                        GLint level,
                                                        GLsizei numViews,
                                                        const GLint *viewportOffsets);
+ANGLE_EXPORT void GL_APIENTRY
+TexStorage2DMultisampleANGLEContextANGLE(GLeglContext ctx,
+                                         GLenum target,
+                                         GLsizei samples,
+                                         GLenum internalformat,
+                                         GLsizei width,
+                                         GLsizei height,
+                                         GLboolean fixedsamplelocations);
+ANGLE_EXPORT void GL_APIENTRY GetMultisamplefvANGLEContextANGLE(GLeglContext ctx,
+                                                                GLenum pname,
+                                                                GLuint index,
+                                                                GLfloat *val);
+ANGLE_EXPORT void GL_APIENTRY SampleMaskiANGLEContextANGLE(GLeglContext ctx,
+                                                           GLuint maskNumber,
+                                                           GLbitfield mask);
 }  // namespace gl
 
 #endif  // LIBGLESV2_ENTRY_POINTS_GLES_EXT_AUTOGEN_H_

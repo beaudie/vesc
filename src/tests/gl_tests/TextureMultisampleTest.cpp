@@ -60,6 +60,13 @@ class TextureMultisampleTest : public ANGLETest
         ANGLETest::TearDown();
     }
 
+    void texStorageMultisample(GLenum target,
+                               GLint samples,
+                               GLenum format,
+                               GLsizei width,
+                               GLsizei height,
+                               GLboolean fixedsamplelocations);
+
     GLuint mFramebuffer = 0;
     GLuint mTexture     = 0;
 
@@ -76,6 +83,20 @@ class TextureMultisampleTest : public ANGLETest
             maxSamples = std::min(maxSamples, maxSamplesFormat);
         }
         return maxSamples;
+    }
+
+    bool requestMultisampleExtension()
+    {
+        if (extensionRequestable("GL_ANGLE_texture_multisample"))
+        {
+            glRequestExtensionANGLE("GL_ANGLE_texture_multisample");
+        }
+
+        if (!extensionEnabled("GL_ANGLE_texture_multisample"))
+        {
+            return false;
+        }
+        return true;
     }
 };
 
@@ -111,6 +132,25 @@ class TextureMultisampleArrayWebGLTest : public TextureMultisampleTest
     }
 };
 
+void TextureMultisampleTest::texStorageMultisample(GLenum target,
+                                                   GLint samples,
+                                                   GLenum internalformat,
+                                                   GLsizei width,
+                                                   GLsizei height,
+                                                   GLboolean fixedsamplelocations)
+{
+    if ((getClientMajorVersion() < 3 || getClientMinorVersion() < 1) &&
+        requestMultisampleExtension())
+    {
+        glTexStorage2DMultisampleANGLE(target, samples, internalformat, width, height,
+                                       fixedsamplelocations);
+    }
+    else
+    {
+        glTexStorage2DMultisample(target, samples, internalformat, width, height,
+                                  fixedsamplelocations);
+    }
+}
 // Tests that if es version < 3.1, GL_TEXTURE_2D_MULTISAMPLE is not supported in
 // GetInternalformativ. Checks that the number of samples returned is valid in case of ES >= 3.1.
 TEST_P(TextureMultisampleTest, MultisampleTargetGetInternalFormativBase)
@@ -119,7 +159,8 @@ TEST_P(TextureMultisampleTest, MultisampleTargetGetInternalFormativBase)
     // queried, it should be the maximum one.
     GLint maxSamplesR8 = 0;
     glGetInternalformativ(GL_TEXTURE_2D_MULTISAMPLE, GL_R8, GL_SAMPLES, 1, &maxSamplesR8);
-    if (getClientMajorVersion() < 3 || getClientMinorVersion() < 1)
+    if ((getClientMajorVersion() < 3 || getClientMinorVersion() < 1) &&
+        !requestMultisampleExtension())
     {
         ASSERT_GL_ERROR(GL_INVALID_ENUM);
     }
@@ -138,26 +179,28 @@ TEST_P(TextureMultisampleTest, MultisampleTargetGetInternalFormativBase)
     }
 }
 
-// Tests that if es version < 3.1, GL_TEXTURE_2D_MULTISAMPLE is not supported in
-// FramebufferTexture2D.
+// Tests that if es version < 3.1 and multisample extension is unsupported,
+// GL_TEXTURE_2D_MULTISAMPLE_ANGLE is not supported in FramebufferTexture2D.
 TEST_P(TextureMultisampleTest, MultisampleTargetFramebufferTexture2D)
 {
     GLint samples = 1;
     glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, mTexture);
-    glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGBA8, 64, 64, GL_FALSE);
-    if (getClientMajorVersion() < 3 || getClientMinorVersion() < 1)
+    if ((getClientMajorVersion() < 3 || getClientMinorVersion() < 1) &&
+        !requestMultisampleExtension())
     {
         ASSERT_GL_ERROR(GL_INVALID_ENUM);
     }
     else
     {
+        texStorageMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGBA8, 64, 64, GL_FALSE);
         ASSERT_GL_NO_ERROR();
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE,
                            mTexture, 0);
-    if (getClientMajorVersion() < 3 || getClientMinorVersion() < 1)
+    if ((getClientMajorVersion() < 3 || getClientMinorVersion() < 1) &&
+        !extensionEnabled("GL_ANGLE_texture_multisample"))
     {
         ASSERT_GL_ERROR(GL_INVALID_OPERATION);
     }
@@ -170,38 +213,41 @@ TEST_P(TextureMultisampleTest, MultisampleTargetFramebufferTexture2D)
 // Tests basic functionality of glTexStorage2DMultisample.
 TEST_P(TextureMultisampleTestES31, ValidateTextureStorageMultisampleParameters)
 {
+    ANGLE_SKIP_TEST_IF((getClientMajorVersion() < 3 || getClientMinorVersion() < 1) &&
+                       !requestMultisampleExtension());
+
     glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, mTexture);
-    glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGBA8, 1, 1, GL_FALSE);
+    texStorageMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGBA8, 1, 1, GL_FALSE);
     ASSERT_GL_NO_ERROR();
 
     GLint params = 0;
     glGetTexParameteriv(GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_IMMUTABLE_FORMAT, &params);
     EXPECT_EQ(1, params);
 
-    glTexStorage2DMultisample(GL_TEXTURE_2D, 1, GL_RGBA8, 1, 1, GL_FALSE);
+    texStorageMultisample(GL_TEXTURE_2D, 1, GL_RGBA8, 1, 1, GL_FALSE);
     ASSERT_GL_ERROR(GL_INVALID_ENUM);
 
-    glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGBA8, 0, 0, GL_FALSE);
+    texStorageMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGBA8, 0, 0, GL_FALSE);
     ASSERT_GL_ERROR(GL_INVALID_VALUE);
 
     GLint maxSize = 0;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxSize);
-    glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGBA8, maxSize + 1, 1, GL_FALSE);
+    texStorageMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGBA8, maxSize + 1, 1, GL_FALSE);
     ASSERT_GL_ERROR(GL_INVALID_VALUE);
 
     GLint maxSamples = 0;
     glGetInternalformativ(GL_TEXTURE_2D_MULTISAMPLE, GL_R8, GL_SAMPLES, 1, &maxSamples);
-    glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, maxSamples + 1, GL_RGBA8, 1, 1, GL_FALSE);
+    texStorageMultisample(GL_TEXTURE_2D_MULTISAMPLE, maxSamples + 1, GL_RGBA8, 1, 1, GL_FALSE);
     ASSERT_GL_ERROR(GL_INVALID_OPERATION);
 
-    glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 0, GL_RGBA8, 1, 1, GL_FALSE);
+    texStorageMultisample(GL_TEXTURE_2D_MULTISAMPLE, 0, GL_RGBA8, 1, 1, GL_FALSE);
     ASSERT_GL_ERROR(GL_INVALID_VALUE);
 
-    glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGBA, 0, 0, GL_FALSE);
+    texStorageMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGBA, 0, 0, GL_FALSE);
     ASSERT_GL_ERROR(GL_INVALID_VALUE);
 
     glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
-    glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGBA8, 1, 1, GL_FALSE);
+    texStorageMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGBA8, 1, 1, GL_FALSE);
     ASSERT_GL_ERROR(GL_INVALID_OPERATION);
 }
 
@@ -209,6 +255,8 @@ TEST_P(TextureMultisampleTestES31, ValidateTextureStorageMultisampleParameters)
 // [OpenGL ES 3.1 SPEC Table 20.40]
 TEST_P(TextureMultisampleTestES31, MaxIntegerSamples)
 {
+    ANGLE_SKIP_TEST_IF((getClientMajorVersion() < 3 || getClientMinorVersion() < 1) &&
+                       !requestMultisampleExtension());
     GLint maxIntegerSamples;
     glGetIntegerv(GL_MAX_INTEGER_SAMPLES, &maxIntegerSamples);
     EXPECT_GE(maxIntegerSamples, 1);
@@ -219,6 +267,8 @@ TEST_P(TextureMultisampleTestES31, MaxIntegerSamples)
 // [OpenGL ES 3.1 SPEC Table 20.40]
 TEST_P(TextureMultisampleTestES31, MaxColorTextureSamples)
 {
+    ANGLE_SKIP_TEST_IF((getClientMajorVersion() < 3 || getClientMinorVersion() < 1) &&
+                       !requestMultisampleExtension());
     GLint maxColorTextureSamples;
     glGetIntegerv(GL_MAX_COLOR_TEXTURE_SAMPLES, &maxColorTextureSamples);
     EXPECT_GE(maxColorTextureSamples, 1);
@@ -229,6 +279,8 @@ TEST_P(TextureMultisampleTestES31, MaxColorTextureSamples)
 // [OpenGL ES 3.1 SPEC Table 20.40]
 TEST_P(TextureMultisampleTestES31, MaxDepthTextureSamples)
 {
+    ANGLE_SKIP_TEST_IF((getClientMajorVersion() < 3 || getClientMinorVersion() < 1) &&
+                       !requestMultisampleExtension());
     GLint maxDepthTextureSamples;
     glGetIntegerv(GL_MAX_DEPTH_TEXTURE_SAMPLES, &maxDepthTextureSamples);
     EXPECT_GE(maxDepthTextureSamples, 1);
@@ -238,7 +290,7 @@ TEST_P(TextureMultisampleTestES31, MaxDepthTextureSamples)
 // The value of sample position should be equal to standard pattern on D3D.
 TEST_P(TextureMultisampleTestES31, CheckSamplePositions)
 {
-    ANGLE_SKIP_TEST_IF(!IsD3D11());
+    ANGLE_SKIP_TEST_IF(!IsD3D11() || !requestMultisampleExtension());
 
     GLsizei maxSamples = 0;
     glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
@@ -564,10 +616,14 @@ ANGLE_INSTANTIATE_TEST(TextureMultisampleTest,
                        ES3_OPENGLES(),
                        ES31_OPENGL(),
                        ES31_OPENGLES());
-ANGLE_INSTANTIATE_TEST(TextureMultisampleTestES31, ES31_D3D11(), ES31_OPENGL(), ES31_OPENGLES());
+ANGLE_INSTANTIATE_TEST(TextureMultisampleTestES31,
+                       ES3_OPENGL(),
+                       ES3_OPENGLES(),
+                       ES31_D3D11(),
+                       ES31_OPENGL(),
+                       ES31_OPENGLES());
 ANGLE_INSTANTIATE_TEST(TextureMultisampleArrayWebGLTest,
                        ES31_D3D11(),
                        ES31_OPENGL(),
                        ES31_OPENGLES());
-
 }  // anonymous namespace
