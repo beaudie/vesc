@@ -4168,4 +4168,42 @@ bool ValidateTexStorage2DMultisampleANGLE(Context *context,
                                                height);
 }
 
+bool ValidateGetTexLevelParameterfvANGLE(Context *context,
+                                         TextureTarget target,
+                                         GLint level,
+                                         GLenum pname,
+                                         GLfloat *params)
+{
+    if (!context->getExtensions().textureMultisample)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(),
+                             MultisampleTextureExtensionOrES31Required);
+        return false;
+    }
+
+    return ValidateGetTexLevelParameterBase(context, target, level, pname, nullptr);
+}
+
+bool ValidateGetTexLevelParameterivANGLE(Context *context,
+                                         TextureTarget target,
+                                         GLint level,
+                                         GLenum pname,
+                                         GLint *params)
+{
+    if (context->getClientVersion() < ES_3_0)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ES3Required);
+        return false;
+    }
+
+    if (!context->getExtensions().textureMultisample)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(),
+                             MultisampleTextureExtensionOrES31Required);
+        return false;
+    }
+
+    return ValidateGetTexLevelParameterBase(context, target, level, pname, nullptr);
+}
+
 }  // namespace gl
