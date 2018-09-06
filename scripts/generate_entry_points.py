@@ -47,8 +47,7 @@ gles1_overloaded = [
     "glGetPointerv",
 ]
 
-supported_extensions = sorted(angle_extensions + gles1_extensions + [
-    # ES2+
+gles2_extensions = [
     "GL_ANGLE_framebuffer_blit",
     "GL_ANGLE_framebuffer_multisample",
     "GL_ANGLE_instanced_arrays",
@@ -70,7 +69,15 @@ supported_extensions = sorted(angle_extensions + gles1_extensions + [
     "GL_OES_texture_storage_multisample_2d_array",
     "GL_OES_vertex_array_object",
     "GL_KHR_parallel_shader_compile",
-])
+]
+
+gles2_extensions = gles2_extensions + angle_extensions;
+
+gles3_extensions = [
+    "GL_ANGLE_texture_multisample",
+]
+
+supported_extensions = sorted(gles1_extensions + gles2_extensions + gles3_extensions)
 
 # The EGL_ANGLE_explicit_context extension is generated differently from other extensions.
 # Toggle generation here.
@@ -736,7 +743,7 @@ for extension in root.findall("extensions/extension"):
     # point signatures (without the suffix) for desktop GL. Note that this
     # extra step is necessary because of Etree's limited Xpath support.
     for require in extension.findall('require'):
-        if 'api' in require.attrib and require.attrib['api'] != 'gles2' and require.attrib['api'] != 'gles1':
+        if 'api' in require.attrib and require.attrib['api'] != 'gles2' and require.attrib['api'] != 'gles1' and require.attrib['api'] != 'gles3':
             continue
 
         # Another special case for EXT_texture_storage
@@ -762,8 +769,10 @@ for extension_name, ext_cmd_names in sorted(ext_data.iteritems()):
 
     if extension_name in gles1_extensions:
         all_cmd_names.add_commands("glext", ext_cmd_names)
-    else:
+    elif  extension_name in gles2_extensions:
         all_cmd_names.add_commands("gl2ext", ext_cmd_names)
+    else:
+        all_cmd_names.add_commands("gl3ext", ext_cmd_names)
 
     decls, defs, libgles_defs, libgles_exports = get_entry_points(
         all_commands, ext_cmd_names, ordinal_start, False)
@@ -832,6 +841,9 @@ if support_EGL_ANGLE_explicit_context:
         elif(annotation == "2_0"):
             glext_ext_ptrs, glext_ext_protos = get_glext_decls(all_commands,
                 all_cmd_names.get_commands("gl2ext"), version, True)
+        elif(annotation == "3_0"):
+            glext_ext_ptrs, glext_ext_protos = get_glext_decls(all_commands,
+                all_cmd_names.get_commands("gl3ext"), version, True)
 
         glext_ptrs += glext_ext_ptrs
         glext_protos += glext_ext_protos
@@ -845,6 +857,8 @@ header_includes += """
 #include <GLES/glext.h>
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
+#include <GLES3/gl3.h>
+#include <GLES3/gl3ext.h>
 """
 
 source_includes = template_sources_includes.format("ext", "", "")

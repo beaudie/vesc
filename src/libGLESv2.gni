@@ -100,6 +100,8 @@ libangle_includes = [
   "include/GLES2/gl2ext_explicit_context_autogen.inc",
   "include/GLES2/gl2platform.h",
   "include/GLES3/gl3.h",
+  "include/GLES2/gl3ext.h",
+  "include/GLES2/gl3ext_angle.h",
   "include/GLES3/gl3ext_explicit_context_autogen.inc",
   "include/GLES3/gl3platform.h",
   "include/GLES3/gl31.h",

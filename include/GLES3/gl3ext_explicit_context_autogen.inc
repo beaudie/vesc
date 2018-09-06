@@ -112,6 +112,7 @@ typedef void (GL_APIENTRYP PFNGLVERTEXATTRIBI4UICONTEXTANGLE)(GLeglContext ctx, 
 typedef void (GL_APIENTRYP PFNGLVERTEXATTRIBI4UIVCONTEXTANGLE)(GLeglContext ctx, GLuint index, const GLuint *v);
 typedef void (GL_APIENTRYP PFNGLVERTEXATTRIBIPOINTERCONTEXTANGLE)(GLeglContext ctx, GLuint index, GLint size, GLenum type, GLsizei stride, const void *pointer);
 typedef void (GL_APIENTRYP PFNGLWAITSYNCCONTEXTANGLE)(GLeglContext ctx, GLsync sync, GLbitfield flags, GLuint64 timeout);
+typedef void (GL_APIENTRYP PFNGLTEXSTORAGE2DMULTISAMPLEANGLECONTEXTANGLE)(GLeglContext ctx, GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations);
 #ifdef GL_GLEXT_PROTOTYPES
 GL_APICALL void GL_APIENTRY glBeginQueryContextANGLE(GLeglContext ctx, GLenum target, GLuint id);
 GL_APICALL void GL_APIENTRY glBeginTransformFeedbackContextANGLE(GLeglContext ctx, GLenum primitiveMode);
@@ -217,4 +218,5 @@ GL_APICALL void GL_APIENTRY glVertexAttribI4uiContextANGLE(GLeglContext ctx, GLu
 GL_APICALL void GL_APIENTRY glVertexAttribI4uivContextANGLE(GLeglContext ctx, GLuint index, const GLuint *v);
 GL_APICALL void GL_APIENTRY glVertexAttribIPointerContextANGLE(GLeglContext ctx, GLuint index, GLint size, GLenum type, GLsizei stride, const void *pointer);
 GL_APICALL void GL_APIENTRY glWaitSyncContextANGLE(GLeglContext ctx, GLsync sync, GLbitfield flags, GLuint64 timeout);
+GL_APICALL void GL_APIENTRY glTexStorage2DMultisampleANGLEContextANGLE(GLeglContext ctx, GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations);
 #endif

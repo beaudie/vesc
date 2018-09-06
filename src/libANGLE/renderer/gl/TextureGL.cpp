@@ -1031,9 +1031,20 @@ gl::Error TextureGL::setStorageMultisample(const gl::Context *context,
     if (nativegl::UseTexImage2D(getType()))
     {
         ASSERT(size.depth == 1);
-        functions->texStorage2DMultisample(ToGLenum(type), samples, texStorageFormat.internalFormat,
-                                           size.width, size.height,
-                                           gl::ConvertToGLBoolean(fixedSampleLocations));
+        if (functions->texStorage2DMultisample)
+        {
+            functions->texStorage2DMultisample(
+                ToGLenum(type), samples, texStorageFormat.internalFormat, size.width, size.height,
+                gl::ConvertToGLBoolean(fixedSampleLocations));
+        }
+        else
+        {
+            // texImage2DMultisample is similar to texStorage2DMultisample of es 3.1 core feature,
+            // so we use texImage2DMultisample on ES 3.0 if the function is supported by driver.
+            functions->texImage2DMultisample(
+                ToGLenum(type), samples, texStorageFormat.internalFormat, size.width, size.height,
+                gl::ConvertToGLBoolean(fixedSampleLocations));
+        }
     }
     else if (nativegl::UseTexImage3D(getType()))
     {

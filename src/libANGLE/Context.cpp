@@ -418,12 +418,14 @@ void Context::initialize()
         Texture *zeroTexture2DArray = new Texture(mImplementation.get(), 0, TextureType::_2DArray);
         mZeroTextures[TextureType::_2DArray].set(this, zeroTexture2DArray);
     }
-    if (getClientVersion() >= Version(3, 1))
+    if (getClientVersion() >= Version(3, 1) || mSupportedExtensions.textureMultisample)
     {
-        // TODO(http://anglebug.com/2775): These could also be enabled via extension
         Texture *zeroTexture2DMultisample =
             new Texture(mImplementation.get(), 0, TextureType::_2DMultisample);
         mZeroTextures[TextureType::_2DMultisample].set(this, zeroTexture2DMultisample);
+    }
+    if (getClientVersion() >= Version(3, 1))
+    {
         Texture *zeroTexture2DMultisampleArray =
             new Texture(mImplementation.get(), 0, TextureType::_2DMultisampleArray);
         mZeroTextures[TextureType::_2DMultisampleArray].set(this, zeroTexture2DMultisampleArray);
@@ -7497,6 +7499,20 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
         switch (pname)
         {
             case GL_NUM_REQUESTABLE_EXTENSIONS_ANGLE:
+                *type      = GL_INT;
+                *numParams = 1;
+                return true;
+        }
+    }
+
+    if (getExtensions().textureMultisample)
+    {
+        switch (pname)
+        {
+            case GL_MAX_COLOR_TEXTURE_SAMPLES_ANGLE:
+            case GL_MAX_INTEGER_SAMPLES_ANGLE:
+            case GL_MAX_DEPTH_TEXTURE_SAMPLES_ANGLE:
+            case GL_TEXTURE_BINDING_2D_MULTISAMPLE_ANGLE:
                 *type      = GL_INT;
                 *numParams = 1;
                 return true;
