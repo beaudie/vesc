@@ -451,7 +451,6 @@ TEST_P(ComputeShaderTest, DispatchComputeIndirect)
     }
 }
 
-
 // Use image uniform to write texture in compute shader, and verify the content is expected.
 TEST_P(ComputeShaderTest, BindImageTexture)
 {

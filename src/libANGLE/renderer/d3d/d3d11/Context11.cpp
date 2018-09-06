@@ -485,7 +485,7 @@ gl::Error Context11::dispatchCompute(const gl::Context *context,
 
 gl::Error Context11::dispatchComputeIndirect(const gl::Context *context, GLintptr indirect)
 {
-    return mRenderer->dispatchCompute(context, indirect);
+    return mRenderer->dispatchComputeIndirect(context, indirect);
 }
 
 angle::Result Context11::triggerDrawCallProgramRecompilation(const gl::Context *context,
