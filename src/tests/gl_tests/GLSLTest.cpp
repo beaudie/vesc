@@ -4774,6 +4774,71 @@ TEST_P(GLSLTest, IfElseIfAndReturn)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+bool Near(GLubyte x, GLubyte y, GLubyte threshold)
+{
+    return fabs(static_cast<float>(x) - static_cast<float>(y)) <= static_cast<float>(threshold);
+}
+
+// Tests that FragCoord behaves the same betweeen a user FBO and the back buffer.
+TEST_P(GLSLTest, FragCoordConsistency)
+{
+    constexpr char kFragCoordShader[] = R"(uniform mediump vec2 viewportSize;
+void main()
+{
+    gl_FragColor = vec4(gl_FragCoord.xy / viewportSize, 0, 1);
+})";
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), kFragCoordShader);
+    glUseProgram(program);
+
+    GLint uniLoc = glGetUniformLocation(program, "viewportSize");
+    ASSERT_NE(-1, uniLoc);
+    glUniform2f(uniLoc, getWindowWidth(), getWindowHeight());
+
+    // Draw to backbuffer.
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5);
+    ASSERT_GL_NO_ERROR();
+
+    std::vector<GLColor> backbufferData(getWindowWidth() * getWindowHeight());
+    glReadPixels(0, 0, getWindowWidth(), getWindowHeight(), GL_RGBA, GL_UNSIGNED_BYTE,
+                 backbufferData.data());
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getWindowWidth(), getWindowHeight(), 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, nullptr);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    ASSERT_GL_NO_ERROR();
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    // Draw to user FBO.
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5);
+    ASSERT_GL_NO_ERROR();
+
+    std::vector<GLColor> userFBOData(getWindowWidth() * getWindowHeight());
+    glReadPixels(0, 0, getWindowWidth(), getWindowHeight(), GL_RGBA, GL_UNSIGNED_BYTE,
+                 userFBOData.data());
+
+    ASSERT_GL_NO_ERROR();
+    ASSERT_EQ(userFBOData.size(), backbufferData.size());
+
+    constexpr GLubyte kThreshold = 1;
+    unsigned int badPixels       = 0;
+    for (size_t index = 0; index < userFBOData.size(); ++index)
+    {
+        const GLColor &a = userFBOData[index];
+        const GLColor &b = backbufferData[index];
+
+        if (!Near(a.R, b.R, kThreshold) || !Near(a.G, b.G, kThreshold) ||
+            !Near(a.B, b.B, kThreshold) || !Near(a.A, b.A, kThreshold))
+            badPixels++;
+    }
+    EXPECT_EQ(0u, badPixels);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(GLSLTest,
