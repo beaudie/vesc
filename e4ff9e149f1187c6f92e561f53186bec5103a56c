@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23d1afa8_2ac43b10",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-09-06T15:51:04Z",
+      "side": 1,
+      "message": "There\u0027s now a mirror of the Chromium third_party/jsoncpp dir into ANGLE\u0027s third_party/jsoncpp dir AND a mirror of Chromium\u0027s mirror of the github version of jsoncpp into ANGLE\u0027s third_party/jsoncpp/source dir.\n\nIs this desired?",
+      "revId": "e4ff9e149f1187c6f92e561f53186bec5103a56c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
