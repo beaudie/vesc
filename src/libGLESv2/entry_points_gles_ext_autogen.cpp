@@ -2131,6 +2131,58 @@ void GL_APIENTRY TexStorage2DMultisampleANGLE(GLenum target,
     }
 }
 
+void GL_APIENTRY GetTexLevelParameterivANGLE(GLenum target,
+                                             GLint level,
+                                             GLenum pname,
+                                             GLint *params)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum target = 0x%X, GLint level = %d, GLenum pname = 0x%X, GLint * params = "
+        "0x%016" PRIxPTR ")",
+        target, level, pname, (uintptr_t)params);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        context->gatherParams<EntryPoint::GetTexLevelParameterivANGLE>(targetPacked, level, pname,
+                                                                       params);
+
+        if (context->skipValidation() ||
+            ValidateGetTexLevelParameterivANGLE(context, targetPacked, level, pname, params))
+        {
+            context->getTexLevelParameteriv(targetPacked, level, pname, params);
+        }
+    }
+}
+
+void GL_APIENTRY GetTexLevelParameterfvANGLE(GLenum target,
+                                             GLint level,
+                                             GLenum pname,
+                                             GLfloat *params)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum target = 0x%X, GLint level = %d, GLenum pname = 0x%X, GLfloat * params = "
+        "0x%016" PRIxPTR ")",
+        target, level, pname, (uintptr_t)params);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        context->gatherParams<EntryPoint::GetTexLevelParameterfvANGLE>(targetPacked, level, pname,
+                                                                       params);
+
+        if (context->skipValidation() ||
+            ValidateGetTexLevelParameterfvANGLE(context, targetPacked, level, pname, params))
+        {
+            context->getTexLevelParameterfv(targetPacked, level, pname, params);
+        }
+    }
+}
+
 // GL_ANGLE_translated_shader_source
 void GL_APIENTRY GetTranslatedShaderSourceANGLE(GLuint shader,
                                                 GLsizei bufsize,
@@ -19521,6 +19573,62 @@ void GL_APIENTRY TexStorage2DMultisampleANGLEContextANGLE(GLeglContext ctx,
         {
             context->texStorage2DMultisample(targetPacked, samples, internalformat, width, height,
                                              fixedsamplelocations);
+        }
+    }
+}
+
+void GL_APIENTRY GetTexLevelParameterivANGLEContextANGLE(GLeglContext ctx,
+                                                         GLenum target,
+                                                         GLint level,
+                                                         GLenum pname,
+                                                         GLint *params)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum target = 0x%X, GLint level = %d, GLenum pname = 0x%X, GLint * params = "
+        "0x%016" PRIxPTR ")",
+        target, level, pname, (uintptr_t)params);
+
+    Context *context = static_cast<gl::Context *>(ctx);
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        context->gatherParams<EntryPoint::GetTexLevelParameterivANGLE>(targetPacked, level, pname,
+                                                                       params);
+
+        if (context->skipValidation() ||
+            ValidateGetTexLevelParameterivANGLE(context, targetPacked, level, pname, params))
+        {
+            context->getTexLevelParameteriv(targetPacked, level, pname, params);
+        }
+    }
+}
+
+void GL_APIENTRY GetTexLevelParameterfvANGLEContextANGLE(GLeglContext ctx,
+                                                         GLenum target,
+                                                         GLint level,
+                                                         GLenum pname,
+                                                         GLfloat *params)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum target = 0x%X, GLint level = %d, GLenum pname = 0x%X, GLfloat * params = "
+        "0x%016" PRIxPTR ")",
+        target, level, pname, (uintptr_t)params);
+
+    Context *context = static_cast<gl::Context *>(ctx);
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        context->gatherParams<EntryPoint::GetTexLevelParameterfvANGLE>(targetPacked, level, pname,
+                                                                       params);
+
+        if (context->skipValidation() ||
+            ValidateGetTexLevelParameterfvANGLE(context, targetPacked, level, pname, params))
+        {
+            context->getTexLevelParameterfv(targetPacked, level, pname, params);
         }
     }
 }
