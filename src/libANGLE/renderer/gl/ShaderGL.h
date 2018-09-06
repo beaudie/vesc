@@ -16,6 +16,7 @@ namespace rx
 class FunctionsGL;
 struct WorkaroundsGL;
 enum class MultiviewImplementationTypeGL;
+enum class MultisampleTextureEXT;
 
 class ShaderGL : public ShaderImpl
 {
@@ -23,6 +24,7 @@ class ShaderGL : public ShaderImpl
     ShaderGL(const gl::ShaderState &data,
              GLuint shaderID,
              MultiviewImplementationTypeGL multiviewImplementationType,
+             MultisampleTextureEXT multisampleTextureEXT,
              const FunctionsGL *functions);
     ~ShaderGL() override;
 
@@ -40,6 +42,7 @@ class ShaderGL : public ShaderImpl
   private:
     GLuint mShaderID;
     MultiviewImplementationTypeGL mMultiviewImplementationType;
+    MultisampleTextureEXT mMultisampleTextureEXT;
     const FunctionsGL *mFunctions;
 };
 

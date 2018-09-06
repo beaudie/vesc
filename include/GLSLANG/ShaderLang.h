@@ -265,6 +265,10 @@ const ShCompileOptions SH_CLAMP_FRAG_DEPTH = UINT64_C(1) << 38;
 // prior to version 397.31.
 const ShCompileOptions SH_REWRITE_REPEATED_ASSIGN_TO_SWIZZLED = UINT64_C(1) << 39;
 
+// Enable extension ANGLE_multisample_texture if ARB_texture_multisample is supported by driver.
+// The extension is not supported on android.
+const ShCompileOptions SH_ANGLE_MULTISAMPLE_TEXTURE = UINT64_C(1) << 40;
+
 // Defines alternate strategies for implementing array index clamping.
 enum ShArrayIndexClampingStrategy
 {

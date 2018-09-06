@@ -287,6 +287,21 @@ void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root, ShCompileOptions 
             // extension is requested.
             sink << "#extension GL_NV_viewport_array2 : require\n";
         }
+
+        // Support ANGLE_texture_multisample extension on GLSL300. Core feature is supported on
+        // GLSL310.
+        if (iter.first == TExtension::ANGLE_texture_multisample)
+        {
+            if (getShaderVersion() >= 310)
+            {
+                continue;
+            }
+            else if ((compileOptions & SH_ANGLE_MULTISAMPLE_TEXTURE) != 0u)
+            {
+                sink << "#extension GL_ARB_texture_multisample : " << GetBehaviorString(iter.second)
+                     << "\n";
+            }
+        }
     }
 
     // GLSL ES 3 explicit location qualifiers need to use an extension before GLSL 330

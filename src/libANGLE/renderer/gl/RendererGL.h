@@ -170,6 +170,7 @@ class RendererGL : angle::NonCopyable
     ClearMultiviewGL *getMultiviewClearer() const { return mMultiviewClearer; }
 
     MultiviewImplementationTypeGL getMultiviewImplementationType() const;
+    MultisampleTextureEXT getMultisampleTextureExt() const;
     const gl::Caps &getNativeCaps() const;
     const gl::TextureCapsMap &getNativeTextureCaps() const;
     const gl::Extensions &getNativeExtensions() const;
@@ -210,6 +211,7 @@ class RendererGL : angle::NonCopyable
     mutable gl::Extensions mNativeExtensions;
     mutable gl::Limitations mNativeLimitations;
     mutable MultiviewImplementationTypeGL mMultiviewImplementationType;
+    mutable MultisampleTextureEXT mMultisampleTextureEXT;
 };
 
 }  // namespace rx

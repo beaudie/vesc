@@ -172,6 +172,18 @@ void TranslatorESSL::writeExtensionBehavior(ShCompileOptions compileOptions)
                 }
                 sink << "#endif\n";
             }
+            else if (iter->first == TExtension::ANGLE_texture_multisample)
+            {
+                if (getShaderVersion() >= 310)
+                {
+                    continue;
+                }
+                else if ((compileOptions & SH_ANGLE_MULTISAMPLE_TEXTURE) != 0u)
+                {
+                    sink << "#extension GL_ARB_texture_multisample : "
+                         << GetBehaviorString(iter->second) << "\n";
+                }
+            }
             else
             {
                 sink << "#extension " << GetExtensionNameString(iter->first) << " : "

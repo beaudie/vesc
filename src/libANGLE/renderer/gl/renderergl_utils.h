@@ -10,9 +10,9 @@
 #ifndef LIBANGLE_RENDERER_GL_RENDERERGLUTILS_H_
 #define LIBANGLE_RENDERER_GL_RENDERERGLUTILS_H_
 
-#include "libANGLE/angletypes.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Version.h"
+#include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/gl/functionsgl_typedefs.h"
 
@@ -42,6 +42,12 @@ enum class MultiviewImplementationTypeGL
     UNSPECIFIED
 };
 
+enum class MultisampleTextureEXT
+{
+    ARB_TEXTURE_MULTISAMPLE,
+    UNSPECIFIED
+};
+
 VendorID GetVendorID(const FunctionsGL *functions);
 
 // Helpers for extracting the GL helper objects out of a context
@@ -60,7 +66,8 @@ void GenerateCaps(const FunctionsGL *functions,
                   gl::TextureCapsMap *textureCapsMap,
                   gl::Extensions *extensions,
                   gl::Version *maxSupportedESVersion,
-                  MultiviewImplementationTypeGL *multiviewImplementationType);
+                  MultiviewImplementationTypeGL *multiviewImplementationType,
+                  MultisampleTextureEXT *multisampleTextureExt);
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds);
 void ApplyWorkarounds(const FunctionsGL *functions, gl::Workarounds *workarounds);
@@ -116,4 +123,4 @@ struct ContextCreationTry
 std::vector<ContextCreationTry> GenerateContextCreationToTry(EGLint requestedType, bool isMesaGLX);
 }  // namespace rx
 
-#endif // LIBANGLE_RENDERER_GL_RENDERERGLUTILS_H_
+#endif  // LIBANGLE_RENDERER_GL_RENDERERGLUTILS_H_

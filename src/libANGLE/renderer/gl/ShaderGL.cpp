@@ -23,10 +23,12 @@ namespace rx
 ShaderGL::ShaderGL(const gl::ShaderState &data,
                    GLuint shaderID,
                    MultiviewImplementationTypeGL multiviewImplementationType,
+                   MultisampleTextureEXT multisampleTextureEXT,
                    const FunctionsGL *functions)
     : ShaderImpl(data),
       mShaderID(shaderID),
       mMultiviewImplementationType(multiviewImplementationType),
+      mMultisampleTextureEXT(multisampleTextureEXT),
       mFunctions(functions)
 {
 }
@@ -139,6 +141,10 @@ ShCompileOptions ShaderGL::prepareSourceAndReturnOptions(const gl::Context *cont
         options |= SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER;
     }
 
+    if (mMultisampleTextureEXT == MultisampleTextureEXT::ARB_TEXTURE_MULTISAMPLE)
+    {
+        options |= SH_ANGLE_MULTISAMPLE_TEXTURE;
+    }
     return options;
 }
 
