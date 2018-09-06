@@ -131,7 +131,7 @@ class CompileTask : public angle::Closure
         }
         srcStrings.push_back(mSource.c_str());
         mResult = sh::Compile(mHandle, &srcStrings[0], srcStrings.size(), mOptions);
-    }
+    } 
     bool getResult() { return mResult; }
 
   private:
