@@ -2004,6 +2004,37 @@ void GL_APIENTRY GetQueryObjectui64vRobustANGLE(GLuint id,
     }
 }
 
+// GL_ANGLE_texture_multisample
+void GL_APIENTRY TexStorage2DMultisampleANGLE(GLenum target,
+                                              GLsizei samples,
+                                              GLenum internalformat,
+                                              GLsizei width,
+                                              GLsizei height,
+                                              GLboolean fixedsamplelocations)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum target = 0x%X, GLsizei samples = %d, GLenum internalformat = 0x%X, GLsizei width "
+        "= %d, GLsizei height = %d, GLboolean fixedsamplelocations = %u)",
+        target, samples, internalformat, width, height, fixedsamplelocations);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        TextureType targetPacked = FromGLenum<TextureType>(target);
+        context->gatherParams<EntryPoint::TexStorage2DMultisampleANGLE>(
+            targetPacked, samples, internalformat, width, height, fixedsamplelocations);
+
+        if (context->skipValidation() ||
+            ValidateTexStorage2DMultisampleANGLE(context, targetPacked, samples, internalformat,
+                                                 width, height, fixedsamplelocations))
+        {
+            context->texStorage2DMultisample(targetPacked, samples, internalformat, width, height,
+                                             fixedsamplelocations);
+        }
+    }
+}
+
 // GL_ANGLE_translated_shader_source
 void GL_APIENTRY GetTranslatedShaderSourceANGLE(GLuint shader,
                                                 GLsizei bufsize,
@@ -18653,6 +18684,38 @@ FramebufferTextureMultiviewSideBySideANGLEContextANGLE(GLeglContext ctx,
         {
             context->framebufferTextureMultiviewSideBySide(target, attachment, texture, level,
                                                            numViews, viewportOffsets);
+        }
+    }
+}
+
+void GL_APIENTRY TexStorage2DMultisampleANGLEContextANGLE(GLeglContext ctx,
+                                                          GLenum target,
+                                                          GLsizei samples,
+                                                          GLenum internalformat,
+                                                          GLsizei width,
+                                                          GLsizei height,
+                                                          GLboolean fixedsamplelocations)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum target = 0x%X, GLsizei samples = %d, GLenum internalformat = 0x%X, GLsizei width "
+        "= %d, GLsizei height = %d, GLboolean fixedsamplelocations = %u)",
+        target, samples, internalformat, width, height, fixedsamplelocations);
+
+    Context *context = static_cast<gl::Context *>(ctx);
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        TextureType targetPacked = FromGLenum<TextureType>(target);
+        context->gatherParams<EntryPoint::TexStorage2DMultisampleANGLE>(
+            targetPacked, samples, internalformat, width, height, fixedsamplelocations);
+
+        if (context->skipValidation() ||
+            ValidateTexStorage2DMultisampleANGLE(context, targetPacked, samples, internalformat,
+                                                 width, height, fixedsamplelocations))
+        {
+            context->texStorage2DMultisample(targetPacked, samples, internalformat, width, height,
+                                             fixedsamplelocations);
         }
     }
 }

@@ -246,6 +246,8 @@ ERRMSG(MultiviewTimerQuery,
        "GL_TIME_ELAPSED_EXT when the number of views in the "
        "active draw framebuffer is greater than 1.");
 ERRMSG(MultisampleArrayExtensionRequired, "GL_ANGLE_texture_multisample_array not enabled.");
+ERRMSG(MultisampleTextureExtensionOrES31Required,
+       "GL_ANGLE_texture_multisample not enabled or requires GLES 3.1.");
 ERRMSG(NameBeginsWithGL, "Attributes that begin with 'gl_' are not allowed.");
 ERRMSG(NegativeAttachments, "Negative number of attachments.");
 ERRMSG(NegativeBufferSize, "Negative buffer size.");

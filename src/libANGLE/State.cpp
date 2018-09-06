@@ -222,10 +222,12 @@ void State::initialize(Context *context)
         mSamplerTextures[TextureType::_2DArray].resize(caps.maxCombinedTextureImageUnits);
         mSamplerTextures[TextureType::_3D].resize(caps.maxCombinedTextureImageUnits);
     }
+    if (clientVersion >= Version(3, 1) || context->getExtensions().textureMultisample)
+    {
+        mSamplerTextures[TextureType::_2DMultisample].resize(caps.maxCombinedTextureImageUnits);
+    }
     if (clientVersion >= Version(3, 1))
     {
-        // TODO(http://anglebug.com/2775): These could also be enabled via extension
-        mSamplerTextures[TextureType::_2DMultisample].resize(caps.maxCombinedTextureImageUnits);
         mSamplerTextures[TextureType::_2DMultisampleArray].resize(
             caps.maxCombinedTextureImageUnits);
 
@@ -242,7 +244,7 @@ void State::initialize(Context *context)
         mSamplerTextures[TextureType::External].resize(caps.maxCombinedTextureImageUnits);
     }
     mCompleteTextureBindings.reserve(caps.maxCombinedTextureImageUnits);
-    mCachedTexturesInitState = InitState::MayNeedInit;
+    mCachedTexturesInitState      = InitState::MayNeedInit;
     mCachedImageTexturesInitState = InitState::MayNeedInit;
     for (uint32_t textureIndex = 0; textureIndex < caps.maxCombinedTextureImageUnits;
          ++textureIndex)
@@ -2711,7 +2713,7 @@ Error State::syncProgramTextures(const Context *context)
 
     // Initialize to the 'Initialized' state and set to 'MayNeedInit' if any texture is not
     // initialized.
-    mCachedTexturesInitState = InitState::Initialized;
+    mCachedTexturesInitState      = InitState::Initialized;
     mCachedImageTexturesInitState = InitState::Initialized;
 
     const ActiveTextureMask &activeTextures             = mProgram->getActiveSamplersMask();
