@@ -16,6 +16,24 @@
       "revId": "e4ff9e149f1187c6f92e561f53186bec5103a56c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed97e2ec_3705bfa6",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-09-06T15:52:30Z",
+      "side": 1,
+      "message": "Alright, I see the commit message now is explaining the double mirror. Excuse my oversight. Still confusing, though.",
+      "parentUuid": "23d1afa8_2ac43b10",
+      "revId": "e4ff9e149f1187c6f92e561f53186bec5103a56c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
