@@ -276,6 +276,12 @@ void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root, ShCompileOptions 
                 sink << "#extension GL_ARB_geometry_shader4 : " << GetBehaviorString(iter.second)
                      << "\n";
             }
+
+            if (iter.first == TExtension::ANGLE_texture_multisample)
+            {
+                sink << "#extension GL_ARB_texture_multisample : " << GetBehaviorString(iter.second)
+                     << "\n";
+            }
         }
 
         const bool isMultiview = (iter.first == TExtension::OVR_multiview);
