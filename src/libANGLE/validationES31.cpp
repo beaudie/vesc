@@ -1015,7 +1015,7 @@ bool ValidateTexStorage2DMultisample(Context *context,
 
     if (target != TextureType::_2DMultisample)
     {
-        context->handleError(InvalidEnum() << "Target must be TEXTURE_2D_MULTISAMPLE.");
+        ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidTarget);
         return false;
     }
 

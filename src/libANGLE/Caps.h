@@ -429,6 +429,9 @@ struct Extensions
 
     // GL_OES_texture_storage_multisample_2d_array
     bool textureStorageMultisample2DArray;
+
+    // GL_ANGLE_texture_multisample
+    bool textureMultisample;
 };
 
 struct ExtensionInfo

@@ -506,7 +506,8 @@ bool ValidTextureTarget(const Context *context, TextureType type)
             return (context->getClientMajorVersion() >= 3);
 
         case TextureType::_2DMultisample:
-            return (context->getClientVersion() >= Version(3, 1));
+            return (context->getClientVersion() >= Version(3, 1) ||
+                    context->getExtensions().textureMultisample);
         case TextureType::_2DMultisampleArray:
             return context->getExtensions().textureStorageMultisample2DArray;
 
@@ -6369,9 +6370,11 @@ bool ValidateGetInternalFormativBase(Context *context,
             break;
 
         case GL_TEXTURE_2D_MULTISAMPLE:
-            if (context->getClientVersion() < ES_3_1)
+            if (context->getClientVersion() < ES_3_1 &&
+                !context->getExtensions().textureMultisample)
             {
-                ANGLE_VALIDATION_ERR(context, InvalidEnum(), TextureTargetRequiresES31);
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(),
+                                     MultisampleTextureExtensionOrES31Required);
                 return false;
             }
             break;
