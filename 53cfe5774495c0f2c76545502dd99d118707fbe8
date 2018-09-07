@@ -16,6 +16,24 @@
       "revId": "53cfe5774495c0f2c76545502dd99d118707fbe8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea0f0a01_c7c90be4",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-07T17:12:57Z",
+      "side": 1,
+      "message": "No. We define a new variable \"flippedFragCoord\" and need to replace the instances in the shader of \"gl_FragCoord\" with \"flippedFragCoord\". That\u0027s what ReplaceVariable does.",
+      "parentUuid": "caa56cc2_365fb011",
+      "revId": "53cfe5774495c0f2c76545502dd99d118707fbe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
