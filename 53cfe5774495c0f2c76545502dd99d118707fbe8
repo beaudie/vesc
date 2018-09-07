@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "caa56cc2_365fb011",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-07T16:59:54Z",
+      "side": 1,
+      "message": "Doesn\u0027t this make the above ReplaceVariable() unnecessary?",
+      "revId": "53cfe5774495c0f2c76545502dd99d118707fbe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
