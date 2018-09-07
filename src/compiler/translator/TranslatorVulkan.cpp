@@ -161,8 +161,24 @@ TIntermConstantUnion *CreateConstantFloat(float value)
     return new TIntermConstantUnion(constantValue, *constantType);
 }
 
-TIntermBinary *CreateDriverUniformRef(const TVariable *driverUniforms, int fieldIndex)
+size_t FieldFieldIndex(const TFieldList &fieldList, const char *fieldName)
 {
+    for (size_t fieldIndex = 0; fieldIndex < fieldList.size(); ++fieldIndex)
+    {
+        if (strcmp(fieldList[fieldIndex]->name().data(), fieldName) == 0)
+        {
+            return fieldIndex;
+        }
+    }
+    UNREACHABLE();
+    return 0;
+}
+
+TIntermBinary *CreateDriverUniformRef(const TVariable *driverUniforms, const char *fieldName)
+{
+    size_t fieldIndex =
+        FieldFieldIndex(driverUniforms->getType().getInterfaceBlock()->fields(), fieldName);
+
     TIntermSymbol *angleUniformsRef = new TIntermSymbol(driverUniforms);
     TConstantUnion *uniformIndex    = new TConstantUnion;
     uniformIndex->setIConst(fieldIndex);
@@ -173,8 +189,7 @@ TIntermBinary *CreateDriverUniformRef(const TVariable *driverUniforms, int field
 
 // Replaces a builtin variable with a version that corrects the Y coordinate.
 void FlipBuiltinVariable(TIntermBlock *root,
-                         const TVariable *driverUniforms,
-                         int driverUniformSwizzleIndex,
+                         TIntermTyped *viewportYScale,
                          TSymbolTable *symbolTable,
                          const TVariable *builtin,
                          const ImmutableString &flippedVariableName,
@@ -199,19 +214,9 @@ void FlipBuiltinVariable(TIntermBlock *root,
     // Use this new variable instead of 'builtin' everywhere.
     ReplaceVariable(root, builtin, replacementVar);
 
-    // ANGLEUniforms.viewportScaleFactor
-    TIntermBinary *viewportScaleFactorRef = CreateDriverUniformRef(driverUniforms, 1);
-
-    // Creates a swizzle to ANGLEUniforms.viewportScaleFactor[index]
-    TVector<int> viewportScaleSwizzleOffsetY;
-    viewportScaleSwizzleOffsetY.push_back(driverUniformSwizzleIndex);
-    TIntermSwizzle *viewportScaleY =
-        new TIntermSwizzle(viewportScaleFactorRef->deepCopy(), viewportScaleSwizzleOffsetY);
-
-    // Create the expression "(builtin.y - pivot) * ANGLEUniforms.viewportScaleFactor[index] +
-    // pivot
+    // Create the expression "(builtin.y - pivot) * viewportYScale + pivot
     TIntermBinary *removePivot = new TIntermBinary(EOpSub, builtinY, pivot);
-    TIntermBinary *inverseY    = new TIntermBinary(EOpMul, removePivot, viewportScaleY);
+    TIntermBinary *inverseY    = new TIntermBinary(EOpMul, removePivot, viewportYScale);
     TIntermBinary *plusPivot   = new TIntermBinary(EOpAdd, inverseY, pivot->deepCopy());
 
     // Create the corrected variable and copy the value of the original builtin.
@@ -241,7 +246,8 @@ void ReplaceGLDepthRangeWithDriverUniform(TIntermBlock *root,
         symbolTable->findBuiltIn(ImmutableString("gl_DepthRange"), 0));
 
     // ANGLEUniforms.depthRange
-    TIntermBinary *angleEmulatedDepthRangeRef = CreateDriverUniformRef(driverUniforms, 2);
+    TIntermBinary *angleEmulatedDepthRangeRef =
+        CreateDriverUniformRef(driverUniforms, "depthRange");
 
     // Use this variable instead of gl_DepthRange everywhere.
     ReplaceVariableWithTyped(root, depthRangeVar, angleEmulatedDepthRangeRef);
@@ -301,12 +307,27 @@ const TVariable *AddDriverUniformsToShader(TIntermBlock *root, TSymbolTable *sym
                                             TSourceLoc(), SymbolType::AngleInternal);
     driverFieldList->push_back(driverViewportSize);
 
-    // Add a vec4 field "viewportScaleFactor" to the driver uniform fields.
-    TType *driverViewportScaleFactorType = new TType(EbtFloat, 4);
-    TField *driverViewportScaleFactorSize =
-        new TField(driverViewportScaleFactorType, ImmutableString("viewportScaleFactor"),
-                   TSourceLoc(), SymbolType::AngleInternal);
-    driverFieldList->push_back(driverViewportScaleFactorSize);
+    // Add a float field "halfRenderAreaHeight".
+    TField *halfRenderAreaHeight =
+        new TField(new TType(EbtFloat), ImmutableString("halfRenderAreaHeight"), TSourceLoc(),
+                   SymbolType::AngleInternal);
+    driverFieldList->push_back(halfRenderAreaHeight);
+
+    // Add a float field "viewportYScale".
+    TField *viewportYScale = new TField(new TType(EbtFloat), ImmutableString("viewportYScale"),
+                                        TSourceLoc(), SymbolType::AngleInternal);
+    driverFieldList->push_back(viewportYScale);
+
+    // Add a float field "invViewportYScale".
+    TField *invViewportYScale =
+        new TField(new TType(EbtFloat), ImmutableString("invViewportYScale"), TSourceLoc(),
+                   SymbolType::AngleInternal);
+    driverFieldList->push_back(invViewportYScale);
+
+    // Add a float field "padding".
+    TField *padding = new TField(new TType(EbtFloat), ImmutableString("padding"), TSourceLoc(),
+                                 SymbolType::AngleInternal);
+    driverFieldList->push_back(padding);
 
     // Add a new struct field "depthRange" to the driver uniform fields.
     const TSourceLoc zeroSourceLoc     = {0, 0, 0, 0};
@@ -464,8 +485,10 @@ void TranslatorVulkan::translate(TIntermBlock *root,
 
             if (inputVarying.name == "gl_PointCoord")
             {
+                TIntermBinary *viewportYScale =
+                    CreateDriverUniformRef(driverUniforms, "invViewportYScale");
                 TIntermConstantUnion *pivot = CreateConstantFloat(0.5f);
-                FlipBuiltinVariable(root, driverUniforms, 1, &getSymbolTable(),
+                FlipBuiltinVariable(root, viewportYScale, &getSymbolTable(),
                                     BuiltInVariable::gl_PointCoord(), kFlippedPointCoordName,
                                     pivot);
                 break;
@@ -473,15 +496,11 @@ void TranslatorVulkan::translate(TIntermBlock *root,
 
             if (inputVarying.name == "gl_FragCoord")
             {
-                // Create a reference to ANGLEDriverUniforms.viewport.w * 0.5
-                TIntermBinary *viewportRef = CreateDriverUniformRef(driverUniforms, 0);
-                TVector<int> swizzleOffset;
-                swizzleOffset.push_back(3);
-                TIntermSwizzle *viewportSwizzle = new TIntermSwizzle(viewportRef, swizzleOffset);
-                TIntermTyped *oneHalf           = CreateConstantFloat(0.5f);
-                TIntermBinary *pivot = new TIntermBinary(EOpMul, viewportSwizzle, oneHalf);
-
-                FlipBuiltinVariable(root, driverUniforms, 3, &getSymbolTable(),
+                TIntermBinary *viewportYScale =
+                    CreateDriverUniformRef(driverUniforms, "viewportYScale");
+                TIntermBinary *pivot =
+                    CreateDriverUniformRef(driverUniforms, "halfRenderAreaHeight");
+                FlipBuiltinVariable(root, viewportYScale, &getSymbolTable(),
                                     BuiltInVariable::gl_FragCoord(), kFlippedFragCoordName, pivot);
                 break;
             }
