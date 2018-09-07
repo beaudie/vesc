@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5fb3324_c1e64e97",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-09-07T22:10:29Z",
+      "side": 1,
+      "message": "Maybe you can have an array with field names and iterate over it adding the fields?\nSeems like the same code is repeated 5 times now, including \"viewport\" above.",
+      "revId": "81bf077cc86158a2f05e303277bdf6cc72f78524",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a02b220e_e426a240",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-09-07T22:10:29Z",
+      "side": 1,
+      "message": "Maybe create string constants for field names?",
+      "range": {
+        "startLine": 500,
+        "startChar": 60,
+        "endLine": 500,
+        "endChar": 74
+      },
+      "revId": "81bf077cc86158a2f05e303277bdf6cc72f78524",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
