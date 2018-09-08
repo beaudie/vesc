@@ -20,7 +20,7 @@ base_path = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file_
 
 # Might have to add lower case "release" in some configurations.
 perftests_paths = glob.glob('out/*Release*')
-metric = 'score'
+metric = 'mean'
 
 binary_name = 'angle_perftests'
 if sys.platform == 'win32':
@@ -112,14 +112,14 @@ while True:
         sys.exit(2)
 
     m = re.search('Running (\d+) tests', output)
-    if m and int(m.group(1)) > 1:
+    if m and float(m.group(1)) > 1:
         print("Found more than one test result in output:")
         print(output)
         sys.exit(3)
 
     end_index += start_index
 
-    score = int(output[start_index:end_index])
+    score = float(output[start_index:end_index])
     sys.stdout.write("score: " + str(score))
 
     scores.append(score)
