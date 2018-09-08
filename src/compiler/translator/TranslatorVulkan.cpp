@@ -150,84 +150,81 @@ class DeclareDefaultUniformsTraverser : public TIntermTraverser
 };
 
 constexpr ImmutableString kFlippedPointCoordName = ImmutableString("flippedPointCoord");
-constexpr ImmutableString kFlippedFragCoordName     = ImmutableString("flippedFragCoord");
 constexpr ImmutableString kEmulatedDepthRangeParams = ImmutableString("ANGLEDepthRangeParams");
 
-TIntermConstantUnion *CreateConstantFloat(float value)
+// Declares a new variable to replace gl_PointCoord with a version that is flipping the Y
+// coordinate.
+void FlipGLPointCoord(TIntermBlock *root,
+                      const TVariable *driverUniforms,
+                      TSymbolTable *symbolTable)
 {
-    const TType *constantType     = StaticType::GetBasic<TBasicType::EbtFloat>();
-    TConstantUnion *constantValue = new TConstantUnion();
-    constantValue->setFConst(value);
-    return new TIntermConstantUnion(constantValue, *constantType);
-}
+    // Create a symbol reference to "gl_PointCoord"
+    const TVariable *pointCoord  = BuiltInVariable::gl_PointCoord();
+    TIntermSymbol *pointCoordRef = new TIntermSymbol(pointCoord);
 
-TIntermBinary *CreateDriverUniformRef(const TVariable *driverUniforms, int fieldIndex)
-{
-    TIntermSymbol *angleUniformsRef = new TIntermSymbol(driverUniforms);
-    TConstantUnion *uniformIndex    = new TConstantUnion;
-    uniformIndex->setIConst(fieldIndex);
-    TIntermConstantUnion *indexRef =
-        new TIntermConstantUnion(uniformIndex, *StaticType::GetBasic<EbtInt>());
-    return new TIntermBinary(EOpIndexDirectInterfaceBlock, angleUniformsRef, indexRef);
-}
+    // Create a swizzle to "gl_PointCoord.x"
+    TVector<int> swizzleOffsetX;
+    swizzleOffsetX.push_back(0);
+    TIntermSwizzle *pointCoordX = new TIntermSwizzle(pointCoordRef, swizzleOffsetX);
 
-// Replaces a builtin variable with a version that corrects the Y coordinate.
-void FlipBuiltinVariable(TIntermBlock *root,
-                         const TVariable *driverUniforms,
-                         int driverUniformSwizzleIndex,
-                         TSymbolTable *symbolTable,
-                         const TVariable *builtin,
-                         const ImmutableString &flippedVariableName,
-                         TIntermTyped *pivot)
-{
-    // Create a symbol reference to 'builtin'.
-    TIntermSymbol *builtinRef = new TIntermSymbol(builtin);
-
-    // Create a swizzle to "builtin.y"
+    // Create a swizzle to "gl_PointCoord.y"
     TVector<int> swizzleOffsetY;
     swizzleOffsetY.push_back(1);
-    TIntermSwizzle *builtinY = new TIntermSwizzle(builtinRef, swizzleOffsetY);
+    TIntermSwizzle *pointCoordY = new TIntermSwizzle(pointCoordRef, swizzleOffsetY);
 
-    // Create a symbol reference to our new variable that will hold the modified builtin.
-    const TType *type = StaticType::GetForVec<EbtFloat>(
-        EvqGlobal, static_cast<unsigned char>(builtin->getType().getNominalSize()));
+    // Create a symbol reference to our new variable that will hold the modified gl_PointCoord.
     TVariable *replacementVar =
-        new TVariable(symbolTable, flippedVariableName, type, SymbolType::AngleInternal);
+        new TVariable(symbolTable, kFlippedPointCoordName,
+                      StaticType::Helpers::GetForVecMatHelper<EbtFloat, EbpMedium, EvqGlobal, 1>(2),
+                      SymbolType::UserDefined);
     DeclareGlobalVariable(root, replacementVar);
-    TIntermSymbol *flippedBuiltinRef = new TIntermSymbol(replacementVar);
+    TIntermSymbol *flippedPointCoordsRef = new TIntermSymbol(replacementVar);
 
-    // Use this new variable instead of 'builtin' everywhere.
-    ReplaceVariable(root, builtin, replacementVar);
+    const TType *constantType             = StaticType::GetBasic<EbtFloat>();
+
+    // Create a constant "0.5"
+    TConstantUnion *constantValuePointFive = new TConstantUnion();
+    constantValuePointFive->setFConst(0.5f);
+    TIntermConstantUnion *pointFive =
+        new TIntermConstantUnion(constantValuePointFive, *constantType);
 
     // ANGLEUniforms.viewportScaleFactor
-    TIntermBinary *viewportScaleFactorRef = CreateDriverUniformRef(driverUniforms, 1);
+    TIntermSymbol *angleUniformsRef             = new TIntermSymbol(driverUniforms);
+    TConstantUnion *viewportScaleFactorConstant = new TConstantUnion;
+    viewportScaleFactorConstant->setIConst(1);
+    TIntermConstantUnion *viewportScaleFactorIndex =
+        new TIntermConstantUnion(viewportScaleFactorConstant, *StaticType::GetBasic<EbtInt>());
+    TIntermBinary *viewportScaleFactorRef =
+        new TIntermBinary(EOpIndexDirectInterfaceBlock, angleUniformsRef, viewportScaleFactorIndex);
 
-    // Creates a swizzle to ANGLEUniforms.viewportScaleFactor[index]
+    // Creates a swizzle to ANGLEUniforms.viewportScaleFactor.y
     TVector<int> viewportScaleSwizzleOffsetY;
-    viewportScaleSwizzleOffsetY.push_back(driverUniformSwizzleIndex);
+    viewportScaleSwizzleOffsetY.push_back(1);
     TIntermSwizzle *viewportScaleY =
         new TIntermSwizzle(viewportScaleFactorRef->deepCopy(), viewportScaleSwizzleOffsetY);
 
-    // Create the expression "(builtin.y - pivot) * ANGLEUniforms.viewportScaleFactor[index] +
-    // pivot
-    TIntermBinary *removePivot = new TIntermBinary(EOpSub, builtinY, pivot);
-    TIntermBinary *inverseY    = new TIntermBinary(EOpMul, removePivot, viewportScaleY);
-    TIntermBinary *plusPivot   = new TIntermBinary(EOpAdd, inverseY, pivot->deepCopy());
+    // Create the expression "(gl_PointCoord.y - 0.5) * ANGLEUniforms.viewportScaleFactor.y +
+    // 0.5
+    TIntermBinary *removePointFive = new TIntermBinary(EOpSub, pointCoordY, pointFive);
+    TIntermBinary *inverseY        = new TIntermBinary(EOpMul, removePointFive, viewportScaleY);
+    TIntermBinary *plusPointFive   = new TIntermBinary(EOpAdd, inverseY, pointFive->deepCopy());
 
-    // Create the corrected variable and copy the value of the original builtin.
+    // Create the new vec2 using the modified Y
     TIntermSequence *sequence = new TIntermSequence();
-    sequence->push_back(builtinRef);
-    TIntermAggregate *aggregate = TIntermAggregate::CreateConstructor(builtin->getType(), sequence);
-    TIntermBinary *assignment   = new TIntermBinary(EOpInitialize, flippedBuiltinRef, aggregate);
+    sequence->push_back(pointCoordX);
+    sequence->push_back(plusPointFive);
+    TIntermAggregate *aggregate =
+        TIntermAggregate::CreateConstructor(BuiltInVariable::gl_PointCoord()->getType(), sequence);
 
-    // Create an assignment to the replaced variable's y.
-    TIntermSwizzle *correctedY = new TIntermSwizzle(flippedBuiltinRef, swizzleOffsetY);
-    TIntermBinary *assignToY   = new TIntermBinary(EOpAssign, correctedY, plusPivot);
+    // Use this new variable instead of gl_PointCoord everywhere.
+    ReplaceVariable(root, pointCoord, replacementVar);
+
+    // Assign this new value to flippedPointCoord
+    TIntermBinary *assignment = new TIntermBinary(EOpInitialize, flippedPointCoordsRef, aggregate);
 
     // Add this assigment at the beginning of the main function
     TIntermFunctionDefinition *main = FindMain(root);
     TIntermSequence *mainSequence   = main->getBody()->getSequence();
-    mainSequence->insert(mainSequence->begin(), assignToY);
     mainSequence->insert(mainSequence->begin(), assignment);
 }
 
@@ -241,7 +238,13 @@ void ReplaceGLDepthRangeWithDriverUniform(TIntermBlock *root,
         symbolTable->findBuiltIn(ImmutableString("gl_DepthRange"), 0));
 
     // ANGLEUniforms.depthRange
-    TIntermBinary *angleEmulatedDepthRangeRef = CreateDriverUniformRef(driverUniforms, 2);
+    TIntermSymbol *angleUniformsRef    = new TIntermSymbol(driverUniforms);
+    TConstantUnion *depthRangeConstant = new TConstantUnion;
+    depthRangeConstant->setIConst(2);
+    TIntermConstantUnion *depthRangeIndex =
+        new TIntermConstantUnion(depthRangeConstant, *StaticType::GetBasic<EbtInt>());
+    TIntermBinary *angleEmulatedDepthRangeRef =
+        new TIntermBinary(EOpIndexDirectInterfaceBlock, angleUniformsRef, depthRangeIndex);
 
     // Use this variable instead of gl_DepthRange everywhere.
     ReplaceVariableWithTyped(root, depthRangeVar, angleEmulatedDepthRangeRef);
@@ -268,7 +271,10 @@ void AppendVertexShaderDepthCorrectionToMain(TIntermBlock *root, TSymbolTable *s
     TIntermSwizzle *positionZ = new TIntermSwizzle(positionRef, swizzleOffsetZ);
 
     // Create a constant "0.5"
-    TIntermConstantUnion *oneHalf = CreateConstantFloat(0.5f);
+    const TType *constantType     = StaticType::GetBasic<TBasicType::EbtFloat>();
+    TConstantUnion *constantValue = new TConstantUnion();
+    constantValue->setFConst(0.5f);
+    TIntermConstantUnion *oneHalf = new TIntermConstantUnion(constantValue, *constantType);
 
     // Create a swizzle to "gl_Position.w"
     TVector<int> swizzleOffsetW;
@@ -418,9 +424,9 @@ void TranslatorVulkan::translate(TIntermBlock *root,
         sink << "};\n";
     }
 
-    const TVariable *driverUniforms = AddDriverUniformsToShader(root, &getSymbolTable());
+    const TVariable *driverUniformsVariable = AddDriverUniformsToShader(root, &getSymbolTable());
 
-    ReplaceGLDepthRangeWithDriverUniform(root, driverUniforms, &getSymbolTable());
+    ReplaceGLDepthRangeWithDriverUniform(root, driverUniformsVariable, &getSymbolTable());
 
     // Declare gl_FragColor and glFragData as webgl_FragColor and webgl_FragData
     // if it's core profile shaders and they are used.
@@ -464,25 +470,7 @@ void TranslatorVulkan::translate(TIntermBlock *root,
 
             if (inputVarying.name == "gl_PointCoord")
             {
-                TIntermConstantUnion *pivot = CreateConstantFloat(0.5f);
-                FlipBuiltinVariable(root, driverUniforms, 1, &getSymbolTable(),
-                                    BuiltInVariable::gl_PointCoord(), kFlippedPointCoordName,
-                                    pivot);
-                break;
-            }
-
-            if (inputVarying.name == "gl_FragCoord")
-            {
-                // Create a reference to ANGLEDriverUniforms.viewport.w * 0.5
-                TIntermBinary *viewportRef = CreateDriverUniformRef(driverUniforms, 0);
-                TVector<int> swizzleOffset;
-                swizzleOffset.push_back(3);
-                TIntermSwizzle *viewportSwizzle = new TIntermSwizzle(viewportRef, swizzleOffset);
-                TIntermTyped *oneHalf           = CreateConstantFloat(0.5f);
-                TIntermBinary *pivot = new TIntermBinary(EOpMul, viewportSwizzle, oneHalf);
-
-                FlipBuiltinVariable(root, driverUniforms, 3, &getSymbolTable(),
-                                    BuiltInVariable::gl_FragCoord(), kFlippedFragCoordName, pivot);
+                FlipGLPointCoord(root, driverUniformsVariable, &getSymbolTable());
                 break;
             }
         }

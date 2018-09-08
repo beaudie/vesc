@@ -1099,7 +1099,7 @@ angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
     bool newBufferAllocated = false;
     ANGLE_TRY(mDriverUniformsBuffer.allocate(this, sizeof(DriverUniforms), &ptr, &buffer, &offset,
                                              &newBufferAllocated));
-    float scaleY = isViewportFlipEnabledForDrawFBO() ? -1.0f : 1.0f;
+    float scaleY = isViewportFlipEnabledForDrawFBO() ? 1.0f : -1.0f;
 
     float depthRangeNear = mState.getState().getNearPlane();
     float depthRangeFar  = mState.getState().getFarPlane();
@@ -1110,7 +1110,7 @@ angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
     *driverUniforms                = {
         {static_cast<float>(glViewport.x), static_cast<float>(glViewport.y),
          static_cast<float>(glViewport.width), static_cast<float>(glViewport.height)},
-        {1.0f, -scaleY, 1.0f, scaleY},
+        {1.0f, scaleY, 1.0f, 1.0f},
         {depthRangeNear, depthRangeFar, depthRangeDiff, 0.0f}};
 
     ANGLE_TRY(mDriverUniformsBuffer.flush(this));
