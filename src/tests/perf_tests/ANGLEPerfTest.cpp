@@ -20,6 +20,9 @@
 namespace
 {
 constexpr size_t kInitialTraceEventBufferSize = 50000;
+constexpr unsigned int kMinimumStepSamples    = 50;
+constexpr double kMaximumStepVariation        = 0.04;
+constexpr double kTrimFactor                  = 0.1;
 
 void EmptyPlatformMethod(angle::PlatformMethods *, const char *)
 {
@@ -207,7 +210,8 @@ ANGLERenderTest::ANGLERenderTest(const std::string &name, const RenderTestParams
     : ANGLEPerfTest(name, testParams.suffix()),
       mTestParams(testParams),
       mEGLWindow(createEGLWindow(testParams)),
-      mOSWindow(nullptr)
+      mOSWindow(nullptr),
+      mStepTimer(nullptr)
 {
     // Try to ensure we don't trigger allocation during execution.
     mTraceEventBuffer.reserve(kInitialTraceEventBufferSize);
@@ -220,7 +224,8 @@ ANGLERenderTest::ANGLERenderTest(const std::string &name,
       mTestParams(testParams),
       mEGLWindow(createEGLWindow(testParams)),
       mOSWindow(nullptr),
-      mExtensionPrerequisites(extensionPrerequisites)
+      mExtensionPrerequisites(extensionPrerequisites),
+      mStepTimer(nullptr)
 {
 }
 
@@ -228,11 +233,14 @@ ANGLERenderTest::~ANGLERenderTest()
 {
     SafeDelete(mOSWindow);
     SafeDelete(mEGLWindow);
+    SafeDelete(mStepTimer);
 }
 
 void ANGLERenderTest::SetUp()
 {
     ANGLEPerfTest::SetUp();
+
+    mStepTimer = CreateTimer();
 
     mOSWindow = CreateOSWindow();
     ASSERT(mEGLWindow != nullptr);
@@ -288,7 +296,12 @@ void ANGLERenderTest::TearDown()
         DumpTraceEventsToJSONFile(mTraceEventBuffer, gTraceFile);
     }
 
-    ANGLEPerfTest::TearDown();
+    if (!mSkipTest)
+    {
+        printSampleStats();
+    }
+
+    // Skip base class TearDown to avoid printing "score".
 }
 
 void ANGLERenderTest::step()
@@ -311,16 +324,95 @@ void ANGLERenderTest::step()
     }
     else
     {
-        drawBenchmark();
         // Swap is needed so that the GPU driver will occasionally flush its internal command queue
         // to the GPU. The null device benchmarks are only testing CPU overhead, so they don't need
         // to swap.
-        if (mTestParams.eglParameters.deviceType != EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE)
+        if (mTestParams.eglParameters.deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE)
         {
-            mEGLWindow->swap();
+            mStepTimer->start();
+            drawBenchmark();
+            mStepTimer->stop();
         }
+        else
+        {
+            mStepTimer->start();
+            drawBenchmark();
+            mEGLWindow->swap();
+            glFinish();
+            mStepTimer->stop();
+        }
+
         mOSWindow->messageLoop();
+
+        double sample = mStepTimer->getElapsedTime();
+        auto iter     = std::upper_bound(mSortedSamples.begin(), mSortedSamples.end(), sample);
+        mSortedSamples.insert(iter, sample);
+
+        // Exit once two termination conditions are satisfied:
+        // 1. We perform at least kMinimumStepSamples steps.
+        // 2. The step sample standard deviation is below kMaximumStepStandardDeviation.
+        if (getNumStepsPerformed() > kMinimumStepSamples &&
+            computeStepCoefficientOfVariation() < kMaximumStepVariation)
+        {
+            abortTest();
+        }
     }
+}
+
+double ANGLERenderTest::computeStepSampleMean() const
+{
+    size_t trimCount  = mSortedSamples.size() * kTrimFactor;
+    size_t numSamples = mSortedSamples.size() - trimCount * 2;
+
+    double mean = 0.0;
+
+    for (size_t index = trimCount; index < mSortedSamples.size() - trimCount; ++index)
+    {
+        mean += mSortedSamples[index];
+    }
+
+    mean /= static_cast<double>(numSamples);
+
+    return mean;
+}
+
+double ANGLERenderTest::computeStepCoefficientOfVariation() const
+{
+    size_t trimCount  = mSortedSamples.size() * kTrimFactor;
+    size_t numSamples = mSortedSamples.size() - trimCount * 2;
+
+    double mean   = computeStepSampleMean();
+    double stddev = 0.0;
+
+    for (size_t index = trimCount; index < mSortedSamples.size() - trimCount; ++index)
+    {
+        double deviation = mSortedSamples[index] - mean;
+        stddev += deviation * deviation;
+    }
+
+    stddev /= static_cast<double>(numSamples);
+    stddev = sqrt(stddev);
+
+    // Compute the coefficient of variation.
+    return stddev / mean;
+}
+
+void ANGLERenderTest::printSampleStats()
+{
+    double mean      = computeStepSampleMean();
+    double variation = computeStepCoefficientOfVariation();
+
+    if (variation > kMaximumStepVariation)
+    {
+        printf("Warning: variation of %.1lf%% exceeded desired maximum of %2.1lf%%.\n",
+               variation * 100.0, kMaximumStepVariation * 100.0);
+    }
+
+    size_t numSteps = getNumStepsPerformed();
+
+    printResult("time", mean * 1000.0, "ms", true);
+    printResult("variation", variation * 100.0, "percent", false);
+    printResult("numSteps", numSteps, "iterations", false);
 }
 
 void ANGLERenderTest::finishTest()

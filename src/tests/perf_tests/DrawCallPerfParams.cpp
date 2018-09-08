@@ -18,7 +18,7 @@ DrawCallPerfParams::DrawCallPerfParams()
     windowWidth  = 256;
     windowHeight = 256;
 
-    iterations     = 50;
+    iterations     = 10000;
     runTimeSeconds = 10.0;
     numTris        = 1;
     useFBO         = false;

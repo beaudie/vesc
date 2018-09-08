@@ -135,6 +135,13 @@ class ANGLERenderTest : public ANGLEPerfTest
 
     void step() override;
     void finishTest() override;
+    void printSampleStats();
+
+    // Trims the highest and lowest results.
+    double computeStepSampleMean() const;
+
+    // Returns a percentage.
+    double computeStepCoefficientOfVariation() const;
 
     bool areExtensionPrerequisitesFulfilled() const;
 
@@ -147,6 +154,8 @@ class ANGLERenderTest : public ANGLEPerfTest
 
     // Trace event record that can be output.
     std::vector<TraceEvent> mTraceEventBuffer;
+    std::vector<double> mSortedSamples;
+    Timer *mStepTimer;
 };
 
 extern bool g_OnlyOneRunFrame;
