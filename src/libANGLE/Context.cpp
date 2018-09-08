@@ -2,7 +2,7 @@
 // Copyright (c) 2002-2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-//
+//x
 
 // Context.cpp: Implements the gl::Context class, managing all GL state and performing
 // rendering operations. It is the GLES2 specific implementation of EGLContext.
