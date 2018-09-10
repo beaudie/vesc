@@ -209,6 +209,12 @@ angle_sample("gles1_draw_texture") {
   ]
 }
 
+angle_sample("line_raster") {
+  sources = [
+    "line_raster/LineRaster.cpp",
+  ]
+}
+
 group("all") {
   testonly = true
   deps = [

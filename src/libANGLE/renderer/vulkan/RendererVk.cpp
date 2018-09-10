@@ -1238,7 +1238,7 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
 #if defined(ANGLE_PLATFORM_ANDROID)
     mFeatures.basicGLLineRasterization.enabled = false;
 #else
-    mFeatures.basicGLLineRasterization.enabled = true;
+    mFeatures.basicGLLineRasterization.enabled = false;
 #endif  // defined(ANGLE_PLATFORM_ANDROID)
 
     if ((mPhysicalDeviceProperties.apiVersion >= VK_MAKE_VERSION(1, 1, 0)) ||
