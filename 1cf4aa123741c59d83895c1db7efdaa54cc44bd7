@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "462177d1_97a8c946",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-10T18:50:02Z",
+      "side": 1,
+      "message": "nit: define these at the global scope",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 9
+      },
+      "revId": "1cf4aa123741c59d83895c1db7efdaa54cc44bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28006712_761d4804",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_map.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-10T18:50:02Z",
+      "side": 1,
+      "message": "nit: instead of changing these, you can make the script accept a list or single value.",
+      "range": {
+        "startLine": 246,
+        "startChar": 23,
+        "endLine": 246,
+        "endChar": 44
+      },
+      "revId": "1cf4aa123741c59d83895c1db7efdaa54cc44bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35a783d0_3cf4a6e1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-10T18:50:02Z",
+      "side": 1,
+      "message": "I don\u0027t want to create vectors here. Can you instead pass two values, a pointer and size?",
+      "range": {
+        "startLine": 108,
+        "startChar": 33,
+        "endLine": 108,
+        "endChar": 73
+      },
+      "revId": "1cf4aa123741c59d83895c1db7efdaa54cc44bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50ffe47e_7b00615c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-10T18:50:02Z",
+      "side": 1,
+      "message": "Instead of the UNREACHABLE, how about you iterate over the size of the fallback array minus one. Then if the loop exits you assign the last value in the array as the format and ASSERT(HasFull*FeatureSupport). This would avoid one check and still guard for an implementation error.",
+      "range": {
+        "startLine": 124,
+        "startChar": 4,
+        "endLine": 124,
+        "endChar": 15
+      },
+      "revId": "1cf4aa123741c59d83895c1db7efdaa54cc44bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdad0bce_18637b1d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-10T18:50:02Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 128,
+        "startChar": 32,
+        "endLine": 128,
+        "endChar": 70
+      },
+      "revId": "1cf4aa123741c59d83895c1db7efdaa54cc44bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3f227b8_5f164b83",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-10T18:50:02Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 145,
+        "startChar": 4,
+        "endLine": 145,
+        "endChar": 15
+      },
+      "revId": "1cf4aa123741c59d83895c1db7efdaa54cc44bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92a2481a_7a760ca4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-10T18:50:02Z",
+      "side": 1,
+      "message": "nit: define these out of the class. makes forward declaring easier. Can call them TextureFormatInitInfo and BufferFormatInitInfo to scope.",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 6
+      },
+      "revId": "1cf4aa123741c59d83895c1db7efdaa54cc44bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
