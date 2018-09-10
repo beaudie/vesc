@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3504c085_bf602f51",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-10T18:51:32Z",
+      "side": 1,
+      "message": "nit: if there\u0027s an extra space here, can remove it. hard to tell with the diff.",
+      "revId": "1dce20491ea2dded58e392899eae68e800211ff2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
