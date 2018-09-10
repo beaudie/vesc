@@ -1473,6 +1473,14 @@ void State::setBufferBinding(const Context *context, BufferBinding target, Buffe
             UpdateBufferBinding(context, &mBoundBuffers[target], buffer, target);
             mDirtyBits.set(DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING);
             break;
+        case BufferBinding::Uniform:
+            UpdateBufferBinding(context, &mBoundBuffers[target], buffer, target);
+            mDirtyBits.set(DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
+            break;
+        case BufferBinding::AtomicCounter:
+            UpdateBufferBinding(context, &mBoundBuffers[target], buffer, target);
+            mDirtyBits.set(DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
+            break;
         default:
             UpdateBufferBinding(context, &mBoundBuffers[target], buffer, target);
             break;
@@ -1497,7 +1505,6 @@ void State::setIndexedBufferBinding(const Context *context,
         case BufferBinding::Uniform:
             UpdateIndexedBufferBinding(context, &mUniformBuffers[index], buffer, target, offset,
                                        size);
-            mDirtyBits.set(DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
             break;
         case BufferBinding::AtomicCounter:
             UpdateIndexedBufferBinding(context, &mAtomicCounterBuffers[index], buffer, target,
@@ -1827,12 +1834,12 @@ void State::loadPathRenderingMatrix(GLenum matrixMode, const GLfloat *matrix)
     if (matrixMode == GL_PATH_MODELVIEW_CHROMIUM)
     {
         memcpy(mPathMatrixMV, matrix, 16 * sizeof(GLfloat));
-        mDirtyBits.set(DIRTY_BIT_PATH_RENDERING_MATRIX_MV);
+        mDirtyBits.set(DIRTY_BIT_PATH_RENDERING);
     }
     else if (matrixMode == GL_PATH_PROJECTION_CHROMIUM)
     {
         memcpy(mPathMatrixProj, matrix, 16 * sizeof(GLfloat));
-        mDirtyBits.set(DIRTY_BIT_PATH_RENDERING_MATRIX_PROJ);
+        mDirtyBits.set(DIRTY_BIT_PATH_RENDERING);
     }
     else
     {
@@ -1860,7 +1867,7 @@ void State::setPathStencilFunc(GLenum func, GLint ref, GLuint mask)
     mPathStencilFunc = func;
     mPathStencilRef  = ref;
     mPathStencilMask = mask;
-    mDirtyBits.set(DIRTY_BIT_PATH_RENDERING_STENCIL_STATE);
+    mDirtyBits.set(DIRTY_BIT_PATH_RENDERING);
 }
 
 GLenum State::getPathStencilFunc() const
@@ -2878,6 +2885,7 @@ void State::setImageUnit(const Context *context,
     mImageUnits[unit].layer   = layer;
     mImageUnits[unit].access  = access;
     mImageUnits[unit].format  = format;
+    mDirtyBits.set(DIRTY_BIT_IMAGE_BINDINGS);
 }
 
 const ImageUnit &State::getImageUnit(size_t unit) const
