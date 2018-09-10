@@ -410,6 +410,7 @@ class State : angle::NonCopyable
         DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING,
         DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING,
         DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING,
+        DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING,
         // TODO(jmadill): Fine-grained dirty bits for each index.
         DIRTY_BIT_UNIFORM_BUFFER_BINDINGS,
         DIRTY_BIT_PROGRAM_BINDING,
@@ -417,6 +418,7 @@ class State : angle::NonCopyable
         // TODO(jmadill): Fine-grained dirty bits for each texture/sampler.
         DIRTY_BIT_TEXTURE_BINDINGS,
         DIRTY_BIT_SAMPLER_BINDINGS,
+        DIRTY_BIT_IMAGE_BINDINGS,
         DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING,
         DIRTY_BIT_MULTISAMPLING,
         DIRTY_BIT_SAMPLE_ALPHA_TO_ONE,
@@ -430,7 +432,7 @@ class State : angle::NonCopyable
         DIRTY_BIT_MAX = DIRTY_BIT_INVALID,
     };
 
-    static_assert(DIRTY_BIT_MAX <= 64, "State dirty bits must be capped at 64");
+    // static_assert(DIRTY_BIT_MAX <= 64, "State dirty bits must be capped at 64");
 
     // TODO(jmadill): Consider storing dirty objects in a list instead of by binding.
     enum DirtyObjectType

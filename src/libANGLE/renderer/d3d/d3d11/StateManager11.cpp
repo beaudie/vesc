@@ -528,6 +528,18 @@ angle::Result ShaderConstants11::updateBuffer(const gl::Context *context,
     return angle::Result::Continue();
 }
 
+const StateManager11::DirtyBits StateManager11::mInternalComputeDirtyBitmask = [] {
+    DirtyBits mask;
+    mask.set(DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE);
+    mask.set(DIRTY_BIT_PROGRAM_UNIFORMS);
+    mask.set(DIRTY_BIT_DRIVER_UNIFORMS);
+    mask.set(DIRTY_BIT_PROGRAM_UNIFORM_BUFFERS);
+    mask.set(DIRTY_BIT_PROGRAM_ATOMIC_COUNTER_BUFFERS);
+    mask.set(DIRTY_BIT_PROGRAM_SHADER_STORAGE_BUFFERS);
+    mask.set(DIRTY_BIT_SHADERS);
+    return mask;
+}();
+
 StateManager11::StateManager11(Renderer11 *renderer)
     : mRenderer(renderer),
       mInternalDirtyBits(),
@@ -722,17 +734,47 @@ angle::Result StateManager11::updateStateForCompute(const gl::Context *context,
 {
     mShaderConstants.setComputeWorkGroups(numGroupsX, numGroupsY, numGroupsZ);
 
-    // TODO(jmadill): Use dirty bits.
-    mProgramD3D->updateSamplerMapping();
+    if (mProgramD3D->updateSamplerMapping() == ProgramD3D::SamplerMapping::WasDirty)
+    {
+        invalidateTexturesAndSamplers();
+    }
 
-    // TODO(jmadill): Use dirty bits.
-    ANGLE_TRY(generateSwizzlesForShader(context, gl::ShaderType::Compute));
+    if (mDirtySwizzles)
+    {
+        ANGLE_TRY(generateSwizzlesForShader(context, gl::ShaderType::Compute));
+        mDirtySwizzles = false;
+    }
 
-    // TODO(jmadill): More complete implementation.
-    ANGLE_TRY(syncTexturesForCompute(context));
-
-    // TODO(Xinghua): Use dirty bits.
-    ANGLE_TRY(syncUniformBuffers(context));
+    auto dirtyBitsCopy = mInternalDirtyBits & mInternalComputeDirtyBitmask;
+    mInternalDirtyBits &= ~mInternalComputeDirtyBitmask;
+    for (auto dirtyBit : dirtyBitsCopy)
+    {
+        switch (dirtyBit)
+        {
+            case DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE:
+                ANGLE_TRY(syncTexturesForCompute(context));
+                break;
+            case DIRTY_BIT_PROGRAM_UNIFORMS:
+            case DIRTY_BIT_DRIVER_UNIFORMS:
+                ANGLE_TRY(applyComputeUniforms(context, mProgramD3D));
+                break;
+            case DIRTY_BIT_PROGRAM_UNIFORM_BUFFERS:
+                ANGLE_TRY(syncUniformBuffers(context));
+                break;
+            case DIRTY_BIT_PROGRAM_ATOMIC_COUNTER_BUFFERS:
+                ANGLE_TRY(syncAtomicCounterBuffers(context));
+                break;
+            case DIRTY_BIT_PROGRAM_SHADER_STORAGE_BUFFERS:
+                ANGLE_TRY(syncShaderStorageBuffers(context));
+                break;
+            case DIRTY_BIT_SHADERS:
+                ANGLE_TRY(syncProgramForCompute(context));
+                break;
+            default:
+                UNREACHABLE();
+                break;
+        }
+    }
 
     return angle::Result::Continue();
 }
@@ -989,10 +1031,19 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
             case gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS:
                 invalidateProgramUniformBuffers();
                 break;
+            case gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING:
+                invalidateProgramAtomicCounterBuffers();
+                break;
+            case gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING:
+                invalidateProgramShaderStorageBuffers();
+                break;
             case gl::State::DIRTY_BIT_TEXTURE_BINDINGS:
                 invalidateTexturesAndSamplers();
                 break;
             case gl::State::DIRTY_BIT_SAMPLER_BINDINGS:
+                invalidateTexturesAndSamplers();
+                break;
+            case gl::State::DIRTY_BIT_IMAGE_BINDINGS:
                 invalidateTexturesAndSamplers();
                 break;
             case gl::State::DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING:
@@ -1010,6 +1061,8 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                 invalidateTexturesAndSamplers();
                 invalidateProgramUniforms();
                 invalidateProgramUniformBuffers();
+                invalidateProgramAtomicCounterBuffers();
+                invalidateProgramShaderStorageBuffers();
                 invalidateDriverUniforms();
                 // If ANGLE_multiview is enabled, the attribute divisor has to be updated for each
                 // binding. When using compute, there could be no vertex array.
@@ -1471,6 +1524,16 @@ void StateManager11::invalidateDriverUniforms()
 void StateManager11::invalidateProgramUniformBuffers()
 {
     mInternalDirtyBits.set(DIRTY_BIT_PROGRAM_UNIFORM_BUFFERS);
+}
+
+void StateManager11::invalidateProgramAtomicCounterBuffers()
+{
+    mInternalDirtyBits.set(DIRTY_BIT_PROGRAM_ATOMIC_COUNTER_BUFFERS);
+}
+
+void StateManager11::invalidateProgramShaderStorageBuffers()
+{
+    mInternalDirtyBits.set(DIRTY_BIT_PROGRAM_SHADER_STORAGE_BUFFERS);
 }
 
 void StateManager11::invalidateConstantBuffer(unsigned int slot)
@@ -2211,7 +2274,7 @@ void StateManager11::setComputeShader(const d3d11::ComputeShader *shader)
         ID3D11ComputeShader *appliedShader = shader ? shader->get() : nullptr;
         mRenderer->getDeviceContext()->CSSetShader(appliedShader, nullptr, 0);
         mAppliedShaders[gl::ShaderType::Compute] = serial;
-        // TODO(jmadill): Dirty bits for compute.
+        invalidateShaders();
     }
 }
 
@@ -2693,6 +2756,18 @@ angle::Result StateManager11::syncProgram(const gl::Context *context, gl::Primit
 
     setDrawShaders(vertexShader, geometryShader, pixelShader);
 
+    // Explicitly clear the shaders dirty bit.
+    mInternalDirtyBits.reset(DIRTY_BIT_SHADERS);
+
+    return angle::Result::Continue();
+}
+
+angle::Result StateManager11::syncProgramForCompute(const gl::Context *context)
+{
+    ShaderExecutableD3D *computeExe = nullptr;
+    ANGLE_TRY(mProgramD3D->getComputeExecutable(&computeExe));
+    ASSERT(computeExe != nullptr);
+    setComputeShader(&GetAs<ShaderExecutable11>(computeExe)->getComputeShader());
     // Explicitly clear the shaders dirty bit.
     mInternalDirtyBits.reset(DIRTY_BIT_SHADERS);
 
@@ -3388,6 +3463,18 @@ angle::Result StateManager11::syncUniformBuffers(const gl::Context *context)
         }
     }
 
+    return angle::Result::Continue();
+}
+
+angle::Result StateManager11::syncAtomicCounterBuffers(const gl::Context *context)
+{
+    // TODO
+    return angle::Result::Continue();
+}
+
+angle::Result StateManager11::syncShaderStorageBuffers(const gl::Context *context)
+{
+    // TODO
     return angle::Result::Continue();
 }
 
