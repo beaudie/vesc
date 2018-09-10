@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "13abcbc5_d853b33c",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1160859
+      },
+      "writtenOn": "2018-09-10T20:22:12Z",
+      "side": 1,
+      "message": "the lesson here is to never try and do checked casts manually, always use base/numerics.",
+      "range": {
+        "startLine": 1084,
+        "startChar": 29,
+        "endLine": 1084,
+        "endChar": 55
+      },
+      "revId": "88d64715c5e18a39f8d65de3284c550d5cc6e69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
