@@ -163,7 +163,10 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions,
       mLocalDirtyBits(),
       mMultiviewDirtyBits(),
       mProgramTexturesAndSamplersDirty(true),
-      mProgramStorageBuffersDirty(true)
+      mProgramStorageBuffersDirty(true),
+      mProgramUniformBuffersDirty(true),
+      mProgramAtomicCounterBuffersDirty(true),
+      mProgramImagesDirty(true)
 {
     ASSERT(mFunctions);
     ASSERT(extensions.maxViews >= 1u);
@@ -864,30 +867,10 @@ gl::Error StateManagerGL::onMakeCurrent(const gl::Context *context)
 
 void StateManagerGL::setGenericShaderState(const gl::Context *context)
 {
-    const gl::State &glState = context->getGLState();
-
-    // Sync the current program state
-    const gl::Program *program = glState.getProgram();
-    for (size_t uniformBlockIndex = 0; uniformBlockIndex < program->getActiveUniformBlockCount();
-         uniformBlockIndex++)
+    if (mProgramUniformBuffersDirty)
     {
-        GLuint binding = program->getUniformBlockBinding(static_cast<GLuint>(uniformBlockIndex));
-        const auto &uniformBuffer = glState.getIndexedUniformBuffer(binding);
-
-        if (uniformBuffer.get() != nullptr)
-        {
-            BufferGL *bufferGL = GetImplAs<BufferGL>(uniformBuffer.get());
-
-            if (uniformBuffer.getSize() == 0)
-            {
-                bindBufferBase(gl::BufferBinding::Uniform, binding, bufferGL->getBufferID());
-            }
-            else
-            {
-                bindBufferRange(gl::BufferBinding::Uniform, binding, bufferGL->getBufferID(),
-                                uniformBuffer.getOffset(), uniformBuffer.getSize());
-            }
-        }
+        updateProgramUniformBufferBindings(context);
+        mProgramUniformBuffersDirty = false;
     }
 
     if (mProgramTexturesAndSamplersDirty)
@@ -902,45 +885,16 @@ void StateManagerGL::setGenericShaderState(const gl::Context *context)
         mProgramStorageBuffersDirty = false;
     }
 
-    // TODO(xinghua.cao@intel.com): Track image units state with dirty bits to
-    // avoid update every draw call.
-    ASSERT(context->getClientVersion() >= gl::ES_3_1 || program->getImageBindings().size() == 0);
-    for (size_t imageUnitIndex : program->getActiveImagesMask())
+    if (mProgramImagesDirty)
     {
-        const gl::ImageUnit &imageUnit = glState.getImageUnit(imageUnitIndex);
-        const TextureGL *textureGL     = SafeGetImplAs<TextureGL>(imageUnit.texture.get());
-        if (textureGL)
-        {
-            bindImageTexture(imageUnitIndex, textureGL->getTextureID(), imageUnit.level,
-                             imageUnit.layered, imageUnit.layer, imageUnit.access,
-                             imageUnit.format);
-        }
-        else
-        {
-            bindImageTexture(imageUnitIndex, 0, imageUnit.level, imageUnit.layered, imageUnit.layer,
-                             imageUnit.access, imageUnit.format);
-        }
+        updateProgramImageBindings(context);
+        mProgramImagesDirty = false;
     }
 
-    for (const auto &atomicCounterBuffer : program->getState().getAtomicCounterBuffers())
+    if (mProgramAtomicCounterBuffersDirty)
     {
-        GLuint binding     = atomicCounterBuffer.binding;
-        const auto &buffer = glState.getIndexedAtomicCounterBuffer(binding);
-
-        if (buffer.get() != nullptr)
-        {
-            BufferGL *bufferGL = GetImplAs<BufferGL>(buffer.get());
-
-            if (buffer.getSize() == 0)
-            {
-                bindBufferBase(gl::BufferBinding::AtomicCounter, binding, bufferGL->getBufferID());
-            }
-            else
-            {
-                bindBufferRange(gl::BufferBinding::AtomicCounter, binding, bufferGL->getBufferID(),
-                                buffer.getOffset(), buffer.getSize());
-            }
-        }
+        updateProgramAtomicCounterBufferBindings(context);
+        mProgramAtomicCounterBuffersDirty = false;
     }
 }
 
@@ -1017,6 +971,85 @@ void StateManagerGL::updateProgramStorageBufferBindings(const gl::Context *conte
                 bindBufferRange(gl::BufferBinding::ShaderStorage, binding, bufferGL->getBufferID(),
                                 shaderStorageBuffer.getOffset(), shaderStorageBuffer.getSize());
             }
+        }
+    }
+}
+
+void StateManagerGL::updateProgramUniformBufferBindings(const gl::Context *context)
+{
+    // Sync the current program state
+    const gl::State &glState   = context->getGLState();
+    const gl::Program *program = glState.getProgram();
+    for (size_t uniformBlockIndex = 0; uniformBlockIndex < program->getActiveUniformBlockCount();
+         uniformBlockIndex++)
+    {
+        GLuint binding = program->getUniformBlockBinding(static_cast<GLuint>(uniformBlockIndex));
+        const auto &uniformBuffer = glState.getIndexedUniformBuffer(binding);
+
+        if (uniformBuffer.get() != nullptr)
+        {
+            BufferGL *bufferGL = GetImplAs<BufferGL>(uniformBuffer.get());
+
+            if (uniformBuffer.getSize() == 0)
+            {
+                bindBufferBase(gl::BufferBinding::Uniform, binding, bufferGL->getBufferID());
+            }
+            else
+            {
+                bindBufferRange(gl::BufferBinding::Uniform, binding, bufferGL->getBufferID(),
+                                uniformBuffer.getOffset(), uniformBuffer.getSize());
+            }
+        }
+    }
+}
+
+void StateManagerGL::updateProgramAtomicCounterBufferBindings(const gl::Context *context)
+{
+    const gl::State &glState   = context->getGLState();
+    const gl::Program *program = glState.getProgram();
+
+    for (const auto &atomicCounterBuffer : program->getState().getAtomicCounterBuffers())
+    {
+        GLuint binding     = atomicCounterBuffer.binding;
+        const auto &buffer = glState.getIndexedAtomicCounterBuffer(binding);
+
+        if (buffer.get() != nullptr)
+        {
+            BufferGL *bufferGL = GetImplAs<BufferGL>(buffer.get());
+
+            if (buffer.getSize() == 0)
+            {
+                bindBufferBase(gl::BufferBinding::AtomicCounter, binding, bufferGL->getBufferID());
+            }
+            else
+            {
+                bindBufferRange(gl::BufferBinding::AtomicCounter, binding, bufferGL->getBufferID(),
+                                buffer.getOffset(), buffer.getSize());
+            }
+        }
+    }
+}
+
+void StateManagerGL::updateProgramImageBindings(const gl::Context *context)
+{
+    const gl::State &glState   = context->getGLState();
+    const gl::Program *program = glState.getProgram();
+
+    ASSERT(context->getClientVersion() >= gl::ES_3_1 || program->getImageBindings().size() == 0);
+    for (size_t imageUnitIndex : program->getActiveImagesMask())
+    {
+        const gl::ImageUnit &imageUnit = glState.getImageUnit(imageUnitIndex);
+        const TextureGL *textureGL     = SafeGetImplAs<TextureGL>(imageUnit.texture.get());
+        if (textureGL)
+        {
+            bindImageTexture(imageUnitIndex, textureGL->getTextureID(), imageUnit.level,
+                             imageUnit.layered, imageUnit.layer, imageUnit.access,
+                             imageUnit.format);
+        }
+        else
+        {
+            bindImageTexture(imageUnitIndex, 0, imageUnit.level, imageUnit.layered, imageUnit.layer,
+                             imageUnit.access, imageUnit.format);
         }
     }
 }
@@ -1955,7 +1988,10 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
             case gl::State::DIRTY_BIT_PROGRAM_BINDING:
             {
                 mProgramTexturesAndSamplersDirty = true;
+                mProgramImagesDirty               = true;
                 mProgramStorageBuffersDirty      = true;
+                mProgramUniformBuffersDirty       = true;
+                mProgramAtomicCounterBuffersDirty = true;
                 gl::Program *program = state.getProgram();
                 if (program != nullptr)
                 {
@@ -1969,12 +2005,18 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
             case gl::State::DIRTY_BIT_SAMPLER_BINDINGS:
                 mProgramTexturesAndSamplersDirty = true;
                 break;
+            case gl::State::DIRTY_BIT_IMAGE_BINDINGS:
+                mProgramImagesDirty = true;
+                break;
             case gl::State::DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING:
                 syncTransformFeedbackState(context);
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
                 mProgramTexturesAndSamplersDirty = true;
+                mProgramImagesDirty               = true;
                 mProgramStorageBuffersDirty      = true;
+                mProgramUniformBuffersDirty       = true;
+                mProgramAtomicCounterBuffersDirty = true;
                 propagateProgramToVAO(state.getProgram(),
                                       GetImplAs<VertexArrayGL>(state.getVertexArray()));
                 updateMultiviewBaseViewLayerIndexUniform(
@@ -1985,7 +2027,10 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 mProgramStorageBuffersDirty = true;
                 break;
             case gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS:
-                // TODO(jmadll): State update.
+                mProgramUniformBuffersDirty = true;
+                break;
+            case gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING:
+                mProgramAtomicCounterBuffersDirty = true;
                 break;
             case gl::State::DIRTY_BIT_MULTISAMPLING:
                 setMultisamplingStateEnabled(state.isMultisamplingEnabled());
