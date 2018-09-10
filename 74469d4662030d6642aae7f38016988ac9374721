@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89e12591_f29ac73e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-10T23:12:43Z",
+      "side": 1,
+      "message": "these can be static constexpr instead of const. Also prefix with k. You should probably also put them in the static local anonymous scope to ensure there aren\u0027t any initialization hijinks when you enter the function scope. Otherwise if you don\u0027t want to tinker with the script you could verify with a debugger that no initialization code is being run on the scope entry.",
+      "range": {
+        "startLine": 484,
+        "startChar": 16,
+        "endLine": 484,
+        "endChar": 22
+      },
+      "revId": "74469d4662030d6642aae7f38016988ac9374721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71666de0_42f831fc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-10T23:12:43Z",
+      "side": 1,
+      "message": "nit: I like that you avoided duplicating the three lines of assignment but this code would look more consistent with ANGLE style if you used a for loop with an integer index. You could make a helper function if you want to avoid the code duplication.",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 5
+      },
+      "revId": "74469d4662030d6642aae7f38016988ac9374721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9492d30a_7a8fe793",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-10T23:12:43Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 135,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 5
+      },
+      "revId": "74469d4662030d6642aae7f38016988ac9374721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

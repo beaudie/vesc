@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "077d9fc6_97b59be7",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-10T23:12:43Z",
+      "side": 1,
+      "message": "No, that\u0027s fine.",
+      "parentUuid": "c34faef8_55d3d0e6",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 9
+      },
+      "revId": "1cf4aa123741c59d83895c1db7efdaa54cc44bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "28006712_761d4804",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_map.json",
         "patchSetId": 2
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "I did it this way for consistency.  Simpler for people looking at this file and simpler to process.",
       "parentUuid": "28006712_761d4804",
+      "range": {
+        "startLine": 246,
+        "startChar": 23,
+        "endLine": 246,
+        "endChar": 44
+      },
+      "revId": "1cf4aa123741c59d83895c1db7efdaa54cc44bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20a694d8_f38e640a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_map.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-10T23:12:43Z",
+      "side": 1,
+      "message": "I still would like it. I think it\u0027s easier to read if it doesn\u0027t have brackets. Is there a very strong overriding reason not to do this?",
+      "parentUuid": "b8b0d363_411f0d3d",
       "range": {
         "startLine": 246,
         "startChar": 23,
