@@ -684,7 +684,7 @@ std::string RendererVk::getRendererDescription() const
 void RendererVk::initFeatures()
 {
     // Use OpenGL line rasterization rules by default.
-    mFeatures.basicGLLineRasterization = true;
+    mFeatures.basicGLLineRasterization = false;
 
     // TODO(lucferron): Currently disabled on Intel only since many tests are failing and need
     // investigation. http://anglebug.com/2728
