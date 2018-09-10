@@ -455,21 +455,55 @@ TVariable *AddANGLEPositionVaryingDeclaration(TIntermBlock *root,
     return varyingVar;
 }
 
-void AddANGLEPositionVarying(TIntermBlock *root, TSymbolTable *symbolTable)
+void AddANGLEPositionVarying(TIntermBlock *root,
+                             TSymbolTable *symbolTable,
+                             const TVariable *driverUniforms)
 {
     TVariable *anglePosition = AddANGLEPositionVaryingDeclaration(root, symbolTable, EvqVaryingOut);
 
-    // Create an assignment "ANGLEPosition = gl_Position".
-    const TVariable *position = BuiltInVariable::gl_Position();
-    TIntermSymbol *varyingRef = new TIntermSymbol(anglePosition);
-    TIntermBinary *assignment =
-        new TIntermBinary(EOpAssign, varyingRef, new TIntermSymbol(position));
+    const TType *vec2Type = StaticType::GetBasic<EbtFloat, 2>();
 
     // Ensure the assignment runs at the end of the main() function.
     TIntermFunctionDefinition *main = FindMain(root);
     TIntermBlock *mainBody          = main->getBody();
     mainBody->appendStatement(GenerateLineRasterIfDef());
+
+    // Create an assignment "ANGLEPosition = gl_Position".
+    const TVariable *position       = BuiltInVariable::gl_Position();
+    TIntermSymbol *anglePositionRef = new TIntermSymbol(anglePosition);
+    TIntermBinary *assignment =
+        new TIntermBinary(EOpAssign, anglePositionRef, new TIntermSymbol(position));
     mainBody->appendStatement(assignment);
+
+    /*
+     * vec2 scale = gl_Viewport * 8.0;
+     * ANGLEPosition = floor(ANGLEPosition * scale) / scale;
+     */
+
+    // scaledViewport = gl_Viewport * 8.0
+    TIntermBinary *viewportRef        = CreateDriverUniformRef(driverUniforms, kViewport);
+    TIntermConstantUnion *scaleFactor = CreateFloatNode(16.0f);
+    TVector<int> swizzleOffsetZW      = {2, 3};
+    TIntermSwizzle *viewportZW        = new TIntermSwizzle(viewportRef, swizzleOffsetZW);
+    TIntermBinary *scaledViewport =
+        new TIntermBinary(EOpVectorTimesScalar, viewportZW, scaleFactor);
+    TVariable *scaleTemp          = CreateTempVariable(symbolTable, vec2Type);
+    TIntermSymbol *scaleRef       = CreateTempSymbolNode(scaleTemp);
+    TIntermDeclaration *scaleDecl = CreateTempInitDeclarationNode(scaleTemp, scaledViewport);
+    mainBody->appendStatement(scaleDecl);
+
+    // ANGLEPosition * scale
+    TVector<int> swizzleOffsetXY = {0, 1};
+    TIntermSwizzle *posXy = new TIntermSwizzle(anglePositionRef->deepCopy(), swizzleOffsetXY);
+    TIntermBinary *scaledPosition = new TIntermBinary(EOpMul, posXy->deepCopy(), scaleRef);
+    // floor(ANGLEPosition * scale)
+    TIntermUnary *flooredScaledPosition = new TIntermUnary(EOpRound, scaledPosition, nullptr);
+    // floor(ANGLEPosition * scale) / scale;
+    TIntermBinary *newPosition =
+        new TIntermBinary(EOpDiv, flooredScaledPosition, scaleRef->deepCopy());
+    TIntermBinary *newAssignment = new TIntermBinary(EOpAssign, posXy, newPosition);
+    mainBody->appendStatement(newAssignment);
+
     mainBody->appendStatement(GenerateEndIf());
 }
 
@@ -520,6 +554,9 @@ ANGLE_NO_DISCARD bool AddLineSegmentRasterizationEmulation(TCompiler *compiler,
     TVariable *anglePosition = AddANGLEPositionVaryingDeclaration(root, symbolTable, EvqVaryingIn);
 
     const TType *vec2Type = StaticType::GetBasic<EbtFloat, 2>();
+#if 0  // TIMTIM
+    const TType *vec4Type = StaticType::GetBasic<EbtFloat, 4>();
+#endif
 
     // Create a swizzle to "ANGLEUniforms.viewport.xy".
     TIntermBinary *viewportRef   = CreateDriverUniformRef(driverUniforms, kViewport);
@@ -530,12 +567,45 @@ ANGLE_NO_DISCARD bool AddLineSegmentRasterizationEmulation(TCompiler *compiler,
     TVector<int> swizzleOffsetZW = {2, 3};
     TIntermSwizzle *viewportZW   = new TIntermSwizzle(viewportRef, swizzleOffsetZW);
 
+#if 0  // TIMTIM
+    /*
+     * vec2 scale = gl_Viewport * 8.0;
+     * ANGLEPosition = floor(ANGLEPosition * scale) / scale;
+     */
+
+    // scaledViewport = gl_Viewport * 8.0
+    TIntermSymbol *anglePositionRef = new TIntermSymbol(anglePosition);
+    TIntermConstantUnion *scaleFactor = CreateFloatNode(1.0f);
+    TIntermBinary *scaledViewport = new TIntermBinary(EOpVectorTimesScalar, viewportRef->deepCopy(), scaleFactor);
+    TVariable *scaleTemp          = CreateTempVariable(symbolTable, vec4Type);
+    TIntermSymbol *scaleRef       = CreateTempSymbolNode(scaleTemp);
+    TIntermDeclaration *scaleDecl = CreateTempInitDeclarationNode(scaleTemp, scaledViewport);
+
+    // ANGLEPosition * scale
+    TIntermBinary *scaledAnglePosition = new TIntermBinary(EOpMul, anglePositionRef->deepCopy(), scaleRef);
+    // floor(ANGLEPosition * scale)
+    TIntermUnary *flooredScaledPosition = new TIntermUnary(EOpFloor, scaledAnglePosition, nullptr);
+    // floor(ANGLEPosition * scale) / scale;
+    TIntermBinary *newPosition =
+        new TIntermBinary(EOpDiv, flooredScaledPosition, scaleRef->deepCopy());
+    TVariable *positionTemp          = CreateTempVariable(symbolTable, vec4Type);
+    TIntermSymbol *positionRef       = CreateTempSymbolNode(positionTemp);
+    TIntermDeclaration *positionDecl = CreateTempInitDeclarationNode(positionTemp, newPosition);
+
+
     // ANGLEPosition.xy / ANGLEPosition.w
-    TIntermSymbol *position     = new TIntermSymbol(anglePosition);
-    TIntermSwizzle *positionXY  = new TIntermSwizzle(position, swizzleOffsetXY);
+    TIntermSwizzle *positionXY  = new TIntermSwizzle(positionRef, swizzleOffsetXY);
     TVector<int> swizzleOffsetW = {3};
-    TIntermSwizzle *positionW   = new TIntermSwizzle(position->deepCopy(), swizzleOffsetW);
+    TIntermSwizzle *positionW   = new TIntermSwizzle(positionRef->deepCopy(), swizzleOffsetW);
     TIntermBinary *positionNDC  = new TIntermBinary(EOpDiv, positionXY, positionW);
+#else
+    // ANGLEPosition.xy / ANGLEPosition.w
+    TIntermSymbol *position            = new TIntermSymbol(anglePosition);
+    TIntermSwizzle *positionXY         = new TIntermSwizzle(position, swizzleOffsetXY);
+    TVector<int> swizzleOffsetW        = {3};
+    TIntermSwizzle *positionW          = new TIntermSwizzle(position->deepCopy(), swizzleOffsetW);
+    TIntermBinary *positionNDC         = new TIntermBinary(EOpDiv, positionXY, positionW);
+#endif
 
     // ANGLEPosition * 0.5
     TIntermConstantUnion *oneHalf = CreateFloatNode(0.5f);
@@ -632,8 +702,13 @@ ANGLE_NO_DISCARD bool AddLineSegmentRasterizationEmulation(TCompiler *compiler,
     TIntermSequence *mainSequence   = main->getBody()->getSequence();
     ASSERT(mainSequence);
 
+#if 0  // TIMTIM
+    std::array<TIntermNode *, 8> nodes = {
+        {scaleDecl, positionDecl, bDecl, baDecl, ba2Decl, bpDecl, ifStatement, GenerateEndIf()}};
+#else
     std::array<TIntermNode *, 6> nodes = {
         {bDecl, baDecl, ba2Decl, bpDecl, ifStatement, GenerateEndIf()}};
+#endif
     mainSequence->insert(mainSequence->begin(), nodes.begin(), nodes.end());
 
     // If the shader does not use frag coord, we should insert it inside the ifdef.
@@ -903,7 +978,7 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
     }
     else if (getShaderType() == GL_VERTEX_SHADER)
     {
-        AddANGLEPositionVarying(root, &getSymbolTable());
+        AddANGLEPositionVarying(root, &getSymbolTable(), driverUniforms);
 
         // Add a macro to declare transform feedback buffers.
         sink << "@@ XFB-DECL @@\n\n";
