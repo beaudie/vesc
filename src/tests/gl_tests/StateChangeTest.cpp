@@ -232,10 +232,6 @@ TEST_P(StateChangeTest, FramebufferIncompleteDepthAttachment)
 // Test that Framebuffer completeness caching works when stencil attachments change.
 TEST_P(StateChangeTest, FramebufferIncompleteStencilAttachment)
 {
-    // TODO(lucferron): Figure out why this fails on android and Intel/Windows and fix.
-    // http://anglebug.com/2655
-    ANGLE_SKIP_TEST_IF(IsVulkan() && (IsAndroid() || (IsIntel() && IsWindows())));
-
     glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
     glBindTexture(GL_TEXTURE_2D, mTextures[0]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
