@@ -287,7 +287,7 @@ class ContextVk : public ContextImpl, public vk::Context
 
         float halfRenderAreaHeight;
         float viewportYScale;
-        float invViewportYScale;
+        float negViewportYScale;
         float padding;
 
         // We'll use x, y, z for near / far / diff respectively.
