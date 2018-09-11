@@ -63,6 +63,8 @@
 // Flaky since we enabled depth/stencil backbuffer in all tests.
 2429 WIN NVIDIA : dEQP-EGL.functional.query_context.query_context.rgba8888_window = FAIL
 
+2811 WIN NVIDIA : dEQP.EGL/functional_swap_buffers_with_damage_* = FAIL
+
 // TODO(jmadill): Triage these into permananent and temporary failures.
 1340 WIN : dEQP-EGL.functional.query_config.get_configs.get_configs_bounds = FAIL
 1340 WIN : dEQP-EGL.functional.choose_config.simple.selection_only.buffer_size = FAIL
