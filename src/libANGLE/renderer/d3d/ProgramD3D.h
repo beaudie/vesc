@@ -82,9 +82,9 @@ struct D3DUniform : private angle::NonCopyable
     std::vector<GLint> mSamplerData;
 };
 
-struct D3DUniformBlock
+struct D3DInterfaceBlock
 {
-    D3DUniformBlock() { mShaderRegisterIndexes.fill(GL_INVALID_INDEX); }
+    D3DInterfaceBlock() { mShaderRegisterIndexes.fill(GL_INVALID_INDEX); }
 
     bool activeInShader(gl::ShaderType shaderType) const
     {
@@ -208,6 +208,9 @@ class ProgramD3D : public ProgramImpl
 
     void updateUniformBufferCache(const gl::Caps &caps,
                                   const gl::ShaderMap<unsigned int> &reservedShaderRegisterIndexes);
+
+    unsigned int getShaderStorageBufferRegisterIndex(GLuint blockIndex,
+                                                     gl::ShaderType shaderType) const;
     const std::vector<GLint> &getShaderUniformBufferCache(gl::ShaderType shaderType) const;
 
     void dirtyAllUniforms();
@@ -464,6 +467,7 @@ class ProgramD3D : public ProgramImpl
 
     void reset();
     void initializeUniformBlocks();
+    void initializeShaderStorageBlocks();
 
     void updateCachedInputLayoutFromShader();
     void updateCachedOutputLayoutFromShader();
@@ -517,6 +521,7 @@ class ProgramD3D : public ProgramImpl
     unsigned int mSerial;
 
     gl::ShaderMap<std::vector<int>> mShaderUBOCaches;
+    gl::ShaderMap<std::vector<int>> mShaderSSBOCaches;
     VertexExecutable::Signature mCachedVertexSignature;
     gl::InputLayout mCachedInputLayout;
     Optional<size_t> mCachedVertexExecutableIndex;
@@ -524,7 +529,8 @@ class ProgramD3D : public ProgramImpl
     std::vector<D3DVarying> mStreamOutVaryings;
     std::vector<D3DUniform *> mD3DUniforms;
     std::map<std::string, int> mImageBindingMap;
-    std::vector<D3DUniformBlock> mD3DUniformBlocks;
+    std::vector<D3DInterfaceBlock> mD3DUniformBlocks;
+    std::vector<D3DInterfaceBlock> mD3DShaderStorageBlocks;
 
     gl::ShaderBitSet mShaderUniformsDirty;
 
