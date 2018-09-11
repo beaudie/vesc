@@ -1,0 +1,215 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ee41aea_c1220e15",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-11T11:54:41Z",
+      "side": 1,
+      "message": "It looks like the handling of atomics and SSBO access would be the same. Maybe we could have a single pass that simplifies uses of both atomics and ssbos? There shouldn\u0027t be any difference apart from the detection.",
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "275d55cb_3d108ebe",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-11T11:54:41Z",
+      "side": 1,
+      "message": "instead of abusing the comma operator, would maybe we could separate the tempValue \u003d atomicAdd(counter, 1) statement like with case 1 and 3\n\nSame for array indexing",
+      "range": {
+        "startLine": 33,
+        "startChar": 3,
+        "endLine": 33,
+        "endChar": 78
+      },
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "deb27823_74968f3d",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-11T11:54:41Z",
+      "side": 1,
+      "message": "this should be false, false since we only do things on the PostVisit.",
+      "range": {
+        "startLine": 67,
+        "startChar": 23,
+        "endLine": 67,
+        "endChar": 33
+      },
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d0f9a1f_f65bdbdb",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-11T11:54:41Z",
+      "side": 1,
+      "message": "As mentioned above, can we avoid using the comma operator and use a temporary variable instead?",
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a71cfd87_065be14f",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-11T11:54:41Z",
+      "side": 1,
+      "message": "I\u0027m a bit worried about the caching of temporary node per type because it could break depending on how the operations are sequenced. If two atomics have the same type, then we could have the two atomic access done first then both values ued, which would give the wrong result.\n\nI don\u0027t think it would happen with the current code but it looks a bit fragile, and producing extra temporary variables should be fine. Can we remove caching?",
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ff9bb0f_bf388cb4",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-11T11:54:41Z",
+      "side": 1,
+      "message": "Can you comment as to why we need this condition?",
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57e02a14_7788b065",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-11T11:54:41Z",
+      "side": 1,
+      "message": "nit: the chromium style guide asks simple types don\u0027t use auto.",
+      "range": {
+        "startLine": 152,
+        "startChar": 4,
+        "endLine": 152,
+        "endChar": 8
+      },
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cc7afd2_d64e6a3d",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1628,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-11T11:54:41Z",
+      "side": 1,
+      "message": "FYI \"can work\" would be \"works\" in idiomatic english, same thing with \"with this change the test can pass\" being \"with this change the test passes\".",
+      "range": {
+        "startLine": 1628,
+        "startChar": 75,
+        "endLine": 1628,
+        "endChar": 83
+      },
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99e6a338_01cab95d",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1631,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-11T11:54:41Z",
+      "side": 1,
+      "message": "kCShader, kCSShader would mean kComputeShaderShader ^^ Same thing in other tests.",
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6be0e9e_6b357c15",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-11T11:54:41Z",
+      "side": 1,
+      "message": "Verify using atomic functions inside expressions as unsigned int.",
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "747f2c18_b380c652",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1734,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-11T11:54:41Z",
+      "side": 1,
+      "message": "Verify using nested atomic functions in expressions.",
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
