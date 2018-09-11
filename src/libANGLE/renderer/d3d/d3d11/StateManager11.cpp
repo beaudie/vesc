@@ -3449,6 +3449,67 @@ angle::Result StateManager11::syncUniformBuffersForShader(const gl::Context *con
     return angle::Result::Continue();
 }
 
+angle::Result StateManager11::syncShaderStorageBuffersForShader(const gl::Context *context,
+                                                                gl::ShaderType shaderType)
+{
+    const auto &shaderStorageBuffers = mProgramD3D->getShaderStorageBufferCache(shaderType);
+
+    for (size_t bufferIndex = 0; bufferIndex < shaderStorageBuffers.size(); ++bufferIndex)
+    {
+        const GLint binding = shaderStorageBuffers[bufferIndex];
+        if (binding == -1)
+        {
+            continue;
+        }
+
+        const auto &glState             = context->getGLState();
+        const auto &shaderStorageBuffer = glState.getIndexedShaderStorageBuffer(binding);
+        // TODO(jiajia.qin@intel.com): add offset support.
+        //  const GLintptr shaderStorageBufferOffset = shaderStorageBuffer.getOffset();
+        //  const GLsizeiptr shaderStorageBufferSize = shaderStorageBuffer.getSize();
+
+        if (shaderStorageBuffer.get() == nullptr)
+        {
+            continue;
+        }
+
+        Buffer11 *bufferStorage = GetImplAs<Buffer11>(shaderStorageBuffer.get());
+
+        d3d11::UnorderedAccessView *uavPtr = nullptr;
+        ANGLE_TRY(bufferStorage->getRawUAV(context, &uavPtr));
+
+        // We need to make sure that resource being set to UnorderedAccessView slot |resourceSlot|
+        // is not bound on SRV.
+        if (uavPtr && unsetConflictingView(uavPtr->get()))
+        {
+            mInternalDirtyBits.set(DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE);
+        }
+
+        const unsigned int appliedIndex = static_cast<unsigned int>(bufferIndex);
+        switch (shaderType)
+        {
+            case gl::ShaderType::Compute:
+            {
+                ID3D11UnorderedAccessView *uav = uavPtr->get();
+                auto deviceContext             = mRenderer->getDeviceContext();
+                deviceContext->CSSetUnorderedAccessViews(appliedIndex, 1, &uav, nullptr);
+                break;
+            }
+
+            case gl::ShaderType::Vertex:
+            case gl::ShaderType::Fragment:
+            case gl::ShaderType::Geometry:
+                UNIMPLEMENTED();
+                break;
+
+            default:
+                UNREACHABLE();
+        }
+    }
+
+    return angle::Result::Continue();
+}
+
 angle::Result StateManager11::syncUniformBuffers(const gl::Context *context)
 {
     gl::ShaderMap<unsigned int> shaderReservedUBOs = mRenderer->getReservedShaderUniformBuffers();
@@ -3479,7 +3540,14 @@ angle::Result StateManager11::syncAtomicCounterBuffers(const gl::Context *contex
 
 angle::Result StateManager11::syncShaderStorageBuffers(const gl::Context *context)
 {
-    // TODO(jie.a.chen@intel.com): http://anglebug.com/1951
+    gl::ShaderMap<unsigned int> shaderReservedSSBOs = {};
+    mProgramD3D->updateShaderStorageBufferCache(context->getCaps(), shaderReservedSSBOs);
+
+    if (mProgramD3D->hasShaderStage(gl::ShaderType::Compute))
+    {
+        ANGLE_TRY(syncShaderStorageBuffersForShader(context, gl::ShaderType::Compute));
+    }
+
     return angle::Result::Continue();
 }
 
