@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "c8215f29_5ccee989",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-11T15:14:33Z",
+      "side": 1,
+      "message": "Compiler-dependent init code. I tried it out six ways with Clang/const/static const/constexpr and got this:\n\nhttps://imgur.com/a/HaR1ZSZ\n\nI think we might have the static thread-safe init disabled. only local const produced extra code. But to be safe we should use constexpr when possible.",
+      "parentUuid": "fd983d31_31adf733",
+      "range": {
+        "startLine": 484,
+        "startChar": 16,
+        "endLine": 484,
+        "endChar": 22
+      },
+      "revId": "74469d4662030d6642aae7f38016988ac9374721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "71666de0_42f831fc",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 3
