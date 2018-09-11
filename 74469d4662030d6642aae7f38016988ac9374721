@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fd983d31_31adf733",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-09-11T02:49:26Z",
+      "side": 1,
+      "message": "What kind of hijinks are you worried about?",
+      "parentUuid": "89e12591_f29ac73e",
+      "range": {
+        "startLine": 484,
+        "startChar": 16,
+        "endLine": 484,
+        "endChar": 22
+      },
+      "revId": "74469d4662030d6642aae7f38016988ac9374721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "71666de0_42f831fc",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "b1ec8149_a6646ca1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-09-11T02:49:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71666de0_42f831fc",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 5
+      },
+      "revId": "74469d4662030d6642aae7f38016988ac9374721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9492d30a_7a8fe793",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "74469d4662030d6642aae7f38016988ac9374721",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82a6814b_9a6d04f6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-09-11T02:49:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9492d30a_7a8fe793",
+      "range": {
+        "startLine": 135,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 5
+      },
+      "revId": "74469d4662030d6642aae7f38016988ac9374721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
