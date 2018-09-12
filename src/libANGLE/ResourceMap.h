@@ -23,7 +23,16 @@ class ResourceMap final : angle::NonCopyable
     ResourceMap();
     ~ResourceMap();
 
-    ResourceType *query(GLuint handle) const;
+    ResourceType *query(GLuint handle) const
+    {
+        if (handle < mFlatResourcesSize)
+        {
+            ResourceType *value = mFlatResources[handle];
+            return (value == InvalidPointer() ? nullptr : value);
+        }
+        auto it = mHashedResources.find(handle);
+        return (it == mHashedResources.end() ? nullptr : it->second);
+    }
 
     // Returns true if the handle was reserved. Not necessarily if the resource is created.
     bool contains(GLuint handle) const;
@@ -84,7 +93,8 @@ class ResourceMap final : angle::NonCopyable
     // Experimental testing suggests that 16k is a reasonable upper limit.
     static constexpr size_t kFlatResourcesLimit = 0x4000;
 
-    std::vector<ResourceType *> mFlatResources;
+    size_t mFlatResourcesSize;
+    ResourceType **mFlatResources;
 
     // A map of GL objects indexed by object ID.
     HashMap mHashedResources;
@@ -92,8 +102,11 @@ class ResourceMap final : angle::NonCopyable
 
 template <typename ResourceType>
 ResourceMap<ResourceType>::ResourceMap()
-    : mFlatResources(kInitialFlatResourcesSize, InvalidPointer()), mHashedResources()
+    : mFlatResourcesSize(kInitialFlatResourcesSize),
+      mFlatResources(new ResourceType *[kInitialFlatResourcesSize]),
+      mHashedResources()
 {
+    memset(mFlatResources, kInvalidPointer, mFlatResourcesSize * sizeof(ResourceType *));
 }
 
 template <typename ResourceType>
@@ -103,21 +116,9 @@ ResourceMap<ResourceType>::~ResourceMap()
 }
 
 template <typename ResourceType>
-ResourceType *ResourceMap<ResourceType>::query(GLuint handle) const
-{
-    if (handle < mFlatResources.size())
-    {
-        auto value = mFlatResources[handle];
-        return (value == InvalidPointer() ? nullptr : value);
-    }
-    auto it = mHashedResources.find(handle);
-    return (it == mHashedResources.end() ? nullptr : it->second);
-}
-
-template <typename ResourceType>
 bool ResourceMap<ResourceType>::contains(GLuint handle) const
 {
-    if (handle < mFlatResources.size())
+    if (handle < mFlatResourcesSize)
     {
         return (mFlatResources[handle] != InvalidPointer());
     }
@@ -127,7 +128,7 @@ bool ResourceMap<ResourceType>::contains(GLuint handle) const
 template <typename ResourceType>
 bool ResourceMap<ResourceType>::erase(GLuint handle, ResourceType **resourceOut)
 {
-    if (handle < mFlatResources.size())
+    if (handle < mFlatResourcesSize)
     {
         auto &value = mFlatResources[handle];
         if (value == InvalidPointer())
@@ -155,17 +156,23 @@ void ResourceMap<ResourceType>::assign(GLuint handle, ResourceType *resource)
 {
     if (handle < kFlatResourcesLimit)
     {
-        if (handle >= mFlatResources.size())
+        if (handle >= mFlatResourcesSize)
         {
             // Use power-of-two.
-            size_t newSize = mFlatResources.size();
+            size_t newSize = mFlatResourcesSize;
             while (newSize <= handle)
             {
                 newSize *= 2;
             }
-            mFlatResources.resize(newSize, nullptr);
+
+            ResourceType **oldResources = mFlatResources;
+
+            mFlatResources = new ResourceType *[newSize];
+            memset(mFlatResources, kInvalidPointer, mFlatResourcesSize * sizeof(ResourceType *));
+            memcpy(mFlatResources, oldResources, mFlatResourcesSize * sizeof(ResourceType *));
+            mFlatResourcesSize = newSize;
         }
-        ASSERT(mFlatResources.size() > handle);
+        ASSERT(mFlatResourcesSize > handle);
         mFlatResources[handle] = resource;
     }
     else
@@ -183,13 +190,13 @@ typename ResourceMap<ResourceType>::Iterator ResourceMap<ResourceType>::begin() 
 template <typename ResourceType>
 typename ResourceMap<ResourceType>::Iterator ResourceMap<ResourceType>::end() const
 {
-    return Iterator(*this, static_cast<GLuint>(mFlatResources.size()), mHashedResources.end());
+    return Iterator(*this, static_cast<GLuint>(mFlatResourcesSize), mHashedResources.end());
 }
 
 template <typename ResourceType>
 typename ResourceMap<ResourceType>::Iterator ResourceMap<ResourceType>::find(GLuint handle) const
 {
-    if (handle < mFlatResources.size())
+    if (handle < mFlatResourcesSize)
     {
         return (mFlatResources[handle] != InvalidPointer()
                     ? Iterator(handle, mHashedResources.begin())
@@ -210,21 +217,21 @@ bool ResourceMap<ResourceType>::empty() const
 template <typename ResourceType>
 void ResourceMap<ResourceType>::clear()
 {
-    mFlatResources.assign(kInitialFlatResourcesSize, InvalidPointer());
+    memset(mFlatResources, kInvalidPointer, kInitialFlatResourcesSize * sizeof(ResourceType *));
     mHashedResources.clear();
 }
 
 template <typename ResourceType>
 GLuint ResourceMap<ResourceType>::nextNonNullResource(size_t flatIndex) const
 {
-    for (size_t index = flatIndex; index < mFlatResources.size(); index++)
+    for (size_t index = flatIndex; index < mFlatResourcesSize; index++)
     {
         if (mFlatResources[index] != nullptr && mFlatResources[index] != InvalidPointer())
         {
             return static_cast<GLuint>(index);
         }
     }
-    return static_cast<GLuint>(mFlatResources.size());
+    return static_cast<GLuint>(mFlatResourcesSize);
 }
 
 template <typename ResourceType>
@@ -259,7 +266,7 @@ bool ResourceMap<ResourceType>::Iterator::operator!=(const Iterator &other) cons
 template <typename ResourceType>
 typename ResourceMap<ResourceType>::Iterator &ResourceMap<ResourceType>::Iterator::operator++()
 {
-    if (mFlatIndex < static_cast<GLuint>(mOrigin.mFlatResources.size()))
+    if (mFlatIndex < static_cast<GLuint>(mOrigin.mFlatResourcesSize))
     {
         mFlatIndex = mOrigin.nextNonNullResource(mFlatIndex + 1);
     }
@@ -288,7 +295,7 @@ const typename ResourceMap<ResourceType>::IndexAndResource
 template <typename ResourceType>
 void ResourceMap<ResourceType>::Iterator::updateValue()
 {
-    if (mFlatIndex < static_cast<GLuint>(mOrigin.mFlatResources.size()))
+    if (mFlatIndex < static_cast<GLuint>(mOrigin.mFlatResourcesSize))
     {
         mValue.first  = mFlatIndex;
         mValue.second = mOrigin.mFlatResources[mFlatIndex];
