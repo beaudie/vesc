@@ -16,6 +16,24 @@
       "revId": "1dce20491ea2dded58e392899eae68e800211ff2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "603d0bc5_8aace222",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-09-12T19:45:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3504c085_bf602f51",
+      "revId": "1dce20491ea2dded58e392899eae68e800211ff2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
