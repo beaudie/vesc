@@ -918,6 +918,7 @@ ANGLE_EXPORT bool ANGLEUseForApplication(const char *appName,
         return rules->getAnswer(scenario);
     }
     delete rules;
+    return true;
 }
 
 }  // extern "C"
