@@ -16,6 +16,24 @@
       "revId": "2a33b4df3bde9627e8dbc0a414e1ff1bfc17ff7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0249f78f_1d086fde",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3522,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-12T07:34:12Z",
+      "side": 1,
+      "message": "No. The resolve operation is done on a framebuffer, and so far only single layers of a MS array can be attached to a framebuffer. We can keep this as is as long as we don\u0027t add some kind of a multiview resolve.",
+      "parentUuid": "f150b914_9f562899",
+      "revId": "2a33b4df3bde9627e8dbc0a414e1ff1bfc17ff7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
