@@ -90,7 +90,7 @@ class FramebufferMultiviewSideBySideClearTest : public FramebufferMultiviewTest
             glGenTextures(1, &mDepthTex);
         }
 
-        CreateMultiviewBackingTextures(GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE, 2, 2, 2,
+        CreateMultiviewBackingTextures(GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE, 0, 2, 2, 2,
                                        mColorTex, mDepthTex, mDepthStencilTex);
 
         glGenFramebuffers(1, &mMultiviewFBO);
@@ -232,7 +232,7 @@ class FramebufferMultiviewLayeredClearTest : public FramebufferMultiviewTest
             glGenTextures(1, &mDepthTex);
         }
 
-        CreateMultiviewBackingTextures(GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE, width, height,
+        CreateMultiviewBackingTextures(GL_FRAMEBUFFER_MULTIVIEW_LAYERED_ANGLE, 0, width, height,
                                        numLayers, mColorTex, mDepthTex, mDepthStencilTex);
 
         glGenFramebuffers(1, &mMultiviewFBO);
