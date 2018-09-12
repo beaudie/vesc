@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f150b914_9f562899",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3522,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-12T07:28:58Z",
+      "side": 1,
+      "message": "Should arraySize be set to something else for 2DMSARRAY?",
+      "revId": "2a33b4df3bde9627e8dbc0a414e1ff1bfc17ff7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
