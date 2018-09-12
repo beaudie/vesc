@@ -104,6 +104,9 @@ class FramebufferVk : public FramebufferImpl, public vk::CommandGraphResource
     gl::DrawBufferMask getEmulatedAlphaAttachmentMask();
     RenderTargetVk *getColorReadRenderTarget() const;
 
+    angle::Result getOutsideRenderPassCommandBuffer(ContextVk *contextVk,
+                                                    vk::CommandBuffer **commandBufferOut);
+
     // This will clear the current write operation if it is complete.
     using CommandGraphResource::appendToStartedRenderPass;
 

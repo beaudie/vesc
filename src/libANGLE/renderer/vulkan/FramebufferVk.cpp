@@ -1066,6 +1066,13 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
     return angle::Result::Continue();
 }
 
+angle::Result FramebufferVk::getOutsideRenderPassCommandBuffer(ContextVk *contextVk,
+                                                               vk::CommandBuffer **commandBufferOut)
+{
+    ANGLE_TRY(beginWriteResource(contextVk, commandBufferOut));
+    return angle::Result::Continue();
+}
+
 gl::Error FramebufferVk::getSamplePosition(const gl::Context *context,
                                            size_t index,
                                            GLfloat *xy) const

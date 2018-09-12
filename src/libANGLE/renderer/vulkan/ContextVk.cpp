@@ -1118,7 +1118,28 @@ angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
         0.0f,
         {depthRangeNear, depthRangeFar, depthRangeDiff, 0.0f}};
 
+    // TODO: If the memory type we have is HOST_COHERENT we can skip this flush and barrier
     ANGLE_TRY(mDriverUniformsBuffer.flush(this));
+    // Insert a barrier to ensure reads from the buffer are complete.
+    VkBufferMemoryBarrier bufferBarrier;
+    bufferBarrier.sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+    bufferBarrier.pNext               = nullptr;
+    bufferBarrier.srcAccessMask       = VK_ACCESS_HOST_WRITE_BIT;
+    bufferBarrier.dstAccessMask       = VK_ACCESS_UNIFORM_READ_BIT;
+    bufferBarrier.srcQueueFamilyIndex = 0;
+    bufferBarrier.dstQueueFamilyIndex = 0;
+    bufferBarrier.buffer              = buffer;
+    bufferBarrier.offset              = offset;
+    // TODO: I think we want to get actual size of dynamic allocated buffer
+    bufferBarrier.size = static_cast<VkDeviceSize>(sizeof(DriverUniforms));
+
+    vk::CommandBuffer *outsideRPCommandBuffer = nullptr;
+    ANGLE_TRY(mDrawFramebuffer->getOutsideRenderPassCommandBuffer(this, &outsideRPCommandBuffer));
+    // TODO: Hack, Create CBBeginInfo
+    // outsideRPCommandBuffer->begin(this, )
+    outsideRPCommandBuffer->singleBufferBarrier(
+        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, bufferBarrier);
+    // TODO: Hack, end CB
 
     // Get the descriptor set layout.
     if (!mDriverUniformsSetLayout.valid())
