@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "daecfdbe_ad8f783a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7978,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-09-12T20:54:41Z",
+      "side": 1,
+      "message": "I think this list would look better with // comments on the right hand side, but suit yourself.",
+      "revId": "3e1c1a195fc8f5dc4a182d48ae6f63246a6c0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eeb03454_8c1798e6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7999,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-09-12T20:54:41Z",
+      "side": 1,
+      "message": "same",
+      "revId": "3e1c1a195fc8f5dc4a182d48ae6f63246a6c0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
