@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "41b407c6_cdd47a54",
+        "filename": "extensions/ANGLE_multiview_multisample.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-13T14:09:11Z",
+      "side": 1,
+      "message": "There\u0027s just one consideration why that might not be a good idea: If we\u0027d ever want to implement parts of ANGLE_multiview on top of native OVR_multiview(2), that implementation might not necessarily support multiview rendering to 2DMSArray textures even if they are otherwise available.\n\nBut I\u0027m not too opposed to this change if you still think it\u0027s a good idea.",
+      "parentUuid": "cd7bb74c_749f6a08",
+      "revId": "55fad9ca3ff3d3d8c1e8278908c5705adeef4330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c7b50721_034c6698",
         "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
         "patchSetId": 3
