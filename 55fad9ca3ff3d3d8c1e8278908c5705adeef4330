@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "fce258bb_ef95b2f1",
+        "filename": "extensions/ANGLE_multiview_multisample.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-13T15:03:03Z",
+      "side": 1,
+      "message": "I think it can wait, there\u0027s not that much urgency here. I\u0027d like to get started with integrating multiview to WebXR in Chromium but I can begin with the non-multisampled variant.",
+      "parentUuid": "3b1a0eb5_1b3a2f5a",
+      "revId": "55fad9ca3ff3d3d8c1e8278908c5705adeef4330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c7b50721_034c6698",
         "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
         "patchSetId": 3
