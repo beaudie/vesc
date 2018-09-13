@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8041abd9_4d63c84e",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-13T20:56:05Z",
+      "side": 1,
+      "message": "tiny nit but just mentioning so you know in the future: you can use full http://anglebug.com/2644 urls here.",
+      "revId": "e39ed6ad3a1ea196c28bcdd4d17eb1643509758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a33191e5_2b948393",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-13T20:56:05Z",
+      "side": 1,
+      "message": "nit: jmadill :)",
+      "range": {
+        "startLine": 127,
+        "startChar": 12,
+        "endLine": 127,
+        "endChar": 20
+      },
+      "revId": "e39ed6ad3a1ea196c28bcdd4d17eb1643509758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "825c8269_d5417956",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-13T20:56:05Z",
+      "side": 1,
+      "message": "nit: jmadill :)",
+      "range": {
+        "startLine": 145,
+        "startChar": 13,
+        "endLine": 145,
+        "endChar": 14
+      },
+      "revId": "e39ed6ad3a1ea196c28bcdd4d17eb1643509758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e418a40d_a11a950f",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-13T20:56:05Z",
+      "side": 1,
+      "message": "nit: git cl format will wrap this line",
+      "range": {
+        "startLine": 488,
+        "startChar": 104,
+        "endLine": 488,
+        "endChar": 105
+      },
+      "revId": "e39ed6ad3a1ea196c28bcdd4d17eb1643509758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
