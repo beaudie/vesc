@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "03ec2f7d_b350aa3b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-13T14:09:15Z",
+      "side": 1,
+      "message": "went back and changed it all to comments on the right. looks better as you suggested.",
+      "parentUuid": "b863304c_c062f073",
+      "revId": "3e1c1a195fc8f5dc4a182d48ae6f63246a6c0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "daecfdbe_ad8f783a",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 6
