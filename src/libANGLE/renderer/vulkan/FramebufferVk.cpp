@@ -211,8 +211,10 @@ gl::Error FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
     }
 
     // If we clear the depth OR the stencil but not both, and we have a packed depth stencil
-    // attachment, we need to use clearAttachment instead of clearDepthStencil since Vulkan won't
+    // attachment, we need to use clearAttachments instead of clearDepthStencil since Vulkan won't
     // allow us to clear one or the other separately.
+    // Note: this might be bugged if we emulate single depth or stencil with a packed format.
+    // TODO(jmadill): Investigate emulated packed formats. http://anglebug.com/2815
     bool isSingleClearOnPackedDepthStencilAttachment =
         depthStencilAttachment && (clearDepth != clearStencil);
     if (glState.isScissorTestEnabled() || isSingleClearOnPackedDepthStencilAttachment)
