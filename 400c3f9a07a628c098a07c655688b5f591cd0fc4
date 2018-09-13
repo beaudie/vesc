@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7455f143_3ab57307",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-13T18:01:37Z",
+      "side": 1,
+      "message": "Under which platform and configuration? std::vector being a template, its `size()` should be implemented in the header, and trivially inline-able by the compiler. I find it hard to believe this would be an optimization.\n\nAs a side note, I\u0027ve been meaning to ask this, what do you use for profiling?",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64a519c4_04ee4431",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-13T18:01:37Z",
+      "side": 1,
+      "message": "Why the move?",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64d72186_01245ef6",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-13T18:01:37Z",
+      "side": 1,
+      "message": "Avoid re-specifying the type by doing `size * sizeof *array` instead of `size * sizeof(type)`. That is more robust (in general) when the type of array changes.",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e4122a8_9ee95cb6",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-13T18:01:37Z",
+      "side": 1,
+      "message": "Same comment about using `sizeof *array` (you don\u0027t need to deal with the type, it can be inferred from the variable)",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b7d1e8f_cae5f1d5",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-13T18:01:37Z",
+      "side": 1,
+      "message": "Some dubious stuff happening here. Why are you filling up `oldSizeInBytes` instead of `newSizeInBytes - oldSizeInBytes`?",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34bb918f_33adcdd8",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-13T18:01:37Z",
+      "side": 1,
+      "message": "Same comment",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92a6e179_17b5f499",
+        "filename": "src/libANGLE/ResourceMap_unittest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-13T18:01:37Z",
+      "side": 1,
+      "message": "Please add a few negative api tests too. For example if `kInvalidPointer` changes, then the `memset` calls may end up doing the wrong thing and that would be left uncaught in these tests.",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
