@@ -22,6 +22,30 @@
       "revId": "3e1c1a195fc8f5dc4a182d48ae6f63246a6c0ec1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ea1001e_a2a9da3a",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2860,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-13T14:09:20Z",
+      "side": 0,
+      "message": "The code duplication IMO was worth the speed improvement from inlining.",
+      "parentUuid": "a3829dbb_83c180c7",
+      "range": {
+        "startLine": 2860,
+        "startChar": 9,
+        "endLine": 2860,
+        "endChar": 25
+      },
+      "revId": "3e1c1a195fc8f5dc4a182d48ae6f63246a6c0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

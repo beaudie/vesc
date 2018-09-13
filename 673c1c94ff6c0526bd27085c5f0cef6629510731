@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "e684ba70_b0caffa9",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2818,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-13T14:09:20Z",
+      "side": 1,
+      "message": "Yeah, there are fast checks which prevent the slow checks from being executed. In a sense that\u0027s being in a different order.",
+      "parentUuid": "29698048_164f525c",
+      "revId": "673c1c94ff6c0526bd27085c5f0cef6629510731",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2da1e283_e2d6bc4d",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 7
@@ -90,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "b45717bb_6bfb7e08",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2916,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-13T14:09:20Z",
+      "side": 1,
+      "message": "Good suggestion Yuly, done. As Yuly said inlining gives a surprisingly big speed boost. Just calling a function that needs to load and unload the stack can cost as much as 4% of the run time.",
+      "parentUuid": "d631c381_0c7ab063",
+      "revId": "673c1c94ff6c0526bd27085c5f0cef6629510731",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1630e76c_6606c2e7",
         "filename": "src/libANGLE/validationES2.h",
         "patchSetId": 7
@@ -104,6 +140,24 @@
       "revId": "673c1c94ff6c0526bd27085c5f0cef6629510731",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ec94ffd_0f19348b",
+        "filename": "src/libANGLE/validationES2.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-13T14:09:20Z",
+      "side": 1,
+      "message": "Yeah I\u0027ve thought about some kind of static polymorphism approach. Any way you code it up it would mean a totally different libGLESv2 / libEGL / libGLES1 for each renderer. I think we might want to do this down the line when we run out of easier things to optimize. Good thought.",
+      "parentUuid": "1630e76c_6606c2e7",
+      "revId": "673c1c94ff6c0526bd27085c5f0cef6629510731",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
