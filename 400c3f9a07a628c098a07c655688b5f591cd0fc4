@@ -104,6 +104,29 @@
     },
     {
       "key": {
+        "uuid": "528568d3_89b5edc9",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-09-13T20:43:57Z",
+      "side": 1,
+      "message": "I\u0027m not sure if the potential reduction in size is intentional here.\nThere is a tradeoff in performance, if you do want to reduce the size, then you save a bit in initialization, but you\u0027ll need to do more work if the size grows in the future.\nMaybe you need 2 sizes - one for size of the array and the other for the size of the portion you are currently using.\n\nIs there a significant gain in not using vector? I have encountered a lot of places telling that it is not a good idea to try to implement std containers on your own. Maybe you can actually gain performance by not implementing \"grow array by power-of-two\" algorithm, but using built-in vector growing capability.",
+      "range": {
+        "startLine": 224,
+        "startChar": 25,
+        "endLine": 224,
+        "endChar": 50
+      },
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "92a6e179_17b5f499",
         "filename": "src/libANGLE/ResourceMap_unittest.cpp",
         "patchSetId": 12
