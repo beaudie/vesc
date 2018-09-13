@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd7bb74c_749f6a08",
+        "filename": "extensions/ANGLE_multiview_multisample.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-13T13:59:57Z",
+      "side": 1,
+      "message": "Would it make sense to change the ANGLE_multiview extension instead to have conditional text depending on whether 2DMSArray textures are available?",
+      "revId": "55fad9ca3ff3d3d8c1e8278908c5705adeef4330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7b50721_034c6698",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1566,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-13T13:59:57Z",
+      "side": 1,
+      "message": "This shows it would work with conditional text.",
+      "revId": "55fad9ca3ff3d3d8c1e8278908c5705adeef4330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
