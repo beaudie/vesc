@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c21d9d4f_be2c2775",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1414,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-09-13T22:27:23Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 1414,
+        "startChar": 39,
+        "endLine": 1414,
+        "endChar": 40
+      },
+      "revId": "74c17af03fcdce4b04d8fdd1a7d9eb458ad3a00f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
