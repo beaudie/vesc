@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee620072_3fa78060",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-13T17:29:10Z",
+      "side": 1,
+      "message": "I don\u0027t get these changes if I run `git cl format` locally, how were they produced?\n\nAlso, why is gerrit showing this chunk like this?!",
+      "revId": "b274c76e3de5014910a55b08d08374a98d40da79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
