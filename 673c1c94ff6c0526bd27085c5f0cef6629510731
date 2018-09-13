@@ -158,6 +158,24 @@
       "revId": "673c1c94ff6c0526bd27085c5f0cef6629510731",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fd2e476_a1b4be8d",
+        "filename": "src/libANGLE/validationES2.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-13T14:31:31Z",
+      "side": 1,
+      "message": "Having different versions of the same lib would be an idea (which comes with some headache as well), but I was mostly thinking of doing this for platforms where only one backend exists.\n\nBut yes, those are thoughts for another time.",
+      "parentUuid": "3ec94ffd_0f19348b",
+      "revId": "673c1c94ff6c0526bd27085c5f0cef6629510731",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
