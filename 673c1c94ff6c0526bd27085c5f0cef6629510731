@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5d72339_113a2f6c",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2818,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-13T00:25:52Z",
+      "side": 1,
+      "message": "Are the optimizations in this file simply that the checks are done in a different order?",
+      "revId": "673c1c94ff6c0526bd27085c5f0cef6629510731",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2da1e283_e2d6bc4d",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2916,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-13T00:25:52Z",
+      "side": 1,
+      "message": "ValidateDrawAttribs is essentially:\n\n- if (FastValidateDrawAttribs()) return true\n- return otherValidation()\n\nThat said, I don\u0027t see how this is an optimization. If FastValidateDrawAttribs() returns true, so does ValidateDrawAttribs, and it does it just as fast. If that fails (the uncommon case), you are doing that call twice. If you undo this chunk, I expect you wouldn\u0027t see any performance difference.",
+      "revId": "673c1c94ff6c0526bd27085c5f0cef6629510731",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1630e76c_6606c2e7",
+        "filename": "src/libANGLE/validationES2.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-13T00:25:52Z",
+      "side": 1,
+      "message": "Speaking of, there are a lot of core member functions that could be inlined, optimizing them may be more interesting.\n\nOn a similar subject, if we have only one backend in a platform, another optimization would be to devirtualize the *Impl classes (that is if the compiler won\u0027t do it if we enable lto)",
+      "revId": "673c1c94ff6c0526bd27085c5f0cef6629510731",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
