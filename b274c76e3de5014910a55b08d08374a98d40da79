@@ -16,6 +16,24 @@
       "revId": "b274c76e3de5014910a55b08d08374a98d40da79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a30fed5f_fb82f986",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-13T17:33:17Z",
+      "side": 1,
+      "message": "I guess Gerrit didn\u0027t understand the indentation changes in some parts.\n\ngit cl format will by default only format the files you modify. In fact it will only format your diff. If you run git cl format --full it will format the full contents of all files you modify. This was the output from a git cl format --full run of this stack of patches. There\u0027s certainly some more dirty code in ANGLE probably leftover from when we didn\u0027t have git cl format. Or that slipped in when we didn\u0027t notice. We have http://anglebug.com/2626 open to add a pre-submit check if you\u0027re interested in improving this.",
+      "parentUuid": "ee620072_3fa78060",
+      "revId": "b274c76e3de5014910a55b08d08374a98d40da79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
