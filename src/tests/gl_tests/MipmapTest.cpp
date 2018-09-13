@@ -767,10 +767,6 @@ TEST_P(MipmapTest, MipMapGenerationD3D9Bug)
 // works as expected. It tests enabling/disabling mipmaps, generating mipmaps, and rendering to level zero.
 TEST_P(MipmapTest, TextureCubeGeneralLevelZero)
 {
-    // This test seems to fail only on Android Vulkan.
-    // TODO(jmadill): Diagnose and fix. http://anglebug.com/2470
-    ANGLE_SKIP_TEST_IF(IsVulkan() && IsAndroid());
-
     glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureCube);
 
     // Draw. Since the negative-Y face's is blue, this should be blue.
