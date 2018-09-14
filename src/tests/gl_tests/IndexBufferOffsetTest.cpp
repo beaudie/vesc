@@ -94,7 +94,7 @@ class IndexBufferOffsetTest : public ANGLETest
         for (int i = 0; i < 16; i++)
         {
             glDrawElements(GL_TRIANGLES, 6, type, reinterpret_cast<void *>(indexDataWidth));
-            EXPECT_PIXEL_EQ(64, 64, 255, 0, 0, 255);
+            EXPECT_PIXEL_EQ(64, 64, 25, 0, 0, 255);
         }
 
         glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indexDataWidth, indexDataWidth, nullIndexData);
@@ -118,10 +118,6 @@ class IndexBufferOffsetTest : public ANGLETest
 // Test using an offset for an UInt8 index buffer
 TEST_P(IndexBufferOffsetTest, UInt8Index)
 {
-    // TODO(lucferron): Add support for unsigned byte elements array buffers
-    // http://anglebug.com/2659
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     GLubyte indexData[] = {0, 1, 2, 1, 2, 3};
     runTest(GL_UNSIGNED_BYTE, 1, indexData);
 }
