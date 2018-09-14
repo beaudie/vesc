@@ -310,11 +310,6 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
 
     VertexAttribute &attrib = mState.mVertexAttributes[attribIndex];
 
-    if (mState.mEnabledAttributesMask.test(attribIndex) == enabledState)
-    {
-        return;
-    }
-
     attrib.enabled = enabledState;
 
     setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_ENABLED);

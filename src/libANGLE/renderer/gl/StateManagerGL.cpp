@@ -2253,12 +2253,6 @@ void StateManagerGL::propagateProgramToVAO(const gl::Program *program, VertexArr
         }
         vao->applyNumViewsToDivisor(programNumViews);
     }
-
-    // Attribute enabled mask:
-    if (program)
-    {
-        vao->applyActiveAttribLocationsMask(program->getActiveAttribLocationsMask());
-    }
 }
 
 void StateManagerGL::updateMultiviewBaseViewLayerIndexUniform(
