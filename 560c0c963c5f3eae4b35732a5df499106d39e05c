@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb47bba4_0a465945",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-14T20:39:43Z",
+      "side": 1,
+      "message": "Wait you missed something here. It\u0027s not `sizeof(array)`, but `sizeof(*array)` (which also answers your comment regarding it not working for std::array, which it does)",
+      "revId": "560c0c963c5f3eae4b35732a5df499106d39e05c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3203e05c_aafbc48d",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-14T20:39:43Z",
+      "side": 1,
+      "message": "Again, `sizeof(*mFlagResources)`, otherwise you are just getting the size of a pointer (which coincidentally works here because mFlatResources is a **).",
+      "revId": "560c0c963c5f3eae4b35732a5df499106d39e05c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33b2f277_03b65cc7",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-14T20:39:43Z",
+      "side": 1,
+      "message": "Same",
+      "revId": "560c0c963c5f3eae4b35732a5df499106d39e05c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

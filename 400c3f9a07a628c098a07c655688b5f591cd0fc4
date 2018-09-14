@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "dec48cbd_e02ba157",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-14T20:39:43Z",
+      "side": 1,
+      "message": "Ok I\u0027m honestly surprised that\u0027s the case. I can see the same on Linux, too:\n\n      struct _Vector_impl\n      : public _Tp_alloc_type\n      {\n\tpointer _M_start;\n\tpointer _M_finish;\n\tpointer _M_end_of_storage;\n\nI guess that is faster for C++y iteratory algorithms...",
+      "parentUuid": "ebfcd448_2559b670",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "64a519c4_04ee4431",
         "filename": "src/libANGLE/ResourceMap.h",
         "patchSetId": 12
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "This was interesting. See again my analysis at https://imgur.com/a/aToKE1c . Compilers seem reluctant to inline functions without the \"forceinline\" syntax. Inlining in the class seems to to the trick for MSVC, but for Clang, it\u0027s forceinline or bust sometimes.\n\nInlining this in Clang with ANGLE_INLINE (converts to forceinline) gave an 8% perf improvement on the bind test.",
       "parentUuid": "64a519c4_04ee4431",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22ba528b_7a833f26",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-14T20:39:43Z",
+      "side": 1,
+      "message": "Ok. Will you be adding ANGLE_INLINE then?",
+      "parentUuid": "8606b715_d25c12fb",
       "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -171,6 +207,24 @@
       "side": 1,
       "message": "I changed this to \"halfNewSizeInBytes\" to make it clear. oldSizeInBytes \u003d\u003d newSizeInBytes / 2.",
       "parentUuid": "8b7d1e8f_cae5f1d5",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b0e2119b_55facc50",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-14T20:39:43Z",
+      "side": 1,
+      "message": "If there is an external condition that guarantees that, it\u0027s definitely not clear from the implementation here. Imagine this:\n\nmFlagResourceSize \u003d 4\nhandle \u003d 27\n\nThe while loop above makes newSize grow as much as 32. The safest thing you can do IMO is `newSizeInBytes - oldSizeInBytes` which is quite clear (you copy `old` and you clear `new-old` for a total of `new`)",
+      "parentUuid": "b823c21e_de85b9a4",
       "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -288,6 +342,24 @@
       "side": 1,
       "message": "Sorry I don\u0027t quite understand what you want. Can you clarify? I don\u0027t know if negative tests make sense for a class that has no validation of any kind.",
       "parentUuid": "92a6e179_17b5f499",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "650685ae_73d09101",
+        "filename": "src/libANGLE/ResourceMap_unittest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-14T20:39:43Z",
+      "side": 1,
+      "message": "I was talking about querying indices that are not set and expecting to get `nullptr` (tests init, erase and clear).",
+      "parentUuid": "07e00627_d950d978",
       "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
