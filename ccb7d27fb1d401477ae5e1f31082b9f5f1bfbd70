@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6ba3595_7429511b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-14T20:52:45Z",
+      "side": 1,
+      "message": "I just noticed that `finish` does a `vkQueueWaitIdle`. That\u0027s pretty overkill and must be optimized at some point. Please try to figure out if all you need is the command buffer to be submitted or not. If not, when we remove that call the issue is going to come back.",
+      "revId": "ccb7d27fb1d401477ae5e1f31082b9f5f1bfbd70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
