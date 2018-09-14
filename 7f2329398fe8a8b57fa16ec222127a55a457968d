@@ -68,6 +68,23 @@
       "revId": "7f2329398fe8a8b57fa16ec222127a55a457968d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e853f54a_eb47e4ae",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2260,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-14T17:02:41Z",
+      "side": 0,
+      "message": "I need to verify in more depth, but I think the bug that would be introduced by removing this is that if you have the same attributes enabled, but change the program in such a way that the active attributes change, the enabled-state of the attributes don\u0027t get updated, so you will end up with an inactive-but-enabled attribute which causes crash on some driver (http://anglebug.com/2138).\n\nSomething like this:\n\nglProgram(program_that_uses_attrib_0_and_1);\nglEnableVertexAttribArray(0);\nglEnableVertexAttribArray(1);\n\nglDraw();\n\nglProgram(program_that_uses_attrib_0);\nglDraw(); // ***\n\nAt step ***, vertex attribute 1 is left enabled (because only the program is changed), even though it\u0027s not active in the program.",
+      "revId": "7f2329398fe8a8b57fa16ec222127a55a457968d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
