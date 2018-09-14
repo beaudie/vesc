@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ebfcd448_2559b670",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-14T04:07:04Z",
+      "side": 1,
+      "message": "At the risk going super deep on this, see my breakdown at https://imgur.com/a/aToKE1c\n\nOriginally this idea was given to me by Markus Tavenrath from NVIDIA who is a real master of micro-optimization. What he said:\n\n\"One other thing I\u0027ve noticed that the std::vector::size() is called quite frequently to determine if an object is in the \u0027fast\u0027 container. Unfortunately some std::vector implementations store begin() and end() instead of begin() and size() so that each size() call results in the instructions below... Luckily the std::vector for the ResourceMaps holds a power of two datatype so that there is no expensive div in the assembly.\"\n\nI use both Intel VTune and the MSVC profiler. VTune has a very good line-by-line dissassembly view. The MSVC profiler has a good UI for walking through the stack of calls. Probably on Linux you\u0027d be limited to VTune and SimplePerf or some similar program. Other folks on Windows also use WPF/Xperf which I think has some other advantages.",
+      "parentUuid": "7455f143_3ab57307",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "64a519c4_04ee4431",
         "filename": "src/libANGLE/ResourceMap.h",
         "patchSetId": 12
@@ -30,6 +48,24 @@
       "writtenOn": "2018-09-13T18:01:37Z",
       "side": 1,
       "message": "Why the move?",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8606b715_d25c12fb",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-14T04:07:04Z",
+      "side": 1,
+      "message": "This was interesting. See again my analysis at https://imgur.com/a/aToKE1c . Compilers seem reluctant to inline functions without the \"forceinline\" syntax. Inlining in the class seems to to the trick for MSVC, but for Clang, it\u0027s forceinline or bust sometimes.\n\nInlining this in Clang with ANGLE_INLINE (converts to forceinline) gave an 8% perf improvement on the bind test.",
+      "parentUuid": "64a519c4_04ee4431",
       "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "999e09a5_a016651e",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-14T04:07:04Z",
+      "side": 1,
+      "message": "Not entirely. If mFlatResources changes to a std::array or other container you\u0027re getting a different result. But Done.",
+      "parentUuid": "64d72186_01245ef6",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e4122a8_9ee95cb6",
         "filename": "src/libANGLE/ResourceMap.h",
         "patchSetId": 12
@@ -67,6 +121,24 @@
       "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03c19dc4_cda2399c",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-14T04:07:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e4122a8_9ee95cb6",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "b823c21e_de85b9a4",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-14T04:07:04Z",
+      "side": 1,
+      "message": "I changed this to \"halfNewSizeInBytes\" to make it clear. oldSizeInBytes \u003d\u003d newSizeInBytes / 2.",
+      "parentUuid": "8b7d1e8f_cae5f1d5",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "34bb918f_33adcdd8",
         "filename": "src/libANGLE/ResourceMap.h",
         "patchSetId": 12
@@ -101,6 +191,24 @@
       "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "318f0ae2_0f33265d",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-14T04:07:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34bb918f_33adcdd8",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -127,6 +235,30 @@
     },
     {
       "key": {
+        "uuid": "527bee07_9bdbaf97",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-14T04:07:04Z",
+      "side": 1,
+      "message": "Regarding first question: this keeps the same behaviour as mFlatResources.assign. In any case this is only used in Context teardown as far as I know so it\u0027s not a performance issue.\n\nRegarding the second question: see my analysis again at https://imgur.com/a/aToKE1c . Generally I think it\u0027s good advice to avoid rolling your own classes. But in specific cases like micro-optimization where you need to squeeze out the most of every instruction then there\u0027s an exception to that rule.",
+      "parentUuid": "528568d3_89b5edc9",
+      "range": {
+        "startLine": 224,
+        "startChar": 25,
+        "endLine": 224,
+        "endChar": 50
+      },
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "92a6e179_17b5f499",
         "filename": "src/libANGLE/ResourceMap_unittest.cpp",
         "patchSetId": 12
@@ -141,6 +273,24 @@
       "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07e00627_d950d978",
+        "filename": "src/libANGLE/ResourceMap_unittest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-14T04:07:04Z",
+      "side": 1,
+      "message": "Sorry I don\u0027t quite understand what you want. Can you clarify? I don\u0027t know if negative tests make sense for a class that has no validation of any kind.",
+      "parentUuid": "92a6e179_17b5f499",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
