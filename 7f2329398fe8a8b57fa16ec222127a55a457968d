@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d8b77fc9_7a6e41c5",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-09-14T10:34:07Z",
+      "side": 0,
+      "message": "If I don\u0027t remove this checking, WebglConformance_conformance_extensions_angle_instanced_arrays always fails. You can see patch set 1\u0027s trybots. I haven\u0027t investigated why.",
+      "range": {
+        "startLine": 313,
+        "startChar": 0,
+        "endLine": 316,
+        "endChar": 5
+      },
+      "revId": "7f2329398fe8a8b57fa16ec222127a55a457968d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f07ea4f8_a84fbc7e",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2258,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-09-14T10:34:07Z",
+      "side": 0,
+      "message": "Another quick fixing is add checking for program shader type.\nif (program \u0026\u0026 !program-\u003ehasLinkedShaderStorage(gl::ShaderType::Compute))\n{\n...\n\nAbove fixing also can let ComputeBiods example work well. But I guess that if we frequently switch between two different render pipelines, such as, they used totally different attributes locations,  the bug maybe still exist. So I didn\u0027t choose this one.",
+      "range": {
+        "startLine": 2258,
+        "startChar": 4,
+        "endLine": 2258,
+        "endChar": 16
+      },
+      "revId": "7f2329398fe8a8b57fa16ec222127a55a457968d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
