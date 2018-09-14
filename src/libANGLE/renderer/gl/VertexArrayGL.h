@@ -50,7 +50,6 @@ class VertexArrayGL : public VertexArrayImpl
                         const gl::VertexArray::DirtyBindingBitsArray &bindingBits) override;
 
     void applyNumViewsToDivisor(int numViews);
-    void applyActiveAttribLocationsMask(const gl::AttributesMask &activeMask);
 
   private:
     gl::Error syncDrawState(const gl::Context *context,
@@ -93,7 +92,7 @@ class VertexArrayGL : public VertexArrayImpl
                           const gl::VertexArray::DirtyBindingBits &dirtyBindingBits);
 
     void updateNeedsStreaming(size_t attribIndex);
-    void updateAttribEnabled(size_t attribIndex);
+    void updateAttribEnabled(const gl::Context *context, size_t attribIndex);
     void updateAttribPointer(const gl::Context *context, size_t attribIndex);
 
     bool supportVertexAttribBinding() const;
@@ -115,10 +114,6 @@ class VertexArrayGL : public VertexArrayImpl
 
     GLuint mVertexArrayID;
     int mAppliedNumViews;
-
-    // Remember the program's active attrib location mask so that attributes can be enabled/disabled
-    // based on whether they are active in the program
-    gl::AttributesMask mProgramActiveAttribLocationsMask;
 
     mutable gl::BindingPointer<gl::Buffer> mAppliedElementArrayBuffer;
 

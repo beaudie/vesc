@@ -415,10 +415,13 @@ GLuint VertexArrayGL::getAppliedElementArrayBufferID() const
     return GetImplAs<BufferGL>(mAppliedElementArrayBuffer.get())->getBufferID();
 }
 
-void VertexArrayGL::updateAttribEnabled(size_t attribIndex)
+void VertexArrayGL::updateAttribEnabled(const gl::Context *context, size_t attribIndex)
 {
+    const gl::State &glState   = context->getGLState();
+    const gl::Program *program = glState.getProgram();
+
     const bool enabled = mState.getVertexAttribute(attribIndex).enabled &
-                         mProgramActiveAttribLocationsMask.test(attribIndex);
+                         program->getActiveAttribLocationsMask().test(attribIndex);
     if (mAppliedAttributes[attribIndex].enabled == enabled)
     {
         return;
@@ -624,7 +627,7 @@ void VertexArrayGL::syncDirtyAttrib(const gl::Context *context,
         switch (dirtyBit)
         {
             case VertexArray::DIRTY_ATTRIB_ENABLED:
-                updateAttribEnabled(attribIndex);
+                updateAttribEnabled(context, attribIndex);
                 break;
 
             case VertexArray::DIRTY_ATTRIB_POINTER:
@@ -729,17 +732,6 @@ void VertexArrayGL::applyNumViewsToDivisor(int numViews)
         {
             updateBindingDivisor(index);
         }
-    }
-}
-
-void VertexArrayGL::applyActiveAttribLocationsMask(const gl::AttributesMask &activeMask)
-{
-    gl::AttributesMask updateMask     = mProgramActiveAttribLocationsMask ^ activeMask;
-    mProgramActiveAttribLocationsMask = activeMask;
-
-    for (size_t attribIndex : updateMask)
-    {
-        updateAttribEnabled(attribIndex);
     }
 }
 
