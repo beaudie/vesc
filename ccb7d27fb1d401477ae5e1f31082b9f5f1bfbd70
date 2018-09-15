@@ -16,6 +16,24 @@
       "revId": "ccb7d27fb1d401477ae5e1f31082b9f5f1bfbd70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e6d460e_0bc7cea0",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-15T10:51:40Z",
+      "side": 1,
+      "message": "I think it\u0027s acceptable for now. The index ranges are cached so we should only hit this path if the buffer data changes between index range queries.\n\nThere are several ways to tackle the problem if it does become a hot spot on Android. #1 is to never call this code. We only need to call it for WebGL contexts really.\n\n#2 is to have some way of determining if the buffer data has pending writes. We could at least skip the finish if there are no incomplete writes. But if this helps would depend on the app.",
+      "parentUuid": "d6ba3595_7429511b",
+      "revId": "ccb7d27fb1d401477ae5e1f31082b9f5f1bfbd70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
