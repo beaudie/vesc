@@ -42,43 +42,15 @@ Subject::~Subject()
 
 bool Subject::hasObservers() const
 {
-    return !mFastObservers.empty();
-}
-
-void Subject::removeObserver(ObserverBinding *observer)
-{
-    auto iter = std::find(mFastObservers.begin(), mFastObservers.end(), observer);
-    if (iter != mFastObservers.end())
-    {
-        size_t index = iter - mFastObservers.begin();
-        std::swap(mFastObservers[index], mFastObservers[mFastObservers.size() - 1]);
-        mFastObservers.resize(mFastObservers.size() - 1);
-        if (!mSlowObservers.empty())
-        {
-            mFastObservers.push_back(mSlowObservers.back());
-            mSlowObservers.pop_back();
-            ASSERT(mFastObservers.full());
-        }
-    }
-    else
-    {
-        auto slowIter = std::find(mSlowObservers.begin(), mSlowObservers.end(), observer);
-        ASSERT(slowIter != mSlowObservers.end());
-        mSlowObservers.erase(slowIter);
-    }
+    return !mObservers.empty();
 }
 
 void Subject::onStateChange(const gl::Context *context, SubjectMessage message) const
 {
-    if (mFastObservers.empty())
+    if (mObservers.empty())
         return;
 
-    for (const angle::ObserverBinding *receiver : mFastObservers)
-    {
-        receiver->onStateChange(context, message);
-    }
-
-    for (const angle::ObserverBinding *receiver : mSlowObservers)
+    for (const angle::ObserverBinding *receiver : mObservers)
     {
         receiver->onStateChange(context, message);
     }
@@ -86,17 +58,11 @@ void Subject::onStateChange(const gl::Context *context, SubjectMessage message) 
 
 void Subject::resetObservers()
 {
-    for (angle::ObserverBinding *observer : mFastObservers)
+    for (angle::ObserverBinding *observer : mObservers)
     {
         observer->onSubjectReset();
     }
-    mFastObservers.clear();
-
-    for (angle::ObserverBinding *observer : mSlowObservers)
-    {
-        observer->onSubjectReset();
-    }
-    mSlowObservers.clear();
+    mObservers.clear();
 }
 
 // ObserverBinding implementation.
@@ -120,39 +86,25 @@ void ObserverBinding::bind(Subject *subject)
     ASSERT(mObserver);
     if (mSubject)
     {
-        if (mSubject->mSlowObservers.empty())
+        ASSERT(IsInContainer(mSubject->mObservers, this));
+        size_t len = mSubject->mObservers.size() - 1;
+        for (size_t index = 0; index < len; ++index)
         {
-            size_t fastLen = mSubject->mFastObservers.size();
-            for (size_t index = 0; index < fastLen; ++index)
+            if (mSubject->mObservers[index] == this)
             {
-                if (mSubject->mFastObservers[index] == this)
-                {
-                    mSubject->mFastObservers[index] = mSubject->mFastObservers[fastLen - 1];
-                    mSubject->mFastObservers.pop_back();
-                }
+                mSubject->mObservers[index] = mSubject->mObservers[len];
+                break;
             }
         }
-        else
-        {
-            mSubject->removeObserver(this);
-        }
+        mSubject->mObservers.pop_back();
     }
 
     mSubject = subject;
 
     if (mSubject)
     {
-        ASSERT(!IsInContainer(mSubject->mFastObservers, this) &&
-               !IsInContainer(mSubject->mSlowObservers, this));
-
-        if (!mSubject->mFastObservers.full())
-        {
-            mSubject->mFastObservers.push_back(this);
-        }
-        else
-        {
-            mSubject->mSlowObservers.push_back(this);
-        }
+        ASSERT(!IsInContainer(mSubject->mObservers, this));
+        mSubject->mObservers.push_back(this);
     }
 }
 
