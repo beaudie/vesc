@@ -13,7 +13,7 @@
 #ifndef LIBANGLE_OBSERVER_H_
 #define LIBANGLE_OBSERVER_H_
 
-#include "common/FixedVector.h"
+#include "common/FastVector.h"
 #include "common/angleutils.h"
 
 namespace gl
@@ -62,13 +62,11 @@ class Subject : NonCopyable
   private:
     // Only the ObserverBinding class should add or remove observers.
     friend class ObserverBinding;
-    void removeObserver(ObserverBinding *observer);
 
     // Keep a short list of observers so we can allocate/free them quickly. But since we support
     // unlimited bindings, have a spill-over list of that uses dynamic allocation.
     static constexpr size_t kMaxFixedObservers = 8;
-    angle::FixedVector<ObserverBinding *, kMaxFixedObservers> mFastObservers;
-    std::vector<ObserverBinding *> mSlowObservers;
+    angle::FastVector<ObserverBinding *, kMaxFixedObservers> mObservers;
 };
 
 // Keeps a binding between a Subject and Observer, with a specific subject index.
