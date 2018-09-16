@@ -1112,6 +1112,8 @@ void State::setSamplerBinding(const Context *context, GLuint textureUnit, Sample
     mSamplers[textureUnit].set(context, sampler);
     mDirtyBits.set(DIRTY_BIT_SAMPLER_BINDINGS);
     mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
+    // This is overly conservative as it assumes the sampler has never been bound.
+    mDirtyObjects.set(DIRTY_OBJECT_SAMPLERS);
 }
 
 GLuint State::getSamplerId(GLuint textureUnit) const
@@ -2672,6 +2674,9 @@ Error State::syncDirtyObjects(const Context *context, const DirtyObjects &bitset
                 ASSERT(mVertexArray);
                 ANGLE_TRY(mVertexArray->syncState(context));
                 break;
+            case DIRTY_OBJECT_SAMPLERS:
+                syncSamplers(context);
+                break;
             case DIRTY_OBJECT_PROGRAM_TEXTURES:
                 ANGLE_TRY(syncProgramTextures(context));
                 break;
@@ -2687,6 +2692,18 @@ Error State::syncDirtyObjects(const Context *context, const DirtyObjects &bitset
 
     mDirtyObjects &= ~dirtyObjects;
     return NoError();
+}
+
+void State::syncSamplers(const Context *context)
+{
+    // This could be optimized by tracking which samplers are dirty.
+    for (BindingPointer<Sampler> &sampler : mSamplers)
+    {
+        if (sampler.get())
+        {
+            sampler->syncState(context);
+        }
+    }
 }
 
 Error State::syncProgramTextures(const Context *context)
@@ -2738,11 +2755,6 @@ Error State::syncProgramTextures(const Context *context)
         // Bind the texture unconditionally, to recieve completeness change notifications.
         mCompleteTextureBindings[textureUnitIndex].bind(texture->getSubject());
         newActiveTextures.set(textureUnitIndex);
-
-        if (sampler != nullptr)
-        {
-            sampler->syncState(context);
-        }
 
         if (texture->initState() == InitState::MayNeedInit)
         {
@@ -2831,7 +2843,11 @@ void State::setObjectDirty(GLenum target)
             mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
             break;
         case GL_TEXTURE:
+            mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
+            mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
+            break;
         case GL_SAMPLER:
+            mDirtyObjects.set(DIRTY_OBJECT_SAMPLERS);
             mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
             mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
             break;
