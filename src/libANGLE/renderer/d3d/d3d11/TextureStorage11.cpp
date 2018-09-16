@@ -1017,7 +1017,7 @@ angle::Result TextureStorage11_2D::useLevelZeroWorkaroundTexture(const gl::Conte
     if (lastSetting != mUseLevelZeroTexture)
     {
         ASSERT(mSubject);
-        mSubject->onStateChange(context, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
+        mSubject->onStateChange(context, angle::SubjectMessage::STORAGE_CHANGED);
     }
 
     return angle::Result::Continue();
