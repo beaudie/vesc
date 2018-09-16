@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "f6fcb316_cf180174",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-16T19:51:07Z",
+      "side": 1,
+      "message": "Yeah, the latest patch sets use ANGLE_INLINE here.",
+      "parentUuid": "22ba528b_7a833f26",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64d72186_01245ef6",
         "filename": "src/libANGLE/ResourceMap.h",
         "patchSetId": 12
@@ -225,6 +243,24 @@
       "side": 1,
       "message": "If there is an external condition that guarantees that, it\u0027s definitely not clear from the implementation here. Imagine this:\n\nmFlagResourceSize \u003d 4\nhandle \u003d 27\n\nThe while loop above makes newSize grow as much as 32. The safest thing you can do IMO is `newSizeInBytes - oldSizeInBytes` which is quite clear (you copy `old` and you clear `new-old` for a total of `new`)",
       "parentUuid": "b823c21e_de85b9a4",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e7374a64_8f417804",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-16T19:51:07Z",
+      "side": 1,
+      "message": "Oh, my bad. You\u0027re absolutely correct. Done. I also added a test for this.",
+      "parentUuid": "b0e2119b_55facc50",
       "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -360,6 +396,24 @@
       "side": 1,
       "message": "I was talking about querying indices that are not set and expecting to get `nullptr` (tests init, erase and clear).",
       "parentUuid": "07e00627_d950d978",
+      "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "83d078d1_cce009fc",
+        "filename": "src/libANGLE/ResourceMap_unittest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-16T19:51:07Z",
+      "side": 1,
+      "message": "Thanks for the clarification. Added test.",
+      "parentUuid": "650685ae_73d09101",
       "revId": "400c3f9a07a628c098a07c655688b5f591cd0fc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
