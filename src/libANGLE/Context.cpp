@@ -2909,7 +2909,6 @@ void Context::getSamplerParameteriv(GLuint sampler, GLenum pname, GLint *params)
     const Sampler *samplerObject =
         mState.mSamplers->checkSamplerAllocation(mImplementation.get(), sampler);
     QuerySamplerParameteriv(samplerObject, pname, params);
-    mGLState.setObjectDirty(GL_SAMPLER);
 }
 
 void Context::getSamplerParameterivRobust(GLuint sampler,
@@ -2944,7 +2943,6 @@ void Context::getSamplerParameterfv(GLuint sampler, GLenum pname, GLfloat *param
     const Sampler *samplerObject =
         mState.mSamplers->checkSamplerAllocation(mImplementation.get(), sampler);
     QuerySamplerParameterfv(samplerObject, pname, params);
-    mGLState.setObjectDirty(GL_SAMPLER);
 }
 
 void Context::getSamplerParameterfvRobust(GLuint sampler,
