@@ -62,7 +62,6 @@ class Subject : NonCopyable
   private:
     // Only the ObserverBinding class should add or remove observers.
     friend class ObserverBinding;
-    void addObserver(ObserverBinding *observer);
     void removeObserver(ObserverBinding *observer);
 
     // Keep a short list of observers so we can allocate/free them quickly. But since we support
@@ -82,6 +81,7 @@ class ObserverBinding final
     ObserverBinding &operator=(const ObserverBinding &other);
 
     void bind(Subject *subject);
+
     void reset();
     void onStateChange(const gl::Context *context, SubjectMessage message) const;
     void onSubjectReset();

@@ -45,20 +45,6 @@ bool Subject::hasObservers() const
     return !mFastObservers.empty();
 }
 
-void Subject::addObserver(ObserverBinding *observer)
-{
-    ASSERT(!IsInContainer(mFastObservers, observer) && !IsInContainer(mSlowObservers, observer));
-
-    if (!mFastObservers.full())
-    {
-        mFastObservers.push_back(observer);
-    }
-    else
-    {
-        mSlowObservers.push_back(observer);
-    }
-}
-
 void Subject::removeObserver(ObserverBinding *observer)
 {
     auto iter = std::find(mFastObservers.begin(), mFastObservers.end(), observer);
@@ -134,14 +120,39 @@ void ObserverBinding::bind(Subject *subject)
     ASSERT(mObserver);
     if (mSubject)
     {
-        mSubject->removeObserver(this);
+        if (mSubject->mSlowObservers.empty())
+        {
+            size_t fastLen = mSubject->mFastObservers.size();
+            for (size_t index = 0; index < fastLen; ++index)
+            {
+                if (mSubject->mFastObservers[index] == this)
+                {
+                    mSubject->mFastObservers[index] = mSubject->mFastObservers[fastLen - 1];
+                    mSubject->mFastObservers.pop_back();
+                }
+            }
+        }
+        else
+        {
+            mSubject->removeObserver(this);
+        }
     }
 
     mSubject = subject;
 
     if (mSubject)
     {
-        mSubject->addObserver(this);
+        ASSERT(!IsInContainer(mSubject->mFastObservers, this) &&
+               !IsInContainer(mSubject->mSlowObservers, this));
+
+        if (!mSubject->mFastObservers.full())
+        {
+            mSubject->mFastObservers.push_back(this);
+        }
+        else
+        {
+            mSubject->mSlowObservers.push_back(this);
+        }
     }
 }
 
