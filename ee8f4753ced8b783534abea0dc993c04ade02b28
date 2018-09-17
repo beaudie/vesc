@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f4d627a_4a817e7f",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-09-17T20:38:02Z",
+      "side": 1,
+      "message": "I don\u0027t follow this logic. Are you sure it does what you want? Can\u0027t you just swap(mData, other.mData)?",
+      "range": {
+        "startLine": 300,
+        "startChar": 0,
+        "endLine": 308,
+        "endChar": 25
+      },
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
