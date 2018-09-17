@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0f9d763f_8dff7eac",
+        "filename": "src/libANGLE/Observer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-17T15:19:00Z",
+      "side": 1,
+      "message": "I left a TODO here as this gets de-duplicated in a future patch.",
+      "parentUuid": "a1bbe7d9_cc9787ed",
+      "revId": "faf0fb9b1f160871bc5c7befb29f097b453d8d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4b4c4e7_826ca547",
         "filename": "src/libANGLE/Observer.cpp",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "faf0fb9b1f160871bc5c7befb29f097b453d8d33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b01d5b07_ac902a07",
+        "filename": "src/libANGLE/Observer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-17T15:19:00Z",
+      "side": 1,
+      "message": "Actually I think I can get the same effect by marking the private functions as ANGLE_INLINE in the cpp file. Since they\u0027re private to the file they inline as expected. Did that instead.",
+      "parentUuid": "d4b4c4e7_826ca547",
+      "revId": "faf0fb9b1f160871bc5c7befb29f097b453d8d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
