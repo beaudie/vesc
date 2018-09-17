@@ -413,6 +413,30 @@
     },
     {
       "key": {
+        "uuid": "937177ab_122ee561",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7495,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-17T20:37:14Z",
+      "side": 1,
+      "message": "Ah, yes, there does seem to be a contradiction here.  I think this query really only makes sense for GetInteger though, GetInteger can still return two values but the \u0027index\u0027 parameter of GetIntegeri_vEXT never makes sense for READ_BUFFER_EXT.",
+      "parentUuid": "1c67e57c_eb2cd2ab",
+      "range": {
+        "startLine": 7495,
+        "startChar": 8,
+        "endLine": 7495,
+        "endChar": 32
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "693331c7_cdad5b5f",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 7
@@ -883,6 +907,30 @@
     },
     {
       "key": {
+        "uuid": "61254d2f_c3639ae7",
+        "filename": "src/libANGLE/renderer/FramebufferImpl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-17T20:37:14Z",
+      "side": 1,
+      "message": "They arn\u0027t set for the default framebuffer because they were immutable until now.  You can remove that check.",
+      "parentUuid": "20e84cfc_40426007",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 98
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b92a411b_be2ee3ca",
         "filename": "src/libANGLE/renderer/SurfaceImpl.h",
         "patchSetId": 7
@@ -1259,6 +1307,30 @@
     },
     {
       "key": {
+        "uuid": "d97373f6_18c14e94",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1798,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-17T20:37:14Z",
+      "side": 1,
+      "message": "I think the initial loop needs to be changed then, this just keeps continuing at soon as rtIndex \u003e\u003d drawStateLocations.size() when it could just loop to drawStateLocations.size().  You could assert that colorRTs.size() is at least drawStateLocations.size().",
+      "parentUuid": "7d2a8747_b7ef156b",
+      "range": {
+        "startLine": 1795,
+        "startChar": 0,
+        "endLine": 1798,
+        "endChar": 9
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e27d1ae1_894bd821",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 7
@@ -1494,6 +1566,30 @@
     },
     {
       "key": {
+        "uuid": "1993ff3a_c1c17d9e",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-17T20:37:14Z",
+      "side": 1,
+      "message": "You can add them to gl_bindings_data.json and they will be auto-generated in the dispatch table.",
+      "parentUuid": "e9a9c742_fb712236",
+      "range": {
+        "startLine": 671,
+        "startChar": 11,
+        "endLine": 681,
+        "endChar": 22
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01c9fcd1_42ca7dd5",
         "filename": "src/libANGLE/renderer/gl/SurfaceGL.h",
         "patchSetId": 7
@@ -1576,6 +1672,30 @@
       "side": 1,
       "message": "I\u0027m not sure how to resolve this one.  At one point, I treated it like a display attribute and created a stereo pixel format no matter what if it was available.  Unfortunately, I ran into too many OpenGL driver issues that causes regressions for contexts that didn\u0027t need stereo.  So, I went with the current code which only tries to get a stereo context when asked.  This prevents regressions, but also can run into context sharing issues.  \n\nAny advise you can suggest would be helpful.",
       "parentUuid": "5e8ab736_91ae9d20",
+      "range": {
+        "startLine": 161,
+        "startChar": 53,
+        "endLine": 161,
+        "endChar": 81
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85db13a1_87548250",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-17T20:37:14Z",
+      "side": 1,
+      "message": "This is a tough issue, the intent with the EGL extension is definitely that the multiview count is per-surface so we need to be able to support that, especially if we plan on exposing this up through WebGL.\n\nSome WGL documentation says that wglMakeCurrent requires that the context and surface have the same pixel format but some other extensions merely say they need to be \"compatible\".  I wonder if some/all drivers allow contexts created on non-stereo pixel formats to be bound to stereo surfaces.  It may be worth trying to use different pixel formats per surface and check if the wglMakeCurrent calls still succeed.\n\nOtherwise, we can look into multiple contexts (in the same share group) to handle needing multiple pixel formats.",
+      "parentUuid": "758c5040_6e95cdc0",
       "range": {
         "startLine": 161,
         "startChar": 53,
@@ -2609,6 +2729,30 @@
       "side": 1,
       "message": "I ran into this problem on Geforce and possibly Intel GPU\u0027s.  Specifically, setting a stereo pixel format succeeds, but calling glDrawBuffer(GL_BACK_RIGHT) causes and INVALID_OPERATION error.  For Geforce, this is due to their 3D Vision technology which will always potentially allow stereo (ie: setting the pixel format works), but really only allows it if the display is a licensed display (ie: the draw buffer failure).\n\nIn release mode, the draw buffer error is silently ignored, but in debug mode I get the test failure.  I could have excluded nVidia and Intel GPU\u0027s from this test, but it is somewhat complicated by the fact that nVidia Quadro GPU\u0027s don\u0027t have the 3D Vision issue.  If I could just exclude Geforce, that would work.\n\nI could go either way (GPU exclusion or the current way), so just let me know which is preferred.",
       "parentUuid": "91f81bba_909551b6",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 54
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8478d3d_33b57e2f",
+        "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-17T20:37:14Z",
+      "side": 1,
+      "message": "Could it be that the driver supports the WGL stereo capability but not the GL multiview draw buffers extension?  In that case we should try to avoid exposing the EGL or GLES extensions.",
+      "parentUuid": "1dabc2b0_418f33cf",
       "range": {
         "startLine": 120,
         "startChar": 0,
