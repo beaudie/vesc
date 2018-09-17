@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1bbe7d9_cc9787ed",
+        "filename": "src/libANGLE/Observer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-17T13:51:27Z",
+      "side": 1,
+      "message": "That (see below, if wrong order) would also remove the need to duplicate the code of removeObserver",
+      "revId": "faf0fb9b1f160871bc5c7befb29f097b453d8d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4b4c4e7_826ca547",
+        "filename": "src/libANGLE/Observer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-17T13:51:27Z",
+      "side": 1,
+      "message": "This might be a bit of a rambling, but I always hated how adding little helper functions (a la static inline functions in C) in C++ meant having to modify the header (to add it as a member to have access to private members), which also exposes unnecessary details of implementation, increases compile time and requires many files to be rebuild when changed. The code on the left is obviously more clear and it\u0027s also a pity these functions end up getting sacrificed for performance.\n\nI was thinking of a pattern that could probably alleviate this though to get the best of all worlds (inline, meaningful function names and hidden implementation in source file). Something like this:\n\n// header:\nclass X\n{\npublic:\n  void f();\nprivate:\n  int v;\n  friend class XInlines;\n};\n\n// source:\nclass XInlines\n{\npublic:\n  static ANGLE_INLINE bool xhelper1(X *x) { return x-\u003ev \u003e\u003d 0; }\n  static ANGLE_INLINE void xhelper2(X *x, int n) { x-\u003ev +\u003d n; }\n};\n\nvoid X::f()\n{\n  if (XInlines::xhelper1(this))\n    XInlines::xhelper2(this, 10);\n  printf(\"%d\\n\", v);\n}\n\nWhat do you think? This could be something we can do in many places where we just want to have a few private-but-inline functions.",
+      "revId": "faf0fb9b1f160871bc5c7befb29f097b453d8d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
