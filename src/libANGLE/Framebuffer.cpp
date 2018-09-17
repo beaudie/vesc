@@ -1783,8 +1783,6 @@ void Framebuffer::setAttachmentImpl(const Context *context,
         }
         break;
     }
-
-    mAttachedTextures.reset();
 }
 
 void Framebuffer::updateAttachment(const Context *context,
@@ -1816,11 +1814,6 @@ void Framebuffer::resetAttachment(const Context *context, GLenum binding)
 
 Error Framebuffer::syncState(const Context *context)
 {
-    if (!mAttachedTextures.valid())
-    {
-        updateAttachedTextures();
-    }
-
     if (mDirtyBits.any())
     {
         mDirtyBitsGuard = mDirtyBits;
@@ -2331,32 +2324,5 @@ bool Framebuffer::partialBufferClearNeedsInit(const Context *context, GLenum buf
             UNREACHABLE();
             return false;
     }
-}
-
-void Framebuffer::updateAttachedTextures() const
-{
-    FramebufferTextureAttachmentVector attachedTextures;
-
-    for (const auto &colorAttachment : mState.mColorAttachments)
-    {
-        if (colorAttachment.isAttached() && colorAttachment.type() == GL_TEXTURE)
-        {
-            attachedTextures.push_back(static_cast<const Texture *>(colorAttachment.getResource()));
-        }
-    }
-
-    if (mState.mDepthAttachment.isAttached() && mState.mDepthAttachment.type() == GL_TEXTURE)
-    {
-        attachedTextures.push_back(
-            static_cast<const Texture *>(mState.mDepthAttachment.getResource()));
-    }
-
-    if (mState.mStencilAttachment.isAttached() && mState.mStencilAttachment.type() == GL_TEXTURE)
-    {
-        attachedTextures.push_back(
-            static_cast<const Texture *>(mState.mStencilAttachment.getResource()));
-    }
-
-    mAttachedTextures = std::move(attachedTextures);
 }
 }  // namespace gl
