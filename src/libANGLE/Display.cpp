@@ -150,7 +150,7 @@ rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap, const D
 #elif defined(ANGLE_USE_OZONE)
             impl = new rx::DisplayOzone(state);
 #elif defined(ANGLE_PLATFORM_ANDROID)
-            impl = new rx::DisplayAndroid(state);
+            impl = new rx::DisplayVkAndroid(state);
 #else
             // No display available
             UNREACHABLE();
