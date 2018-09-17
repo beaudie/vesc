@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0c449b52_6c728a2b",
+        "filename": "src/libANGLE/Compiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-17T07:47:16Z",
+      "side": 1,
+      "message": "I\u0027m not sure you need std::list here. std::list has very fast insertion in the middle of the data structure. but I think you just need something like a vector with push_back and pop_back.",
+      "range": {
+        "startLine": 46,
+        "startChar": 14,
+        "endLine": 46,
+        "endChar": 23
+      },
+      "revId": "4d0af7aa81e4f5b757d8a777aeef7e60f2b29019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd1a00b8_b9ff237f",
+        "filename": "src/libANGLE/Compiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-17T07:47:16Z",
+      "side": 1,
+      "message": "is there any reason to move this into the header? seems like it\u0027s nicer to hide it in the cpp file.",
+      "range": {
+        "startLine": 48,
+        "startChar": 24,
+        "endLine": 48,
+        "endChar": 40
+      },
+      "revId": "4d0af7aa81e4f5b757d8a777aeef7e60f2b29019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05f3571c_731af4ae",
+        "filename": "src/libANGLE/Compiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-17T07:47:16Z",
+      "side": 1,
+      "message": "I see you\u0027re using the unique_ptr class to pass around unique instances of CompilerInstance. Instead have you considered using move semantics to preserve NonCopyable? You\u0027d need a move constructor and move assignment operator. Storing these in a stl container should still work. Also you should be able to return them from functions.\n\nAlso maybe calling this ShCompilerInstance might help distinguish this from gl::Compiler.",
+      "range": {
+        "startLine": 51,
+        "startChar": 6,
+        "endLine": 51,
+        "endChar": 23
+      },
+      "revId": "4d0af7aa81e4f5b757d8a777aeef7e60f2b29019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9eff5193_50dceb15",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-17T07:47:16Z",
+      "side": 1,
+      "message": "nit: avoid auto when possible since it makes it hard to see the type directly.",
+      "range": {
+        "startLine": 350,
+        "startChar": 4,
+        "endLine": 350,
+        "endChar": 9
+      },
+      "revId": "4d0af7aa81e4f5b757d8a777aeef7e60f2b29019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ad9d1d1_007f2ae2",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-17T07:47:16Z",
+      "side": 1,
+      "message": "nit: avoid auto when possible since it makes it hard to see the type directly.",
+      "range": {
+        "startLine": 401,
+        "startChar": 4,
+        "endLine": 401,
+        "endChar": 9
+      },
+      "revId": "4d0af7aa81e4f5b757d8a777aeef7e60f2b29019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edac17ba_7f46e246",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-17T07:47:16Z",
+      "side": 1,
+      "message": "nit: please define this out of the function.",
+      "range": {
+        "startLine": 404,
+        "startChar": 0,
+        "endLine": 412,
+        "endChar": 6
+      },
+      "revId": "4d0af7aa81e4f5b757d8a777aeef7e60f2b29019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
