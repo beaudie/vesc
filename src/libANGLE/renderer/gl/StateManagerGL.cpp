@@ -2304,8 +2304,8 @@ void StateManagerGL::updateMultiviewBaseViewLayerIndexUniform(
 
 void StateManagerGL::syncSamplersState(const gl::Context *context)
 {
-    const gl::State &glState                    = context->getGLState();
-    const gl::Program *program                  = glState.getProgram();
+    const gl::State &glState   = context->getGLState();
+    const gl::Program *program = glState.getProgram();
 
     // This can occur when syncing the path rendering state.
     if (!program)
