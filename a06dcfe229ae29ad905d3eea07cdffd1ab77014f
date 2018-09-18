@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1162307_b916dd16",
+        "filename": "src/libANGLE/Compiler.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T11:46:54Z",
+      "side": 1,
+      "message": "nit: you can call this gActiveCompilers",
+      "range": {
+        "startLine": 23,
+        "startChar": 7,
+        "endLine": 23,
+        "endChar": 23
+      },
+      "revId": "a06dcfe229ae29ad905d3eea07cdffd1ab77014f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6d9c3bd_6f9b4a99",
+        "filename": "src/libANGLE/Compiler.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T11:46:54Z",
+      "side": 1,
+      "message": "nit: you probably don\u0027t need to use auto here.",
+      "range": {
+        "startLine": 170,
+        "startChar": 13,
+        "endLine": 170,
+        "endChar": 18
+      },
+      "revId": "a06dcfe229ae29ad905d3eea07cdffd1ab77014f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3deb554f_45d6a96f",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T11:46:54Z",
+      "side": 1,
+      "message": "how about using final and angle::NonCopyable?",
+      "range": {
+        "startLine": 101,
+        "startChar": 6,
+        "endLine": 101,
+        "endChar": 16
+      },
+      "revId": "a06dcfe229ae29ad905d3eea07cdffd1ab77014f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef34d2dd_3c06dc47",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T11:46:54Z",
+      "side": 1,
+      "message": "nit: closing namespace comment.",
+      "range": {
+        "startLine": 40,
+        "startChar": 1,
+        "endLine": 40,
+        "endChar": 0
+      },
+      "revId": "a06dcfe229ae29ad905d3eea07cdffd1ab77014f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f136a70_a5e2da68",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T11:46:54Z",
+      "side": 1,
+      "message": "is it necessary to use shared_ptr for these? Can you use unique_ptr instead? I didn\u0027t see where you are sharing these resources. maybe the interface to WorkerThreadPool should return unowned pointers? Geoff do you have a strong preference for returning shared_ptr?",
+      "range": {
+        "startLine": 212,
+        "startChar": 9,
+        "endLine": 212,
+        "endChar": 19
+      },
+      "revId": "a06dcfe229ae29ad905d3eea07cdffd1ab77014f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

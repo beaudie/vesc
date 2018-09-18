@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "3ed69fca_18a579f3",
+        "filename": "src/libANGLE/Compiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T11:46:54Z",
+      "side": 1,
+      "message": "Do you know if std::list::push_back will trigger a \"new\" allocation every time? That\u0027s my only concern really.",
+      "parentUuid": "a086e857_f48c2c9e",
+      "range": {
+        "startLine": 46,
+        "startChar": 14,
+        "endLine": 46,
+        "endChar": 23
+      },
+      "revId": "4d0af7aa81e4f5b757d8a777aeef7e60f2b29019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd1a00b8_b9ff237f",
         "filename": "src/libANGLE/Compiler.h",
         "patchSetId": 10
