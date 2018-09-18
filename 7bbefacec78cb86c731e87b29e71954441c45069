@@ -192,6 +192,30 @@
     },
     {
       "key": {
+        "uuid": "7fb1fa23_45c4d335",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-18T08:31:53Z",
+      "side": 1,
+      "message": "Yes it would be better to use it so we can already have some of the code for case 4) tested.",
+      "parentUuid": "f7ef6f83_ab05ff06",
+      "range": {
+        "startLine": 33,
+        "startChar": 3,
+        "endLine": 33,
+        "endChar": 78
+      },
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "deb27823_74968f3d",
         "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
         "patchSetId": 3
