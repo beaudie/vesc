@@ -114,6 +114,30 @@
       "revId": "a06dcfe229ae29ad905d3eea07cdffd1ab77014f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb87a283_fed8989b",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-18T12:48:31Z",
+      "side": 1,
+      "message": "Generally a task may be concurrently accessed both in main thread and background thread. While it\u0027s running in the background thread, the main thread may query for its completion status. That was the main reason we chose to use shared_ptr.",
+      "parentUuid": "4f136a70_a5e2da68",
+      "range": {
+        "startLine": 212,
+        "startChar": 9,
+        "endLine": 212,
+        "endChar": 19
+      },
+      "revId": "a06dcfe229ae29ad905d3eea07cdffd1ab77014f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
