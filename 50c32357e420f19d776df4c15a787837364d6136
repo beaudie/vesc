@@ -16,6 +16,24 @@
       "revId": "50c32357e420f19d776df4c15a787837364d6136",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b1ece5e_d6357013",
+        "filename": "src/libANGLE/Observer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:07:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06ad609c_fc0664c7",
+      "revId": "50c32357e420f19d776df4c15a787837364d6136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
