@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "b11589a8_8b64b407",
+        "filename": "src/libANGLE/Observer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T20:05:02Z",
+      "side": 1,
+      "message": "This should also do the trick:\n\nauto iter \u003d std::find(mObservers.begin(), mObservers.end(), observer);\n*iter \u003d mObservers.back();\nmObservers.pop_back();",
+      "revId": "d28c9b2e6aedb0d500055aecc16a6958e76f035d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "deffa97d_eef8d587",
         "filename": "src/libANGLE/Observer.cpp",
         "patchSetId": 8
