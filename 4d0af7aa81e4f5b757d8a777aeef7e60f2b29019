@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a086e857_f48c2c9e",
+        "filename": "src/libANGLE/Compiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-18T02:45:02Z",
+      "side": 1,
+      "message": "As in this case there is no need to access elements randomly, we don\u0027t need to use array-like containers. For vector, there could be some overhead of space re-allocation. For example, when its size grows from 16 to 17, it newly allocates a 32-elements space, and copies all old elements into the new space. List has no such drawback. It is quite light-weight regarding insertion/deletion/iteration and widely used in linux kernel.",
+      "parentUuid": "0c449b52_6c728a2b",
+      "range": {
+        "startLine": 46,
+        "startChar": 14,
+        "endLine": 46,
+        "endChar": 23
+      },
+      "revId": "4d0af7aa81e4f5b757d8a777aeef7e60f2b29019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cd1a00b8_b9ff237f",
         "filename": "src/libANGLE/Compiler.h",
         "patchSetId": 10
@@ -45,6 +69,30 @@
       "revId": "4d0af7aa81e4f5b757d8a777aeef7e60f2b29019",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f868c2e2_df457312",
+        "filename": "src/libANGLE/Compiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-18T02:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd1a00b8_b9ff237f",
+      "range": {
+        "startLine": 48,
+        "startChar": 24,
+        "endLine": 48,
+        "endChar": 40
+      },
+      "revId": "4d0af7aa81e4f5b757d8a777aeef7e60f2b29019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b9cb2b89_52699df8",
+        "filename": "src/libANGLE/Compiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-18T02:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05f3571c_731af4ae",
+      "range": {
+        "startLine": 51,
+        "startChar": 6,
+        "endLine": 51,
+        "endChar": 23
+      },
+      "revId": "4d0af7aa81e4f5b757d8a777aeef7e60f2b29019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9eff5193_50dceb15",
         "filename": "src/libANGLE/Shader.cpp",
         "patchSetId": 10
@@ -91,6 +163,30 @@
       "revId": "4d0af7aa81e4f5b757d8a777aeef7e60f2b29019",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16c072cb_3e7a368d",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-18T02:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9eff5193_50dceb15",
+      "range": {
+        "startLine": 350,
+        "startChar": 4,
+        "endLine": 350,
+        "endChar": 9
+      },
+      "revId": "4d0af7aa81e4f5b757d8a777aeef7e60f2b29019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "0d7fa5d9_cef6f9a5",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-18T02:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad9d1d1_007f2ae2",
+      "range": {
+        "startLine": 401,
+        "startChar": 4,
+        "endLine": 401,
+        "endChar": 9
+      },
+      "revId": "4d0af7aa81e4f5b757d8a777aeef7e60f2b29019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "edac17ba_7f46e246",
         "filename": "src/libANGLE/Shader.cpp",
         "patchSetId": 10
@@ -137,6 +257,30 @@
       "revId": "4d0af7aa81e4f5b757d8a777aeef7e60f2b29019",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21e531e1_9d9af61d",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-18T02:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edac17ba_7f46e246",
+      "range": {
+        "startLine": 404,
+        "startChar": 0,
+        "endLine": 412,
+        "endChar": 6
+      },
+      "revId": "4d0af7aa81e4f5b757d8a777aeef7e60f2b29019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
