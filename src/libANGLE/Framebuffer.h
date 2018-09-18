@@ -348,7 +348,12 @@ class Framebuffer final : public angle::ObserverInterface,
     Error ensureReadAttachmentInitialized(const Context *context, GLbitfield blitMask);
     Box getDimensions() const;
 
-    bool hasTextureAttachment(const Texture *texture) const;
+    bool hasTextureAttachment(const Texture *texture) const
+    {
+        ASSERT(mAttachedTextures.valid());
+        return std::find(mAttachedTextures.value().begin(), mAttachedTextures.value().end(),
+                         texture) != mAttachedTextures.value().end();
+    }
 
   private:
     bool detachResourceById(const Context *context, GLenum resourceType, GLuint resourceId);
@@ -408,6 +413,8 @@ class Framebuffer final : public angle::ObserverInterface,
 
     FramebufferAttachment *getAttachmentFromSubjectIndex(angle::SubjectIndex index);
 
+    void updateAttachedTextures() const;
+
     FramebufferState mState;
     rx::FramebufferImpl *mImpl;
 
@@ -424,8 +431,7 @@ class Framebuffer final : public angle::ObserverInterface,
 
     // A cache of attached textures for quick validation of feedback loops.
     using FramebufferTextureAttachmentVector =
-        angle::FixedVector<const FramebufferAttachmentObject *,
-                           IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS>;
+        angle::FixedVector<const Texture *, IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS>;
     mutable Optional<FramebufferTextureAttachmentVector> mAttachedTextures;
 };
 
