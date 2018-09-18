@@ -22,6 +22,14 @@ DisplayVkAndroid::DisplayVkAndroid(const egl::DisplayState &state) : DisplayVk(s
 {
 }
 
+egl::Error DisplayVkAndroid::initialize(egl::Display *display)
+{
+    ANGLE_TRY(DisplayVk::initialize(display));
+    std::string rendererDescription = mRenderer->getRendererDescription();
+    __android_log_print(ANDROID_LOG_INFO, "ANGLE", "%s", rendererDescription.c_str());
+    return egl::NoError();
+}
+
 bool DisplayVkAndroid::isValidNativeWindow(EGLNativeWindowType window) const
 {
     return (ANativeWindow_getFormat(window) >= 0);
