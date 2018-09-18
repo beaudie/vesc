@@ -920,30 +920,13 @@ void StateManagerGL::updateProgramTextureAndSamplerBindings(const gl::Context *c
             ASSERT(!texture->hasAnyDirtyBit());
             ASSERT(!textureGL->hasAnyDirtyBit());
 
-            if (mTextures[textureType][textureUnitIndex] != textureGL->getTextureID())
-            {
-                activeTexture(textureUnitIndex);
-                bindTexture(textureType, textureGL->getTextureID());
-            }
+            activeTexture(textureUnitIndex);
+            bindTexture(textureType, textureGL->getTextureID());
         }
         else
         {
-            if (mTextures[textureType][textureUnitIndex] != 0)
-            {
-                activeTexture(textureUnitIndex);
-                bindTexture(textureType, 0);
-            }
-        }
-
-        const gl::Sampler *sampler = glState.getSampler(static_cast<GLuint>(textureUnitIndex));
-        if (sampler != nullptr)
-        {
-            SamplerGL *samplerGL = GetImplAs<SamplerGL>(sampler);
-            bindSampler(textureUnitIndex, samplerGL->getSamplerID());
-        }
-        else
-        {
-            bindSampler(textureUnitIndex, 0);
+            activeTexture(textureUnitIndex);
+            bindTexture(textureType, 0);
         }
     }
 }
@@ -2000,6 +1983,7 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 break;
             case gl::State::DIRTY_BIT_SAMPLER_BINDINGS:
                 mProgramTexturesAndSamplersDirty = true;
+                syncSamplersState(context);
                 break;
             case gl::State::DIRTY_BIT_IMAGE_BINDINGS:
                 mProgramImagesDirty = true;
@@ -2314,6 +2298,32 @@ void StateManagerGL::updateMultiviewBaseViewLayerIndexUniform(
                 break;
             default:
                 break;
+        }
+    }
+}
+
+void StateManagerGL::syncSamplersState(const gl::Context *context)
+{
+    const gl::State &glState                    = context->getGLState();
+    const gl::Program *program                  = glState.getProgram();
+
+    // This can occur when syncing the path rendering state.
+    if (!program)
+        return;
+
+    const gl::ActiveTextureMask &activeTextures = program->getActiveSamplersMask();
+
+    for (GLuint textureUnitIndex : activeTextures)
+    {
+        const gl::Sampler *sampler = glState.getSampler(static_cast<GLuint>(textureUnitIndex));
+        if (sampler != nullptr)
+        {
+            SamplerGL *samplerGL = GetImplAs<SamplerGL>(sampler);
+            bindSampler(textureUnitIndex, samplerGL->getSamplerID());
+        }
+        else
+        {
+            bindSampler(textureUnitIndex, 0);
         }
     }
 }
