@@ -2725,7 +2725,8 @@ Error State::syncProgramTextures(const Context *context)
         // Mark the texture binding bit as dirty if the texture completeness changes.
         // TODO(jmadill): Use specific dirty bit for completeness change.
         if (texture->isSamplerComplete(context, sampler) &&
-            !mDrawFramebuffer->hasTextureAttachment(texture))
+            (mProgram->hasLinkedShaderStage(ShaderType::Compute) ||
+            !mDrawFramebuffer->hasTextureAttachment(texture)))
         {
             ANGLE_TRY(texture->syncState(context));
             mActiveTexturesCache[textureUnitIndex] = texture;
@@ -2768,7 +2769,8 @@ Error State::syncProgramTextures(const Context *context)
         {
             continue;
         }
-        if (!mDrawFramebuffer->hasTextureAttachment(texture))
+        if (mProgram->hasLinkedShaderStage(ShaderType::Compute) ||
+            !mDrawFramebuffer->hasTextureAttachment(texture))
         {
             ANGLE_TRY(texture->syncState(context));
         }
