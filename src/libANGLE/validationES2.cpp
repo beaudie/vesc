@@ -4562,85 +4562,31 @@ bool ValidateBlendFunc(Context *context, GLenum sfactor, GLenum dfactor)
     return ValidateBlendFuncSeparate(context, sfactor, dfactor, sfactor, dfactor);
 }
 
-static bool ValidSrcBlendFunc(GLenum srcBlend)
-{
-    switch (srcBlend)
-    {
-        case GL_ZERO:
-        case GL_ONE:
-        case GL_SRC_COLOR:
-        case GL_ONE_MINUS_SRC_COLOR:
-        case GL_DST_COLOR:
-        case GL_ONE_MINUS_DST_COLOR:
-        case GL_SRC_ALPHA:
-        case GL_ONE_MINUS_SRC_ALPHA:
-        case GL_DST_ALPHA:
-        case GL_ONE_MINUS_DST_ALPHA:
-        case GL_CONSTANT_COLOR:
-        case GL_ONE_MINUS_CONSTANT_COLOR:
-        case GL_CONSTANT_ALPHA:
-        case GL_ONE_MINUS_CONSTANT_ALPHA:
-        case GL_SRC_ALPHA_SATURATE:
-            return true;
-
-        default:
-            return false;
-    }
-}
-
-static bool ValidDstBlendFunc(GLenum dstBlend, GLint contextMajorVersion)
-{
-    switch (dstBlend)
-    {
-        case GL_ZERO:
-        case GL_ONE:
-        case GL_SRC_COLOR:
-        case GL_ONE_MINUS_SRC_COLOR:
-        case GL_DST_COLOR:
-        case GL_ONE_MINUS_DST_COLOR:
-        case GL_SRC_ALPHA:
-        case GL_ONE_MINUS_SRC_ALPHA:
-        case GL_DST_ALPHA:
-        case GL_ONE_MINUS_DST_ALPHA:
-        case GL_CONSTANT_COLOR:
-        case GL_ONE_MINUS_CONSTANT_COLOR:
-        case GL_CONSTANT_ALPHA:
-        case GL_ONE_MINUS_CONSTANT_ALPHA:
-            return true;
-
-        case GL_SRC_ALPHA_SATURATE:
-            return (contextMajorVersion >= 3);
-
-        default:
-            return false;
-    }
-}
-
 bool ValidateBlendFuncSeparate(Context *context,
                                GLenum srcRGB,
                                GLenum dstRGB,
                                GLenum srcAlpha,
                                GLenum dstAlpha)
 {
-    if (!ValidSrcBlendFunc(srcRGB))
+    if (!ValidSrcBlendFunc(context, srcRGB))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidBlendFunction);
         return false;
     }
 
-    if (!ValidDstBlendFunc(dstRGB, context->getClientMajorVersion()))
+    if (!ValidDstBlendFunc(context, dstRGB))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidBlendFunction);
         return false;
     }
 
-    if (!ValidSrcBlendFunc(srcAlpha))
+    if (!ValidSrcBlendFunc(context, srcAlpha))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidBlendFunction);
         return false;
     }
 
-    if (!ValidDstBlendFunc(dstAlpha, context->getClientMajorVersion()))
+    if (!ValidDstBlendFunc(context, dstAlpha))
     {
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidBlendFunction);
         return false;

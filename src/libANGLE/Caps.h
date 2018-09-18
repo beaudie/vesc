@@ -429,6 +429,10 @@ struct Extensions
 
     // GL_OES_texture_storage_multisample_2d_array
     bool textureStorageMultisample2DArray;
+
+    // GL_EXT_blend_func_extended
+    bool blendFuncExtended;
+    GLuint maxDualSourceDrawBuffers;
 };
 
 struct ExtensionInfo
