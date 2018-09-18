@@ -9,6 +9,7 @@
 
 #include "libANGLE/renderer/vulkan/android/DisplayVkAndroid.h"
 
+#include <android/log.h>
 #include <android/native_window.h>
 #include <vulkan/vulkan.h>
 
@@ -20,6 +21,14 @@ namespace rx
 
 DisplayVkAndroid::DisplayVkAndroid(const egl::DisplayState &state) : DisplayVk(state)
 {
+}
+
+egl::Error DisplayVkAndroid::initialize(egl::Display *display)
+{
+    ANGLE_TRY(DisplayVk::initialize(display));
+    std::string rendererDescription = mRenderer->getRendererDescription();
+    __android_log_print(ANDROID_LOG_INFO, "ANGLE", "%s", rendererDescription.c_str());
+    return egl::NoError();
 }
 
 bool DisplayVkAndroid::isValidNativeWindow(EGLNativeWindowType window) const
