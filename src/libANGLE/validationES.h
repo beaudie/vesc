@@ -76,6 +76,9 @@ bool ValidImageDataSize(Context *context,
 
 bool ValidQueryType(const Context *context, QueryType queryType);
 
+bool ValidSrcBlendFunc(const Context *context, GLenum val);
+bool ValidDstBlendFunc(const Context *context, GLenum val);
+
 bool ValidateWebGLVertexAttribPointer(Context *context,
                                       GLenum type,
                                       GLboolean normalized,

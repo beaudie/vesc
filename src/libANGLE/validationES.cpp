@@ -458,6 +458,43 @@ bool IsValidGLES1TextureParameter(GLenum pname)
             return false;
     }
 }
+
+bool ValidBlendFunc(const Context *context, GLenum val)
+{
+    const gl::Extensions &ext = context->getExtensions();
+
+    // these are always valid for src and dst.
+    switch (val)
+    {
+        case GL_ZERO:
+        case GL_ONE:
+        case GL_SRC_COLOR:
+        case GL_ONE_MINUS_SRC_COLOR:
+        case GL_DST_COLOR:
+        case GL_ONE_MINUS_DST_COLOR:
+        case GL_SRC_ALPHA:
+        case GL_ONE_MINUS_SRC_ALPHA:
+        case GL_DST_ALPHA:
+        case GL_ONE_MINUS_DST_ALPHA:
+        case GL_CONSTANT_COLOR:
+        case GL_ONE_MINUS_CONSTANT_COLOR:
+        case GL_CONSTANT_ALPHA:
+        case GL_ONE_MINUS_CONSTANT_ALPHA:
+            return true;
+
+        // EXT_blend_func_extended.
+        case GL_SRC1_COLOR_EXT:
+        case GL_SRC1_ALPHA_EXT:
+        case GL_ONE_MINUS_SRC1_COLOR_EXT:
+        case GL_ONE_MINUS_SRC1_ALPHA_EXT:
+        case GL_SRC_ALPHA_SATURATE_EXT:
+            return ext.blendFuncExtended;
+
+        default:
+            return false;
+    }
+}
+
 }  // anonymous namespace
 
 void SetRobustLengthParam(GLsizei *length, GLsizei value)
@@ -965,6 +1002,31 @@ bool ValidQueryType(const Context *context, QueryType queryType)
         default:
             return false;
     }
+}
+
+bool ValidSrcBlendFunc(const Context *context, GLenum val)
+{
+    if (ValidBlendFunc(context, val))
+        return true;
+
+    if (val == GL_SRC_ALPHA_SATURATE)
+        return true;
+
+    return false;
+}
+
+bool ValidDstBlendFunc(const Context *context, GLenum val)
+{
+    if (ValidBlendFunc(context, val))
+        return true;
+
+    if (val == GL_SRC_ALPHA_SATURATE)
+    {
+        if (context->getClientMajorVersion() >= 3)
+            return true;
+    }
+
+    return false;
 }
 
 bool ValidateWebGLVertexAttribPointer(Context *context,

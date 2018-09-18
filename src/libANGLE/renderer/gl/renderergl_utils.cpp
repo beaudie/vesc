@@ -1113,6 +1113,19 @@ void GenerateCaps(const FunctionsGL *functions,
         caps->maxShaderStorageBlocks[gl::ShaderType::Geometry] =
             QuerySingleGLInt(functions, GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_EXT);
     }
+
+    // EXT_blend_func_extended.
+    // Note that this could be implemented also on top of native EXT_blend_func_extended, but it's
+    // currently not fully implemented.
+    extensions->blendFuncExtended = functions->standard == STANDARD_GL_DESKTOP &&
+                                    functions->hasGLExtension("GL_ARB_blend_func_extended");
+    if (extensions->blendFuncExtended)
+    {
+        // TODO(http://anglebug.com/1085): Support greater values of
+        // MAX_DUAL_SOURCE_DRAW_BUFFERS_EXT queried from the driver. See comments in ProgramGL.cpp
+        // for more information about this limitation.
+        extensions->maxDualSourceDrawBuffers = 1;
+    }
 }
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds)
