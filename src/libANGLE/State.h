@@ -441,6 +441,7 @@ class State : angle::NonCopyable
         DIRTY_OBJECT_READ_FRAMEBUFFER,
         DIRTY_OBJECT_DRAW_FRAMEBUFFER,
         DIRTY_OBJECT_VERTEX_ARRAY,
+        DIRTY_OBJECT_SAMPLERS,
         // Use a very coarse bit for any program or texture change.
         // TODO(jmadill): Fine-grained dirty bits for each texture/sampler.
         DIRTY_OBJECT_PROGRAM_TEXTURES,
@@ -492,6 +493,7 @@ class State : angle::NonCopyable
     const GLES1State &gles1() const { return mGLES1State; }
 
   private:
+    void syncSamplers(const Context *context);
     Error syncProgramTextures(const Context *context);
 
     // Cached values from Context's caps
