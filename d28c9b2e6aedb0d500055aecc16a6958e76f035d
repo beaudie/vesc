@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "deffa97d_eef8d587",
+        "filename": "src/libANGLE/Observer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-09-18T19:28:34Z",
+      "side": 1,
+      "message": "Guess you could make removeFirstOccurrenceOf() a feature of FastVector.",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 26
+      },
+      "revId": "d28c9b2e6aedb0d500055aecc16a6958e76f035d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
