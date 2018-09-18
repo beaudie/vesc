@@ -2,6 +2,125 @@
   "comments": [
     {
       "key": {
+        "uuid": "cac23a6e_1360eb60",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T02:52:48Z",
+      "side": 1,
+      "message": "If you feel adventurous, you could also implement emplace_back!",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5a535b3_2ec4d1a0",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T02:52:48Z",
+      "side": 1,
+      "message": "You could initialize mData to mFixedStorage.data() and mReservedSize to N already, which makes ensure_capacity() call in some constructors do nothing.",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1ef0278_d2fa12af",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T02:52:48Z",
+      "side": 1,
+      "message": "Do we care about or want to define this?\n\nFastVector\u003cint, 5\u003e v1{1, 2, 3, 4, 5};\nFastVector\u003cint, 3\u003e v2{1, 2, 3, 4, 5};\nv1 \u003d\u003d v2\n\nTechnically speaking, just putting another `size_t M` in the argument list and making `b` have minimum size `M` instead of `N` for these functions would do the trick.",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6df22020_303cbd1a",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T02:52:48Z",
+      "side": 1,
+      "message": "return at(pos); instead of two lines",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4df186e_09ac821e",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T02:52:48Z",
+      "side": 1,
+      "message": "Same",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6409e9d5_5fcfc1de",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T02:52:48Z",
+      "side": 1,
+      "message": "Calling data() for an empty vector is not undefined behavior. It\u0027s unspecified behavior [1]. It\u0027s ok if you return mData in that case instead of nullptr. In other words, you can just remove the ASSERT (from both data() functions)\n\nhttps://en.cppreference.com/w/cpp/container/vector/data -- See Notes",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9faf0c81_0661ea47",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T02:52:48Z",
+      "side": 1,
+      "message": "I kind of feel uncomfortable with this... It\u0027s strange that you would first increase the size then ensure capacity. Like if ensure_capacity throws (I know we don\u0027t generally deal with OOM), we are in an inconsistent state.\n\nI would generally prefer to see something like this:\n\nif (mSize \u003d\u003d mReservedSize)   // or \u003e\u003d if you are paranoid ;)\n  ensure_capacity(mSize + 1); // if this fails, nothing has changed\nmData[mSize++] \u003d value;\n\nThis comment applies everywhere, i.e. the order would be ensure_capacity(newSize); mSize \u003d newSize;",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6f4d627a_4a817e7f",
         "filename": "src/common/FastVector.h",
         "patchSetId": 5
@@ -19,6 +138,166 @@
         "endLine": 308,
         "endChar": 25
       },
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27eb0d56_d9d6cc8e",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T02:52:48Z",
+      "side": 1,
+      "message": "If the data pointers point to the fixed storage, swapping them wouldn\u0027t make sense. For any that points to the fixed storage, the other should point to **its own** fixed storage.",
+      "parentUuid": "6f4d627a_4a817e7f",
+      "range": {
+        "startLine": 300,
+        "startChar": 0,
+        "endLine": 308,
+        "endChar": 25
+      },
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8290cbc1_28edf64f",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T02:52:48Z",
+      "side": 1,
+      "message": "With the change of ensure_capacity taking the new size as argument, this for example would become simpler:\n\nensure_capacity(count);\nwhile (mSize \u003c count)\n  mData[mSize++] \u003d value;",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a69f42c_a40b49f3",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T02:52:48Z",
+      "side": 1,
+      "message": "Might be a good idea to test newData !\u003d mData, especially with the std::move suggestion in the comment below (although self-move should always be handled correctly, but there is at least no point in that)",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0df2245_84a2c44a",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T02:52:48Z",
+      "side": 1,
+      "message": "While this works for our use cases so far and is most likely the fastest solution, it\u0027s technically incorrect. For example if T keeps some pointers inside (hey, like FastVector itself!), then they would need to be corrected during the move.\n\nstd::move(begin(), end(), newData); should be the correct (although probably not entirely as efficient) solution.\n\n---\n\nAlso, you should be copying mSize (well, the value of mSize before the modification done prior to this function call, see my other comment) and not mReservedSize. Otherwise you are wasting time copying garbage data.",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73d6d112_620aa77a",
+        "filename": "src/common/FastVector_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T02:52:48Z",
+      "side": 1,
+      "message": "If you really wanna go all the way, you should try defining a class with copy constructor and assignment operator deleted, and make sure initializer list inits etc only move.",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7f7e061_17b882f5",
+        "filename": "src/common/FastVector_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T02:52:48Z",
+      "side": 1,
+      "message": "I would test an index other than 0. If some implementation calculates the address with base+bytes*index and makes a mistake in `bytes`, it would go hidden (at() is only tested here)",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb1b971e_01cef8fd",
+        "filename": "src/common/FastVector_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T02:52:48Z",
+      "side": 1,
+      "message": "Might as well test (and implement) front()",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ef0a7e8_5d2cf9ce",
+        "filename": "src/common/FastVector_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T02:52:48Z",
+      "side": 1,
+      "message": "Add a test for clear in the case of larger-than-minimum size, which should test clear\u0027s dynamically allocated path.",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92badcbc_bc8e305d",
+        "filename": "src/common/FastVector_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T02:52:48Z",
+      "side": 1,
+      "message": "Add a test for resize to larger-than-minimum, and another for resize back to under minimum.",
       "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
