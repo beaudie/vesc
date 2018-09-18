@@ -161,7 +161,11 @@ egl::Error DisplayAndroid::initialize(egl::Display *display)
         return egl::EglNotInitialized() << "OpenGL ES 2.0 is not supportable.";
     }
 
-    return DisplayGL::initialize(display);
+    ANGLE_TRY(DisplayGL::initialize(display));
+
+    std::string rendererDescription = mRenderer->getDescription();
+    __android_log_print(ANDROID_LOG_INFO, "ANGLE", "%s", rendererDescription.c_str());
+    return egl::NoError();
 }
 
 void DisplayAndroid::terminate()
