@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f965995_0e7e878f",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T16:58:09Z",
+      "side": 1,
+      "message": "Any reason why you don\u0027t `std::copy()`? The implementation may be specialized for basic types for better performance (i.e. turned to memcpy).",
+      "revId": "7976f5888fa4153b0fea4b9abe5d572150e1af8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

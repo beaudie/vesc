@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "51339066_ecdc4081",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T16:58:09Z",
+      "side": 1,
+      "message": "Not a problem. Though we certainly need to make sure most of what\u0027s here is inlined!",
+      "parentUuid": "b5fd9017_65762d38",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4df186e_09ac821e",
         "filename": "src/common/FastVector.h",
         "patchSetId": 5
@@ -452,6 +470,24 @@
       "side": 1,
       "message": "Done. Apparently std::initializer_list doesn\u0027t work with move-only semantics.",
       "parentUuid": "73d6d112_620aa77a",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "84d800bc_de95381f",
+        "filename": "src/common/FastVector_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-18T16:58:09Z",
+      "side": 1,
+      "message": "Sadness",
+      "parentUuid": "7e1da03f_e6e4473c",
       "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
