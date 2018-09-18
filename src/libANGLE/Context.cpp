@@ -2623,11 +2623,6 @@ void Context::markContextLost()
     mContextLost = true;
 }
 
-bool Context::isContextLost() const
-{
-    return mContextLost;
-}
-
 GLenum Context::getGraphicsResetStatus()
 {
     // Even if the application doesn't want to know about resets, we want to know
