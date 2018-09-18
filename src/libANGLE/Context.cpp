@@ -480,10 +480,12 @@ void Context::initialize()
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_VERTEX_ARRAY);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_TEXTURES);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
+    mDrawDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
 
     mPathOperationDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
     mPathOperationDirtyObjects.set(State::DIRTY_OBJECT_VERTEX_ARRAY);
     mPathOperationDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_TEXTURES);
+    mPathOperationDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
 
     mTexImageDirtyBits.set(State::DIRTY_BIT_UNPACK_STATE);
     mTexImageDirtyBits.set(State::DIRTY_BIT_UNPACK_BUFFER_BINDING);
@@ -528,6 +530,7 @@ void Context::initialize()
     mComputeDirtyBits.set(State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_TEXTURES);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
+    mComputeDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
 
     mImplementation->setErrorSet(&mErrors);
 
@@ -2835,16 +2838,16 @@ void Context::samplerParameteri(GLuint sampler, GLenum pname, GLint param)
 {
     Sampler *samplerObject =
         mState.mSamplers->checkSamplerAllocation(mImplementation.get(), sampler);
-    SetSamplerParameteri(samplerObject, pname, param);
-    mGLState.setObjectDirty(GL_SAMPLER);
+    SetSamplerParameteri(this, samplerObject, pname, param);
+    mGLState.setSamplerDirty(sampler);
 }
 
 void Context::samplerParameteriv(GLuint sampler, GLenum pname, const GLint *param)
 {
     Sampler *samplerObject =
         mState.mSamplers->checkSamplerAllocation(mImplementation.get(), sampler);
-    SetSamplerParameteriv(samplerObject, pname, param);
-    mGLState.setObjectDirty(GL_SAMPLER);
+    SetSamplerParameteriv(this, samplerObject, pname, param);
+    mGLState.setSamplerDirty(sampler);
 }
 
 void Context::samplerParameterivRobust(GLuint sampler,
@@ -2875,16 +2878,16 @@ void Context::samplerParameterf(GLuint sampler, GLenum pname, GLfloat param)
 {
     Sampler *samplerObject =
         mState.mSamplers->checkSamplerAllocation(mImplementation.get(), sampler);
-    SetSamplerParameterf(samplerObject, pname, param);
-    mGLState.setObjectDirty(GL_SAMPLER);
+    SetSamplerParameterf(this, samplerObject, pname, param);
+    mGLState.setSamplerDirty(sampler);
 }
 
 void Context::samplerParameterfv(GLuint sampler, GLenum pname, const GLfloat *param)
 {
     Sampler *samplerObject =
         mState.mSamplers->checkSamplerAllocation(mImplementation.get(), sampler);
-    SetSamplerParameterfv(samplerObject, pname, param);
-    mGLState.setObjectDirty(GL_SAMPLER);
+    SetSamplerParameterfv(this, samplerObject, pname, param);
+    mGLState.setSamplerDirty(sampler);
 }
 
 void Context::samplerParameterfvRobust(GLuint sampler,
@@ -2900,7 +2903,6 @@ void Context::getSamplerParameteriv(GLuint sampler, GLenum pname, GLint *params)
     const Sampler *samplerObject =
         mState.mSamplers->checkSamplerAllocation(mImplementation.get(), sampler);
     QuerySamplerParameteriv(samplerObject, pname, params);
-    mGLState.setObjectDirty(GL_SAMPLER);
 }
 
 void Context::getSamplerParameterivRobust(GLuint sampler,
@@ -2935,7 +2937,6 @@ void Context::getSamplerParameterfv(GLuint sampler, GLenum pname, GLfloat *param
     const Sampler *samplerObject =
         mState.mSamplers->checkSamplerAllocation(mImplementation.get(), sampler);
     QuerySamplerParameterfv(samplerObject, pname, params);
-    mGLState.setObjectDirty(GL_SAMPLER);
 }
 
 void Context::getSamplerParameterfvRobust(GLuint sampler,
