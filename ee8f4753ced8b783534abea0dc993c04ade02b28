@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "aa127ad7_18e7fb97",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:09:32Z",
+      "side": 1,
+      "message": "Pass for now.",
+      "parentUuid": "cac23a6e_1360eb60",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c5a535b3_2ec4d1a0",
         "filename": "src/common/FastVector.h",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2685686f_f33b3f7f",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:09:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5a535b3_2ec4d1a0",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "48686b91_25794c51",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:09:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1ef0278_d2fa12af",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6df22020_303cbd1a",
         "filename": "src/common/FastVector.h",
         "patchSetId": 5
@@ -67,6 +121,24 @@
       "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5fd9017_65762d38",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:09:32Z",
+      "side": 1,
+      "message": "I\u0027d rather keep it like this if you don\u0027t mind. Avoids having to ensure things are inlined.",
+      "parentUuid": "6df22020_303cbd1a",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "6124f1a2_0b961335",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:09:32Z",
+      "side": 1,
+      "message": "I\u0027d rather keep it like this if you don\u0027t mind. Avoids having to ensure things are inlined.",
+      "parentUuid": "d4df186e_09ac821e",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6409e9d5_5fcfc1de",
         "filename": "src/common/FastVector.h",
         "patchSetId": 5
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "16c08e10_559d3fa8",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:09:32Z",
+      "side": 1,
+      "message": "Makes sense for vector but not for a custom ANGLE container. We don\u0027t want our implementation to have errors here.",
+      "parentUuid": "6409e9d5_5fcfc1de",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9faf0c81_0661ea47",
         "filename": "src/common/FastVector.h",
         "patchSetId": 5
@@ -118,6 +226,24 @@
       "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "647efa85_27a80c1c",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:09:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9faf0c81_0661ea47",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -168,6 +294,30 @@
     },
     {
       "key": {
+        "uuid": "4b814ff1_17ebf670",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:09:32Z",
+      "side": 1,
+      "message": "Yep.",
+      "parentUuid": "27eb0d56_d9d6cc8e",
+      "range": {
+        "startLine": 300,
+        "startChar": 0,
+        "endLine": 308,
+        "endChar": 25
+      },
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8290cbc1_28edf64f",
         "filename": "src/common/FastVector.h",
         "patchSetId": 5
@@ -182,6 +332,24 @@
       "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c6c0cd8_5780a3c9",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:09:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8290cbc1_28edf64f",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -202,6 +370,24 @@
     },
     {
       "key": {
+        "uuid": "c9f23bb1_bb7680ca",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:09:32Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be as necessary with the new ensure_capacity code.",
+      "parentUuid": "3a69f42c_a40b49f3",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c0df2245_84a2c44a",
         "filename": "src/common/FastVector.h",
         "patchSetId": 5
@@ -216,6 +402,24 @@
       "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4476573c_249087db",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:09:32Z",
+      "side": 1,
+      "message": "Done. Also removed other uses of memcpy.",
+      "parentUuid": "c0df2245_84a2c44a",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -236,6 +440,24 @@
     },
     {
       "key": {
+        "uuid": "7e1da03f_e6e4473c",
+        "filename": "src/common/FastVector_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:09:32Z",
+      "side": 1,
+      "message": "Done. Apparently std::initializer_list doesn\u0027t work with move-only semantics.",
+      "parentUuid": "73d6d112_620aa77a",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d7f7e061_17b882f5",
         "filename": "src/common/FastVector_unittest.cpp",
         "patchSetId": 5
@@ -250,6 +472,24 @@
       "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdb72df7_bcebf46d",
+        "filename": "src/common/FastVector_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:09:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7f7e061_17b882f5",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -270,6 +510,24 @@
     },
     {
       "key": {
+        "uuid": "599e1f60_1b45c45b",
+        "filename": "src/common/FastVector_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:09:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb1b971e_01cef8fd",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ef0a7e8_5d2cf9ce",
         "filename": "src/common/FastVector_unittest.cpp",
         "patchSetId": 5
@@ -287,6 +545,24 @@
     },
     {
       "key": {
+        "uuid": "3136abf7_08d19202",
+        "filename": "src/common/FastVector_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:09:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ef0a7e8_5d2cf9ce",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "92badcbc_bc8e305d",
         "filename": "src/common/FastVector_unittest.cpp",
         "patchSetId": 5
@@ -301,6 +577,24 @@
       "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bf17e12_93fcda61",
+        "filename": "src/common/FastVector_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-18T10:09:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92badcbc_bc8e305d",
+      "revId": "ee8f4753ced8b783534abea0dc993c04ade02b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
