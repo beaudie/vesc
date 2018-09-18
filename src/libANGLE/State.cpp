@@ -25,6 +25,7 @@
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/queryutils.h"
 #include "libANGLE/renderer/ContextImpl.h"
+#include "libANGLE/renderer/TextureImpl.h"
 
 namespace gl
 {
@@ -2750,7 +2751,10 @@ Error State::syncProgramTextures(const Context *context)
         // TODO(jmadill): Use specific dirty bit for completeness change.
         if (texture->isSamplerComplete(context, sampler))
         {
-            ANGLE_TRY(texture->syncState(context));
+            if (texture->hasAnyDirtyBit())
+            {
+                ANGLE_TRY(texture->syncState(context));
+            }
             mActiveTexturesCache[textureUnitIndex] = texture;
         }
         else
@@ -2759,7 +2763,7 @@ Error State::syncProgramTextures(const Context *context)
         }
 
         // Bind the texture unconditionally, to recieve completeness change notifications.
-        mCompleteTextureBindings[textureUnitIndex].bind(texture->getSubject());
+        mCompleteTextureBindings[textureUnitIndex].bind(texture->getImplementation());
         newActiveTextures.set(textureUnitIndex);
 
         if (texture->initState() == InitState::MayNeedInit)
@@ -2786,7 +2790,10 @@ Error State::syncProgramTextures(const Context *context)
         {
             continue;
         }
-        ANGLE_TRY(texture->syncState(context));
+        if (texture->hasAnyDirtyBit())
+        {
+            ANGLE_TRY(texture->syncState(context));
+        }
         if (texture->initState() == InitState::MayNeedInit)
         {
             mCachedImageTexturesInitState = InitState::MayNeedInit;
