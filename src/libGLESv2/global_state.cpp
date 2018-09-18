@@ -12,32 +12,27 @@
 #include "common/platform.h"
 #include "common/tls.h"
 
-#include "libANGLE/Debug.h"
-#include "libANGLE/Thread.h"
-
 namespace gl
 {
+Context *gGlobalContext    = nullptr;
+bool gGlobalContextInvalid = false;
 
 Context *GetGlobalContext()
 {
+    if (gGlobalContext)
+    {
+        return gGlobalContext;
+    }
+
     egl::Thread *thread = egl::GetCurrentThread();
     return thread->getContext();
 }
-
-Context *GetValidGlobalContext()
-{
-    egl::Thread *thread = egl::GetCurrentThread();
-    return thread->getValidContext();
-}
-
 }  // namespace gl
 
 namespace egl
 {
-
 namespace
 {
-
 static TLSIndex threadTLS = TLS_INVALID_INDEX;
 Debug *g_Debug            = nullptr;
 
@@ -91,6 +86,22 @@ Debug *GetDebug()
     return g_Debug;
 }
 
+void SetContextCurrent(Thread *thread, gl::Context *context)
+{
+    if (!gl::gGlobalContextInvalid)
+    {
+        if (gl::gGlobalContext == nullptr || gl::gGlobalContext == thread->getContext())
+        {
+            gl::gGlobalContext = context;
+        }
+        else
+        {
+            gl::gGlobalContext        = nullptr;
+            gl::gGlobalContextInvalid = true;
+        }
+    }
+    thread->setCurrent(context);
+}
 }  // namespace egl
 
 #if ANGLE_FORCE_THREAD_SAFETY == ANGLE_ENABLED
