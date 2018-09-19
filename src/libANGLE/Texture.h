@@ -341,7 +341,7 @@ class Texture final : public RefCountObject, public egl::ImageSibling, public La
                          GLint level,
                          const Offset &destOffset,
                          GLint sourceLevel,
-                         const Rectangle &sourceArea,
+                         const Box &sourceBox,
                          bool unpackFlipY,
                          bool unpackPremultiplyAlpha,
                          bool unpackUnmultiplyAlpha,
