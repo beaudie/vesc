@@ -216,6 +216,30 @@
     },
     {
       "key": {
+        "uuid": "c27a9421_421ae78a",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1166724
+      },
+      "writtenOn": "2018-09-19T16:57:44Z",
+      "side": 1,
+      "message": "Adding a note that case 4 is handled the same way as case 3.",
+      "parentUuid": "7fb1fa23_45c4d335",
+      "range": {
+        "startLine": 33,
+        "startChar": 3,
+        "endLine": 33,
+        "endChar": 78
+      },
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "deb27823_74968f3d",
         "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
         "patchSetId": 3
@@ -263,6 +287,30 @@
     },
     {
       "key": {
+        "uuid": "fd6e5f7d_12f10157",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1166724
+      },
+      "writtenOn": "2018-09-19T16:57:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86a7b128_538a8c5d",
+      "range": {
+        "startLine": 67,
+        "startChar": 23,
+        "endLine": 67,
+        "endChar": 33
+      },
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d8773576_3cec80a2",
         "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
         "patchSetId": 3
@@ -286,6 +334,30 @@
     },
     {
       "key": {
+        "uuid": "59deb6d5_e7c5f6a0",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1166724
+      },
+      "writtenOn": "2018-09-19T16:57:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8773576_3cec80a2",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 76,
+        "endChar": 9
+      },
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3d0f9a1f_f65bdbdb",
         "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
         "patchSetId": 3
@@ -300,6 +372,24 @@
       "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1004048_942f69e3",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1166724
+      },
+      "writtenOn": "2018-09-19T16:57:44Z",
+      "side": 1,
+      "message": "Adding a note that this comment appears to be a duplicate.",
+      "parentUuid": "3d0f9a1f_f65bdbdb",
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -320,6 +410,24 @@
     },
     {
       "key": {
+        "uuid": "89cc7d64_695259cc",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1166724
+      },
+      "writtenOn": "2018-09-19T16:57:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a71cfd87_065be14f",
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4ff9bb0f_bf388cb4",
         "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
         "patchSetId": 3
@@ -334,6 +442,24 @@
       "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40331811_5b237e90",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1166724
+      },
+      "writtenOn": "2018-09-19T16:57:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ff9bb0f_bf388cb4",
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -360,6 +486,30 @@
     },
     {
       "key": {
+        "uuid": "e6f128d5_cc4c1392",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1166724
+      },
+      "writtenOn": "2018-09-19T16:57:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57e02a14_7788b065",
+      "range": {
+        "startLine": 152,
+        "startChar": 4,
+        "endLine": 152,
+        "endChar": 8
+      },
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d60ae9a5_199250bc",
         "filename": "src/compiler/translator/tree_util/IntermTraverse.cpp",
         "patchSetId": 3
@@ -383,6 +533,30 @@
     },
     {
       "key": {
+        "uuid": "34c71068_4ec30b77",
+        "filename": "src/compiler/translator/tree_util/IntermTraverse.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1166724
+      },
+      "writtenOn": "2018-09-19T16:57:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d60ae9a5_199250bc",
+      "range": {
+        "startLine": 295,
+        "startChar": 16,
+        "endLine": 295,
+        "endChar": 25
+      },
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9cc7afd2_d64e6a3d",
         "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
         "patchSetId": 3
@@ -403,6 +577,30 @@
       "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fa09b30_ee6cb87d",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1628,
+      "author": {
+        "id": 1166724
+      },
+      "writtenOn": "2018-09-19T16:57:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9cc7afd2_d64e6a3d",
+      "range": {
+        "startLine": 1628,
+        "startChar": 75,
+        "endLine": 1628,
+        "endChar": 83
+      },
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -441,6 +639,24 @@
     },
     {
       "key": {
+        "uuid": "9d67a710_4da1b19c",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1631,
+      "author": {
+        "id": 1166724
+      },
+      "writtenOn": "2018-09-19T16:57:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f56d87f3_2805ad26",
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "396529b3_a6a18845",
         "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
         "patchSetId": 3
@@ -461,6 +677,30 @@
       "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44a69a11_173b866a",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1633,
+      "author": {
+        "id": 1166724
+      },
+      "writtenOn": "2018-09-19T16:57:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "396529b3_a6a18845",
+      "range": {
+        "startLine": 1633,
+        "startChar": 0,
+        "endLine": 1633,
+        "endChar": 8
+      },
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -487,6 +727,30 @@
     },
     {
       "key": {
+        "uuid": "9dd09fb3_e277b45b",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1680,
+      "author": {
+        "id": 1166724
+      },
+      "writtenOn": "2018-09-19T16:57:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13a34e4b_2a8f5759",
+      "range": {
+        "startLine": 1680,
+        "startChar": 4,
+        "endLine": 1680,
+        "endChar": 10
+      },
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6be0e9e_6b357c15",
         "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
         "patchSetId": 3
@@ -504,6 +768,24 @@
     },
     {
       "key": {
+        "uuid": "3d4f2b77_2f791793",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1166724
+      },
+      "writtenOn": "2018-09-19T16:57:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6be0e9e_6b357c15",
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "747f2c18_b380c652",
         "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
         "patchSetId": 3
@@ -518,6 +800,24 @@
       "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "153237ae_c59cda73",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1734,
+      "author": {
+        "id": 1166724
+      },
+      "writtenOn": "2018-09-19T16:57:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "747f2c18_b380c652",
+      "revId": "7bbefacec78cb86c731e87b29e71954441c45069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
