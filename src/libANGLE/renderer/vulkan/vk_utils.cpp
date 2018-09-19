@@ -94,13 +94,15 @@ bool HasValidationLayers(const std::vector<VkLayerProperties> &layerProps)
 
 angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
                                               const vk::MemoryProperties &memoryProperties,
-                                              VkMemoryPropertyFlags memoryPropertyFlags,
+                                              VkMemoryPropertyFlags requestedMemoryPropertyFlags,
                                               const VkMemoryRequirements &memoryRequirements,
                                               vk::DeviceMemory *deviceMemoryOut)
 {
+    VkMemoryPropertyFlags actualMemoryPropertyFlags = 0;
     uint32_t memoryTypeIndex = 0;
-    ANGLE_TRY(memoryProperties.findCompatibleMemoryIndex(context, memoryRequirements,
-                                                         memoryPropertyFlags, &memoryTypeIndex));
+    ANGLE_TRY(memoryProperties.findCompatibleMemoryIndex(
+        context, memoryRequirements, requestedMemoryPropertyFlags, &actualMemoryPropertyFlags,
+        &memoryTypeIndex));
 
     VkMemoryAllocateInfo allocInfo;
     allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -108,7 +110,7 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
     allocInfo.memoryTypeIndex = memoryTypeIndex;
     allocInfo.allocationSize  = memoryRequirements.size;
 
-    ANGLE_TRY(deviceMemoryOut->allocate(context, allocInfo));
+    ANGLE_TRY(deviceMemoryOut->allocate(context, allocInfo, actualMemoryPropertyFlags));
     return angle::Result::Continue();
 }
 
@@ -706,7 +708,7 @@ void Framebuffer::setHandle(VkFramebuffer handle)
 }
 
 // DeviceMemory implementation.
-DeviceMemory::DeviceMemory()
+DeviceMemory::DeviceMemory() : mAllocatedMemoryPropertyFlags(0)
 {
 }
 
@@ -719,10 +721,13 @@ void DeviceMemory::destroy(VkDevice device)
     }
 }
 
-angle::Result DeviceMemory::allocate(Context *context, const VkMemoryAllocateInfo &allocInfo)
+angle::Result DeviceMemory::allocate(Context *context,
+                                     const VkMemoryAllocateInfo &allocInfo,
+                                     VkMemoryPropertyFlags memoryPropertyFlags)
 {
     ASSERT(!valid());
     ANGLE_VK_TRY(context, vkAllocateMemory(context->getDevice(), &allocInfo, nullptr, &mHandle));
+    mAllocatedMemoryPropertyFlags = memoryPropertyFlags;
     return angle::Result::Continue();
 }
 
@@ -742,6 +747,12 @@ void DeviceMemory::unmap(VkDevice device) const
 {
     ASSERT(valid());
     vkUnmapMemory(device, mHandle);
+}
+
+bool DeviceMemory::isHostCoherent() const
+{
+    return (VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ==
+            (mAllocatedMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
 }
 
 // RenderPass implementation.
@@ -1000,7 +1011,8 @@ void MemoryProperties::destroy()
 angle::Result MemoryProperties::findCompatibleMemoryIndex(
     Context *context,
     const VkMemoryRequirements &memoryRequirements,
-    VkMemoryPropertyFlags memoryPropertyFlags,
+    VkMemoryPropertyFlags requestedMemoryPropertyFlags,
+    VkMemoryPropertyFlags *memoryPropertyFlagsOut,
     uint32_t *typeIndexOut) const
 {
     ASSERT(mMemoryProperties.memoryTypeCount > 0 && mMemoryProperties.memoryTypeCount <= 32);
@@ -1013,9 +1025,10 @@ angle::Result MemoryProperties::findCompatibleMemoryIndex(
     {
         ASSERT(memoryIndex < mMemoryProperties.memoryTypeCount);
 
-        if ((mMemoryProperties.memoryTypes[memoryIndex].propertyFlags & memoryPropertyFlags) ==
-            memoryPropertyFlags)
+        if ((mMemoryProperties.memoryTypes[memoryIndex].propertyFlags &
+             requestedMemoryPropertyFlags) == requestedMemoryPropertyFlags)
         {
+            *memoryPropertyFlagsOut = mMemoryProperties.memoryTypes[memoryIndex].propertyFlags;
             *typeIndexOut = static_cast<uint32_t>(memoryIndex);
             return angle::Result::Continue();
         }

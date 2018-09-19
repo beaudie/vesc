@@ -48,7 +48,7 @@ struct VertexAttribute;
 class VertexBinding;
 
 ANGLE_GL_OBJECTS_X(ANGLE_PRE_DECLARE_OBJECT);
-}
+}  // namespace gl
 
 #define ANGLE_PRE_DECLARE_VK_OBJECT(OBJ) class OBJ##Vk;
 
@@ -274,7 +274,8 @@ class MemoryProperties final : angle::NonCopyable
     void init(VkPhysicalDevice physicalDevice);
     angle::Result findCompatibleMemoryIndex(Context *context,
                                             const VkMemoryRequirements &memoryRequirements,
-                                            VkMemoryPropertyFlags memoryPropertyFlags,
+                                            VkMemoryPropertyFlags requestedMemoryPropertyFlags,
+                                            VkMemoryPropertyFlags *memoryPropertyFlagsOut,
                                             uint32_t *indexOut) const;
     void destroy();
 
@@ -485,13 +486,19 @@ class DeviceMemory final : public WrappedObject<DeviceMemory, VkDeviceMemory>
     DeviceMemory();
     void destroy(VkDevice device);
 
-    angle::Result allocate(Context *context, const VkMemoryAllocateInfo &allocInfo);
+    angle::Result allocate(Context *context,
+                           const VkMemoryAllocateInfo &allocInfo,
+                           VkMemoryPropertyFlags memoryPropertyFlags);
     angle::Result map(Context *context,
                       VkDeviceSize offset,
                       VkDeviceSize size,
                       VkMemoryMapFlags flags,
                       uint8_t **mapPointer) const;
     void unmap(VkDevice device) const;
+    bool isHostCoherent() const;
+
+  private:
+    VkMemoryPropertyFlags mAllocatedMemoryPropertyFlags;
 };
 
 class RenderPass final : public WrappedObject<RenderPass, VkRenderPass>

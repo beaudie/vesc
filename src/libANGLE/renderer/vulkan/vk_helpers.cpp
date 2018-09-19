@@ -170,7 +170,7 @@ angle::Result DynamicBuffer::allocate(Context *context,
 
 angle::Result DynamicBuffer::flush(Context *context)
 {
-    if (mNextAllocationOffset > mLastFlushOrInvalidateOffset)
+    if (!mMemory.isHostCoherent() && (mNextAllocationOffset > mLastFlushOrInvalidateOffset))
     {
         VkMappedMemoryRange range;
         range.sType  = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
@@ -187,7 +187,7 @@ angle::Result DynamicBuffer::flush(Context *context)
 
 angle::Result DynamicBuffer::invalidate(Context *context)
 {
-    if (mNextAllocationOffset > mLastFlushOrInvalidateOffset)
+    if (!mMemory.isHostCoherent() && (mNextAllocationOffset > mLastFlushOrInvalidateOffset))
     {
         VkMappedMemoryRange range;
         range.sType  = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
