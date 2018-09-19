@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "ecdfb442_7ef45263",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-19T17:04:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb661e81_d24e3dfe",
+      "range": {
+        "startLine": 341,
+        "startChar": 0,
+        "endLine": 342,
+        "endChar": 0
+      },
+      "revId": "e1a66f8edc87898fec731e9bc979e60ec7af4be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "148e7ff3_2db9d424",
         "filename": "src/common/FastVector.h",
         "patchSetId": 2
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "7077cb4b_bb026eaa",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-19T17:04:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "148e7ff3_2db9d424",
+      "range": {
+        "startLine": 347,
+        "startChar": 0,
+        "endLine": 355,
+        "endChar": 5
+      },
+      "revId": "e1a66f8edc87898fec731e9bc979e60ec7af4be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "252b789c_ef9f5cbf",
         "filename": "src/common/FastVector.h",
         "patchSetId": 2
@@ -116,6 +164,30 @@
       "revId": "e1a66f8edc87898fec731e9bc979e60ec7af4be7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85b55d8f_60fbda5d",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-19T17:04:39Z",
+      "side": 1,
+      "message": "Done. Also found a bug, fixed it, and added test.",
+      "parentUuid": "252b789c_ef9f5cbf",
+      "range": {
+        "startLine": 361,
+        "startChar": 0,
+        "endLine": 370,
+        "endChar": 5
+      },
+      "revId": "e1a66f8edc87898fec731e9bc979e60ec7af4be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
