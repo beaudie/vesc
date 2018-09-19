@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb661e81_d24e3dfe",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-09-19T16:41:08Z",
+      "side": 1,
+      "message": "I was thinking, in case you don\u0027t use mFixedStorage in both objects, would it make sense to optimize out this copy?",
+      "range": {
+        "startLine": 341,
+        "startChar": 0,
+        "endLine": 342,
+        "endChar": 0
+      },
+      "revId": "e1a66f8edc87898fec731e9bc979e60ec7af4be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "148e7ff3_2db9d424",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-09-19T16:41:08Z",
+      "side": 1,
+      "message": "You could simplify this to:\nif (count \u003e mSize)\n  ensure_capacity(count);\nmSize \u003d count;",
+      "range": {
+        "startLine": 347,
+        "startChar": 0,
+        "endLine": 355,
+        "endChar": 5
+      },
+      "revId": "e1a66f8edc87898fec731e9bc979e60ec7af4be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "252b789c_ef9f5cbf",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-09-19T16:41:08Z",
+      "side": 1,
+      "message": "similarly",
+      "range": {
+        "startLine": 361,
+        "startChar": 0,
+        "endLine": 370,
+        "endChar": 5
+      },
+      "revId": "e1a66f8edc87898fec731e9bc979e60ec7af4be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
