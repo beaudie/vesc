@@ -1974,14 +1974,20 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 syncTransformFeedbackState(context);
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
+            {
                 mProgramTexturesAndSamplersDirty = true;
                 mProgramStorageBuffersDirty      = true;
-                propagateProgramToVAO(state.getProgram(),
-                                      GetImplAs<VertexArrayGL>(state.getVertexArray()));
+                const gl::Program *program       = state.getProgram();
+                if (!(program && program->hasLinkedShaderStage(gl::ShaderType::Compute)))
+                {
+                    propagateProgramToVAO(program,
+                                          GetImplAs<VertexArrayGL>(state.getVertexArray()));
+                }
                 updateMultiviewBaseViewLayerIndexUniform(
                     state.getProgram(),
                     state.getDrawFramebuffer()->getImplementation()->getState());
                 break;
+            }
             case gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING:
                 mProgramStorageBuffersDirty = true;
                 break;
