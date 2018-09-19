@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9922e73c_6c8219fc",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-19T23:25:36Z",
+      "side": 1,
+      "message": "nit: this is always false. It could either stay like this or be an ASSERT.",
+      "revId": "67ddec3265b64156d151548914b9d71f0a370cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f382c14_d413e3d5",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-19T23:25:36Z",
+      "side": 1,
+      "message": "ditto.",
+      "revId": "67ddec3265b64156d151548914b9d71f0a370cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
