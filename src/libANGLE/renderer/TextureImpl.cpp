@@ -58,4 +58,34 @@ gl::Error TextureImpl::copyCompressedTexture(const gl::Context *context, const g
     return gl::InternalError() << "CHROMIUM_copy_compressed_texture exposed but not implemented.";
 }
 
+gl::Error TextureImpl::copy3DTexture(const gl::Context *context,
+                                     gl::TextureTarget target,
+                                     GLenum internalFormat,
+                                     GLenum type,
+                                     size_t sourceLevel,
+                                     size_t destLevel,
+                                     bool unpackFlipY,
+                                     bool unpackPremultiplyAlpha,
+                                     bool unpackUnmultiplyAlpha,
+                                     const gl::Texture *source)
+{
+    UNREACHABLE();
+    return gl::InternalError() << "ANGLE_copy_texture_3d exposed but not implemented.";
+}
+
+gl::Error TextureImpl::copy3DSubTexture(const gl::Context *context,
+                                        const gl::TextureTarget target,
+                                        const gl::Offset &destOffset,
+                                        size_t sourceLevel,
+                                        size_t destLevel,
+                                        const gl::Box &srcBox,
+                                        bool unpackFlipY,
+                                        bool unpackPremultiplyAlpha,
+                                        bool unpackUnmultiplyAlpha,
+                                        const gl::Texture *source)
+{
+    UNREACHABLE();
+    return gl::InternalError() << "ANGLE_copy_texture_3d exposed but not implemented.";
+}
+
 }  // namespace rx

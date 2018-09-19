@@ -199,7 +199,8 @@ class Renderer11 : public RendererD3D
     angle::Result copyTexture(const gl::Context *context,
                               const gl::Texture *source,
                               GLint sourceLevel,
-                              const gl::Rectangle &sourceRect,
+                              gl::TextureTarget srcTarget,
+                              const gl::Box &sourceBox,
                               GLenum destFormat,
                               GLenum destType,
                               const gl::Offset &destOffset,
@@ -262,6 +263,14 @@ class Renderer11 : public RendererD3D
                             bool unpackFlipY,
                             bool unpackPremultiplyAlpha,
                             bool unpackUnmultiplyAlpha) override;
+    angle::Result copy3DImage(const gl::Context *context,
+                              ImageD3D *dest,
+                              ImageD3D *source,
+                              const gl::Box &sourceBox,
+                              const gl::Offset &destOffset,
+                              bool unpackFlipY,
+                              bool unpackPremultiplyAlpha,
+                              bool unpackUnmultiplyAlpha) override;
     TextureStorage *createTextureStorage2D(SwapChainD3D *swapChain) override;
     TextureStorage *createTextureStorageEGLImage(EGLImageD3D *eglImage,
                                                  RenderTargetD3D *renderTargetD3D) override;
