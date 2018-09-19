@@ -346,6 +346,26 @@ class Texture final : public RefCountObject, public egl::ImageSibling, public La
                          bool unpackUnmultiplyAlpha,
                          Texture *source);
     Error copyCompressedTexture(const Context *context, const Texture *source);
+    Error copy3DTexture(const Context *context,
+                        TextureTarget target,
+                        GLint level,
+                        GLenum internalFormat,
+                        GLenum type,
+                        GLint sourceLevel,
+                        bool unpackFlipY,
+                        bool unpackPremultiplyAlpha,
+                        bool unpackUnmultiplyAlpha,
+                        Texture *source);
+    Error copy3DSubTexture(const Context *context,
+                           TextureTarget target,
+                           GLint level,
+                           const Offset &destOffset,
+                           GLint sourceLevel,
+                           const Box &sourceBox,
+                           bool unpackFlipY,
+                           bool unpackPremultiplyAlpha,
+                           bool unpackUnmultiplyAlpha,
+                           Texture *source);
 
     Error setStorage(const Context *context,
                      TextureType type,

@@ -75,12 +75,17 @@ ERRMSG(BufferMapped, "An active buffer is mapped");
 ERRMSG(CompressedTextureDimensionsMustMatchData,
        "Compressed texture dimensions must exactly match the dimensions of the data passed in.");
 ERRMSG(CompressedTexturesNotAttachable, "Compressed textures cannot be attached to a framebuffer.");
+ERRMSG(ANGLEcopyTexture3dUnavailable, "GL_ANGLE_copy_texture_3d extension not available.");
 ERRMSG(CubemapFacesEqualDimensions, "Each cubemap face must have equal width and height.");
 ERRMSG(CubemapIncomplete,
        "Texture is not cubemap complete. All cubemaps faces must be defined and be the same size.");
 ERRMSG(DefaultFramebufferInvalidAttachment,
        "Invalid attachment when the default framebuffer is bound.");
 ERRMSG(DefaultFramebufferTarget, "It is invalid to change default FBO's attachments");
+ERRMSG(DestinationImmutable, "Destination texture cannot be immutable.");
+ERRMSG(DestinationLevelNotDefined,
+       "The destination level of the destination texture must be defined.");
+ERRMSG(DestinationTextureTooSmall, "Destination texture too small.");
 ERRMSG(DispatchIndirectBufferNotBound, "Dispatch indirect buffer must be bound.");
 ERRMSG(DrawBufferTypeMismatch,
        "Fragment shader output type does not match the bound framebuffer attachment type.");
@@ -140,6 +145,8 @@ ERRMSG(InvalidDebugSeverity, "Invalid debug severity.");
 ERRMSG(InvalidDebugSource, "Invalid debug source.");
 ERRMSG(InvalidDebugType, "Invalid debug type.");
 ERRMSG(InvalidDepthRange, "Near value cannot be greater than far.");
+ERRMSG(InvalidDestinationTexture, "Destination texture is not a valid texture object.");
+ERRMSG(InvalidDestinationTextureType, "Invalid destination texture type.");
 ERRMSG(InvalidDrawMode, "Invalid draw mode.");
 ERRMSG(InvalidDrawModeTransformFeedback,
        "Draw mode must match current transform feedback object's draw mode.");
@@ -198,6 +205,9 @@ ERRMSG(InvalidSampler, "Sampler is not valid");
 ERRMSG(InvalidShaderName, "Shader object expected.");
 ERRMSG(InvalidShaderType, "Invalid shader type.");
 ERRMSG(InvalidShadingModel, "Invalid shading model.");
+ERRMSG(InvalidSourceTexture, "Source texture is not a valid texture object.");
+ERRMSG(InvalidSourceTextureLevel, "Invalid source texture level.");
+ERRMSG(InvalidSourceTextureSize, "Invalid source texture height or width.");
 ERRMSG(InvalidStencil, "Invalid stencil.");
 ERRMSG(InvalidStencilBitMask, "Invalid stencil bit mask.");
 ERRMSG(InvalidTarget, "Invalid target.");
@@ -255,8 +265,10 @@ ERRMSG(NegativeMaxCount, "Negative maxcount.");
 ERRMSG(NegativeOffset, "Negative offset.");
 ERRMSG(NegativePrimcount, "Primcount must be greater than or equal to zero.");
 ERRMSG(NegativeSize, "Cannot have negative height or width.");
+ERRMSG(NegativeHeightWidthDepth, "Cannot have negative height, width, or depth.");
 ERRMSG(NegativeStart, "Cannot have negative start.");
 ERRMSG(NegativeStride, "Cannot have negative stride.");
+ERRMSG(NegativeXYZ, "x, y, or z cannot be negative.");
 ERRMSG(NoActiveComputeShaderStage, "No active compute shader stage in this program.");
 ERRMSG(NoActiveGeometryShaderStage, "No active geometry shader stage in this program.");
 ERRMSG(
@@ -302,6 +314,7 @@ ERRMSG(ShaderSourceInvalidCharacters, "Shader source contains invalid characters
 ERRMSG(ShaderToDetachMustBeAttached,
        "Shader to be detached must be currently attached to the program.");
 ERRMSG(SourceTextureTooSmall, "The specified dimensions are outside of the bounds of the texture.");
+ERRMSG(SourceLevelNotDefined, "The source level of the source texture must be defined.");
 ERRMSG(StencilReferenceMaskOrMismatch,
        "Stencil reference and mask values must be the same for front facing and back facing "
        "triangles.");

@@ -111,6 +111,27 @@ class TextureImpl : public FramebufferAttachmentObjectImpl
 
     virtual gl::Error copyCompressedTexture(const gl::Context *context, const gl::Texture *source);
 
+    virtual gl::Error copy3DTexture(const gl::Context *context,
+                                    gl::TextureTarget target,
+                                    GLenum internalFormat,
+                                    GLenum type,
+                                    size_t sourceLevel,
+                                    size_t destLevel,
+                                    bool unpackFlipY,
+                                    bool unpackPremultiplyAlpha,
+                                    bool unpackUnmultiplyAlpha,
+                                    const gl::Texture *source);
+    virtual gl::Error copy3DSubTexture(const gl::Context *context,
+                                       const gl::TextureTarget target,
+                                       const gl::Offset &destOffset,
+                                       size_t sourceLevel,
+                                       size_t destLevel,
+                                       const gl::Box &srcBox,
+                                       bool unpackFlipY,
+                                       bool unpackPremultiplyAlpha,
+                                       bool unpackUnmultiplyAlpha,
+                                       const gl::Texture *source);
+
     virtual gl::Error setStorage(const gl::Context *context,
                                  gl::TextureType type,
                                  size_t levels,

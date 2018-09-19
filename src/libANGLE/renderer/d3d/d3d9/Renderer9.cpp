@@ -2450,6 +2450,25 @@ angle::Result Renderer9::copyTexture(const gl::Context *context,
                               unpackUnmultiplyAlpha);
 }
 
+angle::Result Renderer9::copy3DTexture(const gl::Context *context,
+                                       const gl::Texture *source,
+                                       GLint sourceLevel,
+                                       gl::TextureTarget srcTarget,
+                                       const gl::Box &sourceBox,
+                                       GLenum destFormat,
+                                       GLenum destType,
+                                       const gl::Offset &destOffset,
+                                       TextureStorage *storage,
+                                       gl::TextureTarget destTarget,
+                                       GLint destLevel,
+                                       bool unpackFlipY,
+                                       bool unpackPremultiplyAlpha,
+                                       bool unpackUnmultiplyAlpha)
+{
+    ANGLE_HR_UNREACHABLE(GetImplAs<Context9>(context));
+    return angle::Result::Stop();
+}
+
 angle::Result Renderer9::copyCompressedTexture(const gl::Context *context,
                                                const gl::Texture *source,
                                                GLint sourceLevel,
@@ -2783,6 +2802,19 @@ angle::Result Renderer9::copyImage(const gl::Context *context,
     Image9 *src9  = GetAs<Image9>(source);
     return Image9::CopyImage(context, dest9, src9, sourceRect, destOffset, unpackFlipY,
                              unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
+}
+
+angle::Result Renderer9::copy3DImage(const gl::Context *context,
+                                     ImageD3D *dest,
+                                     ImageD3D *source,
+                                     const gl::Box &sourceBox,
+                                     const gl::Offset &destOffset,
+                                     bool unpackFlipY,
+                                     bool unpackPremultiplyAlpha,
+                                     bool unpackUnmultiplyAlpha)
+{
+    ANGLE_HR_UNREACHABLE(GetImplAs<Context9>(context));
+    return angle::Result::Stop();
 }
 
 TextureStorage *Renderer9::createTextureStorage2D(SwapChainD3D *swapChain)

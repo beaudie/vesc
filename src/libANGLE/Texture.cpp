@@ -1179,6 +1179,69 @@ Error Texture::copyCompressedTexture(const Context *context, const Texture *sour
     return NoError();
 }
 
+Error Texture::copy3DTexture(const Context *context,
+                             TextureTarget target,
+                             GLint level,
+                             GLenum internalFormat,
+                             GLenum type,
+                             GLint sourceLevel,
+                             bool unpackFlipY,
+                             bool unpackPremultiplyAlpha,
+                             bool unpackUnmultiplyAlpha,
+                             Texture *source)
+{
+    ASSERT(TextureTargetToType(target) == mState.mType);
+    ASSERT(source->getType() != TextureType::CubeMap);
+
+    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
+    ANGLE_TRY(releaseTexImageInternal(context));
+    ANGLE_TRY(orphanImages(context));
+
+    // Initialize source texture.
+    // Note: we don't have a way to notify which portions of the image changed currently.
+    ANGLE_TRY(source->ensureInitialized(context));
+
+    ANGLE_TRY(mTexture->copy3DTexture(context, target, internalFormat, type, sourceLevel, level,
+                                      unpackFlipY, unpackPremultiplyAlpha, unpackUnmultiplyAlpha,
+                                      source));
+
+    const auto &sourceDesc =
+        source->mState.getImageDesc(NonCubeTextureTypeToTarget(source->getType()), 0);
+    const InternalFormat &internalFormatInfo = GetInternalFormatInfo(internalFormat, type);
+    mState.setImageDesc(
+        target, level,
+        ImageDesc(sourceDesc.size, Format(internalFormatInfo), InitState::Initialized));
+
+    signalDirty(context, InitState::Initialized);
+
+    return NoError();
+}
+
+Error Texture::copy3DSubTexture(const Context *context,
+                                TextureTarget target,
+                                GLint level,
+                                const Offset &destOffset,
+                                GLint sourceLevel,
+                                const Box &sourceBox,
+                                bool unpackFlipY,
+                                bool unpackPremultiplyAlpha,
+                                bool unpackUnmultiplyAlpha,
+                                Texture *source)
+{
+    ASSERT(TextureTargetToType(target) == mState.mType);
+
+    // Ensure source is initialized.
+    ANGLE_TRY(source->ensureInitialized(context));
+
+    Box destBox(destOffset.x, destOffset.y, destOffset.z, sourceBox.width, sourceBox.height,
+                sourceBox.depth);
+    ANGLE_TRY(ensureSubImageInitialized(context, target, level, destBox));
+
+    return mTexture->copy3DSubTexture(context, target, destOffset, sourceLevel, level, sourceBox,
+                                      unpackFlipY, unpackPremultiplyAlpha, unpackUnmultiplyAlpha,
+                                      source);
+}
+
 Error Texture::setStorage(const Context *context,
                           TextureType type,
                           GLsizei levels,

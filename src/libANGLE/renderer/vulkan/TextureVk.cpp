@@ -668,11 +668,11 @@ gl::Error TextureVk::copySubTextureImpl(ContextVk *contextVk,
     GLuint sourceDataRowPitch = sourceArea.width * sourceAngleFormat.pixelBytes;
     GLuint destDataRowPitch   = sourceArea.width * destAngleFormat.pixelBytes;
 
-    CopyImageCHROMIUM(sourceData, sourceDataRowPitch, sourceAngleFormat.pixelBytes,
+    CopyImageCHROMIUM(sourceData, sourceDataRowPitch, sourceAngleFormat.pixelBytes, 0,
                       sourceAngleFormat.pixelReadFunction, destData, destDataRowPitch,
-                      destAngleFormat.pixelBytes, destAngleFormat.pixelWriteFunction,
+                      destAngleFormat.pixelBytes, 0, destAngleFormat.pixelWriteFunction,
                       destFormat.format, destFormat.componentType, sourceArea.width,
-                      sourceArea.height, unpackFlipY, unpackPremultiplyAlpha,
+                      sourceArea.height, 1, unpackFlipY, unpackPremultiplyAlpha,
                       unpackUnmultiplyAlpha);
 
     // Create a new graph node to store image initialization commands.
