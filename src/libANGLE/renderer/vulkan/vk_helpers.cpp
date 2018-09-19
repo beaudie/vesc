@@ -398,7 +398,7 @@ angle::Result LineLoopHelper::getIndexBufferForDrawArrays(Context *context,
     return angle::Result::Continue();
 }
 
-angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(Context *context,
+angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *contextVk,
                                                                   BufferVk *elementArrayBufferVk,
                                                                   VkIndexType indexType,
                                                                   int indexCount,
@@ -413,8 +413,8 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(Context *conte
     auto unitSize = (indexType == VK_INDEX_TYPE_UINT16 ? sizeof(uint16_t) : sizeof(uint32_t));
     size_t allocateBytes = unitSize * (indexCount + 1);
 
-    mDynamicIndexBuffer.releaseRetainedBuffers(context->getRenderer());
-    ANGLE_TRY(mDynamicIndexBuffer.allocate(context, allocateBytes,
+    mDynamicIndexBuffer.releaseRetainedBuffers(contextVk->getRenderer());
+    ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes,
                                            reinterpret_cast<uint8_t **>(&indices), bufferHandleOut,
                                            bufferOffsetOut, nullptr));
 
@@ -424,14 +424,9 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(Context *conte
     VkBufferCopy copy2        = {sourceOffset, *bufferOffsetOut + unitCount * unitSize, unitSize};
     std::array<VkBufferCopy, 2> copies = {{copy1, copy2}};
 
-    vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(recordCommands(context, &commandBuffer));
+    ANGLE_TRY(elementArrayBufferVk->copyToBuffer(contextVk, *bufferHandleOut, 2, copies.data()));
 
-    elementArrayBufferVk->addReadDependency(this);
-    commandBuffer->copyBuffer(elementArrayBufferVk->getVkBuffer().getHandle(), *bufferHandleOut, 2,
-                              copies.data());
-
-    ANGLE_TRY(mDynamicIndexBuffer.flush(context));
+    ANGLE_TRY(mDynamicIndexBuffer.flush(contextVk));
     return angle::Result::Continue();
 }
 
