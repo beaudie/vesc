@@ -1780,6 +1780,14 @@ bool ValidateClearBufferiv(Context *context, GLenum buffer, GLint drawbuffer, co
                 context->handleError(InvalidValue());
                 return false;
             }
+
+            if (!context->getGLState().getDrawFramebuffer()->getStencilbuffer())
+            {
+                // It's not an error to try to clear a non-existent stencil buffer, but it's a
+                // no-op.
+                return false;
+            }
+
             break;
 
         default:
@@ -1849,6 +1857,13 @@ bool ValidateClearBufferfv(Context *context, GLenum buffer, GLint drawbuffer, co
                 context->handleError(InvalidValue());
                 return false;
             }
+
+            if (!context->getGLState().getDrawFramebuffer()->getDepthbuffer())
+            {
+                // It's not an error to try to clear a non-existent depth buffer, but it's a no-op.
+                return false;
+            }
+
             break;
 
         default:
