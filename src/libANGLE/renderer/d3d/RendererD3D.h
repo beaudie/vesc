@@ -241,7 +241,21 @@ class RendererD3D : public BufferFactoryD3D
                                       GLint destLevel,
                                       bool unpackFlipY,
                                       bool unpackPremultiplyAlpha,
-                                      bool unpackUnmultiplyAlpha) = 0;
+                                      bool unpackUnmultiplyAlpha)   = 0;
+    virtual angle::Result copy3DTexture(const gl::Context *context,
+                                        const gl::Texture *source,
+                                        GLint sourceLevel,
+                                        gl::TextureTarget srcTarget,
+                                        const gl::Box &sourceBox,
+                                        GLenum destFormat,
+                                        GLenum destType,
+                                        const gl::Offset &destOffset,
+                                        TextureStorage *storage,
+                                        gl::TextureTarget destTarget,
+                                        GLint destLevel,
+                                        bool unpackFlipY,
+                                        bool unpackPremultiplyAlpha,
+                                        bool unpackUnmultiplyAlpha) = 0;
     virtual angle::Result copyCompressedTexture(const gl::Context *context,
                                                 const gl::Texture *source,
                                                 GLint sourceLevel,
@@ -295,6 +309,14 @@ class RendererD3D : public BufferFactoryD3D
                                     bool unpackFlipY,
                                     bool unpackPremultiplyAlpha,
                                     bool unpackUnmultiplyAlpha)                            = 0;
+    virtual angle::Result copy3DImage(const gl::Context *context,
+                                      ImageD3D *dest,
+                                      ImageD3D *source,
+                                      const gl::Box &sourceBox,
+                                      const gl::Offset &destOffset,
+                                      bool unpackFlipY,
+                                      bool unpackPremultiplyAlpha,
+                                      bool unpackUnmultiplyAlpha)                          = 0;
     virtual TextureStorage *createTextureStorage2D(SwapChainD3D *swapChain)                = 0;
     virtual TextureStorage *createTextureStorageEGLImage(EGLImageD3D *eglImage,
                                                          RenderTargetD3D *renderTargetD3D) = 0;
