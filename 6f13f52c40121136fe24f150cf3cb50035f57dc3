@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e2d50ef_3fe4798f",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-09-19T20:19:50Z",
+      "side": 1,
+      "message": "nit: Doesn\u0027t seem to update SamplerBindings anymore",
+      "range": {
+        "startLine": 902,
+        "startChar": 21,
+        "endLine": 902,
+        "endChar": 59
+      },
+      "revId": "6f13f52c40121136fe24f150cf3cb50035f57dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
