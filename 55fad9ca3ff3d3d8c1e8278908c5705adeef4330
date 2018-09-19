@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "6226bd2d_254e5369",
+        "filename": "extensions/ANGLE_multiview_multisample.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-19T11:55:26Z",
+      "side": 1,
+      "message": "I assume this is fine since Geoff gave +2.",
+      "parentUuid": "fce258bb_ef95b2f1",
+      "revId": "55fad9ca3ff3d3d8c1e8278908c5705adeef4330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c7b50721_034c6698",
         "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
         "patchSetId": 3
@@ -110,6 +128,30 @@
       "revId": "55fad9ca3ff3d3d8c1e8278908c5705adeef4330",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a786030a_b921ea6e",
+        "filename": "src/tests/gl_tests/FramebufferMultiviewTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1433,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-19T11:55:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db0d83ca_79a2aff6",
+      "range": {
+        "startLine": 1429,
+        "startChar": 0,
+        "endLine": 1433,
+        "endChar": 89
+      },
+      "revId": "55fad9ca3ff3d3d8c1e8278908c5705adeef4330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
