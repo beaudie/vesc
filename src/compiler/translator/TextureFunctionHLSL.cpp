@@ -381,6 +381,8 @@ void OutputTextureFunctionArgumentList(TInfoSinkBase &out,
             break;
         case TextureFunctionHLSL::TextureFunction::GRAD:
             break;
+        case TextureFunctionHLSL::TextureFunction::GATHER:
+            break;
         default:
             UNREACHABLE();
     }
@@ -415,6 +417,10 @@ void OutputTextureFunctionArgumentList(TInfoSinkBase &out,
         textureFunction.method == TextureFunctionHLSL::TextureFunction::LOD0BIAS)
     {
         out << ", float bias";
+    }
+    else if (textureFunction.method == TextureFunctionHLSL::TextureFunction::GATHER)
+    {
+        out << ", int comp = 0";
     }
 }
 
@@ -812,6 +818,59 @@ void OutputIntegerTextureSampleFunctionComputations(
     }
 }
 
+void OutputTextureGatherFunctionBody(TInfoSinkBase &out,
+                                     const TextureFunctionHLSL::TextureFunction &textureFunction,
+                                     const ShShaderOutput outputType,
+                                     const ImmutableString &textureReference,
+                                     const ImmutableString &samplerReference,
+                                     const ImmutableString &texCoordX,
+                                     const ImmutableString &texCoordY,
+                                     const ImmutableString &texCoordZ)
+{
+    const int hlslCoords = GetHLSLCoordCount(textureFunction, outputType);
+    std::ostringstream samplerCoordStream;
+    samplerCoordStream << GetSamplerCoordinateTypeString(textureFunction, hlslCoords) << "("
+                       << texCoordX << ", " << texCoordY;
+
+    if (hlslCoords >= 3)
+    {
+        if (textureFunction.coords < 3)
+        {
+            samplerCoordStream << ", 0";
+        }
+        else
+        {
+            samplerCoordStream << ", " << texCoordZ;
+        }
+    }
+
+    samplerCoordStream << ")";
+
+    const std::string &samplerCoord = samplerCoordStream.str();
+
+    out << "    switch(comp)\n"
+           "    {\n"
+           "        case 0:\n"
+           "            return "
+        << textureReference << ".GatherRed(" << samplerReference << ", " << samplerCoord
+        << ");\n"
+           "        case 1:\n"
+           "            return "
+        << textureReference << ".GatherGreen(" << samplerReference << ", " << samplerCoord
+        << ");\n"
+           "        case 2:\n"
+           "            return "
+        << textureReference << ".GatherBlue(" << samplerReference << ", " << samplerCoord
+        << ");\n"
+           "        case 3:\n"
+           "            return "
+        << textureReference << ".GatherAlpha(" << samplerReference << ", " << samplerCoord
+        << ");\n"
+           "        default:\n"
+           "            return float4(0.0, 0.0, 0.0, 1.0);\n"
+           "    }\n";
+}
+
 void OutputTextureSampleFunctionReturnStatement(
     TInfoSinkBase &out,
     const TextureFunctionHLSL::TextureFunction &textureFunction,
@@ -1078,6 +1137,9 @@ ImmutableString TextureFunctionHLSL::TextureFunction::name() const
         case GRAD:
             name << "Grad";
             break;
+        case GATHER:
+            name << "Gather";
+            break;
         default:
             UNREACHABLE();
     }
@@ -1252,6 +1314,10 @@ ImmutableString TextureFunctionHLSL::useTextureFunction(const ImmutableString &n
         textureFunction.proj   = true;
         textureFunction.offset = true;
     }
+    else if (name == "textureGather")
+    {
+        textureFunction.method = TextureFunction::GATHER;
+    }
     else
         UNREACHABLE();
 
@@ -1321,13 +1387,21 @@ void TextureFunctionHLSL::textureFunctionHeader(TInfoSinkBase &out,
             ImmutableString texCoordX("t.x");
             ImmutableString texCoordY("t.y");
             ImmutableString texCoordZ("t.z");
-            ProjectTextureCoordinates(textureFunction, &texCoordX, &texCoordY, &texCoordZ);
-            OutputIntegerTextureSampleFunctionComputations(out, textureFunction, outputType,
-                                                           textureReference, &texCoordX, &texCoordY,
-                                                           &texCoordZ);
-            OutputTextureSampleFunctionReturnStatement(out, textureFunction, outputType,
-                                                       textureReference, samplerReference,
-                                                       texCoordX, texCoordY, texCoordZ);
+            if (textureFunction.method == TextureFunction::GATHER)
+            {
+                OutputTextureGatherFunctionBody(out, textureFunction, outputType, textureReference,
+                                                samplerReference, texCoordX, texCoordY, texCoordZ);
+            }
+            else
+            {
+                ProjectTextureCoordinates(textureFunction, &texCoordX, &texCoordY, &texCoordZ);
+                OutputIntegerTextureSampleFunctionComputations(out, textureFunction, outputType,
+                                                               textureReference, &texCoordX,
+                                                               &texCoordY, &texCoordZ);
+                OutputTextureSampleFunctionReturnStatement(out, textureFunction, outputType,
+                                                           textureReference, samplerReference,
+                                                           texCoordX, texCoordY, texCoordZ);
+            }
         }
 
         out << "}\n"
