@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "7adcc5ab_441a94be",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-09-19T07:04:34Z",
+      "side": 0,
+      "message": "I removed it because WebglConformance_conformance_extensions_angle_instanced_arrays failed in bots. The root cause is if an attribute is enabled but unused in program1, in my change, it won\u0027t be synced to driver. However, if we want to use this attribute in program2, there will be bug since cache already recorded it as enabled and no dirty bit is set. So the driver will never really set it to true. So I found this version still has bug like Shahbaz said.",
+      "parentUuid": "d2d77113_37ae09b2",
+      "range": {
+        "startLine": 313,
+        "startChar": 0,
+        "endLine": 317,
+        "endChar": 0
+      },
+      "revId": "7f2329398fe8a8b57fa16ec222127a55a457968d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f07ea4f8_a84fbc7e",
         "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
         "patchSetId": 2
@@ -82,6 +106,24 @@
       "writtenOn": "2018-09-14T17:02:41Z",
       "side": 0,
       "message": "I need to verify in more depth, but I think the bug that would be introduced by removing this is that if you have the same attributes enabled, but change the program in such a way that the active attributes change, the enabled-state of the attributes don\u0027t get updated, so you will end up with an inactive-but-enabled attribute which causes crash on some driver (http://anglebug.com/2138).\n\nSomething like this:\n\nglProgram(program_that_uses_attrib_0_and_1);\nglEnableVertexAttribArray(0);\nglEnableVertexAttribArray(1);\n\nglDraw();\n\nglProgram(program_that_uses_attrib_0);\nglDraw(); // ***\n\nAt step ***, vertex attribute 1 is left enabled (because only the program is changed), even though it\u0027s not active in the program.",
+      "revId": "7f2329398fe8a8b57fa16ec222127a55a457968d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d915c2a2_917cb36d",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2260,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-09-19T07:04:34Z",
+      "side": 0,
+      "message": "You are right. My original thought is too simple. I finally understand why you did this change. In fact, I can\u0027t see any problem in your current implementation. But your current implementation really caused the blink issue. My latest fixing is only to bypass the blink issue. I think the blink issue happens when we frequently switch the enabled attributes. For example, if I remove the body of applyActiveAttribLocationsMask to the end of VertexArrayGL::syncState in VertexArrayGL.cpp. And do nothing here. Logically, I think they should have the same result but more frequently to call applyActiveAttribLocationsMask(per draw instead of per program change). However, you will see the browser is blinking when you input a url or something else.",
+      "parentUuid": "e853f54a_eb47e4ae",
       "revId": "7f2329398fe8a8b57fa16ec222127a55a457968d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
