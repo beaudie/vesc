@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "832dd3b5_185b93c6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3537,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-19T15:33:43Z",
+      "side": 1,
+      "message": "No, this function can also be used to clear color buffers.",
+      "parentUuid": "1423b83f_c6cc33d1",
+      "range": {
+        "startLine": 3537,
+        "startChar": 8,
+        "endLine": 3537,
+        "endChar": 26
+      },
+      "revId": "3f5d641e99784c0774d99d2fdf80810a5e7214a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4b4109da_6ceab3fe",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 2
@@ -39,6 +63,24 @@
       "revId": "3f5d641e99784c0774d99d2fdf80810a5e7214a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57974f3b_66e58932",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3548,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-19T15:33:43Z",
+      "side": 1,
+      "message": "No, the buffer may still not exist, but it seems like in the case of color buffers the backends handle it correctly.",
+      "parentUuid": "4b4109da_6ceab3fe",
+      "revId": "3f5d641e99784c0774d99d2fdf80810a5e7214a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -62,6 +104,30 @@
       "revId": "3f5d641e99784c0774d99d2fdf80810a5e7214a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c3c6de6_8778e8c0",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3556,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-19T15:33:43Z",
+      "side": 1,
+      "message": "This function can also be used to clear color buffers in integer format.",
+      "parentUuid": "c1976a7b_77cb050a",
+      "range": {
+        "startLine": 3556,
+        "startChar": 8,
+        "endLine": 3556,
+        "endChar": 28
+      },
+      "revId": "3f5d641e99784c0774d99d2fdf80810a5e7214a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
