@@ -127,6 +127,24 @@
       "revId": "7f2329398fe8a8b57fa16ec222127a55a457968d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e47536a3_44074b7b",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2260,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-19T13:59:58Z",
+      "side": 0,
+      "message": "It might be helpful to understand what\u0027s really going on if you can describe precisely what\u0027s happening. A written test would be ideal to make sure this doesn\u0027t happen in the future. If not possible, it would be good to know what sequence of calls and programs lead to your issue.\n\nI don\u0027t know if it\u0027s possible to have a sort of API trace to look at?",
+      "parentUuid": "d915c2a2_917cb36d",
+      "revId": "7f2329398fe8a8b57fa16ec222127a55a457968d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
