@@ -46,6 +46,30 @@
       "revId": "e5f6a3b6ff58280b9c60db7a0b32cd2cec10c888",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8413158c_b14627c4",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-19T14:41:04Z",
+      "side": 1,
+      "message": "Good point, fixed.",
+      "parentUuid": "e2759b8a_3c1e8830",
+      "range": {
+        "startLine": 1784,
+        "startChar": 0,
+        "endLine": 1789,
+        "endChar": 13
+      },
+      "revId": "e5f6a3b6ff58280b9c60db7a0b32cd2cec10c888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
