@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "641c2651_7f26be0b",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-19T13:58:36Z",
+      "side": 1,
+      "message": "nit: technically we should let validation finish to catch potential errors. the earliest point to no-op would be in Context::clearBuffer*. Understood there\u0027s some code duplication here but that\u0027s the usual approach.",
+      "range": {
+        "startLine": 1784,
+        "startChar": 0,
+        "endLine": 1789,
+        "endChar": 13
+      },
+      "revId": "e5f6a3b6ff58280b9c60db7a0b32cd2cec10c888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
