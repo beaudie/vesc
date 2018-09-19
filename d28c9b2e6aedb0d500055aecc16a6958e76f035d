@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "eaebaff8_038fb990",
+        "filename": "src/libANGLE/Observer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-19T09:52:38Z",
+      "side": 1,
+      "message": "See below comment.",
+      "parentUuid": "b11589a8_8b64b407",
+      "revId": "d28c9b2e6aedb0d500055aecc16a6958e76f035d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "deffa97d_eef8d587",
         "filename": "src/libANGLE/Observer.cpp",
         "patchSetId": 8
@@ -39,6 +57,30 @@
       "revId": "d28c9b2e6aedb0d500055aecc16a6958e76f035d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5477824_d279aaaf",
+        "filename": "src/libANGLE/Observer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-19T09:52:38Z",
+      "side": 1,
+      "message": "I have a small optimization here. I assume \"observer\" is in mObservers. If \"observer\" is the last in the list (which is always the case when mObservers is size 1) it exits the loop immediately and just calls pop_back.",
+      "parentUuid": "deffa97d_eef8d587",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 26
+      },
+      "revId": "d28c9b2e6aedb0d500055aecc16a6958e76f035d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
