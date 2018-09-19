@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2e0dc2fe_548e6792",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-19T17:00:14Z",
+      "side": 1,
+      "message": "+1. If you do:\n\nconst bool thisUsesFixed \u003d mData \u003d\u003d mFixedStorage.data();\nconst bool otherUsesFixed \u003d other.mData \u003d\u003d other.mFixedStorage.data();\n\n(with whatever appropriate variable names) that may simplify the end result with this check added.",
+      "parentUuid": "bb661e81_d24e3dfe",
+      "range": {
+        "startLine": 341,
+        "startChar": 0,
+        "endLine": 342,
+        "endChar": 0
+      },
+      "revId": "e1a66f8edc87898fec731e9bc979e60ec7af4be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "148e7ff3_2db9d424",
         "filename": "src/common/FastVector.h",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-09-19T16:41:08Z",
       "side": 1,
       "message": "You could simplify this to:\nif (count \u003e mSize)\n  ensure_capacity(count);\nmSize \u003d count;",
+      "range": {
+        "startLine": 347,
+        "startChar": 0,
+        "endLine": 355,
+        "endChar": 5
+      },
+      "revId": "e1a66f8edc87898fec731e9bc979e60ec7af4be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "163a37d0_bd8a8db7",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-19T17:00:14Z",
+      "side": 1,
+      "message": "Or rather `if (count \u003e mReservedSize)`.\n\n(Logically, the `if` is unnecessary altogether as `ensure_capacity()` already does it, but I\u0027m guessing it\u0027s here so it\u0027s done in this likely-inlined function.)",
+      "parentUuid": "148e7ff3_2db9d424",
       "range": {
         "startLine": 347,
         "startChar": 0,
