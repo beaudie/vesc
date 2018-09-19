@@ -66,37 +66,13 @@
 
 
 
-    
-#ifdef yyget_lval
-#define yyget_lval_ALREADY_DEFINED
-#else
-#define yyget_lval yyget_lval
-#endif
-
-    
-#ifdef yyset_lval
-#define yyset_lval_ALREADY_DEFINED
-#else
-#define yyset_lval yyset_lval
-#endif
+    #define yyget_lval yyget_lval
+    #define yyset_lval yyset_lval
 
 
 
-
-    
-#ifdef yyget_lloc
-#define yyget_lloc_ALREADY_DEFINED
-#else
-#define yyget_lloc yyget_lloc
-#endif
-
-    
-#ifdef yyset_lloc
-#define yyset_lloc_ALREADY_DEFINED
-#else
-#define yyset_lloc yyset_lloc
-#endif
-
+    #define yyget_lloc yyget_lloc
+    #define yyset_lloc yyset_lloc
 
 
 
@@ -1225,6 +1201,7 @@ static int ES2_and_ES3_reserved_ES3_1_keyword(TParseContext *context, int token)
 static int ES2_and_ES3_ident_ES3_1_keyword(TParseContext *context, int token);
 static int ES3_extension_keyword_else_ident(TParseContext *context, TExtension extension, int token);
 static int ES2_ident_ES3_reserved_ES3_1_extension_keyword(TParseContext *context, TExtension extension, int token);
+static int ES3_extension_and_ES3_1_keyword_ES3_reserved_else_ident(TParseContext *context, TExtension extension, int token);
 static int uint_constant(TParseContext *context);
 static int int_constant(TParseContext *context);
 static int float_constant(yyscan_t yyscanner);
@@ -1968,7 +1945,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, SAMPLER2DMS); }
+{ return ES3_extension_and_ES3_1_keyword_ES3_reserved_else_ident(context, TExtension::ARB_texture_multisample, SAMPLER2DMS); }
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
@@ -1988,7 +1965,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, ISAMPLER2DMS); }
+{ return ES3_extension_and_ES3_1_keyword_ES3_reserved_else_ident(context, TExtension::ARB_texture_multisample, ISAMPLER2DMS); }
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
@@ -2008,7 +1985,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, USAMPLER2DMS); }
+{ return ES3_extension_and_ES3_1_keyword_ES3_reserved_else_ident(context, TExtension::ARB_texture_multisample, USAMPLER2DMS); }
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
@@ -2774,8 +2751,6 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 			(void *) YY_CURRENT_BUFFER_LVALUE->yy_ch_buf, (yy_size_t) new_size , yyscanner );
 		if ( ! YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
 			YY_FATAL_ERROR( "out of dynamic memory in yy_get_next_buffer()" );
-		/* "- 2" to take care of EOB's */
-		YY_CURRENT_BUFFER_LVALUE->yy_buf_size = (int) (new_size - 2);
 	}
 
 	yyg->yy_n_chars += number_to_move;
@@ -3960,6 +3935,26 @@ int ES2_ident_ES3_reserved_ES3_1_extension_keyword(TParseContext *context, TExte
     }
 
     // Otherwise can be used as an identifier/type name
+    yylval->lex.string = AllocatePoolCharArray(yytext, yyleng);
+    return check_type(yyscanner);
+}
+
+int ES3_extension_and_ES3_1_keyword_ES3_reserved_else_ident(TParseContext *context, TExtension extension, int token)
+{
+    struct yyguts_t* yyg = (struct yyguts_t*) context->getScanner();
+    yyscan_t yyscanner = (yyscan_t) context->getScanner();
+
+    // a reserved word in GLSL ES 3.00 with enabled extension, otherwise could be used as an identifier/type name
+    if (context->getShaderVersion() >= 310 || (context->getShaderVersion() == 300 && context->isExtensionEnabled(extension)))
+    {
+        return token;
+    }
+
+    if(context->getShaderVersion() == 300)
+    {
+        return reserved_word(yyscanner);
+    }
+
     yylval->lex.string = AllocatePoolCharArray(yytext, yyleng);
     return check_type(yyscanner);
 }

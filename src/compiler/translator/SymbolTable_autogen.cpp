@@ -2688,6 +2688,8 @@ constexpr const UnmangledBuiltIn EXT_YUV_target(TExtension::EXT_YUV_target);
 constexpr const UnmangledBuiltIn EXT_geometry_shader(TExtension::EXT_geometry_shader);
 constexpr const UnmangledBuiltIn EXT_shader_texture_lod(TExtension::EXT_shader_texture_lod);
 constexpr const UnmangledBuiltIn OES_standard_derivatives(TExtension::OES_standard_derivatives);
+constexpr const UnmangledBuiltIn OES_texture_storage_multisample_2d_array(
+    TExtension::OES_texture_storage_multisample_2d_array);
 constexpr const UnmangledBuiltIn UNDEFINED(TExtension::UNDEFINED);
 
 }  // namespace UnmangledBuiltIns
@@ -8115,7 +8117,7 @@ constexpr const TFunction kFunction_textureProjGrad_0c3B1B1B(
 constexpr const TFunction kFunction_textureSize_0O(
     BuiltInId::textureSize_Sampler2DMS1,
     BuiltInName::textureSize,
-    TExtension::UNDEFINED,
+    TExtension::ARB_texture_multisample,
     BuiltInParameters::p0O1C0C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
@@ -8124,7 +8126,7 @@ constexpr const TFunction kFunction_textureSize_0O(
 constexpr const TFunction kFunction_textureSize_0U(
     BuiltInId::textureSize_ISampler2DMS1,
     BuiltInName::textureSize,
-    TExtension::UNDEFINED,
+    TExtension::ARB_texture_multisample,
     BuiltInParameters::p0U1C0C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
@@ -8133,7 +8135,7 @@ constexpr const TFunction kFunction_textureSize_0U(
 constexpr const TFunction kFunction_textureSize_0a(
     BuiltInId::textureSize_USampler2DMS1,
     BuiltInName::textureSize,
-    TExtension::UNDEFINED,
+    TExtension::ARB_texture_multisample,
     BuiltInParameters::p0a1C0C,
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 2, 1>(),
@@ -9357,7 +9359,7 @@ constexpr const TFunction kFunction_textureProj_0M3B0B(
 constexpr const TFunction kFunction_texelFetch_0O1C0C(
     BuiltInId::texelFetch_Sampler2DMS1_Int2_Int1,
     BuiltInName::texelFetch,
-    TExtension::UNDEFINED,
+    TExtension::ARB_texture_multisample,
     BuiltInParameters::p0O1C0C,
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
@@ -9366,7 +9368,7 @@ constexpr const TFunction kFunction_texelFetch_0O1C0C(
 constexpr const TFunction kFunction_texelFetch_0U1C0C(
     BuiltInId::texelFetch_ISampler2DMS1_Int2_Int1,
     BuiltInName::texelFetch,
-    TExtension::UNDEFINED,
+    TExtension::ARB_texture_multisample,
     BuiltInParameters::p0U1C0C,
     3,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
@@ -9375,7 +9377,7 @@ constexpr const TFunction kFunction_texelFetch_0U1C0C(
 constexpr const TFunction kFunction_texelFetch_0a1C0C(
     BuiltInId::texelFetch_USampler2DMS1_Int2_Int1,
     BuiltInName::texelFetch,
-    TExtension::UNDEFINED,
+    TExtension::ARB_texture_multisample,
     BuiltInParameters::p0a1C0C,
     3,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
@@ -11624,14 +11626,6 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
-            case 0x14896e41u:
-            {
-                if (name == BuiltInName::texelFetch_0O1C0C)
-                {
-                    return &BuiltInFunction::kFunction_texelFetch_0O1C0C;
-                }
-                break;
-            }
             case 0x148a0cecu:
             {
                 if (name == BuiltInName::imageStore_0p2C3C)
@@ -11683,15 +11677,6 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
-            case 0x148ddb10u:
-            {
-                if (name.beginsWith(BuiltInName::texelFetch))
-                {
-                    ASSERT(name.length() == 17);
-                    return &BuiltInFunction::kFunction_texelFetch_0a1C0C;
-                }
-                break;
-            }
             case 0x148e37b8u:
             {
                 if (name.beginsWith(BuiltInName::imageStore))
@@ -11714,15 +11699,6 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 if (name == BuiltInName::texelFetch_0P2C0C)
                 {
                     return &BuiltInFunction::kFunction_texelFetch_0P2C0C;
-                }
-                break;
-            }
-            case 0x148ed16fu:
-            {
-                if (name.beginsWith(BuiltInName::texelFetch))
-                {
-                    ASSERT(name.length() == 17);
-                    return &BuiltInFunction::kFunction_texelFetch_0U1C0C;
                 }
                 break;
             }
@@ -11768,15 +11744,6 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
-            case 0x167394d8u:
-            {
-                if (name.beginsWith(BuiltInName::textureSize))
-                {
-                    ASSERT(name.length() == 14);
-                    return &BuiltInFunction::kFunction_textureSize_0U;
-                }
-                break;
-            }
             case 0x1673a791u:
             {
                 if (name.beginsWith(BuiltInName::textureSize))
@@ -11792,24 +11759,6 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 {
                     ASSERT(name.length() == 14);
                     return &BuiltInFunction::kFunction_textureSize_0P;
-                }
-                break;
-            }
-            case 0x1673f496u:
-            {
-                if (name.beginsWith(BuiltInName::textureSize))
-                {
-                    ASSERT(name.length() == 14);
-                    return &BuiltInFunction::kFunction_textureSize_0O;
-                }
-                break;
-            }
-            case 0x16752ab6u:
-            {
-                if (name.beginsWith(BuiltInName::textureSize))
-                {
-                    ASSERT(name.length() == 14);
-                    return &BuiltInFunction::kFunction_textureSize_0a;
                 }
                 break;
             }
@@ -14287,6 +14236,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x14896e41u:
+            {
+                if (name == BuiltInName::texelFetch_0O1C0C)
+                {
+                    return &BuiltInFunction::kFunction_texelFetch_0O1C0C;
+                }
+                break;
+            }
             case 0x1489e510u:
             {
                 if (name.beginsWith(BuiltInName::textureLod))
@@ -14373,6 +14330,15 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x148ddb10u:
+            {
+                if (name.beginsWith(BuiltInName::texelFetch))
+                {
+                    ASSERT(name.length() == 17);
+                    return &BuiltInFunction::kFunction_texelFetch_0a1C0C;
+                }
+                break;
+            }
             case 0x148e100eu:
             {
                 if (name == BuiltInName::texelFetch_0X2C0C)
@@ -14403,6 +14369,15 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 {
                     ASSERT(name.length() == 17);
                     return &BuiltInFunction::kFunction_texelFetch_0W1C0C;
+                }
+                break;
+            }
+            case 0x148ed16fu:
+            {
+                if (name.beginsWith(BuiltInName::texelFetch))
+                {
+                    ASSERT(name.length() == 17);
+                    return &BuiltInFunction::kFunction_texelFetch_0U1C0C;
                 }
                 break;
             }
@@ -14455,12 +14430,39 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x167394d8u:
+            {
+                if (name.beginsWith(BuiltInName::textureSize))
+                {
+                    ASSERT(name.length() == 14);
+                    return &BuiltInFunction::kFunction_textureSize_0U;
+                }
+                break;
+            }
+            case 0x1673f496u:
+            {
+                if (name.beginsWith(BuiltInName::textureSize))
+                {
+                    ASSERT(name.length() == 14);
+                    return &BuiltInFunction::kFunction_textureSize_0O;
+                }
+                break;
+            }
             case 0x1674ed12u:
             {
                 if (name.beginsWith(BuiltInName::determinant))
                 {
                     ASSERT(name.length() == 14);
                     return &BuiltInFunction::kFunction_determinant_FB;
+                }
+                break;
+            }
+            case 0x16752ab6u:
+            {
+                if (name.beginsWith(BuiltInName::textureSize))
+                {
+                    ASSERT(name.length() == 14);
+                    return &BuiltInFunction::kFunction_textureSize_0a;
                 }
                 break;
             }
@@ -19342,7 +19344,7 @@ const UnmangledBuiltIn *TSymbolTable::getUnmangledBuiltInForShaderVersion(
             {
                 if (name == BuiltInName::texelFetch)
                 {
-                    return &UnmangledBuiltIns::UNDEFINED;
+                    return &UnmangledBuiltIns::OES_texture_storage_multisample_2d_array;
                 }
                 break;
             }
@@ -19366,7 +19368,7 @@ const UnmangledBuiltIn *TSymbolTable::getUnmangledBuiltInForShaderVersion(
             {
                 if (name == BuiltInName::textureSize)
                 {
-                    return &UnmangledBuiltIns::UNDEFINED;
+                    return &UnmangledBuiltIns::OES_texture_storage_multisample_2d_array;
                 }
                 break;
             }

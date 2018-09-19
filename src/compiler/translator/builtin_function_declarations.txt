@@ -377,7 +377,7 @@ GROUP BEGIN TextureESSL300
 GROUP END TextureESSL300
 
 GROUP BEGIN TextureSizeMS
-  DEFAULT METADATA {"level": "ESSL3_1_BUILTINS", "op": "CallBuiltInFunction"}
+  DEFAULT METADATA {"level": "ESSL3_BUILTINS", "op": "CallBuiltInFunction", "extension": "ARB_texture_multisample"}
     ivec2 textureSize(gsampler2DMS);
 GROUP END TextureSizeMS
 
@@ -473,7 +473,7 @@ GROUP BEGIN TextureESSL300FS {"condition": "shaderType == GL_FRAGMENT_SHADER"}
 GROUP END TextureESSL300FS
 
 GROUP BEGIN TexelFetchMS
-  DEFAULT METADATA {"level": "ESSL3_1_BUILTINS", "op": "CallBuiltInFunction"}
+  DEFAULT METADATA {"level": "ESSL3_BUILTINS", "op": "CallBuiltInFunction", "extension": "ARB_texture_multisample"}
     gvec4 texelFetch(gsampler2DMS, ivec2, int);
 GROUP END TexelFetchMS
 
