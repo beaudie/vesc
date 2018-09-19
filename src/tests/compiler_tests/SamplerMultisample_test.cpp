@@ -329,3 +329,68 @@ TEST_F(SamplerMultisampleArrayTest, NoPrecisionUSampler2DMSArray)
         FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
     }
 }
+
+class SamplerMultisampleEXTTest : public SamplerMultisampleTest
+{
+  public:
+    SamplerMultisampleEXTTest() {}
+
+  protected:
+    void initResources(ShBuiltInResources *resources) override
+    {
+        resources->ARB_texture_multisample = 1;
+    }
+
+    ::GLenum getShaderType() const override { return GL_FRAGMENT_SHADER; }
+    ShShaderSpec getShaderSpec() const override { return SH_GLES3_SPEC; }
+};
+
+// checks ARB_texture_multisample is supported in es 3.0
+TEST_F(SamplerMultisampleEXTTest, TextureMultisampleEXTEnabled)
+{
+    const std::string &shaderString =
+        R"(#version 300 es
+        #extension GL_ARB_texture_multisample : require
+        precision highp float;
+        uniform highp sampler2DMS s;
+        uniform highp isampler2DMS is;
+        uniform highp usampler2DMS us;
+
+        void main() {
+            ivec2 size = textureSize(s);
+            size = textureSize(is);
+            size = textureSize(us);
+            vec4 tex1 = texelFetch(s, ivec2(0, 0), 0);
+            ivec4 tex2 = texelFetch(is, ivec2(0, 0), 0);
+            uvec4 tex3 = texelFetch(us, ivec2(0, 0), 0);
+        })";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failure, expecting success:\n" << mInfoLog;
+    }
+}
+
+TEST_F(SamplerMultisampleEXTTest, TextureMultisampleEXTDisabled)
+{
+    const std::string &shaderString =
+        R"(#version 300 es
+        precision highp float;
+        uniform highp sampler2DMS s;
+        uniform highp isampler2DMS is;
+        uniform highp usampler2DMS us;
+
+        void main() {
+            ivec2 size = textureSize(s);
+            size = textureSize(is);
+            size = textureSize(us);
+            vec4 tex1 = texelFetch(s, ivec2(0, 0), 0);
+            ivec4 tex2 = texelFetch(is, ivec2(0, 0), 0);
+            uvec4 tex3 = texelFetch(us, ivec2(0, 0), 0);
+        })";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation success, expecting failure:\n" << mInfoLog;
+    }
+}

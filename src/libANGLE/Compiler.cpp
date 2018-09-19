@@ -127,10 +127,10 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
     mResources.MaxComputeAtomicCounterBuffers =
         caps.maxShaderAtomicCounterBuffers[ShaderType::Compute];
 
-    mResources.MaxVertexAtomicCounters         = caps.maxShaderAtomicCounters[ShaderType::Vertex];
-    mResources.MaxFragmentAtomicCounters       = caps.maxShaderAtomicCounters[ShaderType::Fragment];
-    mResources.MaxCombinedAtomicCounters       = caps.maxCombinedAtomicCounters;
-    mResources.MaxAtomicCounterBindings        = caps.maxAtomicCounterBufferBindings;
+    mResources.MaxVertexAtomicCounters   = caps.maxShaderAtomicCounters[ShaderType::Vertex];
+    mResources.MaxFragmentAtomicCounters = caps.maxShaderAtomicCounters[ShaderType::Fragment];
+    mResources.MaxCombinedAtomicCounters = caps.maxCombinedAtomicCounters;
+    mResources.MaxAtomicCounterBindings  = caps.maxAtomicCounterBufferBindings;
     mResources.MaxVertexAtomicCounterBuffers =
         caps.maxShaderAtomicCounterBuffers[ShaderType::Vertex];
     mResources.MaxFragmentAtomicCounterBuffers =
@@ -150,12 +150,12 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
     }
 
     // Geometry Shader constants
-    mResources.EXT_geometry_shader              = extensions.geometryShader;
+    mResources.EXT_geometry_shader          = extensions.geometryShader;
     mResources.MaxGeometryUniformComponents = caps.maxShaderUniformComponents[ShaderType::Geometry];
-    mResources.MaxGeometryUniformBlocks         = caps.maxShaderUniformBlocks[ShaderType::Geometry];
-    mResources.MaxGeometryInputComponents       = caps.maxGeometryInputComponents;
-    mResources.MaxGeometryOutputComponents      = caps.maxGeometryOutputComponents;
-    mResources.MaxGeometryOutputVertices        = caps.maxGeometryOutputVertices;
+    mResources.MaxGeometryUniformBlocks     = caps.maxShaderUniformBlocks[ShaderType::Geometry];
+    mResources.MaxGeometryInputComponents   = caps.maxGeometryInputComponents;
+    mResources.MaxGeometryOutputComponents  = caps.maxGeometryOutputComponents;
+    mResources.MaxGeometryOutputVertices    = caps.maxGeometryOutputVertices;
     mResources.MaxGeometryTotalOutputComponents = caps.maxGeometryTotalOutputComponents;
     mResources.MaxGeometryTextureImageUnits = caps.maxShaderTextureImageUnits[ShaderType::Geometry];
 
@@ -165,6 +165,9 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
     mResources.MaxGeometryShaderStorageBlocks = caps.maxShaderStorageBlocks[ShaderType::Geometry];
     mResources.MaxGeometryShaderInvocations   = caps.maxGeometryShaderInvocations;
     mResources.MaxGeometryImageUniforms       = caps.maxShaderImageUniforms[ShaderType::Geometry];
+
+    // multisampled texture
+    mResources.ARB_texture_multisample = extensions.textureMultisample;
 }
 
 Compiler::~Compiler()
