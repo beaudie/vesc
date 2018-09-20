@@ -184,12 +184,12 @@
 2630 GLES ANDROID : dEQP-GLES2.functional.shaders.struct.uniform.sampler_in_function_arg_* = FAIL
 
 // Android Vulkan backend only failures
-2549 VULKAN ANDROID : dEQP-GLES2.functional.fragment_ops.depth_stencil.stencil* = SKIP
+// 2549 VULKAN ANDROID : dEQP-GLES2.functional.fragment_ops.depth_stencil.stencil* = SKIP
 2606 VULKAN ANDROID : dEQP-GLES2.functional.debug_marker.random = SKIP
-2606 VULKAN ANDROID : dEQP-GLES2.functional.debug_marker.supported = SKIP
-2609 VULKAN ANDROID : dEQP-GLES2.functional.texture.mipmap.cube.generate.* = SKIP
-2405 VULKAN ANDROID : dEQP-GLES2.functional.draw.random.42 = SKIP
-2405 VULKAN ANDROID : dEQP-GLES2.functional.draw.random.59 = SKIP
+// 2606 VULKAN ANDROID : dEQP-GLES2.functional.debug_marker.supported = SKIP
+// 2609 VULKAN ANDROID : dEQP-GLES2.functional.texture.mipmap.cube.generate.* = SKIP
+// 2405 VULKAN ANDROID : dEQP-GLES2.functional.draw.random.42 = SKIP
+// 2405 VULKAN ANDROID : dEQP-GLES2.functional.draw.random.59 = SKIP
 
 // Fails on Nexus 5x only. TODO(jmadill): Remove suppression when possible. http://anglebug.com/2791
 2791 VULKAN ANDROID : dEQP-GLES2.functional.clipping.* = SKIP
