@@ -46,6 +46,30 @@
       "revId": "35d138b285f9af31fc1e1512635d7d5990e7c177",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d44a3fcf_a48f8729",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-20T18:08:28Z",
+      "side": 1,
+      "message": "I think just hoist for now. We can do something like #3 later if it warrants it. I don\u0027t think we\u0027ll need writing directly to image memory very often.",
+      "parentUuid": "d085dce2_9442cd58",
+      "range": {
+        "startLine": 500,
+        "startChar": 1,
+        "endLine": 501,
+        "endChar": 56
+      },
+      "revId": "35d138b285f9af31fc1e1512635d7d5990e7c177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
