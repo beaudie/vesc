@@ -22,18 +22,18 @@ bool NativeWindow9::initialize()
 
 bool NativeWindow9::getClientRect(LPRECT rect) const
 {
-    return GetClientRect(getNativeWindow(), rect) == TRUE;
+    return GetClientRect(static_cast<HWND>(getNativeWindow()), rect) == TRUE;
 }
 
 bool NativeWindow9::isIconic() const
 {
-    return IsIconic(getNativeWindow()) == TRUE;
+    return IsIconic(static_cast<HWND>(getNativeWindow())) == TRUE;
 }
 
 // static
 bool NativeWindow9::IsValidNativeWindow(EGLNativeWindowType window)
 {
-    return IsWindow(window) == TRUE;
+    return IsWindow(static_cast<HWND>(window)) == TRUE;
 }
 
 }  // namespace rx

@@ -30,12 +30,12 @@ angle::Result WindowSurfaceVkWin32::createSurfaceVk(vk::Context *context, gl::Ex
     createInfo.pNext     = nullptr;
     createInfo.flags     = 0;
     createInfo.hinstance = GetModuleHandle(nullptr);
-    createInfo.hwnd      = mNativeWindowType;
+    createInfo.hwnd      = static_cast<HWND>(mNativeWindowType);
     ANGLE_VK_TRY(context, vkCreateWin32SurfaceKHR(context->getRenderer()->getInstance(),
                                                   &createInfo, nullptr, &mSurface));
 
     RECT rect;
-    ANGLE_VK_CHECK(context, GetClientRect(mNativeWindowType, &rect) == TRUE,
+    ANGLE_VK_CHECK(context, GetClientRect(static_cast<HWND>(mNativeWindowType), &rect) == TRUE,
                    VK_ERROR_INITIALIZATION_FAILED);
 
     *extentsOut = gl::Extents(rect.right - rect.left, rect.bottom - rect.top, 0);
