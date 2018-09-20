@@ -857,6 +857,10 @@
         "eglLabelObjectKHR"
     ],
 
+    "EGL_ANDROID_get_native_client_buffer": [
+        "eglGetNativeClientBufferANDROID"
+    ],
+
     "angle::Platform related entry points": [
         "ANGLEGetDisplayPlatform",
         "ANGLEResetDisplayPlatform"

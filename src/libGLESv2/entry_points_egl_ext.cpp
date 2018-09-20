@@ -1141,4 +1141,18 @@ EGLint EGLAPIENTRY LabelObjectKHR(EGLDisplay dpy,
     return EGL_SUCCESS;
 }
 
+EGLClientBuffer EGLAPIENTRY GetNativeClientBufferANDROID(const struct AHardwareBuffer *buffer)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT("(const struct AHardwareBuffer *buffer = 0x%0.8p)", buffer);
+
+    Thread *thread = GetCurrentThread();
+
+    ANGLE_EGL_TRY_RETURN(thread, ValidateGetNativeClientBufferANDROID(buffer),
+                         "eglGetNativeClientBufferANDROID", nullptr, nullptr);
+
+    thread->setSuccess();
+    return Display::getNativeClientBuffer(buffer);
+}
+
 }  // namespace egl
