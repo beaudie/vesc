@@ -352,6 +352,10 @@ class Framebuffer final : public angle::ObserverInterface,
 
   private:
     bool detachResourceById(const Context *context, GLenum resourceType, GLuint resourceId);
+    bool detachMatchingColorAttachment(const Context *context,
+                                       GLenum matchType,
+                                       GLuint matchId,
+                                       size_t colorIndex);
     bool detachMatchingAttachment(const Context *context,
                                   FramebufferAttachment *attachment,
                                   GLenum matchType,

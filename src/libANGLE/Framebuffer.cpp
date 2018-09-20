@@ -745,8 +745,7 @@ bool Framebuffer::detachResourceById(const Context *context, GLenum resourceType
 
     for (size_t colorIndex = 0; colorIndex < mState.mColorAttachments.size(); ++colorIndex)
     {
-        if (detachMatchingAttachment(context, &mState.mColorAttachments[colorIndex], resourceType,
-                                     resourceId, DIRTY_BIT_COLOR_ATTACHMENT_0 + colorIndex))
+        if (detachMatchingColorAttachment(context, resourceType, resourceId, colorIndex))
         {
             found = true;
         }
@@ -782,6 +781,24 @@ bool Framebuffer::detachResourceById(const Context *context, GLenum resourceType
     }
 
     return found;
+}
+
+bool Framebuffer::detachMatchingColorAttachment(const Context *context,
+                                                GLenum matchType,
+                                                GLuint matchId,
+                                                size_t colorIndex)
+{
+    const FramebufferAttachment *attachment = &mState.mColorAttachments[colorIndex];
+    if (attachment->isAttached() && attachment->type() == matchType && attachment->id() == matchId)
+    {
+        // The simpler detachMatchingAttachment function below that's used for depth and stencil
+        // attachments is not sufficient for color buffers. We need to do some extra bookkeeping
+        // here such as updating enabled draw buffer state.
+        resetAttachment(context, GL_COLOR_ATTACHMENT0 + colorIndex);
+        return true;
+    }
+
+    return false;
 }
 
 bool Framebuffer::detachMatchingAttachment(const Context *context,
