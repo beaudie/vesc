@@ -23,7 +23,7 @@ WindowSurfaceWGL::WindowSurfaceWGL(const egl::SurfaceState &state,
                                    EGLint orientation)
     : SurfaceWGL(state),
       mPixelFormat(pixelFormat),
-      mWindow(window),
+      mWindow(static_cast<HWND>(window)),
       mDeviceContext(nullptr),
       mFunctionsWGL(functions),
       mSwapBehavior(0)
