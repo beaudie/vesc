@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d8f8c5bf_d31cb8d7",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3181,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-20T13:51:25Z",
+      "side": 1,
+      "message": "This needs additional API entry points, so not yet. I intend to follow up on this soon, but I think it makes sense to do this work in small steps.",
+      "parentUuid": "5cb88161_a14e95d1",
+      "range": {
+        "startLine": 3180,
+        "startChar": 0,
+        "endLine": 3181,
+        "endChar": 31
+      },
+      "revId": "1d5ad93b8e9ac177a1555787bb15916378c2f9f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "28cf9f2f_9568688d",
         "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "00113d06_2c0f0a98",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-20T13:51:25Z",
+      "side": 1,
+      "message": "Filed https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d2833",
+      "parentUuid": "28cf9f2f_9568688d",
+      "range": {
+        "startLine": 218,
+        "startChar": 11,
+        "endLine": 218,
+        "endChar": 38
+      },
+      "revId": "1d5ad93b8e9ac177a1555787bb15916378c2f9f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c807904d_09517128",
         "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2018-09-19T19:40:47Z",
       "side": 1,
       "message": "if it\u0027s broken on 2/3 vendors it begs the question of if the implementation is correct/portable. any idea if this is possible? were the failure modes distinct?",
+      "range": {
+        "startLine": 1226,
+        "startChar": 44,
+        "endLine": 1226,
+        "endChar": 76
+      },
+      "revId": "1d5ad93b8e9ac177a1555787bb15916378c2f9f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40749352_809703a6",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-20T13:51:25Z",
+      "side": 1,
+      "message": "Yes, the failure modes were different on AMD and Intel based on what I could tell from the logs. AMD had unexpected blending results while Intel couldn\u0027t handle the *FragData arrays.",
+      "parentUuid": "c807904d_09517128",
       "range": {
         "startLine": 1226,
         "startChar": 44,
@@ -91,6 +163,30 @@
       "revId": "1d5ad93b8e9ac177a1555787bb15916378c2f9f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbfb6cc9_46b7fd49",
+        "filename": "src/tests/gl_tests/BlendFuncExtendedTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-20T13:51:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7a24d06_fdc86355",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 18
+      },
+      "revId": "1d5ad93b8e9ac177a1555787bb15916378c2f9f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
