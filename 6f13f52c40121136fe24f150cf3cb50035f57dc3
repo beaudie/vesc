@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bacedc52_bcab5483",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-20T09:23:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e2d50ef_3fe4798f",
+      "range": {
+        "startLine": 902,
+        "startChar": 21,
+        "endLine": 902,
+        "endChar": 59
+      },
+      "revId": "6f13f52c40121136fe24f150cf3cb50035f57dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa05ac03_41c835e8",
         "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
         "patchSetId": 17
@@ -39,6 +63,24 @@
       "revId": "6f13f52c40121136fe24f150cf3cb50035f57dc3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b18b98f_9d1d80bd",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 2314,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-20T09:23:33Z",
+      "side": 1,
+      "message": "Good catch. Fixed. Also added a test.",
+      "parentUuid": "aa05ac03_41c835e8",
+      "revId": "6f13f52c40121136fe24f150cf3cb50035f57dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
