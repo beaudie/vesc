@@ -457,8 +457,8 @@ angle::Result FramebufferVk::blitWithReadback(ContextVk *contextVk,
     uint8_t *destPtr          = nullptr;
     VkBuffer destBufferHandle = VK_NULL_HANDLE;
     VkDeviceSize destOffset   = 0;
-    ANGLE_TRY(mBlitPixelBuffer.allocate(contextVk, blitAllocationSize, &destPtr, &destBufferHandle,
-                                        &destOffset, nullptr));
+    ANGLE_TRY(mBlitPixelBuffer.allocate(contextVk, blitAllocationSize, 1, &destPtr,
+                                        &destBufferHandle, &destOffset, nullptr));
 
     ANGLE_TRY(
         readPixelsImpl(contextVk, copyArea, packPixelsParams, aspect, readRenderTarget, destPtr));
@@ -1172,8 +1172,8 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
     VkDeviceSize stagingOffset = 0;
     size_t allocationSize    = readFormat->pixelBytes * area.width * area.height;
 
-    ANGLE_TRY(mReadPixelBuffer.allocate(contextVk, allocationSize, &readPixelBuffer, &bufferHandle,
-                                        &stagingOffset, &newBufferAllocated));
+    ANGLE_TRY(mReadPixelBuffer.allocate(contextVk, allocationSize, 1, &readPixelBuffer,
+                                        &bufferHandle, &stagingOffset, &newBufferAllocated));
 
     VkBufferImageCopy region;
     region.bufferImageHeight               = area.height;

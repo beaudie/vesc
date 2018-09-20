@@ -42,6 +42,7 @@ class DynamicBuffer : angle::NonCopyable
     // be nullptr.
     angle::Result allocate(Context *context,
                            size_t sizeInBytes,
+                           size_t alignment,
                            uint8_t **ptrOut,
                            VkBuffer *handleOut,
                            VkDeviceSize *offsetOut,

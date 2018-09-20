@@ -1099,8 +1099,8 @@ angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
     VkBuffer buffer         = VK_NULL_HANDLE;
     VkDeviceSize offset     = 0;
     bool newBufferAllocated = false;
-    ANGLE_TRY(mDriverUniformsBuffer.allocate(this, sizeof(DriverUniforms), &ptr, &buffer, &offset,
-                                             &newBufferAllocated));
+    ANGLE_TRY(mDriverUniformsBuffer.allocate(this, sizeof(DriverUniforms), 1, &ptr, &buffer,
+                                             &offset, &newBufferAllocated));
     float scaleY = isViewportFlipEnabledForDrawFBO() ? -1.0f : 1.0f;
 
     float depthRangeNear = mState.getState().getNearPlane();
@@ -1225,7 +1225,7 @@ angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
     VkBuffer bufferHandle = VK_NULL_HANDLE;
     VkDeviceSize offset   = 0;
     ANGLE_TRY(
-        defaultBuffer.allocate(this, kDefaultValueSize, &ptr, &bufferHandle, &offset, nullptr));
+        defaultBuffer.allocate(this, kDefaultValueSize, 1, &ptr, &bufferHandle, &offset, nullptr));
 
     const gl::State &glState = mState.getState();
     const gl::VertexAttribCurrentValueData &defaultValue =

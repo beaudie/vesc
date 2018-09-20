@@ -130,7 +130,7 @@ angle::Result PixelBuffer::stageSubresourceUpdate(ContextVk *contextVk,
     bool newBufferAllocated    = false;
     VkDeviceSize stagingOffset = 0;
     size_t allocationSize      = outputDepthPitch * extents.depth;
-    ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, &stagingPointer, &bufferHandle,
+    ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, 1, &stagingPointer, &bufferHandle,
                                       &stagingOffset, &newBufferAllocated));
 
     const uint8_t *source = pixels + inputSkipBytes;
@@ -203,7 +203,7 @@ angle::Result PixelBuffer::stageSubresourceUpdateFromFramebuffer(
 
     // The destination is only one layer deep.
     size_t allocationSize = outputDepthPitch;
-    ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, &stagingPointer, &bufferHandle,
+    ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, 1, &stagingPointer, &bufferHandle,
                                       &stagingOffset, &newBufferAllocated));
 
     gl::PixelPackState pixelPackState = gl::PixelPackState();
@@ -272,7 +272,7 @@ angle::Result PixelBuffer::allocate(ContextVk *contextVk,
                                     VkDeviceSize *offsetOut,
                                     bool *newBufferAllocatedOut)
 {
-    return mStagingBuffer.allocate(contextVk, sizeInBytes, ptrOut, handleOut, offsetOut,
+    return mStagingBuffer.allocate(contextVk, sizeInBytes, 1, ptrOut, handleOut, offsetOut,
                                    newBufferAllocatedOut);
 }
 
@@ -347,7 +347,7 @@ angle::Result PixelBuffer::stageSubresourceUpdateAndGetData(ContextVk *contextVk
     VkBuffer bufferHandle;
     VkDeviceSize stagingOffset = 0;
     bool newBufferAllocated    = false;
-    ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, destData, &bufferHandle,
+    ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, 1, destData, &bufferHandle,
                                       &stagingOffset, &newBufferAllocated));
 
     VkBufferImageCopy copy;

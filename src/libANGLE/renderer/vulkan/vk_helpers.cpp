@@ -104,16 +104,21 @@ DynamicBuffer::~DynamicBuffer()
 
 angle::Result DynamicBuffer::allocate(Context *context,
                                       size_t sizeInBytes,
+                                      size_t alignment,
                                       uint8_t **ptrOut,
                                       VkBuffer *handleOut,
                                       VkDeviceSize *offsetOut,
                                       bool *newBufferAllocatedOut)
 {
+    ASSERT(alignment > 0);
+
+    size_t padding              = (alignment - (mNextAllocationOffset % alignment)) % alignment;
     size_t sizeToAllocate = roundUp(sizeInBytes, mAlignment);
+    size_t paddedSizeToAllocate = roundUp(padding + sizeInBytes, mAlignment);
 
     angle::base::CheckedNumeric<size_t> checkedNextWriteOffset = mNextAllocationOffset;
-    checkedNextWriteOffset += sizeToAllocate;
-
+    checkedNextWriteOffset += paddedSizeToAllocate;
+    bool newBufferAllocated = false;
     if (!checkedNextWriteOffset.IsValid() || checkedNextWriteOffset.ValueOrDie() >= mSize)
     {
         if (mMappedMemory)
@@ -143,15 +148,16 @@ angle::Result DynamicBuffer::allocate(Context *context,
         ANGLE_TRY(mMemory.map(context, 0, mSize, 0, &mMappedMemory));
         mNextAllocationOffset        = 0;
         mLastFlushOrInvalidateOffset = 0;
-
-        if (newBufferAllocatedOut != nullptr)
-        {
-            *newBufferAllocatedOut = true;
-        }
+        newBufferAllocated           = true;
     }
-    else if (newBufferAllocatedOut != nullptr)
+    else
     {
-        *newBufferAllocatedOut = false;
+        newBufferAllocated = false;
+    }
+
+    if (newBufferAllocatedOut != nullptr)
+    {
+        *newBufferAllocatedOut = newBufferAllocated;
     }
 
     ASSERT(mBuffer.valid());
@@ -162,9 +168,20 @@ angle::Result DynamicBuffer::allocate(Context *context,
     }
 
     ASSERT(mMappedMemory);
-    *ptrOut    = mMappedMemory + mNextAllocationOffset;
-    *offsetOut = static_cast<VkDeviceSize>(mNextAllocationOffset);
-    mNextAllocationOffset += static_cast<uint32_t>(sizeToAllocate);
+
+    if (newBufferAllocated)
+    {
+        *ptrOut    = mMappedMemory + mNextAllocationOffset;
+        *offsetOut = static_cast<VkDeviceSize>(mNextAllocationOffset);
+        mNextAllocationOffset += static_cast<uint32_t>(sizeToAllocate);
+    }
+    else
+    {
+        *ptrOut    = mMappedMemory + mNextAllocationOffset + padding;
+        *offsetOut = static_cast<VkDeviceSize>(mNextAllocationOffset + padding);
+        mNextAllocationOffset += static_cast<uint32_t>(paddedSizeToAllocate);
+    }
+
     return angle::Result::Continue();
 }
 
@@ -375,7 +392,7 @@ angle::Result LineLoopHelper::getIndexBufferForDrawArrays(Context *context,
     size_t allocateBytes = sizeof(uint32_t) * (drawCallParams.vertexCount() + 1);
 
     mDynamicIndexBuffer.releaseRetainedBuffers(context->getRenderer());
-    ANGLE_TRY(mDynamicIndexBuffer.allocate(context, allocateBytes,
+    ANGLE_TRY(mDynamicIndexBuffer.allocate(context, allocateBytes, 1,
                                            reinterpret_cast<uint8_t **>(&indices), bufferHandleOut,
                                            offsetOut, nullptr));
 
@@ -414,7 +431,7 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(Context *conte
     size_t allocateBytes = unitSize * (indexCount + 1);
 
     mDynamicIndexBuffer.releaseRetainedBuffers(context->getRenderer());
-    ANGLE_TRY(mDynamicIndexBuffer.allocate(context, allocateBytes,
+    ANGLE_TRY(mDynamicIndexBuffer.allocate(context, allocateBytes, 1,
                                            reinterpret_cast<uint8_t **>(&indices), bufferHandleOut,
                                            bufferOffsetOut, nullptr));
 
@@ -447,7 +464,7 @@ angle::Result LineLoopHelper::getIndexBufferForClientElementArray(
 
     auto unitSize = (indexType == VK_INDEX_TYPE_UINT16 ? sizeof(uint16_t) : sizeof(uint32_t));
     size_t allocateBytes = unitSize * (drawCallParams.indexCount() + 1);
-    ANGLE_TRY(mDynamicIndexBuffer.allocate(context, allocateBytes,
+    ANGLE_TRY(mDynamicIndexBuffer.allocate(context, allocateBytes, 1,
                                            reinterpret_cast<uint8_t **>(&indices), bufferHandleOut,
                                            bufferOffsetOut, nullptr));
 

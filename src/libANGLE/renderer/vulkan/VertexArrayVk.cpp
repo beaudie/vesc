@@ -37,13 +37,16 @@ angle::Result StreamVertexData(ContextVk *contextVk,
                                size_t bytesToAllocate,
                                size_t destOffset,
                                size_t vertexCount,
+                               size_t alignment,
                                size_t stride,
                                VertexCopyFunction vertexLoadFunction,
                                VkBuffer *bufferHandleOut,
                                VkDeviceSize *bufferOffsetOut)
 {
+    ASSERT(alignment > 0);
+
     uint8_t *dst = nullptr;
-    ANGLE_TRY(dynamicBuffer->allocate(contextVk, bytesToAllocate, &dst, bufferHandleOut,
+    ANGLE_TRY(dynamicBuffer->allocate(contextVk, bytesToAllocate, alignment, &dst, bufferHandleOut,
                                       bufferOffsetOut, nullptr));
     dst += destOffset;
     vertexLoadFunction(sourceData, stride, vertexCount, dst);
@@ -128,7 +131,7 @@ angle::Result VertexArrayVk::streamIndexData(ContextVk *contextVk,
     const size_t amount = sizeof(GLushort) * indexCount;
     GLubyte *dst        = nullptr;
 
-    ANGLE_TRY(dynamicBuffer->allocate(contextVk, amount, &dst, &mCurrentElementArrayBufferHandle,
+    ANGLE_TRY(dynamicBuffer->allocate(contextVk, amount, 1, &dst, &mCurrentElementArrayBufferHandle,
                                       &mCurrentElementArrayBufferOffset, nullptr));
     if (indexType == GL_UNSIGNED_BYTE)
     {
@@ -184,11 +187,13 @@ angle::Result VertexArrayVk::convertVertexBuffer(ContextVk *contextVk,
     ANGLE_TRY(srcBuffer->mapImpl(contextVk, &src));
     const uint8_t *srcBytes = reinterpret_cast<const uint8_t *>(src);
     srcBytes += binding.getOffset();
-    ANGLE_TRY(StreamVertexData(contextVk, &mCurrentArrayBufferConversion[attribIndex], srcBytes,
-                               numVertices * dstFormatSize, 0, numVertices, binding.getStride(),
-                               mCurrentArrayBufferFormats[attribIndex]->vertexLoadFunction,
-                               &mCurrentArrayBufferHandles[attribIndex],
-                               &mCurrentArrayBufferOffsets[attribIndex]));
+    size_t formatAlignment =
+        vk::GetFormatAlignment(mCurrentArrayBufferFormats[attribIndex]->vkBufferFormat);
+    ANGLE_TRY(StreamVertexData(
+        contextVk, &mCurrentArrayBufferConversion[attribIndex], srcBytes,
+        numVertices * dstFormatSize, 0, numVertices, formatAlignment, binding.getStride(),
+        mCurrentArrayBufferFormats[attribIndex]->vertexLoadFunction,
+        &mCurrentArrayBufferHandles[attribIndex], &mCurrentArrayBufferOffsets[attribIndex]));
     ANGLE_TRY(srcBuffer->unmapImpl(contextVk));
 
     mCurrentArrayBufferConversionCanRelease[attribIndex] = true;
@@ -454,17 +459,19 @@ angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
                              drawCallParams.firstVertex() * binding.getStride();
 
         size_t destOffset = drawCallParams.firstVertex() * mCurrentArrayBufferStrides[attribIndex];
+        size_t formatAlignment =
+            vk::GetFormatAlignment(mCurrentArrayBufferFormats[attribIndex]->vkBufferFormat);
 
         // Only vertexCount() vertices will be used by the upcoming draw. so that is all we copy.
         // We allocate space for firstVertex() + vertexCount() so indexing will work.  If we
         // don't start at zero all the indices will be off.
         // TODO(fjhenigman): See if we can account for indices being off by adjusting the
         // offset, thus avoiding wasted memory.
-        ANGLE_TRY(StreamVertexData(contextVk, &mDynamicVertexData, src, bytesToAllocate, destOffset,
-                                   drawCallParams.vertexCount(), binding.getStride(),
-                                   mCurrentArrayBufferFormats[attribIndex]->vertexLoadFunction,
-                                   &mCurrentArrayBufferHandles[attribIndex],
-                                   &mCurrentArrayBufferOffsets[attribIndex]));
+        ANGLE_TRY(StreamVertexData(
+            contextVk, &mDynamicVertexData, src, bytesToAllocate, destOffset,
+            drawCallParams.vertexCount(), formatAlignment, binding.getStride(),
+            mCurrentArrayBufferFormats[attribIndex]->vertexLoadFunction,
+            &mCurrentArrayBufferHandles[attribIndex], &mCurrentArrayBufferOffsets[attribIndex]));
     }
 
     return angle::Result::Continue();
