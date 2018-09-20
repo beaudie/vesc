@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "505f175d_ebf7597b",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 1769,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-20T16:23:37Z",
+      "side": 1,
+      "message": "For the sake of my understanding, can you explain a little what these observer bindings are? The comment says it\u0027s for the objects that use \"dependent state updates\". Dependent to what?",
+      "revId": "2250c71205eeaf63a70857463abe6c597556417a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "076638fa_04e34fb9",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-20T16:23:37Z",
+      "side": 1,
+      "message": "The sampler also clamps, where does the repeat come from?",
+      "revId": "2250c71205eeaf63a70857463abe6c597556417a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
