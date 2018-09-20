@@ -23,7 +23,7 @@ DisplayVkWin32::DisplayVkWin32(const egl::DisplayState &state) : DisplayVk(state
 
 bool DisplayVkWin32::isValidNativeWindow(EGLNativeWindowType window) const
 {
-    return (IsWindow(window) == TRUE);
+    return (IsWindow(static_cast<HWND>(window)) == TRUE);
 }
 
 SurfaceImpl *DisplayVkWin32::createWindowSurfaceVk(const egl::SurfaceState &state,

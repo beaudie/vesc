@@ -1142,7 +1142,6 @@ Error ValidateCreateWindowSurface(Display *display,
                     return EglBadAttribute();
                 }
                 break;
-
             case EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE:
                 if (!display->getExtensions().robustResourceInitialization)
                 {

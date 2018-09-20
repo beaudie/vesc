@@ -2816,6 +2816,7 @@ void QuerySurfaceAttrib(const Surface *surface, EGLint attribute, EGLint *value)
         case EGL_DIRECT_COMPOSITION_ANGLE:
             *value = surface->directComposition();
             break;
+
         case EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE:
             *value = surface->isRobustResourceInitEnabled();
             break;

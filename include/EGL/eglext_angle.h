@@ -43,6 +43,11 @@
 #define EGL_DIRECT_COMPOSITION_ANGLE 0x33A5
 #endif /* EGL_ANGLE_direct_composition */
 
+#ifndef EGL_ANGLE_windows_ui_composition
+#define EGL_ANGLE_windows_ui_composition 1
+#define EGL_WINDOWS_UI_COMPOSITION_ANGLE 0x44A6 //TODO: how to ensure this is unique, allocated according to best practice
+#endif /* EGL_ANGLE_windows_ui_composition */
+
 #ifndef EGL_ANGLE_platform_angle
 #define EGL_ANGLE_platform_angle 1
 #define EGL_PLATFORM_ANGLE_ANGLE          0x3202

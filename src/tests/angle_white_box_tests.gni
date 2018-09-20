@@ -18,4 +18,5 @@ angle_white_box_tests_win_sources = [
   "gl_tests/D3D11InputLayoutCacheTest.cpp",
   "gl_tests/D3DTextureTest.cpp",
   "gl_tests/ErrorMessages.cpp",
+  "egl_tests/EGLDirectCompositionTest.cpp",
 ]
