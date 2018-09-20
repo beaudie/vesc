@@ -131,6 +131,9 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->glTexture3DImage      = mEGL->hasExtension("EGL_KHR_gl_texture_3D_image");
     outExtensions->glRenderbufferImage   = mEGL->hasExtension("EGL_KHR_gl_renderbuffer_image");
 
+    outExtensions->getNativeClientBuffer =
+        mEGL->hasExtension("EGL_ANDROID_get_native_client_buffer");
+
     DisplayGL::generateExtensions(outExtensions);
 }
 

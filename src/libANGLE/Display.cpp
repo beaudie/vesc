@@ -955,6 +955,15 @@ void Display::setBlobCacheFuncs(EGLSetBlobFuncANDROID set, EGLGetBlobFuncANDROID
     mImplementation->setBlobCacheFuncs(set, get);
 }
 
+// static
+EGLClientBuffer Display::getNativeClientBuffer(const struct AHardwareBuffer *buffer)
+{
+    // Conversion from AHardwareBuffer to EGLClientBuffer is a simple cast, the same as in the
+    // Android platform. Knowing that the EGLClientBuffer used to create EGLImages can be cast back
+    // to AHardwareBuffer is neccessary to implement EGLImages on some platforms.
+    return static_cast<EGLClientBuffer>(const_cast<struct AHardwareBuffer *>(buffer));
+}
+
 Error Display::waitClient(const gl::Context *context)
 {
     return mImplementation->waitClient(context);
