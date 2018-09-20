@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "517af23c_ac2eb544",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 1769,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-20T17:44:18Z",
+      "side": 1,
+      "message": "There\u0027s information on this here:\n\nhttps://docs.google.com/document/d/15Edfotqg6_l1skTEL8ADQudF_oIdNa7i8Po43k6jMd4/edit#heading\u003dh.bd7riy39p3d4\n\nFor instance if a sampler object is bound in both context A and B, and it changes on context A, context B should also be notified that the sampler object is dirty. the same pattern applies to things like changing a buffer\u0027s storage when the buffer is bound as an array buffer. or texture when bound as a framebuffer attachment.\n\nA more complete explanation might be easier done in person.",
+      "parentUuid": "505f175d_ebf7597b",
+      "revId": "2250c71205eeaf63a70857463abe6c597556417a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "076638fa_04e34fb9",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 20
@@ -33,6 +51,24 @@
       "revId": "2250c71205eeaf63a70857463abe6c597556417a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b5f91a3_60d1cdaa",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2109,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-20T17:44:18Z",
+      "side": 1,
+      "message": "Comment was outdated. Fixed. Thanks.",
+      "parentUuid": "076638fa_04e34fb9",
+      "revId": "2250c71205eeaf63a70857463abe6c597556417a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
