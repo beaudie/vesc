@@ -64,6 +64,7 @@
 #ifdef ANGLE_ENABLE_WINDOWS_STORE
 #include "libANGLE/renderer/d3d/d3d11/winrt/NativeWindow11WinRT.h"
 #else
+#include "libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.h"
 #include "libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.h"
 #endif
 
@@ -1240,10 +1241,17 @@ angle::Result Renderer11::finish(Context11 *context11)
 
 bool Renderer11::isValidNativeWindow(EGLNativeWindowType window) const
 {
+    ASSERT(sizeof(ABI::Windows::UI::Composition::SpriteVisual *) == sizeof(HWND));
+
 #ifdef ANGLE_ENABLE_WINDOWS_STORE
     return NativeWindow11WinRT::IsValidNativeWindow(window);
 #else
-    return NativeWindow11Win32::IsValidNativeWindow(window);
+    if (NativeWindow11Win32::IsValidNativeWindow(window))
+    {
+        return true;
+    }
+
+    return CompositorNativeWindow11::IsValidNativeWindow(window);
 #endif
 }
 
@@ -1251,14 +1259,23 @@ NativeWindowD3D *Renderer11::createNativeWindow(EGLNativeWindowType window,
                                                 const egl::Config *config,
                                                 const egl::AttributeMap &attribs) const
 {
+    auto useWinUiComp = attribs.get(EGL_WINDOWS_UI_COMPOSITION_ANGLE, EGL_FALSE) == EGL_TRUE;
+
+    if (useWinUiComp)
+    {
+        return new CompositorNativeWindow11(window, config->alphaSize > 0);
+    }
+    else
+    {
 #ifdef ANGLE_ENABLE_WINDOWS_STORE
-    ANGLE_UNUSED_VARIABLE(attribs);
-    return new NativeWindow11WinRT(window, config->alphaSize > 0);
+        UNUSED_VARIABLE(attribs);
+        return new NativeWindow11WinRT(window, config->alphaSize > 0);
 #else
-    return new NativeWindow11Win32(
-        window, config->alphaSize > 0,
-        attribs.get(EGL_DIRECT_COMPOSITION_ANGLE, EGL_FALSE) == EGL_TRUE);
+        return new NativeWindow11Win32(
+            window, config->alphaSize > 0,
+            attribs.get(EGL_DIRECT_COMPOSITION_ANGLE, EGL_FALSE) == EGL_TRUE);
 #endif
+    }
 }
 
 egl::Error Renderer11::getD3DTextureInfo(const egl::Config *configuration,

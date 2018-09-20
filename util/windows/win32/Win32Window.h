@@ -29,6 +29,8 @@ class Win32Window : public OSWindow
     EGLNativeWindowType getNativeWindow() const override;
     EGLNativeDisplayType getNativeDisplay() const override;
 
+    HWND getUnderlyingOsWindow() const;
+
     void messageLoop() override;
 
     void pushEvent(Event event) override;
@@ -51,8 +53,8 @@ class Win32Window : public OSWindow
 
     bool mIsMouseInWindow;
 
-    EGLNativeWindowType mNativeWindow;
-    EGLNativeWindowType mParentWindow;
+    HWND mNativeWindow;
+    HWND mParentWindow;
     EGLNativeDisplayType mNativeDisplay;
 };
 

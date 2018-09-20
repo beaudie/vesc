@@ -1143,6 +1143,13 @@ Error ValidateCreateWindowSurface(Display *display,
                 }
                 break;
 
+            case EGL_WINDOWS_UI_COMPOSITION_ANGLE:
+                if (!displayExtensions.windowsUIComposition)
+                {
+                    return EglBadAttribute() << "EGL_ANGLE_windows_ui_composition is not enabled.";
+                }
+                break;
+
             case EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE:
                 if (!display->getExtensions().robustResourceInitialization)
                 {

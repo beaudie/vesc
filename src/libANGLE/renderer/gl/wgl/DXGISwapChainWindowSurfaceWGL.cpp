@@ -93,7 +93,7 @@ egl::Error DXGISwapChainWindowSurfaceWGL::initialize(const egl::Display *display
     }
 
     RECT rect;
-    if (!GetClientRect(mWindow, &rect))
+    if (!GetClientRect(static_cast<HWND>(mWindow), &rect))
     {
         return egl::EglBadNativeWindow() << "Failed to query the window size.";
     }
@@ -341,7 +341,7 @@ egl::Error DXGISwapChainWindowSurfaceWGL::setObjectsLocked(bool locked)
 egl::Error DXGISwapChainWindowSurfaceWGL::checkForResize()
 {
     RECT rect;
-    if (!GetClientRect(mWindow, &rect))
+    if (!GetClientRect(static_cast<HWND>(mWindow), &rect))
     {
         return egl::EglBadNativeWindow() << "Failed to query the window size.";
     }
@@ -446,8 +446,8 @@ egl::Error DXGISwapChainWindowSurfaceWGL::createSwapChain()
         swapChainDesc.AlphaMode   = DXGI_ALPHA_MODE_UNSPECIFIED;
         swapChainDesc.Flags       = mSwapChainFlags;
 
-        result = dxgiFactory2->CreateSwapChainForHwnd(mDevice, mWindow, &swapChainDesc, nullptr,
-                                                      nullptr, &mSwapChain1);
+        result = dxgiFactory2->CreateSwapChainForHwnd(
+            mDevice, static_cast<HWND>(mWindow), &swapChainDesc, nullptr, nullptr, &mSwapChain1);
         SafeRelease(dxgiFactory2);
         SafeRelease(dxgiFactory);
         if (FAILED(result))
@@ -473,7 +473,7 @@ egl::Error DXGISwapChainWindowSurfaceWGL::createSwapChain()
         swapChainDesc.BufferUsage =
             DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT | DXGI_USAGE_BACK_BUFFER;
         swapChainDesc.Flags              = mSwapChainFlags;
-        swapChainDesc.OutputWindow       = mWindow;
+        swapChainDesc.OutputWindow       = static_cast<HWND>(mWindow);
         swapChainDesc.SampleDesc.Count   = 1;
         swapChainDesc.SampleDesc.Quality = 0;
         swapChainDesc.Windowed           = TRUE;

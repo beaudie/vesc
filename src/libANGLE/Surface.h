@@ -133,6 +133,8 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
 
     bool directComposition() const { return mDirectComposition; }
 
+    bool windowsUIComposition() const { return mWindowsUiComposition; }
+
     gl::InitState initState(const gl::ImageIndex &imageIndex) const override;
     void setInitState(const gl::ImageIndex &imageIndex, gl::InitState initState) override;
 
@@ -180,6 +182,7 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     size_t mFixedHeight;
 
     bool mDirectComposition;
+    bool mWindowsUiComposition;
 
     bool mRobustResourceInitialization;
 
