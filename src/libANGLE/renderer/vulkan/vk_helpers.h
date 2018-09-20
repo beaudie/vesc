@@ -37,6 +37,9 @@ class DynamicBuffer : angle::NonCopyable
     // Init is called after the buffer creation so that the alignment can be specified later.
     void init(size_t alignment, RendererVk *renderer);
 
+    // Set stride for each attrib when used as vertex buffer.
+    void setStride(size_t stride);
+
     // This call will allocate a new region at the end of the buffer. It internally may trigger
     // a new buffer to be created (which is returned in 'newBufferAllocatedOut'. This param may
     // be nullptr.
@@ -79,6 +82,7 @@ class DynamicBuffer : angle::NonCopyable
     uint32_t mLastFlushOrInvalidateOffset;
     size_t mSize;
     size_t mAlignment;
+    size_t mStride;
     uint8_t *mMappedMemory;
 
     std::vector<BufferAndMemory> mRetainedBuffers;

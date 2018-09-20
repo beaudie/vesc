@@ -86,6 +86,7 @@ DynamicBuffer::DynamicBuffer(VkBufferUsageFlags usage, size_t minSize)
       mLastFlushOrInvalidateOffset(0),
       mSize(0),
       mAlignment(0),
+      mStride(1),
       mMappedMemory(nullptr)
 {
 }
@@ -102,6 +103,12 @@ DynamicBuffer::~DynamicBuffer()
 {
 }
 
+void DynamicBuffer::setStride(size_t stride)
+{
+    ASSERT(stride > 0);
+    mStride = stride;
+}
+
 angle::Result DynamicBuffer::allocate(Context *context,
                                       size_t sizeInBytes,
                                       uint8_t **ptrOut,
@@ -109,11 +116,13 @@ angle::Result DynamicBuffer::allocate(Context *context,
                                       VkDeviceSize *offsetOut,
                                       bool *newBufferAllocatedOut)
 {
+    size_t padding              = (mStride - (mNextAllocationOffset % mStride)) % mStride;
     size_t sizeToAllocate = roundUp(sizeInBytes, mAlignment);
+    size_t paddedSizeToAllocate = padding + sizeToAllocate;
 
     angle::base::CheckedNumeric<size_t> checkedNextWriteOffset = mNextAllocationOffset;
-    checkedNextWriteOffset += sizeToAllocate;
-
+    checkedNextWriteOffset += paddedSizeToAllocate;
+    bool newBufferAllocated = false;
     if (!checkedNextWriteOffset.IsValid() || checkedNextWriteOffset.ValueOrDie() >= mSize)
     {
         if (mMappedMemory)
@@ -143,15 +152,16 @@ angle::Result DynamicBuffer::allocate(Context *context,
         ANGLE_TRY(mMemory.map(context, 0, mSize, 0, &mMappedMemory));
         mNextAllocationOffset        = 0;
         mLastFlushOrInvalidateOffset = 0;
-
-        if (newBufferAllocatedOut != nullptr)
-        {
-            *newBufferAllocatedOut = true;
-        }
+        newBufferAllocated           = true;
     }
-    else if (newBufferAllocatedOut != nullptr)
+    else
     {
-        *newBufferAllocatedOut = false;
+        newBufferAllocated = false;
+    }
+
+    if (newBufferAllocatedOut != nullptr)
+    {
+        *newBufferAllocatedOut = newBufferAllocated;
     }
 
     ASSERT(mBuffer.valid());
@@ -162,9 +172,19 @@ angle::Result DynamicBuffer::allocate(Context *context,
     }
 
     ASSERT(mMappedMemory);
-    *ptrOut    = mMappedMemory + mNextAllocationOffset;
-    *offsetOut = static_cast<VkDeviceSize>(mNextAllocationOffset);
-    mNextAllocationOffset += static_cast<uint32_t>(sizeToAllocate);
+
+    if (newBufferAllocated)
+    {
+        *ptrOut    = mMappedMemory + mNextAllocationOffset;
+        *offsetOut = static_cast<VkDeviceSize>(mNextAllocationOffset);
+        mNextAllocationOffset += static_cast<uint32_t>(sizeToAllocate);
+    }
+    else
+    {
+        *ptrOut    = mMappedMemory + mNextAllocationOffset + padding;
+        *offsetOut = static_cast<VkDeviceSize>(mNextAllocationOffset + padding);
+        mNextAllocationOffset += static_cast<uint32_t>(paddedSizeToAllocate);
+    }
     return angle::Result::Continue();
 }
 

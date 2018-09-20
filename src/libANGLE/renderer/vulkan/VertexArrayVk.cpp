@@ -43,6 +43,7 @@ angle::Result StreamVertexData(ContextVk *contextVk,
                                VkDeviceSize *bufferOffsetOut)
 {
     uint8_t *dst = nullptr;
+    dynamicBuffer->setStride(stride);
     ANGLE_TRY(dynamicBuffer->allocate(contextVk, bytesToAllocate, &dst, bufferHandleOut,
                                       bufferOffsetOut, nullptr));
     dst += destOffset;
