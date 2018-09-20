@@ -188,7 +188,7 @@ EGLint SwapChain9::reset(DisplayD3D *displayD3D,
         presentParameters.BackBufferFormat = backBufferd3dFormatInfo.renderFormat;
         presentParameters.EnableAutoDepthStencil = FALSE;
         presentParameters.Flags = 0;
-        presentParameters.hDeviceWindow = window;
+        presentParameters.hDeviceWindow          = static_cast<HWND>(window);
         presentParameters.MultiSampleQuality = 0;                  // FIXME: Unimplemented
         presentParameters.MultiSampleType = D3DMULTISAMPLE_NONE;   // FIXME: Unimplemented
         presentParameters.PresentationInterval = convertInterval(swapInterval);
@@ -232,7 +232,7 @@ EGLint SwapChain9::reset(DisplayD3D *displayD3D,
 
         result = mSwapChain->GetBackBuffer(0, D3DBACKBUFFER_TYPE_MONO, &mBackBuffer);
         ASSERT(SUCCEEDED(result));
-        InvalidateRect(window, nullptr, FALSE);
+        InvalidateRect(static_cast<HWND>(window), nullptr, FALSE);
     }
 
     if (mDepthBufferFormat != GL_NONE)
