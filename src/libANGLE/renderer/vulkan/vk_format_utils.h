@@ -33,6 +33,8 @@ void GetFormatProperties(VkPhysicalDevice physicalDevice,
                          VkFormat vkFormat,
                          VkFormatProperties *propertiesOut);
 
+size_t GetFormatAlignment(VkFormat format);
+
 struct TextureFormatInitInfo final
 {
     angle::FormatID format;
