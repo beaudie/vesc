@@ -35,12 +35,19 @@ struct Format final : private angle::NonCopyable
                      GLuint depthBits,
                      GLuint stencilBits,
                      GLuint pixelBytes,
-                     bool isBlock);
+                     bool isBlock,
+                     bool isPacked);
 
     static const Format &Get(FormatID id);
     static FormatID InternalFormatToID(GLenum internalFormat);
 
     constexpr bool hasDepthOrStencilBits() const;
+    size_t channelCount() const
+    {
+        return (static_cast<size_t>(redBits > 0) + static_cast<size_t>(greenBits > 0) +
+                static_cast<size_t>(blueBits > 0) + static_cast<size_t>(alphaBits > 0) +
+                static_cast<size_t>(depthBits > 0) + static_cast<size_t>(stencilBits > 0));
+    }
 
     bool operator==(const Format &other) const { return this->id == other.id; }
 
@@ -74,6 +81,7 @@ struct Format final : private angle::NonCopyable
     GLuint pixelBytes;
 
     bool isBlock;
+    bool isPacked;
 };
 
 constexpr Format::Format(FormatID id,
@@ -91,7 +99,8 @@ constexpr Format::Format(FormatID id,
                          GLuint depthBits,
                          GLuint stencilBits,
                          GLuint pixelBytes,
-                         bool isBlock)
+                         bool isBlock,
+                         bool isPacked)
     : id(id),
       glInternalFormat(glFormat),
       fboImplementationInternalFormat(fboFormat),
@@ -107,7 +116,8 @@ constexpr Format::Format(FormatID id,
       depthBits(depthBits),
       stencilBits(stencilBits),
       pixelBytes(pixelBytes),
-      isBlock(isBlock)
+      isBlock(isBlock),
+      isPacked(isPacked)
 {
 }
 
@@ -115,6 +125,7 @@ constexpr bool Format::hasDepthOrStencilBits() const
 {
     return depthBits > 0 || stencilBits > 0;
 }
+
 }  // namespace angle
 
 #include "libANGLE/renderer/FormatID_autogen.inc"

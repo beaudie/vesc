@@ -97,7 +97,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
             if (SupportsFormat(DXGI_FORMAT_B5G6R5_UNORM, deviceCaps))
             {
                 static constexpr Format info(GL_BGR565_ANGLEX,
-                                             angle::FormatID::B5G6R5_UNORM,
+                                             angle::FormatID::B5G6R5_UNORM_PACK,
                                              DXGI_FORMAT_B5G6R5_UNORM,
                                              DXGI_FORMAT_B5G6R5_UNORM,
                                              DXGI_FORMAT_UNKNOWN,
@@ -1697,7 +1697,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
             if (SupportsFormat(DXGI_FORMAT_B5G6R5_UNORM, deviceCaps))
             {
                 static constexpr Format info(GL_RGB565,
-                                             angle::FormatID::B5G6R5_UNORM,
+                                             angle::FormatID::B5G6R5_UNORM_PACK,
                                              DXGI_FORMAT_B5G6R5_UNORM,
                                              DXGI_FORMAT_B5G6R5_UNORM,
                                              DXGI_FORMAT_UNKNOWN,
@@ -1728,7 +1728,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
             if (SupportsFormat(DXGI_FORMAT_B5G5R5A1_UNORM, deviceCaps))
             {
                 static constexpr Format info(GL_RGB5_A1,
-                                             angle::FormatID::B5G5R5A1_UNORM,
+                                             angle::FormatID::B5G5R5A1_UNORM_PACK,
                                              DXGI_FORMAT_B5G5R5A1_UNORM,
                                              DXGI_FORMAT_B5G5R5A1_UNORM,
                                              DXGI_FORMAT_UNKNOWN,
@@ -1955,7 +1955,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
             if (SupportsFormat(DXGI_FORMAT_B4G4R4A4_UNORM, deviceCaps))
             {
                 static constexpr Format info(GL_RGBA4,
-                                             angle::FormatID::B4G4R4A4_UNORM,
+                                             angle::FormatID::B4G4R4A4_UNORM_PACK,
                                              DXGI_FORMAT_B4G4R4A4_UNORM,
                                              DXGI_FORMAT_B4G4R4A4_UNORM,
                                              DXGI_FORMAT_UNKNOWN,

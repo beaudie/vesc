@@ -84,8 +84,8 @@
     "BC5_TYPELESS": "",
     "BC5_UNORM": "",
     "BC5_SNORM": "",
-    "B5G6R5_UNORM": "",
-    "B5G5R5A1_UNORM": "",
+    "B5G6R5_UNORM": "B5G6R5_UNORM_PACK",
+    "B5G5R5A1_UNORM": "B5G5R5A1_UNORM_PACK",
     "B8G8R8A8_UNORM": "",
     "B8G8R8X8_UNORM": "",
     "R10G10B10_XR_BIAS_A2_UNORM": "",
@@ -114,5 +114,5 @@
     "IA44": "",
     "P8": "",
     "A8P8": "",
-    "B4G4R4A4_UNORM": ""
+    "B4G4R4A4_UNORM": "B4G4R4A4_UNORM_PACK"
 }

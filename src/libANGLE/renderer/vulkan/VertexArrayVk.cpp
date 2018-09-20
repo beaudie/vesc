@@ -25,6 +25,7 @@ namespace
 {
 constexpr size_t kDynamicVertexDataSize = 1024 * 1024;
 constexpr size_t kDynamicIndexDataSize  = 1024 * 8;
+constexpr size_t kMaxVertexFormatAlignment = 4;
 
 bool BindingIsAligned(const gl::VertexBinding &binding, unsigned componentSize)
 {
@@ -51,6 +52,12 @@ angle::Result StreamVertexData(ContextVk *contextVk,
     ANGLE_TRY(dynamicBuffer->flush(contextVk));
     return angle::Result::Continue();
 }
+
+size_t GetFormatAlignment(const angle::Format &format)
+{
+    return (format.isPacked ? format.pixelBytes : format.pixelBytes / format.channelCount());
+}
+
 }  // anonymous namespace
 
 #define INIT                                        \
@@ -88,9 +95,9 @@ VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state, RendererVk *rend
 
     for (vk::DynamicBuffer &buffer : mCurrentArrayBufferConversion)
     {
-        buffer.init(1, renderer);
+        buffer.init(kMaxVertexFormatAlignment, renderer);
     }
-    mDynamicVertexData.init(1, renderer);
+    mDynamicVertexData.init(kMaxVertexFormatAlignment, renderer);
     mDynamicIndexData.init(1, renderer);
     mTranslatedByteIndexData.init(1, renderer);
 
@@ -184,6 +191,8 @@ angle::Result VertexArrayVk::convertVertexBuffer(ContextVk *contextVk,
     ANGLE_TRY(srcBuffer->mapImpl(contextVk, &src));
     const uint8_t *srcBytes = reinterpret_cast<const uint8_t *>(src);
     srcBytes += binding.getOffset();
+    ASSERT(GetFormatAlignment(mCurrentArrayBufferFormats[attribIndex]->angleFormat()) <=
+           kMaxVertexFormatAlignment);
     ANGLE_TRY(StreamVertexData(contextVk, &mCurrentArrayBufferConversion[attribIndex], srcBytes,
                                numVertices * dstFormatSize, 0, numVertices, binding.getStride(),
                                mCurrentArrayBufferFormats[attribIndex]->vertexLoadFunction,
@@ -454,6 +463,8 @@ angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
                              drawCallParams.firstVertex() * binding.getStride();
 
         size_t destOffset = drawCallParams.firstVertex() * mCurrentArrayBufferStrides[attribIndex];
+        ASSERT(GetFormatAlignment(mCurrentArrayBufferFormats[attribIndex]->angleFormat()) <=
+               kMaxVertexFormatAlignment);
 
         // Only vertexCount() vertices will be used by the upcoming draw. so that is all we copy.
         // We allocate space for firstVertex() + vertexCount() so indexing will work.  If we
