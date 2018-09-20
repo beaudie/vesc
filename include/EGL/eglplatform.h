@@ -77,7 +77,8 @@ typedef HDC     EGLNativeDisplayType;
 typedef HBITMAP EGLNativePixmapType;
 
 #if !defined(WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP) /* Windows Desktop */
-typedef HWND    EGLNativeWindowType;
+static_assert(sizeof(void *) == sizeof(HWND), "HWND size must match void*");
+typedef HWND EGLNativeWindowType;
 #else /* Windows Store */
 #include <inspectable.h>
 typedef IInspectable* EGLNativeWindowType;
