@@ -22,6 +22,30 @@
       "revId": "35d138b285f9af31fc1e1512635d7d5990e7c177",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d085dce2_9442cd58",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-09-20T18:03:33Z",
+      "side": 1,
+      "message": "Yes, I can hoist the logic to DynamicBuffer, but the downside would be that if we want to give similar treatment to the Image and Buffer memory, that will require replicating logic to handle cases like these:\nhttps://chromium.googlesource.com/angle/angle/+/master/src/libANGLE/renderer/vulkan/vk_helpers.cpp#694\nhttps://chromium.googlesource.com/angle/angle/+/master/src/libANGLE/renderer/vulkan/vk_utils.cpp#1054\n\nIf the check is in DeviceMemory then all abstractions above that can share the memory.\nSo, some options are:\n1. Keep logic in DeviceMemory as in the PR\n2. Hoist the logic to DynamicBuffer and potentially replicate logic or revisit if we give similar treatment to Image/Buffer memory\n3. Create a new abstraction above DeviceMemory that has the flush logic (and anything similar we want to add in the future) and is used by Dynamic/Image/Buffer memory\n\nThoughts?",
+      "parentUuid": "8f8961e0_1cea1c94",
+      "range": {
+        "startLine": 500,
+        "startChar": 1,
+        "endLine": 501,
+        "endChar": 56
+      },
+      "revId": "35d138b285f9af31fc1e1512635d7d5990e7c177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
