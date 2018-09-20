@@ -64,6 +64,8 @@ xxhash_sources = [
 
 angle_system_utils_sources = [
   "src/common/Optional.h",
+  "src/common/android_util.cpp",
+  "src/common/android_util.h",
   "src/common/angleutils.h",
   "src/common/platform.h",
   "src/common/system_utils.cpp",
@@ -86,13 +88,6 @@ if (is_mac) {
 
 if (is_win) {
   angle_system_utils_sources += [ "src/common/system_utils_win.cpp" ]
-}
-
-if (is_android) {
-  angle_system_utils_sources += [
-    "src/common/android_util.cpp",
-    "src/common/android_util.h",
-  ]
 }
 
 libangle_image_util_sources = [
