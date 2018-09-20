@@ -22,6 +22,23 @@
       "revId": "6f13f52c40121136fe24f150cf3cb50035f57dc3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa05ac03_41c835e8",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 2314,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-20T02:43:54Z",
+      "side": 1,
+      "message": "Isn\u0027t this going to have the same problem we had with vertex array binding? That is, if you bind a few samplers and a program that doesn\u0027t use all of them + draw, then bind a program that does use one of the samplers that was previously unused, then that sampler never gets bound? Because syncSamplersState doesn\u0027t get called when only the program has changed?",
+      "revId": "6f13f52c40121136fe24f150cf3cb50035f57dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
