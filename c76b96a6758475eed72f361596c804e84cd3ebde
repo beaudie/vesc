@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34cfd7e6_ae9d5175",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1836,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-20T16:38:10Z",
+      "side": 1,
+      "message": "I can\u0027t say I really follow this CL. Looks like you have removed all usage of SubjectMessage::DEPENDENT_DIRTY_BITS, but the declaration (in Observer.h) is still there? If there is a front-end equivalent to what calling this with DEPENDENT_DIRTY_BITS does, it\u0027s not clear to me what that is.\n\nAlso, the behavior here has changed: previously everything would execute the code that follows, but now only STORAGE_CHANGE does that. Is that intentional?",
+      "revId": "c76b96a6758475eed72f361596c804e84cd3ebde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
