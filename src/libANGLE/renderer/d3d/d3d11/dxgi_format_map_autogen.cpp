@@ -282,11 +282,11 @@ const Format &GetFormat(DXGI_FORMAT dxgiFormat)
         case DXGI_FORMAT_AYUV:
             break;
         case DXGI_FORMAT_B4G4R4A4_UNORM:
-            return Format::Get(FormatID::B4G4R4A4_UNORM);
+            return Format::Get(FormatID::B4G4R4A4_UNORM_PACK);
         case DXGI_FORMAT_B5G5R5A1_UNORM:
-            return Format::Get(FormatID::B5G5R5A1_UNORM);
+            return Format::Get(FormatID::B5G5R5A1_UNORM_PACK);
         case DXGI_FORMAT_B5G6R5_UNORM:
-            return Format::Get(FormatID::B5G6R5_UNORM);
+            return Format::Get(FormatID::B5G6R5_UNORM_PACK);
         case DXGI_FORMAT_B8G8R8A8_TYPELESS:
             return Format::Get(FormatID::B8G8R8A8_TYPELESS);
         case DXGI_FORMAT_B8G8R8A8_UNORM:

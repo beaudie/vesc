@@ -30,12 +30,12 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
             // This format is not implemented in Vulkan.
             break;
 
-        case angle::FormatID::A1R5G5B5_UNORM:
+        case angle::FormatID::A1R5G5B5_UNORM_PACK:
             internalFormat               = GL_A1RGB5_ANGLEX;
-            textureFormatID              = angle::FormatID::A1R5G5B5_UNORM;
+            textureFormatID              = angle::FormatID::A1R5G5B5_UNORM_PACK;
             vkTextureFormat              = VK_FORMAT_A1R5G5B5_UNORM_PACK16;
             textureInitializerFunction   = nullptr;
-            bufferFormatID               = angle::FormatID::A1R5G5B5_UNORM;
+            bufferFormatID               = angle::FormatID::A1R5G5B5_UNORM_PACK;
             vkBufferFormat               = VK_FORMAT_A1R5G5B5_UNORM_PACK16;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
@@ -354,34 +354,34 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
             vertexLoadRequiresConversion = false;
             break;
 
-        case angle::FormatID::B4G4R4A4_UNORM:
+        case angle::FormatID::B4G4R4A4_UNORM_PACK:
             internalFormat               = GL_BGRA4_ANGLEX;
-            textureFormatID              = angle::FormatID::B4G4R4A4_UNORM;
+            textureFormatID              = angle::FormatID::B4G4R4A4_UNORM_PACK;
             vkTextureFormat              = VK_FORMAT_B4G4R4A4_UNORM_PACK16;
             textureInitializerFunction   = nullptr;
-            bufferFormatID               = angle::FormatID::B4G4R4A4_UNORM;
+            bufferFormatID               = angle::FormatID::B4G4R4A4_UNORM_PACK;
             vkBufferFormat               = VK_FORMAT_B4G4R4A4_UNORM_PACK16;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
             break;
 
-        case angle::FormatID::B5G5R5A1_UNORM:
+        case angle::FormatID::B5G5R5A1_UNORM_PACK:
             internalFormat               = GL_BGR5_A1_ANGLEX;
-            textureFormatID              = angle::FormatID::B5G5R5A1_UNORM;
+            textureFormatID              = angle::FormatID::B5G5R5A1_UNORM_PACK;
             vkTextureFormat              = VK_FORMAT_B5G5R5A1_UNORM_PACK16;
             textureInitializerFunction   = nullptr;
-            bufferFormatID               = angle::FormatID::B5G5R5A1_UNORM;
+            bufferFormatID               = angle::FormatID::B5G5R5A1_UNORM_PACK;
             vkBufferFormat               = VK_FORMAT_B5G5R5A1_UNORM_PACK16;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
             break;
 
-        case angle::FormatID::B5G6R5_UNORM:
+        case angle::FormatID::B5G6R5_UNORM_PACK:
             internalFormat               = GL_BGR565_ANGLEX;
-            textureFormatID              = angle::FormatID::B5G6R5_UNORM;
+            textureFormatID              = angle::FormatID::B5G6R5_UNORM_PACK;
             vkTextureFormat              = VK_FORMAT_B5G6R5_UNORM_PACK16;
             textureInitializerFunction   = nullptr;
-            bufferFormatID               = angle::FormatID::B5G6R5_UNORM;
+            bufferFormatID               = angle::FormatID::B5G6R5_UNORM_PACK;
             vkBufferFormat               = VK_FORMAT_B5G6R5_UNORM_PACK16;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
@@ -1321,34 +1321,34 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
             // This format is not implemented in Vulkan.
             break;
 
-        case angle::FormatID::R4G4B4A4_UNORM:
+        case angle::FormatID::R4G4B4A4_UNORM_PACK:
             internalFormat               = GL_RGBA4;
-            textureFormatID              = angle::FormatID::R8G8B8A8_UNORM;
-            vkTextureFormat              = VK_FORMAT_R8G8B8A8_UNORM;
+            textureFormatID              = angle::FormatID::R4G4B4A4_UNORM_PACK;
+            vkTextureFormat              = VK_FORMAT_R4G4B4A4_UNORM_PACK16;
             textureInitializerFunction   = nullptr;
-            bufferFormatID               = angle::FormatID::R4G4B4A4_UNORM;
+            bufferFormatID               = angle::FormatID::R4G4B4A4_UNORM_PACK;
             vkBufferFormat               = VK_FORMAT_R4G4B4A4_UNORM_PACK16;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
             break;
 
-        case angle::FormatID::R5G5B5A1_UNORM:
+        case angle::FormatID::R5G5B5A1_UNORM_PACK:
             internalFormat               = GL_RGB5_A1;
-            textureFormatID              = angle::FormatID::A1R5G5B5_UNORM;
-            vkTextureFormat              = VK_FORMAT_A1R5G5B5_UNORM_PACK16;
+            textureFormatID              = angle::FormatID::R5G5B5A1_UNORM_PACK;
+            vkTextureFormat              = VK_FORMAT_R5G5B5A1_UNORM_PACK16;
             textureInitializerFunction   = nullptr;
-            bufferFormatID               = angle::FormatID::R5G5B5A1_UNORM;
+            bufferFormatID               = angle::FormatID::R5G5B5A1_UNORM_PACK;
             vkBufferFormat               = VK_FORMAT_R5G5B5A1_UNORM_PACK16;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
             break;
 
-        case angle::FormatID::R5G6B5_UNORM:
+        case angle::FormatID::R5G6B5_UNORM_PACK:
             internalFormat               = GL_RGB565;
-            textureFormatID              = angle::FormatID::R5G6B5_UNORM;
+            textureFormatID              = angle::FormatID::R5G6B5_UNORM_PACK;
             vkTextureFormat              = VK_FORMAT_R5G6B5_UNORM_PACK16;
             textureInitializerFunction   = nullptr;
-            bufferFormatID               = angle::FormatID::R5G6B5_UNORM;
+            bufferFormatID               = angle::FormatID::R5G6B5_UNORM_PACK;
             vkBufferFormat               = VK_FORMAT_R5G6B5_UNORM_PACK16;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;

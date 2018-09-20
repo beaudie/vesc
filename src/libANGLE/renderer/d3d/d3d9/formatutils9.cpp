@@ -110,17 +110,19 @@ const D3DFormat &GetD3DFormatInfo(D3DFORMAT format)
 
         case D3DFMT_A4R4G4B4:
         {
-            static const D3DFormat info(16, 1, 1, 4, 4, 4, 4, 0, 0, 0, FormatID::B4G4R4A4_UNORM);
+            static const D3DFormat info(16, 1, 1, 4, 4, 4, 4, 0, 0, 0,
+                                        FormatID::B4G4R4A4_UNORM_PACK);
             return info;
         }
         case D3DFMT_A1R5G5B5:
         {
-            static const D3DFormat info(16, 1, 1, 5, 5, 5, 1, 0, 0, 0, FormatID::B5G5R5A1_UNORM);
+            static const D3DFormat info(16, 1, 1, 5, 5, 5, 1, 0, 0, 0,
+                                        FormatID::B5G5R5A1_UNORM_PACK);
             return info;
         }
         case D3DFMT_R5G6B5:
         {
-            static const D3DFormat info(16, 1, 1, 5, 6, 5, 0, 0, 0, 0, FormatID::R5G6B5_UNORM);
+            static const D3DFormat info(16, 1, 1, 5, 6, 5, 0, 0, 0, 0, FormatID::R5G6B5_UNORM_PACK);
             return info;
         }
         case D3DFMT_X8R8G8B8:

@@ -160,7 +160,7 @@ LoadImageFunctionInfo ALPHA8_EXT_to_R8_UNORM(GLenum type)
     }
 }
 
-LoadImageFunctionInfo BGR565_ANGLEX_to_B5G6R5_UNORM(GLenum type)
+LoadImageFunctionInfo BGR565_ANGLEX_to_B5G6R5_UNORM_PACK(GLenum type)
 {
     switch (type)
     {
@@ -1228,7 +1228,7 @@ LoadImageFunctionInfo RGB32UI_to_R32G32B32A32_UINT(GLenum type)
     }
 }
 
-LoadImageFunctionInfo RGB565_to_B5G6R5_UNORM(GLenum type)
+LoadImageFunctionInfo RGB565_to_B5G6R5_UNORM_PACK(GLenum type)
 {
     switch (type)
     {
@@ -1242,7 +1242,7 @@ LoadImageFunctionInfo RGB565_to_B5G6R5_UNORM(GLenum type)
     }
 }
 
-LoadImageFunctionInfo RGB565_to_R5G6B5_UNORM(GLenum type)
+LoadImageFunctionInfo RGB565_to_R5G6B5_UNORM_PACK(GLenum type)
 {
     switch (type)
     {
@@ -1268,7 +1268,7 @@ LoadImageFunctionInfo RGB565_to_R8G8B8A8_UNORM(GLenum type)
     }
 }
 
-LoadImageFunctionInfo RGB5_A1_to_A1R5G5B5_UNORM(GLenum type)
+LoadImageFunctionInfo RGB5_A1_to_A1R5G5B5_UNORM_PACK(GLenum type)
 {
     switch (type)
     {
@@ -1280,7 +1280,7 @@ LoadImageFunctionInfo RGB5_A1_to_A1R5G5B5_UNORM(GLenum type)
     }
 }
 
-LoadImageFunctionInfo RGB5_A1_to_B5G5R5A1_UNORM(GLenum type)
+LoadImageFunctionInfo RGB5_A1_to_B5G5R5A1_UNORM_PACK(GLenum type)
 {
     switch (type)
     {
@@ -1494,7 +1494,7 @@ LoadImageFunctionInfo RGBA32UI_to_R32G32B32A32_UINT(GLenum type)
     }
 }
 
-LoadImageFunctionInfo RGBA4_to_B4G4R4A4_UNORM(GLenum type)
+LoadImageFunctionInfo RGBA4_to_B4G4R4A4_UNORM_PACK(GLenum type)
 {
     switch (type)
     {
@@ -1648,8 +1648,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
         {
             switch (angleFormat)
             {
-                case FormatID::B5G6R5_UNORM:
-                    return BGR565_ANGLEX_to_B5G6R5_UNORM;
+                case FormatID::B5G6R5_UNORM_PACK:
+                    return BGR565_ANGLEX_to_B5G6R5_UNORM_PACK;
                 default:
                     break;
             }
@@ -2361,10 +2361,10 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
         {
             switch (angleFormat)
             {
-                case FormatID::B5G6R5_UNORM:
-                    return RGB565_to_B5G6R5_UNORM;
-                case FormatID::R5G6B5_UNORM:
-                    return RGB565_to_R5G6B5_UNORM;
+                case FormatID::B5G6R5_UNORM_PACK:
+                    return RGB565_to_B5G6R5_UNORM_PACK;
+                case FormatID::R5G6B5_UNORM_PACK:
+                    return RGB565_to_R5G6B5_UNORM_PACK;
                 case FormatID::R8G8B8A8_UNORM:
                     return RGB565_to_R8G8B8A8_UNORM;
                 default:
@@ -2376,10 +2376,10 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
         {
             switch (angleFormat)
             {
-                case FormatID::A1R5G5B5_UNORM:
-                    return RGB5_A1_to_A1R5G5B5_UNORM;
-                case FormatID::B5G5R5A1_UNORM:
-                    return RGB5_A1_to_B5G5R5A1_UNORM;
+                case FormatID::A1R5G5B5_UNORM_PACK:
+                    return RGB5_A1_to_A1R5G5B5_UNORM_PACK;
+                case FormatID::B5G5R5A1_UNORM_PACK:
+                    return RGB5_A1_to_B5G5R5A1_UNORM_PACK;
                 case FormatID::R8G8B8A8_UNORM:
                     return RGB5_A1_to_R8G8B8A8_UNORM;
                 default:
@@ -2536,8 +2536,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
         {
             switch (angleFormat)
             {
-                case FormatID::B4G4R4A4_UNORM:
-                    return RGBA4_to_B4G4R4A4_UNORM;
+                case FormatID::B4G4R4A4_UNORM_PACK:
+                    return RGBA4_to_B4G4R4A4_UNORM_PACK;
                 case FormatID::R8G8B8A8_UNORM:
                     return RGBA4_to_R8G8B8A8_UNORM;
                 default:
