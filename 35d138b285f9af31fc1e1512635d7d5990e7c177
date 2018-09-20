@@ -70,6 +70,30 @@
       "revId": "35d138b285f9af31fc1e1512635d7d5990e7c177",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20a266ce_3e2cf885",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-09-20T20:27:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d44a3fcf_a48f8729",
+      "range": {
+        "startLine": 500,
+        "startChar": 1,
+        "endLine": 501,
+        "endChar": 56
+      },
+      "revId": "35d138b285f9af31fc1e1512635d7d5990e7c177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
