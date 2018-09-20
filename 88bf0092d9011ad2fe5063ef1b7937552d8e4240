@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5252523_c21934e2",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/InputLayoutCache.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-20T21:18:27Z",
+      "side": 1,
+      "message": "Can you add an assert that divisor can fit into the 32-bit int?",
+      "range": {
+        "startLine": 86,
+        "startChar": 35,
+        "endLine": 86,
+        "endChar": 67
+      },
+      "revId": "88bf0092d9011ad2fe5063ef1b7937552d8e4240",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
