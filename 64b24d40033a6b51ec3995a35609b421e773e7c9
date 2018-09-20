@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2ac898fa_b5780a33",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2018-09-20T02:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f30d140_4df634db",
+      "range": {
+        "startLine": 7,
+        "startChar": 14,
+        "endLine": 7,
+        "endChar": 25
+      },
+      "revId": "64b24d40033a6b51ec3995a35609b421e773e7c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2932662b_0f2dd9a2",
         "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "64b24d40033a6b51ec3995a35609b421e773e7c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa6d4b49_60a33365",
+        "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2018-09-20T02:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2932662b_0f2dd9a2",
+      "revId": "64b24d40033a6b51ec3995a35609b421e773e7c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
