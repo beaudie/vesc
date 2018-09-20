@@ -16,6 +16,24 @@
       "revId": "c76b96a6758475eed72f361596c804e84cd3ebde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52fad1ec_0a476919",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1836,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-20T17:47:47Z",
+      "side": 1,
+      "message": "DEPENDENT_DIRTY_BITS are used to notify from the implementation to the GL object that some dirty bits are flagged. Dirty bits are usually tracked internally in the class so there is no direct front-end equivalent. I use the DEPENDENT_DIRTY_BITS in the next patch to signal that the Texture object should sync state of the Impl when there is implementation-side state to sync. It should become more apparent in the next patch.\n\nUnderstood that it\u0027s a lot to take in in a small code review. Maybe we could go over it in more detail face to face.\n\nI changed the above if to an ASSERT to make it clear that only STORAGE_CHANGED should be accepted here now. I don\u0027t believe we can get any other message.",
+      "parentUuid": "34cfd7e6_ae9d5175",
+      "revId": "c76b96a6758475eed72f361596c804e84cd3ebde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
