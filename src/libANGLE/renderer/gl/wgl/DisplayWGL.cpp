@@ -545,7 +545,7 @@ egl::Error DisplayWGL::restoreLostDevice(const egl::Display *display)
 
 bool DisplayWGL::isValidNativeWindow(EGLNativeWindowType window) const
 {
-    return (IsWindow(window) == TRUE);
+    return (IsWindow(static_cast<HWND>(window)) == TRUE);
 }
 
 egl::Error DisplayWGL::validateClientBuffer(const egl::Config *configuration,

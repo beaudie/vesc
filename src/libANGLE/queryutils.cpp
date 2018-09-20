@@ -25,6 +25,7 @@
 #include "libANGLE/Uniform.h"
 #include "libANGLE/VertexAttribute.h"
 #include "libANGLE/queryconversions.h"
+#include "libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.h"
 
 namespace gl
 {
@@ -2728,6 +2729,8 @@ void QueryContextAttrib(const gl::Context *context, EGLint attribute, EGLint *va
 
 void QuerySurfaceAttrib(const Surface *surface, EGLint attribute, EGLint *value)
 {
+    rx::RoHelper helper;
+
     switch (attribute)
     {
         case EGL_GL_COLORSPACE:
@@ -2815,6 +2818,16 @@ void QuerySurfaceAttrib(const Surface *surface, EGLint attribute, EGLint *value)
             break;
         case EGL_DIRECT_COMPOSITION_ANGLE:
             *value = surface->directComposition();
+            break;
+        case EGL_WINDOWS_UI_COMPOSITION_ANGLE:
+            // Fail when not on Win7
+            // Fail when not on Windows 10 1803+
+            if (!helper.WinRtAvailable() || !helper.SupportedWindowsRelease())
+            {
+                *value = false;
+            }
+
+            *value = surface->windowsUIComposition();
             break;
         case EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE:
             *value = surface->isRobustResourceInitEnabled();
