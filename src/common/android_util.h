@@ -22,6 +22,7 @@ namespace android
 {
 
 struct ANativeWindowBuffer *ClientBufferToANativeWindowBuffer(EGLClientBuffer clientBuffer);
+EGLClientBuffer AHardwareBufferToClientBuffer(const struct AHardwareBuffer *hardwareBuffer);
 
 void GetANativeWindowBufferProperties(const struct ANativeWindowBuffer *buffer,
                                       int *width,
