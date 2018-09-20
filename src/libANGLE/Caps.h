@@ -893,6 +893,9 @@ struct DisplayExtensions
 
     // EGL_ANGLE_image_d3d11_texture
     bool imageD3D11Texture;
+
+    // EGL_ANDROID_get_native_client_buffer
+    bool getNativeClientBufferANDROID = false;
 };
 
 struct DeviceExtensions
