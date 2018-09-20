@@ -518,4 +518,9 @@ void EGLAPIENTRY eglSetBlobCacheFuncsANDROID(EGLDisplay dpy,
     return egl::SetBlobCacheFuncsANDROID(dpy, set, get);
 }
 
+EGLClientBuffer EGLAPIENTRY eglGetNativeClientBufferANDROID(const struct AHardwareBuffer *buffer)
+{
+    return egl::GetNativeClientBufferANDROID(buffer);
+}
+
 }  // extern "C"

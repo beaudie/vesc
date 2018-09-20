@@ -151,6 +151,10 @@ ANGLE_EXPORT EGLint EGLAPIENTRY LabelObjectKHR(EGLDisplay display,
                                                EGLObjectKHR object,
                                                EGLLabelKHR label);
 
+// EGL_ANDROID_get_native_client_buffer
+ANGLE_EXPORT EGLClientBuffer EGLAPIENTRY
+GetNativeClientBufferANDROID(const struct AHardwareBuffer *buffer);
+
 }  // namespace egl
 
 #endif  // LIBGLESV2_ENTRYPOINTSEGLEXT_H_

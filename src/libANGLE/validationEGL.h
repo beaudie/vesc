@@ -248,6 +248,9 @@ Error ValidateLabelObjectKHR(Thread *thread,
                              EGLObjectKHR object,
                              EGLLabelKHR label);
 
+// EGL_ANDROID_get_native_client_buffer
+Error ValidateGetNativeClientBufferANDROID(const struct AHardwareBuffer *buffer);
+
 }  // namespace egl
 
 #define ANGLE_EGL_TRY(THREAD, EXPR, FUNCNAME, LABELOBJECT)                               \
