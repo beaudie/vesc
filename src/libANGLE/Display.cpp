@@ -19,6 +19,7 @@
 #include <EGL/eglext.h>
 #include <platform/Platform.h>
 
+#include "common/android_util.h"
 #include "common/debug.h"
 #include "common/mathutil.h"
 #include "common/platform.h"
@@ -1116,6 +1117,12 @@ void Display::setBlobCacheFuncs(EGLSetBlobFuncANDROID set, EGLGetBlobFuncANDROID
     mImplementation->setBlobCacheFuncs(set, get);
 }
 
+// static
+EGLClientBuffer Display::GetNativeClientBuffer(const AHardwareBuffer *buffer)
+{
+    return angle::android::AHardwareBufferToClientBuffer(buffer);
+}
+
 Error Display::waitClient(const gl::Context *context)
 {
     return mImplementation->waitClient(context);
@@ -1349,7 +1356,7 @@ void Display::initVendorString()
 void Display::initializeFrontendFeatures()
 {
     // Enable on all Impls
-    mFrontendFeatures.loseContextOnOutOfMemory.enabled = true;
+    mFrontendFeatures.loseContextOnOutOfMemory.enabled          = true;
     mFrontendFeatures.scalarizeVecAndMatConstructorArgs.enabled = true;
 
     mImplementation->initializeFrontendFeatures(&mFrontendFeatures);
