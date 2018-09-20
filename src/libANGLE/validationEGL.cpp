@@ -3859,4 +3859,16 @@ Error ValidateQueryDisplayAttribANGLE(const Display *display, const EGLint attri
     return NoError();
 }
 
+Error ValidateGetNativeClientBufferANDROID(const struct AHardwareBuffer *buffer)
+{
+    // No extension check is done because no display is passed to eglGetNativeClientBufferANDROID
+    // dispite it being a display extension.  No display is needed for the implementation though.
+    if (buffer == nullptr)
+    {
+        return EglBadParameter() << "NULL buffer.";
+    }
+
+    return NoError();
+}
+
 }  // namespace egl
