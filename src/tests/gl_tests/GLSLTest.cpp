@@ -4935,6 +4935,34 @@ void main()
                               kQuarterSize, kQuarterSize * 2));
 }
 
+TEST_P(GLSLTest, DefinedInMacro)
+{
+    constexpr char kVS[] = R"(precision mediump float;
+attribute highp vec4 dEQP_Position;
+varying float out0;
+
+void main()
+{
+#define AAA defined(BBB)
+
+#if !AAA
+    out0 = 1.0;
+#else
+    out0 = 0.0;
+#endif
+    gl_Position = dEQP_Position;
+})";
+
+    constexpr char kFS[] = R"(precision mediump float;
+varying float out0;
+void main()
+{
+    gl_FragColor = vec4(out0, 0, 0, 1);
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(GLSLTest,
