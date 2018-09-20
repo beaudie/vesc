@@ -400,14 +400,27 @@ angle::Result LineLoopHelper::getIndexBufferForDrawArrays(Context *context,
 
 angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(Context *context,
                                                                   BufferVk *elementArrayBufferVk,
-                                                                  VkIndexType indexType,
+                                                                  GLenum glIndexType,
                                                                   int indexCount,
                                                                   intptr_t elementArrayOffset,
                                                                   VkBuffer *bufferHandleOut,
                                                                   VkDeviceSize *bufferOffsetOut)
 {
-    ASSERT(indexType == VK_INDEX_TYPE_UINT16 || indexType == VK_INDEX_TYPE_UINT32);
+    if (glIndexType == GL_UNSIGNED_BYTE)
+    {
+        void *srcDataMapping = nullptr;
 
+        ANGLE_TRY(context->getRenderer()->finish(context));
+        ANGLE_TRY(elementArrayBufferVk->mapImpl(context, &srcDataMapping));
+        ANGLE_TRY(streamIndices(context, glIndexType, indexCount,
+                                static_cast<const uint8_t *>(srcDataMapping) + elementArrayOffset,
+                                bufferHandleOut, bufferOffsetOut));
+        ANGLE_TRY(elementArrayBufferVk->unmapImpl(context));
+        return angle::Result::Continue();
+    }
+
+    VkIndexType indexType = gl_vk::GetIndexType(glIndexType);
+    ASSERT(indexType == VK_INDEX_TYPE_UINT16 || indexType == VK_INDEX_TYPE_UINT32);
     uint32_t *indices          = nullptr;
 
     auto unitSize = (indexType == VK_INDEX_TYPE_UINT16 ? sizeof(uint16_t) : sizeof(uint32_t));
@@ -435,40 +448,39 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(Context *conte
     return angle::Result::Continue();
 }
 
-angle::Result LineLoopHelper::getIndexBufferForClientElementArray(
-    Context *context,
-    const gl::DrawCallParams &drawCallParams,
-    VkBuffer *bufferHandleOut,
-    VkDeviceSize *bufferOffsetOut)
+angle::Result LineLoopHelper::streamIndices(Context *context,
+                                            GLenum glIndexType,
+                                            GLsizei indexCount,
+                                            const uint8_t *srcPtr,
+                                            VkBuffer *bufferHandleOut,
+                                            VkDeviceSize *bufferOffsetOut)
 {
-    VkIndexType indexType = gl_vk::GetIndexType(drawCallParams.type());
+    VkIndexType indexType = gl_vk::GetIndexType(glIndexType);
 
     uint8_t *indices = nullptr;
 
     auto unitSize = (indexType == VK_INDEX_TYPE_UINT16 ? sizeof(uint16_t) : sizeof(uint32_t));
-    size_t allocateBytes = unitSize * (drawCallParams.indexCount() + 1);
+    size_t allocateBytes = unitSize * (indexCount + 1);
     ANGLE_TRY(mDynamicIndexBuffer.allocate(context, allocateBytes,
                                            reinterpret_cast<uint8_t **>(&indices), bufferHandleOut,
                                            bufferOffsetOut, nullptr));
 
-    if (drawCallParams.type() == GL_UNSIGNED_BYTE)
+    if (glIndexType == GL_UNSIGNED_BYTE)
     {
         // Vulkan doesn't support uint8 index types, so we need to emulate it.
         ASSERT(indexType == VK_INDEX_TYPE_UINT16);
         uint16_t *indicesDst  = reinterpret_cast<uint16_t *>(indices);
-        const uint8_t *srcPtr = reinterpret_cast<const uint8_t *>(drawCallParams.indices());
-        for (int i = 0; i < drawCallParams.indexCount(); i++)
+        for (int i = 0; i < indexCount; i++)
         {
             indicesDst[i] = srcPtr[i];
         }
 
-        indicesDst[drawCallParams.indexCount()] = srcPtr[0];
+        indicesDst[indexCount] = srcPtr[0];
     }
     else
     {
-        memcpy(indices, drawCallParams.indices(), unitSize * drawCallParams.indexCount());
-        memcpy(indices + unitSize * drawCallParams.indexCount(), drawCallParams.indices(),
-               unitSize);
+        memcpy(indices, srcPtr, unitSize * indexCount);
+        memcpy(indices + unitSize * indexCount, srcPtr, unitSize);
     }
 
     ANGLE_TRY(mDynamicIndexBuffer.flush(context));

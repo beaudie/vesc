@@ -58,8 +58,8 @@ class BufferVk : public BufferImpl, public vk::CommandGraphResource
 
     const vk::Buffer &getVkBuffer() const;
 
-    angle::Result mapImpl(ContextVk *contextVk, void **mapPtr);
-    angle::Result unmapImpl(ContextVk *contextVk);
+    angle::Result mapImpl(vk::Context *contextVk, void **mapPtr);
+    angle::Result unmapImpl(vk::Context *contextVk);
 
   private:
     angle::Result setDataImpl(ContextVk *contextVk,

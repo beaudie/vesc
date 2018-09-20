@@ -141,17 +141,21 @@ class LineLoopHelper final : public vk::CommandGraphResource
                                               const gl::DrawCallParams &drawCallParams,
                                               VkBuffer *bufferHandleOut,
                                               VkDeviceSize *offsetOut);
+
     angle::Result getIndexBufferForElementArrayBuffer(Context *context,
                                                       BufferVk *elementArrayBufferVk,
-                                                      VkIndexType indexType,
+                                                      GLenum glIndexType,
                                                       int indexCount,
                                                       intptr_t elementArrayOffset,
                                                       VkBuffer *bufferHandleOut,
                                                       VkDeviceSize *bufferOffsetOut);
-    angle::Result getIndexBufferForClientElementArray(Context *context,
-                                                      const gl::DrawCallParams &drawCallParams,
-                                                      VkBuffer *bufferHandleOut,
-                                                      VkDeviceSize *bufferOffsetOut);
+
+    angle::Result streamIndices(Context *context,
+                                GLenum glIndexType,
+                                GLsizei indexCount,
+                                const uint8_t *srcPtr,
+                                VkBuffer *bufferHandleOut,
+                                VkDeviceSize *bufferOffsetOut);
 
     void destroy(VkDevice device);
 

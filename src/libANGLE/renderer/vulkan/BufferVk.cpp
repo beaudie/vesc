@@ -121,7 +121,7 @@ gl::Error BufferVk::map(const gl::Context *context, GLenum access, void **mapPtr
     return gl::NoError();
 }
 
-angle::Result BufferVk::mapImpl(ContextVk *contextVk, void **mapPtr)
+angle::Result BufferVk::mapImpl(vk::Context *contextVk, void **mapPtr)
 {
     return mBufferMemory.map(contextVk, 0, mState.getSize(), 0,
                              reinterpret_cast<uint8_t **>(mapPtr));
@@ -154,7 +154,7 @@ gl::Error BufferVk::unmap(const gl::Context *context, GLboolean *result)
     return unmapImpl(vk::GetImpl(context));
 }
 
-angle::Result BufferVk::unmapImpl(ContextVk *contextVk)
+angle::Result BufferVk::unmapImpl(vk::Context *contextVk)
 {
     ASSERT(mBuffer.getHandle() != VK_NULL_HANDLE);
     ASSERT(mBufferMemory.getHandle() != VK_NULL_HANDLE);
