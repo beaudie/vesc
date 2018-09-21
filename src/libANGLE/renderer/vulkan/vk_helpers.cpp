@@ -411,7 +411,7 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(Context *conte
     uint32_t *indices          = nullptr;
 
     auto unitSize = (indexType == VK_INDEX_TYPE_UINT16 ? sizeof(uint16_t) : sizeof(uint32_t));
-    size_t allocateBytes = unitSize * (indexCount + 1);
+    size_t allocateBytes = unitSize * (indexCount + 2);
 
     mDynamicIndexBuffer.releaseRetainedBuffers(context->getRenderer());
     ANGLE_TRY(mDynamicIndexBuffer.allocate(context, allocateBytes,
@@ -420,16 +420,21 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(Context *conte
 
     VkDeviceSize sourceOffset = static_cast<VkDeviceSize>(elementArrayOffset);
     uint64_t unitCount        = static_cast<VkDeviceSize>(indexCount);
-    VkBufferCopy copy1        = {sourceOffset, *bufferOffsetOut, unitCount * unitSize};
-    VkBufferCopy copy2        = {sourceOffset, *bufferOffsetOut + unitCount * unitSize, unitSize};
-    std::array<VkBufferCopy, 2> copies = {{copy1, copy2}};
+    const VkBufferCopy copies[] = {
+        {sourceOffset, *bufferOffsetOut, unitCount * unitSize},
+        {sourceOffset, *bufferOffsetOut + unitCount * unitSize, unitSize},
+
+        // An unneeded region to work around bug in Windows with Intel GPU where the last
+        // region isn't copied.
+        {sourceOffset, *bufferOffsetOut + (unitCount + 1) * unitSize, unitSize},
+    };
 
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(beginWriteResource(context, &commandBuffer));
 
     elementArrayBufferVk->addReadDependency(this);
-    commandBuffer->copyBuffer(elementArrayBufferVk->getVkBuffer().getHandle(), *bufferHandleOut, 2,
-                              copies.data());
+    commandBuffer->copyBuffer(elementArrayBufferVk->getVkBuffer().getHandle(), *bufferHandleOut,
+                              ArraySize(copies), copies);
 
     ANGLE_TRY(mDynamicIndexBuffer.flush(context));
     return angle::Result::Continue();
