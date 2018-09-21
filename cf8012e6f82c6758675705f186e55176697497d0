@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "061a8284_67c9d9e3",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-21T23:32:31Z",
+      "side": 1,
+      "message": "instead of using vk::Context here I think you can make LineLoopHelper take ContextVk. I was going to do that in one of my changes anyway. Not sure why I had it as vk::Context in the first place.",
+      "range": {
+        "startLine": 61,
+        "startChar": 26,
+        "endLine": 61,
+        "endChar": 37
+      },
+      "revId": "cf8012e6f82c6758675705f186e55176697497d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
