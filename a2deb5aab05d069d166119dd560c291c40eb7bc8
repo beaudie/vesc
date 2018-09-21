@@ -19,6 +19,70 @@
     },
     {
       "key": {
+        "uuid": "2006de0f_b7b3075e",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2760,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-21T23:39:23Z",
+      "side": 1,
+      "message": "It\u0027s a good question. I use this pattern because hasAnyDirtyBit can be inlined easily. syncState isn\u0027t inline-able really. This way has the hot path skipping the stack pushing / popping in each non-inlined function call. A lot of micro-optimizations I\u0027m making in these CLs are inlining/eliminating calls.",
+      "parentUuid": "fd17288c_86ddc8e8",
+      "revId": "a2deb5aab05d069d166119dd560c291c40eb7bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1df92f49_f1891ccb",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-21T23:39:23Z",
+      "side": 1,
+      "message": "reference",
+      "range": {
+        "startLine": 595,
+        "startChar": 19,
+        "endLine": 595,
+        "endChar": 43
+      },
+      "revId": "a2deb5aab05d069d166119dd560c291c40eb7bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1db7a000_4dec00b1",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-21T23:39:23Z",
+      "side": 1,
+      "message": "reference",
+      "range": {
+        "startLine": 1687,
+        "startChar": 23,
+        "endLine": 1687,
+        "endChar": 47
+      },
+      "revId": "a2deb5aab05d069d166119dd560c291c40eb7bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ca10e566_6e7fcfa3",
         "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
         "patchSetId": 16
@@ -39,6 +103,30 @@
       "revId": "a2deb5aab05d069d166119dd560c291c40eb7bc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8853d017_eff93d08",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-21T23:39:23Z",
+      "side": 1,
+      "message": "No, not bindTexture. It signals to the gl::Texture object that syncState can\u0027t be skipped. So \"hasAnyDirtyBit\" will return true even though no \"real\" dirty bits are set. Just this special one signaling the implementation has internal dirty bits. Once we reach this function mLocalDirtyBits are handled like normal dirty bits. I only included the case because otherwise we reach the UNREACHABLE\n\nI took this design because it wasn\u0027t easy to pass exactly what dirty bits should be enabled at the top level. See references in the top level where this dirty bit is set.",
+      "parentUuid": "ca10e566_6e7fcfa3",
+      "range": {
+        "startLine": 1254,
+        "startChar": 30,
+        "endLine": 1254,
+        "endChar": 54
+      },
+      "revId": "a2deb5aab05d069d166119dd560c291c40eb7bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
