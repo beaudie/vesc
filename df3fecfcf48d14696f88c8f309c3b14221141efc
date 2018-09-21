@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "661899da_ba9b3264",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-09-21T14:53:04Z",
+      "side": 1,
+      "message": "What happens when these limits are exceeded? Do we need clamping inserted in the shader?",
+      "revId": "df3fecfcf48d14696f88c8f309c3b14221141efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
