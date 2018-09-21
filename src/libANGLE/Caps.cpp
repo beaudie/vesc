@@ -1322,7 +1322,8 @@ DisplayExtensions::DisplayExtensions()
       createContextExtensionsEnabled(false),
       presentationTime(false),
       blobCache(false),
-      getNativeClientBuffer(false)
+      getNativeClientBuffer(false),
+      imageNativeBuffer(false)
 {
 }
 
@@ -1372,6 +1373,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_ANDROID_presentation_time",                       presentationTime,                   &extensionStrings);
     InsertExtensionString("EGL_ANDROID_blob_cache",                              blobCache,                          &extensionStrings);
     InsertExtensionString("EGL_ANDROID_get_native_client_buffer",                getNativeClientBuffer,              &extensionStrings);
+    InsertExtensionString("EGL_ANDROID_image_native_buffer",                     imageNativeBuffer,                  &extensionStrings);
     // TODO(jmadill): Enable this when complete.
     //InsertExtensionString("KHR_create_context_no_error",                       createContextNoError,               &extensionStrings);
     // clang-format on

@@ -1882,6 +1882,22 @@ Error ValidateCreateImageKHR(const Display *display,
         }
         break;
 
+        case EGL_NATIVE_BUFFER_ANDROID:
+        {
+            if (!displayExtensions.imageNativeBuffer)
+            {
+                return EglBadParameter() << "EGL_ANDROID_image_native_buffer not supported.";
+            }
+
+            if (context != nullptr)
+            {
+                return EglBadContext() << "ctx must be EGL_NO_CONTEXT.";
+            }
+
+            ANGLE_TRY(display->validateImageClientBuffer(context, target, buffer, attributes));
+        }
+        break;
+
         default:
             return EglBadParameter()
                    << "invalid target: 0x" << std::hex << std::uppercase << target;
