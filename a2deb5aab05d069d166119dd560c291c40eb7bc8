@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd17288c_86ddc8e8",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2760,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-21T14:02:28Z",
+      "side": 1,
+      "message": "If this should come before every syncState, might as well check it inside syncState and early out?",
+      "revId": "a2deb5aab05d069d166119dd560c291c40eb7bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
