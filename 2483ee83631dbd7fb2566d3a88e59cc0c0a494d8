@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f383edf_9b27745d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-21T23:45:44Z",
+      "side": 1,
+      "message": "same comments here",
+      "revId": "2483ee83631dbd7fb2566d3a88e59cc0c0a494d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22d0cfef_bd7afa28",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-21T23:45:44Z",
+      "side": 1,
+      "message": "tiny nit: can you use the \u0027memoryPropertyFlagsOut\u0027 name everywhere instead of \u0027actualMemoryPropertyFlags\u0027? I\u0027ve found \u0027actual\u0027 to be too ambiguous.",
+      "range": {
+        "startLine": 98,
+        "startChar": 69,
+        "endLine": 98,
+        "endChar": 94
+      },
+      "revId": "2483ee83631dbd7fb2566d3a88e59cc0c0a494d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1d583ff_16e7b81c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-21T23:45:44Z",
+      "side": 1,
+      "message": "tiny nit: can you use the \u0027memoryPropertyFlagsOut\u0027 name everywhere instead of \u0027actualMemoryPropertyFlags\u0027? I\u0027ve found \u0027actual\u0027 to be too ambiguous.",
+      "range": {
+        "startLine": 120,
+        "startChar": 65,
+        "endLine": 120,
+        "endChar": 90
+      },
+      "revId": "2483ee83631dbd7fb2566d3a88e59cc0c0a494d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bc6d2c8_f0243349",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-21T23:45:44Z",
+      "side": 1,
+      "message": "tiny nit: can you avoid using \u0027actual\u0027 as I\u0027ve found it\u0027s ambiguous. Maye allocatedFlags or something.",
+      "range": {
+        "startLine": 1063,
+        "startChar": 26,
+        "endLine": 1063,
+        "endChar": 37
+      },
+      "revId": "2483ee83631dbd7fb2566d3a88e59cc0c0a494d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90842658_94c259d8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1077,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-21T23:45:44Z",
+      "side": 1,
+      "message": "same here, and a couple other places.",
+      "range": {
+        "startLine": 1077,
+        "startChar": 58,
+        "endLine": 1077,
+        "endChar": 83
+      },
+      "revId": "2483ee83631dbd7fb2566d3a88e59cc0c0a494d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c681c22_e954589e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-21T23:45:44Z",
+      "side": 1,
+      "message": "see other comments.",
+      "range": {
+        "startLine": 659,
+        "startChar": 58,
+        "endLine": 659,
+        "endChar": 83
+      },
+      "revId": "2483ee83631dbd7fb2566d3a88e59cc0c0a494d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
