@@ -16,6 +16,29 @@
       "revId": "a2deb5aab05d069d166119dd560c291c40eb7bc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca10e566_6e7fcfa3",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-09-21T15:56:35Z",
+      "side": 1,
+      "message": "This is the only place I found that uses DIRTY_BIT_IMPLEMENTATION, but it does nothing with it.\nWhat\u0027s the usefulness of it then?\nOr is stateManager-\u003ebindTexture() the handling for it?",
+      "range": {
+        "startLine": 1254,
+        "startChar": 30,
+        "endLine": 1254,
+        "endChar": 54
+      },
+      "revId": "a2deb5aab05d069d166119dd560c291c40eb7bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
