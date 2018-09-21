@@ -22,6 +22,30 @@
       "revId": "88bf0092d9011ad2fe5063ef1b7937552d8e4240",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52b5ce1e_7dd33b0c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/InputLayoutCache.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-21T05:37:07Z",
+      "side": 1,
+      "message": "It\u0027s already asserted below. It just wasn\u0027t tested before.",
+      "parentUuid": "e5252523_c21934e2",
+      "range": {
+        "startLine": 86,
+        "startChar": 35,
+        "endLine": 86,
+        "endChar": 67
+      },
+      "revId": "88bf0092d9011ad2fe5063ef1b7937552d8e4240",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
