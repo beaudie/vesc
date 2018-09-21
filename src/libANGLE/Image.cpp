@@ -131,6 +131,62 @@ bool ImageSibling::isRenderable(const gl::Context *context,
     return mTargetOf->isRenderable(context);
 }
 
+ExternalImageSibling::ExternalImageSibling(rx::EGLImplFactory *factory,
+                                           const gl::Context *context,
+                                           EGLenum target,
+                                           EGLClientBuffer buffer,
+                                           const AttributeMap &attribs)
+    : mImplementation(factory->createExternalImageSibling(context, target, buffer, attribs))
+{
+}
+
+gl::Extents ExternalImageSibling::getAttachmentSize(const gl::ImageIndex &imageIndex) const
+{
+    return mImplementation->getSize();
+}
+
+gl::Format ExternalImageSibling::getAttachmentFormat(GLenum binding,
+                                                     const gl::ImageIndex &imageIndex) const
+{
+    return mImplementation->getFormat();
+}
+
+GLsizei ExternalImageSibling::getAttachmentSamples(const gl::ImageIndex &imageIndex) const
+{
+    return mImplementation->getSamples();
+}
+
+bool ExternalImageSibling::isRenderable(const gl::Context *context,
+                                        GLenum binding,
+                                        const gl::ImageIndex &imageIndex) const
+{
+    return mImplementation->isRenderable(context);
+}
+
+bool ExternalImageSibling::isTextureable(const gl::Context *context) const
+{
+    return mImplementation->isTexturable(context);
+}
+
+void ExternalImageSibling::onAttach(const gl::Context *context)
+{
+}
+
+void ExternalImageSibling::onDetach(const gl::Context *context)
+{
+}
+
+GLuint ExternalImageSibling::getId() const
+{
+    UNREACHABLE();
+    return 0;
+}
+
+rx::ExternalImageSiblingImpl *ExternalImageSibling::getImplementation() const
+{
+    return mImplementation.get();
+}
+
 ImageState::ImageState(EGLenum target, ImageSibling *buffer, const AttributeMap &attribs)
     : label(nullptr),
       imageIndex(GetImageIndex(target, attribs)),
@@ -172,6 +228,13 @@ Error Image::onDestroy(const Display *display)
     if (mState.source != nullptr)
     {
         mState.source->removeImageSource(this);
+
+        // If the source is an external object, delete it
+        if (IsExternalImageTarget(mState.sourceType))
+        {
+            delete mState.source;
+        }
+
         mState.source = nullptr;
     }
 
@@ -207,6 +270,9 @@ gl::Error Image::orphanSibling(const gl::Context *context, ImageSibling *sibling
 
     if (mState.source == sibling)
     {
+        // The external source of an image cannot be redefined so it cannot be orpahend.
+        ASSERT(IsExternalImageTarget(mState.sourceType));
+
         // If the sibling is the source, it cannot be a target.
         ASSERT(mState.targets.find(sibling) == mState.targets.end());
         mState.source = nullptr;
@@ -233,10 +299,15 @@ bool Image::isRenderable(const gl::Context *context) const
         return mState.format.info->textureAttachmentSupport(context->getClientVersion(),
                                                             context->getExtensions());
     }
-    if (IsRenderbufferTarget(mState.sourceType))
+    else if (IsRenderbufferTarget(mState.sourceType))
     {
         return mState.format.info->renderbufferSupport(context->getClientVersion(),
                                                        context->getExtensions());
+    }
+    else if (IsExternalImageTarget(mState.sourceType))
+    {
+        ASSERT(mState.source != nullptr);
+        return mState.source->isRenderable(context, GL_NONE, gl::ImageIndex());
     }
 
     UNREACHABLE();
@@ -250,9 +321,14 @@ bool Image::isTexturable(const gl::Context *context) const
         return mState.format.info->textureSupport(context->getClientVersion(),
                                                   context->getExtensions());
     }
-    if (IsRenderbufferTarget(mState.sourceType))
+    else if (IsRenderbufferTarget(mState.sourceType))
     {
         return true;
+    }
+    else if (IsExternalImageTarget(mState.sourceType))
+    {
+        ASSERT(mState.source != nullptr);
+        return rx::GetAs<ExternalImageSibling>(mState.source)->isTextureable(context);
     }
 
     UNREACHABLE();

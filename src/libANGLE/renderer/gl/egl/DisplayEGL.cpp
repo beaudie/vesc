@@ -133,6 +133,7 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     outExtensions->getNativeClientBuffer =
         mEGL->hasExtension("EGL_ANDROID_get_native_client_buffer");
+    outExtensions->imageNativeBuffer = mEGL->hasExtension("EGL_ANDROID_image_native_buffer");
 
     DisplayGL::generateExtensions(outExtensions);
 }

@@ -787,6 +787,9 @@ struct DisplayExtensions
 
     // EGL_ANDROID_get_native_client_buffer
     bool getNativeClientBuffer;
+
+    // EGL_ANDROID_image_native_buffer
+    bool imageNativeBuffer;
 };
 
 struct DeviceExtensions
