@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa8ca0ba_66f98c25",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-21T15:02:29Z",
+      "side": 1,
+      "message": "Could you put some of the commit message\u0027s comment here (or the header) describing how the design works.",
+      "revId": "7d19914099cb81d37c08287b5f82cd841c76ee0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0201011_41feef0a",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-21T15:02:29Z",
+      "side": 1,
+      "message": "Could this be gGlobalContextValid? The double-negative below is difficult to read.",
+      "range": {
+        "startLine": 18,
+        "startChar": 5,
+        "endLine": 18,
+        "endChar": 27
+      },
+      "revId": "7d19914099cb81d37c08287b5f82cd841c76ee0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1432d87_342c8c32",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-21T15:02:29Z",
+      "side": 1,
+      "message": "Could you comment these cases?\n\nThis has the one drawback that if a new thread starts making GL calls without an eglMakeCurrent, it will use the context that was current on the other thread.  This would probably be undefined behaviour but our previous code handled this gracefully.  Worth commenting somewhere.",
+      "range": {
+        "startLine": 91,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 5
+      },
+      "revId": "7d19914099cb81d37c08287b5f82cd841c76ee0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56003bca_59581d5a",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-21T15:02:29Z",
+      "side": 1,
+      "message": "How about in-lining this as well and then have GetValidGlobalContext call it with the context loss check?  We could then remove Thread::getValidContext and the doubled error generation.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 28
+      },
+      "revId": "7d19914099cb81d37c08287b5f82cd841c76ee0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
