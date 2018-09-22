@@ -127,6 +127,30 @@
       "revId": "a2deb5aab05d069d166119dd560c291c40eb7bc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3b690d09_bf59349d",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-09-22T01:24:17Z",
+      "side": 1,
+      "message": "I\u0027ve meant references where you use it, not where you set it.\nSo DIRTY_BIT_IMPLEMENTATION would be set in Texture dirty bits and the real dirty bits will be in mLocalDirtyBits?\nMaybe you can change \"Already handled\" comment to \"Real dirty bits are in mLocalDirtyBits\" or something?",
+      "parentUuid": "8853d017_eff93d08",
+      "range": {
+        "startLine": 1254,
+        "startChar": 30,
+        "endLine": 1254,
+        "endChar": 54
+      },
+      "revId": "a2deb5aab05d069d166119dd560c291c40eb7bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
