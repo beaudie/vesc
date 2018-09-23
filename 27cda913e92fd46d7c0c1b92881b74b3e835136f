@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c56fe01_204d5fe4",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-23T23:23:39Z",
+      "side": 1,
+      "message": "the code goes pretty deep, but isn\u0027t it possible that these paths have the same issues?",
+      "range": {
+        "startLine": 756,
+        "startChar": 0,
+        "endLine": 767,
+        "endChar": 9
+      },
+      "revId": "27cda913e92fd46d7c0c1b92881b74b3e835136f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcf06fa2_b6f46c59",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-23T23:23:39Z",
+      "side": 1,
+      "message": "the code goes pretty deep, but isn\u0027t it possible that these paths have the same issues?",
+      "range": {
+        "startLine": 771,
+        "startChar": 0,
+        "endLine": 779,
+        "endChar": 25
+      },
+      "revId": "27cda913e92fd46d7c0c1b92881b74b3e835136f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
