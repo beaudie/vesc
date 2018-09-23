@@ -151,6 +151,30 @@
       "revId": "a2deb5aab05d069d166119dd560c291c40eb7bc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f0fb8095_c11ffaec",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-23T21:24:11Z",
+      "side": 1,
+      "message": "OK I see. That\u0027s right, real dirty bits will be in mLocalDirtyBits. I updated to clarify that.",
+      "parentUuid": "3b690d09_bf59349d",
+      "range": {
+        "startLine": 1254,
+        "startChar": 30,
+        "endLine": 1254,
+        "endChar": 54
+      },
+      "revId": "a2deb5aab05d069d166119dd560c291c40eb7bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
