@@ -19,6 +19,7 @@
 #include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/CompilerVk.h"
+#include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/GlslangWrapper.h"
 #include "libANGLE/renderer/vulkan/ProgramVk.h"
@@ -316,6 +317,7 @@ void RendererVk::onDestroy(vk::Context *context)
 
     mRenderPassCache.destroy(mDevice);
     mPipelineCache.destroy(mDevice);
+    mPipelineCacheVk.destroy(mDevice);
     mShaderLibrary.destroy(mDevice);
 
     GlslangWrapper::Release();
@@ -350,7 +352,7 @@ void RendererVk::onDestroy(vk::Context *context)
     mPhysicalDevice = VK_NULL_HANDLE;
 }
 
-angle::Result RendererVk::initialize(vk::Context *context,
+angle::Result RendererVk::initialize(DisplayVk *context,
                                      const egl::AttributeMap &attribs,
                                      const char *wsiName)
 {
@@ -511,7 +513,7 @@ angle::Result RendererVk::initialize(vk::Context *context,
     return angle::Result::Continue();
 }
 
-angle::Result RendererVk::initializeDevice(vk::Context *context, uint32_t queueFamilyIndex)
+angle::Result RendererVk::initializeDevice(DisplayVk *context, uint32_t queueFamilyIndex)
 {
     uint32_t deviceLayerCount = 0;
     ANGLE_VK_TRY(context,
@@ -596,10 +598,13 @@ angle::Result RendererVk::initializeDevice(vk::Context *context, uint32_t queueF
 
     ANGLE_TRY(mCommandPool.init(context, commandPoolInfo));
 
+    // Initialize the vulkan pipeline cache
+    initPipelineCacheVk(context);
+
     return angle::Result::Continue();
 }
 
-angle::Result RendererVk::selectPresentQueueForSurface(vk::Context *context,
+angle::Result RendererVk::selectPresentQueueForSurface(DisplayVk *context,
                                                        VkSurfaceKHR surface,
                                                        uint32_t *presentQueueOut)
 {
@@ -689,6 +694,32 @@ void RendererVk::initFeatures()
     // TODO(lucferron): Currently disabled on Intel only since many tests are failing and need
     // investigation. http://anglebug.com/2728
     mFeatures.flipViewportY = !IsIntel(mPhysicalDeviceProperties.vendorID);
+}
+
+void RendererVk::initPipelineCacheVk(DisplayVk *display)
+{
+    std::ostringstream hashStream("ANGLE Pipeline Cache");
+    // Add the pipeline cache UUID to make sure the blob cache always gives a compatible pipeline
+    // cache.
+    hashStream << mPhysicalDeviceProperties.pipelineCacheUUID;
+
+    const std::string &hashString = hashStream.str();
+    angle::base::SHA1HashBytes(reinterpret_cast<const unsigned char *>(hashString.c_str()),
+                               hashString.length(), mPipelineCacheVkBlobKey.data());
+
+    egl::BlobCache::Value initialData;
+    angle::ScratchBuffer scratchBuffer(1000u);
+    display->getBlobCache()->get(mPipelineCacheVkBlobKey, &initialData, &scratchBuffer);
+
+    VkPipelineCacheCreateInfo pipelineCacheCreateInfo;
+
+    pipelineCacheCreateInfo.sType           = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+    pipelineCacheCreateInfo.pNext           = nullptr;
+    pipelineCacheCreateInfo.flags           = 0;
+    pipelineCacheCreateInfo.initialDataSize = initialData.size();
+    pipelineCacheCreateInfo.pInitialData    = initialData.data();
+
+    mPipelineCacheVk.init(display, pipelineCacheCreateInfo);
 }
 
 void RendererVk::ensureCapsInitialized() const
@@ -947,8 +978,8 @@ angle::Result RendererVk::getPipeline(vk::Context *context,
     ANGLE_TRY(
         getCompatibleRenderPass(context, pipelineDesc.getRenderPassDesc(), &compatibleRenderPass));
 
-    return mPipelineCache.getPipeline(context, *compatibleRenderPass, pipelineLayout,
-                                      activeAttribLocationsMask, vertexShader.get(),
+    return mPipelineCache.getPipeline(context, mPipelineCacheVk.getHandle(), *compatibleRenderPass,
+                                      pipelineLayout, activeAttribLocationsMask, vertexShader.get(),
                                       fragmentShader.get(), pipelineDesc, pipelineOut);
 }
 
@@ -968,6 +999,41 @@ angle::Result RendererVk::getPipelineLayout(
 {
     return mPipelineLayoutCache.getPipelineLayout(context, desc, descriptorSetLayouts,
                                                   pipelineLayoutOut);
+}
+
+void RendererVk::syncPipelineCacheVk(egl::BlobCache *blobCache)
+{
+    VkPipelineCache pipelineCache = mPipelineCacheVk.getHandle();
+    if (!pipelineCache)
+    {
+        return;
+    }
+
+    if (--mPipelineCacheVkUpdateTimeout > 0)
+    {
+        return;
+    }
+
+    mPipelineCacheVkUpdateTimeout = kPipelineCacheVkUpdatePeriod;
+
+    // Get the size of the cache.
+    size_t pipelineCacheSize = 0;
+    VkResult result =
+        vkGetPipelineCacheData(mDevice, mPipelineCacheVk.getHandle(), &pipelineCacheSize, nullptr);
+    if (result != VK_SUCCESS)
+    {
+        return;
+    }
+
+    angle::MemoryBuffer pipelineCacheData(pipelineCacheSize);
+    result = vkGetPipelineCacheData(mDevice, mPipelineCacheVk.getHandle(), &pipelineCacheSize,
+                                    pipelineCacheData.data());
+    if (result == VK_SUCCESS || result == VK_INCOMPLETE)
+    {
+        // Disallow local caching in blob cache, to prevent duplicating memory that wouldn't
+        // find its way to disk anyway.
+        blobCache->put(mPipelineCacheVkBlobKey, std::move(pipelineCacheData), false);
+    }
 }
 
 vk::ShaderLibrary *RendererVk::getShaderLibrary()

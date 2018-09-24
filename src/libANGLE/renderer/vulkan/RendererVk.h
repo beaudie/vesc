@@ -14,6 +14,7 @@
 #include <memory>
 
 #include "common/angleutils.h"
+#include "libANGLE/BlobCache.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/FeaturesVk.h"
@@ -23,11 +24,13 @@
 namespace egl
 {
 class AttributeMap;
+class BlobCache;
 }
 
 namespace rx
 {
 class FramebufferVk;
+class DisplayVk;
 
 namespace vk
 {
@@ -40,7 +43,7 @@ class RendererVk : angle::NonCopyable
     RendererVk();
     ~RendererVk();
 
-    angle::Result initialize(vk::Context *context,
+    angle::Result initialize(DisplayVk *context,
                              const egl::AttributeMap &attribs,
                              const char *wsiName);
     void onDestroy(vk::Context *context);
@@ -57,7 +60,7 @@ class RendererVk : angle::NonCopyable
     VkQueue getQueue() const { return mQueue; }
     VkDevice getDevice() const { return mDevice; }
 
-    angle::Result selectPresentQueueForSurface(vk::Context *context,
+    angle::Result selectPresentQueueForSurface(DisplayVk *context,
                                                VkSurfaceKHR surface,
                                                uint32_t *presentQueueOut);
 
@@ -132,6 +135,8 @@ class RendererVk : angle::NonCopyable
                                     const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
                                     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
 
+    void syncPipelineCacheVk(egl::BlobCache *blobCache);
+
     // This should only be called from ResourceVk.
     // TODO(jmadill): Keep in ContextVk to enable threaded rendering.
     vk::CommandGraph *getCommandGraph();
@@ -143,7 +148,7 @@ class RendererVk : angle::NonCopyable
     const FeaturesVk &getFeatures() const { return mFeatures; }
 
   private:
-    angle::Result initializeDevice(vk::Context *context, uint32_t queueFamilyIndex);
+    angle::Result initializeDevice(DisplayVk *context, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
     angle::Result submitFrame(vk::Context *context,
                               const VkSubmitInfo &submitInfo,
@@ -152,6 +157,7 @@ class RendererVk : angle::NonCopyable
     void freeAllInFlightResources();
     angle::Result flushCommandGraph(vk::Context *context, vk::CommandBuffer *commandBatch);
     void initFeatures();
+    void initPipelineCacheVk(DisplayVk *display);
 
     mutable bool mCapsInitialized;
     mutable gl::Caps mNativeCaps;
@@ -197,6 +203,12 @@ class RendererVk : angle::NonCopyable
 
     RenderPassCache mRenderPassCache;
     PipelineCache mPipelineCache;
+
+    vk::PipelineCache mPipelineCacheVk;
+    egl::BlobCache::Key mPipelineCacheVkBlobKey;
+    static constexpr uint32_t kPipelineCacheVkUpdatePeriod =
+        10 * 60 * 60;  // update every this many swaps (if 60fps, this means every 10 minutes)
+    uint32_t mPipelineCacheVkUpdateTimeout = kPipelineCacheVkUpdatePeriod;
 
     // See CommandGraph.h for a desription of the Command Graph.
     vk::CommandGraph mCommandGraph;

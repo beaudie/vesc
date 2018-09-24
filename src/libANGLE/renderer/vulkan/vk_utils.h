@@ -94,7 +94,7 @@ namespace vk
 {
 struct Format;
 
-// Abstracts error handling. Implemented by both ContextVk for GL and RendererVk for EGL errors.
+// Abstracts error handling. Implemented by both ContextVk for GL and DisplayVk for EGL errors.
 class Context : angle::NonCopyable
 {
   public:
@@ -536,7 +536,9 @@ class Pipeline final : public WrappedObject<Pipeline, VkPipeline>
     Pipeline();
     void destroy(VkDevice device);
 
-    angle::Result initGraphics(Context *context, const VkGraphicsPipelineCreateInfo &createInfo);
+    angle::Result initGraphics(Context *context,
+                               const VkGraphicsPipelineCreateInfo &createInfo,
+                               VkPipelineCache pipelineCacheVk);
 };
 
 class PipelineLayout final : public WrappedObject<PipelineLayout, VkPipelineLayout>
@@ -546,6 +548,16 @@ class PipelineLayout final : public WrappedObject<PipelineLayout, VkPipelineLayo
     void destroy(VkDevice device);
 
     angle::Result init(Context *context, const VkPipelineLayoutCreateInfo &createInfo);
+};
+
+class PipelineCache final : public WrappedObject<PipelineCache, VkPipelineCache>
+{
+  public:
+    PipelineCache() = default;
+
+    void destroy(VkDevice device);
+
+    void init(Context *context, const VkPipelineCacheCreateInfo &createInfo);
 };
 
 class DescriptorSetLayout final : public WrappedObject<DescriptorSetLayout, VkDescriptorSetLayout>
