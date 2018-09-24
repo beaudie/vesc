@@ -39,14 +39,14 @@ BlobCache::~BlobCache()
 {
 }
 
-void BlobCache::put(const BlobCache::Key &key, angle::MemoryBuffer &&value)
+void BlobCache::put(const BlobCache::Key &key, angle::MemoryBuffer &&value, bool allowLocalCache)
 {
     if (areBlobCacheFuncsSet())
     {
         // Store the result in the application's cache
         mSetBlobFunc(key.data(), key.size(), value.data(), value.size());
     }
-    else
+    else if (allowLocalCache)
     {
         populate(key, std::move(value), CacheSource::Memory);
     }
@@ -66,7 +66,7 @@ void BlobCache::populate(const BlobCache::Key &key, angle::MemoryBuffer &&value,
     }
 }
 
-bool BlobCache::get(const gl::Context *context,
+bool BlobCache::get(angle::ScratchBuffer *scratchBuffer,
                     const BlobCache::Key &key,
                     BlobCache::Value *valueOut)
 {
@@ -79,19 +79,19 @@ bool BlobCache::get(const gl::Context *context,
             return false;
         }
 
-        angle::MemoryBuffer *scratchBuffer;
-        bool result = context->getScratchBuffer(valueSize, &scratchBuffer);
+        angle::MemoryBuffer *scratchMemory;
+        bool result = scratchBuffer->get(valueSize, &scratchMemory);
         if (!result)
         {
             ERR() << "Failed to allocate memory for binary blob";
             return false;
         }
 
-        valueSize = mGetBlobFunc(key.data(), key.size(), scratchBuffer->data(), valueSize);
+        valueSize = mGetBlobFunc(key.data(), key.size(), scratchMemory->data(), valueSize);
 
         // Make sure the key/value pair still exists/is unchanged after the second call
         // (modifications to the application cache by another thread are a possibility)
-        if (static_cast<size_t>(valueSize) != scratchBuffer->size())
+        if (static_cast<size_t>(valueSize) != scratchMemory->size())
         {
             // This warning serves to find issues with the application cache, none of which are
             // currently known to be thread-safe.  If such a use ever arises, this WARN can be
@@ -100,7 +100,7 @@ bool BlobCache::get(const gl::Context *context,
             return false;
         }
 
-        *valueOut = BlobCache::Value(scratchBuffer->data(), scratchBuffer->size());
+        *valueOut = BlobCache::Value(scratchMemory->data(), scratchMemory->size());
         return true;
     }
 

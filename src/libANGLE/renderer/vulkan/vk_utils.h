@@ -94,7 +94,7 @@ namespace vk
 {
 struct Format;
 
-// Abstracts error handling. Implemented by both ContextVk for GL and RendererVk for EGL errors.
+// Abstracts error handling. Implemented by both ContextVk for GL and DisplayVk for EGL errors.
 class Context : angle::NonCopyable
 {
   public:
@@ -530,15 +530,6 @@ class ShaderModule final : public WrappedObject<ShaderModule, VkShaderModule>
     angle::Result init(Context *context, const VkShaderModuleCreateInfo &createInfo);
 };
 
-class Pipeline final : public WrappedObject<Pipeline, VkPipeline>
-{
-  public:
-    Pipeline();
-    void destroy(VkDevice device);
-
-    angle::Result initGraphics(Context *context, const VkGraphicsPipelineCreateInfo &createInfo);
-};
-
 class PipelineLayout final : public WrappedObject<PipelineLayout, VkPipelineLayout>
 {
   public:
@@ -546,6 +537,27 @@ class PipelineLayout final : public WrappedObject<PipelineLayout, VkPipelineLayo
     void destroy(VkDevice device);
 
     angle::Result init(Context *context, const VkPipelineLayoutCreateInfo &createInfo);
+};
+
+class PipelineCache final : public WrappedObject<PipelineCache, VkPipelineCache>
+{
+  public:
+    PipelineCache();
+    void destroy(VkDevice device);
+
+    void init(Context *context, const VkPipelineCacheCreateInfo &createInfo);
+    angle::Result getCacheData(Context *context, size_t *cacheSize, void *cacheData);
+};
+
+class Pipeline final : public WrappedObject<Pipeline, VkPipeline>
+{
+  public:
+    Pipeline();
+    void destroy(VkDevice device);
+
+    angle::Result initGraphics(Context *context,
+                               const VkGraphicsPipelineCreateInfo &createInfo,
+                               const PipelineCache &pipelineCacheVk);
 };
 
 class DescriptorSetLayout final : public WrappedObject<DescriptorSetLayout, VkDescriptorSetLayout>
@@ -751,6 +763,27 @@ VkColorComponentFlags GetColorComponentFlags(bool red, bool green, bool blue, bo
         {                                                              \
             context->handleError(ANGLE_LOCAL_VAR, __FILE__, __LINE__); \
             return angle::Result::Stop();                              \
+        }                                                              \
+    }                                                                  \
+    ANGLE_EMPTY_STATEMENT
+
+#define ANGLE_VK_TRY_ALLOW_INCOMPLETE(context, command)                                        \
+    {                                                                                          \
+        auto ANGLE_LOCAL_VAR = command;                                                        \
+        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS && ANGLE_LOCAL_VAR != VK_INCOMPLETE)) \
+        {                                                                                      \
+            context->handleError(ANGLE_LOCAL_VAR, __FILE__, __LINE__);                         \
+            return angle::Result::Stop();                                                      \
+        }                                                                                      \
+    }                                                                                          \
+    ANGLE_EMPTY_STATEMENT
+
+#define ANGLE_VK_SWALLOW_ERR(context, command)                         \
+    {                                                                  \
+        auto ANGLE_LOCAL_VAR = command;                                \
+        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS))             \
+        {                                                              \
+            context->handleError(ANGLE_LOCAL_VAR, __FILE__, __LINE__); \
         }                                                              \
     }                                                                  \
     ANGLE_EMPTY_STATEMENT

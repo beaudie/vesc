@@ -239,6 +239,9 @@ inline Error NoError()
 #define ANGLE_RETURN(X) return X;
 #define ANGLE_TRY(EXPR) ANGLE_TRY_TEMPLATE(EXPR, ANGLE_RETURN);
 
+#define ANGLE_RETURN_VOID(X) return;
+#define ANGLE_TRY_VOID_RETURN(EXPR) ANGLE_TRY_TEMPLATE(EXPR, ANGLE_RETURN_VOID);
+
 // TODO(jmadill): Remove this once refactor is complete. http://anglebug.com/2491
 #define ANGLE_TRY_HANDLE(CONTEXT, EXPR)                \
     \

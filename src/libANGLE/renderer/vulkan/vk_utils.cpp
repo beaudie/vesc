@@ -822,29 +822,6 @@ angle::Result ShaderModule::init(Context *context, const VkShaderModuleCreateInf
     return angle::Result::Continue();
 }
 
-// Pipeline implementation.
-Pipeline::Pipeline()
-{
-}
-
-void Pipeline::destroy(VkDevice device)
-{
-    if (valid())
-    {
-        vkDestroyPipeline(device, mHandle, nullptr);
-        mHandle = VK_NULL_HANDLE;
-    }
-}
-
-angle::Result Pipeline::initGraphics(Context *context,
-                                     const VkGraphicsPipelineCreateInfo &createInfo)
-{
-    ASSERT(!valid());
-    ANGLE_VK_TRY(context, vkCreateGraphicsPipelines(context->getDevice(), VK_NULL_HANDLE, 1,
-                                                    &createInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
-}
-
 // PipelineLayout implementation.
 PipelineLayout::PipelineLayout()
 {
@@ -864,6 +841,62 @@ angle::Result PipelineLayout::init(Context *context, const VkPipelineLayoutCreat
     ASSERT(!valid());
     ANGLE_VK_TRY(context,
                  vkCreatePipelineLayout(context->getDevice(), &createInfo, nullptr, &mHandle));
+    return angle::Result::Continue();
+}
+
+// PipelineCache implementation.
+PipelineCache::PipelineCache()
+{
+}
+
+void PipelineCache::destroy(VkDevice device)
+{
+    if (valid())
+    {
+        vkDestroyPipelineCache(device, mHandle, nullptr);
+        mHandle = VK_NULL_HANDLE;
+    }
+}
+
+void PipelineCache::init(Context *context, const VkPipelineCacheCreateInfo &createInfo)
+{
+    ASSERT(!valid());
+    // Note: if we are concerned with memory usage of this cache, we should give it custom
+    // allocators.  Also, failure of this function is of little importance.
+    ANGLE_VK_SWALLOW_ERR(
+        context, vkCreatePipelineCache(context->getDevice(), &createInfo, nullptr, &mHandle));
+}
+
+angle::Result PipelineCache::getCacheData(Context *context, size_t *cacheSize, void *cacheData)
+{
+    ASSERT(valid());
+    ANGLE_VK_TRY_ALLOW_INCOMPLETE(
+        context, vkGetPipelineCacheData(context->getDevice(), mHandle, cacheSize, cacheData));
+    return angle::Result::Continue();
+}
+
+// Pipeline implementation.
+Pipeline::Pipeline()
+{
+}
+
+void Pipeline::destroy(VkDevice device)
+{
+    if (valid())
+    {
+        vkDestroyPipeline(device, mHandle, nullptr);
+        mHandle = VK_NULL_HANDLE;
+    }
+}
+
+angle::Result Pipeline::initGraphics(Context *context,
+                                     const VkGraphicsPipelineCreateInfo &createInfo,
+                                     const PipelineCache &pipelineCacheVk)
+{
+    ASSERT(!valid());
+    ANGLE_VK_TRY(context,
+                 vkCreateGraphicsPipelines(context->getDevice(), pipelineCacheVk.getHandle(), 1,
+                                           &createInfo, nullptr, &mHandle));
     return angle::Result::Continue();
 }
 
