@@ -1540,6 +1540,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
                                            angle::MemoryBuffer **scratchBufferOut) const;
     ANGLE_NO_DISCARD bool getZeroFilledBuffer(size_t requstedSizeBytes,
                                               angle::MemoryBuffer **zeroBufferOut) const;
+    angle::ScratchBuffer *getScratchBuffer() const { return &mScratchBuffer; }
 
     Error prepareForDispatch();
 

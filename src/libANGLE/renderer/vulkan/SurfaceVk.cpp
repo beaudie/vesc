@@ -582,6 +582,8 @@ angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk)
     // Get the next available swapchain image.
     ANGLE_TRY(nextSwapchainImage(displayVk));
 
+    ANGLE_TRY(renderer->syncPipelineCacheVk(displayVk));
+
     return angle::Result::Continue();
 }
 

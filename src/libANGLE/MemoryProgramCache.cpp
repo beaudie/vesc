@@ -679,7 +679,7 @@ bool MemoryProgramCache::get(const Context *context,
                              const egl::BlobCache::Key &programHash,
                              egl::BlobCache::Value *programOut)
 {
-    return mBlobCache.get(context, programHash, programOut);
+    return mBlobCache.get(context->getScratchBuffer(), programHash, programOut);
 }
 
 bool MemoryProgramCache::getAt(size_t index,
