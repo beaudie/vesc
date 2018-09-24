@@ -837,10 +837,11 @@ void Pipeline::destroy(VkDevice device)
 }
 
 angle::Result Pipeline::initGraphics(Context *context,
-                                     const VkGraphicsPipelineCreateInfo &createInfo)
+                                     const VkGraphicsPipelineCreateInfo &createInfo,
+                                     VkPipelineCache pipelineCacheVk)
 {
     ASSERT(!valid());
-    ANGLE_VK_TRY(context, vkCreateGraphicsPipelines(context->getDevice(), VK_NULL_HANDLE, 1,
+    ANGLE_VK_TRY(context, vkCreateGraphicsPipelines(context->getDevice(), pipelineCacheVk, 1,
                                                     &createInfo, nullptr, &mHandle));
     return angle::Result::Continue();
 }
@@ -865,6 +866,24 @@ angle::Result PipelineLayout::init(Context *context, const VkPipelineLayoutCreat
     ANGLE_VK_TRY(context,
                  vkCreatePipelineLayout(context->getDevice(), &createInfo, nullptr, &mHandle));
     return angle::Result::Continue();
+}
+
+// PipelineCache implementation.
+void PipelineCache::destroy(VkDevice device)
+{
+    if (valid())
+    {
+        vkDestroyPipelineCache(device, mHandle, nullptr);
+        mHandle = VK_NULL_HANDLE;
+    }
+}
+
+void PipelineCache::init(Context *context, const VkPipelineCacheCreateInfo &createInfo)
+{
+    ASSERT(!valid());
+    // Note: if we are concerned with memory usage of this cache, we should give it custom
+    // allocators.  Also, failure of this function is of little importance.
+    vkCreatePipelineCache(context->getDevice(), &createInfo, nullptr, &mHandle);
 }
 
 // DescriptorSetLayout implementation.
