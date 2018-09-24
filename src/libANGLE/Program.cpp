@@ -1021,6 +1021,18 @@ void Program::bindFragmentInputLocation(GLint index, const char *name)
     mFragmentInputBindings.bindLocation(index, name);
 }
 
+void Program::bindFragmentOutputLocation(GLuint index, const char *name)
+{
+    resolveLink();
+    mFragmentOutputLocations.bindLocation(index, name);
+}
+
+void Program::bindFragmentOutputIndex(GLuint index, const char *name)
+{
+    resolveLink();
+    mFragmentOutputIndexes.bindLocation(index, name);
+}
+
 BindingInfo Program::getFragmentInputBindingInfo(GLint index) const
 {
     resolveLink();

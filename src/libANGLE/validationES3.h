@@ -593,6 +593,21 @@ bool ValidateGetInternalformativ(Context *context,
                                  GLsizei bufSize,
                                  GLint *params);
 
+bool ValidateBindFragDataLocationIndexedEXT(Context *context,
+                                            GLuint program,
+                                            GLuint colorNumber,
+                                            GLuint index,
+                                            const char *name);
+bool ValidateBindFragDataLocationEXT(Context *context,
+                                     GLuint program,
+                                     GLuint colorNumber,
+                                     const char *name);
+bool ValidateGetFragDataIndexEXT(Context *context, GLuint program, const char *name);
+bool ValidateGetProgramResourceLocationIndexEXT(Context *context,
+                                                GLuint program,
+                                                GLenum programInterface,
+                                                const char *name);
+
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES3_H_
