@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "758fc75b_5de59f6e",
+        "filename": "include/EGL/eglplatform.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T20:04:22Z",
+      "side": 1,
+      "message": "We can try to get this up-streamed to Khronos but I think it\u0027s reasonable to just leave it as a HWND too.  The user would static_cast\u003cEGLNativeWindowType\u003e(window) before calling eglCreateWindowSurface.",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 35
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ab7d822_891451fa",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T20:04:22Z",
+      "side": 1,
+      "message": "EGL_ANGLE_windows_ui_composition",
+      "range": {
+        "startLine": 731,
+        "startChar": 7,
+        "endLine": 731,
+        "endChar": 38
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f192a647_949b9dc1",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T20:04:22Z",
+      "side": 1,
+      "message": "This is never assigned.  I don\u0027t thin it\u0027s needed anyways.",
+      "range": {
+        "startLine": 184,
+        "startChar": 28,
+        "endLine": 185,
+        "endChar": 31
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a92dd34_42c661e4",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2831,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T20:04:22Z",
+      "side": 1,
+      "message": "This probably should not be a surface query.  The user should check if the display extension is present to determine if they can create surfaces from this window type.",
+      "range": {
+        "startLine": 2822,
+        "startChar": 8,
+        "endLine": 2831,
+        "endChar": 18
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44cafb87_4f04992f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T20:04:22Z",
+      "side": 1,
+      "message": "Instead of using an attrib, could we just check if it is a win32 window or compositor window and create the correct NativeWindow class?",
+      "range": {
+        "startLine": 1262,
+        "startChar": 4,
+        "endLine": 1262,
+        "endChar": 93
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84cf369d_b6ec7f83",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T20:04:22Z",
+      "side": 1,
+      "message": "I think you could move this whole class into CompositorNativeWindow11.cpp with a forward declaration in CompositorNativeWindow11.h",
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e96ed2ce_3233f77a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T20:04:22Z",
+      "side": 1,
+      "message": "What does Ro stand for?",
+      "range": {
+        "startLine": 7,
+        "startChar": 3,
+        "endLine": 7,
+        "endChar": 11
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ec964f9_ad94d21a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T20:04:22Z",
+      "side": 1,
+      "message": "This could be factored better:\n\n    mFpWindowsCreateStringReference \u003d reinterpret_cast\u003c_WindowsCreateStringReference *\u003e(\n        GetProcAddress(mComBaseModule, \"WindowsCreateStringReference\"));\n    if (mFpWindowsCreateStringReference \u003d\u003d nullptr)\n    {\n        return\n    }\n\n    // etc..\n\nOr you could add a helper to do the assignments in one line each:\n\n    template \u003ctypename T\u003e\n    bool AssignProcAddress(HMODULE comBaseModule, const char* name, T* outProc)\n    {\n        *outProc \u003d reinterpret_cast\u003cT\u003e(GetProcAddress(comBaseModule, name));\n        return *outProc !\u003d nullptr;\n    }",
+      "range": {
+        "startLine": 31,
+        "startChar": 8,
+        "endLine": 88,
+        "endChar": 9
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bba761fe_1eddbcd9",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T20:04:22Z",
+      "side": 1,
+      "message": "I believe identifiers starting with underscores followed by capital letters are reserved by the language.",
+      "range": {
+        "startLine": 213,
+        "startChar": 10,
+        "endLine": 213,
+        "endChar": 12
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d47237a5_7c9047cc",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T20:04:22Z",
+      "side": 1,
+      "message": "May not be needed either.",
+      "range": {
+        "startLine": 1146,
+        "startChar": 0,
+        "endLine": 1151,
+        "endChar": 22
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
