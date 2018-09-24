@@ -224,36 +224,70 @@ gl::LinkResult ProgramGL::linkImpl(const gl::Context *context,
         //    shaders in general, but support for that might be required. Or we might be able
         //    to skip the bind in case the compiler outputs GLSL ES 1.00.
         //
-        const auto &shaderOutputs =
-            mState.getAttachedShader(gl::ShaderType::Fragment)->getActiveOutputVariables();
-        for (const auto &output : shaderOutputs)
+        if (mState.getAttachedShader(gl::ShaderType::Fragment)->getShaderVersion() == 100)
         {
-            if (output.name == "gl_SecondaryFragColorEXT")
+            const auto &shaderOutputs =
+                mState.getAttachedShader(gl::ShaderType::Fragment)->getActiveOutputVariables();
+            for (const auto &output : shaderOutputs)
             {
-                mFunctions->bindFragDataLocationIndexed(mProgramID, 0, 0, "webgl_FragColor");
-                mFunctions->bindFragDataLocationIndexed(mProgramID, 0, 1,
-                                                        "angle_SecondaryFragColor");
-            }
-            else if (output.name == "gl_SecondaryFragDataEXT")
-            {
-                // Basically we should have a loop here going over the output
-                // array binding "webgl_FragData[i]" and "angle_SecondaryFragData[i]" array
-                // indices to the correct color buffers and color indices.
-                // However I'm not sure if this construct is legal or not, neither ARB or EXT
-                // version of the spec mention this.
-                //
-                // In practice it seems that binding array members works on some drivers and
-                // fails on others. One option could be to modify the shader translator to
-                // expand the arrays into individual output variables instead of using an array.
-                //
-                // For now we're going to have a limitation of assuming that
-                // GL_MAX_DUAL_SOURCE_DRAW_BUFFERS is *always* 1 and then only bind the basename
-                // of the variable ignoring any indices. This appears to work uniformly.
-                ASSERT(output.isArray() && output.getOutermostArraySize() == 1);
+                if (output.name == "gl_SecondaryFragColorEXT")
+                {
+                    mFunctions->bindFragDataLocationIndexed(mProgramID, 0, 0, "webgl_FragColor");
+                    mFunctions->bindFragDataLocationIndexed(mProgramID, 0, 1,
+                                                            "angle_SecondaryFragColor");
+                }
+                else if (output.name == "gl_SecondaryFragDataEXT")
+                {
+                    // Basically we should have a loop here going over the output
+                    // array binding "webgl_FragData[i]" and "angle_SecondaryFragData[i]" array
+                    // indices to the correct color buffers and color indices.
+                    // However I'm not sure if this construct is legal or not, neither ARB or EXT
+                    // version of the spec mention this.
+                    //
+                    // In practice it seems that binding array members works on some drivers and
+                    // fails on others. One option could be to modify the shader translator to
+                    // expand the arrays into individual output variables instead of using an array.
+                    //
+                    // For now we're going to have a limitation of assuming that
+                    // GL_MAX_DUAL_SOURCE_DRAW_BUFFERS is *always* 1 and then only bind the basename
+                    // of the variable ignoring any indices. This appears to work uniformly.
+                    ASSERT(output.isArray() && output.getOutermostArraySize() == 1);
 
-                mFunctions->bindFragDataLocationIndexed(mProgramID, 0, 0, "webgl_FragData");
-                mFunctions->bindFragDataLocationIndexed(mProgramID, 0, 1,
-                                                        "angle_SecondaryFragData");
+                    mFunctions->bindFragDataLocationIndexed(mProgramID, 0, 0, "webgl_FragData");
+                    mFunctions->bindFragDataLocationIndexed(mProgramID, 0, 1,
+                                                            "angle_SecondaryFragData");
+                }
+            }
+        }
+        else
+        {
+            // ESSL 3.00 and up.
+            const auto &outputLocations          = mState.getOutputLocations();
+            const auto &secondaryOutputLocations = mState.getSecondaryOutputLocations();
+            for (size_t outputLocationIndex = 0u; outputLocationIndex < outputLocations.size();
+                 ++outputLocationIndex)
+            {
+                const gl::VariableLocation &outputLocation = outputLocations[outputLocationIndex];
+                if (outputLocation.arrayIndex == 0 && outputLocation.used() &&
+                    !outputLocation.ignored)
+                {
+                    mFunctions->bindFragDataLocationIndexed(
+                        mProgramID, outputLocationIndex, 0,
+                        mState.getOutputVariables()[outputLocation.index].mappedName.c_str());
+                }
+            }
+            for (size_t outputLocationIndex = 0u;
+                 outputLocationIndex < secondaryOutputLocations.size(); ++outputLocationIndex)
+            {
+                const gl::VariableLocation &outputLocation =
+                    secondaryOutputLocations[outputLocationIndex];
+                if (outputLocation.arrayIndex == 0 && outputLocation.used() &&
+                    !outputLocation.ignored)
+                {
+                    mFunctions->bindFragDataLocationIndexed(
+                        mProgramID, outputLocationIndex, 1,
+                        mState.getOutputVariables()[outputLocation.index].mappedName.c_str());
+                }
             }
         }
 

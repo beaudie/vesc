@@ -140,7 +140,7 @@ class EXTBlendFuncExtendedDrawTest : public ANGLETest
     {
         glUseProgram(mProgram);
 
-        GLint position = glGetAttribLocation(mProgram, "position");
+        GLint position = glGetAttribLocation(mProgram, essl1_shaders::PositionAttrib());
         GLint src0     = glGetUniformLocation(mProgram, "src0");
         GLint src1     = glGetUniformLocation(mProgram, "src1");
         ASSERT_GL_NO_ERROR();
@@ -204,6 +204,12 @@ class EXTBlendFuncExtendedDrawTest : public ANGLETest
     GLuint mProgram;
 };
 
+class EXTBlendFuncExtendedDrawTestES3 : public EXTBlendFuncExtendedDrawTest
+{
+  protected:
+    EXTBlendFuncExtendedDrawTestES3() : EXTBlendFuncExtendedDrawTest() {}
+};
+
 }  // namespace
 
 // Test EXT_blend_func_extended related gets.
@@ -224,12 +230,6 @@ TEST_P(EXTBlendFuncExtendedDrawTest, FragColor)
 {
     ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_blend_func_extended"));
 
-    const char *kVertexShader =
-        "attribute vec4 position;\n"
-        "void main() {\n"
-        "  gl_Position = position;\n"
-        "}\n";
-
     const char *kFragColorShader =
         "#extension GL_EXT_blend_func_extended : require\n"
         "precision mediump float;\n"
@@ -240,7 +240,7 @@ TEST_P(EXTBlendFuncExtendedDrawTest, FragColor)
         "  gl_SecondaryFragColorEXT = src1;\n"
         "}\n";
 
-    makeProgram(kVertexShader, kFragColorShader);
+    makeProgram(essl1_shaders::vs::Simple(), kFragColorShader);
 
     drawTest();
 }
@@ -250,12 +250,6 @@ TEST_P(EXTBlendFuncExtendedDrawTest, FragColor)
 TEST_P(EXTBlendFuncExtendedDrawTest, FragData)
 {
     ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_blend_func_extended"));
-
-    const char *kVertexShader =
-        "attribute vec4 position;\n"
-        "void main() {\n"
-        "  gl_Position = position;\n"
-        "}\n";
 
     const char *kFragColorShader =
         "#extension GL_EXT_blend_func_extended : require\n"
@@ -267,7 +261,56 @@ TEST_P(EXTBlendFuncExtendedDrawTest, FragData)
         "  gl_SecondaryFragDataEXT[0] = src1;\n"
         "}\n";
 
-    makeProgram(kVertexShader, kFragColorShader);
+    makeProgram(essl1_shaders::vs::Simple(), kFragColorShader);
+
+    drawTest();
+}
+
+// Test an ESSL 3.00 shader that uses two fragment outputs with locations specified in the shader.
+TEST_P(EXTBlendFuncExtendedDrawTestES3, FragmentOutputsLocationInShader)
+{
+    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_blend_func_extended"));
+
+    const char *kFragColorShader = R"(#version 300 es
+#extension GL_EXT_blend_func_extended : require
+precision mediump float;
+uniform vec4 src0;
+uniform vec4 src1;
+layout(location = 0, index = 0) out vec4 outSrc0;
+layout(location = 0, index = 1) out vec4 outSrc1;
+void main() {
+    outSrc0 = src0;
+    outSrc1 = src1;
+})";
+
+    makeProgram(essl3_shaders::vs::Simple(), kFragColorShader);
+
+    drawTest();
+}
+
+// Test an ESSL 3.00 shader that uses two fragment outputs with locations specified through the API.
+TEST_P(EXTBlendFuncExtendedDrawTestES3, FragmentOutputsLocationAPI)
+{
+    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_blend_func_extended"));
+
+    const std::string &kFragColorShader = R"(#version 300 es
+#extension GL_EXT_blend_func_extended : require
+precision mediump float;
+uniform vec4 src0;
+uniform vec4 src1;
+out vec4 outSrc1;
+out vec4 outSrc0;
+void main() {
+    outSrc0 = src0;
+    outSrc1 = src1;
+})";
+
+    mProgram = CompileProgram(essl3_shaders::vs::Simple(), kFragColorShader, [](GLuint program) {
+        glBindFragDataLocationIndexedEXT(program, 0, 0, "outSrc0");
+        glBindFragDataLocationIndexedEXT(program, 0, 1, "outSrc1");
+    });
+
+    ASSERT_NE(0u, mProgram);
 
     drawTest();
 }
@@ -278,3 +321,4 @@ ANGLE_INSTANTIATE_TEST(EXTBlendFuncExtendedTest,
                        ES3_OPENGL(),
                        ES3_OPENGLES());
 ANGLE_INSTANTIATE_TEST(EXTBlendFuncExtendedDrawTest, ES2_OPENGL());
+ANGLE_INSTANTIATE_TEST(EXTBlendFuncExtendedDrawTestES3, ES3_OPENGL(), ES3_OPENGLES());
