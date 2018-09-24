@@ -22,6 +22,30 @@
       "revId": "d0ce7f084b930c59ce1738bf8a029428d93263c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b2ed26e_d8690414",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-24T09:29:15Z",
+      "side": 1,
+      "message": "Good point! To be simpler, we coarsely use the biggest alignment for all formats.",
+      "parentUuid": "4846712b_be28369d",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 47
+      },
+      "revId": "d0ce7f084b930c59ce1738bf8a029428d93263c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
