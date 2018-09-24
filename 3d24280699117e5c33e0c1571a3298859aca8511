@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "456022c1_6087cb41",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4299,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T21:02:38Z",
+      "side": 1,
+      "message": "nit: prefix not needed (and below)",
+      "range": {
+        "startLine": 4299,
+        "startChar": 4,
+        "endLine": 4299,
+        "endChar": 8
+      },
+      "revId": "3d24280699117e5c33e0c1571a3298859aca8511",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b10c0ac6_65c8d232",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T21:02:38Z",
+      "side": 1,
+      "message": "Same comment as the TextureImpl.",
+      "range": {
+        "startLine": 350,
+        "startChar": 14,
+        "endLine": 350,
+        "endChar": 23
+      },
+      "revId": "3d24280699117e5c33e0c1571a3298859aca8511",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a334d331_61b1ec67",
+        "filename": "src/libANGLE/renderer/TextureImpl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T21:02:38Z",
+      "side": 1,
+      "message": "Can we share the existing copyTexture entry points by updating the Rectangle to a Box?",
+      "range": {
+        "startLine": 115,
+        "startChar": 22,
+        "endLine": 115,
+        "endChar": 35
+      },
+      "revId": "3d24280699117e5c33e0c1571a3298859aca8511",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "285ad8ce_0086272d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Blit11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1672,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T21:02:38Z",
+      "side": 1,
+      "message": "nit: UNREACHABLE unless there is something we know is not implemented.",
+      "range": {
+        "startLine": 1672,
+        "startChar": 12,
+        "endLine": 1672,
+        "endChar": 25
+      },
+      "revId": "3d24280699117e5c33e0c1571a3298859aca8511",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a24111fd_a4aee987",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2431,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T21:02:38Z",
+      "side": 1,
+      "message": "The implementation of this function looks very similar to copyTexture above.  Can we merge them?",
+      "range": {
+        "startLine": 2431,
+        "startChar": 26,
+        "endLine": 2431,
+        "endChar": 39
+      },
+      "revId": "3d24280699117e5c33e0c1571a3298859aca8511",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db3e079d_810b3134",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T21:02:38Z",
+      "side": 1,
+      "message": "We should share this with the format validation from the original extension.",
+      "range": {
+        "startLine": 168,
+        "startChar": 4,
+        "endLine": 188,
+        "endChar": 5
+      },
+      "revId": "3d24280699117e5c33e0c1571a3298859aca8511",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c98a138b_1a7d1c86",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-24T21:02:38Z",
+      "side": 1,
+      "message": "Same for this.",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 5
+      },
+      "revId": "3d24280699117e5c33e0c1571a3298859aca8511",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
