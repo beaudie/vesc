@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e29a27b_ce0ffecc",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-24T14:11:17Z",
+      "side": 1,
+      "message": "This will abort the draw call. So the test you made would fail if you tried to verify anything like a second valid attribute. I wonder if a solution might be to internally disable zero sized attributes.",
+      "range": {
+        "startLine": 353,
+        "startChar": 7,
+        "endLine": 353,
+        "endChar": 42
+      },
+      "revId": "95e0e5ee9a46a0a83283f75c62270bef5a4a5c06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
