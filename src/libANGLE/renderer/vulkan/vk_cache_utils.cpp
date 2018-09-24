@@ -11,7 +11,7 @@
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
 #include "common/aligned_memory.h"
-#include "libANGLE/SizedMRUCache.h"
+#include "libANGLE/BlobCache.h"
 #include "libANGLE/VertexAttribute.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/ProgramVk.h"
@@ -441,6 +441,7 @@ angle::Result PipelineDesc::initializePipeline(vk::Context *context,
                                                const gl::AttributesMask &activeAttribLocationsMask,
                                                const ShaderModule &vertexModule,
                                                const ShaderModule &fragmentModule,
+                                               VkPipelineCache pipelineCacheVk,
                                                Pipeline *pipelineOut) const
 {
     VkPipelineShaderStageCreateInfo shaderStages[2];
@@ -617,7 +618,7 @@ angle::Result PipelineDesc::initializePipeline(vk::Context *context,
     createInfo.basePipelineHandle  = VK_NULL_HANDLE;
     createInfo.basePipelineIndex   = 0;
 
-    ANGLE_TRY(pipelineOut->initGraphics(context, createInfo));
+    ANGLE_TRY(pipelineOut->initGraphics(context, createInfo, pipelineCacheVk));
 
     return angle::Result::Continue();
 }
@@ -1125,6 +1126,7 @@ void PipelineCache::destroy(VkDevice device)
 }
 
 angle::Result PipelineCache::getPipeline(vk::Context *context,
+                                         VkPipelineCache pipelineCacheVk,
                                          const vk::RenderPass &compatibleRenderPass,
                                          const vk::PipelineLayout &pipelineLayout,
                                          const gl::AttributesMask &activeAttribLocationsMask,
@@ -1147,7 +1149,7 @@ angle::Result PipelineCache::getPipeline(vk::Context *context,
     {
         ANGLE_TRY(desc.initializePipeline(context, compatibleRenderPass, pipelineLayout,
                                           activeAttribLocationsMask, vertexModule, fragmentModule,
-                                          &newPipeline));
+                                          pipelineCacheVk, &newPipeline));
     }
 
     // The Serial will be updated outside of this query.

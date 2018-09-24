@@ -349,6 +349,7 @@ class PipelineDesc final
                                      const gl::AttributesMask &activeAttribLocationsMask,
                                      const ShaderModule &vertexModule,
                                      const ShaderModule &fragmentModule,
+                                     VkPipelineCache pipelineCacheVk,
                                      Pipeline *pipelineOut) const;
 
     void updateViewport(FramebufferVk *framebufferVk,
@@ -612,6 +613,7 @@ class PipelineCache final : angle::NonCopyable
 
     void populate(const vk::PipelineDesc &desc, vk::Pipeline &&pipeline);
     angle::Result getPipeline(vk::Context *context,
+                              VkPipelineCache pipelineCacheVk,
                               const vk::RenderPass &compatibleRenderPass,
                               const vk::PipelineLayout &pipelineLayout,
                               const gl::AttributesMask &activeAttribLocationsMask,

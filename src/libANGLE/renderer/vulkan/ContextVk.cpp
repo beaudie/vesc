@@ -148,6 +148,8 @@ ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
     mDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] = &ContextVk::handleDirtyDescriptorSets;
 }
 
+#undef INIT
+
 ContextVk::~ContextVk() = default;
 
 void ContextVk::onDestroy(const gl::Context *context)
