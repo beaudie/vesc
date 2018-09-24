@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec7898cc_8f095391",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-24T10:02:17Z",
+      "side": 0,
+      "message": "can you also please try removing the test failure expectations in gles2_test_expectations for 2405 VULKAN WIN AMD : dEQP-GLES2.functional.vertex_arrays.single_attribute and dEQP-GLES2.functional.draw.random?\n\nI\u0027m hoping your fix also fixes these tests.",
+      "range": {
+        "startLine": 308,
+        "startChar": 0,
+        "endLine": 309,
+        "endChar": 63
+      },
+      "revId": "d511948b9f824afd9c481443e12c2da407019eb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

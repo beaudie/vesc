@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9eff88c_cd34588b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-24T10:02:17Z",
+      "side": 1,
+      "message": "This should be computed from the angle::Format for the buffer format. The only thing missing is the \"isPacked\" flag. We can add that to the format table.\n\n1. modify angle::Format to add bool isPacked. Also add it to the constructor.\n2. In gen_angle_format_table.py you can modify format_entry_template and json_to_table_data to initialize isPacked. You can determine the correct value by looking for _PACK in the format name.\n3. Add a helper method channelCount() to angle::Format that counts the number of redBits/greenBits/etc that are not zero.\n4. To get the format alignment, pass bufferFormat() to GetFormatAlignment and then you will have access to isPacked and pixelBytes and channelCount. You won\u0027t need a custom table.",
+      "range": {
+        "startLine": 396,
+        "startChar": 0,
+        "endLine": 406,
+        "endChar": 1
+      },
+      "revId": "98562ccd9b35a455f1881011f6a3bfc9ba46f8d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
