@@ -1021,6 +1021,18 @@ void Program::bindFragmentInputLocation(GLint index, const char *name)
     mFragmentInputBindings.bindLocation(index, name);
 }
 
+void Program::bindFragmentOutputLocation(GLuint index, const char *name)
+{
+    resolveLink();
+    mFragmentOutputLocations.bindLocation(index, name);
+}
+
+void Program::bindFragmentOutputIndex(GLuint index, const char *name)
+{
+    resolveLink();
+    mFragmentOutputIndexes.bindLocation(index, name);
+}
+
 BindingInfo Program::getFragmentInputBindingInfo(GLint index) const
 {
     resolveLink();
@@ -1885,7 +1897,27 @@ const std::vector<GLsizei> &Program::getTransformFeedbackStrides() const
 GLint Program::getFragDataLocation(const std::string &name) const
 {
     resolveLink();
-    return GetVariableLocation(mState.mOutputVariables, mState.mOutputLocations, name);
+    GLint primaryLocation =
+        GetVariableLocation(mState.mOutputVariables, mState.mOutputLocations, name);
+    if (primaryLocation != -1)
+    {
+        return primaryLocation;
+    }
+    return GetVariableLocation(mState.mOutputVariables, mState.mSecondaryOutputLocations, name);
+}
+
+GLint Program::getFragDataIndex(const std::string &name) const
+{
+    resolveLink();
+    if (GetVariableLocation(mState.mOutputVariables, mState.mOutputLocations, name) != -1)
+    {
+        return 0;
+    }
+    if (GetVariableLocation(mState.mOutputVariables, mState.mSecondaryOutputLocations, name) != -1)
+    {
+        return 1;
+    }
+    return -1;
 }
 
 void Program::getActiveUniform(GLuint index,
@@ -3640,27 +3672,64 @@ bool Program::linkOutputVariables(const Caps &caps,
     mState.mOutputVariables = outputVariables;
     // TODO(jmadill): any caps validation here?
 
+    for (sh::OutputVariable &outputVariable : mState.mOutputVariables)
+    {
+        if (outputVariable.isArray())
+        {
+            // We're following the GLES 3.1 November 2016 spec section 7.3.1.1 Naming Active
+            // Resources and including [0] at the end of array variable names.
+            outputVariable.name += "[0]";
+            outputVariable.mappedName += "[0]";
+        }
+    }
+
+    // Reserve locations for output variables whose location is fixed in the shader or through the
+    // API.
     for (unsigned int outputVariableIndex = 0; outputVariableIndex < mState.mOutputVariables.size();
          outputVariableIndex++)
     {
         const sh::OutputVariable &outputVariable = mState.mOutputVariables[outputVariableIndex];
 
-        if (outputVariable.isArray())
-        {
-            // We're following the GLES 3.1 November 2016 spec section 7.3.1.1 Naming Active
-            // Resources and including [0] at the end of array variable names.
-            mState.mOutputVariables[outputVariableIndex].name += "[0]";
-            mState.mOutputVariables[outputVariableIndex].mappedName += "[0]";
-        }
-
         // Don't store outputs for gl_FragDepth, gl_FragColor, etc.
         if (outputVariable.isBuiltIn())
             continue;
 
-        // Since multiple output locations must be specified, use 0 for non-specified locations.
-        unsigned int baseLocation =
-            (outputVariable.location == -1 ? 0u
-                                           : static_cast<unsigned int>(outputVariable.location));
+        unsigned int baseLocation = 0u;
+
+        bool apiLocation = mFragmentOutputLocations.getBinding(outputVariable.name);
+        if (outputVariable.location == -1)
+        {
+            baseLocation = static_cast<unsigned int>(outputVariable.location);
+        }
+        else if (apiLocation != -1)
+        {
+            baseLocation = apiLocation;
+        }
+        else
+        {
+            // Here we're only reserving locations for variables whose location is fixed.
+            continue;
+        }
+
+        bool outputIsSecondary = false;  // EXT_blend_func_extended: Outputs get index 0 by default.
+        bool apiIndex          = mFragmentOutputIndexes.getBinding(outputVariable.name);
+        if (outputVariable.index != -1)
+        {
+            ASSERT(outputVariable.index == 0 || outputVariable.index == 1);
+            outputIsSecondary = (outputVariable.index == 1);
+        }
+        else if (apiIndex != -1)
+        {
+            // Index layout qualifier from the shader takes precedence, so the index from the API is
+            // checked only if the index was not set in the shader.
+            outputIsSecondary = (apiIndex == 1);
+        }
+
+        auto *outputLocations = &mState.mOutputLocations;
+        if (outputIsSecondary)
+        {
+            outputLocations = &mState.mSecondaryOutputLocations;
+        }
 
         // GLSL ES 3.10 section 4.3.6: Output variables cannot be arrays of arrays or arrays of
         // structures, so we may use getBasicTypeElementCount().
@@ -3668,24 +3737,32 @@ bool Program::linkOutputVariables(const Caps &caps,
         for (unsigned int elementIndex = 0; elementIndex < elementCount; elementIndex++)
         {
             const unsigned int location = baseLocation + elementIndex;
-            if (location >= mState.mOutputLocations.size())
+            if (location >= outputLocations->size())
             {
-                mState.mOutputLocations.resize(location + 1);
+                outputLocations->resize(location + 1);
             }
-            ASSERT(!mState.mOutputLocations.at(location).used());
+            if (outputLocations->at(location).used())
+            {
+                mInfoLog << "Location of variable " << outputVariable.name
+                         << " conflicts with another variable.";
+                return false;
+            }
             if (outputVariable.isArray())
             {
-                mState.mOutputLocations[location] =
-                    VariableLocation(elementIndex, outputVariableIndex);
+                (*outputLocations)[location] = VariableLocation(elementIndex, outputVariableIndex);
             }
             else
             {
                 VariableLocation locationInfo;
                 locationInfo.index                = outputVariableIndex;
-                mState.mOutputLocations[location] = locationInfo;
+                (*outputLocations)[location]      = locationInfo;
             }
         }
     }
+
+    // TODO: Sort the output variables according to array size and then assign locations for the ones that
+    // don't yet have them in order. Each output variable is put to the first slot where it fits.
+    // This does not guarantee the best end result but is close enough for our purposes.
 
     return true;
 }
