@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a44152a0_24398b28",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-24T06:49:57Z",
+      "side": 1,
+      "message": "This uses resetAttachment, so it should be fine. Changed it anyway to do the same new detachMatchingAttachment call, but just for consistency.",
+      "parentUuid": "6c56fe01_204d5fe4",
+      "range": {
+        "startLine": 756,
+        "startChar": 0,
+        "endLine": 767,
+        "endChar": 9
+      },
+      "revId": "27cda913e92fd46d7c0c1b92881b74b3e835136f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fcf06fa2_b6f46c59",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "27cda913e92fd46d7c0c1b92881b74b3e835136f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b20319b4_f788739c",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-24T06:49:57Z",
+      "side": 1,
+      "message": "I haven\u0027t found any real issue here, but maybe we\u0027ll sleep more soundly if these also call resetAttachment. Changed the patch to do just that.",
+      "parentUuid": "fcf06fa2_b6f46c59",
+      "range": {
+        "startLine": 771,
+        "startChar": 0,
+        "endLine": 779,
+        "endChar": 25
+      },
+      "revId": "27cda913e92fd46d7c0c1b92881b74b3e835136f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
