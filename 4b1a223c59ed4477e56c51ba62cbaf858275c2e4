@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c402608d_5fbb0e3e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-24T14:15:51Z",
+      "side": 1,
+      "message": "Strange bug. I\u0027m guessing it doesn\u0027t affect `regionCount \u003d\u003d 1`, right? (that is it won\u0027t affect your other CL?)\n\nSo if count is 1, it copies 1, if count is N \u003e 1, it copies N - 1? Is it possible to confirm the bug with Intel?\n\nAnyway, I would at least put the size of the last copy to 1 (unfortunately 0 is not allowed by the spec), so everywhere else that is not affected by the bug will spend less time copying.",
+      "revId": "4b1a223c59ed4477e56c51ba62cbaf858275c2e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
