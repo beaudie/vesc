@@ -101,6 +101,9 @@ bool ValidateProgramResourceProperty(const Context *context, GLenum prop)
         case GL_REFERENCED_BY_GEOMETRY_SHADER_EXT:
             return context->getExtensions().geometryShader;
 
+        case GL_LOCATION_INDEX_EXT:
+            return context->getExtensions().blendFuncExtended;
+
         default:
             return false;
     }
@@ -181,6 +184,12 @@ bool ValidateProgramResourcePropertyByInterface(GLenum prop, GLenum programInter
         case GL_LOCATION:
         {
             return ValidateLocationProgramInterface(programInterface);
+        }
+
+        case GL_LOCATION_INDEX_EXT:
+        {
+            // EXT_blend_func_extended
+            return (programInterface == GL_PROGRAM_OUTPUT);
         }
 
         case GL_NAME_LENGTH:

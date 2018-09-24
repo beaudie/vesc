@@ -1021,6 +1021,18 @@ void Program::bindFragmentInputLocation(GLint index, const char *name)
     mFragmentInputBindings.bindLocation(index, name);
 }
 
+void Program::bindFragmentOutputLocation(GLuint index, const char *name)
+{
+    resolveLink();
+    mFragmentOutputLocations.bindLocation(index, name);
+}
+
+void Program::bindFragmentOutputIndex(GLuint index, const char *name)
+{
+    resolveLink();
+    mFragmentOutputIndexes.bindLocation(index, name);
+}
+
 BindingInfo Program::getFragmentInputBindingInfo(GLint index) const
 {
     ASSERT(mLinkResolved);
@@ -1233,8 +1245,9 @@ Error Program::link(const gl::Context *context)
             return NoError();
         }
 
-        if (!linkOutputVariables(context->getCaps(), context->getClientVersion(),
-                                 combinedImageUniforms, combinedShaderStorageBlocks))
+        if (!linkOutputVariables(context->getCaps(), context->getExtensions(),
+                                 context->getClientVersion(), combinedImageUniforms,
+                                 combinedShaderStorageBlocks))
         {
             return NoError();
         }
@@ -1879,7 +1892,27 @@ const std::vector<GLsizei> &Program::getTransformFeedbackStrides() const
 GLint Program::getFragDataLocation(const std::string &name) const
 {
     ASSERT(mLinkResolved);
-    return GetVariableLocation(mState.mOutputVariables, mState.mOutputLocations, name);
+    GLint primaryLocation =
+        GetVariableLocation(mState.mOutputVariables, mState.mOutputLocations, name);
+    if (primaryLocation != -1)
+    {
+        return primaryLocation;
+    }
+    return GetVariableLocation(mState.mOutputVariables, mState.mSecondaryOutputLocations, name);
+}
+
+GLint Program::getFragDataIndex(const std::string &name) const
+{
+    ASSERT(mLinkResolved);
+    if (GetVariableLocation(mState.mOutputVariables, mState.mOutputLocations, name) != -1)
+    {
+        return 0;
+    }
+    if (GetVariableLocation(mState.mOutputVariables, mState.mSecondaryOutputLocations, name) != -1)
+    {
+        return 1;
+    }
+    return -1;
 }
 
 void Program::getActiveUniform(GLuint index,
@@ -3552,7 +3585,46 @@ ProgramMergedVaryings Program::getMergedVaryings() const
     return merged;
 }
 
+bool CompareOutputVariable(const sh::OutputVariable &a, const sh::OutputVariable &b)
+{
+    return a.getArraySizeProduct() > b.getArraySizeProduct();
+}
+
+int Program::getOutputLocationForLink(const sh::OutputVariable &outputVariable) const
+{
+    if (outputVariable.location != -1)
+    {
+        return outputVariable.location;
+    }
+    int apiLocation = mFragmentOutputLocations.getBinding(outputVariable.name);
+    if (apiLocation != -1)
+    {
+        return apiLocation;
+    }
+    return -1;
+}
+
+bool Program::isOutputSecondaryForLink(const sh::OutputVariable &outputVariable) const
+{
+    if (outputVariable.index != -1)
+    {
+        ASSERT(outputVariable.index == 0 || outputVariable.index == 1);
+        return (outputVariable.index == 1);
+    }
+    int apiIndex = mFragmentOutputIndexes.getBinding(outputVariable.name);
+    if (apiIndex != -1)
+    {
+        // Index layout qualifier from the shader takes precedence, so the index from the API is
+        // checked only if the index was not set in the shader. This is not specified in the EXT
+        // spec, but is specified in desktop OpenGL specs.
+        return (apiIndex == 1);
+    }
+    // EXT_blend_func_extended: Outputs get index 0 by default.
+    return false;
+}
+
 bool Program::linkOutputVariables(const Caps &caps,
+                                  const Extensions &extensions,
                                   const Version &version,
                                   GLuint combinedImageUniformsCount,
                                   GLuint combinedShaderStorageBlocksCount)
@@ -3622,49 +3694,168 @@ bool Program::linkOutputVariables(const Caps &caps,
     mState.mOutputVariables = outputVariables;
     // TODO(jmadill): any caps validation here?
 
+    for (sh::OutputVariable &outputVariable : mState.mOutputVariables)
+    {
+        if (outputVariable.isArray())
+        {
+            // We're following the GLES 3.1 November 2016 spec section 7.3.1.1 Naming Active
+            // Resources and including [0] at the end of array variable names.
+            outputVariable.name += "[0]";
+            outputVariable.mappedName += "[0]";
+        }
+    }
+
+    bool hasSecondaryOutputs = false;
+
+    // Reserve locations for output variables whose location is fixed in the shader or through the
+    // API.
     for (unsigned int outputVariableIndex = 0; outputVariableIndex < mState.mOutputVariables.size();
          outputVariableIndex++)
     {
         const sh::OutputVariable &outputVariable = mState.mOutputVariables[outputVariableIndex];
 
-        if (outputVariable.isArray())
-        {
-            // We're following the GLES 3.1 November 2016 spec section 7.3.1.1 Naming Active
-            // Resources and including [0] at the end of array variable names.
-            mState.mOutputVariables[outputVariableIndex].name += "[0]";
-            mState.mOutputVariables[outputVariableIndex].mappedName += "[0]";
-        }
-
         // Don't store outputs for gl_FragDepth, gl_FragColor, etc.
         if (outputVariable.isBuiltIn())
             continue;
 
-        // Since multiple output locations must be specified, use 0 for non-specified locations.
-        unsigned int baseLocation =
-            (outputVariable.location == -1 ? 0u
-                                           : static_cast<unsigned int>(outputVariable.location));
+        int baseLocation = getOutputLocationForLink(outputVariable);
+        if (baseLocation == -1)
+        {
+            // Here we're only reserving locations for variables whose location is fixed.
+            continue;
+        }
+
+        auto *outputLocations = &mState.mOutputLocations;
+        if (isOutputSecondaryForLink(outputVariable))
+        {
+            outputLocations = &mState.mSecondaryOutputLocations;
+            // Note that this check doesn't need to be before checking baseLocation == -1 above. If
+            // an output has an index specified it will always also have the location specified.
+            hasSecondaryOutputs = true;
+        }
 
         // GLSL ES 3.10 section 4.3.6: Output variables cannot be arrays of arrays or arrays of
         // structures, so we may use getBasicTypeElementCount().
         unsigned int elementCount = outputVariable.getBasicTypeElementCount();
         for (unsigned int elementIndex = 0; elementIndex < elementCount; elementIndex++)
         {
-            const unsigned int location = baseLocation + elementIndex;
-            if (location >= mState.mOutputLocations.size())
+            const unsigned int location = static_cast<unsigned int>(baseLocation) + elementIndex;
+            if (location >= outputLocations->size())
             {
-                mState.mOutputLocations.resize(location + 1);
+                outputLocations->resize(location + 1);
             }
-            ASSERT(!mState.mOutputLocations.at(location).used());
+            if (outputLocations->at(location).used())
+            {
+                mInfoLog << "Location of variable " << outputVariable.name
+                         << " conflicts with another variable.";
+                return false;
+            }
             if (outputVariable.isArray())
             {
-                mState.mOutputLocations[location] =
-                    VariableLocation(elementIndex, outputVariableIndex);
+                (*outputLocations)[location] = VariableLocation(elementIndex, outputVariableIndex);
             }
             else
             {
                 VariableLocation locationInfo;
                 locationInfo.index                = outputVariableIndex;
-                mState.mOutputLocations[location] = locationInfo;
+                (*outputLocations)[location]      = locationInfo;
+            }
+        }
+    }
+
+    // Here we assign locations for the output variables that don't yet have them.
+
+    if (extensions.blendFuncExtended)
+    {
+        // In case we support EXT_blend_func_extended, we might have a mix of variables with
+        // specified locations and variables that get locations assigned automatically. In this case
+        // the variables are processed in the order of descending array size. Each output variable
+        // is put to the first slot where it fits. This greedy algorithm does not guarantee the best
+        // end result but is close enough for now.
+        std::stable_sort(mState.mOutputVariables.begin(), mState.mOutputVariables.end(),
+                         CompareOutputVariable);
+    }
+
+    GLuint maxLocation = caps.maxDrawBuffers;
+    if (hasSecondaryOutputs)
+    {
+        // EXT_blend_func_extended: Program outputs will be validated against
+        // MAX_DUAL_SOURCE_DRAW_BUFFERS_EXT if there's even one output with index one.
+        maxLocation = extensions.maxDualSourceDrawBuffers;
+    }
+
+    for (unsigned int outputVariableIndex = 0; outputVariableIndex < mState.mOutputVariables.size();
+         outputVariableIndex++)
+    {
+        const sh::OutputVariable &outputVariable = mState.mOutputVariables[outputVariableIndex];
+
+        // Don't store outputs for gl_FragDepth, gl_FragColor, etc.
+        if (outputVariable.isBuiltIn())
+            continue;
+
+        if (getOutputLocationForLink(outputVariable) != -1)
+        {
+            continue;
+        }
+
+        auto *outputLocations = &mState.mOutputLocations;
+        if (isOutputSecondaryForLink(outputVariable))
+        {
+            outputLocations = &mState.mSecondaryOutputLocations;
+        }
+
+        int baseLocation          = 0;
+        unsigned int elementCount = outputVariable.getBasicTypeElementCount();
+        bool elementsFit          = false;
+        while (!elementsFit)
+        {
+            // Try baseLocations starting from 0 one at a time and see if the variable fits.
+            elementsFit = true;
+            if (baseLocation + elementCount > maxLocation)
+            {
+                // EXT_blend_func_extended: Linking can fail:
+                // "if the explicit binding assignments do not leave enough space for the linker to
+                // automatically assign a location for a varying out array, which requires multiple
+                // contiguous locations."
+                mInfoLog << "Could not fit output variable into available locations: "
+                         << outputVariable.name;
+                return false;
+            }
+            for (unsigned int elementIndex = 0; elementIndex < elementCount; elementIndex++)
+            {
+                const unsigned int location =
+                    static_cast<unsigned int>(baseLocation) + elementIndex;
+                if (location >= outputLocations->size())
+                {
+                    outputLocations->resize(location + 1);
+                }
+                if (outputLocations->at(location).used())
+                {
+                    elementsFit = false;
+                }
+            }
+            if (elementsFit)
+            {
+                for (unsigned int elementIndex = 0; elementIndex < elementCount; elementIndex++)
+                {
+                    const unsigned int location =
+                        static_cast<unsigned int>(baseLocation) + elementIndex;
+                    if (outputVariable.isArray())
+                    {
+                        (*outputLocations)[location] =
+                            VariableLocation(elementIndex, outputVariableIndex);
+                    }
+                    else
+                    {
+                        VariableLocation locationInfo;
+                        locationInfo.index           = outputVariableIndex;
+                        (*outputLocations)[location] = locationInfo;
+                    }
+                }
+            }
+            else
+            {
+                ++baseLocation;
             }
         }
     }
