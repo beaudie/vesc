@@ -16,6 +16,24 @@
       "revId": "d881ef080fdfff992156eca790ecf550bd14efa5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a5c1a93_e5246515",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-25T14:09:17Z",
+      "side": 1,
+      "message": "Yep, could be a future improvement. But would mean for a new command buffer we\u0027d make two calls to BindDescriptorSets. Unless the logic was smart enough to handle that.",
+      "parentUuid": "3264d2cf_00dd786f",
+      "revId": "d881ef080fdfff992156eca790ecf550bd14efa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
