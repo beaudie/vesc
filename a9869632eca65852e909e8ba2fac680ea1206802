@@ -16,6 +16,70 @@
       "revId": "a9869632eca65852e909e8ba2fac680ea1206802",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afea6fe9_cb80d9bb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-25T11:14:57Z",
+      "side": 1,
+      "message": "I think it should be default, AKA false. You can just put false. The only test we have for this is WebGLCompatibilityTest.EnablePackReverseRowOrderExtension but these tests aren\u0027t enabled for Vulkan yet.",
+      "parentUuid": "e44eb94d_34a76feb",
+      "revId": "a9869632eca65852e909e8ba2fac680ea1206802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ef96b9b_ee3a0944",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-25T11:14:57Z",
+      "side": 1,
+      "message": "clippedRectangle is used here (not just width/height) so that\u0027s probably why your test is failing.",
+      "range": {
+        "startLine": 226,
+        "startChar": 23,
+        "endLine": 226,
+        "endChar": 39
+      },
+      "revId": "a9869632eca65852e909e8ba2fac680ea1206802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c812fb56_ed30138f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-25T11:14:57Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 238,
+        "startChar": 23,
+        "endLine": 238,
+        "endChar": 39
+      },
+      "revId": "a9869632eca65852e909e8ba2fac680ea1206802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
