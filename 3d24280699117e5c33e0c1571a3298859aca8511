@@ -95,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "6c507841_47787c7f",
+        "filename": "src/libANGLE/renderer/TextureImpl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-25T21:06:11Z",
+      "side": 1,
+      "message": "A toRectangle method could work (be sure to assert that depth \u003d\u003d 1). It would be nice to have the usage of Box all the way down in the gl::Texture, rx::TextureImpl and the D3D11 backend though.",
+      "parentUuid": "0e74cf0f_4f285b77",
+      "range": {
+        "startLine": 115,
+        "startChar": 22,
+        "endLine": 115,
+        "endChar": 35
+      },
+      "revId": "3d24280699117e5c33e0c1571a3298859aca8511",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "285ad8ce_0086272d",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Blit11.cpp",
         "patchSetId": 13
