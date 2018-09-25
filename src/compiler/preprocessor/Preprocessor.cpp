@@ -33,11 +33,7 @@ struct PreprocessorImpl
                      const PreprocessorSettings &settings)
         : diagnostics(diag),
           tokenizer(diag),
-          directiveParser(&tokenizer,
-                          &macroSet,
-                          diag,
-                          directiveHandler,
-                          settings),
+          directiveParser(&tokenizer, &macroSet, diag, directiveHandler, settings),
           macroExpander(&directiveParser, &macroSet, diag, settings.maxMacroExpansionDepth)
     {
     }

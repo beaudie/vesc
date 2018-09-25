@@ -9,8 +9,8 @@
 
 #include "compiler/preprocessor/Lexer.h"
 #include "compiler/preprocessor/Macro.h"
-#include "compiler/preprocessor/SourceLocation.h"
 #include "compiler/preprocessor/Preprocessor.h"
+#include "compiler/preprocessor/SourceLocation.h"
 
 namespace angle
 {

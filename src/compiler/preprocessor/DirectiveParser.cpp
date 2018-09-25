@@ -843,7 +843,8 @@ void DirectiveParser::parseLine(Token *token)
     bool parsedFileNumber = false;
     int line = 0, file = 0;
 
-    MacroExpander macroExpander(mTokenizer, mMacroSet, mDiagnostics, mSettings.maxMacroExpansionDepth);
+    MacroExpander macroExpander(mTokenizer, mMacroSet, mDiagnostics,
+                                mSettings.maxMacroExpansionDepth);
 
     // Lex the first token after "#line" so we can check it for EOD.
     macroExpander.lex(token);
@@ -952,7 +953,8 @@ int DirectiveParser::parseExpressionIf(Token *token)
     ASSERT((getDirective(token) == DIRECTIVE_IF) || (getDirective(token) == DIRECTIVE_ELIF));
 
     DefinedParser definedParser(mTokenizer, mMacroSet, mDiagnostics);
-    MacroExpander macroExpander(&definedParser, mMacroSet, mDiagnostics, mSettings.maxMacroExpansionDepth);
+    MacroExpander macroExpander(&definedParser, mMacroSet, mDiagnostics,
+                                mSettings.maxMacroExpansionDepth);
     ExpressionParser expressionParser(&macroExpander, mDiagnostics);
 
     int expression = 0;

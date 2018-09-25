@@ -9,8 +9,8 @@
 
 #include <cstddef>
 
-#include "common/angleutils.h"
 #include "GLSLANG/ShaderLang.h"
+#include "common/angleutils.h"
 
 namespace angle
 {
@@ -25,7 +25,10 @@ struct Token;
 
 struct PreprocessorSettings : private angle::NonCopyable
 {
-    PreprocessorSettings(ShShaderSpec shaderSpec) : maxMacroExpansionDepth(1000), shaderSpec(shaderSpec) {}
+    PreprocessorSettings(ShShaderSpec shaderSpec)
+        : maxMacroExpansionDepth(1000), shaderSpec(shaderSpec)
+    {
+    }
     int maxMacroExpansionDepth;
     ShShaderSpec shaderSpec;
 };
