@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6bba9b62_d9f0cbd2",
+        "filename": "src/libANGLE/renderer/angle_format_data.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-25T14:00:27Z",
+      "side": 1,
+      "message": "Thanks for the clarification, Jamie. I will figure it out tomorrow.",
+      "parentUuid": "6e8a946b_0ed3f55c",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "c66821f0ac093bf24c58512b73bc6c16fa911ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eab5a870_c83118eb",
         "filename": "src/libANGLE/renderer/d3d/d3d11/gen_dxgi_format_table.py",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "c66821f0ac093bf24c58512b73bc6c16fa911ddd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45ad5f31_f6137011",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/gen_dxgi_format_table.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-25T14:00:27Z",
+      "side": 1,
+      "message": "Split at https://chromium-review.googlesource.com/c/angle/angle/+/1242853.",
+      "parentUuid": "eab5a870_c83118eb",
+      "range": {
+        "startLine": 61,
+        "startChar": 23,
+        "endLine": 61,
+        "endChar": 31
+      },
+      "revId": "c66821f0ac093bf24c58512b73bc6c16fa911ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
