@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e44eb94d_34a76feb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-09-25T04:36:33Z",
+      "side": 1,
+      "message": "I notice that in FramebufferVk the value of reverseRowOrder comes from the state (then may get flipped, same as here) but here the value comes from the default construction of PixelPackState.  Is that correct?",
+      "revId": "a9869632eca65852e909e8ba2fac680ea1206802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
