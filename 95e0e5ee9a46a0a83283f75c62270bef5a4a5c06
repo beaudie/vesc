@@ -22,6 +22,30 @@
       "revId": "95e0e5ee9a46a0a83283f75c62270bef5a4a5c06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd6650fe_48ba44ed",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-25T05:18:16Z",
+      "side": 1,
+      "message": "Yes, that\u0027s what the TODO is about. Disabling zero sized attributes might potentially work, if there\u0027s some suitable mechanism available for disabling them.",
+      "parentUuid": "2e29a27b_ce0ffecc",
+      "range": {
+        "startLine": 353,
+        "startChar": 7,
+        "endLine": 353,
+        "endChar": 42
+      },
+      "revId": "95e0e5ee9a46a0a83283f75c62270bef5a4a5c06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
