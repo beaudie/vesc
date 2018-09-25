@@ -16,6 +16,24 @@
       "revId": "df3fecfcf48d14696f88c8f309c3b14221141efc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c68c5b1_91be7bbd",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2018-09-25T00:48:16Z",
+      "side": 1,
+      "message": "If the offset is out of range, ES 3.1 says the result is undefined:\n[ES 3.1] Chapter 8.13.1 Page 180\nIf the value of any non-ignored component of the offset vector operand is outside implementation-dependent limits, the results of the texture lookup are undefined.\n\nCurrent ANGLE compiler treats this out-of-range as a compile error:\nhttps://cs.chromium.org/chromium/src/third_party/angle/src/compiler/translator/ParseContext.cpp?l\u003d5598",
+      "parentUuid": "661899da_ba9b3264",
+      "revId": "df3fecfcf48d14696f88c8f309c3b14221141efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
