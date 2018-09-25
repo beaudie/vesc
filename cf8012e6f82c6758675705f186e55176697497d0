@@ -22,6 +22,30 @@
       "revId": "cf8012e6f82c6758675705f186e55176697497d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c524e915_0351decc",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-09-25T01:08:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "061a8284_67c9d9e3",
+      "range": {
+        "startLine": 61,
+        "startChar": 26,
+        "endLine": 61,
+        "endChar": 37
+      },
+      "revId": "cf8012e6f82c6758675705f186e55176697497d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
