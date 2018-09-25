@@ -482,6 +482,7 @@ class GLSLTest : public ANGLETest
         glDeleteShader(fs);
 
         const std::string &errorMessage = QueryErrorMessage(program);
+        printf("%s\n", errorMessage.c_str());
 
         EXPECT_NE(std::string::npos, errorMessage.find(expectedErrorType));
         EXPECT_NE(std::string::npos, errorMessage.find(expectedVariableFullName));
@@ -4933,6 +4934,66 @@ void main()
                               kQuarterSize * 2));
     EXPECT_TRUE(SubrectEquals(backbufferData, defaultFBOViewportData, getWindowWidth(),
                               kQuarterSize, kQuarterSize * 2));
+}
+
+// Ensure that using defined in a macro works in this simple case. This mirrors a dEQP test.
+TEST_P(GLSLTest, DefinedInMacroSucceeds)
+{
+    constexpr char kVS[] = R"(precision mediump float;
+attribute highp vec4 dEQP_Position;
+varying float out0;
+
+void main()
+{
+#define AAA defined(BBB)
+
+#if !AAA
+    out0 = 1.0;
+#else
+    out0 = 0.0;
+#endif
+    gl_Position = dEQP_Position;
+})";
+
+    constexpr char kFS[] = R"(precision mediump float;
+varying float out0;
+void main()
+{
+    gl_FragColor = vec4(out0, 0, 0, 1);
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+}
+
+// Ensure that defined in a macro is no accepted in WebGL.
+TEST_P(WebGLGLSLTest, DefinedInMacroFails)
+{
+    constexpr char kVS[] = R"(precision mediump float;
+attribute highp vec4 dEQP_Position;
+varying float out0;
+
+void main()
+{
+#define AAA defined(BBB)
+
+#if !AAA
+    out0 = 1.0;
+#else
+    out0 = 0.0;
+#endif
+    gl_Position = dEQP_Position;
+})";
+
+    constexpr char kFS[] = R"(precision mediump float;
+varying float out0;
+void main()
+{
+    gl_FragColor = vec4(out0, 0, 0, 1);
+})";
+
+    GLuint program = CompileProgram(kVS, kFS);
+    EXPECT_EQ(0u, program);
+    glDeleteProgram(program);
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
