@@ -19,8 +19,8 @@ namespace angle
 class PreprocessorTest : public testing::Test
 {
   protected:
-    PreprocessorTest()
-        : mPreprocessor(&mDiagnostics, &mDirectiveHandler, pp::PreprocessorSettings())
+    PreprocessorTest(ShShaderSpec shaderSpec)
+        : mPreprocessor(&mDiagnostics, &mDirectiveHandler, pp::PreprocessorSettings(shaderSpec))
     {
     }
 
