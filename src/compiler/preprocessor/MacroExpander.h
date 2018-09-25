@@ -28,7 +28,8 @@ class MacroExpander : public Lexer
     MacroExpander(Lexer *lexer,
                   MacroSet *macroSet,
                   Diagnostics *diagnostics,
-                  int allowedMacroExpansionDepth);
+                  int allowedMacroExpansionDepth,
+                  bool parseDefined);
     ~MacroExpander() override;
 
     void lex(Token *token) override;
@@ -68,6 +69,7 @@ class MacroExpander : public Lexer
     Lexer *mLexer;
     MacroSet *mMacroSet;
     Diagnostics *mDiagnostics;
+    bool mParseDefined;
 
     std::unique_ptr<Token> mReserveToken;
     std::vector<MacroContext *> mContextStack;

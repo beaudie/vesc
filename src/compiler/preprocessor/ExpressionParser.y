@@ -114,7 +114,7 @@ input
 expression
     : TOK_CONST_INT
     | TOK_IDENTIFIER {
-        if (!context->isIgnoringErrors())
+        if (context->token->text != angle::pp::kDefined && !context->isIgnoringErrors())
         {
             // This rule should be applied right after the token is lexed, so we can
             // refer to context->token in the error message.
