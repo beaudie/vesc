@@ -3122,22 +3122,9 @@ angle::Result Renderer11::readFromAttachment(const gl::Context *context,
 
     const angle::Format &angleFormat = GetFormatFromFormatType(format, type);
     gl::Buffer *packBuffer = context->getGLState().getTargetBuffer(gl::BufferBinding::PixelPack);
-    if (!invertTexture)
-    {
-        PackPixelsParams packParams(safeArea, angleFormat, outputPitch, pack, packBuffer, 0);
-        return packPixels(context, stagingHelper, packParams, pixelsOut);
-    }
 
-    // Create a new PixelPackState with reversed row order. Note that we can't just assign
-    // 'invertTexturePack' to be 'pack' (or memcpy) since that breaks the ref counting/object
-    // tracking in the 'pixelBuffer' members, causing leaks. Instead we must use
-    // pixelBuffer.set() twice, which performs the addRef/release correctly
-    gl::PixelPackState invertTexturePack;
-    invertTexturePack.alignment       = pack.alignment;
-    invertTexturePack.reverseRowOrder = !pack.reverseRowOrder;
-
-    PackPixelsParams packParams(safeArea, angleFormat, outputPitch, invertTexturePack, packBuffer,
-                                0);
+    PackPixelsParams packParams(safeArea, angleFormat, outputPitch,
+                                invertTexture ^ pack.reverseRowOrder, packBuffer, 0);
     return packPixels(context, stagingHelper, packParams, pixelsOut);
 }
 
