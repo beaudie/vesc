@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3264d2cf_00dd786f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-25T14:02:38Z",
+      "side": 1,
+      "message": "I don\u0027t know yet how we do the descriptor sets, but if we do any grouping (i.e. there are multiple descriptor sets), then this would unnecessarily expensive.\n\nEither way, it could be useful to at least separate the stuff that angle itself introduces in a separate set (for example driver uniforms in a separate set), so only that set would need updating here instead of everything.",
+      "revId": "d881ef080fdfff992156eca790ecf550bd14efa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
