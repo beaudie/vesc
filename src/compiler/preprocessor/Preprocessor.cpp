@@ -37,7 +37,7 @@ struct PreprocessorImpl
                           &macroSet,
                           diag,
                           directiveHandler,
-                          settings.maxMacroExpansionDepth),
+                          settings),
           macroExpander(&directiveParser, &macroSet, diag, settings.maxMacroExpansionDepth)
     {
     }
