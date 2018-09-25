@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "470d851d_8df8e970",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-25T12:33:22Z",
+      "side": 0,
+      "message": "sorry jie I tried this myself and think they\u0027re still failing with your CL. could you revert the changes in this file?",
+      "range": {
+        "startLine": 242,
+        "startChar": 34,
+        "endLine": 244,
+        "endChar": 107
+      },
+      "revId": "d511948b9f824afd9c481443e12c2da407019eb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ec7898cc_8f095391",
         "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
         "patchSetId": 5

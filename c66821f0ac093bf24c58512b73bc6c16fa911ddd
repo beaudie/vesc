@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e8a946b_0ed3f55c",
+        "filename": "src/libANGLE/renderer/angle_format_data.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-25T12:33:22Z",
+      "side": 1,
+      "message": "sorry Jie I think this wasn\u0027t the right suggestion on my part. My mistake. I don\u0027t know if \"packed\" makes sense outside of Vulkan. For instance I don\u0027t know why VK_FORMAT_A8B8G8R8_UNORM_PACK32 is packed but VK_FORMAT_B8G8R8A8_UNORM is not. \n\nI think what we have to do is instead put this information in the vk format table. You can do this in gen_vk_format_table.py. You will need to add two booleans to vk::Format \"bool vkTextureFormatIsPacked\" and \"bool vkBufferFormatIsPacked\". You can initialize them in the auto-generated code in gen_vk_fromat_table.py and in Format::initTextureFallback and Format::initBufferFallback. Sorry for the confusion, but can you undo the changes to the angle::Format?",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "c66821f0ac093bf24c58512b73bc6c16fa911ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eab5a870_c83118eb",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/gen_dxgi_format_table.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-25T12:33:22Z",
+      "side": 1,
+      "message": "thanks for noticing that this needs to be fixed. maybe we should list gen_angle_format_table.py as an input to \"DXGI format\" in run_code_generation.py. Can you make this a split fix CL?",
+      "range": {
+        "startLine": 61,
+        "startChar": 23,
+        "endLine": 61,
+        "endChar": 31
+      },
+      "revId": "c66821f0ac093bf24c58512b73bc6c16fa911ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
