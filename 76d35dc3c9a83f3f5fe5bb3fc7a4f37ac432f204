@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a5f6fbd_919d3757",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-26T12:39:26Z",
+      "side": 1,
+      "message": "It seems not right to use pixelBytes of angle::Format here. Correct me if my understanding is wrong. Take \"R8_UNORM\"for example, its pixelBytes is 1. Normally it maps to \"VK_FORMAT_R8_UNORM\", the size of which is same as pixelBytes. So far everything works well. But \"R8_UNORM\" may fallback to use \"R32_FLOAT\" according to vk_format_map.json. The size of \"R32_FLOAT\" is 4. In this case, pixelBytes is wrong.",
+      "range": {
+        "startLine": 240,
+        "startChar": 4,
+        "endLine": 240,
+        "endChar": 48
+      },
+      "revId": "76d35dc3c9a83f3f5fe5bb3fc7a4f37ac432f204",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
