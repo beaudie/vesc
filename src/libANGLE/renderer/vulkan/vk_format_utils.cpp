@@ -145,6 +145,7 @@ void Format::initBufferFallback(VkPhysicalDevice physicalDevice,
     int i          = FindSupportedFormat(physicalDevice, info, numInfo, HasFullBufferFormatSupport);
     bufferFormatID = info[i].format;
     vkBufferFormat = info[i].vkFormat;
+    vkBufferFormatIsPacked       = info[i].vkFormatIsPacked;
     vertexLoadFunction           = info[i].vertexLoadFunction;
     vertexLoadRequiresConversion = info[i].vertexLoadRequiresConversion;
 }
