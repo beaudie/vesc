@@ -577,27 +577,22 @@ std::string ContextVk::getRendererDescription() const
 
 void ContextVk::insertEventMarker(GLsizei length, const char *marker)
 {
-    UNIMPLEMENTED();
 }
 
 void ContextVk::pushGroupMarker(GLsizei length, const char *marker)
 {
-    UNIMPLEMENTED();
 }
 
 void ContextVk::popGroupMarker()
 {
-    UNIMPLEMENTED();
 }
 
 void ContextVk::pushDebugGroup(GLenum source, GLuint id, GLsizei length, const char *message)
 {
-    UNIMPLEMENTED();
 }
 
 void ContextVk::popDebugGroup()
 {
-    UNIMPLEMENTED();
 }
 
 bool ContextVk::isViewportFlipEnabledForDrawFBO() const
