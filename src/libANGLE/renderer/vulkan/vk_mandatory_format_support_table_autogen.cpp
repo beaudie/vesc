@@ -603,6 +603,12 @@ const VkFormatProperties &GetMandatoryFormatSupport(VkFormat vkFormat)
     return kFormatProperties[vkFormat];
 }
 
+size_t GetVertexInputAlignment(const vk::Format &format)
+{
+    const angle::Format &bufferFormat = format.bufferFormat();
+    size_t pixelBytes                 = bufferFormat.pixelBytes;
+    return format.vkBufferFormatIsPacked ? pixelBytes : (pixelBytes / bufferFormat.channelCount());
+}
 }  // namespace vk
 
 }  // namespace rx
