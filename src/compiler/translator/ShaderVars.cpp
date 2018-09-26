@@ -353,6 +353,7 @@ bool Attribute::operator==(const Attribute &other) const
 }
 
 OutputVariable::OutputVariable()
+    : index(-1)
 {
 }
 
@@ -360,19 +361,12 @@ OutputVariable::~OutputVariable()
 {
 }
 
-OutputVariable::OutputVariable(const OutputVariable &other) : VariableWithLocation(other)
-{
-}
-
-OutputVariable &OutputVariable::operator=(const OutputVariable &other)
-{
-    VariableWithLocation::operator=(other);
-    return *this;
-}
+OutputVariable::OutputVariable(const OutputVariable &other) = default;
+OutputVariable &OutputVariable::operator=(const OutputVariable &other) = default;
 
 bool OutputVariable::operator==(const OutputVariable &other) const
 {
-    return VariableWithLocation::operator==(other);
+    return VariableWithLocation::operator==(other) && index == other.index;
 }
 
 InterfaceBlockField::InterfaceBlockField() : isRowMajorLayout(false)
