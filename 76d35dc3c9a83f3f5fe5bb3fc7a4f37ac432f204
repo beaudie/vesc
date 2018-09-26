@@ -22,6 +22,30 @@
       "revId": "76d35dc3c9a83f3f5fe5bb3fc7a4f37ac432f204",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2b09cf8_81d70293",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-26T13:57:19Z",
+      "side": 1,
+      "message": "I\u0027m using format.bufferFormat() here. If the ANGLE format is R8_UNORM and the fallback format is R32_FLOAT, bufferFormat will be R32_FLOAT. pixelBytes  will return 4 bytes. I think that\u0027s what we want. We want the alignment to check the \"real\" native format used for Vulkan. Not the original format that we are emulating. Please let me know if I can provide further clarification.",
+      "parentUuid": "1a5f6fbd_919d3757",
+      "range": {
+        "startLine": 240,
+        "startChar": 4,
+        "endLine": 240,
+        "endChar": 48
+      },
+      "revId": "76d35dc3c9a83f3f5fe5bb3fc7a4f37ac432f204",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
