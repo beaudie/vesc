@@ -46,6 +46,30 @@
       "revId": "76d35dc3c9a83f3f5fe5bb3fc7a4f37ac432f204",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "779a294c_0e41cf44",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-26T23:58:59Z",
+      "side": 1,
+      "message": "You\u0027re right, Jamie. I didn\u0027t read bufferFormat() carefully, and misunderstood it. Thanks for your clarification and patience.",
+      "parentUuid": "e2b09cf8_81d70293",
+      "range": {
+        "startLine": 240,
+        "startChar": 4,
+        "endLine": 240,
+        "endChar": 48
+      },
+      "revId": "76d35dc3c9a83f3f5fe5bb3fc7a4f37ac432f204",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
