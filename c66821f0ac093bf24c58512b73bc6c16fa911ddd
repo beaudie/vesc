@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "374642cd_8960b6a6",
+        "filename": "src/libANGLE/renderer/angle_format_data.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-09-26T06:47:34Z",
+      "side": 1,
+      "message": "Jamie, I still have some confusion to be clarified. The format alignment is computed according to its size and channel count, and whether it\u0027s packed, which are totally specific to the native vulkan format. angle::Format knows size(pixelBytes) and channel count(xxxBits), but they are not for the actual native format. In addition, even for one angle::Format, there can be many corresponding native formats regarding texture, buffer override or fallback. I am not sure whether vk_format_table is the right place to store tables which are purely specific to native formats, as it seemingly handles formats mapping mainly.",
+      "parentUuid": "6bba9b62_d9f0cbd2",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "c66821f0ac093bf24c58512b73bc6c16fa911ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eab5a870_c83118eb",
         "filename": "src/libANGLE/renderer/d3d/d3d11/gen_dxgi_format_table.py",
         "patchSetId": 7
