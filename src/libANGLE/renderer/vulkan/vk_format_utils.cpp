@@ -123,6 +123,7 @@ Format::Format()
       vkTextureFormat(VK_FORMAT_UNDEFINED),
       bufferFormatID(angle::FormatID::NONE),
       vkBufferFormat(VK_FORMAT_UNDEFINED),
+      vkBufferFormatIsPacked(false),
       textureInitializerFunction(nullptr),
       textureLoadFunctions()
 {
@@ -145,6 +146,7 @@ void Format::initBufferFallback(VkPhysicalDevice physicalDevice,
     int i          = FindSupportedFormat(physicalDevice, info, numInfo, HasFullBufferFormatSupport);
     bufferFormatID = info[i].format;
     vkBufferFormat = info[i].vkFormat;
+    vkBufferFormatIsPacked       = info[i].vkFormatIsPacked;
     vertexLoadFunction           = info[i].vertexLoadFunction;
     vertexLoadRequiresConversion = info[i].vertexLoadRequiresConversion;
 }
