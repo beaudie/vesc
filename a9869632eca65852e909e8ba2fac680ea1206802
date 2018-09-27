@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "94f5da18_bbb15f8c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-27T20:52:18Z",
+      "side": 1,
+      "message": "False initially here, then potentially flipped below. Just here since in FramebufferVk it comes from the extension spec and state. Here we want to override the state.",
+      "parentUuid": "5776f463_ff773914",
+      "revId": "a9869632eca65852e909e8ba2fac680ea1206802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9ef96b9b_ee3a0944",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 3
