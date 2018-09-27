@@ -91,6 +91,29 @@
       "revId": "d46fcc5be6d0adadc073b11e6bb3d3c0c42bb2a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a91b5d38_4c5d46c5",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-09-27T18:10:11Z",
+      "side": 1,
+      "message": "nit: std::numeric_limits\u003cuint32_t\u003e::max()",
+      "range": {
+        "startLine": 976,
+        "startChar": 49,
+        "endLine": 976,
+        "endChar": 59
+      },
+      "revId": "d46fcc5be6d0adadc073b11e6bb3d3c0c42bb2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
