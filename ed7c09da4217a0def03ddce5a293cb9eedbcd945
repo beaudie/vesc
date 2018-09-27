@@ -16,6 +16,24 @@
       "revId": "ed7c09da4217a0def03ddce5a293cb9eedbcd945",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0682ef3d_0eb9bf05",
+        "filename": "src/compiler/translator/ShaderVars.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-09-27T13:50:29Z",
+      "side": 1,
+      "message": "Thanks for pointing this out, I just started thinking I probably have forgotten to add some initialization.",
+      "parentUuid": "7098373f_5b3bdaeb",
+      "revId": "ed7c09da4217a0def03ddce5a293cb9eedbcd945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
