@@ -796,6 +796,7 @@ ProgramState::ProgramState()
       mImageUniformRange(0, 0),
       mAtomicCounterUniformRange(0, 0),
       mBinaryRetrieveableHint(false),
+      mSeparable(false),
       mNumViews(-1),
       // [GL_EXT_geometry_shader] Table 20.22
       mGeometryShaderInputPrimitiveType(PrimitiveMode::Triangles),
