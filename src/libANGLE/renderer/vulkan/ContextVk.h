@@ -242,6 +242,9 @@ class ContextVk : public ContextImpl, public vk::Context
                                             const gl::DrawCallParams &drawCallParams,
                                             vk::CommandBuffer *commandBuffer);
 
+    void updatePipelineColorMask(bool programHasOutput);
+    bool currentProgramHasOutput() const;
+
     vk::PipelineAndSerial *mCurrentPipeline;
     gl::PrimitiveMode mCurrentDrawMode;
 

@@ -620,15 +620,31 @@ bool ContextVk::isViewportFlipEnabledForReadFBO() const
     return mFlipViewportForReadFramebuffer;
 }
 
+bool ContextVk::currentProgramHasOutput() const
+{
+    return mProgram == nullptr || mProgram->getState().getActiveOutputVariables().any();
+}
+
+void ContextVk::updatePipelineColorMask(bool programHasOutput)
+{
+    if (programHasOutput)
+    {
+        FramebufferVk *framebufferVk = vk::GetImpl(mState.getState().getDrawFramebuffer());
+        mPipelineDesc->updateColorWriteMask(mClearColorMask,
+                                            framebufferVk->getEmulatedAlphaAttachmentMask());
+    }
+    else
+    {
+        mPipelineDesc->clearColorWriteMask();
+    }
+}
+
 void ContextVk::updateColorMask(const gl::BlendState &blendState)
 {
     mClearColorMask =
         gl_vk::GetColorComponentFlags(blendState.colorMaskRed, blendState.colorMaskGreen,
                                       blendState.colorMaskBlue, blendState.colorMaskAlpha);
-
-    FramebufferVk *framebufferVk = vk::GetImpl(mState.getState().getDrawFramebuffer());
-    mPipelineDesc->updateColorWriteMask(mClearColorMask,
-                                        framebufferVk->getEmulatedAlphaAttachmentMask());
+    updatePipelineColorMask(currentProgramHasOutput());
 }
 
 void ContextVk::updateScissor(const gl::State &glState) const
@@ -835,8 +851,14 @@ gl::Error ContextVk::syncState(const gl::Context *context, const gl::State::Dirt
             case gl::State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING:
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_BINDING:
+            {
+                bool previousOutput = currentProgramHasOutput();
                 mProgram = vk::GetImpl(glState.getProgram());
+                bool currentOutput  = currentProgramHasOutput();
+                if (previousOutput != currentOutput)
+                    updatePipelineColorMask(currentOutput);
                 break;
+            }
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
             {
                 invalidateCurrentTextures();
