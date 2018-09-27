@@ -246,6 +246,9 @@ class ContextVk : public ContextImpl, public vk::Context
                                             const gl::DrawCallParams &drawCallParams,
                                             vk::CommandBuffer *commandBuffer);
 
+    void updatePipelineColorMask(bool programHasOutput);
+    bool currentProgramHasOutput() const;
+
     vk::PipelineAndSerial *mCurrentPipeline;
     gl::PrimitiveMode mCurrentDrawMode;
 
@@ -269,6 +272,9 @@ class ContextVk : public ContextImpl, public vk::Context
     VertexArrayVk *mVertexArray;
     FramebufferVk *mDrawFramebuffer;
     ProgramVk *mProgram;
+
+    // Does the current program have output?
+    bool mProgramHasOutput;
 
     // The offset we had the last time we bound the index buffer.
     const GLvoid *mLastIndexBufferOffset;
