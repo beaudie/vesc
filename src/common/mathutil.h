@@ -929,32 +929,53 @@ inline uint32_t BitfieldReverse(uint32_t value)
 }
 
 // Count the 1 bits.
-#if defined(ANGLE_PLATFORM_WINDOWS)
+#if defined(_M_IX86) || defined(_M_X64)
+#define HAS_BITCOUNT_32
 inline int BitCount(uint32_t bits)
 {
     return static_cast<int>(__popcnt(bits));
 }
-#if defined(ANGLE_IS_64_BIT_CPU)
+#if defined(_M_X64)
+#define HAS_BITCOUNT_64
 inline int BitCount(uint64_t bits)
 {
     return static_cast<int>(__popcnt64(bits));
 }
-#endif  // defined(ANGLE_IS_64_BIT_CPU)
-#endif  // defined(ANGLE_PLATFORM_WINDOWS)
+#endif  // defined(_M_X64)
+#endif  // defined(_M_IX86) || defined(_M_X64)
 
 #if defined(ANGLE_PLATFORM_POSIX)
+#define HAS_BITCOUNT_32
 inline int BitCount(uint32_t bits)
 {
     return __builtin_popcount(bits);
 }
 
 #if defined(ANGLE_IS_64_BIT_CPU)
+#define HAS_BITCOUNT_64
 inline int BitCount(uint64_t bits)
 {
     return __builtin_popcountll(bits);
 }
 #endif  // defined(ANGLE_IS_64_BIT_CPU)
 #endif  // defined(ANGLE_PLATFORM_POSIX)
+
+int BitCountPolyfill(uint32_t);
+
+#if !defined(HAS_BITCOUNT_32)
+inline int BitCount(const uint32_t bits)
+{
+    return BitCountPolyfill(bits);
+}
+#endif  // !defined(HAS_BITCOUNT_32)
+
+#if !defined(HAS_BITCOUNT_64)
+inline int BitCount(const uint64_t bits)
+{
+    return BitCount(static_cast<uint32_t>(bits >> 32)) +
+           BitCount(static_cast<uint32_t>(bits & UINT32_MAX));
+}
+#endif  // !defined(HAS_BITCOUNT_64)
 
 inline int BitCount(uint8_t bits)
 {
