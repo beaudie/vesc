@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "110b36ff_a963ed65",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 932,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-27T10:49:36Z",
+      "side": 1,
+      "message": "can you add a comment explaining what these defines are?",
+      "range": {
+        "startLine": 932,
+        "startChar": 12,
+        "endLine": 932,
+        "endChar": 19
+      },
+      "revId": "d46fcc5be6d0adadc073b11e6bb3d3c0c42bb2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "582dd6b5_95871fb7",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-27T10:49:36Z",
+      "side": 1,
+      "message": "this should be named ANGLE_HAS_BITCOUNT_32",
+      "range": {
+        "startLine": 933,
+        "startChar": 8,
+        "endLine": 933,
+        "endChar": 23
+      },
+      "revId": "d46fcc5be6d0adadc073b11e6bb3d3c0c42bb2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "144c05b7_bf925110",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-27T10:49:36Z",
+      "side": 1,
+      "message": "and ANGLE_HAS_BITCOUNT_64",
+      "range": {
+        "startLine": 939,
+        "startChar": 8,
+        "endLine": 939,
+        "endChar": 23
+      },
+      "revId": "d46fcc5be6d0adadc073b11e6bb3d3c0c42bb2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac009b46_0fefae6f",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-27T10:49:36Z",
+      "side": 1,
+      "message": "nit: include name of parameter",
+      "range": {
+        "startLine": 963,
+        "startChar": 21,
+        "endLine": 963,
+        "endChar": 29
+      },
+      "revId": "d46fcc5be6d0adadc073b11e6bb3d3c0c42bb2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
