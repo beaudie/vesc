@@ -56,16 +56,85 @@ TEST_P(LinkAndRelinkTest, RenderingProgramFailsWithoutProgramInstalled)
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 }
 
+// Vulkan validation will complain if the fragment shader sets
+// neither gl_FragColor nor gl_FragData, unless the color mask
+// is zero.  Test that a "no ouput" shader works and that color mask
+// settings are respected.
+TEST_P(LinkAndRelinkTest, NoFragmentOutput)
+{
+    const std::string vtxSrc =
+        R"(attribute vec3 pos;
+        void main()
+        {
+            gl_Position = vec4(pos, 1);
+        })";
+
+    const std::string fragSrc[3] = {
+        R"(void main()
+        {
+        })",
+
+        R"(void main()
+        {
+            gl_FragColor = vec4(1, 1, 1, 1);
+        })",
+
+        R"(void main()
+        {
+            gl_FragData[0] = vec4(1, 1, 1, 1);
+        })"};
+
+    GLuint program[3];
+
+    for (int i = 0; i < 3; ++i)
+    {
+        program[i] = glCreateProgram();
+        GLuint vs  = CompileShader(GL_VERTEX_SHADER, vtxSrc);
+        GLuint fs  = CompileShader(GL_FRAGMENT_SHADER, fragSrc[i]);
+        EXPECT_NE(0u, vs);
+        EXPECT_NE(0u, fs);
+        glAttachShader(program[i], vs);
+        glDeleteShader(vs);
+        glAttachShader(program[i], fs);
+        glDeleteShader(fs);
+        glLinkProgram(program[i]);
+        GLint linkStatus;
+        glGetProgramiv(program[i], GL_LINK_STATUS, &linkStatus);
+        EXPECT_GL_TRUE(linkStatus);
+    }
+
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
+
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    drawQuad(program[0], "pos", 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
+
+    glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
+    drawQuad(program[0], "pos", 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
+
+    drawQuad(program[1], "pos", 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    drawQuad(program[0], "pos", 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    glColorMask(GL_FALSE, GL_TRUE, GL_FALSE, GL_TRUE);
+    drawQuad(program[2], "pos", 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::yellow);
+
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+}
+
 // When program link or relink fails and a valid rendering program is installed
 // in the GL state before the link, using the failed program via UseProgram
 // should report an error, but starting rendering should succeed.
 // However, dispatching compute always fails.
 TEST_P(LinkAndRelinkTest, RenderingProgramFailsWithProgramInstalled)
 {
-    // TODO(lucferron): Diagnose and fix
-    // http://anglebug.com/2648
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     // Install a render program in current GL state via UseProgram, then render.
     // It should succeed.
     const std::string vsSource =

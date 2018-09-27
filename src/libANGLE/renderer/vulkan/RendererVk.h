@@ -124,6 +124,7 @@ class RendererVk : angle::NonCopyable
                               const vk::PipelineLayout &pipelineLayout,
                               const vk::PipelineDesc &pipelineDesc,
                               const gl::AttributesMask &activeAttribLocationsMask,
+                              bool hasShaderOutput,
                               vk::PipelineAndSerial **pipelineOut);
 
     // Queries the descriptor set layout cache. Creates the layout if not present.
