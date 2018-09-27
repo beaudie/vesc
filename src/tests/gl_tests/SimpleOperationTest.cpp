@@ -1070,6 +1070,62 @@ TEST_P(SimpleOperationTest, RenderbufferAttachment)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Vulkan validation will complain if the fragment shader sets neither gl_FragColor nor gl_FragData,
+// unless the color mask is zero.  Test that a "no ouput" shader works and that color mask settings
+// are preserved after using such shaders.
+TEST_P(SimpleOperationTest, NoFragmentOutput)
+{
+    // Cannot test on GL because "no output" shaders are undefined.
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    const std::string fragSrc[3] = {
+        R"(void main()
+        {
+        })",
+
+        R"(void main()
+        {
+            gl_FragColor = vec4(1, 1, 1, 1);
+        })",
+
+        R"(void main()
+        {
+            gl_FragData[0] = vec4(1, 1, 1, 1);
+        })"};
+
+    GLuint program[3];
+    for (int i = 0; i < 3; ++i)
+    {
+        program[i] = CompileProgram(kBasicVertexShader, fragSrc[i]);
+        ASSERT_NE(program[i], 0u);
+    }
+
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+
+    // shader 0 does nothing
+    glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
+    drawQuad(program[0], "position", 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+
+    // shader 1 draws white, red should get through
+    drawQuad(program[1], "position", 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::magenta);
+
+    // shader 0 does nothing
+    glColorMask(GL_FALSE, GL_TRUE, GL_FALSE, GL_TRUE);
+    drawQuad(program[0], "position", 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::magenta);
+
+    // shader 2 draws white, green should get through
+    glColorMask(GL_FALSE, GL_TRUE, GL_FALSE, GL_TRUE);
+    drawQuad(program[2], "position", 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
+
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(SimpleOperationTest,
                        ES2_D3D9(),

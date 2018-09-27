@@ -116,6 +116,7 @@ ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
       mVertexArray(nullptr),
       mDrawFramebuffer(nullptr),
       mProgram(nullptr),
+      mProgramHasOutput(true),
       mLastIndexBufferOffset(0),
       mCurrentDrawElementsType(GL_NONE),
       mClearColorMask(kAllColorChannelsMask),
@@ -631,15 +632,26 @@ bool ContextVk::isViewportFlipEnabledForReadFBO() const
     return mFlipViewportForReadFramebuffer;
 }
 
+void ContextVk::updatePipelineColorMask() const
+{
+    if (mProgramHasOutput)
+    {
+        FramebufferVk *framebufferVk = vk::GetImpl(mState.getState().getDrawFramebuffer());
+        mPipelineDesc->updateColorWriteMask(mClearColorMask,
+                                            framebufferVk->getEmulatedAlphaAttachmentMask());
+    }
+    else
+    {
+        mPipelineDesc->clearColorWriteMask();
+    }
+}
+
 void ContextVk::updateColorMask(const gl::BlendState &blendState)
 {
     mClearColorMask =
         gl_vk::GetColorComponentFlags(blendState.colorMaskRed, blendState.colorMaskGreen,
                                       blendState.colorMaskBlue, blendState.colorMaskAlpha);
-
-    FramebufferVk *framebufferVk = vk::GetImpl(mState.getState().getDrawFramebuffer());
-    mPipelineDesc->updateColorWriteMask(mClearColorMask,
-                                        framebufferVk->getEmulatedAlphaAttachmentMask());
+    updatePipelineColorMask();
 }
 
 void ContextVk::updateScissor(const gl::State &glState) const
@@ -848,8 +860,14 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING:
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_BINDING:
+            {
+                bool previousOutput = mProgramHasOutput;
                 mProgram = vk::GetImpl(glState.getProgram());
+                mProgramHasOutput   = mProgram->getState().getActiveOutputVariables().any();
+                if (previousOutput != mProgramHasOutput)
+                    updatePipelineColorMask();
                 break;
+            }
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
             {
                 invalidateCurrentTextures();

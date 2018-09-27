@@ -737,6 +737,14 @@ void PipelineDesc::updateColorWriteMask(VkColorComponentFlags colorComponentFlag
     }
 }
 
+void PipelineDesc::clearColorWriteMask()
+{
+    for (size_t colorIndex = 0; colorIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; colorIndex++)
+    {
+        mColorBlendStateInfo.attachments[colorIndex].colorWriteMask = 0;
+    }
+}
+
 void PipelineDesc::updateDepthTestEnabled(const gl::DepthStencilState &depthStencilState,
                                           const gl::Framebuffer *drawFramebuffer)
 {
