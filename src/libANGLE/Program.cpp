@@ -796,6 +796,8 @@ ProgramState::ProgramState()
       mImageUniformRange(0, 0),
       mAtomicCounterUniformRange(0, 0),
       mBinaryRetrieveableHint(false),
+      mSeparable(false),
+      mHasOutput(false),
       mNumViews(-1),
       // [GL_EXT_geometry_shader] Table 20.22
       mGeometryShaderInputPrimitiveType(PrimitiveMode::Triangles),
@@ -3582,6 +3584,7 @@ bool Program::linkOutputVariables(const Caps &caps,
     ASSERT(mState.mActiveOutputVariables.none());
     ASSERT(mState.mDrawBufferTypeMask.none());
 
+    mState.mHasOutput           = false;
     const auto &outputVariables = fragmentShader->getActiveOutputVariables();
     // Gather output variable types
     for (const auto &outputVariable : outputVariables)
@@ -3591,6 +3594,7 @@ bool Program::linkOutputVariables(const Caps &caps,
         {
             continue;
         }
+        mState.mHasOutput = true;
 
         unsigned int baseLocation =
             (outputVariable.location == -1 ? 0u

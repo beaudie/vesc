@@ -1004,6 +1004,7 @@ angle::Result RendererVk::getPipeline(vk::Context *context,
                                       const vk::PipelineLayout &pipelineLayout,
                                       const vk::PipelineDesc &pipelineDesc,
                                       const gl::AttributesMask &activeAttribLocationsMask,
+                                      bool hasShaderOutput,
                                       vk::PipelineAndSerial **pipelineOut)
 {
     ASSERT(vertexShader.getSerial() ==
@@ -1016,9 +1017,9 @@ angle::Result RendererVk::getPipeline(vk::Context *context,
     ANGLE_TRY(
         getCompatibleRenderPass(context, pipelineDesc.getRenderPassDesc(), &compatibleRenderPass));
 
-    return mPipelineCache.getPipeline(context, mPipelineCacheVk, *compatibleRenderPass,
-                                      pipelineLayout, activeAttribLocationsMask, vertexShader.get(),
-                                      fragmentShader.get(), pipelineDesc, pipelineOut);
+    return mPipelineCache.getPipeline(
+        context, mPipelineCacheVk, *compatibleRenderPass, pipelineLayout, activeAttribLocationsMask,
+        vertexShader.get(), fragmentShader.get(), pipelineDesc, hasShaderOutput, pipelineOut);
 }
 
 angle::Result RendererVk::getDescriptorSetLayout(

@@ -350,6 +350,7 @@ class PipelineDesc final
                                      const gl::AttributesMask &activeAttribLocationsMask,
                                      const ShaderModule &vertexModule,
                                      const ShaderModule &fragmentModule,
+                                     bool hasShaderOutput,
                                      Pipeline *pipelineOut) const;
 
     void updateViewport(FramebufferVk *framebufferVk,
@@ -620,6 +621,7 @@ class PipelineCache final : angle::NonCopyable
                               const vk::ShaderModule &vertexModule,
                               const vk::ShaderModule &fragmentModule,
                               const vk::PipelineDesc &desc,
+                              bool hasShaderOutput,
                               vk::PipelineAndSerial **pipelineOut);
 
   private:

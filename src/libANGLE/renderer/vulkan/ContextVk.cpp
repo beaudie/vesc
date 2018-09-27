@@ -259,7 +259,7 @@ angle::Result ContextVk::initPipeline(const gl::DrawCallParams &drawCallParams)
 
     ANGLE_TRY(mRenderer->getPipeline(this, *vertexShaderAndSerial, *fragmentShaderAndSerial,
                                      *pipelineLayout, *mPipelineDesc, activeAttribLocationsMask,
-                                     &mCurrentPipeline));
+                                     mProgram->getState().hasOutput(), &mCurrentPipeline));
 
     return angle::Result::Continue();
 }

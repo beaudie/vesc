@@ -162,7 +162,8 @@ void UnpackStencilState(const vk::PackedStencilOpState &packedState, VkStencilOp
 }
 
 void UnpackBlendAttachmentState(const vk::PackedColorBlendAttachmentState &packedState,
-                                VkPipelineColorBlendAttachmentState *stateOut)
+                                VkPipelineColorBlendAttachmentState *stateOut,
+                                bool hasShaderOutput)
 {
     stateOut->blendEnable         = static_cast<VkBool32>(packedState.blendEnable);
     stateOut->srcColorBlendFactor = static_cast<VkBlendFactor>(packedState.srcColorBlendFactor);
@@ -171,7 +172,8 @@ void UnpackBlendAttachmentState(const vk::PackedColorBlendAttachmentState &packe
     stateOut->srcAlphaBlendFactor = static_cast<VkBlendFactor>(packedState.srcAlphaBlendFactor);
     stateOut->dstAlphaBlendFactor = static_cast<VkBlendFactor>(packedState.dstAlphaBlendFactor);
     stateOut->alphaBlendOp        = static_cast<VkBlendOp>(packedState.alphaBlendOp);
-    stateOut->colorWriteMask      = static_cast<VkColorComponentFlags>(packedState.colorWriteMask);
+    stateOut->colorWriteMask =
+        hasShaderOutput ? static_cast<VkColorComponentFlags>(packedState.colorWriteMask) : 0;
 }
 
 angle::Result InitializeRenderPassFromDesc(vk::Context *context,
@@ -442,6 +444,7 @@ angle::Result PipelineDesc::initializePipeline(vk::Context *context,
                                                const gl::AttributesMask &activeAttribLocationsMask,
                                                const ShaderModule &vertexModule,
                                                const ShaderModule &fragmentModule,
+                                               bool hasShaderOutput,
                                                Pipeline *pipelineOut) const
 {
     VkPipelineShaderStageCreateInfo shaderStages[2];
@@ -593,7 +596,7 @@ angle::Result PipelineDesc::initializePipeline(vk::Context *context,
     for (uint32_t colorIndex = 0; colorIndex < blendState.attachmentCount; ++colorIndex)
     {
         UnpackBlendAttachmentState(mColorBlendStateInfo.attachments[colorIndex],
-                                   &blendAttachmentState[colorIndex]);
+                                   &blendAttachmentState[colorIndex], hasShaderOutput);
     }
 
     // TODO(jmadill): Dynamic state.
@@ -1133,6 +1136,7 @@ angle::Result PipelineCache::getPipeline(vk::Context *context,
                                          const vk::ShaderModule &vertexModule,
                                          const vk::ShaderModule &fragmentModule,
                                          const vk::PipelineDesc &desc,
+                                         bool hasShaderOutput,
                                          vk::PipelineAndSerial **pipelineOut)
 {
     auto item = mPayload.find(desc);
@@ -1149,7 +1153,7 @@ angle::Result PipelineCache::getPipeline(vk::Context *context,
     {
         ANGLE_TRY(desc.initializePipeline(context, pipelineCacheVk, compatibleRenderPass,
                                           pipelineLayout, activeAttribLocationsMask, vertexModule,
-                                          fragmentModule, &newPipeline));
+                                          fragmentModule, hasShaderOutput, &newPipeline));
     }
 
     // The Serial will be updated outside of this query.
