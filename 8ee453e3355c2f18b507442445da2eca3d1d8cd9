@@ -22,6 +22,30 @@
       "revId": "8ee453e3355c2f18b507442445da2eca3d1d8cd9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1303fa6a_89fd56bc",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3127,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-27T23:30:27Z",
+      "side": 1,
+      "message": "Oh yes, sorry. Didn\u0027t notice they were bools. Should not use xor directly.",
+      "parentUuid": "e8a88c5a_17dee2f3",
+      "range": {
+        "startLine": 3127,
+        "startChar": 46,
+        "endLine": 3127,
+        "endChar": 47
+      },
+      "revId": "8ee453e3355c2f18b507442445da2eca3d1d8cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
