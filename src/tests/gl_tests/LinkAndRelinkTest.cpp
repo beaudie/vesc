@@ -56,6 +56,121 @@ TEST_P(LinkAndRelinkTest, RenderingProgramFailsWithoutProgramInstalled)
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 }
 
+TEST_P(LinkAndRelinkTest, Blah)
+{
+    return;
+    std::string vsrc[3];
+    std::string fsrc[3];
+
+    vsrc[0] = R"(void main() { })";
+    fsrc[0] = R"(void main() { })";
+
+    vsrc[1] = R"(void main() { })";
+    fsrc[1] = R"(void main() {
+        gl_FragColor=vec4(0,0,0,0);
+    })";
+
+    vsrc[2] = R"(void main() { })";
+    fsrc[2] = R"(void main() {
+        gl_FragData[0]=vec4(0,0,0,0);
+    })";
+
+
+    GLuint pgm[3];
+    for (int i=0;i<3;++i)
+    {
+        pgm[i] = glCreateProgram();
+        GLuint vs = CompileShader(GL_VERTEX_SHADER, vsrc[i]);
+        GLuint fs = CompileShader(GL_FRAGMENT_SHADER, fsrc[i]);
+        EXPECT_NE(0u, vs);
+        EXPECT_NE(0u, fs);
+        glAttachShader(pgm[i], vs);
+        glDeleteShader(vs);
+        glAttachShader(pgm[i], fs);
+        glDeleteShader(fs);
+        glLinkProgram(pgm[i]);
+        GLint linkStatus;
+        glGetProgramiv(pgm[i], GL_LINK_STATUS, &linkStatus);
+        EXPECT_GL_TRUE(linkStatus);
+    }
+
+
+#define TR(msg) fprintf(stderr,"%s %3d %s\n",msg,__LINE__,__FILE__);fflush(stderr);
+TR("useProgram")
+    glUseProgram(pgm[0]);
+TR("")
+    EXPECT_GL_NO_ERROR();
+TR("drawArrays")
+    glDrawArrays(GL_POINTS, 0, 1); //XXX vulkan complains here
+TR("")
+    EXPECT_GL_NO_ERROR(); //XXX fail
+
+#if 0
+    glDispatchCompute(8, 4, 2);
+TR
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+TR
+
+    // Link failure, and a valid program has been installed in the GL state.
+    GLuint programNull = glCreateProgram();
+
+    glLinkProgram(programNull);
+    glGetProgramiv(programNull, GL_LINK_STATUS, &linkStatus);
+    EXPECT_GL_FALSE(linkStatus);
+
+    // Starting rendering should succeed.
+    glDrawArrays(GL_POINTS, 0, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glDispatchCompute(8, 4, 2);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    // Using the unsuccessfully linked program should report an error.
+    glUseProgram(programNull);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    // Using the unsuccessfully linked program, that program should not
+    // replace the program binary residing in the GL state. It will not make
+    // the installed program invalid either, like what UseProgram(0) can do.
+    // So, starting rendering should succeed.
+    glDrawArrays(GL_POINTS, 0, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glDispatchCompute(8, 4, 2);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    // We try to relink the installed program, but make it fail.
+
+    // No vertex shader, relink fails.
+    glDetachShader(program, vs);
+    glLinkProgram(program);
+    glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+    EXPECT_GL_FALSE(linkStatus);
+    EXPECT_GL_NO_ERROR();
+
+    // Starting rendering should succeed.
+    glDrawArrays(GL_POINTS, 0, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glDispatchCompute(8, 4, 2);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    // Using the unsuccessfully relinked program should report an error.
+    glUseProgram(program);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    // Using the unsuccessfully relinked program, that program should not
+    // replace the program binary residing in the GL state. It will not make
+    // the installed program invalid either, like what UseProgram(0) can do.
+    // So, starting rendering should succeed.
+    glDrawArrays(GL_POINTS, 0, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glDispatchCompute(8, 4, 2);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+#endif
+}
+
 // When program link or relink fails and a valid rendering program is installed
 // in the GL state before the link, using the failed program via UseProgram
 // should report an error, but starting rendering should succeed.
@@ -64,7 +179,7 @@ TEST_P(LinkAndRelinkTest, RenderingProgramFailsWithProgramInstalled)
 {
     // TODO(lucferron): Diagnose and fix
     // http://anglebug.com/2648
-    ANGLE_SKIP_TEST_IF(IsVulkan());
+    //ANGLE_SKIP_TEST_IF(IsVulkan());
 
     // Install a render program in current GL state via UseProgram, then render.
     // It should succeed.
@@ -77,6 +192,7 @@ TEST_P(LinkAndRelinkTest, RenderingProgramFailsWithProgramInstalled)
         R"(void main()
         {
         })";
+        //gl_FragColor=vec4(0,0,0,0);
 
     GLuint program = glCreateProgram();
 
@@ -102,8 +218,8 @@ TEST_P(LinkAndRelinkTest, RenderingProgramFailsWithProgramInstalled)
 
     glUseProgram(program);
     EXPECT_GL_NO_ERROR();
-    glDrawArrays(GL_POINTS, 0, 1);
-    EXPECT_GL_NO_ERROR();
+    glDrawArrays(GL_POINTS, 0, 1); //XXX vulkan complains here
+    EXPECT_GL_NO_ERROR(); //XXX fail
 
     glDispatchCompute(8, 4, 2);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);

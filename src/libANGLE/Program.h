@@ -353,6 +353,7 @@ class ProgramState final : angle::NonCopyable
     const ShaderBitSet &getLinkedShaderStages() const { return mLinkedShaderStages; }
 
     bool hasAttachedShader() const;
+    bool hasOutput() const { return mHasOutput; }
 
     const ActiveTextureMask &getActiveSamplersMask() const { return mActiveSamplersMask; }
 
@@ -427,6 +428,7 @@ class ProgramState final : angle::NonCopyable
 
     bool mBinaryRetrieveableHint;
     bool mSeparable;
+    bool mHasOutput;
     ShaderBitSet mLinkedShaderStages;
 
     // ANGLE_multiview.

@@ -89,7 +89,7 @@ void VulkanPipelineCachePerfTest::step()
     {
         for (const auto &hit : mCacheHits)
         {
-            (void)mCache.getPipeline(VK_NULL_HANDLE, pc, rp, pl, am, sm, sm, hit, &result);
+            (void)mCache.getPipeline(VK_NULL_HANDLE, pc, rp, pl, am, sm, sm, hit, true, &result);
         }
     }
 
@@ -97,7 +97,7 @@ void VulkanPipelineCachePerfTest::step()
          ++missCount, ++mMissIndex)
     {
         const auto &miss = mCacheMisses[mMissIndex];
-        (void)mCache.getPipeline(VK_NULL_HANDLE, pc, rp, pl, am, sm, sm, miss, &result);
+        (void)mCache.getPipeline(VK_NULL_HANDLE, pc, rp, pl, am, sm, sm, miss, true, &result);
     }
 }
 
