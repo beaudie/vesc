@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7098373f_5b3bdaeb",
+        "filename": "src/compiler/translator/ShaderVars.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-09-27T13:49:10Z",
+      "side": 1,
+      "message": "`index` is left uninitialized here, which is part of (if not the) reason you are getting failures.",
+      "revId": "ed7c09da4217a0def03ddce5a293cb9eedbcd945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
