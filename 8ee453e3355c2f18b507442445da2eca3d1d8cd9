@@ -70,6 +70,30 @@
       "revId": "8ee453e3355c2f18b507442445da2eca3d1d8cd9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9998794d_ff411838",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3127,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-09-28T00:21:13Z",
+      "side": 1,
+      "message": "We have a style policy that we don\u0027t perform integer operations on bools. If it\u0027s not in the online style guide we can add it. Do you mind fixing this? You\u0027ll notice this everywhere else in angle.",
+      "parentUuid": "86b6f2c4_2ec2cf25",
+      "range": {
+        "startLine": 3127,
+        "startChar": 46,
+        "endLine": 3127,
+        "endChar": 47
+      },
+      "revId": "8ee453e3355c2f18b507442445da2eca3d1d8cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
