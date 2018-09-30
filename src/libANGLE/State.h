@@ -226,7 +226,7 @@ class State : angle::NonCopyable
     bool removeVertexArrayBinding(const Context *context, GLuint vertexArray);
 
     // Program binding manipulation
-    void setProgram(const Context *context, Program *newProgram);
+    Error setProgram(const Context *context, Program *newProgram);
     Program *getProgram() const { return mProgram; }
 
     // Transform feedback object (not buffer) binding manipulation
@@ -363,7 +363,7 @@ class State : angle::NonCopyable
     bool isRobustResourceInitEnabled() const { return mRobustResourceInit; }
 
     // Sets the dirty bit for the program executable.
-    void onProgramExecutableChange(Program *program);
+    gl::Error onProgramExecutableChange(const Context *context, Program *program);
 
     enum DirtyBitType
     {

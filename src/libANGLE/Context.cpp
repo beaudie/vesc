@@ -1178,7 +1178,7 @@ void Context::bindImageTexture(GLuint unit,
 
 void Context::useProgram(GLuint program)
 {
-    mGLState.setProgram(this, getProgram(program));
+    ANGLE_CONTEXT_TRY(mGLState.setProgram(this, getProgram(program)));
     mStateCache.onProgramExecutableChange(this);
 }
 
@@ -5711,7 +5711,7 @@ void Context::linkProgram(GLuint program)
     if (programObject->isInUse())
     {
         // isLinked() which forces to resolve linking, will be called.
-        mGLState.onProgramExecutableChange(programObject);
+        ANGLE_CONTEXT_TRY(mGLState.onProgramExecutableChange(this, programObject));
         mStateCache.onProgramExecutableChange(this);
     }
 }
@@ -5924,7 +5924,7 @@ void Context::programBinary(GLuint program, GLenum binaryFormat, const void *bin
     handleError(programObject->loadBinary(this, binaryFormat, binary, length));
     if (programObject->isInUse())
     {
-        mGLState.onProgramExecutableChange(programObject);
+        ANGLE_CONTEXT_TRY(mGLState.onProgramExecutableChange(this, programObject));
         mStateCache.onProgramExecutableChange(this);
     }
 }
