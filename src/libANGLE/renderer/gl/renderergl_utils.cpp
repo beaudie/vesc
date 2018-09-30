@@ -1375,17 +1375,19 @@ uint8_t *MapBufferRangeWithFallback(const FunctionsGL *functions,
     }
 }
 
-gl::ErrorOrResult<bool> ShouldApplyLastRowPaddingWorkaround(const gl::Extents &size,
-                                                            const gl::PixelStoreStateBase &state,
-                                                            const gl::Buffer *pixelBuffer,
-                                                            GLenum format,
-                                                            GLenum type,
-                                                            bool is3D,
-                                                            const void *pixels)
+gl::Error ShouldApplyLastRowPaddingWorkaround(const gl::Extents &size,
+                                              const gl::PixelStoreStateBase &state,
+                                              const gl::Buffer *pixelBuffer,
+                                              GLenum format,
+                                              GLenum type,
+                                              bool is3D,
+                                              const void *pixels,
+                                              bool *shouldApplyOut)
 {
     if (pixelBuffer == nullptr)
     {
-        return false;
+        *shouldApplyOut = false;
+        return gl::NoError();
     }
 
     // We are using an pack or unpack buffer, compute what the driver thinks is going to be the
@@ -1413,7 +1415,8 @@ gl::ErrorOrResult<bool> ShouldApplyLastRowPaddingWorkaround(const gl::Extents &s
 
     ANGLE_TRY_CHECKED_MATH(checkedEndByte.IsValid());
 
-    return checkedEndByte.ValueOrDie() > static_cast<size_t>(pixelBuffer->getSize());
+    *shouldApplyOut = checkedEndByte.ValueOrDie() > static_cast<size_t>(pixelBuffer->getSize());
+    return gl::NoError();
 }
 
 std::vector<ContextCreationTry> GenerateContextCreationToTry(EGLint requestedType, bool isMesaGLX)

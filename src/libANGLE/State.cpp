@@ -359,7 +359,9 @@ void State::reset(const Context *context)
     setAllDirtyBits();
 }
 
-ANGLE_INLINE Error State::updateActiveTexture(const Context *context, size_t textureIndex, Texture *texture)
+ANGLE_INLINE Error State::updateActiveTexture(const Context *context,
+                                              size_t textureIndex,
+                                              Texture *texture)
 {
     const Sampler *sampler = mSamplers[textureIndex].get();
 
