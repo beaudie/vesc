@@ -1011,7 +1011,7 @@ bool ValidateWebGLVertexAttribPointer(Context *context,
     return true;
 }
 
-Program *GetValidProgram(Context *context, GLuint id)
+Program *GetValidProgramNoResolve(Context *context, GLuint id)
 {
     // ES3 spec (section 2.11.1) -- "Commands that accept shader or program object names will
     // generate the error INVALID_VALUE if the provided name is not the name of either a shader
@@ -1033,6 +1033,13 @@ Program *GetValidProgram(Context *context, GLuint id)
     }
 
     return validProgram;
+}
+
+Program *GetValidProgram(Context *context, GLuint id)
+{
+    Program *program = GetValidProgramNoResolve(context, id);
+    program->resolveLink();
+    return program;
 }
 
 Shader *GetValidShader(Context *context, GLuint id)
@@ -4405,7 +4412,10 @@ bool ValidateGetProgramivBase(Context *context, GLuint program, GLenum pname, GL
         *numParams = 1;
     }
 
-    Program *programObject = GetValidProgram(context, program);
+    // Special case for GL_COMPLETION_STATUS_KHR: don't resolve the link. Otherwise resolve it now.
+    Program *programObject = (pname == GL_COMPLETION_STATUS_KHR)
+                                 ? GetValidProgramNoResolve(context, program)
+                                 : GetValidProgram(context, program);
     if (!programObject)
     {
         return false;
@@ -4415,7 +4425,6 @@ bool ValidateGetProgramivBase(Context *context, GLuint program, GLenum pname, GL
     {
         case GL_DELETE_STATUS:
         case GL_LINK_STATUS:
-        case GL_COMPLETION_STATUS_KHR:
         case GL_VALIDATE_STATUS:
         case GL_INFO_LOG_LENGTH:
         case GL_ATTACHED_SHADERS:
@@ -4503,6 +4512,14 @@ bool ValidateGetProgramivBase(Context *context, GLuint program, GLenum pname, GL
             if (!programObject->hasLinkedShaderStage(ShaderType::Geometry))
             {
                 ANGLE_VALIDATION_ERR(context, InvalidOperation(), NoActiveGeometryShaderStage);
+                return false;
+            }
+            break;
+
+        case GL_COMPLETION_STATUS_KHR:
+            if (!context->getExtensions().parallelShaderCompile)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidOperation(), ExtensionNotEnabled);
                 return false;
             }
             break;
@@ -5357,7 +5374,6 @@ bool ValidateGetShaderivBase(Context *context, GLuint shader, GLenum pname, GLsi
         case GL_SHADER_TYPE:
         case GL_DELETE_STATUS:
         case GL_COMPILE_STATUS:
-        case GL_COMPLETION_STATUS_KHR:
         case GL_INFO_LOG_LENGTH:
         case GL_SHADER_SOURCE_LENGTH:
             break;
@@ -5366,6 +5382,14 @@ bool ValidateGetShaderivBase(Context *context, GLuint shader, GLenum pname, GLsi
             if (!context->getExtensions().translatedShaderSource)
             {
                 ANGLE_VALIDATION_ERR(context, InvalidEnum(), ExtensionNotEnabled);
+                return false;
+            }
+            break;
+
+        case GL_COMPLETION_STATUS_KHR:
+            if (!context->getExtensions().parallelShaderCompile)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidOperation(), ExtensionNotEnabled);
                 return false;
             }
             break;
