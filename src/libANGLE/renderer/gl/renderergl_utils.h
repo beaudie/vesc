@@ -112,6 +112,6 @@ struct ContextCreationTry
 };
 
 std::vector<ContextCreationTry> GenerateContextCreationToTry(EGLint requestedType, bool isMesaGLX);
-}
+}  // namespace rx
 
 #endif // LIBANGLE_RENDERER_GL_RENDERERGLUTILS_H_
