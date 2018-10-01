@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0347c43_01891776",
+        "filename": "src/libANGLE/Image.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-01T22:36:29Z",
+      "side": 1,
+      "message": "I\u0027ve seen Jamie removing \"else\"s like this.\nI think they are not needed because of the \"return\"s?",
+      "range": {
+        "startLine": 316,
+        "startChar": 4,
+        "endLine": 316,
+        "endChar": 8
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e7a6ba8_b211ec4b",
+        "filename": "src/libANGLE/renderer/gl/egl/ExternalImageSiblingEGL.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-01T22:36:29Z",
+      "side": 1,
+      "message": "no (c)",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f02318ff_6fb3fe1d",
+        "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-01T22:36:29Z",
+      "side": 1,
+      "message": "no (c)",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de55ba86_9910f8e8",
+        "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-01T22:36:29Z",
+      "side": 1,
+      "message": "Eh, all this seems error-prone.\nIf it is indeed needed for implementing EGL_ANDROID_image_native_buffer, maybe we should consider other approaches. For example, have platform\u0027s libEGL implement it on ANGLE\u0027s behalf.\nOr, have some library on Android side of things which ANGLE calls into.\n\nOr, since you only use format, width and height from ANativeWindowBuffer, maybe ANativeWindow_Buffer from android/native_window.h is enough for your needs?",
+      "range": {
+        "startLine": 13,
+        "startChar": 1,
+        "endLine": 55,
+        "endChar": 24
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4b890e3_679c394b",
+        "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-01T22:36:29Z",
+      "side": 1,
+      "message": "no (c)",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fca516f2_74f09afc",
+        "filename": "src/libANGLE/renderer/gl/egl/android/android_util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-01T22:36:29Z",
+      "side": 1,
+      "message": "no (c)",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "105fbb14_ac4ba859",
+        "filename": "src/libANGLE/renderer/gl/egl/android/android_util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-01T22:36:29Z",
+      "side": 1,
+      "message": "Have you considered including android/hardware_buffer.h (or media/NdkImage.h) from the NDK and using AHARDWAREBUFFER_FORMAT (or AIMAGE_FORMATS) from it instead? Some defines don\u0027t match between here and these two others, but I\u0027m not sure which ones are correct, and something looks fishy about us needing to use internal headers.",
+      "range": {
+        "startLine": 15,
+        "startChar": 3,
+        "endLine": 15,
+        "endChar": 111
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1146af64_16fb6c13",
+        "filename": "src/libANGLE/renderer/gl/egl/android/android_util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-01T22:36:29Z",
+      "side": 1,
+      "message": "These two formats don\u0027t appear in https://android.googlesource.com/platform/system/core/+/master/libsystem/include/system/graphics-base-v1.0.h\nOne more reason not to rely on unstable internal APIs.",
+      "range": {
+        "startLine": 22,
+        "startChar": 1,
+        "endLine": 23,
+        "endChar": 48
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95008d89_eee9c64a",
+        "filename": "src/libANGLE/renderer/gl/egl/android/android_util.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-01T22:36:29Z",
+      "side": 1,
+      "message": "I don\u0027t think we use \"(c)\".\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
