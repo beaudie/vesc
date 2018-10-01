@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "59739302_6e4786cc",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4939,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-01T16:47:30Z",
+      "side": 1,
+      "message": "Generally I think angle_end2end_tests are better. Unit tests don\u0027t run on real devices and often require introspection of the internal ANGLE APIs. end2end_tests can do rendering integration tests. I don\u0027t personally have a problem with the duplicate tests. But I would rather keep the endend_tests if I had to choose.\n\nI also added rendering validation to the tests you suggested that pass.",
+      "parentUuid": "48e5d668_a158fe5b",
+      "revId": "db1d5eac4d2056edefa0b5f62af045f0c5c75bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "720edc7f_9c827ffb",
         "filename": "src/tests/preprocessor_tests/if_test.cpp",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "db1d5eac4d2056edefa0b5f62af045f0c5c75bc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f45210f_c6bf7b6c",
+        "filename": "src/tests/preprocessor_tests/if_test.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-01T16:47:30Z",
+      "side": 1,
+      "message": "Thanks for the test suggestions. Added tests for all the suggestions except macro name. I took out the part which allows defined as a macro name. It should be always invalid to use as a macro name.",
+      "parentUuid": "720edc7f_9c827ffb",
+      "revId": "db1d5eac4d2056edefa0b5f62af045f0c5c75bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
