@@ -145,6 +145,7 @@ class Context9 : public ContextD3D
     gl::Error memoryBarrier(const gl::Context *context, GLbitfield barriers) override;
     gl::Error memoryBarrierByRegion(const gl::Context *context, GLbitfield barriers) override;
 
+    RendererD3D *getRendererD3D() const override;
     Renderer9 *getRenderer() const { return mRenderer; }
 
     angle::Result getIncompleteTexture(const gl::Context *context,
