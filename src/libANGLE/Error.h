@@ -144,8 +144,6 @@ inline Error NoError()
 {
     return Error::NoError();
 }
-
-using LinkResult = ErrorOrResult<bool>;
 }  // namespace gl
 
 namespace egl
@@ -286,10 +284,12 @@ class ANGLE_NO_DISCARD Result
 {
   public:
     // TODO(jmadill): Rename when refactor is complete. http://anglebug.com/2491
-    bool isError() const { return mStop; }
+    bool isError() const { return mValue == Value::Stop; }
+    bool isIncomplete() const { return mValue == Value::Incomplete; }
 
-    static Result Stop() { return Result(true); }
-    static Result Continue() { return Result(false); }
+    static Result Stop() { return Result(Value::Stop); }
+    static Result Continue() { return Result(Value::Continue); }
+    static Result Incomplete() { return Result(Value::Incomplete); }
 
     // TODO(jmadill): Remove when refactor is complete. http://anglebug.com/2491
     operator gl::Error() const;
@@ -301,13 +301,20 @@ class ANGLE_NO_DISCARD Result
         return operator gl::Error();
     }
 
-    bool operator==(Result other) const { return mStop == other.mStop; }
+    bool operator==(Result other) const { return mValue == other.mValue; }
 
-    bool operator!=(Result other) const { return mStop != other.mStop; }
+    bool operator!=(Result other) const { return mValue != other.mValue; }
 
   private:
-    Result(bool stop) : mStop(stop) {}
-    bool mStop;
+    enum class Value
+    {
+        Continue,
+        Stop,
+        Incomplete,
+    };
+
+    Result(Value value) : mValue(value) {}
+    Value mValue;
 };
 }  // namespace angle
 

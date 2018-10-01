@@ -1032,6 +1032,8 @@ Program *GetValidProgram(Context *context, GLuint id)
         }
     }
 
+    validProgram->resolveLink(context);
+
     return validProgram;
 }
 

@@ -239,4 +239,50 @@ GLenum DefaultGLErrorCode(HRESULT hr)
             return GL_INVALID_OPERATION;
     }
 }
+
+bool IsDeviceLostErrorCode(HRESULT errorCode)
+{
+    switch (errorCode)
+    {
+#if defined(ANGLE_ENABLE_D3D9)
+        case D3DERR_DRIVERINTERNALERROR:
+        case D3DERR_DEVICELOST:
+        case D3DERR_DEVICEHUNG:
+        case D3DERR_DEVICEREMOVED:
+            return true;
+#endif  // if defined(ANGLE_ENABLE_D3D9)
+
+#if defined(ANGLE_ENABLE_D3D11)
+        case DXGI_ERROR_DEVICE_HUNG:
+        case DXGI_ERROR_DEVICE_REMOVED:
+        case DXGI_ERROR_DEVICE_RESET:
+        case DXGI_ERROR_DRIVER_INTERNAL_ERROR:
+        case DXGI_ERROR_NOT_CURRENTLY_AVAILABLE:
+            return true;
+#endif  // if defined(ANGLE_ENABLE_D3D11)
+
+        default:
+            return false;
+    }
+}
+
+void HandleD3DError(HRESULT hr,
+                    const char *message,
+                    const char *file,
+                    const char *function,
+                    unsigned int line,
+                    gl::ErrorSet *errorSet,
+                    bool *isDeviceLost)
+{
+    ASSERT(FAILED(hr));
+
+    *isDeviceLost      = IsDeviceLostErrorCode(hr);
+    GLenum glErrorCode = DefaultGLErrorCode(hr);
+
+    std::stringstream errorStream;
+    errorStream << "Internal D3D error: " << gl::FmtHR(hr) << ", in " << file << ", " << function
+                << ":" << line << ". " << message;
+
+    errorSet->handleError(gl::Error(glErrorCode, glErrorCode, errorStream.str()));
+}
 }  // namespace rx

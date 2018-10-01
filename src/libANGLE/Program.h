@@ -704,14 +704,14 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     const AttributesMask &getActiveAttribLocationsMask() const
     {
-        resolveLink();
+        ASSERT(mLinkResolved);
         return mState.mActiveAttribLocationsMask;
     }
 
     const std::vector<SamplerBinding> &getSamplerBindings() const;
     const std::vector<ImageBinding> &getImageBindings() const
     {
-        resolveLink();
+        ASSERT(mLinkResolved);
         return mState.mImageBindings;
     }
     const sh::WorkGroupSize &getComputeShaderLocalSize() const;
@@ -722,7 +722,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     const ProgramState &getState() const
     {
-        resolveLink();
+        ASSERT(mLinkResolved);
         return mState;
     }
 
@@ -779,6 +779,17 @@ class Program final : angle::NonCopyable, public LabeledObject
     using DirtyBits = angle::BitSet<DIRTY_BIT_COUNT>;
 
     Error syncState(const Context *context);
+
+    // Try to resolve linking.
+    // Note: this method is frequently called in each draw call. Please make sure its overhead
+    // is as low as possible.
+    void resolveLink(const gl::Context *context) const
+    {
+        if (!mLinkResolved)
+        {
+            return const_cast<Program *>(this)->resolveLinkImpl(context);
+        }
+    }
 
   private:
     struct LinkingState;
@@ -873,18 +884,9 @@ class Program final : angle::NonCopyable, public LabeledObject
     GLuint getSamplerUniformBinding(const VariableLocation &uniformLocation) const;
 
     bool validateSamplersImpl(InfoLog *infoLog, const Caps &caps);
-    // Try to resolve linking.
-    // Note: this method is frequently called in each draw call. Please make sure its overhead
-    // is as low as possible.
-    void resolveLink() const
-    {
-        if (!mLinkResolved)
-        {
-            return const_cast<Program *>(this)->resolveLinkImpl();
-        }
-    }
+
     // Block until linking is finished and resolve it.
-    void resolveLinkImpl();
+    void resolveLinkImpl(const gl::Context *context);
 
     ProgramState mState;
     rx::ProgramImpl *mProgram;

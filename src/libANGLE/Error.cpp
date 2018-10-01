@@ -113,7 +113,7 @@ namespace angle
 {
 Result::operator gl::Error() const
 {
-    if (mStop)
+    if (mValue == Value::Stop)
     {
         return gl::Error(GL_INTERNAL_ERROR_ANGLEX);
     }

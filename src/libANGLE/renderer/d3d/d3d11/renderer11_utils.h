@@ -176,21 +176,6 @@ outType* DynamicCastComObject(IUnknown* object)
     }
 }
 
-inline bool isDeviceLostError(HRESULT errorCode)
-{
-    switch (errorCode)
-    {
-      case DXGI_ERROR_DEVICE_HUNG:
-      case DXGI_ERROR_DEVICE_REMOVED:
-      case DXGI_ERROR_DEVICE_RESET:
-      case DXGI_ERROR_DRIVER_INTERNAL_ERROR:
-      case DXGI_ERROR_NOT_CURRENTLY_AVAILABLE:
-        return true;
-      default:
-        return false;
-    }
-}
-
 template <ResourceType ResourceT>
 class LazyResource : angle::NonCopyable
 {

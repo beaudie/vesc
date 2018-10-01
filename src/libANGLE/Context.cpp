@@ -7821,15 +7821,19 @@ void ErrorSet::handleError(const Error &error) const
     {
         GLenum code = error.getCode();
         mErrors.insert(code);
-        if (code == GL_OUT_OF_MEMORY && mContext->getWorkarounds().loseContextOnOutOfMemory)
-        {
-            mContext->markContextLost();
-        }
 
-        ASSERT(!error.getMessage().empty());
-        mContext->getGLState().getDebug().insertMessage(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_ERROR,
-                                                        error.getID(), GL_DEBUG_SEVERITY_HIGH,
-                                                        error.getMessage());
+        if (mContext)
+        {
+            if (code == GL_OUT_OF_MEMORY && mContext->getWorkarounds().loseContextOnOutOfMemory)
+            {
+                mContext->markContextLost();
+            }
+
+            ASSERT(!error.getMessage().empty());
+            mContext->getGLState().getDebug().insertMessage(
+                GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_ERROR, error.getID(), GL_DEBUG_SEVERITY_HIGH,
+                error.getMessage());
+        }
     }
 }
 
