@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a81f03ef_460ea908",
+        "filename": "include/EGL/eglplatform.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-01T15:35:20Z",
+      "side": 1,
+      "message": "I\u0027m OK either way.  I originally had left it as HWND, changed to void* based on feedback from Rafael.  There is certainly less churn from leaving it as HWND.",
+      "parentUuid": "758fc75b_5de59f6e",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 35
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ab7d822_891451fa",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7e7bd01_eef755f5",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-01T15:35:20Z",
+      "side": 1,
+      "message": "Done in next update",
+      "parentUuid": "7ab7d822_891451fa",
+      "range": {
+        "startLine": 731,
+        "startChar": 7,
+        "endLine": 731,
+        "endChar": 38
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "7688b9bb_ccb3cfd1",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2831,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-01T15:35:20Z",
+      "side": 1,
+      "message": "OK thx for the feedback, I was modelling the approach on the EGL_DIRECT_COMPOSITION_ANGLE case above.  How / where would I indicate that EGL_WINDOWS_UI_COMPOSITION_ANGLE is available, and how would the user query for that (appols for my ignorance here)?",
+      "parentUuid": "6a92dd34_42c661e4",
+      "range": {
+        "startLine": 2822,
+        "startChar": 8,
+        "endLine": 2831,
+        "endChar": 18
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "44cafb87_4f04992f",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 1
@@ -105,6 +177,30 @@
       "writtenOn": "2018-09-24T20:04:22Z",
       "side": 1,
       "message": "Instead of using an attrib, could we just check if it is a win32 window or compositor window and create the correct NativeWindow class?",
+      "range": {
+        "startLine": 1262,
+        "startChar": 4,
+        "endLine": 1262,
+        "endChar": 93
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8d5a91c_51709a3e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-01T15:35:20Z",
+      "side": 1,
+      "message": "Can do.",
+      "parentUuid": "44cafb87_4f04992f",
       "range": {
         "startLine": 1262,
         "startChar": 4,
@@ -134,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "d20186c1_098204bc",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-01T15:35:20Z",
+      "side": 1,
+      "message": "Sounds good.",
+      "parentUuid": "84cf369d_b6ec7f83",
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e96ed2ce_3233f77a",
         "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
         "patchSetId": 1
@@ -145,6 +259,30 @@
       "writtenOn": "2018-09-24T20:04:22Z",
       "side": 1,
       "message": "What does Ro stand for?",
+      "range": {
+        "startLine": 7,
+        "startChar": 3,
+        "endLine": 7,
+        "endChar": 11
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "438287b4_bf5d2135",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-01T15:35:20Z",
+      "side": 1,
+      "message": "RuntimeObject as used in RoActivateInstance",
+      "parentUuid": "e96ed2ce_3233f77a",
       "range": {
         "startLine": 7,
         "startChar": 3,
@@ -180,6 +318,30 @@
     },
     {
       "key": {
+        "uuid": "f892e713_d77bf74a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-01T15:35:20Z",
+      "side": 1,
+      "message": "Agree this is much nicer, will go ahead and do this.",
+      "parentUuid": "7ec964f9_ad94d21a",
+      "range": {
+        "startLine": 31,
+        "startChar": 8,
+        "endLine": 88,
+        "endChar": 9
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bba761fe_1eddbcd9",
         "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
         "patchSetId": 1
@@ -203,6 +365,30 @@
     },
     {
       "key": {
+        "uuid": "cab900d0_565b1e10",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-01T15:35:20Z",
+      "side": 1,
+      "message": "Indeed, nice catch.  I will change to a trailing underscore which I believe is legal.",
+      "parentUuid": "bba761fe_1eddbcd9",
+      "range": {
+        "startLine": 213,
+        "startChar": 10,
+        "endLine": 213,
+        "endChar": 12
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d47237a5_7c9047cc",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 1
@@ -214,6 +400,30 @@
       "writtenOn": "2018-09-24T20:04:22Z",
       "side": 1,
       "message": "May not be needed either.",
+      "range": {
+        "startLine": 1146,
+        "startChar": 0,
+        "endLine": 1151,
+        "endChar": 22
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d472902_eac2d779",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-01T15:35:20Z",
+      "side": 1,
+      "message": "I was modelling on the direct_composition case above.  I can remove this check.",
+      "parentUuid": "d47237a5_7c9047cc",
       "range": {
         "startLine": 1146,
         "startChar": 0,
