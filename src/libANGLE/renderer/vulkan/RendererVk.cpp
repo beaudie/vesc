@@ -258,6 +258,9 @@ void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
     *physicalDeviceOut = physicalDevices[0];
     vkGetPhysicalDeviceProperties(*physicalDeviceOut, physicalDevicePropertiesOut);
 }
+
+// Initially dumping the command graphs is disabled.
+constexpr bool kEnableCommandGraphDiagnostics = false;
 }  // anonymous namespace
 
 // CommandBatch implementation.
@@ -295,7 +298,8 @@ RendererVk::RendererVk()
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
       mDevice(VK_NULL_HANDLE),
       mLastCompletedQueueSerial(mQueueSerialFactory.generate()),
-      mCurrentQueueSerial(mQueueSerialFactory.generate())
+      mCurrentQueueSerial(mQueueSerialFactory.generate()),
+      mCommandGraph(kEnableCommandGraphDiagnostics)
 {
 }
 
