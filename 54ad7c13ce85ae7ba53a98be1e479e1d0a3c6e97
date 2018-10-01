@@ -22,6 +22,30 @@
       "revId": "54ad7c13ce85ae7ba53a98be1e479e1d0a3c6e97",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36d5fefb_1837009b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2018-10-01T18:56:24Z",
+      "side": 1,
+      "message": "Done. (And since that blocks the chromium bug, removed the chromium bug.)",
+      "parentUuid": "70a45a7f_260da713",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 20
+      },
+      "revId": "54ad7c13ce85ae7ba53a98be1e479e1d0a3c6e97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
