@@ -2192,7 +2192,7 @@ bool ValidateBeginTransformFeedback(Context *context, PrimitiveMode primitiveMod
         }
     }
 
-    Program *program = context->getGLState().getLinkedProgram();
+    Program *program = context->getGLState().getLinkedProgram(context);
 
     if (!program)
     {

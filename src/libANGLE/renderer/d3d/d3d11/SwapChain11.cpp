@@ -497,7 +497,7 @@ EGLint SwapChain11::resize(DisplayD3D *displayD3D, EGLint backbufferWidth, EGLin
         ERR() << "Error resizing swap chain buffers, " << gl::FmtHR(hr);
         release();
 
-        if (d3d11::isDeviceLostError(hr))
+        if (IsDeviceLostErrorCode(hr))
         {
             return EGL_CONTEXT_LOST;
         }
@@ -615,7 +615,7 @@ EGLint SwapChain11::reset(DisplayD3D *displayD3D,
                   << gl::FmtHR(hr);
             release();
 
-            if (d3d11::isDeviceLostError(hr))
+            if (IsDeviceLostErrorCode(hr))
             {
                 return EGL_CONTEXT_LOST;
             }

@@ -173,7 +173,7 @@ gl::Error Query9::testQuery()
 
         if (!mQueryFinished)
         {
-            if (d3d9::isDeviceLostError(result))
+            if (IsDeviceLostErrorCode(result))
             {
                 mRenderer->notifyDeviceLost();
                 return gl::OutOfMemory() << "Failed to test get query result, device is lost.";

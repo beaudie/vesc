@@ -138,6 +138,7 @@ class Context11 : public ContextD3D, public MultisampleTextureInitializer
     const gl::Extensions &getNativeExtensions() const override;
     const gl::Limitations &getNativeLimitations() const override;
 
+    RendererD3D *getRendererD3D() const override;
     Renderer11 *getRenderer() const { return mRenderer; }
 
     gl::Error dispatchCompute(const gl::Context *context,
