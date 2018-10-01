@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "719d706a_6c2ad777",
+        "filename": "include/EGL/eglplatform.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-01T17:30:08Z",
+      "side": 1,
+      "message": "I\u0027m OK with trying to get it changed to a void* if we think that\u0027s best but the proper way is to try to upstream these changes to the official headers.",
+      "parentUuid": "a81f03ef_460ea908",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 35
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ab7d822_891451fa",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 1
@@ -154,6 +178,30 @@
       "side": 1,
       "message": "OK thx for the feedback, I was modelling the approach on the EGL_DIRECT_COMPOSITION_ANGLE case above.  How / where would I indicate that EGL_WINDOWS_UI_COMPOSITION_ANGLE is available, and how would the user query for that (appols for my ignorance here)?",
       "parentUuid": "6a92dd34_42c661e4",
+      "range": {
+        "startLine": 2822,
+        "startChar": 8,
+        "endLine": 2831,
+        "endChar": 18
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9279b03e_f57e837f",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2831,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-01T17:30:08Z",
+      "side": 1,
+      "message": "Yes, this is a bit different from the direct composition query.  That one is to ask if the window was created with the direct composition attribute.\n\nThe user would determine if they can create a surface from a sprite visual by simply checking if the extension string is present in the display extension strings: eglQueryString(display, EGL_EXTENSIONS).  The changes you made in Caps.h/cpp ensure that the string will be in the list if the extension is enabled.\n\nWhat we missed here was updating Renderer11::generateDisplayExtensions to mark this extension as available under these circumstances.",
+      "parentUuid": "7688b9bb_ccb3cfd1",
       "range": {
         "startLine": 2822,
         "startChar": 8,
