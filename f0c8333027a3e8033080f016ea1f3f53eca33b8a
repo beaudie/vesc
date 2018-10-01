@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cbf4877e_85b4bb4e",
+        "filename": "util/shader_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-01T14:13:50Z",
+      "side": 1,
+      "message": "maybe this should be const \u0026?",
+      "range": {
+        "startLine": 36,
+        "startChar": 35,
+        "endLine": 36,
+        "endChar": 62
+      },
+      "revId": "f0c8333027a3e8033080f016ea1f3f53eca33b8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
