@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48e5d668_a158fe5b",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4939,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-01T14:39:54Z",
+      "side": 1,
+      "message": "Do you think that end2end_tests for this are needed even if there are a bunch of unit tests and also the dEQP tests for this? Personally I rather wouldn\u0027t have as much duplicate testing. If these cover cases that the existing unit tests don\u0027t cover, these could simply be added to unit tests.",
+      "revId": "db1d5eac4d2056edefa0b5f62af045f0c5c75bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "720edc7f_9c827ffb",
+        "filename": "src/tests/preprocessor_tests/if_test.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-01T14:39:54Z",
+      "side": 1,
+      "message": "I think more test coverage should still be added. The tests below check when the defined operator is evaluated:\n\n#define BBB 1\n#define AAA defined(BBB)\n#undef BBB\n#if AAA\n#endif\n\nand similarly:\n\n#define AAA defined(BBB)\n#define BBB 1\n#if AAA\n#endif\n\nand also:\n\n#define BBB 1\n#define AAA(defi, ned) defi ## ned(BBB)\n#if AAA(defi, ned)\n#endif\n\nand:\n\n#define BBB 1\n#define AAA(defined) defined(BBB)\n#if AAA(defined)\n#endif\n\nAnd does this patch allow \"defined\" used as a macro name? Then some other corner cases become possible, like:\n\n#define AAA 1\n#define defined(B) 1\n#undef defined\n#if defined(AAA)",
+      "revId": "db1d5eac4d2056edefa0b5f62af045f0c5c75bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
