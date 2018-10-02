@@ -47,6 +47,7 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
     outExtensions->copyTexture     = true;
     outExtensions->debugMarker     = true;
     outExtensions->robustness      = true;
+    outExtensions->textureBorderClamp = false;  // not implemented yet
 
     // TODO: Not implemented yet but exposed so that Chrome can load the query entry points.  http://anglebug.com/2855
     outExtensions->occlusionQueryBoolean = true;

@@ -120,6 +120,8 @@ int GetWrapBits(GLenum wrap)
             return 0x2;
         case GL_MIRRORED_REPEAT:
             return 0x3;
+        case GL_CLAMP_TO_BORDER:
+            return 0x4;
         default:
             UNREACHABLE();
             return 0;
@@ -369,16 +371,36 @@ bool ShaderConstants11::updateSamplerMetadata(SamplerMetadata *data, const gl::T
             data->internalFormatBits = internalFormatBits;
             dirty                    = true;
         }
-        // Pack the wrap values into one integer so we can fit all the metadata in one 4-integer
-        // vector.
+        // Pack the wrap values into one integer so we can fit all the metadata in two 4-integer
+        // vectors.
         GLenum wrapS  = texture.getWrapS();
         GLenum wrapT  = texture.getWrapT();
         GLenum wrapR  = texture.getWrapR();
-        int wrapModes = GetWrapBits(wrapS) | (GetWrapBits(wrapT) << 2) | (GetWrapBits(wrapR) << 4);
+        int wrapModes = GetWrapBits(wrapS) | (GetWrapBits(wrapT) << 3) | (GetWrapBits(wrapR) << 6);
         if (data->wrapModes != wrapModes)
         {
             data->wrapModes = wrapModes;
             dirty           = true;
+        }
+
+        const angle::ColorVariant &borderColor(texture.getBorderColor());
+        int intBorderColor[4] = {0};
+        switch (borderColor.type)
+        {
+            default:
+            case angle::ColorVariant::Type::Float:
+                break;
+            case angle::ColorVariant::Type::Int:
+                memcpy(intBorderColor, borderColor.colorI.data(), sizeof(intBorderColor));
+                break;
+            case angle::ColorVariant::Type::UInt:
+                memcpy(intBorderColor, borderColor.colorUI.data(), sizeof(intBorderColor));
+                break;
+        }
+        if (memcmp(data->intBorderColor, intBorderColor, sizeof(intBorderColor)) != 0)
+        {
+            memcpy(data->intBorderColor, intBorderColor, sizeof(intBorderColor));
+            dirty = true;
         }
     }
 

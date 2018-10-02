@@ -32,12 +32,21 @@ void OutputIntTexCoordWrap(TInfoSinkBase &out,
     out << "int " << texCoordOutName << ";\n";
     out << "float " << texCoordOutName << "Offset = " << texCoord << " + float(" << texCoordOffset
         << ") / " << size << ";\n";
+    out << "bool " << texCoordOutName << "UseBorderColor = false;\n";
 
     // CLAMP_TO_EDGE
     out << "if (" << wrapMode << " == 1)\n";
     out << "{\n";
     out << "    " << texCoordOutName << " = clamp(int(floor(" << size << " * " << texCoordOutName
         << "Offset)), 0, int(" << size << ") - 1);\n";
+    out << "}\n";
+
+    // CLAMP_TO_BORDER
+    out << "else if (" << wrapMode << " == 4)\n";
+    out << "{\n";
+    out << "    int texCoordInt = int(floor(" << size << " * " << texCoordOutName << "Offset));\n";
+    out << "    " << texCoordOutName << " = clamp(texCoordInt, 0, int(" << size << ") - 1);\n";
+    out << "    " << texCoordOutName << "UseBorderColor = (texCoordInt != " << texCoordOutName << ");\n";
     out << "}\n";
 
     // MIRRORED_REPEAT
@@ -63,7 +72,7 @@ void OutputIntTexCoordWraps(TInfoSinkBase &out,
                             ImmutableString *texCoordZ)
 {
     // Convert from normalized floating-point to integer
-    out << "int wrapS = samplerMetadata[samplerIndex].wrapModes & 0x3;\n";
+    out << "int wrapS = samplerMetadata[samplerIndex].wrapModes & 0x7;\n";
     if (textureFunction.offset)
     {
         OutputIntTexCoordWrap(out, "wrapS", "width", *texCoordX, "offset.x", "tix");
@@ -73,7 +82,7 @@ void OutputIntTexCoordWraps(TInfoSinkBase &out,
         OutputIntTexCoordWrap(out, "wrapS", "width", *texCoordX, "0", "tix");
     }
     *texCoordX = ImmutableString("tix");
-    out << "int wrapT = (samplerMetadata[samplerIndex].wrapModes >> 2) & 0x3;\n";
+    out << "int wrapT = (samplerMetadata[samplerIndex].wrapModes >> 3) & 0x7;\n";
     if (textureFunction.offset)
     {
         OutputIntTexCoordWrap(out, "wrapT", "height", *texCoordY, "offset.y", "tiy");
@@ -84,13 +93,15 @@ void OutputIntTexCoordWraps(TInfoSinkBase &out,
     }
     *texCoordY = ImmutableString("tiy");
 
+    bool tizAvailable = false;
+
     if (IsSamplerArray(textureFunction.sampler))
     {
         *texCoordZ = ImmutableString("int(max(0, min(layers - 1, floor(0.5 + t.z))))");
     }
     else if (!IsSamplerCube(textureFunction.sampler) && !IsSampler2D(textureFunction.sampler))
     {
-        out << "int wrapR = (samplerMetadata[samplerIndex].wrapModes >> 4) & 0x3;\n";
+        out << "int wrapR = (samplerMetadata[samplerIndex].wrapModes >> 6) & 0x7;\n";
         if (textureFunction.offset)
         {
             OutputIntTexCoordWrap(out, "wrapR", "depth", *texCoordZ, "offset.z", "tiz");
@@ -100,7 +111,11 @@ void OutputIntTexCoordWraps(TInfoSinkBase &out,
             OutputIntTexCoordWrap(out, "wrapR", "depth", *texCoordZ, "0", "tiz");
         }
         *texCoordZ = ImmutableString("tiz");
+        tizAvailable = true;
     }
+
+    out << "bool useBorderColor = tixUseBorderColor || tiyUseBorderColor"
+        << (tizAvailable ? " || tizUseBorderColor" : "") << ";\n";
 }
 
 void OutputHLSL4SampleFunctionPrefix(TInfoSinkBase &out,
@@ -883,6 +898,17 @@ void OutputTextureSampleFunctionReturnStatement(
     const ImmutableString &texCoordZ)
 {
     out << "    return ";
+
+    if (IsIntegerSampler(textureFunction.sampler) && !IsSamplerCube(textureFunction.sampler) &&
+        textureFunction.method != TextureFunctionHLSL::TextureFunction::FETCH)
+    {
+        out << " useBorderColor ? ";
+        if (IsIntegerSamplerUnsigned(textureFunction.sampler))
+        {
+            out << "asuint";
+        }
+        out << "(samplerMetadata[samplerIndex].intBorderColor) : ";
+    }
 
     // HLSL intrinsic
     if (outputType == SH_HLSL_3_0_OUTPUT)
