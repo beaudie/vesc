@@ -126,6 +126,7 @@ D3DTEXTUREADDRESS ConvertTextureWrap(GLenum wrap)
     {
       case GL_REPEAT:            d3dWrap = D3DTADDRESS_WRAP;   break;
       case GL_CLAMP_TO_EDGE:     d3dWrap = D3DTADDRESS_CLAMP;  break;
+      case GL_CLAMP_TO_BORDER:   d3dWrap = D3DTADDRESS_BORDER; break;
       case GL_MIRRORED_REPEAT:   d3dWrap = D3DTADDRESS_MIRROR; break;
       default: UNREACHABLE();
     }
