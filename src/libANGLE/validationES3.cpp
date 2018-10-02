@@ -4023,6 +4023,22 @@ bool ValidateGetSamplerParameteriv(Context *context, GLuint sampler, GLenum pnam
     return ValidateGetSamplerParameterBase(context, sampler, pname, nullptr);
 }
 
+bool ValidateGetSamplerParameterIivOES(Context *context,
+                                       GLuint sampler,
+                                       GLenum pname,
+                                       const GLint *params)
+{
+    return ValidateGetSamplerParameterBase(context, sampler, pname, nullptr);
+}
+
+bool ValidateGetSamplerParameterIuivOES(Context *context,
+                                        GLuint sampler,
+                                        GLenum pname,
+                                        const GLuint *params)
+{
+    return ValidateGetSamplerParameterBase(context, sampler, pname, nullptr);
+}
+
 bool ValidateSamplerParameterf(Context *context, GLuint sampler, GLenum pname, GLfloat param)
 {
     return ValidateSamplerParameterBase(context, sampler, pname, -1, &param);
@@ -4042,6 +4058,22 @@ bool ValidateSamplerParameteri(Context *context, GLuint sampler, GLenum pname, G
 }
 
 bool ValidateSamplerParameteriv(Context *context, GLuint sampler, GLenum pname, const GLint *params)
+{
+    return ValidateSamplerParameterBase(context, sampler, pname, -1, params);
+}
+
+bool ValidateSamplerParameterIivOES(Context *context,
+                                    GLuint sampler,
+                                    GLenum pname,
+                                    const GLint *params)
+{
+    return ValidateSamplerParameterBase(context, sampler, pname, -1, params);
+}
+
+bool ValidateSamplerParameterIuivOES(Context *context,
+                                     GLuint sampler,
+                                     GLenum pname,
+                                     const GLuint *params)
 {
     return ValidateSamplerParameterBase(context, sampler, pname, -1, params);
 }

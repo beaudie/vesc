@@ -347,6 +347,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
                                  GLsizei *length,
                                  GLfloat *params);
     void getTexParameteriv(TextureType target, GLenum pname, GLint *params);
+    void getTexParameterIiv(GLenum target, GLenum pname, GLint *params);
+    void getTexParameterIuiv(GLenum target, GLenum pname, GLuint *params);
     void getTexParameterivRobust(TextureType target,
                                  GLenum pname,
                                  GLsizei bufSize,
@@ -385,6 +387,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
                               const GLfloat *params);
     void texParameteri(TextureType target, GLenum pname, GLint param);
     void texParameteriv(TextureType target, GLenum pname, const GLint *params);
+    void texParameterIiv(GLenum target, GLenum pname, const GLint *params);
+    void texParameterIuiv(GLenum target, GLenum pname, const GLuint *params);
     void texParameterivRobust(TextureType target,
                               GLenum pname,
                               GLsizei bufSize,
@@ -399,6 +403,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
                                 const GLuint *params);
     void samplerParameteri(GLuint sampler, GLenum pname, GLint param);
     void samplerParameteriv(GLuint sampler, GLenum pname, const GLint *param);
+    void samplerParameterIiv(GLuint sampler, GLenum pname, const GLint *param);
+    void samplerParameterIuiv(GLuint sampler, GLenum pname, const GLuint *param);
     void samplerParameterivRobust(GLuint sampler,
                                   GLenum pname,
                                   GLsizei bufSize,
@@ -419,6 +425,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
                                   const GLfloat *param);
 
     void getSamplerParameteriv(GLuint sampler, GLenum pname, GLint *params);
+    void getSamplerParameterIiv(GLuint sampler, GLenum pname, GLint *params);
+    void getSamplerParameterIuiv(GLuint sampler, GLenum pname, GLuint *params);
     void getSamplerParameterivRobust(GLuint sampler,
                                      GLenum pname,
                                      GLsizei bufSize,
