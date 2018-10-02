@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6eeb03e_27b61e60",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T15:41:08Z",
+      "side": 1,
+      "message": "static/anonymous namespace",
+      "range": {
+        "startLine": 513,
+        "startChar": 12,
+        "endLine": 513,
+        "endChar": 31
+      },
+      "revId": "8963c53b909abda8575ccd49e771a1efa96ba5c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0df64ba8_cda94c6e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T15:41:08Z",
+      "side": 1,
+      "message": "Could you pass the stream to fill into this function and handle where it\u0027s printed at a higher level?",
+      "range": {
+        "startLine": 530,
+        "startChar": 19,
+        "endLine": 530,
+        "endChar": 35
+      },
+      "revId": "8963c53b909abda8575ccd49e771a1efa96ba5c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
