@@ -388,6 +388,9 @@ class Texture final : public RefCountObject,
 
     bool getAttachmentFixedSampleLocations(const ImageIndex &imageIndex) const;
 
+    void setBorderColor(const ColorF &color);
+    const ColorF &getBorderColor() const;
+
     // GLES1 emulation
     void setCrop(const gl::Rectangle &rect);
     const gl::Rectangle &getCrop() const;
@@ -418,6 +421,7 @@ class Texture final : public RefCountObject,
         DIRTY_BIT_COMPARE_MODE,
         DIRTY_BIT_COMPARE_FUNC,
         DIRTY_BIT_SRGB_DECODE,
+        DIRTY_BIT_BORDER_COLOR,
 
         // Texture state
         DIRTY_BIT_SWIZZLE_RED,

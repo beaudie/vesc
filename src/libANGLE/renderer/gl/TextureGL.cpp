@@ -1207,6 +1207,11 @@ gl::Error TextureGL::syncState(const gl::Context *context, const gl::Texture::Di
                 functions->texParameteri(ToGLenum(getType()), GL_TEXTURE_SRGB_DECODE_EXT,
                                          mAppliedSampler.getSRGBDecode());
                 break;
+            case gl::Texture::DIRTY_BIT_BORDER_COLOR:
+                mAppliedSampler.setBorderColor(mState.getSamplerState().getBorderColor());
+                functions->texParameterfv(ToGLenum(getType()), GL_TEXTURE_BORDER_COLOR,
+                                          &mAppliedSampler.getBorderColor().red);
+                break;
 
             // Texture state
             case gl::Texture::DIRTY_BIT_SWIZZLE_RED:

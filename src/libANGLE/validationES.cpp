@@ -225,6 +225,14 @@ bool ValidateTextureWrapModeValue(Context *context, ParamType *params, bool rest
         case GL_CLAMP_TO_EDGE:
             break;
 
+        case GL_CLAMP_TO_BORDER:
+            if (!context->getExtensions().textureBorderClamp)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), ExtensionNotEnabled);
+                return false;
+            }
+            break;
+
         case GL_REPEAT:
         case GL_MIRRORED_REPEAT:
             if (restrictedWrapModes)
@@ -5487,6 +5495,13 @@ bool ValidateGetTexParameterBase(Context *context,
                 return false;
             }
             break;
+        case GL_TEXTURE_BORDER_COLOR:
+            if (!context->getExtensions().textureBorderClamp)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), ExtensionNotEnabled);
+                return false;
+            }
+            break;
         default:
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
             return false;
@@ -6093,6 +6108,15 @@ bool ValidateTexParameterBase(Context *context,
                 return false;
             }
             break;
+
+        case GL_TEXTURE_BORDER_COLOR:
+            if (!context->getExtensions().textureBorderClamp)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), ExtensionNotEnabled);
+                return false;
+            }
+            break;
+
         default:
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
             return false;
@@ -6265,6 +6289,14 @@ bool ValidateSamplerParameterBase(Context *context,
         }
         break;
 
+        case GL_TEXTURE_BORDER_COLOR:
+            if (!context->getExtensions().textureBorderClamp)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), ExtensionNotEnabled);
+                return false;
+            }
+            break;
+
         default:
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
             return false;
@@ -6322,6 +6354,14 @@ bool ValidateGetSamplerParameterBase(Context *context,
             if (!context->getExtensions().textureSRGBDecode)
             {
                 context->handleError(InvalidEnum() << "GL_EXT_texture_sRGB_decode is not enabled.");
+                return false;
+            }
+            break;
+
+        case GL_TEXTURE_BORDER_COLOR:
+            if (!context->getExtensions().textureBorderClamp)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), ExtensionNotEnabled);
                 return false;
             }
             break;
