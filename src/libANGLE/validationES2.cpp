@@ -6226,6 +6226,18 @@ bool ValidateGetTexParameteriv(Context *context, TextureType target, GLenum pnam
     return ValidateGetTexParameterBase(context, target, pname, nullptr);
 }
 
+bool ValidateGetTexParameterIivOES(Context *context, GLenum target, GLenum pname, GLint *params)
+{
+    const TextureType targetPacked = FromGLenum<TextureType>(target);
+    return ValidateGetTexParameterBase(context, targetPacked, pname, nullptr);
+}
+
+bool ValidateGetTexParameterIuivOES(Context *context, GLenum target, GLenum pname, GLuint *params)
+{
+    const TextureType targetPacked = FromGLenum<TextureType>(target);
+    return ValidateGetTexParameterBase(context, targetPacked, pname, nullptr);
+}
+
 bool ValidateGetUniformfv(Context *context, GLuint program, GLint location, GLfloat *params)
 {
     return ValidateGetUniformBase(context, program, location);
@@ -6316,6 +6328,21 @@ bool ValidateTexParameteri(Context *context, TextureType target, GLenum pname, G
 bool ValidateTexParameteriv(Context *context, TextureType target, GLenum pname, const GLint *params)
 {
     return ValidateTexParameterBase(context, target, pname, -1, params);
+}
+
+bool ValidateTexParameterIivOES(Context *context, GLenum target, GLenum pname, const GLint *params)
+{
+    const TextureType targetPacked = FromGLenum<TextureType>(target);
+    return ValidateTexParameterBase(context, targetPacked, pname, -1, params);
+}
+
+bool ValidateTexParameterIuivOES(Context *context,
+                                 GLenum target,
+                                 GLenum pname,
+                                 const GLuint *params)
+{
+    const TextureType targetPacked = FromGLenum<TextureType>(target);
+    return ValidateTexParameterBase(context, targetPacked, pname, -1, params);
 }
 
 bool ValidateUseProgram(Context *context, GLuint program)

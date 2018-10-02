@@ -4023,9 +4023,25 @@ bool ValidateGetSamplerParameteriv(Context *context, GLuint sampler, GLenum pnam
     return ValidateGetSamplerParameterBase(context, sampler, pname, nullptr);
 }
 
+bool ValidateGetSamplerParameterIivOES(Context *context,
+                                       GLuint sampler,
+                                       GLenum pname,
+                                       const GLint *params)
+{
+    return ValidateGetSamplerParameterBase(context, sampler, pname, nullptr);
+}
+
+bool ValidateGetSamplerParameterIuivOES(Context *context,
+                                        GLuint sampler,
+                                        GLenum pname,
+                                        const GLuint *params)
+{
+    return ValidateGetSamplerParameterBase(context, sampler, pname, nullptr);
+}
+
 bool ValidateSamplerParameterf(Context *context, GLuint sampler, GLenum pname, GLfloat param)
 {
-    return ValidateSamplerParameterBase(context, sampler, pname, -1, &param);
+    return ValidateSamplerParameterBase(context, sampler, pname, 1, &param);
 }
 
 bool ValidateSamplerParameterfv(Context *context,
@@ -4038,10 +4054,26 @@ bool ValidateSamplerParameterfv(Context *context,
 
 bool ValidateSamplerParameteri(Context *context, GLuint sampler, GLenum pname, GLint param)
 {
-    return ValidateSamplerParameterBase(context, sampler, pname, -1, &param);
+    return ValidateSamplerParameterBase(context, sampler, pname, 1, &param);
 }
 
 bool ValidateSamplerParameteriv(Context *context, GLuint sampler, GLenum pname, const GLint *params)
+{
+    return ValidateSamplerParameterBase(context, sampler, pname, -1, params);
+}
+
+bool ValidateSamplerParameterIivOES(Context *context,
+                                    GLuint sampler,
+                                    GLenum pname,
+                                    const GLint *params)
+{
+    return ValidateSamplerParameterBase(context, sampler, pname, -1, params);
+}
+
+bool ValidateSamplerParameterIuivOES(Context *context,
+                                     GLuint sampler,
+                                     GLenum pname,
+                                     const GLuint *params)
 {
     return ValidateSamplerParameterBase(context, sampler, pname, -1, params);
 }
