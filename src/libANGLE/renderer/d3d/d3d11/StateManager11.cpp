@@ -115,10 +115,12 @@ int GetWrapBits(GLenum wrap)
     switch (wrap)
     {
         case GL_CLAMP_TO_EDGE:
-            return 0x1;
+            return 0x0;
         case GL_REPEAT:
-            return 0x2;
+            return 0x1;
         case GL_MIRRORED_REPEAT:
+            return 0x2;
+        case GL_CLAMP_TO_BORDER:
             return 0x3;
         default:
             UNREACHABLE();
@@ -369,16 +371,29 @@ bool ShaderConstants11::updateSamplerMetadata(SamplerMetadata *data, const gl::T
             data->internalFormatBits = internalFormatBits;
             dirty                    = true;
         }
-        // Pack the wrap values into one integer so we can fit all the metadata in one 4-integer
-        // vector.
+        // Pack the wrap values into one integer so we can fit all the metadata in two 4-integer
+        // vectors.
         GLenum wrapS  = texture.getWrapS();
         GLenum wrapT  = texture.getWrapT();
         GLenum wrapR  = texture.getWrapR();
-        int wrapModes = GetWrapBits(wrapS) | (GetWrapBits(wrapT) << 2) | (GetWrapBits(wrapR) << 4);
+        int wrapModes = GetWrapBits(wrapS) | (GetWrapBits(wrapT) << 3) | (GetWrapBits(wrapR) << 6);
         if (data->wrapModes != wrapModes)
         {
             data->wrapModes = wrapModes;
             dirty           = true;
+        }
+
+        const angle::ColorVariant &borderColor(texture.getBorderColor());
+        constexpr int black[4]           = {0};
+        const void *const intBorderColor = (borderColor.type == angle::ColorVariant::Type::Float)
+                                               ? black
+                                               : borderColor.colorI.data();
+        ASSERT(static_cast<const void *>(borderColor.colorI.data()) ==
+               static_cast<const void *>(borderColor.colorUI.data()));
+        if (memcmp(data->intBorderColor, intBorderColor, sizeof(data->intBorderColor)) != 0)
+        {
+            memcpy(data->intBorderColor, intBorderColor, sizeof(data->intBorderColor));
+            dirty = true;
         }
     }
 
