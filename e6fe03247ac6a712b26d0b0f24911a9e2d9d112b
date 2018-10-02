@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "319ff929_99aeb885",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4973,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-02T07:12:50Z",
+      "side": 1,
+      "message": "Could add a comment that \"the defined operator is evaluated when the macro is called, not when the macro is defined\".",
+      "revId": "e6fe03247ac6a712b26d0b0f24911a9e2d9d112b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "336e6bbf_493af6d1",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5004,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-02T07:12:50Z",
+      "side": 1,
+      "message": "You could also still add this variation:\n\n#define AAA defined(BBB)\n#define BBB 1\n#if AAA\n#endif",
+      "revId": "e6fe03247ac6a712b26d0b0f24911a9e2d9d112b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "627b293e_ca8c31ad",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5006,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-02T07:12:50Z",
+      "side": 1,
+      "message": "A suggestion for a comment: \u0027Test generating the \"defined\" operator by concatenation when a macro is called. This is not allowed.\u0027",
+      "revId": "e6fe03247ac6a712b26d0b0f24911a9e2d9d112b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d37730a_ed09231f",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5038,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-02T07:12:50Z",
+      "side": 1,
+      "message": "nit: I\u0027d suggest adding \"This is not allowed.\" to the comment here as well.",
+      "revId": "e6fe03247ac6a712b26d0b0f24911a9e2d9d112b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

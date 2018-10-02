@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "44638618_60dac188",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4939,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-02T07:12:50Z",
+      "side": 1,
+      "message": "I think that I\u0027d still much prefer most of these tests to be implemented as unit tests for the preprocessor. They\u0027re much simpler to debug and faster to run. In unit tests there\u0027s also existing machinery for testing for specific errors instead of just checking whether compilation fails or succeeds.\n\nAlso there aren\u0027t really more than a few configurations of the preprocessor, so it\u0027s not hard to configure it the right way for the unit tests. It\u0027s maybe good to have one or two tests also in end2end tests to verify that the preprocessor is being used with the correct flags according to the ANGLE context config, but I don\u0027t see a need for more than that.",
+      "parentUuid": "59739302_6e4786cc",
+      "revId": "db1d5eac4d2056edefa0b5f62af045f0c5c75bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "720edc7f_9c827ffb",
         "filename": "src/tests/preprocessor_tests/if_test.cpp",
         "patchSetId": 7
