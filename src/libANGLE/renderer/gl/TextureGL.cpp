@@ -1207,6 +1207,30 @@ gl::Error TextureGL::syncState(const gl::Context *context, const gl::Texture::Di
                 functions->texParameteri(ToGLenum(getType()), GL_TEXTURE_SRGB_DECODE_EXT,
                                          mAppliedSampler.getSRGBDecode());
                 break;
+            case gl::Texture::DIRTY_BIT_BORDER_COLOR:
+            {
+                const angle::ColorT &borderColor(mState.getSamplerState().getBorderColor());
+                mAppliedSampler.setBorderColor(borderColor);
+                switch (borderColor.type)
+                {
+                    case angle::ColorT::Type::Float:
+                        functions->texParameterfv(ToGLenum(getType()), GL_TEXTURE_BORDER_COLOR,
+                                                  &borderColor.colorF.red);
+                        break;
+                    case angle::ColorT::Type::Int:
+                        functions->texParameterIiv(ToGLenum(getType()), GL_TEXTURE_BORDER_COLOR,
+                                                   &borderColor.colorI.red);
+                        break;
+                    case angle::ColorT::Type::UInt:
+                        functions->texParameterIuiv(ToGLenum(getType()), GL_TEXTURE_BORDER_COLOR,
+                                                    &borderColor.colorUI.red);
+                        break;
+                    default:
+                        UNREACHABLE();
+                        break;
+                }
+                break;
+            }
 
             // Texture state
             case gl::Texture::DIRTY_BIT_SWIZZLE_RED:
