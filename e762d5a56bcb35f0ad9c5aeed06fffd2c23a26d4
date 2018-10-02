@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5741d02a_4baf5152",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-02T16:52:55Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "fbc414cd_b91fa56b",
+      "range": {
+        "startLine": 73,
+        "startChar": 35,
+        "endLine": 73,
+        "endChar": 36
+      },
+      "revId": "e762d5a56bcb35f0ad9c5aeed06fffd2c23a26d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5520bf0e_ab4b7248",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 13
@@ -36,6 +60,30 @@
       "writtenOn": "2018-09-17T20:37:14Z",
       "side": 1,
       "message": "This isn\u0027t neccessary, the vector should be all 0s anyways.",
+      "range": {
+        "startLine": 294,
+        "startChar": 8,
+        "endLine": 294,
+        "endChar": 41
+      },
+      "revId": "e762d5a56bcb35f0ad9c5aeed06fffd2c23a26d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80e5c6be_cc3bd308",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-02T16:52:55Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "5520bf0e_ab4b7248",
       "range": {
         "startLine": 294,
         "startChar": 8,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "acfa596d_c6ee52de",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-02T16:52:55Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "e2c26ebf_ce424af3",
+      "range": {
+        "startLine": 296,
+        "startChar": 8,
+        "endLine": 296,
+        "endChar": 41
+      },
+      "revId": "e762d5a56bcb35f0ad9c5aeed06fffd2c23a26d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8273eab4_6f3dc006",
         "filename": "src/libANGLE/Framebuffer.h",
         "patchSetId": 13
@@ -82,6 +154,30 @@
       "writtenOn": "2018-09-17T20:37:14Z",
       "side": 1,
       "message": "I think we can just use the existing DIRTY_BIT_DRAW_BUFFERS and DIRTY_BIT_READ_BUFFER dirty bits to sync the indexed state.  As it is, there may be ordering issues if the indexed and non-indexed calls are both synced at once.",
+      "range": {
+        "startLine": 341,
+        "startChar": 0,
+        "endLine": 342,
+        "endChar": 38
+      },
+      "revId": "e762d5a56bcb35f0ad9c5aeed06fffd2c23a26d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f48de51d_2d2a3139",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-02T16:52:55Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "8273eab4_6f3dc006",
       "range": {
         "startLine": 341,
         "startChar": 0,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "19a142bd_00ddec1f",
+        "filename": "src/libANGLE/renderer/FramebufferImpl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-02T16:52:55Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "8d22c5e5_c32afc7f",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 98
+      },
+      "revId": "e762d5a56bcb35f0ad9c5aeed06fffd2c23a26d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eae48370_425e7234",
         "filename": "src/libANGLE/renderer/d3d/RendererD3D.h",
         "patchSetId": 13
@@ -128,6 +248,30 @@
       "writtenOn": "2018-09-17T20:37:14Z",
       "side": 1,
       "message": "Bad merge?",
+      "range": {
+        "startLine": 389,
+        "startChar": 4,
+        "endLine": 389,
+        "endChar": 51
+      },
+      "revId": "e762d5a56bcb35f0ad9c5aeed06fffd2c23a26d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08e23be4_cbd1f993",
+        "filename": "src/libANGLE/renderer/d3d/RendererD3D.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-02T16:52:55Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "eae48370_425e7234",
       "range": {
         "startLine": 389,
         "startChar": 4,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "b4d1e5de_f2d83b3c",
+        "filename": "src/libANGLE/renderer/d3d/SurfaceD3D.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-02T16:52:55Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "748a1400_4c2ed2d9",
+      "range": {
+        "startLine": 55,
+        "startChar": 31,
+        "endLine": 55,
+        "endChar": 39
+      },
+      "revId": "e762d5a56bcb35f0ad9c5aeed06fffd2c23a26d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c82b309f_045d645b",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 13
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "eb48d8b4_a5da5319",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3655,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-02T16:52:55Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "c82b309f_045d645b",
+      "range": {
+        "startLine": 3655,
+        "startChar": 4,
+        "endLine": 3655,
+        "endChar": 14
+      },
+      "revId": "e762d5a56bcb35f0ad9c5aeed06fffd2c23a26d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ab299cfd_53be1e8d",
         "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
         "patchSetId": 13
@@ -197,6 +389,30 @@
       "writtenOn": "2018-09-17T20:37:14Z",
       "side": 1,
       "message": "I think we should be checking if the native driver supports the extension here.  It will be, at the very least, a strong indicator that the driver supports multiview properly.",
+      "range": {
+        "startLine": 991,
+        "startChar": 39,
+        "endLine": 991,
+        "endChar": 81
+      },
+      "revId": "e762d5a56bcb35f0ad9c5aeed06fffd2c23a26d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8311bfd_f6816fe5",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-02T16:52:55Z",
+      "side": 1,
+      "message": "I found a way to verify that stereo is supported in all cases.  Sometimes the pixel format says it supports stereo, but it does not.  Calling drawBuffer with a back right buffer and checking for gl errors verifies stereo support.",
+      "parentUuid": "ab299cfd_53be1e8d",
       "range": {
         "startLine": 991,
         "startChar": 39,

@@ -437,6 +437,30 @@
     },
     {
       "key": {
+        "uuid": "72bf4cd1_0b8aa46f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7495,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-02T16:52:55Z",
+      "side": 1,
+      "message": "I ran into one more roadblock that makes this not implementable.  Unfortunately, GL_READ_BUFFER and GL_READ_BUFFER_EXT use the same values, so there is no way to differentiate them in GetInteger.  Therefore, we can\u0027t know if the call is expecting 1 or 2 return values.",
+      "parentUuid": "937177ab_122ee561",
+      "range": {
+        "startLine": 7495,
+        "startChar": 8,
+        "endLine": 7495,
+        "endChar": 32
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "693331c7_cdad5b5f",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 7
@@ -931,6 +955,30 @@
     },
     {
       "key": {
+        "uuid": "7cfc11d4_b6ffeaf5",
+        "filename": "src/libANGLE/renderer/FramebufferImpl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-02T16:52:55Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "61254d2f_c3639ae7",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 98
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b92a411b_be2ee3ca",
         "filename": "src/libANGLE/renderer/SurfaceImpl.h",
         "patchSetId": 7
@@ -1331,6 +1379,30 @@
     },
     {
       "key": {
+        "uuid": "f2b65165_13cc8fac",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1798,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-02T16:52:55Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "d97373f6_18c14e94",
+      "range": {
+        "startLine": 1795,
+        "startChar": 0,
+        "endLine": 1798,
+        "endChar": 9
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e27d1ae1_894bd821",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 7
@@ -1590,6 +1662,30 @@
     },
     {
       "key": {
+        "uuid": "f8366e1a_871c6100",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-02T16:52:55Z",
+      "side": 1,
+      "message": "Since there is no desktop support for these entry points, I am emulating them with drawBuffers.",
+      "parentUuid": "1993ff3a_c1c17d9e",
+      "range": {
+        "startLine": 671,
+        "startChar": 11,
+        "endLine": 681,
+        "endChar": 22
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01c9fcd1_42ca7dd5",
         "filename": "src/libANGLE/renderer/gl/SurfaceGL.h",
         "patchSetId": 7
@@ -1696,6 +1792,30 @@
       "side": 1,
       "message": "This is a tough issue, the intent with the EGL extension is definitely that the multiview count is per-surface so we need to be able to support that, especially if we plan on exposing this up through WebGL.\n\nSome WGL documentation says that wglMakeCurrent requires that the context and surface have the same pixel format but some other extensions merely say they need to be \"compatible\".  I wonder if some/all drivers allow contexts created on non-stereo pixel formats to be bound to stereo surfaces.  It may be worth trying to use different pixel formats per surface and check if the wglMakeCurrent calls still succeed.\n\nOtherwise, we can look into multiple contexts (in the same share group) to handle needing multiple pixel formats.",
       "parentUuid": "758c5040_6e95cdc0",
+      "range": {
+        "startLine": 161,
+        "startChar": 53,
+        "endLine": 161,
+        "endChar": 81
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0cdfc55_f934b8a6",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-02T16:52:55Z",
+      "side": 1,
+      "message": "I ran into this issue when porting the Unreal engine, and I know that makeCurrent will fail if there is a pixel format mismatch.  When I look at the implementation here, I don\u0027t know if we would hit this problem.  As far as I can see, if the pixel format is stereo at device initialization, that pixel format is used for all device surfaces.  That would indicate that all contexts would be sharable.  The error would occur at surface initialization time if a surface being created does not share the same pixel format.  There already seems to be a check for that.",
+      "parentUuid": "85db13a1_87548250",
       "range": {
         "startLine": 161,
         "startChar": 53,
@@ -2753,6 +2873,30 @@
       "side": 1,
       "message": "Could it be that the driver supports the WGL stereo capability but not the GL multiview draw buffers extension?  In that case we should try to avoid exposing the EGL or GLES extensions.",
       "parentUuid": "1dabc2b0_418f33cf",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 54
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c8cb056_bc143560",
+        "filename": "src/tests/gl_tests/MultiviewDrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-02T16:52:55Z",
+      "side": 1,
+      "message": "I was able to add additional checks at initialization that fixes this issue, so it has been removed.",
+      "parentUuid": "d8478d3d_33b57e2f",
       "range": {
         "startLine": 120,
         "startChar": 0,
