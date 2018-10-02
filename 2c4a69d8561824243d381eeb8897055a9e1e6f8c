@@ -152,6 +152,30 @@
     },
     {
       "key": {
+        "uuid": "3a5c3310_6ee2069f",
+        "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T15:13:10Z",
+      "side": 1,
+      "message": "ANativeWindow_Buffer is unfortunately a different object then what gets passed in here and there is no way that I know of to convert between them.\n\nI\u0027ll ask the Android team about this.  Nicolas had to do the same thing in Swiftshader after asking them, these headers are not accessible to clients.  They said the class member layout and size was guaranteed to not change.",
+      "parentUuid": "897119eb_b1cf24c5",
+      "range": {
+        "startLine": 13,
+        "startChar": 1,
+        "endLine": 55,
+        "endChar": 24
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f4b890e3_679c394b",
         "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.h",
         "patchSetId": 4
@@ -245,6 +269,30 @@
     },
     {
       "key": {
+        "uuid": "3cde8e10_c1f191bb",
+        "filename": "src/libANGLE/renderer/gl/egl/android/android_util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T15:13:10Z",
+      "side": 1,
+      "message": "I could pull in the enums or header from  from hardware_buffer.h but we may have to copy it into ANGLE, the enum values match but some are missing in hardware_buffer.h.\n\nAndroid does guarantee that the enums will never change, some are deprecated or added but values are not re-used.",
+      "parentUuid": "fde0515a_5f9555ad",
+      "range": {
+        "startLine": 15,
+        "startChar": 3,
+        "endLine": 15,
+        "endChar": 111
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1146af64_16fb6c13",
         "filename": "src/libANGLE/renderer/gl/egl/android/android_util.cpp",
         "patchSetId": 4
@@ -256,6 +304,30 @@
       "writtenOn": "2018-10-01T22:36:29Z",
       "side": 1,
       "message": "These two formats don\u0027t appear in https://android.googlesource.com/platform/system/core/+/master/libsystem/include/system/graphics-base-v1.0.h\nOne more reason not to rely on unstable internal APIs.",
+      "range": {
+        "startLine": 22,
+        "startChar": 1,
+        "endLine": 23,
+        "endChar": 48
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ff55a52_07127aad",
+        "filename": "src/libANGLE/renderer/gl/egl/android/android_util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T15:13:10Z",
+      "side": 1,
+      "message": "Yea, they arn\u0027t in the AHARDWAREBUFFER_FORMAT enum either (deprecated) but the dEQP tests still use them.",
+      "parentUuid": "1146af64_16fb6c13",
       "range": {
         "startLine": 22,
         "startChar": 1,
