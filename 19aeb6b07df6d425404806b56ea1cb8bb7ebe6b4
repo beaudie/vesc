@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "56c0f78f_32cb1974",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-02T16:20:38Z",
+      "side": 1,
+      "message": "resolved?",
+      "range": {
+        "startLine": 10,
+        "startChar": 40,
+        "endLine": 10,
+        "endChar": 47
+      },
+      "revId": "19aeb6b07df6d425404806b56ea1cb8bb7ebe6b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bbee734a_dc799932",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 5
