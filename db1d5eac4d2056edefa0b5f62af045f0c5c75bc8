@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "d7c7eaae_3633b70c",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4939,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-02T13:30:44Z",
+      "side": 1,
+      "message": "I added these tests as preprocessor tests. They\u0027re a bit more fragile since any change in the error reporting can break them. But they should do the same thing.",
+      "parentUuid": "44638618_60dac188",
+      "revId": "db1d5eac4d2056edefa0b5f62af045f0c5c75bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "720edc7f_9c827ffb",
         "filename": "src/tests/preprocessor_tests/if_test.cpp",
         "patchSetId": 7
