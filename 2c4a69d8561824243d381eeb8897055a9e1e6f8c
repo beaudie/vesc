@@ -412,6 +412,30 @@
     },
     {
       "key": {
+        "uuid": "a841d2ac_241512a0",
+        "filename": "src/libANGLE/renderer/gl/egl/android/android_util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T17:07:37Z",
+      "side": 1,
+      "message": "haha I know.  I had to patch hack together a patch for dEQP to get it to work on the latest versions of GraphicBuffer:\nhttps://pastebin.com/Sz59S2Tw",
+      "parentUuid": "d7cd9ade_3dbf3719",
+      "range": {
+        "startLine": 22,
+        "startChar": 1,
+        "endLine": 23,
+        "endChar": 48
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "95008d89_eee9c64a",
         "filename": "src/libANGLE/renderer/gl/egl/android/android_util.h",
         "patchSetId": 4
