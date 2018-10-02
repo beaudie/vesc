@@ -32,6 +32,50 @@ namespace gl
 namespace
 {
 
+// We use normalizedToFloatExact and floatToNormalizedExact here that do the calculation in double
+// precision instead of normalizedToFloat and floatToNormalized from mathutil.h. float has only a 23
+// bit mantissa, so it can't precisely store std::numeric_limits<int>::max() which would need 31
+// bits. normalizedToFloat and floatToNormalized not only result in lower precision but sometimes
+// produce also totally wrong values. For example floatToNormalized<int>(1.0f) returns -2147483648!
+template <typename T>
+inline float normalizedToFloatExact(T input)
+{
+    static_assert(std::numeric_limits<T>::is_integer, "T must be an integer.");
+
+    const double inverseMax = 1.0 / std::numeric_limits<T>::max();
+    return static_cast<float>(input * inverseMax);
+}
+
+template <typename T>
+inline T floatToNormalizedExact(float input)
+{
+    return static_cast<T>(std::numeric_limits<T>::max() * static_cast<double>(input) + 0.5);
+}
+
+ColorF ConvertToColor(const GLfloat *params)
+{
+    return ColorF::fromData(params);
+}
+
+ColorF ConvertToColor(const GLint *params)
+{
+    return ColorF(normalizedToFloatExact(params[0]), normalizedToFloatExact(params[1]),
+                  normalizedToFloatExact(params[2]), normalizedToFloatExact(params[3]));
+}
+
+void ConvertFromColor(const ColorF &color, GLfloat *outParams)
+{
+    color.writeData(outParams);
+}
+
+void ConvertFromColor(const ColorF &color, GLint *outParams)
+{
+    outParams[0] = floatToNormalizedExact<GLint>(color.red);
+    outParams[1] = floatToNormalizedExact<GLint>(color.green);
+    outParams[2] = floatToNormalizedExact<GLint>(color.blue);
+    outParams[3] = floatToNormalizedExact<GLint>(color.alpha);
+}
+
 template <typename ParamType>
 void QueryTexLevelParameterBase(const Texture *texture,
                                 TextureTarget target,
@@ -200,6 +244,9 @@ void QueryTexParameterBase(const Texture *texture, GLenum pname, ParamType *para
         case GL_GENERATE_MIPMAP:
             *params = CastFromGLintStateValue<ParamType>(pname, texture->getGenerateMipmapHint());
             break;
+        case GL_TEXTURE_BORDER_COLOR:
+            ConvertFromColor(texture->getBorderColor(), params);
+            break;
         default:
             UNREACHABLE();
             break;
@@ -282,6 +329,9 @@ void SetTexParameterBase(Context *context, Texture *texture, GLenum pname, const
         case GL_GENERATE_MIPMAP:
             texture->setGenerateMipmapHint(ConvertToGLenum(params[0]));
             break;
+        case GL_TEXTURE_BORDER_COLOR:
+            texture->setBorderColor(ConvertToColor(params));
+            break;
         default:
             UNREACHABLE();
             break;
@@ -325,6 +375,9 @@ void QuerySamplerParameterBase(const Sampler *sampler, GLenum pname, ParamType *
             break;
         case GL_TEXTURE_SRGB_DECODE_EXT:
             *params = CastFromGLintStateValue<ParamType>(pname, sampler->getSRGBDecode());
+            break;
+        case GL_TEXTURE_BORDER_COLOR:
+            ConvertFromColor(sampler->getBorderColor(), params);
             break;
         default:
             UNREACHABLE();
@@ -372,6 +425,9 @@ void SetSamplerParameterBase(Context *context,
             break;
         case GL_TEXTURE_SRGB_DECODE_EXT:
             sampler->setSRGBDecode(ConvertToGLenum(pname, params[0]));
+            break;
+        case GL_TEXTURE_BORDER_COLOR:
+            sampler->setBorderColor(ConvertToColor(params));
             break;
         default:
             UNREACHABLE();
@@ -2556,6 +2612,7 @@ unsigned int GetTexParameterCount(GLenum pname)
     switch (pname)
     {
         case GL_TEXTURE_CROP_RECT_OES:
+        case GL_TEXTURE_BORDER_COLOR:
             return 4;
         case GL_TEXTURE_MAG_FILTER:
         case GL_TEXTURE_MIN_FILTER:

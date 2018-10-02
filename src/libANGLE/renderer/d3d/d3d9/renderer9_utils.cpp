@@ -126,6 +126,7 @@ D3DTEXTUREADDRESS ConvertTextureWrap(GLenum wrap)
     {
       case GL_REPEAT:            d3dWrap = D3DTADDRESS_WRAP;   break;
       case GL_CLAMP_TO_EDGE:     d3dWrap = D3DTADDRESS_CLAMP;  break;
+      case GL_CLAMP_TO_BORDER:   d3dWrap = D3DTADDRESS_BORDER; break;
       case GL_MIRRORED_REPEAT:   d3dWrap = D3DTADDRESS_MIRROR; break;
       default: UNREACHABLE();
     }
@@ -560,10 +561,11 @@ void GenerateCaps(IDirect3D9 *d3d9,
     if (SUCCEEDED(d3d9->GetAdapterIdentifier(adapter, 0, &adapterId)))
     {
         // ATI cards on XP have problems with non-power-of-two textures.
-        extensions->textureNPOT = !(deviceCaps.TextureCaps & D3DPTEXTURECAPS_POW2) &&
-                                  !(deviceCaps.TextureCaps & D3DPTEXTURECAPS_CUBEMAP_POW2) &&
-                                  !(deviceCaps.TextureCaps & D3DPTEXTURECAPS_NONPOW2CONDITIONAL) &&
-                                  !(!isWindowsVistaOrGreater() && IsAMD(adapterId.VendorId));
+        extensions->textureNPOT =
+            !(deviceCaps.TextureCaps & D3DPTEXTURECAPS_POW2) &&
+            !(deviceCaps.TextureCaps & D3DPTEXTURECAPS_CUBEMAP_POW2) &&
+            !(deviceCaps.TextureCaps & D3DPTEXTURECAPS_NONPOW2CONDITIONAL) &&
+            !(!true /*isWindowsVistaOrGreater()*/ && IsAMD(adapterId.VendorId));
 
         // Disable depth texture support on AMD cards (See ANGLE issue 839)
         if (IsAMD(adapterId.VendorId))

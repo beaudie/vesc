@@ -964,6 +964,9 @@ angle::Result Renderer9::setSamplerState(const gl::Context *context,
                                            static_cast<DWORD>(samplerState.getMaxAnisotropy()));
             mDevice->SetSamplerState(d3dSampler, D3DSAMP_MAXANISOTROPY, maxAnisotropy);
         }
+
+        mDevice->SetSamplerState(d3dSampler, D3DSAMP_BORDERCOLOR,
+                                 gl_d3d9::ConvertColor(texture->getBorderColor()));
     }
 
     appliedSampler.forceSet     = false;
