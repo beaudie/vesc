@@ -359,6 +359,31 @@ void State::reset(const Context *context)
     setAllDirtyBits();
 }
 
+ANGLE_INLINE Error State::updateActiveTexture(const Context *context,
+                                              size_t textureIndex,
+                                              Texture *texture)
+{
+    const Sampler *sampler = mSamplers[textureIndex].get();
+
+    if (!texture || !texture->isSamplerComplete(context, sampler))
+        return NoError();
+
+    if (texture->hasAnyDirtyBit())
+    {
+        ANGLE_TRY(texture->syncState(context));
+    }
+
+    mActiveTexturesCache[textureIndex] = texture;
+    mCompleteTextureBindings[textureIndex].bind(texture->getSubject());
+
+    if (texture->initState() == InitState::MayNeedInit)
+    {
+        mCachedTexturesInitState = InitState::MayNeedInit;
+    }
+
+    return NoError();
+}
+
 const RasterizerState &State::getRasterizerState() const
 {
     return mRasterizer;
@@ -1025,8 +1050,13 @@ unsigned int State::getActiveSampler() const
 void State::setSamplerTexture(const Context *context, TextureType type, Texture *texture)
 {
     mSamplerTextures[type][mActiveSampler].set(context, texture);
+
+    if (mProgram && mProgram->getActiveSamplersMask()[mActiveSampler])
+    {
+        updateActiveTexture(context, mActiveSampler, texture);
+    }
+
     mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
-    mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
 }
 
 Texture *State::getTargetTexture(TextureType type) const
@@ -2900,23 +2930,7 @@ Error State::onProgramExecutableChange(const Context *context, Program *program)
     for (size_t textureIndex : mProgram->getActiveSamplersMask())
     {
         Texture *texture = mSamplerTextures[textureTypes[textureIndex]][textureIndex].get();
-        Sampler *sampler = mSamplers[textureIndex].get();
-
-        if (!texture || !texture->isSamplerComplete(context, sampler))
-            continue;
-
-        if (texture->hasAnyDirtyBit())
-        {
-            ANGLE_TRY(texture->syncState(context));
-        }
-
-        mActiveTexturesCache[textureIndex] = texture;
-        mCompleteTextureBindings[textureIndex].bind(texture->getSubject());
-
-        if (texture->initState() == InitState::MayNeedInit)
-        {
-            mCachedTexturesInitState = InitState::MayNeedInit;
-        }
+        ANGLE_TRY(updateActiveTexture(context, textureIndex, texture));
     }
 
     for (size_t imageUnitIndex : mProgram->getActiveImagesMask())

@@ -513,6 +513,7 @@ class State : angle::NonCopyable
   private:
     void syncSamplers(const Context *context);
     Error syncProgramTextures(const Context *context);
+    Error updateActiveTexture(const Context *context, size_t textureIndex, Texture *texture);
 
     // Cached values from Context's caps
     GLuint mMaxDrawBuffers;
