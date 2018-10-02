@@ -1330,12 +1330,19 @@ void State::setVertexBindingDivisor(GLuint bindingIndex, GLuint divisor)
     mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
-void State::setProgram(const Context *context, Program *newProgram)
+Error State::setProgram(const Context *context, Program *newProgram)
 {
     if (mProgram != newProgram)
     {
         if (mProgram)
         {
+            // Unset any relevant bound textures.
+            for (size_t textureIndex : mProgram->getActiveSamplersMask())
+            {
+                mActiveTexturesCache[textureIndex] = nullptr;
+                mCompleteTextureBindings[textureIndex].reset();
+            }
+
             mProgram->release(context);
         }
 
@@ -1344,7 +1351,7 @@ void State::setProgram(const Context *context, Program *newProgram)
         if (mProgram)
         {
             newProgram->addRef();
-            onProgramExecutableChange(newProgram);
+            ANGLE_TRY(onProgramExecutableChange(context, newProgram));
         }
 
         // Note that rendering is undefined if glUseProgram(0) is called. But ANGLE will generate
@@ -1352,6 +1359,8 @@ void State::setProgram(const Context *context, Program *newProgram)
 
         mDirtyBits.set(DIRTY_BIT_PROGRAM_BINDING);
     }
+
+    return NoError();
 }
 
 void State::setTransformFeedbackBinding(const Context *context,
@@ -2875,7 +2884,7 @@ void State::setObjectDirty(GLenum target)
     }
 }
 
-void State::onProgramExecutableChange(Program *program)
+Error State::onProgramExecutableChange(const Context *context, Program *program)
 {
     // OpenGL Spec:
     // "If LinkProgram or ProgramBinary successfully re-links a program object
@@ -2884,8 +2893,56 @@ void State::onProgramExecutableChange(Program *program)
     ASSERT(program->isLinked());
 
     mDirtyBits.set(DIRTY_BIT_PROGRAM_EXECUTABLE);
-    mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
     mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
+
+    // Set any bound textures.
+    const ActiveTextureTypeArray &textureTypes = program->getActiveSamplerTypes();
+    for (size_t textureIndex : program->getActiveSamplersMask())
+    {
+        TextureType type = textureTypes[textureIndex];
+
+        // This can happen if there is a conflicting texture type.
+        if (type == TextureType::InvalidEnum)
+            continue;
+
+        Texture *texture = mSamplerTextures[type][textureIndex].get();
+        Sampler *sampler = mSamplers[textureIndex].get();
+
+        if (!texture || !texture->isSamplerComplete(context, sampler))
+            continue;
+
+        if (texture->hasAnyDirtyBit())
+        {
+            ANGLE_TRY(texture->syncState(context));
+        }
+
+        mActiveTexturesCache[textureIndex] = texture;
+        mCompleteTextureBindings[textureIndex].bind(texture->getSubject());
+
+        if (texture->initState() == InitState::MayNeedInit)
+        {
+            mCachedTexturesInitState = InitState::MayNeedInit;
+        }
+    }
+
+    for (size_t imageUnitIndex : program->getActiveImagesMask())
+    {
+        Texture *image = mImageUnits[imageUnitIndex].texture.get();
+        if (!image)
+            continue;
+
+        if (image->hasAnyDirtyBit())
+        {
+            ANGLE_TRY(image->syncState(context));
+        }
+
+        if (image->initState() == InitState::MayNeedInit)
+        {
+            mCachedImageTexturesInitState = InitState::MayNeedInit;
+        }
+    }
+
+    return NoError();
 }
 
 void State::setSamplerDirty(size_t samplerIndex)
