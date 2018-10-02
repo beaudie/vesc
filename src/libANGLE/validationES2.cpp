@@ -6226,6 +6226,22 @@ bool ValidateGetTexParameteriv(Context *context, TextureType target, GLenum pnam
     return ValidateGetTexParameterBase(context, target, pname, nullptr);
 }
 
+bool ValidateGetTexParameterIivOES(Context *context,
+                                   TextureType target,
+                                   GLenum pname,
+                                   GLint *params)
+{
+    return ValidateGetTexParameterBase(context, target, pname, nullptr);
+}
+
+bool ValidateGetTexParameterIuivOES(Context *context,
+                                    TextureType target,
+                                    GLenum pname,
+                                    GLuint *params)
+{
+    return ValidateGetTexParameterBase(context, target, pname, nullptr);
+}
+
 bool ValidateGetUniformfv(Context *context, GLuint program, GLint location, GLfloat *params)
 {
     return ValidateGetUniformBase(context, program, location);
@@ -6314,6 +6330,22 @@ bool ValidateTexParameteri(Context *context, TextureType target, GLenum pname, G
 }
 
 bool ValidateTexParameteriv(Context *context, TextureType target, GLenum pname, const GLint *params)
+{
+    return ValidateTexParameterBase(context, target, pname, -1, params);
+}
+
+bool ValidateTexParameterIivOES(Context *context,
+                                TextureType target,
+                                GLenum pname,
+                                const GLint *params)
+{
+    return ValidateTexParameterBase(context, target, pname, -1, params);
+}
+
+bool ValidateTexParameterIuivOES(Context *context,
+                                 TextureType target,
+                                 GLenum pname,
+                                 const GLuint *params)
 {
     return ValidateTexParameterBase(context, target, pname, -1, params);
 }

@@ -34,4 +34,44 @@ bool operator!=(const Color<T> &a, const Color<T> &b)
     return !(a == b);
 }
 
+
+ColorT::ColorT() : colorF(), type(Type::Float)
+{
+}
+
+ColorT::ColorT(const ColorF& color) : colorF(color), type(Type::Float)
+{
+}
+
+ColorT::ColorT(const ColorI& color) : colorI(color), type(Type::Int)
+{
+}
+
+ColorT::ColorT(const ColorUI& color) : colorUI(color), type(Type::UInt)
+{
+}
+
+bool operator==(const ColorT &a, const ColorT &b)
+{
+    if (a.type != b.type)
+    {
+        return false;
+    }
+    switch (a.type)
+    {
+    default:
+    case ColorT::Type::Float:
+        return a.colorF == b.colorF;
+    case ColorT::Type::Int:
+        return a.colorI == b.colorI;
+    case ColorT::Type::UInt:
+        return a.colorUI == b.colorUI;
+    }
+}
+
+bool operator!=(const ColorT &a, const ColorT &b)
+{
+    return !(a == b);
+}
+
 }  // namespace angle
