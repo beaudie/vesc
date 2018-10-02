@@ -64,7 +64,7 @@ TEST_P(TextureParameterTest, InitialState)
     EXPECT_EQ(0, params[3]);
 }
 
-// Negative test: invalid enum / operation
+// Negative test: invalid enum
 TEST_P(TextureParameterTest, NegativeEnum)
 {
     // Invalid target (not supported)
@@ -77,7 +77,7 @@ TEST_P(TextureParameterTest, NegativeEnum)
 
     // Not enough buffer
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, 3);
-    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
 
     // Not supported in GLES1
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
