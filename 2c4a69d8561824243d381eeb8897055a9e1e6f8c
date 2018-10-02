@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "c6c85903_1b33da44",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-02T14:03:43Z",
+      "side": 1,
+      "message": "Hint: If you use Bug: instead of Bug\u003d, you can avoid the empty line between this and Change-Id (which trips up some scripts, reissuing the Change-Id if you remove the empty line!)",
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a64fc77_831bbcb2",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-02T14:03:43Z",
+      "side": 1,
+      "message": "The other cases don\u0027t allocate the sibling if I\u0027m right, and I don\u0027t see where this is deleted. Can you verify that there is no leak here?",
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c0347c43_01891776",
         "filename": "src/libANGLE/Image.cpp",
         "patchSetId": 4
@@ -94,6 +128,30 @@
     },
     {
       "key": {
+        "uuid": "897119eb_b1cf24c5",
+        "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-02T14:03:43Z",
+      "side": 1,
+      "message": "+1. I\u0027m afraid this would result in no end of security bugs if android changes the struct and angle\u0027s is not matching, which can very easily happen for example if an application statically links to a single version of angle and releases on multiple android versions.",
+      "parentUuid": "de55ba86_9910f8e8",
+      "range": {
+        "startLine": 13,
+        "startChar": 1,
+        "endLine": 55,
+        "endChar": 24
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f4b890e3_679c394b",
         "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.h",
         "patchSetId": 4
@@ -151,6 +209,30 @@
       "writtenOn": "2018-10-01T22:36:29Z",
       "side": 1,
       "message": "Have you considered including android/hardware_buffer.h (or media/NdkImage.h) from the NDK and using AHARDWAREBUFFER_FORMAT (or AIMAGE_FORMATS) from it instead? Some defines don\u0027t match between here and these two others, but I\u0027m not sure which ones are correct, and something looks fishy about us needing to use internal headers.",
+      "range": {
+        "startLine": 15,
+        "startChar": 3,
+        "endLine": 15,
+        "endChar": 111
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fde0515a_5f9555ad",
+        "filename": "src/libANGLE/renderer/gl/egl/android/android_util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-02T14:03:43Z",
+      "side": 1,
+      "message": "If there is no way around it, it would be nice to have a way to at least fail if there is a potential problem. For example if this header is taken from v1.1, then check the current version and fail if it\u0027s not v1.1, in case in the future the enum values change and angle is outdated.\n\nAlternatively, android would have to guarantee the enum values won\u0027t change no matter what.",
+      "parentUuid": "105fbb14_ac4ba859",
       "range": {
         "startLine": 15,
         "startChar": 3,
