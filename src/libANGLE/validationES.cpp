@@ -229,6 +229,14 @@ bool ValidateTextureWrapModeValue(Context *context, ParamType *params, bool rest
         case GL_CLAMP_TO_EDGE:
             break;
 
+        case GL_CLAMP_TO_BORDER:
+            if (!context->getExtensions().textureBorderClamp)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), ExtensionNotEnabled);
+                return false;
+            }
+            break;
+
         case GL_REPEAT:
         case GL_MIRRORED_REPEAT:
             if (restrictedWrapModes)
@@ -462,6 +470,12 @@ bool IsValidGLES1TextureParameter(GLenum pname)
             return false;
     }
 }
+
+unsigned int GetSamplerParameterCount(GLenum pname)
+{
+    return pname == GL_TEXTURE_BORDER_COLOR ? 4 : 1;
+}
+
 }  // anonymous namespace
 
 void SetRobustLengthParam(GLsizei *length, GLsizei value)
@@ -4702,7 +4716,7 @@ bool ValidateTexParameterfvRobustANGLE(Context *context,
         return false;
     }
 
-    return ValidateTexParameterBase(context, target, pname, bufSize, params);
+    return ValidateTexParameterBase(context, target, pname, bufSize, true, params);
 }
 
 bool ValidateTexParameterivRobustANGLE(Context *context,
@@ -4716,7 +4730,7 @@ bool ValidateTexParameterivRobustANGLE(Context *context,
         return false;
     }
 
-    return ValidateTexParameterBase(context, target, pname, bufSize, params);
+    return ValidateTexParameterBase(context, target, pname, bufSize, true, params);
 }
 
 bool ValidateTexParameterIivRobustANGLE(Context *context,
@@ -4828,7 +4842,7 @@ bool ValidateSamplerParameterfvRobustANGLE(Context *context,
         return false;
     }
 
-    return ValidateSamplerParameterBase(context, sampler, pname, bufSize, params);
+    return ValidateSamplerParameterBase(context, sampler, pname, bufSize, true, params);
 }
 
 bool ValidateSamplerParameterivRobustANGLE(Context *context,
@@ -4842,7 +4856,7 @@ bool ValidateSamplerParameterivRobustANGLE(Context *context,
         return false;
     }
 
-    return ValidateSamplerParameterBase(context, sampler, pname, bufSize, params);
+    return ValidateSamplerParameterBase(context, sampler, pname, bufSize, true, params);
 }
 
 bool ValidateSamplerParameterIivRobustANGLE(Context *context,
@@ -5530,6 +5544,14 @@ bool ValidateGetTexParameterBase(Context *context,
             }
             break;
 
+        case GL_TEXTURE_BORDER_COLOR:
+            if (!context->getExtensions().textureBorderClamp)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), ExtensionNotEnabled);
+                return false;
+            }
+            break;
+
         default:
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
             return false;
@@ -5879,6 +5901,7 @@ bool ValidateTexParameterBase(Context *context,
                               TextureType target,
                               GLenum pname,
                               GLsizei bufSize,
+                              bool vectorParams,
                               const ParamType *params)
 {
     if (!ValidTextureTarget(context, target) && !ValidTextureExternalTarget(context, target))
@@ -5959,6 +5982,7 @@ bool ValidateTexParameterBase(Context *context,
             case GL_TEXTURE_MAX_LOD:
             case GL_TEXTURE_COMPARE_MODE:
             case GL_TEXTURE_COMPARE_FUNC:
+            case GL_TEXTURE_BORDER_COLOR:
                 context->handleError(InvalidEnum()
                                      << "Invalid parameter for 2D multisampled textures.");
                 return false;
@@ -6129,13 +6153,39 @@ bool ValidateTexParameterBase(Context *context,
             break;
 
         case GL_GENERATE_MIPMAP:
-        case GL_TEXTURE_CROP_RECT_OES:
             if (context->getClientMajorVersion() > 1)
             {
                 ANGLE_VALIDATION_ERR(context, InvalidEnum(), GLES1Only);
                 return false;
             }
             break;
+
+        case GL_TEXTURE_CROP_RECT_OES:
+            if (context->getClientMajorVersion() > 1)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), GLES1Only);
+                return false;
+            }
+            if (!vectorParams)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidOperation(), InsufficientBufferSize);
+                return false;
+            }
+            break;
+
+        case GL_TEXTURE_BORDER_COLOR:
+            if (!context->getExtensions().textureBorderClamp)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), ExtensionNotEnabled);
+                return false;
+            }
+            if (!vectorParams)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), InsufficientBufferSize);
+                return false;
+            }
+            break;
+
         default:
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
             return false;
@@ -6144,8 +6194,24 @@ bool ValidateTexParameterBase(Context *context,
     return true;
 }
 
-template bool ValidateTexParameterBase(Context *, TextureType, GLenum, GLsizei, const GLfloat *);
-template bool ValidateTexParameterBase(Context *, TextureType, GLenum, GLsizei, const GLint *);
+template bool ValidateTexParameterBase(Context *,
+                                       TextureType,
+                                       GLenum,
+                                       GLsizei,
+                                       bool,
+                                       const GLfloat *);
+template bool ValidateTexParameterBase(Context *,
+                                       TextureType,
+                                       GLenum,
+                                       GLsizei,
+                                       bool,
+                                       const GLint *);
+template bool ValidateTexParameterBase(Context *,
+                                       TextureType,
+                                       GLenum,
+                                       GLsizei,
+                                       bool,
+                                       const GLuint *);
 
 bool ValidateVertexAttribIndex(Context *context, GLuint index)
 {
@@ -6226,6 +6292,7 @@ bool ValidateSamplerParameterBase(Context *context,
                                   GLuint sampler,
                                   GLenum pname,
                                   GLsizei bufSize,
+                                  bool vectorParams,
                                   ParamType *params)
 {
     if (context->getClientMajorVersion() < 3)
@@ -6240,7 +6307,7 @@ bool ValidateSamplerParameterBase(Context *context,
         return false;
     }
 
-    const GLsizei minBufSize = 1;
+    const GLsizei minBufSize = GetSamplerParameterCount(pname);
     if (bufSize >= 0 && bufSize < minBufSize)
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), InsufficientBufferSize);
@@ -6308,6 +6375,19 @@ bool ValidateSamplerParameterBase(Context *context,
         }
         break;
 
+        case GL_TEXTURE_BORDER_COLOR:
+            if (!context->getExtensions().textureBorderClamp)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), ExtensionNotEnabled);
+                return false;
+            }
+            if (!vectorParams)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), InsufficientBufferSize);
+                return false;
+            }
+            break;
+
         default:
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
             return false;
@@ -6316,8 +6396,14 @@ bool ValidateSamplerParameterBase(Context *context,
     return true;
 }
 
-template bool ValidateSamplerParameterBase(Context *, GLuint, GLenum, GLsizei, GLfloat *);
-template bool ValidateSamplerParameterBase(Context *, GLuint, GLenum, GLsizei, GLint *);
+template bool ValidateSamplerParameterBase(Context *, GLuint, GLenum, GLsizei, bool, GLfloat *);
+template bool ValidateSamplerParameterBase(Context *, GLuint, GLenum, GLsizei, bool, GLint *);
+template bool ValidateSamplerParameterBase(Context *,
+                                           GLuint,
+                                           GLenum,
+                                           GLsizei,
+                                           bool,
+                                           const GLuint *);
 
 bool ValidateGetSamplerParameterBase(Context *context,
                                      GLuint sampler,
@@ -6369,6 +6455,14 @@ bool ValidateGetSamplerParameterBase(Context *context,
             }
             break;
 
+        case GL_TEXTURE_BORDER_COLOR:
+            if (!context->getExtensions().textureBorderClamp)
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidEnum(), ExtensionNotEnabled);
+                return false;
+            }
+            break;
+
         default:
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), EnumNotSupported);
             return false;
@@ -6376,7 +6470,7 @@ bool ValidateGetSamplerParameterBase(Context *context,
 
     if (length)
     {
-        *length = 1;
+        *length = GetSamplerParameterCount(pname);
     }
     return true;
 }

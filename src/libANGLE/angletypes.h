@@ -273,6 +273,10 @@ class SamplerState final
 
     void setSRGBDecode(GLenum sRGBDecode);
 
+    void setBorderColor(const ColorGeneric &color);
+
+    const ColorGeneric &getBorderColor() const { return mBorderColor; }
+
     bool sameCompleteness(const SamplerState &samplerState) const
     {
         return mCompleteness.packed == samplerState.mCompleteness.packed;
@@ -298,6 +302,8 @@ class SamplerState final
     GLenum mCompareFunc;
 
     GLenum mSRGBDecode;
+
+    ColorGeneric mBorderColor;
 
     union Completeness {
         uint32_t packed;
