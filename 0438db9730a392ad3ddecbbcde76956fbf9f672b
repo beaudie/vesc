@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "664b33f4_7e0f7349",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-02T19:08:42Z",
+      "side": 1,
+      "message": "I wasn\u0027t tough enough to change the implementation of normalizedToFloat and floatToNormalized in mathutil.h to use double precision because I am not sure if these functions are maybe used at performance critical places.\nBut it might be worth a ticket as this is probably problematic also in other areas where these functions are utilized.",
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
