@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bbee734a_dc799932",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1588,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T15:26:27Z",
+      "side": 1,
+      "message": "I wonder if getResolvedLinkedProgram would be better, the program may not be linked at all.",
+      "range": {
+        "startLine": 1588,
+        "startChar": 13,
+        "endLine": 1588,
+        "endChar": 29
+      },
+      "revId": "19aeb6b07df6d425404806b56ea1cb8bb7ebe6b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
