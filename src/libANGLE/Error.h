@@ -220,9 +220,9 @@ inline Error NoError()
         auto ANGLE_LOCAL_VAR = EXPR;                   \
         if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR.isError())) \
         {                                              \
-            return ANGLE_LOCAL_VAR.getError();         \
+            return ANGLE_LOCAL_VAR;                    \
         }                                              \
-        RESULT = ANGLE_LOCAL_VAR.getResult();          \
+        RESULT = ANGLE_LOCAL_VAR;                      \
     }                                                  \
     ANGLE_EMPTY_STATEMENT
 
