@@ -60,6 +60,10 @@ class RendererVk : angle::NonCopyable
     {
         return mPhysicalDeviceProperties;
     }
+    const VkPhysicalDeviceFeatures &getPhysicalDeviceFeatures() const
+    {
+        return mPhysicalDeviceFeatures;
+    }
     VkQueue getQueue() const { return mQueue; }
     VkDevice getDevice() const { return mDevice; }
 

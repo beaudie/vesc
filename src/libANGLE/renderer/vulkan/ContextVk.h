@@ -161,6 +161,7 @@ class ContextVk : public ContextImpl, public vk::Context
     void invalidateDefaultAttributes(const gl::AttributesMask &dirtyMask);
 
     vk::DynamicDescriptorPool *getDynamicDescriptorPool(uint32_t descriptorSetIndex);
+    vk::DynamicQueryPool *getOcclusionQueryPool();
 
     const VkClearValue &getClearColorValue() const;
     const VkClearValue &getClearDepthStencilValue() const;
@@ -251,7 +252,9 @@ class ContextVk : public ContextImpl, public vk::Context
 
     // The descriptor pools are externally sychronized, so cannot be accessed from different
     // threads simultaneously. Hence, we keep them in the ContextVk instead of the RendererVk.
+    // Same with query pools.
     vk::DescriptorSetLayoutArray<vk::DynamicDescriptorPool> mDynamicDescriptorPools;
+    vk::DynamicQueryPool mOcclusionQueryPool;
 
     // Dirty bits.
     DirtyBits mDirtyBits;
