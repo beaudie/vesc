@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "575f087b_3d692088",
+        "filename": "src/libANGLE/ErrorStrings.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-10-02T17:37:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "687741d8_d9251c4d",
+      "range": {
+        "startLine": 78,
+        "startChar": 7,
+        "endLine": 78,
+        "endChar": 36
+      },
+      "revId": "f90fb9fd84fccea143bf7c4becfd5293a6617d94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6201dc5e_bb488014",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Blit11.cpp",
         "patchSetId": 15
@@ -36,6 +60,30 @@
       "writtenOn": "2018-09-26T18:17:48Z",
       "side": 1,
       "message": "I\u0027m actually going to take a different tack from Geoff and propose that we consider doing auto-gen for this stuff. It\u0027s going to be easier to manage going forward. I\u0027m fine with doing that as a follow-up if you would prefer. But it would help future contributors maintain this section of code I think.",
+      "range": {
+        "startLine": 2492,
+        "startChar": 13,
+        "endLine": 2492,
+        "endChar": 44
+      },
+      "revId": "f90fb9fd84fccea143bf7c4becfd5293a6617d94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd093f21_d14a1d55",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Blit11.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2492,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-10-02T17:37:53Z",
+      "side": 1,
+      "message": "Okay. I\u0027d like to do this as a follow up. I\u0027ve got this partially done already - I\u0027m planning on generation for: the BlitShaderType enums, get*BlitShaderType(), and also this big switch case in getBlitShader(). Does that sound good?",
+      "parentUuid": "6201dc5e_bb488014",
       "range": {
         "startLine": 2492,
         "startChar": 13,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "74e363ef_88efa2f2",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/shaders/MultiplyAlpha.hlsl",
+        "patchSetId": 15
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-10-02T17:37:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "385598df_5f8e0620",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 9
+      },
+      "revId": "f90fb9fd84fccea143bf7c4becfd5293a6617d94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b0fdca3f_2255e779",
         "filename": "src/libANGLE/renderer/d3d/d3d11/shaders/Passthrough2DArray11.hlsl",
         "patchSetId": 15
@@ -88,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "072a4d3e_2b896db8",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/shaders/Passthrough2DArray11.hlsl",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-10-02T17:37:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0fdca3f_2255e779",
+      "revId": "f90fb9fd84fccea143bf7c4becfd5293a6617d94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ee3b90f8_dd1d2f34",
         "filename": "src/libANGLE/renderer/d3d/d3d11/shaders/Passthrough3D11.hlsl",
         "patchSetId": 15
@@ -102,6 +192,24 @@
       "revId": "f90fb9fd84fccea143bf7c4becfd5293a6617d94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6de7339_6c276578",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/shaders/Passthrough3D11.hlsl",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-10-02T17:37:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee3b90f8_dd1d2f34",
+      "revId": "f90fb9fd84fccea143bf7c4becfd5293a6617d94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -128,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "f73fc931_562f7d52",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-10-02T17:37:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e040ec8f_8e6f94e9",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 25
+      },
+      "revId": "f90fb9fd84fccea143bf7c4becfd5293a6617d94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66326bbe_ddc19754",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 15
@@ -148,6 +280,30 @@
       "revId": "f90fb9fd84fccea143bf7c4becfd5293a6617d94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac4de870_530fca77",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-10-02T17:37:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66326bbe_ddc19754",
+      "range": {
+        "startLine": 190,
+        "startChar": 0,
+        "endLine": 198,
+        "endChar": 5
+      },
+      "revId": "f90fb9fd84fccea143bf7c4becfd5293a6617d94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -174,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "26080ecd_c4b6d9a4",
+        "filename": "src/tests/gl_tests/CopyTexture3DTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-10-02T17:37:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70e7d3ae_75bbde6c",
+      "range": {
+        "startLine": 430,
+        "startChar": 0,
+        "endLine": 430,
+        "endChar": 6
+      },
+      "revId": "f90fb9fd84fccea143bf7c4becfd5293a6617d94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "408c26d2_5cc38d5d",
         "filename": "src/tests/gl_tests/CopyTexture3DTest.cpp",
         "patchSetId": 15
@@ -197,6 +377,30 @@
     },
     {
       "key": {
+        "uuid": "b8f9d62d_0d6c9ac7",
+        "filename": "src/tests/gl_tests/CopyTexture3DTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-10-02T17:37:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "408c26d2_5cc38d5d",
+      "range": {
+        "startLine": 432,
+        "startChar": 0,
+        "endLine": 435,
+        "endChar": 5
+      },
+      "revId": "f90fb9fd84fccea143bf7c4becfd5293a6617d94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ca223a3d_17a04d1f",
         "filename": "src/tests/gl_tests/CopyTexture3DTest.cpp",
         "patchSetId": 15
@@ -208,6 +412,24 @@
       "writtenOn": "2018-09-26T18:17:48Z",
       "side": 1,
       "message": "impressive amount of tests! do you think they\u0027ll take a while to run?",
+      "revId": "f90fb9fd84fccea143bf7c4becfd5293a6617d94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f8ba8c4_209692a3",
+        "filename": "src/tests/gl_tests/CopyTexture3DTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1763,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-10-02T17:37:53Z",
+      "side": 1,
+      "message": "It takes ~5sec for my dated i5 dev machine to get through them all. I don\u0027t think it will be an issue.",
+      "parentUuid": "ca223a3d_17a04d1f",
       "revId": "f90fb9fd84fccea143bf7c4becfd5293a6617d94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
