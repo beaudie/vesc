@@ -340,6 +340,30 @@
     },
     {
       "key": {
+        "uuid": "f431d880_cc4cf0b3",
+        "filename": "src/libANGLE/renderer/gl/egl/android/android_util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-02T15:54:56Z",
+      "side": 1,
+      "message": "Maybe dEQP should stop testing these, then?\nBTW, where does dEQP take these defines from?\nThey\u0027ve also copied parts of Android internal API?",
+      "parentUuid": "5ff55a52_07127aad",
+      "range": {
+        "startLine": 22,
+        "startChar": 1,
+        "endLine": 23,
+        "endChar": 48
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "95008d89_eee9c64a",
         "filename": "src/libANGLE/renderer/gl/egl/android/android_util.h",
         "patchSetId": 4
