@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0ea644a5_2fbb292e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-02T17:40:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56c0f78f_32cb1974",
+      "range": {
+        "startLine": 10,
+        "startChar": 40,
+        "endLine": 10,
+        "endChar": 47
+      },
+      "revId": "19aeb6b07df6d425404806b56ea1cb8bb7ebe6b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bbee734a_dc799932",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "19aeb6b07df6d425404806b56ea1cb8bb7ebe6b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82144a14_c4157bd6",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1588,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-02T17:40:06Z",
+      "side": 1,
+      "message": "Renamed to getProgramResolveLink and getProgramNoResolveLink",
+      "parentUuid": "bbee734a_dc799932",
+      "range": {
+        "startLine": 1588,
+        "startChar": 13,
+        "endLine": 1588,
+        "endChar": 29
+      },
+      "revId": "19aeb6b07df6d425404806b56ea1cb8bb7ebe6b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
