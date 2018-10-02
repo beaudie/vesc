@@ -20,6 +20,15 @@ Query::~Query()
     SafeDelete(mQuery);
 }
 
+Error Query::onDestroy(const Context *context)
+{
+    if (mQuery)
+    {
+        return mQuery->onDestroy(context);
+    }
+    return NoError();
+}
+
 void Query::setLabel(const std::string &label)
 {
     mLabel = label;
