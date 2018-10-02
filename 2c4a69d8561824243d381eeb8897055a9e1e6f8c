@@ -364,6 +364,30 @@
     },
     {
       "key": {
+        "uuid": "0518be0b_3b4bf610",
+        "filename": "src/libANGLE/renderer/gl/egl/android/android_util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T16:50:46Z",
+      "side": 1,
+      "message": "dEQP doesn\u0027t test this extension at all by default, it has to be explicitly enabled. dEQP contains the only tests of this extension though I could at least verify that it works.\n\nYou can see here the code to create GraphicsBuffer: https://android.googlesource.com/platform/external/deqp/+/master/framework/platform/android/tcuAndroidInternals.cpp  It loads mangled symbol names from Android system libraries to construct the buffer.\n\nFormat enums are from https://android.googlesource.com/platform/external/deqp/+/master/framework/platform/android/tcuAndroidInternals.hpp#77",
+      "parentUuid": "f431d880_cc4cf0b3",
+      "range": {
+        "startLine": 22,
+        "startChar": 1,
+        "endLine": 23,
+        "endChar": 48
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "95008d89_eee9c64a",
         "filename": "src/libANGLE/renderer/gl/egl/android/android_util.h",
         "patchSetId": 4
