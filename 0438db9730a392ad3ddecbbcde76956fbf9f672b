@@ -16,6 +16,208 @@
       "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b517d2f3_66138ee5",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T20:28:41Z",
+      "side": 1,
+      "message": "Hmm, a bug about this would be good.  It doesn\u0027t look like normalizedToFloat is used much with 32+ bit precision integers so it may not be covered.\n\nPerformance is not a major concern for this function, it\u0027s used mostly for glReadPixels processing and some mipmap generation.",
+      "parentUuid": "664b33f4_7e0f7349",
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04f883d5_3847b486",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T20:28:41Z",
+      "side": 1,
+      "message": "nit: capitalize the function name for globals.",
+      "range": {
+        "startLine": 41,
+        "startChar": 13,
+        "endLine": 41,
+        "endChar": 14
+      },
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edea6b24_e2f16cbc",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T20:28:41Z",
+      "side": 1,
+      "message": "Can be constexpr",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 9
+      },
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "129ec4ee_38c27cf7",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T20:28:41Z",
+      "side": 1,
+      "message": "nit: same",
+      "range": {
+        "startLine": 50,
+        "startChar": 9,
+        "endLine": 50,
+        "endChar": 10
+      },
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52018c18_36bd8646",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T20:28:41Z",
+      "side": 1,
+      "message": "We don\u0027t need to make a copy, can we just grab by const ref?",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 254,
+        "endChar": 67
+      },
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b34ac563_311cd1ac",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T20:28:41Z",
+      "side": 1,
+      "message": "Is this intentional?",
+      "range": {
+        "startLine": 568,
+        "startChar": 15,
+        "endLine": 568,
+        "endChar": 49
+      },
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fe933c9_5becb72c",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T20:28:41Z",
+      "side": 1,
+      "message": "This needs to generate an error.",
+      "range": {
+        "startLine": 230,
+        "startChar": 13,
+        "endLine": 231,
+        "endChar": 29
+      },
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57c4e246_a1a2cf8e",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6114,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T20:28:41Z",
+      "side": 1,
+      "message": "This needs to generate an error.",
+      "range": {
+        "startLine": 6113,
+        "startChar": 13,
+        "endLine": 6114,
+        "endChar": 29
+      },
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d63eb41_b75d509d",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6293,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-02T20:28:41Z",
+      "side": 1,
+      "message": "This needs to generate an error.",
+      "range": {
+        "startLine": 6292,
+        "startChar": 13,
+        "endLine": 6293,
+        "endChar": 29
+      },
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
