@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4aa0bda2_48cb2c48",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-02T20:48:11Z",
+      "side": 1,
+      "message": "nit: I\u0027ve been using a tagging like this:\n\n Vulkan: Add 565 configs for Android\n\nCould you use this style?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 30
+      },
+      "revId": "57f5f9858553cb1a969d4d8ec8d504985bdf45af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
