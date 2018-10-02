@@ -356,6 +356,134 @@ void DynamicDescriptorPool::setMaxSetsPerPoolForTesting(uint32_t maxSetsPerPool)
     mMaxSetsPerPool = maxSetsPerPool;
 }
 
+// QueryHelper implementation
+QueryHelper::QueryHelper()
+    : CommandGraphResource(CommandGraphResourceType::Query), mQueryPool(nullptr), mQuery(0)
+{
+}
+
+QueryHelper::QueryHelper(const QueryPool *queryPool, uint32_t query)
+    : CommandGraphResource(CommandGraphResourceType::Query), mQueryPool(queryPool), mQuery(query)
+{
+}
+
+QueryHelper::QueryHelper(QueryHelper &&other) : QueryHelper()
+{
+    *this = std::move(other);
+}
+
+QueryHelper::~QueryHelper()
+{
+}
+
+QueryHelper &QueryHelper::operator=(QueryHelper &&other)
+{
+    mQueryPool = other.mQueryPool;
+    mQuery     = other.mQuery;
+
+    other.mQueryPool = nullptr;
+
+    return *this;
+}
+
+// DynamicQueryPool implementation
+DynamicQueryPool::DynamicQueryPool() : mPoolSize(0), mCurrentQueryPool(0), mCurrentFreeQuery(0)
+{
+}
+
+DynamicQueryPool::~DynamicQueryPool() = default;
+
+angle::Result DynamicQueryPool::init(Context *context, VkQueryType type, uint32_t poolSize)
+{
+    ASSERT(mQueryPools.empty() && mQueryPoolStats.empty());
+
+    mPoolSize  = poolSize;
+    mQueryType = type;
+    ANGLE_TRY(allocateNewPool(context));
+    return angle::Result::Continue();
+}
+
+void DynamicQueryPool::destroy(VkDevice device)
+{
+    for (QueryPool &queryPool : mQueryPools)
+    {
+        queryPool.destroy(device);
+    }
+
+    mQueryPools.clear();
+    mQueryPoolStats.clear();
+}
+
+angle::Result DynamicQueryPool::allocateQuery(Context *context, QueryHelper *queryOut)
+{
+    ASSERT(!queryOut->getQueryPool());
+
+    if (mCurrentFreeQuery >= mPoolSize)
+    {
+        // No more queries left in this pool, create another one.
+        ANGLE_TRY(allocateNewPool(context));
+    }
+
+    *queryOut = QueryHelper(&mQueryPools[mCurrentQueryPool], mCurrentFreeQuery++);
+
+    return angle::Result::Continue();
+}
+
+void DynamicQueryPool::freeQuery(Context *context, QueryHelper *query)
+{
+    if (query->getQueryPool())
+    {
+        size_t poolIndex = query->getQueryPool() - &mQueryPools[0];
+        ASSERT(query->getQueryPool()->valid() && poolIndex < mQueryPoolStats.size() &&
+               mQueryPoolStats[poolIndex].freeCount < mPoolSize);
+
+        ++mQueryPoolStats[poolIndex].freeCount;
+        *query = QueryHelper();
+
+        // Take note of the current serial to avoid reallocating a query in the same pool
+        mQueryPoolStats[poolIndex].serial = context->getRenderer()->getCurrentQueueSerial();
+    }
+}
+
+angle::Result DynamicQueryPool::allocateNewPool(Context *context)
+{
+    // Before allocating a new pool, see if a previously allocated pool is completely freed up.
+    // In that case, use that older pool instead.
+    Serial currentQueueSerial = context->getRenderer()->getCurrentQueueSerial();
+    for (size_t i = 0; i < mQueryPools.size(); ++i)
+    {
+        if (mQueryPoolStats[i].freeCount == mPoolSize &&
+            mQueryPoolStats[i].serial < currentQueueSerial)
+        {
+            mCurrentQueryPool = i;
+            mCurrentFreeQuery = 0;
+
+            return angle::Result::Continue();
+        }
+    }
+
+    VkQueryPoolCreateInfo queryPoolInfo = {};
+    queryPoolInfo.sType                 = VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO;
+    queryPoolInfo.flags                 = 0;
+    queryPoolInfo.queryType             = mQueryType;
+    queryPoolInfo.queryCount            = mPoolSize;
+    queryPoolInfo.pipelineStatistics    = 0;
+
+    vk::QueryPool queryPool;
+
+    ANGLE_TRY(queryPool.init(context, queryPoolInfo));
+
+    mQueryPools.push_back(std::move(queryPool));
+
+    QueryPoolStats poolStats = {0, Serial()};
+    mQueryPoolStats.push_back(poolStats);
+
+    mCurrentQueryPool = mQueryPools.size() - 1;
+    mCurrentFreeQuery = 0;
+
+    return angle::Result::Continue();
+}
+
 // LineLoopHelper implementation.
 LineLoopHelper::LineLoopHelper(RendererVk *renderer)
     : mDynamicIndexBuffer(kLineLoopDynamicBufferUsage, kLineLoopDynamicBufferMinSize)

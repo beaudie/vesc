@@ -169,6 +169,8 @@ void ContextVk::onDestroy(const gl::Context *context)
     {
         defaultBuffer.destroy(getDevice());
     }
+
+    mOcclusionQueryPool.destroy(getDevice());
 }
 
 gl::Error ContextVk::getIncompleteTexture(const gl::Context *context,
@@ -198,6 +200,9 @@ gl::Error ContextVk::initialize()
                                                    vk::kDefaultDescriptorPoolMaxSets};
     ANGLE_TRY(mDynamicDescriptorPools[kDriverUniformsDescriptorSetIndex].init(
         this, driverUniformsPoolSize));
+
+    ANGLE_TRY(mOcclusionQueryPool.init(this, VK_QUERY_TYPE_OCCLUSION,
+                                       vk::kDefaultOcclusionQueryPoolSize));
 
     size_t minAlignment = static_cast<size_t>(
         mRenderer->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
@@ -1079,6 +1084,11 @@ gl::Error ContextVk::memoryBarrierByRegion(const gl::Context *context, GLbitfiel
 vk::DynamicDescriptorPool *ContextVk::getDynamicDescriptorPool(uint32_t descriptorSetIndex)
 {
     return &mDynamicDescriptorPools[descriptorSetIndex];
+}
+
+vk::DynamicQueryPool *ContextVk::getOcclusionQueryPool()
+{
+    return &mOcclusionQueryPool;
 }
 
 const VkClearValue &ContextVk::getClearColorValue() const
