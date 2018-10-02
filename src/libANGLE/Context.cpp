@@ -1024,7 +1024,7 @@ gl::LabeledObject *Context::getLabeledObject(GLenum identifier, GLuint name) con
         case GL_SHADER:
             return getShader(name);
         case GL_PROGRAM:
-            return getProgram(name);
+            return getMaybeLinkedProgram(name);
         case GL_VERTEX_ARRAY:
             return getVertexArray(name);
         case GL_QUERY:
@@ -1178,7 +1178,7 @@ void Context::bindImageTexture(GLuint unit,
 
 void Context::useProgram(GLuint program)
 {
-    mGLState.setProgram(this, getProgram(program));
+    mGLState.setProgram(this, getLinkedProgram(program));
     mStateCache.onProgramExecutableChange(this);
 }
 
@@ -2335,7 +2335,7 @@ void Context::popGroupMarker()
 
 void Context::bindUniformLocation(GLuint program, GLint location, const GLchar *name)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
 
     programObject->bindUniformLocation(location, name);
@@ -2533,7 +2533,7 @@ void Context::stencilThenCoverStrokePathInstanced(GLsizei numPaths,
 
 void Context::bindFragmentInputLocation(GLuint program, GLint location, const GLchar *name)
 {
-    auto *programObject = getProgram(program);
+    auto *programObject = getLinkedProgram(program);
 
     programObject->bindFragmentInputLocation(location, name);
 }
@@ -2544,14 +2544,14 @@ void Context::programPathFragmentInputGen(GLuint program,
                                           GLint components,
                                           const GLfloat *coeffs)
 {
-    auto *programObject = getProgram(program);
+    auto *programObject = getLinkedProgram(program);
 
     programObject->pathFragmentInputGen(location, genMode, components, coeffs);
 }
 
 GLuint Context::getProgramResourceIndex(GLuint program, GLenum programInterface, const GLchar *name)
 {
-    const auto *programObject = getProgram(program);
+    const Program *programObject = getLinkedProgram(program);
     return QueryProgramResourceIndex(programObject, programInterface, name);
 }
 
@@ -2562,7 +2562,7 @@ void Context::getProgramResourceName(GLuint program,
                                      GLsizei *length,
                                      GLchar *name)
 {
-    const auto *programObject = getProgram(program);
+    const Program *programObject = getLinkedProgram(program);
     QueryProgramResourceName(programObject, programInterface, index, bufSize, length, name);
 }
 
@@ -2570,7 +2570,7 @@ GLint Context::getProgramResourceLocation(GLuint program,
                                           GLenum programInterface,
                                           const GLchar *name)
 {
-    const auto *programObject = getProgram(program);
+    const Program *programObject = getLinkedProgram(program);
     return QueryProgramResourceLocation(programObject, programInterface, name);
 }
 
@@ -2583,7 +2583,7 @@ void Context::getProgramResourceiv(GLuint program,
                                    GLsizei *length,
                                    GLint *params)
 {
-    const auto *programObject = getProgram(program);
+    const Program *programObject = getLinkedProgram(program);
     QueryProgramResourceiv(programObject, programInterface, index, propCount, props, bufSize,
                            length, params);
 }
@@ -2593,7 +2593,7 @@ void Context::getProgramInterfaceiv(GLuint program,
                                     GLenum pname,
                                     GLint *params)
 {
-    const auto *programObject = getProgram(program);
+    const Program *programObject = getLinkedProgram(program);
     QueryProgramInterfaceiv(programObject, programInterface, pname, params);
 }
 
@@ -2955,7 +2955,7 @@ void Context::getSamplerParameterfvRobust(GLuint sampler,
 
 void Context::programParameteri(GLuint program, GLenum pname, GLint value)
 {
-    gl::Program *programObject = getProgram(program);
+    gl::Program *programObject = getLinkedProgram(program);
     SetProgramParameteri(programObject, pname, value);
 }
 
@@ -5013,8 +5013,8 @@ void Context::copyBufferSubData(BufferBinding readTarget,
 
 void Context::bindAttribLocation(GLuint program, GLuint index, const GLchar *name)
 {
-    Program *programObject = getProgram(program);
-    // TODO(jmadill): Re-use this from the validation if possible.
+    // Ideally we could share the program query with the validation layer if possible.
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->bindAttributeLocation(index, name);
 }
@@ -5308,7 +5308,7 @@ void Context::deleteTextures(GLsizei n, const GLuint *textures)
 
 void Context::detachShader(GLuint program, GLuint shader)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getMaybeLinkedProgram(program);
     ASSERT(programObject);
 
     Shader *shaderObject = getShader(shader);
@@ -5357,7 +5357,7 @@ void Context::getActiveAttrib(GLuint program,
                               GLenum *type,
                               GLchar *name)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->getActiveAttribute(index, bufsize, length, size, type, name);
 }
@@ -5370,21 +5370,21 @@ void Context::getActiveUniform(GLuint program,
                                GLenum *type,
                                GLchar *name)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->getActiveUniform(index, bufsize, length, size, type, name);
 }
 
 void Context::getAttachedShaders(GLuint program, GLsizei maxcount, GLsizei *count, GLuint *shaders)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getMaybeLinkedProgram(program);
     ASSERT(programObject);
     programObject->getAttachedShaders(maxcount, count, shaders);
 }
 
 GLint Context::getAttribLocation(GLuint program, const GLchar *name)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     return programObject->getAttributeLocation(name);
 }
@@ -5454,7 +5454,9 @@ void Context::getIntegervRobust(GLenum pname, GLsizei bufSize, GLsizei *length, 
 
 void Context::getProgramiv(GLuint program, GLenum pname, GLint *params)
 {
-    Program *programObject = getProgram(program);
+    // Don't resolve link if checking the link completion status.
+    Program *programObject = (pname == GL_COMPLETION_STATUS_KHR ? getMaybeLinkedProgram(program)
+                                                                : getLinkedProgram(program));
     ASSERT(programObject);
     QueryProgramiv(this, programObject, pname, params);
 }
@@ -5475,7 +5477,7 @@ void Context::getProgramPipelineiv(GLuint pipeline, GLenum pname, GLint *params)
 
 void Context::getProgramInfoLog(GLuint program, GLsizei bufsize, GLsizei *length, GLchar *infolog)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->getInfoLog(bufsize, length, infolog);
 }
@@ -5593,7 +5595,7 @@ void Context::getShaderSource(GLuint shader, GLsizei bufsize, GLsizei *length, G
 
 void Context::getUniformfv(GLuint program, GLint location, GLfloat *params)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->getUniformfv(this, location, params);
 }
@@ -5609,7 +5611,7 @@ void Context::getUniformfvRobust(GLuint program,
 
 void Context::getUniformiv(GLuint program, GLint location, GLint *params)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->getUniformiv(this, location, params);
 }
@@ -5625,7 +5627,7 @@ void Context::getUniformivRobust(GLuint program,
 
 GLint Context::getUniformLocation(GLuint program, const GLchar *name)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     return programObject->getUniformLocation(name);
 }
@@ -5662,7 +5664,7 @@ GLboolean Context::isProgram(GLuint program)
         return GL_FALSE;
     }
 
-    return (getProgram(program) ? GL_TRUE : GL_FALSE);
+    return (getMaybeLinkedProgram(program) ? GL_TRUE : GL_FALSE);
 }
 
 GLboolean Context::isRenderbuffer(GLuint renderbuffer)
@@ -5697,7 +5699,7 @@ GLboolean Context::isTexture(GLuint texture)
 
 void Context::linkProgram(GLuint program)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getMaybeLinkedProgram(program);
     ASSERT(programObject);
     handleError(programObject->link(this));
 
@@ -5710,6 +5712,8 @@ void Context::linkProgram(GLuint program)
     //      ProgramD3D.
     if (programObject->isInUse())
     {
+        programObject->resolveLink();
+
         // isLinked() which forces to resolve linking, will be called.
         mGLState.onProgramExecutableChange(programObject);
         mStateCache.onProgramExecutableChange(this);
@@ -5894,7 +5898,7 @@ void Context::uniformMatrix4fv(GLint location,
 
 void Context::validateProgram(GLuint program)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->validate(mCaps);
 }
@@ -5910,7 +5914,7 @@ void Context::getProgramBinary(GLuint program,
                                GLenum *binaryFormat,
                                void *binary)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject != nullptr);
 
     handleError(programObject->saveBinary(this, binaryFormat, binary, bufSize, length));
@@ -5918,7 +5922,7 @@ void Context::getProgramBinary(GLuint program,
 
 void Context::programBinary(GLuint program, GLenum binaryFormat, const void *binary, GLsizei length)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject != nullptr);
 
     handleError(programObject->loadBinary(this, binaryFormat, binary, length));
@@ -6122,7 +6126,7 @@ void Context::transformFeedbackVaryings(GLuint program,
                                         const GLchar *const *varyings,
                                         GLenum bufferMode)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setTransformFeedbackVaryings(count, varyings, bufferMode);
 }
@@ -6135,7 +6139,7 @@ void Context::getTransformFeedbackVarying(GLuint program,
                                           GLenum *type,
                                           GLchar *name)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->getTransformFeedbackVarying(index, bufSize, length, size, type, name);
 }
@@ -6201,7 +6205,7 @@ void Context::resumeTransformFeedback()
 
 void Context::getUniformuiv(GLuint program, GLint location, GLuint *params)
 {
-    const Program *programObject = getProgram(program);
+    const Program *programObject = getLinkedProgram(program);
     programObject->getUniformuiv(this, location, params);
 }
 
@@ -6216,7 +6220,7 @@ void Context::getUniformuivRobust(GLuint program,
 
 GLint Context::getFragDataLocation(GLuint program, const GLchar *name)
 {
-    const Program *programObject = getProgram(program);
+    const Program *programObject = getLinkedProgram(program);
     return programObject->getFragDataLocation(name);
 }
 
@@ -6225,7 +6229,7 @@ void Context::getUniformIndices(GLuint program,
                                 const GLchar *const *uniformNames,
                                 GLuint *uniformIndices)
 {
-    const Program *programObject = getProgram(program);
+    const Program *programObject = getLinkedProgram(program);
     if (!programObject->isLinked())
     {
         for (int uniformId = 0; uniformId < uniformCount; uniformId++)
@@ -6248,7 +6252,7 @@ void Context::getActiveUniformsiv(GLuint program,
                                   GLenum pname,
                                   GLint *params)
 {
-    const Program *programObject = getProgram(program);
+    const Program *programObject = getLinkedProgram(program);
     for (int uniformId = 0; uniformId < uniformCount; uniformId++)
     {
         const GLuint index = uniformIndices[uniformId];
@@ -6258,7 +6262,7 @@ void Context::getActiveUniformsiv(GLuint program,
 
 GLuint Context::getUniformBlockIndex(GLuint program, const GLchar *uniformBlockName)
 {
-    const Program *programObject = getProgram(program);
+    const Program *programObject = getLinkedProgram(program);
     return programObject->getUniformBlockIndex(uniformBlockName);
 }
 
@@ -6267,7 +6271,7 @@ void Context::getActiveUniformBlockiv(GLuint program,
                                       GLenum pname,
                                       GLint *params)
 {
-    const Program *programObject = getProgram(program);
+    const Program *programObject = getLinkedProgram(program);
     QueryActiveUniformBlockiv(programObject, uniformBlockIndex, pname, params);
 }
 
@@ -6287,7 +6291,7 @@ void Context::getActiveUniformBlockName(GLuint program,
                                         GLsizei *length,
                                         GLchar *uniformBlockName)
 {
-    const Program *programObject = getProgram(program);
+    const Program *programObject = getLinkedProgram(program);
     programObject->getActiveUniformBlockName(uniformBlockIndex, bufSize, length, uniformBlockName);
 }
 
@@ -6295,7 +6299,7 @@ void Context::uniformBlockBinding(GLuint program,
                                   GLuint uniformBlockIndex,
                                   GLuint uniformBlockBinding)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     programObject->bindUniformBlock(uniformBlockIndex, uniformBlockBinding);
 
     if (programObject->isInUse())
@@ -6507,84 +6511,84 @@ void Context::programUniform4f(GLuint program,
 
 void Context::programUniform1iv(GLuint program, GLint location, GLsizei count, const GLint *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     setUniform1iImpl(programObject, location, count, value);
 }
 
 void Context::programUniform2iv(GLuint program, GLint location, GLsizei count, const GLint *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniform2iv(location, count, value);
 }
 
 void Context::programUniform3iv(GLuint program, GLint location, GLsizei count, const GLint *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniform3iv(location, count, value);
 }
 
 void Context::programUniform4iv(GLuint program, GLint location, GLsizei count, const GLint *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniform4iv(location, count, value);
 }
 
 void Context::programUniform1uiv(GLuint program, GLint location, GLsizei count, const GLuint *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniform1uiv(location, count, value);
 }
 
 void Context::programUniform2uiv(GLuint program, GLint location, GLsizei count, const GLuint *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniform2uiv(location, count, value);
 }
 
 void Context::programUniform3uiv(GLuint program, GLint location, GLsizei count, const GLuint *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniform3uiv(location, count, value);
 }
 
 void Context::programUniform4uiv(GLuint program, GLint location, GLsizei count, const GLuint *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniform4uiv(location, count, value);
 }
 
 void Context::programUniform1fv(GLuint program, GLint location, GLsizei count, const GLfloat *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniform1fv(location, count, value);
 }
 
 void Context::programUniform2fv(GLuint program, GLint location, GLsizei count, const GLfloat *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniform2fv(location, count, value);
 }
 
 void Context::programUniform3fv(GLuint program, GLint location, GLsizei count, const GLfloat *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniform3fv(location, count, value);
 }
 
 void Context::programUniform4fv(GLuint program, GLint location, GLsizei count, const GLfloat *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniform4fv(location, count, value);
 }
@@ -6595,7 +6599,7 @@ void Context::programUniformMatrix2fv(GLuint program,
                                       GLboolean transpose,
                                       const GLfloat *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniformMatrix2fv(location, count, transpose, value);
 }
@@ -6606,7 +6610,7 @@ void Context::programUniformMatrix3fv(GLuint program,
                                       GLboolean transpose,
                                       const GLfloat *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniformMatrix3fv(location, count, transpose, value);
 }
@@ -6617,7 +6621,7 @@ void Context::programUniformMatrix4fv(GLuint program,
                                       GLboolean transpose,
                                       const GLfloat *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniformMatrix4fv(location, count, transpose, value);
 }
@@ -6628,7 +6632,7 @@ void Context::programUniformMatrix2x3fv(GLuint program,
                                         GLboolean transpose,
                                         const GLfloat *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniformMatrix2x3fv(location, count, transpose, value);
 }
@@ -6639,7 +6643,7 @@ void Context::programUniformMatrix3x2fv(GLuint program,
                                         GLboolean transpose,
                                         const GLfloat *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniformMatrix3x2fv(location, count, transpose, value);
 }
@@ -6650,7 +6654,7 @@ void Context::programUniformMatrix2x4fv(GLuint program,
                                         GLboolean transpose,
                                         const GLfloat *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniformMatrix2x4fv(location, count, transpose, value);
 }
@@ -6661,7 +6665,7 @@ void Context::programUniformMatrix4x2fv(GLuint program,
                                         GLboolean transpose,
                                         const GLfloat *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniformMatrix4x2fv(location, count, transpose, value);
 }
@@ -6672,7 +6676,7 @@ void Context::programUniformMatrix3x4fv(GLuint program,
                                         GLboolean transpose,
                                         const GLfloat *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniformMatrix3x4fv(location, count, transpose, value);
 }
@@ -6683,7 +6687,7 @@ void Context::programUniformMatrix4x3fv(GLuint program,
                                         GLboolean transpose,
                                         const GLfloat *value)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
     programObject->setUniformMatrix4x3fv(location, count, transpose, value);
 }
@@ -6783,7 +6787,7 @@ void Context::getTranslatedShaderSource(GLuint shader,
 
 void Context::getnUniformfv(GLuint program, GLint location, GLsizei bufSize, GLfloat *params)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
 
     programObject->getUniformfv(this, location, params);
@@ -6800,7 +6804,7 @@ void Context::getnUniformfvRobust(GLuint program,
 
 void Context::getnUniformiv(GLuint program, GLint location, GLsizei bufSize, GLint *params)
 {
-    Program *programObject = getProgram(program);
+    Program *programObject = getLinkedProgram(program);
     ASSERT(programObject);
 
     programObject->getUniformiv(this, location, params);
@@ -7682,7 +7686,17 @@ bool Context::getIndexedQueryParameterInfo(GLenum target, GLenum *type, unsigned
     return false;
 }
 
-Program *Context::getProgram(GLuint handle) const
+Program *Context::getLinkedProgram(GLuint handle) const
+{
+    Program *program = mState.mShaderPrograms->getProgram(handle);
+    if (program)
+    {
+        program->resolveLink();
+    }
+    return program;
+}
+
+Program *Context::getMaybeLinkedProgram(GLuint handle) const
 {
     return mState.mShaderPrograms->getProgram(handle);
 }
