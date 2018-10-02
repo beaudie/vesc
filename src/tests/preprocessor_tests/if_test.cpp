@@ -874,17 +874,132 @@ TEST_F(IfTest, DefinedOperatorValidAfterMacroExpansion)
         "pass\n"
         "#endif\n";
 
+    preprocess(str);
+}
+
+// Validate the defined operator is evaluated when the macro is called, not when defined.
+TEST_F(IfTest, DefinedOperatorValidWhenUsed)
+{
+    constexpr char str[] = R"(precision mediump float;
+attribute highp vec4 position;
+varying vec2 out0;
+
+void main()
+{
+#define BBB 1
+#define AAA defined(BBB)
+#undef BBB
+
+#if AAA
+    out0 = vec2(1.0, 0.0);
+#else
+    out0 = vec2(0.0, 1.0);
+#endif
+    gl_Position = position;
+})";
+
+    preprocess(str);
+}
+
+// Validate the defined operator is evaluated when the macro is called, not when defined.
+TEST_F(IfTest, DefinedOperatorValidWhenUsedReversed)
+{
+    constexpr char str[] = R"(precision mediump float;
+attribute highp vec4 position;
+varying vec2 out0;
+
+void main()
+{
+#define AAA defined(BBB)
+#define BBB 1
+#undef BBB
+
+#if AAA
+    out0 = vec2(1.0, 0.0);
+#else
+    out0 = vec2(0.0, 1.0);
+#endif
+    gl_Position = position;
+})";
+
+    preprocess(str);
+}
+
+// Test generating "defined" by concatenation when a macro is called. This is not allowed.
+TEST_F(IfTest, DefinedInMacroConcatenationNotAllowed)
+{
+    constexpr char str[] = R"(precision mediump float;
+attribute highp vec4 position;
+varying vec2 out0;
+
+void main()
+{
+#define BBB 1
+#define AAA(defi, ned) defi ## ned(BBB)
+
+#if AAA(defi, ned)
+    out0 = vec2(0.0, 1.0);
+#else
+    out0 = vec2(1.0, 0.0);
+#endif
+    gl_Position = position;
+})";
+
+    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
+                                    pp::SourceLocation(0, 10), "defi"));
+    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
+                                    pp::SourceLocation(0, 10), "#"));
+
+    preprocess(str);
+}
+
+// Test using defined in a macro parameter name. This is not allowed.
+TEST_F(IfTest, DefinedAsParameterNameNotAllowed)
+{
+    constexpr char str[] = R"(precision mediump float;
+attribute highp vec4 position;
+varying vec2 out0;
+
+void main()
+{
+#define BBB 1
+#define AAA(defined) defined(BBB)
+
+#if AAA(defined)
+    out0 = vec2(0.0, 1.0);
+#else
+    out0 = vec2(1.0, 0.0);
+#endif
+    gl_Position = position;
+})";
+
+    EXPECT_CALL(mDiagnostics,
+                print(pp::Diagnostics::PP_UNEXPECTED_TOKEN, pp::SourceLocation(0, 0), ""));
+
+    preprocess(str);
+}
+
+// This behavour is disabled in WebGL.
+TEST_F(IfTest, DefinedOperatorInvalidAfterMacroExpansionInWebGL)
+{
+    const char *str =
+        "#define foo defined\n"
+        "#if !foo bar\n"
+        "pass\n"
+        "#endif\n";
+
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
                                     pp::SourceLocation(0, 2), "defined"));
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
                                     pp::SourceLocation(0, 2), "bar"));
 
-    preprocess(str);
+    preprocess(str, pp::PreprocessorSettings(SH_WEBGL_SPEC));
 }
 
 // Defined operator produced by macro expansion has undefined behavior according to C++ spec,
-// which the GLSL spec references (see C++14 draft spec section 16.1.4), but this behavior is
-// needed for passing dEQP tests, which enforce stricter compatibility between implementations.
+// which the GLSL spec references (see C++14 draft spec section 16.1.4). Some edge case
+// behaviours with defined are not portable between implementations and thus are not required
+// to pass dEQP Tests.
 TEST_F(IfTest, UnterminatedDefinedInMacro)
 {
     const char *str =
@@ -892,17 +1007,18 @@ TEST_F(IfTest, UnterminatedDefinedInMacro)
         "#if foo\n"
         "#endif\n";
 
-    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
-                                    pp::SourceLocation(0, 2), "defined"));
-    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
-                                    pp::SourceLocation(0, 2), "("));
+    EXPECT_CALL(mDiagnostics,
+                print(pp::Diagnostics::PP_UNEXPECTED_TOKEN, pp::SourceLocation(0, 2), "\n"));
+    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_INVALID_EXPRESSION,
+                                    pp::SourceLocation(0, 2), "syntax error"));
 
     preprocess(str);
 }
 
 // Defined operator produced by macro expansion has undefined behavior according to C++ spec,
-// which the GLSL spec references (see C++14 draft spec section 16.1.4), but this behavior is
-// needed for passing dEQP tests, which enforce stricter compatibility between implementations.
+// which the GLSL spec references (see C++14 draft spec section 16.1.4). Some edge case
+// behaviours with defined are not portable between implementations and thus are not required
+// to pass dEQP Tests.
 TEST_F(IfTest, UnterminatedDefinedInMacro2)
 {
     const char *str =
@@ -910,10 +1026,10 @@ TEST_F(IfTest, UnterminatedDefinedInMacro2)
         "#if foo\n"
         "#endif\n";
 
-    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
-                                    pp::SourceLocation(0, 2), "defined"));
-    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
-                                    pp::SourceLocation(0, 2), "("));
+    EXPECT_CALL(mDiagnostics,
+                print(pp::Diagnostics::PP_UNEXPECTED_TOKEN, pp::SourceLocation(0, 2), "\n"));
+    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_INVALID_EXPRESSION,
+                                    pp::SourceLocation(0, 2), "syntax error"));
 
     preprocess(str);
 }
