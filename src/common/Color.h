@@ -48,6 +48,33 @@ typedef Color<float> ColorF;
 typedef Color<int> ColorI;
 typedef Color<unsigned int> ColorUI;
 
+struct ColorT
+{
+    inline ColorT();
+    inline ColorT(const ColorF &color);
+    inline ColorT(const ColorI &color);
+    inline ColorT(const ColorUI &color);
+
+    enum class Type : uint8_t
+    {
+        Float = 0,
+        Int   = 1,
+        UInt  = 2
+    };
+
+    union {
+        ColorF colorF;
+        ColorI colorI;
+        ColorUI colorUI;
+    };
+
+    Type type;
+};
+
+inline bool operator==(const ColorT &a, const ColorT &b);
+
+inline bool operator!=(const ColorT &a, const ColorT &b);
+
 struct DepthStencil
 {
     DepthStencil() : depth(0), stencil(0) {}
@@ -67,6 +94,7 @@ using Color   = angle::Color<T>;
 using ColorF  = angle::ColorF;
 using ColorI  = angle::ColorI;
 using ColorUI = angle::ColorUI;
+using ColorT  = angle::ColorT;
 
 }  // namespace gl
 
