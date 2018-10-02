@@ -932,6 +932,11 @@ void GenerateCaps(const FunctionsGL *functions,
         *multiviewImplementationType = MultiviewImplementationTypeGL::NV_VIEWPORT_ARRAY2;
     }
 
+    extensions->textureBorderClamp = functions->standard == STANDARD_GL_DESKTOP ||
+                                     functions->hasGLESExtension("GL_OES_texture_border_clamp") ||
+                                     functions->hasGLESExtension("GL_EXT_texture_border_clamp") ||
+                                     functions->hasGLESExtension("GL_NV_texture_border_clamp");
+
     extensions->fboRenderMipmap = functions->isAtLeastGL(gl::Version(3, 0)) || functions->hasGLExtension("GL_EXT_framebuffer_object") ||
                                   functions->isAtLeastGLES(gl::Version(3, 0)) || functions->hasGLESExtension("GL_OES_fbo_render_mipmap");
     extensions->instancedArrays = functions->isAtLeastGL(gl::Version(3, 1)) ||
