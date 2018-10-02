@@ -1949,6 +1949,8 @@ D3D11_TEXTURE_ADDRESS_MODE ConvertTextureWrap(GLenum wrap)
             return D3D11_TEXTURE_ADDRESS_WRAP;
         case GL_CLAMP_TO_EDGE:
             return D3D11_TEXTURE_ADDRESS_CLAMP;
+        case GL_CLAMP_TO_BORDER:
+            return D3D11_TEXTURE_ADDRESS_BORDER;
         case GL_MIRRORED_REPEAT:
             return D3D11_TEXTURE_ADDRESS_MIRROR;
         default:

@@ -68,6 +68,9 @@ class Sampler final : public RefCountObject, public LabeledObject, public angle:
     void setSRGBDecode(GLenum sRGBDecode);
     GLenum getSRGBDecode() const;
 
+    void setBorderColor(const ColorT &color);
+    const ColorT &getBorderColor() const;
+
     const SamplerState &getSamplerState() const;
 
     rx::SamplerImpl *getImplementation() const;
