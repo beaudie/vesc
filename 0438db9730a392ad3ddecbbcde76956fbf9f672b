@@ -60,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "1689f217_71174b3a",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-02T22:11:03Z",
+      "side": 1,
+      "message": "This was actually to be aligned to the lower case normalizedToFloat and floatToNormalized functions from mathutil.h --\nbut I capitalized them now, OK.",
+      "parentUuid": "04f883d5_3847b486",
+      "range": {
+        "startLine": 41,
+        "startChar": 13,
+        "endLine": 41,
+        "endChar": 14
+      },
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "edea6b24_e2f16cbc",
         "filename": "src/libANGLE/queryutils.cpp",
         "patchSetId": 1
@@ -80,6 +104,30 @@
       "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61200767_236a2cd5",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-02T22:11:03Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "edea6b24_e2f16cbc",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 9
+      },
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -106,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "3a18e145_6fc9dce5",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-02T22:11:03Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "129ec4ee_38c27cf7",
+      "range": {
+        "startLine": 50,
+        "startChar": 9,
+        "endLine": 50,
+        "endChar": 10
+      },
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "52018c18_36bd8646",
         "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
         "patchSetId": 1
@@ -126,6 +198,30 @@
       "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f302b081_18f0c27c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-02T22:11:03Z",
+      "side": 1,
+      "message": "right",
+      "parentUuid": "52018c18_36bd8646",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 254,
+        "endChar": 67
+      },
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -152,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "cf3e14b9_9527b1ad",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-02T22:11:03Z",
+      "side": 1,
+      "message": "Oops... no.\nI remember for some reason my Windows SDK didn\u0027t provide this function at some time, so I commented it out locally. It was not meant to be committed.",
+      "parentUuid": "b34ac563_311cd1ac",
+      "range": {
+        "startLine": 568,
+        "startChar": 15,
+        "endLine": 568,
+        "endChar": 49
+      },
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4fe933c9_5becb72c",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 1
@@ -172,6 +292,30 @@
       "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fff8cbe_475df3f6",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-02T22:11:03Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "4fe933c9_5becb72c",
+      "range": {
+        "startLine": 230,
+        "startChar": 13,
+        "endLine": 231,
+        "endChar": 29
+      },
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -198,6 +342,30 @@
     },
     {
       "key": {
+        "uuid": "a32d8456_3d1ef7f3",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6114,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-02T22:11:03Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "57c4e246_a1a2cf8e",
+      "range": {
+        "startLine": 6113,
+        "startChar": 13,
+        "endLine": 6114,
+        "endChar": 29
+      },
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4d63eb41_b75d509d",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 1
@@ -218,6 +386,30 @@
       "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af894dca_17ccfafc",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6293,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-02T22:11:03Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "4d63eb41_b75d509d",
+      "range": {
+        "startLine": 6292,
+        "startChar": 13,
+        "endLine": 6293,
+        "endChar": 29
+      },
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
