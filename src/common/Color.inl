@@ -34,4 +34,60 @@ bool operator!=(const Color<T> &a, const Color<T> &b)
     return !(a == b);
 }
 
+
+ColorVariant::ColorVariant() : colorF(), type(Type::Float)
+{
+}
+
+ColorVariant::ColorVariant(const ColorF& color) : colorF(color), type(Type::Float)
+{
+}
+
+ColorVariant::ColorVariant(const ColorI& color) : colorI(color), type(Type::Int)
+{
+}
+
+ColorVariant::ColorVariant(const ColorUI& color) : colorUI(color), type(Type::UInt)
+{
+}
+
+ColorF ColorVariant::castToColorF() const
+{
+    switch (type)
+    {
+        default:
+        case ColorVariant::Type::Float:
+            return colorF;
+        case ColorVariant::Type::Int:
+            return ColorF(static_cast<float>(colorI.red), static_cast<float>(colorI.green),
+                          static_cast<float>(colorI.blue), static_cast<float>(colorI.alpha));
+        case ColorVariant::Type::UInt:
+            return ColorF(static_cast<float>(colorUI.red), static_cast<float>(colorUI.green),
+                          static_cast<float>(colorUI.blue), static_cast<float>(colorUI.alpha));
+    }
+}
+
+bool operator==(const ColorVariant &a, const ColorVariant &b)
+{
+    if (a.type != b.type)
+    {
+        return false;
+    }
+    switch (a.type)
+    {
+    default:
+    case ColorVariant::Type::Float:
+        return a.colorF == b.colorF;
+    case ColorVariant::Type::Int:
+        return a.colorI == b.colorI;
+    case ColorVariant::Type::UInt:
+        return a.colorUI == b.colorUI;
+    }
+}
+
+bool operator!=(const ColorVariant &a, const ColorVariant &b)
+{
+    return !(a == b);
+}
+
 }  // namespace angle
