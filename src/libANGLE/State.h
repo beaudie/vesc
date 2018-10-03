@@ -174,7 +174,7 @@ class State : angle::NonCopyable
     // Texture binding & active texture unit manipulation
     void setActiveSampler(unsigned int active);
     unsigned int getActiveSampler() const;
-    void setSamplerTexture(const Context *context, TextureType type, Texture *texture);
+    Error setSamplerTexture(const Context *context, TextureType type, Texture *texture);
     Texture *getTargetTexture(TextureType type) const;
 
     Texture *getSamplerTexture(unsigned int sampler, TextureType type) const
@@ -513,6 +513,7 @@ class State : angle::NonCopyable
   private:
     void syncSamplers(const Context *context);
     Error syncProgramTextures(const Context *context);
+    Error updateActiveTexture(const Context *context, size_t textureIndex, Texture *texture);
 
     // Cached values from Context's caps
     GLuint mMaxDrawBuffers;

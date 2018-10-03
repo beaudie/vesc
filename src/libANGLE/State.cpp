@@ -359,6 +359,42 @@ void State::reset(const Context *context)
     setAllDirtyBits();
 }
 
+ANGLE_INLINE Error State::updateActiveTexture(const Context *context,
+                                              size_t textureIndex,
+                                              Texture *texture)
+{
+    const Sampler *sampler = mSamplers[textureIndex].get();
+
+    if (!texture)
+    {
+        mActiveTexturesCache[textureIndex] = nullptr;
+        mCompleteTextureBindings[textureIndex].bind(nullptr);
+        return NoError();
+    }
+
+    mCompleteTextureBindings[textureIndex].bind(texture->getSubject());
+
+    if (!texture->isSamplerComplete(context, sampler))
+    {
+        mActiveTexturesCache[textureIndex] = nullptr;
+        return NoError();
+    }
+
+    mActiveTexturesCache[textureIndex] = texture;
+
+    if (texture->hasAnyDirtyBit())
+    {
+        ANGLE_TRY(texture->syncState(context));
+    }
+
+    if (texture->initState() == InitState::MayNeedInit)
+    {
+        mCachedTexturesInitState = InitState::MayNeedInit;
+    }
+
+    return NoError();
+}
+
 const RasterizerState &State::getRasterizerState() const
 {
     return mRasterizer;
@@ -1022,11 +1058,19 @@ unsigned int State::getActiveSampler() const
     return static_cast<unsigned int>(mActiveSampler);
 }
 
-void State::setSamplerTexture(const Context *context, TextureType type, Texture *texture)
+Error State::setSamplerTexture(const Context *context, TextureType type, Texture *texture)
 {
     mSamplerTextures[type][mActiveSampler].set(context, texture);
+
+    if (mProgram && mProgram->getActiveSamplersMask()[mActiveSampler] &&
+        mProgram->getActiveSamplerTypes()[mActiveSampler] == type)
+    {
+        ANGLE_TRY(updateActiveTexture(context, mActiveSampler, texture));
+    }
+
     mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
-    mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
+
+    return NoError();
 }
 
 Texture *State::getTargetTexture(TextureType type) const
@@ -2906,23 +2950,7 @@ Error State::onProgramExecutableChange(const Context *context, Program *program)
             continue;
 
         Texture *texture = mSamplerTextures[type][textureIndex].get();
-        Sampler *sampler = mSamplers[textureIndex].get();
-
-        if (!texture || !texture->isSamplerComplete(context, sampler))
-            continue;
-
-        if (texture->hasAnyDirtyBit())
-        {
-            ANGLE_TRY(texture->syncState(context));
-        }
-
-        mActiveTexturesCache[textureIndex] = texture;
-        mCompleteTextureBindings[textureIndex].bind(texture->getSubject());
-
-        if (texture->initState() == InitState::MayNeedInit)
-        {
-            mCachedTexturesInitState = InitState::MayNeedInit;
-        }
+        ANGLE_TRY(updateActiveTexture(context, textureIndex, texture));
     }
 
     for (size_t imageUnitIndex : program->getActiveImagesMask())
