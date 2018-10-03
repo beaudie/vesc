@@ -140,7 +140,7 @@ angle::Result PixelBuffer::stageSubresourceUpdate(ContextVk *contextVk,
     loadFunction.loadFunction(extents.width, extents.height, extents.depth, source, inputRowPitch,
                               inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);
 
-    VkBufferImageCopy copy;
+    VkBufferImageCopy copy = {};
 
     copy.bufferOffset                    = stagingOffset;
     copy.bufferRowLength                 = extents.width;
@@ -240,7 +240,7 @@ angle::Result PixelBuffer::stageSubresourceUpdateFromFramebuffer(
     }
 
     // 3- enqueue the destination image subresource update
-    VkBufferImageCopy copyToImage;
+    VkBufferImageCopy copyToImage               = {};
     copyToImage.bufferOffset                    = static_cast<VkDeviceSize>(stagingOffset);
     copyToImage.bufferRowLength                 = 0;  // Tightly packed data can be specified as 0.
     copyToImage.bufferImageHeight               = clippedRectangle.height;
@@ -341,7 +341,7 @@ angle::Result PixelBuffer::stageSubresourceUpdateAndGetData(ContextVk *contextVk
     ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, destData, &bufferHandle,
                                       &stagingOffset, &newBufferAllocated));
 
-    VkBufferImageCopy copy;
+    VkBufferImageCopy copy               = {};
     copy.bufferOffset                    = stagingOffset;
     copy.bufferRowLength                 = extents.width;
     copy.bufferImageHeight               = extents.height;
@@ -776,7 +776,7 @@ angle::Result TextureVk::copyImageDataToBuffer(ContextVk *contextVk,
     ANGLE_TRY(mPixelBuffer.allocate(contextVk, sourceCopyAllocationSize, outDataPtr,
                                     &copyBufferHandle, &sourceCopyOffset, &newBufferAllocated));
 
-    VkBufferImageCopy region;
+    VkBufferImageCopy region               = {};
     region.bufferOffset                    = sourceCopyOffset;
     region.bufferRowLength                 = 0;
     region.bufferImageHeight               = 0;
@@ -820,12 +820,11 @@ angle::Result TextureVk::generateMipmapWithBlit(ContextVk *contextVk)
 
     // Manually manage the image memory barrier because it uses a lot more parameters than our
     // usual one.
-    VkImageMemoryBarrier barrier;
+    VkImageMemoryBarrier barrier            = {};
     barrier.sType                           = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
     barrier.image                           = mImage.getImage().getHandle();
     barrier.srcQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
     barrier.dstQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
-    barrier.pNext                           = nullptr;
     barrier.subresourceRange.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
     barrier.subresourceRange.baseArrayLayer = 0;
     barrier.subresourceRange.layerCount     = imageLayerCount;
@@ -1067,9 +1066,8 @@ gl::Error TextureVk::syncState(const gl::Context *context, const gl::Texture::Di
     const gl::SamplerState &samplerState = mState.getSamplerState();
 
     // Create a simple sampler. Force basic parameter settings.
-    VkSamplerCreateInfo samplerInfo;
+    VkSamplerCreateInfo samplerInfo     = {};
     samplerInfo.sType                   = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-    samplerInfo.pNext                   = nullptr;
     samplerInfo.flags                   = 0;
     samplerInfo.magFilter               = gl_vk::GetFilter(samplerState.getMagFilter());
     samplerInfo.minFilter               = gl_vk::GetFilter(samplerState.getMinFilter());
