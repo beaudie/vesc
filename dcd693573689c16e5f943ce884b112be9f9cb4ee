@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3f69351_823d25e4",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5017,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-03T07:35:56Z",
+      "side": 1,
+      "message": "I think this test is more valuable if it checks that \"BBB\" is treated as defined if it is defined after the macro \"AAA\" is defined.\n\nTo achieve that, this line should be removed and the #if below should be reversed.",
+      "range": {
+        "startLine": 5017,
+        "startChar": 0,
+        "endLine": 5017,
+        "endChar": 10
+      },
+      "revId": "dcd693573689c16e5f943ce884b112be9f9cb4ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6014fa9_1270d7a2",
+        "filename": "src/tests/preprocessor_tests/if_test.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-03T07:35:56Z",
+      "side": 1,
+      "message": "Most of the GLSL other than the preprocessor directives could be stripped out from these tests, just adding strings like \"success\" or \"fail\" inside the #if. Then it would be easy to add expected output to these tests.",
+      "revId": "dcd693573689c16e5f943ce884b112be9f9cb4ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
