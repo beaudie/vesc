@@ -602,15 +602,15 @@ angle::Result TextureD3D::commitRegion(const gl::Context *context,
     return angle::Result::Continue();
 }
 
-gl::Error TextureD3D::getAttachmentRenderTarget(const gl::Context *context,
-                                                GLenum /*binding*/,
-                                                const gl::ImageIndex &imageIndex,
-                                                FramebufferAttachmentRenderTarget **rtOut)
+angle::Result TextureD3D::getAttachmentRenderTarget(const gl::Context *context,
+                                                    GLenum binding,
+                                                    const gl::ImageIndex &imageIndex,
+                                                    FramebufferAttachmentRenderTarget **rtOut)
 {
     RenderTargetD3D *rtD3D = nullptr;
-    gl::Error error        = getRenderTarget(context, imageIndex, &rtD3D);
+    ANGLE_TRY(getRenderTarget(context, imageIndex, &rtD3D));
     *rtOut = static_cast<FramebufferAttachmentRenderTarget *>(rtD3D);
-    return error;
+    return angle::Result::Continue();
 }
 
 gl::Error TextureD3D::setBaseLevel(const gl::Context *context, GLuint baseLevel)
@@ -1305,9 +1305,9 @@ angle::Result TextureD3D_2D::initMipmapImages(const gl::Context *context)
     return angle::Result::Continue();
 }
 
-gl::Error TextureD3D_2D::getRenderTarget(const gl::Context *context,
-                                         const gl::ImageIndex &index,
-                                         RenderTargetD3D **outRT)
+angle::Result TextureD3D_2D::getRenderTarget(const gl::Context *context,
+                                             const gl::ImageIndex &index,
+                                             RenderTargetD3D **outRT)
 {
     ASSERT(!index.hasLayer());
 
@@ -2016,9 +2016,9 @@ angle::Result TextureD3D_Cube::initMipmapImages(const gl::Context *context)
     return angle::Result::Continue();
 }
 
-gl::Error TextureD3D_Cube::getRenderTarget(const gl::Context *context,
-                                           const gl::ImageIndex &index,
-                                           RenderTargetD3D **outRT)
+angle::Result TextureD3D_Cube::getRenderTarget(const gl::Context *context,
+                                               const gl::ImageIndex &index,
+                                               RenderTargetD3D **outRT)
 {
     ASSERT(gl::IsCubeMapFaceTarget(index.getTarget()));
 
@@ -2590,9 +2590,9 @@ angle::Result TextureD3D_3D::initMipmapImages(const gl::Context *context)
     return angle::Result::Continue();
 }
 
-gl::Error TextureD3D_3D::getRenderTarget(const gl::Context *context,
-                                         const gl::ImageIndex &index,
-                                         RenderTargetD3D **outRT)
+angle::Result TextureD3D_3D::getRenderTarget(const gl::Context *context,
+                                             const gl::ImageIndex &index,
+                                             RenderTargetD3D **outRT)
 {
     // ensure the underlying texture is created
     ANGLE_TRY(ensureRenderTarget(context));
@@ -3169,9 +3169,9 @@ angle::Result TextureD3D_2DArray::initMipmapImages(const gl::Context *context)
     return angle::Result::Continue();
 }
 
-gl::Error TextureD3D_2DArray::getRenderTarget(const gl::Context *context,
-                                              const gl::ImageIndex &index,
-                                              RenderTargetD3D **outRT)
+angle::Result TextureD3D_2DArray::getRenderTarget(const gl::Context *context,
+                                                  const gl::ImageIndex &index,
+                                                  RenderTargetD3D **outRT)
 {
     // ensure the underlying texture is created
     ANGLE_TRY(ensureRenderTarget(context));
@@ -3617,12 +3617,12 @@ angle::Result TextureD3D_External::initMipmapImages(const gl::Context *context)
     return angle::Result::Stop();
 }
 
-gl::Error TextureD3D_External::getRenderTarget(const gl::Context *context,
-                                               const gl::ImageIndex &index,
-                                               RenderTargetD3D **outRT)
+angle::Result TextureD3D_External::getRenderTarget(const gl::Context *context,
+                                                   const gl::ImageIndex &index,
+                                                   RenderTargetD3D **outRT)
 {
     UNREACHABLE();
-    return gl::InternalError();
+    return angle::Result::Stop();
 }
 
 bool TextureD3D_External::isImageComplete(const gl::ImageIndex &index) const
@@ -3723,9 +3723,9 @@ gl::Error TextureD3D_2DMultisample::setEGLImageTarget(const gl::Context *context
     return gl::InternalError();
 }
 
-gl::Error TextureD3D_2DMultisample::getRenderTarget(const gl::Context *context,
-                                                    const gl::ImageIndex &index,
-                                                    RenderTargetD3D **outRT)
+angle::Result TextureD3D_2DMultisample::getRenderTarget(const gl::Context *context,
+                                                        const gl::ImageIndex &index,
+                                                        RenderTargetD3D **outRT)
 {
     ASSERT(!index.hasLayer());
 
@@ -3844,9 +3844,9 @@ gl::Error TextureD3D_2DMultisampleArray::setEGLImageTarget(const gl::Context *co
     return gl::InternalError();
 }
 
-gl::Error TextureD3D_2DMultisampleArray::getRenderTarget(const gl::Context *context,
-                                                         const gl::ImageIndex &index,
-                                                         RenderTargetD3D **outRT)
+angle::Result TextureD3D_2DMultisampleArray::getRenderTarget(const gl::Context *context,
+                                                             const gl::ImageIndex &index,
+                                                             RenderTargetD3D **outRT)
 {
     // ensure the underlying texture is created
     ANGLE_TRY(ensureRenderTarget(context));

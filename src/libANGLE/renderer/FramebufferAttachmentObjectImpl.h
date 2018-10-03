@@ -24,23 +24,23 @@ class FramebufferAttachmentObjectImpl : public angle::Subject
     FramebufferAttachmentObjectImpl() {}
     virtual ~FramebufferAttachmentObjectImpl() {}
 
-    virtual gl::Error getAttachmentRenderTarget(const gl::Context *context,
-                                                GLenum binding,
-                                                const gl::ImageIndex &imageIndex,
-                                                FramebufferAttachmentRenderTarget **rtOut);
+    virtual angle::Result getAttachmentRenderTarget(const gl::Context *context,
+                                                    GLenum binding,
+                                                    const gl::ImageIndex &imageIndex,
+                                                    FramebufferAttachmentRenderTarget **rtOut);
 
     virtual gl::Error initializeContents(const gl::Context *context,
                                          const gl::ImageIndex &imageIndex);
 };
 
-inline gl::Error FramebufferAttachmentObjectImpl::getAttachmentRenderTarget(
+angle::Result FramebufferAttachmentObjectImpl::getAttachmentRenderTarget(
     const gl::Context *context,
     GLenum binding,
     const gl::ImageIndex &imageIndex,
     FramebufferAttachmentRenderTarget **rtOut)
 {
     UNIMPLEMENTED();
-    return gl::OutOfMemory() << "getAttachmentRenderTarget not supported.";
+    return angle::Result::Stop();
 }
 
 inline gl::Error FramebufferAttachmentObjectImpl::initializeContents(

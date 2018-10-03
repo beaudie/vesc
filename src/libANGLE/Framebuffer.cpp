@@ -1807,7 +1807,7 @@ void Framebuffer::resetAttachment(const Context *context, GLenum binding)
     setAttachment(context, GL_NONE, binding, ImageIndex(), nullptr);
 }
 
-Error Framebuffer::syncState(const Context *context)
+angle::Result Framebuffer::syncState(const Context *context)
 {
     if (mDirtyBits.any())
     {
@@ -1816,7 +1816,7 @@ Error Framebuffer::syncState(const Context *context)
         mDirtyBits.reset();
         mDirtyBitsGuard.reset();
     }
-    return NoError();
+    return angle::Result::Continue();
 }
 
 void Framebuffer::onSubjectStateChange(const Context *context,

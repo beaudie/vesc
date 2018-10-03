@@ -347,7 +347,7 @@ FramebufferAttachmentObject::~FramebufferAttachmentObject()
 {
 }
 
-Error FramebufferAttachmentObject::getAttachmentRenderTarget(
+angle::Result FramebufferAttachmentObject::getAttachmentRenderTarget(
     const Context *context,
     GLenum binding,
     const ImageIndex &imageIndex,

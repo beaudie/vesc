@@ -428,10 +428,10 @@ const angle::Format *SurfaceD3D::getD3DTextureColorFormat() const
     return mColorFormat;
 }
 
-gl::Error SurfaceD3D::getAttachmentRenderTarget(const gl::Context *context,
-                                                GLenum binding,
-                                                const gl::ImageIndex &imageIndex,
-                                                FramebufferAttachmentRenderTarget **rtOut)
+angle::Result SurfaceD3D::getAttachmentRenderTarget(const gl::Context *context,
+                                                    GLenum binding,
+                                                    const gl::ImageIndex &imageIndex,
+                                                    FramebufferAttachmentRenderTarget **rtOut)
 {
     if (binding == GL_BACK)
     {
@@ -441,7 +441,7 @@ gl::Error SurfaceD3D::getAttachmentRenderTarget(const gl::Context *context,
     {
         *rtOut = mSwapChain->getDepthStencilRenderTarget();
     }
-    return gl::NoError();
+    return angle::Result::Continue();
 }
 
 gl::Error SurfaceD3D::initializeContents(const gl::Context *context,

@@ -979,10 +979,10 @@ gl::Error TextureVk::releaseTexImage(const gl::Context *context)
     return gl::InternalError();
 }
 
-gl::Error TextureVk::getAttachmentRenderTarget(const gl::Context *context,
-                                               GLenum binding,
-                                               const gl::ImageIndex &imageIndex,
-                                               FramebufferAttachmentRenderTarget **rtOut)
+angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
+                                                   GLenum binding,
+                                                   const gl::ImageIndex &imageIndex,
+                                                   FramebufferAttachmentRenderTarget **rtOut)
 {
     // Non-zero mip level attachments are an ES 3.0 feature.
     ASSERT(imageIndex.getLevelIndex() == 0);
@@ -1003,7 +1003,7 @@ gl::Error TextureVk::getAttachmentRenderTarget(const gl::Context *context,
             UNREACHABLE();
     }
 
-    return gl::NoError();
+    return angle::Result::Continue();
 }
 
 angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk)

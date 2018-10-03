@@ -216,10 +216,11 @@ EGLint OffscreenSurfaceVk::getSwapBehavior() const
     return EGL_BUFFER_PRESERVED;
 }
 
-gl::Error OffscreenSurfaceVk::getAttachmentRenderTarget(const gl::Context * /*context*/,
-                                                        GLenum binding,
-                                                        const gl::ImageIndex & /*imageIndex*/,
-                                                        FramebufferAttachmentRenderTarget **rtOut)
+angle::Result OffscreenSurfaceVk::getAttachmentRenderTarget(
+    const gl::Context *context,
+    GLenum binding,
+    const gl::ImageIndex &imageIndex,
+    FramebufferAttachmentRenderTarget **rtOut)
 {
     if (binding == GL_BACK)
     {
@@ -231,7 +232,7 @@ gl::Error OffscreenSurfaceVk::getAttachmentRenderTarget(const gl::Context * /*co
         *rtOut = &mDepthStencilAttachment.renderTarget;
     }
 
-    return gl::NoError();
+    return angle::Result::Continue();
 }
 
 gl::Error OffscreenSurfaceVk::initializeContents(const gl::Context *context,
@@ -674,10 +675,10 @@ EGLint WindowSurfaceVk::getSwapBehavior() const
     return EGL_BUFFER_DESTROYED;
 }
 
-gl::Error WindowSurfaceVk::getAttachmentRenderTarget(const gl::Context * /*context*/,
-                                                     GLenum binding,
-                                                     const gl::ImageIndex & /*target*/,
-                                                     FramebufferAttachmentRenderTarget **rtOut)
+angle::Result WindowSurfaceVk::getAttachmentRenderTarget(const gl::Context *context,
+                                                         GLenum binding,
+                                                         const gl::ImageIndex &imageIndex,
+                                                         FramebufferAttachmentRenderTarget **rtOut)
 {
     if (binding == GL_BACK)
     {
@@ -689,7 +690,7 @@ gl::Error WindowSurfaceVk::getAttachmentRenderTarget(const gl::Context * /*conte
         *rtOut = &mDepthStencilRenderTarget;
     }
 
-    return gl::NoError();
+    return angle::Result::Continue();
 }
 
 angle::Result WindowSurfaceVk::getCurrentFramebuffer(vk::Context *context,
