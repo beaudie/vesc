@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a2923f9_e2281961",
+        "filename": "src/tests/gl_tests/CopyTexture3DTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1424,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-03T22:44:54Z",
+      "side": 1,
+      "message": "use http://anglebug.com/2856 to link directly to the report.",
+      "range": {
+        "startLine": 1424,
+        "startChar": 7,
+        "endLine": 1424,
+        "endChar": 24
+      },
+      "revId": "c022f38fc765e63d1df3000ea2f5bbd7f83ff4c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
