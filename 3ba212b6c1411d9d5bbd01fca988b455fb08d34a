@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f3c33d0_326be9e1",
+        "filename": "src/libANGLE/Query.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-03T21:43:39Z",
+      "side": 1,
+      "message": "mQuery should always be valid, you can assert that it is.",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 28,
+        "endChar": 5
+      },
+      "revId": "3ba212b6c1411d9d5bbd01fca988b455fb08d34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cdf4f5c_8296a005",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-03T21:43:39Z",
+      "side": 1,
+      "message": "nit: const",
+      "range": {
+        "startLine": 103,
+        "startChar": 42,
+        "endLine": 103,
+        "endChar": 43
+      },
+      "revId": "3ba212b6c1411d9d5bbd01fca988b455fb08d34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04c7405d_1e3e1ea5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-03T21:43:39Z",
+      "side": 1,
+      "message": "Can we have this in a PackedEnumMap based on gl::QueryType?  We can support more types of queries in QueryVk if we can abstract away the query type.",
+      "range": {
+        "startLine": 257,
+        "startChar": 4,
+        "endLine": 257,
+        "endChar": 45
+      },
+      "revId": "3ba212b6c1411d9d5bbd01fca988b455fb08d34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "040a0fc3_1ad1d3b0",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-03T21:43:39Z",
+      "side": 1,
+      "message": "You can use the ANGLE_TRY macro to wrap the allocateQuery call above.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 35
+      },
+      "revId": "3ba212b6c1411d9d5bbd01fca988b455fb08d34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97c603a1_760fe014",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-03T21:43:39Z",
+      "side": 1,
+      "message": "Because the query result can be queried multiple times, I think we should cache it in QueryVk.  Then in the isResultAvailable function below, the result can be saved and the next getResult call will return fast.  The result may also need some processing to be as GL expects, the occusion queries in GL expect a return of true or false but I believe vulkan writes the number of samples that pass.",
+      "range": {
+        "startLine": 63,
+        "startChar": 19,
+        "endLine": 63,
+        "endChar": 28
+      },
+      "revId": "3ba212b6c1411d9d5bbd01fca988b455fb08d34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "361fd82e_e57631a9",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-03T21:43:39Z",
+      "side": 1,
+      "message": "nit: pull this out into a variable.",
+      "range": {
+        "startLine": 69,
+        "startChar": 8,
+        "endLine": 69,
+        "endChar": 95
+      },
+      "revId": "3ba212b6c1411d9d5bbd01fca988b455fb08d34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af19490c_c3c7d7bb",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-03T21:43:39Z",
+      "side": 1,
+      "message": "This should be handled by the ANGLE_TRY",
+      "range": {
+        "startLine": 71,
+        "startChar": 11,
+        "endLine": 71,
+        "endChar": 80
+      },
+      "revId": "3ba212b6c1411d9d5bbd01fca988b455fb08d34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe342b93_34a51592",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-03T21:43:39Z",
+      "side": 1,
+      "message": "We should probably always get the result as 64 bits if vulkan supports it and then just cast to the correct type in these calls.",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 53
+      },
+      "revId": "3ba212b6c1411d9d5bbd01fca988b455fb08d34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
