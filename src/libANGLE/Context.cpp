@@ -5718,7 +5718,7 @@ void Context::linkProgram(GLuint program)
     //      ProgramD3D.
     if (programObject->isInUse())
     {
-        programObject->resolveLink();
+        programObject->resolveLink(this);
         if (programObject->isLinked())
         {
             ANGLE_CONTEXT_TRY(mGLState.onProgramExecutableChange(this, programObject));
@@ -7698,7 +7698,7 @@ Program *Context::getProgramResolveLink(GLuint handle) const
     Program *program = mState.mShaderPrograms->getProgram(handle);
     if (program)
     {
-        program->resolveLink();
+        program->resolveLink(this);
     }
     return program;
 }
@@ -7841,15 +7841,19 @@ void ErrorSet::handleError(const Error &error) const
     {
         GLenum code = error.getCode();
         mErrors.insert(code);
-        if (code == GL_OUT_OF_MEMORY && mContext->getWorkarounds().loseContextOnOutOfMemory)
-        {
-            mContext->markContextLost();
-        }
 
-        ASSERT(!error.getMessage().empty());
-        mContext->getGLState().getDebug().insertMessage(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_ERROR,
-                                                        error.getID(), GL_DEBUG_SEVERITY_HIGH,
-                                                        error.getMessage());
+        if (mContext)
+        {
+            if (code == GL_OUT_OF_MEMORY && mContext->getWorkarounds().loseContextOnOutOfMemory)
+            {
+                mContext->markContextLost();
+            }
+
+            ASSERT(!error.getMessage().empty());
+            mContext->getGLState().getDebug().insertMessage(
+                GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_ERROR, error.getID(), GL_DEBUG_SEVERITY_HIGH,
+                error.getMessage());
+        }
     }
 }
 

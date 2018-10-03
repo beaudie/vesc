@@ -133,7 +133,7 @@ EGLint SwapChain9::reset(DisplayD3D *displayD3D,
             ERR() << "Could not create offscreen texture, " << gl::FmtHR(result);
             release();
 
-            if (d3d9::isDeviceLostError(result))
+            if (IsDeviceLostErrorCode(result))
             {
                 return EGL_CONTEXT_LOST;
             }
@@ -220,7 +220,7 @@ EGLint SwapChain9::reset(DisplayD3D *displayD3D,
                   << gl::FmtHR(result);
             release();
 
-            if (d3d9::isDeviceLostError(result))
+            if (IsDeviceLostErrorCode(result))
             {
                 return EGL_CONTEXT_LOST;
             }
@@ -249,7 +249,7 @@ EGLint SwapChain9::reset(DisplayD3D *displayD3D,
                   << gl::FmtHR(result);
             release();
 
-            if (d3d9::isDeviceLostError(result))
+            if (IsDeviceLostErrorCode(result))
             {
                 return EGL_CONTEXT_LOST;
             }
