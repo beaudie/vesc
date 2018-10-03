@@ -16,6 +16,24 @@
       "revId": "7fcf3053df531577a4c687c4668d616ee0238530",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12c60a2b_18260067",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-10-03T22:29:09Z",
+      "side": 1,
+      "message": "Good question!\nThis seems like something we\u0027d want to know and shouldn\u0027t be part of the common path.\nProbably should be ALOGW.",
+      "parentUuid": "0420cfc7_7ae68ea9",
+      "revId": "7fcf3053df531577a4c687c4668d616ee0238530",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
