@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0420cfc7_7ae68ea9",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-10-03T22:17:24Z",
+      "side": 1,
+      "message": "Should these types of messages that are showing JSON parsing errors still at least be debug messages so we still have a chance to see them?\n\nOr are these benign enough to not really care too much until it becomes an actual issue?",
+      "revId": "7fcf3053df531577a4c687c4668d616ee0238530",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
