@@ -120,12 +120,12 @@ gl::Error ContextNULL::finish(const gl::Context *context)
     return gl::NoError();
 }
 
-gl::Error ContextNULL::drawArrays(const gl::Context *context,
-                                  gl::PrimitiveMode mode,
-                                  GLint first,
-                                  GLsizei count)
+angle::Result ContextNULL::drawArrays(const gl::Context *context,
+                                      gl::PrimitiveMode mode,
+                                      GLint first,
+                                      GLsizei count)
 {
-    return gl::NoError();
+    return angle::Result::Continue();
 }
 
 gl::Error ContextNULL::drawArraysInstanced(const gl::Context *context,
@@ -295,9 +295,10 @@ void ContextNULL::popDebugGroup()
 {
 }
 
-gl::Error ContextNULL::syncState(const gl::Context *context, const gl::State::DirtyBits &dirtyBits)
+angle::Result ContextNULL::syncState(const gl::Context *context,
+                                     const gl::State::DirtyBits &dirtyBits)
 {
-    return gl::NoError();
+    return angle::Result::Continue();
 }
 
 GLint ContextNULL::getGPUDisjoint()
