@@ -154,7 +154,7 @@ angle::Result Framebuffer9::readPixelsImpl(const gl::Context *context,
 
         // It turns out that D3D will sometimes produce more error
         // codes than those documented.
-        if (d3d9::isDeviceLostError(result))
+        if (IsDeviceLostErrorCode(result))
         {
             mRenderer->notifyDeviceLost();
         }

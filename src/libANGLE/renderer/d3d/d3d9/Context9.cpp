@@ -343,19 +343,12 @@ void Context9::handleError(HRESULT hr,
                            const char *function,
                            unsigned int line)
 {
-    ASSERT(FAILED(hr));
+    bool isDeviceLost = false;
+    HandleD3DError(hr, message, file, function, line, mErrors, &isDeviceLost);
 
-    if (d3d9::isDeviceLostError(hr))
+    if (isDeviceLost)
     {
         mRenderer->notifyDeviceLost();
     }
-
-    GLenum glErrorCode = DefaultGLErrorCode(hr);
-
-    std::stringstream errorStream;
-    errorStream << "Internal D3D9 error: " << gl::FmtHR(hr) << ", in " << file << ", " << function
-                << ":" << line << ". " << message;
-
-    mErrors->handleError(gl::Error(glErrorCode, glErrorCode, errorStream.str()));
 }
 }  // namespace rx

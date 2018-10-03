@@ -75,20 +75,6 @@ GLuint ComputeBlockSize(D3DFORMAT format, GLuint width, GLuint height);
 
 void MakeValidSize(bool isImage, D3DFORMAT format, GLsizei *requestWidth, GLsizei *requestHeight, int *levelOffset);
 
-inline bool isDeviceLostError(HRESULT errorCode)
-{
-    switch (errorCode)
-    {
-      case D3DERR_DRIVERINTERNALERROR:
-      case D3DERR_DEVICELOST:
-      case D3DERR_DEVICEHUNG:
-      case D3DERR_DEVICEREMOVED:
-        return true;
-      default:
-        return false;
-    }
-}
-
 angle::WorkaroundsD3D GenerateWorkarounds();
 }
 
