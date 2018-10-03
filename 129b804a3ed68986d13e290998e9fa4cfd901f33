@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6537239b_21844460",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-03T20:27:23Z",
+      "side": 1,
+      "message": "An alternative to this call here (and again in `submitCommands`) could be to add this dependency on every new node allocation, but this is slightly faster as the check for \"if there is a previous barrier\" is done once for many nodes.",
+      "revId": "129b804a3ed68986d13e290998e9fa4cfd901f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33e1401b_86183ab0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-03T20:27:23Z",
+      "side": 1,
+      "message": "In short, query pools are created as necessary with query allocations.  When queries are freed, we keep just a count that says how many have been returned.  When that number reaches pool size, the pool is ready for reuse.\n\nTo avoid reusing a query that has recently been deleted, the queue serial of the last deletion is kept for each pool, so only pools with old serials can be reused.  This is because the command graph has a reference to the pools and will actually issue the query on swap.",
+      "revId": "129b804a3ed68986d13e290998e9fa4cfd901f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
