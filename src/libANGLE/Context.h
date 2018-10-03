@@ -1632,13 +1632,13 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool noopDraw(PrimitiveMode mode, GLsizei count);
     bool noopDrawInstanced(PrimitiveMode mode, GLsizei count, GLsizei instanceCount);
 
-    Error prepareForDraw(PrimitiveMode mode);
+    angle::Result prepareForDraw(PrimitiveMode mode);
     Error prepareForClear(GLbitfield mask);
     Error prepareForClearBuffer(GLenum buffer, GLint drawbuffer);
     Error syncState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);
-    Error syncDirtyBits();
-    Error syncDirtyBits(const State::DirtyBits &bitMask);
-    Error syncDirtyObjects(const State::DirtyObjects &objectMask);
+    angle::Result syncDirtyBits();
+    angle::Result syncDirtyBits(const State::DirtyBits &bitMask);
+    angle::Result syncDirtyObjects(const State::DirtyObjects &objectMask);
     Error syncStateForReadPixels();
     Error syncStateForTexImage();
     Error syncStateForBlit();
