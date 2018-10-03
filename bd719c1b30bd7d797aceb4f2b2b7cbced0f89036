@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e40cf9c_2ce41ba2",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-03T15:50:46Z",
+      "side": 1,
+      "message": "Can you make this a helper function and also call from State::syncProgramTextures?",
+      "revId": "bd719c1b30bd7d797aceb4f2b2b7cbced0f89036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "251e4406_cfdf7806",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2944,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-03T15:50:46Z",
+      "side": 1,
+      "message": "Is it possible to reuse the code in State::syncProgramTextures somehow?",
+      "revId": "bd719c1b30bd7d797aceb4f2b2b7cbced0f89036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52035adf_532d0cea",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-03T15:50:46Z",
+      "side": 1,
+      "message": "Isn\u0027t this in gl namespace already?",
+      "range": {
+        "startLine": 380,
+        "startChar": 4,
+        "endLine": 380,
+        "endChar": 8
+      },
+      "revId": "bd719c1b30bd7d797aceb4f2b2b7cbced0f89036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
