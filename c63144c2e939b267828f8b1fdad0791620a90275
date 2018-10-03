@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cfcdb883_3a388dd8",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5745,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-03T17:19:34Z",
+      "side": 1,
+      "message": "nit: you can use the full type here.",
+      "range": {
+        "startLine": 5745,
+        "startChar": 4,
+        "endLine": 5745,
+        "endChar": 8
+      },
+      "revId": "c63144c2e939b267828f8b1fdad0791620a90275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2c8bbf1_c4e1fd9c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5757,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-03T17:19:34Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 5757,
+        "startChar": 4,
+        "endLine": 5757,
+        "endChar": 8
+      },
+      "revId": "c63144c2e939b267828f8b1fdad0791620a90275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a34a4cf4_5ba4d66c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5765,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-03T17:19:34Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 5765,
+        "startChar": 4,
+        "endLine": 5765,
+        "endChar": 8
+      },
+      "revId": "c63144c2e939b267828f8b1fdad0791620a90275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78e8fca8_a81f832d",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-03T17:19:34Z",
+      "side": 1,
+      "message": "I think this is called before link. But you can replace this with ASSERT(mLinkResolved)",
+      "range": {
+        "startLine": 1026,
+        "startChar": 4,
+        "endLine": 1026,
+        "endChar": 18
+      },
+      "revId": "c63144c2e939b267828f8b1fdad0791620a90275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a50d508_dab35be8",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-03T17:19:34Z",
+      "side": 1,
+      "message": "I think this is called before link. But you can replace this with ASSERT(mLinkResolved)",
+      "range": {
+        "startLine": 1032,
+        "startChar": 4,
+        "endLine": 1032,
+        "endChar": 18
+      },
+      "revId": "c63144c2e939b267828f8b1fdad0791620a90275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5235543_c10b7433",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-03T17:19:34Z",
+      "side": 1,
+      "message": "nit: should be mFragmentOutputBindings.\n\nOne request: can you make gl::ProgramBindings be a template class that defaults to GLuint? Then for mFragmentOutputBindings you can store {location,index} for a single binding.",
+      "range": {
+        "startLine": 938,
+        "startChar": 0,
+        "endLine": 939,
+        "endChar": 43
+      },
+      "revId": "c63144c2e939b267828f8b1fdad0791620a90275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
