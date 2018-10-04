@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2924d305_a5eaf1c4",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T12:03:56Z",
+      "side": 1,
+      "message": "nit: instead of storing mHasOutput you can return mActiveOutputVariables.any()\n\nalso you could rename this to hasActiveOutput",
+      "range": {
+        "startLine": 356,
+        "startChar": 29,
+        "endLine": 356,
+        "endChar": 49
+      },
+      "revId": "7f2f1b5200a1f30575075e264cf7ba96f98ee628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "243303e4_593259b8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T12:03:56Z",
+      "side": 1,
+      "message": "instead of passing a bool to getPipeline, disable the color mask in ContextVk::syncState when you bind a new program or color mask. this will clean up the code so we aren\u0027t passing workarounds directly to the pipeline cache. the pipeline cache itself should be separate from the workaround logic.",
+      "range": {
+        "startLine": 262,
+        "startChar": 37,
+        "endLine": 262,
+        "endChar": 69
+      },
+      "revId": "7f2f1b5200a1f30575075e264cf7ba96f98ee628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1221c7e4_5bd965c9",
+        "filename": "src/tests/gl_tests/LinkAndRelinkTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T12:03:56Z",
+      "side": 1,
+      "message": "nit: wrap to 100 chars",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 26
+      },
+      "revId": "7f2f1b5200a1f30575075e264cf7ba96f98ee628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c78257c7_e15a0d2e",
+        "filename": "src/tests/gl_tests/LinkAndRelinkTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T12:03:56Z",
+      "side": 1,
+      "message": "looks like you\u0027ll need to suppress this test on AMD for some reason. could you file a bug for that?",
+      "range": {
+        "startLine": 63,
+        "startChar": 7,
+        "endLine": 63,
+        "endChar": 24
+      },
+      "revId": "7f2f1b5200a1f30575075e264cf7ba96f98ee628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20763a1b_08a1ab29",
+        "filename": "src/tests/gl_tests/LinkAndRelinkTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T12:03:56Z",
+      "side": 1,
+      "message": "nit: CompileProgram",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 35
+      },
+      "revId": "7f2f1b5200a1f30575075e264cf7ba96f98ee628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
