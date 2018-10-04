@@ -439,6 +439,9 @@ struct Extensions
     // GL_EXT_blend_func_extended
     bool blendFuncExtended;
     GLuint maxDualSourceDrawBuffers;
+
+    // GL_ANGLE_memory_size
+    bool memorySize;
 };
 
 struct ExtensionInfo
