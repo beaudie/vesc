@@ -796,11 +796,11 @@ class Program final : angle::NonCopyable, public LabeledObject
     Error syncState(const Context *context);
 
     // Try to resolve linking. Inlined to make sure its overhead is as low as possible.
-    void resolveLink()
+    void resolveLink(const Context *context)
     {
         if (!mLinkResolved)
         {
-            resolveLinkImpl();
+            resolveLinkImpl(context);
         }
     }
 
@@ -899,7 +899,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     bool validateSamplersImpl(InfoLog *infoLog, const Caps &caps);
 
     // Block until linking is finished and resolve it.
-    void resolveLinkImpl();
+    void resolveLinkImpl(const gl::Context *context);
 
     ProgramState mState;
     rx::ProgramImpl *mProgram;
