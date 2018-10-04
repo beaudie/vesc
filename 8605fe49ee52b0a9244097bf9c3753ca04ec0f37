@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "3bfd854f_b07c63cc",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T17:31:56Z",
+      "side": 1,
+      "message": "No, I still think an angle_end2end_test would be ideal. It\u0027s a bit tricky to write. You\u0027d have to do something like render to a texture, then write to the texture, then render to it again. Then potentially the renderpass wouldn\u0027t be interrupted and you\u0027d only get two command buffers:\n\n1) draw 1 + draw 2\n2) texture update\n\nThen potentially the texture would have the \"update\" data instead of \"draw 2\". But sometimes it\u0027s hard to reproduce even if your theory is good. Maybe try writing a test quickly and if you have trouble reproducing I can help later. It can go in StateChangeTests.cpp.",
+      "parentUuid": "1ac03aa0_fec6145b",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 0
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "43f0fde9_17ae102a",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
         "patchSetId": 4
@@ -177,6 +201,30 @@
       "side": 1,
       "message": "SetHappensBeforeDependencies makes a dependency from many befores to one after. This function makes a dependency from one before to many afters.\n\nI could rename the function and make it similar to SetHappensBeforeDependencies, but an additional function is necessary either way.",
       "parentUuid": "e7abffe6_3b90ee35",
+      "range": {
+        "startLine": 562,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 5
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91f16eb7_95fb4f45",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T17:31:56Z",
+      "side": 1,
+      "message": "Oh, okay. Yeah maybe using the same naming scheme would help clarify it. Thanks!",
+      "parentUuid": "4488d844_25e9fdaf",
       "range": {
         "startLine": 562,
         "startChar": 0,
@@ -590,6 +638,30 @@
       "side": 1,
       "message": "I\u0027ll do that in that followup CL previously mentioned.\n\n---\n\nAlso, you can always discard your comments ;)",
       "parentUuid": "a72d3c1b_9098000d",
+      "range": {
+        "startLine": 1171,
+        "startChar": 4,
+        "endLine": 1171,
+        "endChar": 32
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f054012d_0296ed73",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1171,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T17:31:56Z",
+      "side": 1,
+      "message": "Yeah, only noticed after I published. Hah. Sorry.",
+      "parentUuid": "455a2722_8cd5b7bb",
       "range": {
         "startLine": 1171,
         "startChar": 4,
