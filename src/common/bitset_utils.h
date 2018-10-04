@@ -56,6 +56,19 @@ class BitSetT final
         bool operator!=(const Iterator &other) const;
         ParamT operator*() const;
 
+        // This helper functions allow mutating an iterator in-flight.
+        void resetLaterBit(std::size_t index)
+        {
+            ASSERT(index > mCurrentBit);
+            mBitsCopy.reset(index);
+        }
+
+        void setLaterBit(std::size_t index)
+        {
+            ASSERT(index > mCurrentBit);
+            mBitsCopy.set(index);
+        }
+
       private:
         std::size_t getNextBit();
 

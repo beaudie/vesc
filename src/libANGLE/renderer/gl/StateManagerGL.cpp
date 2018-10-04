@@ -162,12 +162,7 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions,
       mIsSideBySideDrawFramebuffer(false),
       mIsMultiviewEnabled(extensions.multiview),
       mLocalDirtyBits(),
-      mMultiviewDirtyBits(),
-      mProgramTexturesDirty(true),
-      mProgramStorageBuffersDirty(true),
-      mProgramUniformBuffersDirty(true),
-      mProgramAtomicCounterBuffersDirty(true),
-      mProgramImagesDirty(true)
+      mMultiviewDirtyBits()
 {
     ASSERT(mFunctions);
     ASSERT(extensions.maxViews >= 1u);
@@ -684,15 +679,16 @@ angle::Result StateManagerGL::setDrawArraysState(const gl::Context *context,
                                                  GLsizei count,
                                                  GLsizei instanceCount)
 {
-    const gl::State &glState = context->getGLState();
+    if (context->getStateCache().getActiveClientAttribsMask().any())
+    {
+        const gl::State &glState   = context->getGLState();
+        const gl::Program *program = glState.getProgram();
+        const gl::VertexArray *vao = glState.getVertexArray();
+        const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
 
-    const gl::Program *program = glState.getProgram();
-
-    const gl::VertexArray *vao = glState.getVertexArray();
-    const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
-
-    ANGLE_TRY(vaoGL->syncDrawArraysState(context, program->getActiveAttribLocationsMask(), first,
-                                         count, instanceCount));
+        ANGLE_TRY(vaoGL->syncDrawArraysState(context, program->getActiveAttribLocationsMask(),
+                                             first, count, instanceCount));
+    }
 
     return setGenericDrawState(context);
 }
@@ -747,7 +743,6 @@ void StateManagerGL::updateDispatchIndirectBufferBinding(const gl::Context *cont
 
 angle::Result StateManagerGL::setDispatchComputeState(const gl::Context *context)
 {
-    setGenericShaderState(context);
     return angle::Result::Continue();
 }
 
@@ -864,39 +859,6 @@ angle::Result StateManagerGL::onMakeCurrent(const gl::Context *context)
     setTextureCubemapSeamlessEnabled(context->getClientMajorVersion() >= 3);
 
     return angle::Result::Continue();
-}
-
-void StateManagerGL::setGenericShaderState(const gl::Context *context)
-{
-    if (mProgramUniformBuffersDirty)
-    {
-        updateProgramUniformBufferBindings(context);
-        mProgramUniformBuffersDirty = false;
-    }
-
-    if (mProgramTexturesDirty)
-    {
-        updateProgramTextureBindings(context);
-        mProgramTexturesDirty = false;
-    }
-
-    if (mProgramStorageBuffersDirty)
-    {
-        updateProgramStorageBufferBindings(context);
-        mProgramStorageBuffersDirty = false;
-    }
-
-    if (mProgramImagesDirty)
-    {
-        updateProgramImageBindings(context);
-        mProgramImagesDirty = false;
-    }
-
-    if (mProgramAtomicCounterBuffersDirty)
-    {
-        updateProgramAtomicCounterBufferBindings(context);
-        mProgramAtomicCounterBuffersDirty = false;
-    }
 }
 
 void StateManagerGL::updateProgramTextureBindings(const gl::Context *context)
@@ -1040,8 +1002,6 @@ void StateManagerGL::updateProgramImageBindings(const gl::Context *context)
 
 angle::Result StateManagerGL::setGenericDrawState(const gl::Context *context)
 {
-    setGenericShaderState(context);
-
     if (context->getExtensions().webglCompatibility)
     {
         const gl::State &glState     = context->getGLState();
@@ -1753,9 +1713,9 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
     }
 
     // TODO(jmadill): Investigate only syncing vertex state for active attributes
-    for (auto dirtyBit : glAndLocalDirtyBits)
+    for (auto iter = glAndLocalDirtyBits.begin(); iter != glAndLocalDirtyBits.end(); ++iter)
     {
-        switch (dirtyBit)
+        switch (*iter)
         {
             case gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED:
                 setScissorTestEnabled(state.isScissorTestEnabled());
@@ -1978,38 +1938,38 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
                 }
                 break;
             }
-            case gl::State::DIRTY_BIT_TEXTURE_BINDINGS:
-                mProgramTexturesDirty = true;
-                break;
-            case gl::State::DIRTY_BIT_SAMPLER_BINDINGS:
-                syncSamplersState(context);
-                break;
-            case gl::State::DIRTY_BIT_IMAGE_BINDINGS:
-                mProgramImagesDirty = true;
-                break;
-            case gl::State::DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING:
-                syncTransformFeedbackState(context);
-                break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
-                mProgramTexturesDirty             = true;
-                mProgramImagesDirty               = true;
-                mProgramStorageBuffersDirty      = true;
-                mProgramUniformBuffersDirty       = true;
-                mProgramAtomicCounterBuffersDirty = true;
+                iter.setLaterBit(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);
+                iter.setLaterBit(gl::State::DIRTY_BIT_IMAGE_BINDINGS);
+                iter.setLaterBit(gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING);
+                iter.setLaterBit(gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
+                iter.setLaterBit(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
                 propagateProgramToVAO(state.getProgram(),
                                       GetImplAs<VertexArrayGL>(state.getVertexArray()));
                 updateMultiviewBaseViewLayerIndexUniform(
                     state.getProgram(),
                     state.getDrawFramebuffer()->getImplementation()->getState());
                 break;
+            case gl::State::DIRTY_BIT_TEXTURE_BINDINGS:
+                updateProgramTextureBindings(context);
+                break;
+            case gl::State::DIRTY_BIT_SAMPLER_BINDINGS:
+                syncSamplersState(context);
+                break;
+            case gl::State::DIRTY_BIT_IMAGE_BINDINGS:
+                updateProgramImageBindings(context);
+                break;
+            case gl::State::DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING:
+                syncTransformFeedbackState(context);
+                break;
             case gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING:
-                mProgramStorageBuffersDirty = true;
+                updateProgramStorageBufferBindings(context);
                 break;
             case gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS:
-                mProgramUniformBuffersDirty = true;
+                updateProgramUniformBufferBindings(context);
                 break;
             case gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING:
-                mProgramAtomicCounterBuffersDirty = true;
+                updateProgramAtomicCounterBufferBindings(context);
                 break;
             case gl::State::DIRTY_BIT_MULTISAMPLING:
                 setMultisamplingStateEnabled(state.isMultisamplingEnabled());
