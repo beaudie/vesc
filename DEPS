@@ -36,7 +36,7 @@ vars = {
 deps = {
 
   '{angle_root}/build': {
-    'url': '{chromium_git}/chromium/src/build.git@ee922ea8f8ed211d485add7906a64ccd2ffc358b',
+    'url': '{chromium_git}/chromium/src/build.git@dc7ee415d73ca3151898b4bda0f314f77647bdc9',
     'condition': 'not build_with_chromium',
   },
 
@@ -114,7 +114,7 @@ deps = {
   },
 
   '{angle_root}/tools/clang': {
-    'url': '{chromium_git}/chromium/src/tools/clang.git@99ac9bf4ad0d629e1168a0bda9a82f87062ce106',
+    'url': '{chromium_git}/chromium/src/tools/clang.git@7792d28b069af6dd3a86d1ba83b7f5c4ede605dc',
     'condition': 'not build_with_chromium',
   },
 }
