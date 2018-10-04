@@ -780,6 +780,7 @@ VkColorComponentFlags GetColorComponentFlags(bool red, bool green, bool blue, bo
 }  // namespace rx
 
 #define ANGLE_VK_TRY(context, command)                                 \
+    do                                                                 \
     {                                                                  \
         auto ANGLE_LOCAL_VAR = command;                                \
         if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS))             \
@@ -787,10 +788,10 @@ VkColorComponentFlags GetColorComponentFlags(bool red, bool green, bool blue, bo
             context->handleError(ANGLE_LOCAL_VAR, __FILE__, __LINE__); \
             return angle::Result::Stop();                              \
         }                                                              \
-    }                                                                  \
-    ANGLE_EMPTY_STATEMENT
+    } while (0)
 
 #define ANGLE_VK_TRY_ALLOW_OTHER(context, command, acceptable, result)                      \
+    do                                                                                      \
     {                                                                                       \
         auto ANGLE_LOCAL_VAR = command;                                                     \
         if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS && ANGLE_LOCAL_VAR != acceptable)) \
@@ -800,8 +801,7 @@ VkColorComponentFlags GetColorComponentFlags(bool red, bool green, bool blue, bo
         }                                                                                   \
         result = ANGLE_LOCAL_VAR == VK_SUCCESS ? angle::Result::Continue()                  \
                                                : angle::Result::Incomplete();               \
-    }                                                                                       \
-    ANGLE_EMPTY_STATEMENT
+    } while (0)
 
 #define ANGLE_VK_TRY_ALLOW_INCOMPLETE(context, command, result) \
     ANGLE_VK_TRY_ALLOW_OTHER(context, command, VK_INCOMPLETE, result)
@@ -816,5 +816,30 @@ VkColorComponentFlags GetColorComponentFlags(bool red, bool green, bool blue, bo
 
 #define ANGLE_VK_CHECK_ALLOC(context, result) \
     ANGLE_VK_CHECK(context, result, VK_ERROR_OUT_OF_HOST_MEMORY)
+
+// Macros specifically made for vulkan wrappers (in vk_utils.h) that execute the call and return
+// appropriately.
+#define ANGLE_VK_WRAPPED_EXEC(context, command) \
+    do                                          \
+    {                                           \
+        ANGLE_VK_TRY(context, command);         \
+        return angle::Result::Continue();       \
+    } while (0)
+
+#define ANGLE_VK_WRAPPED_EXEC_ALLOW_INCOMPLETE(context, command) \
+    do                                                           \
+    {                                                            \
+        angle::Result result = angle::Result::Stop();            \
+        ANGLE_VK_TRY_ALLOW_INCOMPLETE(context, command, result); \
+        return result;                                           \
+    } while (0)
+
+#define ANGLE_VK_WRAPPED_EXEC_ALLOW_NOT_READY(context, command) \
+    do                                                          \
+    {                                                           \
+        angle::Result result = angle::Result::Stop();           \
+        ANGLE_VK_TRY_ALLOW_NOT_READY(context, command, result); \
+        return result;                                          \
+    } while (0)
 
 #endif  // LIBANGLE_RENDERER_VULKAN_VK_UTILS_H_
