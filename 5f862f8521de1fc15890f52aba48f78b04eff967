@@ -16,6 +16,24 @@
       "revId": "5f862f8521de1fc15890f52aba48f78b04eff967",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d60cb66f_0dd78dc9",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1892,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:29:58Z",
+      "side": 1,
+      "message": "I think anything that occurs during or after the link operation would need the link resolved. A better name might be \"mLinkPending\" rather than \"mLinkResolved\" since mLinkResolved \u003d true means either there has never been a link or the link is complete. But you\u0027re right about bindAttribLocation probably.",
+      "parentUuid": "a40841ca_fb5e0066",
+      "revId": "5f862f8521de1fc15890f52aba48f78b04eff967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
