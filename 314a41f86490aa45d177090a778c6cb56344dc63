@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4c2a086_faf958ee",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-04T20:37:25Z",
+      "side": 1,
+      "message": "Could you assert that the query pool is valid?  Shouldn\u0027t be possible to get here unless the extensions are exposed unexpectedly.",
+      "range": {
+        "startLine": 1097,
+        "startChar": 4,
+        "endLine": 1102,
+        "endChar": 5
+      },
+      "revId": "314a41f86490aa45d177090a778c6cb56344dc63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa2d3b09_1d9a9d2a",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-04T20:37:25Z",
+      "side": 1,
+      "message": "This doesn\u0027t assign mCachedResultValid.",
+      "revId": "314a41f86490aa45d177090a778c6cb56344dc63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8c4b9fe_f8af755f",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-04T20:37:25Z",
+      "side": 1,
+      "message": "This won\u0027t do the conversion needed.  What if getResult had a bool to tell it if it should wait and then call getResult here?",
+      "range": {
+        "startLine": 141,
+        "startChar": 26,
+        "endLine": 141,
+        "endChar": 39
+      },
+      "revId": "314a41f86490aa45d177090a778c6cb56344dc63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
