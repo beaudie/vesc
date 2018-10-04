@@ -46,6 +46,30 @@
       "revId": "0977bae63a1dd6cfaebc421d6b056c177ee0d4e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13b14fb5_fea52f46",
+        "filename": "src/libANGLE/renderer/vulkan/android/WindowSurfaceVkAndroid.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T18:40:23Z",
+      "side": 1,
+      "message": "Was using the settings used in the Chrome perf bots, which are pretty close to what Chrome ships with. Settings here:\n\nhttps://ci.chromium.org/p/chrome/builders/luci.chrome.ci/win64-builder-perf/12371\n\nis_chrome_branded \u003d true\nis_debug \u003d false\nis_official_build \u003d true\n\nSome results here:\n\nhttps://imgur.com/a/LFnfNi7\n\nThe {} init uses SIMD registers in 64-bit. Not sure what it does in 32-bit. But doesn\u0027t seem like a huge difference. We can always do another micro-optimization pass later if one way or the other is faster.",
+      "parentUuid": "048ffcc3_5876f2fd",
+      "range": {
+        "startLine": 29,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 33
+      },
+      "revId": "0977bae63a1dd6cfaebc421d6b056c177ee0d4e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
