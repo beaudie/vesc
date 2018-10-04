@@ -317,9 +317,8 @@ void CommandPool::destroy(VkDevice device)
 angle::Result CommandPool::init(Context *context, const VkCommandPoolCreateInfo &createInfo)
 {
     ASSERT(!valid());
-    ANGLE_VK_TRY(context,
-                 vkCreateCommandPool(context->getDevice(), &createInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context,
+                        vkCreateCommandPool(context->getDevice(), &createInfo, nullptr, &mHandle));
 }
 
 // CommandBuffer implementation.
@@ -337,8 +336,8 @@ VkCommandBuffer CommandBuffer::releaseHandle()
 angle::Result CommandBuffer::init(Context *context, const VkCommandBufferAllocateInfo &createInfo)
 {
     ASSERT(!valid());
-    ANGLE_VK_TRY(context, vkAllocateCommandBuffers(context->getDevice(), &createInfo, &mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context,
+                        vkAllocateCommandBuffers(context->getDevice(), &createInfo, &mHandle));
 }
 
 void CommandBuffer::blitImage(const Image &srcImage,
@@ -357,22 +356,19 @@ void CommandBuffer::blitImage(const Image &srcImage,
 angle::Result CommandBuffer::begin(Context *context, const VkCommandBufferBeginInfo &info)
 {
     ASSERT(valid());
-    ANGLE_VK_TRY(context, vkBeginCommandBuffer(mHandle, &info));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context, vkBeginCommandBuffer(mHandle, &info));
 }
 
 angle::Result CommandBuffer::end(Context *context)
 {
     ASSERT(valid());
-    ANGLE_VK_TRY(context, vkEndCommandBuffer(mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context, vkEndCommandBuffer(mHandle));
 }
 
 angle::Result CommandBuffer::reset(Context *context)
 {
     ASSERT(valid());
-    ANGLE_VK_TRY(context, vkResetCommandBuffer(mHandle, 0));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context, vkResetCommandBuffer(mHandle, 0));
 }
 
 void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask,
@@ -619,8 +615,8 @@ void Image::destroy(VkDevice device)
 angle::Result Image::init(Context *context, const VkImageCreateInfo &createInfo)
 {
     ASSERT(!valid());
-    ANGLE_VK_TRY(context, vkCreateImage(context->getDevice(), &createInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context,
+                        vkCreateImage(context->getDevice(), &createInfo, nullptr, &mHandle));
 }
 
 void Image::getMemoryRequirements(VkDevice device, VkMemoryRequirements *requirementsOut) const
@@ -632,9 +628,8 @@ void Image::getMemoryRequirements(VkDevice device, VkMemoryRequirements *require
 angle::Result Image::bindMemory(Context *context, const vk::DeviceMemory &deviceMemory)
 {
     ASSERT(valid() && deviceMemory.valid());
-    ANGLE_VK_TRY(context,
-                 vkBindImageMemory(context->getDevice(), mHandle, deviceMemory.getHandle(), 0));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(
+        context, vkBindImageMemory(context->getDevice(), mHandle, deviceMemory.getHandle(), 0));
 }
 
 void Image::getSubresourceLayout(VkDevice device,
@@ -667,8 +662,8 @@ void ImageView::destroy(VkDevice device)
 
 angle::Result ImageView::init(Context *context, const VkImageViewCreateInfo &createInfo)
 {
-    ANGLE_VK_TRY(context, vkCreateImageView(context->getDevice(), &createInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context,
+                        vkCreateImageView(context->getDevice(), &createInfo, nullptr, &mHandle));
 }
 
 // Semaphore implementation.
@@ -694,10 +689,8 @@ angle::Result Semaphore::init(Context *context)
     semaphoreInfo.pNext = nullptr;
     semaphoreInfo.flags = 0;
 
-    ANGLE_VK_TRY(context,
-                 vkCreateSemaphore(context->getDevice(), &semaphoreInfo, nullptr, &mHandle));
-
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context,
+                        vkCreateSemaphore(context->getDevice(), &semaphoreInfo, nullptr, &mHandle));
 }
 
 // Framebuffer implementation.
@@ -717,9 +710,8 @@ void Framebuffer::destroy(VkDevice device)
 angle::Result Framebuffer::init(Context *context, const VkFramebufferCreateInfo &createInfo)
 {
     ASSERT(!valid());
-    ANGLE_VK_TRY(context,
-                 vkCreateFramebuffer(context->getDevice(), &createInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context,
+                        vkCreateFramebuffer(context->getDevice(), &createInfo, nullptr, &mHandle));
 }
 
 void Framebuffer::setHandle(VkFramebuffer handle)
@@ -744,8 +736,8 @@ void DeviceMemory::destroy(VkDevice device)
 angle::Result DeviceMemory::allocate(Context *context, const VkMemoryAllocateInfo &allocInfo)
 {
     ASSERT(!valid());
-    ANGLE_VK_TRY(context, vkAllocateMemory(context->getDevice(), &allocInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context,
+                        vkAllocateMemory(context->getDevice(), &allocInfo, nullptr, &mHandle));
 }
 
 angle::Result DeviceMemory::map(Context *context,
@@ -755,9 +747,8 @@ angle::Result DeviceMemory::map(Context *context,
                                 uint8_t **mapPointer) const
 {
     ASSERT(valid());
-    ANGLE_VK_TRY(context, vkMapMemory(context->getDevice(), mHandle, offset, size, flags,
-                                      reinterpret_cast<void **>(mapPointer)));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context, vkMapMemory(context->getDevice(), mHandle, offset, size, flags,
+                                             reinterpret_cast<void **>(mapPointer)));
 }
 
 void DeviceMemory::unmap(VkDevice device) const
@@ -783,8 +774,8 @@ void RenderPass::destroy(VkDevice device)
 angle::Result RenderPass::init(Context *context, const VkRenderPassCreateInfo &createInfo)
 {
     ASSERT(!valid());
-    ANGLE_VK_TRY(context, vkCreateRenderPass(context->getDevice(), &createInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context,
+                        vkCreateRenderPass(context->getDevice(), &createInfo, nullptr, &mHandle));
 }
 
 // Buffer implementation.
@@ -804,16 +795,15 @@ void Buffer::destroy(VkDevice device)
 angle::Result Buffer::init(Context *context, const VkBufferCreateInfo &createInfo)
 {
     ASSERT(!valid());
-    ANGLE_VK_TRY(context, vkCreateBuffer(context->getDevice(), &createInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context,
+                        vkCreateBuffer(context->getDevice(), &createInfo, nullptr, &mHandle));
 }
 
 angle::Result Buffer::bindMemory(Context *context, const DeviceMemory &deviceMemory)
 {
     ASSERT(valid() && deviceMemory.valid());
-    ANGLE_VK_TRY(context,
-                 vkBindBufferMemory(context->getDevice(), mHandle, deviceMemory.getHandle(), 0));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(
+        context, vkBindBufferMemory(context->getDevice(), mHandle, deviceMemory.getHandle(), 0));
 }
 
 void Buffer::getMemoryRequirements(VkDevice device, VkMemoryRequirements *memoryRequirementsOut)
@@ -839,9 +829,8 @@ void ShaderModule::destroy(VkDevice device)
 angle::Result ShaderModule::init(Context *context, const VkShaderModuleCreateInfo &createInfo)
 {
     ASSERT(!valid());
-    ANGLE_VK_TRY(context,
-                 vkCreateShaderModule(context->getDevice(), &createInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context,
+                        vkCreateShaderModule(context->getDevice(), &createInfo, nullptr, &mHandle));
 }
 
 // PipelineLayout implementation.
@@ -861,9 +850,8 @@ void PipelineLayout::destroy(VkDevice device)
 angle::Result PipelineLayout::init(Context *context, const VkPipelineLayoutCreateInfo &createInfo)
 {
     ASSERT(!valid());
-    ANGLE_VK_TRY(context,
-                 vkCreatePipelineLayout(context->getDevice(), &createInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(
+        context, vkCreatePipelineLayout(context->getDevice(), &createInfo, nullptr, &mHandle));
 }
 
 // PipelineCache implementation.
@@ -885,9 +873,8 @@ angle::Result PipelineCache::init(Context *context, const VkPipelineCacheCreateI
     ASSERT(!valid());
     // Note: if we are concerned with memory usage of this cache, we should give it custom
     // allocators.  Also, failure of this function is of little importance.
-    ANGLE_VK_TRY(context,
-                 vkCreatePipelineCache(context->getDevice(), &createInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(
+        context, vkCreatePipelineCache(context->getDevice(), &createInfo, nullptr, &mHandle));
 }
 
 angle::Result PipelineCache::getCacheData(Context *context, size_t *cacheSize, void *cacheData)
@@ -900,12 +887,8 @@ angle::Result PipelineCache::getCacheData(Context *context, size_t *cacheSize, v
     // VK_INCOMPLETE in the first case is an expected output.  In the second case, VK_INCOMPLETE is
     // also acceptable and the resulting buffer will contain valid value by spec.  Angle currently
     // ensures *cacheSize to be either 0 or of enough size, therefore VK_INCOMPLETE is not expected.
-    angle::Result result = angle::Result::Stop();
-    ANGLE_VK_TRY_ALLOW_INCOMPLETE(
-        context, vkGetPipelineCacheData(context->getDevice(), mHandle, cacheSize, cacheData),
-        result);
-
-    return result;
+    ANGLE_VK_TRY_RETURN_ALLOW_INCOMPLETE(
+        context, vkGetPipelineCacheData(context->getDevice(), mHandle, cacheSize, cacheData));
 }
 
 // Pipeline implementation.
@@ -927,10 +910,9 @@ angle::Result Pipeline::initGraphics(Context *context,
                                      const PipelineCache &pipelineCacheVk)
 {
     ASSERT(!valid());
-    ANGLE_VK_TRY(context,
-                 vkCreateGraphicsPipelines(context->getDevice(), pipelineCacheVk.getHandle(), 1,
+    ANGLE_VK_TRY_RETURN(
+        context, vkCreateGraphicsPipelines(context->getDevice(), pipelineCacheVk.getHandle(), 1,
                                            &createInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
 }
 
 // DescriptorSetLayout implementation.
@@ -951,9 +933,8 @@ angle::Result DescriptorSetLayout::init(Context *context,
                                         const VkDescriptorSetLayoutCreateInfo &createInfo)
 {
     ASSERT(!valid());
-    ANGLE_VK_TRY(context,
-                 vkCreateDescriptorSetLayout(context->getDevice(), &createInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(
+        context, vkCreateDescriptorSetLayout(context->getDevice(), &createInfo, nullptr, &mHandle));
 }
 
 // DescriptorPool implementation.
@@ -973,9 +954,8 @@ void DescriptorPool::destroy(VkDevice device)
 angle::Result DescriptorPool::init(Context *context, const VkDescriptorPoolCreateInfo &createInfo)
 {
     ASSERT(!valid());
-    ANGLE_VK_TRY(context,
-                 vkCreateDescriptorPool(context->getDevice(), &createInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(
+        context, vkCreateDescriptorPool(context->getDevice(), &createInfo, nullptr, &mHandle));
 }
 
 angle::Result DescriptorPool::allocateDescriptorSets(Context *context,
@@ -983,9 +963,8 @@ angle::Result DescriptorPool::allocateDescriptorSets(Context *context,
                                                      VkDescriptorSet *descriptorSetsOut)
 {
     ASSERT(valid());
-    ANGLE_VK_TRY(context,
-                 vkAllocateDescriptorSets(context->getDevice(), &allocInfo, descriptorSetsOut));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(
+        context, vkAllocateDescriptorSets(context->getDevice(), &allocInfo, descriptorSetsOut));
 }
 
 angle::Result DescriptorPool::freeDescriptorSets(Context *context,
@@ -994,9 +973,8 @@ angle::Result DescriptorPool::freeDescriptorSets(Context *context,
 {
     ASSERT(valid());
     ASSERT(descriptorSetCount > 0);
-    ANGLE_VK_TRY(context, vkFreeDescriptorSets(context->getDevice(), mHandle, descriptorSetCount,
-                                               descriptorSets));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context, vkFreeDescriptorSets(context->getDevice(), mHandle,
+                                                      descriptorSetCount, descriptorSets));
 }
 
 // Sampler implementation.
@@ -1016,8 +994,8 @@ void Sampler::destroy(VkDevice device)
 angle::Result Sampler::init(Context *context, const VkSamplerCreateInfo &createInfo)
 {
     ASSERT(!valid());
-    ANGLE_VK_TRY(context, vkCreateSampler(context->getDevice(), &createInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context,
+                        vkCreateSampler(context->getDevice(), &createInfo, nullptr, &mHandle));
 }
 
 // Fence implementation.
@@ -1037,8 +1015,8 @@ void Fence::destroy(VkDevice device)
 angle::Result Fence::init(Context *context, const VkFenceCreateInfo &createInfo)
 {
     ASSERT(!valid());
-    ANGLE_VK_TRY(context, vkCreateFence(context->getDevice(), &createInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context,
+                        vkCreateFence(context->getDevice(), &createInfo, nullptr, &mHandle));
 }
 
 VkResult Fence::getStatus(VkDevice device) const
@@ -1151,8 +1129,8 @@ void QueryPool::destroy(VkDevice device)
 angle::Result QueryPool::init(Context *context, const VkQueryPoolCreateInfo &createInfo)
 {
     ASSERT(!valid());
-    ANGLE_VK_TRY(context, vkCreateQueryPool(context->getDevice(), &createInfo, nullptr, &mHandle));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context,
+                        vkCreateQueryPool(context->getDevice(), &createInfo, nullptr, &mHandle));
 }
 
 angle::Result QueryPool::getResults(Context *context,
@@ -1163,13 +1141,9 @@ angle::Result QueryPool::getResults(Context *context,
                                     VkDeviceSize stride,
                                     VkQueryResultFlags flags) const
 {
-    angle::Result result = angle::Result::Stop();
-    ANGLE_VK_TRY_ALLOW_NOT_READY(context,
-                                 vkGetQueryPoolResults(context->getDevice(), mHandle, firstQuery,
-                                                       queryCount, dataSize, data, stride, flags),
-                                 result);
-
-    return result;
+    ANGLE_VK_TRY_RETURN_ALLOW_NOT_READY(
+        context, vkGetQueryPoolResults(context->getDevice(), mHandle, firstQuery, queryCount,
+                                       dataSize, data, stride, flags));
 }
 
 angle::Result AllocateBufferMemory(vk::Context *context,
