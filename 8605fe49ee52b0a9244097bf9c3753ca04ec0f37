@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "8b3a6acd_575dae31",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-04T18:07:21Z",
+      "side": 1,
+      "message": "Shouldn\u0027t the texture update already cause a split? I mean, that would be a useful test, but is it related to queries?\n\nThe test that covers this is going to be something like:\n\n- Draw to RT0\n- Begin query\n- Draw to RT0 (query result should be \"yes\")\n- End query\n\nAnd if the begin/end doesn\u0027t cause a split, you would end up with:\n\n- Draw1 + Draw2\n- Begin/end query (query result will be \"no\")\n\nAnd the query result will tell you if everything is ok.\n\nThis is indeed one of the query tests that is already available (and what revealed a couple bugs I had during development).",
+      "parentUuid": "3bfd854f_b07c63cc",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 0
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "43f0fde9_17ae102a",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
         "patchSetId": 4
