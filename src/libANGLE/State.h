@@ -446,6 +446,8 @@ class State : angle::NonCopyable
         DIRTY_BIT_PATH_RENDERING,
         DIRTY_BIT_FRAMEBUFFER_SRGB,  // GL_EXT_sRGB_write_control
         DIRTY_BIT_CURRENT_VALUES,
+        // Special dirty bit for GL back-end custom dirty bits.
+        DIRTY_BIT_IMPLEMENTATION,
         DIRTY_BIT_INVALID,
         DIRTY_BIT_MAX = DIRTY_BIT_INVALID,
     };
