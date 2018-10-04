@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f66ed60c_e2ebcc31",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T21:03:03Z",
+      "side": 1,
+      "message": "this will refresh the uniforms applied to the program. in order to keep the stale descriptor set you\u0027ll need to forego any state updates when you re-bind the program.",
+      "range": {
+        "startLine": 329,
+        "startChar": 4,
+        "endLine": 329,
+        "endChar": 28
+      },
+      "revId": "ec017e743a2554f6d992ea45f2ea69b83088112f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "648047bd_c9a822d4",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T21:03:03Z",
+      "side": 1,
+      "message": "ditto here",
+      "range": {
+        "startLine": 330,
+        "startChar": 4,
+        "endLine": 330,
+        "endChar": 55
+      },
+      "revId": "ec017e743a2554f6d992ea45f2ea69b83088112f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
