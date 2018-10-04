@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "0f6dd03c_2c6a1b50",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T18:26:27Z",
+      "side": 1,
+      "message": "Yeah this actually should already be handled. \"hasStartedRenderPass\" already checks for a childless writing node. So I think we can remove this block and forget about the test.",
+      "parentUuid": "8b3a6acd_575dae31",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 0
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "43f0fde9_17ae102a",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
         "patchSetId": 4
