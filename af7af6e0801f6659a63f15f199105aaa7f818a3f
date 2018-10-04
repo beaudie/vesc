@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "401077bc_7833bdf3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T18:50:30Z",
+      "side": 1,
+      "message": "close, but could we do this without needing the \"out\" parameter in ANGLE_VK_TRY_ALLOW_*?\n\nAlso can we call it ANGLE_VK_TRY_RETURN?",
+      "range": {
+        "startLine": 820,
+        "startChar": 0,
+        "endLine": 828,
+        "endChar": 0
+      },
+      "revId": "af7af6e0801f6659a63f15f199105aaa7f818a3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

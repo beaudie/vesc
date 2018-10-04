@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "051c8acb_d18f761a",
+        "filename": "src/common/debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T18:50:30Z",
+      "side": 0,
+      "message": "why did you break the pattern on this? Can you put it back?",
+      "range": {
+        "startLine": 289,
+        "startChar": 4,
+        "endLine": 289,
+        "endChar": 25
+      },
+      "revId": "71fcac5f40250e0fb0a0ee79986fa5188bf1556a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
