@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f4f3b5f_5b309e37",
+        "filename": "src/libANGLE/renderer/vulkan/android/WindowSurfaceVkAndroid.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T11:45:11Z",
+      "side": 1,
+      "message": "nit: leaving in the explicit assignment to nullptr will generate different code. the {} will always zero out the full struct if any field is missing.",
+      "range": {
+        "startLine": 29,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 33
+      },
+      "revId": "0977bae63a1dd6cfaebc421d6b056c177ee0d4e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
