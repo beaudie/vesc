@@ -191,10 +191,7 @@ bool RequiresMultiviewClear(const FramebufferState &state, bool scissorTestEnabl
 }  // namespace
 
 FramebufferGL::FramebufferGL(const gl::FramebufferState &data, GLuint id, bool isDefault)
-    : FramebufferImpl(data),
-      mFramebufferID(id),
-      mIsDefault(isDefault),
-      mAppliedEnabledDrawBuffers(1)
+    : FramebufferImpl(data), mFramebufferID(id), mIsDefault(isDefault)
 {
 }
 
@@ -662,10 +659,7 @@ angle::Result FramebufferGL::syncState(const gl::Context *context,
             }
             case Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
             {
-                const auto &drawBuffers = mState.getDrawBufferStates();
-                functions->drawBuffers(static_cast<GLsizei>(drawBuffers.size()),
-                                       drawBuffers.data());
-                mAppliedEnabledDrawBuffers = mState.getEnabledDrawBuffers();
+                stateManager->invalidateDrawBuffers();
                 break;
             }
             case Framebuffer::DIRTY_BIT_READ_BUFFER:
@@ -731,34 +725,6 @@ GLuint FramebufferGL::getFramebufferID() const
 bool FramebufferGL::isDefault() const
 {
     return mIsDefault;
-}
-
-void FramebufferGL::maskOutInactiveOutputDrawBuffers(const gl::Context *context,
-                                                     GLenum binding,
-                                                     DrawBufferMask maxSet)
-{
-
-    auto targetAppliedDrawBuffers = mState.getEnabledDrawBuffers() & maxSet;
-    if (mAppliedEnabledDrawBuffers != targetAppliedDrawBuffers)
-    {
-        mAppliedEnabledDrawBuffers = targetAppliedDrawBuffers;
-
-        const auto &stateDrawBuffers = mState.getDrawBufferStates();
-        GLsizei drawBufferCount      = static_cast<GLsizei>(stateDrawBuffers.size());
-        ASSERT(drawBufferCount <= IMPLEMENTATION_MAX_DRAW_BUFFERS);
-
-        GLenum drawBuffers[IMPLEMENTATION_MAX_DRAW_BUFFERS];
-        for (GLenum i = 0; static_cast<int>(i) < drawBufferCount; ++i)
-        {
-            drawBuffers[i] = targetAppliedDrawBuffers[i] ? stateDrawBuffers[i] : GL_NONE;
-        }
-
-        const FunctionsGL *functions = GetFunctionsGL(context);
-        StateManagerGL *stateManager = GetStateManagerGL(context);
-
-        stateManager->bindFramebuffer(binding, mFramebufferID);
-        functions->drawBuffers(drawBufferCount, drawBuffers);
-    }
 }
 
 void FramebufferGL::syncClearState(const gl::Context *context, GLbitfield mask)
