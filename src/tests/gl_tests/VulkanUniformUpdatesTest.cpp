@@ -211,6 +211,126 @@ void main()
     }
 }
 
+// Uniform updates along with Texture updates.
+TEST_P(VulkanUniformUpdatesTest, DescriptorPoolUniformAndTextureUpdatesTwoShaders)
+{
+    ASSERT_TRUE(IsVulkan());
+
+    // Force a small limit on the max sets per pool to more easily trigger a new allocation.
+    constexpr uint32_t kMaxSetsForTesting = 32;
+    rx::vk::DynamicDescriptorPool *uniformPool =
+        hackANGLE()->getDynamicDescriptorPool(rx::kUniformsDescriptorSetIndex);
+    uniformPool->setMaxSetsPerPoolForTesting(kMaxSetsForTesting);
+    rx::vk::DynamicDescriptorPool *texturePool =
+        hackANGLE()->getDynamicDescriptorPool(rx::kTextureDescriptorSetIndex);
+    texturePool->setMaxSetsPerPoolForTesting(kMaxSetsForTesting);
+
+    // Initialize texture program1.
+    constexpr char kVS1[] = R"(attribute vec2 position;
+varying mediump vec2 texCoord;
+void main()
+{
+    gl_Position = vec4(position, 0, 1);
+    texCoord = position * 0.5 + vec2(0.5);
+})";
+
+    constexpr char kFS1[] = R"(varying mediump vec2 texCoord;
+uniform sampler2D tex;
+uniform mediump vec4 colorMask;
+void main()
+{
+    gl_FragColor = texture2D(tex, texCoord) * colorMask;
+})";
+
+    // Initialize texture program2.
+    constexpr char kVS2[] = R"(attribute vec2 position;
+varying mediump vec2 texCoord;
+void main()
+{
+    gl_Position = vec4(position, 0, 1);
+    texCoord = position * 0.5 + vec2(0.5);
+})";
+
+    constexpr char kFS2[] = R"(varying mediump vec2 texCoord;
+uniform sampler2D tex;
+uniform mediump vec4 colorMask;
+void main()
+{
+    gl_FragColor = texture2D(tex, texCoord) * colorMask;
+})";
+
+    ANGLE_GL_PROGRAM(program1, kVS1, kFS1);
+    ANGLE_GL_PROGRAM(program2, kVS2, kFS2);
+    glUseProgram(program1);
+
+    // Get uniform locations.
+    GLint texLoc1 = glGetUniformLocation(program1, "tex");
+    ASSERT_NE(-1, texLoc1);
+    GLint texLoc2 = glGetUniformLocation(program2, "tex");
+    ASSERT_NE(-1, texLoc2);
+
+    GLint colorMaskLoc1 = glGetUniformLocation(program1, "colorMask");
+    ASSERT_NE(-1, colorMaskLoc1);
+    GLint colorMaskLoc2 = glGetUniformLocation(program2, "colorMask");
+    ASSERT_NE(-1, colorMaskLoc2);
+
+    // Initialize white texture.
+    GLTexture whiteTexture;
+    InitTexture(GLColor::white, &whiteTexture);
+    ASSERT_GL_NO_ERROR();
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, whiteTexture);
+
+    // Initialize magenta texture.
+    GLTexture magentaTexture;
+    InitTexture(GLColor::magenta, &magentaTexture);
+    ASSERT_GL_NO_ERROR();
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, magentaTexture);
+
+    // Draw with white using program1.
+    glUniform1i(texLoc1, 0);
+    glUniform4f(colorMaskLoc1, 1.0f, 1.0f, 1.0f, 1.0f);
+    drawQuad(program1, "position", 0.5f, 1.0f, true);
+    swapBuffers();
+    ASSERT_GL_NO_ERROR();
+
+    // Now switch to use program2
+    glUseProgram(program2);
+    // Draw multiple times w/ program2, each iteration will create a new descriptor set.
+    // This will cause the first descriptor pool to be cleaned up
+    for (uint32_t iteration = 0; iteration < kMaxSetsForTesting * 2; ++iteration)
+    {
+        // Draw with white.
+        glUniform1i(texLoc2, 0);
+        glUniform4f(colorMaskLoc2, 1.0f, 1.0f, 1.0f, 1.0f);
+        drawQuad(program2, "position", 0.5f, 1.0f, true);
+
+        // Draw with white masking out red.
+        glUniform4f(colorMaskLoc2, 0.0f, 1.0f, 1.0f, 1.0f);
+        drawQuad(program2, "position", 0.5f, 1.0f, true);
+
+        // Draw with magenta.
+        glUniform1i(texLoc2, 1);
+        glUniform4f(colorMaskLoc2, 1.0f, 1.0f, 1.0f, 1.0f);
+        drawQuad(program2, "position", 0.5f, 1.0f, true);
+
+        // Draw with magenta masking out red.
+        glUniform4f(colorMaskLoc2, 0.0f, 1.0f, 1.0f, 1.0f);
+        drawQuad(program2, "position", 0.5f, 1.0f, true);
+
+        swapBuffers();
+        ASSERT_GL_NO_ERROR();
+    }
+    // Finally, attempt to draw again with program1, with original uniform values.
+    glUseProgram(program1);
+    drawQuad(program1, "position", 0.5f, 1.0f, true);
+    swapBuffers();
+    ASSERT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST(VulkanUniformUpdatesTest, ES2_VULKAN());
 
 }  // anonymous namespace
