@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "467fb92c_0515a54c",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "you can return result directly here.",
+      "range": {
+        "startLine": 41,
+        "startChar": 15,
+        "endLine": 42,
+        "endChar": 0
+      },
+      "revId": "6a571877552f01f50faa67daadecb14ae0a7da12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b087ee8_40ab8272",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "I think you can use ANGLE_TRY here",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 81
+      },
+      "revId": "6a571877552f01f50faa67daadecb14ae0a7da12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82b52f6d_00c3cd29",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "you can return result directly here.",
+      "range": {
+        "startLine": 120,
+        "startChar": 14,
+        "endLine": 120,
+        "endChar": 35
+      },
+      "revId": "6a571877552f01f50faa67daadecb14ae0a7da12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7668e489_f03e6f5e",
         "filename": "src/tests/gl_tests/OcclusionQueriesTest.cpp",
         "patchSetId": 1
@@ -13,6 +82,24 @@
       "writtenOn": "2018-10-03T20:27:23Z",
       "side": 1,
       "message": "Even though I don\u0027t use `VK_QUERY_CONTROL_PRECISE_BIT`, I still get precise results on nvidia. This makes sure non-zero result turns to 1, as EXPECT_GL_TRUE expects.",
+      "revId": "6a571877552f01f50faa67daadecb14ae0a7da12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92a923aa_9638201f",
+        "filename": "src/tests/gl_tests/OcclusionQueriesTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "The only value return values for the query are GL_TRUE and GL_FALSE. Thus I think you should probably leave the test as-is. ANGLE would be wrong to return something else. If a Vulkan driver doesn\u0027t return 1/0 we\u0027ll have to adjust for it.",
+      "parentUuid": "7668e489_f03e6f5e",
       "revId": "6a571877552f01f50faa67daadecb14ae0a7da12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

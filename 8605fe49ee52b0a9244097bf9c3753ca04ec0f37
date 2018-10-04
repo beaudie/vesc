@@ -1,0 +1,435 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34a3d144_1b0a822a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "nit: this should be in a split patch I think. ideally with a test, although they can be hard to write.",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 0
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43f0fde9_17ae102a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "same comment",
+      "range": {
+        "startLine": 169,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 0
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f195647_fd1b9381",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "this seems redundant. I think you can infer this when you\u0027re calling beginQuery/endQuery. Maybe we can remove it?",
+      "range": {
+        "startLine": 202,
+        "startChar": 50,
+        "endLine": 202,
+        "endChar": 59
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ca60035_5227aa27",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "same as below.",
+      "range": {
+        "startLine": 543,
+        "startChar": 8,
+        "endLine": 543,
+        "endChar": 42
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7abffe6_3b90ee35",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "instead of adding a new API here, you can use SetHappensBeforeDependencies. Can you update this API to take a count and pointer instead of a vector const \u0026?",
+      "range": {
+        "startLine": 562,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 5
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb17b33b_4755e564",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "if the std::vector in DynamicQueryPool grows I think this becomes invalid. You might need to store a pointer to the DynamicQueryPool along with a Query and Pool index.",
+      "range": {
+        "startLine": 127,
+        "startChar": 4,
+        "endLine": 127,
+        "endChar": 32
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db5873f5_3065c583",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "instead of passing the QueryHelper, it would be a bit cleaner just to pass the query pool and and query index directly. To keep knowledge about the helper out of the graph.",
+      "range": {
+        "startLine": 181,
+        "startChar": 0,
+        "endLine": 182,
+        "endChar": 68
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17ad6a12_ac123ea2",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "nit: vk::GetImpl(context)\n\nSee other class files.",
+      "range": {
+        "startLine": 27,
+        "startChar": 27,
+        "endLine": 27,
+        "endChar": 82
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4ebdc7f_6bccf79d",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "nit: vk::GetImpl(context)\n\nSee other class files.",
+      "range": {
+        "startLine": 35,
+        "startChar": 27,
+        "endLine": 35,
+        "endChar": 82
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89cf20dc_bcf31eaf",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "nit: vk::GetImpl(context)\n\nSee other class files.",
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "752d1776_2657b9c8",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "nit: vk::GetImpl(context)\n\nSee other class files.",
+      "range": {
+        "startLine": 65,
+        "startChar": 27,
+        "endLine": 66,
+        "endChar": 0
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ebeddf0_64a5c672",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "nit: vk::GetImpl(context)\n\nSee other class files.",
+      "range": {
+        "startLine": 100,
+        "startChar": 27,
+        "endLine": 100,
+        "endChar": 82
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11bff2c2_5afa99ad",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "aha, here you use the assignment. Instead of using assignment, maybe you should use an init method. I think QueryHelper inherts from CommandGraphResource so that would be my preference to keep the uses of all component classes consistent.",
+      "range": {
+        "startLine": 427,
+        "startChar": 4,
+        "endLine": 427,
+        "endChar": 82
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3a5362d_f13ccd05",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "This seems sketchy. If the vector grows and triggers a reallocation this calculation will be invalid. I think I would rather you store a poolIndex directly in QueryHelper if possible.",
+      "range": {
+        "startLine": 436,
+        "startChar": 27,
+        "endLine": 436,
+        "endChar": 67
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7d689ae_6c727333",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "here you could use a deinit method.",
+      "range": {
+        "startLine": 441,
+        "startChar": 7,
+        "endLine": 442,
+        "endChar": 0
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "370100bd_a4cfe7db",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "this should be lastCompletedQueueSerial not currentQueueSerial. The queries in the pool could be in flight with serial 50 while the current queue serial is 51.",
+      "range": {
+        "startLine": 452,
+        "startChar": 56,
+        "endLine": 452,
+        "endChar": 77
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "679a9d46_5b5d7e2d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "Do you need the move constructor and assignment operator? I only see this in QueryVk and it doesn\u0027t get copied. You could remove them and store a const \u0026 instead for mQueryPool.",
+      "range": {
+        "startLine": 146,
+        "startChar": 0,
+        "endLine": 151,
+        "endChar": 48
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7e18199_4f18c626",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1171,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "instead of making an out parameter for these (NOT_READY/INCOMPLETE) I think it would be nicer if the macro just returned Incomplete() directly.",
+      "range": {
+        "startLine": 1171,
+        "startChar": 4,
+        "endLine": 1171,
+        "endChar": 32
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78e835a8_f721e20d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "I like the re-use of the macro. I have one request for follow up. Could be a second CL. \n\nWe can make a macro specially for the vk::WrappedObject helpers that always returns. Instead of the out result parameter we just return Continue()/Incomplete()/Stop always. Then inside the WrappedObject helpers we don\u0027t need the explicit return Continue() either.",
+      "range": {
+        "startLine": 793,
+        "startChar": 0,
+        "endLine": 803,
+        "endChar": 37
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

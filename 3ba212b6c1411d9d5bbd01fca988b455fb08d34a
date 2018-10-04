@@ -142,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "fefa2d98_bae5fd51",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:17:41Z",
+      "side": 1,
+      "message": "I\u0027m working on removing gl::Error and replacing it with angle::Result in http://anglebug.com/2491 . But converting angle::Result -\u003e gl::Error happens automatically in ANGLE_TRY since angle::Result has a conversion operator to gl::Error.",
+      "parentUuid": "eb9034cb_cbf02b5e",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 35
+      },
+      "revId": "3ba212b6c1411d9d5bbd01fca988b455fb08d34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "97c603a1_760fe014",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 3
