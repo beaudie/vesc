@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0e37969_cf6b0759",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-04T20:43:05Z",
+      "side": 0,
+      "message": "Why was this removed?",
+      "range": {
+        "startLine": 235,
+        "startChar": 8,
+        "endLine": 252,
+        "endChar": 0
+      },
+      "revId": "4d422c290779afe1262ef16cbff497b48e29b49c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
