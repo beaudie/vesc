@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a40841ca_fb5e0066",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1892,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-04T09:22:16Z",
+      "side": 1,
+      "message": "Maybe these functions don\u0027t need to have a resolved link either? The output location fields in mState are updated when link is called, before link is resolved. Or is the idea that queries need to first check whether link can be resolved successfully on the backend?",
+      "revId": "5f862f8521de1fc15890f52aba48f78b04eff967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

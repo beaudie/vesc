@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bd90fdc1_5321c77e",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5745,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-04T09:22:16Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "cfcdb883_3a388dd8",
+      "range": {
+        "startLine": 5745,
+        "startChar": 4,
+        "endLine": 5745,
+        "endChar": 8
+      },
+      "revId": "c63144c2e939b267828f8b1fdad0791620a90275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e2c8bbf1_c4e1fd9c",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 10
@@ -45,6 +69,30 @@
       "revId": "c63144c2e939b267828f8b1fdad0791620a90275",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "892cbea4_99c0b67e",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5757,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-04T09:22:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2c8bbf1_c4e1fd9c",
+      "range": {
+        "startLine": 5757,
+        "startChar": 4,
+        "endLine": 5757,
+        "endChar": 8
+      },
+      "revId": "c63144c2e939b267828f8b1fdad0791620a90275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "cc86cac1_5cc643c3",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5765,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-04T09:22:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a34a4cf4_5ba4d66c",
+      "range": {
+        "startLine": 5765,
+        "startChar": 4,
+        "endLine": 5765,
+        "endChar": 8
+      },
+      "revId": "c63144c2e939b267828f8b1fdad0791620a90275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78e8fca8_a81f832d",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 10
@@ -91,6 +163,30 @@
       "revId": "c63144c2e939b267828f8b1fdad0791620a90275",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83ad8738_b1575833",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-04T09:22:16Z",
+      "side": 1,
+      "message": "Ah, I think I got the link resolution logic wrong. It seems like gl::Program level linking calculations are done before mLinkResolved is set to false - only the link on the backend is left to be resolved later. If this is correct then this function doesn\u0027t need to resolve link.\n\nIt seems like bindAttributeLocation and bindUniformLocation could also be optimized not to resolve link, though there might be some interactions with MemoryProgramCache to refactor before that.",
+      "parentUuid": "78e8fca8_a81f832d",
+      "range": {
+        "startLine": 1026,
+        "startChar": 4,
+        "endLine": 1026,
+        "endChar": 18
+      },
+      "revId": "c63144c2e939b267828f8b1fdad0791620a90275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "b2eb0d93_1bb49d4c",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-04T09:22:16Z",
+      "side": 1,
+      "message": "Removed this.",
+      "parentUuid": "7a50d508_dab35be8",
+      "range": {
+        "startLine": 1032,
+        "startChar": 4,
+        "endLine": 1032,
+        "endChar": 18
+      },
+      "revId": "c63144c2e939b267828f8b1fdad0791620a90275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c5235543_c10b7433",
         "filename": "src/libANGLE/Program.h",
         "patchSetId": 10
@@ -128,6 +248,30 @@
       "writtenOn": "2018-10-03T17:19:34Z",
       "side": 1,
       "message": "nit: should be mFragmentOutputBindings.\n\nOne request: can you make gl::ProgramBindings be a template class that defaults to GLuint? Then for mFragmentOutputBindings you can store {location,index} for a single binding.",
+      "range": {
+        "startLine": 938,
+        "startChar": 0,
+        "endLine": 939,
+        "endChar": 43
+      },
+      "revId": "c63144c2e939b267828f8b1fdad0791620a90275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "625d84bf_455b1e6a",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-04T09:22:16Z",
+      "side": 1,
+      "message": "It\u0027s not that simple to change it - ProgramBindings::getBinding() returns -1 in case the binding isn\u0027t set. It couldn\u0027t work in a similar way if the binding type would be a class. I\u0027d either keep this as it is or add an entirely different class for the fragment output bindings.",
+      "parentUuid": "c5235543_c10b7433",
       "range": {
         "startLine": 938,
         "startChar": 0,
