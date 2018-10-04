@@ -3921,7 +3921,7 @@ bool Program::samplesFromTexture(const gl::State &state, GLuint textureID) const
     return false;
 }
 
-Error Program::syncState(const Context *context)
+angle::Result Program::syncState(const Context *context)
 {
     if (mDirtyBits.any())
     {
@@ -3930,6 +3930,6 @@ Error Program::syncState(const Context *context)
         mDirtyBits.reset();
     }
 
-    return NoError();
+    return angle::Result::Continue();
 }
 }  // namespace gl
