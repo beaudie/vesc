@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "c2f40c09_26c4be67",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-04T04:59:08Z",
+      "side": 1,
+      "message": "Yes sure.",
+      "parentUuid": "04c7405d_1e3e1ea5",
+      "range": {
+        "startLine": 257,
+        "startChar": 4,
+        "endLine": 257,
+        "endChar": 45
+      },
+      "revId": "3ba212b6c1411d9d5bbd01fca988b455fb08d34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "040a0fc3_1ad1d3b0",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 3
@@ -94,6 +118,30 @@
     },
     {
       "key": {
+        "uuid": "eb9034cb_cbf02b5e",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-04T04:59:08Z",
+      "side": 1,
+      "message": "There\u0027s a translation from `angle::Result` to `gl::Error` here that\u0027s preventing me from using ANGLE_TRY. Or there\u0027s something I\u0027m missing?",
+      "parentUuid": "040a0fc3_1ad1d3b0",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 35
+      },
+      "revId": "3ba212b6c1411d9d5bbd01fca988b455fb08d34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "97c603a1_760fe014",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 3
@@ -105,6 +153,30 @@
       "writtenOn": "2018-10-03T21:43:39Z",
       "side": 1,
       "message": "Because the query result can be queried multiple times, I think we should cache it in QueryVk.  Then in the isResultAvailable function below, the result can be saved and the next getResult call will return fast.  The result may also need some processing to be as GL expects, the occusion queries in GL expect a return of true or false but I believe vulkan writes the number of samples that pass.",
+      "range": {
+        "startLine": 63,
+        "startChar": 19,
+        "endLine": 63,
+        "endChar": 28
+      },
+      "revId": "3ba212b6c1411d9d5bbd01fca988b455fb08d34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "810a4610_256bf2e1",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-04T04:59:08Z",
+      "side": 1,
+      "message": "Hmmm... does the query pool memory live in the host or on the device? If it\u0027s already in the host, there\u0027s no point in caching, but if it\u0027s on the device I agree.\n\nThe post processing can be done, yes. I didn\u0027t pay attention to the fact that gl occlusion query results are binary.",
+      "parentUuid": "97c603a1_760fe014",
       "range": {
         "startLine": 63,
         "startChar": 19,
