@@ -22,6 +22,30 @@
       "revId": "71fcac5f40250e0fb0a0ee79986fa5188bf1556a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a01065c3_c98b84a9",
+        "filename": "src/common/debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-04T19:23:26Z",
+      "side": 0,
+      "message": "`do { } while (0)` makes the macro invocation behave exactly as a function invocation would. The hacky way it\u0027s done here doesn\u0027t.\n\nFor example, if you have:\n\nif (x)\n  MACRO(y);\nelse\n  something;\n\nThe one with ANGLE_EMPTY_STATEMENT would cause a syntax error, even though by all means it looks like it shouldn\u0027t. `do { } while (0)` is a pretty common idiom for macros, I\u0027m surprised it\u0027s not used here.\n\nSee https://stackoverflow.com/a/257425 and linked questions for more info.\n\nThe kernel\u0027s style guide recommends the same: https://github.com/torvalds/linux/blob/v4.16/Documentation/process/coding-style.rst#12-macros-enums-and-rtl\n\nGcc would issue a warning for this and recommends `do { } while (0)`: https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html (see -Wmultistatement-macros)\n\nThere\u0027s a lot more if you search for it.",
+      "parentUuid": "051c8acb_d18f761a",
+      "range": {
+        "startLine": 289,
+        "startChar": 4,
+        "endLine": 289,
+        "endChar": 25
+      },
+      "revId": "71fcac5f40250e0fb0a0ee79986fa5188bf1556a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
