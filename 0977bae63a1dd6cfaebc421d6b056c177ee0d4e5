@@ -22,6 +22,30 @@
       "revId": "0977bae63a1dd6cfaebc421d6b056c177ee0d4e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "048ffcc3_5876f2fd",
+        "filename": "src/libANGLE/renderer/vulkan/android/WindowSurfaceVkAndroid.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-04T17:42:11Z",
+      "side": 1,
+      "message": "I just tried both g++ and clang++ with -O2, and their output is identical with or without a missing 0-initialized field. What compiler did you try that on?\n\nFYI, both g++ and clang++ completely zero-out the struct even if all fields are initialized afterwards, so perhaps you were looking at unoptimized code?\n\n---\n\nMy test case:\n\nstruct X\n{\n    int a;\n    int b;\n    char *c;\n    float d;\n    int e;\n    double *f;\n};\n\nvoid g(X *x);\n\nvoid f()\n{\n    struct X x \u003d {};\n\n    x.a \u003d 1;\n    x.b \u003d 2;\n    x.d \u003d 4;\n    x.e \u003d 5;\n    x.f \u003d (double *)6;\n\n#if COMPLETE_INIT\n    x.c \u003d nullptr;\n#endif\n\n    g(\u0026x);\n}",
+      "parentUuid": "2f4f3b5f_5b309e37",
+      "range": {
+        "startLine": 29,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 33
+      },
+      "revId": "0977bae63a1dd6cfaebc421d6b056c177ee0d4e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
