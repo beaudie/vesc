@@ -34,6 +34,24 @@
       "revId": "5f862f8521de1fc15890f52aba48f78b04eff967",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d5ffa238_13e8f05b",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1892,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-04T13:41:21Z",
+      "side": 1,
+      "message": "I think most of the queries just need Program::link to have been called, but resolving the link on the backend might not be strictly necessary. This is the case at least if we can trust that the link always succeeds on the backend after the validation done in ANGLE. Also setting state that only affects the next link doesn\u0027t really depend on having completed the previous link. Of course optimizing repeated linking of the same program object probably isn\u0027t worth much effort.\n\nThe code could be clearer if the linked state would be more clearly separated from unlinked state though.",
+      "parentUuid": "d60cb66f_0dd78dc9",
+      "revId": "5f862f8521de1fc15890f52aba48f78b04eff967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
