@@ -410,6 +410,30 @@
     },
     {
       "key": {
+        "uuid": "a72d3c1b_9098000d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1171,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-04T13:20:28Z",
+      "side": 1,
+      "message": "Whoops, made another comment about this. Ignore this one.",
+      "parentUuid": "c7e18199_4f18c626",
+      "range": {
+        "startLine": 1171,
+        "startChar": 4,
+        "endLine": 1171,
+        "endChar": 32
+      },
+      "revId": "8605fe49ee52b0a9244097bf9c3753ca04ec0f37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78e835a8_f721e20d",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 4
