@@ -163,7 +163,6 @@ class StateManagerGL final : angle::NonCopyable
                                        const void *indices,
                                        GLsizei instanceCount,
                                        const void **outIndices);
-    angle::Result setDrawIndirectState(const gl::Context *context);
 
     angle::Result setDispatchComputeState(const gl::Context *context);
 
@@ -182,10 +181,9 @@ class StateManagerGL final : angle::NonCopyable
         const gl::Program *program,
         const gl::FramebufferState &drawFramebufferState) const;
 
-  private:
-    // Set state that's common among draw commands.
-    angle::Result setGenericDrawState(const gl::Context *context);
+    void invalidateDrawBuffers();
 
+  private:
     void setTextureCubemapSeamlessEnabled(bool enabled);
 
     void applyViewportOffsetsAndSetScissors(const gl::Rectangle &scissor,
@@ -206,11 +204,15 @@ class StateManagerGL final : angle::NonCopyable
     void syncSamplersState(const gl::Context *context);
     void syncTransformFeedbackState(const gl::Context *context);
 
-    enum MultiviewDirtyBitType
+    void syncImplementationDirtyBits(const gl::Context *context);
+
+    // Implementation dirty bits.
+    enum DirtyBitType
     {
-        MULTIVIEW_DIRTY_BIT_SIDE_BY_SIDE_LAYOUT,
-        MULTIVIEW_DIRTY_BIT_VIEWPORT_OFFSETS,
-        MULTIVIEW_DIRTY_BIT_MAX
+        DIRTY_BIT_DRAW_BUFFERS,
+        DIRTY_BIT_SIDE_BY_SIDE_LAYOUT,
+        DIRTY_BIT_VIEWPORT_OFFSETS,
+        DIRTY_BIT_MAX
     };
 
     const FunctionsGL *mFunctions;
@@ -361,8 +363,10 @@ class StateManagerGL final : angle::NonCopyable
     gl::State::DirtyBits mLocalDirtyBits;
     gl::AttributesMask mLocalDirtyCurrentValues;
 
+    gl::DrawBufferMask mAppliedEnabledDrawBuffers;
+
     // ANGLE_multiview dirty bits.
-    angle::BitSet<MULTIVIEW_DIRTY_BIT_MAX> mMultiviewDirtyBits;
+    angle::BitSet<DIRTY_BIT_MAX> mImplementationDirtyBits;
 };
 }  // namespace rx
 
