@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f6ba7e0_78a5e9b0",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3821,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-04T14:51:02Z",
+      "side": 1,
+      "message": "I think this resize could be computed before the loop, it will always try to resize to at least baseLocation + elementCount + 1",
+      "range": {
+        "startLine": 3818,
+        "startChar": 16,
+        "endLine": 3821,
+        "endChar": 17
+      },
+      "revId": "c37e1b0c0765eaace716b5a4a1904fe8113943b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f83baa07_ead4c213",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3824,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-04T14:51:02Z",
+      "side": 1,
+      "message": "Could break after this if the resize is moved.",
+      "range": {
+        "startLine": 3824,
+        "startChar": 20,
+        "endLine": 3824,
+        "endChar": 40
+      },
+      "revId": "c37e1b0c0765eaace716b5a4a1904fe8113943b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddbd1686_52ab8018",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-04T14:51:02Z",
+      "side": 1,
+      "message": "Any advice on how to improve this later? Is there a way we can use the shader API to know these strings?",
+      "range": {
+        "startLine": 237,
+        "startChar": 24,
+        "endLine": 240,
+        "endChar": 92
+      },
+      "revId": "c37e1b0c0765eaace716b5a4a1904fe8113943b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
