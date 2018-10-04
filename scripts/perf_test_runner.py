@@ -18,8 +18,7 @@ import re
 
 base_path = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
-# Might have to add lower case "release" in some configurations.
-perftests_paths = glob.glob('out/*Release*')
+perftests_paths = glob.glob('out/*elease*')
 metric = 'score'
 
 binary_name = 'angle_perftests'

@@ -105,6 +105,14 @@ config("extra_warnings") {
   }
 }
 
+config("extra_optim") {
+  cflags = []
+
+  if (is_clang && !is_debug) {
+    cflags += [ "-flto" ]
+  }
+}
+
 # This config adds build-ids to the associated library.
 # -Wl is a special option that indicates that clang should pass the associated
 # option --build-id to the linker. This will cause a build-id section to be added
@@ -137,8 +145,9 @@ static_library("preprocessor") {
 
   configs -= angle_undefine_configs
   configs += [
-    ":extra_warnings",
     ":internal_config",
+    ":extra_warnings",
+    ":extra_optim",
   ]
 
   public_deps = [
@@ -188,8 +197,9 @@ static_library("angle_common") {
   configs += [
     ":angle_common_config",
     ":debug_annotations_config",
-    ":extra_warnings",
     ":internal_config",
+    ":extra_warnings",
+    ":extra_optim",
   ]
 
   public_deps = [
@@ -350,6 +360,7 @@ static_library("translator") {
   configs += [
     ":internal_config",
     ":extra_warnings",
+    ":extra_optim",
   ]
   public_configs = [ ":external_config" ]
   if (use_fuzzing_engine) {
@@ -366,7 +377,7 @@ static_library("translator") {
   ]
 
   if (is_win) {
-    # Necessary to suppress some system header xtree warnigns in Release.
+    # Necessary to suppress some system header xtree warnings in Release.
     # For some reason this warning doesn't get triggered in Chromium
     cflags = [ "/wd4718" ]
   }
@@ -608,8 +619,9 @@ static_library("libANGLE") {
   configs += [
     ":commit_id_config",
     ":debug_annotations_config",
-    ":extra_warnings",
     ":internal_config",
+    ":extra_warnings",
+    ":extra_optim",
   ]
 
   public_configs = [ ":libANGLE_config" ]
@@ -667,8 +679,9 @@ shared_library("libGLESv2${angle_libs_suffix}") {
   configs += [
     ":commit_id_config",
     ":debug_annotations_config",
-    ":extra_warnings",
     ":internal_config",
+    ":extra_warnings",
+    ":extra_optim",
   ]
 
   defines = [ "LIBGLESV2_IMPLEMENTATION" ]
@@ -697,8 +710,9 @@ static_library("libGLESv2_static") {
   configs += [
     ":commit_id_config",
     ":debug_annotations_config",
-    ":extra_warnings",
     ":internal_config",
+    ":extra_warnings",
+    ":extra_optim",
   ]
 
   public_configs = [ ":angle_static" ]
@@ -729,8 +743,9 @@ shared_library("libGLESv1_CM${angle_libs_suffix}") {
   configs += [
     ":commit_id_config",
     ":debug_annotations_config",
-    ":extra_warnings",
     ":internal_config",
+    ":extra_warnings",
+    ":extra_optim",
   ]
 
   defines = []
@@ -759,8 +774,9 @@ static_library("libGLESv1_CM_static") {
   configs += [
     ":commit_id_config",
     ":debug_annotations_config",
-    ":extra_warnings",
     ":internal_config",
+    ":extra_warnings",
+    ":extra_optim",
   ]
 
   public_configs = [ ":angle_static" ]
@@ -782,8 +798,9 @@ shared_library("libEGL${angle_libs_suffix}") {
   configs += [
     ":commit_id_config",
     ":debug_annotations_config",
-    ":extra_warnings",
     ":internal_config",
+    ":extra_warnings",
+    ":extra_optim",
   ]
 
   defines = [ "LIBEGL_IMPLEMENTATION" ]
@@ -818,8 +835,9 @@ static_library("libEGL_static") {
   configs += [
     ":commit_id_config",
     ":debug_annotations_config",
-    ":extra_warnings",
     ":internal_config",
+    ":extra_warnings",
+    ":extra_optim",
   ]
 
   public_configs = [ ":angle_static" ]
@@ -904,6 +922,7 @@ foreach(is_shared_library,
     configs += [
       ":debug_annotations_config",
       ":extra_warnings",
+      ":extra_optim",
     ]
 
     public_configs = [
