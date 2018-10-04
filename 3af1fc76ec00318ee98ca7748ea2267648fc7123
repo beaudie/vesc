@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c8e94f6_6cbbd625",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-04T22:30:58Z",
+      "side": 1,
+      "message": "Could you please provide a more descriptive message outlining all the changes you needed in order to make this happen. Especially the new Incomplete behavior for link.",
+      "revId": "3af1fc76ec00318ee98ca7748ea2267648fc7123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36d26171_04310c01",
+        "filename": "src/libANGLE/Error.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-04T22:30:58Z",
+      "side": 1,
+      "message": "How should we treat Incomplete?\nIs it always an error?",
+      "range": {
+        "startLine": 116,
+        "startChar": 15,
+        "endLine": 116,
+        "endChar": 33
+      },
+      "revId": "3af1fc76ec00318ee98ca7748ea2267648fc7123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0df9d0c9_ab61902a",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-04T22:30:58Z",
+      "side": 1,
+      "message": "Why is this different from \"result \u003d\u003d angle::Result::Continue()\" above?",
+      "range": {
+        "startLine": 1287,
+        "startChar": 24,
+        "endLine": 1287,
+        "endChar": 67
+      },
+      "revId": "3af1fc76ec00318ee98ca7748ea2267648fc7123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5735ced_009d7c7a",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1603,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-04T22:30:58Z",
+      "side": 1,
+      "message": "Looks like this won\u0027t handle error for Incomplete, is this intentional?",
+      "range": {
+        "startLine": 1596,
+        "startChar": 0,
+        "endLine": 1603,
+        "endChar": 0
+      },
+      "revId": "3af1fc76ec00318ee98ca7748ea2267648fc7123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
