@@ -52,8 +52,8 @@ void GetDefaultInputLayoutFromShader(gl::Shader *vertexShader, gl::InputLayout *
                 GLenum componentType = gl::VariableComponentType(transposedType);
                 GLuint components    = static_cast<GLuint>(gl::VariableColumnCount(transposedType));
                 bool pureInt         = (componentType != GL_FLOAT);
-                gl::VertexFormatType defaultType =
-                    gl::GetVertexFormatType(componentType, GL_FALSE, components, pureInt);
+                angle::FormatID defaultType =
+                    gl::GetVertexFormatID(componentType, GL_FALSE, components, pureInt);
 
                 inputLayoutOut->push_back(defaultType);
             }
@@ -501,8 +501,8 @@ void ProgramD3D::VertexExecutable::getSignature(RendererD3D *renderer,
 
     for (size_t index = 0; index < inputLayout.size(); ++index)
     {
-        gl::VertexFormatType vertexFormatType = inputLayout[index];
-        if (vertexFormatType == gl::VERTEX_FORMAT_INVALID)
+        angle::FormatID vertexFormatType = inputLayout[index];
+        if (vertexFormatType == angle::FormatID::NONE)
             continue;
 
         VertexConversionType conversionType = renderer->getVertexConversionType(vertexFormatType);
@@ -925,11 +925,11 @@ gl::LinkResult ProgramD3D::load(const gl::Context *context,
          vertexShaderIndex++)
     {
         size_t inputLayoutSize = stream->readInt<size_t>();
-        gl::InputLayout inputLayout(inputLayoutSize, gl::VERTEX_FORMAT_INVALID);
+        gl::InputLayout inputLayout(inputLayoutSize, angle::FormatID::NONE);
 
         for (size_t inputIndex = 0; inputIndex < inputLayoutSize; inputIndex++)
         {
-            inputLayout[inputIndex] = stream->readInt<gl::VertexFormatType>();
+            inputLayout[inputIndex] = stream->readInt<angle::FormatID>();
         }
 
         unsigned int vertexShaderSize             = stream->readInt<unsigned int>();
@@ -2711,11 +2711,11 @@ void ProgramD3D::updateCachedInputLayout(Serial associatedSerial, const gl::Stat
         {
             if (mCachedInputLayout.size() < static_cast<size_t>(d3dSemantic + 1))
             {
-                mCachedInputLayout.resize(d3dSemantic + 1, gl::VERTEX_FORMAT_INVALID);
+                mCachedInputLayout.resize(d3dSemantic + 1, angle::FormatID::NONE);
             }
             mCachedInputLayout[d3dSemantic] =
-                GetVertexFormatType(vertexAttributes[locationIndex],
-                                    state.getVertexAttribCurrentValue(locationIndex).Type);
+                GetVertexFormatID(vertexAttributes[locationIndex],
+                                  state.getVertexAttribCurrentValue(locationIndex).Type);
         }
     }
 

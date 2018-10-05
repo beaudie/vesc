@@ -73,7 +73,7 @@ PackedAttributeLayout::PackedAttributeLayout(const PackedAttributeLayout &other)
 
 void PackedAttributeLayout::addAttributeData(GLenum glType,
                                              UINT semanticIndex,
-                                             gl::VertexFormatType vertexFormatType,
+                                             angle::FormatID vertexFormatType,
                                              unsigned int divisor)
 {
     gl::AttributeType attribType = gl::GetAttributeType(glType);
@@ -87,7 +87,7 @@ void PackedAttributeLayout::addAttributeData(GLenum glType,
 
     ASSERT(static_cast<gl::AttributeType>(packedAttrib.attribType) == attribType);
     ASSERT(static_cast<UINT>(packedAttrib.semanticIndex) == semanticIndex);
-    ASSERT(static_cast<gl::VertexFormatType>(packedAttrib.vertexFormatType) == vertexFormatType);
+    ASSERT(static_cast<angle::FormatID>(packedAttrib.vertexFormatType) == vertexFormatType);
     ASSERT(static_cast<unsigned int>(packedAttrib.divisor) == divisor);
 
     static_assert(sizeof(uint64_t) == sizeof(PackedAttribute),
@@ -166,7 +166,7 @@ angle::Result InputLayoutCache::getInputLayout(
 
         const auto &currentValue =
             state.getVertexAttribCurrentValue(static_cast<unsigned int>(attribIndex));
-        gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib, currentValue.Type);
+        angle::FormatID vertexFormatType = gl::GetVertexFormatID(attrib, currentValue.Type);
 
         layout.addAttributeData(glslElementType, d3dSemantic, vertexFormatType,
                                 binding.getDivisor() * divisorMultiplier);
@@ -222,7 +222,7 @@ angle::Result InputLayoutCache::createInputLayout(
             attrib.divisor > 0 ? D3D11_INPUT_PER_INSTANCE_DATA : D3D11_INPUT_PER_VERTEX_DATA;
 
         const auto &vertexFormatType =
-            gl::GetVertexFormatType(*attrib.attribute, attrib.currentValueType);
+            gl::GetVertexFormatID(*attrib.attribute, attrib.currentValueType);
         const auto &vertexFormatInfo = d3d11::GetVertexFormatInfo(vertexFormatType, featureLevel);
 
         auto *inputElement = &inputElements[inputElementCount];

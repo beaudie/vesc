@@ -90,7 +90,7 @@ angle::Result VertexBuffer9::storeVertexAttributes(const gl::Context *context,
         input += inputStride * start;
     }
 
-    gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib, currentValueType);
+    angle::FormatID vertexFormatType = gl::GetVertexFormatID(attrib, currentValueType);
     const d3d9::VertexFormat &d3dVertexInfo = d3d9::GetVertexFormatInfo(mRenderer->getCapsDeclTypes(), vertexFormatType);
     bool needsConversion = (d3dVertexInfo.conversionType & VERTEX_CONVERT_CPU) > 0;
 

@@ -137,8 +137,8 @@ class BufferFactoryD3D : angle::NonCopyable
 
     // TODO(jmadill): add VertexFormatCaps
     virtual VertexConversionType getVertexConversionType(
-        gl::VertexFormatType vertexFormatType) const                                   = 0;
-    virtual GLenum getVertexComponentType(gl::VertexFormatType vertexFormatType) const = 0;
+        angle::FormatID vertexFormatType) const                                   = 0;
+    virtual GLenum getVertexComponentType(angle::FormatID vertexFormatType) const = 0;
 
     // Warning: you should ensure binding really matches attrib.bindingIndex before using this
     // function.
