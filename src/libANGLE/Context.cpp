@@ -3508,7 +3508,7 @@ Error Context::syncState(const State::DirtyBits &bitMask, const State::DirtyObje
 angle::Result Context::syncDirtyBits()
 {
     const State::DirtyBits &dirtyBits = mGLState.getDirtyBits();
-    ANGLE_TRY(mImplementation->syncState(this, dirtyBits));
+    ANGLE_TRY(mImplementation->syncState(this, dirtyBits, dirtyBits));
     mGLState.clearDirtyBits();
     return angle::Result::Continue();
 }
@@ -3516,7 +3516,7 @@ angle::Result Context::syncDirtyBits()
 angle::Result Context::syncDirtyBits(const State::DirtyBits &bitMask)
 {
     const State::DirtyBits &dirtyBits = (mGLState.getDirtyBits() & bitMask);
-    ANGLE_TRY(mImplementation->syncState(this, dirtyBits));
+    ANGLE_TRY(mImplementation->syncState(this, dirtyBits, bitMask));
     mGLState.clearDirtyBits(dirtyBits);
     return angle::Result::Continue();
 }
