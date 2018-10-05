@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ce511f27_e2e2282f",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3821,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-05T08:26:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f6ba7e0_78a5e9b0",
+      "range": {
+        "startLine": 3818,
+        "startChar": 16,
+        "endLine": 3821,
+        "endChar": 17
+      },
+      "revId": "c37e1b0c0765eaace716b5a4a1904fe8113943b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f83baa07_ead4c213",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 12
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "bfbd3197_0289126b",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3824,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-05T08:26:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f83baa07_ead4c213",
+      "range": {
+        "startLine": 3824,
+        "startChar": 20,
+        "endLine": 3824,
+        "endChar": 40
+      },
+      "revId": "c37e1b0c0765eaace716b5a4a1904fe8113943b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ddbd1686_52ab8018",
         "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
         "patchSetId": 12
@@ -68,6 +116,30 @@
       "revId": "c37e1b0c0765eaace716b5a4a1904fe8113943b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d453d4ea_d790fec0",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1142464
+      },
+      "writtenOn": "2018-10-05T08:26:43Z",
+      "side": 1,
+      "message": "This could be improved by storing the changed names into ShaderVariable::mappedName in the translator API. Currently the code that outputs these names is in OutputGLSL so it would require some refactoring to accomplish this. Added a TODO comment about this.",
+      "parentUuid": "ddbd1686_52ab8018",
+      "range": {
+        "startLine": 237,
+        "startChar": 24,
+        "endLine": 240,
+        "endChar": 92
+      },
+      "revId": "c37e1b0c0765eaace716b5a4a1904fe8113943b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
