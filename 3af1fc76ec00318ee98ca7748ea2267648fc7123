@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ec9b95ad_262ea9d1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-05T10:16:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c8e94f6_6cbbd625",
+      "revId": "3af1fc76ec00318ee98ca7748ea2267648fc7123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "36d26171_04310c01",
         "filename": "src/libANGLE/Error.cpp",
         "patchSetId": 8
@@ -39,6 +57,30 @@
       "revId": "3af1fc76ec00318ee98ca7748ea2267648fc7123",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "361fcbfc_938c1a09",
+        "filename": "src/libANGLE/Error.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-05T10:16:52Z",
+      "side": 1,
+      "message": "An unexpected incomplete is an error. Each case that handles incomplete must do an explicit check. At least for now.",
+      "parentUuid": "36d26171_04310c01",
+      "range": {
+        "startLine": 116,
+        "startChar": 15,
+        "endLine": 116,
+        "endChar": 33
+      },
+      "revId": "3af1fc76ec00318ee98ca7748ea2267648fc7123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "9d95f54c_d35ec0ca",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-05T10:16:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0df9d0c9_ab61902a",
+      "range": {
+        "startLine": 1287,
+        "startChar": 24,
+        "endLine": 1287,
+        "endChar": 67
+      },
+      "revId": "3af1fc76ec00318ee98ca7748ea2267648fc7123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d5735ced_009d7c7a",
         "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
         "patchSetId": 8
@@ -85,6 +151,30 @@
       "revId": "3af1fc76ec00318ee98ca7748ea2267648fc7123",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47d03066_a8941f83",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1603,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-05T10:16:52Z",
+      "side": 1,
+      "message": "Yes. Incomplete is not an error. This is just handling error. Added a comment.",
+      "parentUuid": "d5735ced_009d7c7a",
+      "range": {
+        "startLine": 1596,
+        "startChar": 0,
+        "endLine": 1603,
+        "endChar": 0
+      },
+      "revId": "3af1fc76ec00318ee98ca7748ea2267648fc7123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
