@@ -83,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "37598a98_32c8c6ef",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-05T15:45:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9caba29b_cea9f254",
+      "range": {
+        "startLine": 211,
+        "startChar": 16,
+        "endLine": 211,
+        "endChar": 87
+      },
+      "revId": "9a12cfe40a5392f7776dc7895053a0c60a593f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a60b384f_937dd9b0",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
         "patchSetId": 11
@@ -129,6 +153,30 @@
     },
     {
       "key": {
+        "uuid": "129ddae6_0b0fa5e5",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-05T15:45:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "09d7ae87_0e63ed0f",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 20
+      },
+      "revId": "9a12cfe40a5392f7776dc7895053a0c60a593f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3991c52d_e19bae0c",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 11
@@ -140,6 +188,30 @@
       "writtenOn": "2018-10-05T15:14:56Z",
       "side": 1,
       "message": "nit: we use () around sizeof everywhere else. should probably stick to that style. same with the below.",
+      "range": {
+        "startLine": 74,
+        "startChar": 61,
+        "endLine": 74,
+        "endChar": 81
+      },
+      "revId": "9a12cfe40a5392f7776dc7895053a0c60a593f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d814a54_ccc74d54",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-05T15:45:33Z",
+      "side": 1,
+      "message": "Unnecessary, but sure.",
+      "parentUuid": "3991c52d_e19bae0c",
       "range": {
         "startLine": 74,
         "startChar": 61,
@@ -175,6 +247,30 @@
     },
     {
       "key": {
+        "uuid": "3bbf4ffa_b919ddf1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-05T15:45:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "766547a8_2de8a600",
+      "range": {
+        "startLine": 421,
+        "startChar": 38,
+        "endLine": 421,
+        "endChar": 39
+      },
+      "revId": "9a12cfe40a5392f7776dc7895053a0c60a593f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "22736dad_64a76f5d",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 11
@@ -195,6 +291,30 @@
       "revId": "9a12cfe40a5392f7776dc7895053a0c60a593f3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5555e76_5bc34583",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-05T15:45:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22736dad_64a76f5d",
+      "range": {
+        "startLine": 465,
+        "startChar": 0,
+        "endLine": 465,
+        "endChar": 13
+      },
+      "revId": "9a12cfe40a5392f7776dc7895053a0c60a593f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -221,6 +341,30 @@
     },
     {
       "key": {
+        "uuid": "47cabcae_5aa09e75",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-05T15:45:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c299e8c0_b60bfe83",
+      "range": {
+        "startLine": 169,
+        "startChar": 17,
+        "endLine": 169,
+        "endChar": 26
+      },
+      "revId": "9a12cfe40a5392f7776dc7895053a0c60a593f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e93fbd15_0a80d2f3",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 11
@@ -241,6 +385,30 @@
       "revId": "9a12cfe40a5392f7776dc7895053a0c60a593f3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cb27fa9_e30c4cc2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-05T15:45:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e93fbd15_0a80d2f3",
+      "range": {
+        "startLine": 171,
+        "startChar": 50,
+        "endLine": 171,
+        "endChar": 70
+      },
+      "revId": "9a12cfe40a5392f7776dc7895053a0c60a593f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
