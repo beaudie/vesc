@@ -22,6 +22,30 @@
       "revId": "4d422c290779afe1262ef16cbff497b48e29b49c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d0b1f91_0c24827b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-05T13:34:28Z",
+      "side": 0,
+      "message": "It\u0027s redundant. This is a barrier used twice for the same buffer. Specifying the buffer parameters twice is more error-prone.",
+      "parentUuid": "c0e37969_cf6b0759",
+      "range": {
+        "startLine": 235,
+        "startChar": 8,
+        "endLine": 252,
+        "endChar": 0
+      },
+      "revId": "4d422c290779afe1262ef16cbff497b48e29b49c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
