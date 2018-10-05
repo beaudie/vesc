@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba888e18_664b2a6e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2018-10-05T02:27:50Z",
+      "side": 1,
+      "message": "Since this is not a template class, you should put the implementations of these methods in the cpp file and let the compiler decide whether to inline them or not.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 14
+      },
+      "revId": "acf6324877c76ac142790210e93605c1942187cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a288a65_06101f95",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2018-10-05T02:27:50Z",
+      "side": 1,
+      "message": "If the DLL where these functions resides can be delay loaded by the linker, you can avoid all of these function pointers. You just need to check for the Windows version before calling any Windows 10 specific functions.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 53
+      },
+      "revId": "acf6324877c76ac142790210e93605c1942187cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

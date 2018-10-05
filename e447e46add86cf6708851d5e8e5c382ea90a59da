@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "fc04e855_9af8c709",
+        "filename": "include/EGL/eglplatform.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2018-10-05T02:27:50Z",
+      "side": 1,
+      "message": "I do not feel super strong about changing from an HWND to a pointer, just a little bit dirty. \nI think the static_cast should already handle cases where the two types are incompatible with one another",
+      "parentUuid": "719d706a_6c2ad777",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 35
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ab7d822_891451fa",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 1
