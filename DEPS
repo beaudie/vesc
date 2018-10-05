@@ -36,7 +36,7 @@ vars = {
 deps = {
 
   '{angle_root}/build': {
-    'url': '{chromium_git}/chromium/src/build.git@ee922ea8f8ed211d485add7906a64ccd2ffc358b',
+    'url': '{chromium_git}/chromium/src/build.git@1a0ce5087e25809c43a0add52ef5f00fbfcb149d',
     'condition': 'not build_with_chromium',
   },
 
@@ -46,7 +46,7 @@ deps = {
   },
 
   '{angle_root}/testing': {
-    'url': '{chromium_git}/chromium/src/testing@f6b3243e8ba941f4dfa6b579137738803f43aa18',
+    'url': '{chromium_git}/chromium/src/testing@b71f668a96c74ae61cd538c1daf64269c1907907',
     'condition': 'not build_with_chromium',
   },
 
@@ -109,12 +109,12 @@ deps = {
   },
 
   '{angle_root}/third_party/zlib': {
-    'url': '{chromium_git}/chromium/src/third_party/zlib@de0fe056df0577ea69cbf5f46dfe66debe046e5c',
+    'url': '{chromium_git}/chromium/src/third_party/zlib@c44fb7248079cc3d5563b14b3f758aee60d6b415',
     'condition': 'not build_with_chromium',
   },
 
   '{angle_root}/tools/clang': {
-    'url': '{chromium_git}/chromium/src/tools/clang.git@99ac9bf4ad0d629e1168a0bda9a82f87062ce106',
+    'url': '{chromium_git}/chromium/src/tools/clang.git@a245b955fe9cd620081ed267fae303c88d033fef',
     'condition': 'not build_with_chromium',
   },
 }
@@ -222,6 +222,14 @@ hooks = [
     'pattern': '.',
     'action': ['python', '{angle_root}/tools/clang/scripts/update.py'],
     'condition': 'not build_with_chromium',
+  },
+
+  {
+    # Update LASTCHANGE.
+    'name': 'lastchange',
+    'pattern': '.',
+    'action': ['python', 'build/util/lastchange.py',
+               '-o', 'build/util/LASTCHANGE'],
   },
 
   # Pull rc binaries using checked-in hashes.
