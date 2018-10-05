@@ -3553,7 +3553,9 @@ void Context::clearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat *valu
     {
         return;
     }
-    if (buffer == GL_COLOR && !getGLState().getDrawFramebuffer()->getColorbuffer(drawbuffer))
+    if (buffer == GL_COLOR && (getGLState().getDrawFramebuffer()->getNumColorBuffers() <=
+                                   static_cast<size_t>(drawbuffer) ||
+                               !getGLState().getDrawFramebuffer()->getColorbuffer(drawbuffer)))
     {
         return;
     }
@@ -3566,7 +3568,9 @@ void Context::clearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint *valu
 {
     // It's not an error to try to clear a non-existent buffer, but it's a no-op. We early out so
     // that the backend doesn't need to take this case into account.
-    if (buffer == GL_COLOR && !getGLState().getDrawFramebuffer()->getColorbuffer(drawbuffer))
+    if (buffer == GL_COLOR && (getGLState().getDrawFramebuffer()->getNumColorBuffers() <=
+                                   static_cast<size_t>(drawbuffer) ||
+                               !getGLState().getDrawFramebuffer()->getColorbuffer(drawbuffer)))
     {
         return;
     }
@@ -3583,7 +3587,9 @@ void Context::clearBufferiv(GLenum buffer, GLint drawbuffer, const GLint *values
     {
         return;
     }
-    if (buffer == GL_COLOR && !getGLState().getDrawFramebuffer()->getColorbuffer(drawbuffer))
+    if (buffer == GL_COLOR && (getGLState().getDrawFramebuffer()->getNumColorBuffers() <=
+                                   static_cast<size_t>(drawbuffer) ||
+                               !getGLState().getDrawFramebuffer()->getColorbuffer(drawbuffer)))
     {
         return;
     }
