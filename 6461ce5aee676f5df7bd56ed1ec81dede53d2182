@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88246c02_608f992b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3552,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-05T14:48:47Z",
+      "side": 1,
+      "message": "nit: can you cache this in a temporary Framebufer *drawFramebuffer \u003d getGLState().getDrawFramebuffer() ?",
+      "range": {
+        "startLine": 3552,
+        "startChar": 31,
+        "endLine": 3552,
+        "endChar": 64
+      },
+      "revId": "6461ce5aee676f5df7bd56ed1ec81dede53d2182",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83e9e2cf_17be5628",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3557,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-05T14:48:47Z",
+      "side": 1,
+      "message": "nit: can you phrase this as drawBuffer \u003e\u003d getNumColorBuffers? seems a bit easier to parse.",
+      "range": {
+        "startLine": 3556,
+        "startChar": 30,
+        "endLine": 3557,
+        "endChar": 66
+      },
+      "revId": "6461ce5aee676f5df7bd56ed1ec81dede53d2182",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "889864ef_6500160c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3571,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-05T14:48:47Z",
+      "side": 1,
+      "message": "nit: can you cache this in a temporary Framebufer *drawFramebuffer \u003d getGLState().getDrawFramebuffer() ?",
+      "range": {
+        "startLine": 3571,
+        "startChar": 31,
+        "endLine": 3571,
+        "endChar": 64
+      },
+      "revId": "6461ce5aee676f5df7bd56ed1ec81dede53d2182",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c3eb6fa_962c8132",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3572,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-05T14:48:47Z",
+      "side": 1,
+      "message": "nit: can you phrase this as drawBuffer \u003e\u003d getNumColorBuffers?",
+      "range": {
+        "startLine": 3572,
+        "startChar": 35,
+        "endLine": 3572,
+        "endChar": 66
+      },
+      "revId": "6461ce5aee676f5df7bd56ed1ec81dede53d2182",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fed92a6d_0cbbb7fd",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3590,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-05T14:48:47Z",
+      "side": 1,
+      "message": "nit: can you cache this in a temporary Framebufer *drawFramebuffer \u003d getGLState().getDrawFramebuffer() ?",
+      "range": {
+        "startLine": 3590,
+        "startChar": 30,
+        "endLine": 3590,
+        "endChar": 64
+      },
+      "revId": "6461ce5aee676f5df7bd56ed1ec81dede53d2182",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7a45b37_8abd79f2",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3591,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-05T14:48:47Z",
+      "side": 1,
+      "message": "nit: can you phrase this as drawBuffer \u003e\u003d getNumColorBuffers?",
+      "range": {
+        "startLine": 3591,
+        "startChar": 35,
+        "endLine": 3591,
+        "endChar": 66
+      },
+      "revId": "6461ce5aee676f5df7bd56ed1ec81dede53d2182",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
