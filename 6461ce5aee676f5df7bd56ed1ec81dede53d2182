@@ -137,6 +137,29 @@
       "revId": "6461ce5aee676f5df7bd56ed1ec81dede53d2182",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba523a6a_33d344e1",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-05T16:40:52Z",
+      "side": 1,
+      "message": "nit: could just be a constexpr array or std::vector\u003cGLuint\u003e testUint(4);",
+      "range": {
+        "startLine": 636,
+        "startChar": 4,
+        "endLine": 637,
+        "endChar": 23
+      },
+      "revId": "6461ce5aee676f5df7bd56ed1ec81dede53d2182",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
