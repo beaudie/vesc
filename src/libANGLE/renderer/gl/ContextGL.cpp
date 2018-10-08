@@ -367,7 +367,8 @@ void ContextGL::popDebugGroup()
 }
 
 angle::Result ContextGL::syncState(const gl::Context *context,
-                                   const gl::State::DirtyBits &dirtyBits)
+                                   const gl::State::DirtyBits &dirtyBits,
+                                   const gl::State::DirtyBits &bitMask)
 {
     mRenderer->getStateManager()->syncState(context, dirtyBits);
     return angle::Result::Continue();
