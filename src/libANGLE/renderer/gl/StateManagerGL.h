@@ -77,7 +77,6 @@ class StateManagerGL final : angle::NonCopyable
     void onTransformFeedbackStateChange();
     void beginQuery(gl::QueryType type, QueryGL *queryObject, GLuint queryId);
     void endQuery(gl::QueryType type, QueryGL *queryObject, GLuint queryId);
-    void onBeginQuery(QueryGL *query);
 
     void setAttributeCurrentData(size_t index, const gl::VertexAttribCurrentValueData &data);
 
@@ -90,7 +89,6 @@ class StateManagerGL final : angle::NonCopyable
     void setViewportArrayv(GLuint first, const std::vector<gl::Rectangle> &viewports);
     void setDepthRange(float near, float far);
 
-    void setViewportOffsets(const std::vector<gl::Offset> &kviewportOffsets);
     void setSideBySide(bool isSideBySide);
 
     void setBlendEnabled(bool enabled);
@@ -163,7 +161,6 @@ class StateManagerGL final : angle::NonCopyable
                                        const void *indices,
                                        GLsizei instanceCount,
                                        const void **outIndices);
-    angle::Result setDrawIndirectState(const gl::Context *context);
 
     angle::Result setDispatchComputeState(const gl::Context *context);
 
@@ -182,11 +179,13 @@ class StateManagerGL final : angle::NonCopyable
         const gl::Program *program,
         const gl::FramebufferState &drawFramebufferState) const;
 
-  private:
-    // Set state that's common among draw commands.
-    angle::Result setGenericDrawState(const gl::Context *context);
+    void invalidateDrawBuffers();
 
+  private:
     void setTextureCubemapSeamlessEnabled(bool enabled);
+    void updateDrawBuffers(bool isWebGL,
+                           const gl::Program *program,
+                           const gl::Framebuffer *drawFramebuffer);
 
     void applyViewportOffsetsAndSetScissors(const gl::Rectangle &scissor,
                                             const gl::Framebuffer &drawFramebuffer);
@@ -206,11 +205,13 @@ class StateManagerGL final : angle::NonCopyable
     void syncSamplersState(const gl::Context *context);
     void syncTransformFeedbackState(const gl::Context *context);
 
-    enum MultiviewDirtyBitType
+    void syncImplementationDirtyBits(const gl::Context *context);
+
+    // Implementation dirty bits.
+    enum DirtyBitType
     {
-        MULTIVIEW_DIRTY_BIT_SIDE_BY_SIDE_LAYOUT,
-        MULTIVIEW_DIRTY_BIT_VIEWPORT_OFFSETS,
-        MULTIVIEW_DIRTY_BIT_MAX
+        DIRTY_BIT_DRAW_BUFFERS,
+        DIRTY_BIT_MAX
     };
 
     const FunctionsGL *mFunctions;
@@ -362,7 +363,7 @@ class StateManagerGL final : angle::NonCopyable
     gl::AttributesMask mLocalDirtyCurrentValues;
 
     // ANGLE_multiview dirty bits.
-    angle::BitSet<MULTIVIEW_DIRTY_BIT_MAX> mMultiviewDirtyBits;
+    angle::BitSet<DIRTY_BIT_MAX> mImplementationDirtyBits;
 };
 }  // namespace rx
 
