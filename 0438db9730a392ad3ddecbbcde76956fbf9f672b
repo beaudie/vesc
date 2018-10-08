@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "877a1135_58a7fc10",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-08T16:23:47Z",
+      "side": 1,
+      "message": "I fixed that now in mathutil.h. For small types (bit count less than 24 bits) float is used, double otherwise. The if condition should be evaluated at compile time since it checks only sizeof(T) or the template inputBitCount/outputBitCount parameter.\nIf this should better be submitted in a separate commit, please let me know.",
+      "parentUuid": "b517d2f3_66138ee5",
+      "revId": "0438db9730a392ad3ddecbbcde76956fbf9f672b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "04f883d5_3847b486",
         "filename": "src/libANGLE/queryutils.cpp",
         "patchSetId": 1
