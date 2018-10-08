@@ -174,16 +174,15 @@ class StateManagerGL final : angle::NonCopyable
     angle::Result resumeQuery(const gl::Context *context, gl::QueryType type);
     angle::Result onMakeCurrent(const gl::Context *context);
 
-    void syncState(const gl::Context *context, const gl::State::DirtyBits &glDirtyBits);
+    void syncState(const gl::Context *context,
+                   const gl::State::DirtyBits &glDirtyBits,
+                   const gl::State::DirtyBits &bitMask);
 
     void updateMultiviewBaseViewLayerIndexUniform(
         const gl::Program *program,
         const gl::FramebufferState &drawFramebufferState) const;
 
   private:
-    // Set state that's common among draw commands and compute invocations.
-    void setGenericShaderState(const gl::Context *context);
-
     // Set state that's common among draw commands.
     angle::Result setGenericDrawState(const gl::Context *context);
 
@@ -364,13 +363,7 @@ class StateManagerGL final : angle::NonCopyable
 
     // ANGLE_multiview dirty bits.
     angle::BitSet<MULTIVIEW_DIRTY_BIT_MAX> mMultiviewDirtyBits;
-
-    bool mProgramTexturesDirty;
-    bool mProgramStorageBuffersDirty;
-    bool mProgramUniformBuffersDirty;
-    bool mProgramAtomicCounterBuffersDirty;
-    bool mProgramImagesDirty;
 };
-}
+}  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_GL_STATEMANAGERGL_H_
