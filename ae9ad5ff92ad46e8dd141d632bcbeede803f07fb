@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b8f5ee3_a0ab3dc8",
+        "filename": "src/libANGLE/renderer/gl/VertexArrayGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-08T19:21:14Z",
+      "side": 1,
+      "message": "Can this can be an ASSERT instead of an explicit bind? Now that you fixed the dirty executable bit to only call propogateProgramToVAO when it is a graphics program?",
+      "range": {
+        "startLine": 738,
+        "startChar": 4,
+        "endLine": 738,
+        "endChar": 85
+      },
+      "revId": "ae9ad5ff92ad46e8dd141d632bcbeede803f07fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
