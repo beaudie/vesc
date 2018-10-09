@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fefdf6a7_c0e90563",
+        "filename": "src/common/Color.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T17:18:21Z",
+      "side": 1,
+      "message": "Slight preference for ColorVariant.\n\nThis class is also very similiar to our VertexAttribCurrentValueData but I don\u0027t think there is much shareable code because we want color structs vs arrays.",
+      "range": {
+        "startLine": 51,
+        "startChar": 7,
+        "endLine": 51,
+        "endChar": 13
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce5545eb_84be586f",
+        "filename": "src/common/Color.inl",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T17:18:21Z",
+      "side": 1,
+      "message": "I would guess this will hit some undefined behaviour.  You may need to break this up and check type.  I would guess this is not in a critical path.",
+      "range": {
+        "startLine": 56,
+        "startChar": 31,
+        "endLine": 56,
+        "endChar": 52
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1ee89c5_ec56f5ab",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3252,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T17:18:21Z",
+      "side": 1,
+      "message": "This extension will not be supported on all of our backends.  Enable it per-backend in the files: renderer11_utils.cpp renderer9_utils.cpp renderergl_utils.cpp and vk_caps_utils.cpp based on native support and if it has been implemented in that backend.",
+      "range": {
+        "startLine": 3252,
+        "startChar": 4,
+        "endLine": 3252,
+        "endChar": 53
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a04f4c2d_6c893fee",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T17:18:21Z",
+      "side": 1,
+      "message": "See entry_point_packed_gl_enums.json to generate these entry points using our internal enums.",
+      "range": {
+        "startLine": 350,
+        "startChar": 28,
+        "endLine": 350,
+        "endChar": 41
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34a9b195_9df62d5d",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T17:18:21Z",
+      "side": 1,
+      "message": "You could template these functions on the parameter type and not need the isIntegerType below.",
+      "range": {
+        "startLine": 35,
+        "startChar": 7,
+        "endLine": 35,
+        "endChar": 22
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58513c3b_51c6c660",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1348,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T17:18:21Z",
+      "side": 1,
+      "message": "Why is this not an integer type?",
+      "range": {
+        "startLine": 1348,
+        "startChar": 50,
+        "endLine": 1348,
+        "endChar": 55
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5c1bbb7_741ba56d",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1368,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T17:18:21Z",
+      "side": 1,
+      "message": "Same for this.",
+      "range": {
+        "startLine": 1368,
+        "startChar": 54,
+        "endLine": 1368,
+        "endChar": 59
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2d2929f_64d45a82",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T17:18:21Z",
+      "side": 1,
+      "message": "What guarantees this?",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 254,
+        "endChar": 77
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a06df352_3881acb6",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T17:18:21Z",
+      "side": 1,
+      "message": "What guarantees this?",
+      "range": {
+        "startLine": 968,
+        "startChar": 7,
+        "endLine": 968,
+        "endChar": 77
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
