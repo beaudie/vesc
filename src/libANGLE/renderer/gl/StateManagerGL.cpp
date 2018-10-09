@@ -1685,7 +1685,9 @@ void StateManagerGL::setClearStencil(GLint clearStencil)
     }
 }
 
-void StateManagerGL::syncState(const gl::Context *context, const gl::State::DirtyBits &glDirtyBits)
+void StateManagerGL::syncState(const gl::Context *context,
+                               const gl::State::DirtyBits &glDirtyBits,
+                               const gl::State::DirtyBits &bitMask)
 {
     const gl::State &state = context->getGLState();
 
@@ -1745,7 +1747,7 @@ void StateManagerGL::syncState(const gl::Context *context, const gl::State::Dirt
         mMultiviewDirtyBits.reset();
     }
 
-    const gl::State::DirtyBits &glAndLocalDirtyBits = (glDirtyBits | mLocalDirtyBits);
+    const gl::State::DirtyBits &glAndLocalDirtyBits = (glDirtyBits | mLocalDirtyBits) & bitMask;
 
     if (!glAndLocalDirtyBits.any())
     {
