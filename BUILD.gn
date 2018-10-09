@@ -223,7 +223,7 @@ static_library("angle_image_util") {
   ]
 }
 
-config("angle_feature_support_util_config") {
+config("angle_feature_support_config") {
   include_dirs = [
     "include",
     "src",
@@ -234,7 +234,25 @@ config("angle_feature_support_util_config") {
   }
 }
 
-static_library("angle_feature_support_util") {
+config("angle_gl_visibility_config") {
+  if (is_win) {
+    defines = [
+      "GL_APICALL=",
+      "GL_API=",
+    ]
+  } else {
+    defines = [
+      "GL_APICALL=__attribute__((visibility(\"default\")))",
+      "GL_API=__attribute__((visibility(\"default\")))",
+    ]
+  }
+}
+
+shared_library("libfeature_support${angle_libs_suffix}") {
+  if (is_android) {
+    configs -= [ "//build/config/android:hide_all_but_jni_onload" ]
+    configs += [ ":build_id_config" ]
+  }
   configs -= angle_undefine_configs
   configs += [
     ":internal_config",
@@ -242,7 +260,8 @@ static_library("angle_feature_support_util") {
   ]
 
   public_configs = [
-    ":angle_feature_support_util_config",
+    ":angle_gl_visibility_config",
+    ":angle_feature_support_config",
     "third_party/jsoncpp:jsoncpp_config",
   ]
 
@@ -508,9 +527,6 @@ static_library("libANGLE") {
     ":includes",
     ":translator",
   ]
-  if (is_android) {
-    deps += [ ":angle_feature_support_util" ]
-  }
 
   # Shared D3D sources.
   if (angle_enable_d3d9 || angle_enable_d3d11) {
@@ -668,6 +684,7 @@ shared_library("libGLESv2${angle_libs_suffix}") {
 
   configs -= angle_undefine_configs
   configs += [
+    ":angle_gl_visibility_config",
     ":commit_id_config",
     ":debug_annotations_config",
     ":extra_warnings",
@@ -675,17 +692,6 @@ shared_library("libGLESv2${angle_libs_suffix}") {
   ]
 
   defines = [ "LIBGLESV2_IMPLEMENTATION" ]
-  if (is_win) {
-    defines += [
-      "GL_APICALL=",
-      "GL_API=",
-    ]
-  } else {
-    defines += [
-      "GL_APICALL=__attribute__((visibility(\"default\")))",
-      "GL_API=__attribute__((visibility(\"default\")))",
-    ]
-  }
 
   deps = [
     ":includes",
@@ -730,6 +736,7 @@ shared_library("libGLESv1_CM${angle_libs_suffix}") {
 
   configs -= angle_undefine_configs
   configs += [
+    ":angle_gl_visibility_config",
     ":commit_id_config",
     ":debug_annotations_config",
     ":extra_warnings",
@@ -737,17 +744,6 @@ shared_library("libGLESv1_CM${angle_libs_suffix}") {
   ]
 
   defines = []
-  if (is_win) {
-    defines += [
-      "GL_APICALL=",
-      "GL_API=",
-    ]
-  } else {
-    defines += [
-      "GL_APICALL=__attribute__((visibility(\"default\")))",
-      "GL_API=__attribute__((visibility(\"default\")))",
-    ]
-  }
 
   deps = [
     ":includes",
@@ -966,6 +962,7 @@ if (is_android) {
         "//third_party/angle:libEGL${angle_libs_suffix}($android_secondary_abi_toolchain)",
         "//third_party/angle:libGLESv1_CM${angle_libs_suffix}($android_secondary_abi_toolchain)",
         "//third_party/angle:libGLESv2${angle_libs_suffix}($android_secondary_abi_toolchain)",
+        "//third_party/angle:libfeature_support${angle_libs_suffix}($android_secondary_abi_toolchain)",
       ]
     }
 
@@ -977,6 +974,7 @@ if (is_android) {
       "//third_party/angle:libEGL${angle_libs_suffix}",
       "//third_party/angle:libGLESv1_CM${angle_libs_suffix}",
       "//third_party/angle:libGLESv2${angle_libs_suffix}",
+      "//third_party/angle:libfeature_support${angle_libs_suffix}",
     ]
   }
 }
