@@ -892,6 +892,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 break;
             }
             break;
+            case gl::State::DIRTY_BIT_IMPLEMENTATION:
+                break;
             default:
                 UNREACHABLE();
                 break;
