@@ -16,6 +16,24 @@
       "revId": "c4c19dfba3664fac16a2c823f3f4fb91e5d4fb76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3957dd4_8708599d",
+        "filename": "src/tests/gl_tests/DrawBuffersTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-09T15:41:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6468bfdc_72fbf361",
+      "revId": "c4c19dfba3664fac16a2c823f3f4fb91e5d4fb76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
