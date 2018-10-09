@@ -2,6 +2,69 @@
   "comments": [
     {
       "key": {
+        "uuid": "5eedc550_e9a45be0",
+        "filename": "src/tests/gl_tests/BPTCCompressedTextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-09T19:34:03Z",
+      "side": 1,
+      "message": "nit: file-level description",
+      "revId": "6ad721f630a50249462dd9cdde722395979dd305",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15b3cdca_73c00043",
+        "filename": "src/tests/gl_tests/BPTCCompressedTextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-09T19:34:03Z",
+      "side": 1,
+      "message": "nit: override instead of virtual",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 11
+      },
+      "revId": "6ad721f630a50249462dd9cdde722395979dd305",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca40b65f_88d59b81",
+        "filename": "src/tests/gl_tests/BPTCCompressedTextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-09T19:34:03Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 12
+      },
+      "revId": "6ad721f630a50249462dd9cdde722395979dd305",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ef426ba4_314ce317",
         "filename": "src/tests/gl_tests/BPTCCompressedTextureTest.cpp",
         "patchSetId": 3
