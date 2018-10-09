@@ -442,7 +442,19 @@ void TOutputGLSLBase::writeConstructorTriplet(Visit visit, const TType &type)
 void TOutputGLSLBase::visitSymbol(TIntermSymbol *node)
 {
     TInfoSinkBase &out = objSink();
-    out << hashName(&node->variable());
+
+    if (node->getName() == "gl_DrawID")
+    {
+        // AngleInternal variables don't get hashed. This is an emulated
+        // uniform so we do want to get a mangled name
+        ASSERT(node->variable().symbolType() == SymbolType::AngleInternal);
+        ASSERT(node->getQualifier() == EvqUniform);
+        out << HashName(node->getName(), mHashFunction, &mNameMap);
+    }
+    else
+    {
+        out << hashName(&node->variable());
+    }
 
     if (mDeclaringVariable && node->getType().isArray())
         out << ArrayString(node->getType());
