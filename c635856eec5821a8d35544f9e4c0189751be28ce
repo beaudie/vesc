@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "8f9cc1ad_b920dea4",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-10-09T17:15:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71a171cd_63adc1a4",
+      "range": {
+        "startLine": 231,
+        "startChar": 15,
+        "endLine": 231,
+        "endChar": 43
+      },
+      "revId": "c635856eec5821a8d35544f9e4c0189751be28ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71bec91e_188f44ed",
         "filename": "BUILD.gn",
         "patchSetId": 3
@@ -131,6 +155,30 @@
       "side": 1,
       "message": "We need ${angle_libs_suffix} for libEGL and libGLES, since we sometimes want them to have suffix and sometimes we don\u0027t. I don\u0027t see why you would want libfeature_support without suffix, so you can just get rid of ${angle_libs_suffix} and name it libangle_feature_support directly.",
       "parentUuid": "c9c05d3b_b6b0787c",
+      "range": {
+        "startLine": 237,
+        "startChar": 16,
+        "endLine": 237,
+        "endChar": 34
+      },
+      "revId": "c635856eec5821a8d35544f9e4c0189751be28ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c925472_2cf06d41",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-10-09T17:15:44Z",
+      "side": 1,
+      "message": "The Android side depends on all the libraries coming from ANGLE have _angle suffix.",
+      "parentUuid": "cf65011a_c9cce012",
       "range": {
         "startLine": 237,
         "startChar": 16,
@@ -234,6 +282,30 @@
       "revId": "c635856eec5821a8d35544f9e4c0189751be28ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f67ffe16_a611b28d",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-10-09T17:15:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14f36f91_8061c982",
+      "range": {
+        "startLine": 266,
+        "startChar": 6,
+        "endLine": 266,
+        "endChar": 18
+      },
+      "revId": "c635856eec5821a8d35544f9e4c0189751be28ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
