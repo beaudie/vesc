@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "bd0fd7c7_2e8a0a13",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-09T17:57:06Z",
+      "side": 0,
+      "message": "My intention was to use LIBANGLE_UTIL_IMPLEMENTATION for libangle_util.so and LIBANGLE_FEATURE_SUPPORT_IMPLEMENTATION for libangle_feature_support.so.\nI guess if we\u0027re naming the library libfeature_support_angle.so, the define should be LIBFEATURE_SUPPORT_ANGLE_IMPLEMENTATION instead.",
+      "parentUuid": "7216f4dd_1750e415",
+      "range": {
+        "startLine": 924,
+        "startChar": 19,
+        "endLine": 924,
+        "endChar": 47
+      },
+      "revId": "3dffe2b7050f6491f4061705bf8bb7350684cfb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "77798f5d_02fe62d8",
         "filename": "include/export.h",
         "patchSetId": 5
@@ -60,6 +84,30 @@
       "writtenOn": "2018-10-09T17:38:00Z",
       "side": 0,
       "message": "Ah, we still need LIBANGLE_UTIL_IMPLEMENTATION here.",
+      "range": {
+        "startLine": 15,
+        "startChar": 12,
+        "endLine": 15,
+        "endChar": 40
+      },
+      "revId": "3dffe2b7050f6491f4061705bf8bb7350684cfb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "672633d3_a36acc3f",
+        "filename": "include/export.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-09T17:57:06Z",
+      "side": 0,
+      "message": "I mean we need both LIBANGLE_UTIL_IMPLEMENTATION and LIBANGLE_FEATURE_SUPPORT_IMPLEMENTATION, here and in the other place below.",
+      "parentUuid": "77798f5d_02fe62d8",
       "range": {
         "startLine": 15,
         "startChar": 12,
