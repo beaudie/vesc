@@ -1,0 +1,67 @@
+Name
+
+    ANGLE_draw_id
+
+Name Strings
+
+    GL_ANGLE_draw_id
+
+Contributors
+
+    Austin Eng
+    Kai Ninomiya
+    Contributors to GL_ARB_shader_draw_parameters
+
+Contact
+
+    Austin Eng (enga 'at' google.com)
+
+Status
+
+    Draft
+
+Version
+
+    Version 1, October 9, 2018
+
+Dependencies
+
+    OpenGL ES 2.0 and the extension GL_EXT_multi_draw_arrays are required.
+
+Overview
+
+    This extension adds a built-in variable gl_DrawID to the shading
+    language. This variable contains the index of the draw currently
+    being processed by glMultiDrawArraysEXT.
+
+IP Status
+
+    No known IP claims.
+
+New Procedures and Functions
+
+    None
+
+New Tokens
+
+    None
+
+Additions to the GL_EXT_multi_draw_arrays
+
+    Add the following after the pseudo-code describing glMultiDrawArraysEXT:
+
+        The index of the draw (<i> in the above pseudo-code) may be read by
+    a vertex shader as <gl_DrawID>.
+
+    Add the following after the pseudo-code describing glMultiDrawElementsEXT:
+
+        The index of the draw (<i> in the above pseudo-code) may be read by
+    a vertex shader as <gl_DrawID>.
+
+Errors
+
+    None
+
+New State
+
+    None
