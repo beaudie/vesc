@@ -3007,7 +3007,7 @@ bool ValidateDrawElementsCommon(Context *context,
     }
 
     const VertexArray *vao     = state.getVertexArray();
-    Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
+    Buffer *elementArrayBuffer = vao->getElementArrayBuffer();
 
     GLuint typeBytes = GetTypeInfo(type).bytes;
 
