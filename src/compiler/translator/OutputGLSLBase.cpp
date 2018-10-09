@@ -442,7 +442,20 @@ void TOutputGLSLBase::writeConstructorTriplet(Visit visit, const TType &type)
 void TOutputGLSLBase::visitSymbol(TIntermSymbol *node)
 {
     TInfoSinkBase &out = objSink();
-    out << hashName(&node->variable());
+
+    bool isEmulatedDrawID = (node->variable().symbolType() == SymbolType::AngleInternal &&
+                             node->getQualifier() == EvqUniform && node->getName() == "gl_DrawID");
+
+    if (isEmulatedDrawID)
+    {
+        // AngleInternal variables don't get hashed.
+        // This is an emulated uniform so we do want to use the mapped name
+        out << HashName(node->getName(), mHashFunction, &mNameMap);
+    }
+    else
+    {
+        out << hashName(&node->variable());
+    }
 
     if (mDeclaringVariable && node->getType().isArray())
         out << ArrayString(node->getType());

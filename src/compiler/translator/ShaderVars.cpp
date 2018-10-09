@@ -304,6 +304,11 @@ bool Uniform::isSameUniformAtLinkTime(const Uniform &other) const
     return VariableWithLocation::isSameVariableAtLinkTime(other, true, true);
 }
 
+bool Uniform::isEmulatedBuiltIn() const
+{
+    return isBuiltIn() && name != mappedName;
+}
+
 VariableWithLocation::VariableWithLocation() : location(-1)
 {
 }

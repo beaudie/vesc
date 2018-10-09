@@ -173,6 +173,8 @@ struct Uniform : public VariableWithLocation
         return !operator==(other);
     }
 
+    bool isEmulatedBuiltIn() const;
+
     int binding;
     int offset;
     bool readonly;

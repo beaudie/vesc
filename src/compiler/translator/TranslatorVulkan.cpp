@@ -136,13 +136,25 @@ class DeclareDefaultUniformsTraverser : public TIntermTraverser
     {
         if (mInDefaultUniform)
         {
-            const ImmutableString &name = symbol->variable().name();
-            ASSERT(!name.beginsWith("gl_"));
-            (*mSink) << HashName(name, mHashFunction, mNameMap) << ArrayString(symbol->getType());
+            ASSERT(!hasReservedName(symbol));
+            (*mSink) << HashName(symbol->getName(), mHashFunction, mNameMap)
+                     << ArrayString(symbol->getType());
         }
     }
 
   private:
+    bool isEmulatedDrawID(TIntermSymbol *symbol) const
+    {
+        return (symbol->getQualifier() == EvqUniform &&
+                symbol->variable().symbolType() == SymbolType::AngleInternal &&
+                symbol->getName() == "gl_DrawID");
+    }
+
+    bool hasReservedName(TIntermSymbol *symbol) const
+    {
+        return symbol->getName().beginsWith("gl_") && !isEmulatedDrawID(symbol);
+    }
+
     TInfoSinkBase *mSink;
     ShHashFunction64 mHashFunction;
     NameMap *mNameMap;
@@ -638,7 +650,8 @@ void TranslatorVulkan::translate(TIntermBlock *root,
     int structTypesUsedForUniforms = 0;
     for (const auto &uniform : getUniforms())
     {
-        if (!uniform.isBuiltIn() && uniform.staticUse && !gl::IsOpaqueType(uniform.type))
+        if ((!uniform.isBuiltIn() || uniform.isEmulatedBuiltIn()) && uniform.staticUse &&
+            !gl::IsOpaqueType(uniform.type))
         {
             ++defaultUniformCount;
         }
