@@ -446,6 +446,9 @@ struct Extensions
 
     // GL_ANGLE_memory_size
     bool memorySize;
+
+    // GL_ANGLE_draw_id
+    bool drawID;
 };
 
 struct ExtensionInfo
