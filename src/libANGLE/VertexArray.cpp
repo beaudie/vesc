@@ -21,11 +21,15 @@ bool IsElementArrayBufferSubjectIndex(angle::SubjectIndex subjectIndex)
 {
     return (subjectIndex == MAX_VERTEX_ATTRIBS);
 }
+
+constexpr angle::SubjectIndex kElementArrayBufferIndex = MAX_VERTEX_ATTRIBS;
 }  // anonymous namespce
 
 // VertexArrayState implementation.
-VertexArrayState::VertexArrayState(size_t maxAttribs, size_t maxAttribBindings)
-    : mLabel(), mVertexBindings()
+VertexArrayState::VertexArrayState(VertexArray *vertexArray,
+                                   size_t maxAttribs,
+                                   size_t maxAttribBindings)
+    : mElementArrayBuffer(vertexArray, kElementArrayBufferIndex)
 {
     ASSERT(maxAttribs <= maxAttribBindings);
 
@@ -89,9 +93,8 @@ VertexArray::VertexArray(rx::GLImplFactory *factory,
                          size_t maxAttribs,
                          size_t maxAttribBindings)
     : mId(id),
-      mState(maxAttribs, maxAttribBindings),
-      mVertexArray(factory->createVertexArray(mState)),
-      mElementArrayBufferObserverBinding(this, MAX_VERTEX_ATTRIBS)
+      mState(this, maxAttribs, maxAttribBindings),
+      mVertexArray(factory->createVertexArray(mState))
 {
     for (size_t attribIndex = 0; attribIndex < maxAttribBindings; ++attribIndex)
     {
@@ -108,7 +111,7 @@ void VertexArray::onDestroy(const Context *context)
     }
     if (isBound && mState.mElementArrayBuffer.get())
         mState.mElementArrayBuffer->onNonTFBindingChanged(context, -1);
-    mState.mElementArrayBuffer.set(context, nullptr);
+    mState.mElementArrayBuffer.bind(context, nullptr);
     mVertexArray->destroy(context);
     SafeDelete(mVertexArray);
     delete this;
@@ -145,11 +148,11 @@ void VertexArray::detachBuffer(const Context *context, GLuint bufferName)
         }
     }
 
-    if (mState.mElementArrayBuffer.id() == bufferName)
+    if (mState.mElementArrayBuffer.get() && mState.mElementArrayBuffer->id() == bufferName)
     {
         if (isBound && mState.mElementArrayBuffer.get())
             mState.mElementArrayBuffer->onNonTFBindingChanged(context, -1);
-        mState.mElementArrayBuffer.set(context, nullptr);
+        mState.mElementArrayBuffer.bind(context, nullptr);
     }
 }
 
@@ -364,15 +367,10 @@ void VertexArray::setElementArrayBuffer(const Context *context, Buffer *buffer)
     {
         mState.mElementArrayBuffer->onNonTFBindingChanged(context, -1);
     }
-    mState.mElementArrayBuffer.set(context, buffer);
+    mState.mElementArrayBuffer.bind(context, buffer);
     if (buffer)
     {
-        mElementArrayBufferObserverBinding.bind(buffer);
         buffer->onNonTFBindingChanged(context, 1);
-    }
-    else
-    {
-        mElementArrayBufferObserverBinding.bind(nullptr);
     }
     mDirtyBits.set(DIRTY_BIT_ELEMENT_ARRAY_BUFFER);
 }
