@@ -81,6 +81,10 @@ void InitExtensionBehavior(const ShBuiltInResources &resources, TExtensionBehavi
     {
         extBehavior[TExtension::ANGLE_texture_multisample] = EBhUndefined;
     }
+    if (resources.ANGLE_draw_id)
+    {
+        extBehavior[TExtension::ANGLE_draw_id] = EBhUndefined;
+    }
 }
 
 void ResetExtensionBehavior(TExtensionBehavior &extBehavior)
