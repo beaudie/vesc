@@ -85,6 +85,8 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
     mResources.ARB_texture_rectangle           = extensions.textureRectangle;
     mResources.OES_texture_storage_multisample_2d_array =
         extensions.textureStorageMultisample2DArray;
+    mResources.WEBGL_multi_draw_arrays = extensions.multiDrawArrays;
+
     // TODO: use shader precision caps to determine if high precision is supported?
     mResources.FragmentPrecisionHigh = 1;
     mResources.EXT_frag_depth        = extensions.fragDepth;

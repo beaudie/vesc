@@ -446,6 +446,9 @@ struct Extensions
 
     // GL_ANGLE_memory_size
     bool memorySize;
+
+    // GL_WEBGL_multi_draw_arrays
+    bool multiDrawArrays;
 };
 
 struct ExtensionInfo
