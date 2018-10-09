@@ -3191,6 +3191,7 @@ Extensions Context::generateSupportedExtensions() const
     supportedExtensions.bindGeneratesResource = true;
     supportedExtensions.clientArrays          = true;
     supportedExtensions.requestExtension      = true;
+    supportedExtensions.drawID                = true;
 
     // Enable the no error extension if the context was created with the flag.
     supportedExtensions.noError = mSkipValidation;
