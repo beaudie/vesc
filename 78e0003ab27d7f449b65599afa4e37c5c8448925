@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6a6f4f25_510527c2",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-09T22:30:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7bb02ac_3cda4557",
+      "range": {
+        "startLine": 155,
+        "startChar": 14,
+        "endLine": 155,
+        "endChar": 20
+      },
+      "revId": "78e0003ab27d7f449b65599afa4e37c5c8448925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f430f84a_2d11b75a",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 13
@@ -45,6 +69,30 @@
       "revId": "78e0003ab27d7f449b65599afa4e37c5c8448925",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "160bab57_aa26b872",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-09T22:30:24Z",
+      "side": 1,
+      "message": "Added ASSERTs to PackedEnumMap::operator[].",
+      "parentUuid": "f430f84a_2d11b75a",
+      "range": {
+        "startLine": 158,
+        "startChar": 44,
+        "endLine": 158,
+        "endChar": 48
+      },
+      "revId": "78e0003ab27d7f449b65599afa4e37c5c8448925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b4e17824_b581e1df",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-09T22:30:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6a46822_e41b1a21",
+      "range": {
+        "startLine": 1113,
+        "startChar": 5,
+        "endLine": 1113,
+        "endChar": 28
+      },
+      "revId": "78e0003ab27d7f449b65599afa4e37c5c8448925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aaa2a0fe_9aa7c2db",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 13
@@ -91,6 +163,30 @@
       "revId": "78e0003ab27d7f449b65599afa4e37c5c8448925",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8a5bbe3_bd20947b",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1148,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-09T22:30:24Z",
+      "side": 1,
+      "message": "Nope. Happens if the enum is invalid.",
+      "parentUuid": "aaa2a0fe_9aa7c2db",
+      "range": {
+        "startLine": 1148,
+        "startChar": 0,
+        "endLine": 1148,
+        "endChar": 79
+      },
+      "revId": "78e0003ab27d7f449b65599afa4e37c5c8448925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
