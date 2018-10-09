@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "cad92298_e267181c",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-10-09T18:09:50Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "49a26663_7f9d1c6f",
+      "range": {
+        "startLine": 924,
+        "startChar": 19,
+        "endLine": 924,
+        "endChar": 47
+      },
+      "revId": "3dffe2b7050f6491f4061705bf8bb7350684cfb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "77798f5d_02fe62d8",
         "filename": "include/export.h",
         "patchSetId": 5
@@ -165,6 +189,30 @@
       "revId": "3dffe2b7050f6491f4061705bf8bb7350684cfb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a393b5ad_55523158",
+        "filename": "include/export.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-10-09T18:09:50Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "77798f5d_02fe62d8",
+      "range": {
+        "startLine": 15,
+        "startChar": 12,
+        "endLine": 15,
+        "endChar": 40
+      },
+      "revId": "3dffe2b7050f6491f4061705bf8bb7350684cfb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
