@@ -172,6 +172,11 @@ void TranslatorESSL::writeExtensionBehavior(ShCompileOptions compileOptions)
                 }
                 sink << "#endif\n";
             }
+            else if (iter->first == TExtension::WEBGL_multi_draw_arrays)
+            {
+                // Don't emit anything. This extension is emulated
+                continue;
+            }
             else
             {
                 sink << "#extension " << GetExtensionNameString(iter->first) << " : "

@@ -449,6 +449,9 @@ struct Extensions
 
     // GL_ANGLE_texture_multisample
     bool textureMultisample;
+
+    // GL_WEBGL_multi_draw_arrays
+    bool multiDrawArrays;
 };
 
 struct ExtensionInfo
