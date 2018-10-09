@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "48345c0f_12f57cbb",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-09T18:02:46Z",
+      "side": 0,
+      "message": "I don\u0027t see your point - this is exactly the places where it should be used.",
+      "parentUuid": "01d1b95c_14c4171f",
+      "range": {
+        "startLine": 924,
+        "startChar": 19,
+        "endLine": 924,
+        "endChar": 47
+      },
+      "revId": "3dffe2b7050f6491f4061705bf8bb7350684cfb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "77798f5d_02fe62d8",
         "filename": "include/export.h",
         "patchSetId": 5
