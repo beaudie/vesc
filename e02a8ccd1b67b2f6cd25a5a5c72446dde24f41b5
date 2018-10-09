@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9dd08aa2_951f4b12",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-09T17:38:00Z",
+      "side": 1,
+      "message": "not needed",
+      "range": {
+        "startLine": 920,
+        "startChar": 4,
+        "endLine": 920,
+        "endChar": 18
+      },
+      "revId": "e02a8ccd1b67b2f6cd25a5a5c72446dde24f41b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f4b0972_23f5ec40",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-09T17:38:00Z",
+      "side": 1,
+      "message": "Shouldn\u0027t be needed now, since angle_common is no longer a dep.",
+      "range": {
+        "startLine": 931,
+        "startChar": 8,
+        "endLine": 931,
+        "endChar": 34
+      },
+      "revId": "e02a8ccd1b67b2f6cd25a5a5c72446dde24f41b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

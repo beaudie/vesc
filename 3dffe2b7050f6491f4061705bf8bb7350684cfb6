@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49a26663_7f9d1c6f",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-09T17:38:00Z",
+      "side": 0,
+      "message": "Please keep LIBANGLE_UTIL_IMPLEMENTATION here.",
+      "range": {
+        "startLine": 924,
+        "startChar": 19,
+        "endLine": 924,
+        "endChar": 47
+      },
+      "revId": "3dffe2b7050f6491f4061705bf8bb7350684cfb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77798f5d_02fe62d8",
+        "filename": "include/export.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-09T17:38:00Z",
+      "side": 0,
+      "message": "Ah, we still need LIBANGLE_UTIL_IMPLEMENTATION here.",
+      "range": {
+        "startLine": 15,
+        "startChar": 12,
+        "endLine": 15,
+        "endChar": 40
+      },
+      "revId": "3dffe2b7050f6491f4061705bf8bb7350684cfb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
