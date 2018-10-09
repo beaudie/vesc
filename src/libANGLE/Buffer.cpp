@@ -53,12 +53,11 @@ Buffer::~Buffer()
     SafeDelete(mImpl);
 }
 
-Error Buffer::onDestroy(const Context *context)
+void Buffer::onDestroy(const Context *context)
 {
     // In tests, mImpl might be null.
     if (mImpl)
         mImpl->destroy(context);
-    return NoError();
 }
 
 void Buffer::setLabel(const std::string &label)

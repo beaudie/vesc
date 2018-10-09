@@ -73,7 +73,7 @@ class Buffer final : public RefCountObject,
   public:
     Buffer(rx::GLImplFactory *factory, GLuint id);
     ~Buffer() override;
-    Error onDestroy(const Context *context) override;
+    void onDestroy(const Context *context) override;
 
     void setLabel(const std::string &label) override;
     const std::string &getLabel() const override;
