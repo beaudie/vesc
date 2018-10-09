@@ -1888,16 +1888,29 @@ void StateManagerGL::syncState(const gl::Context *context,
                 break;
             }
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
-                if (state.getProgram())
+            {
+                gl::Program *program = state.getProgram();
+                if (program)
                 {
                     iter.setLaterBit(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);
-                    iter.setLaterBit(gl::State::DIRTY_BIT_IMAGE_BINDINGS);
-                    iter.setLaterBit(gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING);
-                    iter.setLaterBit(gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
-                    iter.setLaterBit(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
-                    updateMultiviewBaseViewLayerIndexUniform(
-                        state.getProgram(),
-                        state.getDrawFramebuffer()->getImplementation()->getState());
+
+                    if (program->getActiveImagesMask().any())
+                        iter.setLaterBit(gl::State::DIRTY_BIT_IMAGE_BINDINGS);
+
+                    if (program->getActiveShaderStorageBlockCount() > 0)
+                        iter.setLaterBit(gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING);
+
+                    if (program->getActiveUniformBlockCount() > 0)
+                        iter.setLaterBit(gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
+
+                    if (program->getActiveAtomicCounterBufferCount() > 0)
+                        iter.setLaterBit(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
+
+                    if (mIsMultiviewEnabled && program && program->usesMultiview())
+                    {
+                        updateMultiviewBaseViewLayerIndexUniform(
+                            program, state.getDrawFramebuffer()->getImplementation()->getState());
+                    }
 
                     // This can also affect the masked out draw buffers.
                     if (context->getExtensions().webglCompatibility)
@@ -1909,6 +1922,7 @@ void StateManagerGL::syncState(const gl::Context *context,
                 propagateProgramToVAO(state.getProgram(),
                                       GetImplAs<VertexArrayGL>(state.getVertexArray()));
                 break;
+            }
             case gl::State::DIRTY_BIT_TEXTURE_BINDINGS:
                 updateProgramTextureBindings(context);
                 break;
