@@ -671,6 +671,22 @@
                     "qualifier":"Layer"
                 }
             }
+        },
+        "subgroups":{
+            "ANGLEDrawID":{
+                "condition": "mResources.ANGLE_draw_id",
+                "variables":{
+                    "gl_DrawID":{
+                        "level":"ESSL1_BUILTINS",
+                        "extension":"ANGLE_draw_id",
+                        "type":{
+                            "basic":"Int",
+                            "precision":"High",
+                            "qualifier":"DrawID"
+                        }
+                    }
+                }
+            }
         }
     },
     "ComputeShader":{
