@@ -81,6 +81,10 @@ void InitExtensionBehavior(const ShBuiltInResources &resources, TExtensionBehavi
     {
         extBehavior[TExtension::ANGLE_texture_multisample] = EBhUndefined;
     }
+    if (resources.WEBGL_multi_draw_arrays)
+    {
+        extBehavior[TExtension::WEBGL_multi_draw_arrays] = EBhUndefined;
+    }
 }
 
 void ResetExtensionBehavior(TExtensionBehavior &extBehavior)

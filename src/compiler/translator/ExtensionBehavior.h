@@ -34,7 +34,8 @@ enum class TExtension
     OES_EGL_image_external_essl3,
     OES_standard_derivatives,
     OES_texture_storage_multisample_2d_array,
-    OVR_multiview
+    OVR_multiview,
+    WEBGL_multi_draw_arrays,
 };
 
 enum TBehavior
