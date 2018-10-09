@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "01d1b95c_14c4171f",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-09T17:58:49Z",
+      "side": 0,
+      "message": "LIBANGLE_UTIL_IMPLEMENTATION is not currently used except here:\n\nhttps://cs.chromium.org/search/?q\u003dlibangle_util_implementation\u0026sq\u003dpackage:chromium\u0026type\u003dcs",
+      "parentUuid": "bd0fd7c7_2e8a0a13",
+      "range": {
+        "startLine": 924,
+        "startChar": 19,
+        "endLine": 924,
+        "endChar": 47
+      },
+      "revId": "3dffe2b7050f6491f4061705bf8bb7350684cfb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "77798f5d_02fe62d8",
         "filename": "include/export.h",
         "patchSetId": 5
