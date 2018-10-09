@@ -41,6 +41,7 @@ angle_unittests_sources = [
   "../libANGLE/renderer/TextureImpl_mock.h",
   "../libANGLE/renderer/TransformFeedbackImpl_mock.h",
   "../tests/angle_unittests_utils.h",
+  "../tests/compiler_tests/ANGLE_draw_id_test.cpp",
   "../tests/compiler_tests/API_test.cpp",
   "../tests/compiler_tests/AppendixALimitations_test.cpp",
   "../tests/compiler_tests/ARB_texture_rectangle_test.cpp",
