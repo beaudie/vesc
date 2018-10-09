@@ -49,6 +49,29 @@
     },
     {
       "key": {
+        "uuid": "71a171cd_63adc1a4",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-09T16:37:10Z",
+      "side": 1,
+      "message": "I think it would be better to add a new define, something like LIBANGLE_FEATURE_SUPPORT_IMPLEMENTATION and modify ANGLE_EXPORT definition accordingly.",
+      "range": {
+        "startLine": 231,
+        "startChar": 15,
+        "endLine": 231,
+        "endChar": 43
+      },
+      "revId": "c635856eec5821a8d35544f9e4c0189751be28ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "71bec91e_188f44ed",
         "filename": "BUILD.gn",
         "patchSetId": 3
@@ -164,6 +187,29 @@
       "revId": "c635856eec5821a8d35544f9e4c0189751be28ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "14f36f91_8061c982",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-09T16:37:10Z",
+      "side": 1,
+      "message": "I can\u0027t understand why this is here. My guess would be that\u0027s how you get your dependency on liblog.so. You should do this directly:\n    if (is_android) {\n      libs \u003d [ \"log\" ]\n    }\nAlso, do we need this on non-android?\nMaybe just have the whole shared_library inside \"if (is_android)\", then you won\u0027t need to have the \"if\" for configs as well.",
+      "range": {
+        "startLine": 266,
+        "startChar": 6,
+        "endLine": 266,
+        "endChar": 18
+      },
+      "revId": "c635856eec5821a8d35544f9e4c0189751be28ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
