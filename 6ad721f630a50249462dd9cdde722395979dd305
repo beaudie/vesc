@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef426ba4_314ce317",
+        "filename": "src/tests/gl_tests/BPTCCompressedTextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T19:05:41Z",
+      "side": 1,
+      "message": "We should add Vulkan too to make sure the extension\u0027s not being exposed.",
+      "range": {
+        "startLine": 378,
+        "startChar": 23,
+        "endLine": 384,
+        "endChar": 37
+      },
+      "revId": "6ad721f630a50249462dd9cdde722395979dd305",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
