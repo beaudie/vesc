@@ -64,3 +64,4 @@ bool isImage(const TFunction *func)
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_PARSECONTEXT_AUTOGEN_H_
+
