@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ce5c1fec_38c1e5ff",
+        "filename": "src/common/Color.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-09T19:12:36Z",
+      "side": 1,
+      "message": "I am not sure, the color is not really a variant, but it is a typed color -- that was my intention with ColorT. (didn\u0027t want to name it TypedColor or ColorTyped, though)\nBut if ColorVariant still fits better in your opinion I can change it. Please let me know.",
+      "parentUuid": "fefdf6a7_c0e90563",
+      "range": {
+        "startLine": 51,
+        "startChar": 7,
+        "endLine": 51,
+        "endChar": 13
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce5545eb_84be586f",
         "filename": "src/common/Color.inl",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2018-10-09T17:18:21Z",
       "side": 1,
       "message": "I would guess this will hit some undefined behaviour.  You may need to break this up and check type.  I would guess this is not in a critical path.",
+      "range": {
+        "startLine": 56,
+        "startChar": 31,
+        "endLine": 56,
+        "endChar": 52
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7993feb5_da118100",
+        "filename": "src/common/Color.inl",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-09T19:12:36Z",
+      "side": 1,
+      "message": "Hm, I think you\u0027re right.",
+      "parentUuid": "ce5545eb_84be586f",
       "range": {
         "startLine": 56,
         "startChar": 31,
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "7d182520_8d50c36e",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-09T19:12:36Z",
+      "side": 1,
+      "message": "Ah, I see!",
+      "parentUuid": "a04f4c2d_6c893fee",
+      "range": {
+        "startLine": 350,
+        "startChar": 28,
+        "endLine": 350,
+        "endChar": 41
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "34a9b195_9df62d5d",
         "filename": "src/libANGLE/queryutils.cpp",
         "patchSetId": 8
@@ -105,6 +177,30 @@
       "writtenOn": "2018-10-09T17:18:21Z",
       "side": 1,
       "message": "You could template these functions on the parameter type and not need the isIntegerType below.",
+      "range": {
+        "startLine": 35,
+        "startChar": 7,
+        "endLine": 35,
+        "endChar": 22
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f714c4c5_b629cede",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-09T19:12:36Z",
+      "side": 1,
+      "message": "That would not work because the isIntegerType doesn\u0027t describe if the data type to query or set is an integer type but the \"type\" of the OpenGL function:\n*Parameter*() vs. *ParameterI*().\nMaybe a better name would be isIntegerFunctionVariant?",
+      "parentUuid": "34a9b195_9df62d5d",
       "range": {
         "startLine": 35,
         "startChar": 7,
@@ -140,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "3b11640d_a56889a3",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1348,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-09T19:12:36Z",
+      "side": 1,
+      "message": "See comment above.",
+      "parentUuid": "58513c3b_51c6c660",
+      "range": {
+        "startLine": 1348,
+        "startChar": 50,
+        "endLine": 1348,
+        "endChar": 55
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a5c1bbb7_741ba56d",
         "filename": "src/libANGLE/queryutils.cpp",
         "patchSetId": 8
@@ -151,6 +271,30 @@
       "writtenOn": "2018-10-09T17:18:21Z",
       "side": 1,
       "message": "Same for this.",
+      "range": {
+        "startLine": 1368,
+        "startChar": 54,
+        "endLine": 1368,
+        "endChar": 59
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15887d56_6316499e",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1368,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-09T19:12:36Z",
+      "side": 1,
+      "message": "See comment above.",
+      "parentUuid": "a5c1bbb7_741ba56d",
       "range": {
         "startLine": 1368,
         "startChar": 54,
@@ -186,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "cfc3249f_ffb48076",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-09T19:12:36Z",
+      "side": 1,
+      "message": "Good point...\nBut D3D11_SAMPLER_DESC.BorderColor only supports float I think. Is there any way to set Integer border colors on Direct3D11?",
+      "parentUuid": "b2d2929f_64d45a82",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 254,
+        "endChar": 77
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a06df352_3881acb6",
         "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
         "patchSetId": 8
@@ -197,6 +365,30 @@
       "writtenOn": "2018-10-09T17:18:21Z",
       "side": 1,
       "message": "What guarantees this?",
+      "range": {
+        "startLine": 968,
+        "startChar": 7,
+        "endLine": 968,
+        "endChar": 77
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d54006d9_c20c2f3b",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-09T19:12:36Z",
+      "side": 1,
+      "message": "I guess D3D9 doesn\u0027t support Integer textures and thus no Int border colors.\nI am not sure, do we have to disable the extension then for this backend? I mean, for \"regular\" textures it works (using floating point border colors), and since D3D9 has no GLES3 frontend integer textures are out of the question anyway.\nThe extension text says:\n    If OpenGL ES 3.0 is not supported, delete all references to the\n    TexParameterI*, GetTexParameterI*, SamplerParameterI*, and\n    GetSamplerParameterI* entry points and all related text about\n    signed and unsigned integer textures.\nHowever, I think there is no way to suppress exposing the functions based on the frontend and/or backend, right?",
+      "parentUuid": "a06df352_3881acb6",
       "range": {
         "startLine": 968,
         "startChar": 7,
