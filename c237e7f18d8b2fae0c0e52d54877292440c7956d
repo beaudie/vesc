@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ecc53d5_868eebe2",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T19:16:24Z",
+      "side": 1,
+      "message": "This one doesn\u0027t need ANGLE_INLINE?",
+      "revId": "c237e7f18d8b2fae0c0e52d54877292440c7956d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4447122d_7c121e07",
+        "filename": "src/libANGLE/validationES2.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T19:16:24Z",
+      "side": 1,
+      "message": "May be worth inlining all the ValidateUniform calls (possibly in an .inl).  I guess this is the only one called by the perf test?",
+      "range": {
+        "startLine": 726,
+        "startChar": 0,
+        "endLine": 729,
+        "endChar": 1
+      },
+      "revId": "c237e7f18d8b2fae0c0e52d54877292440c7956d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
