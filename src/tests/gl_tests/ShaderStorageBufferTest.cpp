@@ -190,6 +190,127 @@ TEST_P(ShaderStorageBufferTest31, ShaderStorageBufferReadWrite)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test shader storage buffer read write for vector data.
+TEST_P(ShaderStorageBufferTest31, ShaderStorageBufferVector)
+{
+    const std::string &csSource =
+        "#version 310 es\n"
+        "layout(local_size_x=1, local_size_y=1, local_size_z=1) in;\n"
+        "layout(std140, binding = 1) buffer blockName {\n"
+        "    uvec2 data;\n"
+        "} instanceName;\n"
+        "void main()\n"
+        "{\n"
+        "    instanceName.data[0] = 3u;\n"
+        "    instanceName.data[1] = 4u;\n"
+        "}\n";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+
+    glUseProgram(program.get());
+
+    constexpr unsigned int kComponentCount    = 2;
+    constexpr unsigned int kBytesPerComponent = 4;
+    // Create shader storage buffer
+    GLBuffer shaderStorageBuffer;
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kComponentCount * kBytesPerComponent, nullptr,
+                 GL_STATIC_DRAW);
+
+    // Bind shader storage buffer
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderStorageBuffer);
+
+    // Dispath compute
+    glDispatchCompute(1, 1, 1);
+
+    glFinish();
+
+    // Read back shader storage buffer
+    constexpr unsigned int kExpectedValues[2] = {3u, 4u};
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
+    void *ptr = glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, kComponentCount * kBytesPerComponent,
+                                 GL_MAP_READ_BIT);
+    for (unsigned int idx = 0; idx < kComponentCount; idx++)
+    {
+        EXPECT_EQ(kExpectedValues[idx],
+                  *(reinterpret_cast<const GLuint *>(reinterpret_cast<const GLbyte *>(ptr) +
+                                                     idx * kBytesPerComponent)));
+    }
+    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test shader storage buffer read write for matrix data.
+TEST_P(ShaderStorageBufferTest31, ShaderStorageBufferMatrix)
+{
+    const std::string &csSource =
+        "#version 310 es\n"
+        "layout(local_size_x=1, local_size_y=1, local_size_z=1) in;\n"
+        "layout(std140, binding = 0) buffer blockIn {\n"
+        "    mat2x3 data;\n"
+        "} instanceIn;\n"
+        "layout(std140, binding = 1) buffer blockOut {\n"
+        "    mat2x3 data;\n"
+        "} instanceOut;\n"
+        "void main()\n"
+        "{\n"
+        "    instanceOut.data[0][0] = instanceIn.data[0][0];\n"
+        "    instanceOut.data[0][1] = instanceIn.data[0][1];\n"
+        "    instanceOut.data[0][2] = instanceIn.data[0][2];\n"
+        "    instanceOut.data[1][0] = instanceIn.data[1][0];\n"
+        "    instanceOut.data[1][1] = instanceIn.data[1][1];\n"
+        "    instanceOut.data[1][2] = instanceIn.data[1][2];\n"
+        "}\n";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+
+    glUseProgram(program.get());
+
+    constexpr unsigned int kColumns                          = 2;
+    constexpr unsigned int kRows                             = 3;
+    constexpr unsigned int kBytesPerComponent                = 4;
+    constexpr unsigned int kVectorStride                     = 16;
+    constexpr float kInputDada[kColumns][kBytesPerComponent] = {{0.1, 0.2, 0.3}, {0.4, 0.5, 0.6}};
+    // Create shader storage buffer
+    GLBuffer shaderStorageBuffer[2];
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[0]);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kColumns * kVectorStride, kInputDada, GL_STATIC_DRAW);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[1]);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kColumns * kVectorStride, nullptr, GL_STATIC_DRAW);
+
+    // Bind shader storage buffer
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, shaderStorageBuffer[0]);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderStorageBuffer[1]);
+
+    // Dispath compute
+    glDispatchCompute(1, 1, 1);
+
+    glFinish();
+
+    // Read back shader storage buffer
+    constexpr float kExpectedValues[kColumns][kRows] = {{0.1, 0.2, 0.3}, {0.4, 0.5, 0.6}};
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[1]);
+    void *ptr =
+        glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, kColumns * kVectorStride, GL_MAP_READ_BIT);
+    for (unsigned int idx = 0; idx < kColumns; idx++)
+    {
+        for (unsigned int idy = 0; idy < kColumns; idy++)
+        {
+            EXPECT_EQ(kExpectedValues[idx][idy],
+                      *(reinterpret_cast<const GLfloat *>(reinterpret_cast<const GLbyte *>(ptr) +
+                                                          idx * kVectorStride +
+                                                          idy * kBytesPerComponent)));
+        }
+    }
+
+    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test atomic memory functions.
 TEST_P(ShaderStorageBufferTest31, AtomicMemoryFunctions)
 {
