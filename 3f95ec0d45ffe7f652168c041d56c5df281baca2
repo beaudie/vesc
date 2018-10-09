@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "4a782f0b_71231def",
+        "filename": "src/common/Color.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T19:41:08Z",
+      "side": 1,
+      "message": "I think variant fits in this case, ColorVariant would mean that the Color is \"one of these possibilities\".",
+      "parentUuid": "ce5c1fec_38c1e5ff",
+      "range": {
+        "startLine": 51,
+        "startChar": 7,
+        "endLine": 51,
+        "endChar": 13
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce5545eb_84be586f",
         "filename": "src/common/Color.inl",
         "patchSetId": 8
@@ -213,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "478ffada_d0c9ac52",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T19:41:08Z",
+      "side": 1,
+      "message": "Oh, I see.  In our vertex attribute code for handling these kind of integers, we called the pure integers.  Given that they are known at compile time, we can move it from a function parameter to template parameter at least (and maybe on these functions too?).",
+      "parentUuid": "f714c4c5_b629cede",
+      "range": {
+        "startLine": 35,
+        "startChar": 7,
+        "endLine": 35,
+        "endChar": 22
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "58513c3b_51c6c660",
         "filename": "src/libANGLE/queryutils.cpp",
         "patchSetId": 8
@@ -354,6 +402,30 @@
     },
     {
       "key": {
+        "uuid": "d43c8b36_59a12b65",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T19:41:08Z",
+      "side": 1,
+      "message": "It\u0027s unclear what D3D11 will do when you sample an integer texture out of bounds.  The docs don\u0027t specify.  You could add a test and I suspect it will cast the floats to ints.\n\nWe should at least do the cast from the ColorT to floats here, you could add a helper in ColorT to generate a ColorF from any type it\u0027s holding.",
+      "parentUuid": "cfc3249f_ffb48076",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 254,
+        "endChar": 77
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a06df352_3881acb6",
         "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
         "patchSetId": 8
@@ -389,6 +461,30 @@
       "side": 1,
       "message": "I guess D3D9 doesn\u0027t support Integer textures and thus no Int border colors.\nI am not sure, do we have to disable the extension then for this backend? I mean, for \"regular\" textures it works (using floating point border colors), and since D3D9 has no GLES3 frontend integer textures are out of the question anyway.\nThe extension text says:\n    If OpenGL ES 3.0 is not supported, delete all references to the\n    TexParameterI*, GetTexParameterI*, SamplerParameterI*, and\n    GetSamplerParameterI* entry points and all related text about\n    signed and unsigned integer textures.\nHowever, I think there is no way to suppress exposing the functions based on the frontend and/or backend, right?",
       "parentUuid": "a06df352_3881acb6",
+      "range": {
+        "startLine": 968,
+        "startChar": 7,
+        "endLine": 968,
+        "endChar": 77
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4379c9cb_b38e3d52",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T19:41:08Z",
+      "side": 1,
+      "message": "Ah, I just read up on this too.  What we need to do is generate invalid operation errors in those entry points when the context is below version 3, then this assert will make sense for D3D9.",
+      "parentUuid": "d54006d9_c20c2f3b",
       "range": {
         "startLine": 968,
         "startChar": 7,
