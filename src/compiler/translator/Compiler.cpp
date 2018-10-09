@@ -26,6 +26,7 @@
 #include "compiler/translator/tree_ops/ClampPointSize.h"
 #include "compiler/translator/tree_ops/DeclareAndInitBuiltinsForInstancedMultiview.h"
 #include "compiler/translator/tree_ops/DeferGlobalInitializers.h"
+#include "compiler/translator/tree_ops/EmulateGLDrawID.h"
 #include "compiler/translator/tree_ops/EmulateGLFragColorBroadcast.h"
 #include "compiler/translator/tree_ops/EmulatePrecision.h"
 #include "compiler/translator/tree_ops/FoldExpressions.h"
@@ -573,6 +574,20 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         root->traverse(&gen);
     }
 
+    if (mShaderType == GL_VERTEX_SHADER &&
+        IsExtensionEnabled(mExtensionBehavior, TExtension::ANGLE_draw_id))
+    {
+        if (compileOptions & SH_EMULATE_GL_DRAW_ID)
+        {
+            EmulateGLDrawID(root, &mSymbolTable);
+        }
+        else
+        {
+            mDiagnostics.globalError("ANGLE_draw_id not supported without emulation");
+            return false;
+        }
+    }
+
     if (mShaderType == GL_FRAGMENT_SHADER && mShaderVersion == 100 && mResources.EXT_draw_buffers &&
         mResources.MaxDrawBuffers > 1 &&
         IsExtensionEnabled(mExtensionBehavior, TExtension::EXT_draw_buffers))
@@ -825,6 +840,7 @@ void TCompiler::setResourceString()
         << ":MaxViewsOVR:" << mResources.MaxViewsOVR
         << ":NV_draw_buffers:" << mResources.NV_draw_buffers
         << ":WEBGL_debug_shader_precision:" << mResources.WEBGL_debug_shader_precision
+        << ":ANGLE_draw_id:" << mResources.ANGLE_draw_id
         << ":MinProgramTextureGatherOffset:" << mResources.MinProgramTextureGatherOffset
         << ":MaxProgramTextureGatherOffset:" << mResources.MaxProgramTextureGatherOffset
         << ":MaxImageUnits:" << mResources.MaxImageUnits
