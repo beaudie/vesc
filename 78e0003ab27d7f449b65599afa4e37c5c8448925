@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6a46822_e41b1a21",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-09T19:19:38Z",
+      "side": 1,
+      "message": "nit: RecordBindTextureTypeError",
+      "range": {
+        "startLine": 1113,
+        "startChar": 5,
+        "endLine": 1113,
+        "endChar": 28
+      },
+      "revId": "78e0003ab27d7f449b65599afa4e37c5c8448925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
