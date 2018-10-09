@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "006d1bcc_647780bd",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-09T13:21:52Z",
+      "side": 1,
+      "message": "we usually prefix defines in ANGLE with ANGLE_ . Also you might want to scope this to where it is used - like ANGLE_FEATURE_UTIL_LOG_VERBOSE",
+      "range": {
+        "startLine": 233,
+        "startChar": 18,
+        "endLine": 233,
+        "endChar": 29
+      },
+      "revId": "3ddc7cc2496cdb70f1948e486c9301a6c7d6fb85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
