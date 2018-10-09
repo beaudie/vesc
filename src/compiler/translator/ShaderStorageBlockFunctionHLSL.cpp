@@ -18,36 +18,56 @@ void ShaderStorageBlockFunctionHLSL::OutputSSBOLoadFunctionBody(
     TInfoSinkBase &out,
     const ShaderStorageBlockFunction &ssboFunction)
 {
-    if (ssboFunction.type.isScalar())
+    TString convertString;
+    switch (ssboFunction.type.getBasicType())
     {
-        TString convertString;
-        switch (ssboFunction.type.getBasicType())
-        {
-            case EbtFloat:
-                convertString = "asfloat(";
-                break;
-            case EbtInt:
-                convertString = "asint(";
-                break;
-            case EbtUInt:
-                convertString = "asuint(";
-                break;
-            case EbtBool:
-                convertString = "asint(";
-                break;
-            default:
-                UNREACHABLE();
-                break;
-        }
-
-        out << "    " << ssboFunction.typeString << " result = " << convertString
-            << "buffer.Load(loc));\n";
-        out << "    return result;\n";
-        return;
+        case EbtFloat:
+            convertString = "asfloat(";
+            break;
+        case EbtInt:
+            convertString = "asint(";
+            break;
+        case EbtUInt:
+            convertString = "asuint(";
+            break;
+        case EbtBool:
+            convertString = "asint(";
+            break;
+        default:
+            UNREACHABLE();
+            return;
     }
 
-    // TODO(jiajia.qin@intel.com): Process all possible return types.
-    out << "    return 1.0;\n";
+    out << "    " << ssboFunction.typeString << " result";
+    if (ssboFunction.type.isScalar())
+    {
+        out << " = " << convertString << "buffer.Load(loc));\n";
+    }
+    else if (ssboFunction.type.isVector())
+    {
+        out << " = " << convertString << "buffer.Load" << ssboFunction.type.getNominalSize()
+            << "(loc));\n";
+    }
+    else if (ssboFunction.type.isMatrix())
+    {
+        out << " = {";
+        TString dataString;
+        for (int index = 0; index < ssboFunction.type.getRows(); index++)
+        {
+            dataString += "asfloat(buffer.Load" + str(ssboFunction.type.getCols()) + "(loc +" +
+                          str(index * 16) + ")), ";
+        }
+
+        out << dataString << "};\n";
+    }
+    else
+    {
+        // TODO(jiajia.qin@intel.com): Process all possible return types. http://anglebug.com/1951
+        out << ";\n";
+    }
+
+    out << "    return result;\n";
+    return;
 }
 
 // static
@@ -59,8 +79,23 @@ void ShaderStorageBlockFunctionHLSL::OutputSSBOStoreFunctionBody(
     {
         out << "    buffer.Store(loc, asuint(value));\n";
     }
-
-    // TODO(jiajia.qin@intel.com): Process all possible return types.
+    else if (ssboFunction.type.isVector())
+    {
+        out << "    buffer.Store" << ssboFunction.type.getNominalSize()
+            << "(loc, asuint(value));\n";
+    }
+    else if (ssboFunction.type.isMatrix())
+    {
+        for (int index = 0; index < ssboFunction.type.getRows(); index++)
+        {
+            out << "    buffer.Store" << ssboFunction.type.getCols() << "(loc +" << index * 16
+                << ", asuint(value[" << index << "]));\n";
+        }
+    }
+    else
+    {
+        // TODO(jiajia.qin@intel.com): Process all possible return types. http://anglebug.com/1951
+    }
 }
 
 bool ShaderStorageBlockFunctionHLSL::ShaderStorageBlockFunction::operator<(
