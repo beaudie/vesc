@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b33933fd_a31868cc",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-10-09T16:34:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fbd4bb6_4bb9cb32",
+      "range": {
+        "startLine": 226,
+        "startChar": 8,
+        "endLine": 226,
+        "endChar": 32
+      },
+      "revId": "c635856eec5821a8d35544f9e4c0189751be28ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71bec91e_188f44ed",
         "filename": "BUILD.gn",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2018-10-09T16:12:03Z",
       "side": 1,
       "message": "I think we should keep angle in the name if possible.  What about libangle_feature_support",
+      "range": {
+        "startLine": 237,
+        "startChar": 16,
+        "endLine": 237,
+        "endChar": 34
+      },
+      "revId": "c635856eec5821a8d35544f9e4c0189751be28ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9c05d3b_b6b0787c",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-10-09T16:34:19Z",
+      "side": 1,
+      "message": "_angle will automatically be appended to the name by ${angle_libs_suffix}. Would prefer not to have it listed twice.",
+      "parentUuid": "71bec91e_188f44ed",
       "range": {
         "startLine": 237,
         "startChar": 16,
@@ -92,6 +140,30 @@
       "revId": "c635856eec5821a8d35544f9e4c0189751be28ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbb1c7ab_e07b0eb4",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-10-09T16:34:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88eec4ec_28b0edc9",
+      "range": {
+        "startLine": 248,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 3
+      },
+      "revId": "c635856eec5821a8d35544f9e4c0189751be28ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
