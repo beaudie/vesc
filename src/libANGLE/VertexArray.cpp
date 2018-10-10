@@ -367,7 +367,7 @@ void VertexArray::setElementArrayBuffer(const Context *context, Buffer *buffer)
     mState.mElementArrayBuffer.set(context, buffer);
     if (buffer)
     {
-        mElementArrayBufferObserverBinding.bind(buffer->getImplementation());
+        mElementArrayBufferObserverBinding.bind(buffer);
         buffer->onNonTFBindingChanged(context, 1);
     }
     else
@@ -487,8 +487,7 @@ void VertexArray::setDependentDirtyBit(const gl::Context *context,
 void VertexArray::updateObserverBinding(size_t bindingIndex)
 {
     Buffer *boundBuffer = mState.mVertexBindings[bindingIndex].getBuffer().get();
-    mArrayBufferObserverBindings[bindingIndex].bind(boundBuffer ? boundBuffer->getImplementation()
-                                                                : nullptr);
+    mArrayBufferObserverBindings[bindingIndex].bind(boundBuffer);
 }
 
 void VertexArray::updateCachedBufferBindingSize(VertexBinding *binding)
