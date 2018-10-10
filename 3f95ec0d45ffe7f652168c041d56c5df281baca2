@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "4f4cdaa7_3c1e59f2",
+        "filename": "src/common/Color.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-10T10:43:14Z",
+      "side": 1,
+      "message": "OK",
+      "parentUuid": "4a782f0b_71231def",
+      "range": {
+        "startLine": 51,
+        "startChar": 7,
+        "endLine": 51,
+        "endChar": 13
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce5545eb_84be586f",
         "filename": "src/common/Color.inl",
         "patchSetId": 8
@@ -261,6 +285,30 @@
     },
     {
       "key": {
+        "uuid": "17804e69_b1436d66",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-10T10:43:14Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "478ffada_d0c9ac52",
+      "range": {
+        "startLine": 35,
+        "startChar": 7,
+        "endLine": 35,
+        "endChar": 22
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "58513c3b_51c6c660",
         "filename": "src/libANGLE/queryutils.cpp",
         "patchSetId": 8
@@ -426,6 +474,30 @@
     },
     {
       "key": {
+        "uuid": "df89960a_fe005d52",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-10T10:43:14Z",
+      "side": 1,
+      "message": "I created a test case but it seems casting the ints to floats and putting that into samplerDesc.BorderColor has no effect. That\u0027s a pity.\nHow to proceed?",
+      "parentUuid": "d43c8b36_59a12b65",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 254,
+        "endChar": 77
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a06df352_3881acb6",
         "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
         "patchSetId": 8
@@ -485,6 +557,30 @@
       "side": 1,
       "message": "Ah, I just read up on this too.  What we need to do is generate invalid operation errors in those entry points when the context is below version 3, then this assert will make sense for D3D9.",
       "parentUuid": "d54006d9_c20c2f3b",
+      "range": {
+        "startLine": 968,
+        "startChar": 7,
+        "endLine": 968,
+        "endChar": 77
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f846204f_cc7ada9c",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-10T10:43:14Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "4379c9cb_b38e3d52",
       "range": {
         "startLine": 968,
         "startChar": 7,
