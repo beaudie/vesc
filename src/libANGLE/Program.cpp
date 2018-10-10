@@ -802,6 +802,7 @@ ProgramState::ProgramState()
       mGeometryShaderOutputPrimitiveType(PrimitiveMode::TriangleStrip),
       mGeometryShaderInvocations(1),
       mGeometryShaderMaxVertices(0),
+      mDrawIDLocation(-1),
       mActiveSamplerRefCounts{}
 {
     mComputeShaderLocalSize.fill(1);
@@ -1219,6 +1220,20 @@ Error Program::link(const gl::Context *context)
             return NoError();
         }
 
+        if (context->getExtensions().drawID)
+        {
+            // Uniforms starting with gl_ don't get index by the linker
+            // set a flag so the linker knows they are emulated
+            for (auto& uniform : mState.mUniforms)
+            {
+                if (uniform.name == "gl_DrawID")
+                {
+                    uniform.emulatedBuiltIn = true;
+                    break;
+                }
+            }
+        }
+
         GLuint combinedImageUniforms = 0u;
         if (!linkUniforms(context->getCaps(), mInfoLog, mUniformLocationBindings,
                           &combinedImageUniforms, &resources->unusedUniforms))
@@ -1314,6 +1329,11 @@ void Program::resolveLinkImpl(const Context *context)
     mState.updateActiveImages();
 
     setUniformValuesFromBindingQualifiers();
+
+    if (context->getExtensions().drawID)
+    {
+        mState.mDrawIDLocation = getUniformLocation("gl_DrawID");
+    }
 
     // Save to the program cache.
     auto *cache = linkingState->context->getMemoryProgramCache();
@@ -1420,6 +1440,7 @@ void Program::unlink()
     mState.mGeometryShaderOutputPrimitiveType = PrimitiveMode::TriangleStrip;
     mState.mGeometryShaderInvocations         = 1;
     mState.mGeometryShaderMaxVertices         = 0;
+    mState.mDrawIDLocation                    = -1;
 
     mValidated = false;
 
@@ -2680,6 +2701,16 @@ const TransformFeedbackVarying &Program::getTransformFeedbackVaryingResource(GLu
     ASSERT(mLinkResolved);
     ASSERT(index < mState.mLinkedTransformFeedbackVaryings.size());
     return mState.mLinkedTransformFeedbackVaryings[index];
+}
+
+bool Program::hasDrawIDLocationANGLE() const {
+  return mState.mDrawIDLocation >= 0;
+}
+
+void Program::setDrawIDLocationANGLE(GLint drawid) {
+    ASSERT(mLinkResolved);
+    ASSERT(mState.mDrawIDLocation >= 0);
+    mProgram->setUniform1iv(mState.mDrawIDLocation, 1, &drawid);
 }
 
 bool Program::linkVaryings(InfoLog &infoLog) const

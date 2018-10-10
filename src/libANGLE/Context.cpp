@@ -5356,6 +5356,7 @@ void Context::multiDrawArrays(PrimitiveMode mode,
                               GLsizei primcount)
 {
     bool firstDraw = true;
+    bool hasDrawID = mExtensions.drawID && mGLState.getProgram()->hasDrawIDLocationANGLE();
     for (GLsizei drawid = 0; drawid < primcount; ++drawid)
     {
         // No-op if count draws no primitives for given mode
@@ -5367,6 +5368,10 @@ void Context::multiDrawArrays(PrimitiveMode mode,
         {
             firstDraw = false;
             ANGLE_CONTEXT_TRY(prepareForDraw(mode));
+        }
+        if (hasDrawID)
+        {
+            mGLState.getProgram()->setDrawIDLocationANGLE(drawid);
         }
         gatherParams<EntryPoint::DrawArrays>(mode, first[drawid], count[drawid]);
         ANGLE_CONTEXT_TRY(mImplementation->drawArrays(this, mode, first[drawid], count[drawid]));
@@ -5382,6 +5387,7 @@ void Context::multiDrawElements(PrimitiveMode mode,
                                 GLsizei primcount)
 {
     bool firstDraw = true;
+    bool hasDrawID = mExtensions.drawID && mGLState.getProgram()->hasDrawIDLocationANGLE();
     for (GLsizei drawid = 0; drawid < primcount; ++drawid)
     {
         // No-op if count draws no primitives for given mode
@@ -5393,6 +5399,10 @@ void Context::multiDrawElements(PrimitiveMode mode,
         {
             firstDraw = false;
             ANGLE_CONTEXT_TRY(prepareForDraw(mode));
+        }
+        if (hasDrawID)
+        {
+            mGLState.getProgram()->setDrawIDLocationANGLE(drawid);
         }
         gatherParams<EntryPoint::DrawElements>(mode, count[drawid], type, indices[drawid]);
         ANGLE_CONTEXT_TRY(
