@@ -3568,6 +3568,24 @@ void *GL_APIENTRY glMapBufferRangeEXT(GLenum target,
     return gl::MapBufferRangeEXT(target, offset, length, access);
 }
 
+// GL_EXT_multi_draw_arrays
+void GL_APIENTRY glMultiDrawArraysEXT(GLenum mode,
+                                      const GLint *first,
+                                      const GLsizei *count,
+                                      GLsizei primcount)
+{
+    return gl::MultiDrawArraysEXT(mode, first, count, primcount);
+}
+
+void GL_APIENTRY glMultiDrawElementsEXT(GLenum mode,
+                                        const GLsizei *count,
+                                        GLenum type,
+                                        const void *const *indices,
+                                        GLsizei primcount)
+{
+    return gl::MultiDrawElementsEXT(mode, count, type, indices, primcount);
+}
+
 // GL_EXT_occlusion_query_boolean
 
 // GL_EXT_robustness
@@ -6277,6 +6295,25 @@ void GL_APIENTRY glMultMatrixfContextANGLE(GLeglContext ctx, const GLfloat *m)
 void GL_APIENTRY glMultMatrixxContextANGLE(GLeglContext ctx, const GLfixed *m)
 {
     return gl::MultMatrixxContextANGLE(ctx, m);
+}
+
+void GL_APIENTRY glMultiDrawArraysEXTContextANGLE(GLeglContext ctx,
+                                                  GLenum mode,
+                                                  const GLint *first,
+                                                  const GLsizei *count,
+                                                  GLsizei primcount)
+{
+    return gl::MultiDrawArraysEXTContextANGLE(ctx, mode, first, count, primcount);
+}
+
+void GL_APIENTRY glMultiDrawElementsEXTContextANGLE(GLeglContext ctx,
+                                                    GLenum mode,
+                                                    const GLsizei *count,
+                                                    GLenum type,
+                                                    const void *const *indices,
+                                                    GLsizei primcount)
+{
+    return gl::MultiDrawElementsEXTContextANGLE(ctx, mode, count, type, indices, primcount);
 }
 
 void GL_APIENTRY glMultiTexCoord4fContextANGLE(GLeglContext ctx,
