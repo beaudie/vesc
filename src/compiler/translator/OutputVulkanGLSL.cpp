@@ -25,7 +25,8 @@ TOutputVulkanGLSL::TOutputVulkanGLSL(TInfoSinkBase &objSink,
                                      sh::GLenum shaderType,
                                      int shaderVersion,
                                      ShShaderOutput output,
-                                     ShCompileOptions compileOptions)
+                                     ShCompileOptions compileOptions,
+                                     const ShBuiltInResources &resources)
     : TOutputGLSL(objSink,
                   clampingStrategy,
                   hashFunction,
@@ -34,7 +35,8 @@ TOutputVulkanGLSL::TOutputVulkanGLSL(TInfoSinkBase &objSink,
                   shaderType,
                   shaderVersion,
                   output,
-                  compileOptions)
+                  compileOptions,
+                  resources)
 {
 }
 

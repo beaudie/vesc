@@ -627,9 +627,9 @@ void TranslatorVulkan::translate(TIntermBlock *root,
                                  PerformanceDiagnostics * /*perfDiagnostics*/)
 {
     TInfoSinkBase &sink = getInfoSink().obj;
-    TOutputVulkanGLSL outputGLSL(sink, getArrayIndexClampingStrategy(), getHashFunction(),
-                                 getNameMap(), &getSymbolTable(), getShaderType(),
-                                 getShaderVersion(), getOutputType(), compileOptions);
+    TOutputVulkanGLSL outputGLSL(
+        sink, getArrayIndexClampingStrategy(), getHashFunction(), getNameMap(), &getSymbolTable(),
+        getShaderType(), getShaderVersion(), getOutputType(), compileOptions, getResources());
 
     sink << "#version 450 core\n";
 

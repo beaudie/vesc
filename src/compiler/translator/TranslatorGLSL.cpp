@@ -212,7 +212,7 @@ void TranslatorGLSL::translate(TIntermBlock *root,
     // Write translated shader.
     TOutputGLSL outputGLSL(sink, getArrayIndexClampingStrategy(), getHashFunction(), getNameMap(),
                            &getSymbolTable(), getShaderType(), getShaderVersion(), getOutputType(),
-                           compileOptions);
+                           compileOptions, getResources());
 
     root->traverse(&outputGLSL);
 }
@@ -286,6 +286,14 @@ void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root, ShCompileOptions 
             // SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER option is set and the OVR_multiview(2)
             // extension is requested.
             sink << "#extension GL_NV_viewport_array2 : require\n";
+        }
+
+        const bool hasDrawID = (iter.first == TExtension::ANGLE_draw_id);
+        if (hasDrawID && getShaderType() == GL_VERTEX_SHADER &&
+            getResources().ARB_shader_draw_parameters &&
+            (compileOptions & SH_EMULATE_GL_DRAW_ID) == 0)
+        {
+            sink << "#extension GL_ARB_shader_draw_parameters : require\n";
         }
     }
 

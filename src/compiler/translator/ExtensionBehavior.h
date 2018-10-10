@@ -35,7 +35,8 @@ enum class TExtension
     OES_standard_derivatives,
     OES_texture_storage_multisample_2d_array,
     OVR_multiview,
-    ANGLE_draw_id
+    ANGLE_draw_id,
+    WEBGL_multi_draw_arrays,
 };
 
 enum TBehavior

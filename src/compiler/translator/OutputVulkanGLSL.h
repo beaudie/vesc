@@ -25,7 +25,8 @@ class TOutputVulkanGLSL : public TOutputGLSL
                       sh::GLenum shaderType,
                       int shaderVersion,
                       ShShaderOutput output,
-                      ShCompileOptions compileOptions);
+                      ShCompileOptions compileOptions,
+                      const ShBuiltInResources &resources);
 
     void writeStructType(const TStructure *structure);
 

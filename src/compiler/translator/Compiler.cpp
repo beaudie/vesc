@@ -349,7 +349,9 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
 
     // If gl_DrawID is not supported, remove it from the available extensions
     // Currently we only allow emulation of gl_DrawID
-    const bool glDrawIDSupported = (compileOptions & SH_EMULATE_GL_DRAW_ID) != 0u;
+    const bool glDrawIDEmulated = (compileOptions & SH_EMULATE_GL_DRAW_ID) != 0u;
+    const bool glDrawIDSupported =
+        glDrawIDEmulated || (IsOutputGLSL(mOutputType) && mResources.ARB_shader_draw_parameters);
     if (!glDrawIDSupported)
     {
         auto it = mExtensionBehavior.find(TExtension::ANGLE_draw_id);
@@ -849,6 +851,8 @@ void TCompiler::setResourceString()
         << ":NV_draw_buffers:" << mResources.NV_draw_buffers
         << ":WEBGL_debug_shader_precision:" << mResources.WEBGL_debug_shader_precision
         << ":ANGLE_draw_id:" << mResources.ANGLE_draw_id
+        << ":WEBGL_multi_draw_arrays:" << mResources.WEBGL_multi_draw_arrays
+        << ":ARB_shader_draw_parameters:" << mResources.ARB_shader_draw_parameters
         << ":MinProgramTextureGatherOffset:" << mResources.MinProgramTextureGatherOffset
         << ":MaxProgramTextureGatherOffset:" << mResources.MaxProgramTextureGatherOffset
         << ":MaxImageUnits:" << mResources.MaxImageUnits

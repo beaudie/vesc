@@ -166,6 +166,10 @@ void TDirectiveHandler::handleExtension(const angle::pp::SourceLocation &loc,
     if (iter != mExtensionBehavior.end())
     {
         iter->second = behaviorVal;
+        if (iter->first == TExtension::WEBGL_multi_draw_arrays)
+        {
+            mExtensionBehavior[TExtension::ANGLE_draw_id] = behaviorVal;
+        }
         return;
     }
 

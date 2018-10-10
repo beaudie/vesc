@@ -319,6 +319,8 @@ struct ShBuiltInResources
     int OES_texture_storage_multisample_2d_array;
     int ANGLE_texture_multisample;
     int ANGLE_draw_id;
+    int WEBGL_multi_draw_arrays;
+    int ARB_shader_draw_parameters;
 
     // Set to 1 to enable replacing GL_EXT_draw_buffers #extension directives
     // with GL_NV_draw_buffers in ESSL output. This flag can be used to emulate

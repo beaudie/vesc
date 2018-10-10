@@ -280,6 +280,12 @@
     "glMatrixMode": {
         "mode": "MatrixType"
     },
+    "glMultiDrawArraysEXT": {
+        "mode": "PrimitiveMode"
+    },
+    "glMultiDrawElementsEXT": {
+        "mode": "PrimitiveMode"
+    },
     "glPointParameterf": {
         "pname" : "PointParameter"
     },

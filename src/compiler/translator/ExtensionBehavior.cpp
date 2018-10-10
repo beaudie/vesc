@@ -30,7 +30,8 @@
     OP(OES_standard_derivatives)                 \
     OP(OES_texture_storage_multisample_2d_array) \
     OP(OVR_multiview)                            \
-    OP(ANGLE_draw_id)
+    OP(ANGLE_draw_id)                            \
+    OP(WEBGL_multi_draw_arrays)
 
 namespace sh
 {

@@ -205,6 +205,8 @@ void InitBuiltInResources(ShBuiltInResources *resources)
     resources->OES_texture_storage_multisample_2d_array = 0;
     resources->ANGLE_texture_multisample                = 0;
     resources->ANGLE_draw_id                            = 0;
+    resources->WEBGL_multi_draw_arrays                  = 0;
+    resources->ARB_shader_draw_parameters               = 0;
 
     resources->NV_draw_buffers = 0;
 

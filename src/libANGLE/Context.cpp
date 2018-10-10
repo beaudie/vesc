@@ -3207,6 +3207,7 @@ Extensions Context::generateSupportedExtensions() const
     supportedExtensions.clientArrays          = true;
     supportedExtensions.requestExtension      = true;
     supportedExtensions.drawID                = true;
+    supportedExtensions.multiDrawArrays       = true;
 
     // Enable the no error extension if the context was created with the flag.
     supportedExtensions.noError = mSkipValidation;
@@ -5347,6 +5348,56 @@ void Context::memoryBarrier(GLbitfield barriers)
 void Context::memoryBarrierByRegion(GLbitfield barriers)
 {
     handleError(mImplementation->memoryBarrierByRegion(this, barriers));
+}
+
+void Context::multiDrawArrays(PrimitiveMode mode,
+                              const GLint *first,
+                              const GLsizei *count,
+                              GLsizei primcount)
+{
+    ANGLE_CONTEXT_TRY(prepareForDraw(mode));
+    bool hasDrawID = mExtensions.drawID && mGLState.getProgram()->hasDrawIDUniform();
+    for (GLsizei drawID = 0; drawID < primcount; ++drawID)
+    {
+        // No-op if count draws no primitives for given mode
+        if (noopDraw(mode, count[drawID]))
+        {
+            continue;
+        }
+        if (hasDrawID)
+        {
+            mGLState.getProgram()->setDrawIDUniform(drawID);
+        }
+        gatherParams<EntryPoint::DrawArrays>(mode, first[drawID], count[drawID]);
+        ANGLE_CONTEXT_TRY(mImplementation->drawArrays(this, mode, first[drawID], count[drawID]));
+        MarkTransformFeedbackBufferUsage(this, mGLState.getCurrentTransformFeedback(),
+                                         count[drawID], 1);
+    }
+}
+
+void Context::multiDrawElements(PrimitiveMode mode,
+                                const GLsizei *count,
+                                GLenum type,
+                                const void *const *indices,
+                                GLsizei primcount)
+{
+    ANGLE_CONTEXT_TRY(prepareForDraw(mode));
+    bool hasDrawID = mExtensions.drawID && mGLState.getProgram()->hasDrawIDUniform();
+    for (GLsizei drawID = 0; drawID < primcount; ++drawID)
+    {
+        // No-op if count draws no primitives for given mode
+        if (noopDraw(mode, count[drawID]))
+        {
+            continue;
+        }
+        if (hasDrawID)
+        {
+            mGLState.getProgram()->setDrawIDUniform(drawID);
+        }
+        gatherParams<EntryPoint::DrawElements>(mode, count[drawID], type, indices[drawID]);
+        ANGLE_CONTEXT_TRY(
+            mImplementation->drawElements(this, mode, count[drawID], type, indices[drawID]));
+    }
 }
 
 GLenum Context::checkFramebufferStatus(GLenum target)

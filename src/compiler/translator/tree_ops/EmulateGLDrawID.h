@@ -24,6 +24,9 @@ void EmulateGLDrawID(TIntermBlock *root,
                      std::vector<sh::Uniform> *uniforms,
                      ShHashFunction64 hashFunction,
                      bool shouldCollect);
+
+const char *GetEmulatedGLDrawIDName();
+
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_TREEOPS_EMULATEGLDRAWID_H_

@@ -61,10 +61,12 @@ struct LinkedUniform : public sh::Uniform, public ActiveVariable
     bool isAtomicCounter() const;
     bool isInDefaultBlock() const;
     bool isField() const;
+    bool isNonEmulatedBuiltIn() const;
     size_t getElementSize() const;
     size_t getElementComponents() const;
 
     const UniformTypeInfo *typeInfo;
+    bool emulatedBuiltIn;
 
     // Identifies the containing buffer backed resource -- interface block or atomic counter buffer.
     int bufferIndex;
