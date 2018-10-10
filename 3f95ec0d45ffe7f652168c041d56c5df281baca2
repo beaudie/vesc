@@ -498,6 +498,30 @@
     },
     {
       "key": {
+        "uuid": "e8272fc0_9fce6567",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-10T16:04:43Z",
+      "side": 1,
+      "message": "I looked into this and it turns out we\u0027re emulating the wrap modes of integer textures in ES3.  Supporting this should be possible but requires a bit of work in our shader compiler.\n\nThe implementation of the wrap functions is done here: https://cs.chromium.org/chromium/src/third_party/angle/src/compiler/translator/TextureFunctionHLSL.cpp?l\u003d23\n\nThe wrap types come from: https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp?l\u003d113\n\nThe SamplerMetadata struct will have to be updated to hold the border color too:\nhttps://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/renderer/d3d/d3d11/StateManager11.h?l\u003d116\n\nThis struct is generated for the shader here:\nhttps://cs.chromium.org/chromium/src/third_party/angle/src/compiler/translator/ResourcesHLSL.cpp?l\u003d501\n\nIt would also be possible to not support this extension on ES3+ contexts on D3D11 but if you\u0027re up for trying to get it working then it\u0027ll be much more useful to the users.\n\nWith the current patch (10) I hit some asserts in the GetWrapBits function, are you running with a debug build?",
+      "parentUuid": "df89960a_fe005d52",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 254,
+        "endChar": 77
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a06df352_3881acb6",
         "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
         "patchSetId": 8
