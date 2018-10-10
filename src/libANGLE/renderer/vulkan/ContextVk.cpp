@@ -331,7 +331,7 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
         mCurrentDrawElementsType = drawCallParams.type();
     }
 
-    const gl::Buffer *elementArrayBuffer = mVertexArray->getState().getElementArrayBuffer().get();
+    const gl::Buffer *elementArrayBuffer = mVertexArray->getState().getElementArrayBuffer();
     if (!elementArrayBuffer)
     {
         mDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
