@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3244dafb_7f12e387",
+        "filename": "src/libANGLE/Query.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-10T17:31:58Z",
+      "side": 1,
+      "message": "Do you have plans for this onDestroy to return void as well?",
+      "range": {
+        "startLine": 26,
+        "startChar": 30,
+        "endLine": 26,
+        "endChar": 39
+      },
+      "revId": "ae2ded35684f0179da825f25ef4ba017e5e699c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "543eb88a_54c41505",
+        "filename": "src/libANGLE/Renderbuffer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-10T17:31:58Z",
+      "side": 1,
+      "message": "Here, too?",
+      "range": {
+        "startLine": 83,
+        "startChar": 43,
+        "endLine": 83,
+        "endChar": 52
+      },
+      "revId": "ae2ded35684f0179da825f25ef4ba017e5e699c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c500e81_21bb9d76",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-10T17:31:58Z",
+      "side": 1,
+      "message": "And here?",
+      "range": {
+        "startLine": 615,
+        "startChar": 36,
+        "endLine": 615,
+        "endChar": 45
+      },
+      "revId": "ae2ded35684f0179da825f25ef4ba017e5e699c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
