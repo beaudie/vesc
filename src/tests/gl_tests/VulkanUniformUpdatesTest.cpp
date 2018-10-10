@@ -34,6 +34,14 @@ class VulkanUniformUpdatesTest : public ANGLETest
         const gl::Context *context = static_cast<gl::Context *>(getEGLWindow()->getContext());
         return rx::GetImplAs<rx::ContextVk>(context);
     }
+
+    rx::ProgramVk *hackProgram(GLuint handle) const
+    {
+        // Hack the angle!
+        const gl::Context *context = static_cast<gl::Context *>(getEGLWindow()->getContext());
+        const gl::Program *program = context->getProgramResolveLink(handle);
+        return rx::vk::GetImpl(program);
+    }
 };
 
 // This test updates a uniform until a new buffer is allocated and then make sure the uniform
@@ -59,8 +67,7 @@ void main()
     ANGLE_GL_PROGRAM(program, kPositionUniformVertexShader, kColorUniformFragmentShader);
     glUseProgram(program);
 
-    const gl::State &state   = hackANGLE()->getGLState();
-    rx::ProgramVk *programVk = rx::vk::GetImpl(state.getProgram());
+    rx::ProgramVk *programVk = hackProgram(program);
 
     // Set a really small min size so that uniform updates often allocates a new buffer.
     programVk->setDefaultUniformBlocksMinSizeForTesting(128);
@@ -209,6 +216,91 @@ void main()
         swapBuffers();
         ASSERT_GL_NO_ERROR();
     }
+}
+
+// Uniform updates along with Texture updates.
+TEST_P(VulkanUniformUpdatesTest, DescriptorPoolUniformAndTextureUpdatesTwoShaders)
+{
+    ASSERT_TRUE(IsVulkan());
+
+    // Force a small limit on the max sets per pool to more easily trigger a new allocation.
+    constexpr uint32_t kMaxSetsForTesting = 32;
+    rx::vk::DynamicDescriptorPool *uniformPool =
+        hackANGLE()->getDynamicDescriptorPool(rx::kUniformsDescriptorSetIndex);
+    uniformPool->setMaxSetsPerPoolForTesting(kMaxSetsForTesting);
+    rx::vk::DynamicDescriptorPool *texturePool =
+        hackANGLE()->getDynamicDescriptorPool(rx::kTextureDescriptorSetIndex);
+    texturePool->setMaxSetsPerPoolForTesting(kMaxSetsForTesting);
+
+    // Initialize program.
+    constexpr char kVS[] = R"(attribute vec2 position;
+varying mediump vec2 texCoord;
+void main()
+{
+    gl_Position = vec4(position, 0, 1);
+    texCoord = position * 0.5 + vec2(0.5);
+})";
+
+    constexpr char kFS[] = R"(varying mediump vec2 texCoord;
+uniform mediump vec4 colorMask;
+void main()
+{
+    gl_FragColor = colorMask;
+})";
+
+    ANGLE_GL_PROGRAM(program1, kVS, kFS);
+    ANGLE_GL_PROGRAM(program2, kVS, kFS);
+    glUseProgram(program1);
+
+    rx::ProgramVk *program1Vk = hackProgram(program1);
+    rx::ProgramVk *program2Vk = hackProgram(program2);
+
+    // Set a really small min size so that uniform updates often allocates a new buffer.
+    program1Vk->setDefaultUniformBlocksMinSizeForTesting(128);
+    program2Vk->setDefaultUniformBlocksMinSizeForTesting(128);
+
+    // Get uniform locations.
+    GLint colorMaskLoc1 = glGetUniformLocation(program1, "colorMask");
+    ASSERT_NE(-1, colorMaskLoc1);
+    GLint colorMaskLoc2 = glGetUniformLocation(program2, "colorMask");
+    ASSERT_NE(-1, colorMaskLoc2);
+
+    // Draw with white using program1.
+    glUniform4f(colorMaskLoc1, 1.0f, 1.0f, 1.0f, 1.0f);
+    drawQuad(program1, "position", 0.5f, 1.0f, true);
+    swapBuffers();
+    ASSERT_GL_NO_ERROR();
+
+    // Now switch to use program2
+    glUseProgram(program2);
+    // Draw multiple times w/ program2, each iteration will create a new descriptor set.
+    // This will cause the first descriptor pool to be cleaned up
+    for (uint32_t iteration = 0; iteration < kMaxSetsForTesting * 2; ++iteration)
+    {
+        // Draw with white.
+        glUniform4f(colorMaskLoc2, 1.0f, 1.0f, 1.0f, 1.0f);
+        drawQuad(program2, "position", 0.5f, 1.0f, true);
+
+        // Draw with white masking out red.
+        glUniform4f(colorMaskLoc2, 0.0f, 1.0f, 1.0f, 1.0f);
+        drawQuad(program2, "position", 0.5f, 1.0f, true);
+
+        // Draw with magenta.
+        glUniform4f(colorMaskLoc2, 1.0f, 1.0f, 1.0f, 1.0f);
+        drawQuad(program2, "position", 0.5f, 1.0f, true);
+
+        // Draw with magenta masking out red.
+        glUniform4f(colorMaskLoc2, 0.0f, 1.0f, 1.0f, 1.0f);
+        drawQuad(program2, "position", 0.5f, 1.0f, true);
+
+        swapBuffers();
+        ASSERT_GL_NO_ERROR();
+    }
+    // Finally, attempt to draw again with program1, with original uniform values.
+    glUseProgram(program1);
+    drawQuad(program1, "position", 0.5f, 1.0f, true);
+    swapBuffers();
+    ASSERT_GL_NO_ERROR();
 }
 
 ANGLE_INSTANTIATE_TEST(VulkanUniformUpdatesTest, ES2_VULKAN());
