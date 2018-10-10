@@ -1622,7 +1622,7 @@ Buffer *State::getTargetBuffer(BufferBinding target) const
     switch (target)
     {
         case BufferBinding::ElementArray:
-            return getVertexArray()->getElementArrayBuffer().get();
+            return getVertexArray()->getElementArrayBuffer();
         default:
             return mBoundBuffers[target].get();
     }
@@ -2216,7 +2216,7 @@ Error State::getIntegerv(const Context *context, GLenum pname, GLint *params)
             *params = mBoundBuffers[BufferBinding::DrawIndirect].id();
             break;
         case GL_ELEMENT_ARRAY_BUFFER_BINDING:
-            *params = getVertexArray()->getElementArrayBuffer().id();
+            *params = getVertexArray()->getElementArrayBuffer()->id();
             break;
         case GL_DRAW_FRAMEBUFFER_BINDING:
             static_assert(GL_DRAW_FRAMEBUFFER_BINDING == GL_DRAW_FRAMEBUFFER_BINDING_ANGLE,
