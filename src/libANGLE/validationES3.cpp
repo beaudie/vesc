@@ -1658,7 +1658,7 @@ static bool ValidateBindBufferCommon(Context *context,
                                                        "indexed binding points.");
                 return false;
             }
-            if (buffer != 0 && ((offset % 4) != 0 || (size % 4) != 0))
+            if ((offset % 4) != 0 || (size % 4) != 0)
             {
                 context->handleError(InvalidValue() << "offset and size must be multiple of 4.");
                 return false;
@@ -1686,7 +1686,7 @@ static bool ValidateBindBufferCommon(Context *context,
             }
 
             ASSERT(caps.uniformBufferOffsetAlignment);
-            if (buffer != 0 && (offset % caps.uniformBufferOffsetAlignment) != 0)
+            if ((offset % caps.uniformBufferOffsetAlignment) != 0)
             {
                 context->handleError(
                     InvalidValue()
