@@ -6658,4 +6658,47 @@ bool ValidateMaxShaderCompilerThreadsKHR(Context *context, GLuint count)
     return true;
 }
 
+bool ValidateMultiDrawArraysEXT(Context *context,
+                                PrimitiveMode mode,
+                                const GLint *first,
+                                const GLsizei *count,
+                                GLsizei primcount)
+{
+    if (!context->getExtensions().multiDrawArrays)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ExtensionNotEnabled);
+        return false;
+    }
+    for (GLsizei drawid = 0; drawid < primcount; ++drawid)
+    {
+        if (!ValidateDrawArrays(context, mode, first[drawid], count[drawid]))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+bool ValidateMultiDrawElementsEXT(Context *context,
+                                  PrimitiveMode mode,
+                                  const GLsizei *count,
+                                  GLenum type,
+                                  const void *const *indices,
+                                  GLsizei primcount)
+{
+    if (!context->getExtensions().multiDrawArrays)
+    {
+        ANGLE_VALIDATION_ERR(context, InvalidOperation(), ExtensionNotEnabled);
+        return false;
+    }
+    for (GLsizei drawid = 0; drawid < primcount; ++drawid)
+    {
+        context->gatherParams<EntryPoint::DrawElements>(mode, count[drawid], type, indices[drawid]);
+        if (!ValidateDrawElements(context, mode, count[drawid], type, indices[drawid]))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 }  // namespace gl

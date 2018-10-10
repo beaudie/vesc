@@ -65,6 +65,7 @@ struct LinkedUniform : public sh::Uniform, public ActiveVariable
     size_t getElementComponents() const;
 
     const UniformTypeInfo *typeInfo;
+    bool emulatedBuiltIn;
 
     // Identifies the containing buffer backed resource -- interface block or atomic counter buffer.
     int bufferIndex;

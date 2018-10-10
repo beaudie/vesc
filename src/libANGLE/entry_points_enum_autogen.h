@@ -399,6 +399,8 @@ enum class EntryPoint
     MemoryBarrierByRegion,
     MultMatrixf,
     MultMatrixx,
+    MultiDrawArraysEXT,
+    MultiDrawElementsEXT,
     MultiTexCoord4f,
     MultiTexCoord4x,
     Normal3f,

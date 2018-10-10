@@ -23,6 +23,11 @@ namespace gl
 namespace
 {
 
+bool IsBuiltIn(const LinkedUniform &uniform)
+{
+    return !uniform.emulatedBuiltIn && uniform.isBuiltIn();
+}
+
 LinkedUniform *FindUniform(std::vector<LinkedUniform> &list, const std::string &name)
 {
     for (LinkedUniform &uniform : list)
@@ -354,7 +359,7 @@ bool UniformLinker::indexUniforms(InfoLog &infoLog, const ProgramBindings &unifo
     {
         const LinkedUniform &uniform = mUniforms[uniformIndex];
 
-        if (uniform.isBuiltIn() || IsAtomicCounterType(uniform.type))
+        if (IsBuiltIn(uniform) || IsAtomicCounterType(uniform.type))
         {
             continue;
         }
@@ -430,7 +435,7 @@ bool UniformLinker::gatherUniformLocationsAndCheckConflicts(
 
     for (const LinkedUniform &uniform : mUniforms)
     {
-        if (uniform.isBuiltIn())
+        if (IsBuiltIn(uniform))
         {
             continue;
         }

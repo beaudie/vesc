@@ -257,7 +257,8 @@ Extensions::Extensions()
       blendFuncExtended(false),
       maxDualSourceDrawBuffers(0),
       memorySize(false),
-      drawID(false)
+      drawID(false),
+      multiDrawArrays(false)
 {
 }
 
@@ -892,6 +893,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_ANGLE_multiview_multisample"] = enableableExtension(&Extensions::multiviewMultisample);
         map["GL_EXT_blend_func_extended"] = enableableExtension(&Extensions::blendFuncExtended);
         map["GL_ANGLE_draw_id"] = enableableExtension(&Extensions::drawID);
+        map["GL_EXT_multi_draw_arrays"] = enableableExtension(&Extensions::multiDrawArrays);
         // GLES1 extensinos
         map["GL_OES_point_size_array"] = enableableExtension(&Extensions::pointSizeArray);
         map["GL_OES_texture_cube_map"] = enableableExtension(&Extensions::textureCubeMap);
