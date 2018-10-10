@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "825166a5_359530ef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-10T17:33:35Z",
+      "side": 1,
+      "message": "nit: \"return\" would be more correct term, I think. When I see \"throw\" I think about exceptions.",
+      "range": {
+        "startLine": 9,
+        "startChar": 11,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "ae2ded35684f0179da825f25ef4ba017e5e699c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3244dafb_7f12e387",
         "filename": "src/libANGLE/Query.cpp",
         "patchSetId": 4
