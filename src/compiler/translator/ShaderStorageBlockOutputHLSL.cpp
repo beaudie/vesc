@@ -49,14 +49,101 @@ const TField *GetFieldMemberInShaderStorageBlock(const TInterfaceBlock *interfac
     return nullptr;
 }
 
-void SetShaderStorageBlockFieldMemberInfo(const TFieldList &fields, sh::BlockLayoutEncoder *encoder)
+void SetShaderStorageBlockFieldMemberInfo(const TFieldList &fields,
+                                          sh::BlockLayoutEncoder *encoder,
+                                          TLayoutBlockStorage storage);
+
+void GetShaderStorageBlockStructMemberInfo(const TFieldList &fields,
+                                           sh::BlockLayoutEncoder *encoder,
+                                           TLayoutBlockStorage storage)
+{
+    encoder->enterAggregateType();
+    SetShaderStorageBlockFieldMemberInfo(fields, encoder, storage);
+    encoder->exitAggregateType();
+}
+
+void GetShaderStorageBlockStructArrayMemberInfo(TField *field,
+                                                unsigned int arrayNestingIndex,
+                                                sh::BlockLayoutEncoder *encoder,
+                                                TLayoutBlockStorage storage)
+{
+    const TType &fieldType = *field->type();
+    ASSERT(fieldType.getArraySizes());
+    ASSERT(arrayNestingIndex < fieldType.getArraySizes()->size());
+    // Nested arrays are processed starting from outermost (arrayNestingIndex 0u) and ending at the
+    // innermost.
+    const TVector<unsigned int> &arraySizes = *fieldType.getArraySizes();
+    const unsigned int currentArraySize =
+        arraySizes[fieldType.getArraySizes()->size() - 1u - arrayNestingIndex];
+
+    for (unsigned int arrayElement = 0u; arrayElement < currentArraySize; ++arrayElement)
+    {
+        if (arrayNestingIndex + 1u < fieldType.getArraySizes()->size())
+        {
+            GetShaderStorageBlockStructArrayMemberInfo(field, arrayNestingIndex + 1u, encoder,
+                                                       storage);
+        }
+        else
+        {
+            GetShaderStorageBlockStructMemberInfo(fieldType.getStruct()->fields(), encoder,
+                                                  storage);
+        }
+    }
+}
+
+size_t SetBlockFieldMemberInfoAndReturnBlockSize(const TFieldList &fields,
+                                                 TLayoutBlockStorage storage)
+{
+    sh::Std140BlockEncoder std140Encoder;
+    sh::HLSLBlockEncoder hlslEncoder(sh::HLSLBlockEncoder::ENCODE_PACKED, false);
+    sh::BlockLayoutEncoder *structureEncoder = nullptr;
+
+    if (storage == EbsStd140)
+    {
+        structureEncoder = &std140Encoder;
+    }
+    else
+    {
+        // TODO(jiajia.qin@intel.com): add std430 support.
+        structureEncoder = &hlslEncoder;
+    }
+
+    structureEncoder->enterAggregateType();
+    size_t beforeSize = structureEncoder->getBlockSize();
+    SetShaderStorageBlockFieldMemberInfo(fields, structureEncoder, storage);
+    structureEncoder->exitAggregateType();
+    size_t afterSize = structureEncoder->getBlockSize();
+    return afterSize - beforeSize;
+}
+
+void SetShaderStorageBlockFieldMemberInfo(const TFieldList &fields,
+                                          sh::BlockLayoutEncoder *encoder,
+                                          TLayoutBlockStorage storage)
 {
     for (TField *field : fields)
     {
         const TType &fieldType = *field->type();
         if (fieldType.getStruct())
         {
-            // TODO(jiajia.qin@intel.com): Add structure field member support.
+            field->setOffset(encoder->getBlockSize());
+
+            // Below if-else is in order to get correct offset for the field members after structure
+            // field.
+            if (fieldType.isArray())
+            {
+
+                GetShaderStorageBlockStructArrayMemberInfo(field, 0u, encoder, storage);
+            }
+            else
+            {
+                GetShaderStorageBlockStructMemberInfo(fieldType.getStruct()->fields(), encoder,
+                                                      storage);
+            }
+
+            // This is the real operation to set structure member offset and array stride using a
+            // new encoder to ensure that the first field member offset in structure is always zero.
+            field->setArrayStride(SetBlockFieldMemberInfoAndReturnBlockSize(
+                fieldType.getStruct()->fields(), storage));
         }
         else if (fieldType.isArrayOfArrays())
         {
@@ -96,7 +183,8 @@ void SetShaderStorageBlockMembersOffset(const TInterfaceBlock *interfaceBlock)
         encoder = &hlslEncoder;
     }
 
-    SetShaderStorageBlockFieldMemberInfo(interfaceBlock->fields(), encoder);
+    SetShaderStorageBlockFieldMemberInfo(interfaceBlock->fields(), encoder,
+                                         interfaceBlock->blockStorage());
 }
 
 }  // anonymous namespace

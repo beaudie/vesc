@@ -313,6 +313,73 @@ void main()
     EXPECT_GL_NO_ERROR();
 }
 
+// Test that access/write to structure data in shader storage buffer.
+TEST_P(ShaderStorageBufferTest31, ShaderStorageBufferStructureArray)
+{
+    constexpr char kComputeShaderSource[] =
+        R"(#version 310 es
+ layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+struct S
+{
+   uvec2 data;
+};
+ layout(std140, binding = 0) buffer blockIn {
+     S s[2];
+ } instanceIn;
+ layout(std140, binding = 1) buffer blockOut {
+     S s[2];
+ } instanceOut;
+ void main()
+ {
+     instanceOut.s[0].data = instanceIn.s[0].data;
+     instanceOut.s[1].data = instanceIn.s[1].data;
+ }
+ )";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kComputeShaderSource);
+
+    glUseProgram(program.get());
+
+    constexpr unsigned int kElementCount      = 2;
+    constexpr unsigned int kComponentCount    = 2;
+    constexpr unsigned int kBytesPerComponent = sizeof(unsigned int);
+    constexpr unsigned int kStructureStride   = 16;
+    constexpr unsigned int kInputValues[kElementCount][kStructureStride / kBytesPerComponent] = {
+        {1u, 2u, 0u, 0u}, {3u, 4u, 0u, 0u}};
+    constexpr unsigned int kExpectedValues[kElementCount][kComponentCount] = {{1u, 2u}, {3u, 4u}};
+    // Create shader storage buffer
+    GLBuffer shaderStorageBuffer[2];
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[0]);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kElementCount * kStructureStride, kInputValues,
+                 GL_STATIC_DRAW);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[1]);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kElementCount * kStructureStride, nullptr,
+                 GL_STATIC_DRAW);
+
+    // Bind shader storage buffer
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, shaderStorageBuffer[0]);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderStorageBuffer[1]);
+
+    glDispatchCompute(1, 1, 1);
+
+    glFinish();
+
+    // Read back shader storage buffer
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[1]);
+    const GLuint *ptr = reinterpret_cast<const GLuint *>(glMapBufferRange(
+        GL_SHADER_STORAGE_BUFFER, 0, kElementCount * kStructureStride, GL_MAP_READ_BIT));
+    for (unsigned int idx = 0; idx < kElementCount; idx++)
+    {
+        for (unsigned int idy = 0; idy < kComponentCount; idy++)
+        {
+            EXPECT_EQ(kExpectedValues[idx][idy],
+                      *(ptr + idx * (kStructureStride / kBytesPerComponent) + idy));
+        }
+    }
+
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test atomic memory functions.
 TEST_P(ShaderStorageBufferTest31, AtomicMemoryFunctions)
 {
