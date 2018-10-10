@@ -23,12 +23,16 @@ class TOutputGLSL : public TOutputGLSLBase
                 sh::GLenum shaderType,
                 int shaderVersion,
                 ShShaderOutput output,
-                ShCompileOptions compileOptions);
+                ShCompileOptions compileOptions,
+                const ShBuiltInResources &resources);
 
   protected:
     bool writeVariablePrecision(TPrecision) override;
     void visitSymbol(TIntermSymbol *node) override;
     ImmutableString translateTextureFunction(const ImmutableString &name) override;
+
+  private:
+    const ShBuiltInResources &mResources;
 };
 
 }  // namespace sh

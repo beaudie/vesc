@@ -19,7 +19,8 @@ TOutputGLSL::TOutputGLSL(TInfoSinkBase &objSink,
                          sh::GLenum shaderType,
                          int shaderVersion,
                          ShShaderOutput output,
-                         ShCompileOptions compileOptions)
+                         ShCompileOptions compileOptions,
+                         const ShBuiltInResources &resources)
     : TOutputGLSLBase(objSink,
                       clampingStrategy,
                       hashFunction,
@@ -28,7 +29,8 @@ TOutputGLSL::TOutputGLSL(TInfoSinkBase &objSink,
                       shaderType,
                       shaderVersion,
                       output,
-                      compileOptions)
+                      compileOptions),
+      mResources(resources)
 {
 }
 
@@ -69,6 +71,17 @@ void TOutputGLSL::visitSymbol(TIntermSymbol *node)
     else if (name == "gl_SecondaryFragDataEXT")
     {
         out << "angle_SecondaryFragData";
+    }
+    else if (name == "gl_DrawID")
+    {
+        if (mResources.ARB_shader_draw_parameters)
+        {
+            out << "gl_DrawIDARB";
+        }
+        else
+        {
+            ASSERT(false);
+        }
     }
     else
     {

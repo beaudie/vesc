@@ -52,3 +52,16 @@ TEST_F(ANGLEDrawIDTest, EmulatesUniform)
     ASSERT_TRUE(foundInCode("uniform int"));
     ASSERT_FALSE(foundInCode("float(gl_DrawID)"));
 }
+
+TEST_F(ANGLEDrawIDTest, WithARBShaderDrawParameters)
+{
+    getResources()->ARB_shader_draw_parameters = 1;
+    const std::string &shaderString =
+        "#extension GL_ANGLE_draw_id : require\n"
+        "void main() {\n"
+        "   gl_Position = vec4(float(gl_DrawID), 0.0, 0.0, 1.0);\n"
+        "}\n";
+    compile(shaderString);
+    ASSERT_TRUE(foundInCode("float(gl_DrawIDARB)"));
+    ASSERT_FALSE(foundInCode("float(gl_DrawID)"));
+}

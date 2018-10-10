@@ -65,7 +65,10 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
                              const int locationIn,
                              const int bufferIndexIn,
                              const sh::BlockMemberInfo &blockInfoIn)
-    : typeInfo(&GetUniformTypeInfo(typeIn)), bufferIndex(bufferIndexIn), blockInfo(blockInfoIn)
+    : typeInfo(&GetUniformTypeInfo(typeIn)),
+      emulatedBuiltIn(false),
+      bufferIndex(bufferIndexIn),
+      blockInfo(blockInfoIn)
 {
     type       = typeIn;
     precision  = precisionIn;
