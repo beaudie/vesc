@@ -163,7 +163,8 @@ const char *GetSamplerCoordinateTypeString(
     const TextureFunctionHLSL::TextureFunction &textureFunction,
     int hlslCoords)
 {
-    if (IsIntegerSampler(textureFunction.sampler) ||
+    if ((IsIntegerSampler(textureFunction.sampler) &&
+         textureFunction.method != TextureFunctionHLSL::TextureFunction::GATHER) ||
         textureFunction.method == TextureFunctionHLSL::TextureFunction::FETCH)
     {
         switch (hlslCoords)
