@@ -1557,6 +1557,15 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     void memoryBarrier(GLbitfield barriers);
     void memoryBarrierByRegion(GLbitfield barriers);
+    void multiDrawArrays(PrimitiveMode mode,
+                         const GLint *first,
+                         const GLsizei *count,
+                         GLsizei primcount);
+    void multiDrawElements(PrimitiveMode mode,
+                           const GLsizei *count,
+                           GLenum type,
+                           const void *const *indices,
+                           GLsizei primcount);
 
     void framebufferTexture(GLenum target, GLenum attachment, GLuint texture, GLint level);
 

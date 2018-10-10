@@ -112,4 +112,9 @@ void EmulateGLDrawID(TIntermBlock *root,
         root->insertStatement(mainIndex, uniformDeclaration);
     }
 }
+
+const char *GetEmulatedGLDrawIDName()
+{
+    return kEmulatedGLDrawIDName.data();
+}
 }

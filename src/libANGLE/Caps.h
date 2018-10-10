@@ -449,6 +449,9 @@ struct Extensions
 
     // GL_ANGLE_draw_id
     bool drawID;
+
+    // GL_EXT_multi_draw_arrays
+    bool multiDrawArrays;
 };
 
 struct ExtensionInfo

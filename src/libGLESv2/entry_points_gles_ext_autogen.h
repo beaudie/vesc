@@ -651,6 +651,17 @@ ANGLE_EXPORT void *GL_APIENTRY MapBufferRangeEXT(GLenum target,
                                                  GLsizeiptr length,
                                                  GLbitfield access);
 
+// GL_EXT_multi_draw_arrays
+ANGLE_EXPORT void GL_APIENTRY MultiDrawArraysEXT(GLenum mode,
+                                                 const GLint *first,
+                                                 const GLsizei *count,
+                                                 GLsizei primcount);
+ANGLE_EXPORT void GL_APIENTRY MultiDrawElementsEXT(GLenum mode,
+                                                   const GLsizei *count,
+                                                   GLenum type,
+                                                   const void *const *indices,
+                                                   GLsizei primcount);
+
 // GL_EXT_occlusion_query_boolean
 
 // GL_EXT_robustness
@@ -1924,6 +1935,17 @@ ANGLE_EXPORT void GL_APIENTRY MemoryBarrierByRegionContextANGLE(GLeglContext ctx
                                                                 GLbitfield barriers);
 ANGLE_EXPORT void GL_APIENTRY MultMatrixfContextANGLE(GLeglContext ctx, const GLfloat *m);
 ANGLE_EXPORT void GL_APIENTRY MultMatrixxContextANGLE(GLeglContext ctx, const GLfixed *m);
+ANGLE_EXPORT void GL_APIENTRY MultiDrawArraysEXTContextANGLE(GLeglContext ctx,
+                                                             GLenum mode,
+                                                             const GLint *first,
+                                                             const GLsizei *count,
+                                                             GLsizei primcount);
+ANGLE_EXPORT void GL_APIENTRY MultiDrawElementsEXTContextANGLE(GLeglContext ctx,
+                                                               GLenum mode,
+                                                               const GLsizei *count,
+                                                               GLenum type,
+                                                               const void *const *indices,
+                                                               GLsizei primcount);
 ANGLE_EXPORT void GL_APIENTRY MultiTexCoord4fContextANGLE(GLeglContext ctx,
                                                           GLenum target,
                                                           GLfloat s,
