@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d979f0ae_75d1e995",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-10T10:21:13Z",
+      "side": 1,
+      "message": "nit: missing bug tag",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 0
+      },
+      "revId": "7c9753bc8ae733eb1b53448dbb99e450a659bd0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
