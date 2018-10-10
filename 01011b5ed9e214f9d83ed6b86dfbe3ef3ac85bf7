@@ -22,6 +22,30 @@
       "revId": "01011b5ed9e214f9d83ed6b86dfbe3ef3ac85bf7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0914cb76_28d19d84",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-10T20:53:14Z",
+      "side": 1,
+      "message": "Pretty much yeah. Just smaller code to call a function instead of using the stream ops.",
+      "parentUuid": "4dfb1dc0_e6060032",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 0
+      },
+      "revId": "01011b5ed9e214f9d83ed6b86dfbe3ef3ac85bf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
