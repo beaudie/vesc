@@ -522,6 +522,30 @@
     },
     {
       "key": {
+        "uuid": "618d2c3a_bda38665",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-11T18:28:51Z",
+      "side": 1,
+      "message": "Nice, this works!\n\nRegarding the assertion: Yes, I recently switched to release builds, unfortunately, to have faster test app execution times. I switched back to debug builds now and also got the assertion with patch 10. This is fixed in the latest patch.\n\nI just saw that in PackedGLEnums_autogen.cpp/h in FromGLenum\u003cWrapMode\u003e(GLenum from) and ToGLenum(WrapMode from) GL_CLAMP_TO_BORDER is missing, too. I wonder why that was no problem yet? Anyways, I added GL_CLAMP_TO_BORDER to packed_gl_enums.json, to be safe.",
+      "parentUuid": "e8272fc0_9fce6567",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 254,
+        "endChar": 77
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a06df352_3881acb6",
         "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
         "patchSetId": 8
