@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3bc170e_1ab9e79a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-11T16:06:56Z",
+      "side": 1,
+      "message": "Is that clear enough or would you like to see some sort of diagram in the comment?",
+      "revId": "14d366f029ce9a4b7f79817e43361d7abcc2c224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4738470_006bdf6c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-11T16:06:56Z",
+      "side": 1,
+      "message": "Little bit funky, but makes life easier and avoids redirections.",
+      "revId": "14d366f029ce9a4b7f79817e43361d7abcc2c224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df98129b_e28cd9e8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-11T16:06:56Z",
+      "side": 1,
+      "message": "Not really happy about this name. I chose it to make a distinction with DynamicDescriptorPool that doesn\u0027t grow. `DynamicPool` would be fine by me if it\u0027s not confusing in your opinion.",
+      "range": {
+        "startLine": 129,
+        "startChar": 6,
+        "endLine": 129,
+        "endChar": 28
+      },
+      "revId": "14d366f029ce9a4b7f79817e43361d7abcc2c224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
