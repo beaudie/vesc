@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57027ef3_04edf12e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-10-11T14:00:02Z",
+      "side": 1,
+      "message": "scenarios typo",
+      "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16f619d8_640f7c5e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-10-11T14:00:02Z",
+      "side": 1,
+      "message": "So at the time of pool creation we fix each pool to a single descriptor type, and each pool will also have a uniform number of descriptors for each set allocated from the pool?\nJust verifying that I understand correctly.\nLots of testing we should do about if/how much this affects perf vs. other potential pool configs.",
+      "range": {
+        "startLine": 349,
+        "startChar": 0,
+        "endLine": 350,
+        "endChar": 68
+      },
+      "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04753b69_3a9cec81",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-10-11T14:00:02Z",
+      "side": 1,
+      "message": "Cool",
+      "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15bd2293_9a7e287d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-10-11T14:00:02Z",
+      "side": 1,
+      "message": "Is this b/c we should only allocateNewPool when we know that mCurrentPoolIndex is referenced or in use?",
+      "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9bda357_064e076f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-10-11T14:00:02Z",
+      "side": 1,
+      "message": "Incomplete comment",
+      "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b399924f_985d60f7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-10-11T14:00:02Z",
+      "side": 1,
+      "message": "Developers, the gauntlet has been cast... who will be the first to use 500001 descriptors? :)",
+      "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
