@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "a6f9a587_f1b003ac",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-11T21:57:30Z",
+      "side": 1,
+      "message": "nit: Do the assignment outside of the if-statement, it is difficult to read.",
+      "range": {
+        "startLine": 39,
+        "startChar": 8,
+        "endLine": 39,
+        "endChar": 51
+      },
+      "revId": "55c5946c5feaf1cfba34d01cde99da138bf67768",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5215b680_e44e1e33",
         "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
         "patchSetId": 5
