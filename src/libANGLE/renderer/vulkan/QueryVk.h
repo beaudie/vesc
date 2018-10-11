@@ -36,7 +36,10 @@ class QueryVk : public QueryImpl
   private:
     angle::Result getResult(const gl::Context *context, bool wait);
 
-    vk::QueryHelper mQueryHelper;
+    vk::QueryHelper mQueryHelper;  // Used for AnySamples, AnySamplesConservative, Timestamp and
+                                   // TimeElapsed (begin)
+    vk::QueryHelper mQueryHelperTimeElapsedEnd;  // An additional query used for TimeElapsed (end),
+                                                 // as it is implemented using Timestamp
     uint64_t mCachedResult;
     bool mCachedResultValid;
 };
