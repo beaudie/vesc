@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08a73e53_c8f347c7",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-11T15:17:29Z",
+      "side": 1,
+      "message": "This will cast the result to GLuint and then assign it to a ParamType.  Shouldn\u0027t it just be CastFromStateValue\u003cParamType\u003e?",
+      "range": {
+        "startLine": 419,
+        "startChar": 41,
+        "endLine": 419,
+        "endChar": 58
+      },
+      "revId": "aebf948bd71286be6189af2953eff28063bdc498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
