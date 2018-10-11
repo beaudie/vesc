@@ -427,6 +427,7 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
     void resetQueryPool(VkQueryPool queryPool, uint32_t firstQuery, uint32_t queryCount);
     void beginQuery(VkQueryPool queryPool, uint32_t query, VkQueryControlFlags flags);
     void endQuery(VkQueryPool queryPool, uint32_t query);
+    void queryCounter(VkPipelineStageFlagBits pipelineStage, VkQueryPool queryPool, uint32_t query);
 };
 
 class Image final : public WrappedObject<Image, VkImage>
