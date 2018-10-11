@@ -817,4 +817,8 @@ VkColorComponentFlags GetColorComponentFlags(bool red, bool green, bool blue, bo
 #define ANGLE_VK_CHECK_ALLOC(context, result) \
     ANGLE_VK_CHECK(context, result, VK_ERROR_OUT_OF_HOST_MEMORY)
 
+#define ANGLE_VK_UNREACHABLE(context) \
+    UNREACHABLE();                    \
+    ANGLE_VK_CHECK(context, false, VK_ERROR_FEATURE_NOT_PRESENT)
+
 #endif  // LIBANGLE_RENDERER_VULKAN_VK_UTILS_H_
