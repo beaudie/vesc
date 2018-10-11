@@ -582,6 +582,8 @@ angle::Result CommandGraph::submitCommands(Context *context,
             previousBarrier, &mNodes[previousBarrierIndex + 1], afterNodesCount);
     }
 
+    mLastBarrierIndex = kInvalidNodeIndex;
+
     VkCommandBufferAllocateInfo primaryInfo = {};
     primaryInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     primaryInfo.commandPool        = commandPool->getHandle();
@@ -589,11 +591,6 @@ angle::Result CommandGraph::submitCommands(Context *context,
     primaryInfo.commandBufferCount = 1;
 
     ANGLE_TRY(primaryCommandBufferOut->init(context, primaryInfo));
-
-    if (mNodes.empty())
-    {
-        return angle::Result::Continue();
-    }
 
     if (mEnableGraphDiagnostics)
     {
@@ -650,7 +647,6 @@ angle::Result CommandGraph::submitCommands(Context *context,
         delete node;
     }
     mNodes.clear();
-    mLastBarrierIndex = kInvalidNodeIndex;
 
     return angle::Result::Continue();
 }
