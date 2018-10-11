@@ -59,6 +59,23 @@
     },
     {
       "key": {
+        "uuid": "d18e65ee_62f6c2ea",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-11T15:44:28Z",
+      "side": 1,
+      "message": "If `bindingOut` has enough capacity and you are just going to allocate from it, then don\u0027t you need to update the serial too? That is in the `else` part of the outermost if.",
+      "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "15bd2293_9a7e287d",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -70,6 +87,24 @@
       "writtenOn": "2018-10-11T14:00:02Z",
       "side": 1,
       "message": "Is this b/c we should only allocateNewPool when we know that mCurrentPoolIndex is referenced or in use?",
+      "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5491b7e_7a24238f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-11T15:44:28Z",
+      "side": 1,
+      "message": "Looks odd to me too. What\u0027s wrong with reusing the same pool you were using as long as it\u0027s not in use?",
+      "parentUuid": "15bd2293_9a7e287d",
       "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
