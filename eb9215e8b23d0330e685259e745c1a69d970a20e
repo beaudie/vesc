@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19eef897_747977bb",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-11T16:12:12Z",
+      "side": 1,
+      "message": "Desktop GL says:\n\n\u003e glGetQueryObject implicitly flushes the GL pipeline...\n\nWhile GLES says:\n\n\u003e When pname is GL_QUERY_RESULT, glGetQueryObjectuiv implicitly flushes the GL pipeline...\n\n\u003e Repeatedly querying the GL_QUERY_RESULT_AVAILABLE state for any given query object is guaranteed to return true eventually.\n\nGLES makes a distinction between GL_QUERY_RESULT and GL_QUERY_RESULT_AVAILABLE, which seems unnecessary. Repeatedly querying the GL_QUERY_RESULT_AVAILABLE state cannot eventually return true until it implicitly flushes the GL pipeline!\n\nBased on this reasoning, I always do a flush regarding of what parameter is given to `glGetQueryObject*`.",
+      "revId": "eb9215e8b23d0330e685259e745c1a69d970a20e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
