@@ -69,6 +69,17 @@ class EGLContextCompatibilityTest : public EGLTest,
         return (samples > 1);
     }
 
+    // The only configs with 16-bits for each of red, green, blue, and alpha is GL_RGBA16F
+    bool isRGBA16FConfig(EGLConfig config)
+    {
+        EGLint red, green, blue, alpha;
+        eglGetConfigAttrib(mDisplay, config, EGL_RED_SIZE, &red);
+        eglGetConfigAttrib(mDisplay, config, EGL_GREEN_SIZE, &green);
+        eglGetConfigAttrib(mDisplay, config, EGL_BLUE_SIZE, &blue);
+        eglGetConfigAttrib(mDisplay, config, EGL_ALPHA_SIZE, &alpha);
+        return ((red == 16) && (green == 16) && (blue == 16) && (alpha == 16));
+    }
+
     bool areConfigsCompatible(EGLConfig c1, EGLConfig c2, EGLint surfaceBit)
     {
         EGLint colorBufferType1, colorBufferType2;
@@ -238,7 +249,7 @@ TEST_P(EGLContextCompatibilityTest, WindowSameConfig)
         {
             // Disabling multisampled configurations due to test instability with various graphics
             // cards
-            if (isMultisampledConfig(config))
+            if (isMultisampledConfig(config) || isRGBA16FConfig(config))
             {
                 continue;
             }
@@ -285,7 +296,7 @@ TEST_P(EGLContextCompatibilityTest, WindowDifferentConfig)
     {
         EGLConfig config1 = mConfigs[i];
         // Disabling multisampled configurations due to test instability with various graphics cards
-        if (isMultisampledConfig(config1))
+        if (isMultisampledConfig(config1) || isRGBA16FConfig(config1))
         {
             continue;
         }
@@ -304,7 +315,7 @@ TEST_P(EGLContextCompatibilityTest, WindowDifferentConfig)
             EGLConfig config2 = mConfigs[j];
             // Disabling multisampled configurations due to test instability with various graphics
             // cards
-            if (isMultisampledConfig(config2))
+            if (isMultisampledConfig(config2) || isRGBA16FConfig(config2))
             {
                 continue;
             }
