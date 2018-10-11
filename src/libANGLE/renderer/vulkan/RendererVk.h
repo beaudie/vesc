@@ -19,6 +19,7 @@
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/FeaturesVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
+#include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_internal_shaders.h"
 
 namespace egl
@@ -72,9 +73,7 @@ class RendererVk : angle::NonCopyable
                                                uint32_t *presentQueueOut);
 
     angle::Result finish(vk::Context *context);
-    angle::Result flush(vk::Context *context,
-                        const vk::Semaphore &waitSemaphore,
-                        const vk::Semaphore &signalSemaphore);
+    angle::Result flush(vk::Context *context);
 
     const vk::CommandPool &getCommandPool() const;
 
@@ -145,6 +144,17 @@ class RendererVk : angle::NonCopyable
 
     angle::Result syncPipelineCacheVk(DisplayVk *displayVk);
 
+    vk::DynamicSemaphorePool *getDynamicSemaphorePool() { return &mSubmitSemaphorePool; }
+
+    // Set a semaphore to wait on the first submission.
+    void setSubmitWaitSemaphore(const vk::Semaphore *semaphore)
+    {
+        mSubmitWaitSemaphore = semaphore;
+    }
+    // Get the last signaled semaphore to wait on externally.  The semaphore will not be waited on
+    // by next submission.
+    const vk::Semaphore *getSubmitLastSignaledSemaphore(vk::Context *context);
+
     // This should only be called from ResourceVk.
     // TODO(jmadill): Keep in ContextVk to enable threaded rendering.
     vk::CommandGraph *getCommandGraph();
@@ -158,6 +168,9 @@ class RendererVk : angle::NonCopyable
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
+    void getSubmitWaitSemaphores(vk::Context *context,
+                                 VkSemaphore *waitSemaphores,
+                                 uint32_t *outWaitSemaphoreCount);
     angle::Result submitFrame(vk::Context *context,
                               const VkSubmitInfo &submitInfo,
                               vk::CommandBuffer &&commandBuffer);
@@ -218,6 +231,21 @@ class RendererVk : angle::NonCopyable
     vk::PipelineCache mPipelineCacheVk;
     egl::BlobCache::Key mPipelineCacheVkBlobKey;
     uint32_t mPipelineCacheVkUpdateTimeout;
+
+    // mSubmitWaitSemaphore is a specifically requested semaphore to be waited on before a command
+    // buffer submission, for example to set this to the semaphore that surface's
+    // acquire image signals.  After first use, it's automatically reset to
+    // nullptr.
+    const vk::Semaphore *mSubmitWaitSemaphore;
+    // mSubmitLastSignaledSemaphore shows which semaphore was last signaled by submission.  This can
+    // be set to nullptr if retrieved to be waited on outside RendererVk, such
+    // as by the surface before presentation.  Each submission waits on the
+    // previously signalled semaphore (possibly as well as
+    // mSubmitWaitSemaphore) and allocates a new semaphore to signal.
+    vk::SemaphoreHelper mSubmitLastSignaledSemaphore;
+
+    // A pool of semaphores used to support the aforementioned mid-frame submissions.
+    vk::DynamicSemaphorePool mSubmitSemaphorePool;
 
     // See CommandGraph.h for a desription of the Command Graph.
     vk::CommandGraph mCommandGraph;
