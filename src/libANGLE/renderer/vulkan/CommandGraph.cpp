@@ -65,6 +65,8 @@ const char *GetResourceTypeName(CommandGraphResourceType resourceType,
                     return "BeginQuery";
                 case CommandGraphNodeFunction::EndQuery:
                     return "EndQuery";
+                case CommandGraphNodeFunction::QueryCounter:
+                    return "QueryCounter";
                 default:
                     return "Query";
             }
@@ -192,6 +194,14 @@ void CommandGraphResource::endQuery(Context *context,
                                     uint32_t queryIndex)
 {
     startNewCommands(context->getRenderer(), CommandGraphNodeFunction::EndQuery);
+    mCurrentWritingNode->setQueryPool(queryPool, queryIndex);
+}
+
+void CommandGraphResource::queryCounter(Context *context,
+                                        const QueryPool *queryPool,
+                                        uint32_t queryIndex)
+{
+    startNewCommands(context->getRenderer(), CommandGraphNodeFunction::QueryCounter);
     mCurrentWritingNode->setQueryPool(queryPool, queryIndex);
 }
 
@@ -386,7 +396,8 @@ bool CommandGraphNode::hasParents() const
 void CommandGraphNode::setQueryPool(const QueryPool *queryPool, uint32_t queryIndex)
 {
     ASSERT(mFunction == CommandGraphNodeFunction::BeginQuery ||
-           mFunction == CommandGraphNodeFunction::EndQuery);
+           mFunction == CommandGraphNodeFunction::EndQuery ||
+           mFunction == CommandGraphNodeFunction::QueryCounter);
     mQueryPool  = queryPool->getHandle();
     mQueryIndex = queryIndex;
 }
@@ -482,7 +493,9 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
             ASSERT(!mOutsideRenderPassCommands.valid() && !mInsideRenderPassCommands.valid());
             ASSERT(mQueryPool != VK_NULL_HANDLE);
 
+fprintf(stderr, "xxxx CG reset query pool %p, %u\n", mQueryPool, mQueryIndex);
             primaryCommandBuffer->resetQueryPool(mQueryPool, mQueryIndex, 1);
+fprintf(stderr, "xxxx CG beginQuery %p, %u\n", mQueryPool, mQueryIndex);
             primaryCommandBuffer->beginQuery(mQueryPool, mQueryIndex, 0);
 
             break;
@@ -491,7 +504,20 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
             ASSERT(!mOutsideRenderPassCommands.valid() && !mInsideRenderPassCommands.valid());
             ASSERT(mQueryPool != VK_NULL_HANDLE);
 
+fprintf(stderr, "xxxx CG endQuery %p, %u\n", mQueryPool, mQueryIndex);
             primaryCommandBuffer->endQuery(mQueryPool, mQueryIndex);
+
+            break;
+
+        case CommandGraphNodeFunction::QueryCounter:
+            ASSERT(!mOutsideRenderPassCommands.valid() && !mInsideRenderPassCommands.valid());
+            ASSERT(mQueryPool != VK_NULL_HANDLE);
+
+fprintf(stderr, "xxxx CG reset query pool %p, %u\n", mQueryPool, mQueryIndex);
+            primaryCommandBuffer->resetQueryPool(mQueryPool, mQueryIndex, 1);
+fprintf(stderr, "xxxx CG queryCounter %p, %u\n", mQueryPool, mQueryIndex);
+            primaryCommandBuffer->queryCounter(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, mQueryPool,
+                                               mQueryIndex);
 
             break;
 
