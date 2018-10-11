@@ -249,8 +249,7 @@ WindowSurfaceVk::SwapchainImage::SwapchainImage(SwapchainImage &&other)
     : image(std::move(other.image)),
       imageView(std::move(other.imageView)),
       framebuffer(std::move(other.framebuffer)),
-      imageAcquiredSemaphore(std::move(other.imageAcquiredSemaphore)),
-      commandsCompleteSemaphore(std::move(other.commandsCompleteSemaphore))
+      imageAcquiredSemaphore(std::move(other.imageAcquiredSemaphore))
 {
 }
 
@@ -298,7 +297,6 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
         swapchainImage.imageView.destroy(device);
         swapchainImage.framebuffer.destroy(device);
         swapchainImage.imageAcquiredSemaphore.destroy(device);
-        swapchainImage.commandsCompleteSemaphore.destroy(device);
     }
 
     if (mSwapchain)
@@ -498,7 +496,6 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
         member.image.clearColor(transparentBlack, 0, 1, commandBuffer);
 
         ANGLE_TRY(member.imageAcquiredSemaphore.init(displayVk));
-        ANGLE_TRY(member.commandsCompleteSemaphore.init(displayVk));
     }
 
     // Get the first available swapchain iamge.
@@ -570,13 +567,16 @@ angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk)
                                        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                        VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, swapCommands);
 
-    ANGLE_TRY(
-        renderer->flush(displayVk, image.imageAcquiredSemaphore, image.commandsCompleteSemaphore));
+    ANGLE_TRY(renderer->flush(displayVk));
+
+    // Ask the renderer what semaphore it signalled in the last flush.
+    const vk::Semaphore *commandsCompleteSemaphore = renderer->getPostSubmitSemaphore();
+    ASSERT(commandsCompleteSemaphore);
 
     VkPresentInfoKHR presentInfo   = {};
     presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
     presentInfo.waitSemaphoreCount = 1;
-    presentInfo.pWaitSemaphores    = image.commandsCompleteSemaphore.ptr();
+    presentInfo.pWaitSemaphores    = commandsCompleteSemaphore->ptr();
     presentInfo.swapchainCount     = 1;
     presentInfo.pSwapchains        = &mSwapchain;
     presentInfo.pImageIndices      = &mCurrentSwapchainImageIndex;
@@ -604,6 +604,9 @@ angle::Result WindowSurfaceVk::nextSwapchainImage(DisplayVk *displayVk)
 
     // Swap the unused swapchain semaphore and the now active spare semaphore.
     std::swap(image.imageAcquiredSemaphore, mAcquireNextImageSemaphore);
+
+    // Tell the renderer what semaphore to wait on for its first flush.
+    displayVk->getRenderer()->setPreSubmitSemaphore(&image.imageAcquiredSemaphore);
 
     // Update RenderTarget pointers.
     mColorRenderTarget.updateSwapchainImage(&image.image, &image.imageView);

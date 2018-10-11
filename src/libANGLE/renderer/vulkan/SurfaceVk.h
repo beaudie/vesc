@@ -169,7 +169,6 @@ class WindowSurfaceVk : public SurfaceImpl
         vk::ImageView imageView;
         vk::Framebuffer framebuffer;
         vk::Semaphore imageAcquiredSemaphore;
-        vk::Semaphore commandsCompleteSemaphore;
     };
 
     std::vector<SwapchainImage> mSwapchainImages;
