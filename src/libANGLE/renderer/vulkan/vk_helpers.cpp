@@ -351,45 +351,112 @@ void DynamicDescriptorPool::setMaxSetsPerPoolForTesting(uint32_t maxSetsPerPool)
     mMaxSetsPerPool = maxSetsPerPool;
 }
 
-// DynamicQueryPool implementation
-DynamicQueryPool::DynamicQueryPool() : mPoolSize(0), mCurrentQueryPool(0), mCurrentFreeQuery(0)
+// DynamicallyGrowingPool implementation
+template <typename Pool>
+DynamicallyGrowingPool<Pool>::DynamicallyGrowingPool()
+    : mPoolSize(0), mCurrentPool(0), mCurrentFreeEntry(0)
 {
 }
+
+template <typename Pool>
+DynamicallyGrowingPool<Pool>::~DynamicallyGrowingPool() = default;
+
+template <typename Pool>
+angle::Result DynamicallyGrowingPool<Pool>::init(Context *context, uint32_t poolSize)
+{
+    ASSERT(mPools.empty() && mPoolStats.empty());
+    mPoolSize = poolSize;
+    return angle::Result::Continue();
+}
+
+template <typename Pool>
+void DynamicallyGrowingPool<Pool>::destroy()
+{
+    mPools.clear();
+    mPoolStats.clear();
+}
+
+template <typename Pool>
+bool DynamicallyGrowingPool<Pool>::findFreePool(Context *context)
+{
+    Serial lastCompletedQueueSerial = context->getRenderer()->getLastCompletedQueueSerial();
+    for (size_t i = 0; i < mPools.size(); ++i)
+    {
+        if (mPoolStats[i].freedCount == mPoolSize &&
+            mPoolStats[i].serial <= lastCompletedQueueSerial)
+        {
+            mCurrentPool      = i;
+            mCurrentFreeEntry = 0;
+
+            mPoolStats[i].freedCount = 0;
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+template <typename Pool>
+angle::Result DynamicallyGrowingPool<Pool>::allocateNewPool(Context *context, Pool &&pool)
+{
+    mPools.push_back(std::move(pool));
+
+    PoolStats poolStats = {0, Serial()};
+    mPoolStats.push_back(poolStats);
+
+    mCurrentPool      = mPools.size() - 1;
+    mCurrentFreeEntry = 0;
+
+    return angle::Result::Continue();
+}
+
+template <typename Pool>
+void DynamicallyGrowingPool<Pool>::freedEntry(Context *context, size_t poolIndex)
+{
+    ASSERT(poolIndex < mPoolStats.size() && mPoolStats[poolIndex].freedCount < mPoolSize);
+
+    // Take note of the current serial to avoid reallocating a query in the same pool
+    mPoolStats[poolIndex].serial = context->getRenderer()->getCurrentQueueSerial();
+    ++mPoolStats[poolIndex].freedCount;
+}
+
+// DynamicQueryPool implementation
+DynamicQueryPool::DynamicQueryPool() = default;
 
 DynamicQueryPool::~DynamicQueryPool() = default;
 
 angle::Result DynamicQueryPool::init(Context *context, VkQueryType type, uint32_t poolSize)
 {
-    ASSERT(mQueryPools.empty() && mQueryPoolStats.empty());
+    ANGLE_TRY(DynamicallyGrowingPool::init(context, poolSize));
 
-    mPoolSize  = poolSize;
     mQueryType = type;
     ANGLE_TRY(allocateNewPool(context));
+
     return angle::Result::Continue();
 }
 
 void DynamicQueryPool::destroy(VkDevice device)
 {
-    for (QueryPool &queryPool : mQueryPools)
+    for (QueryPool &queryPool : mPools)
     {
         queryPool.destroy(device);
     }
 
-    mQueryPools.clear();
-    mQueryPoolStats.clear();
+    DynamicallyGrowingPool::destroy();
 }
 
 angle::Result DynamicQueryPool::allocateQuery(Context *context, QueryHelper *queryOut)
 {
     ASSERT(!queryOut->getQueryPool());
 
-    if (mCurrentFreeQuery >= mPoolSize)
+    if (mCurrentFreeEntry >= mPoolSize)
     {
         // No more queries left in this pool, create another one.
         ANGLE_TRY(allocateNewPool(context));
     }
 
-    queryOut->init(this, mCurrentQueryPool, mCurrentFreeQuery++);
+    queryOut->init(this, mCurrentPool, mCurrentFreeEntry++);
 
     return angle::Result::Continue();
 }
@@ -399,32 +466,18 @@ void DynamicQueryPool::freeQuery(Context *context, QueryHelper *query)
     if (query->getQueryPool())
     {
         size_t poolIndex = query->getQueryPoolIndex();
-        ASSERT(query->getQueryPool()->valid() && poolIndex < mQueryPoolStats.size() &&
-               mQueryPoolStats[poolIndex].freedCount < mPoolSize);
+        ASSERT(query->getQueryPool()->valid());
 
-        ++mQueryPoolStats[poolIndex].freedCount;
+        freedEntry(context, poolIndex);
         query->deinit();
-
-        // Take note of the current serial to avoid reallocating a query in the same pool
-        mQueryPoolStats[poolIndex].serial = context->getRenderer()->getCurrentQueueSerial();
     }
 }
 
 angle::Result DynamicQueryPool::allocateNewPool(Context *context)
 {
-    // Before allocating a new pool, see if a previously allocated pool is completely freed up.
-    // In that case, use that older pool instead.
-    Serial lastCompletedQueueSerial = context->getRenderer()->getLastCompletedQueueSerial();
-    for (size_t i = 0; i < mQueryPools.size(); ++i)
+    if (findFreePool(context))
     {
-        if (mQueryPoolStats[i].freedCount == mPoolSize &&
-            mQueryPoolStats[i].serial <= lastCompletedQueueSerial)
-        {
-            mCurrentQueryPool = i;
-            mCurrentFreeQuery = 0;
-
-            return angle::Result::Continue();
-        }
+        return angle::Result::Continue();
     }
 
     VkQueryPoolCreateInfo queryPoolInfo = {};
@@ -438,15 +491,7 @@ angle::Result DynamicQueryPool::allocateNewPool(Context *context)
 
     ANGLE_TRY(queryPool.init(context, queryPoolInfo));
 
-    mQueryPools.push_back(std::move(queryPool));
-
-    QueryPoolStats poolStats = {0, Serial()};
-    mQueryPoolStats.push_back(poolStats);
-
-    mCurrentQueryPool = mQueryPools.size() - 1;
-    mCurrentFreeQuery = 0;
-
-    return angle::Result::Continue();
+    return DynamicallyGrowingPool::allocateNewPool(context, std::move(queryPool));
 }
 
 // QueryHelper implementation
@@ -476,6 +521,102 @@ void QueryHelper::deinit()
     mDynamicQueryPool = nullptr;
     mQueryPoolIndex   = 0;
     mQuery            = 0;
+}
+
+// DynamicSemaphorePool implementation
+DynamicSemaphorePool::DynamicSemaphorePool() = default;
+
+DynamicSemaphorePool::~DynamicSemaphorePool() = default;
+
+angle::Result DynamicSemaphorePool::init(Context *context, uint32_t poolSize)
+{
+    ANGLE_TRY(DynamicallyGrowingPool::init(context, poolSize));
+    ANGLE_TRY(allocateNewPool(context));
+    return angle::Result::Continue();
+}
+
+void DynamicSemaphorePool::destroy(VkDevice device)
+{
+    for (auto &semaphorePool : mPools)
+    {
+        for (Semaphore &semaphore : semaphorePool)
+        {
+            semaphore.destroy(device);
+        }
+    }
+
+    DynamicallyGrowingPool::destroy();
+}
+
+angle::Result DynamicSemaphorePool::allocateSemaphore(Context *context,
+                                                      SemaphoreHelper *semaphoreOut)
+{
+    ASSERT(!semaphoreOut->getSemaphore());
+
+    if (mCurrentFreeEntry >= mPoolSize)
+    {
+        // No more queries left in this pool, create another one.
+        ANGLE_TRY(allocateNewPool(context));
+    }
+
+    semaphoreOut->init(mCurrentPool, &mPools[mCurrentPool][mCurrentFreeEntry++]);
+
+    return angle::Result::Continue();
+}
+
+void DynamicSemaphorePool::freeSemaphore(Context *context, SemaphoreHelper *semaphore)
+{
+    if (semaphore->getSemaphore())
+    {
+        freedEntry(context, semaphore->getSemaphorePoolIndex());
+        semaphore->deinit();
+    }
+}
+
+angle::Result DynamicSemaphorePool::allocateNewPool(Context *context)
+{
+    if (findFreePool(context))
+    {
+        return angle::Result::Continue();
+    }
+
+    std::vector<Semaphore> newPool(mPoolSize);
+
+    for (Semaphore &semaphore : newPool)
+    {
+        ANGLE_TRY(semaphore.init(context));
+    }
+
+    // This code is safe as long as the growth of the outer vector in vector<vector<T>> is done by
+    // moving the inner vectors, making sure references to the inner vector remain intact.
+    Semaphore *assertMove = mPools.size() > 0 ? mPools[0].data() : nullptr;
+
+    ANGLE_TRY(DynamicallyGrowingPool::allocateNewPool(context, std::move(newPool)));
+
+    ASSERT(assertMove == nullptr || assertMove == mPools[0].data());
+
+    return angle::Result::Continue();
+}
+
+// SemaphoreHelper implementation
+SemaphoreHelper::SemaphoreHelper() : mSemaphorePoolIndex(0), mSemaphore(0)
+{
+}
+
+SemaphoreHelper::~SemaphoreHelper()
+{
+}
+
+void SemaphoreHelper::init(const size_t semaphorePoolIndex, const vk::Semaphore *semaphore)
+{
+    mSemaphorePoolIndex = semaphorePoolIndex;
+    mSemaphore          = semaphore;
+}
+
+void SemaphoreHelper::deinit()
+{
+    mSemaphorePoolIndex = 0;
+    mSemaphore          = nullptr;
 }
 
 // LineLoopHelper implementation.
