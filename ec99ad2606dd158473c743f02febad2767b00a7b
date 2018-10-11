@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "776259b1_19ed6245",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 5297,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-11T22:14:53Z",
+      "side": 1,
+      "message": "Intentional \u003d yes. The previous order was inconsistent with \"prepareForDraw\" and I think it was in fact wrong. Could ussie incorrect GL command sequencing during state sync. This CL uncovered this bug.",
+      "parentUuid": "32826fa4_ac6ad0a3",
+      "range": {
+        "startLine": 5289,
+        "startChar": 0,
+        "endLine": 5297,
+        "endChar": 0
+      },
+      "revId": "ec99ad2606dd158473c743f02febad2767b00a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aac27845_80d7a0e0",
         "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
         "patchSetId": 20
@@ -45,6 +69,30 @@
       "revId": "ec99ad2606dd158473c743f02febad2767b00a7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c3d4f84_dfdefb44",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-11T22:14:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aac27845_80d7a0e0",
+      "range": {
+        "startLine": 744,
+        "startChar": 0,
+        "endLine": 744,
+        "endChar": 81
+      },
+      "revId": "ec99ad2606dd158473c743f02febad2767b00a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "bcac3b4c_3f2878af",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-11T22:14:53Z",
+      "side": 1,
+      "message": "Context: CHROMIUM_path_rendering aka NV_path_rendering. It\u0027s a really weird extension. I don\u0027t think it\u0027s used anywhere. But AFAIK it can work with and without a program. So we need to sync the Program bits. And also handle the situation where there is no Program. These lines were necessary to pass the angle_end2end_tests that were contributed by NV.",
+      "parentUuid": "13036f15_898ae3d9",
+      "range": {
+        "startLine": 869,
+        "startChar": 7,
+        "endLine": 869,
+        "endChar": 60
+      },
+      "revId": "ec99ad2606dd158473c743f02febad2767b00a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f596cfda_80dab304",
         "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
         "patchSetId": 20
@@ -91,6 +163,30 @@
       "revId": "ec99ad2606dd158473c743f02febad2767b00a7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47e91caa_2eaafa50",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1987,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-11T22:14:53Z",
+      "side": 1,
+      "message": "I don\u0027t think we need to explicitly check for the compute stage. If a compute program uses multiview, more power to it!\n\nThe inline check is not necessary for correctness but does improve performance. I made this into an inline check + impl method so we don\u0027t duplicate the check in multiview scenarios.",
+      "parentUuid": "f596cfda_80dab304",
+      "range": {
+        "startLine": 1987,
+        "startChar": 24,
+        "endLine": 1987,
+        "endChar": 71
+      },
+      "revId": "ec99ad2606dd158473c743f02febad2767b00a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
