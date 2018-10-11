@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cd75e345_b31433e6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2018-10-11T20:32:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36f67d05_d7245073",
+      "revId": "fd07029d431560176a519c63901d24e01e9a098b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a94a0787_cd72eda5",
         "filename": "src/compiler/translator/SymbolTable_autogen.cpp",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "3c96e460_661441e5",
+        "filename": "src/compiler/translator/SymbolTable_autogen.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2018-10-11T20:32:56Z",
+      "side": 1,
+      "message": "I think it should be okay for this to be a highp int.\n\nHere\u0027s what I found:\n\nOpenGL ES Shading Language 1.00 Spec\nhttps://www.khronos.org/files/opengles_shading_language.pdf\n\n4.3.4\nThe uniform qualifier can be used with any of the basic data types, or when declaring a variable whose\ntype is a structure, or an array of any of these.\n\n4.5.1\nThe vertex language must provide an integer precision of at least 16 bits, plus a sign bit.\n\n4.5.2\nAny floating point or integer declaration can have the type preceded by one of these precision qualifiers:\nhighp: Satisfies the minimum requirements for the vertex language described\nabove. Optional in the fragment language.\n\nThe vertex language requires any uses of lowp, mediump and highp to compile and link without error.\nThe fragment language requires any uses of lowp and mediump to compile without error. Support for\nhighp is optional.\n\nEssentially, it seems like \n1) You can use `uniform` with `int` because it it is one of the basic types\n2) highp is required in the vertex shader and is at least 16+1 bits\n3) \"any\" integer declaration can be highp -- so this should be permitted for uniforms",
+      "parentUuid": "a94a0787_cd72eda5",
+      "revId": "fd07029d431560176a519c63901d24e01e9a098b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "44608a2f_c389b8f7",
         "filename": "src/compiler/translator/tree_ops/EmulateGLDrawID.cpp",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2018-10-10T18:47:30Z",
       "side": 1,
       "message": "If we decide there *is* a specified precision for gl_DrawID, then I think it needs to be specified here too (on the generated uniform).",
+      "revId": "fd07029d431560176a519c63901d24e01e9a098b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf18edf2_065224cc",
+        "filename": "src/compiler/translator/tree_ops/EmulateGLDrawID.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2018-10-11T20:32:56Z",
+      "side": 1,
+      "message": "I haven\u0027t found anything specific regarding the precision of gl_DrawID or any of the vertex built-ins. Where would that be found?",
+      "parentUuid": "44608a2f_c389b8f7",
       "revId": "fd07029d431560176a519c63901d24e01e9a098b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
