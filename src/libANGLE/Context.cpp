@@ -4548,7 +4548,7 @@ void Context::clearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha
 
 void Context::clearDepthf(GLfloat depth)
 {
-    mGLState.setDepthClearValue(depth);
+    mGLState.setDepthClearValue(clamp01(depth));
 }
 
 void Context::clearStencil(GLint s)
@@ -4579,7 +4579,7 @@ void Context::depthMask(GLboolean flag)
 
 void Context::depthRangef(GLfloat zNear, GLfloat zFar)
 {
-    mGLState.setDepthRange(zNear, zFar);
+    mGLState.setDepthRange(clamp01(zNear), clamp01(zFar));
 }
 
 void Context::disable(GLenum cap)
