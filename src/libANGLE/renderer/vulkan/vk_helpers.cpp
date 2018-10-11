@@ -454,6 +454,7 @@ angle::Result DynamicQueryPool::allocateQuery(Context *context, QueryHelper *que
         ANGLE_TRY(allocateNewPool(context));
     }
 
+fprintf(stderr, "** Query allocated: %zu (%p), %u\n", mCurrentPool, &mPools[mCurrentPool], mCurrentFreeEntry);
     queryOut->init(this, mCurrentPool, mCurrentFreeEntry++);
 
     return angle::Result::Continue();
@@ -466,6 +467,7 @@ void DynamicQueryPool::freeQuery(Context *context, QueryHelper *query)
         size_t poolIndex = query->getQueryPoolIndex();
         ASSERT(query->getQueryPool()->valid());
 
+fprintf(stderr, "** Query freed: %zu (%p)\n", poolIndex, &mPools[poolIndex]);
         freedEntry(context, poolIndex);
         query->deinit();
     }
