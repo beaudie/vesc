@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "2c4be480_a3b13487",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-11T08:02:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0923552_469b5d5e",
+      "revId": "a25a230f1629ea57b94172cbe51754a16754024d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "939e6b58_b554807f",
         "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
         "patchSetId": 2
@@ -59,6 +77,30 @@
     },
     {
       "key": {
+        "uuid": "1e41801f_9a8c3be9",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-11T08:02:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "939e6b58_b554807f",
+      "range": {
+        "startLine": 55,
+        "startChar": 17,
+        "endLine": 55,
+        "endChar": 22
+      },
+      "revId": "a25a230f1629ea57b94172cbe51754a16754024d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70f0139c_929f5f47",
         "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
         "patchSetId": 2
@@ -70,6 +112,30 @@
       "writtenOn": "2018-10-10T08:33:54Z",
       "side": 1,
       "message": "What is str? (would disappear when outputting to \"out\" anyway)",
+      "range": {
+        "startLine": 57,
+        "startChar": 50,
+        "endLine": 57,
+        "endChar": 53
+      },
+      "revId": "a25a230f1629ea57b94172cbe51754a16754024d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21e86143_63ce45e2",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-11T08:02:27Z",
+      "side": 1,
+      "message": "str will convert the data to string so that it can be used as the left of \u0027+\u0027. Yes we don\u0027t need it if we directly output to \u0027out\u0027.",
+      "parentUuid": "70f0139c_929f5f47",
       "range": {
         "startLine": 57,
         "startChar": 50,
@@ -128,6 +194,54 @@
     },
     {
       "key": {
+        "uuid": "1d93c5ce_7d24ab7b",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-11T08:02:27Z",
+      "side": 1,
+      "message": "Sorry, it shouldn\u0027t be a hard code here. Currently, packed and std140 are both 16. I have changed it to use encoder to get right matrix stride. Thanks.",
+      "parentUuid": "f4bb0e13_e126e792",
+      "range": {
+        "startLine": 58,
+        "startChar": 38,
+        "endLine": 58,
+        "endChar": 40
+      },
+      "revId": "a25a230f1629ea57b94172cbe51754a16754024d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dc99334_45223335",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-11T08:02:27Z",
+      "side": 1,
+      "message": "Yes, it won\u0027t report error.",
+      "parentUuid": "45dc6d8d_0aa15233",
+      "range": {
+        "startLine": 58,
+        "startChar": 47,
+        "endLine": 58,
+        "endChar": 48
+      },
+      "revId": "a25a230f1629ea57b94172cbe51754a16754024d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c6e17ec3_beb18f99",
         "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
         "patchSetId": 2
@@ -148,6 +262,30 @@
       "revId": "a25a230f1629ea57b94172cbe51754a16754024d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63c25c2d_dd48e223",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-11T08:02:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6e17ec3_beb18f99",
+      "range": {
+        "startLine": 89,
+        "startChar": 17,
+        "endLine": 89,
+        "endChar": 22
+      },
+      "revId": "a25a230f1629ea57b94172cbe51754a16754024d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -174,6 +312,30 @@
     },
     {
       "key": {
+        "uuid": "0def6191_cb87a7bf",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-11T08:02:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4ae675c_1d99002a",
+      "range": {
+        "startLine": 91,
+        "startChar": 92,
+        "endLine": 91,
+        "endChar": 94
+      },
+      "revId": "a25a230f1629ea57b94172cbe51754a16754024d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "382039c0_27989e87",
         "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
         "patchSetId": 2
@@ -197,6 +359,30 @@
     },
     {
       "key": {
+        "uuid": "d049f250_1b25a06f",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-11T08:02:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "382039c0_27989e87",
+      "range": {
+        "startLine": 232,
+        "startChar": 7,
+        "endLine": 232,
+        "endChar": 14
+      },
+      "revId": "a25a230f1629ea57b94172cbe51754a16754024d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60d24ea7_6cb3f6be",
         "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
         "patchSetId": 2
@@ -214,6 +400,24 @@
     },
     {
       "key": {
+        "uuid": "de874c2a_91e53927",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-11T08:02:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60d24ea7_6cb3f6be",
+      "revId": "a25a230f1629ea57b94172cbe51754a16754024d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b6b1d970_15343f08",
         "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
         "patchSetId": 2
@@ -225,6 +429,30 @@
       "writtenOn": "2018-10-10T08:33:54Z",
       "side": 1,
       "message": "I think this should be 8 instead according to the std140 rules but I might be wrong",
+      "range": {
+        "startLine": 283,
+        "startChar": 27,
+        "endLine": 283,
+        "endChar": 40
+      },
+      "revId": "a25a230f1629ea57b94172cbe51754a16754024d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6de86e19_83fd090e",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-11T08:02:27Z",
+      "side": 1,
+      "message": "See https://www.khronos.org/registry/OpenGL/specs/es/3.1/es_spec_3.1.pdf  ES3.1 spec, session 7.6.2.2 \"Standard Uniform Block Layout\", rule 4:\nIf the member is an array of scalars or vectors, the base alignment and array\nstride are set to match the base alignment of a single array element, according\nto rules (1), (2), and (3), and rounded up to the base alignment of a vec4.\n\nSo I think the kVectorStride is the size of vec4 for std140.",
+      "parentUuid": "b6b1d970_15343f08",
       "range": {
         "startLine": 283,
         "startChar": 27,
@@ -300,6 +528,24 @@
     },
     {
       "key": {
+        "uuid": "48c77e97_66ab7262",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-11T08:02:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e8ac28f_3ff54998",
+      "revId": "a25a230f1629ea57b94172cbe51754a16754024d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a61b632_9dd3f574",
         "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
         "patchSetId": 2
@@ -323,6 +569,30 @@
     },
     {
       "key": {
+        "uuid": "39aee365_0455054d",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-11T08:02:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a61b632_9dd3f574",
+      "range": {
+        "startLine": 311,
+        "startChar": 22,
+        "endLine": 313,
+        "endChar": 86
+      },
+      "revId": "a25a230f1629ea57b94172cbe51754a16754024d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fb9079af_a5f69507",
         "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
         "patchSetId": 2
@@ -337,6 +607,24 @@
       "revId": "a25a230f1629ea57b94172cbe51754a16754024d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03862a1b_14ae6345",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-11T08:02:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb9079af_a5f69507",
+      "revId": "a25a230f1629ea57b94172cbe51754a16754024d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
