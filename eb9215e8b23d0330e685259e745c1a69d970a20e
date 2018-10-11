@@ -16,6 +16,24 @@
       "revId": "eb9215e8b23d0330e685259e745c1a69d970a20e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "687a39fd_a81e4bf0",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-11T19:57:52Z",
+      "side": 1,
+      "message": "I think GL_QUERY_RESULT_AVAILABLE will eventually return true because the previous commands will be executed \"eventually\", for some internal logic of the driver when to execute the commands. I think with explicit flush you might speed things up a bit.",
+      "parentUuid": "19eef897_747977bb",
+      "revId": "eb9215e8b23d0330e685259e745c1a69d970a20e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
