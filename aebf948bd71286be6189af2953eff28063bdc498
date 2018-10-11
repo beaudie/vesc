@@ -22,6 +22,30 @@
       "revId": "aebf948bd71286be6189af2953eff28063bdc498",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "586bcda4_50386796",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1307868
+      },
+      "writtenOn": "2018-10-11T16:34:18Z",
+      "side": 1,
+      "message": "Your suggestion did not compile.\n\nI don\u0027t really know how these helpers work. If you want something else there, please do the change yourself.",
+      "parentUuid": "08a73e53_c8f347c7",
+      "range": {
+        "startLine": 419,
+        "startChar": 41,
+        "endLine": 419,
+        "endChar": 58
+      },
+      "revId": "aebf948bd71286be6189af2953eff28063bdc498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
