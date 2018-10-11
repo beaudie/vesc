@@ -19,6 +19,7 @@
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/FeaturesVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
+#include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_internal_shaders.h"
 
 namespace egl
@@ -72,9 +73,7 @@ class RendererVk : angle::NonCopyable
                                                uint32_t *presentQueueOut);
 
     angle::Result finish(vk::Context *context);
-    angle::Result flush(vk::Context *context,
-                        const vk::Semaphore &waitSemaphore,
-                        const vk::Semaphore &signalSemaphore);
+    angle::Result flush(vk::Context *context);
 
     const vk::CommandPool &getCommandPool() const;
 
@@ -144,6 +143,12 @@ class RendererVk : angle::NonCopyable
                                     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
 
     angle::Result syncPipelineCacheVk(DisplayVk *displayVk);
+
+    void setPreSubmitSemaphore(const vk::Semaphore *semaphore) { mPreSubmitSemaphore = semaphore; }
+    void setPostSubmitSemaphore(const vk::Semaphore *semaphore)
+    {
+        mPostSubmitSemaphore = semaphore;
+    }
 
     // This should only be called from ResourceVk.
     // TODO(jmadill): Keep in ContextVk to enable threaded rendering.
@@ -218,6 +223,15 @@ class RendererVk : angle::NonCopyable
     vk::PipelineCache mPipelineCacheVk;
     egl::BlobCache::Key mPipelineCacheVkBlobKey;
     uint32_t mPipelineCacheVkUpdateTimeout;
+
+    // Semaphores waited on/signalled before/after a command buffer submission.  These are initially
+    // the surface image's semaphores (if any), and could change if there is a mid-frame submission,
+    // such as done through flush().
+    const vk::Semaphore *mPreSubmitSemaphore;
+    const vk::Semaphore *mPostSubmitSemaphore;
+
+    // A pool of semaphores used to support the aforementioned mid-frame submissions.
+    vk::DynamicSemaphorePool mSubmitSemaphorePool;
 
     // See CommandGraph.h for a desription of the Command Graph.
     vk::CommandGraph mCommandGraph;
