@@ -26,16 +26,16 @@ FramebufferNULL::~FramebufferNULL()
 {
 }
 
-gl::Error FramebufferNULL::discard(const gl::Context *context,
-                                   size_t count,
-                                   const GLenum *attachments)
+angle::Result FramebufferNULL::discard(const gl::Context *context,
+                                       size_t count,
+                                       const GLenum *attachments)
 {
     return gl::NoError();
 }
 
-gl::Error FramebufferNULL::invalidate(const gl::Context *context,
-                                      size_t count,
-                                      const GLenum *attachments)
+angle::Result FramebufferNULL::invalidate(const gl::Context *context,
+                                          size_t count,
+                                          const GLenum *attachments)
 {
     return gl::NoError();
 }

@@ -142,17 +142,17 @@ void FramebufferVk::destroy(const gl::Context *context)
     mBlitPixelBuffer.destroy(contextVk->getDevice());
 }
 
-gl::Error FramebufferVk::discard(const gl::Context *context,
-                                 size_t count,
-                                 const GLenum *attachments)
+angle::Result FramebufferVk::discard(const gl::Context *context,
+                                     size_t count,
+                                     const GLenum *attachments)
 {
     UNIMPLEMENTED();
     return gl::InternalError();
 }
 
-gl::Error FramebufferVk::invalidate(const gl::Context *context,
-                                    size_t count,
-                                    const GLenum *attachments)
+angle::Result FramebufferVk::invalidate(const gl::Context *context,
+                                        size_t count,
+                                        const GLenum *attachments)
 {
     UNIMPLEMENTED();
     return gl::InternalError();

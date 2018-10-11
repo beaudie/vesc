@@ -21,10 +21,12 @@ class FramebufferNULL : public FramebufferImpl
     FramebufferNULL(const gl::FramebufferState &state);
     ~FramebufferNULL() override;
 
-    gl::Error discard(const gl::Context *context, size_t count, const GLenum *attachments) override;
-    gl::Error invalidate(const gl::Context *context,
-                         size_t count,
-                         const GLenum *attachments) override;
+    angle::Result discard(const gl::Context *context,
+                          size_t count,
+                          const GLenum *attachments) override;
+    angle::Result invalidate(const gl::Context *context,
+                             size_t count,
+                             const GLenum *attachments) override;
     gl::Error invalidateSub(const gl::Context *context,
                             size_t count,
                             const GLenum *attachments,

@@ -33,12 +33,12 @@ class FramebufferImpl : angle::NonCopyable
     virtual ~FramebufferImpl() {}
     virtual void destroy(const gl::Context *context) {}
 
-    virtual gl::Error discard(const gl::Context *context,
-                              size_t count,
-                              const GLenum *attachments) = 0;
-    virtual gl::Error invalidate(const gl::Context *context,
-                                 size_t count,
-                                 const GLenum *attachments) = 0;
+    virtual angle::Result discard(const gl::Context *context,
+                                  size_t count,
+                                  const GLenum *attachments)    = 0;
+    virtual angle::Result invalidate(const gl::Context *context,
+                                     size_t count,
+                                     const GLenum *attachments) = 0;
     virtual gl::Error invalidateSub(const gl::Context *context,
                                     size_t count,
                                     const GLenum *attachments,

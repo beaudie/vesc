@@ -207,13 +207,17 @@ void FramebufferGL::destroy(const gl::Context *context)
     mFramebufferID = 0;
 }
 
-Error FramebufferGL::discard(const gl::Context *context, size_t count, const GLenum *attachments)
+angle::Result FramebufferGL::discard(const gl::Context *context,
+                                     size_t count,
+                                     const GLenum *attachments)
 {
     // glInvalidateFramebuffer accepts the same enums as glDiscardFramebufferEXT
     return invalidate(context, count, attachments);
 }
 
-Error FramebufferGL::invalidate(const gl::Context *context, size_t count, const GLenum *attachments)
+angle::Result FramebufferGL::invalidate(const gl::Context *context,
+                                        size_t count,
+                                        const GLenum *attachments)
 {
     const GLenum *finalAttachmentsPtr = attachments;
 

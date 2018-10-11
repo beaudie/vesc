@@ -34,14 +34,18 @@ Framebuffer9::~Framebuffer9()
 {
 }
 
-gl::Error Framebuffer9::discard(const gl::Context *context, size_t, const GLenum *)
+angle::Result Framebuffer9::discard(const gl::Context *context,
+                                    size_t count,
+                                    const attachments *attachments)
 {
     // Extension not implemented in D3D9 renderer
     UNREACHABLE();
     return gl::NoError();
 }
 
-gl::Error Framebuffer9::invalidate(const gl::Context *context, size_t, const GLenum *)
+angle::Result Framebuffer9::invalidate(const gl::Context *context,
+                                       size_t count,
+                                       const attachments *attachments)
 {
     // Shouldn't ever reach here in D3D9
     UNREACHABLE();

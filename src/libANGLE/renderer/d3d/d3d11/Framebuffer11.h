@@ -24,10 +24,12 @@ class Framebuffer11 : public FramebufferD3D
     Framebuffer11(const gl::FramebufferState &data, Renderer11 *renderer);
     ~Framebuffer11() override;
 
-    gl::Error discard(const gl::Context *context, size_t count, const GLenum *attachments) override;
-    gl::Error invalidate(const gl::Context *context,
-                         size_t count,
-                         const GLenum *attachments) override;
+    angle::Result discard(const gl::Context *context,
+                          size_t count,
+                          const GLenum *attachments) override;
+    angle::Result invalidate(const gl::Context *context,
+                             size_t count,
+                             const GLenum *attachments) override;
     gl::Error invalidateSub(const gl::Context *context,
                             size_t count,
                             const GLenum *attachments,
