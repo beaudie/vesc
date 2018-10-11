@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40e6fdf7_db8de106",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-11T21:34:53Z",
+      "side": 1,
+      "message": "please for this CL and all future CLs don\u0027t neglect to add a Bug: tag. We should make a presubmit for this.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 32
+      },
+      "revId": "ac5cbfc68548de3606851d555d08ab1b6a0dc8a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79bbeae3_968459d0",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-11T21:34:53Z",
+      "side": 1,
+      "message": "nit: UNREACHABLE()",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 35
+      },
+      "revId": "ac5cbfc68548de3606851d555d08ab1b6a0dc8a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
