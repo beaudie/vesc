@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32826fa4_ac6ad0a3",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 5297,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-11T16:42:00Z",
+      "side": 1,
+      "message": "Why change the order here? This will also not syncDirtyBits() if clearUnclearedActiveTextures() fails, is this intentional?",
+      "range": {
+        "startLine": 5289,
+        "startChar": 0,
+        "endLine": 5297,
+        "endChar": 0
+      },
+      "revId": "ec99ad2606dd158473c743f02febad2767b00a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aac27845_80d7a0e0",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-11T16:42:00Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem to be doing anything now.\nI don\u0027t know if it should, but if it really shouldn\u0027t, can you remove this function and its usages?",
+      "range": {
+        "startLine": 744,
+        "startChar": 0,
+        "endLine": 744,
+        "endChar": 81
+      },
+      "revId": "ec99ad2606dd158473c743f02febad2767b00a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13036f15_898ae3d9",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-11T16:42:00Z",
+      "side": 1,
+      "message": "It\u0027s hard for me to understand this.\nDoes this mean \"It is possible that a program is not bound during a path operation\"?\n\nI\u0027m also missing some context, what is a path operation and why it needs to update texture, storage buffer, uniform buffer, atomic counter buffer and image bindings? Sorry, I don\u0027t know GL well.",
+      "range": {
+        "startLine": 869,
+        "startChar": 7,
+        "endLine": 869,
+        "endChar": 60
+      },
+      "revId": "ec99ad2606dd158473c743f02febad2767b00a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f596cfda_80dab304",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1987,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-11T16:42:00Z",
+      "side": 1,
+      "message": "Do you also need to check \"!program-\u003ehasLinkedShaderStage(gl::ShaderType::Compute)\"?\nAlso, \"mIsMultiviewEnabled \u0026\u0026 program-\u003eusesMultiview()\" is checked in updateMultiviewBaseViewLayerIndexUniform(), so why check twice?",
+      "range": {
+        "startLine": 1987,
+        "startChar": 24,
+        "endLine": 1987,
+        "endChar": 71
+      },
+      "revId": "ec99ad2606dd158473c743f02febad2767b00a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
