@@ -304,6 +304,7 @@ RendererVk::RendererVk()
       mCurrentQueueSerial(mQueueSerialFactory.generate()),
       mDeviceLost(false),
       mPipelineCacheVkUpdateTimeout(kPipelineCacheVkUpdatePeriod),
+      mSubmitWaitSemaphore(nullptr),
       mCommandGraph(kEnableCommandGraphDiagnostics)
 {
 }
@@ -326,6 +327,7 @@ void RendererVk::onDestroy(vk::Context *context)
     mRenderPassCache.destroy(mDevice);
     mPipelineCache.destroy(mDevice);
     mPipelineCacheVk.destroy(mDevice);
+    mSubmitSemaphorePool.destroy(mDevice);
     mShaderLibrary.destroy(mDevice);
 
     GlslangWrapper::Release();
@@ -615,8 +617,11 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 
     ANGLE_TRY(mCommandPool.init(displayVk, commandPoolInfo));
 
-    // Initialize the vulkan pipeline cache
+    // Initialize the vulkan pipeline cache.
     ANGLE_TRY(initPipelineCacheVk(displayVk));
+
+    // Initialize the submission semaphore pool.
+    ANGLE_TRY(mSubmitSemaphorePool.init(displayVk, vk::kDefaultSemaphorePoolSize));
 
     return angle::Result::Continue();
 }
@@ -771,6 +776,25 @@ void RendererVk::ensureCapsInitialized() const
     }
 }
 
+void RendererVk::getSubmitWaitSemaphores(
+    vk::Context *context,
+    angle::FixedVector<VkSemaphore, kMaxWaitSemaphores> &waitSemaphores)
+{
+    if (mSubmitLastSignaledSemaphore.getSemaphore())
+    {
+        waitSemaphores.push_back(mSubmitLastSignaledSemaphore.getSemaphore()->getHandle());
+
+        // Return the semaphore to the pool (which will remain valid and unused until the
+        // queue it's about to be waited on has finished execution).
+        mSubmitSemaphorePool.freeSemaphore(context, &mSubmitLastSignaledSemaphore);
+    }
+
+    if (mSubmitWaitSemaphore)
+    {
+        waitSemaphores.push_back(mSubmitWaitSemaphore->getHandle());
+    }
+}
+
 const gl::Caps &RendererVk::getNativeCaps() const
 {
     ensureCapsInitialized();
@@ -814,11 +838,18 @@ angle::Result RendererVk::finish(vk::Context *context)
         vk::Scoped<vk::CommandBuffer> commandBatch(mDevice);
         ANGLE_TRY(flushCommandGraph(context, &commandBatch.get()));
 
+        VkPipelineStageFlags waitStageMask[2] = {
+            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+        };
+
+        angle::FixedVector<VkSemaphore, kMaxWaitSemaphores> waitSemaphores;
+        getSubmitWaitSemaphores(context, waitSemaphores);
+
         VkSubmitInfo submitInfo         = {};
         submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        submitInfo.waitSemaphoreCount   = 0;
-        submitInfo.pWaitSemaphores      = nullptr;
-        submitInfo.pWaitDstStageMask    = nullptr;
+        submitInfo.waitSemaphoreCount   = static_cast<uint32_t>(waitSemaphores.size());
+        submitInfo.pWaitSemaphores      = waitSemaphores.data();
+        submitInfo.pWaitDstStageMask    = waitStageMask;
         submitInfo.commandBufferCount   = 1;
         submitInfo.pCommandBuffers      = commandBatch.get().ptr();
         submitInfo.signalSemaphoreCount = 0;
@@ -900,6 +931,10 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
 
     ANGLE_VK_TRY(context, vkQueueSubmit(mQueue, 1, &submitInfo, batch.fence.getHandle()));
 
+    // Reset the specifically requested pre-submit semaphore.  It should only be waited once until
+    // set again.
+    mSubmitWaitSemaphore = nullptr;
+
     // Store this command buffer in the in-flight list.
     batch.commandPool = std::move(mCommandPool);
     batch.serial      = mCurrentQueueSerial;
@@ -967,26 +1002,39 @@ angle::Result RendererVk::flushCommandGraph(vk::Context *context, vk::CommandBuf
                                         &mCommandPool, commandBatch);
 }
 
-angle::Result RendererVk::flush(vk::Context *context,
-                                const vk::Semaphore &waitSemaphore,
-                                const vk::Semaphore &signalSemaphore)
+angle::Result RendererVk::flush(vk::Context *context)
 {
+    if (mCommandGraph.empty())
+    {
+        return angle::Result::Continue();
+    }
+
     vk::Scoped<vk::CommandBuffer> commandBatch(mDevice);
     ANGLE_TRY(flushCommandGraph(context, &commandBatch.get()));
 
-    VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+    VkPipelineStageFlags waitStageMask[2] = {
+        VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+    };
+
+    angle::FixedVector<VkSemaphore, kMaxWaitSemaphores> waitSemaphores;
+    getSubmitWaitSemaphores(context, waitSemaphores);
+
+    // On every flush, create a semaphore to be signaled.  On the next submission, this semaphore
+    // will be waited on.
+    ANGLE_TRY(mSubmitSemaphorePool.allocateSemaphore(context, &mSubmitLastSignaledSemaphore));
 
     VkSubmitInfo submitInfo         = {};
     submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.waitSemaphoreCount   = 1;
-    submitInfo.pWaitSemaphores      = waitSemaphore.ptr();
-    submitInfo.pWaitDstStageMask    = &waitStageMask;
+    submitInfo.waitSemaphoreCount   = static_cast<uint32_t>(waitSemaphores.size());
+    submitInfo.pWaitSemaphores      = waitSemaphores.data();
+    submitInfo.pWaitDstStageMask    = waitStageMask;
     submitInfo.commandBufferCount   = 1;
     submitInfo.pCommandBuffers      = commandBatch.get().ptr();
     submitInfo.signalSemaphoreCount = 1;
-    submitInfo.pSignalSemaphores    = signalSemaphore.ptr();
+    submitInfo.pSignalSemaphores    = mSubmitLastSignaledSemaphore.getSemaphore()->ptr();
 
     ANGLE_TRY(submitFrame(context, submitInfo, commandBatch.release()));
+
     return angle::Result::Continue();
 }
 
@@ -1077,6 +1125,18 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk)
     displayVk->getBlobCache()->putApplication(mPipelineCacheVkBlobKey, *pipelineCacheData);
 
     return angle::Result::Continue();
+}
+
+const vk::Semaphore *RendererVk::getSubmitLastSignaledSemaphore(vk::Context *context)
+{
+    const vk::Semaphore *semaphore = mSubmitLastSignaledSemaphore.getSemaphore();
+
+    // Return the semaphore to the pool (which will remain valid and unused until the
+    // queue it's about to be waited on has finished execution).  The caller is about
+    // to wait on it.
+    mSubmitSemaphorePool.freeSemaphore(context, &mSubmitLastSignaledSemaphore);
+
+    return semaphore;
 }
 
 vk::ShaderLibrary *RendererVk::getShaderLibrary()
