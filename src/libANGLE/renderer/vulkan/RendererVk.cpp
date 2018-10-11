@@ -304,6 +304,8 @@ RendererVk::RendererVk()
       mCurrentQueueSerial(mQueueSerialFactory.generate()),
       mDeviceLost(false),
       mPipelineCacheVkUpdateTimeout(kPipelineCacheVkUpdatePeriod),
+      mPreSubmitSemaphore(nullptr),
+      mPostSubmitSemaphore(nullptr),
       mCommandGraph(kEnableCommandGraphDiagnostics)
 {
 }
@@ -326,6 +328,7 @@ void RendererVk::onDestroy(vk::Context *context)
     mRenderPassCache.destroy(mDevice);
     mPipelineCache.destroy(mDevice);
     mPipelineCacheVk.destroy(mDevice);
+    mSubmitSemaphorePool.destroy(mDevice);
     mShaderLibrary.destroy(mDevice);
 
     GlslangWrapper::Release();
@@ -615,8 +618,11 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 
     ANGLE_TRY(mCommandPool.init(displayVk, commandPoolInfo));
 
-    // Initialize the vulkan pipeline cache
+    // Initialize the vulkan pipeline cache.
     ANGLE_TRY(initPipelineCacheVk(displayVk));
+
+    // Initialize the submission semaphore pool.
+    ANGLE_TRY(mSubmitSemaphorePool.init(displayVk, vk::kDefaultSemaphorePoolSize));
 
     return angle::Result::Continue();
 }
@@ -967,26 +973,46 @@ angle::Result RendererVk::flushCommandGraph(vk::Context *context, vk::CommandBuf
                                         &mCommandPool, commandBatch);
 }
 
-angle::Result RendererVk::flush(vk::Context *context,
-                                const vk::Semaphore &waitSemaphore,
-                                const vk::Semaphore &signalSemaphore)
+angle::Result RendererVk::flush(vk::Context *context)
 {
     vk::Scoped<vk::CommandBuffer> commandBatch(mDevice);
     ANGLE_TRY(flushCommandGraph(context, &commandBatch.get()));
 
     VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
 
+    // If this flush comes from a swapchain swap, then mPostSubmitSemaphore is expected
+    // to be set.  If it's not set, this must be a mid-frame submission, for which a
+    // temporary semaphore is required to link this submission with the next.  I.e. if
+    // mPostSubmitSemaphore is nullptr, we should create a temporary semaphore, signal
+    // that, and use that as the next mPreSubmitSemaphore.
+    //
+    // mPreSubmitSemaphore should always be present.
+    ASSERT(mPreSubmitSemaphore != nullptr);
+    ASSERT(mPreSubmitSemaphore != mPostSubmitSemaphore);
+
+    const vk::Semaphore *postSubmitSemaphore = mPostSubmitSemaphore;
+    if (postSubmitSemaphore == nullptr)
+    {
+        ANGLE_TRY(mSubmitSemaphorePool.allocateSemaphore(context, true, &postSubmitSemaphore));
+    }
+
     VkSubmitInfo submitInfo         = {};
     submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.waitSemaphoreCount   = 1;
-    submitInfo.pWaitSemaphores      = waitSemaphore.ptr();
+    submitInfo.pWaitSemaphores      = mPreSubmitSemaphore->ptr();
     submitInfo.pWaitDstStageMask    = &waitStageMask;
     submitInfo.commandBufferCount   = 1;
     submitInfo.pCommandBuffers      = commandBatch.get().ptr();
     submitInfo.signalSemaphoreCount = 1;
-    submitInfo.pSignalSemaphores    = signalSemaphore.ptr();
+    submitInfo.pSignalSemaphores    = postSubmitSemaphore->ptr();
 
     ANGLE_TRY(submitFrame(context, submitInfo, commandBatch.release()));
+
+    // Note: it's ok to unconditionally do the following assignment, since the final step (where
+    // mPostSubmitSemaphore is not nullptr) should only happen once before the pre/post semaphores
+    // are reconfigured.  The assertion above that tests pre != post ensures this.
+    mPreSubmitSemaphore = postSubmitSemaphore;
+
     return angle::Result::Continue();
 }
 

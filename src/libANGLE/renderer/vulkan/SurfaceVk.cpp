@@ -570,8 +570,9 @@ angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk)
                                        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                        VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, swapCommands);
 
-    ANGLE_TRY(
-        renderer->flush(displayVk, image.imageAcquiredSemaphore, image.commandsCompleteSemaphore));
+    // Tell the renderer that the last submission needs to signal the appropriate semaphore
+    renderer->setPostSubmitSemaphore(&image.commandsCompleteSemaphore);
+    ANGLE_TRY(renderer->flush(displayVk));
 
     VkPresentInfoKHR presentInfo   = {};
     presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -604,6 +605,13 @@ angle::Result WindowSurfaceVk::nextSwapchainImage(DisplayVk *displayVk)
 
     // Swap the unused swapchain semaphore and the now active spare semaphore.
     std::swap(image.imageAcquiredSemaphore, mAcquireNextImageSemaphore);
+
+    // Tell the renderer what semaphore to wait on if it needs to make mid-frame submissions.
+    displayVk->getRenderer()->setPreSubmitSemaphore(&image.imageAcquiredSemaphore);
+    // By telling the renderer that there is no post-submit semaphore, it will create temporary
+    // ones to link mid-frame submissions.  Before the final flush, the appropriate semaphore is
+    // set.
+    displayVk->getRenderer()->setPostSubmitSemaphore(nullptr);
 
     // Update RenderTarget pointers.
     mColorRenderTarget.updateSwapchainImage(&image.image, &image.imageView);
