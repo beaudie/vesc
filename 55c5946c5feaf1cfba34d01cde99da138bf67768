@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5215b680_e44e1e33",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-11T09:39:10Z",
+      "side": 1,
+      "message": "sizeof(float)",
+      "range": {
+        "startLine": 217,
+        "startChar": 62,
+        "endLine": 217,
+        "endChar": 63
+      },
+      "revId": "55c5946c5feaf1cfba34d01cde99da138bf67768",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b2ff85b_c386c4b1",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-11T09:39:10Z",
+      "side": 1,
+      "message": "Can you do the same simplification you did in the other test here?",
+      "revId": "55c5946c5feaf1cfba34d01cde99da138bf67768",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c74eeb88_a97b3ae1",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-11T09:39:10Z",
+      "side": 1,
+      "message": "sizeof(float)",
+      "range": {
+        "startLine": 279,
+        "startChar": 48,
+        "endLine": 279,
+        "endChar": 49
+      },
+      "revId": "55c5946c5feaf1cfba34d01cde99da138bf67768",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
