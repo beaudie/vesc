@@ -178,6 +178,30 @@
     },
     {
       "key": {
+        "uuid": "1bfe94ab_bc51712f",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5910,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T16:51:55Z",
+      "side": 1,
+      "message": "I think we should return InvalidOperation.",
+      "parentUuid": "b97ff612_39a7c00b",
+      "range": {
+        "startLine": 5905,
+        "startChar": 8,
+        "endLine": 5910,
+        "endChar": 9
+      },
+      "revId": "f3d7d37951f19d7e9b20631e8e7cc4c25f086200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "550a6a7a_346dfec8",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 12
