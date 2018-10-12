@@ -23,7 +23,7 @@ struct Caps;
 class ContextState;
 class State;
 class FramebufferState;
-}
+}  // namespace gl
 
 namespace rx
 {
