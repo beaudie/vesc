@@ -67,6 +67,14 @@ angle::Result QueryVk::getResult(const gl::Context *context, bool wait)
 
     ContextVk *contextVk = vk::GetImpl(context);
 
+    // glGetQueryObject* requires an implicit flush of the command buffers to guarantee execution in
+    // finite time.
+    if (mQueryHelper.hasPendingWork(contextVk->getRenderer()))
+    {
+        ANGLE_TRY_HANDLE(context, contextVk->flush(context));
+        ASSERT(!mQueryHelper.hasPendingWork(contextVk->getRenderer()));
+    }
+
     VkQueryResultFlags flags = (wait ? VK_QUERY_RESULT_WAIT_BIT : 0) | VK_QUERY_RESULT_64_BIT;
 
     angle::Result result = mQueryHelper.getQueryPool()->getResults(
@@ -124,18 +132,6 @@ gl::Error QueryVk::getResult(const gl::Context *context, GLuint64 *params)
 
 gl::Error QueryVk::isResultAvailable(const gl::Context *context, bool *available)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
-
-    // Make sure the command buffer for this query is submitted.  If not, *available should always
-    // be false. This is because the reset command is not yet executed (it's only put in the command
-    // graph), so actually checking the results may return "true" because of a previous submission.
-
-    if (mQueryHelper.hasPendingWork(contextVk->getRenderer()))
-    {
-        *available = false;
-        return gl::NoError();
-    }
-
     ANGLE_TRY(getResult(context, false));
     *available = mCachedResultValid;
 
