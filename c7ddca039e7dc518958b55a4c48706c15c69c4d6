@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34b0ca3d_1cc8ac29",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-12T19:03:54Z",
+      "side": 1,
+      "message": "Since the semaphores are reused in the pool, I can\u0027t free a signaled semaphore without waiting on it first (because when it\u0027s allocated later, it\u0027s already signaled).\n\nSo what\u0027s going on here is that every submission (except the very first!) always has a wait on the last submission, even if that last submission is very old, in which case the wait is a no-op and serves only to set the semaphore in the unsignaled state.\n\nWhen there is a `vkAcquireNextImageKHR()` call, the corresponding signal is *additionally* wait on.",
+      "revId": "c7ddca039e7dc518958b55a4c48706c15c69c4d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d4cb96a_fed4e295",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-12T19:03:54Z",
+      "side": 1,
+      "message": "I bit the bullet and added the semaphore helper class. Autofreeing semaphores as in the previous patches just ended up being more troublesome than useful (in particular that, since the semaphores are reused in the pool, they should be waited on if ever signaled no matter if the corresponding submission is definitely finished, so the semaphore signaled as part of the last submission must stay alive until the next submission no matter what)",
+      "revId": "c7ddca039e7dc518958b55a4c48706c15c69c4d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

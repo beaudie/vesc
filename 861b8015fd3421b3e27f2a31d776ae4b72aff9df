@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40846a37_6a38e47f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-12T19:03:54Z",
+      "side": 0,
+      "message": "There was a bug here: if `mNodes.empty()`, the command buffer is in the Initial state (not Executable or Pending), so submitting it is invalid, which would have happened in `RendererVk::flush()` if command graph is empty. I removed this (which eventually just translates to a begin/end call) and added a guard to `flush()` similar to `finish()` that simply submits nothing if there is nothing to submit.\n\nThis works only because at the same time the surface\u0027s `commandCompleteSemaphore` is removed and doesn\u0027t strictly need to be signaled (i.e. there is no need to submit an empty command buffer for that sake).",
+      "revId": "861b8015fd3421b3e27f2a31d776ae4b72aff9df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44ac4d54_8daf936e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-12T19:03:54Z",
+      "side": 0,
+      "message": "No more chicken and egg problem :)",
+      "revId": "861b8015fd3421b3e27f2a31d776ae4b72aff9df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
