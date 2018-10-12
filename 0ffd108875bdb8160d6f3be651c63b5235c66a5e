@@ -140,6 +140,30 @@
     },
     {
       "key": {
+        "uuid": "9d79f4ce_fd93dbe6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-12T17:25:56Z",
+      "side": 1,
+      "message": "Damn, I missed that... (and my local tests still worked because the s coordinate obviously went through nicely as the bits for it are not shifted)\nI was using 3 bits per coordinate before and just changed that back to two an hour ago.",
+      "parentUuid": "559ef2e1_7ebfd563",
+      "range": {
+        "startLine": 379,
+        "startChar": 67,
+        "endLine": 379,
+        "endChar": 97
+      },
+      "revId": "0ffd108875bdb8160d6f3be651c63b5235c66a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2a1cf403_5b4edebf",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 13

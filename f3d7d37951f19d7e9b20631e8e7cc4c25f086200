@@ -250,6 +250,30 @@
     },
     {
       "key": {
+        "uuid": "9f4fd2a7_8f7ba15e",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5910,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-12T17:25:56Z",
+      "side": 1,
+      "message": "I don\u0027t get it.\nValidateTexParameter* calls ValidateTexParameterBase with size \u003d 1 and ValidateTexParameter*v with size \u003d -1, so this check will return an InvalidOperation (or InvalidEnum now) in case it is called for GL_TEXTURE_CROP_RECT_OES or GL_TEXTURE_BORDER_COLOR. And this is what TextureParameterTest.NegativeEnum checks.\nIn the OES_draw_texture I couldn\u0027t find information about whether to return InvalidEnum or InvalidOperation for GL_TEXTURE_CROP_RECT_OES, so maybe InvalidEnum is OK?",
+      "parentUuid": "c0dd6056_762d66a8",
+      "range": {
+        "startLine": 5905,
+        "startChar": 8,
+        "endLine": 5910,
+        "endChar": 9
+      },
+      "revId": "f3d7d37951f19d7e9b20631e8e7cc4c25f086200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "550a6a7a_346dfec8",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 12
