@@ -226,6 +226,30 @@
     },
     {
       "key": {
+        "uuid": "c0dd6056_762d66a8",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5910,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T17:02:45Z",
+      "side": 1,
+      "message": "This validation is for something else, bufSize comes from the GL_ANGLE_robust_client_memory extension so we can validate that we don\u0027t read over the end of the buffer.",
+      "parentUuid": "b8037073_663a96a7",
+      "range": {
+        "startLine": 5905,
+        "startChar": 8,
+        "endLine": 5910,
+        "endChar": 9
+      },
+      "revId": "f3d7d37951f19d7e9b20631e8e7cc4c25f086200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "550a6a7a_346dfec8",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 12
