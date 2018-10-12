@@ -202,6 +202,30 @@
     },
     {
       "key": {
+        "uuid": "b8037073_663a96a7",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5910,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-12T16:56:36Z",
+      "side": 1,
+      "message": "But the GL_OES_texture_border_clamp extension text describes:\n\"An INVALID_ENUM error is generated if TexParameter{if} is called for a non-scalar parameters (TEXTURE_BORDER_COLOR_OES).\"\nBut I just saw that the test TextureParameterTest.NegativeEnum checks for INVALID_OPERATION for GL_TEXTURE_CROP_RECT_OES...",
+      "parentUuid": "1bfe94ab_bc51712f",
+      "range": {
+        "startLine": 5905,
+        "startChar": 8,
+        "endLine": 5910,
+        "endChar": 9
+      },
+      "revId": "f3d7d37951f19d7e9b20631e8e7cc4c25f086200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "550a6a7a_346dfec8",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 12
