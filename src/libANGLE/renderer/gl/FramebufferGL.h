@@ -85,10 +85,6 @@ class FramebufferGL : public FramebufferImpl
     GLuint getFramebufferID() const;
     bool isDefault() const;
 
-    void maskOutInactiveOutputDrawBuffers(const gl::Context *context,
-                                          GLenum binding,
-                                          gl::DrawBufferMask maxSet);
-
   private:
     void syncClearState(const gl::Context *context, GLbitfield mask);
     void syncClearBufferState(const gl::Context *context, GLenum buffer, GLint drawBuffer);
@@ -115,9 +111,7 @@ class FramebufferGL : public FramebufferImpl
 
     GLuint mFramebufferID;
     bool mIsDefault;
-
-    gl::DrawBufferMask mAppliedEnabledDrawBuffers;
 };
-}
+}  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_GL_FRAMEBUFFERGL_H_

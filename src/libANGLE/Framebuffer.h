@@ -358,6 +358,8 @@ class Framebuffer final : public angle::ObserverInterface,
     angle::Result ensureReadAttachmentInitialized(const Context *context, GLbitfield blitMask);
     Box getDimensions() const;
 
+    DrawBufferMask getEnabledDrawBuffers() const { return mState.getEnabledDrawBuffers(); }
+
   private:
     bool detachResourceById(const Context *context, GLenum resourceType, GLuint resourceId);
     bool detachMatchingAttachment(const Context *context,
