@@ -83,6 +83,7 @@ void SetShaderStorageBlockFieldMemberInfo(const TFieldList &fields, sh::BlockLay
 void SetShaderStorageBlockMembersOffset(const TInterfaceBlock *interfaceBlock)
 {
     sh::Std140BlockEncoder std140Encoder;
+    sh::Std430BlockEncoder std430Encoder;
     sh::HLSLBlockEncoder hlslEncoder(sh::HLSLBlockEncoder::ENCODE_PACKED, false);
     sh::BlockLayoutEncoder *encoder = nullptr;
 
@@ -90,9 +91,12 @@ void SetShaderStorageBlockMembersOffset(const TInterfaceBlock *interfaceBlock)
     {
         encoder = &std140Encoder;
     }
+    else if (interfaceBlock->blockStorage() == EbsStd430)
+    {
+        encoder = &std430Encoder;
+    }
     else
     {
-        // TODO(jiajia.qin@intel.com): add std430 support.
         encoder = &hlslEncoder;
     }
 
@@ -105,6 +109,8 @@ ShaderStorageBlockOutputHLSL::ShaderStorageBlockOutputHLSL(OutputHLSL *outputHLS
                                                            TSymbolTable *symbolTable,
                                                            ResourcesHLSL *resourcesHLSL)
     : TIntermTraverser(true, true, true, symbolTable),
+      mStorage(EbsStd140),
+      mRowMajor(false),
       mIsLoadFunctionCall(false),
       mOutputHLSL(outputHLSL),
       mResourcesHLSL(resourcesHLSL)
@@ -117,22 +123,30 @@ ShaderStorageBlockOutputHLSL::~ShaderStorageBlockOutputHLSL()
     SafeDelete(mSSBOFunctionHLSL);
 }
 
-void ShaderStorageBlockOutputHLSL::outputStoreFunctionCallPrefix(TIntermTyped *node)
+void ShaderStorageBlockOutputHLSL::outputStoreFunctionCallPrefix(TIntermTyped *node,
+                                                                 TLayoutBlockStorage storage,
+                                                                 bool rowMajor)
 {
     mIsLoadFunctionCall = false;
+    mStorage            = storage;
+    mRowMajor           = rowMajor;
     traverseSSBOAccess(node, SSBOMethod::STORE);
 }
 
-void ShaderStorageBlockOutputHLSL::outputLoadFunctionCall(TIntermTyped *node)
+void ShaderStorageBlockOutputHLSL::outputLoadFunctionCall(TIntermTyped *node,
+                                                          TLayoutBlockStorage storage,
+                                                          bool rowMajor)
 {
     mIsLoadFunctionCall = true;
+    mStorage            = storage;
+    mRowMajor           = rowMajor;
     traverseSSBOAccess(node, SSBOMethod::LOAD);
 }
 
 void ShaderStorageBlockOutputHLSL::traverseSSBOAccess(TIntermTyped *node, SSBOMethod method)
 {
-    const TString &functionName =
-        mSSBOFunctionHLSL->registerShaderStorageBlockFunction(node->getType(), method);
+    const TString &functionName = mSSBOFunctionHLSL->registerShaderStorageBlockFunction(
+        node->getType(), mStorage, mRowMajor, method);
     TInfoSinkBase &out = mOutputHLSL->getInfoSink();
     out << functionName;
     out << "(";
@@ -362,14 +376,13 @@ void ShaderStorageBlockOutputHLSL::writeEOpIndexDirectOrIndirectOutput(TInfoSink
         const TType &type = node->getLeft()->getType();
         if (node->getType().isVector() && type.isMatrix())
         {
-            int matrixStride =
-                BlockLayoutEncoder::ComponentsPerRegister * BlockLayoutEncoder::BytesPerComponent;
-            out << " + " << str(matrixStride);
+            unsigned int matrixStride = GetMatrixStride(type, mStorage, mRowMajor);
+            out << " + " << matrixStride;
         }
         else if (node->getType().isScalar() && !type.isArray())
         {
             int scalarStride = BlockLayoutEncoder::BytesPerComponent;
-            out << " + " << str(scalarStride);
+            out << " + " << scalarStride;
         }
 
         out << " * ";

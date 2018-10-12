@@ -245,6 +245,127 @@ TEST_P(ShaderStorageBufferTest31, ShaderStorageBufferVector)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test that access/write to vector data in std430 shader storage buffer.
+TEST_P(ShaderStorageBufferTest31, Std430ShaderStorageBufferVectorArray)
+{
+    constexpr char kComputeShaderSource[] =
+        R"(#version 310 es
+ layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+ layout(std430, binding = 0) buffer blockIn {
+     uvec2 data[2];
+ } instanceIn;
+ layout(std430, binding = 1) buffer blockOut {
+     uvec2 data[2];
+ } instanceOut;
+ void main()
+ {
+     instanceOut.data[0] = instanceIn.data[0];
+     instanceOut.data[1] = instanceIn.data[1];
+ }
+ )";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kComputeShaderSource);
+
+    glUseProgram(program);
+
+    constexpr unsigned int kElementCount      = 2;
+    constexpr unsigned int kBytesPerComponent = sizeof(unsigned int);
+    constexpr unsigned int kArrayStride       = 8;
+    constexpr unsigned int kExpectedValues[kElementCount][kArrayStride / kBytesPerComponent] = {
+        {1u, 2u}, {3u, 4u}};
+    // Create shader storage buffer
+    GLBuffer shaderStorageBuffer[2];
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[0]);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kElementCount * kArrayStride, kExpectedValues,
+                 GL_STATIC_DRAW);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[1]);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kElementCount * kArrayStride, nullptr, GL_STATIC_DRAW);
+
+    // Bind shader storage buffer
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, shaderStorageBuffer[0]);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderStorageBuffer[1]);
+
+    glDispatchCompute(1, 1, 1);
+
+    glFinish();
+
+    // Read back shader storage buffer
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[1]);
+    const GLuint *ptr = reinterpret_cast<const GLuint *>(glMapBufferRange(
+        GL_SHADER_STORAGE_BUFFER, 0, kElementCount * kArrayStride, GL_MAP_READ_BIT));
+    for (unsigned int idx = 0; idx < kElementCount; idx++)
+    {
+        for (unsigned int idy = 0; idy < (kArrayStride / kBytesPerComponent); idy++)
+        {
+            EXPECT_EQ(kExpectedValues[idx][idy],
+                      *(ptr + idx * (kArrayStride / kBytesPerComponent) + idy));
+        }
+    }
+
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test that access/write to matrix data in std430 shader storage buffer.
+TEST_P(ShaderStorageBufferTest31, Std430ShaderStorageBufferMatrix)
+{
+    constexpr char kComputeShaderSource[] =
+        R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(std430, binding = 0) buffer blockIn {
+    mat2 data;
+} instanceIn;
+layout(std430, binding = 1) buffer blockOut {
+    mat2 data;
+} instanceOut;
+void main()
+{
+    instanceOut.data[0][0] = instanceIn.data[0][0];
+    instanceOut.data[0][1] = instanceIn.data[0][1];
+    instanceOut.data[1][0] = instanceIn.data[1][0];
+    instanceOut.data[1][1] = instanceIn.data[1][1];
+}
+)";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kComputeShaderSource);
+
+    glUseProgram(program);
+
+    constexpr unsigned int kColumns             = 2;
+    constexpr unsigned int kRows                = 2;
+    constexpr unsigned int kBytesPerComponent   = sizeof(float);
+    constexpr unsigned int kMatrixStride        = kRows * kBytesPerComponent;
+    constexpr float kInputDada[kColumns][kRows] = {{0.1, 0.2}, {0.4, 0.5}};
+    // Create shader storage buffer
+    GLBuffer shaderStorageBuffer[2];
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[0]);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kColumns * kMatrixStride, kInputDada, GL_STATIC_DRAW);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[1]);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kColumns * kMatrixStride, nullptr, GL_STATIC_DRAW);
+
+    // Bind shader storage buffer
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, shaderStorageBuffer[0]);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderStorageBuffer[1]);
+
+    glDispatchCompute(1, 1, 1);
+
+    glFinish();
+
+    // Read back shader storage buffer
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[1]);
+    const GLfloat *ptr = reinterpret_cast<const GLfloat *>(
+        glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, kColumns * kMatrixStride, GL_MAP_READ_BIT));
+    for (unsigned int idx = 0; idx < kColumns; idx++)
+    {
+        for (unsigned int idy = 0; idy < kRows; idy++)
+        {
+            EXPECT_EQ(kInputDada[idx][idy],
+                      *(ptr + idx * (kMatrixStride / kBytesPerComponent) + idy));
+        }
+    }
+
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test that access/write to matrix data in shader storage buffer.
 TEST_P(ShaderStorageBufferTest31, ShaderStorageBufferMatrix)
 {

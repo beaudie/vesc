@@ -484,7 +484,7 @@ ImmutableString ArrayString(const TType &type)
     if (!type.isArray())
         return ImmutableString("");
 
-    const TVector<unsigned int> &arraySizes = *type.getArraySizes();
+    const TVector<unsigned int> &arraySizes         = *type.getArraySizes();
     constexpr const size_t kMaxDecimalDigitsPerSize = 10u;
     ImmutableStringBuilder arrayString(arraySizes.size() * (kMaxDecimalDigitsPerSize + 2u));
     for (auto arraySizeIter = arraySizes.rbegin(); arraySizeIter != arraySizes.rend();
@@ -753,31 +753,83 @@ bool IsOutputVulkan(ShShaderOutput output)
 
 bool IsInShaderStorageBlock(TIntermTyped *node)
 {
+    TLayoutBlockStorage storage;
+    bool rowMajor;
+    return IsInShaderStorageBlock(node, &storage, &rowMajor);
+}
+
+bool IsInShaderStorageBlock(TIntermTyped *node,
+                            TLayoutBlockStorage *storage,
+                            bool *rowMajor,
+                            bool assignRowMajor)
+{
     TIntermBinary *binaryNode   = nullptr;
     TIntermSwizzle *swizzleNode = node->getAsSwizzleNode();
     if (swizzleNode)
     {
-        binaryNode = swizzleNode->getOperand()->getAsBinaryNode();
-        if (binaryNode)
-        {
-            return IsInShaderStorageBlock(binaryNode->getLeft());
-        }
         TIntermSymbol *symbolNode = swizzleNode->getOperand()->getAsSymbolNode();
         if (symbolNode)
         {
-            return symbolNode->getQualifier() == EvqBuffer;
+            const TType &type = symbolNode->getType();
+            bool isSSBO       = type.getQualifier() == EvqBuffer;
+            if (isSSBO)
+            {
+                const TInterfaceBlock *interfaceBlock = type.getInterfaceBlock();
+                ASSERT(interfaceBlock);
+                *storage = interfaceBlock->blockStorage();
+                if (!assignRowMajor)
+                {
+                    *rowMajor = type.getLayoutQualifier().matrixPacking == EmpRowMajor;
+                }
+            }
+            return isSSBO;
         }
+        binaryNode = swizzleNode->getOperand()->getAsBinaryNode();
     }
-    binaryNode = node->getAsBinaryNode();
+    else
+    {
+        binaryNode = node->getAsBinaryNode();
+    }
 
     if (binaryNode)
     {
-        return IsInShaderStorageBlock(binaryNode->getLeft());
+        switch (binaryNode->getOp())
+        {
+            case EOpIndexDirectInterfaceBlock:
+            {
+                const TType &type = node->getType();
+                *rowMajor         = type.getLayoutQualifier().matrixPacking == EmpRowMajor;
+
+                return IsInShaderStorageBlock(binaryNode->getLeft(), storage, rowMajor, true);
+            }
+            case EOpIndexIndirect:
+            case EOpIndexDirect:
+            case EOpIndexDirectStruct:
+                return IsInShaderStorageBlock(binaryNode->getLeft(), storage, rowMajor,
+                                              assignRowMajor);
+            default:
+                return false;
+        }
     }
 
     const TType &type = node->getType();
+    bool isSSBO       = type.getQualifier() == EvqBuffer;
+    if (isSSBO)
+    {
+        const TInterfaceBlock *interfaceBlock = type.getInterfaceBlock();
+        ASSERT(interfaceBlock);
+        *storage = interfaceBlock->blockStorage();
+        if (!assignRowMajor)
+        {
+            *rowMajor = type.getLayoutQualifier().matrixPacking == EmpRowMajor;
+        }
+    }
+    return isSSBO;
+}
 
-    return type.getQualifier() == EvqBuffer;
+bool IsInShaderStorageBlock(TIntermTyped *node, TLayoutBlockStorage *storage, bool *rowMajor)
+{
+    return IsInShaderStorageBlock(node, storage, rowMajor, false);
 }
 
 }  // namespace sh

@@ -129,6 +129,19 @@ class Std140BlockEncoder : public BlockLayoutEncoder
                        int matrixStride) override;
 };
 
+class Std430BlockEncoder : public Std140BlockEncoder
+{
+  public:
+    Std430BlockEncoder();
+
+  protected:
+    void getBlockLayoutInfo(GLenum type,
+                            const std::vector<unsigned int> &arraySizes,
+                            bool isRowMajorMatrix,
+                            int *arrayStrideOut,
+                            int *matrixStrideOut) override;
+};
+
 using BlockLayoutMap = std::map<std::string, BlockMemberInfo>;
 
 void GetInterfaceBlockInfo(const std::vector<InterfaceBlockField> &fields,

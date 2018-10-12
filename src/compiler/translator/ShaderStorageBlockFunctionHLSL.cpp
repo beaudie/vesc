@@ -16,25 +16,28 @@
 namespace sh
 {
 
-namespace
-{
-
-unsigned int GetMatrixStride(const TType &type)
+// It's possible that the current type has lost the original layout information. So we should pass
+// the right layout information to GetMatrixStride.
+unsigned int GetMatrixStride(const TType &type, TLayoutBlockStorage storage, bool rowMajor)
 {
     sh::Std140BlockEncoder std140Encoder;
+    sh::Std430BlockEncoder std430Encoder;
     sh::HLSLBlockEncoder hlslEncoder(sh::HLSLBlockEncoder::ENCODE_PACKED, false);
     sh::BlockLayoutEncoder *encoder = nullptr;
 
-    if (type.getLayoutQualifier().blockStorage == EbsStd140)
+    if (storage == EbsStd140)
     {
         encoder = &std140Encoder;
     }
+    else if (storage == EbsStd430)
+    {
+        encoder = &std430Encoder;
+    }
     else
     {
-        // TODO(jiajia.qin@intel.com): add std430 support. http://anglebug.com/1951
         encoder = &hlslEncoder;
     }
-    const bool isRowMajorLayout = (type.getLayoutQualifier().matrixPacking == EmpRowMajor);
+
     std::vector<unsigned int> arraySizes;
     auto *typeArraySizes = type.getArraySizes();
     if (typeArraySizes != nullptr)
@@ -42,11 +45,9 @@ unsigned int GetMatrixStride(const TType &type)
         arraySizes.assign(typeArraySizes->begin(), typeArraySizes->end());
     }
     const BlockMemberInfo &memberInfo =
-        encoder->encodeType(GLVariableType(type), arraySizes, isRowMajorLayout);
+        encoder->encodeType(GLVariableType(type), arraySizes, rowMajor);
     return memberInfo.matrixStride;
 }
-
-}  // anonymous namespace
 
 // static
 void ShaderStorageBlockFunctionHLSL::OutputSSBOLoadFunctionBody(
@@ -85,7 +86,8 @@ void ShaderStorageBlockFunctionHLSL::OutputSSBOLoadFunctionBody(
     }
     else if (ssboFunction.type.isMatrix())
     {
-        unsigned int matrixStride = GetMatrixStride(ssboFunction.type);
+        unsigned int matrixStride =
+            GetMatrixStride(ssboFunction.type, ssboFunction.storage, ssboFunction.rowMajor);
         out << " = {";
         for (int rowIndex = 0; rowIndex < ssboFunction.type.getRows(); rowIndex++)
         {
@@ -121,7 +123,8 @@ void ShaderStorageBlockFunctionHLSL::OutputSSBOStoreFunctionBody(
     }
     else if (ssboFunction.type.isMatrix())
     {
-        unsigned int matrixStride = GetMatrixStride(ssboFunction.type);
+        unsigned int matrixStride =
+            GetMatrixStride(ssboFunction.type, ssboFunction.storage, ssboFunction.rowMajor);
         for (int rowIndex = 0; rowIndex < ssboFunction.type.getRows(); rowIndex++)
         {
             out << "    buffer.Store" << ssboFunction.type.getCols() << "(loc +"
@@ -141,11 +144,16 @@ bool ShaderStorageBlockFunctionHLSL::ShaderStorageBlockFunction::operator<(
            std::tie(rhs.functionName, rhs.typeString, rhs.method);
 }
 
-TString ShaderStorageBlockFunctionHLSL::registerShaderStorageBlockFunction(const TType &type,
-                                                                           SSBOMethod method)
+TString ShaderStorageBlockFunctionHLSL::registerShaderStorageBlockFunction(
+    const TType &type,
+    TLayoutBlockStorage storage,
+    bool rowMajor,
+    SSBOMethod method)
 {
     ShaderStorageBlockFunction ssboFunction;
     ssboFunction.typeString = TypeString(type);
+    ssboFunction.storage    = storage;
+    ssboFunction.rowMajor   = rowMajor;
     ssboFunction.method     = method;
     ssboFunction.type       = type;
 

@@ -34,6 +34,8 @@
 namespace sh
 {
 
+unsigned int GetMatrixStride(const TType &type, TLayoutBlockStorage storage, bool rowMajor);
+
 enum class SSBOMethod
 {
     LOAD,
@@ -43,7 +45,10 @@ enum class SSBOMethod
 class ShaderStorageBlockFunctionHLSL final : angle::NonCopyable
 {
   public:
-    TString registerShaderStorageBlockFunction(const TType &type, SSBOMethod method);
+    TString registerShaderStorageBlockFunction(const TType &type,
+                                               TLayoutBlockStorage storage,
+                                               bool rowMajor,
+                                               SSBOMethod method);
 
     void shaderStorageBlockFunctionHeader(TInfoSinkBase &out);
 
@@ -53,6 +58,8 @@ class ShaderStorageBlockFunctionHLSL final : angle::NonCopyable
         bool operator<(const ShaderStorageBlockFunction &rhs) const;
         TString functionName;
         TString typeString;
+        TLayoutBlockStorage storage;
+        bool rowMajor;
         SSBOMethod method;
         TType type;
     };
