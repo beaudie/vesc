@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be388530_7837d370",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T18:20:15Z",
+      "side": 0,
+      "message": "Could this stil be const? I don\u0027t see the change that would prohibit it.",
+      "range": {
+        "startLine": 183,
+        "startChar": 58,
+        "endLine": 183,
+        "endChar": 63
+      },
+      "revId": "c97e3f6684c71b3eeb799837106c1588fc36282b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

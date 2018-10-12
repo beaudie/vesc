@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a5cd609_8e9e1304",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T18:20:15Z",
+      "side": 1,
+      "message": "Any way to refactor this to be a bool member that is updated when the VAO is updated?",
+      "range": {
+        "startLine": 682,
+        "startChar": 8,
+        "endLine": 682,
+        "endChar": 67
+      },
+      "revId": "522fea36d04753aa0189092c89a5cdbe2cfd8ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcab4914_5bb68b07",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T18:20:15Z",
+      "side": 1,
+      "message": "Should we update the name to indicate that this only syncs client side data?",
+      "range": {
+        "startLine": 689,
+        "startChar": 25,
+        "endLine": 689,
+        "endChar": 44
+      },
+      "revId": "522fea36d04753aa0189092c89a5cdbe2cfd8ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b307d51d_9c223232",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1984,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T18:20:15Z",
+      "side": 1,
+      "message": "Prefer to use the braces on the one line if-statements because it gets messy with the formatter putting them on multiple lines.",
+      "range": {
+        "startLine": 1983,
+        "startChar": 0,
+        "endLine": 1984,
+        "endChar": 98
+      },
+      "revId": "522fea36d04753aa0189092c89a5cdbe2cfd8ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
