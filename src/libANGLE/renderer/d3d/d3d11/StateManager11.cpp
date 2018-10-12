@@ -1087,8 +1087,6 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                 break;
         }
     }
-
-    // TODO(jmadill): Input layout and vertex buffer state.
 }
 
 void StateManager11::handleMultiviewDrawFramebufferChange(const gl::Context *context)
