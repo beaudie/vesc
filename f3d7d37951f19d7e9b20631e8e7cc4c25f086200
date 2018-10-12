@@ -274,6 +274,30 @@
     },
     {
       "key": {
+        "uuid": "10662126_832ac79c",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5910,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T17:29:35Z",
+      "side": 1,
+      "message": "Ok, this is the bug then, it should be calling with a bufsize of -1 so that bufsize is not validated at all in this case.  This was probably missed because this is the first parameter that doesn\u0027t have a bufsize of 1.",
+      "parentUuid": "9f4fd2a7_8f7ba15e",
+      "range": {
+        "startLine": 5905,
+        "startChar": 8,
+        "endLine": 5910,
+        "endChar": 9
+      },
+      "revId": "f3d7d37951f19d7e9b20631e8e7cc4c25f086200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "550a6a7a_346dfec8",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 12
