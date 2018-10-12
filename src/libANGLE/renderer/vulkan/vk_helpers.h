@@ -266,6 +266,8 @@ class QueryHelper final : public CommandGraphResource
     // Used only by DynamicQueryPool.
     size_t getQueryPoolIndex() const { return mQueryPoolIndex; }
 
+    Serial getQueueSerial() const { return getStoredQueueSerial(); }
+
   private:
     const DynamicQueryPool *mDynamicQueryPool;
     size_t mQueryPoolIndex;
