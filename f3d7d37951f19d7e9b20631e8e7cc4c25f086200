@@ -298,6 +298,47 @@
     },
     {
       "key": {
+        "uuid": "0a1233e1_faf247bd",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5910,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T18:06:36Z",
+      "side": 1,
+      "message": "I looked again and the bufSize of 1 is correct for those functions, they are the glTexParameterf functions as opposed to glTexParameterfv so it is known that the parameter size is 1.\n\nThe proper fix is to add another parameter to this function, something like.. bool vectorParameters and generate the invalid enum in the switch on pname below.",
+      "parentUuid": "10662126_832ac79c",
+      "range": {
+        "startLine": 5905,
+        "startChar": 8,
+        "endLine": 5910,
+        "endChar": 9
+      },
+      "revId": "f3d7d37951f19d7e9b20631e8e7cc4c25f086200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ac8cc60_c57d2891",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 6159,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T18:06:36Z",
+      "side": 1,
+      "message": "put the vector parameter check here.",
+      "revId": "f3d7d37951f19d7e9b20631e8e7cc4c25f086200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "550a6a7a_346dfec8",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 12
