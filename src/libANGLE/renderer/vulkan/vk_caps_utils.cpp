@@ -31,6 +31,7 @@ namespace vk
 
 void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
                   const VkPhysicalDeviceFeatures &physicalDeviceFeatures,
+                  const VkQueueFamilyProperties &queueFamilyProperties,
                   const gl::TextureCapsMap &textureCaps,
                   gl::Caps *outCaps,
                   gl::Extensions *outExtensions,
@@ -52,6 +53,10 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
     // able to execute in the presence of queries.  As a result, we won't support queries
     // unless that feature is available.
     outExtensions->occlusionQueryBoolean = physicalDeviceFeatures.inheritedQueries;
+
+    outExtensions->disjointTimerQuery          = queueFamilyProperties.timestampValidBits > 0;
+    outExtensions->queryCounterBitsTimeElapsed = queueFamilyProperties.timestampValidBits;
+    outExtensions->queryCounterBitsTimestamp   = queueFamilyProperties.timestampValidBits;
 
     // TODO(lucferron): Eventually remove everything above this line in this function as the caps
     // get implemented.
