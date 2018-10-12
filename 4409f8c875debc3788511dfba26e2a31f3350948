@@ -22,6 +22,30 @@
       "revId": "4409f8c875debc3788511dfba26e2a31f3350948",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c611f31e_1f5ca1e0",
+        "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2018-10-12T02:55:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14ada72a_fcc93a56",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 78
+      },
+      "revId": "4409f8c875debc3788511dfba26e2a31f3350948",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
