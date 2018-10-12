@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "4404654c_919871f2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T19:57:35Z",
+      "side": 1,
+      "message": "I would suggest using a FixedVector here so there are no dynamic allocations and we don\u0027t need to track as many sizes.",
+      "range": {
+        "startLine": 780,
+        "startChar": 41,
+        "endLine": 781,
+        "endChar": 72
+      },
+      "revId": "c7ddca039e7dc518958b55a4c48706c15c69c4d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "34b0ca3d_1cc8ac29",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
@@ -13,6 +36,29 @@
       "writtenOn": "2018-10-12T19:03:54Z",
       "side": 1,
       "message": "Since the semaphores are reused in the pool, I can\u0027t free a signaled semaphore without waiting on it first (because when it\u0027s allocated later, it\u0027s already signaled).\n\nSo what\u0027s going on here is that every submission (except the very first!) always has a wait on the last submission, even if that last submission is very old, in which case the wait is a no-op and serves only to set the semaphore in the unsignaled state.\n\nWhen there is a `vkAcquireNextImageKHR()` call, the corresponding signal is *additionally* wait on.",
+      "revId": "c7ddca039e7dc518958b55a4c48706c15c69c4d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77a1ce51_ddaf06a2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T19:57:35Z",
+      "side": 1,
+      "message": "The renderer can be shared between a bunch of surfaces, could this block other contexts from doing work until this surface is finished swapping?\n\nWhat work will really require this semaphore to be triggered? Rendering to this surface again?",
+      "range": {
+        "startLine": 609,
+        "startChar": 0,
+        "endLine": 610,
+        "endChar": 80
+      },
       "revId": "c7ddca039e7dc518958b55a4c48706c15c69c4d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
