@@ -22,6 +22,7 @@ namespace
 unsigned int GetMatrixStride(const TType &type)
 {
     sh::Std140BlockEncoder std140Encoder;
+    sh::Std430BlockEncoder std430Encoder;
     sh::HLSLBlockEncoder hlslEncoder(sh::HLSLBlockEncoder::ENCODE_PACKED, false);
     sh::BlockLayoutEncoder *encoder = nullptr;
 
@@ -29,9 +30,12 @@ unsigned int GetMatrixStride(const TType &type)
     {
         encoder = &std140Encoder;
     }
+    else if (type.getLayoutQualifier().blockStorage == EbsStd430)
+    {
+        encoder = &std430Encoder;
+    }
     else
     {
-        // TODO(jiajia.qin@intel.com): add std430 support. http://anglebug.com/1951
         encoder = &hlslEncoder;
     }
     const bool isRowMajorLayout = (type.getLayoutQualifier().matrixPacking == EmpRowMajor);

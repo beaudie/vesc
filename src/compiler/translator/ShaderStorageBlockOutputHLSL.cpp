@@ -95,6 +95,7 @@ size_t SetBlockFieldMemberInfoAndReturnBlockSize(const TFieldList &fields,
                                                  TLayoutBlockStorage storage)
 {
     sh::Std140BlockEncoder std140Encoder;
+    sh::Std430BlockEncoder std430Encoder;
     sh::HLSLBlockEncoder hlslEncoder(sh::HLSLBlockEncoder::ENCODE_PACKED, false);
     sh::BlockLayoutEncoder *structureEncoder = nullptr;
 
@@ -102,9 +103,12 @@ size_t SetBlockFieldMemberInfoAndReturnBlockSize(const TFieldList &fields,
     {
         structureEncoder = &std140Encoder;
     }
+    else if (storage == EbsStd430)
+    {
+        structureEncoder = &std430Encoder;
+    }
     else
     {
-        // TODO(jiajia.qin@intel.com): add std430 support.
         structureEncoder = &hlslEncoder;
     }
 
@@ -170,6 +174,7 @@ void SetShaderStorageBlockFieldMemberInfo(const TFieldList &fields,
 void SetShaderStorageBlockMembersOffset(const TInterfaceBlock *interfaceBlock)
 {
     sh::Std140BlockEncoder std140Encoder;
+    sh::Std430BlockEncoder std430Encoder;
     sh::HLSLBlockEncoder hlslEncoder(sh::HLSLBlockEncoder::ENCODE_PACKED, false);
     sh::BlockLayoutEncoder *encoder = nullptr;
 
@@ -177,9 +182,12 @@ void SetShaderStorageBlockMembersOffset(const TInterfaceBlock *interfaceBlock)
     {
         encoder = &std140Encoder;
     }
+    else if (interfaceBlock->blockStorage() == EbsStd430)
+    {
+        encoder = &std430Encoder;
+    }
     else
     {
-        // TODO(jiajia.qin@intel.com): add std430 support.
         encoder = &hlslEncoder;
     }
 
