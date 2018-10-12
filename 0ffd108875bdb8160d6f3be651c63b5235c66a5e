@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2dc13366_4f3848b2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-12T17:06:13Z",
+      "side": 1,
+      "message": "can you please add a tag to associate this CL with an issue in the bug tracker?\n\n\"Bug:\u003cspace\u003eangleproject:####\"\n\nIf there is no bug could you please open one?",
+      "range": {
+        "startLine": 11,
+        "startChar": 5,
+        "endLine": 11,
+        "endChar": 24
+      },
+      "revId": "0ffd108875bdb8160d6f3be651c63b5235c66a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c59058fa_542318f7",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-12T17:06:13Z",
+      "side": 1,
+      "message": "use scripts/run_code_generation.py - this will update some hashes.",
+      "range": {
+        "startLine": 72,
+        "startChar": 5,
+        "endLine": 72,
+        "endChar": 32
+      },
+      "revId": "0ffd108875bdb8160d6f3be651c63b5235c66a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00649927_8269dcbf",
+        "filename": "src/common/Color.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-12T17:06:13Z",
+      "side": 1,
+      "message": "maybe Generic is a better name than variant?",
+      "range": {
+        "startLine": 51,
+        "startChar": 7,
+        "endLine": 51,
+        "endChar": 19
+      },
+      "revId": "0ffd108875bdb8160d6f3be651c63b5235c66a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25fa1574_ae8b5737",
+        "filename": "src/common/Color.inl",
+        "patchSetId": 13
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-12T17:06:13Z",
+      "side": 1,
+      "message": "can you manually format this code? It seems git cl format doesn\u0027t understand inl files.",
+      "range": {
+        "startLine": 63,
+        "startChar": 4,
+        "endLine": 63,
+        "endChar": 9
+      },
+      "revId": "0ffd108875bdb8160d6f3be651c63b5235c66a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6804a7bb_441b01d4",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-12T17:06:13Z",
+      "side": 1,
+      "message": "how about cleaning this up slightly:\n\nangle::ColorF borderColor;\nif (type \u003d\u003d Float)\n{\n    borderColor \u003d samplerState.getBorderColor.colorF;\n}",
+      "range": {
+        "startLine": 254,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 30
+      },
+      "revId": "0ffd108875bdb8160d6f3be651c63b5235c66a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "559ef2e1_7ebfd563",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-12T17:06:13Z",
+      "side": 1,
+      "message": "trying to understand why you needed to shift by 3/6 instead of 2/4 here. you still only use two wrap mode bits since you now claim the \"00\" bit pattern.",
+      "range": {
+        "startLine": 379,
+        "startChar": 67,
+        "endLine": 379,
+        "endChar": 97
+      },
+      "revId": "0ffd108875bdb8160d6f3be651c63b5235c66a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a1cf403_5b4edebf",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-12T17:06:13Z",
+      "side": 1,
+      "message": "nit: kBlack",
+      "range": {
+        "startLine": 387,
+        "startChar": 22,
+        "endLine": 387,
+        "endChar": 27
+      },
+      "revId": "0ffd108875bdb8160d6f3be651c63b5235c66a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0c3f250_b96c2dd8",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2786,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-12T17:06:13Z",
+      "side": 1,
+      "message": "nit: Can you please add a comment before each new test?",
+      "range": {
+        "startLine": 2786,
+        "startChar": 0,
+        "endLine": 2786,
+        "endChar": 6
+      },
+      "revId": "0ffd108875bdb8160d6f3be651c63b5235c66a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02b3a614_17b8cc03",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3015,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-12T17:06:13Z",
+      "side": 1,
+      "message": "nit: when using R\"()\" syntax you can unindent the block strings. This makes them easier to read in the debugger.",
+      "range": {
+        "startLine": 3006,
+        "startChar": 0,
+        "endLine": 3015,
+        "endChar": 16
+      },
+      "revId": "0ffd108875bdb8160d6f3be651c63b5235c66a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
