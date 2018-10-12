@@ -196,7 +196,8 @@ class CommandGraphResource : angle::NonCopyable
   protected:
     explicit CommandGraphResource(CommandGraphResourceType resourceType);
 
-    // Get the current queue serial for this resource. Only used to release resources.
+    // Get the current queue serial for this resource. Used to release resources, and for
+    // queries, to know if the queue they are submitted on has finished execution.
     Serial getStoredQueueSerial() const;
 
   private:
