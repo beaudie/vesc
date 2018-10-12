@@ -39,6 +39,8 @@ class QueryVk : public QueryImpl
     vk::QueryHelper mQueryHelper;
     uint64_t mCachedResult;
     bool mCachedResultValid;
+
+    Serial mQuerySerial;  // The serial of the batch the query was issued on.
 };
 
 }  // namespace rx
