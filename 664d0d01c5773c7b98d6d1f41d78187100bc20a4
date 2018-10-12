@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a2bb2205_da12baa9",
+        "filename": "include/GLES2/gl2ext_angle.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T20:01:10Z",
+      "side": 1,
+      "message": "Yes, will link it to you.",
+      "parentUuid": "115f0750_7518c177",
+      "revId": "664d0d01c5773c7b98d6d1f41d78187100bc20a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4e26df06_9912d93d",
         "filename": "src/libANGLE/Renderbuffer.cpp",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2018-10-12T19:58:22Z",
       "side": 1,
       "message": "Is this just for statistics, or anyone is doing something based on it?",
+      "revId": "664d0d01c5773c7b98d6d1f41d78187100bc20a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b2e8c54_645a9738",
+        "filename": "src/libANGLE/Renderbuffer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T20:01:10Z",
+      "side": 1,
+      "message": "Chrome tries to estimate the GPU memory allocated for various textures to implement caches.  It\u0027s not meant to be exact.\n\nThat said, we can implement some of these functions in our backends and return exact values.",
+      "parentUuid": "4e26df06_9912d93d",
       "revId": "664d0d01c5773c7b98d6d1f41d78187100bc20a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
