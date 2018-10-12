@@ -546,6 +546,30 @@
     },
     {
       "key": {
+        "uuid": "cfbce971_e6a15675",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T15:32:53Z",
+      "side": 1,
+      "message": "Ah, yes, that was the correct thing to do.",
+      "parentUuid": "618d2c3a_bda38665",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 254,
+        "endChar": 77
+      },
+      "revId": "3f95ec0d45ffe7f652168c041d56c5df281baca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a06df352_3881acb6",
         "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
         "patchSetId": 8

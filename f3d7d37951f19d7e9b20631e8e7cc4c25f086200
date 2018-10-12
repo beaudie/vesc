@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2487adc_84a4e519",
+        "filename": "src/compiler/translator/BaseTypes.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T15:32:53Z",
+      "side": 1,
+      "message": "This should be !IsIntegerSampler(type) to guarantee that we don\u0027t miss integer sampler types above.",
+      "revId": "f3d7d37951f19d7e9b20631e8e7cc4c25f086200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f16818a_daaf1a9f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T15:32:53Z",
+      "side": 1,
+      "message": "I\u0027m not sure why we started at 0x1 but I think we could shift everything down 1 value and still fit in 2 bits (also be sure to update the generated HLSL)",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 23
+      },
+      "revId": "f3d7d37951f19d7e9b20631e8e7cc4c25f086200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26d50d62_2ebd5a8f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T15:32:53Z",
+      "side": 1,
+      "message": "Instead of copying to this, could you just assign it to void pointer and do the compare/copy below?",
+      "range": {
+        "startLine": 387,
+        "startChar": 8,
+        "endLine": 387,
+        "endChar": 36
+      },
+      "revId": "f3d7d37951f19d7e9b20631e8e7cc4c25f086200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f6882b4_0656aef6",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5910,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T15:32:53Z",
+      "side": 1,
+      "message": "We don\u0027t need a special case here.",
+      "range": {
+        "startLine": 5905,
+        "startChar": 8,
+        "endLine": 5910,
+        "endChar": 9
+      },
+      "revId": "f3d7d37951f19d7e9b20631e8e7cc4c25f086200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "550a6a7a_346dfec8",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 6273,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-12T15:32:53Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 6269,
+        "startChar": 5,
+        "endLine": 6273,
+        "endChar": 9
+      },
+      "revId": "f3d7d37951f19d7e9b20631e8e7cc4c25f086200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
