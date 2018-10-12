@@ -427,6 +427,7 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
     void resetQueryPool(VkQueryPool queryPool, uint32_t firstQuery, uint32_t queryCount);
     void beginQuery(VkQueryPool queryPool, uint32_t query, VkQueryControlFlags flags);
     void endQuery(VkQueryPool queryPool, uint32_t query);
+    void queryCounter(VkPipelineStageFlagBits pipelineStage, VkQueryPool queryPool, uint32_t query);
 };
 
 class Image final : public WrappedObject<Image, VkImage>
@@ -812,11 +813,14 @@ VkColorComponentFlags GetColorComponentFlags(bool red, bool green, bool blue, bo
     do                                                                                      \
     {                                                                                       \
         auto ANGLE_LOCAL_VAR = command;                                                     \
+        fprintf(stderr, "%s returned %u (success: %u, acceptable (%s): %u)\n", #command, ANGLE_LOCAL_VAR, VK_SUCCESS, #acceptable, acceptable);\
         if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS && ANGLE_LOCAL_VAR != acceptable)) \
         {                                                                                   \
             context->handleError(ANGLE_LOCAL_VAR, __FILE__, __LINE__);                      \
+        fprintf(stderr, "  -- return Stop()\n");\
             return angle::Result::Stop();                                                   \
         }                                                                                   \
+        fprintf(stderr, "  -- return %s()\n", ANGLE_LOCAL_VAR == VK_SUCCESS ? "Continue": "Incomplete");\
         return ANGLE_LOCAL_VAR == VK_SUCCESS ? angle::Result::Continue()                    \
                                              : angle::Result::Incomplete();                 \
     } while (0)
