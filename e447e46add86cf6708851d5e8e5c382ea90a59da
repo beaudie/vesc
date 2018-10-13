@@ -215,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "d63f012e_937debca",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-13T00:11:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f192a647_949b9dc1",
+      "range": {
+        "startLine": 184,
+        "startChar": 28,
+        "endLine": 185,
+        "endChar": 31
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a92dd34_42c661e4",
         "filename": "src/libANGLE/queryutils.cpp",
         "patchSetId": 1
@@ -286,6 +310,30 @@
     },
     {
       "key": {
+        "uuid": "f05868fb_0817e838",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2831,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-13T00:11:51Z",
+      "side": 1,
+      "message": "OK, I see what you mean, I now have this approach working, will be in my next update.",
+      "parentUuid": "9279b03e_f57e837f",
+      "range": {
+        "startLine": 2822,
+        "startChar": 8,
+        "endLine": 2831,
+        "endChar": 18
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "44cafb87_4f04992f",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 1
@@ -333,6 +381,30 @@
     },
     {
       "key": {
+        "uuid": "d1c9b5ad_6b1ec7cc",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-13T00:11:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8d5a91c_51709a3e",
+      "range": {
+        "startLine": 1262,
+        "startChar": 4,
+        "endLine": 1262,
+        "endChar": 93
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84cf369d_b6ec7f83",
         "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
         "patchSetId": 1
@@ -362,6 +434,24 @@
       "side": 1,
       "message": "Sounds good.",
       "parentUuid": "84cf369d_b6ec7f83",
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "455a8331_2776d936",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-13T00:11:51Z",
+      "side": 1,
+      "message": "Having taken a look at this, the disadvantage of moving RoHelper out of the header is that i can no longer easily re-use it from the end-to-end tests project unless I link in libangle which doesn\u0027t seem like a good approach.  Any thoughts on that?",
+      "parentUuid": "d20186c1_098204bc",
       "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -553,6 +643,30 @@
       "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "672306c7_63821992",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-13T00:11:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d472902_eac2d779",
+      "range": {
+        "startLine": 1146,
+        "startChar": 0,
+        "endLine": 1151,
+        "endChar": 22
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
