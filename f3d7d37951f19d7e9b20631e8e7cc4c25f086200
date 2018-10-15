@@ -322,6 +322,30 @@
     },
     {
       "key": {
+        "uuid": "0cdb6869_fd471a6a",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5910,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-15T09:26:31Z",
+      "side": 1,
+      "message": "Ah, OK.\nBut then all non-robust functions need to call with bufSize -1 because otherwise we would already return at the bufSize check (with InvalidOperation) if we call a non vector glTexParameter with GL_TEXTURE_BORDER_COLOR, so we wouldn\u0027t reach the pname-switch where we can return with InvalidEnum.",
+      "parentUuid": "0a1233e1_faf247bd",
+      "range": {
+        "startLine": 5905,
+        "startChar": 8,
+        "endLine": 5910,
+        "endChar": 9
+      },
+      "revId": "f3d7d37951f19d7e9b20631e8e7cc4c25f086200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ac8cc60_c57d2891",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 12
