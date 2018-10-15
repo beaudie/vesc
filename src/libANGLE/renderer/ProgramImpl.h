@@ -31,29 +31,29 @@ struct BlockMemberInfo;
 namespace rx
 {
 
-// Provides a mechanism to access the result of asynchronous linking.
-class LinkEvent : angle::NonCopyable
+// Provides a mechanism to access the result of asynchronous linking or loading.
+class ParallelEvent : angle::NonCopyable
 {
   public:
-    virtual ~LinkEvent(){};
+    virtual ~ParallelEvent(){};
 
     // Please be aware that these methods may be called under a gl::Context other
-    // than the one where the LinkEvent was created.
+    // than the one where the ParallelEvent was created.
     //
-    // Waits until the linking is actually done. Returns true if the linking
-    // succeeded, false otherwise.
+    // Waits until the linking or loading is actually done. Returns true if it succeeded, false
+    // otherwise.
     virtual angle::Result wait(const gl::Context *context) = 0;
-    // Peeks whether the linking is still ongoing.
-    virtual bool isLinking() = 0;
+    // Peeks whether the linking or loading is still ongoing.
+    virtual bool isOngoing() = 0;
 };
 
-// Wraps an already done linking.
-class LinkEventDone final : public LinkEvent
+// Wraps an already done linking or loading.
+class ParallelEventDone final : public ParallelEvent
 {
   public:
-    LinkEventDone(angle::Result result) : mResult(result) {}
+    ParallelEventDone(angle::Result result) : mResult(result) {}
     angle::Result wait(const gl::Context *context) override { return mResult; }
-    bool isLinking() override { return false; }
+    bool isOngoing() override { return false; }
 
   private:
     angle::Result mResult;
@@ -73,9 +73,9 @@ class ProgramImpl : angle::NonCopyable
     virtual void setBinaryRetrievableHint(bool retrievable) = 0;
     virtual void setSeparable(bool separable)               = 0;
 
-    virtual std::unique_ptr<LinkEvent> link(const gl::Context *context,
-                                            const gl::ProgramLinkedResources &resources,
-                                            gl::InfoLog &infoLog)          = 0;
+    virtual std::unique_ptr<ParallelEvent> link(const gl::Context *context,
+                                                const gl::ProgramLinkedResources &resources,
+                                                gl::InfoLog &infoLog)      = 0;
     virtual GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) = 0;
 
     virtual void setUniform1fv(GLint location, GLsizei count, const GLfloat *v) = 0;

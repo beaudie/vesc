@@ -1022,7 +1022,7 @@ Program *GetValidProgramNoResolve(Context *context, GLuint id)
     // or program object and INVALID_OPERATION if the provided name identifies an object
     // that is not the expected type."
 
-    Program *validProgram = context->getProgramNoResolveLink(id);
+    Program *validProgram = context->getProgramNoResolve(id);
 
     if (!validProgram)
     {
@@ -1044,7 +1044,7 @@ Program *GetValidProgram(Context *context, GLuint id)
     Program *program = GetValidProgramNoResolve(context, id);
     if (program)
     {
-        program->resolveLink(context);
+        program->resolve(context);
     }
     return program;
 }
@@ -1057,7 +1057,7 @@ Shader *GetValidShader(Context *context, GLuint id)
 
     if (!validShader)
     {
-        if (context->getProgramNoResolveLink(id))
+        if (context->getProgramNoResolve(id))
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), ExpectedShaderName);
         }
@@ -3270,7 +3270,7 @@ static bool ValidateSizedGetUniform(Context *context,
         return false;
     }
 
-    Program *programObject = context->getProgramResolveLink(program);
+    Program *programObject = context->getProgramResolve(program);
     ASSERT(programObject);
 
     // sized queries -- ensure the provided buffer is large enough

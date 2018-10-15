@@ -1499,18 +1499,19 @@ angle::Result ProgramD3D::getComputeExecutable(ShaderExecutableD3D **outExecutab
     return angle::Result::Continue();
 }
 
-// The LinkEvent implementation for linking a rendering(VS, FS, GS) program.
-class ProgramD3D::GraphicsProgramLinkEvent final : public LinkEvent
+// The ParallelEvent implementation for linking a rendering(VS, FS, GS) program.
+class ProgramD3D::GraphicsProgramParallelEvent final : public ParallelEvent
 {
   public:
-    GraphicsProgramLinkEvent(gl::InfoLog &infoLog,
-                             std::shared_ptr<WorkerThreadPool> workerPool,
-                             std::shared_ptr<ProgramD3D::GetVertexExecutableTask> vertexTask,
-                             std::shared_ptr<ProgramD3D::GetPixelExecutableTask> pixelTask,
-                             std::shared_ptr<ProgramD3D::GetGeometryExecutableTask> geometryTask,
-                             bool useGS,
-                             const ShaderD3D *vertexShader,
-                             const ShaderD3D *fragmentShader)
+    GraphicsProgramParallelEvent(
+        gl::InfoLog &infoLog,
+        std::shared_ptr<WorkerThreadPool> workerPool,
+        std::shared_ptr<ProgramD3D::GetVertexExecutableTask> vertexTask,
+        std::shared_ptr<ProgramD3D::GetPixelExecutableTask> pixelTask,
+        std::shared_ptr<ProgramD3D::GetGeometryExecutableTask> geometryTask,
+        bool useGS,
+        const ShaderD3D *vertexShader,
+        const ShaderD3D *fragmentShader)
         : mInfoLog(infoLog),
           mWorkerPool(workerPool),
           mVertexTask(vertexTask),
@@ -1573,7 +1574,7 @@ class ProgramD3D::GraphicsProgramLinkEvent final : public LinkEvent
         return isLinked ? angle::Result::Continue() : angle::Result::Incomplete();
     }
 
-    bool isLinking() override
+    bool isOngoing() override
     {
         for (auto &event : mWaitEvents)
         {
@@ -1615,14 +1616,14 @@ class ProgramD3D::GraphicsProgramLinkEvent final : public LinkEvent
     const ShaderD3D *mFragmentShader;
 };
 
-std::unique_ptr<LinkEvent> ProgramD3D::compileProgramExecutables(const gl::Context *context,
-                                                                 gl::InfoLog &infoLog)
+std::unique_ptr<ParallelEvent> ProgramD3D::compileProgramExecutables(const gl::Context *context,
+                                                                     gl::InfoLog &infoLog)
 {
     // Ensure the compiler is initialized to avoid race conditions.
     angle::Result result = mRenderer->ensureHLSLCompilerInitialized(GetImplAs<ContextD3D>(context));
     if (result.isError())
     {
-        return std::make_unique<LinkEventDone>(result);
+        return std::make_unique<ParallelEventDone>(result);
     }
 
     auto vertexTask   = std::make_shared<GetVertexExecutableTask>(this);
@@ -1634,9 +1635,9 @@ std::unique_ptr<LinkEvent> ProgramD3D::compileProgramExecutables(const gl::Conte
     const ShaderD3D *fragmentShaderD3D =
         GetImplAs<ShaderD3D>(mState.getAttachedShader(gl::ShaderType::Fragment));
 
-    return std::make_unique<GraphicsProgramLinkEvent>(infoLog, context->getWorkerThreadPool(),
-                                                      vertexTask, pixelTask, geometryTask, useGS,
-                                                      vertexShaderD3D, fragmentShaderD3D);
+    return std::make_unique<GraphicsProgramParallelEvent>(
+        infoLog, context->getWorkerThreadPool(), vertexTask, pixelTask, geometryTask, useGS,
+        vertexShaderD3D, fragmentShaderD3D);
 }
 
 angle::Result ProgramD3D::compileComputeExecutable(d3d::Context *context, gl::InfoLog &infoLog)
@@ -1669,9 +1670,9 @@ angle::Result ProgramD3D::compileComputeExecutable(d3d::Context *context, gl::In
     return mComputeExecutable.get() ? angle::Result::Continue() : angle::Result::Incomplete();
 }
 
-std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
-                                            const gl::ProgramLinkedResources &resources,
-                                            gl::InfoLog &infoLog)
+std::unique_ptr<ParallelEvent> ProgramD3D::link(const gl::Context *context,
+                                                const gl::ProgramLinkedResources &resources,
+                                                gl::InfoLog &infoLog)
 {
     const auto &data = context->getContextState();
 
@@ -1695,7 +1696,7 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
         {
             infoLog << "Failed to create D3D compute shader.";
         }
-        return std::make_unique<LinkEventDone>(result);
+        return std::make_unique<ParallelEventDone>(result);
     }
     else
     {
@@ -1720,7 +1721,7 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
             if (shadersD3D[gl::ShaderType::Fragment]->usesFrontFacing())
             {
                 infoLog << "The current renderer doesn't support gl_FrontFacing";
-                return std::make_unique<LinkEventDone>(angle::Result::Incomplete());
+                return std::make_unique<ParallelEventDone>(angle::Result::Incomplete());
             }
         }
 
