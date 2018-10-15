@@ -178,9 +178,9 @@ class ProgramD3D : public ProgramImpl
     bool usesGeometryShaderForPointSpriteEmulation() const;
     bool usesInstancedPointSpriteEmulation() const;
 
-    angle::Result load(const gl::Context *context,
-                       gl::InfoLog &infoLog,
-                       gl::BinaryInputStream *stream) override;
+    std::unique_ptr<ParallelEvent> load(const gl::Context *context,
+                                        gl::InfoLog &infoLog,
+                                        gl::BinaryInputStream &&stream) override;
     void save(const gl::Context *context, gl::BinaryOutputStream *stream) override;
     void setBinaryRetrievableHint(bool retrievable) override;
     void setSeparable(bool separable) override;
@@ -197,9 +197,9 @@ class ProgramD3D : public ProgramImpl
                                                           ShaderExecutableD3D **outExectuable,
                                                           gl::InfoLog *infoLog);
     angle::Result getComputeExecutable(ShaderExecutableD3D **outExecutable);
-    std::unique_ptr<LinkEvent> link(const gl::Context *context,
-                                    const gl::ProgramLinkedResources &resources,
-                                    gl::InfoLog &infoLog) override;
+    std::unique_ptr<ParallelEvent> link(const gl::Context *context,
+                                        const gl::ProgramLinkedResources &resources,
+                                        gl::InfoLog &infoLog) override;
     GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) override;
 
     void setPathFragmentInputGen(const std::string &inputName,
@@ -309,11 +309,14 @@ class ProgramD3D : public ProgramImpl
 
   private:
     // These forward-declared tasks are used for multi-thread shader compiles.
+    class Task;
     class GetExecutableTask;
     class GetVertexExecutableTask;
     class GetPixelExecutableTask;
     class GetGeometryExecutableTask;
-    class GraphicsProgramLinkEvent;
+    class GraphicsProgramParallelEvent;
+    class LoadBinaryTask;
+    class LoadBinaryEvent;
 
     class VertexExecutable
     {
@@ -454,8 +457,8 @@ class ProgramD3D : public ProgramImpl
                                     GLboolean transpose,
                                     const GLfloat *value);
 
-    std::unique_ptr<LinkEvent> compileProgramExecutables(const gl::Context *context,
-                                                         gl::InfoLog &infoLog);
+    std::unique_ptr<ParallelEvent> compileProgramExecutables(const gl::Context *context,
+                                                             gl::InfoLog &infoLog);
     angle::Result compileComputeExecutable(d3d::Context *context, gl::InfoLog &infoLog);
 
     void gatherTransformFeedbackVaryings(const gl::VaryingPacking &varyings,

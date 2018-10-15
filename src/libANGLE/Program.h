@@ -499,7 +499,6 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     ANGLE_INLINE rx::ProgramImpl *getImplementation() const
     {
-        ASSERT(mLinkResolved);
         return mProgram;
     }
 
@@ -531,7 +530,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     bool isLinked() const
     {
-        ASSERT(mLinkResolved);
+        ASSERT(mResolved);
         return mLinked;
     }
 
@@ -597,13 +596,13 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     const std::vector<VariableLocation> &getUniformLocations() const
     {
-        ASSERT(mLinkResolved);
+        ASSERT(mResolved);
         return mState.mUniformLocations;
     }
 
     const LinkedUniform &getUniformByIndex(GLuint index) const
     {
-        ASSERT(mLinkResolved);
+        ASSERT(mResolved);
         ASSERT(index < static_cast<size_t>(mState.mUniforms.size()));
         return mState.mUniforms[index];
     }
@@ -682,19 +681,19 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     ANGLE_INLINE GLuint getActiveUniformBlockCount() const
     {
-        ASSERT(mLinkResolved);
+        ASSERT(mResolved);
         return static_cast<GLuint>(mState.mUniformBlocks.size());
     }
 
     ANGLE_INLINE GLuint getActiveAtomicCounterBufferCount() const
     {
-        ASSERT(mLinkResolved);
+        ASSERT(mResolved);
         return static_cast<GLuint>(mState.mAtomicCounterBuffers.size());
     }
 
     ANGLE_INLINE GLuint getActiveShaderStorageBlockCount() const
     {
-        ASSERT(mLinkResolved);
+        ASSERT(mResolved);
         return static_cast<GLuint>(mState.mShaderStorageBlocks.size());
     }
 
@@ -728,13 +727,13 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     ANGLE_INLINE void addRef()
     {
-        ASSERT(mLinkResolved);
+        ASSERT(mResolved);
         mRefCount++;
     }
 
     ANGLE_INLINE void release(const Context *context)
     {
-        ASSERT(mLinkResolved);
+        ASSERT(mResolved);
         mRefCount--;
 
         if (mRefCount == 0 && mDeleteStatus)
@@ -766,14 +765,14 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     const AttributesMask &getActiveAttribLocationsMask() const
     {
-        ASSERT(mLinkResolved);
+        ASSERT(mResolved);
         return mState.mActiveAttribLocationsMask;
     }
 
     const std::vector<SamplerBinding> &getSamplerBindings() const;
     const std::vector<ImageBinding> &getImageBindings() const
     {
-        ASSERT(mLinkResolved);
+        ASSERT(mResolved);
         return mState.mImageBindings;
     }
     const sh::WorkGroupSize &getComputeShaderLocalSize() const;
@@ -784,7 +783,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     const ProgramState &getState() const
     {
-        ASSERT(mLinkResolved);
+        ASSERT(mResolved);
         return mState;
     }
 
@@ -842,12 +841,20 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     angle::Result syncState(const Context *context);
 
-    // Try to resolve linking. Inlined to make sure its overhead is as low as possible.
-    void resolveLink(const Context *context)
+    // Try to resolve linking or loading. Inlined to make sure its overhead is as low as possible.
+    void resolve(const Context *context)
     {
-        if (!mLinkResolved)
+        if (!mResolved)
         {
-            resolveLinkImpl(context);
+            if (mLinkingState.get())
+            {
+                resolveLinkImpl(context);
+            }
+            else
+            {
+                ASSERT(mLoadingState.get());
+                resolveLoadImpl(context);
+            }
         }
     }
 
@@ -855,6 +862,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
   private:
     struct LinkingState;
+    struct LoadingState;
 
     ~Program() override;
 
@@ -954,6 +962,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     // Block until linking is finished and resolve it.
     void resolveLinkImpl(const gl::Context *context);
 
+    void resolveLoadImpl(const gl::Context *context);
+
     ProgramState mState;
     rx::ProgramImpl *mProgram;
 
@@ -973,8 +983,9 @@ class Program final : angle::NonCopyable, public LabeledObject
     ProgramBindings mFragmentOutputIndexes;
 
     bool mLinked;
-    bool mLinkResolved;
+    bool mResolved;
     std::unique_ptr<LinkingState> mLinkingState;
+    std::unique_ptr<LoadingState> mLoadingState;
     bool mDeleteStatus;  // Flag to indicate that the program can be deleted when no longer in use
 
     unsigned int mRefCount;

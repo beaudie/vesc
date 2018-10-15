@@ -31,6 +31,19 @@ class BinaryInputStream : angle::NonCopyable
         mLength = length;
     }
 
+    BinaryInputStream(BinaryInputStream &&other)
+    {
+        mError  = other.mError;
+        mOffset = other.mOffset;
+        mData   = other.mData;
+        mLength = other.mLength;
+
+        other.mError  = false;
+        other.mOffset = 0;
+        other.mData   = nullptr;
+        other.mLength = 0;
+    }
+
     // readInt will generate an error for bool types
     template <class IntT>
     IntT readInt()

@@ -234,12 +234,12 @@ angle::Result ProgramVk::reset(ContextVk *contextVk)
     return angle::Result::Continue();
 }
 
-angle::Result ProgramVk::load(const gl::Context *context,
-                              gl::InfoLog &infoLog,
-                              gl::BinaryInputStream *stream)
+std::unique_ptr<ParallelEvent> ProgramVk::load(const gl::Context *context,
+                                               gl::InfoLog &infoLog,
+                                               gl::BinaryInputStream &&stream)
 {
     UNIMPLEMENTED();
-    return angle::Result::Stop();
+    return std::make_unique<ParallelEventDone>(angle::Result::Stop());
 }
 
 void ProgramVk::save(const gl::Context *context, gl::BinaryOutputStream *stream)
@@ -257,13 +257,13 @@ void ProgramVk::setSeparable(bool separable)
     UNIMPLEMENTED();
 }
 
-std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
-                                           const gl::ProgramLinkedResources &resources,
-                                           gl::InfoLog &infoLog)
+std::unique_ptr<ParallelEvent> ProgramVk::link(const gl::Context *context,
+                                               const gl::ProgramLinkedResources &resources,
+                                               gl::InfoLog &infoLog)
 {
     // TODO(jie.a.chen@intel.com): Parallelize linking.
     // http://crbug.com/849576
-    return std::make_unique<LinkEventDone>(linkImpl(context, resources, infoLog));
+    return std::make_unique<ParallelEventDone>(linkImpl(context, resources, infoLog));
 }
 
 angle::Result ProgramVk::linkImpl(const gl::Context *glContext,
