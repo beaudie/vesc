@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1210f8db_99ea0b5d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-15T22:28:49Z",
+      "side": 1,
+      "message": "nit: Could you please comment about how this initialization addresses the 2 issues:\n1. Setting color mask without active program.\n2. updatePipelineColorMask for the first active program.",
+      "range": {
+        "startLine": 119,
+        "startChar": 6,
+        "endLine": 119,
+        "endChar": 29
+      },
+      "revId": "01b0e110c371c72d8379061b9edde28823bea794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed065bed_f22cbcaa",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-15T22:28:49Z",
+      "side": 1,
+      "message": "Will this work if you clear the program to 0?\nAlso, what should be mProgramHasOutput value if you clear the program to 0 for updatePipelineColorMask() to do the right thing?",
+      "range": {
+        "startLine": 866,
+        "startChar": 0,
+        "endLine": 866,
+        "endChar": 92
+      },
+      "revId": "01b0e110c371c72d8379061b9edde28823bea794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
