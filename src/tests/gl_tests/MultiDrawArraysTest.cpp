@@ -47,7 +47,7 @@ constexpr std::array<std::array<GLfloat, 3>, 4> getQuadVertices(uint32_t x, uint
     };
 }
 
-void CheckResult()
+void CheckDrawNoDrawIDResult()
 {
     for (uint32_t y = 0; y < y_count; ++y)
     {
@@ -61,11 +61,40 @@ void CheckResult()
     }
 }
 
+void CheckDrawWithDrawIDResult()
+{
+    for (uint32_t y = 0; y < y_count; ++y)
+    {
+        for (uint32_t x = 0; x < x_count; ++x)
+        {
+            uint32_t center_x = x * tilePixelSize[0] + tilePixelSize[0] / 2;
+            uint32_t center_y = y * tilePixelSize[1] + tilePixelSize[1] / 2;
+            uint32_t quadID   = y * x_count + x;
+            uint32_t colorID  = quadID % 3u;
+            GLColor expected;
+            switch (colorID)
+            {
+                case 0u:
+                    expected = GLColor(255, 0, 0, 255);
+                    break;
+                case 1u:
+                    expected = GLColor(0, 255, 0, 255);
+                    break;
+                default:
+                    expected = GLColor(0, 0, 255, 255);
+                    break;
+            }
+            EXPECT_PIXEL_RECT_EQ(center_x - pixelCheckSize[0] / 2, center_y - pixelCheckSize[1] / 2,
+                                 pixelCheckSize[0], pixelCheckSize[1], expected);
+        }
+    }
+}
+
 class MultiDrawArraysTest : public ANGLETest
 {
   protected:
     MultiDrawArraysTest()
-        : mVertexBuffer(0u), mIndexBuffer(0u), mProgram(0u)
+        : mVertexBuffer(0u), mIndexBuffer(0u), mSimpleProgram(0u), mDrawIDProgram(0u)
     {
         setWindowWidth(width);
         setWindowHeight(height);
@@ -120,9 +149,13 @@ class MultiDrawArraysTest : public ANGLETest
         {
             glDeleteBuffers(1, &mIndexBuffer);
         }
-        if (mProgram != 0u)
+        if (mSimpleProgram != 0u)
         {
-            glDeleteProgram(mProgram);
+            glDeleteProgram(mSimpleProgram);
+        }
+        if (mDrawIDProgram != 0)
+        {
+            glDeleteProgram(mDrawIDProgram);
         }
         ANGLETest::TearDown();
     }
@@ -146,10 +179,11 @@ class MultiDrawArraysTest : public ANGLETest
     std::vector<GLfloat> mNonIndexedVertices;
     GLuint mVertexBuffer;
     GLuint mIndexBuffer;
-    GLuint mProgram;
+    GLuint mSimpleProgram;
+    GLuint mDrawIDProgram;
 };
 
-const char *VertexShaderSource()
+const char *VertexShaderNoDrawIDSource()
 {
     return
         R"(attribute vec2 vPosition;
@@ -157,6 +191,27 @@ const char *VertexShaderSource()
         void main()
         {
             color = vec4(1.0, 0.0, 0.0, 1.0);
+            gl_Position = vec4(vPosition * 2.0 - 1.0, 0, 1);
+        })";
+}
+
+const char *VertexShaderWithDrawIDSource()
+{
+    return
+        R"(#extension GL_ANGLE_draw_id : require
+        attribute vec2 vPosition;
+        varying vec4 color;
+        void main()
+        {
+            float quad_id = float(gl_DrawID / 2);
+            float color_id = quad_id - (3.0 * floor(quad_id / 3.0));
+            if (color_id == 0.0) {
+              color = vec4(1, 0, 0, 1);
+            } else if (color_id == 1.0) {
+              color = vec4(0, 1, 0, 1);
+            } else {
+              color = vec4(0, 0, 1, 1);
+            }
             gl_Position = vec4(vPosition * 2.0 - 1.0, 0, 1);
         })";
 }
@@ -176,7 +231,8 @@ const char *FragmentShaderSource()
 TEST_P(MultiDrawArraysTest, ValidateMultiDrawArrays)
 {
     ANGLE_SKIP_TEST_IF(!requestExtension());
-    ANGLE_GL_PROGRAM(mProgram, VertexShaderSource(), FragmentShaderSource());
+    ANGLE_GL_PROGRAM(mSimpleProgram, VertexShaderNoDrawIDSource(), FragmentShaderSource());
+    ANGLE_GL_PROGRAM(mDrawIDProgram, VertexShaderWithDrawIDSource(), FragmentShaderSource());
 
     glGenBuffers(1, &mVertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
@@ -194,18 +250,26 @@ TEST_P(MultiDrawArraysTest, ValidateMultiDrawArrays)
     }
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glUseProgram(mProgram);
+    glUseProgram(mSimpleProgram);
     glMultiDrawArraysEXT(GL_TRIANGLES, firsts.data(), counts.data(), tri_count);
     EXPECT_GL_NO_ERROR();
 
-    CheckResult();
+    CheckDrawNoDrawIDResult();
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glUseProgram(mDrawIDProgram);
+    glMultiDrawArraysEXT(GL_TRIANGLES, firsts.data(), counts.data(), tri_count);
+    EXPECT_GL_NO_ERROR();
+
+    CheckDrawWithDrawIDResult();
 }
 
 // Tests basic functionality of glMultiDrawElements
 TEST_P(MultiDrawArraysTest, ValidateMultiDrawElements)
 {
     ANGLE_SKIP_TEST_IF(!requestExtension());
-    ANGLE_GL_PROGRAM(mProgram, VertexShaderSource(), FragmentShaderSource());
+    ANGLE_GL_PROGRAM(mSimpleProgram, VertexShaderNoDrawIDSource(), FragmentShaderSource());
+    ANGLE_GL_PROGRAM(mDrawIDProgram, VertexShaderWithDrawIDSource(), FragmentShaderSource());
 
     glGenBuffers(1, &mVertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
@@ -230,12 +294,20 @@ TEST_P(MultiDrawArraysTest, ValidateMultiDrawElements)
     }
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glUseProgram(mProgram);
+    glUseProgram(mSimpleProgram);
     glMultiDrawElementsEXT(GL_TRIANGLES, counts.data(), GL_UNSIGNED_SHORT, offsets.data(),
                            tri_count);
     EXPECT_GL_NO_ERROR();
 
-    CheckResult();
+    CheckDrawNoDrawIDResult();
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glUseProgram(mDrawIDProgram);
+    glMultiDrawElementsEXT(GL_TRIANGLES, counts.data(), GL_UNSIGNED_SHORT, offsets.data(),
+                           tri_count);
+    EXPECT_GL_NO_ERROR();
+
+    CheckDrawWithDrawIDResult();
 }
 
 ANGLE_INSTANTIATE_TEST(MultiDrawArraysTest,
