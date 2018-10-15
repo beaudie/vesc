@@ -22,11 +22,11 @@ ProgramNULL::~ProgramNULL()
 {
 }
 
-angle::Result ProgramNULL::load(const gl::Context *context,
-                                gl::InfoLog &infoLog,
-                                gl::BinaryInputStream *stream)
+std::unique_ptr<ParallelEvent> ProgramNULL::load(const gl::Context *context,
+                                                 gl::InfoLog &infoLog,
+                                                 gl::BinaryInputStream &&stream)
 {
-    return angle::Result::Continue();
+    return std::make_unique<ParallelEventDone>(angle::Result::Continue());
 }
 
 void ProgramNULL::save(const gl::Context *context, gl::BinaryOutputStream *stream)
@@ -41,11 +41,11 @@ void ProgramNULL::setSeparable(bool separable)
 {
 }
 
-std::unique_ptr<LinkEvent> ProgramNULL::link(const gl::Context *contextImpl,
-                                             const gl::ProgramLinkedResources &resources,
-                                             gl::InfoLog &infoLog)
+std::unique_ptr<ParallelEvent> ProgramNULL::link(const gl::Context *contextImpl,
+                                                 const gl::ProgramLinkedResources &resources,
+                                                 gl::InfoLog &infoLog)
 {
-    return std::make_unique<LinkEventDone>(angle::Result::Continue());
+    return std::make_unique<ParallelEventDone>(angle::Result::Continue());
 }
 
 GLboolean ProgramNULL::validate(const gl::Caps &caps, gl::InfoLog *infoLog)
