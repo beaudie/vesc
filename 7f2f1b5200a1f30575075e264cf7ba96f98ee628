@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5ed2b70a_c21793f0",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-10-15T21:35:53Z",
+      "side": 1,
+      "message": "I\u0027ve done away with this.",
+      "parentUuid": "2924d305_a5eaf1c4",
+      "range": {
+        "startLine": 356,
+        "startChar": 29,
+        "endLine": 356,
+        "endChar": 49
+      },
+      "revId": "7f2f1b5200a1f30575075e264cf7ba96f98ee628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "243303e4_593259b8",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "7f2f1b5200a1f30575075e264cf7ba96f98ee628",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2f5c53e_8f9ae12d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-10-15T21:35:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "243303e4_593259b8",
+      "range": {
+        "startLine": 262,
+        "startChar": 37,
+        "endLine": 262,
+        "endChar": 69
+      },
+      "revId": "7f2f1b5200a1f30575075e264cf7ba96f98ee628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b20754ca_cd8a0327",
+        "filename": "src/tests/gl_tests/LinkAndRelinkTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-10-15T21:35:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1221c7e4_5bd965c9",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 26
+      },
+      "revId": "7f2f1b5200a1f30575075e264cf7ba96f98ee628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c78257c7_e15a0d2e",
         "filename": "src/tests/gl_tests/LinkAndRelinkTest.cpp",
         "patchSetId": 3
@@ -82,6 +154,30 @@
       "writtenOn": "2018-10-04T12:03:56Z",
       "side": 1,
       "message": "looks like you\u0027ll need to suppress this test on AMD for some reason. could you file a bug for that?",
+      "range": {
+        "startLine": 63,
+        "startChar": 7,
+        "endLine": 63,
+        "endChar": 24
+      },
+      "revId": "7f2f1b5200a1f30575075e264cf7ba96f98ee628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e02c5201_172c5610",
+        "filename": "src/tests/gl_tests/LinkAndRelinkTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-10-15T21:35:53Z",
+      "side": 1,
+      "message": "Apparently not a bug.  Geoff says GL no-output shaders are undefined.\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d2889\nWhich means we can only run this test on Vulkan.",
+      "parentUuid": "c78257c7_e15a0d2e",
       "range": {
         "startLine": 63,
         "startChar": 7,
@@ -114,6 +210,30 @@
       "revId": "7f2f1b5200a1f30575075e264cf7ba96f98ee628",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dae130e_0693ec6b",
+        "filename": "src/tests/gl_tests/LinkAndRelinkTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-10-15T21:35:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20763a1b_08a1ab29",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 35
+      },
+      "revId": "7f2f1b5200a1f30575075e264cf7ba96f98ee628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
