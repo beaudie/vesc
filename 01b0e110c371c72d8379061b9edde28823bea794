@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "47f7c742_1da08b72",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-10-15T23:03:10Z",
+      "side": 1,
+      "message": "1. If we get into updateColorMask before mProgram has been set, we want to do the usual job of updateColorMask which we will because mProgramHasOutput is true.\n2. The first time mProgram is set we need to call updatePipelineColorMask only if the program doesn\u0027t have output, i.e. mProgramHasOutput is now false and different from the initial value of true.\n\nShall I put all of the above into a comment in the code?  I\u0027m not sure how enlightening I can make it.",
+      "parentUuid": "1210f8db_99ea0b5d",
+      "range": {
+        "startLine": 119,
+        "startChar": 6,
+        "endLine": 119,
+        "endChar": 29
+      },
+      "revId": "01b0e110c371c72d8379061b9edde28823bea794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed065bed_f22cbcaa",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2018-10-15T22:28:49Z",
       "side": 1,
       "message": "Will this work if you clear the program to 0?\nAlso, what should be mProgramHasOutput value if you clear the program to 0 for updatePipelineColorMask() to do the right thing?",
+      "range": {
+        "startLine": 866,
+        "startChar": 0,
+        "endLine": 866,
+        "endChar": 92
+      },
+      "revId": "01b0e110c371c72d8379061b9edde28823bea794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ebd8aea_8278c06e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-10-15T23:03:10Z",
+      "side": 1,
+      "message": "We don\u0027t reach here on glUseProgram(0) so there is no crash.\nI will add an assert though that mProgram is not 0.\nAfter glUseProgram(0) drawing is undefined, so I think anything is the right thing.",
+      "parentUuid": "ed065bed_f22cbcaa",
       "range": {
         "startLine": 866,
         "startChar": 0,
