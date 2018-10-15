@@ -49,7 +49,18 @@ class ParallelShaderCompileTest : public ANGLETest
     class ClearColorWithDraw
     {
       public:
-        ClearColorWithDraw(GLubyte color) : mColor(color, color, color, 255) {}
+        ClearColorWithDraw(GLubyte color)
+            : mColor(color, color, color, 255), mVertexShader(0), mFragmentShader(0), mProgram(0)
+        {
+        }
+        ~ClearColorWithDraw()
+        {
+            if (mProgram != 0)
+            {
+                glDeleteProgram(mProgram);
+                mProgram = 0;
+            }
+        }
 
         bool compile()
         {
@@ -87,6 +98,29 @@ class ParallelShaderCompileTest : public ANGLETest
             return (mProgram != 0);
         }
 
+        void saveAndLoadBinary()
+        {
+            GLint programLength = 0;
+            GLint readLength    = 0;
+            GLenum binaryFormat = GL_NONE;
+            glGetProgramiv(mProgram, GL_PROGRAM_BINARY_LENGTH_OES, &programLength);
+            EXPECT_GL_NO_ERROR();
+            mBinary = std::make_unique<std::vector<uint8_t>>(programLength);
+            glGetProgramBinaryOES(mProgram, programLength, &readLength, &binaryFormat,
+                                  mBinary->data());
+            EXPECT_GL_NO_ERROR();
+            EXPECT_EQ(programLength, readLength);
+
+            glUseProgram(0);
+            glDeleteProgram(0);
+            EXPECT_GL_NO_ERROR();
+
+            mProgram = glCreateProgram();
+            // The binary data must be availabe until the background loading task is done.
+            glProgramBinaryOES(mProgram, binaryFormat, mBinary->data(), programLength);
+            EXPECT_GL_NO_ERROR();
+        }
+
         bool isLinkCompleted()
         {
             GLint status;
@@ -109,8 +143,6 @@ class ParallelShaderCompileTest : public ANGLETest
             test->drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
             EXPECT_PIXEL_COLOR_EQ(test->getWindowWidth() / 2, test->getWindowHeight() / 2, mColor);
             glUseProgram(0);
-            glDeleteProgram(mProgram);
-            ASSERT_GL_NO_ERROR();
         }
 
       private:
@@ -165,6 +197,7 @@ class ParallelShaderCompileTest : public ANGLETest
         GLuint mVertexShader;
         GLuint mFragmentShader;
         GLuint mProgram;
+        std::unique_ptr<std::vector<uint8_t>> mBinary;
     };
 };
 
@@ -181,8 +214,8 @@ TEST_P(ParallelShaderCompileTest, Basic)
     EXPECT_EQ(8, count);
 }
 
-// Test to compile and link many programs in parallel.
-TEST_P(ParallelShaderCompileTest, LinkAndDrawManyPrograms)
+// Test to compile and link, then save and load many programs in parallel.
+TEST_P(ParallelShaderCompileTest, LinkAndDrawThenLoadAndDrawManyPrograms)
 {
     ANGLE_SKIP_TEST_IF(!ensureParallelShaderCompileExtensionAvailable());
 
@@ -218,6 +251,7 @@ TEST_P(ParallelShaderCompileTest, LinkAndDrawManyPrograms)
         Sleep(kPollInterval);
     }
 
+    std::vector<std::unique_ptr<ClearColorWithDraw>> binaryTasks;
     while (!linkTasks.empty())
     {
         for (unsigned int i = 0; i < linkTasks.size();)
@@ -227,7 +261,29 @@ TEST_P(ParallelShaderCompileTest, LinkAndDrawManyPrograms)
             if (task->isLinkCompleted())
             {
                 task->drawAndVerify(this);
+                if (extensionEnabled("GL_OES_get_program_binary"))
+                {
+                    task->saveAndLoadBinary();
+                    binaryTasks.push_back(std::move(task));
+                }
                 linkTasks.erase(linkTasks.begin() + i);
+                continue;
+            }
+            ++i;
+        }
+        Sleep(kPollInterval);
+    }
+
+    while (!binaryTasks.empty())
+    {
+        for (unsigned int i = 0; i < binaryTasks.size();)
+        {
+            auto &task = binaryTasks[i];
+
+            if (task->isLinkCompleted())
+            {
+                task->drawAndVerify(this);
+                binaryTasks.erase(binaryTasks.begin() + i);
                 continue;
             }
             ++i;
@@ -241,7 +297,6 @@ ANGLE_INSTANTIATE_TEST(ParallelShaderCompileTest,
                        ES2_D3D11(),
                        ES2_D3D11_FL9_3(),
                        ES2_OPENGL(),
-                       ES2_OPENGLES(),
-                       ES2_VULKAN());
+                       ES2_OPENGLES());
 
 }  // namespace

@@ -2293,7 +2293,7 @@ static bool ValidateObjectIdentifierAndName(Context *context, GLenum identifier,
             return true;
 
         case GL_PROGRAM:
-            if (context->getProgramNoResolveLink(name) == nullptr)
+            if (context->getProgramNoResolve(name) == nullptr)
             {
                 context->handleError(InvalidValue() << "name is not a valid program.");
                 return false;
@@ -3841,7 +3841,7 @@ bool ValidateBindFragmentInputLocationCHROMIUM(Context *context,
         return false;
     }
 
-    const auto *programObject = context->getProgramNoResolveLink(program);
+    const auto *programObject = context->getProgramNoResolve(program);
     if (!programObject)
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), ProgramNotBound);
@@ -3876,7 +3876,7 @@ bool ValidateProgramPathFragmentInputGenCHROMIUM(Context *context,
         return false;
     }
 
-    const auto *programObject = context->getProgramResolveLink(program);
+    const auto *programObject = context->getProgramResolve(program);
     if (!programObject || programObject->isFlaggedForDeletion())
     {
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), ProgramDoesNotExist);
@@ -4912,7 +4912,7 @@ bool ValidateDeleteProgram(Context *context, GLuint program)
         return false;
     }
 
-    if (!context->getProgramResolveLink(program))
+    if (!context->getProgramResolve(program))
     {
         if (context->getShader(program))
         {
@@ -4938,7 +4938,7 @@ bool ValidateDeleteShader(Context *context, GLuint shader)
 
     if (!context->getShader(shader))
     {
-        if (context->getProgramResolveLink(shader))
+        if (context->getProgramResolve(shader))
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), InvalidShaderName);
             return false;
@@ -6296,7 +6296,7 @@ bool ValidateUseProgram(Context *context, GLuint program)
 {
     if (program != 0)
     {
-        Program *programObject = context->getProgramResolveLink(program);
+        Program *programObject = context->getProgramResolve(program);
         if (!programObject)
         {
             // ES 3.1.0 section 7.3 page 72

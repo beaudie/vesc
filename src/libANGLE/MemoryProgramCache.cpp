@@ -209,12 +209,12 @@ MemoryProgramCache::~MemoryProgramCache()
 }
 
 // static
-angle::Result MemoryProgramCache::Deserialize(const Context *context,
-                                              const Program *program,
-                                              ProgramState *state,
-                                              const uint8_t *binary,
-                                              size_t length,
-                                              InfoLog &infoLog)
+std::unique_ptr<rx::ParallelEvent> MemoryProgramCache::Deserialize(const Context *context,
+                                                                   const Program *program,
+                                                                   ProgramState *state,
+                                                                   const uint8_t *binary,
+                                                                   size_t length,
+                                                                   InfoLog &infoLog)
 {
     BinaryInputStream stream(binary, length);
 
@@ -224,7 +224,7 @@ angle::Result MemoryProgramCache::Deserialize(const Context *context,
         0)
     {
         infoLog << "Invalid program binary version.";
-        return angle::Result::Incomplete();
+        return std::make_unique<rx::ParallelEventDone>(angle::Result::Incomplete());
     }
 
     int majorVersion = stream.readInt<int>();
@@ -233,7 +233,7 @@ angle::Result MemoryProgramCache::Deserialize(const Context *context,
         minorVersion != context->getClientMinorVersion())
     {
         infoLog << "Cannot load program binaries across different ES context versions.";
-        return angle::Result::Incomplete();
+        return std::make_unique<rx::ParallelEventDone>(angle::Result::Incomplete());
     }
 
     state->mComputeShaderLocalSize[0] = stream.readInt<int>();
@@ -345,7 +345,7 @@ angle::Result MemoryProgramCache::Deserialize(const Context *context,
         context->getWorkarounds().disableProgramCachingForTransformFeedback)
     {
         infoLog << "Current driver does not support transform feedback in binary programs.";
-        return angle::Result::Incomplete();
+        return std::make_unique<rx::ParallelEventDone>(angle::Result::Incomplete());
     }
 
     ASSERT(state->mLinkedTransformFeedbackVaryings.empty());
@@ -450,7 +450,7 @@ angle::Result MemoryProgramCache::Deserialize(const Context *context,
     state->updateActiveSamplers();
     state->updateActiveImages();
 
-    return program->getImplementation()->load(context, infoLog, &stream);
+    return program->getImplementation()->load(context, infoLog, std::move(stream));
 }
 
 // static
@@ -683,8 +683,9 @@ angle::Result MemoryProgramCache::getProgram(const Context *context,
     if (get(context, *hashOut, &binaryProgram))
     {
         InfoLog infoLog;
-        angle::Result result = Deserialize(context, program, state, binaryProgram.data(),
-                                           binaryProgram.size(), infoLog);
+        std::unique_ptr<rx::ParallelEvent> loadEvent = Deserialize(
+            context, program, state, binaryProgram.data(), binaryProgram.size(), infoLog);
+        angle::Result result = loadEvent->wait(context);
         ANGLE_HISTOGRAM_BOOLEAN("GPU.ANGLE.ProgramCache.LoadBinarySuccess",
                                 result == angle::Result::Continue());
         ANGLE_TRY(result);
