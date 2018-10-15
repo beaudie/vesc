@@ -739,311 +739,6 @@ gl::RangeUI ProgramD3D::getUsedImageRange(gl::ShaderType type, bool readonly) co
     }
 }
 
-angle::Result ProgramD3D::load(const gl::Context *context,
-                               gl::InfoLog &infoLog,
-                               gl::BinaryInputStream *stream)
-{
-    // TODO(jmadill): Use Renderer from contextImpl.
-
-    reset();
-
-    DeviceIdentifier binaryDeviceIdentifier = {0};
-    stream->readBytes(reinterpret_cast<unsigned char *>(&binaryDeviceIdentifier),
-                      sizeof(DeviceIdentifier));
-
-    DeviceIdentifier identifier = mRenderer->getAdapterIdentifier();
-    if (memcmp(&identifier, &binaryDeviceIdentifier, sizeof(DeviceIdentifier)) != 0)
-    {
-        infoLog << "Invalid program binary, device configuration has changed.";
-        return angle::Result::Incomplete();
-    }
-
-    int compileFlags = stream->readInt<int>();
-    if (compileFlags != ANGLE_COMPILE_OPTIMIZATION_LEVEL)
-    {
-        infoLog << "Mismatched compilation flags.";
-        return angle::Result::Incomplete();
-    }
-
-    for (int &index : mAttribLocationToD3DSemantic)
-    {
-        stream->readInt(&index);
-    }
-
-    for (gl::ShaderType shaderType : gl::AllShaderTypes())
-    {
-        const unsigned int samplerCount = stream->readInt<unsigned int>();
-        for (unsigned int i = 0; i < samplerCount; ++i)
-        {
-            Sampler sampler;
-            stream->readBool(&sampler.active);
-            stream->readInt(&sampler.logicalTextureUnit);
-            stream->readEnum(&sampler.textureType);
-            mShaderSamplers[shaderType].push_back(sampler);
-        }
-
-        unsigned int samplerRangeLow, samplerRangeHigh;
-        stream->readInt(&samplerRangeLow);
-        stream->readInt(&samplerRangeHigh);
-        mUsedShaderSamplerRanges[shaderType] = gl::RangeUI(samplerRangeLow, samplerRangeHigh);
-    }
-
-    const unsigned int csImageCount = stream->readInt<unsigned int>();
-    for (unsigned int i = 0; i < csImageCount; ++i)
-    {
-        Image image;
-        stream->readBool(&image.active);
-        stream->readInt(&image.logicalImageUnit);
-        mImagesCS.push_back(image);
-    }
-
-    const unsigned int csReadonlyImageCount = stream->readInt<unsigned int>();
-    for (unsigned int i = 0; i < csReadonlyImageCount; ++i)
-    {
-        Image image;
-        stream->readBool(&image.active);
-        stream->readInt(&image.logicalImageUnit);
-        mReadonlyImagesCS.push_back(image);
-    }
-
-    unsigned int computeImageRangeLow, computeImageRangeHigh, computeReadonlyImageRangeLow,
-        computeReadonlyImageRangeHigh;
-    stream->readInt(&computeImageRangeLow);
-    stream->readInt(&computeImageRangeHigh);
-    stream->readInt(&computeReadonlyImageRangeLow);
-    stream->readInt(&computeReadonlyImageRangeHigh);
-    mUsedComputeImageRange = gl::RangeUI(computeImageRangeLow, computeImageRangeHigh);
-    mUsedComputeReadonlyImageRange =
-        gl::RangeUI(computeReadonlyImageRangeLow, computeReadonlyImageRangeHigh);
-
-    const unsigned int shaderStorageBlockCount = stream->readInt<unsigned int>();
-    if (stream->error())
-    {
-        infoLog << "Invalid program binary.";
-        return angle::Result::Incomplete();
-    }
-
-    ASSERT(mD3DShaderStorageBlocks.empty());
-    for (unsigned int blockIndex = 0; blockIndex < shaderStorageBlockCount; ++blockIndex)
-    {
-        D3DInterfaceBlock shaderStorageBlock;
-        for (gl::ShaderType shaderType : gl::AllShaderTypes())
-        {
-            stream->readInt(&shaderStorageBlock.mShaderRegisterIndexes[shaderType]);
-        }
-        mD3DShaderStorageBlocks.push_back(shaderStorageBlock);
-    }
-
-    const unsigned int uniformCount = stream->readInt<unsigned int>();
-    if (stream->error())
-    {
-        infoLog << "Invalid program binary.";
-        return angle::Result::Incomplete();
-    }
-
-    const auto &linkedUniforms = mState.getUniforms();
-    ASSERT(mD3DUniforms.empty());
-    for (unsigned int uniformIndex = 0; uniformIndex < uniformCount; uniformIndex++)
-    {
-        const gl::LinkedUniform &linkedUniform = linkedUniforms[uniformIndex];
-
-        D3DUniform *d3dUniform =
-            new D3DUniform(linkedUniform.type, HLSLRegisterType::None, linkedUniform.name,
-                           linkedUniform.arraySizes, linkedUniform.isInDefaultBlock());
-        stream->readInt<HLSLRegisterType>(&d3dUniform->regType);
-        for (gl::ShaderType shaderType : gl::AllShaderTypes())
-        {
-            stream->readInt(&d3dUniform->mShaderRegisterIndexes[shaderType]);
-        }
-        stream->readInt(&d3dUniform->registerCount);
-        stream->readInt(&d3dUniform->registerElement);
-
-        mD3DUniforms.push_back(d3dUniform);
-    }
-
-    const unsigned int blockCount = stream->readInt<unsigned int>();
-    if (stream->error())
-    {
-        infoLog << "Invalid program binary.";
-        return angle::Result::Incomplete();
-    }
-
-    ASSERT(mD3DUniformBlocks.empty());
-    for (unsigned int blockIndex = 0; blockIndex < blockCount; ++blockIndex)
-    {
-        D3DInterfaceBlock uniformBlock;
-        for (gl::ShaderType shaderType : gl::AllShaderTypes())
-        {
-            stream->readInt(&uniformBlock.mShaderRegisterIndexes[shaderType]);
-        }
-        mD3DUniformBlocks.push_back(uniformBlock);
-    }
-
-    const unsigned int streamOutVaryingCount = stream->readInt<unsigned int>();
-    mStreamOutVaryings.resize(streamOutVaryingCount);
-    for (unsigned int varyingIndex = 0; varyingIndex < streamOutVaryingCount; ++varyingIndex)
-    {
-        D3DVarying *varying = &mStreamOutVaryings[varyingIndex];
-
-        stream->readString(&varying->semanticName);
-        stream->readInt(&varying->semanticIndex);
-        stream->readInt(&varying->componentCount);
-        stream->readInt(&varying->outputSlot);
-    }
-
-    for (gl::ShaderType shaderType : gl::AllShaderTypes())
-    {
-        stream->readString(&mShaderHLSL[shaderType]);
-        stream->readBytes(reinterpret_cast<unsigned char *>(&mShaderWorkarounds[shaderType]),
-                          sizeof(angle::CompilerWorkaroundsD3D));
-    }
-
-    stream->readBool(&mUsesFragDepth);
-    stream->readBool(&mHasANGLEMultiviewEnabled);
-    stream->readBool(&mUsesViewID);
-    stream->readBool(&mUsesPointSize);
-    stream->readBool(&mUsesFlatInterpolation);
-
-    const size_t pixelShaderKeySize = stream->readInt<unsigned int>();
-    mPixelShaderKey.resize(pixelShaderKeySize);
-    for (size_t pixelShaderKeyIndex = 0; pixelShaderKeyIndex < pixelShaderKeySize;
-         pixelShaderKeyIndex++)
-    {
-        stream->readInt(&mPixelShaderKey[pixelShaderKeyIndex].type);
-        stream->readString(&mPixelShaderKey[pixelShaderKeyIndex].name);
-        stream->readString(&mPixelShaderKey[pixelShaderKeyIndex].source);
-        stream->readInt(&mPixelShaderKey[pixelShaderKeyIndex].outputIndex);
-    }
-
-    stream->readString(&mGeometryShaderPreamble);
-
-    const unsigned char *binary = reinterpret_cast<const unsigned char *>(stream->data());
-
-    bool separateAttribs = (mState.getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS);
-
-    d3d::Context *contextD3D = GetImplAs<ContextD3D>(context);
-
-    const unsigned int vertexShaderCount = stream->readInt<unsigned int>();
-    for (unsigned int vertexShaderIndex = 0; vertexShaderIndex < vertexShaderCount;
-         vertexShaderIndex++)
-    {
-        size_t inputLayoutSize = stream->readInt<size_t>();
-        gl::InputLayout inputLayout(inputLayoutSize, angle::FormatID::NONE);
-
-        for (size_t inputIndex = 0; inputIndex < inputLayoutSize; inputIndex++)
-        {
-            inputLayout[inputIndex] = stream->readInt<angle::FormatID>();
-        }
-
-        unsigned int vertexShaderSize             = stream->readInt<unsigned int>();
-        const unsigned char *vertexShaderFunction = binary + stream->offset();
-
-        ShaderExecutableD3D *shaderExecutable = nullptr;
-
-        ANGLE_TRY(mRenderer->loadExecutable(contextD3D, vertexShaderFunction, vertexShaderSize,
-                                            gl::ShaderType::Vertex, mStreamOutVaryings,
-                                            separateAttribs, &shaderExecutable));
-
-        if (!shaderExecutable)
-        {
-            infoLog << "Could not create vertex shader.";
-            return angle::Result::Incomplete();
-        }
-
-        // generated converted input layout
-        VertexExecutable::Signature signature;
-        VertexExecutable::getSignature(mRenderer, inputLayout, &signature);
-
-        // add new binary
-        mVertexExecutables.push_back(std::unique_ptr<VertexExecutable>(
-            new VertexExecutable(inputLayout, signature, shaderExecutable)));
-
-        stream->skip(vertexShaderSize);
-    }
-
-    const size_t pixelShaderCount = stream->readInt<unsigned int>();
-    for (size_t pixelShaderIndex = 0; pixelShaderIndex < pixelShaderCount; pixelShaderIndex++)
-    {
-        const size_t outputCount = stream->readInt<unsigned int>();
-        std::vector<GLenum> outputs(outputCount);
-        for (size_t outputIndex = 0; outputIndex < outputCount; outputIndex++)
-        {
-            stream->readInt(&outputs[outputIndex]);
-        }
-
-        const size_t pixelShaderSize             = stream->readInt<unsigned int>();
-        const unsigned char *pixelShaderFunction = binary + stream->offset();
-        ShaderExecutableD3D *shaderExecutable    = nullptr;
-
-        ANGLE_TRY(mRenderer->loadExecutable(contextD3D, pixelShaderFunction, pixelShaderSize,
-                                            gl::ShaderType::Fragment, mStreamOutVaryings,
-                                            separateAttribs, &shaderExecutable));
-
-        if (!shaderExecutable)
-        {
-            infoLog << "Could not create pixel shader.";
-            return angle::Result::Incomplete();
-        }
-
-        // add new binary
-        mPixelExecutables.push_back(
-            std::unique_ptr<PixelExecutable>(new PixelExecutable(outputs, shaderExecutable)));
-
-        stream->skip(pixelShaderSize);
-    }
-
-    for (auto &geometryExe : mGeometryExecutables)
-    {
-        unsigned int geometryShaderSize = stream->readInt<unsigned int>();
-        if (geometryShaderSize == 0)
-        {
-            continue;
-        }
-
-        const unsigned char *geometryShaderFunction = binary + stream->offset();
-
-        ShaderExecutableD3D *geometryExecutable = nullptr;
-        ANGLE_TRY(mRenderer->loadExecutable(contextD3D, geometryShaderFunction, geometryShaderSize,
-                                            gl::ShaderType::Geometry, mStreamOutVaryings,
-                                            separateAttribs, &geometryExecutable));
-
-        if (!geometryExecutable)
-        {
-            infoLog << "Could not create geometry shader.";
-            return angle::Result::Incomplete();
-        }
-
-        geometryExe.reset(geometryExecutable);
-
-        stream->skip(geometryShaderSize);
-    }
-
-    unsigned int computeShaderSize = stream->readInt<unsigned int>();
-    if (computeShaderSize > 0)
-    {
-        const unsigned char *computeShaderFunction = binary + stream->offset();
-
-        ShaderExecutableD3D *computeExecutable = nullptr;
-        ANGLE_TRY(mRenderer->loadExecutable(contextD3D, computeShaderFunction, computeShaderSize,
-                                            gl::ShaderType::Compute, std::vector<D3DVarying>(),
-                                            false, &computeExecutable));
-
-        if (!computeExecutable)
-        {
-            infoLog << "Could not create compute shader.";
-            return angle::Result::Incomplete();
-        }
-
-        mComputeExecutable.reset(computeExecutable);
-    }
-
-    initializeUniformStorage(mState.getLinkedShaderStages());
-
-    dirtyAllUniforms();
-
-    return angle::Result::Continue();
-}
-
 void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream)
 {
     // Output the DeviceIdentifier before we output any shader code
@@ -1379,10 +1074,10 @@ angle::Result ProgramD3D::getGeometryExecutableForPrimitiveType(d3d::Context *co
     return result;
 }
 
-class ProgramD3D::GetExecutableTask : public Closure, public d3d::Context
+class ProgramD3D::Task : public Closure, public d3d::Context
 {
   public:
-    GetExecutableTask(ProgramD3D *program) : mProgram(program) {}
+    Task() {}
 
     virtual angle::Result run() = 0;
 
@@ -1390,7 +1085,6 @@ class ProgramD3D::GetExecutableTask : public Closure, public d3d::Context
 
     angle::Result getResult() const { return mResult; }
     const gl::InfoLog &getInfoLog() const { return mInfoLog; }
-    ShaderExecutableD3D *getExecutable() { return mExecutable; }
 
     void handleError(HRESULT hr,
                      const char *message,
@@ -1411,15 +1105,24 @@ class ProgramD3D::GetExecutableTask : public Closure, public d3d::Context
     }
 
   protected:
-    ProgramD3D *mProgram  = nullptr;
     angle::Result mResult = angle::Result::Continue();
     gl::InfoLog mInfoLog;
-    ShaderExecutableD3D *mExecutable = nullptr;
     HRESULT mStoredHR                = S_OK;
     const char *mStoredMessage       = nullptr;
     const char *mStoredFile          = nullptr;
     const char *mStoredFunction      = nullptr;
     unsigned int mStoredLine         = 0;
+};
+
+class ProgramD3D::GetExecutableTask : public ProgramD3D::Task
+{
+  public:
+    GetExecutableTask(ProgramD3D *program) : mProgram(program) {}
+    ShaderExecutableD3D *getExecutable() { return mExecutable; }
+
+  protected:
+    ProgramD3D *mProgram             = nullptr;
+    ShaderExecutableD3D *mExecutable = nullptr;
 };
 
 class ProgramD3D::GetVertexExecutableTask : public ProgramD3D::GetExecutableTask
@@ -1489,6 +1192,26 @@ class ProgramD3D::GetGeometryExecutableTask : public ProgramD3D::GetExecutableTa
     const gl::Caps &mCaps;
 };
 
+using LoadFunctor = std::function<
+    angle::Result(const gl::Context *context, gl::InfoLog &infoLog, gl::BinaryInputStream *stream)>;
+
+class ProgramD3D::LoadBinaryTask : public ProgramD3D::Task
+{
+  public:
+    LoadBinaryTask(const gl::Context *context,
+                   gl::BinaryInputStream &&stream,
+                   LoadFunctor &&loadFunctor)
+        : mContext(context), mStream(std::move(stream)), mLoadFunctor(std::move(loadFunctor))
+    {
+    }
+    angle::Result run() override { return mLoadFunctor(mContext, mInfoLog, &mStream); }
+
+  private:
+    const gl::Context *mContext;
+    gl::BinaryInputStream mStream;
+    LoadFunctor mLoadFunctor;
+};
+
 angle::Result ProgramD3D::getComputeExecutable(ShaderExecutableD3D **outExecutable)
 {
     if (outExecutable)
@@ -1499,18 +1222,19 @@ angle::Result ProgramD3D::getComputeExecutable(ShaderExecutableD3D **outExecutab
     return angle::Result::Continue();
 }
 
-// The LinkEvent implementation for linking a rendering(VS, FS, GS) program.
-class ProgramD3D::GraphicsProgramLinkEvent final : public LinkEvent
+// The ParallelEvent implementation for linking a rendering(VS, FS, GS) program.
+class ProgramD3D::GraphicsProgramParallelEvent final : public ParallelEvent
 {
   public:
-    GraphicsProgramLinkEvent(gl::InfoLog &infoLog,
-                             std::shared_ptr<WorkerThreadPool> workerPool,
-                             std::shared_ptr<ProgramD3D::GetVertexExecutableTask> vertexTask,
-                             std::shared_ptr<ProgramD3D::GetPixelExecutableTask> pixelTask,
-                             std::shared_ptr<ProgramD3D::GetGeometryExecutableTask> geometryTask,
-                             bool useGS,
-                             const ShaderD3D *vertexShader,
-                             const ShaderD3D *fragmentShader)
+    GraphicsProgramParallelEvent(
+        gl::InfoLog &infoLog,
+        std::shared_ptr<WorkerThreadPool> workerPool,
+        std::shared_ptr<ProgramD3D::GetVertexExecutableTask> vertexTask,
+        std::shared_ptr<ProgramD3D::GetPixelExecutableTask> pixelTask,
+        std::shared_ptr<ProgramD3D::GetGeometryExecutableTask> geometryTask,
+        bool useGS,
+        const ShaderD3D *vertexShader,
+        const ShaderD3D *fragmentShader)
         : mInfoLog(infoLog),
           mWorkerPool(workerPool),
           mVertexTask(vertexTask),
@@ -1573,7 +1297,7 @@ class ProgramD3D::GraphicsProgramLinkEvent final : public LinkEvent
         return isLinked ? angle::Result::Continue() : angle::Result::Incomplete();
     }
 
-    bool isLinking() override
+    bool isOngoing() override
     {
         for (auto &event : mWaitEvents)
         {
@@ -1615,14 +1339,54 @@ class ProgramD3D::GraphicsProgramLinkEvent final : public LinkEvent
     const ShaderD3D *mFragmentShader;
 };
 
-std::unique_ptr<LinkEvent> ProgramD3D::compileProgramExecutables(const gl::Context *context,
-                                                                 gl::InfoLog &infoLog)
+class ProgramD3D::LoadBinaryEvent final : public ParallelEvent
+{
+  public:
+    LoadBinaryEvent(gl::InfoLog &infoLog,
+                    std::shared_ptr<WorkerThreadPool> workerPool,
+                    std::shared_ptr<ProgramD3D::LoadBinaryTask> task)
+        : mInfoLog(infoLog),
+          mWorkerPool(workerPool),
+          mTask(task),
+          mWaitEvent(std::shared_ptr<WaitableEvent>(workerPool->postWorkerTask(task)))
+    {
+    }
+
+    angle::Result wait(const gl::Context *context) override
+    {
+        mWaitEvent->wait();
+        if (!mTask->getInfoLog().empty())
+        {
+            mInfoLog << mTask->getInfoLog().str();
+        }
+
+        if (mTask->getResult() == angle::Result::Continue())
+        {
+            return angle::Result::Continue();
+        }
+        else
+        {
+            return angle::Result::Stop();
+        }
+    }
+
+    bool isOngoing() override { return !mWaitEvent->isReady(); }
+
+  private:
+    gl::InfoLog &mInfoLog;
+    std::shared_ptr<WorkerThreadPool> mWorkerPool;
+    std::shared_ptr<ProgramD3D::LoadBinaryTask> mTask;
+    std::shared_ptr<WaitableEvent> mWaitEvent;
+};
+
+std::unique_ptr<ParallelEvent> ProgramD3D::compileProgramExecutables(const gl::Context *context,
+                                                                     gl::InfoLog &infoLog)
 {
     // Ensure the compiler is initialized to avoid race conditions.
     angle::Result result = mRenderer->ensureHLSLCompilerInitialized(GetImplAs<ContextD3D>(context));
     if (result.isError())
     {
-        return std::make_unique<LinkEventDone>(result);
+        return std::make_unique<ParallelEventDone>(result);
     }
 
     auto vertexTask   = std::make_shared<GetVertexExecutableTask>(this);
@@ -1634,9 +1398,9 @@ std::unique_ptr<LinkEvent> ProgramD3D::compileProgramExecutables(const gl::Conte
     const ShaderD3D *fragmentShaderD3D =
         GetImplAs<ShaderD3D>(mState.getAttachedShader(gl::ShaderType::Fragment));
 
-    return std::make_unique<GraphicsProgramLinkEvent>(infoLog, context->getWorkerThreadPool(),
-                                                      vertexTask, pixelTask, geometryTask, useGS,
-                                                      vertexShaderD3D, fragmentShaderD3D);
+    return std::make_unique<GraphicsProgramParallelEvent>(
+        infoLog, context->getWorkerThreadPool(), vertexTask, pixelTask, geometryTask, useGS,
+        vertexShaderD3D, fragmentShaderD3D);
 }
 
 angle::Result ProgramD3D::compileComputeExecutable(d3d::Context *context, gl::InfoLog &infoLog)
@@ -1669,9 +1433,323 @@ angle::Result ProgramD3D::compileComputeExecutable(d3d::Context *context, gl::In
     return mComputeExecutable.get() ? angle::Result::Continue() : angle::Result::Incomplete();
 }
 
-std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
-                                            const gl::ProgramLinkedResources &resources,
-                                            gl::InfoLog &infoLog)
+std::unique_ptr<ParallelEvent> ProgramD3D::load(const gl::Context *context,
+                                                gl::InfoLog &infoLog,
+                                                gl::BinaryInputStream &&stream)
+{
+
+    LoadFunctor loadFunctor = [this](const gl::Context *context, gl::InfoLog &infoLog,
+                                     gl::BinaryInputStream *stream) -> angle::Result {
+
+        // TODO(jmadill): Use Renderer from contextImpl.
+
+        reset();
+
+        DeviceIdentifier binaryDeviceIdentifier = {0};
+        stream->readBytes(reinterpret_cast<unsigned char *>(&binaryDeviceIdentifier),
+                          sizeof(DeviceIdentifier));
+
+        DeviceIdentifier identifier = mRenderer->getAdapterIdentifier();
+        if (memcmp(&identifier, &binaryDeviceIdentifier, sizeof(DeviceIdentifier)) != 0)
+        {
+            infoLog << "Invalid program binary, device configuration has changed.";
+            return angle::Result::Incomplete();
+        }
+
+        int compileFlags = stream->readInt<int>();
+        if (compileFlags != ANGLE_COMPILE_OPTIMIZATION_LEVEL)
+        {
+            infoLog << "Mismatched compilation flags.";
+            return angle::Result::Incomplete();
+        }
+
+        for (int &index : mAttribLocationToD3DSemantic)
+        {
+            stream->readInt(&index);
+        }
+
+        for (gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            const unsigned int samplerCount = stream->readInt<unsigned int>();
+            for (unsigned int i = 0; i < samplerCount; ++i)
+            {
+                Sampler sampler;
+                stream->readBool(&sampler.active);
+                stream->readInt(&sampler.logicalTextureUnit);
+                stream->readEnum(&sampler.textureType);
+                mShaderSamplers[shaderType].push_back(sampler);
+            }
+
+            unsigned int samplerRangeLow, samplerRangeHigh;
+            stream->readInt(&samplerRangeLow);
+            stream->readInt(&samplerRangeHigh);
+            mUsedShaderSamplerRanges[shaderType] = gl::RangeUI(samplerRangeLow, samplerRangeHigh);
+        }
+
+        const unsigned int csImageCount = stream->readInt<unsigned int>();
+        for (unsigned int i = 0; i < csImageCount; ++i)
+        {
+            Image image;
+            stream->readBool(&image.active);
+            stream->readInt(&image.logicalImageUnit);
+            mImagesCS.push_back(image);
+        }
+
+        const unsigned int csReadonlyImageCount = stream->readInt<unsigned int>();
+        for (unsigned int i = 0; i < csReadonlyImageCount; ++i)
+        {
+            Image image;
+            stream->readBool(&image.active);
+            stream->readInt(&image.logicalImageUnit);
+            mReadonlyImagesCS.push_back(image);
+        }
+
+        unsigned int computeImageRangeLow, computeImageRangeHigh, computeReadonlyImageRangeLow,
+            computeReadonlyImageRangeHigh;
+        stream->readInt(&computeImageRangeLow);
+        stream->readInt(&computeImageRangeHigh);
+        stream->readInt(&computeReadonlyImageRangeLow);
+        stream->readInt(&computeReadonlyImageRangeHigh);
+        mUsedComputeImageRange = gl::RangeUI(computeImageRangeLow, computeImageRangeHigh);
+        mUsedComputeReadonlyImageRange =
+            gl::RangeUI(computeReadonlyImageRangeLow, computeReadonlyImageRangeHigh);
+
+        const unsigned int shaderStorageBlockCount = stream->readInt<unsigned int>();
+        if (stream->error())
+        {
+            infoLog << "Invalid program binary.";
+            return angle::Result::Incomplete();
+        }
+
+        ASSERT(mD3DShaderStorageBlocks.empty());
+        for (unsigned int blockIndex = 0; blockIndex < shaderStorageBlockCount; ++blockIndex)
+        {
+            D3DInterfaceBlock shaderStorageBlock;
+            for (gl::ShaderType shaderType : gl::AllShaderTypes())
+            {
+                stream->readInt(&shaderStorageBlock.mShaderRegisterIndexes[shaderType]);
+            }
+            mD3DShaderStorageBlocks.push_back(shaderStorageBlock);
+        }
+
+        const unsigned int uniformCount = stream->readInt<unsigned int>();
+        if (stream->error())
+        {
+            infoLog << "Invalid program binary.";
+            return angle::Result::Incomplete();
+        }
+
+        const auto &linkedUniforms = mState.getUniforms();
+        ASSERT(mD3DUniforms.empty());
+        for (unsigned int uniformIndex = 0; uniformIndex < uniformCount; uniformIndex++)
+        {
+            const gl::LinkedUniform &linkedUniform = linkedUniforms[uniformIndex];
+
+            D3DUniform *d3dUniform =
+                new D3DUniform(linkedUniform.type, HLSLRegisterType::None, linkedUniform.name,
+                               linkedUniform.arraySizes, linkedUniform.isInDefaultBlock());
+            stream->readInt<HLSLRegisterType>(&d3dUniform->regType);
+            for (gl::ShaderType shaderType : gl::AllShaderTypes())
+            {
+                stream->readInt(&d3dUniform->mShaderRegisterIndexes[shaderType]);
+            }
+            stream->readInt(&d3dUniform->registerCount);
+            stream->readInt(&d3dUniform->registerElement);
+
+            mD3DUniforms.push_back(d3dUniform);
+        }
+
+        const unsigned int blockCount = stream->readInt<unsigned int>();
+        if (stream->error())
+        {
+            infoLog << "Invalid program binary.";
+            return angle::Result::Incomplete();
+        }
+
+        ASSERT(mD3DUniformBlocks.empty());
+        for (unsigned int blockIndex = 0; blockIndex < blockCount; ++blockIndex)
+        {
+            D3DInterfaceBlock uniformBlock;
+            for (gl::ShaderType shaderType : gl::AllShaderTypes())
+            {
+                stream->readInt(&uniformBlock.mShaderRegisterIndexes[shaderType]);
+            }
+            mD3DUniformBlocks.push_back(uniformBlock);
+        }
+
+        const unsigned int streamOutVaryingCount = stream->readInt<unsigned int>();
+        mStreamOutVaryings.resize(streamOutVaryingCount);
+        for (unsigned int varyingIndex = 0; varyingIndex < streamOutVaryingCount; ++varyingIndex)
+        {
+            D3DVarying *varying = &mStreamOutVaryings[varyingIndex];
+
+            stream->readString(&varying->semanticName);
+            stream->readInt(&varying->semanticIndex);
+            stream->readInt(&varying->componentCount);
+            stream->readInt(&varying->outputSlot);
+        }
+
+        for (gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            stream->readString(&mShaderHLSL[shaderType]);
+            stream->readBytes(reinterpret_cast<unsigned char *>(&mShaderWorkarounds[shaderType]),
+                              sizeof(angle::CompilerWorkaroundsD3D));
+        }
+
+        stream->readBool(&mUsesFragDepth);
+        stream->readBool(&mHasANGLEMultiviewEnabled);
+        stream->readBool(&mUsesViewID);
+        stream->readBool(&mUsesPointSize);
+        stream->readBool(&mUsesFlatInterpolation);
+
+        const size_t pixelShaderKeySize = stream->readInt<unsigned int>();
+        mPixelShaderKey.resize(pixelShaderKeySize);
+        for (size_t pixelShaderKeyIndex = 0; pixelShaderKeyIndex < pixelShaderKeySize;
+             pixelShaderKeyIndex++)
+        {
+            stream->readInt(&mPixelShaderKey[pixelShaderKeyIndex].type);
+            stream->readString(&mPixelShaderKey[pixelShaderKeyIndex].name);
+            stream->readString(&mPixelShaderKey[pixelShaderKeyIndex].source);
+            stream->readInt(&mPixelShaderKey[pixelShaderKeyIndex].outputIndex);
+        }
+
+        stream->readString(&mGeometryShaderPreamble);
+
+        const unsigned char *binary = reinterpret_cast<const unsigned char *>(stream->data());
+
+        bool separateAttribs = (mState.getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS);
+
+        d3d::Context *contextD3D = GetImplAs<ContextD3D>(context);
+
+        const unsigned int vertexShaderCount = stream->readInt<unsigned int>();
+        for (unsigned int vertexShaderIndex = 0; vertexShaderIndex < vertexShaderCount;
+             vertexShaderIndex++)
+        {
+            size_t inputLayoutSize = stream->readInt<size_t>();
+            gl::InputLayout inputLayout(inputLayoutSize, angle::FormatID::NONE);
+
+            for (size_t inputIndex = 0; inputIndex < inputLayoutSize; inputIndex++)
+            {
+                inputLayout[inputIndex] = stream->readInt<angle::FormatID>();
+            }
+
+            unsigned int vertexShaderSize             = stream->readInt<unsigned int>();
+            const unsigned char *vertexShaderFunction = binary + stream->offset();
+
+            ShaderExecutableD3D *shaderExecutable = nullptr;
+
+            ANGLE_TRY(mRenderer->loadExecutable(contextD3D, vertexShaderFunction, vertexShaderSize,
+                                                gl::ShaderType::Vertex, mStreamOutVaryings,
+                                                separateAttribs, &shaderExecutable));
+
+            if (!shaderExecutable)
+            {
+                infoLog << "Could not create vertex shader.";
+                return angle::Result::Incomplete();
+            }
+
+            // generated converted input layout
+            VertexExecutable::Signature signature;
+            VertexExecutable::getSignature(mRenderer, inputLayout, &signature);
+
+            // add new binary
+            mVertexExecutables.push_back(std::unique_ptr<VertexExecutable>(
+                new VertexExecutable(inputLayout, signature, shaderExecutable)));
+
+            stream->skip(vertexShaderSize);
+        }
+
+        const size_t pixelShaderCount = stream->readInt<unsigned int>();
+        for (size_t pixelShaderIndex = 0; pixelShaderIndex < pixelShaderCount; pixelShaderIndex++)
+        {
+            const size_t outputCount = stream->readInt<unsigned int>();
+            std::vector<GLenum> outputs(outputCount);
+            for (size_t outputIndex = 0; outputIndex < outputCount; outputIndex++)
+            {
+                stream->readInt(&outputs[outputIndex]);
+            }
+
+            const size_t pixelShaderSize             = stream->readInt<unsigned int>();
+            const unsigned char *pixelShaderFunction = binary + stream->offset();
+            ShaderExecutableD3D *shaderExecutable    = nullptr;
+
+            ANGLE_TRY(mRenderer->loadExecutable(contextD3D, pixelShaderFunction, pixelShaderSize,
+                                                gl::ShaderType::Fragment, mStreamOutVaryings,
+                                                separateAttribs, &shaderExecutable));
+
+            if (!shaderExecutable)
+            {
+                infoLog << "Could not create pixel shader.";
+                return angle::Result::Incomplete();
+            }
+
+            // add new binary
+            mPixelExecutables.push_back(
+                std::unique_ptr<PixelExecutable>(new PixelExecutable(outputs, shaderExecutable)));
+
+            stream->skip(pixelShaderSize);
+        }
+
+        for (auto &geometryExe : mGeometryExecutables)
+        {
+            unsigned int geometryShaderSize = stream->readInt<unsigned int>();
+            if (geometryShaderSize == 0)
+            {
+                continue;
+            }
+
+            const unsigned char *geometryShaderFunction = binary + stream->offset();
+
+            ShaderExecutableD3D *geometryExecutable = nullptr;
+            ANGLE_TRY(mRenderer->loadExecutable(
+                contextD3D, geometryShaderFunction, geometryShaderSize, gl::ShaderType::Geometry,
+                mStreamOutVaryings, separateAttribs, &geometryExecutable));
+
+            if (!geometryExecutable)
+            {
+                infoLog << "Could not create geometry shader.";
+                return angle::Result::Incomplete();
+            }
+
+            geometryExe.reset(geometryExecutable);
+
+            stream->skip(geometryShaderSize);
+        }
+
+        unsigned int computeShaderSize = stream->readInt<unsigned int>();
+        if (computeShaderSize > 0)
+        {
+            const unsigned char *computeShaderFunction = binary + stream->offset();
+
+            ShaderExecutableD3D *computeExecutable = nullptr;
+            ANGLE_TRY(mRenderer->loadExecutable(
+                contextD3D, computeShaderFunction, computeShaderSize, gl::ShaderType::Compute,
+                std::vector<D3DVarying>(), false, &computeExecutable));
+
+            if (!computeExecutable)
+            {
+                infoLog << "Could not create compute shader.";
+                return angle::Result::Incomplete();
+            }
+
+            mComputeExecutable.reset(computeExecutable);
+        }
+
+        initializeUniformStorage(mState.getLinkedShaderStages());
+
+        dirtyAllUniforms();
+
+        return angle::Result::Continue();
+    };
+
+    auto loadTask =
+        std::make_shared<LoadBinaryTask>(context, std::move(stream), std::move(loadFunctor));
+    return std::make_unique<LoadBinaryEvent>(infoLog, context->getWorkerThreadPool(), loadTask);
+}
+
+std::unique_ptr<ParallelEvent> ProgramD3D::link(const gl::Context *context,
+                                                const gl::ProgramLinkedResources &resources,
+                                                gl::InfoLog &infoLog)
 {
     const auto &data = context->getContextState();
 
@@ -1695,7 +1773,7 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
         {
             infoLog << "Failed to create D3D compute shader.";
         }
-        return std::make_unique<LinkEventDone>(result);
+        return std::make_unique<ParallelEventDone>(result);
     }
     else
     {
@@ -1720,7 +1798,7 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
             if (shadersD3D[gl::ShaderType::Fragment]->usesFrontFacing())
             {
                 infoLog << "The current renderer doesn't support gl_FrontFacing";
-                return std::make_unique<LinkEventDone>(angle::Result::Incomplete());
+                return std::make_unique<ParallelEventDone>(angle::Result::Incomplete());
             }
         }
 

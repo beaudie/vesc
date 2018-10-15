@@ -25,16 +25,16 @@ class ProgramVk : public ProgramImpl
     ~ProgramVk() override;
     gl::Error destroy(const gl::Context *context) override;
 
-    angle::Result load(const gl::Context *context,
-                       gl::InfoLog &infoLog,
-                       gl::BinaryInputStream *stream) override;
+    std::unique_ptr<ParallelEvent> load(const gl::Context *context,
+                                        gl::InfoLog &infoLog,
+                                        gl::BinaryInputStream &&stream) override;
     void save(const gl::Context *context, gl::BinaryOutputStream *stream) override;
     void setBinaryRetrievableHint(bool retrievable) override;
     void setSeparable(bool separable) override;
 
-    std::unique_ptr<LinkEvent> link(const gl::Context *context,
-                                    const gl::ProgramLinkedResources &resources,
-                                    gl::InfoLog &infoLog) override;
+    std::unique_ptr<ParallelEvent> link(const gl::Context *context,
+                                        const gl::ProgramLinkedResources &resources,
+                                        gl::InfoLog &infoLog) override;
     GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) override;
 
     void setUniform1fv(GLint location, GLsizei count, const GLfloat *v) override;

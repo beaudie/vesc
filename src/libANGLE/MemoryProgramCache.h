@@ -16,6 +16,11 @@
 #include "libANGLE/BlobCache.h"
 #include "libANGLE/Error.h"
 
+namespace rx
+{
+class ParallelEvent;
+}
+
 namespace gl
 {
 class Context;
@@ -35,12 +40,12 @@ class MemoryProgramCache final : angle::NonCopyable
                           angle::MemoryBuffer *binaryOut);
 
     // Loads program state according to the specified binary blob.
-    static angle::Result Deserialize(const Context *context,
-                                     const Program *program,
-                                     ProgramState *state,
-                                     const uint8_t *binary,
-                                     size_t length,
-                                     InfoLog &infoLog);
+    static std::unique_ptr<rx::ParallelEvent> Deserialize(const Context *context,
+                                                          const Program *program,
+                                                          ProgramState *state,
+                                                          const uint8_t *binary,
+                                                          size_t length,
+                                                          InfoLog &infoLog);
 
     static void ComputeHash(const Context *context,
                             const Program *program,

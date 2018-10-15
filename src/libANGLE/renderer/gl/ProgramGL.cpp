@@ -52,9 +52,16 @@ ProgramGL::~ProgramGL()
     mProgramID = 0;
 }
 
-angle::Result ProgramGL::load(const gl::Context *context,
-                              gl::InfoLog &infoLog,
-                              gl::BinaryInputStream *stream)
+std::unique_ptr<ParallelEvent> ProgramGL::load(const gl::Context *context,
+                                               gl::InfoLog &infoLog,
+                                               gl::BinaryInputStream &&stream)
+{
+    return std::make_unique<ParallelEventDone>(loadImpl(context, infoLog, &stream));
+}
+
+angle::Result ProgramGL::loadImpl(const gl::Context *context,
+                                  gl::InfoLog &infoLog,
+                                  gl::BinaryInputStream *stream)
 {
     preLink();
 
@@ -125,12 +132,12 @@ void ProgramGL::setSeparable(bool separable)
     mFunctions->programParameteri(mProgramID, GL_PROGRAM_SEPARABLE, separable ? GL_TRUE : GL_FALSE);
 }
 
-std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
-                                           const gl::ProgramLinkedResources &resources,
-                                           gl::InfoLog &infoLog)
+std::unique_ptr<ParallelEvent> ProgramGL::link(const gl::Context *context,
+                                               const gl::ProgramLinkedResources &resources,
+                                               gl::InfoLog &infoLog)
 {
     // TODO(jie.a.chen@intel.com): Parallelize linking.
-    return std::make_unique<LinkEventDone>(linkImpl(context, resources, infoLog));
+    return std::make_unique<ParallelEventDone>(linkImpl(context, resources, infoLog));
 }
 
 angle::Result ProgramGL::linkImpl(const gl::Context *context,
