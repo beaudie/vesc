@@ -257,13 +257,13 @@ void ProgramVk::setSeparable(bool separable)
     UNIMPLEMENTED();
 }
 
-std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
-                                           const gl::ProgramLinkedResources &resources,
-                                           gl::InfoLog &infoLog)
+std::unique_ptr<ParallelEvent> ProgramVk::link(const gl::Context *context,
+                                               const gl::ProgramLinkedResources &resources,
+                                               gl::InfoLog &infoLog)
 {
     // TODO(jie.a.chen@intel.com): Parallelize linking.
     // http://crbug.com/849576
-    return std::make_unique<LinkEventDone>(linkImpl(context, resources, infoLog));
+    return std::make_unique<ParallelEventDone>(linkImpl(context, resources, infoLog));
 }
 
 angle::Result ProgramVk::linkImpl(const gl::Context *glContext,
