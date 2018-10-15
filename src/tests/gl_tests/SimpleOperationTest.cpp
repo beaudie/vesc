@@ -675,6 +675,26 @@ TEST_P(SimpleOperationTest, DrawQuadWithTwoUniforms)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::yellow);
 }
 
+// Draw with empty fragment shader.
+TEST_P(SimpleOperationTest, DrawNoFragment)
+{
+    // http://anglebug.com/2648
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    const std::string &fragmentShader =
+        "void main()\n"
+        "{\n"
+        "}";
+    ANGLE_GL_PROGRAM(program, kBasicVertexShader, fragmentShader);
+    glUseProgram(program);
+
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    drawQuad(program.get(), "position", 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
+}
+
+
 // Tests a shader program with more than one vertex attribute, with vertex buffers.
 TEST_P(SimpleOperationTest, ThreeVertexAttributes)
 {
