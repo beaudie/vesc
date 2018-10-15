@@ -370,6 +370,30 @@
     },
     {
       "key": {
+        "uuid": "183b9f38_3fa12025",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5910,
+      "author": {
+        "id": 1299044
+      },
+      "writtenOn": "2018-10-15T18:57:22Z",
+      "side": 1,
+      "message": "Please look at the latest patch, there I check it in line 6169 for GL_TEXTURE_CROP_RECT_OES and in line 6182 for GL_TEXTURE_BORDER_COLOR. And all the \"non-robust\" calls to ValidateTexParameterBase use a bufSize parameter of -1 now, so the check for bufSize is only relevant for TexParameter*Robust* calls.",
+      "parentUuid": "e90c268e_8aa20a0a",
+      "range": {
+        "startLine": 5905,
+        "startChar": 8,
+        "endLine": 5910,
+        "endChar": 9
+      },
+      "revId": "f3d7d37951f19d7e9b20631e8e7cc4c25f086200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ac8cc60_c57d2891",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 12
