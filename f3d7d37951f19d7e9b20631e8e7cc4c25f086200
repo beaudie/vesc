@@ -346,6 +346,30 @@
     },
     {
       "key": {
+        "uuid": "e90c268e_8aa20a0a",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5910,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-15T15:28:18Z",
+      "side": 1,
+      "message": "Looks like we\u0027ll need to special case it above... if (pname \u003d\u003d GL_TEXTURE_BORDER_COLOR \u0026\u0026 vectorParameters) { invalid operation }\n\nI want to make sure that we explictly handle this error case instead of implicitly through the bufSize parameter.",
+      "parentUuid": "0cdb6869_fd471a6a",
+      "range": {
+        "startLine": 5905,
+        "startChar": 8,
+        "endLine": 5910,
+        "endChar": 9
+      },
+      "revId": "f3d7d37951f19d7e9b20631e8e7cc4c25f086200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ac8cc60_c57d2891",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 12
