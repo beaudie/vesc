@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff209b82_bb81e4dc",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-15T18:00:56Z",
+      "side": 1,
+      "message": "The race condition fix is here, where I wait for the fence corresponding to the batch this query was used on.  This is because the query is reset in that batch, but if the GPU hasn\u0027t yet executed it, CPU doesn\u0027t see the reset yet.\n\n`updateCompletedBatches` is the function that used to be `checkInFlightCommands`. I renamed it as it\u0027s now a `public` function.\n\nAlso, I realize I forgot to do `git cl format`.",
+      "revId": "a28b53257909877e152911a5bc73dfe5c50197a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
