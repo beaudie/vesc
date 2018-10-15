@@ -4,8 +4,8 @@
 // found in the LICENSE file.
 //
 
-// feature_support_util.cpp: Implementation of the code that helps the Android EGL loader
-// determine whether to use ANGLE or a native GLES driver.
+// feature_support_util.cpp: Helps Android EGL loader to determine whether to use ANGLE or a native
+// GLES driver.  Helps ANGLE know which work-arounds to use.
 
 #include "feature_support_util.h"
 #include <json/json.h>
@@ -924,6 +924,48 @@ ANGLE_EXPORT bool ANGLEUseForApplication(const char *appName,
     {
         rtn = rules->getAnswer(scenario);
     }
+    delete rules;
+    return rtn;
+}
+
+ANGLE_EXPORT bool ANGLEGetUtilityAPI(unsigned int *versionToUse)
+{
+    if (*versionToUse >= kFeatureVersion_LowestSupported)
+    {
+        if (*versionToUse <= kFeatureVersion_HighestSupported)
+        {
+            // This versionToUse is valid, and doesn't need to be changed.
+            return true;
+        }
+        else
+        {
+            // The versionToUse is greater than the highest version supported; change it to the
+            // highest version supported (caller will decide if it can use that version).
+            *versionToUse = kFeatureVersion_HighestSupported;
+            return true;
+        }
+    }
+    else
+    {
+        // The versionToUse is less than the lowest version supported, which is an error.
+        return false;
+    }
+}
+
+ANGLE_EXPORT bool AndroidUseANGLEForApplication(int fd,
+                                                const char *appName,
+                                                const char *deviceMfr,
+                                                const char *deviceModel)
+{
+    Scenario scenario(appName, deviceMfr, deviceModel);
+    // FIXME - USE THE FILE FROM THE FILE DESCRIPTOR
+    RuleList *rules = RuleList::ReadRulesFromJsonFile();
+    bool rtn        = false;
+    scenario.logScenario();
+    rules->logRules();
+
+    rtn = rules->getAnswer(scenario);
+
     delete rules;
     return rtn;
 }
