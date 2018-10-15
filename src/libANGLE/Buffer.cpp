@@ -70,11 +70,11 @@ const std::string &Buffer::getLabel() const
     return mState.mLabel;
 }
 
-Error Buffer::bufferData(Context *context,
-                         BufferBinding target,
-                         const void *data,
-                         GLsizeiptr size,
-                         BufferUsage usage)
+angle::Result Buffer::bufferData(Context *context,
+                                 BufferBinding target,
+                                 const void *data,
+                                 GLsizeiptr size,
+                                 BufferUsage usage)
 {
     const void *dataForImpl = data;
 
@@ -98,14 +98,14 @@ Error Buffer::bufferData(Context *context,
     // Notify when storage changes.
     onStateChange(context, angle::SubjectMessage::STORAGE_CHANGED);
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Buffer::bufferSubData(const Context *context,
-                            BufferBinding target,
-                            const void *data,
-                            GLsizeiptr size,
-                            GLintptr offset)
+angle::Result Buffer::bufferSubData(const Context *context,
+                                    BufferBinding target,
+                                    const void *data,
+                                    GLsizeiptr size,
+                                    GLintptr offset)
 {
     ANGLE_TRY(mImpl->setSubData(context, target, data, size, offset));
 
@@ -114,14 +114,14 @@ Error Buffer::bufferSubData(const Context *context,
     // Notify when data changes.
     onStateChange(context, angle::SubjectMessage::CONTENTS_CHANGED);
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Buffer::copyBufferSubData(const Context *context,
-                                Buffer *source,
-                                GLintptr sourceOffset,
-                                GLintptr destOffset,
-                                GLsizeiptr size)
+angle::Result Buffer::copyBufferSubData(const Context *context,
+                                        Buffer *source,
+                                        GLintptr sourceOffset,
+                                        GLintptr destOffset,
+                                        GLsizeiptr size)
 {
     ANGLE_TRY(
         mImpl->copySubData(context, source->getImplementation(), sourceOffset, destOffset, size));
@@ -131,10 +131,10 @@ Error Buffer::copyBufferSubData(const Context *context,
     // Notify when data changes.
     onStateChange(context, angle::SubjectMessage::CONTENTS_CHANGED);
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Buffer::map(const Context *context, GLenum access)
+angle::Result Buffer::map(const Context *context, GLenum access)
 {
     ASSERT(!mState.mMapped);
 
@@ -153,13 +153,13 @@ Error Buffer::map(const Context *context, GLenum access)
     // Notify when state changes.
     onStateChange(context, angle::SubjectMessage::RESOURCE_MAPPED);
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Buffer::mapRange(const Context *context,
-                       GLintptr offset,
-                       GLsizeiptr length,
-                       GLbitfield access)
+angle::Result Buffer::mapRange(const Context *context,
+                               GLintptr offset,
+                               GLsizeiptr length,
+                               GLbitfield access)
 {
     ASSERT(!mState.mMapped);
     ASSERT(offset + length <= mState.mSize);
@@ -186,10 +186,10 @@ Error Buffer::mapRange(const Context *context,
     // Notify when state changes.
     onStateChange(context, angle::SubjectMessage::RESOURCE_MAPPED);
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Buffer::unmap(const Context *context, GLboolean *result)
+angle::Result Buffer::unmap(const Context *context, GLboolean *result)
 {
     ASSERT(mState.mMapped);
 
@@ -206,7 +206,7 @@ Error Buffer::unmap(const Context *context, GLboolean *result)
     // Notify when data changes.
     onStateChange(context, angle::SubjectMessage::RESOURCE_UNMAPPED);
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
 void Buffer::onTransformFeedback(const Context *context)
@@ -225,16 +225,16 @@ void Buffer::onPixelPack(const Context *context)
     onStateChange(context, angle::SubjectMessage::CONTENTS_CHANGED);
 }
 
-Error Buffer::getIndexRange(const gl::Context *context,
-                            GLenum type,
-                            size_t offset,
-                            size_t count,
-                            bool primitiveRestartEnabled,
-                            IndexRange *outRange) const
+angle::Result Buffer::getIndexRange(const gl::Context *context,
+                                    GLenum type,
+                                    size_t offset,
+                                    size_t count,
+                                    bool primitiveRestartEnabled,
+                                    IndexRange *outRange) const
 {
     if (mIndexRangeCache.findRange(type, offset, count, primitiveRestartEnabled, outRange))
     {
-        return NoError();
+        return angle::Result::Continue();
     }
 
     ANGLE_TRY(
@@ -242,7 +242,7 @@ Error Buffer::getIndexRange(const gl::Context *context,
 
     mIndexRangeCache.addRange(type, offset, count, primitiveRestartEnabled, *outRange);
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
 GLint Buffer::getMemorySize() const
