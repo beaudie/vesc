@@ -107,7 +107,7 @@ void VertexArray::onDestroy(const Context *context)
         binding.setBuffer(context, nullptr, isBound);
     }
     if (isBound && mState.mElementArrayBuffer.get())
-        mState.mElementArrayBuffer->onNonTFBindingChanged(context, -1);
+        mState.mElementArrayBuffer->onNonTFBindingChanged(-1);
     mState.mElementArrayBuffer.set(context, nullptr);
     mVertexArray->destroy(context);
     SafeDelete(mVertexArray);
@@ -148,7 +148,7 @@ void VertexArray::detachBuffer(const Context *context, GLuint bufferName)
     if (mState.mElementArrayBuffer.id() == bufferName)
     {
         if (isBound && mState.mElementArrayBuffer.get())
-            mState.mElementArrayBuffer->onNonTFBindingChanged(context, -1);
+            mState.mElementArrayBuffer->onNonTFBindingChanged(-1);
         mState.mElementArrayBuffer.set(context, nullptr);
     }
 }
@@ -362,13 +362,13 @@ void VertexArray::setElementArrayBuffer(const Context *context, Buffer *buffer)
     ASSERT(context->isCurrentVertexArray(this));
     if (mState.mElementArrayBuffer.get())
     {
-        mState.mElementArrayBuffer->onNonTFBindingChanged(context, -1);
+        mState.mElementArrayBuffer->onNonTFBindingChanged(-1);
     }
     mState.mElementArrayBuffer.set(context, buffer);
     if (buffer)
     {
         mElementArrayBufferObserverBinding.bind(buffer->getImplementation());
-        buffer->onNonTFBindingChanged(context, 1);
+        buffer->onNonTFBindingChanged(1);
     }
     else
     {
@@ -400,7 +400,7 @@ angle::Result VertexArray::syncState(const Context *context)
 void VertexArray::onBindingChanged(const Context *context, int incr)
 {
     if (mState.mElementArrayBuffer.get())
-        mState.mElementArrayBuffer->onNonTFBindingChanged(context, incr);
+        mState.mElementArrayBuffer->onNonTFBindingChanged(incr);
     for (auto &binding : mState.mVertexBindings)
     {
         binding.onContainerBindingChanged(context, incr);
