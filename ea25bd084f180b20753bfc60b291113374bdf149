@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3801ced0_a61f4622",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5360,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2018-10-16T23:37:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c50bcba7_6cb34357",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "46e7838e_71486637",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fce7877f_2a017d60",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5370,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2018-10-16T23:37:45Z",
+      "side": 1,
+      "message": "Simplified this. You\u0027re correct I had that extra logic to avoid prepareForDraw unless necessary. I now realize nothing incorrect should happen if we prepareForDraw unnecessarily. It updates some dirty bits and clears resources for robust resource initialization which shouldn\u0027t be a problem.\nIt\u0027s probably okay if a multidraw of absolutely nothing has suboptimal performance.",
+      "parentUuid": "46e7838e_71486637",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "938bc80b_08c2f777",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2018-10-16T23:37:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e233949b_3d66e27a",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "25edef5c_84163006",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83b5c0a5_d515df88",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2018-10-16T23:37:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25edef5c_84163006",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "7a00050a_c798eefe",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2018-10-16T23:37:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9593fcd6_9c729ee8",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c5debba_c524568f",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 1
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "c745c2b4_834355f4",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2711,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2018-10-16T23:37:45Z",
+      "side": 1,
+      "message": "Updated. Not sure why I named it that.",
+      "parentUuid": "5c5debba_c524568f",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cf5a6c0c_3bced397",
         "filename": "src/libANGLE/ProgramLinkedResources.cpp",
         "patchSetId": 1
@@ -118,6 +226,24 @@
       "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f9daac3_893cad43",
+        "filename": "src/libANGLE/ProgramLinkedResources.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2018-10-16T23:37:45Z",
+      "side": 1,
+      "message": "I changed this to a isNonEmulatedBuiltIn member function instead.\nChanging ShaderVariable::isBuiltIn would require changing ANGLE\u0027s api.\nAs you mentioned, overriding with LinkedUniform::isBuiltIn may be confusing.",
+      "parentUuid": "cf5a6c0c_3bced397",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +281,24 @@
     },
     {
       "key": {
+        "uuid": "9cd4dd40_c86f7a84",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6672,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2018-10-16T23:37:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89788c21_5e7110aa",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff94de46_84820051",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 1
@@ -172,6 +316,24 @@
     },
     {
       "key": {
+        "uuid": "8dbb6269_908d0958",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6681,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2018-10-16T23:37:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff94de46_84820051",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffd4a45a_c74ce02e",
         "filename": "src/tests/gl_tests/MultiDrawArraysTest.cpp",
         "patchSetId": 1
@@ -186,6 +348,24 @@
       "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f9d93c3_7ed026eb",
+        "filename": "src/tests/gl_tests/MultiDrawArraysTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2018-10-16T23:37:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffd4a45a_c74ce02e",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
