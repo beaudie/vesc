@@ -22,6 +22,30 @@
       "revId": "9355bc45811e719dee6fcc998f5b94a0b5e0a5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a545011d_4465c0d2",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-16T21:24:45Z",
+      "side": 0,
+      "message": "This is indeed intentional, although both callers (`finish()` and `flush()`) check for `mCommandGraph.empty()`, so this no longer happens anyway.\n\nThe reason I removed it is that otherwise a command buffer is created, `init`ed but not `begin/end`ed, which according to specs is not in a state that can be submitted (this was caught by validation layers before I added the `mCommandGraph.empty()` check to `finish()`.\n\nIf `mNodes` is empty, all that happens is that `begin/end` is called on the command buffer (and an empty graphviz is output). If you notice, the rest of the code loops over nodes, i.e. does nothing.",
+      "parentUuid": "4561b6a9_3378236b",
+      "range": {
+        "startLine": 583,
+        "startChar": 0,
+        "endLine": 586,
+        "endChar": 5
+      },
+      "revId": "9355bc45811e719dee6fcc998f5b94a0b5e0a5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
