@@ -516,6 +516,14 @@ class State : angle::NonCopyable
     GLES1State &gles1() { return mGLES1State; }
     const GLES1State &gles1() const { return mGLES1State; }
 
+    // Helpers for setting bound buffers. They should all have the same signature.
+    // Not meant to be called externally. Used for local helpers in State.cpp.
+    template <BufferBinding Target>
+    void setGenericBufferBindingWithBit(const Context *context, Buffer *buffer);
+
+    template <BufferBinding Target>
+    void setGenericBufferBinding(const Context *context, Buffer *buffer);
+
   private:
     void syncSamplers(const Context *context);
     angle::Result syncProgramTextures(const Context *context);

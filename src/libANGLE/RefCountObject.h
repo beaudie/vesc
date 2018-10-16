@@ -110,6 +110,8 @@ class BindingPointer
         }
     }
 
+    void assign(ObjectType *object) { mObject = object; }
+
     ObjectType *get() const { return mObject; }
     ObjectType *operator->() const { return mObject; }
 
