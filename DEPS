@@ -36,17 +36,17 @@ vars = {
 deps = {
 
   '{angle_root}/build': {
-    'url': '{chromium_git}/chromium/src/build.git@ee922ea8f8ed211d485add7906a64ccd2ffc358b',
+    'url': '{chromium_git}/chromium/src/build.git@47b1e3d07e898f33029040c060bf28f9da14de07',
     'condition': 'not build_with_chromium',
   },
 
   '{angle_root}/buildtools': {
-    'url': '{chromium_git}/chromium/buildtools.git@2dff9c9c74e9d732e6fe57c84ef7fd044cc45d96',
+    'url': '{chromium_git}/chromium/buildtools.git@13a00f110ef910a25763346d6538b60f12845656',
     'condition': 'not build_with_chromium',
   },
 
   '{angle_root}/testing': {
-    'url': '{chromium_git}/chromium/src/testing@f6b3243e8ba941f4dfa6b579137738803f43aa18',
+    'url': '{chromium_git}/chromium/src/testing@8127386af6d96313ba394ac82c7ddffb9111e628',
     'condition': 'not build_with_chromium',
   },
 
@@ -114,7 +114,7 @@ deps = {
   },
 
   '{angle_root}/tools/clang': {
-    'url': '{chromium_git}/chromium/src/tools/clang.git@99ac9bf4ad0d629e1168a0bda9a82f87062ce106',
+    'url': '{chromium_git}/chromium/src/tools/clang.git@a245b955fe9cd620081ed267fae303c88d033fef',
     'condition': 'not build_with_chromium',
   },
 }
@@ -235,6 +235,14 @@ hooks = [
                 '--bucket', 'chromium-browser-clang/rc',
                 '-s', '{angle_root}/build/toolchain/win/rc/win/rc.exe.sha1',
     ],
+  },
+
+  {
+    # Update LASTCHANGE.
+    'name': 'lastchange',
+    'pattern': '.',
+    'action': ['python', '{angle_root}/build/util/lastchange.py',
+               '-o', '{angle_root}/build/util/LASTCHANGE'],
   },
 ]
 
