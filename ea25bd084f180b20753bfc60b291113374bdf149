@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c50bcba7_6cb34357",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5360,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-16T02:36:14Z",
+      "side": 1,
+      "message": "I think drawID would be preferable over drawid. Same in multiDrawElements.",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46e7838e_71486637",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5370,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-16T02:36:14Z",
+      "side": 1,
+      "message": "What\u0027s the reason for putting this inside the loop? The extra firstDraw logic is unfortunate, and has a tiny overhead.\n\nI\u0027m guessing it\u0027s because noopDraw is before it, so you want to avoid doing it unless it\u0027s really necessary. But does it hurt to prepareForDraw if the draw never happens? If not, I\u0027d hoist this out of the loop and simplify things.\n\nIf the firstDraw logic _is_ necessary, can you add a comment about *why*?\n\nSame in multiDrawElements.",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e233949b_3d66e27a",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-16T02:36:14Z",
+      "side": 1,
+      "message": "Add some punctuation to clarify this comment - the line break looks like it\u0027s in the middle of a sentence:\n\n... by the linker. Set a flag ... emulated.\n\n?",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25edef5c_84163006",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-16T02:36:14Z",
+      "side": 1,
+      "message": "Probably should keep the value \"gl_DrawID\" in a constant somewhere and use it here.",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9593fcd6_9c729ee8",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-16T02:36:14Z",
+      "side": 1,
+      "message": "Here too.",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c5debba_c524568f",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2711,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-16T02:36:14Z",
+      "side": 1,
+      "message": "This isn\u0027t \"setting the DrawID location\" - maybe setDrawIDUniformANGLE?\n\nActually, why is the ANGLE prefix needed here?",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf5a6c0c_3bced397",
+        "filename": "src/libANGLE/ProgramLinkedResources.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-16T02:36:14Z",
+      "side": 1,
+      "message": "Can uniform.isBuiltIn be aware of uniform.emulatedBuiltIn, so this method isn\u0027t needed?\n\nIf not, maybe rename this IsBuiltIn (IsNonEmulatedBuiltIn). It\u0027s weird to have two functions called \"isbuiltin\" that have different behavior.",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6427ab07_578bb977",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-16T02:36:14Z",
+      "side": 1,
+      "message": "Not sure if this is the right place for this comment, but this reminded me.\n\nWe need to make sure that gl_DrawID is rejected, on an ANGLE WebGL context, if the extension is not enabled. We\u0027ll need a test for that (it can be a WebGL conformance test, which I think could fail on --use-cmd-decoder\u003dpassthrough).",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
