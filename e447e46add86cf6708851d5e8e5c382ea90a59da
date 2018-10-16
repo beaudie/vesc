@@ -476,6 +476,24 @@
     },
     {
       "key": {
+        "uuid": "27758a7b_f787bb7c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-16T00:26:00Z",
+      "side": 1,
+      "message": "This worked, thx.  Will be in my next update.",
+      "parentUuid": "d6afe8b2_5021e447",
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e96ed2ce_3233f77a",
         "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
         "patchSetId": 1
@@ -520,6 +538,30 @@
       "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b53ef0f2_251a19d2",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-16T00:26:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "438287b4_bf5d2135",
+      "range": {
+        "startLine": 7,
+        "startChar": 3,
+        "endLine": 7,
+        "endChar": 11
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -614,6 +656,30 @@
       "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "caf60802_e3ab11ab",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-16T00:26:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cab900d0_565b1e10",
+      "range": {
+        "startLine": 213,
+        "startChar": 10,
+        "endLine": 213,
+        "endChar": 12
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
