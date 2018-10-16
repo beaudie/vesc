@@ -46,6 +46,30 @@
       "revId": "9355bc45811e719dee6fcc998f5b94a0b5e0a5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be33dfc2_cdde24fd",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-16T21:39:09Z",
+      "side": 0,
+      "message": "Ok. Can you maybe change this to an ASSERT to verify that the early exit is caught before entering this function? Just to make it clear and to check we aren\u0027t doing extra work or creating empty graph nodes.",
+      "parentUuid": "a545011d_4465c0d2",
+      "range": {
+        "startLine": 583,
+        "startChar": 0,
+        "endLine": 586,
+        "endChar": 5
+      },
+      "revId": "9355bc45811e719dee6fcc998f5b94a0b5e0a5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
