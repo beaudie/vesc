@@ -32,7 +32,6 @@ namespace gl
 
 namespace
 {
-
 bool GetAlternativeQueryType(QueryType type, QueryType *alternativeType)
 {
     switch (type)
@@ -48,6 +47,31 @@ bool GetAlternativeQueryType(QueryType type, QueryType *alternativeType)
     }
 }
 
+// Mapping from a buffer binding type to a dirty bit type.
+constexpr angle::PackedEnumMap<BufferBinding, size_t> kBufferBindingDirtyBits = {{
+    0,                                                 /* Array */
+    State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING,    /* AtomicCounter */
+    0,                                                 /* CopyRead */
+    0,                                                 /* CopyWrite */
+    State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING, /* DispatchIndirect */
+    State::DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING,     /* DrawIndirect */
+    0,                                                 /* ElementArray */
+    State::DIRTY_BIT_PACK_BUFFER_BINDING,              /* PixelPack */
+    State::DIRTY_BIT_UNPACK_BUFFER_BINDING,            /* PixelUnpack */
+    State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING,    /* ShaderStorage */
+    0,                                                 /* TransformFeedback */
+    State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS,          /* Uniform */
+}};
+
+using BufferBindingSetter = void (State::*)(const Context *, Buffer *);
+
+// Returns a buffer binding function depending on if a dirty bit is set.
+template <BufferBinding Target>
+constexpr BufferBindingSetter GetBufferBindingSetter()
+{
+    return kBufferBindingDirtyBits[Target] != 0 ? &State::setGenericBufferBindingWithBit<Target>
+                                                : &State::setGenericBufferBinding<Target>;
+}
 }  // anonymous namepace
 
 template <typename BindingT, typename... ArgsT>
@@ -1493,46 +1517,53 @@ Query *State::getActiveQuery(QueryType type) const
     return mActiveQueries[type].get();
 }
 
+template <BufferBinding Target>
+void State::setGenericBufferBindingWithBit(const Context *context, Buffer *buffer)
+{
+    UpdateNonTFBufferBinding(context, &mBoundBuffers[Target], buffer);
+    mDirtyBits.set(kBufferBindingDirtyBits[Target]);
+}
+
+template <BufferBinding Target>
+void State::setGenericBufferBinding(const Context *context, Buffer *buffer)
+{
+    UpdateNonTFBufferBinding(context, &mBoundBuffers[Target], buffer);
+}
+
+template <>
+void State::setGenericBufferBinding<BufferBinding::TransformFeedback>(const Context *context,
+                                                                      Buffer *buffer)
+{
+    UpdateTFBufferBinding(context, &mBoundBuffers[BufferBinding::TransformFeedback], false, buffer);
+}
+
+template <>
+void State::setGenericBufferBinding<BufferBinding::ElementArray>(const Context *context,
+                                                                 Buffer *buffer)
+{
+    getVertexArray()->setElementArrayBuffer(context, buffer);
+    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+}
+
+// Dispatch table for buffer update functions. Must be defined after the setter template functions.
+static constexpr angle::PackedEnumMap<BufferBinding, BufferBindingSetter> kBufferSetters = {{
+    GetBufferBindingSetter<BufferBinding::Array>(),
+    GetBufferBindingSetter<BufferBinding::AtomicCounter>(),
+    GetBufferBindingSetter<BufferBinding::CopyRead>(),
+    GetBufferBindingSetter<BufferBinding::CopyWrite>(),
+    GetBufferBindingSetter<BufferBinding::DispatchIndirect>(),
+    GetBufferBindingSetter<BufferBinding::DrawIndirect>(),
+    GetBufferBindingSetter<BufferBinding::ElementArray>(),
+    GetBufferBindingSetter<BufferBinding::PixelPack>(),
+    GetBufferBindingSetter<BufferBinding::PixelUnpack>(),
+    GetBufferBindingSetter<BufferBinding::ShaderStorage>(),
+    GetBufferBindingSetter<BufferBinding::TransformFeedback>(),
+    GetBufferBindingSetter<BufferBinding::Uniform>(),
+}};
+
 void State::setBufferBinding(const Context *context, BufferBinding target, Buffer *buffer)
 {
-    switch (target)
-    {
-        case BufferBinding::PixelPack:
-            UpdateNonTFBufferBinding(context, &mBoundBuffers[target], buffer);
-            mDirtyBits.set(DIRTY_BIT_PACK_BUFFER_BINDING);
-            break;
-        case BufferBinding::PixelUnpack:
-            UpdateNonTFBufferBinding(context, &mBoundBuffers[target], buffer);
-            mDirtyBits.set(DIRTY_BIT_UNPACK_BUFFER_BINDING);
-            break;
-        case BufferBinding::DrawIndirect:
-            UpdateNonTFBufferBinding(context, &mBoundBuffers[target], buffer);
-            mDirtyBits.set(DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING);
-            break;
-        case BufferBinding::DispatchIndirect:
-            UpdateNonTFBufferBinding(context, &mBoundBuffers[target], buffer);
-            mDirtyBits.set(DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING);
-            break;
-        case BufferBinding::ElementArray:
-            getVertexArray()->setElementArrayBuffer(context, buffer);
-            mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
-            break;
-        case BufferBinding::ShaderStorage:
-            UpdateNonTFBufferBinding(context, &mBoundBuffers[target], buffer);
-            mDirtyBits.set(DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING);
-            break;
-        case BufferBinding::Uniform:
-            UpdateBufferBinding(context, &mBoundBuffers[target], buffer, target);
-            mDirtyBits.set(DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
-            break;
-        case BufferBinding::AtomicCounter:
-            UpdateBufferBinding(context, &mBoundBuffers[target], buffer, target);
-            mDirtyBits.set(DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
-            break;
-        default:
-            UpdateBufferBinding(context, &mBoundBuffers[target], buffer, target);
-            break;
-    }
+    (this->*(kBufferSetters[target]))(context, buffer);
 }
 
 void State::setIndexedBufferBinding(const Context *context,
