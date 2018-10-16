@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b64e3663_72ea78a8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-16T01:39:06Z",
+      "side": 1,
+      "message": "I think I would rather you just update the color mask unconditionally if the program changes. Rather than storing this dirty bit. Just to simplify the state tracking. Unless there\u0027s some other reason I\u0027m missing?\n\nYou could also move the program dirty bit to a lower index if you want to make sure that is synced first.",
+      "parentUuid": "47f7c742_1da08b72",
+      "range": {
+        "startLine": 119,
+        "startChar": 6,
+        "endLine": 119,
+        "endChar": 29
+      },
+      "revId": "01b0e110c371c72d8379061b9edde28823bea794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed065bed_f22cbcaa",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "We don\u0027t reach here on glUseProgram(0) so there is no crash.\nI will add an assert though that mProgram is not 0.\nAfter glUseProgram(0) drawing is undefined, so I think anything is the right thing.",
       "parentUuid": "ed065bed_f22cbcaa",
+      "range": {
+        "startLine": 866,
+        "startChar": 0,
+        "endLine": 866,
+        "endChar": 92
+      },
+      "revId": "01b0e110c371c72d8379061b9edde28823bea794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a22d074_a3680e48",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-16T01:39:06Z",
+      "side": 1,
+      "message": "I think you should update on the executable dirty bit. Not the binding. Imagine you a) first link a program that has outputs. b) call UseProgram. c) rebind the fragment shader to have no outputs and call LinkProgram. Then you won\u0027t get the mask applied.",
+      "parentUuid": "8ebd8aea_8278c06e",
       "range": {
         "startLine": 866,
         "startChar": 0,
