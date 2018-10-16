@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3089e43d_06945e1d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-16T20:03:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57027ef3_04edf12e",
+      "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "16f619d8_640f7c5e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "29b7dadf_8135f8b2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-16T20:03:58Z",
+      "side": 1,
+      "message": "Yep. There\u0027s potentially quite a variety of ways to allocate descriptors. But your understanding is correct.",
+      "parentUuid": "16f619d8_640f7c5e",
+      "range": {
+        "startLine": 349,
+        "startChar": 0,
+        "endLine": 350,
+        "endChar": 68
+      },
+      "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "04753b69_3a9cec81",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "2a046ee7_8410a1e3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-16T20:03:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "04753b69_3a9cec81",
+      "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d18e65ee_62f6c2ea",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -73,6 +133,47 @@
       "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab930bb5_332cca7e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-16T20:03:58Z",
+      "side": 1,
+      "message": "You could but I think it\u0027s redundant. We only have one current pool at a time. And we only check if the serials are in use when we move to a new pool. So I think this is only time we need to update the serial. I updated the comment.",
+      "parentUuid": "d18e65ee_62f6c2ea",
+      "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "78369e61_00199856",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-16T20:03:58Z",
+      "side": 1,
+      "message": "here\u0027s the one place we check the serial is in use.",
+      "range": {
+        "startLine": 400,
+        "startChar": 23,
+        "endLine": 400,
+        "endChar": 36
+      },
+      "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +212,24 @@
     },
     {
       "key": {
+        "uuid": "424f89ca_99892766",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-16T20:03:58Z",
+      "side": 1,
+      "message": "Yeah, Tobin is correct. It\u0027s impossible to be allocating a new pool and have the current pool be available at the same time. If the current pool is available we\u0027ll allocate a new set from the current pool. This check is to verify that we don\u0027t do that.\n\nI added a comment here to clarify this.",
+      "parentUuid": "b5491b7e_7a24238f",
+      "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9bda357_064e076f",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 5
@@ -128,6 +247,24 @@
     },
     {
       "key": {
+        "uuid": "804da99d_a911212b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-16T20:03:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9bda357_064e076f",
+      "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b399924f_985d60f7",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 5
@@ -142,6 +279,24 @@
       "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e692836c_8da887c3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-16T20:03:58Z",
+      "side": 1,
+      "message": "Technically 2**19 + 1, so 524k + :)",
+      "parentUuid": "b399924f_985d60f7",
+      "revId": "b723bf1a677ff23e0f81366f119ecf7db608cd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
