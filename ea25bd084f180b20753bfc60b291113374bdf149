@@ -135,6 +135,57 @@
       "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89788c21_5e7110aa",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6672,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-16T19:06:50Z",
+      "side": 1,
+      "message": "drawid-\u003edrawID here too. (primcount is okay because that\u0027s how it\u0027s written in the spec)",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff94de46_84820051",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6681,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-16T19:06:50Z",
+      "side": 1,
+      "message": "I think git cl format would insert a blank line between these functions. (If not, you should add it.)",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffd4a45a_c74ce02e",
+        "filename": "src/tests/gl_tests/MultiDrawArraysTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-16T19:06:50Z",
+      "side": 1,
+      "message": "As implemented, requestExtension should always succeed, right? Let\u0027s add another tiny test case that just checks requestExtension is successful.",
+      "revId": "ea25bd084f180b20753bfc60b291113374bdf149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
