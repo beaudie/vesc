@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4561b6a9_3378236b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-16T19:43:38Z",
+      "side": 0,
+      "message": "is this an intentional change? Can you ASSERT(!mNodes.empty())? What work happens if nodes is empty?",
+      "range": {
+        "startLine": 583,
+        "startChar": 0,
+        "endLine": 586,
+        "endChar": 5
+      },
+      "revId": "9355bc45811e719dee6fcc998f5b94a0b5e0a5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

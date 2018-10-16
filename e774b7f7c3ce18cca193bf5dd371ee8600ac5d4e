@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c53f66bc_f868d5e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-16T19:43:38Z",
+      "side": 1,
+      "message": "RendererVk?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 18
+      },
+      "revId": "e774b7f7c3ce18cca193bf5dd371ee8600ac5d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39b51fb3_91c4c56d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-16T19:43:38Z",
+      "side": 1,
+      "message": "Could you instead store a FixedVector of two semaphore helpers and make the Renderer own all the semaphores used?\n\nAlso when we support multiple contexts concurrently this will likely have to change. As you said in your comment.",
+      "range": {
+        "startLine": 242,
+        "startChar": 0,
+        "endLine": 251,
+        "endChar": 53
+      },
+      "revId": "e774b7f7c3ce18cca193bf5dd371ee8600ac5d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69a960dd_5cda4f3f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-16T19:43:38Z",
+      "side": 1,
+      "message": "nit: using overloading without inheritance is a but unusual. How about you give this function a unique name?",
+      "range": {
+        "startLine": 146,
+        "startChar": 18,
+        "endLine": 146,
+        "endChar": 33
+      },
+      "revId": "e774b7f7c3ce18cca193bf5dd371ee8600ac5d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
