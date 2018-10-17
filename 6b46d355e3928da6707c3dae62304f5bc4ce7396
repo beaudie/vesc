@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d6ac65f3_07f2477e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T13:56:17Z",
+      "side": 1,
+      "message": "This corresponds to the number of surfaces we can support; supporting 7 surfaces sounds weird ;)",
+      "parentUuid": "69ad3053_f55de452",
+      "range": {
+        "startLine": 170,
+        "startChar": 28,
+        "endLine": 170,
+        "endChar": 51
+      },
+      "revId": "6b46d355e3928da6707c3dae62304f5bc4ce7396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "51dd924a_d65bb9fb",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "6b46d355e3928da6707c3dae62304f5bc4ce7396",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51b02ae8_99a8fec9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T13:56:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51dd924a_d65bb9fb",
+      "range": {
+        "startLine": 179,
+        "startChar": 9,
+        "endLine": 179,
+        "endChar": 75
+      },
+      "revId": "6b46d355e3928da6707c3dae62304f5bc4ce7396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "74bd14b9_7e634e80",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T13:56:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3fcb6fc3_e05a97c1",
+      "range": {
+        "startLine": 242,
+        "startChar": 34,
+        "endLine": 242,
+        "endChar": 97
+      },
+      "revId": "6b46d355e3928da6707c3dae62304f5bc4ce7396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6bcb76b1_97fb9a9b",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 9
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "39d81e25_704207e5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T13:56:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6bcb76b1_97fb9a9b",
+      "range": {
+        "startLine": 246,
+        "startChar": 7,
+        "endLine": 247,
+        "endChar": 42
+      },
+      "revId": "6b46d355e3928da6707c3dae62304f5bc4ce7396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a7192298_016a3a21",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 9
@@ -105,6 +201,30 @@
       "writtenOn": "2018-10-16T21:39:09Z",
       "side": 1,
       "message": "nit: usually operator\u003d returns a \u0026 not a *.",
+      "range": {
+        "startLine": 620,
+        "startChar": 11,
+        "endLine": 620,
+        "endChar": 15
+      },
+      "revId": "6b46d355e3928da6707c3dae62304f5bc4ce7396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d54fb6d_64f17e86",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T13:56:17Z",
+      "side": 1,
+      "message": "Hahaha, yeap I was in a rush to get home. (I had `return *this;` written in fact with the wrong return type and just removed the `*` on compile error..)",
+      "parentUuid": "a7192298_016a3a21",
       "range": {
         "startLine": 620,
         "startChar": 11,
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "b78ab38a_95e39afe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T13:56:17Z",
+      "side": 1,
+      "message": "This is analogous to QueryHelper\u0027s `deinit()`: https://chromium-review.googlesource.com/c/angle/angle/+/1259762/4/src/libANGLE/renderer/vulkan/vk_helpers.cpp#442",
+      "parentUuid": "366bc16d_065220e0",
+      "range": {
+        "startLine": 629,
+        "startChar": 22,
+        "endLine": 629,
+        "endChar": 28
+      },
+      "revId": "6b46d355e3928da6707c3dae62304f5bc4ce7396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6c9951b0_268f94ac",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 9
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "15d5a311_9e93bbbe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T13:56:17Z",
+      "side": 1,
+      "message": "Done. Also, I ended up not doing CRTP, as `init()` takes different parameters in the children (so I couldn\u0027t call it from the parent), and I didn\u0027t want to mix-and-match patterns.",
+      "parentUuid": "6c9951b0_268f94ac",
+      "range": {
+        "startLine": 129,
+        "startChar": 6,
+        "endLine": 129,
+        "endChar": 28
+      },
+      "revId": "6b46d355e3928da6707c3dae62304f5bc4ce7396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "192bfa39_38ecdb43",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 9
@@ -183,6 +351,30 @@
       "revId": "6b46d355e3928da6707c3dae62304f5bc4ce7396",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "470c0094_380a6cae",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T13:56:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "192bfa39_38ecdb43",
+      "range": {
+        "startLine": 149,
+        "startChar": 9,
+        "endLine": 149,
+        "endChar": 19
+      },
+      "revId": "6b46d355e3928da6707c3dae62304f5bc4ce7396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
