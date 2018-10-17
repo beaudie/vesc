@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82f398d3_ed626e51",
+        "filename": "src/libANGLE/renderer/copyvertex.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T17:55:38Z",
+      "side": 1,
+      "message": "nit: might be worth ifdefing this, based on something in platform.h. Something like ANGLE_IS_ARM32",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 139,
+        "endChar": 86
+      },
+      "revId": "1c9120eac51d062ecafa4cc278687e3fcd33f158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
