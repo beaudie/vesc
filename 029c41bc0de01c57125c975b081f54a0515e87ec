@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "07437695_6324899f",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T18:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86f3c1f6_df63e366",
+      "range": {
+        "startLine": 78,
+        "startChar": 34,
+        "endLine": 78,
+        "endChar": 59
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e527fd2_09337190",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 8
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "950a8fd0_996614b4",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T18:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e527fd2_09337190",
+      "range": {
+        "startLine": 89,
+        "startChar": 32,
+        "endLine": 89,
+        "endChar": 54
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aea2b1af_33f99b6a",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 8
@@ -59,6 +107,30 @@
       "writtenOn": "2018-10-17T17:26:09Z",
       "side": 1,
       "message": "nit: I think you can just make this ANGLE_TRY as well.",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 0
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf9fc662_18ed8ff6",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T18:02:31Z",
+      "side": 1,
+      "message": "getResults() can return angle::Result::Incomplete(). Hence the three cases; ANGLE_TRY() handling Stop() and the `if` below differentiating Continue() and Incomplete().\n\nChanged the `if` below to check for Incomplete() to make this clearer.",
+      "parentUuid": "aea2b1af_33f99b6a",
       "range": {
         "startLine": 97,
         "startChar": 0,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "2669e8d7_c752837c",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T18:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81c4b41b_54378ce0",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 23
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6ead9c77_f576ee55",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 8
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "7bbda0ec_b62e18b6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 974,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T18:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ead9c77_f576ee55",
+      "range": {
+        "startLine": 974,
+        "startChar": 26,
+        "endLine": 974,
+        "endChar": 45
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f26036e_72f30639",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 8
@@ -128,6 +248,30 @@
       "writtenOn": "2018-10-17T17:22:48Z",
       "side": 1,
       "message": "nit: this seems a bit too overdeveloped. you can just use a for loop to find the first index.",
+      "range": {
+        "startLine": 983,
+        "startChar": 0,
+        "endLine": 988,
+        "endChar": 78
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32459b2d_4dce49ab",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T18:02:31Z",
+      "side": 1,
+      "message": "But.. O(log(n))..but...\n\nOk I guess this list is too short for that to matter.",
+      "parentUuid": "6f26036e_72f30639",
       "range": {
         "startLine": 983,
         "startChar": 0,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "3951d75c_79170bf5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T18:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fd97714_5140898b",
+      "range": {
+        "startLine": 992,
+        "startChar": 52,
+        "endLine": 992,
+        "endChar": 70
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24ed27fd_a27cfdd3",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 8
@@ -174,6 +342,30 @@
       "writtenOn": "2018-10-17T17:22:48Z",
       "side": 1,
       "message": "nit: I believe you can just use ANGLE_TRY here instead of checking the result manually.",
+      "range": {
+        "startLine": 993,
+        "startChar": 0,
+        "endLine": 998,
+        "endChar": 22
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8788220_ead24b47",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T18:02:31Z",
+      "side": 1,
+      "message": "Left as-is as discussed.",
+      "parentUuid": "24ed27fd_a27cfdd3",
       "range": {
         "startLine": 993,
         "startChar": 0,
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "27363423_af1a1273",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T18:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24a257f9_7c62ff8e",
+      "range": {
+        "startLine": 1001,
+        "startChar": 0,
+        "endLine": 1002,
+        "endChar": 37
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67b53a1f_0bfaf39a",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 8
@@ -229,6 +445,30 @@
       "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "777ec4a0_fe85d9f6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-17T18:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67b53a1f_0bfaf39a",
+      "range": {
+        "startLine": 107,
+        "startChar": 18,
+        "endLine": 107,
+        "endChar": 40
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
