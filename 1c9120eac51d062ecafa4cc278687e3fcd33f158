@@ -22,6 +22,30 @@
       "revId": "1c9120eac51d062ecafa4cc278687e3fcd33f158",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee589c5d_abd63bfb",
+        "filename": "src/libANGLE/renderer/copyvertex.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-17T18:20:07Z",
+      "side": 1,
+      "message": "Are you concerned about performance or some other reason?\nPerformance-wise, I don\u0027t think this will change anything, as unaligned access has performance penalties on all platforms anyways. Also the whole \"input\" should be in cache after the first access to it.\nBut, what I could do, is check if input and stride are aligned, and use the old code in that case. Should I?",
+      "parentUuid": "82f398d3_ed626e51",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 139,
+        "endChar": 86
+      },
+      "revId": "1c9120eac51d062ecafa4cc278687e3fcd33f158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
