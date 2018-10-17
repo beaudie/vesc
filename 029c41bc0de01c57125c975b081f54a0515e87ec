@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86f3c1f6_df63e366",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T17:22:48Z",
+      "side": 1,
+      "message": "nit: you can call RendererVk::flush directly and pass the ContextVk.",
+      "range": {
+        "startLine": 78,
+        "startChar": 34,
+        "endLine": 78,
+        "endChar": 59
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e527fd2_09337190",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T17:22:48Z",
+      "side": 1,
+      "message": "maybe move this before the isSerialInUse check. would potentially do a bit of extra work in some cases but would also save some in some other cases.",
+      "range": {
+        "startLine": 89,
+        "startChar": 32,
+        "endLine": 89,
+        "endChar": 54
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81c4b41b_54378ce0",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T17:22:48Z",
+      "side": 1,
+      "message": "nit: can you use the serial from CommandGraphResource here?",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 23
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ead9c77_f576ee55",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 974,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T17:22:48Z",
+      "side": 1,
+      "message": "nit: finishToSerial",
+      "range": {
+        "startLine": 974,
+        "startChar": 26,
+        "endLine": 974,
+        "endChar": 45
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f26036e_72f30639",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T17:22:48Z",
+      "side": 1,
+      "message": "nit: this seems a bit too overdeveloped. you can just use a for loop to find the first index.",
+      "range": {
+        "startLine": 983,
+        "startChar": 0,
+        "endLine": 988,
+        "endChar": 78
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fd97714_5140898b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T17:22:48Z",
+      "side": 1,
+      "message": "nit: can make this a constexpr named value.",
+      "range": {
+        "startLine": 992,
+        "startChar": 52,
+        "endLine": 992,
+        "endChar": 70
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24ed27fd_a27cfdd3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T17:22:48Z",
+      "side": 1,
+      "message": "nit: I believe you can just use ANGLE_TRY here instead of checking the result manually.",
+      "range": {
+        "startLine": 993,
+        "startChar": 0,
+        "endLine": 998,
+        "endChar": 22
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24a257f9_7c62ff8e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T17:22:48Z",
+      "side": 1,
+      "message": "nit: just return instead of ANGLE_TRY/return continue.",
+      "range": {
+        "startLine": 1001,
+        "startChar": 0,
+        "endLine": 1002,
+        "endChar": 37
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67b53a1f_0bfaf39a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T17:22:48Z",
+      "side": 1,
+      "message": "nit: how about checkCompletedCommands?",
+      "range": {
+        "startLine": 107,
+        "startChar": 18,
+        "endLine": 107,
+        "endChar": 40
+      },
+      "revId": "029c41bc0de01c57125c975b081f54a0515e87ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
