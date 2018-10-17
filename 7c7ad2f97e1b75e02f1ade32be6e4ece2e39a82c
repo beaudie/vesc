@@ -70,6 +70,30 @@
       "revId": "7c7ad2f97e1b75e02f1ade32be6e4ece2e39a82c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08259e55_6e891f77",
+        "filename": "src/libANGLE/renderer/copyvertex.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-17T21:21:58Z",
+      "side": 1,
+      "message": "Done\nThough, from what I know, relying on CPU to optimize your code execution is a good thing.\nI used to work for Intel, so I may be biased :)",
+      "parentUuid": "b4548d07_68a047ae",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 138,
+        "endChar": 80
+      },
+      "revId": "7c7ad2f97e1b75e02f1ade32be6e4ece2e39a82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
