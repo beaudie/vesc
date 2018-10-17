@@ -22,6 +22,30 @@
       "revId": "7c7ad2f97e1b75e02f1ade32be6e4ece2e39a82c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efcf0ea5_3947d625",
+        "filename": "src/libANGLE/renderer/copyvertex.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-17T21:03:52Z",
+      "side": 1,
+      "message": "I know, that\u0027s why I asked you to take a look.\nPerformance-wise, I don\u0027t think it makes a difference, since branch prediction should do the right thing, and having it outside the loop I\u0027ll have to duplicate the \"for\" statement.\nBut, if you prefer it outside the loop, I don\u0027t mind changing it.",
+      "parentUuid": "a993511e_0893ebc4",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 138,
+        "endChar": 80
+      },
+      "revId": "7c7ad2f97e1b75e02f1ade32be6e4ece2e39a82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
