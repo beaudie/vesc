@@ -46,6 +46,30 @@
       "revId": "1c9120eac51d062ecafa4cc278687e3fcd33f158",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75f495d8_fd0b4423",
+        "filename": "src/libANGLE/renderer/copyvertex.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T18:25:26Z",
+      "side": 1,
+      "message": "Yeah, maybe the alignment check is sufficient. LGTM with that.",
+      "parentUuid": "ee589c5d_abd63bfb",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 139,
+        "endChar": 86
+      },
+      "revId": "1c9120eac51d062ecafa4cc278687e3fcd33f158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
