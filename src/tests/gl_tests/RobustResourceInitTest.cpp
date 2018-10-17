@@ -1454,7 +1454,7 @@ TEST_P(RobustResourceInitTest, CopyTexSubImage2D)
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, destTexture, 0);
     ASSERT_GL_NO_ERROR();
 
-    auto srcInitTest = [kOffset, kDestSize](int x, int y) {
+    auto srcInitTest = [](int x, int y) {
         return (x >= kOffset) && x < (kDestSize - kOffset) && (y >= kOffset) &&
                y < (kDestSize - kOffset);
     };
@@ -1522,7 +1522,7 @@ TEST_P(RobustResourceInitTestES3, CopyTexSubImage3D)
     glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, destTexture, 0, 0);
     ASSERT_GL_NO_ERROR();
 
-    auto srcInitTest = [kOffset, kDestSize](int x, int y) {
+    auto srcInitTest = [](int x, int y) {
         return (x >= kOffset) && x < (kDestSize - kOffset) && (y >= kOffset) &&
                y < (kDestSize - kOffset);
     };
