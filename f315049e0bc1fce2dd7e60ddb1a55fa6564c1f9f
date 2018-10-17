@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7692990_12b9b8be",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T17:37:33Z",
+      "side": 1,
+      "message": "nit: put this inside the TimeElapsed block (use {})",
+      "range": {
+        "startLine": 148,
+        "startChar": 0,
+        "endLine": 148,
+        "endChar": 44
+      },
+      "revId": "f315049e0bc1fce2dd7e60ddb1a55fa6564c1f9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "088ecc7c_2e8058eb",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T17:37:33Z",
+      "side": 1,
+      "message": "this should just be ANGLE_TRY as well.",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 164,
+        "endChar": 34
+      },
+      "revId": "f315049e0bc1fce2dd7e60ddb1a55fa6564c1f9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef0a065e_5baddbe1",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T17:37:33Z",
+      "side": 1,
+      "message": "nit: to fix the formatting can you just put the comments on a prior line?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 78
+      },
+      "revId": "f315049e0bc1fce2dd7e60ddb1a55fa6564c1f9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "577d04b3_4c56d85e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T17:37:33Z",
+      "side": 1,
+      "message": "from the Vulkan spec:\n\nThe number of valid bits in a timestamp value is determined by the VkQueueFamilyProperties::timestampValidBits property of the queue on which the timestamp is written. Timestamps are supported on any queue which reports a non-zero value for timestampValidBits via vkGetPhysicalDeviceQueueFamilyProperties. If the timestampComputeAndGraphics limit is VK_TRUE, timestamps are supported by every queue family that supports either graphics or compute operations (see VkQueueFamilyProperties).\n\nWe should check the queue family properties here. We can cache those in RendererVk::initializeDevice and pass them to GenerateCaps.",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 0
+      },
+      "revId": "f315049e0bc1fce2dd7e60ddb1a55fa6564c1f9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d84df18a_8c9f531d",
+        "filename": "src/tests/gl_tests/TimerQueriesTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T17:37:33Z",
+      "side": 1,
+      "message": "nit: IsVulkan()",
+      "range": {
+        "startLine": 284,
+        "startChar": 4,
+        "endLine": 284,
+        "endChar": 51
+      },
+      "revId": "f315049e0bc1fce2dd7e60ddb1a55fa6564c1f9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
