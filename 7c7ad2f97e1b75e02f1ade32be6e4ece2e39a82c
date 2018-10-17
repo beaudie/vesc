@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a993511e_0893ebc4",
+        "filename": "src/libANGLE/renderer/copyvertex.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-17T20:52:51Z",
+      "side": 1,
+      "message": "nit: can be outside the loop technically",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 138,
+        "endChar": 80
+      },
+      "revId": "7c7ad2f97e1b75e02f1ade32be6e4ece2e39a82c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
