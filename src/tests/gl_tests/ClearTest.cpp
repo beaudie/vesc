@@ -254,6 +254,25 @@ TEST_P(ClearTest, ClearIssue)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+TEST_P(ClearTest, ClearIsClamped)
+{
+    glClearDepthf(5.0f);
+
+    GLfloat clear_depth;
+    glGetFloatv(GL_DEPTH_CLEAR_VALUE, &clear_depth);
+    EXPECT_EQ(1.0, clear_depth);
+}
+
+TEST_P(ClearTest, DepthRangefIsClamped)
+{
+    glDepthRangef(1.1f, -4.0f);
+
+    GLfloat depth_range[2];
+    glGetFloatv(GL_DEPTH_RANGE, depth_range);
+    EXPECT_EQ(1, depth_range[0]);
+    EXPECT_EQ(0, depth_range[1]);
+}
+
 // Requires ES3
 // This tests a bug where in a masked clear when calling "ClearBuffer", we would
 // mistakenly clear every channel (including the masked-out ones)
