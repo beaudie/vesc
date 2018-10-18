@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4bf7a156_c64c175b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-18T17:59:37Z",
+      "side": 1,
+      "message": "Any results to share?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 70
+      },
+      "revId": "3618c8899921d6f6a7e6af5c20fc232911eb0f5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3781d0a7_0348e9fa",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-18T17:59:37Z",
+      "side": 1,
+      "message": "second?",
+      "range": {
+        "startLine": 76,
+        "startChar": 49,
+        "endLine": 76,
+        "endChar": 54
+      },
+      "revId": "3618c8899921d6f6a7e6af5c20fc232911eb0f5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
