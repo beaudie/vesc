@@ -210,8 +210,8 @@ void GL_APIENTRY DrawElementsInstancedANGLE(GLenum mode,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum mode = 0x%X, GLsizei count = %d, GLenum type = 0x%X, const void *indices = "
-        "0x%0.8p, GLsizei primcount = %d)",
-        mode, count, type, indices, primcount);
+        "0x%016" PRIxPTR ", GLsizei primcount = %d)",
+        mode, count, type, reinterpret_cast<uintptr_t>(indices), primcount);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -285,8 +285,8 @@ void GL_APIENTRY FramebufferTextureMultiviewSideBySideANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum attachment = 0x%X, GLuint texture = %u, GLint level = %d, "
-        "GLsizei numViews = %d, const GLint * viewportOffsets = 0x%0.8p)",
-        target, attachment, texture, level, numViews, viewportOffsets);
+        "GLsizei numViews = %d, const GLint * viewportOffsets = 0x%016" PRIxPTR ")",
+        target, attachment, texture, level, numViews, reinterpret_cast<uintptr_t>(viewportOffsets));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -308,7 +308,7 @@ void GL_APIENTRY FramebufferTextureMultiviewSideBySideANGLE(GLenum target,
 void GL_APIENTRY RequestExtensionANGLE(const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(const GLchar * name = 0x%0.8p)", name);
+    EVENT("(const GLchar * name = 0x%016" PRIxPTR ")", reinterpret_cast<uintptr_t>(name));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -329,10 +329,9 @@ void GL_APIENTRY GetBooleanvRobustANGLE(GLenum pname,
                                         GLboolean *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, GLboolean * "
-        "params = 0x%0.8p)",
-        pname, bufSize, length, params);
+    EVENT("(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%016" PRIxPTR
+          ", GLboolean * params = 0x%016" PRIxPTR ")",
+          pname, bufSize, reinterpret_cast<uintptr_t>(length), reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -356,8 +355,9 @@ void GL_APIENTRY GetBufferParameterivRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -380,10 +380,9 @@ void GL_APIENTRY GetFloatvRobustANGLE(GLenum pname,
                                       GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, GLfloat * params "
-        "= 0x%0.8p)",
-        pname, bufSize, length, params);
+    EVENT("(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%016" PRIxPTR
+          ", GLfloat * params = 0x%016" PRIxPTR ")",
+          pname, bufSize, reinterpret_cast<uintptr_t>(length), reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -408,8 +407,9 @@ void GL_APIENTRY GetFramebufferAttachmentParameterivRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum attachment = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = "
-        "%d, GLsizei * length = 0x%0.8p, GLint * params = 0x%0.8p)",
-        target, attachment, pname, bufSize, length, params);
+        "%d, GLsizei * length = 0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        target, attachment, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -430,10 +430,9 @@ void GL_APIENTRY GetFramebufferAttachmentParameterivRobustANGLE(GLenum target,
 void GL_APIENTRY GetIntegervRobustANGLE(GLenum pname, GLsizei bufSize, GLsizei *length, GLint *data)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, GLint * data = "
-        "0x%0.8p)",
-        pname, bufSize, length, data);
+    EVENT("(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%016" PRIxPTR
+          ", GLint * data = 0x%016" PRIxPTR ")",
+          pname, bufSize, reinterpret_cast<uintptr_t>(length), reinterpret_cast<uintptr_t>(data));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -457,8 +456,9 @@ void GL_APIENTRY GetProgramivRobustANGLE(GLuint program,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        program, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        program, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -483,8 +483,9 @@ void GL_APIENTRY GetRenderbufferParameterivRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -506,8 +507,9 @@ GetShaderivRobustANGLE(GLuint shader, GLenum pname, GLsizei bufSize, GLsizei *le
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint shader = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        shader, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        shader, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -532,8 +534,9 @@ void GL_APIENTRY GetTexParameterfvRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLfloat * params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLfloat * params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -559,8 +562,9 @@ void GL_APIENTRY GetTexParameterivRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -586,8 +590,9 @@ void GL_APIENTRY GetUniformfvRobustANGLE(GLuint program,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLfloat * params = 0x%0.8p)",
-        program, location, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLfloat * params = 0x%016" PRIxPTR ")",
+        program, location, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -612,8 +617,9 @@ void GL_APIENTRY GetUniformivRobustANGLE(GLuint program,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        program, location, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        program, location, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -638,8 +644,9 @@ void GL_APIENTRY GetVertexAttribfvRobustANGLE(GLuint index,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint index = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLfloat * params = 0x%0.8p)",
-        index, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLfloat * params = 0x%016" PRIxPTR ")",
+        index, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -664,8 +671,9 @@ void GL_APIENTRY GetVertexAttribivRobustANGLE(GLuint index,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint index = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        index, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        index, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -690,8 +698,9 @@ void GL_APIENTRY GetVertexAttribPointervRobustANGLE(GLuint index,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint index = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, void ** pointer = 0x%0.8p)",
-        index, pname, bufSize, length, pointer);
+        "0x%016" PRIxPTR ", void ** pointer = 0x%016" PRIxPTR ")",
+        index, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(pointer));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -722,9 +731,12 @@ void GL_APIENTRY ReadPixelsRobustANGLE(GLint x,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d, GLenum format = "
-        "0x%X, GLenum type = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, GLsizei * "
-        "columns = 0x%0.8p, GLsizei * rows = 0x%0.8p, void * pixels = 0x%0.8p)",
-        x, y, width, height, format, type, bufSize, length, columns, rows, pixels);
+        "0x%X, GLenum type = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%016" PRIxPTR
+        ", GLsizei * columns = 0x%016" PRIxPTR ", GLsizei * rows = 0x%016" PRIxPTR
+        ", void * pixels = 0x%016" PRIxPTR ")",
+        x, y, width, height, format, type, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(columns), reinterpret_cast<uintptr_t>(rows),
+        reinterpret_cast<uintptr_t>(pixels));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -757,8 +769,9 @@ void GL_APIENTRY TexImage2DRobustANGLE(GLenum target,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLint internalformat = %d, GLsizei width = %d, "
         "GLsizei height = %d, GLint border = %d, GLenum format = 0x%X, GLenum type = 0x%X, GLsizei "
-        "bufSize = %d, const void * pixels = 0x%0.8p)",
-        target, level, internalformat, width, height, border, format, type, bufSize, pixels);
+        "bufSize = %d, const void * pixels = 0x%016" PRIxPTR ")",
+        target, level, internalformat, width, height, border, format, type, bufSize,
+        reinterpret_cast<uintptr_t>(pixels));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -786,8 +799,8 @@ void GL_APIENTRY TexParameterfvRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, const GLfloat * params "
-        "= 0x%0.8p)",
-        target, pname, bufSize, params);
+        "= 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -812,8 +825,8 @@ void GL_APIENTRY TexParameterivRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, const GLint * params = "
-        "0x%0.8p)",
-        target, pname, bufSize, params);
+        "0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -845,8 +858,9 @@ void GL_APIENTRY TexSubImage2DRobustANGLE(GLenum target,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, GLsizei "
         "width = %d, GLsizei height = %d, GLenum format = 0x%X, GLenum type = 0x%X, GLsizei "
-        "bufSize = %d, const void * pixels = 0x%0.8p)",
-        target, level, xoffset, yoffset, width, height, format, type, bufSize, pixels);
+        "bufSize = %d, const void * pixels = 0x%016" PRIxPTR ")",
+        target, level, xoffset, yoffset, width, height, format, type, bufSize,
+        reinterpret_cast<uintptr_t>(pixels));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -881,8 +895,9 @@ void GL_APIENTRY TexImage3DRobustANGLE(GLenum target,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLint internalformat = %d, GLsizei width = %d, "
         "GLsizei height = %d, GLsizei depth = %d, GLint border = %d, GLenum format = 0x%X, GLenum "
-        "type = 0x%X, GLsizei bufSize = %d, const void * pixels = 0x%0.8p)",
-        target, level, internalformat, width, height, depth, border, format, type, bufSize, pixels);
+        "type = 0x%X, GLsizei bufSize = %d, const void * pixels = 0x%016" PRIxPTR ")",
+        target, level, internalformat, width, height, depth, border, format, type, bufSize,
+        reinterpret_cast<uintptr_t>(pixels));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -919,9 +934,10 @@ void GL_APIENTRY TexSubImage3DRobustANGLE(GLenum target,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, GLint "
         "zoffset = %d, GLsizei width = %d, GLsizei height = %d, GLsizei depth = %d, GLenum format "
-        "= 0x%X, GLenum type = 0x%X, GLsizei bufSize = %d, const void * pixels = 0x%0.8p)",
+        "= 0x%X, GLenum type = 0x%X, GLsizei bufSize = %d, const void * pixels = 0x%016" PRIxPTR
+        ")",
         target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, bufSize,
-        pixels);
+        reinterpret_cast<uintptr_t>(pixels));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -956,8 +972,9 @@ void GL_APIENTRY CompressedTexImage2DRobustANGLE(GLenum target,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLenum internalformat = 0x%X, GLsizei width = "
         "%d, GLsizei height = %d, GLint border = %d, GLsizei imageSize = %d, GLsizei dataSize = "
-        "%d, const GLvoid * data = 0x%0.8p)",
-        target, level, internalformat, width, height, border, imageSize, dataSize, data);
+        "%d, const GLvoid * data = 0x%016" PRIxPTR ")",
+        target, level, internalformat, width, height, border, imageSize, dataSize,
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -991,8 +1008,9 @@ void GL_APIENTRY CompressedTexSubImage2DRobustANGLE(GLenum target,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLsizei xoffset = %d, GLsizei yoffset = %d, "
         "GLsizei width = %d, GLsizei height = %d, GLenum format = 0x%X, GLsizei imageSize = %d, "
-        "GLsizei dataSize = %d, const GLvoid * data = 0x%0.8p)",
-        target, level, xoffset, yoffset, width, height, format, imageSize, dataSize, data);
+        "GLsizei dataSize = %d, const GLvoid * data = 0x%016" PRIxPTR ")",
+        target, level, xoffset, yoffset, width, height, format, imageSize, dataSize,
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1027,8 +1045,9 @@ void GL_APIENTRY CompressedTexImage3DRobustANGLE(GLenum target,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLenum internalformat = 0x%X, GLsizei width = "
         "%d, GLsizei height = %d, GLsizei depth = %d, GLint border = %d, GLsizei imageSize = %d, "
-        "GLsizei dataSize = %d, const GLvoid * data = 0x%0.8p)",
-        target, level, internalformat, width, height, depth, border, imageSize, dataSize, data);
+        "GLsizei dataSize = %d, const GLvoid * data = 0x%016" PRIxPTR ")",
+        target, level, internalformat, width, height, depth, border, imageSize, dataSize,
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1065,9 +1084,10 @@ void GL_APIENTRY CompressedTexSubImage3DRobustANGLE(GLenum target,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, GLint "
         "zoffset = %d, GLsizei width = %d, GLsizei height = %d, GLsizei depth = %d, GLenum format "
-        "= 0x%X, GLsizei imageSize = %d, GLsizei dataSize = %d, const GLvoid * data = 0x%0.8p)",
+        "= 0x%X, GLsizei imageSize = %d, GLsizei dataSize = %d, const GLvoid * data = "
+        "0x%016" PRIxPTR ")",
         target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, dataSize,
-        data);
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1095,8 +1115,9 @@ GetQueryivRobustANGLE(GLenum target, GLenum pname, GLsizei bufSize, GLsizei *len
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1121,9 +1142,10 @@ void GL_APIENTRY GetQueryObjectuivRobustANGLE(GLuint id,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLuint id = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, "
-        "GLuint * params = 0x%0.8p)",
-        id, pname, bufSize, length, params);
+        "(GLuint id = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
+        "0x%016" PRIxPTR ", GLuint * params = 0x%016" PRIxPTR ")",
+        id, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1148,8 +1170,9 @@ void GL_APIENTRY GetBufferPointervRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, void ** params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", void ** params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1172,8 +1195,9 @@ GetIntegeri_vRobustANGLE(GLenum target, GLuint index, GLsizei bufSize, GLsizei *
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLuint index = %u, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * data = 0x%0.8p)",
-        target, index, bufSize, length, data);
+        "0x%016" PRIxPTR ", GLint * data = 0x%016" PRIxPTR ")",
+        target, index, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1199,8 +1223,9 @@ void GL_APIENTRY GetInternalformativRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum internalformat = 0x%X, GLenum pname = 0x%X, GLsizei bufSize "
-        "= %d, GLsizei * length = 0x%0.8p, GLint * params = 0x%0.8p)",
-        target, internalformat, pname, bufSize, length, params);
+        "= %d, GLsizei * length = 0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        target, internalformat, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1227,8 +1252,9 @@ void GL_APIENTRY GetVertexAttribIivRobustANGLE(GLuint index,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint index = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        index, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        index, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1253,8 +1279,9 @@ void GL_APIENTRY GetVertexAttribIuivRobustANGLE(GLuint index,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint index = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLuint * params = 0x%0.8p)",
-        index, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLuint * params = 0x%016" PRIxPTR ")",
+        index, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1279,8 +1306,9 @@ void GL_APIENTRY GetUniformuivRobustANGLE(GLuint program,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLuint * params = 0x%0.8p)",
-        program, location, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLuint * params = 0x%016" PRIxPTR ")",
+        program, location, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1306,8 +1334,9 @@ void GL_APIENTRY GetActiveUniformBlockivRobustANGLE(GLuint program,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLuint uniformBlockIndex = %u, GLenum pname = 0x%X, GLsizei bufSize "
-        "= %d, GLsizei * length = 0x%0.8p, GLint * params = 0x%0.8p)",
-        program, uniformBlockIndex, pname, bufSize, length, params);
+        "= %d, GLsizei * length = 0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        program, uniformBlockIndex, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1331,10 +1360,9 @@ void GL_APIENTRY GetInteger64vRobustANGLE(GLenum pname,
                                           GLint64 *data)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, GLint64 * data = "
-        "0x%0.8p)",
-        pname, bufSize, length, data);
+    EVENT("(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%016" PRIxPTR
+          ", GLint64 * data = 0x%016" PRIxPTR ")",
+          pname, bufSize, reinterpret_cast<uintptr_t>(length), reinterpret_cast<uintptr_t>(data));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1358,8 +1386,9 @@ void GL_APIENTRY GetInteger64i_vRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLuint index = %u, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint64 * data = 0x%0.8p)",
-        target, index, bufSize, length, data);
+        "0x%016" PRIxPTR ", GLint64 * data = 0x%016" PRIxPTR ")",
+        target, index, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1384,8 +1413,9 @@ void GL_APIENTRY GetBufferParameteri64vRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint64 * params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint64 * params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1410,8 +1440,8 @@ void GL_APIENTRY SamplerParameterivRobustANGLE(GLuint sampler,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLuint pname = %u, GLsizei bufSize = %d, const GLint * param = "
-        "0x%0.8p)",
-        sampler, pname, bufSize, param);
+        "0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(param));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1435,8 +1465,8 @@ void GL_APIENTRY SamplerParameterfvRobustANGLE(GLuint sampler,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, const GLfloat * param = "
-        "0x%0.8p)",
-        sampler, pname, bufSize, param);
+        "0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(param));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1461,8 +1491,9 @@ void GL_APIENTRY GetSamplerParameterivRobustANGLE(GLuint sampler,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        sampler, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1487,8 +1518,9 @@ void GL_APIENTRY GetSamplerParameterfvRobustANGLE(GLuint sampler,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLfloat * params = 0x%0.8p)",
-        sampler, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLfloat * params = 0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1513,8 +1545,9 @@ void GL_APIENTRY GetFramebufferParameterivRobustANGLE(GLuint sampler,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        sampler, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1540,8 +1573,9 @@ void GL_APIENTRY GetProgramInterfaceivRobustANGLE(GLuint program,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLenum programInterface = 0x%X, GLenum pname = 0x%X, GLsizei "
-        "bufSize = %d, GLsizei * length = 0x%0.8p, GLint * params = 0x%0.8p)",
-        program, programInterface, pname, bufSize, length, params);
+        "bufSize = %d, GLsizei * length = 0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        program, programInterface, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1568,8 +1602,9 @@ void GL_APIENTRY GetBooleani_vRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLuint index = %u, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLboolean * data = 0x%0.8p)",
-        target, index, bufSize, length, data);
+        "0x%016" PRIxPTR ", GLboolean * data = 0x%016" PRIxPTR ")",
+        target, index, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1594,8 +1629,9 @@ void GL_APIENTRY GetMultisamplefvRobustANGLE(GLenum pname,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum pname = 0x%X, GLuint index = %u, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLfloat * val = 0x%0.8p)",
-        pname, index, bufSize, length, val);
+        "0x%016" PRIxPTR ", GLfloat * val = 0x%016" PRIxPTR ")",
+        pname, index, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(val));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1621,8 +1657,9 @@ void GL_APIENTRY GetTexLevelParameterivRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLenum pname = 0x%X, GLsizei bufSize = %d, "
-        "GLsizei * length = 0x%0.8p, GLint * params = 0x%0.8p)",
-        target, level, pname, bufSize, length, params);
+        "GLsizei * length = 0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        target, level, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1651,8 +1688,9 @@ void GL_APIENTRY GetTexLevelParameterfvRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLenum pname = 0x%X, GLsizei bufSize = %d, "
-        "GLsizei * length = 0x%0.8p, GLfloat * params = 0x%0.8p)",
-        target, level, pname, bufSize, length, params);
+        "GLsizei * length = 0x%016" PRIxPTR ", GLfloat * params = 0x%016" PRIxPTR ")",
+        target, level, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1677,10 +1715,9 @@ void GL_APIENTRY GetPointervRobustANGLERobustANGLE(GLenum pname,
                                                    void **params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, void ** params = "
-        "0x%0.8p)",
-        pname, bufSize, length, params);
+    EVENT("(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%016" PRIxPTR
+          ", void ** params = 0x%016" PRIxPTR ")",
+          pname, bufSize, reinterpret_cast<uintptr_t>(length), reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1711,9 +1748,12 @@ void GL_APIENTRY ReadnPixelsRobustANGLE(GLint x,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d, GLenum format = "
-        "0x%X, GLenum type = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, GLsizei * "
-        "columns = 0x%0.8p, GLsizei * rows = 0x%0.8p, void * data = 0x%0.8p)",
-        x, y, width, height, format, type, bufSize, length, columns, rows, data);
+        "0x%X, GLenum type = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%016" PRIxPTR
+        ", GLsizei * columns = 0x%016" PRIxPTR ", GLsizei * rows = 0x%016" PRIxPTR
+        ", void * data = 0x%016" PRIxPTR ")",
+        x, y, width, height, format, type, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(columns), reinterpret_cast<uintptr_t>(rows),
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1740,8 +1780,9 @@ void GL_APIENTRY GetnUniformfvRobustANGLE(GLuint program,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLfloat * params = 0x%0.8p)",
-        program, location, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLfloat * params = 0x%016" PRIxPTR ")",
+        program, location, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1766,8 +1807,9 @@ void GL_APIENTRY GetnUniformivRobustANGLE(GLuint program,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        program, location, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        program, location, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1792,8 +1834,9 @@ void GL_APIENTRY GetnUniformuivRobustANGLE(GLuint program,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLuint * params = 0x%0.8p)",
-        program, location, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLuint * params = 0x%016" PRIxPTR ")",
+        program, location, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1817,8 +1860,8 @@ void GL_APIENTRY TexParameterIivRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, const GLint * params = "
-        "0x%0.8p)",
-        target, pname, bufSize, params);
+        "0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1843,8 +1886,8 @@ void GL_APIENTRY TexParameterIuivRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, const GLuint * params = "
-        "0x%0.8p)",
-        target, pname, bufSize, params);
+        "0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1870,8 +1913,9 @@ void GL_APIENTRY GetTexParameterIivRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1897,8 +1941,9 @@ void GL_APIENTRY GetTexParameterIuivRobustANGLE(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLuint * params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLuint * params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1923,8 +1968,8 @@ void GL_APIENTRY SamplerParameterIivRobustANGLE(GLuint sampler,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, const GLint * param = "
-        "0x%0.8p)",
-        sampler, pname, bufSize, param);
+        "0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(param));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1948,8 +1993,8 @@ void GL_APIENTRY SamplerParameterIuivRobustANGLE(GLuint sampler,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, const GLuint * param = "
-        "0x%0.8p)",
-        sampler, pname, bufSize, param);
+        "0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(param));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1974,8 +2019,9 @@ void GL_APIENTRY GetSamplerParameterIivRobustANGLE(GLuint sampler,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        sampler, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2000,8 +2046,9 @@ void GL_APIENTRY GetSamplerParameterIuivRobustANGLE(GLuint sampler,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLuint * params = 0x%0.8p)",
-        sampler, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLuint * params = 0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2025,9 +2072,10 @@ void GL_APIENTRY GetQueryObjectivRobustANGLE(GLuint id,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLuint id = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, "
-        "GLint * params = 0x%0.8p)",
-        id, pname, bufSize, length, params);
+        "(GLuint id = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        id, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2051,9 +2099,10 @@ void GL_APIENTRY GetQueryObjecti64vRobustANGLE(GLuint id,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLuint id = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, "
-        "GLint64 * params = 0x%0.8p)",
-        id, pname, bufSize, length, params);
+        "(GLuint id = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
+        "0x%016" PRIxPTR ", GLint64 * params = 0x%016" PRIxPTR ")",
+        id, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2077,9 +2126,10 @@ void GL_APIENTRY GetQueryObjectui64vRobustANGLE(GLuint id,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLuint id = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, "
-        "GLuint64 * params = 0x%0.8p)",
-        id, pname, bufSize, length, params);
+        "(GLuint id = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
+        "0x%016" PRIxPTR ", GLuint64 * params = 0x%016" PRIxPTR ")",
+        id, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2102,10 +2152,10 @@ void GL_APIENTRY GetTranslatedShaderSourceANGLE(GLuint shader,
                                                 GLchar *source)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint shader = %u, GLsizei bufsize = %d, GLsizei *length = 0x%0.8p, GLchar *source = "
-        "0x%0.8p)",
-        shader, bufsize, length, source);
+    EVENT("(GLuint shader = %u, GLsizei bufsize = %d, GLsizei *length = 0x%016" PRIxPTR
+          ", GLchar *source = 0x%016" PRIxPTR ")",
+          shader, bufsize, reinterpret_cast<uintptr_t>(length),
+          reinterpret_cast<uintptr_t>(source));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2125,8 +2175,8 @@ void GL_APIENTRY GetTranslatedShaderSourceANGLE(GLuint shader,
 void GL_APIENTRY BindUniformLocationCHROMIUM(GLuint program, GLint location, const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, GLint location = %d, const GLchar* name = 0x%0.8p)", program,
-          location, name);
+    EVENT("(GLuint program = %u, GLint location = %d, const GLchar* name = 0x%016" PRIxPTR ")",
+          program, location, reinterpret_cast<uintptr_t>(name));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2267,7 +2317,8 @@ void GL_APIENTRY CoverageModulationCHROMIUM(GLenum components)
 void GL_APIENTRY MatrixLoadfCHROMIUM(GLenum matrixMode, const GLfloat *matrix)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum matrixMode = 0x%X, const GLfloat * matrix = 0x%0.8p)", matrixMode, matrix);
+    EVENT("(GLenum matrixMode = 0x%X, const GLfloat * matrix = 0x%016" PRIxPTR ")", matrixMode,
+          reinterpret_cast<uintptr_t>(matrix));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2362,10 +2413,11 @@ void GL_APIENTRY PathCommandsCHROMIUM(GLuint path,
                                       const void *coords)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint path = %u, GLsizei numCommands = %d, const GLubyte * commands = 0x%0.8p, GLsizei "
-        "numCoords = %d, GLenum coordType = 0x%X, const void* coords = 0x%0.8p)",
-        path, numCommands, commands, numCoords, coordType, coords);
+    EVENT("(GLuint path = %u, GLsizei numCommands = %d, const GLubyte * commands = 0x%016" PRIxPTR
+          ", GLsizei numCoords = %d, GLenum coordType = 0x%X, const void* coords = 0x%016" PRIxPTR
+          ")",
+          path, numCommands, reinterpret_cast<uintptr_t>(commands), numCoords, coordType,
+          reinterpret_cast<uintptr_t>(coords));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2421,7 +2473,8 @@ void GL_APIENTRY PathParameteriCHROMIUM(GLuint path, GLenum pname, GLint value)
 void GL_APIENTRY GetPathParameterfvCHROMIUM(GLuint path, GLenum pname, GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint path = %u, GLenum pname = 0x%X, GLfloat * value = 0x%0.8p)", path, pname, value);
+    EVENT("(GLuint path = %u, GLenum pname = 0x%X, GLfloat * value = 0x%016" PRIxPTR ")", path,
+          pname, reinterpret_cast<uintptr_t>(value));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2439,7 +2492,8 @@ void GL_APIENTRY GetPathParameterfvCHROMIUM(GLuint path, GLenum pname, GLfloat *
 void GL_APIENTRY GetPathParameterivCHROMIUM(GLuint path, GLenum pname, GLint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint path = %u, GLenum pname = 0x%X, GLint * value = 0x%0.8p)", path, pname, value);
+    EVENT("(GLuint path = %u, GLenum pname = 0x%X, GLint * value = 0x%016" PRIxPTR ")", path, pname,
+          reinterpret_cast<uintptr_t>(value));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2596,11 +2650,11 @@ void GL_APIENTRY CoverFillPathInstancedCHROMIUM(GLsizei numPath,
                                                 const GLfloat *transformValues)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLsizei numPath = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%0.8p, GLuint "
-        "pathBase = %u, GLenum coverMode = 0x%X, GLenum transformType = 0x%X, const GLfloat * "
-        "transformValues = 0x%0.8p)",
-        numPath, pathNameType, paths, pathBase, coverMode, transformType, transformValues);
+    EVENT("(GLsizei numPath = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%016" PRIxPTR
+          ", GLuint pathBase = %u, GLenum coverMode = 0x%X, GLenum transformType = 0x%X, const "
+          "GLfloat * transformValues = 0x%016" PRIxPTR ")",
+          numPath, pathNameType, reinterpret_cast<uintptr_t>(paths), pathBase, coverMode,
+          transformType, reinterpret_cast<uintptr_t>(transformValues));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2627,11 +2681,11 @@ void GL_APIENTRY CoverStrokePathInstancedCHROMIUM(GLsizei numPath,
                                                   const GLfloat *transformValues)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLsizei numPath = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%0.8p, GLuint "
-        "pathBase = %u, GLenum coverMode = 0x%X, GLenum transformType = 0x%X, const GLfloat * "
-        "transformValues = 0x%0.8p)",
-        numPath, pathNameType, paths, pathBase, coverMode, transformType, transformValues);
+    EVENT("(GLsizei numPath = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%016" PRIxPTR
+          ", GLuint pathBase = %u, GLenum coverMode = 0x%X, GLenum transformType = 0x%X, const "
+          "GLfloat * transformValues = 0x%016" PRIxPTR ")",
+          numPath, pathNameType, reinterpret_cast<uintptr_t>(paths), pathBase, coverMode,
+          transformType, reinterpret_cast<uintptr_t>(transformValues));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2659,11 +2713,11 @@ void GL_APIENTRY StencilStrokePathInstancedCHROMIUM(GLsizei numPath,
                                                     const GLfloat *transformValues)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLsizei numPath = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%0.8p, GLuint "
-        "pathBase = %u, GLint reference = %d, GLuint mask = %u, GLenum transformType = 0x%X, const "
-        "GLfloat * transformValues = 0x%0.8p)",
-        numPath, pathNameType, paths, pathBase, reference, mask, transformType, transformValues);
+    EVENT("(GLsizei numPath = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%016" PRIxPTR
+          ", GLuint pathBase = %u, GLint reference = %d, GLuint mask = %u, GLenum transformType = "
+          "0x%X, const GLfloat * transformValues = 0x%016" PRIxPTR ")",
+          numPath, pathNameType, reinterpret_cast<uintptr_t>(paths), pathBase, reference, mask,
+          transformType, reinterpret_cast<uintptr_t>(transformValues));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2692,11 +2746,11 @@ void GL_APIENTRY StencilFillPathInstancedCHROMIUM(GLsizei numPaths,
                                                   const GLfloat *transformValues)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLsizei numPaths = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%0.8p, GLuint "
-        "pathBase = %u, GLenum fillMode = 0x%X, GLuint mask = %u, GLenum transformType = 0x%X, "
-        "const GLfloat * transformValues = 0x%0.8p)",
-        numPaths, pathNameType, paths, pathBase, fillMode, mask, transformType, transformValues);
+    EVENT("(GLsizei numPaths = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%016" PRIxPTR
+          ", GLuint pathBase = %u, GLenum fillMode = 0x%X, GLuint mask = %u, GLenum transformType "
+          "= 0x%X, const GLfloat * transformValues = 0x%016" PRIxPTR ")",
+          numPaths, pathNameType, reinterpret_cast<uintptr_t>(paths), pathBase, fillMode, mask,
+          transformType, reinterpret_cast<uintptr_t>(transformValues));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2726,12 +2780,11 @@ void GL_APIENTRY StencilThenCoverFillPathInstancedCHROMIUM(GLsizei numPaths,
                                                            const GLfloat *transformValues)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLsizei numPaths = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%0.8p, GLuint "
-        "pathBase = %u, GLenum fillMode = 0x%X, GLuint mask = %u, GLenum coverMode = 0x%X, GLenum "
-        "transformType = 0x%X, const GLfloat * transformValues = 0x%0.8p)",
-        numPaths, pathNameType, paths, pathBase, fillMode, mask, coverMode, transformType,
-        transformValues);
+    EVENT("(GLsizei numPaths = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%016" PRIxPTR
+          ", GLuint pathBase = %u, GLenum fillMode = 0x%X, GLuint mask = %u, GLenum coverMode = "
+          "0x%X, GLenum transformType = 0x%X, const GLfloat * transformValues = 0x%016" PRIxPTR ")",
+          numPaths, pathNameType, reinterpret_cast<uintptr_t>(paths), pathBase, fillMode, mask,
+          coverMode, transformType, reinterpret_cast<uintptr_t>(transformValues));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2763,12 +2816,11 @@ void GL_APIENTRY StencilThenCoverStrokePathInstancedCHROMIUM(GLsizei numPaths,
                                                              const GLfloat *transformValues)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLsizei numPaths = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%0.8p, GLuint "
-        "pathBase = %u, GLint reference = %d, GLuint mask = %u, GLenum coverMode = 0x%X, GLenum "
-        "transformType = 0x%X, const GLfloat * transformValues = 0x%0.8p)",
-        numPaths, pathNameType, paths, pathBase, reference, mask, coverMode, transformType,
-        transformValues);
+    EVENT("(GLsizei numPaths = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%016" PRIxPTR
+          ", GLuint pathBase = %u, GLint reference = %d, GLuint mask = %u, GLenum coverMode = "
+          "0x%X, GLenum transformType = 0x%X, const GLfloat * transformValues = 0x%016" PRIxPTR ")",
+          numPaths, pathNameType, reinterpret_cast<uintptr_t>(paths), pathBase, reference, mask,
+          coverMode, transformType, reinterpret_cast<uintptr_t>(transformValues));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2794,8 +2846,8 @@ void GL_APIENTRY BindFragmentInputLocationCHROMIUM(GLuint programs,
                                                    const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint programs = %u, GLint location = %d, const GLchar * name = 0x%0.8p)", programs,
-          location, name);
+    EVENT("(GLuint programs = %u, GLint location = %d, const GLchar * name = 0x%016" PRIxPTR ")",
+          programs, location, reinterpret_cast<uintptr_t>(name));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2820,8 +2872,8 @@ void GL_APIENTRY ProgramPathFragmentInputGenCHROMIUM(GLuint program,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLenum genMode = 0x%X, GLint components = %d, "
-        "const GLfloat * coeffs = 0x%0.8p)",
-        program, location, genMode, components, coeffs);
+        "const GLfloat * coeffs = 0x%016" PRIxPTR ")",
+        program, location, genMode, components, reinterpret_cast<uintptr_t>(coeffs));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2842,8 +2894,8 @@ void GL_APIENTRY ProgramPathFragmentInputGenCHROMIUM(GLuint program,
 void GL_APIENTRY BindFragDataLocationEXT(GLuint program, GLuint color, const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, GLuint color = %u, const GLchar *name = 0x%0.8p)", program, color,
-          name);
+    EVENT("(GLuint program = %u, GLuint color = %u, const GLchar *name = 0x%016" PRIxPTR ")",
+          program, color, reinterpret_cast<uintptr_t>(name));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2866,8 +2918,8 @@ void GL_APIENTRY BindFragDataLocationIndexedEXT(GLuint program,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLuint colorNumber = %u, GLuint index = %u, const GLchar *name = "
-        "0x%0.8p)",
-        program, colorNumber, index, name);
+        "0x%016" PRIxPTR ")",
+        program, colorNumber, index, reinterpret_cast<uintptr_t>(name));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2886,7 +2938,8 @@ void GL_APIENTRY BindFragDataLocationIndexedEXT(GLuint program,
 GLint GL_APIENTRY GetFragDataIndexEXT(GLuint program, const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, const GLchar *name = 0x%0.8p)", program, name);
+    EVENT("(GLuint program = %u, const GLchar *name = 0x%016" PRIxPTR ")", program,
+          reinterpret_cast<uintptr_t>(name));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2907,8 +2960,10 @@ GLint GL_APIENTRY GetProgramResourceLocationIndexEXT(GLuint program,
                                                      const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, GLenum programInterface = 0x%X, const GLchar *name = 0x%0.8p)",
-          program, programInterface, name);
+    EVENT(
+        "(GLuint program = %u, GLenum programInterface = 0x%X, const GLchar *name = 0x%016" PRIxPTR
+        ")",
+        program, programInterface, reinterpret_cast<uintptr_t>(name));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2932,7 +2987,8 @@ void GL_APIENTRY InsertEventMarkerEXT(GLsizei length, const GLchar *marker)
     ANGLE_SCOPED_GLOBAL_LOCK();
     // Don't run an EVENT() macro on the EXT_debug_marker entry points.
     // It can interfere with the debug events being set by the caller.
-    // EVENT("(GLsizei length = %d, const GLchar *marker = 0x%0.8p)", length, marker);
+    // EVENT("(GLsizei length = %d, const GLchar *marker = 0x%016"PRIxPTR")", length,
+    // reinterpret_cast<uintptr_t>(marker));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2970,7 +3026,8 @@ void GL_APIENTRY PushGroupMarkerEXT(GLsizei length, const GLchar *marker)
     ANGLE_SCOPED_GLOBAL_LOCK();
     // Don't run an EVENT() macro on the EXT_debug_marker entry points.
     // It can interfere with the debug events being set by the caller.
-    // EVENT("(GLsizei length = %d, const GLchar *marker = 0x%0.8p)", length, marker);
+    // EVENT("(GLsizei length = %d, const GLchar *marker = 0x%016"PRIxPTR")", length,
+    // reinterpret_cast<uintptr_t>(marker));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2991,8 +3048,9 @@ void GL_APIENTRY DiscardFramebufferEXT(GLenum target,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLenum target = 0x%X, GLsizei numAttachments = %d, const GLenum *attachments = 0x%0.8p)",
-        target, numAttachments, attachments);
+        "(GLenum target = 0x%X, GLsizei numAttachments = %d, const GLenum *attachments = "
+        "0x%016" PRIxPTR ")",
+        target, numAttachments, reinterpret_cast<uintptr_t>(attachments));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3030,7 +3088,8 @@ void GL_APIENTRY BeginQueryEXT(GLenum target, GLuint id)
 void GL_APIENTRY DeleteQueriesEXT(GLsizei n, const GLuint *ids)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *ids = 0x%0.8p)", n, ids);
+    EVENT("(GLsizei n = %d, const GLuint *ids = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(ids));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3065,7 +3124,7 @@ void GL_APIENTRY EndQueryEXT(GLenum target)
 void GL_APIENTRY GenQueriesEXT(GLsizei n, GLuint *ids)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *ids = 0x%0.8p)", n, ids);
+    EVENT("(GLsizei n = %d, GLuint *ids = 0x%016" PRIxPTR ")", n, reinterpret_cast<uintptr_t>(ids));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3082,7 +3141,8 @@ void GL_APIENTRY GenQueriesEXT(GLsizei n, GLuint *ids)
 void GL_APIENTRY GetQueryObjecti64vEXT(GLuint id, GLenum pname, GLint64 *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLint64 *params = 0x%0.8p)", id, pname, params);
+    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLint64 *params = 0x%016" PRIxPTR ")", id, pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3099,7 +3159,8 @@ void GL_APIENTRY GetQueryObjecti64vEXT(GLuint id, GLenum pname, GLint64 *params)
 void GL_APIENTRY GetQueryObjectivEXT(GLuint id, GLenum pname, GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", id, pname, params);
+    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", id, pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3116,7 +3177,8 @@ void GL_APIENTRY GetQueryObjectivEXT(GLuint id, GLenum pname, GLint *params)
 void GL_APIENTRY GetQueryObjectui64vEXT(GLuint id, GLenum pname, GLuint64 *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLuint64 *params = 0x%0.8p)", id, pname, params);
+    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLuint64 *params = 0x%016" PRIxPTR ")", id, pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3133,7 +3195,8 @@ void GL_APIENTRY GetQueryObjectui64vEXT(GLuint id, GLenum pname, GLuint64 *param
 void GL_APIENTRY GetQueryObjectuivEXT(GLuint id, GLenum pname, GLuint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLuint *params = 0x%0.8p)", id, pname, params);
+    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLuint *params = 0x%016" PRIxPTR ")", id, pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3150,8 +3213,8 @@ void GL_APIENTRY GetQueryObjectuivEXT(GLuint id, GLenum pname, GLuint *params)
 void GL_APIENTRY GetQueryivEXT(GLenum target, GLenum pname, GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", target,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3208,7 +3271,8 @@ void GL_APIENTRY QueryCounterEXT(GLuint id, GLenum target)
 void GL_APIENTRY DrawBuffersEXT(GLsizei n, const GLenum *bufs)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLenum *bufs = 0x%0.8p)", n, bufs);
+    EVENT("(GLsizei n = %d, const GLenum *bufs = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(bufs));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3250,8 +3314,8 @@ void GL_APIENTRY FramebufferTextureEXT(GLenum target,
 void GL_APIENTRY FlushMappedBufferRangeEXT(GLenum target, GLintptr offset, GLsizeiptr length)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLintptr offset = %d, GLsizeiptr length = %d)", target, offset,
-          length);
+    EVENT("(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr length = %llu)", target,
+          static_cast<unsigned long long>(offset), static_cast<unsigned long long>(length));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3274,9 +3338,10 @@ void *GL_APIENTRY MapBufferRangeEXT(GLenum target,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLenum target = 0x%X, GLintptr offset = %d, GLsizeiptr length = %d, GLbitfield access = "
-        "0x%X)",
-        target, offset, length, access);
+        "(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr length = %llu, GLbitfield "
+        "access = 0x%X)",
+        target, static_cast<unsigned long long>(offset), static_cast<unsigned long long>(length),
+        access);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3334,8 +3399,8 @@ void GL_APIENTRY GetnUniformfvEXT(GLuint program, GLint location, GLsizei bufSiz
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLfloat *params = "
-        "0x%0.8p)",
-        program, location, bufSize, params);
+        "0x%016" PRIxPTR ")",
+        program, location, bufSize, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3354,8 +3419,9 @@ void GL_APIENTRY GetnUniformivEXT(GLuint program, GLint location, GLsizei bufSiz
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLint *params = 0x%0.8p)",
-        program, location, bufSize, params);
+        "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLint *params = "
+        "0x%016" PRIxPTR ")",
+        program, location, bufSize, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3382,8 +3448,8 @@ void GL_APIENTRY ReadnPixelsEXT(GLint x,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d, GLenum format = "
-        "0x%X, GLenum type = 0x%X, GLsizei bufSize = %d, void *data = 0x%0.8p)",
-        x, y, width, height, format, type, bufSize, data);
+        "0x%X, GLenum type = 0x%X, GLsizei bufSize = %d, void *data = 0x%016" PRIxPTR ")",
+        x, y, width, height, format, type, bufSize, reinterpret_cast<uintptr_t>(data));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3481,8 +3547,9 @@ void GL_APIENTRY TexStorage3DEXT(GLenum target,
 void GL_APIENTRY DebugMessageCallbackKHR(GLDEBUGPROCKHR callback, const void *userParam)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLDEBUGPROCKHR callback = 0x%0.8p, const void *userParam = 0x%0.8p)", callback,
-          userParam);
+    EVENT("(GLDEBUGPROCKHR callback = 0x%016" PRIxPTR ", const void *userParam = 0x%016" PRIxPTR
+          ")",
+          reinterpret_cast<uintptr_t>(callback), reinterpret_cast<uintptr_t>(userParam));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3507,8 +3574,8 @@ void GL_APIENTRY DebugMessageControlKHR(GLenum source,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum source = 0x%X, GLenum type = 0x%X, GLenum severity = 0x%X, GLsizei count = %d, "
-        "const GLuint *ids = 0x%0.8p, GLboolean enabled = %u)",
-        source, type, severity, count, ids, enabled);
+        "const GLuint *ids = 0x%016" PRIxPTR ", GLboolean enabled = %u)",
+        source, type, severity, count, reinterpret_cast<uintptr_t>(ids), enabled);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3534,8 +3601,8 @@ void GL_APIENTRY DebugMessageInsertKHR(GLenum source,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum source = 0x%X, GLenum type = 0x%X, GLuint id = %u, GLenum severity = 0x%X, "
-        "GLsizei length = %d, const GLchar *buf = 0x%0.8p)",
-        source, type, id, severity, length, buf);
+        "GLsizei length = %d, const GLchar *buf = 0x%016" PRIxPTR ")",
+        source, type, id, severity, length, reinterpret_cast<uintptr_t>(buf));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3561,11 +3628,13 @@ GLuint GL_APIENTRY GetDebugMessageLogKHR(GLuint count,
                                          GLchar *messageLog)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint count = %u, GLsizei bufSize = %d, GLenum *sources = 0x%0.8p, GLenum *types = "
-        "0x%0.8p, GLuint *ids = 0x%0.8p, GLenum *severities = 0x%0.8p, GLsizei *lengths = 0x%0.8p, "
-        "GLchar *messageLog = 0x%0.8p)",
-        count, bufSize, sources, types, ids, severities, lengths, messageLog);
+    EVENT("(GLuint count = %u, GLsizei bufSize = %d, GLenum *sources = 0x%016" PRIxPTR
+          ", GLenum *types = 0x%016" PRIxPTR ", GLuint *ids = 0x%016" PRIxPTR
+          ", GLenum *severities = 0x%016" PRIxPTR ", GLsizei *lengths = 0x%016" PRIxPTR
+          ", GLchar *messageLog = 0x%016" PRIxPTR ")",
+          count, bufSize, reinterpret_cast<uintptr_t>(sources), reinterpret_cast<uintptr_t>(types),
+          reinterpret_cast<uintptr_t>(ids), reinterpret_cast<uintptr_t>(severities),
+          reinterpret_cast<uintptr_t>(lengths), reinterpret_cast<uintptr_t>(messageLog));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3591,8 +3660,9 @@ GetObjectLabelKHR(GLenum identifier, GLuint name, GLsizei bufSize, GLsizei *leng
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum identifier = 0x%X, GLuint name = %u, GLsizei bufSize = %d, GLsizei *length = "
-        "0x%0.8p, GLchar *label = 0x%0.8p)",
-        identifier, name, bufSize, length, label);
+        "0x%016" PRIxPTR ", GLchar *label = 0x%016" PRIxPTR ")",
+        identifier, name, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(label));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3614,10 +3684,11 @@ void GL_APIENTRY GetObjectPtrLabelKHR(const void *ptr,
                                       GLchar *label)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(const void *ptr = 0x%0.8p, GLsizei bufSize = %d, GLsizei *length = 0x%0.8p, GLchar "
-        "*label = 0x%0.8p)",
-        ptr, bufSize, length, label);
+    EVENT("(const void *ptr = 0x%016" PRIxPTR
+          ", GLsizei bufSize = %d, GLsizei *length = 0x%016" PRIxPTR
+          ", GLchar *label = 0x%016" PRIxPTR ")",
+          reinterpret_cast<uintptr_t>(ptr), bufSize, reinterpret_cast<uintptr_t>(length),
+          reinterpret_cast<uintptr_t>(label));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3635,7 +3706,8 @@ void GL_APIENTRY GetObjectPtrLabelKHR(const void *ptr,
 void GL_APIENTRY GetPointervKHR(GLenum pname, void **params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum pname = 0x%X, void **params = 0x%0.8p)", pname, params);
+    EVENT("(GLenum pname = 0x%X, void **params = 0x%016" PRIxPTR ")", pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3654,8 +3726,8 @@ void GL_APIENTRY ObjectLabelKHR(GLenum identifier, GLuint name, GLsizei length, 
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum identifier = 0x%X, GLuint name = %u, GLsizei length = %d, const GLchar *label = "
-        "0x%0.8p)",
-        identifier, name, length, label);
+        "0x%016" PRIxPTR ")",
+        identifier, name, length, reinterpret_cast<uintptr_t>(label));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3673,8 +3745,9 @@ void GL_APIENTRY ObjectLabelKHR(GLenum identifier, GLuint name, GLsizei length, 
 void GL_APIENTRY ObjectPtrLabelKHR(const void *ptr, GLsizei length, const GLchar *label)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(const void *ptr = 0x%0.8p, GLsizei length = %d, const GLchar *label = 0x%0.8p)", ptr,
-          length, label);
+    EVENT("(const void *ptr = 0x%016" PRIxPTR
+          ", GLsizei length = %d, const GLchar *label = 0x%016" PRIxPTR ")",
+          reinterpret_cast<uintptr_t>(ptr), length, reinterpret_cast<uintptr_t>(label));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3710,8 +3783,8 @@ void GL_APIENTRY PushDebugGroupKHR(GLenum source, GLuint id, GLsizei length, con
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum source = 0x%X, GLuint id = %u, GLsizei length = %d, const GLchar *message = "
-        "0x%0.8p)",
-        source, id, length, message);
+        "0x%016" PRIxPTR ")",
+        source, id, length, reinterpret_cast<uintptr_t>(message));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3748,7 +3821,8 @@ void GL_APIENTRY MaxShaderCompilerThreadsKHR(GLuint count)
 void GL_APIENTRY DeleteFencesNV(GLsizei n, const GLuint *fences)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *fences = 0x%0.8p)", n, fences);
+    EVENT("(GLsizei n = %d, const GLuint *fences = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(fences));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3782,7 +3856,8 @@ void GL_APIENTRY FinishFenceNV(GLuint fence)
 void GL_APIENTRY GenFencesNV(GLsizei n, GLuint *fences)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *fences = 0x%0.8p)", n, fences);
+    EVENT("(GLsizei n = %d, GLuint *fences = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(fences));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3799,8 +3874,8 @@ void GL_APIENTRY GenFencesNV(GLsizei n, GLuint *fences)
 void GL_APIENTRY GetFenceivNV(GLuint fence, GLenum pname, GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint fence = %u, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", fence, pname,
-          params);
+    EVENT("(GLuint fence = %u, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", fence,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3873,7 +3948,8 @@ GLboolean GL_APIENTRY TestFenceNV(GLuint fence)
 void GL_APIENTRY EGLImageTargetRenderbufferStorageOES(GLenum target, GLeglImageOES image)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLeglImageOES image = 0x%0.8p)", target, image);
+    EVENT("(GLenum target = 0x%X, GLeglImageOES image = 0x%016" PRIxPTR ")", target,
+          reinterpret_cast<uintptr_t>(image));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3891,7 +3967,8 @@ void GL_APIENTRY EGLImageTargetRenderbufferStorageOES(GLenum target, GLeglImageO
 void GL_APIENTRY EGLImageTargetTexture2DOES(GLenum target, GLeglImageOES image)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLeglImageOES image = 0x%0.8p)", target, image);
+    EVENT("(GLenum target = 0x%X, GLeglImageOES image = 0x%016" PRIxPTR ")", target,
+          reinterpret_cast<uintptr_t>(image));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3930,7 +4007,7 @@ void GL_APIENTRY DrawTexfOES(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLf
 void GL_APIENTRY DrawTexfvOES(const GLfloat *coords)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(const GLfloat *coords = 0x%0.8p)", coords);
+    EVENT("(const GLfloat *coords = 0x%016" PRIxPTR ")", reinterpret_cast<uintptr_t>(coords));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3965,7 +4042,7 @@ void GL_APIENTRY DrawTexiOES(GLint x, GLint y, GLint z, GLint width, GLint heigh
 void GL_APIENTRY DrawTexivOES(const GLint *coords)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(const GLint *coords = 0x%0.8p)", coords);
+    EVENT("(const GLint *coords = 0x%016" PRIxPTR ")", reinterpret_cast<uintptr_t>(coords));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4001,7 +4078,7 @@ void GL_APIENTRY DrawTexsOES(GLshort x, GLshort y, GLshort z, GLshort width, GLs
 void GL_APIENTRY DrawTexsvOES(const GLshort *coords)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(const GLshort *coords = 0x%0.8p)", coords);
+    EVENT("(const GLshort *coords = 0x%016" PRIxPTR ")", reinterpret_cast<uintptr_t>(coords));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4038,7 +4115,7 @@ void GL_APIENTRY DrawTexxOES(GLfixed x, GLfixed y, GLfixed z, GLfixed width, GLf
 void GL_APIENTRY DrawTexxvOES(const GLfixed *coords)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(const GLfixed *coords = 0x%0.8p)", coords);
+    EVENT("(const GLfixed *coords = 0x%016" PRIxPTR ")", reinterpret_cast<uintptr_t>(coords));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4109,7 +4186,8 @@ GLenum GL_APIENTRY CheckFramebufferStatusOES(GLenum target)
 void GL_APIENTRY DeleteFramebuffersOES(GLsizei n, const GLuint *framebuffers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *framebuffers = 0x%0.8p)", n, framebuffers);
+    EVENT("(GLsizei n = %d, const GLuint *framebuffers = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(framebuffers));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4126,7 +4204,8 @@ void GL_APIENTRY DeleteFramebuffersOES(GLsizei n, const GLuint *framebuffers)
 void GL_APIENTRY DeleteRenderbuffersOES(GLsizei n, const GLuint *renderbuffers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *renderbuffers = 0x%0.8p)", n, renderbuffers);
+    EVENT("(GLsizei n = %d, const GLuint *renderbuffers = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(renderbuffers));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4197,7 +4276,8 @@ void GL_APIENTRY FramebufferTexture2DOES(GLenum target,
 void GL_APIENTRY GenFramebuffersOES(GLsizei n, GLuint *framebuffers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *framebuffers = 0x%0.8p)", n, framebuffers);
+    EVENT("(GLsizei n = %d, GLuint *framebuffers = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(framebuffers));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4214,7 +4294,8 @@ void GL_APIENTRY GenFramebuffersOES(GLsizei n, GLuint *framebuffers)
 void GL_APIENTRY GenRenderbuffersOES(GLsizei n, GLuint *renderbuffers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *renderbuffers = 0x%0.8p)", n, renderbuffers);
+    EVENT("(GLsizei n = %d, GLuint *renderbuffers = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(renderbuffers));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4254,8 +4335,8 @@ void GL_APIENTRY GetFramebufferAttachmentParameterivOES(GLenum target,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum attachment = 0x%X, GLenum pname = 0x%X, GLint *params = "
-        "0x%0.8p)",
-        target, attachment, pname, params);
+        "0x%016" PRIxPTR ")",
+        target, attachment, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4274,8 +4355,8 @@ void GL_APIENTRY GetFramebufferAttachmentParameterivOES(GLenum target,
 void GL_APIENTRY GetRenderbufferParameterivOES(GLenum target, GLenum pname, GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", target,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4361,10 +4442,10 @@ void GL_APIENTRY GetProgramBinaryOES(GLuint program,
                                      void *binary)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint program = %u, GLsizei bufSize = %d, GLsizei *length = 0x%0.8p, GLenum "
-        "*binaryFormat = 0x%0.8p, void *binary = 0x%0.8p)",
-        program, bufSize, length, binaryFormat, binary);
+    EVENT("(GLuint program = %u, GLsizei bufSize = %d, GLsizei *length = 0x%016" PRIxPTR
+          ", GLenum *binaryFormat = 0x%016" PRIxPTR ", void *binary = 0x%016" PRIxPTR ")",
+          program, bufSize, reinterpret_cast<uintptr_t>(length),
+          reinterpret_cast<uintptr_t>(binaryFormat), reinterpret_cast<uintptr_t>(binary));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4386,10 +4467,9 @@ void GL_APIENTRY ProgramBinaryOES(GLuint program,
                                   GLint length)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint program = %u, GLenum binaryFormat = 0x%X, const void *binary = 0x%0.8p, GLint "
-        "length = %d)",
-        program, binaryFormat, binary, length);
+    EVENT("(GLuint program = %u, GLenum binaryFormat = 0x%X, const void *binary = 0x%016" PRIxPTR
+          ", GLint length = %d)",
+          program, binaryFormat, reinterpret_cast<uintptr_t>(binary), length);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4408,8 +4488,8 @@ void GL_APIENTRY ProgramBinaryOES(GLuint program,
 void GL_APIENTRY GetBufferPointervOES(GLenum target, GLenum pname, void **params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, void **params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, void **params = 0x%016" PRIxPTR ")", target,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4505,8 +4585,9 @@ void GL_APIENTRY MatrixIndexPointerOES(GLint size, GLenum type, GLsizei stride, 
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)",
-        size, type, stride, pointer);
+        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = "
+        "0x%016" PRIxPTR ")",
+        size, type, stride, reinterpret_cast<uintptr_t>(pointer));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4525,8 +4606,9 @@ void GL_APIENTRY WeightPointerOES(GLint size, GLenum type, GLsizei stride, const
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)",
-        size, type, stride, pointer);
+        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = "
+        "0x%016" PRIxPTR ")",
+        size, type, stride, reinterpret_cast<uintptr_t>(pointer));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4545,8 +4627,8 @@ void GL_APIENTRY WeightPointerOES(GLint size, GLenum type, GLsizei stride, const
 void GL_APIENTRY PointSizePointerOES(GLenum type, GLsizei stride, const void *pointer)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)", type, stride,
-          pointer);
+    EVENT("(GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%016" PRIxPTR ")",
+          type, stride, reinterpret_cast<uintptr_t>(pointer));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4565,7 +4647,8 @@ void GL_APIENTRY PointSizePointerOES(GLenum type, GLsizei stride, const void *po
 GLbitfield GL_APIENTRY QueryMatrixxOES(GLfixed *mantissa, GLint *exponent)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLfixed *mantissa = 0x%0.8p, GLint *exponent = 0x%0.8p)", mantissa, exponent);
+    EVENT("(GLfixed *mantissa = 0x%016" PRIxPTR ", GLint *exponent = 0x%016" PRIxPTR ")",
+          reinterpret_cast<uintptr_t>(mantissa), reinterpret_cast<uintptr_t>(exponent));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4585,8 +4668,8 @@ GLbitfield GL_APIENTRY QueryMatrixxOES(GLfixed *mantissa, GLint *exponent)
 void GL_APIENTRY GetTexGenfvOES(GLenum coord, GLenum pname, GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)", coord, pname,
-          params);
+    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%016" PRIxPTR ")", coord,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4603,8 +4686,8 @@ void GL_APIENTRY GetTexGenfvOES(GLenum coord, GLenum pname, GLfloat *params)
 void GL_APIENTRY GetTexGenivOES(GLenum coord, GLenum pname, GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", coord, pname,
-          params);
+    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", coord,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4621,8 +4704,8 @@ void GL_APIENTRY GetTexGenivOES(GLenum coord, GLenum pname, GLint *params)
 void GL_APIENTRY GetTexGenxvOES(GLenum coord, GLenum pname, GLfixed *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%0.8p)", coord, pname,
-          params);
+    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%016" PRIxPTR ")", coord,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4656,8 +4739,8 @@ void GL_APIENTRY TexGenfOES(GLenum coord, GLenum pname, GLfloat param)
 void GL_APIENTRY TexGenfvOES(GLenum coord, GLenum pname, const GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%0.8p)", coord,
-          pname, params);
+    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%016" PRIxPTR ")",
+          coord, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4691,8 +4774,8 @@ void GL_APIENTRY TexGeniOES(GLenum coord, GLenum pname, GLint param)
 void GL_APIENTRY TexGenivOES(GLenum coord, GLenum pname, const GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, const GLint *params = 0x%0.8p)", coord, pname,
-          params);
+    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, const GLint *params = 0x%016" PRIxPTR ")",
+          coord, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4726,8 +4809,8 @@ void GL_APIENTRY TexGenxOES(GLenum coord, GLenum pname, GLfixed param)
 void GL_APIENTRY TexGenxvOES(GLenum coord, GLenum pname, const GLfixed *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, const GLfixed *params = 0x%0.8p)", coord,
-          pname, params);
+    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, const GLfixed *params = 0x%016" PRIxPTR ")",
+          coord, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4794,7 +4877,8 @@ void GL_APIENTRY BindVertexArrayOES(GLuint array)
 void GL_APIENTRY DeleteVertexArraysOES(GLsizei n, const GLuint *arrays)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *arrays = 0x%0.8p)", n, arrays);
+    EVENT("(GLsizei n = %d, const GLuint *arrays = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(arrays));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4811,7 +4895,8 @@ void GL_APIENTRY DeleteVertexArraysOES(GLsizei n, const GLuint *arrays)
 void GL_APIENTRY GenVertexArraysOES(GLsizei n, GLuint *arrays)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *arrays = 0x%0.8p)", n, arrays);
+    EVENT("(GLsizei n = %d, GLuint *arrays = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(arrays));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -5001,8 +5086,8 @@ void GL_APIENTRY BindAttribLocationContextANGLE(GLeglContext ctx,
                                                 const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, GLuint index = %u, const GLchar *name = 0x%0.8p)", program, index,
-          name);
+    EVENT("(GLuint program = %u, GLuint index = %u, const GLchar *name = 0x%016" PRIxPTR ")",
+          program, index, reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5068,9 +5153,10 @@ void GL_APIENTRY BindBufferRangeContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLenum target = 0x%X, GLuint index = %u, GLuint buffer = %u, GLintptr offset = %d, "
-        "GLsizeiptr size = %d)",
-        target, index, buffer, offset, size);
+        "(GLenum target = 0x%X, GLuint index = %u, GLuint buffer = %u, GLintptr offset = %llu, "
+        "GLsizeiptr size = %llu)",
+        target, index, buffer, static_cast<unsigned long long>(offset),
+        static_cast<unsigned long long>(size));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5094,8 +5180,8 @@ void GL_APIENTRY BindFragDataLocationEXTContextANGLE(GLeglContext ctx,
                                                      const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, GLuint color = %u, const GLchar *name = 0x%0.8p)", program, color,
-          name);
+    EVENT("(GLuint program = %u, GLuint color = %u, const GLchar *name = 0x%016" PRIxPTR ")",
+          program, color, reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5120,8 +5206,8 @@ void GL_APIENTRY BindFragDataLocationIndexedEXTContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLuint colorNumber = %u, GLuint index = %u, const GLchar *name = "
-        "0x%0.8p)",
-        program, colorNumber, index, name);
+        "0x%016" PRIxPTR ")",
+        program, colorNumber, index, reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5359,8 +5445,9 @@ void GL_APIENTRY BindVertexBufferContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLuint bindingindex = %u, GLuint buffer = %u, GLintptr offset = %d, GLsizei stride = %d)",
-        bindingindex, buffer, offset, stride);
+        "(GLuint bindingindex = %u, GLuint buffer = %u, GLintptr offset = %llu, GLsizei stride = "
+        "%d)",
+        bindingindex, buffer, static_cast<unsigned long long>(offset), stride);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5558,10 +5645,9 @@ void GL_APIENTRY BufferDataContextANGLE(GLeglContext ctx,
                                         GLenum usage)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum target = 0x%X, GLsizeiptr size = %d, const void *data = 0x%0.8p, GLenum usage = "
-        "0x%X)",
-        target, size, data, usage);
+    EVENT("(GLenum target = 0x%X, GLsizeiptr size = %llu, const void *data = 0x%016" PRIxPTR
+          ", GLenum usage = 0x%X)",
+          target, static_cast<unsigned long long>(size), reinterpret_cast<uintptr_t>(data), usage);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5587,9 +5673,10 @@ void GL_APIENTRY BufferSubDataContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLenum target = 0x%X, GLintptr offset = %d, GLsizeiptr size = %d, const void *data = "
-        "0x%0.8p)",
-        target, offset, size, data);
+        "(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr size = %llu, const void *data = "
+        "0x%016" PRIxPTR ")",
+        target, static_cast<unsigned long long>(offset), static_cast<unsigned long long>(size),
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5694,8 +5781,8 @@ void GL_APIENTRY ClearBufferfvContextANGLE(GLeglContext ctx,
                                            const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum buffer = 0x%X, GLint drawbuffer = %d, const GLfloat *value = 0x%0.8p)", buffer,
-          drawbuffer, value);
+    EVENT("(GLenum buffer = 0x%X, GLint drawbuffer = %d, const GLfloat *value = 0x%016" PRIxPTR ")",
+          buffer, drawbuffer, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5716,8 +5803,8 @@ void GL_APIENTRY ClearBufferivContextANGLE(GLeglContext ctx,
                                            const GLint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum buffer = 0x%X, GLint drawbuffer = %d, const GLint *value = 0x%0.8p)", buffer,
-          drawbuffer, value);
+    EVENT("(GLenum buffer = 0x%X, GLint drawbuffer = %d, const GLint *value = 0x%016" PRIxPTR ")",
+          buffer, drawbuffer, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5738,8 +5825,8 @@ void GL_APIENTRY ClearBufferuivContextANGLE(GLeglContext ctx,
                                             const GLuint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum buffer = 0x%X, GLint drawbuffer = %d, const GLuint *value = 0x%0.8p)", buffer,
-          drawbuffer, value);
+    EVENT("(GLenum buffer = 0x%X, GLint drawbuffer = %d, const GLuint *value = 0x%016" PRIxPTR ")",
+          buffer, drawbuffer, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5872,8 +5959,8 @@ GLenum GL_APIENTRY ClientWaitSyncContextANGLE(GLeglContext ctx,
                                               GLuint64 timeout)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsync sync = 0x%0.8p, GLbitfield flags = 0x%X, GLuint64 timeout = %llu)", sync, flags,
-          timeout);
+    EVENT("(GLsync sync = 0x%016" PRIxPTR ", GLbitfield flags = 0x%X, GLuint64 timeout = %llu)",
+          reinterpret_cast<uintptr_t>(sync), flags, static_cast<unsigned long long>(timeout));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5893,7 +5980,8 @@ GLenum GL_APIENTRY ClientWaitSyncContextANGLE(GLeglContext ctx,
 void GL_APIENTRY ClipPlanefContextANGLE(GLeglContext ctx, GLenum p, const GLfloat *eqn)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum p = 0x%X, const GLfloat *eqn = 0x%0.8p)", p, eqn);
+    EVENT("(GLenum p = 0x%X, const GLfloat *eqn = 0x%016" PRIxPTR ")", p,
+          reinterpret_cast<uintptr_t>(eqn));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -5911,7 +5999,8 @@ void GL_APIENTRY ClipPlanefContextANGLE(GLeglContext ctx, GLenum p, const GLfloa
 void GL_APIENTRY ClipPlanexContextANGLE(GLeglContext ctx, GLenum plane, const GLfixed *equation)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum plane = 0x%X, const GLfixed *equation = 0x%0.8p)", plane, equation);
+    EVENT("(GLenum plane = 0x%X, const GLfixed *equation = 0x%016" PRIxPTR ")", plane,
+          reinterpret_cast<uintptr_t>(equation));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6017,8 +6106,9 @@ void GL_APIENTRY ColorPointerContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)",
-        size, type, stride, pointer);
+        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = "
+        "0x%016" PRIxPTR ")",
+        size, type, stride, reinterpret_cast<uintptr_t>(pointer));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6065,8 +6155,9 @@ void GL_APIENTRY CompressedTexImage2DContextANGLE(GLeglContext ctx,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLenum internalformat = 0x%X, GLsizei width = "
         "%d, GLsizei height = %d, GLint border = %d, GLsizei imageSize = %d, const void *data = "
-        "0x%0.8p)",
-        target, level, internalformat, width, height, border, imageSize, data);
+        "0x%016" PRIxPTR ")",
+        target, level, internalformat, width, height, border, imageSize,
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6101,8 +6192,9 @@ void GL_APIENTRY CompressedTexImage3DContextANGLE(GLeglContext ctx,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLenum internalformat = 0x%X, GLsizei width = "
         "%d, GLsizei height = %d, GLsizei depth = %d, GLint border = %d, GLsizei imageSize = %d, "
-        "const void *data = 0x%0.8p)",
-        target, level, internalformat, width, height, depth, border, imageSize, data);
+        "const void *data = 0x%016" PRIxPTR ")",
+        target, level, internalformat, width, height, depth, border, imageSize,
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6137,8 +6229,9 @@ void GL_APIENTRY CompressedTexSubImage2DContextANGLE(GLeglContext ctx,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, GLsizei "
         "width = %d, GLsizei height = %d, GLenum format = 0x%X, GLsizei imageSize = %d, const void "
-        "*data = 0x%0.8p)",
-        target, level, xoffset, yoffset, width, height, format, imageSize, data);
+        "*data = 0x%016" PRIxPTR ")",
+        target, level, xoffset, yoffset, width, height, format, imageSize,
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6175,8 +6268,9 @@ void GL_APIENTRY CompressedTexSubImage3DContextANGLE(GLeglContext ctx,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, GLint "
         "zoffset = %d, GLsizei width = %d, GLsizei height = %d, GLsizei depth = %d, GLenum format "
-        "= 0x%X, GLsizei imageSize = %d, const void *data = 0x%0.8p)",
-        target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, data);
+        "= 0x%X, GLsizei imageSize = %d, const void *data = 0x%016" PRIxPTR ")",
+        target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize,
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6206,9 +6300,10 @@ void GL_APIENTRY CopyBufferSubDataContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLenum readTarget = 0x%X, GLenum writeTarget = 0x%X, GLintptr readOffset = %d, GLintptr "
-        "writeOffset = %d, GLsizeiptr size = %d)",
-        readTarget, writeTarget, readOffset, writeOffset, size);
+        "(GLenum readTarget = 0x%X, GLenum writeTarget = 0x%X, GLintptr readOffset = %llu, "
+        "GLintptr writeOffset = %llu, GLsizeiptr size = %llu)",
+        readTarget, writeTarget, static_cast<unsigned long long>(readOffset),
+        static_cast<unsigned long long>(writeOffset), static_cast<unsigned long long>(size));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6378,8 +6473,9 @@ GLuint GL_APIENTRY CreateShaderProgramvContextANGLE(GLeglContext ctx,
                                                     const GLchar *const *strings)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum type = 0x%X, GLsizei count = %d, const GLchar *const*strings = 0x%0.8p)", type,
-          count, strings);
+    EVENT("(GLenum type = 0x%X, GLsizei count = %d, const GLchar *const*strings = 0x%016" PRIxPTR
+          ")",
+          type, count, reinterpret_cast<uintptr_t>(strings));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6441,8 +6537,9 @@ void GL_APIENTRY DebugMessageCallbackKHRContextANGLE(GLeglContext ctx,
                                                      const void *userParam)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLDEBUGPROCKHR callback = 0x%0.8p, const void *userParam = 0x%0.8p)", callback,
-          userParam);
+    EVENT("(GLDEBUGPROCKHR callback = 0x%016" PRIxPTR ", const void *userParam = 0x%016" PRIxPTR
+          ")",
+          reinterpret_cast<uintptr_t>(callback), reinterpret_cast<uintptr_t>(userParam));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6469,8 +6566,8 @@ void GL_APIENTRY DebugMessageControlKHRContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum source = 0x%X, GLenum type = 0x%X, GLenum severity = 0x%X, GLsizei count = %d, "
-        "const GLuint *ids = 0x%0.8p, GLboolean enabled = %u)",
-        source, type, severity, count, ids, enabled);
+        "const GLuint *ids = 0x%016" PRIxPTR ", GLboolean enabled = %u)",
+        source, type, severity, count, reinterpret_cast<uintptr_t>(ids), enabled);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6498,8 +6595,8 @@ void GL_APIENTRY DebugMessageInsertKHRContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum source = 0x%X, GLenum type = 0x%X, GLuint id = %u, GLenum severity = 0x%X, "
-        "GLsizei length = %d, const GLchar *buf = 0x%0.8p)",
-        source, type, id, severity, length, buf);
+        "GLsizei length = %d, const GLchar *buf = 0x%016" PRIxPTR ")",
+        source, type, id, severity, length, reinterpret_cast<uintptr_t>(buf));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6519,7 +6616,8 @@ void GL_APIENTRY DebugMessageInsertKHRContextANGLE(GLeglContext ctx,
 void GL_APIENTRY DeleteBuffersContextANGLE(GLeglContext ctx, GLsizei n, const GLuint *buffers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *buffers = 0x%0.8p)", n, buffers);
+    EVENT("(GLsizei n = %d, const GLuint *buffers = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(buffers));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6537,7 +6635,8 @@ void GL_APIENTRY DeleteBuffersContextANGLE(GLeglContext ctx, GLsizei n, const GL
 void GL_APIENTRY DeleteFencesNVContextANGLE(GLeglContext ctx, GLsizei n, const GLuint *fences)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *fences = 0x%0.8p)", n, fences);
+    EVENT("(GLsizei n = %d, const GLuint *fences = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(fences));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6557,7 +6656,8 @@ void GL_APIENTRY DeleteFramebuffersContextANGLE(GLeglContext ctx,
                                                 const GLuint *framebuffers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *framebuffers = 0x%0.8p)", n, framebuffers);
+    EVENT("(GLsizei n = %d, const GLuint *framebuffers = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(framebuffers));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6577,7 +6677,8 @@ void GL_APIENTRY DeleteFramebuffersOESContextANGLE(GLeglContext ctx,
                                                    const GLuint *framebuffers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *framebuffers = 0x%0.8p)", n, framebuffers);
+    EVENT("(GLsizei n = %d, const GLuint *framebuffers = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(framebuffers));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6615,7 +6716,8 @@ void GL_APIENTRY DeleteProgramPipelinesContextANGLE(GLeglContext ctx,
                                                     const GLuint *pipelines)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *pipelines = 0x%0.8p)", n, pipelines);
+    EVENT("(GLsizei n = %d, const GLuint *pipelines = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(pipelines));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6633,7 +6735,8 @@ void GL_APIENTRY DeleteProgramPipelinesContextANGLE(GLeglContext ctx,
 void GL_APIENTRY DeleteQueriesContextANGLE(GLeglContext ctx, GLsizei n, const GLuint *ids)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *ids = 0x%0.8p)", n, ids);
+    EVENT("(GLsizei n = %d, const GLuint *ids = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(ids));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6651,7 +6754,8 @@ void GL_APIENTRY DeleteQueriesContextANGLE(GLeglContext ctx, GLsizei n, const GL
 void GL_APIENTRY DeleteQueriesEXTContextANGLE(GLeglContext ctx, GLsizei n, const GLuint *ids)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *ids = 0x%0.8p)", n, ids);
+    EVENT("(GLsizei n = %d, const GLuint *ids = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(ids));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6671,7 +6775,8 @@ void GL_APIENTRY DeleteRenderbuffersContextANGLE(GLeglContext ctx,
                                                  const GLuint *renderbuffers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *renderbuffers = 0x%0.8p)", n, renderbuffers);
+    EVENT("(GLsizei n = %d, const GLuint *renderbuffers = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(renderbuffers));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6691,7 +6796,8 @@ void GL_APIENTRY DeleteRenderbuffersOESContextANGLE(GLeglContext ctx,
                                                     const GLuint *renderbuffers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *renderbuffers = 0x%0.8p)", n, renderbuffers);
+    EVENT("(GLsizei n = %d, const GLuint *renderbuffers = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(renderbuffers));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6709,7 +6815,8 @@ void GL_APIENTRY DeleteRenderbuffersOESContextANGLE(GLeglContext ctx,
 void GL_APIENTRY DeleteSamplersContextANGLE(GLeglContext ctx, GLsizei count, const GLuint *samplers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei count = %d, const GLuint *samplers = 0x%0.8p)", count, samplers);
+    EVENT("(GLsizei count = %d, const GLuint *samplers = 0x%016" PRIxPTR ")", count,
+          reinterpret_cast<uintptr_t>(samplers));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6745,7 +6852,7 @@ void GL_APIENTRY DeleteShaderContextANGLE(GLeglContext ctx, GLuint shader)
 void GL_APIENTRY DeleteSyncContextANGLE(GLeglContext ctx, GLsync sync)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsync sync = 0x%0.8p)", sync);
+    EVENT("(GLsync sync = 0x%016" PRIxPTR ")", reinterpret_cast<uintptr_t>(sync));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6763,7 +6870,8 @@ void GL_APIENTRY DeleteSyncContextANGLE(GLeglContext ctx, GLsync sync)
 void GL_APIENTRY DeleteTexturesContextANGLE(GLeglContext ctx, GLsizei n, const GLuint *textures)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *textures = 0x%0.8p)", n, textures);
+    EVENT("(GLsizei n = %d, const GLuint *textures = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(textures));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6783,7 +6891,8 @@ void GL_APIENTRY DeleteTransformFeedbacksContextANGLE(GLeglContext ctx,
                                                       const GLuint *ids)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *ids = 0x%0.8p)", n, ids);
+    EVENT("(GLsizei n = %d, const GLuint *ids = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(ids));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6801,7 +6910,8 @@ void GL_APIENTRY DeleteTransformFeedbacksContextANGLE(GLeglContext ctx,
 void GL_APIENTRY DeleteVertexArraysContextANGLE(GLeglContext ctx, GLsizei n, const GLuint *arrays)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *arrays = 0x%0.8p)", n, arrays);
+    EVENT("(GLsizei n = %d, const GLuint *arrays = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(arrays));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6821,7 +6931,8 @@ void GL_APIENTRY DeleteVertexArraysOESContextANGLE(GLeglContext ctx,
                                                    const GLuint *arrays)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLuint *arrays = 0x%0.8p)", n, arrays);
+    EVENT("(GLsizei n = %d, const GLuint *arrays = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(arrays));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -6988,8 +7099,9 @@ void GL_APIENTRY DiscardFramebufferEXTContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLenum target = 0x%X, GLsizei numAttachments = %d, const GLenum *attachments = 0x%0.8p)",
-        target, numAttachments, attachments);
+        "(GLenum target = 0x%X, GLsizei numAttachments = %d, const GLenum *attachments = "
+        "0x%016" PRIxPTR ")",
+        target, numAttachments, reinterpret_cast<uintptr_t>(attachments));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7033,7 +7145,7 @@ void GL_APIENTRY DispatchComputeContextANGLE(GLeglContext ctx,
 void GL_APIENTRY DispatchComputeIndirectContextANGLE(GLeglContext ctx, GLintptr indirect)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLintptr indirect = %d)", indirect);
+    EVENT("(GLintptr indirect = %llu)", static_cast<unsigned long long>(indirect));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7070,7 +7182,8 @@ void GL_APIENTRY DrawArraysContextANGLE(GLeglContext ctx, GLenum mode, GLint fir
 void GL_APIENTRY DrawArraysIndirectContextANGLE(GLeglContext ctx, GLenum mode, const void *indirect)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum mode = 0x%X, const void *indirect = 0x%0.8p)", mode, indirect);
+    EVENT("(GLenum mode = 0x%X, const void *indirect = 0x%016" PRIxPTR ")", mode,
+          reinterpret_cast<uintptr_t>(indirect));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7141,7 +7254,8 @@ void GL_APIENTRY DrawArraysInstancedANGLEContextANGLE(GLeglContext ctx,
 void GL_APIENTRY DrawBuffersContextANGLE(GLeglContext ctx, GLsizei n, const GLenum *bufs)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLenum *bufs = 0x%0.8p)", n, bufs);
+    EVENT("(GLsizei n = %d, const GLenum *bufs = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(bufs));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7159,7 +7273,8 @@ void GL_APIENTRY DrawBuffersContextANGLE(GLeglContext ctx, GLsizei n, const GLen
 void GL_APIENTRY DrawBuffersEXTContextANGLE(GLeglContext ctx, GLsizei n, const GLenum *bufs)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, const GLenum *bufs = 0x%0.8p)", n, bufs);
+    EVENT("(GLsizei n = %d, const GLenum *bufs = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(bufs));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7183,8 +7298,8 @@ void GL_APIENTRY DrawElementsContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum mode = 0x%X, GLsizei count = %d, GLenum type = 0x%X, const void *indices = "
-        "0x%0.8p)",
-        mode, count, type, indices);
+        "0x%016" PRIxPTR ")",
+        mode, count, type, reinterpret_cast<uintptr_t>(indices));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7207,8 +7322,8 @@ void GL_APIENTRY DrawElementsIndirectContextANGLE(GLeglContext ctx,
                                                   const void *indirect)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum mode = 0x%X, GLenum type = 0x%X, const void *indirect = 0x%0.8p)", mode, type,
-          indirect);
+    EVENT("(GLenum mode = 0x%X, GLenum type = 0x%X, const void *indirect = 0x%016" PRIxPTR ")",
+          mode, type, reinterpret_cast<uintptr_t>(indirect));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7235,8 +7350,8 @@ void GL_APIENTRY DrawElementsInstancedContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum mode = 0x%X, GLsizei count = %d, GLenum type = 0x%X, const void *indices = "
-        "0x%0.8p, GLsizei instancecount = %d)",
-        mode, count, type, indices, instancecount);
+        "0x%016" PRIxPTR ", GLsizei instancecount = %d)",
+        mode, count, type, reinterpret_cast<uintptr_t>(indices), instancecount);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7264,8 +7379,8 @@ void GL_APIENTRY DrawElementsInstancedANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum mode = 0x%X, GLsizei count = %d, GLenum type = 0x%X, const void *indices = "
-        "0x%0.8p, GLsizei primcount = %d)",
-        mode, count, type, indices, primcount);
+        "0x%016" PRIxPTR ", GLsizei primcount = %d)",
+        mode, count, type, reinterpret_cast<uintptr_t>(indices), primcount);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7294,8 +7409,8 @@ void GL_APIENTRY DrawRangeElementsContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum mode = 0x%X, GLuint start = %u, GLuint end = %u, GLsizei count = %d, GLenum type "
-        "= 0x%X, const void *indices = 0x%0.8p)",
-        mode, start, end, count, type, indices);
+        "= 0x%X, const void *indices = 0x%016" PRIxPTR ")",
+        mode, start, end, count, type, reinterpret_cast<uintptr_t>(indices));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7341,7 +7456,7 @@ void GL_APIENTRY DrawTexfOESContextANGLE(GLeglContext ctx,
 void GL_APIENTRY DrawTexfvOESContextANGLE(GLeglContext ctx, const GLfloat *coords)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(const GLfloat *coords = 0x%0.8p)", coords);
+    EVENT("(const GLfloat *coords = 0x%016" PRIxPTR ")", reinterpret_cast<uintptr_t>(coords));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7379,7 +7494,7 @@ DrawTexiOESContextANGLE(GLeglContext ctx, GLint x, GLint y, GLint z, GLint width
 void GL_APIENTRY DrawTexivOESContextANGLE(GLeglContext ctx, const GLint *coords)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(const GLint *coords = 0x%0.8p)", coords);
+    EVENT("(const GLint *coords = 0x%016" PRIxPTR ")", reinterpret_cast<uintptr_t>(coords));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7422,7 +7537,7 @@ void GL_APIENTRY DrawTexsOESContextANGLE(GLeglContext ctx,
 void GL_APIENTRY DrawTexsvOESContextANGLE(GLeglContext ctx, const GLshort *coords)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(const GLshort *coords = 0x%0.8p)", coords);
+    EVENT("(const GLshort *coords = 0x%016" PRIxPTR ")", reinterpret_cast<uintptr_t>(coords));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7466,7 +7581,7 @@ void GL_APIENTRY DrawTexxOESContextANGLE(GLeglContext ctx,
 void GL_APIENTRY DrawTexxvOESContextANGLE(GLeglContext ctx, const GLfixed *coords)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(const GLfixed *coords = 0x%0.8p)", coords);
+    EVENT("(const GLfixed *coords = 0x%016" PRIxPTR ")", reinterpret_cast<uintptr_t>(coords));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7486,7 +7601,8 @@ void GL_APIENTRY EGLImageTargetRenderbufferStorageOESContextANGLE(GLeglContext c
                                                                   GLeglImageOES image)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLeglImageOES image = 0x%0.8p)", target, image);
+    EVENT("(GLenum target = 0x%X, GLeglImageOES image = 0x%016" PRIxPTR ")", target,
+          reinterpret_cast<uintptr_t>(image));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7507,7 +7623,8 @@ void GL_APIENTRY EGLImageTargetTexture2DOESContextANGLE(GLeglContext ctx,
                                                         GLeglImageOES image)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLeglImageOES image = 0x%0.8p)", target, image);
+    EVENT("(GLenum target = 0x%X, GLeglImageOES image = 0x%016" PRIxPTR ")", target,
+          reinterpret_cast<uintptr_t>(image));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7715,8 +7832,8 @@ void GL_APIENTRY FlushMappedBufferRangeContextANGLE(GLeglContext ctx,
                                                     GLsizeiptr length)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLintptr offset = %d, GLsizeiptr length = %d)", target, offset,
-          length);
+    EVENT("(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr length = %llu)", target,
+          static_cast<unsigned long long>(offset), static_cast<unsigned long long>(length));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7739,8 +7856,8 @@ void GL_APIENTRY FlushMappedBufferRangeEXTContextANGLE(GLeglContext ctx,
                                                        GLsizeiptr length)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLintptr offset = %d, GLsizeiptr length = %d)", target, offset,
-          length);
+    EVENT("(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr length = %llu)", target,
+          static_cast<unsigned long long>(offset), static_cast<unsigned long long>(length));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7778,7 +7895,8 @@ void GL_APIENTRY FogfContextANGLE(GLeglContext ctx, GLenum pname, GLfloat param)
 void GL_APIENTRY FogfvContextANGLE(GLeglContext ctx, GLenum pname, const GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum pname = 0x%X, const GLfloat *params = 0x%0.8p)", pname, params);
+    EVENT("(GLenum pname = 0x%X, const GLfloat *params = 0x%016" PRIxPTR ")", pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -7814,7 +7932,8 @@ void GL_APIENTRY FogxContextANGLE(GLeglContext ctx, GLenum pname, GLfixed param)
 void GL_APIENTRY FogxvContextANGLE(GLeglContext ctx, GLenum pname, const GLfixed *param)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum pname = 0x%X, const GLfixed *param = 0x%0.8p)", pname, param);
+    EVENT("(GLenum pname = 0x%X, const GLfixed *param = 0x%016" PRIxPTR ")", pname,
+          reinterpret_cast<uintptr_t>(param));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8095,7 +8214,8 @@ void GL_APIENTRY FrustumxContextANGLE(GLeglContext ctx,
 void GL_APIENTRY GenBuffersContextANGLE(GLeglContext ctx, GLsizei n, GLuint *buffers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *buffers = 0x%0.8p)", n, buffers);
+    EVENT("(GLsizei n = %d, GLuint *buffers = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(buffers));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8113,7 +8233,8 @@ void GL_APIENTRY GenBuffersContextANGLE(GLeglContext ctx, GLsizei n, GLuint *buf
 void GL_APIENTRY GenFencesNVContextANGLE(GLeglContext ctx, GLsizei n, GLuint *fences)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *fences = 0x%0.8p)", n, fences);
+    EVENT("(GLsizei n = %d, GLuint *fences = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(fences));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8131,7 +8252,8 @@ void GL_APIENTRY GenFencesNVContextANGLE(GLeglContext ctx, GLsizei n, GLuint *fe
 void GL_APIENTRY GenFramebuffersContextANGLE(GLeglContext ctx, GLsizei n, GLuint *framebuffers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *framebuffers = 0x%0.8p)", n, framebuffers);
+    EVENT("(GLsizei n = %d, GLuint *framebuffers = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(framebuffers));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8149,7 +8271,8 @@ void GL_APIENTRY GenFramebuffersContextANGLE(GLeglContext ctx, GLsizei n, GLuint
 void GL_APIENTRY GenFramebuffersOESContextANGLE(GLeglContext ctx, GLsizei n, GLuint *framebuffers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *framebuffers = 0x%0.8p)", n, framebuffers);
+    EVENT("(GLsizei n = %d, GLuint *framebuffers = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(framebuffers));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8167,7 +8290,8 @@ void GL_APIENTRY GenFramebuffersOESContextANGLE(GLeglContext ctx, GLsizei n, GLu
 void GL_APIENTRY GenProgramPipelinesContextANGLE(GLeglContext ctx, GLsizei n, GLuint *pipelines)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *pipelines = 0x%0.8p)", n, pipelines);
+    EVENT("(GLsizei n = %d, GLuint *pipelines = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(pipelines));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8185,7 +8309,7 @@ void GL_APIENTRY GenProgramPipelinesContextANGLE(GLeglContext ctx, GLsizei n, GL
 void GL_APIENTRY GenQueriesContextANGLE(GLeglContext ctx, GLsizei n, GLuint *ids)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *ids = 0x%0.8p)", n, ids);
+    EVENT("(GLsizei n = %d, GLuint *ids = 0x%016" PRIxPTR ")", n, reinterpret_cast<uintptr_t>(ids));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8203,7 +8327,7 @@ void GL_APIENTRY GenQueriesContextANGLE(GLeglContext ctx, GLsizei n, GLuint *ids
 void GL_APIENTRY GenQueriesEXTContextANGLE(GLeglContext ctx, GLsizei n, GLuint *ids)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *ids = 0x%0.8p)", n, ids);
+    EVENT("(GLsizei n = %d, GLuint *ids = 0x%016" PRIxPTR ")", n, reinterpret_cast<uintptr_t>(ids));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8221,7 +8345,8 @@ void GL_APIENTRY GenQueriesEXTContextANGLE(GLeglContext ctx, GLsizei n, GLuint *
 void GL_APIENTRY GenRenderbuffersContextANGLE(GLeglContext ctx, GLsizei n, GLuint *renderbuffers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *renderbuffers = 0x%0.8p)", n, renderbuffers);
+    EVENT("(GLsizei n = %d, GLuint *renderbuffers = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(renderbuffers));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8239,7 +8364,8 @@ void GL_APIENTRY GenRenderbuffersContextANGLE(GLeglContext ctx, GLsizei n, GLuin
 void GL_APIENTRY GenRenderbuffersOESContextANGLE(GLeglContext ctx, GLsizei n, GLuint *renderbuffers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *renderbuffers = 0x%0.8p)", n, renderbuffers);
+    EVENT("(GLsizei n = %d, GLuint *renderbuffers = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(renderbuffers));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8257,7 +8383,8 @@ void GL_APIENTRY GenRenderbuffersOESContextANGLE(GLeglContext ctx, GLsizei n, GL
 void GL_APIENTRY GenSamplersContextANGLE(GLeglContext ctx, GLsizei count, GLuint *samplers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei count = %d, GLuint *samplers = 0x%0.8p)", count, samplers);
+    EVENT("(GLsizei count = %d, GLuint *samplers = 0x%016" PRIxPTR ")", count,
+          reinterpret_cast<uintptr_t>(samplers));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8275,7 +8402,8 @@ void GL_APIENTRY GenSamplersContextANGLE(GLeglContext ctx, GLsizei count, GLuint
 void GL_APIENTRY GenTexturesContextANGLE(GLeglContext ctx, GLsizei n, GLuint *textures)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *textures = 0x%0.8p)", n, textures);
+    EVENT("(GLsizei n = %d, GLuint *textures = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(textures));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8293,7 +8421,7 @@ void GL_APIENTRY GenTexturesContextANGLE(GLeglContext ctx, GLsizei n, GLuint *te
 void GL_APIENTRY GenTransformFeedbacksContextANGLE(GLeglContext ctx, GLsizei n, GLuint *ids)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *ids = 0x%0.8p)", n, ids);
+    EVENT("(GLsizei n = %d, GLuint *ids = 0x%016" PRIxPTR ")", n, reinterpret_cast<uintptr_t>(ids));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8311,7 +8439,8 @@ void GL_APIENTRY GenTransformFeedbacksContextANGLE(GLeglContext ctx, GLsizei n, 
 void GL_APIENTRY GenVertexArraysContextANGLE(GLeglContext ctx, GLsizei n, GLuint *arrays)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *arrays = 0x%0.8p)", n, arrays);
+    EVENT("(GLsizei n = %d, GLuint *arrays = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(arrays));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8329,7 +8458,8 @@ void GL_APIENTRY GenVertexArraysContextANGLE(GLeglContext ctx, GLsizei n, GLuint
 void GL_APIENTRY GenVertexArraysOESContextANGLE(GLeglContext ctx, GLsizei n, GLuint *arrays)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsizei n = %d, GLuint *arrays = 0x%0.8p)", n, arrays);
+    EVENT("(GLsizei n = %d, GLuint *arrays = 0x%016" PRIxPTR ")", n,
+          reinterpret_cast<uintptr_t>(arrays));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8393,9 +8523,12 @@ void GL_APIENTRY GetActiveAttribContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLuint program = %u, GLuint index = %u, GLsizei bufSize = %d, GLsizei *length = 0x%0.8p, "
-        "GLint *size = 0x%0.8p, GLenum *type = 0x%0.8p, GLchar *name = 0x%0.8p)",
-        program, index, bufSize, length, size, type, name);
+        "(GLuint program = %u, GLuint index = %u, GLsizei bufSize = %d, GLsizei *length = "
+        "0x%016" PRIxPTR ", GLint *size = 0x%016" PRIxPTR ", GLenum *type = 0x%016" PRIxPTR
+        ", GLchar *name = 0x%016" PRIxPTR ")",
+        program, index, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(size), reinterpret_cast<uintptr_t>(type),
+        reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8423,9 +8556,12 @@ void GL_APIENTRY GetActiveUniformContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLuint program = %u, GLuint index = %u, GLsizei bufSize = %d, GLsizei *length = 0x%0.8p, "
-        "GLint *size = 0x%0.8p, GLenum *type = 0x%0.8p, GLchar *name = 0x%0.8p)",
-        program, index, bufSize, length, size, type, name);
+        "(GLuint program = %u, GLuint index = %u, GLsizei bufSize = %d, GLsizei *length = "
+        "0x%016" PRIxPTR ", GLint *size = 0x%016" PRIxPTR ", GLenum *type = 0x%016" PRIxPTR
+        ", GLchar *name = 0x%016" PRIxPTR ")",
+        program, index, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(size), reinterpret_cast<uintptr_t>(type),
+        reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8452,8 +8588,9 @@ void GL_APIENTRY GetActiveUniformBlockNameContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLuint uniformBlockIndex = %u, GLsizei bufSize = %d, GLsizei "
-        "*length = 0x%0.8p, GLchar *uniformBlockName = 0x%0.8p)",
-        program, uniformBlockIndex, bufSize, length, uniformBlockName);
+        "*length = 0x%016" PRIxPTR ", GLchar *uniformBlockName = 0x%016" PRIxPTR ")",
+        program, uniformBlockIndex, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(uniformBlockName));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8481,8 +8618,8 @@ void GL_APIENTRY GetActiveUniformBlockivContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLuint uniformBlockIndex = %u, GLenum pname = 0x%X, GLint *params = "
-        "0x%0.8p)",
-        program, uniformBlockIndex, pname, params);
+        "0x%016" PRIxPTR ")",
+        program, uniformBlockIndex, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8508,9 +8645,10 @@ void GL_APIENTRY GetActiveUniformsivContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLuint program = %u, GLsizei uniformCount = %d, const GLuint *uniformIndices = 0x%0.8p, "
-        "GLenum pname = 0x%X, GLint *params = 0x%0.8p)",
-        program, uniformCount, uniformIndices, pname, params);
+        "(GLuint program = %u, GLsizei uniformCount = %d, const GLuint *uniformIndices = "
+        "0x%016" PRIxPTR ", GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")",
+        program, uniformCount, reinterpret_cast<uintptr_t>(uniformIndices), pname,
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8534,10 +8672,10 @@ void GL_APIENTRY GetAttachedShadersContextANGLE(GLeglContext ctx,
                                                 GLuint *shaders)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint program = %u, GLsizei maxCount = %d, GLsizei *count = 0x%0.8p, GLuint *shaders = "
-        "0x%0.8p)",
-        program, maxCount, count, shaders);
+    EVENT("(GLuint program = %u, GLsizei maxCount = %d, GLsizei *count = 0x%016" PRIxPTR
+          ", GLuint *shaders = 0x%016" PRIxPTR ")",
+          program, maxCount, reinterpret_cast<uintptr_t>(count),
+          reinterpret_cast<uintptr_t>(shaders));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8558,7 +8696,8 @@ GLint GL_APIENTRY GetAttribLocationContextANGLE(GLeglContext ctx,
                                                 const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, const GLchar *name = 0x%0.8p)", program, name);
+    EVENT("(GLuint program = %u, const GLchar *name = 0x%016" PRIxPTR ")", program,
+          reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8581,8 +8720,8 @@ void GL_APIENTRY GetBooleani_vContextANGLE(GLeglContext ctx,
                                            GLboolean *data)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLuint index = %u, GLboolean *data = 0x%0.8p)", target, index,
-          data);
+    EVENT("(GLenum target = 0x%X, GLuint index = %u, GLboolean *data = 0x%016" PRIxPTR ")", target,
+          index, reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8600,7 +8739,8 @@ void GL_APIENTRY GetBooleani_vContextANGLE(GLeglContext ctx,
 void GL_APIENTRY GetBooleanvContextANGLE(GLeglContext ctx, GLenum pname, GLboolean *data)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum pname = 0x%X, GLboolean *data = 0x%0.8p)", pname, data);
+    EVENT("(GLenum pname = 0x%X, GLboolean *data = 0x%016" PRIxPTR ")", pname,
+          reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8621,8 +8761,8 @@ void GL_APIENTRY GetBufferParameteri64vContextANGLE(GLeglContext ctx,
                                                     GLint64 *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint64 *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint64 *params = 0x%016" PRIxPTR ")",
+          target, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8645,8 +8785,8 @@ void GL_APIENTRY GetBufferParameterivContextANGLE(GLeglContext ctx,
                                                   GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", target,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8669,8 +8809,8 @@ void GL_APIENTRY GetBufferPointervContextANGLE(GLeglContext ctx,
                                                void **params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, void **params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, void **params = 0x%016" PRIxPTR ")", target,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8693,8 +8833,8 @@ void GL_APIENTRY GetBufferPointervOESContextANGLE(GLeglContext ctx,
                                                   void **params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, void **params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, void **params = 0x%016" PRIxPTR ")", target,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8714,7 +8854,8 @@ void GL_APIENTRY GetBufferPointervOESContextANGLE(GLeglContext ctx,
 void GL_APIENTRY GetClipPlanefContextANGLE(GLeglContext ctx, GLenum plane, GLfloat *equation)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum plane = 0x%X, GLfloat *equation = 0x%0.8p)", plane, equation);
+    EVENT("(GLenum plane = 0x%X, GLfloat *equation = 0x%016" PRIxPTR ")", plane,
+          reinterpret_cast<uintptr_t>(equation));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8732,7 +8873,8 @@ void GL_APIENTRY GetClipPlanefContextANGLE(GLeglContext ctx, GLenum plane, GLflo
 void GL_APIENTRY GetClipPlanexContextANGLE(GLeglContext ctx, GLenum plane, GLfixed *equation)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum plane = 0x%X, GLfixed *equation = 0x%0.8p)", plane, equation);
+    EVENT("(GLenum plane = 0x%X, GLfixed *equation = 0x%016" PRIxPTR ")", plane,
+          reinterpret_cast<uintptr_t>(equation));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8758,11 +8900,13 @@ GLuint GL_APIENTRY GetDebugMessageLogKHRContextANGLE(GLeglContext ctx,
                                                      GLchar *messageLog)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint count = %u, GLsizei bufSize = %d, GLenum *sources = 0x%0.8p, GLenum *types = "
-        "0x%0.8p, GLuint *ids = 0x%0.8p, GLenum *severities = 0x%0.8p, GLsizei *lengths = 0x%0.8p, "
-        "GLchar *messageLog = 0x%0.8p)",
-        count, bufSize, sources, types, ids, severities, lengths, messageLog);
+    EVENT("(GLuint count = %u, GLsizei bufSize = %d, GLenum *sources = 0x%016" PRIxPTR
+          ", GLenum *types = 0x%016" PRIxPTR ", GLuint *ids = 0x%016" PRIxPTR
+          ", GLenum *severities = 0x%016" PRIxPTR ", GLsizei *lengths = 0x%016" PRIxPTR
+          ", GLchar *messageLog = 0x%016" PRIxPTR ")",
+          count, bufSize, reinterpret_cast<uintptr_t>(sources), reinterpret_cast<uintptr_t>(types),
+          reinterpret_cast<uintptr_t>(ids), reinterpret_cast<uintptr_t>(severities),
+          reinterpret_cast<uintptr_t>(lengths), reinterpret_cast<uintptr_t>(messageLog));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8809,8 +8953,8 @@ void GL_APIENTRY GetFenceivNVContextANGLE(GLeglContext ctx,
                                           GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint fence = %u, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", fence, pname,
-          params);
+    EVENT("(GLuint fence = %u, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", fence,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8828,7 +8972,8 @@ void GL_APIENTRY GetFenceivNVContextANGLE(GLeglContext ctx,
 void GL_APIENTRY GetFixedvContextANGLE(GLeglContext ctx, GLenum pname, GLfixed *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum pname = 0x%X, GLfixed *params = 0x%0.8p)", pname, params);
+    EVENT("(GLenum pname = 0x%X, GLfixed *params = 0x%016" PRIxPTR ")", pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8846,7 +8991,8 @@ void GL_APIENTRY GetFixedvContextANGLE(GLeglContext ctx, GLenum pname, GLfixed *
 void GL_APIENTRY GetFloatvContextANGLE(GLeglContext ctx, GLenum pname, GLfloat *data)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum pname = 0x%X, GLfloat *data = 0x%0.8p)", pname, data);
+    EVENT("(GLenum pname = 0x%X, GLfloat *data = 0x%016" PRIxPTR ")", pname,
+          reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8866,7 +9012,8 @@ GLint GL_APIENTRY GetFragDataIndexEXTContextANGLE(GLeglContext ctx,
                                                   const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, const GLchar *name = 0x%0.8p)", program, name);
+    EVENT("(GLuint program = %u, const GLchar *name = 0x%016" PRIxPTR ")", program,
+          reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8888,7 +9035,8 @@ GLint GL_APIENTRY GetFragDataLocationContextANGLE(GLeglContext ctx,
                                                   const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, const GLchar *name = 0x%0.8p)", program, name);
+    EVENT("(GLuint program = %u, const GLchar *name = 0x%016" PRIxPTR ")", program,
+          reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8914,8 +9062,8 @@ void GL_APIENTRY GetFramebufferAttachmentParameterivContextANGLE(GLeglContext ct
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum attachment = 0x%X, GLenum pname = 0x%X, GLint *params = "
-        "0x%0.8p)",
-        target, attachment, pname, params);
+        "0x%016" PRIxPTR ")",
+        target, attachment, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8941,8 +9089,8 @@ void GL_APIENTRY GetFramebufferAttachmentParameterivOESContextANGLE(GLeglContext
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum attachment = 0x%X, GLenum pname = 0x%X, GLint *params = "
-        "0x%0.8p)",
-        target, attachment, pname, params);
+        "0x%016" PRIxPTR ")",
+        target, attachment, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -8965,8 +9113,8 @@ void GL_APIENTRY GetFramebufferParameterivContextANGLE(GLeglContext ctx,
                                                        GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", target,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9008,8 +9156,8 @@ void GL_APIENTRY GetInteger64i_vContextANGLE(GLeglContext ctx,
                                              GLint64 *data)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLuint index = %u, GLint64 *data = 0x%0.8p)", target, index,
-          data);
+    EVENT("(GLenum target = 0x%X, GLuint index = %u, GLint64 *data = 0x%016" PRIxPTR ")", target,
+          index, reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9027,7 +9175,8 @@ void GL_APIENTRY GetInteger64i_vContextANGLE(GLeglContext ctx,
 void GL_APIENTRY GetInteger64vContextANGLE(GLeglContext ctx, GLenum pname, GLint64 *data)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum pname = 0x%X, GLint64 *data = 0x%0.8p)", pname, data);
+    EVENT("(GLenum pname = 0x%X, GLint64 *data = 0x%016" PRIxPTR ")", pname,
+          reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9048,7 +9197,8 @@ void GL_APIENTRY GetIntegeri_vContextANGLE(GLeglContext ctx,
                                            GLint *data)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLuint index = %u, GLint *data = 0x%0.8p)", target, index, data);
+    EVENT("(GLenum target = 0x%X, GLuint index = %u, GLint *data = 0x%016" PRIxPTR ")", target,
+          index, reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9066,7 +9216,8 @@ void GL_APIENTRY GetIntegeri_vContextANGLE(GLeglContext ctx,
 void GL_APIENTRY GetIntegervContextANGLE(GLeglContext ctx, GLenum pname, GLint *data)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum pname = 0x%X, GLint *data = 0x%0.8p)", pname, data);
+    EVENT("(GLenum pname = 0x%X, GLint *data = 0x%016" PRIxPTR ")", pname,
+          reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9091,8 +9242,8 @@ void GL_APIENTRY GetInternalformativContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum internalformat = 0x%X, GLenum pname = 0x%X, GLsizei bufSize "
-        "= %d, GLint *params = 0x%0.8p)",
-        target, internalformat, pname, bufSize, params);
+        "= %d, GLint *params = 0x%016" PRIxPTR ")",
+        target, internalformat, pname, bufSize, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9115,8 +9266,8 @@ void GL_APIENTRY GetLightfvContextANGLE(GLeglContext ctx,
                                         GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum light = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)", light, pname,
-          params);
+    EVENT("(GLenum light = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%016" PRIxPTR ")", light,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9138,8 +9289,8 @@ void GL_APIENTRY GetLightxvContextANGLE(GLeglContext ctx,
                                         GLfixed *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum light = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%0.8p)", light, pname,
-          params);
+    EVENT("(GLenum light = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%016" PRIxPTR ")", light,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9161,8 +9312,8 @@ void GL_APIENTRY GetMaterialfvContextANGLE(GLeglContext ctx,
                                            GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum face = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)", face, pname,
-          params);
+    EVENT("(GLenum face = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%016" PRIxPTR ")", face,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9184,8 +9335,8 @@ void GL_APIENTRY GetMaterialxvContextANGLE(GLeglContext ctx,
                                            GLfixed *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum face = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%0.8p)", face, pname,
-          params);
+    EVENT("(GLenum face = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%016" PRIxPTR ")", face,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9207,7 +9358,8 @@ void GL_APIENTRY GetMultisamplefvContextANGLE(GLeglContext ctx,
                                               GLfloat *val)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum pname = 0x%X, GLuint index = %u, GLfloat *val = 0x%0.8p)", pname, index, val);
+    EVENT("(GLenum pname = 0x%X, GLuint index = %u, GLfloat *val = 0x%016" PRIxPTR ")", pname,
+          index, reinterpret_cast<uintptr_t>(val));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9232,8 +9384,9 @@ void GL_APIENTRY GetObjectLabelKHRContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum identifier = 0x%X, GLuint name = %u, GLsizei bufSize = %d, GLsizei *length = "
-        "0x%0.8p, GLchar *label = 0x%0.8p)",
-        identifier, name, bufSize, length, label);
+        "0x%016" PRIxPTR ", GLchar *label = 0x%016" PRIxPTR ")",
+        identifier, name, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(label));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9257,10 +9410,11 @@ void GL_APIENTRY GetObjectPtrLabelKHRContextANGLE(GLeglContext ctx,
                                                   GLchar *label)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(const void *ptr = 0x%0.8p, GLsizei bufSize = %d, GLsizei *length = 0x%0.8p, GLchar "
-        "*label = 0x%0.8p)",
-        ptr, bufSize, length, label);
+    EVENT("(const void *ptr = 0x%016" PRIxPTR
+          ", GLsizei bufSize = %d, GLsizei *length = 0x%016" PRIxPTR
+          ", GLchar *label = 0x%016" PRIxPTR ")",
+          reinterpret_cast<uintptr_t>(ptr), bufSize, reinterpret_cast<uintptr_t>(length),
+          reinterpret_cast<uintptr_t>(label));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9279,7 +9433,8 @@ void GL_APIENTRY GetObjectPtrLabelKHRContextANGLE(GLeglContext ctx,
 void GL_APIENTRY GetPointervContextANGLE(GLeglContext ctx, GLenum pname, void **params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum pname = 0x%X, void **params = 0x%0.8p)", pname, params);
+    EVENT("(GLenum pname = 0x%X, void **params = 0x%016" PRIxPTR ")", pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9297,7 +9452,8 @@ void GL_APIENTRY GetPointervContextANGLE(GLeglContext ctx, GLenum pname, void **
 void GL_APIENTRY GetPointervKHRContextANGLE(GLeglContext ctx, GLenum pname, void **params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum pname = 0x%X, void **params = 0x%0.8p)", pname, params);
+    EVENT("(GLenum pname = 0x%X, void **params = 0x%016" PRIxPTR ")", pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9320,10 +9476,10 @@ void GL_APIENTRY GetProgramBinaryContextANGLE(GLeglContext ctx,
                                               void *binary)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint program = %u, GLsizei bufSize = %d, GLsizei *length = 0x%0.8p, GLenum "
-        "*binaryFormat = 0x%0.8p, void *binary = 0x%0.8p)",
-        program, bufSize, length, binaryFormat, binary);
+    EVENT("(GLuint program = %u, GLsizei bufSize = %d, GLsizei *length = 0x%016" PRIxPTR
+          ", GLenum *binaryFormat = 0x%016" PRIxPTR ", void *binary = 0x%016" PRIxPTR ")",
+          program, bufSize, reinterpret_cast<uintptr_t>(length),
+          reinterpret_cast<uintptr_t>(binaryFormat), reinterpret_cast<uintptr_t>(binary));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9348,10 +9504,10 @@ void GL_APIENTRY GetProgramBinaryOESContextANGLE(GLeglContext ctx,
                                                  void *binary)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint program = %u, GLsizei bufSize = %d, GLsizei *length = 0x%0.8p, GLenum "
-        "*binaryFormat = 0x%0.8p, void *binary = 0x%0.8p)",
-        program, bufSize, length, binaryFormat, binary);
+    EVENT("(GLuint program = %u, GLsizei bufSize = %d, GLsizei *length = 0x%016" PRIxPTR
+          ", GLenum *binaryFormat = 0x%016" PRIxPTR ", void *binary = 0x%016" PRIxPTR ")",
+          program, bufSize, reinterpret_cast<uintptr_t>(length),
+          reinterpret_cast<uintptr_t>(binaryFormat), reinterpret_cast<uintptr_t>(binary));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9375,10 +9531,10 @@ void GL_APIENTRY GetProgramInfoLogContextANGLE(GLeglContext ctx,
                                                GLchar *infoLog)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint program = %u, GLsizei bufSize = %d, GLsizei *length = 0x%0.8p, GLchar *infoLog = "
-        "0x%0.8p)",
-        program, bufSize, length, infoLog);
+    EVENT("(GLuint program = %u, GLsizei bufSize = %d, GLsizei *length = 0x%016" PRIxPTR
+          ", GLchar *infoLog = 0x%016" PRIxPTR ")",
+          program, bufSize, reinterpret_cast<uintptr_t>(length),
+          reinterpret_cast<uintptr_t>(infoLog));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9403,8 +9559,8 @@ void GL_APIENTRY GetProgramInterfaceivContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLenum programInterface = 0x%X, GLenum pname = 0x%X, GLint *params "
-        "= 0x%0.8p)",
-        program, programInterface, pname, params);
+        "= 0x%016" PRIxPTR ")",
+        program, programInterface, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9428,10 +9584,10 @@ void GL_APIENTRY GetProgramPipelineInfoLogContextANGLE(GLeglContext ctx,
                                                        GLchar *infoLog)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint pipeline = %u, GLsizei bufSize = %d, GLsizei *length = 0x%0.8p, GLchar *infoLog = "
-        "0x%0.8p)",
-        pipeline, bufSize, length, infoLog);
+    EVENT("(GLuint pipeline = %u, GLsizei bufSize = %d, GLsizei *length = 0x%016" PRIxPTR
+          ", GLchar *infoLog = 0x%016" PRIxPTR ")",
+          pipeline, bufSize, reinterpret_cast<uintptr_t>(length),
+          reinterpret_cast<uintptr_t>(infoLog));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9454,8 +9610,8 @@ void GL_APIENTRY GetProgramPipelineivContextANGLE(GLeglContext ctx,
                                                   GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint pipeline = %u, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", pipeline, pname,
-          params);
+    EVENT("(GLuint pipeline = %u, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")",
+          pipeline, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9477,8 +9633,10 @@ GLuint GL_APIENTRY GetProgramResourceIndexContextANGLE(GLeglContext ctx,
                                                        const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, GLenum programInterface = 0x%X, const GLchar *name = 0x%0.8p)",
-          program, programInterface, name);
+    EVENT(
+        "(GLuint program = %u, GLenum programInterface = 0x%X, const GLchar *name = 0x%016" PRIxPTR
+        ")",
+        program, programInterface, reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9502,8 +9660,10 @@ GLint GL_APIENTRY GetProgramResourceLocationContextANGLE(GLeglContext ctx,
                                                          const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, GLenum programInterface = 0x%X, const GLchar *name = 0x%0.8p)",
-          program, programInterface, name);
+    EVENT(
+        "(GLuint program = %u, GLenum programInterface = 0x%X, const GLchar *name = 0x%016" PRIxPTR
+        ")",
+        program, programInterface, reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9528,8 +9688,10 @@ GLint GL_APIENTRY GetProgramResourceLocationIndexEXTContextANGLE(GLeglContext ct
                                                                  const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, GLenum programInterface = 0x%X, const GLchar *name = 0x%0.8p)",
-          program, programInterface, name);
+    EVENT(
+        "(GLuint program = %u, GLenum programInterface = 0x%X, const GLchar *name = 0x%016" PRIxPTR
+        ")",
+        program, programInterface, reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9559,8 +9721,9 @@ void GL_APIENTRY GetProgramResourceNameContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLenum programInterface = 0x%X, GLuint index = %u, GLsizei bufSize "
-        "= %d, GLsizei *length = 0x%0.8p, GLchar *name = 0x%0.8p)",
-        program, programInterface, index, bufSize, length, name);
+        "= %d, GLsizei *length = 0x%016" PRIxPTR ", GLchar *name = 0x%016" PRIxPTR ")",
+        program, programInterface, index, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9592,9 +9755,11 @@ void GL_APIENTRY GetProgramResourceivContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLenum programInterface = 0x%X, GLuint index = %u, GLsizei "
-        "propCount = %d, const GLenum *props = 0x%0.8p, GLsizei bufSize = %d, GLsizei *length = "
-        "0x%0.8p, GLint *params = 0x%0.8p)",
-        program, programInterface, index, propCount, props, bufSize, length, params);
+        "propCount = %d, const GLenum *props = 0x%016" PRIxPTR
+        ", GLsizei bufSize = %d, GLsizei *length = 0x%016" PRIxPTR
+        ", GLint *params = 0x%016" PRIxPTR ")",
+        program, programInterface, index, propCount, reinterpret_cast<uintptr_t>(props), bufSize,
+        reinterpret_cast<uintptr_t>(length), reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9619,8 +9784,8 @@ void GL_APIENTRY GetProgramivContextANGLE(GLeglContext ctx,
                                           GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", program, pname,
-          params);
+    EVENT("(GLuint program = %u, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", program,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9641,7 +9806,8 @@ void GL_APIENTRY GetQueryObjecti64vEXTContextANGLE(GLeglContext ctx,
                                                    GLint64 *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLint64 *params = 0x%0.8p)", id, pname, params);
+    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLint64 *params = 0x%016" PRIxPTR ")", id, pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9662,7 +9828,8 @@ void GL_APIENTRY GetQueryObjectivEXTContextANGLE(GLeglContext ctx,
                                                  GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", id, pname, params);
+    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", id, pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9683,7 +9850,8 @@ void GL_APIENTRY GetQueryObjectui64vEXTContextANGLE(GLeglContext ctx,
                                                     GLuint64 *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLuint64 *params = 0x%0.8p)", id, pname, params);
+    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLuint64 *params = 0x%016" PRIxPTR ")", id, pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9704,7 +9872,8 @@ void GL_APIENTRY GetQueryObjectuivContextANGLE(GLeglContext ctx,
                                                GLuint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLuint *params = 0x%0.8p)", id, pname, params);
+    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLuint *params = 0x%016" PRIxPTR ")", id, pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9725,7 +9894,8 @@ void GL_APIENTRY GetQueryObjectuivEXTContextANGLE(GLeglContext ctx,
                                                   GLuint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLuint *params = 0x%0.8p)", id, pname, params);
+    EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLuint *params = 0x%016" PRIxPTR ")", id, pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9746,8 +9916,8 @@ void GL_APIENTRY GetQueryivContextANGLE(GLeglContext ctx,
                                         GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", target,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9769,8 +9939,8 @@ void GL_APIENTRY GetQueryivEXTContextANGLE(GLeglContext ctx,
                                            GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", target,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9793,8 +9963,8 @@ void GL_APIENTRY GetRenderbufferParameterivContextANGLE(GLeglContext ctx,
                                                         GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", target,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9816,8 +9986,8 @@ void GL_APIENTRY GetRenderbufferParameterivOESContextANGLE(GLeglContext ctx,
                                                            GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", target,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9839,8 +10009,8 @@ void GL_APIENTRY GetSamplerParameterfvContextANGLE(GLeglContext ctx,
                                                    GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint sampler = %u, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)", sampler, pname,
-          params);
+    EVENT("(GLuint sampler = %u, GLenum pname = 0x%X, GLfloat *params = 0x%016" PRIxPTR ")",
+          sampler, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9862,8 +10032,8 @@ void GL_APIENTRY GetSamplerParameterivContextANGLE(GLeglContext ctx,
                                                    GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint sampler = %u, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", sampler, pname,
-          params);
+    EVENT("(GLuint sampler = %u, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", sampler,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9886,10 +10056,10 @@ void GL_APIENTRY GetShaderInfoLogContextANGLE(GLeglContext ctx,
                                               GLchar *infoLog)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint shader = %u, GLsizei bufSize = %d, GLsizei *length = 0x%0.8p, GLchar *infoLog = "
-        "0x%0.8p)",
-        shader, bufSize, length, infoLog);
+    EVENT("(GLuint shader = %u, GLsizei bufSize = %d, GLsizei *length = 0x%016" PRIxPTR
+          ", GLchar *infoLog = 0x%016" PRIxPTR ")",
+          shader, bufSize, reinterpret_cast<uintptr_t>(length),
+          reinterpret_cast<uintptr_t>(infoLog));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9912,10 +10082,10 @@ void GL_APIENTRY GetShaderPrecisionFormatContextANGLE(GLeglContext ctx,
                                                       GLint *precision)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum shadertype = 0x%X, GLenum precisiontype = 0x%X, GLint *range = 0x%0.8p, GLint "
-        "*precision = 0x%0.8p)",
-        shadertype, precisiontype, range, precision);
+    EVENT("(GLenum shadertype = 0x%X, GLenum precisiontype = 0x%X, GLint *range = 0x%016" PRIxPTR
+          ", GLint *precision = 0x%016" PRIxPTR ")",
+          shadertype, precisiontype, reinterpret_cast<uintptr_t>(range),
+          reinterpret_cast<uintptr_t>(precision));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9939,10 +10109,10 @@ void GL_APIENTRY GetShaderSourceContextANGLE(GLeglContext ctx,
                                              GLchar *source)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint shader = %u, GLsizei bufSize = %d, GLsizei *length = 0x%0.8p, GLchar *source = "
-        "0x%0.8p)",
-        shader, bufSize, length, source);
+    EVENT("(GLuint shader = %u, GLsizei bufSize = %d, GLsizei *length = 0x%016" PRIxPTR
+          ", GLchar *source = 0x%016" PRIxPTR ")",
+          shader, bufSize, reinterpret_cast<uintptr_t>(length),
+          reinterpret_cast<uintptr_t>(source));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -9964,8 +10134,8 @@ void GL_APIENTRY GetShaderivContextANGLE(GLeglContext ctx,
                                          GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint shader = %u, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", shader, pname,
-          params);
+    EVENT("(GLuint shader = %u, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", shader,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10028,10 +10198,11 @@ void GL_APIENTRY GetSyncivContextANGLE(GLeglContext ctx,
                                        GLint *values)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLsync sync = 0x%0.8p, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei *length = "
-        "0x%0.8p, GLint *values = 0x%0.8p)",
-        sync, pname, bufSize, length, values);
+    EVENT("(GLsync sync = 0x%016" PRIxPTR
+          ", GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei *length = 0x%016" PRIxPTR
+          ", GLint *values = 0x%016" PRIxPTR ")",
+          reinterpret_cast<uintptr_t>(sync), pname, bufSize, reinterpret_cast<uintptr_t>(length),
+          reinterpret_cast<uintptr_t>(values));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10053,8 +10224,8 @@ void GL_APIENTRY GetTexEnvfvContextANGLE(GLeglContext ctx,
                                          GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%016" PRIxPTR ")",
+          target, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10078,8 +10249,8 @@ void GL_APIENTRY GetTexEnvivContextANGLE(GLeglContext ctx,
                                          GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", target,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10103,8 +10274,8 @@ void GL_APIENTRY GetTexEnvxvContextANGLE(GLeglContext ctx,
                                          GLfixed *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%016" PRIxPTR ")",
+          target, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10128,8 +10299,8 @@ void GL_APIENTRY GetTexGenfvOESContextANGLE(GLeglContext ctx,
                                             GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)", coord, pname,
-          params);
+    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%016" PRIxPTR ")", coord,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10150,8 +10321,8 @@ void GL_APIENTRY GetTexGenivOESContextANGLE(GLeglContext ctx,
                                             GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", coord, pname,
-          params);
+    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", coord,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10172,8 +10343,8 @@ void GL_APIENTRY GetTexGenxvOESContextANGLE(GLeglContext ctx,
                                             GLfixed *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%0.8p)", coord, pname,
-          params);
+    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%016" PRIxPTR ")", coord,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10196,8 +10367,9 @@ void GL_APIENTRY GetTexLevelParameterfvContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLenum target = 0x%X, GLint level = %d, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)",
-        target, level, pname, params);
+        "(GLenum target = 0x%X, GLint level = %d, GLenum pname = 0x%X, GLfloat *params = "
+        "0x%016" PRIxPTR ")",
+        target, level, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10222,8 +10394,10 @@ void GL_APIENTRY GetTexLevelParameterivContextANGLE(GLeglContext ctx,
                                                     GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLint level = %d, GLenum pname = 0x%X, GLint *params = 0x%0.8p)",
-          target, level, pname, params);
+    EVENT(
+        "(GLenum target = 0x%X, GLint level = %d, GLenum pname = 0x%X, GLint *params = "
+        "0x%016" PRIxPTR ")",
+        target, level, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10247,8 +10421,8 @@ void GL_APIENTRY GetTexParameterfvContextANGLE(GLeglContext ctx,
                                                GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfloat *params = 0x%016" PRIxPTR ")",
+          target, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10271,8 +10445,8 @@ void GL_APIENTRY GetTexParameterivContextANGLE(GLeglContext ctx,
                                                GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", target,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10295,8 +10469,8 @@ void GL_APIENTRY GetTexParameterxvContextANGLE(GLeglContext ctx,
                                                GLfixed *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%0.8p)", target, pname,
-          params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfixed *params = 0x%016" PRIxPTR ")",
+          target, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10324,9 +10498,12 @@ void GL_APIENTRY GetTransformFeedbackVaryingContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLuint program = %u, GLuint index = %u, GLsizei bufSize = %d, GLsizei *length = 0x%0.8p, "
-        "GLsizei *size = 0x%0.8p, GLenum *type = 0x%0.8p, GLchar *name = 0x%0.8p)",
-        program, index, bufSize, length, size, type, name);
+        "(GLuint program = %u, GLuint index = %u, GLsizei bufSize = %d, GLsizei *length = "
+        "0x%016" PRIxPTR ", GLsizei *size = 0x%016" PRIxPTR ", GLenum *type = 0x%016" PRIxPTR
+        ", GLchar *name = 0x%016" PRIxPTR ")",
+        program, index, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(size), reinterpret_cast<uintptr_t>(type),
+        reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10351,10 +10528,10 @@ void GL_APIENTRY GetTranslatedShaderSourceANGLEContextANGLE(GLeglContext ctx,
                                                             GLchar *source)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint shader = %u, GLsizei bufsize = %d, GLsizei *length = 0x%0.8p, GLchar *source = "
-        "0x%0.8p)",
-        shader, bufsize, length, source);
+    EVENT("(GLuint shader = %u, GLsizei bufsize = %d, GLsizei *length = 0x%016" PRIxPTR
+          ", GLchar *source = 0x%016" PRIxPTR ")",
+          shader, bufsize, reinterpret_cast<uintptr_t>(length),
+          reinterpret_cast<uintptr_t>(source));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10376,8 +10553,8 @@ GLuint GL_APIENTRY GetUniformBlockIndexContextANGLE(GLeglContext ctx,
                                                     const GLchar *uniformBlockName)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, const GLchar *uniformBlockName = 0x%0.8p)", program,
-          uniformBlockName);
+    EVENT("(GLuint program = %u, const GLchar *uniformBlockName = 0x%016" PRIxPTR ")", program,
+          reinterpret_cast<uintptr_t>(uniformBlockName));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10404,8 +10581,9 @@ void GL_APIENTRY GetUniformIndicesContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLsizei uniformCount = %d, const GLchar *const*uniformNames = "
-        "0x%0.8p, GLuint *uniformIndices = 0x%0.8p)",
-        program, uniformCount, uniformNames, uniformIndices);
+        "0x%016" PRIxPTR ", GLuint *uniformIndices = 0x%016" PRIxPTR ")",
+        program, uniformCount, reinterpret_cast<uintptr_t>(uniformNames),
+        reinterpret_cast<uintptr_t>(uniformIndices));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10427,7 +10605,8 @@ GLint GL_APIENTRY GetUniformLocationContextANGLE(GLeglContext ctx,
                                                  const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, const GLchar *name = 0x%0.8p)", program, name);
+    EVENT("(GLuint program = %u, const GLchar *name = 0x%016" PRIxPTR ")", program,
+          reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10450,8 +10629,8 @@ void GL_APIENTRY GetUniformfvContextANGLE(GLeglContext ctx,
                                           GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, GLint location = %d, GLfloat *params = 0x%0.8p)", program,
-          location, params);
+    EVENT("(GLuint program = %u, GLint location = %d, GLfloat *params = 0x%016" PRIxPTR ")",
+          program, location, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10472,8 +10651,8 @@ void GL_APIENTRY GetUniformivContextANGLE(GLeglContext ctx,
                                           GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, GLint location = %d, GLint *params = 0x%0.8p)", program, location,
-          params);
+    EVENT("(GLuint program = %u, GLint location = %d, GLint *params = 0x%016" PRIxPTR ")", program,
+          location, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10494,8 +10673,8 @@ void GL_APIENTRY GetUniformuivContextANGLE(GLeglContext ctx,
                                            GLuint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, GLint location = %d, GLuint *params = 0x%0.8p)", program, location,
-          params);
+    EVENT("(GLuint program = %u, GLint location = %d, GLuint *params = 0x%016" PRIxPTR ")", program,
+          location, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10516,8 +10695,8 @@ void GL_APIENTRY GetVertexAttribIivContextANGLE(GLeglContext ctx,
                                                 GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint index = %u, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", index, pname,
-          params);
+    EVENT("(GLuint index = %u, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", index,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10538,8 +10717,8 @@ void GL_APIENTRY GetVertexAttribIuivContextANGLE(GLeglContext ctx,
                                                  GLuint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint index = %u, GLenum pname = 0x%X, GLuint *params = 0x%0.8p)", index, pname,
-          params);
+    EVENT("(GLuint index = %u, GLenum pname = 0x%X, GLuint *params = 0x%016" PRIxPTR ")", index,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10560,8 +10739,8 @@ void GL_APIENTRY GetVertexAttribPointervContextANGLE(GLeglContext ctx,
                                                      void **pointer)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint index = %u, GLenum pname = 0x%X, void **pointer = 0x%0.8p)", index, pname,
-          pointer);
+    EVENT("(GLuint index = %u, GLenum pname = 0x%X, void **pointer = 0x%016" PRIxPTR ")", index,
+          pname, reinterpret_cast<uintptr_t>(pointer));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10583,8 +10762,8 @@ void GL_APIENTRY GetVertexAttribfvContextANGLE(GLeglContext ctx,
                                                GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint index = %u, GLenum pname = 0x%X, GLfloat *params = 0x%0.8p)", index, pname,
-          params);
+    EVENT("(GLuint index = %u, GLenum pname = 0x%X, GLfloat *params = 0x%016" PRIxPTR ")", index,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10605,8 +10784,8 @@ void GL_APIENTRY GetVertexAttribivContextANGLE(GLeglContext ctx,
                                                GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint index = %u, GLenum pname = 0x%X, GLint *params = 0x%0.8p)", index, pname,
-          params);
+    EVENT("(GLuint index = %u, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", index,
+          pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10630,8 +10809,8 @@ void GL_APIENTRY GetnUniformfvEXTContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLfloat *params = "
-        "0x%0.8p)",
-        program, location, bufSize, params);
+        "0x%016" PRIxPTR ")",
+        program, location, bufSize, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10655,8 +10834,9 @@ void GL_APIENTRY GetnUniformivEXTContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLint *params = 0x%0.8p)",
-        program, location, bufSize, params);
+        "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLint *params = "
+        "0x%016" PRIxPTR ")",
+        program, location, bufSize, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10697,7 +10877,8 @@ void GL_APIENTRY InsertEventMarkerEXTContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     // Don't run an EVENT() macro on the EXT_debug_marker entry points.
     // It can interfere with the debug events being set by the caller.
-    // EVENT("(GLsizei length = %d, const GLchar *marker = 0x%0.8p)", length, marker);
+    // EVENT("(GLsizei length = %d, const GLchar *marker = 0x%016"PRIxPTR")", length,
+    // reinterpret_cast<uintptr_t>(marker));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10719,8 +10900,9 @@ void GL_APIENTRY InvalidateFramebufferContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLenum target = 0x%X, GLsizei numAttachments = %d, const GLenum *attachments = 0x%0.8p)",
-        target, numAttachments, attachments);
+        "(GLenum target = 0x%X, GLsizei numAttachments = %d, const GLenum *attachments = "
+        "0x%016" PRIxPTR ")",
+        target, numAttachments, reinterpret_cast<uintptr_t>(attachments));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -10748,9 +10930,9 @@ void GL_APIENTRY InvalidateSubFramebufferContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLenum target = 0x%X, GLsizei numAttachments = %d, const GLenum *attachments = 0x%0.8p, "
-        "GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d)",
-        target, numAttachments, attachments, x, y, width, height);
+        "(GLenum target = 0x%X, GLsizei numAttachments = %d, const GLenum *attachments = "
+        "0x%016" PRIxPTR ", GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d)",
+        target, numAttachments, reinterpret_cast<uintptr_t>(attachments), x, y, width, height);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11032,7 +11214,7 @@ GLboolean GL_APIENTRY IsShaderContextANGLE(GLeglContext ctx, GLuint shader)
 GLboolean GL_APIENTRY IsSyncContextANGLE(GLeglContext ctx, GLsync sync)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsync sync = 0x%0.8p)", sync);
+    EVENT("(GLsync sync = 0x%016" PRIxPTR ")", reinterpret_cast<uintptr_t>(sync));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11150,7 +11332,8 @@ void GL_APIENTRY LightModelfContextANGLE(GLeglContext ctx, GLenum pname, GLfloat
 void GL_APIENTRY LightModelfvContextANGLE(GLeglContext ctx, GLenum pname, const GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum pname = 0x%X, const GLfloat *params = 0x%0.8p)", pname, params);
+    EVENT("(GLenum pname = 0x%X, const GLfloat *params = 0x%016" PRIxPTR ")", pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11186,7 +11369,8 @@ void GL_APIENTRY LightModelxContextANGLE(GLeglContext ctx, GLenum pname, GLfixed
 void GL_APIENTRY LightModelxvContextANGLE(GLeglContext ctx, GLenum pname, const GLfixed *param)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum pname = 0x%X, const GLfixed *param = 0x%0.8p)", pname, param);
+    EVENT("(GLenum pname = 0x%X, const GLfixed *param = 0x%016" PRIxPTR ")", pname,
+          reinterpret_cast<uintptr_t>(param));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11226,8 +11410,8 @@ void GL_APIENTRY LightfvContextANGLE(GLeglContext ctx,
                                      const GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum light = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%0.8p)", light,
-          pname, params);
+    EVENT("(GLenum light = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%016" PRIxPTR ")",
+          light, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11268,8 +11452,8 @@ void GL_APIENTRY LightxvContextANGLE(GLeglContext ctx,
                                      const GLfixed *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum light = 0x%X, GLenum pname = 0x%X, const GLfixed *params = 0x%0.8p)", light,
-          pname, params);
+    EVENT("(GLenum light = 0x%X, GLenum pname = 0x%X, const GLfixed *params = 0x%016" PRIxPTR ")",
+          light, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11360,7 +11544,7 @@ void GL_APIENTRY LoadIdentityContextANGLE(GLeglContext ctx)
 void GL_APIENTRY LoadMatrixfContextANGLE(GLeglContext ctx, const GLfloat *m)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(const GLfloat *m = 0x%0.8p)", m);
+    EVENT("(const GLfloat *m = 0x%016" PRIxPTR ")", reinterpret_cast<uintptr_t>(m));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11378,7 +11562,7 @@ void GL_APIENTRY LoadMatrixfContextANGLE(GLeglContext ctx, const GLfloat *m)
 void GL_APIENTRY LoadMatrixxContextANGLE(GLeglContext ctx, const GLfixed *m)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(const GLfixed *m = 0x%0.8p)", m);
+    EVENT("(const GLfixed *m = 0x%016" PRIxPTR ")", reinterpret_cast<uintptr_t>(m));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11459,9 +11643,10 @@ void *GL_APIENTRY MapBufferRangeContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLenum target = 0x%X, GLintptr offset = %d, GLsizeiptr length = %d, GLbitfield access = "
-        "0x%X)",
-        target, offset, length, access);
+        "(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr length = %llu, GLbitfield "
+        "access = 0x%X)",
+        target, static_cast<unsigned long long>(offset), static_cast<unsigned long long>(length),
+        access);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11488,9 +11673,10 @@ void *GL_APIENTRY MapBufferRangeEXTContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLenum target = 0x%X, GLintptr offset = %d, GLsizeiptr length = %d, GLbitfield access = "
-        "0x%X)",
-        target, offset, length, access);
+        "(GLenum target = 0x%X, GLintptr offset = %llu, GLsizeiptr length = %llu, GLbitfield "
+        "access = 0x%X)",
+        target, static_cast<unsigned long long>(offset), static_cast<unsigned long long>(length),
+        access);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11534,8 +11720,8 @@ void GL_APIENTRY MaterialfvContextANGLE(GLeglContext ctx,
                                         const GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum face = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%0.8p)", face, pname,
-          params);
+    EVENT("(GLenum face = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%016" PRIxPTR ")",
+          face, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11576,8 +11762,8 @@ void GL_APIENTRY MaterialxvContextANGLE(GLeglContext ctx,
                                         const GLfixed *param)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum face = 0x%X, GLenum pname = 0x%X, const GLfixed *param = 0x%0.8p)", face, pname,
-          param);
+    EVENT("(GLenum face = 0x%X, GLenum pname = 0x%X, const GLfixed *param = 0x%016" PRIxPTR ")",
+          face, pname, reinterpret_cast<uintptr_t>(param));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11601,8 +11787,9 @@ void GL_APIENTRY MatrixIndexPointerOESContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)",
-        size, type, stride, pointer);
+        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = "
+        "0x%016" PRIxPTR ")",
+        size, type, stride, reinterpret_cast<uintptr_t>(pointer));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11694,7 +11881,7 @@ void GL_APIENTRY MemoryBarrierByRegionContextANGLE(GLeglContext ctx, GLbitfield 
 void GL_APIENTRY MultMatrixfContextANGLE(GLeglContext ctx, const GLfloat *m)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(const GLfloat *m = 0x%0.8p)", m);
+    EVENT("(const GLfloat *m = 0x%016" PRIxPTR ")", reinterpret_cast<uintptr_t>(m));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11712,7 +11899,7 @@ void GL_APIENTRY MultMatrixfContextANGLE(GLeglContext ctx, const GLfloat *m)
 void GL_APIENTRY MultMatrixxContextANGLE(GLeglContext ctx, const GLfixed *m)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(const GLfixed *m = 0x%0.8p)", m);
+    EVENT("(const GLfixed *m = 0x%016" PRIxPTR ")", reinterpret_cast<uintptr_t>(m));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11819,8 +12006,8 @@ void GL_APIENTRY NormalPointerContextANGLE(GLeglContext ctx,
                                            const void *pointer)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)", type, stride,
-          pointer);
+    EVENT("(GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%016" PRIxPTR ")",
+          type, stride, reinterpret_cast<uintptr_t>(pointer));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11844,8 +12031,8 @@ void GL_APIENTRY ObjectLabelKHRContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum identifier = 0x%X, GLuint name = %u, GLsizei length = %d, const GLchar *label = "
-        "0x%0.8p)",
-        identifier, name, length, label);
+        "0x%016" PRIxPTR ")",
+        identifier, name, length, reinterpret_cast<uintptr_t>(label));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11867,8 +12054,9 @@ void GL_APIENTRY ObjectPtrLabelKHRContextANGLE(GLeglContext ctx,
                                                const GLchar *label)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(const void *ptr = 0x%0.8p, GLsizei length = %d, const GLchar *label = 0x%0.8p)", ptr,
-          length, label);
+    EVENT("(const void *ptr = 0x%016" PRIxPTR
+          ", GLsizei length = %d, const GLchar *label = 0x%016" PRIxPTR ")",
+          reinterpret_cast<uintptr_t>(ptr), length, reinterpret_cast<uintptr_t>(label));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -11995,7 +12183,8 @@ void GL_APIENTRY PointParameterfContextANGLE(GLeglContext ctx, GLenum pname, GLf
 void GL_APIENTRY PointParameterfvContextANGLE(GLeglContext ctx, GLenum pname, const GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum pname = 0x%X, const GLfloat *params = 0x%0.8p)", pname, params);
+    EVENT("(GLenum pname = 0x%X, const GLfloat *params = 0x%016" PRIxPTR ")", pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12033,7 +12222,8 @@ void GL_APIENTRY PointParameterxContextANGLE(GLeglContext ctx, GLenum pname, GLf
 void GL_APIENTRY PointParameterxvContextANGLE(GLeglContext ctx, GLenum pname, const GLfixed *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum pname = 0x%X, const GLfixed *params = 0x%0.8p)", pname, params);
+    EVENT("(GLenum pname = 0x%X, const GLfixed *params = 0x%016" PRIxPTR ")", pname,
+          reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12073,8 +12263,8 @@ void GL_APIENTRY PointSizePointerOESContextANGLE(GLeglContext ctx,
                                                  const void *pointer)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)", type, stride,
-          pointer);
+    EVENT("(GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%016" PRIxPTR ")",
+          type, stride, reinterpret_cast<uintptr_t>(pointer));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12207,10 +12397,9 @@ void GL_APIENTRY ProgramBinaryContextANGLE(GLeglContext ctx,
                                            GLsizei length)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint program = %u, GLenum binaryFormat = 0x%X, const void *binary = 0x%0.8p, GLsizei "
-        "length = %d)",
-        program, binaryFormat, binary, length);
+    EVENT("(GLuint program = %u, GLenum binaryFormat = 0x%X, const void *binary = 0x%016" PRIxPTR
+          ", GLsizei length = %d)",
+          program, binaryFormat, reinterpret_cast<uintptr_t>(binary), length);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12233,10 +12422,9 @@ void GL_APIENTRY ProgramBinaryOESContextANGLE(GLeglContext ctx,
                                               GLint length)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint program = %u, GLenum binaryFormat = 0x%X, const void *binary = 0x%0.8p, GLint "
-        "length = %d)",
-        program, binaryFormat, binary, length);
+    EVENT("(GLuint program = %u, GLenum binaryFormat = 0x%X, const void *binary = 0x%016" PRIxPTR
+          ", GLint length = %d)",
+          program, binaryFormat, reinterpret_cast<uintptr_t>(binary), length);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12303,8 +12491,8 @@ void GL_APIENTRY ProgramUniform1fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLfloat *value = "
-        "0x%0.8p)",
-        program, location, count, value);
+        "0x%016" PRIxPTR ")",
+        program, location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12350,8 +12538,8 @@ void GL_APIENTRY ProgramUniform1ivContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLint *value = "
-        "0x%0.8p)",
-        program, location, count, value);
+        "0x%016" PRIxPTR ")",
+        program, location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12397,8 +12585,8 @@ void GL_APIENTRY ProgramUniform1uivContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLuint *value = "
-        "0x%0.8p)",
-        program, location, count, value);
+        "0x%016" PRIxPTR ")",
+        program, location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12447,8 +12635,8 @@ void GL_APIENTRY ProgramUniform2fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLfloat *value = "
-        "0x%0.8p)",
-        program, location, count, value);
+        "0x%016" PRIxPTR ")",
+        program, location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12494,8 +12682,8 @@ void GL_APIENTRY ProgramUniform2ivContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLint *value = "
-        "0x%0.8p)",
-        program, location, count, value);
+        "0x%016" PRIxPTR ")",
+        program, location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12544,8 +12732,8 @@ void GL_APIENTRY ProgramUniform2uivContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLuint *value = "
-        "0x%0.8p)",
-        program, location, count, value);
+        "0x%016" PRIxPTR ")",
+        program, location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12597,8 +12785,8 @@ void GL_APIENTRY ProgramUniform3fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLfloat *value = "
-        "0x%0.8p)",
-        program, location, count, value);
+        "0x%016" PRIxPTR ")",
+        program, location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12648,8 +12836,8 @@ void GL_APIENTRY ProgramUniform3ivContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLint *value = "
-        "0x%0.8p)",
-        program, location, count, value);
+        "0x%016" PRIxPTR ")",
+        program, location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12701,8 +12889,8 @@ void GL_APIENTRY ProgramUniform3uivContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLuint *value = "
-        "0x%0.8p)",
-        program, location, count, value);
+        "0x%016" PRIxPTR ")",
+        program, location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12755,8 +12943,8 @@ void GL_APIENTRY ProgramUniform4fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLfloat *value = "
-        "0x%0.8p)",
-        program, location, count, value);
+        "0x%016" PRIxPTR ")",
+        program, location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12809,8 +12997,8 @@ void GL_APIENTRY ProgramUniform4ivContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLint *value = "
-        "0x%0.8p)",
-        program, location, count, value);
+        "0x%016" PRIxPTR ")",
+        program, location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12863,8 +13051,8 @@ void GL_APIENTRY ProgramUniform4uivContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, const GLuint *value = "
-        "0x%0.8p)",
-        program, location, count, value);
+        "0x%016" PRIxPTR ")",
+        program, location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12890,8 +13078,8 @@ void GL_APIENTRY ProgramUniformMatrix2fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
-        program, location, count, transpose, value);
+        "const GLfloat *value = 0x%016" PRIxPTR ")",
+        program, location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12918,8 +13106,8 @@ void GL_APIENTRY ProgramUniformMatrix2x3fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
-        program, location, count, transpose, value);
+        "const GLfloat *value = 0x%016" PRIxPTR ")",
+        program, location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12946,8 +13134,8 @@ void GL_APIENTRY ProgramUniformMatrix2x4fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
-        program, location, count, transpose, value);
+        "const GLfloat *value = 0x%016" PRIxPTR ")",
+        program, location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -12974,8 +13162,8 @@ void GL_APIENTRY ProgramUniformMatrix3fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
-        program, location, count, transpose, value);
+        "const GLfloat *value = 0x%016" PRIxPTR ")",
+        program, location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -13002,8 +13190,8 @@ void GL_APIENTRY ProgramUniformMatrix3x2fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
-        program, location, count, transpose, value);
+        "const GLfloat *value = 0x%016" PRIxPTR ")",
+        program, location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -13030,8 +13218,8 @@ void GL_APIENTRY ProgramUniformMatrix3x4fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
-        program, location, count, transpose, value);
+        "const GLfloat *value = 0x%016" PRIxPTR ")",
+        program, location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -13058,8 +13246,8 @@ void GL_APIENTRY ProgramUniformMatrix4fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
-        program, location, count, transpose, value);
+        "const GLfloat *value = 0x%016" PRIxPTR ")",
+        program, location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -13086,8 +13274,8 @@ void GL_APIENTRY ProgramUniformMatrix4x2fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
-        program, location, count, transpose, value);
+        "const GLfloat *value = 0x%016" PRIxPTR ")",
+        program, location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -13114,8 +13302,8 @@ void GL_APIENTRY ProgramUniformMatrix4x3fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
-        "const GLfloat *value = 0x%0.8p)",
-        program, location, count, transpose, value);
+        "const GLfloat *value = 0x%016" PRIxPTR ")",
+        program, location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -13141,8 +13329,8 @@ void GL_APIENTRY PushDebugGroupKHRContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum source = 0x%X, GLuint id = %u, GLsizei length = %d, const GLchar *message = "
-        "0x%0.8p)",
-        source, id, length, message);
+        "0x%016" PRIxPTR ")",
+        source, id, length, reinterpret_cast<uintptr_t>(message));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -13165,7 +13353,8 @@ void GL_APIENTRY PushGroupMarkerEXTContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     // Don't run an EVENT() macro on the EXT_debug_marker entry points.
     // It can interfere with the debug events being set by the caller.
-    // EVENT("(GLsizei length = %d, const GLchar *marker = 0x%0.8p)", length, marker);
+    // EVENT("(GLsizei length = %d, const GLchar *marker = 0x%016"PRIxPTR")", length,
+    // reinterpret_cast<uintptr_t>(marker));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -13222,7 +13411,8 @@ GLbitfield GL_APIENTRY QueryMatrixxOESContextANGLE(GLeglContext ctx,
                                                    GLint *exponent)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLfixed *mantissa = 0x%0.8p, GLint *exponent = 0x%0.8p)", mantissa, exponent);
+    EVENT("(GLfixed *mantissa = 0x%016" PRIxPTR ", GLint *exponent = 0x%016" PRIxPTR ")",
+          reinterpret_cast<uintptr_t>(mantissa), reinterpret_cast<uintptr_t>(exponent));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -13269,8 +13459,8 @@ void GL_APIENTRY ReadPixelsContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d, GLenum format = "
-        "0x%X, GLenum type = 0x%X, void *pixels = 0x%0.8p)",
-        x, y, width, height, format, type, pixels);
+        "0x%X, GLenum type = 0x%X, void *pixels = 0x%016" PRIxPTR ")",
+        x, y, width, height, format, type, reinterpret_cast<uintptr_t>(pixels));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -13299,8 +13489,8 @@ void GL_APIENTRY ReadnPixelsEXTContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d, GLenum format = "
-        "0x%X, GLenum type = 0x%X, GLsizei bufSize = %d, void *data = 0x%0.8p)",
-        x, y, width, height, format, type, bufSize, data);
+        "0x%X, GLenum type = 0x%X, GLsizei bufSize = %d, void *data = 0x%016" PRIxPTR ")",
+        x, y, width, height, format, type, bufSize, reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -13585,8 +13775,8 @@ void GL_APIENTRY SamplerParameterfvContextANGLE(GLeglContext ctx,
                                                 const GLfloat *param)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint sampler = %u, GLenum pname = 0x%X, const GLfloat *param = 0x%0.8p)", sampler,
-          pname, param);
+    EVENT("(GLuint sampler = %u, GLenum pname = 0x%X, const GLfloat *param = 0x%016" PRIxPTR ")",
+          sampler, pname, reinterpret_cast<uintptr_t>(param));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -13628,8 +13818,8 @@ void GL_APIENTRY SamplerParameterivContextANGLE(GLeglContext ctx,
                                                 const GLint *param)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint sampler = %u, GLenum pname = 0x%X, const GLint *param = 0x%0.8p)", sampler,
-          pname, param);
+    EVENT("(GLuint sampler = %u, GLenum pname = 0x%X, const GLint *param = 0x%016" PRIxPTR ")",
+          sampler, pname, reinterpret_cast<uintptr_t>(param));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -13745,10 +13935,11 @@ void GL_APIENTRY ShaderBinaryContextANGLE(GLeglContext ctx,
                                           GLsizei length)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLsizei count = %d, const GLuint *shaders = 0x%0.8p, GLenum binaryformat = 0x%X, const "
-        "void *binary = 0x%0.8p, GLsizei length = %d)",
-        count, shaders, binaryformat, binary, length);
+    EVENT("(GLsizei count = %d, const GLuint *shaders = 0x%016" PRIxPTR
+          ", GLenum binaryformat = 0x%X, const void *binary = 0x%016" PRIxPTR
+          ", GLsizei length = %d)",
+          count, reinterpret_cast<uintptr_t>(shaders), binaryformat,
+          reinterpret_cast<uintptr_t>(binary), length);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -13772,10 +13963,9 @@ void GL_APIENTRY ShaderSourceContextANGLE(GLeglContext ctx,
                                           const GLint *length)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint shader = %u, GLsizei count = %d, const GLchar *const*string = 0x%0.8p, const "
-        "GLint *length = 0x%0.8p)",
-        shader, count, string, length);
+    EVENT("(GLuint shader = %u, GLsizei count = %d, const GLchar *const*string = 0x%016" PRIxPTR
+          ", const GLint *length = 0x%016" PRIxPTR ")",
+          shader, count, reinterpret_cast<uintptr_t>(string), reinterpret_cast<uintptr_t>(length));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -13936,8 +14126,9 @@ void GL_APIENTRY TexCoordPointerContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)",
-        size, type, stride, pointer);
+        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = "
+        "0x%016" PRIxPTR ")",
+        size, type, stride, reinterpret_cast<uintptr_t>(pointer));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -13979,8 +14170,8 @@ void GL_APIENTRY TexEnvfvContextANGLE(GLeglContext ctx,
                                       const GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%0.8p)", target,
-          pname, params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%016" PRIxPTR ")",
+          target, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14024,8 +14215,8 @@ void GL_APIENTRY TexEnvivContextANGLE(GLeglContext ctx,
                                       const GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLint *params = 0x%0.8p)", target,
-          pname, params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLint *params = 0x%016" PRIxPTR ")",
+          target, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14070,8 +14261,8 @@ void GL_APIENTRY TexEnvxvContextANGLE(GLeglContext ctx,
                                       const GLfixed *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLfixed *params = 0x%0.8p)", target,
-          pname, params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLfixed *params = 0x%016" PRIxPTR ")",
+          target, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14113,8 +14304,8 @@ void GL_APIENTRY TexGenfvOESContextANGLE(GLeglContext ctx,
                                          const GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%0.8p)", coord,
-          pname, params);
+    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%016" PRIxPTR ")",
+          coord, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14153,8 +14344,8 @@ void GL_APIENTRY TexGenivOESContextANGLE(GLeglContext ctx,
                                          const GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, const GLint *params = 0x%0.8p)", coord, pname,
-          params);
+    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, const GLint *params = 0x%016" PRIxPTR ")",
+          coord, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14193,8 +14384,8 @@ void GL_APIENTRY TexGenxvOESContextANGLE(GLeglContext ctx,
                                          const GLfixed *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, const GLfixed *params = 0x%0.8p)", coord,
-          pname, params);
+    EVENT("(GLenum coord = 0x%X, GLenum pname = 0x%X, const GLfixed *params = 0x%016" PRIxPTR ")",
+          coord, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14224,8 +14415,9 @@ void GL_APIENTRY TexImage2DContextANGLE(GLeglContext ctx,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLint internalformat = %d, GLsizei width = %d, "
         "GLsizei height = %d, GLint border = %d, GLenum format = 0x%X, GLenum type = 0x%X, const "
-        "void *pixels = 0x%0.8p)",
-        target, level, internalformat, width, height, border, format, type, pixels);
+        "void *pixels = 0x%016" PRIxPTR ")",
+        target, level, internalformat, width, height, border, format, type,
+        reinterpret_cast<uintptr_t>(pixels));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14261,8 +14453,9 @@ void GL_APIENTRY TexImage3DContextANGLE(GLeglContext ctx,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLint internalformat = %d, GLsizei width = %d, "
         "GLsizei height = %d, GLsizei depth = %d, GLint border = %d, GLenum format = 0x%X, GLenum "
-        "type = 0x%X, const void *pixels = 0x%0.8p)",
-        target, level, internalformat, width, height, depth, border, format, type, pixels);
+        "type = 0x%X, const void *pixels = 0x%016" PRIxPTR ")",
+        target, level, internalformat, width, height, depth, border, format, type,
+        reinterpret_cast<uintptr_t>(pixels));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14310,8 +14503,8 @@ void GL_APIENTRY TexParameterfvContextANGLE(GLeglContext ctx,
                                             const GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%0.8p)", target,
-          pname, params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLfloat *params = 0x%016" PRIxPTR ")",
+          target, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14356,8 +14549,8 @@ void GL_APIENTRY TexParameterivContextANGLE(GLeglContext ctx,
                                             const GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLint *params = 0x%0.8p)", target,
-          pname, params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLint *params = 0x%016" PRIxPTR ")",
+          target, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14403,8 +14596,8 @@ void GL_APIENTRY TexParameterxvContextANGLE(GLeglContext ctx,
                                             const GLfixed *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLfixed *params = 0x%0.8p)", target,
-          pname, params);
+    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, const GLfixed *params = 0x%016" PRIxPTR ")",
+          target, pname, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14646,8 +14839,9 @@ void GL_APIENTRY TexSubImage2DContextANGLE(GLeglContext ctx,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, GLsizei "
         "width = %d, GLsizei height = %d, GLenum format = 0x%X, GLenum type = 0x%X, const void "
-        "*pixels = 0x%0.8p)",
-        target, level, xoffset, yoffset, width, height, format, type, pixels);
+        "*pixels = 0x%016" PRIxPTR ")",
+        target, level, xoffset, yoffset, width, height, format, type,
+        reinterpret_cast<uintptr_t>(pixels));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14684,8 +14878,9 @@ void GL_APIENTRY TexSubImage3DContextANGLE(GLeglContext ctx,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, GLint "
         "zoffset = %d, GLsizei width = %d, GLsizei height = %d, GLsizei depth = %d, GLenum format "
-        "= 0x%X, GLenum type = 0x%X, const void *pixels = 0x%0.8p)",
-        target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels);
+        "= 0x%X, GLenum type = 0x%X, const void *pixels = 0x%016" PRIxPTR ")",
+        target, level, xoffset, yoffset, zoffset, width, height, depth, format, type,
+        reinterpret_cast<uintptr_t>(pixels));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14713,10 +14908,9 @@ void GL_APIENTRY TransformFeedbackVaryingsContextANGLE(GLeglContext ctx,
                                                        GLenum bufferMode)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint program = %u, GLsizei count = %d, const GLchar *const*varyings = 0x%0.8p, GLenum "
-        "bufferMode = 0x%X)",
-        program, count, varyings, bufferMode);
+    EVENT("(GLuint program = %u, GLsizei count = %d, const GLchar *const*varyings = 0x%016" PRIxPTR
+          ", GLenum bufferMode = 0x%X)",
+          program, count, reinterpret_cast<uintptr_t>(varyings), bufferMode);
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14793,8 +14987,8 @@ void GL_APIENTRY Uniform1fvContextANGLE(GLeglContext ctx,
                                         const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLfloat *value = 0x%0.8p)", location,
-          count, value);
+    EVENT("(GLint location = %d, GLsizei count = %d, const GLfloat *value = 0x%016" PRIxPTR ")",
+          location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14833,8 +15027,8 @@ void GL_APIENTRY Uniform1ivContextANGLE(GLeglContext ctx,
                                         const GLint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLint *value = 0x%0.8p)", location,
-          count, value);
+    EVENT("(GLint location = %d, GLsizei count = %d, const GLint *value = 0x%016" PRIxPTR ")",
+          location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14873,8 +15067,8 @@ void GL_APIENTRY Uniform1uivContextANGLE(GLeglContext ctx,
                                          const GLuint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLuint *value = 0x%0.8p)", location,
-          count, value);
+    EVENT("(GLint location = %d, GLsizei count = %d, const GLuint *value = 0x%016" PRIxPTR ")",
+          location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14913,8 +15107,8 @@ void GL_APIENTRY Uniform2fvContextANGLE(GLeglContext ctx,
                                         const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLfloat *value = 0x%0.8p)", location,
-          count, value);
+    EVENT("(GLint location = %d, GLsizei count = %d, const GLfloat *value = 0x%016" PRIxPTR ")",
+          location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14953,8 +15147,8 @@ void GL_APIENTRY Uniform2ivContextANGLE(GLeglContext ctx,
                                         const GLint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLint *value = 0x%0.8p)", location,
-          count, value);
+    EVENT("(GLint location = %d, GLsizei count = %d, const GLint *value = 0x%016" PRIxPTR ")",
+          location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -14993,8 +15187,8 @@ void GL_APIENTRY Uniform2uivContextANGLE(GLeglContext ctx,
                                          const GLuint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLuint *value = 0x%0.8p)", location,
-          count, value);
+    EVENT("(GLint location = %d, GLsizei count = %d, const GLuint *value = 0x%016" PRIxPTR ")",
+          location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15035,8 +15229,8 @@ void GL_APIENTRY Uniform3fvContextANGLE(GLeglContext ctx,
                                         const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLfloat *value = 0x%0.8p)", location,
-          count, value);
+    EVENT("(GLint location = %d, GLsizei count = %d, const GLfloat *value = 0x%016" PRIxPTR ")",
+          location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15077,8 +15271,8 @@ void GL_APIENTRY Uniform3ivContextANGLE(GLeglContext ctx,
                                         const GLint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLint *value = 0x%0.8p)", location,
-          count, value);
+    EVENT("(GLint location = %d, GLsizei count = %d, const GLint *value = 0x%016" PRIxPTR ")",
+          location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15119,8 +15313,8 @@ void GL_APIENTRY Uniform3uivContextANGLE(GLeglContext ctx,
                                          const GLuint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLuint *value = 0x%0.8p)", location,
-          count, value);
+    EVENT("(GLint location = %d, GLsizei count = %d, const GLuint *value = 0x%016" PRIxPTR ")",
+          location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15166,8 +15360,8 @@ void GL_APIENTRY Uniform4fvContextANGLE(GLeglContext ctx,
                                         const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLfloat *value = 0x%0.8p)", location,
-          count, value);
+    EVENT("(GLint location = %d, GLsizei count = %d, const GLfloat *value = 0x%016" PRIxPTR ")",
+          location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15208,8 +15402,8 @@ void GL_APIENTRY Uniform4ivContextANGLE(GLeglContext ctx,
                                         const GLint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLint *value = 0x%0.8p)", location,
-          count, value);
+    EVENT("(GLint location = %d, GLsizei count = %d, const GLint *value = 0x%016" PRIxPTR ")",
+          location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15250,8 +15444,8 @@ void GL_APIENTRY Uniform4uivContextANGLE(GLeglContext ctx,
                                          const GLuint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLuint *value = 0x%0.8p)", location,
-          count, value);
+    EVENT("(GLint location = %d, GLsizei count = %d, const GLuint *value = 0x%016" PRIxPTR ")",
+          location, count, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15299,8 +15493,8 @@ void GL_APIENTRY UniformMatrix2fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, const GLfloat *value "
-        "= 0x%0.8p)",
-        location, count, transpose, value);
+        "= 0x%016" PRIxPTR ")",
+        location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15325,8 +15519,8 @@ void GL_APIENTRY UniformMatrix2x3fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, const GLfloat *value "
-        "= 0x%0.8p)",
-        location, count, transpose, value);
+        "= 0x%016" PRIxPTR ")",
+        location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15351,8 +15545,8 @@ void GL_APIENTRY UniformMatrix2x4fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, const GLfloat *value "
-        "= 0x%0.8p)",
-        location, count, transpose, value);
+        "= 0x%016" PRIxPTR ")",
+        location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15377,8 +15571,8 @@ void GL_APIENTRY UniformMatrix3fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, const GLfloat *value "
-        "= 0x%0.8p)",
-        location, count, transpose, value);
+        "= 0x%016" PRIxPTR ")",
+        location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15403,8 +15597,8 @@ void GL_APIENTRY UniformMatrix3x2fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, const GLfloat *value "
-        "= 0x%0.8p)",
-        location, count, transpose, value);
+        "= 0x%016" PRIxPTR ")",
+        location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15429,8 +15623,8 @@ void GL_APIENTRY UniformMatrix3x4fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, const GLfloat *value "
-        "= 0x%0.8p)",
-        location, count, transpose, value);
+        "= 0x%016" PRIxPTR ")",
+        location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15455,8 +15649,8 @@ void GL_APIENTRY UniformMatrix4fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, const GLfloat *value "
-        "= 0x%0.8p)",
-        location, count, transpose, value);
+        "= 0x%016" PRIxPTR ")",
+        location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15481,8 +15675,8 @@ void GL_APIENTRY UniformMatrix4x2fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, const GLfloat *value "
-        "= 0x%0.8p)",
-        location, count, transpose, value);
+        "= 0x%016" PRIxPTR ")",
+        location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15507,8 +15701,8 @@ void GL_APIENTRY UniformMatrix4x3fvContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, const GLfloat *value "
-        "= 0x%0.8p)",
-        location, count, transpose, value);
+        "= 0x%016" PRIxPTR ")",
+        location, count, transpose, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15664,7 +15858,8 @@ void GL_APIENTRY VertexAttrib1fContextANGLE(GLeglContext ctx, GLuint index, GLfl
 void GL_APIENTRY VertexAttrib1fvContextANGLE(GLeglContext ctx, GLuint index, const GLfloat *v)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint index = %u, const GLfloat *v = 0x%0.8p)", index, v);
+    EVENT("(GLuint index = %u, const GLfloat *v = 0x%016" PRIxPTR ")", index,
+          reinterpret_cast<uintptr_t>(v));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15700,7 +15895,8 @@ void GL_APIENTRY VertexAttrib2fContextANGLE(GLeglContext ctx, GLuint index, GLfl
 void GL_APIENTRY VertexAttrib2fvContextANGLE(GLeglContext ctx, GLuint index, const GLfloat *v)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint index = %u, const GLfloat *v = 0x%0.8p)", index, v);
+    EVENT("(GLuint index = %u, const GLfloat *v = 0x%016" PRIxPTR ")", index,
+          reinterpret_cast<uintptr_t>(v));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15737,7 +15933,8 @@ VertexAttrib3fContextANGLE(GLeglContext ctx, GLuint index, GLfloat x, GLfloat y,
 void GL_APIENTRY VertexAttrib3fvContextANGLE(GLeglContext ctx, GLuint index, const GLfloat *v)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint index = %u, const GLfloat *v = 0x%0.8p)", index, v);
+    EVENT("(GLuint index = %u, const GLfloat *v = 0x%016" PRIxPTR ")", index,
+          reinterpret_cast<uintptr_t>(v));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15779,7 +15976,8 @@ void GL_APIENTRY VertexAttrib4fContextANGLE(GLeglContext ctx,
 void GL_APIENTRY VertexAttrib4fvContextANGLE(GLeglContext ctx, GLuint index, const GLfloat *v)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint index = %u, const GLfloat *v = 0x%0.8p)", index, v);
+    EVENT("(GLuint index = %u, const GLfloat *v = 0x%016" PRIxPTR ")", index,
+          reinterpret_cast<uintptr_t>(v));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15905,7 +16103,8 @@ VertexAttribI4iContextANGLE(GLeglContext ctx, GLuint index, GLint x, GLint y, GL
 void GL_APIENTRY VertexAttribI4ivContextANGLE(GLeglContext ctx, GLuint index, const GLint *v)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint index = %u, const GLint *v = 0x%0.8p)", index, v);
+    EVENT("(GLuint index = %u, const GLint *v = 0x%016" PRIxPTR ")", index,
+          reinterpret_cast<uintptr_t>(v));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15943,7 +16142,8 @@ VertexAttribI4uiContextANGLE(GLeglContext ctx, GLuint index, GLuint x, GLuint y,
 void GL_APIENTRY VertexAttribI4uivContextANGLE(GLeglContext ctx, GLuint index, const GLuint *v)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint index = %u, const GLuint *v = 0x%0.8p)", index, v);
+    EVENT("(GLuint index = %u, const GLuint *v = 0x%016" PRIxPTR ")", index,
+          reinterpret_cast<uintptr_t>(v));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -15995,8 +16195,8 @@ void GL_APIENTRY VertexAttribIPointerContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint index = %u, GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void "
-        "*pointer = 0x%0.8p)",
-        index, size, type, stride, pointer);
+        "*pointer = 0x%016" PRIxPTR ")",
+        index, size, type, stride, reinterpret_cast<uintptr_t>(pointer));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16023,8 +16223,8 @@ void GL_APIENTRY VertexAttribPointerContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint index = %u, GLint size = %d, GLenum type = 0x%X, GLboolean normalized = %u, "
-        "GLsizei stride = %d, const void *pointer = 0x%0.8p)",
-        index, size, type, normalized, stride, pointer);
+        "GLsizei stride = %d, const void *pointer = 0x%016" PRIxPTR ")",
+        index, size, type, normalized, stride, reinterpret_cast<uintptr_t>(pointer));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16070,8 +16270,9 @@ void GL_APIENTRY VertexPointerContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)",
-        size, type, stride, pointer);
+        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = "
+        "0x%016" PRIxPTR ")",
+        size, type, stride, reinterpret_cast<uintptr_t>(pointer));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16113,8 +16314,8 @@ void GL_APIENTRY WaitSyncContextANGLE(GLeglContext ctx,
                                       GLuint64 timeout)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLsync sync = 0x%0.8p, GLbitfield flags = 0x%X, GLuint64 timeout = %llu)", sync, flags,
-          timeout);
+    EVENT("(GLsync sync = 0x%016" PRIxPTR ", GLbitfield flags = 0x%X, GLuint64 timeout = %llu)",
+          reinterpret_cast<uintptr_t>(sync), flags, static_cast<unsigned long long>(timeout));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16137,8 +16338,9 @@ void GL_APIENTRY WeightPointerOESContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%0.8p)",
-        size, type, stride, pointer);
+        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = "
+        "0x%016" PRIxPTR ")",
+        size, type, stride, reinterpret_cast<uintptr_t>(pointer));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16160,8 +16362,8 @@ void GL_APIENTRY BindUniformLocationCHROMIUMContextANGLE(GLeglContext ctx,
                                                          const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint program = %u, GLint location = %d, const GLchar* name = 0x%0.8p)", program,
-          location, name);
+    EVENT("(GLuint program = %u, GLint location = %d, const GLchar* name = 0x%016" PRIxPTR ")",
+          program, location, reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16200,7 +16402,8 @@ void GL_APIENTRY MatrixLoadfCHROMIUMContextANGLE(GLeglContext ctx,
                                                  const GLfloat *matrix)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLenum matrixMode = 0x%X, const GLfloat * matrix = 0x%0.8p)", matrixMode, matrix);
+    EVENT("(GLenum matrixMode = 0x%X, const GLfloat * matrix = 0x%016" PRIxPTR ")", matrixMode,
+          reinterpret_cast<uintptr_t>(matrix));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16300,10 +16503,11 @@ void GL_APIENTRY PathCommandsCHROMIUMContextANGLE(GLeglContext ctx,
                                                   const void *coords)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLuint path = %u, GLsizei numCommands = %d, const GLubyte * commands = 0x%0.8p, GLsizei "
-        "numCoords = %d, GLenum coordType = 0x%X, const void* coords = 0x%0.8p)",
-        path, numCommands, commands, numCoords, coordType, coords);
+    EVENT("(GLuint path = %u, GLsizei numCommands = %d, const GLubyte * commands = 0x%016" PRIxPTR
+          ", GLsizei numCoords = %d, GLenum coordType = 0x%X, const void* coords = 0x%016" PRIxPTR
+          ")",
+          path, numCommands, reinterpret_cast<uintptr_t>(commands), numCoords, coordType,
+          reinterpret_cast<uintptr_t>(coords));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16371,7 +16575,8 @@ void GL_APIENTRY GetPathParameterfvCHROMIUMContextANGLE(GLeglContext ctx,
                                                         GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint path = %u, GLenum pname = 0x%X, GLfloat * value = 0x%0.8p)", path, pname, value);
+    EVENT("(GLuint path = %u, GLenum pname = 0x%X, GLfloat * value = 0x%016" PRIxPTR ")", path,
+          pname, reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16393,7 +16598,8 @@ void GL_APIENTRY GetPathParameterivCHROMIUMContextANGLE(GLeglContext ctx,
                                                         GLint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint path = %u, GLenum pname = 0x%X, GLint * value = 0x%0.8p)", path, pname, value);
+    EVENT("(GLuint path = %u, GLenum pname = 0x%X, GLint * value = 0x%016" PRIxPTR ")", path, pname,
+          reinterpret_cast<uintptr_t>(value));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16572,11 +16778,11 @@ void GL_APIENTRY CoverFillPathInstancedCHROMIUMContextANGLE(GLeglContext ctx,
                                                             const GLfloat *transformValues)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLsizei numPath = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%0.8p, GLuint "
-        "pathBase = %u, GLenum coverMode = 0x%X, GLenum transformType = 0x%X, const GLfloat * "
-        "transformValues = 0x%0.8p)",
-        numPath, pathNameType, paths, pathBase, coverMode, transformType, transformValues);
+    EVENT("(GLsizei numPath = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%016" PRIxPTR
+          ", GLuint pathBase = %u, GLenum coverMode = 0x%X, GLenum transformType = 0x%X, const "
+          "GLfloat * transformValues = 0x%016" PRIxPTR ")",
+          numPath, pathNameType, reinterpret_cast<uintptr_t>(paths), pathBase, coverMode,
+          transformType, reinterpret_cast<uintptr_t>(transformValues));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16605,11 +16811,11 @@ void GL_APIENTRY CoverStrokePathInstancedCHROMIUMContextANGLE(GLeglContext ctx,
                                                               const GLfloat *transformValues)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLsizei numPath = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%0.8p, GLuint "
-        "pathBase = %u, GLenum coverMode = 0x%X, GLenum transformType = 0x%X, const GLfloat * "
-        "transformValues = 0x%0.8p)",
-        numPath, pathNameType, paths, pathBase, coverMode, transformType, transformValues);
+    EVENT("(GLsizei numPath = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%016" PRIxPTR
+          ", GLuint pathBase = %u, GLenum coverMode = 0x%X, GLenum transformType = 0x%X, const "
+          "GLfloat * transformValues = 0x%016" PRIxPTR ")",
+          numPath, pathNameType, reinterpret_cast<uintptr_t>(paths), pathBase, coverMode,
+          transformType, reinterpret_cast<uintptr_t>(transformValues));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16639,11 +16845,11 @@ void GL_APIENTRY StencilStrokePathInstancedCHROMIUMContextANGLE(GLeglContext ctx
                                                                 const GLfloat *transformValues)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLsizei numPath = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%0.8p, GLuint "
-        "pathBase = %u, GLint reference = %d, GLuint mask = %u, GLenum transformType = 0x%X, const "
-        "GLfloat * transformValues = 0x%0.8p)",
-        numPath, pathNameType, paths, pathBase, reference, mask, transformType, transformValues);
+    EVENT("(GLsizei numPath = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%016" PRIxPTR
+          ", GLuint pathBase = %u, GLint reference = %d, GLuint mask = %u, GLenum transformType = "
+          "0x%X, const GLfloat * transformValues = 0x%016" PRIxPTR ")",
+          numPath, pathNameType, reinterpret_cast<uintptr_t>(paths), pathBase, reference, mask,
+          transformType, reinterpret_cast<uintptr_t>(transformValues));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16674,11 +16880,11 @@ void GL_APIENTRY StencilFillPathInstancedCHROMIUMContextANGLE(GLeglContext ctx,
                                                               const GLfloat *transformValues)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLsizei numPaths = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%0.8p, GLuint "
-        "pathBase = %u, GLenum fillMode = 0x%X, GLuint mask = %u, GLenum transformType = 0x%X, "
-        "const GLfloat * transformValues = 0x%0.8p)",
-        numPaths, pathNameType, paths, pathBase, fillMode, mask, transformType, transformValues);
+    EVENT("(GLsizei numPaths = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%016" PRIxPTR
+          ", GLuint pathBase = %u, GLenum fillMode = 0x%X, GLuint mask = %u, GLenum transformType "
+          "= 0x%X, const GLfloat * transformValues = 0x%016" PRIxPTR ")",
+          numPaths, pathNameType, reinterpret_cast<uintptr_t>(paths), pathBase, fillMode, mask,
+          transformType, reinterpret_cast<uintptr_t>(transformValues));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16711,12 +16917,11 @@ StencilThenCoverFillPathInstancedCHROMIUMContextANGLE(GLeglContext ctx,
                                                       const GLfloat *transformValues)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLsizei numPaths = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%0.8p, GLuint "
-        "pathBase = %u, GLenum fillMode = 0x%X, GLuint mask = %u, GLenum coverMode = 0x%X, GLenum "
-        "transformType = 0x%X, const GLfloat * transformValues = 0x%0.8p)",
-        numPaths, pathNameType, paths, pathBase, fillMode, mask, coverMode, transformType,
-        transformValues);
+    EVENT("(GLsizei numPaths = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%016" PRIxPTR
+          ", GLuint pathBase = %u, GLenum fillMode = 0x%X, GLuint mask = %u, GLenum coverMode = "
+          "0x%X, GLenum transformType = 0x%X, const GLfloat * transformValues = 0x%016" PRIxPTR ")",
+          numPaths, pathNameType, reinterpret_cast<uintptr_t>(paths), pathBase, fillMode, mask,
+          coverMode, transformType, reinterpret_cast<uintptr_t>(transformValues));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16751,12 +16956,11 @@ StencilThenCoverStrokePathInstancedCHROMIUMContextANGLE(GLeglContext ctx,
                                                         const GLfloat *transformValues)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLsizei numPaths = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%0.8p, GLuint "
-        "pathBase = %u, GLint reference = %d, GLuint mask = %u, GLenum coverMode = 0x%X, GLenum "
-        "transformType = 0x%X, const GLfloat * transformValues = 0x%0.8p)",
-        numPaths, pathNameType, paths, pathBase, reference, mask, coverMode, transformType,
-        transformValues);
+    EVENT("(GLsizei numPaths = %d, GLenum pathNameType = 0x%X, const void * paths = 0x%016" PRIxPTR
+          ", GLuint pathBase = %u, GLint reference = %d, GLuint mask = %u, GLenum coverMode = "
+          "0x%X, GLenum transformType = 0x%X, const GLfloat * transformValues = 0x%016" PRIxPTR ")",
+          numPaths, pathNameType, reinterpret_cast<uintptr_t>(paths), pathBase, reference, mask,
+          coverMode, transformType, reinterpret_cast<uintptr_t>(transformValues));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16784,8 +16988,8 @@ void GL_APIENTRY BindFragmentInputLocationCHROMIUMContextANGLE(GLeglContext ctx,
                                                                const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(GLuint programs = %u, GLint location = %d, const GLchar * name = 0x%0.8p)", programs,
-          location, name);
+    EVENT("(GLuint programs = %u, GLint location = %d, const GLchar * name = 0x%016" PRIxPTR ")",
+          programs, location, reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16812,8 +17016,8 @@ void GL_APIENTRY ProgramPathFragmentInputGenCHROMIUMContextANGLE(GLeglContext ct
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLenum genMode = 0x%X, GLint components = %d, "
-        "const GLfloat * coeffs = 0x%0.8p)",
-        program, location, genMode, components, coeffs);
+        "const GLfloat * coeffs = 0x%016" PRIxPTR ")",
+        program, location, genMode, components, reinterpret_cast<uintptr_t>(coeffs));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16944,7 +17148,7 @@ void GL_APIENTRY CompressedCopyTextureCHROMIUMContextANGLE(GLeglContext ctx,
 void GL_APIENTRY RequestExtensionANGLEContextANGLE(GLeglContext ctx, const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(const GLchar * name = 0x%0.8p)", name);
+    EVENT("(const GLchar * name = 0x%016" PRIxPTR ")", reinterpret_cast<uintptr_t>(name));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16966,10 +17170,9 @@ void GL_APIENTRY GetBooleanvRobustANGLEContextANGLE(GLeglContext ctx,
                                                     GLboolean *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, GLboolean * "
-        "params = 0x%0.8p)",
-        pname, bufSize, length, params);
+    EVENT("(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%016" PRIxPTR
+          ", GLboolean * params = 0x%016" PRIxPTR ")",
+          pname, bufSize, reinterpret_cast<uintptr_t>(length), reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -16995,8 +17198,9 @@ void GL_APIENTRY GetBufferParameterivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17021,10 +17225,9 @@ void GL_APIENTRY GetFloatvRobustANGLEContextANGLE(GLeglContext ctx,
                                                   GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, GLfloat * params "
-        "= 0x%0.8p)",
-        pname, bufSize, length, params);
+    EVENT("(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%016" PRIxPTR
+          ", GLfloat * params = 0x%016" PRIxPTR ")",
+          pname, bufSize, reinterpret_cast<uintptr_t>(length), reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17051,8 +17254,9 @@ void GL_APIENTRY GetFramebufferAttachmentParameterivRobustANGLEContextANGLE(GLeg
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum attachment = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = "
-        "%d, GLsizei * length = 0x%0.8p, GLint * params = 0x%0.8p)",
-        target, attachment, pname, bufSize, length, params);
+        "%d, GLsizei * length = 0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        target, attachment, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17078,10 +17282,9 @@ void GL_APIENTRY GetIntegervRobustANGLEContextANGLE(GLeglContext ctx,
                                                     GLint *data)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, GLint * data = "
-        "0x%0.8p)",
-        pname, bufSize, length, data);
+    EVENT("(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%016" PRIxPTR
+          ", GLint * data = 0x%016" PRIxPTR ")",
+          pname, bufSize, reinterpret_cast<uintptr_t>(length), reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17107,8 +17310,9 @@ void GL_APIENTRY GetProgramivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        program, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        program, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17135,8 +17339,9 @@ void GL_APIENTRY GetRenderbufferParameterivRobustANGLEContextANGLE(GLeglContext 
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17163,8 +17368,9 @@ void GL_APIENTRY GetShaderivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint shader = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        shader, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        shader, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17191,8 +17397,9 @@ void GL_APIENTRY GetTexParameterfvRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLfloat * params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLfloat * params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17220,8 +17427,9 @@ void GL_APIENTRY GetTexParameterivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17249,8 +17457,9 @@ void GL_APIENTRY GetUniformfvRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLfloat * params = 0x%0.8p)",
-        program, location, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLfloat * params = 0x%016" PRIxPTR ")",
+        program, location, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17277,8 +17486,9 @@ void GL_APIENTRY GetUniformivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        program, location, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        program, location, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17305,8 +17515,9 @@ void GL_APIENTRY GetVertexAttribfvRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint index = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLfloat * params = 0x%0.8p)",
-        index, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLfloat * params = 0x%016" PRIxPTR ")",
+        index, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17333,8 +17544,9 @@ void GL_APIENTRY GetVertexAttribivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint index = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        index, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        index, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17361,8 +17573,9 @@ void GL_APIENTRY GetVertexAttribPointervRobustANGLEContextANGLE(GLeglContext ctx
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint index = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, void ** pointer = 0x%0.8p)",
-        index, pname, bufSize, length, pointer);
+        "0x%016" PRIxPTR ", void ** pointer = 0x%016" PRIxPTR ")",
+        index, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(pointer));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17395,9 +17608,12 @@ void GL_APIENTRY ReadPixelsRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d, GLenum format = "
-        "0x%X, GLenum type = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, GLsizei * "
-        "columns = 0x%0.8p, GLsizei * rows = 0x%0.8p, void * pixels = 0x%0.8p)",
-        x, y, width, height, format, type, bufSize, length, columns, rows, pixels);
+        "0x%X, GLenum type = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%016" PRIxPTR
+        ", GLsizei * columns = 0x%016" PRIxPTR ", GLsizei * rows = 0x%016" PRIxPTR
+        ", void * pixels = 0x%016" PRIxPTR ")",
+        x, y, width, height, format, type, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(columns), reinterpret_cast<uintptr_t>(rows),
+        reinterpret_cast<uintptr_t>(pixels));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17432,8 +17648,9 @@ void GL_APIENTRY TexImage2DRobustANGLEContextANGLE(GLeglContext ctx,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLint internalformat = %d, GLsizei width = %d, "
         "GLsizei height = %d, GLint border = %d, GLenum format = 0x%X, GLenum type = 0x%X, GLsizei "
-        "bufSize = %d, const void * pixels = 0x%0.8p)",
-        target, level, internalformat, width, height, border, format, type, bufSize, pixels);
+        "bufSize = %d, const void * pixels = 0x%016" PRIxPTR ")",
+        target, level, internalformat, width, height, border, format, type, bufSize,
+        reinterpret_cast<uintptr_t>(pixels));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17463,8 +17680,8 @@ void GL_APIENTRY TexParameterfvRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, const GLfloat * params "
-        "= 0x%0.8p)",
-        target, pname, bufSize, params);
+        "= 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17491,8 +17708,8 @@ void GL_APIENTRY TexParameterivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, const GLint * params = "
-        "0x%0.8p)",
-        target, pname, bufSize, params);
+        "0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17526,8 +17743,9 @@ void GL_APIENTRY TexSubImage2DRobustANGLEContextANGLE(GLeglContext ctx,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, GLsizei "
         "width = %d, GLsizei height = %d, GLenum format = 0x%X, GLenum type = 0x%X, GLsizei "
-        "bufSize = %d, const void * pixels = 0x%0.8p)",
-        target, level, xoffset, yoffset, width, height, format, type, bufSize, pixels);
+        "bufSize = %d, const void * pixels = 0x%016" PRIxPTR ")",
+        target, level, xoffset, yoffset, width, height, format, type, bufSize,
+        reinterpret_cast<uintptr_t>(pixels));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17564,8 +17782,9 @@ void GL_APIENTRY TexImage3DRobustANGLEContextANGLE(GLeglContext ctx,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLint internalformat = %d, GLsizei width = %d, "
         "GLsizei height = %d, GLsizei depth = %d, GLint border = %d, GLenum format = 0x%X, GLenum "
-        "type = 0x%X, GLsizei bufSize = %d, const void * pixels = 0x%0.8p)",
-        target, level, internalformat, width, height, depth, border, format, type, bufSize, pixels);
+        "type = 0x%X, GLsizei bufSize = %d, const void * pixels = 0x%016" PRIxPTR ")",
+        target, level, internalformat, width, height, depth, border, format, type, bufSize,
+        reinterpret_cast<uintptr_t>(pixels));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17604,9 +17823,10 @@ void GL_APIENTRY TexSubImage3DRobustANGLEContextANGLE(GLeglContext ctx,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, GLint "
         "zoffset = %d, GLsizei width = %d, GLsizei height = %d, GLsizei depth = %d, GLenum format "
-        "= 0x%X, GLenum type = 0x%X, GLsizei bufSize = %d, const void * pixels = 0x%0.8p)",
+        "= 0x%X, GLenum type = 0x%X, GLsizei bufSize = %d, const void * pixels = 0x%016" PRIxPTR
+        ")",
         target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, bufSize,
-        pixels);
+        reinterpret_cast<uintptr_t>(pixels));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17643,8 +17863,9 @@ void GL_APIENTRY CompressedTexImage2DRobustANGLEContextANGLE(GLeglContext ctx,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLenum internalformat = 0x%X, GLsizei width = "
         "%d, GLsizei height = %d, GLint border = %d, GLsizei imageSize = %d, GLsizei dataSize = "
-        "%d, const GLvoid * data = 0x%0.8p)",
-        target, level, internalformat, width, height, border, imageSize, dataSize, data);
+        "%d, const GLvoid * data = 0x%016" PRIxPTR ")",
+        target, level, internalformat, width, height, border, imageSize, dataSize,
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17680,8 +17901,9 @@ void GL_APIENTRY CompressedTexSubImage2DRobustANGLEContextANGLE(GLeglContext ctx
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLsizei xoffset = %d, GLsizei yoffset = %d, "
         "GLsizei width = %d, GLsizei height = %d, GLenum format = 0x%X, GLsizei imageSize = %d, "
-        "GLsizei dataSize = %d, const GLvoid * data = 0x%0.8p)",
-        target, level, xoffset, yoffset, width, height, format, imageSize, dataSize, data);
+        "GLsizei dataSize = %d, const GLvoid * data = 0x%016" PRIxPTR ")",
+        target, level, xoffset, yoffset, width, height, format, imageSize, dataSize,
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17718,8 +17940,9 @@ void GL_APIENTRY CompressedTexImage3DRobustANGLEContextANGLE(GLeglContext ctx,
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLenum internalformat = 0x%X, GLsizei width = "
         "%d, GLsizei height = %d, GLsizei depth = %d, GLint border = %d, GLsizei imageSize = %d, "
-        "GLsizei dataSize = %d, const GLvoid * data = 0x%0.8p)",
-        target, level, internalformat, width, height, depth, border, imageSize, dataSize, data);
+        "GLsizei dataSize = %d, const GLvoid * data = 0x%016" PRIxPTR ")",
+        target, level, internalformat, width, height, depth, border, imageSize, dataSize,
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17758,9 +17981,10 @@ void GL_APIENTRY CompressedTexSubImage3DRobustANGLEContextANGLE(GLeglContext ctx
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, GLint "
         "zoffset = %d, GLsizei width = %d, GLsizei height = %d, GLsizei depth = %d, GLenum format "
-        "= 0x%X, GLsizei imageSize = %d, GLsizei dataSize = %d, const GLvoid * data = 0x%0.8p)",
+        "= 0x%X, GLsizei imageSize = %d, GLsizei dataSize = %d, const GLvoid * data = "
+        "0x%016" PRIxPTR ")",
         target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, dataSize,
-        data);
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17793,8 +18017,9 @@ void GL_APIENTRY GetQueryivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17821,9 +18046,10 @@ void GL_APIENTRY GetQueryObjectuivRobustANGLEContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLuint id = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, "
-        "GLuint * params = 0x%0.8p)",
-        id, pname, bufSize, length, params);
+        "(GLuint id = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
+        "0x%016" PRIxPTR ", GLuint * params = 0x%016" PRIxPTR ")",
+        id, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17850,8 +18076,9 @@ void GL_APIENTRY GetBufferPointervRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, void ** params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", void ** params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17879,8 +18106,9 @@ void GL_APIENTRY GetIntegeri_vRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLuint index = %u, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * data = 0x%0.8p)",
-        target, index, bufSize, length, data);
+        "0x%016" PRIxPTR ", GLint * data = 0x%016" PRIxPTR ")",
+        target, index, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17908,8 +18136,9 @@ void GL_APIENTRY GetInternalformativRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum internalformat = 0x%X, GLenum pname = 0x%X, GLsizei bufSize "
-        "= %d, GLsizei * length = 0x%0.8p, GLint * params = 0x%0.8p)",
-        target, internalformat, pname, bufSize, length, params);
+        "= %d, GLsizei * length = 0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        target, internalformat, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17938,8 +18167,9 @@ void GL_APIENTRY GetVertexAttribIivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint index = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        index, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        index, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17966,8 +18196,9 @@ void GL_APIENTRY GetVertexAttribIuivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint index = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLuint * params = 0x%0.8p)",
-        index, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLuint * params = 0x%016" PRIxPTR ")",
+        index, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -17994,8 +18225,9 @@ void GL_APIENTRY GetUniformuivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLuint * params = 0x%0.8p)",
-        program, location, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLuint * params = 0x%016" PRIxPTR ")",
+        program, location, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18023,8 +18255,9 @@ void GL_APIENTRY GetActiveUniformBlockivRobustANGLEContextANGLE(GLeglContext ctx
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLuint uniformBlockIndex = %u, GLenum pname = 0x%X, GLsizei bufSize "
-        "= %d, GLsizei * length = 0x%0.8p, GLint * params = 0x%0.8p)",
-        program, uniformBlockIndex, pname, bufSize, length, params);
+        "= %d, GLsizei * length = 0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        program, uniformBlockIndex, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18050,10 +18283,9 @@ void GL_APIENTRY GetInteger64vRobustANGLEContextANGLE(GLeglContext ctx,
                                                       GLint64 *data)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, GLint64 * data = "
-        "0x%0.8p)",
-        pname, bufSize, length, data);
+    EVENT("(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%016" PRIxPTR
+          ", GLint64 * data = 0x%016" PRIxPTR ")",
+          pname, bufSize, reinterpret_cast<uintptr_t>(length), reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18079,8 +18311,9 @@ void GL_APIENTRY GetInteger64i_vRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLuint index = %u, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint64 * data = 0x%0.8p)",
-        target, index, bufSize, length, data);
+        "0x%016" PRIxPTR ", GLint64 * data = 0x%016" PRIxPTR ")",
+        target, index, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18107,8 +18340,9 @@ void GL_APIENTRY GetBufferParameteri64vRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint64 * params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint64 * params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18135,8 +18369,8 @@ void GL_APIENTRY SamplerParameterivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLuint pname = %u, GLsizei bufSize = %d, const GLint * param = "
-        "0x%0.8p)",
-        sampler, pname, bufSize, param);
+        "0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(param));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18162,8 +18396,8 @@ void GL_APIENTRY SamplerParameterfvRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, const GLfloat * param = "
-        "0x%0.8p)",
-        sampler, pname, bufSize, param);
+        "0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(param));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18190,8 +18424,9 @@ void GL_APIENTRY GetSamplerParameterivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        sampler, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18218,8 +18453,9 @@ void GL_APIENTRY GetSamplerParameterfvRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLfloat * params = 0x%0.8p)",
-        sampler, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLfloat * params = 0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18246,8 +18482,9 @@ void GL_APIENTRY GetFramebufferParameterivRobustANGLEContextANGLE(GLeglContext c
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        sampler, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18275,8 +18512,9 @@ void GL_APIENTRY GetProgramInterfaceivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLenum programInterface = 0x%X, GLenum pname = 0x%X, GLsizei "
-        "bufSize = %d, GLsizei * length = 0x%0.8p, GLint * params = 0x%0.8p)",
-        program, programInterface, pname, bufSize, length, params);
+        "bufSize = %d, GLsizei * length = 0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        program, programInterface, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18305,8 +18543,9 @@ void GL_APIENTRY GetBooleani_vRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLuint index = %u, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLboolean * data = 0x%0.8p)",
-        target, index, bufSize, length, data);
+        "0x%016" PRIxPTR ", GLboolean * data = 0x%016" PRIxPTR ")",
+        target, index, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18333,8 +18572,9 @@ void GL_APIENTRY GetMultisamplefvRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum pname = 0x%X, GLuint index = %u, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLfloat * val = 0x%0.8p)",
-        pname, index, bufSize, length, val);
+        "0x%016" PRIxPTR ", GLfloat * val = 0x%016" PRIxPTR ")",
+        pname, index, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(val));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18362,8 +18602,9 @@ void GL_APIENTRY GetTexLevelParameterivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLenum pname = 0x%X, GLsizei bufSize = %d, "
-        "GLsizei * length = 0x%0.8p, GLint * params = 0x%0.8p)",
-        target, level, pname, bufSize, length, params);
+        "GLsizei * length = 0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        target, level, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18394,8 +18635,9 @@ void GL_APIENTRY GetTexLevelParameterfvRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLint level = %d, GLenum pname = 0x%X, GLsizei bufSize = %d, "
-        "GLsizei * length = 0x%0.8p, GLfloat * params = 0x%0.8p)",
-        target, level, pname, bufSize, length, params);
+        "GLsizei * length = 0x%016" PRIxPTR ", GLfloat * params = 0x%016" PRIxPTR ")",
+        target, level, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18422,10 +18664,9 @@ void GL_APIENTRY GetPointervRobustANGLERobustANGLEContextANGLE(GLeglContext ctx,
                                                                void **params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT(
-        "(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, void ** params = "
-        "0x%0.8p)",
-        pname, bufSize, length, params);
+    EVENT("(GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%016" PRIxPTR
+          ", void ** params = 0x%016" PRIxPTR ")",
+          pname, bufSize, reinterpret_cast<uintptr_t>(length), reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18458,9 +18699,12 @@ void GL_APIENTRY ReadnPixelsRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d, GLenum format = "
-        "0x%X, GLenum type = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, GLsizei * "
-        "columns = 0x%0.8p, GLsizei * rows = 0x%0.8p, void * data = 0x%0.8p)",
-        x, y, width, height, format, type, bufSize, length, columns, rows, data);
+        "0x%X, GLenum type = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%016" PRIxPTR
+        ", GLsizei * columns = 0x%016" PRIxPTR ", GLsizei * rows = 0x%016" PRIxPTR
+        ", void * data = 0x%016" PRIxPTR ")",
+        x, y, width, height, format, type, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(columns), reinterpret_cast<uintptr_t>(rows),
+        reinterpret_cast<uintptr_t>(data));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18489,8 +18733,9 @@ void GL_APIENTRY GetnUniformfvRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLfloat * params = 0x%0.8p)",
-        program, location, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLfloat * params = 0x%016" PRIxPTR ")",
+        program, location, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18517,8 +18762,9 @@ void GL_APIENTRY GetnUniformivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        program, location, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        program, location, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18545,8 +18791,9 @@ void GL_APIENTRY GetnUniformuivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint program = %u, GLint location = %d, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLuint * params = 0x%0.8p)",
-        program, location, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLuint * params = 0x%016" PRIxPTR ")",
+        program, location, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18572,8 +18819,8 @@ void GL_APIENTRY TexParameterIivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, const GLint * params = "
-        "0x%0.8p)",
-        target, pname, bufSize, params);
+        "0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18600,8 +18847,8 @@ void GL_APIENTRY TexParameterIuivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, const GLuint * params = "
-        "0x%0.8p)",
-        target, pname, bufSize, params);
+        "0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18629,8 +18876,9 @@ void GL_APIENTRY GetTexParameterIivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18658,8 +18906,9 @@ void GL_APIENTRY GetTexParameterIuivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLuint * params = 0x%0.8p)",
-        target, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLuint * params = 0x%016" PRIxPTR ")",
+        target, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18686,8 +18935,8 @@ void GL_APIENTRY SamplerParameterIivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, const GLint * param = "
-        "0x%0.8p)",
-        sampler, pname, bufSize, param);
+        "0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(param));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18713,8 +18962,8 @@ void GL_APIENTRY SamplerParameterIuivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, const GLuint * param = "
-        "0x%0.8p)",
-        sampler, pname, bufSize, param);
+        "0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(param));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18741,8 +18990,9 @@ void GL_APIENTRY GetSamplerParameterIivRobustANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLint * params = 0x%0.8p)",
-        sampler, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18769,8 +19019,9 @@ void GL_APIENTRY GetSamplerParameterIuivRobustANGLEContextANGLE(GLeglContext ctx
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLuint sampler = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
-        "0x%0.8p, GLuint * params = 0x%0.8p)",
-        sampler, pname, bufSize, length, params);
+        "0x%016" PRIxPTR ", GLuint * params = 0x%016" PRIxPTR ")",
+        sampler, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18796,9 +19047,10 @@ void GL_APIENTRY GetQueryObjectivRobustANGLEContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLuint id = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, "
-        "GLint * params = 0x%0.8p)",
-        id, pname, bufSize, length, params);
+        "(GLuint id = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
+        "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
+        id, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18824,9 +19076,10 @@ void GL_APIENTRY GetQueryObjecti64vRobustANGLEContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLuint id = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, "
-        "GLint64 * params = 0x%0.8p)",
-        id, pname, bufSize, length, params);
+        "(GLuint id = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
+        "0x%016" PRIxPTR ", GLint64 * params = 0x%016" PRIxPTR ")",
+        id, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18852,9 +19105,10 @@ void GL_APIENTRY GetQueryObjectui64vRobustANGLEContextANGLE(GLeglContext ctx,
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
-        "(GLuint id = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = 0x%0.8p, "
-        "GLuint64 * params = 0x%0.8p)",
-        id, pname, bufSize, length, params);
+        "(GLuint id = %u, GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei * length = "
+        "0x%016" PRIxPTR ", GLuint64 * params = 0x%016" PRIxPTR ")",
+        id, pname, bufSize, reinterpret_cast<uintptr_t>(length),
+        reinterpret_cast<uintptr_t>(params));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
@@ -18914,8 +19168,8 @@ FramebufferTextureMultiviewSideBySideANGLEContextANGLE(GLeglContext ctx,
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
         "(GLenum target = 0x%X, GLenum attachment = 0x%X, GLuint texture = %u, GLint level = %d, "
-        "GLsizei numViews = %d, const GLint * viewportOffsets = 0x%0.8p)",
-        target, attachment, texture, level, numViews, viewportOffsets);
+        "GLsizei numViews = %d, const GLint * viewportOffsets = 0x%016" PRIxPTR ")",
+        target, attachment, texture, level, numViews, reinterpret_cast<uintptr_t>(viewportOffsets));
 
     Context *context = static_cast<gl::Context *>(ctx);
     if (context)
