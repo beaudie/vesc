@@ -3686,7 +3686,71 @@ angle::Result StateManager11::syncUniformBuffers(const gl::Context *context)
 
 angle::Result StateManager11::syncAtomicCounterBuffers(const gl::Context *context)
 {
-    // TODO(jie.a.chen@intel.com): http://anglebug.com/1729
+    if (mProgramD3D->hasShaderStage(gl::ShaderType::Compute))
+    {
+        ANGLE_TRY(syncAtomicCounterBuffersForShader(context, gl::ShaderType::Compute));
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result StateManager11::syncAtomicCounterBuffersForShader(const gl::Context *context,
+                                                                gl::ShaderType shaderType)
+{
+    const gl::State &glState   = context->getState();
+    const gl::Program *program = glState.getProgram();
+    std::set<Buffer11 *> previouslyBound;
+    for (const auto &atomicCounterBuffer : program->getState().getAtomicCounterBuffers())
+    {
+        GLuint binding     = atomicCounterBuffer.binding;
+        const auto &buffer = glState.getIndexedAtomicCounterBuffer(binding);
+
+        if (buffer.get() == nullptr)
+        {
+            continue;
+        }
+
+        Buffer11 *bufferStorage = GetImplAs<Buffer11>(buffer.get());
+        // TODO(enrico.galli@intel.com): Check against all UAV uses instead of just atomic counter
+        // buffers
+        if (previouslyBound.find(bufferStorage) != previouslyBound.end())
+        {
+            // D3D11 doesn't support binding a buffer multiple times
+            // http://anglebug.com/3032
+            ERR() << "Writing to multiple blocks on the same buffer is not allowed.";
+            return angle::Result::Stop;
+        }
+        previouslyBound.insert(bufferStorage);
+
+        // Bindings only have a valid size if bound using glBindBufferRange. Therefore, we use the
+        // buffer size for glBindBufferBase
+        GLsizeiptr viewSize = (buffer.getSize() > 0) ? buffer.getSize() : bufferStorage->getSize();
+        d3d11::UnorderedAccessView *uavPtr = nullptr;
+        ANGLE_TRY(bufferStorage->getRawUAVRange(context, buffer.getOffset(), viewSize, &uavPtr));
+
+        // We need to make sure that resource being set to UnorderedAccessView slot |registerIndex|
+        // is not bound on SRV.
+        if (uavPtr && unsetConflictingView(uavPtr->get()))
+        {
+            mInternalDirtyBits.set(DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE);
+        }
+
+        const unsigned int registerIndex =
+            mProgramD3D->getAtomicCounterBufferRegisterIndex(binding, shaderType);
+
+        if (shaderType == gl::ShaderType::Compute)
+        {
+            ID3D11UnorderedAccessView *uav     = uavPtr->get();
+            ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
+            deviceContext->CSSetUnorderedAccessViews(registerIndex, 1, &uav, nullptr);
+        }
+        else
+        {
+            // Atomic Shaders on non-compute shaders are currently unimplemented
+            UNIMPLEMENTED();
+        }
+    }
+
     return angle::Result::Continue;
 }
 

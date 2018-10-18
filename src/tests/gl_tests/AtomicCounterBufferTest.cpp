@@ -177,10 +177,6 @@ TEST_P(AtomicCounterBufferTest31, AtomicCounterRead)
 // Test atomic counter increment and decrement.
 TEST_P(AtomicCounterBufferTest31, AtomicCounterIncrementAndDecrement)
 {
-    // Skipping test while we work on enabling atomic counter buffer support in th D3D renderer.
-    // http://anglebug.com/1729
-    ANGLE_SKIP_TEST_IF(IsD3D11());
-
     constexpr char kCS[] =
         "#version 310 es\n"
         "layout(local_size_x=1, local_size_y=1, local_size_z=1) in;\n"
@@ -205,6 +201,8 @@ TEST_P(AtomicCounterBufferTest31, AtomicCounterIncrementAndDecrement)
 
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
+
+    glMemoryBarrier(GL_ATOMIC_COUNTER_BARRIER_BIT);
 
     glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomicCounterBuffer);
     void *mappedBuffer =
