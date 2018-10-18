@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "269c187e_98e65baf",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-18T13:31:15Z",
+      "side": 1,
+      "message": "nit: comment before each test",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 6
+      },
+      "revId": "b954a32016cd4526baf042b77974d04f48311fb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8739602a_7c7bae83",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-18T13:31:15Z",
+      "side": 1,
+      "message": "nit: 1.0f",
+      "range": {
+        "startLine": 263,
+        "startChar": 14,
+        "endLine": 263,
+        "endChar": 17
+      },
+      "revId": "b954a32016cd4526baf042b77974d04f48311fb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f13d17e_c2723416",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-18T13:31:15Z",
+      "side": 1,
+      "message": "nit: comment before each test",
+      "range": {
+        "startLine": 266,
+        "startChar": 0,
+        "endLine": 266,
+        "endChar": 6
+      },
+      "revId": "b954a32016cd4526baf042b77974d04f48311fb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c70cb47_da87b7f7",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-18T13:31:15Z",
+      "side": 1,
+      "message": "nit: 1.0f",
+      "range": {
+        "startLine": 272,
+        "startChar": 14,
+        "endLine": 272,
+        "endChar": 15
+      },
+      "revId": "b954a32016cd4526baf042b77974d04f48311fb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "570b0dd6_ab85de76",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-18T13:31:15Z",
+      "side": 1,
+      "message": "nit: 0.0f",
+      "range": {
+        "startLine": 273,
+        "startChar": 14,
+        "endLine": 273,
+        "endChar": 15
+      },
+      "revId": "b954a32016cd4526baf042b77974d04f48311fb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
