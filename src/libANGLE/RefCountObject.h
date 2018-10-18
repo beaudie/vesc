@@ -92,7 +92,7 @@ class BindingPointer
         ASSERT(mObject == nullptr);
     }
 
-    virtual void set(const ContextType *context, ObjectType *newObject)
+    void set(const ContextType *context, ObjectType *newObject)
     {
         // addRef first in case newObject == mObject and this is the last reference to it.
         if (newObject != nullptr)
@@ -168,24 +168,17 @@ class BindingPointer : public angle::BindingPointer<ObjectType, Context, Error>
 };
 
 template <class ObjectType>
-class OffsetBindingPointer : public gl::BindingPointer<ObjectType>
+class OffsetBindingPointer : public BindingPointer<ObjectType>
 {
   public:
-    using ContextType = typename gl::BindingPointer<ObjectType>::ContextType;
-    using ErrorType   = typename gl::BindingPointer<ObjectType>::ErrorType;
+    using ContextType = typename BindingPointer<ObjectType>::ContextType;
+    using ErrorType   = typename BindingPointer<ObjectType>::ErrorType;
 
     OffsetBindingPointer() : mOffset(0), mSize(0) { }
 
-    void set(const ContextType *context, ObjectType *newObject) override
-    {
-        BindingPointer<ObjectType>::set(context, newObject);
-        mOffset = 0;
-        mSize = 0;
-    }
-
     void set(const ContextType *context, ObjectType *newObject, GLintptr offset, GLsizeiptr size)
     {
-        BindingPointer<ObjectType>::set(context, newObject);
+        set(context, newObject);
         mOffset = offset;
         mSize = size;
     }
@@ -205,12 +198,16 @@ class OffsetBindingPointer : public gl::BindingPointer<ObjectType>
 
     void assign(ObjectType *object, GLintptr offset, GLsizeiptr size)
     {
-        BindingPointer<ObjectType>::assign(object);
+        assign(object);
         mOffset = offset;
         mSize   = size;
     }
 
   private:
+    // Delete the unparameterized functions. This forces an explicit offset and size.
+    using BindingPointer<ObjectType>::set;
+    using BindingPointer<ObjectType>::assign;
+
     GLintptr mOffset;
     GLsizeiptr mSize;
 };
