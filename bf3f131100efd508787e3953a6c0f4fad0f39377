@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "232a77ac_651c99d9",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-10-18T20:47:47Z",
+      "side": 1,
+      "message": "Why not check to see if the contents match the #include format and apply this offset in that case? Then we can just leave this code in place if we want.\nOr maybe better, check that the first X characters match a pattern we expect. Could then defend against invalid json files.\nE.g. if \"\u003d\u003d\u003d\u003d\u003d\" do the #include version, if \u0027{\"Rules\"\u0027 use the raw json.",
+      "range": {
+        "startLine": 972,
+        "startChar": 4,
+        "endLine": 972,
+        "endChar": 18
+      },
+      "revId": "bf3f131100efd508787e3953a6c0f4fad0f39377",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
