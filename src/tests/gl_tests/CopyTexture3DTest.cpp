@@ -1322,6 +1322,9 @@ TEST_P(Texture2DArrayCopy, SnormFormats)
 // unsigned byte formats.
 TEST_P(Texture2DArrayCopy, UnsignedByteFormats)
 {
+    // Flay on Windows D3D11. http://anglebug.com/2896
+    ANGLE_SKIP_TEST_IF(IsWindows() && IsD3D11())
+
     ANGLE_SKIP_TEST_IF(!checkExtensions());
 
     testCopy(GL_TEXTURE_2D_ARRAY, GLColor(250, 200, 150, 100), GL_R8, GL_UNSIGNED_BYTE, false,
