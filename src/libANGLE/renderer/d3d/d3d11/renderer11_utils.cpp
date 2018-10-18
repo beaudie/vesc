@@ -945,7 +945,7 @@ void SetUAVRelatedResourceLimits(D3D_FEATURE_LEVEL featureLevel, gl::Caps *caps)
     {
         case D3D_FEATURE_LEVEL_11_1:
             // Currently we allocate 4 UAV slots for atomic counter buffers on feature level 11_1.
-            reservedUAVsForAtomicCounterBuffers = 4u;
+            reservedUAVsForAtomicCounterBuffers = gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS;
             maxNumRTVsAndUAVs                   = D3D11_1_UAV_SLOT_COUNT;
             break;
         case D3D_FEATURE_LEVEL_11_0:
