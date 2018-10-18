@@ -22,6 +22,30 @@
       "revId": "bf3f131100efd508787e3953a6c0f4fad0f39377",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cd7d6f1_d252f62e",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-10-18T21:32:09Z",
+      "side": 1,
+      "message": "Longer-term, I plan to:\n\n1) Remove the whole \"\u003d\u003d\u003d\u003d\u003d\" stuff (needed for the #include approach\n2) Push version info into the file (at the start), and add code to check that.",
+      "parentUuid": "232a77ac_651c99d9",
+      "range": {
+        "startLine": 972,
+        "startChar": 4,
+        "endLine": 972,
+        "endChar": 18
+      },
+      "revId": "bf3f131100efd508787e3953a6c0f4fad0f39377",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
