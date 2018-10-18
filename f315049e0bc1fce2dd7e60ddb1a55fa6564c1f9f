@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "5e769fd6_e0b22a4f",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-18T15:49:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e2efe256_45522295",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 164,
+        "endChar": 34
+      },
+      "revId": "f315049e0bc1fce2dd7e60ddb1a55fa6564c1f9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef0a065e_5baddbe1",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.h",
         "patchSetId": 10
@@ -187,6 +211,30 @@
       "revId": "f315049e0bc1fce2dd7e60ddb1a55fa6564c1f9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "116c12b0_1585dfa8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-18T15:49:43Z",
+      "side": 1,
+      "message": "It\u0027s not possible. We ensure the caps are init on MakeCurrent which happens after a Surface is created. If it comes up as a problem with some kind of surfaceless operation we can fix it then!",
+      "parentUuid": "3d326105_7460867b",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 0
+      },
+      "revId": "f315049e0bc1fce2dd7e60ddb1a55fa6564c1f9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
