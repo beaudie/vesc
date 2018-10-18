@@ -7,6 +7,7 @@
 #include <sstream>
 #include <stdarg.h>
 
+static std::vector<char> FormatArg(const char *fmt, ...) ANGLE_PRINTF(1, 2);
 static std::vector<char> FormatArg(const char* fmt, ...)
 {
     va_list vararg;
