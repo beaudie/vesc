@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "22e12544_80915742",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-19T00:51:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f022daed_97847d01",
+      "revId": "456ae8faeee95bae5f15af74d0d1c84cc0ba1985",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a0b84e8_69d76642",
         "filename": "src/libANGLE/Observer.h",
         "patchSetId": 10
@@ -33,6 +51,24 @@
       "revId": "456ae8faeee95bae5f15af74d0d1c84cc0ba1985",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7afc7845_61d66cb6",
+        "filename": "src/libANGLE/Observer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-19T00:51:59Z",
+      "side": 1,
+      "message": "I think this is okay. It\u0027s only called when ASSERT is enabled.",
+      "parentUuid": "8a0b84e8_69d76642",
+      "revId": "456ae8faeee95bae5f15af74d0d1c84cc0ba1985",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
