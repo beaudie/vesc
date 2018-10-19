@@ -10,7 +10,7 @@
 #include "libANGLE/renderer/d3d/d3d11/RenderStateCache.h"
 
 #include <float.h>
-
+#include <iostream>
 #include "common/debug.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Framebuffer.h"
@@ -134,12 +134,12 @@ angle::Result RenderStateCache::getRasterizerState(const gl::Context *context,
     key.rasterizerState = rasterState;
     key.scissorEnabled  = scissorEnabled ? 1 : 0;
 
-    auto keyIter = mRasterizerStateCache.Get(key);
-    if (keyIter != mRasterizerStateCache.end())
+  //  auto keyIter = mRasterizerStateCache.Get(key);
+   /* if (keyIter != mRasterizerStateCache.end())
     {
         *outRasterizerState = keyIter->second.get();
         return angle::Result::Continue();
-    }
+    }*/
 
     TrimCache(kMaxStates, kGCLimit, "rasterizer state", &mRasterizerStateCache);
 
@@ -188,6 +188,7 @@ angle::Result RenderStateCache::getDepthStencilState(const gl::Context *context,
                                                      const gl::DepthStencilState &glState,
                                                      const d3d11::DepthStencilState **outDSState)
 {
+    std::cout << "getDepthStencilState()\n";
     auto keyIter = mDepthStencilStateCache.Get(glState);
     if (keyIter != mDepthStencilStateCache.end())
     {
@@ -228,12 +229,15 @@ angle::Result RenderStateCache::getSamplerState(const gl::Context *context,
                                                 const gl::SamplerState &samplerState,
                                                 ID3D11SamplerState **outSamplerState)
 {
+    std::cout << "getSamplerState()\n";
     auto keyIter = mSamplerStateCache.Get(samplerState);
     if (keyIter != mSamplerStateCache.end())
     {
+        std::cout << "Sampler State Cache Hit\n";
         *outSamplerState = keyIter->second.get();
         return angle::Result::Continue();
     }
+    std::cout << "Sampler State Cache Miss\n";
 
     TrimCache(kMaxStates, kGCLimit, "sampler state", &mSamplerStateCache);
 
