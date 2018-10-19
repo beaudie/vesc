@@ -17,6 +17,7 @@
 #include "common/string_utils.h"
 #include "common/utilities.h"
 #include "compiler/translator/blocklayout.h"
+#include "compiler/translator/tree_ops/EmulateGLDrawID.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/MemoryProgramCache.h"
 #include "libANGLE/ProgramLinkedResources.h"
@@ -802,6 +803,7 @@ ProgramState::ProgramState()
       mGeometryShaderOutputPrimitiveType(PrimitiveMode::TriangleStrip),
       mGeometryShaderInvocations(1),
       mGeometryShaderMaxVertices(0),
+      mDrawIDLocation(-1),
       mActiveSamplerRefCounts{}
 {
     mComputeShaderLocalSize.fill(1);
@@ -1314,6 +1316,11 @@ void Program::resolveLinkImpl(const Context *context)
 
     setUniformValuesFromBindingQualifiers();
 
+    if (context->getExtensions().multiDraw)
+    {
+        mState.mDrawIDLocation = getUniformLocation("gl_DrawID");
+    }
+
     // Save to the program cache.
     auto *cache = linkingState->context->getMemoryProgramCache();
     if (cache &&
@@ -1419,6 +1426,7 @@ void Program::unlink()
     mState.mGeometryShaderOutputPrimitiveType = PrimitiveMode::TriangleStrip;
     mState.mGeometryShaderInvocations         = 1;
     mState.mGeometryShaderMaxVertices         = 0;
+    mState.mDrawIDLocation                    = -1;
 
     mValidated = false;
 
@@ -2680,6 +2688,18 @@ const TransformFeedbackVarying &Program::getTransformFeedbackVaryingResource(GLu
     ASSERT(mLinkResolved);
     ASSERT(index < mState.mLinkedTransformFeedbackVaryings.size());
     return mState.mLinkedTransformFeedbackVaryings[index];
+}
+
+bool Program::hasDrawIDUniform() const
+{
+    return mState.mDrawIDLocation >= 0;
+}
+
+void Program::setDrawIDUniform(GLint drawid)
+{
+    ASSERT(mLinkResolved);
+    ASSERT(mState.mDrawIDLocation >= 0);
+    mProgram->setUniform1iv(mState.mDrawIDLocation, 1, &drawid);
 }
 
 bool Program::linkVaryings(InfoLog &infoLog) const

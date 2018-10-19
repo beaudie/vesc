@@ -80,6 +80,17 @@ ANGLE_EXPORT void GL_APIENTRY DrawElementsInstancedANGLE(GLenum mode,
                                                          GLsizei primcount);
 ANGLE_EXPORT void GL_APIENTRY VertexAttribDivisorANGLE(GLuint index, GLuint divisor);
 
+// GL_ANGLE_multi_draw
+ANGLE_EXPORT void GL_APIENTRY MultiDrawArraysANGLE(GLenum mode,
+                                                   const GLint *firsts,
+                                                   const GLsizei *counts,
+                                                   GLsizei drawcount);
+ANGLE_EXPORT void GL_APIENTRY MultiDrawElementsANGLE(GLenum mode,
+                                                     const GLsizei *counts,
+                                                     GLenum type,
+                                                     const GLsizei *offsets,
+                                                     GLsizei drawcount);
+
 // GL_ANGLE_multiview
 ANGLE_EXPORT void GL_APIENTRY FramebufferTextureMultiviewLayeredANGLE(GLenum target,
                                                                       GLenum attachment,
@@ -3394,6 +3405,17 @@ TexStorage2DMultisampleANGLEContextANGLE(GLeglContext ctx,
                                          GLsizei width,
                                          GLsizei height,
                                          GLboolean fixedsamplelocations);
+ANGLE_EXPORT void GL_APIENTRY MultiDrawArraysANGLEContextANGLE(GLeglContext ctx,
+                                                               GLenum mode,
+                                                               const GLint *firsts,
+                                                               const GLsizei *counts,
+                                                               GLsizei drawcount);
+ANGLE_EXPORT void GL_APIENTRY MultiDrawElementsANGLEContextANGLE(GLeglContext ctx,
+                                                                 GLenum mode,
+                                                                 const GLsizei *counts,
+                                                                 GLenum type,
+                                                                 const GLsizei *offsets,
+                                                                 GLsizei drawcount);
 }  // namespace gl
 
 #endif  // LIBGLESV2_ENTRY_POINTS_GLES_EXT_AUTOGEN_H_
