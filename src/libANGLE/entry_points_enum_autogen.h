@@ -399,6 +399,8 @@ enum class EntryPoint
     MemoryBarrierByRegion,
     MultMatrixf,
     MultMatrixx,
+    MultiDrawArraysWEBGL,
+    MultiDrawElementsWEBGL,
     MultiTexCoord4f,
     MultiTexCoord4x,
     Normal3f,
