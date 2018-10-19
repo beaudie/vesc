@@ -854,6 +854,17 @@ ANGLE_EXPORT void GL_APIENTRY DeleteVertexArraysOES(GLsizei n, const GLuint *arr
 ANGLE_EXPORT void GL_APIENTRY GenVertexArraysOES(GLsizei n, GLuint *arrays);
 ANGLE_EXPORT GLboolean GL_APIENTRY IsVertexArrayOES(GLuint array);
 
+// GL_WEBGL_multi_draw_arrays
+ANGLE_EXPORT void GL_APIENTRY MultiDrawArraysWEBGL(GLenum mode,
+                                                   const GLint *firsts,
+                                                   const GLsizei *counts,
+                                                   GLsizei drawcount);
+ANGLE_EXPORT void GL_APIENTRY MultiDrawElementsWEBGL(GLenum mode,
+                                                     const GLsizei *counts,
+                                                     GLenum type,
+                                                     const GLsizei *offsets,
+                                                     GLsizei drawcount);
+
 // EGL_ANGLE_explicit_context
 ANGLE_EXPORT void GL_APIENTRY ActiveShaderProgramContextANGLE(GLeglContext ctx,
                                                               GLuint pipeline,
@@ -3378,6 +3389,17 @@ ANGLE_EXPORT void GL_APIENTRY CopySubTexture3DANGLEContextANGLE(GLeglContext ctx
                                                                 GLboolean unpackFlipY,
                                                                 GLboolean unpackPremultiplyAlpha,
                                                                 GLboolean unpackUnmultiplyAlpha);
+ANGLE_EXPORT void GL_APIENTRY MultiDrawArraysWEBGLContextANGLE(GLeglContext ctx,
+                                                               GLenum mode,
+                                                               const GLint *firsts,
+                                                               const GLsizei *counts,
+                                                               GLsizei drawcount);
+ANGLE_EXPORT void GL_APIENTRY MultiDrawElementsWEBGLContextANGLE(GLeglContext ctx,
+                                                                 GLenum mode,
+                                                                 const GLsizei *counts,
+                                                                 GLenum type,
+                                                                 const GLsizei *offsets,
+                                                                 GLsizei drawcount);
 }  // namespace gl
 
 #endif  // LIBGLESV2_ENTRY_POINTS_GLES_EXT_AUTOGEN_H_

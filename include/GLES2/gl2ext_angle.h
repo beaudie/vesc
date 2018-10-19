@@ -620,6 +620,16 @@ typedef void *GLeglContext;
 #include "../GLES3/gl31ext_explicit_context_autogen.inc"
 #endif /* GL_ANGLE_explicit_context */
 
+#ifndef GL_WEBGL_multi_draw_arrays
+#define GL_WEBGL_multi_draw_arrays 1
+typedef void (GL_APIENTRYP PFNGLMULTIDRAWARRAYSWEBGLPROC) (GLenum mode, const GLint *firsts, const GLsizei *counts, GLsizei drawcount);
+typedef void (GL_APIENTRYP PFNGLMULTIDRAWELEMENTSWEBGLPROC) (GLenum mode, const GLsizei *counts, GLenum type, const GLsizei *offsets, GLsizei drawcount);
+#ifdef GL_GLEXT_PROTOTYPES
+GL_APICALL void GL_APIENTRY glMultiDrawArraysWEBGL (GLenum mode, const GLint *firsts, const GLsizei *counts, GLsizei drawcount);
+GL_APICALL void GL_APIENTRY glMultiDrawElementsWEBGL (GLenum mode, const GLsizei *counts, GLenum type, const GLsizei *offsets, GLsizei drawcount);
+#endif
+#endif /* GL_WEBGL_multi_draw_arrays */
+
 // clang-format on
 
 #endif  // INCLUDE_GLES2_GL2EXT_ANGLE_H_

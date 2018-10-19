@@ -4046,6 +4046,24 @@ GLboolean GL_APIENTRY glIsVertexArrayOES(GLuint array)
     return gl::IsVertexArrayOES(array);
 }
 
+// GL_WEBGL_multi_draw_arrays
+void GL_APIENTRY glMultiDrawArraysWEBGL(GLenum mode,
+                                        const GLint *firsts,
+                                        const GLsizei *counts,
+                                        GLsizei drawcount)
+{
+    return gl::MultiDrawArraysWEBGL(mode, firsts, counts, drawcount);
+}
+
+void GL_APIENTRY glMultiDrawElementsWEBGL(GLenum mode,
+                                          const GLsizei *counts,
+                                          GLenum type,
+                                          const GLsizei *offsets,
+                                          GLsizei drawcount)
+{
+    return gl::MultiDrawElementsWEBGL(mode, counts, type, offsets, drawcount);
+}
+
 // EGL_ANGLE_explicit_context
 void GL_APIENTRY glActiveShaderProgramContextANGLE(GLeglContext ctx,
                                                    GLuint pipeline,
@@ -8890,6 +8908,25 @@ void GL_APIENTRY glCopySubTexture3DANGLEContextANGLE(GLeglContext ctx,
     return gl::CopySubTexture3DANGLEContextANGLE(
         ctx, sourceId, sourceLevel, destTarget, destId, destLevel, xoffset, yoffset, zoffset, x, y,
         z, width, height, depth, unpackFlipY, unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
+}
+
+void GL_APIENTRY glMultiDrawArraysWEBGLContextANGLE(GLeglContext ctx,
+                                                    GLenum mode,
+                                                    const GLint *firsts,
+                                                    const GLsizei *counts,
+                                                    GLsizei drawcount)
+{
+    return gl::MultiDrawArraysWEBGLContextANGLE(ctx, mode, firsts, counts, drawcount);
+}
+
+void GL_APIENTRY glMultiDrawElementsWEBGLContextANGLE(GLeglContext ctx,
+                                                      GLenum mode,
+                                                      const GLsizei *counts,
+                                                      GLenum type,
+                                                      const GLsizei *offsets,
+                                                      GLsizei drawcount)
+{
+    return gl::MultiDrawElementsWEBGLContextANGLE(ctx, mode, counts, type, offsets, drawcount);
 }
 
 }  // extern "C"

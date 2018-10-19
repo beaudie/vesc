@@ -4844,6 +4844,60 @@ GLboolean GL_APIENTRY IsVertexArrayOES(GLuint array)
     return GetDefaultReturnValue<EntryPoint::IsVertexArrayOES, GLboolean>();
 }
 
+// GL_WEBGL_multi_draw_arrays
+void GL_APIENTRY MultiDrawArraysWEBGL(GLenum mode,
+                                      const GLint *firsts,
+                                      const GLsizei *counts,
+                                      GLsizei drawcount)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum mode = 0x%X, const GLint *firsts = 0x%0.8p, const GLsizei *counts = 0x%0.8p, "
+        "GLsizei drawcount = %d)",
+        mode, firsts, counts, drawcount);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        context->gatherParams<EntryPoint::MultiDrawArraysWEBGL>(modePacked, firsts, counts,
+                                                                drawcount);
+
+        if (context->skipValidation() ||
+            ValidateMultiDrawArraysWEBGL(context, modePacked, firsts, counts, drawcount))
+        {
+            context->multiDrawArraysWEBGL(modePacked, firsts, counts, drawcount);
+        }
+    }
+}
+
+void GL_APIENTRY MultiDrawElementsWEBGL(GLenum mode,
+                                        const GLsizei *counts,
+                                        GLenum type,
+                                        const GLsizei *offsets,
+                                        GLsizei drawcount)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum mode = 0x%X, const GLsizei *counts = 0x%0.8p, GLenum type = 0x%X, const "
+        "GLsizei*offsets = 0x%0.8p, GLsizei drawcount = %d)",
+        mode, counts, type, offsets, drawcount);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        context->gatherParams<EntryPoint::MultiDrawElementsWEBGL>(modePacked, counts, type, offsets,
+                                                                  drawcount);
+
+        if (context->skipValidation() ||
+            ValidateMultiDrawElementsWEBGL(context, modePacked, counts, type, offsets, drawcount))
+        {
+            context->multiDrawElementsWEBGL(modePacked, counts, type, offsets, drawcount);
+        }
+    }
+}
+
 // EGL_ANGLE_explicit_context
 void GL_APIENTRY ActiveShaderProgramContextANGLE(GLeglContext ctx, GLuint pipeline, GLuint program)
 {
@@ -19024,6 +19078,63 @@ void GL_APIENTRY CopySubTexture3DANGLEContextANGLE(GLeglContext ctx,
             context->copySubTexture3D(sourceId, sourceLevel, destTargetPacked, destId, destLevel,
                                       xoffset, yoffset, zoffset, x, y, z, width, height, depth,
                                       unpackFlipY, unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
+        }
+    }
+}
+
+void GL_APIENTRY MultiDrawArraysWEBGLContextANGLE(GLeglContext ctx,
+                                                  GLenum mode,
+                                                  const GLint *firsts,
+                                                  const GLsizei *counts,
+                                                  GLsizei drawcount)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum mode = 0x%X, const GLint *firsts = 0x%0.8p, const GLsizei *counts = 0x%0.8p, "
+        "GLsizei drawcount = %d)",
+        mode, firsts, counts, drawcount);
+
+    Context *context = static_cast<gl::Context *>(ctx);
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        context->gatherParams<EntryPoint::MultiDrawArraysWEBGL>(modePacked, firsts, counts,
+                                                                drawcount);
+
+        if (context->skipValidation() ||
+            ValidateMultiDrawArraysWEBGL(context, modePacked, firsts, counts, drawcount))
+        {
+            context->multiDrawArraysWEBGL(modePacked, firsts, counts, drawcount);
+        }
+    }
+}
+
+void GL_APIENTRY MultiDrawElementsWEBGLContextANGLE(GLeglContext ctx,
+                                                    GLenum mode,
+                                                    const GLsizei *counts,
+                                                    GLenum type,
+                                                    const GLsizei *offsets,
+                                                    GLsizei drawcount)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum mode = 0x%X, const GLsizei *counts = 0x%0.8p, GLenum type = 0x%X, const "
+        "GLsizei*offsets = 0x%0.8p, GLsizei drawcount = %d)",
+        mode, counts, type, offsets, drawcount);
+
+    Context *context = static_cast<gl::Context *>(ctx);
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        context->gatherParams<EntryPoint::MultiDrawElementsWEBGL>(modePacked, counts, type, offsets,
+                                                                  drawcount);
+
+        if (context->skipValidation() ||
+            ValidateMultiDrawElementsWEBGL(context, modePacked, counts, type, offsets, drawcount))
+        {
+            context->multiDrawElementsWEBGL(modePacked, counts, type, offsets, drawcount);
         }
     }
 }

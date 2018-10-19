@@ -5349,6 +5349,56 @@ void Context::memoryBarrierByRegion(GLbitfield barriers)
     handleError(mImplementation->memoryBarrierByRegion(this, barriers));
 }
 
+void Context::multiDrawArraysWEBGL(PrimitiveMode mode,
+                                   const GLint *firsts,
+                                   const GLsizei *counts,
+                                   GLsizei drawcount)
+{
+    ANGLE_CONTEXT_TRY(prepareForDraw(mode));
+    const bool hasDrawID = mGLState.getProgram()->hasDrawIDUniform();
+    for (GLsizei drawID = 0; drawID < drawcount; ++drawID)
+    {
+        // No-op if count draws no primitives for given mode
+        if (noopDraw(mode, counts[drawID]))
+        {
+            continue;
+        }
+        if (hasDrawID)
+        {
+            mGLState.getProgram()->setDrawIDUniform(drawID);
+        }
+        gatherParams<EntryPoint::DrawArrays>(mode, firsts[drawID], counts[drawID]);
+        ANGLE_CONTEXT_TRY(mImplementation->drawArrays(this, mode, firsts[drawID], counts[drawID]));
+        MarkTransformFeedbackBufferUsage(this, mGLState.getCurrentTransformFeedback(),
+                                         counts[drawID], 1);
+    }
+}
+
+void Context::multiDrawElementsWEBGL(PrimitiveMode mode,
+                                     const GLsizei *counts,
+                                     GLenum type,
+                                     const GLsizei *offsets,
+                                     GLsizei drawcount)
+{
+    ANGLE_CONTEXT_TRY(prepareForDraw(mode));
+    const bool hasDrawID = mGLState.getProgram()->hasDrawIDUniform();
+    for (GLsizei drawID = 0; drawID < drawcount; ++drawID)
+    {
+        // No-op if count draws no primitives for given mode
+        if (noopDraw(mode, counts[drawID]))
+        {
+            continue;
+        }
+        if (hasDrawID)
+        {
+            mGLState.getProgram()->setDrawIDUniform(drawID);
+        }
+        const void *indices = reinterpret_cast<void *>(static_cast<long>(offsets[drawID]));
+        gatherParams<EntryPoint::DrawElements>(mode, counts[drawID], type, indices);
+        ANGLE_CONTEXT_TRY(mImplementation->drawElements(this, mode, counts[drawID], type, indices));
+    }
+}
+
 GLenum Context::checkFramebufferStatus(GLenum target)
 {
     Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
