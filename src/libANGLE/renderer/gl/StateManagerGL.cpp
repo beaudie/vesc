@@ -904,6 +904,10 @@ void StateManagerGL::updateProgramTextureBindings(const gl::Context *context)
     const gl::State &glState   = context->getGLState();
     const gl::Program *program = glState.getProgram();
 
+    // It is possible there is no active program during a path operation.
+    if (!program)
+        return;
+
     const gl::ActiveTexturePointerArray &textures  = glState.getActiveTexturesCache();
     const gl::ActiveTextureMask &activeTextures    = program->getActiveSamplersMask();
     const gl::ActiveTextureTypeArray &textureTypes = program->getActiveSamplerTypes();
@@ -964,6 +968,7 @@ void StateManagerGL::updateProgramUniformBufferBindings(const gl::Context *conte
     // Sync the current program state
     const gl::State &glState   = context->getGLState();
     const gl::Program *program = glState.getProgram();
+
     for (size_t uniformBlockIndex = 0; uniformBlockIndex < program->getActiveUniformBlockCount();
          uniformBlockIndex++)
     {
@@ -1747,7 +1752,7 @@ void StateManagerGL::syncState(const gl::Context *context,
         mMultiviewDirtyBits.reset();
     }
 
-    const gl::State::DirtyBits &glAndLocalDirtyBits = (glDirtyBits | mLocalDirtyBits);
+    const gl::State::DirtyBits &glAndLocalDirtyBits = (glDirtyBits | mLocalDirtyBits) & bitMask;
 
     if (!glAndLocalDirtyBits.any())
     {
@@ -1755,9 +1760,10 @@ void StateManagerGL::syncState(const gl::Context *context,
     }
 
     // TODO(jmadill): Investigate only syncing vertex state for active attributes
-    for (auto dirtyBit : glAndLocalDirtyBits)
+    for (auto iter = glAndLocalDirtyBits.begin(), endIter = glAndLocalDirtyBits.end();
+         iter != endIter; ++iter)
     {
-        switch (dirtyBit)
+        switch (*iter)
         {
             case gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED:
                 setScissorTestEnabled(state.isScissorTestEnabled());
@@ -1981,7 +1987,7 @@ void StateManagerGL::syncState(const gl::Context *context,
                 break;
             }
             case gl::State::DIRTY_BIT_TEXTURE_BINDINGS:
-                mProgramTexturesDirty = true;
+                updateProgramTextureBindings(context);
                 break;
             case gl::State::DIRTY_BIT_SAMPLER_BINDINGS:
                 syncSamplersState(context);
@@ -1994,7 +2000,12 @@ void StateManagerGL::syncState(const gl::Context *context,
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
             {
-                mProgramTexturesDirty             = true;
+                // mProgramTexturesDirty             = true;
+                if (state.getProgram())
+                {
+                    iter.setLaterBit(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);
+                }
+
                 mProgramImagesDirty               = true;
                 mProgramStorageBuffersDirty      = true;
                 mProgramUniformBuffersDirty       = true;
@@ -2070,9 +2081,9 @@ void StateManagerGL::syncState(const gl::Context *context,
                 UNREACHABLE();
                 break;
         }
-
-        mLocalDirtyBits.reset();
     }
+
+    mLocalDirtyBits &= ~(bitMask);
 }
 
 void StateManagerGL::setFramebufferSRGBEnabled(const gl::Context *context, bool enabled)
