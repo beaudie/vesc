@@ -65,7 +65,10 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
                              const int locationIn,
                              const int bufferIndexIn,
                              const sh::BlockMemberInfo &blockInfoIn)
-    : typeInfo(&GetUniformTypeInfo(typeIn)), bufferIndex(bufferIndexIn), blockInfo(blockInfoIn)
+    : typeInfo(&GetUniformTypeInfo(typeIn)),
+      emulatedBuiltIn(false),
+      bufferIndex(bufferIndexIn),
+      blockInfo(blockInfoIn)
 {
     type       = typeIn;
     precision  = precisionIn;
@@ -134,6 +137,11 @@ bool LinkedUniform::isAtomicCounter() const
 bool LinkedUniform::isField() const
 {
     return name.find('.') != std::string::npos;
+}
+
+bool LinkedUniform::isNonEmulatedBuiltIn() const
+{
+    return !emulatedBuiltIn && isBuiltIn();
 }
 
 size_t LinkedUniform::getElementSize() const

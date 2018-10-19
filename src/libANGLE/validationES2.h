@@ -722,6 +722,17 @@ bool ValidateTexStorage3DEXT(Context *context,
                              GLsizei height,
                              GLsizei depth);
 bool ValidateMaxShaderCompilerThreadsKHR(Context *context, GLuint count);
+bool ValidateMultiDrawArraysWEBGL(Context *context,
+                                  PrimitiveMode mode,
+                                  const GLint *firsts,
+                                  const GLsizei *counts,
+                                  GLsizei drawcount);
+bool ValidateMultiDrawElementsWEBGL(Context *context,
+                                    PrimitiveMode mode,
+                                    const GLsizei *counts,
+                                    GLenum type,
+                                    const GLsizei *offsets,
+                                    GLsizei drawcount);
 }  // namespace gl
 
 #include "libANGLE/ErrorStrings.h"
