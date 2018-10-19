@@ -496,9 +496,14 @@ void Context::initialize()
     mPathOperationDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_TEXTURES);
     mPathOperationDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
 
+    // We update the draw and read Framebuffer bindings to work around an Intel bug.
+    mTexImageDirtyObjects.set(State::DIRTY_OBJECT_READ_FRAMEBUFFER);
+    mTexImageDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+
     mTexImageDirtyBits.set(State::DIRTY_BIT_UNPACK_STATE);
     mTexImageDirtyBits.set(State::DIRTY_BIT_UNPACK_BUFFER_BINDING);
-    // No dirty objects.
+    mTexImageDirtyBits.set(State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
+    mTexImageDirtyBits.set(State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
 
     // Readpixels uses the pack state and read FBO
     mReadPixelsDirtyBits.set(State::DIRTY_BIT_PACK_STATE);
