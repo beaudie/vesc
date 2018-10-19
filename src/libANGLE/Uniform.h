@@ -61,6 +61,7 @@ struct LinkedUniform : public sh::Uniform, public ActiveVariable
     bool isAtomicCounter() const;
     bool isInDefaultBlock() const;
     bool isField() const;
+    bool isEmulatedBuiltIn() const;
     size_t getElementSize() const;
     size_t getElementComponents() const;
 
