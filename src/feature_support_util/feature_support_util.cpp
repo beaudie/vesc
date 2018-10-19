@@ -165,7 +165,10 @@ class ListOf
 {
   public:
     ListOf(std::string listType) : mListType(listType), mWildcard(true) {}
-    ~ListOf() {}
+    ~ListOf()
+    {
+        mList.clear();
+    }
     void addItem(T &toAdd)
     {
         mList.push_back(toAdd);
@@ -199,7 +202,7 @@ class ListOf
         }
         else
         {
-            ALOGV("%sListOf%s is has %d item(s):", prefix.c_str(), name.c_str(),
+            ALOGV("%sListOf%s has %d item(s):", prefix.c_str(), name.c_str(),
                   static_cast<int>(mList.size()));
             for (auto &it : mList)
             {
@@ -294,8 +297,6 @@ class Version
                 version = new Version(major);
             }
         }
-        // TODO (ianelliott@) (b/113346561) appropriately destruct lists and
-        // other items that get created from json parsing
         return version;
     }
     std::string getString()
@@ -404,8 +405,6 @@ class Application
                 application = new Application(appName);
             }
         }
-        // TODO (ianelliott@) (b/113346561) appropriately destruct lists and
-        // other items that get created from json parsing
         return application;
     }
     void logItem()
@@ -518,8 +517,6 @@ class GPU
             ALOGW("Asked to parse a GPU, but no GPU found");
         }
 
-        // TODO (ianelliott@) (b/113346561) appropriately destruct lists and
-        // other items that get created from json parsing
         return gpu;
     }
     void logItem()
@@ -616,8 +613,6 @@ class Device
             // more GPUs, and not any specific Manufacturer devices:
             device = new Device();
         }
-        // TODO (ianelliott@) (b/113346561) appropriately destruct lists and
-        // other items that get created from json parsing
         return device;
     }
     void logItem()
@@ -752,7 +747,10 @@ class RuleList
 {
   public:
     RuleList() {}
-    ~RuleList() {}
+    ~RuleList()
+    {
+        mRuleList.clear();
+    }
     void addRule(Rule &rule) { mRuleList.push_back(rule); }
     bool getAppChoice(Scenario &toCheck)
     {
@@ -822,8 +820,6 @@ class RuleList
             std::string ruleDescription = jRule[kJsonRule].asString();
             bool ruleAppChoice          = jRule[kJsonAppChoice].asBool();
             bool ruleAnswer             = jRule[kJsonNonChoice].asBool();
-            // TODO (ianelliott@) (b/113346561) appropriately destruct lists and
-            // other items that get created from json parsing
             Rule *newRule = new Rule(ruleDescription, ruleAppChoice, ruleAnswer);
 
             Json::Value jApps = jRule[kJsonApplications];
@@ -831,8 +827,6 @@ class RuleList
             {
                 Json::Value jApp    = jApps[j];
                 Application *newApp = Application::CreateApplicationFromJson(jApp);
-                // TODO (ianelliott@) (b/113346561) appropriately destruct lists and
-                // other items that get created from json parsing
                 newRule->addApp(*newApp);
             }
 
@@ -855,7 +849,6 @@ class RuleList
                 newRule->addDev(*newDev);
             }
 
-            // TODO: Need to manage memory
             rules->addRule(*newRule);
         }
 
@@ -886,43 +879,6 @@ class RuleList
 extern "C" {
 
 // using namespace angle_for_android;
-
-ANGLE_EXPORT bool ANGLEUseForApplication(const char *appName,
-                                         const char *deviceMfr,
-                                         const char *deviceModel,
-                                         ANGLEPreference developerOption,
-                                         ANGLEPreference appPreference)
-{
-    Scenario scenario(appName, deviceMfr, deviceModel);
-    bool rtn        = false;
-    scenario.logScenario();
-
-    // #include the contents of the file into a string and then parse it:
-    using namespace std;
-    // Embed the rules file contents into a string:
-    const char *s =
-#include "a4a_rules.json"
-        ;
-    std::string jsonFileContents = s;
-    RuleList *rules              = RuleList::ReadRulesFromJsonString(jsonFileContents);
-    rules->logRules();
-
-    if (developerOption != ANGLE_NO_PREFERENCE)
-    {
-        rtn = (developerOption == ANGLE_PREFER_ANGLE);
-    }
-    else if ((appPreference != ANGLE_NO_PREFERENCE) && rules->getAppChoice(scenario))
-    {
-        rtn = (appPreference == ANGLE_PREFER_ANGLE);
-    }
-    else
-    {
-        rtn = rules->getAnswer(scenario);
-    }
-    ALOGV("Application \"%s\" should %s ANGLE", appName, rtn ? "use" : "NOT use");
-    delete rules;
-    return rtn;
-}
 
 ANGLE_EXPORT bool ANGLEGetUtilityAPI(unsigned int *versionToUse)
 {
@@ -967,10 +923,6 @@ ANGLE_EXPORT bool AndroidUseANGLEForApplication(int rules_fd,
     }
     off_t fileSize       = rules_length;
     off_t startOfContent = rules_offset;
-    // This is temporary magic--while there's extra stuff at the start of the file
-    // (so that it can be #include'd into the source code):
-    startOfContent += 8;
-    fileSize -= (8 + 7 + 2);
     lseek(rules_fd, startOfContent, SEEK_SET);
     char *buffer                 = new char[fileSize + 1];
     ssize_t numBytesRead         = read(rules_fd, buffer, fileSize);
