@@ -624,7 +624,7 @@ void Texture::onDestroy(const Context *context)
 
     if (mTexture)
     {
-        ANGLE_SWALLOW_ERR(mTexture->onDestroy(context));
+        mTexture->onDestroy(context);
     }
 }
 
@@ -814,7 +814,7 @@ const SamplerState &Texture::getSamplerState() const
     return mState.mSamplerState;
 }
 
-Error Texture::setBaseLevel(const Context *context, GLuint baseLevel)
+angle::Result Texture::setBaseLevel(const Context *context, GLuint baseLevel)
 {
     if (mState.setBaseLevel(baseLevel))
     {
@@ -823,7 +823,7 @@ Error Texture::setBaseLevel(const Context *context, GLuint baseLevel)
         invalidateCompletenessCache();
     }
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
 GLuint Texture::getBaseLevel() const
@@ -976,15 +976,15 @@ void Texture::signalDirty(const Context *context, InitState initState)
     invalidateCompletenessCache();
 }
 
-Error Texture::setImage(const Context *context,
-                        const PixelUnpackState &unpackState,
-                        TextureTarget target,
-                        GLint level,
-                        GLenum internalFormat,
-                        const Extents &size,
-                        GLenum format,
-                        GLenum type,
-                        const uint8_t *pixels)
+angle::Result Texture::setImage(const Context *context,
+                                const PixelUnpackState &unpackState,
+                                TextureTarget target,
+                                GLint level,
+                                GLenum internalFormat,
+                                const Extents &size,
+                                GLenum format,
+                                GLenum type,
+                                const uint8_t *pixels)
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
 
@@ -1004,18 +1004,18 @@ Error Texture::setImage(const Context *context,
 
     signalDirty(context, initState);
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Texture::setSubImage(const Context *context,
-                           const PixelUnpackState &unpackState,
-                           Buffer *unpackBuffer,
-                           TextureTarget target,
-                           GLint level,
-                           const Box &area,
-                           GLenum format,
-                           GLenum type,
-                           const uint8_t *pixels)
+angle::Result Texture::setSubImage(const Context *context,
+                                   const PixelUnpackState &unpackState,
+                                   Buffer *unpackBuffer,
+                                   TextureTarget target,
+                                   GLint level,
+                                   const Box &area,
+                                   GLenum format,
+                                   GLenum type,
+                                   const uint8_t *pixels)
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
 
@@ -1028,17 +1028,17 @@ Error Texture::setSubImage(const Context *context,
 
     ANGLE_TRY(handleMipmapGenerationHint(context, level));
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Texture::setCompressedImage(const Context *context,
-                                  const PixelUnpackState &unpackState,
-                                  TextureTarget target,
-                                  GLint level,
-                                  GLenum internalFormat,
-                                  const Extents &size,
-                                  size_t imageSize,
-                                  const uint8_t *pixels)
+angle::Result Texture::setCompressedImage(const Context *context,
+                                          const PixelUnpackState &unpackState,
+                                          TextureTarget target,
+                                          GLint level,
+                                          GLenum internalFormat,
+                                          const Extents &size,
+                                          size_t imageSize,
+                                          const uint8_t *pixels)
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
 
@@ -1055,17 +1055,17 @@ Error Texture::setCompressedImage(const Context *context,
     mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat), initState));
     signalDirty(context, initState);
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Texture::setCompressedSubImage(const Context *context,
-                                     const PixelUnpackState &unpackState,
-                                     TextureTarget target,
-                                     GLint level,
-                                     const Box &area,
-                                     GLenum format,
-                                     size_t imageSize,
-                                     const uint8_t *pixels)
+angle::Result Texture::setCompressedSubImage(const Context *context,
+                                             const PixelUnpackState &unpackState,
+                                             TextureTarget target,
+                                             GLint level,
+                                             const Box &area,
+                                             GLenum format,
+                                             size_t imageSize,
+                                             const uint8_t *pixels)
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
 
@@ -1077,12 +1077,12 @@ Error Texture::setCompressedSubImage(const Context *context,
                                            pixels);
 }
 
-Error Texture::copyImage(const Context *context,
-                         TextureTarget target,
-                         GLint level,
-                         const Rectangle &sourceArea,
-                         GLenum internalFormat,
-                         Framebuffer *source)
+angle::Result Texture::copyImage(const Context *context,
+                                 TextureTarget target,
+                                 GLint level,
+                                 const Rectangle &sourceArea,
+                                 GLenum internalFormat,
+                                 Framebuffer *source)
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
 
@@ -1113,15 +1113,15 @@ Error Texture::copyImage(const Context *context,
     // We need to initialize this texture only if the source attachment is not initialized.
     signalDirty(context, InitState::Initialized);
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Texture::copySubImage(const Context *context,
-                            TextureTarget target,
-                            GLint level,
-                            const Offset &destOffset,
-                            const Rectangle &sourceArea,
-                            Framebuffer *source)
+angle::Result Texture::copySubImage(const Context *context,
+                                    TextureTarget target,
+                                    GLint level,
+                                    const Offset &destOffset,
+                                    const Rectangle &sourceArea,
+                                    Framebuffer *source)
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
 
@@ -1136,19 +1136,19 @@ Error Texture::copySubImage(const Context *context,
     ANGLE_TRY(mTexture->copySubImage(context, index, destOffset, sourceArea, source));
     ANGLE_TRY(handleMipmapGenerationHint(context, level));
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Texture::copyTexture(const Context *context,
-                           TextureTarget target,
-                           GLint level,
-                           GLenum internalFormat,
-                           GLenum type,
-                           GLint sourceLevel,
-                           bool unpackFlipY,
-                           bool unpackPremultiplyAlpha,
-                           bool unpackUnmultiplyAlpha,
-                           Texture *source)
+angle::Result Texture::copyTexture(const Context *context,
+                                   TextureTarget target,
+                                   GLint level,
+                                   GLenum internalFormat,
+                                   GLenum type,
+                                   GLint sourceLevel,
+                                   bool unpackFlipY,
+                                   bool unpackPremultiplyAlpha,
+                                   bool unpackUnmultiplyAlpha,
+                                   Texture *source)
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
     ASSERT(source->getType() != TextureType::CubeMap);
@@ -1175,19 +1175,19 @@ Error Texture::copyTexture(const Context *context,
 
     signalDirty(context, InitState::Initialized);
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Texture::copySubTexture(const Context *context,
-                              TextureTarget target,
-                              GLint level,
-                              const Offset &destOffset,
-                              GLint sourceLevel,
-                              const Box &sourceBox,
-                              bool unpackFlipY,
-                              bool unpackPremultiplyAlpha,
-                              bool unpackUnmultiplyAlpha,
-                              Texture *source)
+angle::Result Texture::copySubTexture(const Context *context,
+                                      TextureTarget target,
+                                      GLint level,
+                                      const Offset &destOffset,
+                                      GLint sourceLevel,
+                                      const Box &sourceBox,
+                                      bool unpackFlipY,
+                                      bool unpackPremultiplyAlpha,
+                                      bool unpackUnmultiplyAlpha,
+                                      Texture *source)
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
 
@@ -1204,7 +1204,7 @@ Error Texture::copySubTexture(const Context *context,
                                     unpackPremultiplyAlpha, unpackUnmultiplyAlpha, source);
 }
 
-Error Texture::copyCompressedTexture(const Context *context, const Texture *source)
+angle::Result Texture::copyCompressedTexture(const Context *context, const Texture *source)
 {
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
     ANGLE_TRY(releaseTexImageInternal(context));
@@ -1217,14 +1217,14 @@ Error Texture::copyCompressedTexture(const Context *context, const Texture *sour
         source->mState.getImageDesc(NonCubeTextureTypeToTarget(source->getType()), 0);
     mState.setImageDesc(NonCubeTextureTypeToTarget(getType()), 0, sourceDesc);
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Texture::setStorage(const Context *context,
-                          TextureType type,
-                          GLsizei levels,
-                          GLenum internalFormat,
-                          const Extents &size)
+angle::Result Texture::setStorage(const Context *context,
+                                  TextureType type,
+                                  GLsizei levels,
+                                  GLenum internalFormat,
+                                  const Extents &size)
 {
     ASSERT(type == mState.mType);
 
@@ -1249,15 +1249,15 @@ Error Texture::setStorage(const Context *context,
 
     signalDirty(context, InitState::MayNeedInit);
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Texture::setStorageMultisample(const Context *context,
-                                     TextureType type,
-                                     GLsizei samples,
-                                     GLint internalFormat,
-                                     const Extents &size,
-                                     bool fixedSampleLocations)
+angle::Result Texture::setStorageMultisample(const Context *context,
+                                             TextureType type,
+                                             GLsizei samples,
+                                             GLint internalFormat,
+                                             const Extents &size,
+                                             bool fixedSampleLocations)
 {
     ASSERT(type == mState.mType);
 
@@ -1276,10 +1276,10 @@ Error Texture::setStorageMultisample(const Context *context,
 
     signalDirty(context, InitState::MayNeedInit);
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Texture::generateMipmap(const Context *context)
+angle::Result Texture::generateMipmap(const Context *context)
 {
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
     ANGLE_TRY(releaseTexImageInternal(context));
@@ -1296,7 +1296,7 @@ Error Texture::generateMipmap(const Context *context)
 
     if (maxLevel <= baseLevel)
     {
-        return NoError();
+        return angle::Result::Continue();
     }
 
     if (hasAnyDirtyBit())
@@ -1332,10 +1332,10 @@ Error Texture::generateMipmap(const Context *context)
 
     signalDirty(context, InitState::Initialized);
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Texture::bindTexImageFromSurface(const Context *context, egl::Surface *surface)
+angle::Result Texture::bindTexImageFromSurface(const Context *context, egl::Surface *surface)
 {
     ASSERT(surface);
 
@@ -1353,10 +1353,10 @@ Error Texture::bindTexImageFromSurface(const Context *context, egl::Surface *sur
     ImageDesc desc(size, surface->getBindTexImageFormat(), InitState::Initialized);
     mState.setImageDesc(NonCubeTextureTypeToTarget(mState.mType), 0, desc);
     signalDirty(context, InitState::Initialized);
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Texture::releaseTexImageFromSurface(const Context *context)
+angle::Result Texture::releaseTexImageFromSurface(const Context *context)
 {
     ASSERT(mBoundSurface);
     mBoundSurface = nullptr;
@@ -1366,7 +1366,7 @@ Error Texture::releaseTexImageFromSurface(const Context *context)
     ASSERT(mState.mType == TextureType::_2D || mState.mType == TextureType::Rectangle);
     mState.clearImageDesc(NonCubeTextureTypeToTarget(mState.mType), 0);
     signalDirty(context, InitState::Initialized);
-    return NoError();
+    return angle::Result::Continue();
 }
 
 void Texture::bindStream(egl::Stream *stream)
@@ -1387,8 +1387,8 @@ void Texture::releaseStream()
     mBoundStream = nullptr;
 }
 
-Error Texture::acquireImageFromStream(const Context *context,
-                                      const egl::Stream::GLTextureDescription &desc)
+angle::Result Texture::acquireImageFromStream(const Context *context,
+                                              const egl::Stream::GLTextureDescription &desc)
 {
     ASSERT(mBoundStream != nullptr);
     ANGLE_TRY(mTexture->setImageExternal(context, mState.mType, mBoundStream, desc));
@@ -1397,10 +1397,10 @@ Error Texture::acquireImageFromStream(const Context *context,
     mState.setImageDesc(NonCubeTextureTypeToTarget(mState.mType), 0,
                         ImageDesc(size, Format(desc.internalFormat), InitState::Initialized));
     signalDirty(context, InitState::Initialized);
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Texture::releaseImageFromStream(const Context *context)
+angle::Result Texture::releaseImageFromStream(const Context *context)
 {
     ASSERT(mBoundStream != nullptr);
     ANGLE_TRY(mTexture->setImageExternal(context, mState.mType, nullptr,
@@ -1409,23 +1409,25 @@ Error Texture::releaseImageFromStream(const Context *context)
     // Set to incomplete
     mState.clearImageDesc(NonCubeTextureTypeToTarget(mState.mType), 0);
     signalDirty(context, InitState::Initialized);
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Texture::releaseTexImageInternal(const Context *context)
+angle::Result Texture::releaseTexImageInternal(const Context *context)
 {
     if (mBoundSurface)
     {
         // Notify the surface
-        ANGLE_TRY(mBoundSurface->releaseTexImageFromTexture(context));
+        ANGLE_TRY_HANDLE(context, Error(mBoundSurface->releaseTexImageFromTexture(context)));
 
         // Then, call the same method as from the surface
         ANGLE_TRY(releaseTexImageFromSurface(context));
     }
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Texture::setEGLImageTarget(const Context *context, TextureType type, egl::Image *imageTarget)
+angle::Result Texture::setEGLImageTarget(const Context *context,
+                                         TextureType type,
+                                         egl::Image *imageTarget)
 {
     ASSERT(type == mState.mType);
     ASSERT(type == TextureType::_2D || type == TextureType::External);
@@ -1448,7 +1450,7 @@ Error Texture::setEGLImageTarget(const Context *context, TextureType type, egl::
                         ImageDesc(size, imageTarget->getFormat(), initState));
     signalDirty(context, initState);
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
 Extents Texture::getAttachmentSize(const ImageIndex &imageIndex) const
@@ -1675,14 +1677,14 @@ void Texture::setInitState(const ImageIndex &imageIndex, InitState initState)
     }
 }
 
-Error Texture::ensureSubImageInitialized(const Context *context,
-                                         TextureTarget target,
-                                         size_t level,
-                                         const gl::Box &area)
+angle::Result Texture::ensureSubImageInitialized(const Context *context,
+                                                 TextureTarget target,
+                                                 size_t level,
+                                                 const gl::Box &area)
 {
     if (!context->isRobustResourceInitEnabled() || mState.mInitState == InitState::Initialized)
     {
-        return NoError();
+        return angle::Result::Continue();
     }
 
     // Pre-initialize the texture contents if necessary.
@@ -1702,10 +1704,10 @@ Error Texture::ensureSubImageInitialized(const Context *context,
         setInitState(imageIndex, InitState::Initialized);
     }
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
-Error Texture::handleMipmapGenerationHint(const Context *context, int level)
+angle::Result Texture::handleMipmapGenerationHint(const Context *context, int level)
 {
 
     if (getGenerateMipmapHint() == GL_TRUE && level == 0)
@@ -1713,7 +1715,7 @@ Error Texture::handleMipmapGenerationHint(const Context *context, int level)
         ANGLE_TRY(generateMipmap(context));
     }
 
-    return NoError();
+    return angle::Result::Continue();
 }
 
 void Texture::onSubjectStateChange(const gl::Context *context,
