@@ -136,6 +136,11 @@ bool LinkedUniform::isField() const
     return name.find('.') != std::string::npos;
 }
 
+bool LinkedUniform::isEmulatedBuiltIn() const
+{
+    return isBuiltIn() && name != mappedName;
+}
+
 size_t LinkedUniform::getElementSize() const
 {
     return typeInfo->externalSize;
