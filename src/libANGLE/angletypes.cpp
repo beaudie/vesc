@@ -11,7 +11,7 @@
 #include "libANGLE/State.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/VertexAttribute.h"
-
+#include <iostream>
 namespace gl
 {
 RasterizerState::RasterizerState()
@@ -194,6 +194,7 @@ void SamplerState::setCompareMode(GLenum compareMode)
 
 void SamplerState::setCompareFunc(GLenum compareFunc)
 {
+     std::cout << "Comparison Function Set: " << compareFunc << "\n";
     mCompareFunc = compareFunc;
 }
 
