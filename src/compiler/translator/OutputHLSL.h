@@ -30,6 +30,7 @@ class TextureFunctionHLSL;
 class TSymbolTable;
 class TVariable;
 class UnfoldShortCircuit;
+class AtomicCounterFunctionHLSL;
 
 using ReferencedVariables       = std::map<int, const TVariable *>;
 
@@ -177,6 +178,7 @@ class OutputHLSL : public TIntermTraverser
     ResourcesHLSL *mResourcesHLSL;
     TextureFunctionHLSL *mTextureFunctionHLSL;
     ImageFunctionHLSL *mImageFunctionHLSL;
+    AtomicCounterFunctionHLSL *mAtomicCounterFunctionHLSL;
 
     // Parameters determining what goes in the header output
     bool mUsesFragColor;

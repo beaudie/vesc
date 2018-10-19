@@ -113,9 +113,35 @@ TEST_P(AtomicCounterBufferTest31, OffsetNotAllSpecifiedWithSameValue)
     EXPECT_EQ(0u, program);
 }
 
+// Tests atomic counter reads using compute shaders. Used as a sanity check for the translator.
+TEST_P(AtomicCounterBufferTest31, AtomicCounterReadCompute)
+{
+    constexpr char kComputeShaderSource[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(binding = 0, offset = 8) uniform atomic_uint ac[3];
+
+void atomicCounterInFunction(in atomic_uint counter[3])
+{
+    atomicCounter(counter[0]);
+}
+
+void main()
+{
+    atomicCounterInFunction(ac);
+    atomicCounter(ac[gl_LocalInvocationIndex + 1u]);
+})";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kComputeShaderSource);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test atomic counter read.
 TEST_P(AtomicCounterBufferTest31, AtomicCounterRead)
 {
+    // Skipping test while we work on enabling atomic counter buffer support in th D3D renderer.
+    // http://anglebug.com/1729
+    ANGLE_SKIP_TEST_IF(IsD3D11());
+
     const std::string &fragShader =
         "#version 310 es\n"
         "precision highp float;\n"
@@ -148,6 +174,10 @@ TEST_P(AtomicCounterBufferTest31, AtomicCounterRead)
 // Test atomic counter increment and decrement.
 TEST_P(AtomicCounterBufferTest31, AtomicCounterIncrementAndDecrement)
 {
+    // Skipping test while we work on enabling atomic counter buffer support in th D3D renderer.
+    // http://anglebug.com/1729
+    ANGLE_SKIP_TEST_IF(IsD3D11());
+
     const std::string &csSource =
         "#version 310 es\n"
         "layout(local_size_x=1, local_size_y=1, local_size_z=1) in;\n"
@@ -188,7 +218,8 @@ ANGLE_INSTANTIATE_TEST(AtomicCounterBufferTest,
                        ES3_OPENGL(),
                        ES3_OPENGLES(),
                        ES31_OPENGL(),
-                       ES31_OPENGLES());
-ANGLE_INSTANTIATE_TEST(AtomicCounterBufferTest31, ES31_OPENGL(), ES31_OPENGLES());
+                       ES31_OPENGLES(),
+                       ES31_D3D11());
+ANGLE_INSTANTIATE_TEST(AtomicCounterBufferTest31, ES31_OPENGL(), ES31_OPENGLES(), ES31_D3D11());
 
 }  // namespace
