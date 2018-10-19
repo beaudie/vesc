@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 
 #include <algorithm>
+#include <iostream>
 
 #include "common/debug.h"
 #include "libANGLE/Buffer.h"
@@ -30,6 +31,8 @@
 #include "libANGLE/renderer/driver_utils.h"
 #include "platform/Platform.h"
 #include "platform/WorkaroundsD3D.h"
+
+
 
 namespace rx
 {
@@ -1797,6 +1800,8 @@ D3D11_CULL_MODE ConvertCullMode(bool cullEnabled, gl::CullFaceMode cullMode)
 
 D3D11_COMPARISON_FUNC ConvertComparison(GLenum comparison)
 {
+    std::cout << "Comparison Function: " << comparison << "\n";
+
     D3D11_COMPARISON_FUNC d3dComp = D3D11_COMPARISON_NEVER;
     switch (comparison)
     {
