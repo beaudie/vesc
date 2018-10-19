@@ -772,7 +772,16 @@ bool IsInShaderStorageBlock(TIntermTyped *node)
 
     if (binaryNode)
     {
-        return IsInShaderStorageBlock(binaryNode->getLeft());
+        switch (binaryNode->getOp())
+        {
+            case EOpIndexDirectInterfaceBlock:
+            case EOpIndexIndirect:
+            case EOpIndexDirect:
+            case EOpIndexDirectStruct:
+                return IsInShaderStorageBlock(binaryNode->getLeft());
+            default:
+                return false;
+        }
     }
 
     const TType &type = node->getType();
