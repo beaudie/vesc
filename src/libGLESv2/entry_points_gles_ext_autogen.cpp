@@ -245,6 +245,60 @@ void GL_APIENTRY VertexAttribDivisorANGLE(GLuint index, GLuint divisor)
     }
 }
 
+// GL_ANGLE_multi_draw
+void GL_APIENTRY MultiDrawArraysANGLE(GLenum mode,
+                                      const GLint *firsts,
+                                      const GLsizei *counts,
+                                      GLsizei drawcount)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum mode = 0x%X, const GLint *firsts = 0x%0.8p, const GLsizei *counts = 0x%0.8p, "
+        "GLsizei drawcount = %d)",
+        mode, firsts, counts, drawcount);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        context->gatherParams<EntryPoint::MultiDrawArraysANGLE>(modePacked, firsts, counts,
+                                                                drawcount);
+
+        if (context->skipValidation() ||
+            ValidateMultiDrawArraysANGLE(context, modePacked, firsts, counts, drawcount))
+        {
+            context->multiDrawArrays(modePacked, firsts, counts, drawcount);
+        }
+    }
+}
+
+void GL_APIENTRY MultiDrawElementsANGLE(GLenum mode,
+                                        const GLsizei *counts,
+                                        GLenum type,
+                                        const GLsizei *offsets,
+                                        GLsizei drawcount)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum mode = 0x%X, const GLsizei *counts = 0x%0.8p, GLenum type = 0x%X, const "
+        "GLsizei*offsets = 0x%0.8p, GLsizei drawcount = %d)",
+        mode, counts, type, offsets, drawcount);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        context->gatherParams<EntryPoint::MultiDrawElementsANGLE>(modePacked, counts, type, offsets,
+                                                                  drawcount);
+
+        if (context->skipValidation() ||
+            ValidateMultiDrawElementsANGLE(context, modePacked, counts, type, offsets, drawcount))
+        {
+            context->multiDrawElements(modePacked, counts, type, offsets, drawcount);
+        }
+    }
+}
+
 // GL_ANGLE_multiview
 void GL_APIENTRY FramebufferTextureMultiviewLayeredANGLE(GLenum target,
                                                          GLenum attachment,
@@ -19087,6 +19141,63 @@ void GL_APIENTRY TexStorage2DMultisampleANGLEContextANGLE(GLeglContext ctx,
         {
             context->texStorage2DMultisample(targetPacked, samples, internalformat, width, height,
                                              fixedsamplelocations);
+        }
+    }
+}
+
+void GL_APIENTRY MultiDrawArraysANGLEContextANGLE(GLeglContext ctx,
+                                                  GLenum mode,
+                                                  const GLint *firsts,
+                                                  const GLsizei *counts,
+                                                  GLsizei drawcount)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum mode = 0x%X, const GLint *firsts = 0x%0.8p, const GLsizei *counts = 0x%0.8p, "
+        "GLsizei drawcount = %d)",
+        mode, firsts, counts, drawcount);
+
+    Context *context = static_cast<gl::Context *>(ctx);
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        context->gatherParams<EntryPoint::MultiDrawArraysANGLE>(modePacked, firsts, counts,
+                                                                drawcount);
+
+        if (context->skipValidation() ||
+            ValidateMultiDrawArraysANGLE(context, modePacked, firsts, counts, drawcount))
+        {
+            context->multiDrawArrays(modePacked, firsts, counts, drawcount);
+        }
+    }
+}
+
+void GL_APIENTRY MultiDrawElementsANGLEContextANGLE(GLeglContext ctx,
+                                                    GLenum mode,
+                                                    const GLsizei *counts,
+                                                    GLenum type,
+                                                    const GLsizei *offsets,
+                                                    GLsizei drawcount)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum mode = 0x%X, const GLsizei *counts = 0x%0.8p, GLenum type = 0x%X, const "
+        "GLsizei*offsets = 0x%0.8p, GLsizei drawcount = %d)",
+        mode, counts, type, offsets, drawcount);
+
+    Context *context = static_cast<gl::Context *>(ctx);
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        context->gatherParams<EntryPoint::MultiDrawElementsANGLE>(modePacked, counts, type, offsets,
+                                                                  drawcount);
+
+        if (context->skipValidation() ||
+            ValidateMultiDrawElementsANGLE(context, modePacked, counts, type, offsets, drawcount))
+        {
+            context->multiDrawElements(modePacked, counts, type, offsets, drawcount);
         }
     }
 }
