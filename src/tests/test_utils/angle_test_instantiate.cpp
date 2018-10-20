@@ -106,6 +106,8 @@ bool IsPlatformAvailable(const PlatformParameters &param)
     }
     else
     {
+        std::cout << "Checking platform: " << param;
+
         OSWindow *osWindow = CreateOSWindow();
         bool result = osWindow->initialize("CONFIG_TESTER", 1, 1);
 
@@ -115,6 +117,8 @@ bool IsPlatformAvailable(const PlatformParameters &param)
                 new EGLWindow(param.majorVersion, param.minorVersion, param.eglParameters);
             result = eglWindow->initializeGL(osWindow);
 
+            std::cout << " done init GL.. ";
+
             eglWindow->destroyGL();
             SafeDelete(eglWindow);
         }
@@ -123,6 +127,8 @@ bool IsPlatformAvailable(const PlatformParameters &param)
         SafeDelete(osWindow);
 
         paramAvailabilityCache[param] = result;
+
+        std::cout << " done deleting GL." << std::endl;
 
         if (!result)
         {
