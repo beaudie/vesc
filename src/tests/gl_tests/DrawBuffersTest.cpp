@@ -220,6 +220,16 @@ class DrawBuffersTest : public ANGLETest
     GLint mMaxDrawBuffers   = 0;
 };
 
+class DrawBuffersWebGLTest : public DrawBuffersTest
+{
+  public:
+    DrawBuffersWebGLTest()
+    {
+        setWebGLCompatibilityEnabled(true);
+        setRobustResourceInit(true);
+    }
+};
+
 class DrawBuffersWebGL2Test : public DrawBuffersTest
 {
   public:
@@ -402,9 +412,6 @@ TEST_P(DrawBuffersWebGL2Test, SomeProgramOutputsDisabled)
 // Same as above but adds a state change from a program with different masks after a clear.
 TEST_P(DrawBuffersWebGL2Test, TwoProgramsWithDifferentOutputsAndClear)
 {
-    // TODO(http://anglebug.com/2872): Broken on the GL back-end.
-    ANGLE_SKIP_TEST_IF(IsOpenGL());
-
     // TODO(ynovikov): Investigate the failure (https://anglebug.com/1533)
     ANGLE_SKIP_TEST_IF(IsWindows() && IsAMD() && IsDesktopOpenGL());
 
@@ -559,6 +566,49 @@ TEST_P(DrawBuffersTest, BroadcastGLFragColor)
     glDeleteProgram(program);
 }
 
+// Tests that we don't broadcast gl_FragColor to unused channels.
+TEST_P(DrawBuffersWebGLTest, NoBroadcastWithoutExtension)
+{
+    ANGLE_SKIP_TEST_IF(!setupTest());
+
+    // Bind two render targets. gl_FragColor should be broadcast to both.
+    glBindTexture(GL_TEXTURE_2D, mTextures[0]);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTextures[0], 0);
+
+    glBindTexture(GL_TEXTURE_2D, mTextures[1]);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, mTextures[1], 0);
+
+    const GLenum bufs[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+
+    const std::string fragmentShaderSource =
+        "precision highp float;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(1, 0, 0, 1);\n"
+        "}\n";
+
+    GLuint program = CompileProgram(essl1_shaders::vs::Simple(), fragmentShaderSource);
+    if (program == 0)
+    {
+        FAIL() << "shader compilation failed.";
+    }
+
+    setDrawBuffers(2, bufs);
+
+    // Clear to green.
+    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+
+    verifyAttachment2DColor(0, mTextures[0], GL_TEXTURE_2D, 0, GLColor::red);
+    verifyAttachment2DColor(0, mTextures[1], GL_TEXTURE_2D, 0, GLColor::green);
+
+    EXPECT_GL_NO_ERROR();
+
+    glDeleteProgram(program);
+}
+
 class DrawBuffersTestES3 : public DrawBuffersTest
 {
 };
@@ -645,6 +695,8 @@ ANGLE_INSTANTIATE_TEST(DrawBuffersTest,
                        ES3_OPENGL(),
                        ES2_OPENGLES(),
                        ES3_OPENGLES());
+
+ANGLE_INSTANTIATE_TEST(DrawBuffersWebGLTest, ES2_D3D11(), ES2_OPENGL());
 
 ANGLE_INSTANTIATE_TEST(DrawBuffersWebGL2Test, ES3_D3D11(), ES3_OPENGL());
 
