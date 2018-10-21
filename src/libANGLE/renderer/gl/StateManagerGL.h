@@ -10,7 +10,9 @@
 #define LIBANGLE_RENDERER_GL_STATEMANAGERGL_H_
 
 #include "common/debug.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/Framebuffer.h"
 #include "libANGLE/State.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/gl/functionsgl_typedefs.h"
@@ -77,7 +79,6 @@ class StateManagerGL final : angle::NonCopyable
     void onTransformFeedbackStateChange();
     void beginQuery(gl::QueryType type, QueryGL *queryObject, GLuint queryId);
     void endQuery(gl::QueryType type, QueryGL *queryObject, GLuint queryId);
-    void onBeginQuery(QueryGL *query);
 
     void setAttributeCurrentData(size_t index, const gl::VertexAttribCurrentValueData &data);
 
@@ -90,7 +91,6 @@ class StateManagerGL final : angle::NonCopyable
     void setViewportArrayv(GLuint first, const std::vector<gl::Rectangle> &viewports);
     void setDepthRange(float near, float far);
 
-    void setViewportOffsets(const std::vector<gl::Offset> &kviewportOffsets);
     void setSideBySide(bool isSideBySide);
 
     void setBlendEnabled(bool enabled);
@@ -163,7 +163,6 @@ class StateManagerGL final : angle::NonCopyable
                                        const void *indices,
                                        GLsizei instanceCount,
                                        const void **outIndices);
-    angle::Result setDrawIndirectState(const gl::Context *context);
 
     void pauseTransformFeedback();
     angle::Result pauseAllQueries(const gl::Context *context);
@@ -171,6 +170,20 @@ class StateManagerGL final : angle::NonCopyable
     angle::Result resumeAllQueries(const gl::Context *context);
     angle::Result resumeQuery(const gl::Context *context, gl::QueryType type);
     angle::Result onMakeCurrent(const gl::Context *context);
+
+    // Called in a clear, draw or blit operation.
+    ANGLE_INLINE void syncDrawBuffersState(const gl::Context *context, bool isDrawCommand)
+    {
+        // Early-exist for the default FBO.
+        if (context->getGLState().getDrawFramebuffer()->isDefault())
+            return;
+
+        if (!mDrawBuffersDirty &&
+            (!mDrawBuffersNeedsMask || isDrawCommand == mDrawBuffersAppliedForDrawCommand))
+            return;
+
+        syncDrawBuffersStateImpl(context, isDrawCommand);
+    }
 
     void syncState(const gl::Context *context,
                    const gl::State::DirtyBits &glDirtyBits,
@@ -186,13 +199,14 @@ class StateManagerGL final : angle::NonCopyable
         }
     }
 
+    void invalidateDrawBuffers();
     GLuint getVertexArrayID() const { return mVAO; }
 
   private:
-    // Set state that's common among draw commands.
-    angle::Result setGenericDrawState(const gl::Context *context);
-
     void setTextureCubemapSeamlessEnabled(bool enabled);
+    void updateDrawBuffers(bool isWebGL,
+                           const gl::Program *program,
+                           const gl::Framebuffer *drawFramebuffer);
 
     void applyViewportOffsetsAndSetScissors(const gl::Rectangle &scissor,
                                             const gl::Framebuffer &drawFramebuffer);
@@ -216,12 +230,9 @@ class StateManagerGL final : angle::NonCopyable
         const gl::Program *program,
         const gl::FramebufferState &drawFramebufferState) const;
 
-    enum MultiviewDirtyBitType
-    {
-        MULTIVIEW_DIRTY_BIT_SIDE_BY_SIDE_LAYOUT,
-        MULTIVIEW_DIRTY_BIT_VIEWPORT_OFFSETS,
-        MULTIVIEW_DIRTY_BIT_MAX
-    };
+    void updateDrawBuffersNeedsMasking(const gl::Program *program,
+                                       const gl::Framebuffer *drawFramebuffer);
+    void syncDrawBuffersStateImpl(const gl::Context *context, bool isDrawCommand);
 
     const FunctionsGL *mFunctions;
 
@@ -371,8 +382,14 @@ class StateManagerGL final : angle::NonCopyable
     gl::State::DirtyBits mLocalDirtyBits;
     gl::AttributesMask mLocalDirtyCurrentValues;
 
-    // ANGLE_multiview dirty bits.
-    angle::BitSet<MULTIVIEW_DIRTY_BIT_MAX> mMultiviewDirtyBits;
+    // We need to mask out draw buffers to work around undefined behaviour for WebGL.
+    // In order to implement this efficiently we store three flags:
+    // 1. Are the draw buffers valid at all? This is reset in FramebufferGL.
+    // 2. Do we need to mask out draw buffers? In most cases we don't.
+    // 3. Was the last application for a clear/blit or for a draw? We only mask for draws.
+    bool mDrawBuffersDirty;
+    bool mDrawBuffersNeedsMask;
+    bool mDrawBuffersAppliedForDrawCommand;
 };
 }  // namespace rx
 

@@ -16,8 +16,6 @@
 #include "common/bitset_utils.h"
 #include "common/mathutil.h"
 #include "common/matrix_utils.h"
-#include "libANGLE/Context.h"
-#include "libANGLE/Framebuffer.h"
 #include "libANGLE/Query.h"
 #include "libANGLE/TransformFeedback.h"
 #include "libANGLE/VertexArray.h"
@@ -161,8 +159,9 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions,
       mPathStencilMask(std::numeric_limits<GLuint>::max()),
       mIsSideBySideDrawFramebuffer(false),
       mIsMultiviewEnabled(extensions.multiview),
-      mLocalDirtyBits(),
-      mMultiviewDirtyBits()
+      mDrawBuffersDirty(false),
+      mDrawBuffersNeedsMask(false),
+      mDrawBuffersAppliedForDrawCommand(false)
 {
     ASSERT(mFunctions);
     ASSERT(extensions.maxViews >= 1u);
@@ -679,18 +678,14 @@ angle::Result StateManagerGL::setDrawArraysState(const gl::Context *context,
                                                  GLsizei count,
                                                  GLsizei instanceCount)
 {
-    if (context->getStateCache().hasAnyActiveClientAttrib())
-    {
-        const gl::State &glState   = context->getGLState();
-        const gl::Program *program = glState.getProgram();
-        const gl::VertexArray *vao = glState.getVertexArray();
-        const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
+    ASSERT(context->getStateCache().hasAnyActiveClientAttrib());
+    const gl::State &glState   = context->getGLState();
+    const gl::Program *program = glState.getProgram();
+    const gl::VertexArray *vao = glState.getVertexArray();
+    const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
 
-        ANGLE_TRY(vaoGL->syncClientSideData(context, program->getActiveAttribLocationsMask(), first,
-                                            count, instanceCount));
-    }
-
-    return setGenericDrawState(context);
+    return vaoGL->syncClientSideData(context, program->getActiveAttribLocationsMask(), first, count,
+                                     instanceCount);
 }
 
 angle::Result StateManagerGL::setDrawElementsState(const gl::Context *context,
@@ -707,16 +702,9 @@ angle::Result StateManagerGL::setDrawElementsState(const gl::Context *context,
     const gl::VertexArray *vao = glState.getVertexArray();
     const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
 
-    ANGLE_TRY(vaoGL->syncDrawElementsState(context, program->getActiveAttribLocationsMask(), count,
-                                           type, indices, instanceCount,
-                                           glState.isPrimitiveRestartEnabled(), outIndices));
-
-    return setGenericDrawState(context);
-}
-
-angle::Result StateManagerGL::setDrawIndirectState(const gl::Context *context)
-{
-    return setGenericDrawState(context);
+    return vaoGL->syncDrawElementsState(context, program->getActiveAttribLocationsMask(), count,
+                                        type, indices, instanceCount,
+                                        glState.isPrimitiveRestartEnabled(), outIndices);
 }
 
 void StateManagerGL::updateDrawIndirectBufferBinding(const gl::Context *context)
@@ -852,6 +840,9 @@ angle::Result StateManagerGL::onMakeCurrent(const gl::Context *context)
     // Seamless cubemaps are required for ES3 and higher contexts. It should be the cheapest to set
     // this state here since MakeCurrent is expected to be called less frequently than draw calls.
     setTextureCubemapSeamlessEnabled(context->getClientMajorVersion() >= 3);
+
+    // Force the draw buffers to be dirty if we are binding a user FBO. Otherwise don't touch them.
+    mDrawBuffersDirty = true;
 
     return angle::Result::Continue();
 }
@@ -1016,26 +1007,6 @@ void StateManagerGL::updateProgramImageBindings(const gl::Context *context)
     }
 }
 
-angle::Result StateManagerGL::setGenericDrawState(const gl::Context *context)
-{
-    if (context->getExtensions().webglCompatibility)
-    {
-        const gl::State &glState     = context->getGLState();
-        FramebufferGL *framebufferGL = GetImplAs<FramebufferGL>(glState.getDrawFramebuffer());
-        auto activeOutputs = glState.getProgram()->getState().getActiveOutputVariables();
-        framebufferGL->maskOutInactiveOutputDrawBuffers(context, GL_DRAW_FRAMEBUFFER,
-                                                        activeOutputs);
-    }
-
-    ASSERT(
-        mFramebuffers[angle::FramebufferBindingDraw] ==
-        GetImplAs<FramebufferGL>(context->getGLState().getDrawFramebuffer())->getFramebufferID());
-    ASSERT(mVAO ==
-           GetImplAs<VertexArrayGL>(context->getGLState().getVertexArray())->getVertexArrayID());
-
-    return angle::Result::Continue();
-}
-
 void StateManagerGL::setAttributeCurrentData(size_t index,
                                              const gl::VertexAttribCurrentValueData &data)
 {
@@ -1152,30 +1123,13 @@ void StateManagerGL::setViewportArrayv(GLuint first, const std::vector<gl::Recta
     }
 }
 
-void StateManagerGL::setViewportOffsets(const std::vector<gl::Offset> &viewportOffsets)
-{
-    if (!std::equal(viewportOffsets.cbegin(), viewportOffsets.cend(), mViewportOffsets.cbegin()))
-    {
-        std::copy(viewportOffsets.begin(), viewportOffsets.end(), mViewportOffsets.begin());
-
-        const std::vector<gl::Rectangle> &viewportArray =
-            ApplyOffsets(mViewports[0], viewportOffsets);
-        setViewportArrayv(0u, viewportArray);
-
-        const std::vector<gl::Rectangle> &scissorArray =
-            ApplyOffsets(mScissors[0], viewportOffsets);
-        setScissorArrayv(0u, scissorArray);
-
-        mMultiviewDirtyBits.set(MULTIVIEW_DIRTY_BIT_VIEWPORT_OFFSETS);
-    }
-}
-
 void StateManagerGL::setSideBySide(bool isSideBySide)
 {
     if (mIsSideBySideDrawFramebuffer != isSideBySide)
     {
         mIsSideBySideDrawFramebuffer = isSideBySide;
-        mMultiviewDirtyBits.set(MULTIVIEW_DIRTY_BIT_SIDE_BY_SIDE_LAYOUT);
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_SCISSOR);
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_VIEWPORT);
     }
 }
 
@@ -1661,6 +1615,21 @@ void StateManagerGL::setClearStencil(GLint clearStencil)
     }
 }
 
+ANGLE_INLINE void StateManagerGL::updateDrawBuffersNeedsMasking(
+    const gl::Program *program,
+    const gl::Framebuffer *drawFramebuffer)
+{
+    gl::DrawBufferMask targetMask =
+        (program->getActiveOutputVariables() & drawFramebuffer->getEnabledDrawBuffers());
+    bool needsMask = (targetMask != drawFramebuffer->getEnabledDrawBuffers());
+
+    if ((needsMask || mDrawBuffersNeedsMask) && !drawFramebuffer->isDefault())
+    {
+        mDrawBuffersDirty     = true;
+        mDrawBuffersNeedsMask = needsMask;
+    }
+}
+
 void StateManagerGL::syncState(const gl::Context *context,
                                const gl::State::DirtyBits &glDirtyBits,
                                const gl::State::DirtyBits &bitMask)
@@ -1680,47 +1649,18 @@ void StateManagerGL::syncState(const gl::Context *context,
             // When a new draw framebuffer is bound, we have to mark the layout, viewport offsets,
             // scissor test, scissor and viewport rectangle bits as dirty because it could be a
             // transition from or to a side-by-side draw framebuffer.
-            mMultiviewDirtyBits.set(MULTIVIEW_DIRTY_BIT_SIDE_BY_SIDE_LAYOUT);
-            mMultiviewDirtyBits.set(MULTIVIEW_DIRTY_BIT_VIEWPORT_OFFSETS);
             mLocalDirtyBits.set(gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED);
             mLocalDirtyBits.set(gl::State::DIRTY_BIT_SCISSOR);
             mLocalDirtyBits.set(gl::State::DIRTY_BIT_VIEWPORT);
-        }
-    }
 
-    // Iterate over and resolve multi-view dirty bits.
-    if (mMultiviewDirtyBits.any())
-    {
-        for (auto dirtyBit : mMultiviewDirtyBits)
-        {
-            switch (dirtyBit)
+            const gl::FramebufferAttachment *attachment =
+                state.getDrawFramebuffer()->getFirstNonNullAttachment();
+            if (attachment)
             {
-                case MULTIVIEW_DIRTY_BIT_SIDE_BY_SIDE_LAYOUT:
-                {
-                    const gl::Framebuffer *drawFramebuffer = state.getDrawFramebuffer();
-                    ASSERT(drawFramebuffer != nullptr);
-                    setSideBySide(drawFramebuffer->getMultiviewLayout() ==
-                                  GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE);
-                }
-                break;
-                case MULTIVIEW_DIRTY_BIT_VIEWPORT_OFFSETS:
-                {
-                    const gl::Framebuffer *drawFramebuffer = state.getDrawFramebuffer();
-                    ASSERT(drawFramebuffer != nullptr);
-                    const std::vector<gl::Offset> *attachmentViewportOffsets =
-                        drawFramebuffer->getViewportOffsets();
-                    const std::vector<gl::Offset> &viewportOffsets =
-                        attachmentViewportOffsets != nullptr
-                            ? *attachmentViewportOffsets
-                            : gl::FramebufferAttachment::GetDefaultViewportOffsetVector();
-                    setViewportOffsets(viewportOffsets);
-                }
-                break;
-                default:
-                    UNREACHABLE();
+                setSideBySide(attachment->getMultiviewLayout() ==
+                              GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE);
             }
         }
-        mMultiviewDirtyBits.reset();
     }
 
     const gl::State::DirtyBits &glAndLocalDirtyBits = (glDirtyBits | mLocalDirtyBits) & bitMask;
@@ -1730,7 +1670,6 @@ void StateManagerGL::syncState(const gl::Context *context,
         return;
     }
 
-    // TODO(jmadill): Investigate only syncing vertex state for active attributes
     for (auto iter = glAndLocalDirtyBits.begin(), endIter = glAndLocalDirtyBits.end();
          iter != endIter; ++iter)
     {
@@ -1937,6 +1876,11 @@ void StateManagerGL::syncState(const gl::Context *context,
                 bindFramebuffer(GL_DRAW_FRAMEBUFFER, framebufferGL->getFramebufferID());
 
                 const gl::Program *program = state.getProgram();
+                if (context->getExtensions().webglCompatibility && program)
+                {
+                    updateDrawBuffersNeedsMasking(program, framebuffer);
+                }
+
                 if (program)
                 {
                     updateMultiviewBaseViewLayerIndexUniform(program, framebufferGL->getState());
@@ -2001,6 +1945,12 @@ void StateManagerGL::syncState(const gl::Context *context,
                     {
                         updateMultiviewBaseViewLayerIndexUniform(
                             program, state.getDrawFramebuffer()->getImplementation()->getState());
+                    }
+
+                    // This can also affect the masked out draw buffers.
+                    if (context->getExtensions().webglCompatibility)
+                    {
+                        updateDrawBuffersNeedsMasking(program, state.getDrawFramebuffer());
                     }
                 }
 
@@ -2079,6 +2029,7 @@ void StateManagerGL::syncState(const gl::Context *context,
                 }
                 break;
             }
+
             default:
                 UNREACHABLE();
                 break;
@@ -2360,4 +2311,44 @@ void StateManagerGL::syncTransformFeedbackState(const gl::Context *context)
         mCurrentTransformFeedback = nullptr;
     }
 }
+
+void StateManagerGL::invalidateDrawBuffers()
+{
+    mDrawBuffersDirty = true;
 }
+
+void StateManagerGL::syncDrawBuffersStateImpl(const gl::Context *context, bool isDrawCommand)
+{
+    const gl::Framebuffer *drawFramebuffer = context->getGLState().getDrawFramebuffer();
+    const std::vector<GLenum> &drawBuffers = drawFramebuffer->getDrawBufferStates();
+    const gl::Program *program             = context->getGLState().getProgram();
+
+    // Don't apply draw buffers for the default FBO.
+    ASSERT(!drawFramebuffer->isDefault());
+
+    if (isDrawCommand && mDrawBuffersNeedsMask && program)
+    {
+        gl::DrawBufferMask targetAppliedDrawBuffers =
+            drawFramebuffer->getEnabledDrawBuffers() & program->getActiveOutputVariables();
+        if (targetAppliedDrawBuffers != drawFramebuffer->getEnabledDrawBuffers())
+        {
+            GLsizei drawBufferCount = static_cast<GLsizei>(drawBuffers.size());
+            ASSERT(drawBufferCount <= gl::IMPLEMENTATION_MAX_DRAW_BUFFERS);
+
+            std::array<GLenum, gl::IMPLEMENTATION_MAX_DRAW_BUFFERS> appliedDrawBuffers;
+            for (GLenum i = 0; static_cast<int>(i) < drawBufferCount; ++i)
+            {
+                appliedDrawBuffers[i] = targetAppliedDrawBuffers[i] ? drawBuffers[i] : GL_NONE;
+            }
+
+            mFunctions->drawBuffers(drawBufferCount, appliedDrawBuffers.data());
+            return;
+        }
+    }
+
+    mFunctions->drawBuffers(static_cast<GLsizei>(drawBuffers.size()), drawBuffers.data());
+
+    mDrawBuffersAppliedForDrawCommand = isDrawCommand;
+    mDrawBuffersDirty                 = false;
+}
+}  // namespace rx
