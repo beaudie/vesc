@@ -9,6 +9,7 @@
 
 #include "ANGLEPerfTest.h"
 #include "third_party/perf/perf_test.h"
+#include "third_party/trace_event/trace_event.h"
 
 #include <cassert>
 #include <cmath>
@@ -45,7 +46,26 @@ angle::TraceEventHandle AddTraceEvent(angle::PlatformMethods *platform,
 {
     ANGLERenderTest *renderTest     = static_cast<ANGLERenderTest *>(platform->context);
     std::vector<TraceEvent> &buffer = renderTest->getTraceEventBuffer();
-    buffer.emplace_back(phase, name, timestamp);
+    if (phase != 'c')
+    {
+        buffer.emplace_back(phase, name, timestamp);
+    }
+    else
+    {
+        // For clock sync events, the issue_ts argument will be the gpuTimestamp
+        double gpuTimestamp = timestamp;
+        for (int i = 0; i < numArgs; ++i)
+        {
+            if (strcmp(argNames[i], "issue_ts") == 0)
+            {
+                gl::TraceEvent::TraceValueUnion value;
+                value.m_uint = argValues[i];
+                gpuTimestamp = value.m_double;
+                break;
+            }
+        }
+        buffer.emplace_back(phase, name, timestamp, gpuTimestamp);
+    }
     return buffer.size();
 }
 
@@ -67,7 +87,10 @@ void UpdateTraceEventDuration(angle::PlatformMethods *platform,
 double MonotonicallyIncreasingTime(angle::PlatformMethods *platform)
 {
     ANGLERenderTest *renderTest = static_cast<ANGLERenderTest *>(platform->context);
-    return renderTest->getTimer()->getElapsedTime();
+    // Move the time origin to the first call to this function, to avoid generating unnecessarily
+    // large timestamps.
+    static double origin = renderTest->getTimer()->getAbsoluteTime();
+    return renderTest->getTimer()->getAbsoluteTime() - origin;
 }
 
 void DumpTraceEventsToJSONFile(const std::vector<TraceEvent> &traceEvents,
@@ -75,22 +98,80 @@ void DumpTraceEventsToJSONFile(const std::vector<TraceEvent> &traceEvents,
 {
     Json::Value eventsValue(Json::arrayValue);
 
-    for (const TraceEvent &traceEvent : traceEvents)
+    double lastGpuSyncTime   = 0;
+    double lastGpuSyncDiff   = 0;
+    double gpuSyncDriftSlope = 0;
+
+    for (size_t i = 0; i < traceEvents.size(); ++i)
     {
+        const TraceEvent &traceEvent = traceEvents[i];
+
+        const char *name = traceEvent.name;
+        double timestamp = traceEvent.timestamp;
+        char phase       = traceEvent.phase;
+
+        if (traceEvent.phase == 'c')
+        {
+            // Special handling of clock sync event.  Note that this is not per-spec, and is
+            // currently a hack to synchronize CPU and GPU times, taking clock drift into account.
+
+            // Note: syncs are currently generated in order, and out-of-order sync events are not
+            // supported.
+            ASSERT(lastGpuSyncTime <= traceEvent.gpuTimestamp);
+
+            lastGpuSyncTime = traceEvent.gpuTimestamp;
+            lastGpuSyncDiff = traceEvent.timestamp - traceEvent.gpuTimestamp;
+
+            gpuSyncDriftSlope = 0;
+
+            // Search for the next clock sync event
+            for (size_t j = i + 1; j < traceEvents.size(); ++j)
+            {
+                if (traceEvents[j].phase == 'c')
+                {
+                    double nextGpuSyncTime = traceEvents[j].gpuTimestamp;
+                    double nextGpuSyncDiff = traceEvents[j].timestamp - traceEvents[j].gpuTimestamp;
+
+                    gpuSyncDriftSlope =
+                        (nextGpuSyncDiff - lastGpuSyncDiff) / (nextGpuSyncTime - lastGpuSyncTime);
+
+                    break;
+                }
+            }
+
+            // Don't write the clock sync event to file.  Instead, create an instant event for it.
+            name  = "GPU Clock Sync";
+            phase = TRACE_EVENT_PHASE_INSTANT;
+        }
+
         Json::Value value(Json::objectValue);
 
         std::stringstream phaseName;
-        phaseName << traceEvent.phase;
+        phaseName << phase;
+
+        // Note: as a way to distinguish CPU and GPU events, GPU timestamps are negated.
+        bool isGpuTimestamp = timestamp < 0;
+        if (isGpuTimestamp)
+        {
+            timestamp = -timestamp;
+
+            // Note: syncs are currently generated in order and during GPU idle time, and
+            // out-of-order sync events and gpu events are not supported.
+            ASSERT(timestamp >= lastGpuSyncTime);
+
+            // Account for clock drift.
+            timestamp += lastGpuSyncDiff + gpuSyncDriftSlope * (timestamp - lastGpuSyncTime);
+        }
 
         unsigned long long microseconds =
-            static_cast<unsigned long long>(traceEvent.timestamp * 1000.0 * 1000.0);
+            static_cast<unsigned long long>(timestamp * 1000.0 * 1000.0);
 
-        value["name"] = traceEvent.name;
-        value["cat"]  = "gpu.angle";
+        value["name"] = name;
+        value["cat"]  = isGpuTimestamp ? "gpu.angle.gpu" : "gpu.angle";
         value["ph"]   = phaseName.str();
         value["ts"]   = microseconds;
         value["pid"]  = "ANGLE";
-        value["tid"]  = "CPU";
+        value["tid"]  = isGpuTimestamp ? "GPU" : "CPU";
 
         eventsValue.append(value);
     }

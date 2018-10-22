@@ -297,6 +297,16 @@ std::string ToString(const T &value)
 #define ANGLE_NOINLINE
 #endif
 
+#if defined(__clang__) || (defined(__GNUC__) && defined(__has_attribute))
+#if __has_attribute(unused)
+#define ANGLE_UNUSED __attribute__((unused))
+#else
+#define ANGLE_UNUSED
+#endif
+#else
+#define ANGLE_UNUSED
+#endif
+
 #ifndef ANGLE_STRINGIFY
 #define ANGLE_STRINGIFY(x) #x
 #endif
