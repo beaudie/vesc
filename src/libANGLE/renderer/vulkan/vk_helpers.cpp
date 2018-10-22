@@ -574,6 +574,23 @@ QueryHelper::~QueryHelper()
 {
 }
 
+QueryHelper::QueryHelper(QueryHelper &&other)
+    : CommandGraphResource(std::move(other)),
+      mDynamicQueryPool(other.mDynamicQueryPool),
+      mQueryPoolIndex(other.mQueryPoolIndex),
+      mQuery(other.mQuery)
+{
+    other.mDynamicQueryPool = nullptr;
+}
+
+QueryHelper &QueryHelper::operator=(QueryHelper &&other)
+{
+    std::swap(mDynamicQueryPool, other.mDynamicQueryPool);
+    std::swap(mQueryPoolIndex, other.mQueryPoolIndex);
+    std::swap(mQuery, other.mQuery);
+    return *this;
+}
+
 void QueryHelper::init(const DynamicQueryPool *dynamicQueryPool,
                        const size_t queryPoolIndex,
                        uint32_t query)

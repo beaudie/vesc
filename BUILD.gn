@@ -20,6 +20,9 @@ declare_args() {
 
   # Link in system libGL, to work with apitrace.  See doc/DebuggingTips.md.
   angle_link_glx = false
+
+  # Enable Vulkan GPU trace event capability
+  angle_enable_gpu_trace_events = false
 }
 
 if (!build_with_chromium) {
@@ -79,6 +82,10 @@ config("internal_config") {
 
   if (angle_force_thread_safety) {
     defines += [ "ANGLE_FORCE_THREAD_SAFETY=1" ]
+  }
+
+  if (angle_enable_gpu_trace_events) {
+    defines += [ "ANGLE_ENABLE_GPU_TRACE_EVENTS=1" ]
   }
 }
 
