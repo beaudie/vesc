@@ -23,6 +23,8 @@ class OSXTimer : public Timer
     void stop() override;
     double getElapsedTime() const override;
 
+    double getAbsoluteTime() const override;
+
   private:
     bool mRunning;
     uint64_t mStartTime;
