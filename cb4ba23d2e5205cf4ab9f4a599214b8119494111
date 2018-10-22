@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af93ed99_da4bf25a",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-22T20:34:02Z",
+      "side": 1,
+      "message": "git cl format maybe?",
+      "range": {
+        "startLine": 961,
+        "startChar": 69,
+        "endLine": 961,
+        "endChar": 100
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1138e1b9_9171b2b5",
+        "filename": "src/feature_support_util/a4a_rules.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-22T20:34:02Z",
+      "side": 1,
+      "message": "can we run our json files through a standard formatter? something like https://jsonformatter.curiousconcept.com/",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 0
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0f106a0_d5ecd2fd",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-22T20:34:02Z",
+      "side": 1,
+      "message": "nit: probably also a good time to take out any WIP comments you had",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 3
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cb64b0c_a79efbca",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-22T20:34:02Z",
+      "side": 1,
+      "message": "nit: std::list can be heavy weight. consider using std::vector unless you need to insert and delete in the middle of the list quite often.",
+      "range": {
+        "startLine": 874,
+        "startChar": 4,
+        "endLine": 874,
+        "endChar": 13
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "259ce14b_f8ca8e38",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-22T20:34:02Z",
+      "side": 1,
+      "message": "also in places like this you should prefer to use c++ classes with automatic memory management like std::vector. Or angle::MemoryBuffer if you want to be robust to error.",
+      "range": {
+        "startLine": 927,
+        "startChar": 4,
+        "endLine": 927,
+        "endChar": 58
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec22c24b_682f7beb",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 932,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-22T20:34:02Z",
+      "side": 1,
+      "message": "in cases like this we can use std::unique_ptr to avoid potential problems with object deletion.",
+      "range": {
+        "startLine": 932,
+        "startChar": 4,
+        "endLine": 932,
+        "endChar": 19
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0535627e_dc0c149f",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-22T20:34:02Z",
+      "side": 1,
+      "message": "nit: because this is un-namespaced I\u0027d probably qualify which utility (ANGLEGetFeatureSupportUtilAPI() for example).\n\nAlso, the decision of the \"best\" version to use seems like it doesn\u0027t have to be embedded into this API. You could make this API return the current version and make the logic about whether to use this library part of an inline helper function. The function would just take the two versions (or call GetAPI implicitly) and run the logic you describe above.\n\nAll that to say we can make the API contract slightly simpler this way.",
+      "range": {
+        "startLine": 35,
+        "startChar": 18,
+        "endLine": 35,
+        "endChar": 36
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "744711b3_fa3751a2",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-22T20:34:02Z",
+      "side": 1,
+      "message": "Hear me out, but I think we should make this more general.\n\nAlso we should probably take the API version as part of this API for validation purposes.\n\nOK, so I think we should call this ANGLEGetFeatureSupport. Arguments: API version, rules_FD + other file args, appName, and systemInfo. This would assume we can tag the systemInfo with the deviceMfr and deviceModel.\n\nOutputs: either an in/out for number of outputs, and an array of bools for rules results, if we need to return \"app choice\" vs \"system choice\". Or a single bool if we only want one result. This function currently doesn\u0027t seem to respect the app choice, but thinking ahead. If multiple choice, could be up to the caller to understand the array indexing scheme.\n\nOptionally we could return a code that indicates an unexpected error.\n\nThe reason I\u0027m proposing is that this could be future-proof towards using the exact same API for workaround selection. If we decide we want to go that way.\n\nIt would be nice if we could use the SystemInfo because it has a lot of other nice information other than deviceMfr and deviceModel. It shouldn\u0027t be hard to add a method to SystemInfo to patch in the device info. Or to just set it manually.\n\nWhat do you think? Maybe we should resolve some of this before moving on to the nitty gritty of the implementation details.\n\nI think either scheme work be forward-compatible with using protobufs as an optimization.",
+      "range": {
+        "startLine": 48,
+        "startChar": 18,
+        "endLine": 48,
+        "endChar": 47
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
