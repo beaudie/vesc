@@ -12,6 +12,27 @@
 #include <mach/mach.h>
 #include <mach/mach_time.h>
 
+namespace
+{
+double getSecondCoeff()
+{
+    // If this is the first time we've run, get the timebase.
+    // We can use denom == 0 to indicate that sTimebaseInfo is
+    // uninitialised because it makes no sense to have a zero
+    // denominator in a fraction.
+    static mach_timebase_info_data_t timebaseInfo;
+    static double secondCoeff;
+
+    if (timebaseInfo.denom == 0)
+    {
+        mach_timebase_info(&timebaseInfo);
+        secondCoeff = timebaseInfo.numer * (1.0 / 1000000000) / timebaseInfo.denom;
+    }
+
+    return secondCoeff;
+}
+}  // anonymous namespace
+
 OSXTimer::OSXTimer()
     : mRunning(false)
 {
@@ -31,18 +52,7 @@ void OSXTimer::stop()
 
 double OSXTimer::getElapsedTime() const
 {
-    // If this is the first time we've run, get the timebase.
-    // We can use denom == 0 to indicate that sTimebaseInfo is
-    // uninitialised because it makes no sense to have a zero
-    // denominator in a fraction.
-    static mach_timebase_info_data_t timebaseInfo;
-    static double secondCoeff;
-
-    if ( timebaseInfo.denom == 0 )
-    {
-        mach_timebase_info(&timebaseInfo);
-        secondCoeff = timebaseInfo.numer * (1.0 / 1000000000) / timebaseInfo.denom;
-    }
+    double secondCoeff = getSecondCoeff();
 
     if (mRunning)
     {
@@ -52,6 +62,13 @@ double OSXTimer::getElapsedTime() const
     {
         return secondCoeff * (mStopTime - mStartTime);
     }
+}
+
+double OSXTimer::getAbsoluteTime() const
+{
+    double secondCoeff = getSecondCoeff();
+
+    return secondCoeff * mach_absolute_time();
 }
 
 Timer *CreateTimer()
