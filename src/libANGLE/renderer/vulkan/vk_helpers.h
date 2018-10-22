@@ -253,6 +253,9 @@ class QueryHelper final : public CommandGraphResource
     QueryHelper();
     ~QueryHelper();
 
+    QueryHelper(QueryHelper &&other);
+    QueryHelper &operator=(QueryHelper &&other);
+
     void init(const DynamicQueryPool *dynamicQueryPool,
               const size_t queryPoolIndex,
               uint32_t query);

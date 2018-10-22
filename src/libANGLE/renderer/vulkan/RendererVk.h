@@ -18,6 +18,7 @@
 #include "libANGLE/Caps.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/FeaturesVk.h"
+#include "libANGLE/renderer/vulkan/QueryVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_internal_shaders.h"
@@ -84,6 +85,7 @@ class RendererVk : angle::NonCopyable
     uint32_t getMaxActiveTextures();
 
     Serial getCurrentQueueSerial() const { return mCurrentQueueSerial; }
+    Serial getLastSubmittedQueueSerial() const { return mLastSubmittedQueueSerial; }
     Serial getLastCompletedQueueSerial() const { return mLastCompletedQueueSerial; }
 
     bool isSerialInUse(Serial serial) const;
@@ -171,6 +173,14 @@ class RendererVk : angle::NonCopyable
     vk::ShaderLibrary *getShaderLibrary();
     const FeaturesVk &getFeatures() const { return mFeatures; }
 
+    // Create Begin/End/Instant GPU trace events, which take their timestamps from GPU queries.
+    // The events are queued until the query results are available.  Possible values for `phase`
+    // are TRACE_EVENT_PHASE_*
+    angle::Result traceGpuEvent(vk::Context *context,
+                                vk::CommandBuffer *commandBuffer,
+                                char phase,
+                                const char *name);
+
   private:
     // Number of semaphores for external entities to renderer to issue a wait, such as surface's
     // image acquire.
@@ -183,7 +193,8 @@ class RendererVk : angle::NonCopyable
     void ensureCapsInitialized() const;
     void getSubmitWaitSemaphores(
         vk::Context *context,
-        angle::FixedVector<VkSemaphore, kMaxWaitSemaphores> *waitSemaphores);
+        angle::FixedVector<VkSemaphore, kMaxWaitSemaphores> *waitSemaphores,
+        angle::FixedVector<VkPipelineStageFlags, kMaxWaitSemaphores> *waitStageMasks);
     angle::Result submitFrame(vk::Context *context,
                               const VkSubmitInfo &submitInfo,
                               vk::CommandBuffer &&commandBuffer);
@@ -192,6 +203,9 @@ class RendererVk : angle::NonCopyable
     void initFeatures();
     void initPipelineCacheVkKey();
     angle::Result initPipelineCacheVk(DisplayVk *display);
+
+    angle::Result synchronizeCpuGpuTime(vk::Context *context);
+    angle::Result checkCompletedGpuEvents(vk::Context *context);
 
     mutable bool mCapsInitialized;
     mutable gl::Caps mNativeCaps;
@@ -214,6 +228,7 @@ class RendererVk : angle::NonCopyable
     SerialFactory mQueueSerialFactory;
     SerialFactory mShaderSerialFactory;
     Serial mLastCompletedQueueSerial;
+    Serial mLastSubmittedQueueSerial;
     Serial mCurrentQueueSerial;
 
     bool mDeviceLost;
@@ -275,6 +290,37 @@ class RendererVk : angle::NonCopyable
 
     // Internal shader library.
     vk::ShaderLibrary mShaderLibrary;
+
+    // The GpuEvent struct holds together a timestamp query and enough data to create a
+    // trace event based on that. Use traceGpuEvent to insert such queries.  They will be readback
+    // when the results are available, without inserting a GPU bubble.
+    //
+    // - eventName will be the reported name of the event
+    // - phase is either 'B' (duration begin), 'E' (duration end) or 'i' (instant // event).
+    //   See Google's "Trace Event Format":
+    //   https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU
+    // - serial is the serial of the batch the query was submitted on.  Until the batch is
+    //   submitted, the query is not checked to avoid incuring a flush.
+    struct GpuEvent final : angle::NonCopyable
+    {
+        vk::QueryHelper query;
+        const char *name;
+        char phase;
+        Serial serial;
+
+        GpuEvent() = default;
+        GpuEvent(GpuEvent &&other);
+        GpuEvent &operator=(GpuEvent &&other);
+    };
+
+    vk::DynamicQueryPool mGpuEventQueryPool;
+    // A list of queries that have yet to be turned into an event (their result is not yet
+    // available)
+    std::vector<GpuEvent> mInFlightGpuEvents;
+    // The very first timestamp queried for a GPU event is used as origin, so event timestamps would
+    // have a value close to zero, to avoid losing 12 bits when converting these 64 bit values to
+    // double.
+    uint64_t mGpuEventTimestampOrigin ANGLE_UNUSED;
 };
 
 uint32_t GetUniformBufferDescriptorCount();
