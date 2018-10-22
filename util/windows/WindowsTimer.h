@@ -22,12 +22,12 @@ class WindowsTimer : public Timer
     void stop() override;
     double getElapsedTime() const override;
 
+    double getAbsoluteTime() const override;
+
   private:
     bool mRunning;
     LONGLONG mStartTime;
     LONGLONG mStopTime;
-
-    LONGLONG mFrequency;
 };
 
 #endif  // UTIL_WINDOWS_TIMER_H
