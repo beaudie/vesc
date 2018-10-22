@@ -8,16 +8,28 @@
 
 #include "windows/WindowsTimer.h"
 
+namespace
+{
+LARGE_INTEGER getFrequency()
+{
+    static LARGE_INTEGER frequency;
+
+    if (frequency == 0)
+    {
+        QueryPerformanceFrequency(&frequency);
+        mFrequency = frequency.QuadPart;
+    }
+
+    return frequency;
+}
+}  // anonymous namespace
+
 WindowsTimer::WindowsTimer() : mRunning(false), mStartTime(0), mStopTime(0)
 {
 }
 
 void WindowsTimer::start()
 {
-    LARGE_INTEGER frequency;
-    QueryPerformanceFrequency(&frequency);
-    mFrequency = frequency.QuadPart;
-
     LARGE_INTEGER curTime;
     QueryPerformanceCounter(&curTime);
     mStartTime = curTime.QuadPart;
@@ -48,7 +60,15 @@ double WindowsTimer::getElapsedTime() const
         endTime = mStopTime;
     }
 
-    return static_cast<double>(endTime - mStartTime) / mFrequency;
+    return static_cast<double>(endTime - mStartTime) / getFrequency();
+}
+
+double WindowsTimer::getAbsoluteTime() const
+{
+    LARGE_INTEGER curTime;
+    QueryPerformanceCounter(&curTime);
+
+    return curTime / getFrequency();
 }
 
 Timer *CreateTimer()
