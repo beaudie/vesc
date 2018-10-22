@@ -1797,12 +1797,9 @@ D3D11_CULL_MODE ConvertCullMode(bool cullEnabled, gl::CullFaceMode cullMode)
 
 D3D11_COMPARISON_FUNC ConvertComparison(GLenum comparison)
 {
-    D3D11_COMPARISON_FUNC d3dComp = D3D11_COMPARISON_NEVER;
+    D3D11_COMPARISON_FUNC d3dComp;
     switch (comparison)
     {
-        case GL_NEVER:
-            d3dComp = D3D11_COMPARISON_NEVER;
-            break;
         case GL_ALWAYS:
             d3dComp = D3D11_COMPARISON_ALWAYS;
             break;
@@ -1824,8 +1821,9 @@ D3D11_COMPARISON_FUNC ConvertComparison(GLenum comparison)
         case GL_NOTEQUAL:
             d3dComp = D3D11_COMPARISON_NOT_EQUAL;
             break;
+        case GL_NEVER:
         default:
-            UNREACHABLE();
+            d3dComp = D3D11_COMPARISON_NEVER;
     }
 
     return d3dComp;
