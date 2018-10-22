@@ -461,6 +461,30 @@
     },
     {
       "key": {
+        "uuid": "fe766d80_1fb202fb",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7495,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-22T18:59:02Z",
+      "side": 1,
+      "message": "Right, this is unfortunate. Let\u0027s go with the original plan to only query these in the GetIntegeri_v case.  We can email the extension contact and ask for clarification here too.",
+      "parentUuid": "72bf4cd1_0b8aa46f",
+      "range": {
+        "startLine": 7495,
+        "startChar": 8,
+        "endLine": 7495,
+        "endChar": 32
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "693331c7_cdad5b5f",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 7
@@ -1686,6 +1710,30 @@
     },
     {
       "key": {
+        "uuid": "a188b596_a456129c",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-22T18:59:02Z",
+      "side": 1,
+      "message": "It would be good to use native support (on GLES) when it exists.",
+      "parentUuid": "f8366e1a_871c6100",
+      "range": {
+        "startLine": 671,
+        "startChar": 11,
+        "endLine": 681,
+        "endChar": 22
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01c9fcd1_42ca7dd5",
         "filename": "src/libANGLE/renderer/gl/SurfaceGL.h",
         "patchSetId": 7
@@ -1816,6 +1864,30 @@
       "side": 1,
       "message": "I ran into this issue when porting the Unreal engine, and I know that makeCurrent will fail if there is a pixel format mismatch.  When I look at the implementation here, I don\u0027t know if we would hit this problem.  As far as I can see, if the pixel format is stereo at device initialization, that pixel format is used for all device surfaces.  That would indicate that all contexts would be sharable.  The error would occur at surface initialization time if a surface being created does not share the same pixel format.  There already seems to be a check for that.",
       "parentUuid": "85db13a1_87548250",
+      "range": {
+        "startLine": 161,
+        "startChar": 53,
+        "endLine": 161,
+        "endChar": 81
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "038e4be7_c051c1e0",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-22T18:59:02Z",
+      "side": 1,
+      "message": "ANGLE currently virtualizes all contexts using a single context and pixel format so this forces all contexts and surfaces to use stereo or not.  Theoretically we can work around this with architectural changes, we already support some devirtualization but still no support for multiple pixel formats.\n\nWhat did you intend to use this extension for?  If an application knows that it will only use stereo surfaces, we could add an extension on top of this one to request that behaviour but we couldn\u0027t use it for cases like Chrome because that would allocate extra memory for every surface.",
+      "parentUuid": "d0cdfc55_f934b8a6",
       "range": {
         "startLine": 161,
         "startChar": 53,

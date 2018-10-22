@@ -422,6 +422,30 @@
       "revId": "e762d5a56bcb35f0ad9c5aeed06fffd2c23a26d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b09f7715_506cb8e4",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-22T18:59:02Z",
+      "side": 1,
+      "message": "Ok, the only other thing I can think of is to query the pixel format for the WGL_stereo_ARB flag, it may return false afterwards.\n\nThat seems to be how they do it in glfw: https://github.com/glfw/glfw/blob/master/src/wgl_context.c#L124",
+      "parentUuid": "e8311bfd_f6816fe5",
+      "range": {
+        "startLine": 991,
+        "startChar": 39,
+        "endLine": 991,
+        "endChar": 81
+      },
+      "revId": "e762d5a56bcb35f0ad9c5aeed06fffd2c23a26d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
