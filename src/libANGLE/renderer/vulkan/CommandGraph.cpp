@@ -16,6 +16,8 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
+#include "third_party/trace_event/trace_event.h"
+
 namespace rx
 {
 namespace vk
@@ -85,6 +87,23 @@ CommandGraphResource::CommandGraphResource(CommandGraphResourceType resourceType
 }
 
 CommandGraphResource::~CommandGraphResource() = default;
+
+CommandGraphResource::CommandGraphResource(CommandGraphResource &&other)
+    : mStoredQueueSerial(other.mStoredQueueSerial),
+      mCurrentReadingNodes(other.mCurrentReadingNodes),
+      mCurrentWritingNode(other.mCurrentWritingNode),
+      mResourceType(other.mResourceType)
+{
+}
+
+CommandGraphResource &CommandGraphResource::operator=(CommandGraphResource &&other)
+{
+    std::swap(mStoredQueueSerial, other.mStoredQueueSerial);
+    std::swap(mCurrentReadingNodes, other.mCurrentReadingNodes);
+    std::swap(mCurrentWritingNode, other.mCurrentWritingNode);
+    std::swap(mResourceType, other.mResourceType);
+    return *this;
+}
 
 void CommandGraphResource::updateQueueSerial(Serial queueSerial)
 {
@@ -625,11 +644,14 @@ angle::Result CommandGraph::submitCommands(Context *context,
     std::vector<CommandGraphNode *> nodeStack;
 
     VkCommandBufferBeginInfo beginInfo = {};
-    beginInfo.sType            = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags            = 0;
-    beginInfo.pInheritanceInfo = nullptr;
+    beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+    beginInfo.pInheritanceInfo         = nullptr;
 
     ANGLE_TRY(primaryCommandBufferOut->begin(context, beginInfo));
+
+    ANGLE_TRY(context->getRenderer()->traceGpuEvent(
+        context, primaryCommandBufferOut, TRACE_EVENT_PHASE_BEGIN, "Primary Command Buffer"));
 
     for (CommandGraphNode *topLevelNode : mNodes)
     {
@@ -663,6 +685,9 @@ angle::Result CommandGraph::submitCommands(Context *context,
             }
         }
     }
+
+    ANGLE_TRY(context->getRenderer()->traceGpuEvent(
+        context, primaryCommandBufferOut, TRACE_EVENT_PHASE_END, "Primary Command Buffer"));
 
     ANGLE_TRY(primaryCommandBufferOut->end(context));
 

@@ -45,13 +45,21 @@ struct TraceEvent final
     TraceEvent() {}
 
     TraceEvent(char phaseIn, const char *nameIn, double timestampIn)
-        : phase(phaseIn), name(nameIn), timestamp(timestampIn)
+        : phase(phaseIn), name(nameIn), timestamp(timestampIn), gpuTimestamp(0)
     {
+    }
+
+    TraceEvent(char phaseIn, const char *nameIn, double timestampIn, double gpuTimestampIn)
+        : TraceEvent(phaseIn, nameIn, timestampIn)
+    {
+        ASSERT(phaseIn == 'c');
+        gpuTimestamp = gpuTimestampIn;
     }
 
     char phase       = 0;
     const char *name = nullptr;
     double timestamp = 0;
+    double gpuTimestamp = 0;  // issue_ts argument of clock sync event
 };
 
 class ANGLEPerfTest : public testing::Test, angle::NonCopyable

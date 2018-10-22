@@ -155,6 +155,9 @@ class CommandGraphResource : angle::NonCopyable
   public:
     virtual ~CommandGraphResource();
 
+    CommandGraphResource(CommandGraphResource &&other);
+    CommandGraphResource &operator=(CommandGraphResource &&other);
+
     // Returns true if the resource is in use by the renderer.
     bool isResourceInUse(RendererVk *renderer) const;
 
