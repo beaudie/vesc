@@ -517,15 +517,32 @@ angle::Result ContextVk::drawElements(const gl::Context *context,
     return angle::Result::Continue();
 }
 
-angle::Result ContextVk::drawElementsInstanced(const gl::Context *context,
-                                               gl::PrimitiveMode mode,
-                                               GLsizei count,
-                                               GLenum type,
-                                               const void *indices,
-                                               GLsizei instances)
+angle::Result ContextVk::drawElementsInstanced(
+    const gl::Context *context,
+    gl::PrimitiveMode mode,
+    GLsizei count,
+    GLenum type,
+    const void *indices,
+    GLsizei instances)  // XXX this is in drawcallparams too
 {
-    ANGLE_VK_UNREACHABLE(this);
-    return angle::Result::Stop();
+    const gl::DrawCallParams &drawCallParams = context->getParams<gl::DrawCallParams>();
+    assert(drawCallParams.instances() == instances);
+
+    vk::CommandBuffer *commandBuffer = nullptr;
+    if (mode == gl::PrimitiveMode::LineLoop)
+    {
+        ANGLE_VK_UNREACHABLE(this);
+        return angle::Result::Stop();
+        ANGLE_TRY(setupLineLoopDraw(context, drawCallParams, &commandBuffer));
+        vk::LineLoopHelper::Draw(count, commandBuffer);
+    }
+    else
+    {
+        ANGLE_TRY(setupIndexedDraw(context, drawCallParams, &commandBuffer));
+        commandBuffer->drawIndexed(count, instances, 0, 0, 0);
+    }
+
+    return angle::Result::Continue();
 }
 
 angle::Result ContextVk::drawRangeElements(const gl::Context *context,

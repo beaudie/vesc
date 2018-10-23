@@ -42,14 +42,16 @@ class InstancingTest : public ANGLETest
         mQuadVertices.insert(mQuadVertices.end(), qvertex3, qvertex3 + 3);
         mQuadVertices.insert(mQuadVertices.end(), qvertex4, qvertex4 + 3);
 
-        constexpr GLfloat coord1[2] = {0.0f, 0.0f};
-        constexpr GLfloat coord2[2] = {0.0f, 1.0f};
-        constexpr GLfloat coord3[2] = {1.0f, 1.0f};
-        constexpr GLfloat coord4[2] = {1.0f, 0.0f};
-        mTexcoords.insert(mTexcoords.end(), coord1, coord1 + 2);
-        mTexcoords.insert(mTexcoords.end(), coord2, coord2 + 2);
-        mTexcoords.insert(mTexcoords.end(), coord3, coord3 + 2);
-        mTexcoords.insert(mTexcoords.end(), coord4, coord4 + 2);
+        /*
+                constexpr GLfloat coord1[2] = {0.0f, 0.0f};
+                constexpr GLfloat coord2[2] = {0.0f, 1.0f};
+                constexpr GLfloat coord3[2] = {1.0f, 1.0f};
+                constexpr GLfloat coord4[2] = {1.0f, 0.0f};
+                mTexcoords.insert(mTexcoords.end(), coord1, coord1 + 2);
+                mTexcoords.insert(mTexcoords.end(), coord2, coord2 + 2);
+                mTexcoords.insert(mTexcoords.end(), coord3, coord3 + 2);
+                mTexcoords.insert(mTexcoords.end(), coord4, coord4 + 2);
+        */
 
         mIndices.push_back(0);
         mIndices.push_back(1);
@@ -199,23 +201,39 @@ class InstancingTest : public ANGLETest
         // Use the program object
         glUseProgram(program);
 
+        constexpr GLfloat x     = .2;
+        constexpr GLfloat pos[] = {
+            -1, -1, -1, 1, -1 + x, -1, -1 + x, 1,
+        };
+        constexpr GLushort indices[] = {1, 0, 2, 1, 2, 3};
+        constexpr GLfloat inst[]     = {0 * x, 1 * x, 2 * x, 3 * x, 4 * x,
+                                    5 * x, 6 * x, 7 * x, 8 * x, 9 * x};
+
         // Load the vertex position
-        glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, mQuadVertices.data());
+        glVertexAttribPointer(positionLoc, 2, GL_FLOAT, GL_FALSE, 0, pos);
         glEnableVertexAttribArray(positionLoc);
 
         // Load the instance position
-        glVertexAttribPointer(instancePosLoc, 3, GL_FLOAT, GL_FALSE, 0, mInstances.data());
+        glVertexAttribPointer(instancePosLoc, 1, GL_FLOAT, GL_FALSE, 0, inst);
         glEnableVertexAttribArray(instancePosLoc);
 
         // Enable instancing
         glVertexAttribDivisorANGLE(instancePosLoc, 1);
 
         // Do the instanced draw
-        glDrawElementsInstancedANGLE(GL_TRIANGLES, static_cast<GLsizei>(mIndices.size()),
-                                     GL_UNSIGNED_SHORT, mIndices.data(),
-                                     static_cast<GLsizei>(mInstances.size()) / 3);
+        for (int i = 1; i <= 10; ++i)
+        {
+            glClear(GL_COLOR_BUFFER_BIT);
+            glDrawElementsInstancedANGLE(GL_TRIANGLES, ArraySize(indices), GL_UNSIGNED_SHORT,
+                                         indices, i);
 
-        ASSERT_GL_NO_ERROR();
+            ASSERT_GL_NO_ERROR();
+
+            printf("%d\n", i);
+            swapBuffers();
+            sleep(1);
+        }
+        return;
 
         checkQuads();
     }
@@ -275,11 +293,11 @@ TEST_P(InstancingTestAllConfigs, AttributeZeroInstanced)
     ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_ANGLE_instanced_arrays"));
 
     const std::string vs =
-        "attribute vec3 a_instancePos;\n"
-        "attribute vec3 a_position;\n"
+        "attribute float a_instancePos;\n"
+        "attribute vec2 a_position;\n"
         "void main()\n"
         "{\n"
-        "    gl_Position = vec4(a_position.xyz + a_instancePos.xyz, 1.0);\n"
+        "    gl_Position = vec4(a_position.x + a_instancePos, a_position.y, 0, 1);\n"
         "}\n";
 
     runDrawElementsTest(vs, true);
@@ -292,12 +310,13 @@ TEST_P(InstancingTestAllConfigs, AttributeZeroNotInstanced)
 {
     ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_ANGLE_instanced_arrays"));
 
+    // XXX the only difference here is the order of the attribs
     const std::string vs =
-        "attribute vec3 a_position;\n"
-        "attribute vec3 a_instancePos;\n"
+        "attribute vec2 a_position;\n"
+        "attribute float a_instancePos;\n"
         "void main()\n"
         "{\n"
-        "    gl_Position = vec4(a_position.xyz + a_instancePos.xyz, 1.0);\n"
+        "    gl_Position = vec4(a_position.x + a_instancePos, a_position.y, 0, 1);\n"
         "}\n";
 
     runDrawElementsTest(vs, false);
