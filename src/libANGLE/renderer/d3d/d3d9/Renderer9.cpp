@@ -1292,21 +1292,18 @@ angle::Result Renderer9::applyVertexBuffer(const gl::Context *context,
 
 // Applies the indices and element array bindings to the Direct3D 9 device
 angle::Result Renderer9::applyIndexBuffer(const gl::Context *context,
-                                          const void *indices,
-                                          GLsizei count,
-                                          gl::PrimitiveMode mode,
-                                          GLenum type,
+                                          const gl::DrawCallParams &params,
                                           TranslatedIndexData *indexInfo)
 {
     gl::VertexArray *vao                     = context->getGLState().getVertexArray();
     gl::Buffer *elementArrayBuffer           = vao->getElementArrayBuffer();
-    const gl::DrawCallParams &drawCallParams = context->getParams<gl::DrawCallParams>();
 
     GLenum dstType = GL_NONE;
-    ANGLE_TRY(GetIndexTranslationDestType(context, drawCallParams, false, &dstType));
+    ANGLE_TRY(GetIndexTranslationDestType(context, params, false, &dstType));
 
-    ANGLE_TRY(mIndexDataManager->prepareIndexData(context, type, dstType, count, elementArrayBuffer,
-                                                  indices, indexInfo));
+    ANGLE_TRY(mIndexDataManager->prepareIndexData(context, params.type(), dstType,
+                                                  params.indexCount(), elementArrayBuffer,
+                                                  params.indices(), indexInfo));
 
     // Directly binding the storage buffer is not supported for d3d9
     ASSERT(indexInfo->storage == nullptr);
@@ -1364,23 +1361,18 @@ angle::Result Renderer9::drawArraysImpl(const gl::Context *context,
 }
 
 angle::Result Renderer9::drawElementsImpl(const gl::Context *context,
-                                          gl::PrimitiveMode mode,
-                                          GLsizei count,
-                                          GLenum type,
-                                          const void *indices,
-                                          GLsizei instances)
+                                          const gl::DrawCallParams &params)
 {
     TranslatedIndexData indexInfo;
 
-    ANGLE_TRY(applyIndexBuffer(context, indices, count, mode, type, &indexInfo));
+    ANGLE_TRY(applyIndexBuffer(context, params, &indexInfo));
 
-    const auto &drawCallParams = context->getParams<gl::DrawCallParams>();
-    ANGLE_TRY_HANDLE(context, drawCallParams.ensureIndexRangeResolved(context));
+    ANGLE_TRY_HANDLE(context, params.ensureIndexRangeResolved(context));
 
-    const gl::IndexRange &indexRange = drawCallParams.getIndexRange();
+    const gl::IndexRange &indexRange = params.getIndexRange();
     size_t vertexCount               = indexRange.vertexCount();
-    ANGLE_TRY(applyVertexBuffer(context, mode, static_cast<GLsizei>(indexRange.start),
-                                static_cast<GLsizei>(vertexCount), instances, &indexInfo));
+    ANGLE_TRY(applyVertexBuffer(context, params.mode(), static_cast<GLsizei>(indexRange.start),
+                                static_cast<GLsizei>(vertexCount), params.instances(), &indexInfo));
 
     startScene();
 
@@ -1389,14 +1381,16 @@ angle::Result Renderer9::drawElementsImpl(const gl::Context *context,
     gl::VertexArray *vao           = context->getGLState().getVertexArray();
     gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer();
 
-    if (mode == gl::PrimitiveMode::Points)
+    if (params.mode() == gl::PrimitiveMode::Points)
     {
-        return drawIndexedPoints(context, count, type, indices, minIndex, elementArrayBuffer);
+        return drawIndexedPoints(context, params.indexCount(), params.type(), params.indices(),
+                                 minIndex, elementArrayBuffer);
     }
 
-    if (mode == gl::PrimitiveMode::LineLoop)
+    if (params.mode() == gl::PrimitiveMode::LineLoop)
     {
-        return drawLineLoop(context, count, type, indices, minIndex, elementArrayBuffer);
+        return drawLineLoop(context, params.indexCount(), params.type(), params.indices(), minIndex,
+                            elementArrayBuffer);
     }
 
     for (int i = 0; i < mRepeatDraw; i++)
@@ -2968,11 +2962,7 @@ Renderer9::CurSamplerState::CurSamplerState()
 }
 
 angle::Result Renderer9::genericDrawElements(const gl::Context *context,
-                                             gl::PrimitiveMode mode,
-                                             GLsizei count,
-                                             GLenum type,
-                                             const void *indices,
-                                             GLsizei instances)
+                                             const gl::DrawCallParams &params)
 {
     const auto &data     = context->getContextState();
     gl::Program *program = context->getGLState().getProgram();
@@ -2982,18 +2972,18 @@ angle::Result Renderer9::genericDrawElements(const gl::Context *context,
 
     programD3D->updateSamplerMapping();
 
-    if (!applyPrimitiveType(mode, count, usesPointSize))
+    if (!applyPrimitiveType(params.mode(), params.indexCount(), usesPointSize))
     {
         return angle::Result::Continue();
     }
 
-    ANGLE_TRY(updateState(context, mode));
+    ANGLE_TRY(updateState(context, params.mode()));
     ANGLE_TRY(applyTextures(context));
-    ANGLE_TRY(applyShaders(context, mode));
+    ANGLE_TRY(applyShaders(context, params.mode()));
 
-    if (!skipDraw(data.getState(), mode))
+    if (!skipDraw(data.getState(), params.mode()))
     {
-        ANGLE_TRY(drawElementsImpl(context, mode, count, type, indices, instances));
+        ANGLE_TRY(drawElementsImpl(context, params));
     }
 
     return angle::Result::Continue();

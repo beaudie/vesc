@@ -156,10 +156,7 @@ class Renderer9 : public RendererD3D
                                     GLsizei instances,
                                     TranslatedIndexData *indexInfo);
     angle::Result applyIndexBuffer(const gl::Context *context,
-                                   const void *indices,
-                                   GLsizei count,
-                                   gl::PrimitiveMode mode,
-                                   GLenum type,
+                                   const gl::DrawCallParams &params,
                                    TranslatedIndexData *indexInfo);
 
     void clear(const ClearParameters &clearParams,
@@ -387,12 +384,7 @@ class Renderer9 : public RendererD3D
                                     GLsizei count,
                                     GLsizei instances);
 
-    angle::Result genericDrawElements(const gl::Context *context,
-                                      gl::PrimitiveMode mode,
-                                      GLsizei count,
-                                      GLenum type,
-                                      const void *indices,
-                                      GLsizei instances);
+    angle::Result genericDrawElements(const gl::Context *context, const gl::DrawCallParams &params);
 
     // Necessary hack for default framebuffers in D3D.
     FramebufferImpl *createDefaultFramebuffer(const gl::FramebufferState &state) override;
@@ -421,12 +413,7 @@ class Renderer9 : public RendererD3D
                                  GLint startVertex,
                                  GLsizei count,
                                  GLsizei instances);
-    angle::Result drawElementsImpl(const gl::Context *context,
-                                   gl::PrimitiveMode mode,
-                                   GLsizei count,
-                                   GLenum type,
-                                   const void *indices,
-                                   GLsizei instances);
+    angle::Result drawElementsImpl(const gl::Context *context, const gl::DrawCallParams &params);
 
     angle::Result applyShaders(const gl::Context *context, gl::PrimitiveMode drawMode);
 

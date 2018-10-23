@@ -16,6 +16,7 @@
 namespace gl
 {
 class Context;
+class DrawCallParams;
 struct IndexRange;
 
 bool ValidateES3TexImageParametersBase(Context *context,
@@ -178,12 +179,9 @@ bool ValidateInvalidateSubFramebuffer(Context *context,
 bool ValidateClearBuffer(Context *context);
 
 bool ValidateDrawRangeElements(Context *context,
-                               PrimitiveMode mode,
                                GLuint start,
                                GLuint end,
-                               GLsizei count,
-                               GLenum type,
-                               const void *indices);
+                               const DrawCallParams &params);
 
 bool ValidateGetUniformuiv(Context *context, GLuint program, GLint location, GLuint *params);
 
@@ -441,12 +439,7 @@ bool ValidateGetSynciv(Context *context,
                        GLsizei *length,
                        GLint *values);
 
-bool ValidateDrawElementsInstanced(Context *context,
-                                   PrimitiveMode mode,
-                                   GLsizei count,
-                                   GLenum type,
-                                   const void *indices,
-                                   GLsizei instanceCount);
+bool ValidateDrawElementsInstanced(Context *context, const DrawCallParams &params);
 
 bool ValidateFramebufferTextureMultiviewLayeredANGLE(Context *context,
                                                      GLenum target,
@@ -567,11 +560,7 @@ bool ValidateUniformBlockBinding(Context *context,
                                  GLuint program,
                                  GLuint uniformBlockIndex,
                                  GLuint uniformBlockBinding);
-bool ValidateDrawArraysInstanced(Context *context,
-                                 PrimitiveMode mode,
-                                 GLint first,
-                                 GLsizei count,
-                                 GLsizei primcount);
+bool ValidateDrawArraysInstanced(Context *context, const DrawCallParams &params);
 
 bool ValidateFenceSync(Context *context, GLenum condition, GLbitfield flags);
 bool ValidateIsSync(Context *context, GLsync sync);

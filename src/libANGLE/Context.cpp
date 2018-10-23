@@ -336,7 +336,6 @@ Context::Context(rx::EGLImplFactory *implFactory,
              mLimitations),
       mSkipValidation(GetNoError(attribs)),
       mDisplayTextureShareGroup(shareTextures != nullptr),
-      mSavedArgsType(nullptr),
       mImplementation(implFactory->createContext(mState, config, shareContext, attribs)),
       mLabel(nullptr),
       mCompiler(),
@@ -368,10 +367,6 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mZeroFilledBuffer(1000u),
       mThreadPool(nullptr)
 {
-    // Needed to solve a Clang warning of unused variables.
-    ANGLE_UNUSED_VARIABLE(mSavedArgsType);
-    ANGLE_UNUSED_VARIABLE(mParamsBuffer);
-
     for (angle::SubjectIndex uboIndex = kUniformBuffer0SubjectIndex;
          uboIndex < kUniformBufferMaxSubjectIndex; ++uboIndex)
     {
@@ -2215,94 +2210,80 @@ void Context::texParameterIuivRobust(TextureType target,
     UNIMPLEMENTED();
 }
 
-void Context::drawArrays(PrimitiveMode mode, GLint first, GLsizei count)
+void Context::drawArrays(const DrawCallParams &params)
 {
     // No-op if count draws no primitives for given mode
-    if (noopDraw(mode, count))
+    if (noopDraw(params.mode(), params.vertexCount()))
     {
         return;
     }
 
-    ANGLE_CONTEXT_TRY(prepareForDraw(mode));
-    ANGLE_CONTEXT_TRY(mImplementation->drawArrays(this, mode, first, count));
-    MarkTransformFeedbackBufferUsage(this, mGLState.getCurrentTransformFeedback(), count, 1);
+    ANGLE_CONTEXT_TRY(prepareForDraw(params.mode()));
+    ANGLE_CONTEXT_TRY(mImplementation->drawArrays(this, params));
+    MarkTransformFeedbackBufferUsage(this, mGLState.getCurrentTransformFeedback(),
+                                     params.vertexCount(), 1);
 }
 
-void Context::drawArraysInstanced(PrimitiveMode mode,
-                                  GLint first,
-                                  GLsizei count,
-                                  GLsizei instanceCount)
+void Context::drawArraysInstanced(const DrawCallParams &params)
 {
     // No-op if count draws no primitives for given mode
-    if (noopDrawInstanced(mode, count, instanceCount))
+    if (noopDrawInstanced(params.mode(), params.vertexCount(), params.instances()))
     {
         return;
     }
 
-    ANGLE_CONTEXT_TRY(prepareForDraw(mode));
-    ANGLE_CONTEXT_TRY(
-        mImplementation->drawArraysInstanced(this, mode, first, count, instanceCount));
-    MarkTransformFeedbackBufferUsage(this, mGLState.getCurrentTransformFeedback(), count,
-                                     instanceCount);
+    ANGLE_CONTEXT_TRY(prepareForDraw(params.mode()));
+    ANGLE_CONTEXT_TRY(mImplementation->drawArraysInstanced(this, params));
+    MarkTransformFeedbackBufferUsage(this, mGLState.getCurrentTransformFeedback(),
+                                     params.vertexCount(), params.instances());
 }
 
-void Context::drawElements(PrimitiveMode mode, GLsizei count, GLenum type, const void *indices)
+void Context::drawElements(const DrawCallParams &params)
 {
     // No-op if count draws no primitives for given mode
-    if (noopDraw(mode, count))
+    if (noopDraw(params.mode(), params.indexCount()))
     {
         return;
     }
 
-    ANGLE_CONTEXT_TRY(prepareForDraw(mode));
-    ANGLE_CONTEXT_TRY(mImplementation->drawElements(this, mode, count, type, indices));
+    ANGLE_CONTEXT_TRY(prepareForDraw(params.mode()));
+    ANGLE_CONTEXT_TRY(mImplementation->drawElements(this, params));
 }
 
-void Context::drawElementsInstanced(PrimitiveMode mode,
-                                    GLsizei count,
-                                    GLenum type,
-                                    const void *indices,
-                                    GLsizei instances)
+void Context::drawElementsInstanced(const DrawCallParams &params)
 {
     // No-op if count draws no primitives for given mode
-    if (noopDrawInstanced(mode, count, instances))
+    if (noopDrawInstanced(params.mode(), params.indexCount(), params.instances()))
     {
         return;
     }
 
-    ANGLE_CONTEXT_TRY(prepareForDraw(mode));
-    ANGLE_CONTEXT_TRY(
-        mImplementation->drawElementsInstanced(this, mode, count, type, indices, instances));
+    ANGLE_CONTEXT_TRY(prepareForDraw(params.mode()));
+    ANGLE_CONTEXT_TRY(mImplementation->drawElementsInstanced(this, params));
 }
 
-void Context::drawRangeElements(PrimitiveMode mode,
-                                GLuint start,
-                                GLuint end,
-                                GLsizei count,
-                                GLenum type,
-                                const void *indices)
+void Context::drawRangeElements(GLuint start, GLuint end, const DrawCallParams &params)
 {
     // No-op if count draws no primitives for given mode
-    if (noopDraw(mode, count))
+    if (noopDraw(params.mode(), params.indexCount()))
     {
         return;
     }
 
-    ANGLE_CONTEXT_TRY(prepareForDraw(mode));
-    ANGLE_CONTEXT_TRY(
-        mImplementation->drawRangeElements(this, mode, start, end, count, type, indices));
+    ANGLE_CONTEXT_TRY(prepareForDraw(params.mode()));
+    ANGLE_CONTEXT_TRY(mImplementation->drawRangeElements(this, start, end, params));
 }
 
-void Context::drawArraysIndirect(PrimitiveMode mode, const void *indirect)
+void Context::drawArraysIndirect(const DrawCallParams &params)
 {
-    ANGLE_CONTEXT_TRY(prepareForDraw(mode));
-    ANGLE_CONTEXT_TRY(mImplementation->drawArraysIndirect(this, mode, indirect));
+    ANGLE_CONTEXT_TRY(prepareForDraw(params.mode()));
+    ANGLE_CONTEXT_TRY(mImplementation->drawArraysIndirect(this, params));
 }
 
-void Context::drawElementsIndirect(PrimitiveMode mode, GLenum type, const void *indirect)
+void Context::drawElementsIndirect(const DrawCallParams &params)
 {
-    ANGLE_CONTEXT_TRY(prepareForDraw(mode));
-    ANGLE_CONTEXT_TRY(mImplementation->drawElementsIndirect(this, mode, type, indirect));
+    ANGLE_CONTEXT_TRY(prepareForDraw(params.mode()));
+    ANGLE_CONTEXT_TRY(mImplementation->drawElementsIndirect(this, params));
 }
 
 void Context::flush()

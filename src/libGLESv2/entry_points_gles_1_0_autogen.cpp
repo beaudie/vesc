@@ -25,7 +25,6 @@ void GL_APIENTRY AlphaFunc(GLenum func, GLfloat ref)
     if (context)
     {
         AlphaTestFunc funcPacked = FromGLenum<AlphaTestFunc>(func);
-        context->gatherParams<EntryPoint::AlphaFunc>(funcPacked, ref);
 
         if (context->skipValidation() || ValidateAlphaFunc(context, funcPacked, ref))
         {
@@ -43,7 +42,6 @@ void GL_APIENTRY AlphaFuncx(GLenum func, GLfixed ref)
     if (context)
     {
         AlphaTestFunc funcPacked = FromGLenum<AlphaTestFunc>(func);
-        context->gatherParams<EntryPoint::AlphaFuncx>(funcPacked, ref);
 
         if (context->skipValidation() || ValidateAlphaFuncx(context, funcPacked, ref))
         {
@@ -61,7 +59,6 @@ void GL_APIENTRY ClearColorx(GLfixed red, GLfixed green, GLfixed blue, GLfixed a
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::ClearColorx>(red, green, blue, alpha);
 
         if (context->skipValidation() || ValidateClearColorx(context, red, green, blue, alpha))
         {
@@ -78,7 +75,6 @@ void GL_APIENTRY ClearDepthx(GLfixed depth)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::ClearDepthx>(depth);
 
         if (context->skipValidation() || ValidateClearDepthx(context, depth))
         {
@@ -95,7 +91,6 @@ void GL_APIENTRY ClientActiveTexture(GLenum texture)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::ClientActiveTexture>(texture);
 
         if (context->skipValidation() || ValidateClientActiveTexture(context, texture))
         {
@@ -112,7 +107,6 @@ void GL_APIENTRY ClipPlanef(GLenum p, const GLfloat *eqn)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::ClipPlanef>(p, eqn);
 
         if (context->skipValidation() || ValidateClipPlanef(context, p, eqn))
         {
@@ -129,7 +123,6 @@ void GL_APIENTRY ClipPlanex(GLenum plane, const GLfixed *equation)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::ClipPlanex>(plane, equation);
 
         if (context->skipValidation() || ValidateClipPlanex(context, plane, equation))
         {
@@ -147,7 +140,6 @@ void GL_APIENTRY Color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Color4f>(red, green, blue, alpha);
 
         if (context->skipValidation() || ValidateColor4f(context, red, green, blue, alpha))
         {
@@ -165,7 +157,6 @@ void GL_APIENTRY Color4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alph
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Color4ub>(red, green, blue, alpha);
 
         if (context->skipValidation() || ValidateColor4ub(context, red, green, blue, alpha))
         {
@@ -183,7 +174,6 @@ void GL_APIENTRY Color4x(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Color4x>(red, green, blue, alpha);
 
         if (context->skipValidation() || ValidateColor4x(context, red, green, blue, alpha))
         {
@@ -202,7 +192,6 @@ void GL_APIENTRY ColorPointer(GLint size, GLenum type, GLsizei stride, const voi
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::ColorPointer>(size, type, stride, pointer);
 
         if (context->skipValidation() || ValidateColorPointer(context, size, type, stride, pointer))
         {
@@ -219,7 +208,6 @@ void GL_APIENTRY DepthRangex(GLfixed n, GLfixed f)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::DepthRangex>(n, f);
 
         if (context->skipValidation() || ValidateDepthRangex(context, n, f))
         {
@@ -237,7 +225,6 @@ void GL_APIENTRY DisableClientState(GLenum array)
     if (context)
     {
         ClientVertexArrayType arrayPacked = FromGLenum<ClientVertexArrayType>(array);
-        context->gatherParams<EntryPoint::DisableClientState>(arrayPacked);
 
         if (context->skipValidation() || ValidateDisableClientState(context, arrayPacked))
         {
@@ -255,7 +242,6 @@ void GL_APIENTRY EnableClientState(GLenum array)
     if (context)
     {
         ClientVertexArrayType arrayPacked = FromGLenum<ClientVertexArrayType>(array);
-        context->gatherParams<EntryPoint::EnableClientState>(arrayPacked);
 
         if (context->skipValidation() || ValidateEnableClientState(context, arrayPacked))
         {
@@ -272,7 +258,6 @@ void GL_APIENTRY Fogf(GLenum pname, GLfloat param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Fogf>(pname, param);
 
         if (context->skipValidation() || ValidateFogf(context, pname, param))
         {
@@ -289,7 +274,6 @@ void GL_APIENTRY Fogfv(GLenum pname, const GLfloat *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Fogfv>(pname, params);
 
         if (context->skipValidation() || ValidateFogfv(context, pname, params))
         {
@@ -306,7 +290,6 @@ void GL_APIENTRY Fogx(GLenum pname, GLfixed param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Fogx>(pname, param);
 
         if (context->skipValidation() || ValidateFogx(context, pname, param))
         {
@@ -323,7 +306,6 @@ void GL_APIENTRY Fogxv(GLenum pname, const GLfixed *param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Fogxv>(pname, param);
 
         if (context->skipValidation() || ValidateFogxv(context, pname, param))
         {
@@ -343,7 +325,6 @@ void GL_APIENTRY Frustumf(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Frustumf>(l, r, b, t, n, f);
 
         if (context->skipValidation() || ValidateFrustumf(context, l, r, b, t, n, f))
         {
@@ -363,7 +344,6 @@ void GL_APIENTRY Frustumx(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Frustumx>(l, r, b, t, n, f);
 
         if (context->skipValidation() || ValidateFrustumx(context, l, r, b, t, n, f))
         {
@@ -380,7 +360,6 @@ void GL_APIENTRY GetClipPlanef(GLenum plane, GLfloat *equation)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::GetClipPlanef>(plane, equation);
 
         if (context->skipValidation() || ValidateGetClipPlanef(context, plane, equation))
         {
@@ -397,7 +376,6 @@ void GL_APIENTRY GetClipPlanex(GLenum plane, GLfixed *equation)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::GetClipPlanex>(plane, equation);
 
         if (context->skipValidation() || ValidateGetClipPlanex(context, plane, equation))
         {
@@ -414,7 +392,6 @@ void GL_APIENTRY GetFixedv(GLenum pname, GLfixed *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::GetFixedv>(pname, params);
 
         if (context->skipValidation() || ValidateGetFixedv(context, pname, params))
         {
@@ -433,7 +410,6 @@ void GL_APIENTRY GetLightfv(GLenum light, GLenum pname, GLfloat *params)
     if (context)
     {
         LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
-        context->gatherParams<EntryPoint::GetLightfv>(light, pnamePacked, params);
 
         if (context->skipValidation() || ValidateGetLightfv(context, light, pnamePacked, params))
         {
@@ -452,7 +428,6 @@ void GL_APIENTRY GetLightxv(GLenum light, GLenum pname, GLfixed *params)
     if (context)
     {
         LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
-        context->gatherParams<EntryPoint::GetLightxv>(light, pnamePacked, params);
 
         if (context->skipValidation() || ValidateGetLightxv(context, light, pnamePacked, params))
         {
@@ -471,7 +446,6 @@ void GL_APIENTRY GetMaterialfv(GLenum face, GLenum pname, GLfloat *params)
     if (context)
     {
         MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
-        context->gatherParams<EntryPoint::GetMaterialfv>(face, pnamePacked, params);
 
         if (context->skipValidation() || ValidateGetMaterialfv(context, face, pnamePacked, params))
         {
@@ -490,7 +464,6 @@ void GL_APIENTRY GetMaterialxv(GLenum face, GLenum pname, GLfixed *params)
     if (context)
     {
         MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
-        context->gatherParams<EntryPoint::GetMaterialxv>(face, pnamePacked, params);
 
         if (context->skipValidation() || ValidateGetMaterialxv(context, face, pnamePacked, params))
         {
@@ -507,7 +480,6 @@ void GL_APIENTRY GetPointerv(GLenum pname, void **params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::GetPointerv>(pname, params);
 
         if (context->skipValidation() || ValidateGetPointerv(context, pname, params))
         {
@@ -527,7 +499,6 @@ void GL_APIENTRY GetTexEnvfv(GLenum target, GLenum pname, GLfloat *params)
     {
         TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
         TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
-        context->gatherParams<EntryPoint::GetTexEnvfv>(targetPacked, pnamePacked, params);
 
         if (context->skipValidation() ||
             ValidateGetTexEnvfv(context, targetPacked, pnamePacked, params))
@@ -548,7 +519,6 @@ void GL_APIENTRY GetTexEnviv(GLenum target, GLenum pname, GLint *params)
     {
         TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
         TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
-        context->gatherParams<EntryPoint::GetTexEnviv>(targetPacked, pnamePacked, params);
 
         if (context->skipValidation() ||
             ValidateGetTexEnviv(context, targetPacked, pnamePacked, params))
@@ -569,7 +539,6 @@ void GL_APIENTRY GetTexEnvxv(GLenum target, GLenum pname, GLfixed *params)
     {
         TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
         TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
-        context->gatherParams<EntryPoint::GetTexEnvxv>(targetPacked, pnamePacked, params);
 
         if (context->skipValidation() ||
             ValidateGetTexEnvxv(context, targetPacked, pnamePacked, params))
@@ -589,7 +558,6 @@ void GL_APIENTRY GetTexParameterxv(GLenum target, GLenum pname, GLfixed *params)
     if (context)
     {
         TextureType targetPacked = FromGLenum<TextureType>(target);
-        context->gatherParams<EntryPoint::GetTexParameterxv>(targetPacked, pname, params);
 
         if (context->skipValidation() ||
             ValidateGetTexParameterxv(context, targetPacked, pname, params))
@@ -607,7 +575,6 @@ void GL_APIENTRY LightModelf(GLenum pname, GLfloat param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::LightModelf>(pname, param);
 
         if (context->skipValidation() || ValidateLightModelf(context, pname, param))
         {
@@ -624,7 +591,6 @@ void GL_APIENTRY LightModelfv(GLenum pname, const GLfloat *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::LightModelfv>(pname, params);
 
         if (context->skipValidation() || ValidateLightModelfv(context, pname, params))
         {
@@ -641,7 +607,6 @@ void GL_APIENTRY LightModelx(GLenum pname, GLfixed param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::LightModelx>(pname, param);
 
         if (context->skipValidation() || ValidateLightModelx(context, pname, param))
         {
@@ -658,7 +623,6 @@ void GL_APIENTRY LightModelxv(GLenum pname, const GLfixed *param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::LightModelxv>(pname, param);
 
         if (context->skipValidation() || ValidateLightModelxv(context, pname, param))
         {
@@ -676,7 +640,6 @@ void GL_APIENTRY Lightf(GLenum light, GLenum pname, GLfloat param)
     if (context)
     {
         LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
-        context->gatherParams<EntryPoint::Lightf>(light, pnamePacked, param);
 
         if (context->skipValidation() || ValidateLightf(context, light, pnamePacked, param))
         {
@@ -695,7 +658,6 @@ void GL_APIENTRY Lightfv(GLenum light, GLenum pname, const GLfloat *params)
     if (context)
     {
         LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
-        context->gatherParams<EntryPoint::Lightfv>(light, pnamePacked, params);
 
         if (context->skipValidation() || ValidateLightfv(context, light, pnamePacked, params))
         {
@@ -713,7 +675,6 @@ void GL_APIENTRY Lightx(GLenum light, GLenum pname, GLfixed param)
     if (context)
     {
         LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
-        context->gatherParams<EntryPoint::Lightx>(light, pnamePacked, param);
 
         if (context->skipValidation() || ValidateLightx(context, light, pnamePacked, param))
         {
@@ -732,7 +693,6 @@ void GL_APIENTRY Lightxv(GLenum light, GLenum pname, const GLfixed *params)
     if (context)
     {
         LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
-        context->gatherParams<EntryPoint::Lightxv>(light, pnamePacked, params);
 
         if (context->skipValidation() || ValidateLightxv(context, light, pnamePacked, params))
         {
@@ -749,7 +709,6 @@ void GL_APIENTRY LineWidthx(GLfixed width)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::LineWidthx>(width);
 
         if (context->skipValidation() || ValidateLineWidthx(context, width))
         {
@@ -766,7 +725,6 @@ void GL_APIENTRY LoadIdentity()
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::LoadIdentity>();
 
         if (context->skipValidation() || ValidateLoadIdentity(context))
         {
@@ -783,7 +741,6 @@ void GL_APIENTRY LoadMatrixf(const GLfloat *m)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::LoadMatrixf>(m);
 
         if (context->skipValidation() || ValidateLoadMatrixf(context, m))
         {
@@ -800,7 +757,6 @@ void GL_APIENTRY LoadMatrixx(const GLfixed *m)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::LoadMatrixx>(m);
 
         if (context->skipValidation() || ValidateLoadMatrixx(context, m))
         {
@@ -818,7 +774,6 @@ void GL_APIENTRY LogicOp(GLenum opcode)
     if (context)
     {
         LogicalOperation opcodePacked = FromGLenum<LogicalOperation>(opcode);
-        context->gatherParams<EntryPoint::LogicOp>(opcodePacked);
 
         if (context->skipValidation() || ValidateLogicOp(context, opcodePacked))
         {
@@ -836,7 +791,6 @@ void GL_APIENTRY Materialf(GLenum face, GLenum pname, GLfloat param)
     if (context)
     {
         MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
-        context->gatherParams<EntryPoint::Materialf>(face, pnamePacked, param);
 
         if (context->skipValidation() || ValidateMaterialf(context, face, pnamePacked, param))
         {
@@ -855,7 +809,6 @@ void GL_APIENTRY Materialfv(GLenum face, GLenum pname, const GLfloat *params)
     if (context)
     {
         MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
-        context->gatherParams<EntryPoint::Materialfv>(face, pnamePacked, params);
 
         if (context->skipValidation() || ValidateMaterialfv(context, face, pnamePacked, params))
         {
@@ -873,7 +826,6 @@ void GL_APIENTRY Materialx(GLenum face, GLenum pname, GLfixed param)
     if (context)
     {
         MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
-        context->gatherParams<EntryPoint::Materialx>(face, pnamePacked, param);
 
         if (context->skipValidation() || ValidateMaterialx(context, face, pnamePacked, param))
         {
@@ -892,7 +844,6 @@ void GL_APIENTRY Materialxv(GLenum face, GLenum pname, const GLfixed *param)
     if (context)
     {
         MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
-        context->gatherParams<EntryPoint::Materialxv>(face, pnamePacked, param);
 
         if (context->skipValidation() || ValidateMaterialxv(context, face, pnamePacked, param))
         {
@@ -910,7 +861,6 @@ void GL_APIENTRY MatrixMode(GLenum mode)
     if (context)
     {
         MatrixType modePacked = FromGLenum<MatrixType>(mode);
-        context->gatherParams<EntryPoint::MatrixMode>(modePacked);
 
         if (context->skipValidation() || ValidateMatrixMode(context, modePacked))
         {
@@ -927,7 +877,6 @@ void GL_APIENTRY MultMatrixf(const GLfloat *m)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::MultMatrixf>(m);
 
         if (context->skipValidation() || ValidateMultMatrixf(context, m))
         {
@@ -944,7 +893,6 @@ void GL_APIENTRY MultMatrixx(const GLfixed *m)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::MultMatrixx>(m);
 
         if (context->skipValidation() || ValidateMultMatrixx(context, m))
         {
@@ -962,7 +910,6 @@ void GL_APIENTRY MultiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::MultiTexCoord4f>(target, s, t, r, q);
 
         if (context->skipValidation() || ValidateMultiTexCoord4f(context, target, s, t, r, q))
         {
@@ -982,7 +929,6 @@ void GL_APIENTRY MultiTexCoord4x(GLenum texture, GLfixed s, GLfixed t, GLfixed r
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::MultiTexCoord4x>(texture, s, t, r, q);
 
         if (context->skipValidation() || ValidateMultiTexCoord4x(context, texture, s, t, r, q))
         {
@@ -999,7 +945,6 @@ void GL_APIENTRY Normal3f(GLfloat nx, GLfloat ny, GLfloat nz)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Normal3f>(nx, ny, nz);
 
         if (context->skipValidation() || ValidateNormal3f(context, nx, ny, nz))
         {
@@ -1016,7 +961,6 @@ void GL_APIENTRY Normal3x(GLfixed nx, GLfixed ny, GLfixed nz)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Normal3x>(nx, ny, nz);
 
         if (context->skipValidation() || ValidateNormal3x(context, nx, ny, nz))
         {
@@ -1034,7 +978,6 @@ void GL_APIENTRY NormalPointer(GLenum type, GLsizei stride, const void *pointer)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::NormalPointer>(type, stride, pointer);
 
         if (context->skipValidation() || ValidateNormalPointer(context, type, stride, pointer))
         {
@@ -1054,7 +997,6 @@ void GL_APIENTRY Orthof(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, G
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Orthof>(l, r, b, t, n, f);
 
         if (context->skipValidation() || ValidateOrthof(context, l, r, b, t, n, f))
         {
@@ -1074,7 +1016,6 @@ void GL_APIENTRY Orthox(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, G
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Orthox>(l, r, b, t, n, f);
 
         if (context->skipValidation() || ValidateOrthox(context, l, r, b, t, n, f))
         {
@@ -1092,7 +1033,6 @@ void GL_APIENTRY PointParameterf(GLenum pname, GLfloat param)
     if (context)
     {
         PointParameter pnamePacked = FromGLenum<PointParameter>(pname);
-        context->gatherParams<EntryPoint::PointParameterf>(pnamePacked, param);
 
         if (context->skipValidation() || ValidatePointParameterf(context, pnamePacked, param))
         {
@@ -1110,7 +1050,6 @@ void GL_APIENTRY PointParameterfv(GLenum pname, const GLfloat *params)
     if (context)
     {
         PointParameter pnamePacked = FromGLenum<PointParameter>(pname);
-        context->gatherParams<EntryPoint::PointParameterfv>(pnamePacked, params);
 
         if (context->skipValidation() || ValidatePointParameterfv(context, pnamePacked, params))
         {
@@ -1128,7 +1067,6 @@ void GL_APIENTRY PointParameterx(GLenum pname, GLfixed param)
     if (context)
     {
         PointParameter pnamePacked = FromGLenum<PointParameter>(pname);
-        context->gatherParams<EntryPoint::PointParameterx>(pnamePacked, param);
 
         if (context->skipValidation() || ValidatePointParameterx(context, pnamePacked, param))
         {
@@ -1146,7 +1084,6 @@ void GL_APIENTRY PointParameterxv(GLenum pname, const GLfixed *params)
     if (context)
     {
         PointParameter pnamePacked = FromGLenum<PointParameter>(pname);
-        context->gatherParams<EntryPoint::PointParameterxv>(pnamePacked, params);
 
         if (context->skipValidation() || ValidatePointParameterxv(context, pnamePacked, params))
         {
@@ -1163,7 +1100,6 @@ void GL_APIENTRY PointSize(GLfloat size)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::PointSize>(size);
 
         if (context->skipValidation() || ValidatePointSize(context, size))
         {
@@ -1180,7 +1116,6 @@ void GL_APIENTRY PointSizex(GLfixed size)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::PointSizex>(size);
 
         if (context->skipValidation() || ValidatePointSizex(context, size))
         {
@@ -1197,7 +1132,6 @@ void GL_APIENTRY PolygonOffsetx(GLfixed factor, GLfixed units)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::PolygonOffsetx>(factor, units);
 
         if (context->skipValidation() || ValidatePolygonOffsetx(context, factor, units))
         {
@@ -1214,7 +1148,6 @@ void GL_APIENTRY PopMatrix()
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::PopMatrix>();
 
         if (context->skipValidation() || ValidatePopMatrix(context))
         {
@@ -1231,7 +1164,6 @@ void GL_APIENTRY PushMatrix()
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::PushMatrix>();
 
         if (context->skipValidation() || ValidatePushMatrix(context))
         {
@@ -1248,7 +1180,6 @@ void GL_APIENTRY Rotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Rotatef>(angle, x, y, z);
 
         if (context->skipValidation() || ValidateRotatef(context, angle, x, y, z))
         {
@@ -1266,7 +1197,6 @@ void GL_APIENTRY Rotatex(GLfixed angle, GLfixed x, GLfixed y, GLfixed z)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Rotatex>(angle, x, y, z);
 
         if (context->skipValidation() || ValidateRotatex(context, angle, x, y, z))
         {
@@ -1283,7 +1213,6 @@ void GL_APIENTRY SampleCoveragex(GLclampx value, GLboolean invert)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::SampleCoveragex>(value, invert);
 
         if (context->skipValidation() || ValidateSampleCoveragex(context, value, invert))
         {
@@ -1300,7 +1229,6 @@ void GL_APIENTRY Scalef(GLfloat x, GLfloat y, GLfloat z)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Scalef>(x, y, z);
 
         if (context->skipValidation() || ValidateScalef(context, x, y, z))
         {
@@ -1317,7 +1245,6 @@ void GL_APIENTRY Scalex(GLfixed x, GLfixed y, GLfixed z)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Scalex>(x, y, z);
 
         if (context->skipValidation() || ValidateScalex(context, x, y, z))
         {
@@ -1335,7 +1262,6 @@ void GL_APIENTRY ShadeModel(GLenum mode)
     if (context)
     {
         ShadingModel modePacked = FromGLenum<ShadingModel>(mode);
-        context->gatherParams<EntryPoint::ShadeModel>(modePacked);
 
         if (context->skipValidation() || ValidateShadeModel(context, modePacked))
         {
@@ -1354,7 +1280,6 @@ void GL_APIENTRY TexCoordPointer(GLint size, GLenum type, GLsizei stride, const 
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::TexCoordPointer>(size, type, stride, pointer);
 
         if (context->skipValidation() ||
             ValidateTexCoordPointer(context, size, type, stride, pointer))
@@ -1374,7 +1299,6 @@ void GL_APIENTRY TexEnvf(GLenum target, GLenum pname, GLfloat param)
     {
         TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
         TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
-        context->gatherParams<EntryPoint::TexEnvf>(targetPacked, pnamePacked, param);
 
         if (context->skipValidation() || ValidateTexEnvf(context, targetPacked, pnamePacked, param))
         {
@@ -1394,7 +1318,6 @@ void GL_APIENTRY TexEnvfv(GLenum target, GLenum pname, const GLfloat *params)
     {
         TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
         TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
-        context->gatherParams<EntryPoint::TexEnvfv>(targetPacked, pnamePacked, params);
 
         if (context->skipValidation() ||
             ValidateTexEnvfv(context, targetPacked, pnamePacked, params))
@@ -1414,7 +1337,6 @@ void GL_APIENTRY TexEnvi(GLenum target, GLenum pname, GLint param)
     {
         TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
         TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
-        context->gatherParams<EntryPoint::TexEnvi>(targetPacked, pnamePacked, param);
 
         if (context->skipValidation() || ValidateTexEnvi(context, targetPacked, pnamePacked, param))
         {
@@ -1434,7 +1356,6 @@ void GL_APIENTRY TexEnviv(GLenum target, GLenum pname, const GLint *params)
     {
         TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
         TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
-        context->gatherParams<EntryPoint::TexEnviv>(targetPacked, pnamePacked, params);
 
         if (context->skipValidation() ||
             ValidateTexEnviv(context, targetPacked, pnamePacked, params))
@@ -1455,7 +1376,6 @@ void GL_APIENTRY TexEnvx(GLenum target, GLenum pname, GLfixed param)
     {
         TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
         TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
-        context->gatherParams<EntryPoint::TexEnvx>(targetPacked, pnamePacked, param);
 
         if (context->skipValidation() || ValidateTexEnvx(context, targetPacked, pnamePacked, param))
         {
@@ -1475,7 +1395,6 @@ void GL_APIENTRY TexEnvxv(GLenum target, GLenum pname, const GLfixed *params)
     {
         TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
         TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
-        context->gatherParams<EntryPoint::TexEnvxv>(targetPacked, pnamePacked, params);
 
         if (context->skipValidation() ||
             ValidateTexEnvxv(context, targetPacked, pnamePacked, params))
@@ -1495,7 +1414,6 @@ void GL_APIENTRY TexParameterx(GLenum target, GLenum pname, GLfixed param)
     if (context)
     {
         TextureType targetPacked = FromGLenum<TextureType>(target);
-        context->gatherParams<EntryPoint::TexParameterx>(targetPacked, pname, param);
 
         if (context->skipValidation() || ValidateTexParameterx(context, targetPacked, pname, param))
         {
@@ -1514,7 +1432,6 @@ void GL_APIENTRY TexParameterxv(GLenum target, GLenum pname, const GLfixed *para
     if (context)
     {
         TextureType targetPacked = FromGLenum<TextureType>(target);
-        context->gatherParams<EntryPoint::TexParameterxv>(targetPacked, pname, params);
 
         if (context->skipValidation() ||
             ValidateTexParameterxv(context, targetPacked, pname, params))
@@ -1532,7 +1449,6 @@ void GL_APIENTRY Translatef(GLfloat x, GLfloat y, GLfloat z)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Translatef>(x, y, z);
 
         if (context->skipValidation() || ValidateTranslatef(context, x, y, z))
         {
@@ -1549,7 +1465,6 @@ void GL_APIENTRY Translatex(GLfixed x, GLfixed y, GLfixed z)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::Translatex>(x, y, z);
 
         if (context->skipValidation() || ValidateTranslatex(context, x, y, z))
         {
@@ -1568,7 +1483,6 @@ void GL_APIENTRY VertexPointer(GLint size, GLenum type, GLsizei stride, const vo
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        context->gatherParams<EntryPoint::VertexPointer>(size, type, stride, pointer);
 
         if (context->skipValidation() ||
             ValidateVertexPointer(context, size, type, stride, pointer))

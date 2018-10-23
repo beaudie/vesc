@@ -121,64 +121,45 @@ angle::Result ContextNULL::finish(const gl::Context *context)
     return angle::Result::Continue();
 }
 
-angle::Result ContextNULL::drawArrays(const gl::Context *context,
-                                      gl::PrimitiveMode mode,
-                                      GLint first,
-                                      GLsizei count)
+angle::Result ContextNULL::drawArrays(const gl::Context *context, const gl::DrawCallParams &params)
 {
     return angle::Result::Continue();
 }
 
 angle::Result ContextNULL::drawArraysInstanced(const gl::Context *context,
-                                               gl::PrimitiveMode mode,
-                                               GLint first,
-                                               GLsizei count,
-                                               GLsizei instanceCount)
+                                               const gl::DrawCallParams &params)
 {
     return angle::Result::Continue();
 }
 
 angle::Result ContextNULL::drawElements(const gl::Context *context,
-                                        gl::PrimitiveMode mode,
-                                        GLsizei count,
-                                        GLenum type,
-                                        const void *indices)
+                                        const gl::DrawCallParams &params)
 {
     return angle::Result::Continue();
 }
 
 angle::Result ContextNULL::drawElementsInstanced(const gl::Context *context,
-                                                 gl::PrimitiveMode mode,
-                                                 GLsizei count,
-                                                 GLenum type,
-                                                 const void *indices,
-                                                 GLsizei instances)
+                                                 const gl::DrawCallParams &params)
 {
     return angle::Result::Continue();
 }
 
 angle::Result ContextNULL::drawRangeElements(const gl::Context *context,
-                                             gl::PrimitiveMode mode,
                                              GLuint start,
                                              GLuint end,
-                                             GLsizei count,
-                                             GLenum type,
-                                             const void *indices)
+                                             const gl::DrawCallParams &params)
 {
     return angle::Result::Continue();
 }
 
 angle::Result ContextNULL::drawArraysIndirect(const gl::Context *context,
-                                              gl::PrimitiveMode mode,
-                                              const void *indirect)
+                                              const gl::DrawCallParams &params)
 {
     return angle::Result::Continue();
 }
 
 angle::Result ContextNULL::drawElementsIndirect(const gl::Context *context,
-                                                gl::PrimitiveMode mode,
-                                                GLenum type,
-                                                const void *indirect)
+                                                const gl::DrawCallParams &params)
 {
     return angle::Result::Continue();
 }

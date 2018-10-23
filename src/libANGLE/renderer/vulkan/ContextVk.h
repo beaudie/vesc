@@ -36,41 +36,22 @@ class ContextVk : public ContextImpl, public vk::Context
     angle::Result finish(const gl::Context *context) override;
 
     // Drawing methods.
-    angle::Result drawArrays(const gl::Context *context,
-                             gl::PrimitiveMode mode,
-                             GLint first,
-                             GLsizei count) override;
+    angle::Result drawArrays(const gl::Context *context, const gl::DrawCallParams &params) override;
     angle::Result drawArraysInstanced(const gl::Context *context,
-                                      gl::PrimitiveMode mode,
-                                      GLint first,
-                                      GLsizei count,
-                                      GLsizei instanceCount) override;
+                                      const gl::DrawCallParams &params) override;
 
     angle::Result drawElements(const gl::Context *context,
-                               gl::PrimitiveMode mode,
-                               GLsizei count,
-                               GLenum type,
-                               const void *indices) override;
+                               const gl::DrawCallParams &params) override;
     angle::Result drawElementsInstanced(const gl::Context *context,
-                                        gl::PrimitiveMode mode,
-                                        GLsizei count,
-                                        GLenum type,
-                                        const void *indices,
-                                        GLsizei instances) override;
+                                        const gl::DrawCallParams &params) override;
     angle::Result drawRangeElements(const gl::Context *context,
-                                    gl::PrimitiveMode mode,
                                     GLuint start,
                                     GLuint end,
-                                    GLsizei count,
-                                    GLenum type,
-                                    const void *indices) override;
+                                    const gl::DrawCallParams &params) override;
     angle::Result drawArraysIndirect(const gl::Context *context,
-                                     gl::PrimitiveMode mode,
-                                     const void *indirect) override;
+                                     const gl::DrawCallParams &params) override;
     angle::Result drawElementsIndirect(const gl::Context *context,
-                                       gl::PrimitiveMode mode,
-                                       GLenum type,
-                                       const void *indirect) override;
+                                       const gl::DrawCallParams &params) override;
 
     // Device loss
     GLenum getResetStatus() override;

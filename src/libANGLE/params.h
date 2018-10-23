@@ -78,43 +78,82 @@ class DrawCallParams final : angle::NonCopyable
 {
   public:
     // Called by DrawArrays.
-    DrawCallParams(PrimitiveMode mode, GLint firstVertex, GLsizei vertexCount, GLsizei instances)
-        : mMode(mode),
-          mFirstVertex(firstVertex),
-          mVertexCount(vertexCount),
-          mIndexCount(0),
-          mBaseVertex(0),
-          mType(GL_NONE),
-          mIndices(nullptr),
-          mInstances(instances),
-          mIndirect(nullptr)
+    DrawCallParams(GLenum mode, GLint firstVertex, GLsizei vertexCount)
     {
+        memset(this, 0, sizeof(DrawCallParams));
+        mMode        = FromGLenum<PrimitiveMode>(mode);
+        mFirstVertex = firstVertex;
+        mVertexCount = vertexCount;
     }
 
-    // Called by DrawElements.
-    DrawCallParams(PrimitiveMode mode,
+    // Called by DrawArraysInstanced.
+    DrawCallParams(GLenum mode, GLint firstVertex, GLsizei vertexCount, GLsizei instances)
+    {
+        memset(this, 0, sizeof(DrawCallParams));
+        mMode        = FromGLenum<PrimitiveMode>(mode);
+        mFirstVertex = firstVertex;
+        mVertexCount = vertexCount;
+        mInstances   = instances;
+    }
+
+    // Called by DrawElements and DrawRangElements.
+    DrawCallParams(GLenum mode, GLint indexCount, GLenum type, const void *indices)
+    {
+        memset(this, 0, sizeof(DrawCallParams));
+        mMode       = FromGLenum<PrimitiveMode>(mode);
+        mIndexCount = indexCount;
+        mType       = type;
+        mIndices    = indices;
+    }
+
+    // Called by DrawElementsInstanced.
+    DrawCallParams(GLenum mode,
+                   GLint indexCount,
+                   GLenum type,
+                   const void *indices,
+                   GLsizei instances)
+    {
+        memset(this, 0, sizeof(DrawCallParams));
+        mMode       = FromGLenum<PrimitiveMode>(mode);
+        mIndexCount = indexCount;
+        mType       = type;
+        mIndices    = indices;
+        mInstances  = instances;
+    }
+
+    // Called internally by DrawElementsIndirect on readback.
+    DrawCallParams(GLenum mode,
                    GLint indexCount,
                    GLenum type,
                    const void *indices,
                    GLint baseVertex,
                    GLsizei instances)
-        : mMode(mode),
-          mFirstVertex(0),
-          mVertexCount(0),
-          mIndexCount(indexCount),
-          mBaseVertex(baseVertex),
-          mType(type),
-          mIndices(indices),
-          mInstances(instances),
-          mIndirect(nullptr)
     {
+        memset(this, 0, sizeof(DrawCallParams));
+        mMode       = FromGLenum<PrimitiveMode>(mode);
+        mIndexCount = indexCount;
+        mType       = type;
+        mIndices    = indices;
+        mBaseVertex = baseVertex;
+        mInstances  = instances;
     }
 
     // Called by DrawArraysIndirect.
-    DrawCallParams(PrimitiveMode mode, const void *indirect);
+    DrawCallParams(GLenum mode, const void *indirect)
+    {
+        memset(this, 0, sizeof(DrawCallParams));
+        mMode     = FromGLenum<PrimitiveMode>(mode);
+        mIndirect = indirect;
+    }
 
     // Called by DrawElementsIndirect.
-    DrawCallParams(PrimitiveMode mode, GLenum type, const void *indirect);
+    DrawCallParams(GLenum mode, GLenum type, const void *indirect)
+    {
+        memset(this, 0, sizeof(DrawCallParams));
+        mMode     = FromGLenum<PrimitiveMode>(mode);
+        mType     = type;
+        mIndirect = indirect;
+    }
 
     PrimitiveMode mode() const { return mMode; }
 
@@ -135,12 +174,25 @@ class DrawCallParams final : angle::NonCopyable
         return mVertexCount;
     }
 
-    GLsizei indexCount() const;
-    GLint baseVertex() const;
-    GLenum type() const;
-    const void *indices() const;
-    GLsizei instances() const;
-    const void *indirect() const;
+    GLsizei indexCount() const
+    {
+        ASSERT(isDrawElements());
+        return mIndexCount;
+    }
+
+    GLint baseVertex() const { return mBaseVertex; }
+
+    GLenum type() const
+    {
+        ASSERT(isDrawElements());
+        return mType;
+    }
+
+    const void *indices() const { return mIndices; }
+
+    GLsizei instances() const { return mInstances; }
+
+    const void *indirect() const { return mIndirect; }
 
     Error ensureIndexRangeResolved(const Context *context) const;
     bool isDrawElements() const { return (mType != GL_NONE); }
@@ -152,11 +204,6 @@ class DrawCallParams final : angle::NonCopyable
 
     template <typename T>
     T getClampedVertexCount() const;
-
-    template <EntryPoint EP, typename... ArgsT>
-    static void Factory(DrawCallParams *objBuffer, ArgsT... args);
-
-    ANGLE_PARAM_TYPE_INFO(DrawCallParams, ParamsBase);
 
   private:
     PrimitiveMode mMode;
@@ -190,120 +237,6 @@ template<> struct EntryPointParam<EntryPoint::NAME> \
     };                                              \
     \
 template<> inline void CLASS::Factory<EntryPoint::NAME>(__VA_ARGS__)
-
-ANGLE_ENTRY_POINT_FUNC(DrawArrays,
-                       DrawCallParams,
-                       DrawCallParams *objBuffer,
-                       Context *context,
-                       PrimitiveMode mode,
-                       GLint first,
-                       GLsizei count)
-{
-    return ParamsBase::Factory<EntryPoint::DrawArrays>(objBuffer, mode, first, count, 0);
-}
-
-ANGLE_ENTRY_POINT_FUNC(DrawArraysInstanced,
-                       DrawCallParams,
-                       DrawCallParams *objBuffer,
-                       Context *context,
-                       PrimitiveMode mode,
-                       GLint first,
-                       GLsizei count,
-                       GLsizei instanceCount)
-{
-    return ParamsBase::Factory<EntryPoint::DrawArraysInstanced>(objBuffer, mode, first, count,
-                                                                instanceCount);
-}
-
-ANGLE_ENTRY_POINT_FUNC(DrawArraysInstancedANGLE,
-                       DrawCallParams,
-                       DrawCallParams *objBuffer,
-                       Context *context,
-                       PrimitiveMode mode,
-                       GLint first,
-                       GLsizei count,
-                       GLsizei instanceCount)
-{
-    return ParamsBase::Factory<EntryPoint::DrawArraysInstancedANGLE>(objBuffer, mode, first, count,
-                                                                     instanceCount);
-}
-
-ANGLE_ENTRY_POINT_FUNC(DrawArraysIndirect,
-                       DrawCallParams,
-                       DrawCallParams *objBuffer,
-                       Context *context,
-                       PrimitiveMode mode,
-                       const void *indirect)
-{
-    return ParamsBase::Factory<EntryPoint::DrawArraysIndirect>(objBuffer, mode, indirect);
-}
-
-ANGLE_ENTRY_POINT_FUNC(DrawElementsIndirect,
-                       DrawCallParams,
-                       DrawCallParams *objBuffer,
-                       Context *context,
-                       PrimitiveMode mode,
-                       GLenum type,
-                       const void *indirect)
-{
-    return ParamsBase::Factory<EntryPoint::DrawElementsIndirect>(objBuffer, mode, type, indirect);
-}
-
-ANGLE_ENTRY_POINT_FUNC(DrawElements,
-                       DrawCallParams,
-                       DrawCallParams *objBuffer,
-                       Context *context,
-                       PrimitiveMode mode,
-                       GLsizei count,
-                       GLenum type,
-                       const void *indices)
-{
-    return ParamsBase::Factory<EntryPoint::DrawElements>(objBuffer, mode, count, type, indices, 0,
-                                                         0);
-}
-
-ANGLE_ENTRY_POINT_FUNC(DrawElementsInstanced,
-                       DrawCallParams,
-                       DrawCallParams *objBuffer,
-                       Context *context,
-                       PrimitiveMode mode,
-                       GLsizei count,
-                       GLenum type,
-                       const void *indices,
-                       GLsizei instanceCount)
-{
-    return ParamsBase::Factory<EntryPoint::DrawElementsInstanced>(objBuffer, mode, count, type,
-                                                                  indices, 0, instanceCount);
-}
-
-ANGLE_ENTRY_POINT_FUNC(DrawElementsInstancedANGLE,
-                       DrawCallParams,
-                       DrawCallParams *objBuffer,
-                       Context *context,
-                       PrimitiveMode mode,
-                       GLsizei count,
-                       GLenum type,
-                       const void *indices,
-                       GLsizei instanceCount)
-{
-    return ParamsBase::Factory<EntryPoint::DrawElementsInstancedANGLE>(objBuffer, mode, count, type,
-                                                                       indices, 0, instanceCount);
-}
-
-ANGLE_ENTRY_POINT_FUNC(DrawRangeElements,
-                       DrawCallParams,
-                       DrawCallParams *objBuffer,
-                       Context *context,
-                       PrimitiveMode mode,
-                       GLuint /*start*/,
-                       GLuint /*end*/,
-                       GLsizei count,
-                       GLenum type,
-                       const void *indices)
-{
-    return ParamsBase::Factory<EntryPoint::DrawRangeElements>(objBuffer, mode, count, type, indices,
-                                                              0, 0);
-}
 
 #undef ANGLE_ENTRY_POINT_FUNC
 

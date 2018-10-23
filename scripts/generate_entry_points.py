@@ -10,6 +10,7 @@
 import sys, os, pprint, json
 import xml.etree.ElementTree as etree
 from datetime import date
+from collections import OrderedDict
 
 # List of supported extensions. Add to this list to enable new extensions
 # available in gl.xml.
@@ -190,7 +191,6 @@ template_entry_point_def = """{return_type}GL_APIENTRY {name}{explicit_context_s
     Context *context = {context_getter};
     if (context)
     {{{assert_explicit_context}{packed_gl_enum_conversions}
-        context->gatherParams<EntryPoint::{name}>({internal_params});
 
         if (context->skipValidation() || Validate{name}({validate_params}))
         {{
@@ -255,7 +255,7 @@ root = tree.getroot()
 commands = root.find(".//commands[@namespace='GL']")
 
 with open(script_relative('entry_point_packed_gl_enums.json')) as f:
-    cmd_packed_gl_enums = json.loads(f.read())
+    cmd_packed_gl_enums = json.loads(f.read(), object_pairs_hook=OrderedDict)
 
 def format_entry_point_decl(cmd_name, proto, params, is_explicit_context):
     comma_if_needed = ", " if len(params) > 0 else ""
@@ -350,13 +350,26 @@ def format_entry_point_def(cmd_name, proto, params, is_explicit_context):
     packed_gl_enums = cmd_packed_gl_enums.get(cmd_name, {})
     internal_params = [just_the_name_packed(param, packed_gl_enums) for param in params]
     packed_gl_enum_conversions = []
-    for param in params:
-        name = just_the_name(param)
-        if name in packed_gl_enums:
-            internal_name = name + "Packed"
-            internal_type = packed_gl_enums[name]
-            packed_gl_enum_conversions += ["\n        " + internal_type + " " + internal_name +" = FromGLenum<" +
-                                          internal_type + ">(" + name + ");"]
+
+    if cmd_name in cmd_packed_gl_enums:
+        for name, internal_type in cmd_packed_gl_enums[cmd_name].iteritems():
+            if isinstance(internal_type, dict):
+                # Delete multi-params from internal_params
+                multi_params = internal_type["multiparams"]
+                for param in multi_params:
+                    assert param in internal_params
+                    internal_params.remove(param)
+
+                # Add the new metaparam.
+                internal_params += [name]
+
+                # Add the conversion
+                meta_type = internal_type["type"]
+                packed_gl_enum_conversions += ["\n        " + meta_type + " " + name + "(" + ", ".join(multi_params) +  ");"]
+            else:
+                internal_name = name + "Packed"
+                packed_gl_enum_conversions += ["\n        " + internal_type + " " + internal_name +" = FromGLenum<" +
+                                              internal_type + ">(" + name + ");"]
 
     pass_params = [just_the_name(param) for param in params]
     format_params = [param_format_string(param) for param in params]

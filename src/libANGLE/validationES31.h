@@ -16,6 +16,7 @@
 namespace gl
 {
 class Context;
+class DrawCallParams;
 
 bool ValidateGetBooleani_v(Context *context, GLenum target, GLuint index, GLboolean *data);
 bool ValidateGetBooleani_vRobustANGLE(Context *context,
@@ -65,12 +66,8 @@ bool ValidateGetMultisamplefvRobustANGLE(Context *context,
                                          GLsizei *length,
                                          GLfloat *val);
 
-bool ValidateDrawIndirectBase(Context *context, PrimitiveMode mode, const void *indirect);
-bool ValidateDrawArraysIndirect(Context *context, PrimitiveMode mode, const void *indirect);
-bool ValidateDrawElementsIndirect(Context *context,
-                                  PrimitiveMode mode,
-                                  GLenum type,
-                                  const void *indirect);
+bool ValidateDrawArraysIndirect(Context *context, const DrawCallParams &params);
+bool ValidateDrawElementsIndirect(Context *context, const DrawCallParams &params);
 
 bool ValidateProgramUniform1i(Context *context, GLuint program, GLint location, GLint v0);
 bool ValidateProgramUniform2i(Context *context, GLuint program, GLint location, GLint v0, GLint v1);

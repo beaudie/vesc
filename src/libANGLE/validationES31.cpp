@@ -477,7 +477,7 @@ bool ValidateDrawIndirectBase(Context *context, PrimitiveMode mode, const void *
     return true;
 }
 
-bool ValidateDrawArraysIndirect(Context *context, PrimitiveMode mode, const void *indirect)
+bool ValidateDrawArraysIndirect(Context *context, const DrawCallParams &params)
 {
     const State &state                      = context->getGLState();
     TransformFeedback *curTransformFeedback = state.getCurrentTransformFeedback();
@@ -489,7 +489,7 @@ bool ValidateDrawArraysIndirect(Context *context, PrimitiveMode mode, const void
         if (context->getExtensions().geometryShader)
         {
             if (!ValidateTransformFeedbackPrimitiveMode(
-                    context, curTransformFeedback->getPrimitiveMode(), mode))
+                    context, curTransformFeedback->getPrimitiveMode(), params.mode()))
             {
                 ANGLE_VALIDATION_ERR(context, InvalidOperation(), InvalidDrawModeTransformFeedback);
                 return false;
@@ -505,11 +505,11 @@ bool ValidateDrawArraysIndirect(Context *context, PrimitiveMode mode, const void
         }
     }
 
-    if (!ValidateDrawIndirectBase(context, mode, indirect))
+    if (!ValidateDrawIndirectBase(context, params.mode(), params.indirect()))
         return false;
 
     Buffer *drawIndirectBuffer = state.getTargetBuffer(BufferBinding::DrawIndirect);
-    CheckedNumeric<size_t> checkedOffset(reinterpret_cast<size_t>(indirect));
+    CheckedNumeric<size_t> checkedOffset(reinterpret_cast<size_t>(params.indirect()));
     // In OpenGL ES3.1 spec, session 10.5, it defines the struct of DrawArraysIndirectCommand
     // which's size is 4 * sizeof(uint).
     auto checkedSum = checkedOffset + 4 * sizeof(GLuint);
@@ -525,12 +525,9 @@ bool ValidateDrawArraysIndirect(Context *context, PrimitiveMode mode, const void
     return true;
 }
 
-bool ValidateDrawElementsIndirect(Context *context,
-                                  PrimitiveMode mode,
-                                  GLenum type,
-                                  const void *indirect)
+bool ValidateDrawElementsIndirect(Context *context, const DrawCallParams &params)
 {
-    if (!ValidateDrawElementsBase(context, mode, type))
+    if (!ValidateDrawElementsBase(context, params))
     {
         return false;
     }
@@ -544,11 +541,11 @@ bool ValidateDrawElementsIndirect(Context *context,
         return false;
     }
 
-    if (!ValidateDrawIndirectBase(context, mode, indirect))
+    if (!ValidateDrawIndirectBase(context, params.mode(), params.indirect()))
         return false;
 
     Buffer *drawIndirectBuffer = state.getTargetBuffer(BufferBinding::DrawIndirect);
-    CheckedNumeric<size_t> checkedOffset(reinterpret_cast<size_t>(indirect));
+    CheckedNumeric<size_t> checkedOffset(reinterpret_cast<size_t>(params.indirect()));
     // In OpenGL ES3.1 spec, session 10.5, it defines the struct of DrawElementsIndirectCommand
     // which's size is 5 * sizeof(uint).
     auto checkedSum = checkedOffset + 5 * sizeof(GLuint);

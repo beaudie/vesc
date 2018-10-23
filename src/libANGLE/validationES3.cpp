@@ -1402,12 +1402,9 @@ bool ValidateClearBuffer(Context *context)
 }
 
 bool ValidateDrawRangeElements(Context *context,
-                               PrimitiveMode mode,
                                GLuint start,
                                GLuint end,
-                               GLsizei count,
-                               GLenum type,
-                               const void *indices)
+                               const DrawCallParams &params)
 {
     if (context->getClientMajorVersion() < 3)
     {
@@ -1421,19 +1418,18 @@ bool ValidateDrawRangeElements(Context *context,
         return false;
     }
 
-    if (!ValidateDrawElementsCommon(context, mode, count, type, indices, 0))
+    if (!ValidateDrawElementsCommon(context, params))
     {
         return false;
     }
 
     // Skip range checks for no-op calls.
-    if (count <= 0)
+    if (params.indexCount() <= 0)
     {
         return true;
     }
 
     // Use the parameter buffer to retrieve and cache the index range.
-    const DrawCallParams &params = context->getParams<DrawCallParams>();
     ANGLE_VALIDATION_TRY(params.ensureIndexRangeResolved(context));
 
     const IndexRange &indexRange = params.getIndexRange();
@@ -3085,12 +3081,7 @@ bool ValidateGetSynciv(Context *context,
     return true;
 }
 
-bool ValidateDrawElementsInstanced(Context *context,
-                                   PrimitiveMode mode,
-                                   GLsizei count,
-                                   GLenum type,
-                                   const void *indices,
-                                   GLsizei instanceCount)
+bool ValidateDrawElementsInstanced(Context *context, const DrawCallParams &params)
 {
     if (context->getClientMajorVersion() < 3)
     {
@@ -3098,7 +3089,7 @@ bool ValidateDrawElementsInstanced(Context *context,
         return false;
     }
 
-    return ValidateDrawElementsInstancedCommon(context, mode, count, type, indices, instanceCount);
+    return ValidateDrawElementsInstancedCommon(context, params);
 }
 
 bool ValidateFramebufferTextureMultiviewLayeredANGLE(Context *context,
@@ -3777,11 +3768,7 @@ bool ValidateUniformBlockBinding(Context *context,
     return true;
 }
 
-bool ValidateDrawArraysInstanced(Context *context,
-                                 PrimitiveMode mode,
-                                 GLint first,
-                                 GLsizei count,
-                                 GLsizei primcount)
+bool ValidateDrawArraysInstanced(Context *context, const DrawCallParams &params)
 {
     if (context->getClientMajorVersion() < 3)
     {
@@ -3789,7 +3776,7 @@ bool ValidateDrawArraysInstanced(Context *context,
         return false;
     }
 
-    return ValidateDrawArraysInstancedBase(context, mode, first, count, primcount);
+    return ValidateDrawArraysInstancedBase(context, params);
 }
 
 bool ValidateFenceSync(Context *context, GLenum condition, GLbitfield flags)

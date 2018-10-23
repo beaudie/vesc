@@ -278,16 +278,16 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mCurrentDrawMode = drawCallParams.mode();
     }
 
-    if (!mDrawFramebuffer->appendToStartedRenderPass(mRenderer, commandBufferOut))
-    {
-        ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, commandBufferOut));
-        mDirtyBits |= mNewCommandBufferDirtyBits;
-    }
-
     if (context->getStateCache().hasAnyActiveClientAttrib())
     {
         ANGLE_TRY(mVertexArray->updateClientAttribs(context, drawCallParams));
         mDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
+    }
+
+    if (!mDrawFramebuffer->appendToStartedRenderPass(mRenderer, commandBufferOut))
+    {
+        ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, commandBufferOut));
+        mDirtyBits |= mNewCommandBufferDirtyBits;
     }
 
     if (mProgram->dirtyUniforms())
@@ -460,81 +460,60 @@ angle::Result ContextVk::handleDirtyDescriptorSets(const gl::Context *context,
     return angle::Result::Continue();
 }
 
-angle::Result ContextVk::drawArrays(const gl::Context *context,
-                                    gl::PrimitiveMode mode,
-                                    GLint first,
-                                    GLsizei count)
+angle::Result ContextVk::drawArrays(const gl::Context *context, const gl::DrawCallParams &params)
 {
-    const gl::DrawCallParams &drawCallParams = context->getParams<gl::DrawCallParams>();
-
     vk::CommandBuffer *commandBuffer = nullptr;
-    uint32_t clampedVertexCount      = drawCallParams.getClampedVertexCount<uint32_t>();
+    uint32_t clampedVertexCount      = params.getClampedVertexCount<uint32_t>();
 
-    if (mode == gl::PrimitiveMode::LineLoop)
+    if (params.mode() == gl::PrimitiveMode::LineLoop)
     {
-        ANGLE_TRY(setupLineLoopDraw(context, drawCallParams, &commandBuffer));
+        ANGLE_TRY(setupLineLoopDraw(context, params, &commandBuffer));
         vk::LineLoopHelper::Draw(clampedVertexCount, commandBuffer);
     }
     else
     {
-        ANGLE_TRY(setupDraw(context, drawCallParams, mNonIndexedDirtyBitsMask, &commandBuffer));
-        commandBuffer->draw(clampedVertexCount, 1, drawCallParams.firstVertex(), 0);
+        ANGLE_TRY(setupDraw(context, params, mNonIndexedDirtyBitsMask, &commandBuffer));
+        commandBuffer->draw(clampedVertexCount, 1, params.firstVertex(), 0);
     }
 
     return angle::Result::Continue();
 }
 
 angle::Result ContextVk::drawArraysInstanced(const gl::Context *context,
-                                             gl::PrimitiveMode mode,
-                                             GLint first,
-                                             GLsizei count,
-                                             GLsizei instanceCount)
+                                             const gl::DrawCallParams &params)
 {
     ANGLE_VK_UNREACHABLE(this);
     return angle::Result::Stop();
 }
 
-angle::Result ContextVk::drawElements(const gl::Context *context,
-                                      gl::PrimitiveMode mode,
-                                      GLsizei count,
-                                      GLenum type,
-                                      const void *indices)
+angle::Result ContextVk::drawElements(const gl::Context *context, const gl::DrawCallParams &params)
 {
-    const gl::DrawCallParams &drawCallParams = context->getParams<gl::DrawCallParams>();
-
     vk::CommandBuffer *commandBuffer = nullptr;
-    if (mode == gl::PrimitiveMode::LineLoop)
+    if (params.mode() == gl::PrimitiveMode::LineLoop)
     {
-        ANGLE_TRY(setupLineLoopDraw(context, drawCallParams, &commandBuffer));
-        vk::LineLoopHelper::Draw(count, commandBuffer);
+        ANGLE_TRY(setupLineLoopDraw(context, params, &commandBuffer));
+        vk::LineLoopHelper::Draw(params.indexCount(), commandBuffer);
     }
     else
     {
-        ANGLE_TRY(setupIndexedDraw(context, drawCallParams, &commandBuffer));
-        commandBuffer->drawIndexed(count, 1, 0, 0, 0);
+        ANGLE_TRY(setupIndexedDraw(context, params, &commandBuffer));
+        commandBuffer->drawIndexed(params.indexCount(), 1, 0, 0, 0);
     }
 
     return angle::Result::Continue();
 }
 
 angle::Result ContextVk::drawElementsInstanced(const gl::Context *context,
-                                               gl::PrimitiveMode mode,
-                                               GLsizei count,
-                                               GLenum type,
-                                               const void *indices,
-                                               GLsizei instances)
+                                               const gl::DrawCallParams &params)
 {
     ANGLE_VK_UNREACHABLE(this);
     return angle::Result::Stop();
 }
 
 angle::Result ContextVk::drawRangeElements(const gl::Context *context,
-                                           gl::PrimitiveMode mode,
                                            GLuint start,
                                            GLuint end,
-                                           GLsizei count,
-                                           GLenum type,
-                                           const void *indices)
+                                           const gl::DrawCallParams &params)
 {
     ANGLE_VK_UNREACHABLE(this);
     return angle::Result::Stop();
@@ -546,17 +525,14 @@ VkDevice ContextVk::getDevice() const
 }
 
 angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
-                                            gl::PrimitiveMode mode,
-                                            const void *indirect)
+                                            const gl::DrawCallParams &params)
 {
     ANGLE_VK_UNREACHABLE(this);
     return angle::Result::Stop();
 }
 
 angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
-                                              gl::PrimitiveMode mode,
-                                              GLenum type,
-                                              const void *indirect)
+                                              const gl::DrawCallParams &params)
 {
     ANGLE_VK_UNREACHABLE(this);
     return angle::Result::Stop();

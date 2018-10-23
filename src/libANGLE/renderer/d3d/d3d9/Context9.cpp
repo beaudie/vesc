@@ -146,65 +146,47 @@ angle::Result Context9::finish(const gl::Context *context)
     return mRenderer->finish(context);
 }
 
-angle::Result Context9::drawArrays(const gl::Context *context,
-                                   gl::PrimitiveMode mode,
-                                   GLint first,
-                                   GLsizei count)
+angle::Result Context9::drawArrays(const gl::Context *context, const gl::DrawCallParams &params)
 {
-    return mRenderer->genericDrawArrays(context, mode, first, count, 0);
+    return mRenderer->genericDrawArrays(context, params.mode(), params.firstVertex(),
+                                        params.vertexCount(), 0);
 }
 
 angle::Result Context9::drawArraysInstanced(const gl::Context *context,
-                                            gl::PrimitiveMode mode,
-                                            GLint first,
-                                            GLsizei count,
-                                            GLsizei instanceCount)
+                                            const gl::DrawCallParams &params)
 {
-    return mRenderer->genericDrawArrays(context, mode, first, count, instanceCount);
+    return mRenderer->genericDrawArrays(context, params.mode(), params.firstVertex(),
+                                        params.vertexCount(), params.instances());
 }
 
-angle::Result Context9::drawElements(const gl::Context *context,
-                                     gl::PrimitiveMode mode,
-                                     GLsizei count,
-                                     GLenum type,
-                                     const void *indices)
+angle::Result Context9::drawElements(const gl::Context *context, const gl::DrawCallParams &params)
 {
-    return mRenderer->genericDrawElements(context, mode, count, type, indices, 0);
+    return mRenderer->genericDrawElements(context, params);
 }
 
 angle::Result Context9::drawElementsInstanced(const gl::Context *context,
-                                              gl::PrimitiveMode mode,
-                                              GLsizei count,
-                                              GLenum type,
-                                              const void *indices,
-                                              GLsizei instances)
+                                              const gl::DrawCallParams &params)
 {
-    return mRenderer->genericDrawElements(context, mode, count, type, indices, instances);
+    return mRenderer->genericDrawElements(context, params);
 }
 
 angle::Result Context9::drawRangeElements(const gl::Context *context,
-                                          gl::PrimitiveMode mode,
                                           GLuint start,
                                           GLuint end,
-                                          GLsizei count,
-                                          GLenum type,
-                                          const void *indices)
+                                          const gl::DrawCallParams &params)
 {
-    return mRenderer->genericDrawElements(context, mode, count, type, indices, 0);
+    return mRenderer->genericDrawElements(context, params);
 }
 
 angle::Result Context9::drawArraysIndirect(const gl::Context *context,
-                                           gl::PrimitiveMode mode,
-                                           const void *indirect)
+                                           const gl::DrawCallParams &params)
 {
     ANGLE_HR_UNREACHABLE(this);
     return angle::Result::Stop();
 }
 
 angle::Result Context9::drawElementsIndirect(const gl::Context *context,
-                                             gl::PrimitiveMode mode,
-                                             GLenum type,
-                                             const void *indirect)
+                                             const gl::DrawCallParams &params)
 {
     ANGLE_HR_UNREACHABLE(this);
     return angle::Result::Stop();

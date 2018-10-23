@@ -42,41 +42,23 @@ class ContextImpl : public GLImplFactory
 
     // Drawing methods.
     virtual angle::Result drawArrays(const gl::Context *context,
-                                     gl::PrimitiveMode mode,
-                                     GLint first,
-                                     GLsizei count)              = 0;
+                                     const gl::DrawCallParams &params)          = 0;
     virtual angle::Result drawArraysInstanced(const gl::Context *context,
-                                              gl::PrimitiveMode mode,
-                                              GLint first,
-                                              GLsizei count,
-                                              GLsizei instanceCount) = 0;
+                                              const gl::DrawCallParams &params) = 0;
 
     virtual angle::Result drawElements(const gl::Context *context,
-                                       gl::PrimitiveMode mode,
-                                       GLsizei count,
-                                       GLenum type,
-                                       const void *indices)        = 0;
+                                       const gl::DrawCallParams &params)          = 0;
     virtual angle::Result drawElementsInstanced(const gl::Context *context,
-                                                gl::PrimitiveMode mode,
-                                                GLsizei count,
-                                                GLenum type,
-                                                const void *indices,
-                                                GLsizei instances) = 0;
+                                                const gl::DrawCallParams &params) = 0;
     virtual angle::Result drawRangeElements(const gl::Context *context,
-                                            gl::PrimitiveMode mode,
                                             GLuint start,
                                             GLuint end,
-                                            GLsizei count,
-                                            GLenum type,
-                                            const void *indices)   = 0;
+                                            const gl::DrawCallParams &params)     = 0;
 
     virtual angle::Result drawArraysIndirect(const gl::Context *context,
-                                             gl::PrimitiveMode mode,
-                                             const void *indirect)   = 0;
+                                             const gl::DrawCallParams &params)   = 0;
     virtual angle::Result drawElementsIndirect(const gl::Context *context,
-                                               gl::PrimitiveMode mode,
-                                               GLenum type,
-                                               const void *indirect) = 0;
+                                               const gl::DrawCallParams &params) = 0;
 
     // CHROMIUM_path_rendering path drawing methods.
     virtual void stencilFillPath(const gl::Path *path, GLenum fillMode, GLuint mask);

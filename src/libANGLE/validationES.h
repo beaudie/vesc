@@ -287,42 +287,20 @@ bool ValidateCopyTexImageParametersBase(Context *context,
                                         Format *textureFormatOut);
 
 bool ValidateDrawBase(Context *context, PrimitiveMode mode, GLsizei count);
+bool ValidateDrawArraysCommon(Context *context, const DrawCallParams &params);
 bool ValidateDrawArraysCommon(Context *context,
                               PrimitiveMode mode,
                               GLint first,
                               GLsizei count,
                               GLsizei primcount);
-bool ValidateDrawArraysInstancedBase(Context *context,
-                                     PrimitiveMode mode,
-                                     GLint first,
-                                     GLsizei count,
-                                     GLsizei primcount);
-bool ValidateDrawArraysInstancedANGLE(Context *context,
-                                      PrimitiveMode mode,
-                                      GLint first,
-                                      GLsizei count,
-                                      GLsizei primcount);
+bool ValidateDrawArraysInstancedBase(Context *context, const DrawCallParams &params);
+bool ValidateDrawArraysInstancedANGLE(Context *context, const DrawCallParams &params);
 
-bool ValidateDrawElementsBase(Context *context, PrimitiveMode mode, GLenum type);
-bool ValidateDrawElementsCommon(Context *context,
-                                PrimitiveMode mode,
-                                GLsizei count,
-                                GLenum type,
-                                const void *indices,
-                                GLsizei primcount);
+bool ValidateDrawElementsBase(Context *context, const DrawCallParams &params);
+bool ValidateDrawElementsCommon(Context *context, const DrawCallParams &params);
 
-bool ValidateDrawElementsInstancedCommon(Context *context,
-                                         PrimitiveMode mode,
-                                         GLsizei count,
-                                         GLenum type,
-                                         const void *indices,
-                                         GLsizei primcount);
-bool ValidateDrawElementsInstancedANGLE(Context *context,
-                                        PrimitiveMode mode,
-                                        GLsizei count,
-                                        GLenum type,
-                                        const void *indices,
-                                        GLsizei primcount);
+bool ValidateDrawElementsInstancedCommon(Context *context, const DrawCallParams &params);
+bool ValidateDrawElementsInstancedANGLE(Context *context, const DrawCallParams &params);
 
 bool ValidateFramebufferTextureBase(Context *context,
                                     GLenum target,

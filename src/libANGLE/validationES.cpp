@@ -614,20 +614,15 @@ bool ValidateTransformFeedbackPrimitiveMode(const Context *context,
     }
 }
 
-bool ValidateDrawElementsInstancedBase(Context *context,
-                                       PrimitiveMode mode,
-                                       GLsizei count,
-                                       GLenum type,
-                                       const GLvoid *indices,
-                                       GLsizei primcount)
+bool ValidateDrawElementsInstancedBase(Context *context, const DrawCallParams &params)
 {
-    if (primcount < 0)
+    if (params.instances() < 0)
     {
         ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativePrimcount);
         return false;
     }
 
-    if (!ValidateDrawElementsCommon(context, mode, count, type, indices, primcount))
+    if (!ValidateDrawElementsCommon(context, params))
     {
         return false;
     }
@@ -635,19 +630,15 @@ bool ValidateDrawElementsInstancedBase(Context *context,
     return true;
 }
 
-bool ValidateDrawArraysInstancedBase(Context *context,
-                                     PrimitiveMode mode,
-                                     GLint first,
-                                     GLsizei count,
-                                     GLsizei primcount)
+bool ValidateDrawArraysInstancedBase(Context *context, const DrawCallParams &params)
 {
-    if (primcount < 0)
+    if (params.instances() < 0)
     {
         ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativePrimcount);
         return false;
     }
 
-    if (!ValidateDrawArraysCommon(context, mode, first, count, primcount))
+    if (!ValidateDrawArraysCommon(context, params))
     {
         return false;
     }
@@ -2845,6 +2836,12 @@ bool ValidateDrawBase(Context *context, PrimitiveMode mode, GLsizei count)
     return true;
 }
 
+bool ValidateDrawArraysCommon(Context *context, const DrawCallParams &params)
+{
+    return ValidateDrawArraysCommon(context, params.mode(), params.firstVertex(),
+                                    params.vertexCount(), params.indexCount());
+}
+
 bool ValidateDrawArraysCommon(Context *context,
                               PrimitiveMode mode,
                               GLint first,
@@ -2924,11 +2921,7 @@ bool ValidateDrawArraysCommon(Context *context,
     return true;
 }
 
-bool ValidateDrawArraysInstancedANGLE(Context *context,
-                                      PrimitiveMode mode,
-                                      GLint first,
-                                      GLsizei count,
-                                      GLsizei primcount)
+bool ValidateDrawArraysInstancedANGLE(Context *context, const DrawCallParams &params)
 {
     if (!context->getExtensions().instancedArrays)
     {
@@ -2936,7 +2929,7 @@ bool ValidateDrawArraysInstancedANGLE(Context *context,
         return false;
     }
 
-    if (!ValidateDrawArraysInstancedBase(context, mode, first, count, primcount))
+    if (!ValidateDrawArraysInstancedBase(context, params))
     {
         return false;
     }
@@ -2944,9 +2937,9 @@ bool ValidateDrawArraysInstancedANGLE(Context *context,
     return ValidateDrawInstancedANGLE(context);
 }
 
-bool ValidateDrawElementsBase(Context *context, PrimitiveMode mode, GLenum type)
+bool ValidateDrawElementsBase(Context *context, const DrawCallParams &params)
 {
-    switch (type)
+    switch (params.type())
     {
         case GL_UNSIGNED_BYTE:
         case GL_UNSIGNED_SHORT:
@@ -2974,7 +2967,7 @@ bool ValidateDrawElementsBase(Context *context, PrimitiveMode mode, GLenum type)
         if (context->getExtensions().geometryShader)
         {
             if (!ValidateTransformFeedbackPrimitiveMode(
-                    context, curTransformFeedback->getPrimitiveMode(), mode))
+                    context, curTransformFeedback->getPrimitiveMode(), params.mode()))
             {
                 ANGLE_VALIDATION_ERR(context, InvalidOperation(), InvalidDrawModeTransformFeedback);
                 return false;
@@ -2994,19 +2987,14 @@ bool ValidateDrawElementsBase(Context *context, PrimitiveMode mode, GLenum type)
     return true;
 }
 
-bool ValidateDrawElementsCommon(Context *context,
-                                PrimitiveMode mode,
-                                GLsizei count,
-                                GLenum type,
-                                const void *indices,
-                                GLsizei primcount)
+bool ValidateDrawElementsCommon(Context *context, const DrawCallParams &params)
 {
-    if (!ValidateDrawElementsBase(context, mode, type))
+    if (!ValidateDrawElementsBase(context, params))
         return false;
 
     const State &state = context->getGLState();
 
-    if (!ValidateDrawBase(context, mode, count))
+    if (!ValidateDrawBase(context, params.mode(), params.indexCount()))
     {
         return false;
     }
@@ -3014,12 +3002,13 @@ bool ValidateDrawElementsCommon(Context *context,
     const VertexArray *vao     = state.getVertexArray();
     Buffer *elementArrayBuffer = vao->getElementArrayBuffer();
 
-    GLuint typeBytes = GetTypeInfo(type).bytes;
+    GLuint typeBytes = GetTypeInfo(params.type()).bytes;
 
     if (context->getExtensions().webglCompatibility)
     {
         ASSERT(isPow2(typeBytes) && typeBytes > 0);
-        if ((reinterpret_cast<uintptr_t>(indices) & static_cast<uintptr_t>(typeBytes - 1)) != 0)
+        if ((reinterpret_cast<uintptr_t>(params.indices()) &
+             static_cast<uintptr_t>(typeBytes - 1)) != 0)
         {
             // [WebGL 1.0] Section 6.4 Buffer Offset and Stride Requirements
             // The offset arguments to drawElements and [...], must be a multiple of the size of the
@@ -3031,7 +3020,7 @@ bool ValidateDrawElementsCommon(Context *context,
         // [WebGL 1.0] Section 6.4 Buffer Offset and Stride Requirements
         // In addition the offset argument to drawElements must be non-negative or an INVALID_VALUE
         // error is generated.
-        if (reinterpret_cast<intptr_t>(indices) < 0)
+        if (reinterpret_cast<intptr_t>(params.indices()) < 0)
         {
             ANGLE_VALIDATION_ERR(context, InvalidValue(), NegativeOffset);
             return false;
@@ -3059,7 +3048,7 @@ bool ValidateDrawElementsCommon(Context *context,
         }
     }
 
-    if (count > 0 && !elementArrayBuffer && !indices)
+    if (params.indexCount() > 0 && !elementArrayBuffer && !params.indices())
     {
         // This is an application error that would normally result in a crash, but we catch it and
         // return an error
@@ -3067,7 +3056,7 @@ bool ValidateDrawElementsCommon(Context *context,
         return false;
     }
 
-    if (count > 0 && elementArrayBuffer)
+    if (params.indexCount() > 0 && elementArrayBuffer)
     {
         // The max possible type size is 8 and count is on 32 bits so doing the multiplication
         // in a 64 bit integer is safe. Also we are guaranteed that here count > 0.
@@ -3078,14 +3067,14 @@ bool ValidateDrawElementsCommon(Context *context,
         static_assert(kIntMax < kUint64Max / kMaxTypeSize, "");
 
         uint64_t typeSize     = typeBytes;
-        uint64_t elementCount = static_cast<uint64_t>(count);
+        uint64_t elementCount = static_cast<uint64_t>(params.indexCount());
         ASSERT(elementCount > 0 && typeSize <= kMaxTypeSize);
 
         // Doing the multiplication here is overflow-safe
         uint64_t elementDataSizeNoOffset = typeSize * elementCount;
 
         // The offset can be any value, check for overflows
-        uint64_t offset = static_cast<uint64_t>(reinterpret_cast<uintptr_t>(indices));
+        uint64_t offset = static_cast<uint64_t>(reinterpret_cast<uintptr_t>(params.indices()));
         if (elementDataSizeNoOffset > kUint64Max - offset)
         {
             ANGLE_VALIDATION_ERR(context, InvalidOperation(), IntegerOverflow);
@@ -3115,10 +3104,10 @@ bool ValidateDrawElementsCommon(Context *context,
         }
     }
 
-    if (!context->getExtensions().robustBufferAccessBehavior && count > 0 && primcount > 0)
+    if (!context->getExtensions().robustBufferAccessBehavior && params.indexCount() > 0 &&
+        params.instances() > 0)
     {
         // Use the parameter buffer to retrieve and cache the index range.
-        const DrawCallParams &params = context->getParams<DrawCallParams>();
         ANGLE_VALIDATION_TRY(params.ensureIndexRangeResolved(context));
         const IndexRange &indexRange = params.getIndexRange();
 
@@ -3131,7 +3120,7 @@ bool ValidateDrawElementsCommon(Context *context,
             return false;
         }
 
-        if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(indexRange.end)))
+        if (!ValidateDrawAttribs(context, params.instances(), static_cast<GLint>(indexRange.end)))
         {
             return false;
         }
@@ -3143,22 +3132,12 @@ bool ValidateDrawElementsCommon(Context *context,
     return true;
 }
 
-bool ValidateDrawElementsInstancedCommon(Context *context,
-                                         PrimitiveMode mode,
-                                         GLsizei count,
-                                         GLenum type,
-                                         const void *indices,
-                                         GLsizei primcount)
+bool ValidateDrawElementsInstancedCommon(Context *context, const DrawCallParams &params)
 {
-    return ValidateDrawElementsInstancedBase(context, mode, count, type, indices, primcount);
+    return ValidateDrawElementsInstancedBase(context, params);
 }
 
-bool ValidateDrawElementsInstancedANGLE(Context *context,
-                                        PrimitiveMode mode,
-                                        GLsizei count,
-                                        GLenum type,
-                                        const void *indices,
-                                        GLsizei primcount)
+bool ValidateDrawElementsInstancedANGLE(Context *context, const DrawCallParams &params)
 {
     if (!context->getExtensions().instancedArrays)
     {
@@ -3166,7 +3145,7 @@ bool ValidateDrawElementsInstancedANGLE(Context *context,
         return false;
     }
 
-    if (!ValidateDrawElementsInstancedBase(context, mode, count, type, indices, primcount))
+    if (!ValidateDrawElementsInstancedBase(context, params))
     {
         return false;
     }

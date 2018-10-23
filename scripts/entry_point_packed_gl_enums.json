@@ -95,31 +95,58 @@
         "array": "ClientVertexArrayType"
     },
     "glDrawArrays": {
-        "mode": "PrimitiveMode"
+        "params": {
+            "multiparams": ["mode", "first", "count"],
+            "type": "DrawCallParams"
+        }
     },
     "glDrawArraysIndirect": {
-        "mode": "PrimitiveMode"
+        "params": {
+            "multiparams": ["mode", "indirect"],
+            "type": "DrawCallParams"
+        }
     },
     "glDrawArraysInstanced": {
-        "mode": "PrimitiveMode"
+        "params": {
+            "multiparams": ["mode", "first", "count", "instancecount"],
+            "type": "DrawCallParams"
+        }
     },
     "glDrawArraysInstancedANGLE": {
-        "mode": "PrimitiveMode"
+        "params": {
+            "multiparams": ["mode", "first", "count", "primcount"],
+            "type": "DrawCallParams"
+        }
     },
     "glDrawElements": {
-        "mode": "PrimitiveMode"
+        "params": {
+            "multiparams": ["mode", "count", "type", "indices"],
+            "type": "DrawCallParams"
+        }
     },
     "glDrawElementsIndirect": {
-        "mode": "PrimitiveMode"
+        "params": {
+            "multiparams": ["mode", "type", "indirect"],
+            "type": "DrawCallParams"
+        }
     },
     "glDrawElementsInstanced": {
-        "mode": "PrimitiveMode"
+        "params": {
+            "multiparams": ["mode", "count", "type", "indices", "instancecount"],
+            "type": "DrawCallParams"
+        }
     },
     "glDrawElementsInstancedANGLE": {
-        "mode": "PrimitiveMode"
+        "params": {
+            "multiparams": ["mode", "count", "type", "indices", "primcount"],
+            "type": "DrawCallParams"
+        }
     },
     "glDrawRangeElements": {
-        "mode": "PrimitiveMode"
+        "params": {
+            "multiparams": ["mode", "count", "type", "indices"],
+            "type": "DrawCallParams"
+        }
     },
     "glEGLImageTargetTexture2DOES": {
         "target": "TextureType"
