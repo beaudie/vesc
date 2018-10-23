@@ -183,6 +183,30 @@
       "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b4d9d83_ea5842da",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-10-23T17:38:24Z",
+      "side": 1,
+      "message": "I have lots of thoughts.  I\u0027m open.  Let\u0027s keep chatting ... perhaps in our meeting in a few minutes.  Here\u0027s some thoughts before then ...\n\nI\u0027d like to back up first, before getting into all of the details ...\n\nYou say \"... for workaround selection, if we decide we want to go that way.\"  I thought you did want to go that way.  It might be good to determine that before looking at modifying this API (e.g. if you decide to not \"to go that way\", we\u0027ll save time/effort).\n\nBTW, have you looked at this doc lately?: https://docs.google.com/document/d/1mdEPW25ZZPplRm5ybzYGye2oVxSqy-k9QkYpz2Rnt3s/edit?pli\u003d1#heading\u003dh.c0gzv7zc9e98\n\nIt has a section that looks at what \"functions\" are needed in terms of what-to-do, what inputs, what output, etc.  I was thinking of \"5. ANGLE determines what work-around(s) ANGLE will use for a given application and the current device\" as what ANGLE needed.  Is that close?\n\nJumping into some of the details...\n\nSomething that happened since Budapest is that Courtney put this into its own shared library that Android\u0027s EGL loader dlopen\u0027s and dlclose\u0027s.  Thus (I think--correct me if I\u0027m wrong), anything we pass down (like the deviceMfr and deviceModel, which can be queried by certain APIs that are above EGL) will be forgotten by the time ANGLE can call it.  I think that ANGLE needs to know that info, and we need to plumb it down to ANGLE.\n\nFrom our discussions in Budapest, I thought we agreed that we\u0027d have different functions for Android and for ANGLE calling into the rules processing.  The needs were different, and so different functions seemed appropriate.  This function is what Android needs now.  For example, the notion of an application preference was dropped strategically (we still encode any application-specific info into the rules file and not allow applications themselves to programmatically express a preference), and so it was dropped from this function signature as well.  It seems like ANGLE had different needs (less care for specific applications and more care for devices/drivers), and so a different function/signature is what I thought you preferred.  Do you really want to have one function that meets all needs?",
+      "parentUuid": "744711b3_fa3751a2",
+      "range": {
+        "startLine": 48,
+        "startChar": 18,
+        "endLine": 48,
+        "endChar": 47
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
