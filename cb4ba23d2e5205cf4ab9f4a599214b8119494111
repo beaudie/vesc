@@ -207,6 +207,30 @@
       "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d62b0be4_e3c5d462",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-23T17:59:57Z",
+      "side": 1,
+      "message": "\u003e I have lots of thoughts.  I\u0027m open.  Let\u0027s keep chatting ... perhaps in our meeting in a few minutes.  Here\u0027s some thoughts before then ...\n\u003e \n\u003e I\u0027d like to back up first, before getting into all of the details ...\n\u003e \n\u003e You say \"... for workaround selection, if we decide we want to go that way.\"  I thought you did want to go that way.  It might be good to determine that before looking at modifying this API (e.g. if you decide to not \"to go that way\", we\u0027ll save time/effort).\n\u003e \n\u003e BTW, have you looked at this doc lately?: https://docs.google.com/document/d/1mdEPW25ZZPplRm5ybzYGye2oVxSqy-k9QkYpz2Rnt3s/edit?pli\u003d1#heading\u003dh.c0gzv7zc9e98\n\u003e \n\u003e It has a section that looks at what \"functions\" are needed in terms of what-to-do, what inputs, what output, etc.  I was thinking of \"5. ANGLE determines what work-around(s) ANGLE will use for a given application and the current device\" as what ANGLE needed.  Is that close?\n\nOh no we do. So we if we could leave the door open to it without a redesign of the API version that\u0027d be idea.\n\n\u003e Jumping into some of the details...\n\u003e \n\u003e Something that happened since Budapest is that Courtney put this into its own shared library that Android\u0027s EGL loader dlopen\u0027s and dlclose\u0027s.  Thus (I think--correct me if I\u0027m wrong), anything we pass down (like the deviceMfr and deviceModel, which can be queried by certain APIs that are above EGL) will be forgotten by the time ANGLE can call it.  I think that ANGLE needs to know that info, and we need to plumb it down to ANGLE.\n\nOK, good point. Also, we probably don\u0027t want to call system info collection twice if ANGLE is using this info for workarounds determination. That would leave two options for us:\n\n#1. we store the SystemInfo in the shared library that Courtney added and pass a handle to ANGLE on init.\n#2. we pass in the full SystemInfo to ANGLE on ANGLE init.\n\nIn either case, wouldn\u0027t you potentially want the full SystemInfo along with of device manufacturer/model? You\u0027d have access to the driver version. The device info could be folded into the struct as well. Are you even using the SystemInfo right now?\n\n\u003e From our discussions in Budapest, I thought we agreed that we\u0027d have different functions for Android and for ANGLE calling into the rules processing.  The needs were different, and so different functions seemed appropriate.  This function is what Android needs now.  For example, the notion of an application preference was dropped strategically (we still encode any application-specific info into the rules file and not allow applications themselves to programmatically express a preference), and so it was dropped from this function signature as well.  It seems like ANGLE had different needs (less care for specific applications and more care for devices/drivers), and so a different function/signature is what I thought you preferred.  Do you really want to have one function that meets all needs?\n\nWell, it\u0027s good if you dropped the app preference design. That means the rules system only has one output. I think the only thing that would need to change to make the APIs the same is to take a SystemInfo instead of device info. App name seems reasonable since in all cases ANGLE is running under an application layer. Sometimes it wouldn\u0027t be used in the rules file, and it isn\u0027t a part of the System info, but it does make sense for all our users.\n\nOh, and maybe return yes/no/error instead of yes/no. There could be some unexpected behaviour. Or add an error callback if we really want to get fancy.",
+      "parentUuid": "2b4d9d83_ea5842da",
+      "range": {
+        "startLine": 48,
+        "startChar": 18,
+        "endLine": 48,
+        "endChar": 47
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
