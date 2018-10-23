@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "17ffce0c_a6c7f4d6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-23T16:38:49Z",
+      "side": 1,
+      "message": "Huh, I\u0027ve never seen that issue.  I know Jamie uses that syntax because some auto-rollers don\u0027t pick it up when they put comments in bugs.",
+      "parentUuid": "c6c85903_1b33da44",
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a64fc77_831bbcb2",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 4
@@ -33,6 +51,47 @@
       "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39cb118d_d00678d5",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-23T16:38:49Z",
+      "side": 1,
+      "message": "It\u0027s done in Image::onDestroy, marked it.",
+      "parentUuid": "7a64fc77_831bbcb2",
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e4f22a4_b2d11e1c",
+        "filename": "src/libANGLE/Image.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-23T16:38:49Z",
+      "side": 1,
+      "message": "Special case for deletion of external siblings is done here.",
+      "range": {
+        "startLine": 246,
+        "startChar": 0,
+        "endLine": 250,
+        "endChar": 9
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +118,30 @@
     },
     {
       "key": {
+        "uuid": "f073aeb1_82542cb2",
+        "filename": "src/libANGLE/Image.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-23T16:38:49Z",
+      "side": 1,
+      "message": "Honestly I find it harder to read that way because it\u0027s extra special cases.",
+      "parentUuid": "c0347c43_01891776",
+      "range": {
+        "startLine": 316,
+        "startChar": 4,
+        "endLine": 316,
+        "endChar": 8
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e7a6ba8_b211ec4b",
         "filename": "src/libANGLE/renderer/gl/egl/ExternalImageSiblingEGL.h",
         "patchSetId": 4
@@ -82,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "f62cc048_ff67ed14",
+        "filename": "src/libANGLE/renderer/gl/egl/ExternalImageSiblingEGL.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-23T16:38:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e7a6ba8_b211ec4b",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f02318ff_6fb3fe1d",
         "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.cpp",
         "patchSetId": 4
@@ -102,6 +209,30 @@
       "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd5b2644_4ce93b53",
+        "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-23T16:38:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f02318ff_6fb3fe1d",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -176,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "bb8e5f4f_1f7bf93c",
+        "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-23T16:38:49Z",
+      "side": 1,
+      "message": "From Jesse:\n\n\"Yeah, there\u0027s not a good way of doing this right now via public APIs; it was assumed that the only people who\u0027d need to treat it as anything other than an opaque type had access to internals (an assumption we kind of broke with Treble, where we started walling off vendor code from things, but oh well).\n\nCopying enough of the struct to get the info you need is probably the best option. Alternately you could assume that the ANativeWindowBuffer* is really a AHardwareBuffer*, and use AHardwareBuffer_describe(). But I think we\u0027d be more likely to break that than to change the layout of data inside the ANativeWindowBuffer -- binary vendor drivers depend on the latter but not the former.\n\nOr, if you were okay only being able to do this on Q, we could add a public API to go from EGLClientBuffer to AHardwareBuffer, basically the reverse of eglGetNativeClientBufferANDROID().\"\n\n\nLeaving it as is seems like the best option for now.",
+      "parentUuid": "3a5c3310_6ee2069f",
+      "range": {
+        "startLine": 13,
+        "startChar": 1,
+        "endLine": 55,
+        "endChar": 24
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f4b890e3_679c394b",
         "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.h",
         "patchSetId": 4
@@ -199,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "456b080a_6f0b2726",
+        "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-23T16:38:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4b890e3_679c394b",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fca516f2_74f09afc",
         "filename": "src/libANGLE/renderer/gl/egl/android/android_util.cpp",
         "patchSetId": 4
@@ -219,6 +398,30 @@
       "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de26dff3_1e5a2c75",
+        "filename": "src/libANGLE/renderer/gl/egl/android/android_util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-23T16:38:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fca516f2_74f09afc",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -290,6 +493,30 @@
       "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6ea5800_d71eeaa8",
+        "filename": "src/libANGLE/renderer/gl/egl/android/android_util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-23T16:38:49Z",
+      "side": 1,
+      "message": "I went with using the formats from android/hardware_buffer.h.  They probably most closely mirror what we\u0027ll be receiving here, no YUV formats.",
+      "parentUuid": "3cde8e10_c1f191bb",
+      "range": {
+        "startLine": 15,
+        "startChar": 3,
+        "endLine": 15,
+        "endChar": 111
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -436,6 +663,30 @@
     },
     {
       "key": {
+        "uuid": "5d52164c_e0942a51",
+        "filename": "src/libANGLE/renderer/gl/egl/android/android_util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-23T16:38:49Z",
+      "side": 1,
+      "message": "I added an extra comment to these formats so we know where they came from.",
+      "parentUuid": "a841d2ac_241512a0",
+      "range": {
+        "startLine": 22,
+        "startChar": 1,
+        "endLine": 23,
+        "endChar": 48
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "95008d89_eee9c64a",
         "filename": "src/libANGLE/renderer/gl/egl/android/android_util.h",
         "patchSetId": 4
@@ -456,6 +707,30 @@
       "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ea12faf_24c8a2d8",
+        "filename": "src/libANGLE/renderer/gl/egl/android/android_util.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-23T16:38:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95008d89_eee9c64a",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "2c4a69d8561824243d381eeb8897055a9e1e6f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
