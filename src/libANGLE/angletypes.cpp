@@ -108,8 +108,6 @@ bool operator!=(const DepthStencilState &a, const DepthStencilState &b)
 
 SamplerState::SamplerState()
 {
-    memset(this, 0, sizeof(SamplerState));
-
     setMinFilter(GL_NEAREST_MIPMAP_LINEAR);
     setMagFilter(GL_LINEAR);
     setWrapS(GL_REPEAT);
@@ -121,6 +119,11 @@ SamplerState::SamplerState()
     setCompareMode(GL_NONE);
     setCompareFunc(GL_LEQUAL);
     setSRGBDecode(GL_DECODE_EXT);
+    mCompleteness.packed = 0;
+    mCompleteness.typed.magFilter = 0;
+    mCompleteness.typed.minFilter = 0;
+    mCompleteness.typed.wrapS = 0;
+    mCompleteness.typed.wrapTCompareMode = 0;
 }
 
 SamplerState::SamplerState(const SamplerState &other) = default;

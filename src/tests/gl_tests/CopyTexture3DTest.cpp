@@ -100,6 +100,8 @@ class CopyTexture3DTest : public ANGLETest
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(testTarget, destTexture.get());
+        glTexImage3D(testTarget, 0, GL_RGBA, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     nullptr);
         glCopyTexture3DANGLE(sourceTexture.get(), 0, testTarget, destTexture.get(), 0,
                              destInternalFormat, destType, flipY, premultiplyAlpha,
                              unmultiplyAlpha);
@@ -192,6 +194,9 @@ class CopyTexture3DTest : public ANGLETest
 
         drawQuad(mProgram, "position", 0.5f);
         EXPECT_GL_NO_ERROR();
+
+        sourceTexture.reset();
+        destTexture.reset();
 
         if (renderType == GL_RGBA8)
         {
@@ -684,6 +689,7 @@ TEST_P(Texture3DCopy, UnsignedByteFormats)
     testCopy(GL_TEXTURE_3D, GLColor(100, 150, 250, 200), GL_RGB565, GL_UNSIGNED_SHORT_5_6_5, false,
              false, true, GLColor(132, 190, 255, 255));
 }
+
 
 // Test passthrough, premultiply alpha, and unmultiply alpha copies for GL_TEXTURE_3D with float
 // formats.
@@ -1278,11 +1284,9 @@ TEST_P(Texture2DArrayCopy, UnsizedFormats)
 TEST_P(Texture2DArrayCopy, SnormFormats)
 {
     ANGLE_SKIP_TEST_IF(!checkExtensions());
-
-    // http://anglebug.com/2865
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsNVIDIA() && IsD3D11());
-
-    testCopy(GL_TEXTURE_2D_ARRAY, GLColor(250, 200, 150, 190), GL_R8_SNORM, GL_BYTE, false, false,
+    for(int i = 0;i<40;i++)
+    {
+          testCopy(GL_TEXTURE_2D_ARRAY, GLColor(250, 200, 150, 190), GL_R8_SNORM, GL_BYTE, false, false,
              false, GLColor(251, 0, 0, 255));
     testCopy(GL_TEXTURE_2D_ARRAY, GLColor(250, 200, 150, 190), GL_R8_SNORM, GL_BYTE, false, true,
              false, GLColor(187, 0, 0, 255));
@@ -1316,17 +1320,16 @@ TEST_P(Texture2DArrayCopy, SnormFormats)
              GL_UNSIGNED_INT_2_10_10_10_REV, false, true, false, GLColor(196, 157, 118, 170));
     testCopy(GL_TEXTURE_2D_ARRAY, GLColor(100, 150, 250, 200), GL_RGB10_A2,
              GL_UNSIGNED_INT_2_10_10_10_REV, false, false, true, GLColor(128, 191, 255, 170));
+    }
+  
 }
 
-// Test passthrough, premultiply alpha, and unmultiply alpha copies for GL_TEXTURE_2D_ARRAY with
-// unsigned byte formats.
 TEST_P(Texture2DArrayCopy, UnsignedByteFormats)
 {
     ANGLE_SKIP_TEST_IF(!checkExtensions());
 
-    // Flay on Windows D3D11. http://anglebug.com/2896
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsD3D11());
-
+    for(int i = 0;i<40;i++)
+    {
     testCopy(GL_TEXTURE_2D_ARRAY, GLColor(250, 200, 150, 100), GL_R8, GL_UNSIGNED_BYTE, false,
              false, false, GLColor(250, 0, 0, 255));
     testCopy(GL_TEXTURE_2D_ARRAY, GLColor(250, 200, 150, 100), GL_R8, GL_UNSIGNED_BYTE, false, true,
@@ -1419,6 +1422,7 @@ TEST_P(Texture2DArrayCopy, UnsignedByteFormats)
              false, true, false, GLColor(31, 19, 11, 100));
     testCopy(GL_TEXTURE_2D_ARRAY, GLColor(250, 200, 150, 100), GL_SRGB8_ALPHA8, GL_UNSIGNED_BYTE,
              false, false, true, GLColor(52, 253, 53, 100));
+    }
 }
 
 // Test passthrough, premultiply alpha, and unmultiply alpha copies for GL_TEXTURE_2D_ARRAY with
@@ -1427,11 +1431,11 @@ TEST_P(Texture2DArrayCopy, FloatFormats)
 {
     ANGLE_SKIP_TEST_IF(!checkExtensions());
 
-    // http://anglebug.com/2865
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsNVIDIA() && IsD3D11());
-
     std::vector<GLenum> floatTypes = {GL_FLOAT, GL_HALF_FLOAT, GL_UNSIGNED_INT_10F_11F_11F_REV,
                                       GL_UNSIGNED_INT_5_9_9_9_REV};
+
+        for(int i = 0;i<40;i++)
+    {
 
     for (GLenum floatType : floatTypes)
     {
@@ -1515,6 +1519,7 @@ TEST_P(Texture2DArrayCopy, FloatFormats)
              false, GLColor(191, 184, 138, 235));
     testCopy(GL_TEXTURE_2D_ARRAY, GLColor(210, 200, 150, 235), GL_RGBA32F, GL_FLOAT, false, false,
              true, GLColor(227, 217, 161, 235));
+        }
 }
 
 // Test passthrough, premultiply alpha, and unmultiply alpha copies for GL_TEXTURE_2D_ARRAY with
