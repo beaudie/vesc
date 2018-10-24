@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7ba25cdf_e3f3011a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-24T20:38:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8228961c_cdfab389",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 27
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3025fcf3_a6384728",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2018-10-24T20:14:24Z",
       "side": 1,
       "message": "I\u0027d prefer to keep either no space adjustment or the full 16 padded with zeros. it makes pointers super clear to use full zero padding.",
+      "range": {
+        "startLine": 22,
+        "startChar": 15,
+        "endLine": 22,
+        "endChar": 18
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bf728be_b5d8dc4f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-24T20:38:12Z",
+      "side": 1,
+      "message": "Unfortunately, %0p is undefined in printf. If we want the padding, it can be done using `\"0x%016\"PRIXPTR` and giving `reinterpret_cast\u003cuintptr_t\u003e(pointer)`.\n\nThe later is a bit more verbose in the code, but I don\u0027t personally mind it. I\u0027ll go with that, if you don\u0027t have any objections.",
+      "parentUuid": "3025fcf3_a6384728",
       "range": {
         "startLine": 22,
         "startChar": 15,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "bbc7f1c9_3af3d9e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-24T20:38:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e400dcb6_220349b0",
+      "range": {
+        "startLine": 42,
+        "startChar": 5,
+        "endLine": 42,
+        "endChar": 9
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c4926b49_84ad66ff",
         "filename": "src/common/angleutils.h",
         "patchSetId": 3
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "fdbc95c0_272f1e3f",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-24T20:38:12Z",
+      "side": 1,
+      "message": "Done.\n\nIt\u0027s a way to enable `printf` (and `scanf`, with `format(__scanf__, ...)`) format checking on functions that the compiler doesn\u0027t know follow the same rules. It\u0027s very useful for wrapper functions that call `v*printf` (or `v*scanf`) where the compiler cannot do format checking.",
+      "parentUuid": "c4926b49_84ad66ff",
+      "range": {
+        "startLine": 298,
+        "startChar": 8,
+        "endLine": 298,
+        "endChar": 20
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "432cd316_114a318b",
         "filename": "src/common/debug.h",
         "patchSetId": 3
@@ -105,6 +201,30 @@
       "writtenOn": "2018-10-24T20:14:24Z",
       "side": 1,
       "message": "nit: I think the compiler accepts this as a prefix as well as suffix. Can you try it? Just to make it consistent with our other uses in the code if possible.",
+      "range": {
+        "startLine": 34,
+        "startChar": 51,
+        "endLine": 34,
+        "endChar": 70
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc08a586_8574f82c",
+        "filename": "src/common/debug.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-24T20:38:12Z",
+      "side": 1,
+      "message": "You\u0027re right it does.",
+      "parentUuid": "432cd316_114a318b",
       "range": {
         "startLine": 34,
         "startChar": 51,
@@ -137,6 +257,30 @@
       "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "385ba7e3_381ce50c",
+        "filename": "src/gpu_info_util/SystemInfo_android.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-24T20:38:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ae38289d_2ab24ce2",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 66
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
