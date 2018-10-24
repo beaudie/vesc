@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22df8a33_477aac61",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-24T20:18:10Z",
+      "side": 1,
+      "message": "I added the TRACE_EVENT0 here (instead of inside nextSwapchainImage) to work around the issue we talked about.",
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
