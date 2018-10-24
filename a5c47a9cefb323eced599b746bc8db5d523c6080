@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "93189364_61ab8190",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-24T20:39:57Z",
+      "side": 1,
+      "message": "As long as it\u0027s compatible with MSVC that\u0027s fine. Fallback is just no padding (that\u0027s fine too).",
+      "parentUuid": "9bf728be_b5d8dc4f",
+      "range": {
+        "startLine": 22,
+        "startChar": 15,
+        "endLine": 22,
+        "endChar": 18
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e400dcb6_220349b0",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
