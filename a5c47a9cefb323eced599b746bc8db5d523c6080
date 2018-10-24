@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8228961c_cdfab389",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-24T20:14:24Z",
+      "side": 1,
+      "message": "nit: might say compiler printf attribute. Sounds like you\u0027re adding printfs everywhere.",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 27
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3025fcf3_a6384728",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-24T20:14:24Z",
+      "side": 1,
+      "message": "I\u0027d prefer to keep either no space adjustment or the full 16 padded with zeros. it makes pointers super clear to use full zero padding.",
+      "range": {
+        "startLine": 22,
+        "startChar": 15,
+        "endLine": 22,
+        "endChar": 18
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e400dcb6_220349b0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-24T20:14:24Z",
+      "side": 1,
+      "message": "nit: remember to include \"angleproject:\"",
+      "range": {
+        "startLine": 42,
+        "startChar": 5,
+        "endLine": 42,
+        "endChar": 9
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4926b49_84ad66ff",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-24T20:14:24Z",
+      "side": 1,
+      "message": "what does this do exactly? Also maybe call it ANGLE_FORMAT_PRINTF",
+      "range": {
+        "startLine": 298,
+        "startChar": 8,
+        "endLine": 298,
+        "endChar": 20
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "432cd316_114a318b",
+        "filename": "src/common/debug.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-24T20:14:24Z",
+      "side": 1,
+      "message": "nit: I think the compiler accepts this as a prefix as well as suffix. Can you try it? Just to make it consistent with our other uses in the code if possible.",
+      "range": {
+        "startLine": 34,
+        "startChar": 51,
+        "endLine": 34,
+        "endChar": 70
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae38289d_2ab24ce2",
+        "filename": "src/gpu_info_util/SystemInfo_android.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-24T20:14:24Z",
+      "side": 1,
+      "message": "if it\u0027s necessary to make a separate declaration to use this attribute, can you leave a comment to that effect? otherwise combine.",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 66
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
