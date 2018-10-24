@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "25831f76_514f1f7e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-24T20:23:42Z",
+      "side": 1,
+      "message": "OK. Mild preference to use the const \u0026. You can pass const vk::Event * to waitEvents as well if you want. We just don\u0027t support arrays of weak refs yet. But it\u0027s something I\u0027ve been meaning to add.",
+      "parentUuid": "5e2b332f_437e4aec",
+      "range": {
+        "startLine": 426,
+        "startChar": 18,
+        "endLine": 426,
+        "endChar": 25
+      },
+      "revId": "93e4210c0061d3ab46a34e5fea5af1fee5155b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e7952e45_7757f9e7",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 2
