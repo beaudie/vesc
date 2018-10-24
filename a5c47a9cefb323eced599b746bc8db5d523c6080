@@ -167,6 +167,75 @@
     },
     {
       "key": {
+        "uuid": "11300e1f_f8e16e8c",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-24T22:08:12Z",
+      "side": 1,
+      "message": "Why not intptr_t?",
+      "range": {
+        "startLine": 301,
+        "startChar": 17,
+        "endLine": 301,
+        "endChar": 35
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c9f7153_8768796b",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-24T22:08:12Z",
+      "side": 1,
+      "message": "Why not ptrdiff_t?",
+      "range": {
+        "startLine": 302,
+        "startChar": 19,
+        "endLine": 302,
+        "endChar": 37
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa804501_3a4f02aa",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-24T22:08:12Z",
+      "side": 1,
+      "message": "Why not uint64_t?",
+      "range": {
+        "startLine": 303,
+        "startChar": 17,
+        "endLine": 303,
+        "endChar": 35
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c4926b49_84ad66ff",
         "filename": "src/common/angleutils.h",
         "patchSetId": 3
