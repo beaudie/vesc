@@ -255,6 +255,12 @@ class VertexArray final : public angle::ObserverInterface,
     void onBindingChanged(const Context *context, int incr);
     bool hasTransformFeedbackBindingConflict(const gl::Context *context) const;
 
+    angle::Result getIndexRange(const Context *context,
+                                GLenum type,
+                                GLsizei indexCount,
+                                const void *indices,
+                                IndexRange *indexRangeOut) const;
+
   private:
     ~VertexArray() override;
 
@@ -288,6 +294,29 @@ class VertexArray final : public angle::ObserverInterface,
     std::vector<angle::ObserverBinding> mArrayBufferObserverBindings;
 
     AttributesMask mCachedTransformFeedbackConflictedBindingsMask;
+
+    class IndexRangeCache final : angle::NonCopyable
+    {
+      public:
+        IndexRangeCache();
+
+        void invalidate() { mTypeKey = GL_NONE; }
+
+        angle::Result get(const Context *context,
+                          GLenum type,
+                          GLsizei indexCount,
+                          const void *indices,
+                          Buffer *elementArrayBuffer,
+                          IndexRange *indexRangeOut);
+
+      private:
+        GLenum mTypeKey;
+        GLsizei mIndexCountKey;
+        size_t mOffsetKey;
+        IndexRange mPayload;
+    };
+
+    mutable IndexRangeCache mIndexRangeCache;
 };
 
 }  // namespace gl

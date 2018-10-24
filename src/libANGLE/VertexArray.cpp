@@ -7,6 +7,8 @@
 //
 
 #include "libANGLE/VertexArray.h"
+
+#include "common/utilities.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/BufferImpl.h"
@@ -395,6 +397,7 @@ VertexArray::DirtyBitType VertexArray::getDirtyBitFromIndex(bool contentsChanged
 {
     if (IsElementArrayBufferSubjectIndex(index))
     {
+        mIndexRangeCache.invalidate();
         return contentsChanged ? DIRTY_BIT_ELEMENT_ARRAY_BUFFER_DATA
                                : DIRTY_BIT_ELEMENT_ARRAY_BUFFER;
     }
@@ -525,5 +528,50 @@ void VertexArray::updateCachedMappedArrayBuffers(VertexBinding *binding)
 
     mState.mCachedEnabledMappedArrayBuffers =
         mState.mCachedMappedArrayBuffers & mState.mEnabledAttributesMask;
+}
+
+angle::Result VertexArray::getIndexRange(const Context *context,
+                                         GLenum type,
+                                         GLsizei indexCount,
+                                         const void *indices,
+                                         IndexRange *indexRangeOut) const
+{
+    Buffer *elementArrayBuffer = mState.mElementArrayBuffer.get();
+    if (!elementArrayBuffer)
+    {
+        *indexRangeOut = ComputeIndexRange(type, indices, indexCount,
+                                           context->getGLState().isPrimitiveRestartEnabled());
+        return angle::Result::Continue();
+    }
+
+    return mIndexRangeCache.get(context, type, indexCount, indices, elementArrayBuffer,
+                                indexRangeOut);
+}
+
+VertexArray::IndexRangeCache::IndexRangeCache() = default;
+
+angle::Result VertexArray::IndexRangeCache::get(const Context *context,
+                                                GLenum type,
+                                                GLsizei indexCount,
+                                                const void *indices,
+                                                Buffer *elementArrayBuffer,
+                                                IndexRange *indexRangeOut)
+{
+    ASSERT(type != GL_NONE);
+    ASSERT(elementArrayBuffer);
+
+    size_t offset = reinterpret_cast<uintptr_t>(indices);
+    if (mTypeKey == type && mIndexCountKey == indexCount && mOffsetKey == offset)
+    {
+        *indexRangeOut = mPayload;
+        return angle::Result::Continue();
+    }
+
+    ANGLE_TRY(elementArrayBuffer->getIndexRange(context, type, offset, indexCount,
+                                                context->getGLState().isPrimitiveRestartEnabled(),
+                                                &mPayload));
+
+    *indexRangeOut = mPayload;
+    return angle::Result::Continue();
 }
 }  // namespace gl
