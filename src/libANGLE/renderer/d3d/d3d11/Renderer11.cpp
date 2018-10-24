@@ -1530,7 +1530,9 @@ angle::Result Renderer11::drawArrays(const gl::Context *context, const gl::DrawC
     return angle::Result::Continue();
 }
 
-angle::Result Renderer11::drawElements(const gl::Context *context, const gl::DrawCallParams &params)
+angle::Result Renderer11::drawElements(const gl::Context *context,
+                                       const gl::DrawCallParams &params,
+                                       GLint startVertex)
 {
     if (mStateManager.getCullEverything())
     {
@@ -1544,8 +1546,7 @@ angle::Result Renderer11::drawElements(const gl::Context *context, const gl::Dra
 
     // If this draw call is coming from an indirect call, offset by the indirect call's base vertex.
     // No base vertex parameter exists for a normal drawElements, so params.baseVertex will be zero.
-    int startVertex = static_cast<int>(params.firstVertex() - params.baseVertex());
-    int baseVertex  = -startVertex;
+    int baseVertex = -startVertex;
 
     const ProgramD3D *programD3D  = mStateManager.getProgramD3D();
     GLsizei adjustedInstanceCount = GetAdjustedInstanceCount(programD3D, params.instances());
