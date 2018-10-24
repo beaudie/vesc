@@ -289,7 +289,25 @@ angle::Result VertexArray11::updateDynamicAttribs(const gl::Context *context,
     const auto &attribs  = mState.getVertexAttributes();
     const auto &bindings = mState.getVertexBindings();
 
-    ANGLE_TRY_HANDLE(context, drawCallParams.ensureIndexRangeResolved(context));
+    GLint firstVertex;
+    GLsizei vertexCount;
+
+    if (drawCallParams.isDrawElements())
+    {
+        gl::IndexRange indexRange;
+        ANGLE_TRY(glState.getVertexArray()->getIndexRange(context, drawCallParams.type(),
+                                                          drawCallParams.indexCount(),
+                                                          drawCallParams.indices(), &indexRange));
+
+        ANGLE_TRY(ComputeFirstVertex(GetImplAs<Context11>(context), indexRange,
+                                     drawCallParams.baseVertex(), &firstVertex));
+        vertexCount = indexRange.vertexCount();
+    }
+    else
+    {
+        firstVertex = drawCallParams.firstVertex();
+        vertexCount = drawCallParams.vertexCount();
+    }
 
     for (size_t dynamicAttribIndex : activeDynamicAttribs)
     {
@@ -303,12 +321,12 @@ angle::Result VertexArray11::updateDynamicAttribs(const gl::Context *context,
         dynamicAttrib->divisor = dynamicAttrib->binding->getDivisor() * mAppliedNumViewsToDivisor;
     }
 
-    ANGLE_TRY(vertexDataManager->storeDynamicAttribs(
-        context, &mTranslatedAttribs, activeDynamicAttribs, drawCallParams.firstVertex(),
-        drawCallParams.vertexCount(), drawCallParams.instances()));
+    ANGLE_TRY(vertexDataManager->storeDynamicAttribs(context, &mTranslatedAttribs,
+                                                     activeDynamicAttribs, firstVertex, vertexCount,
+                                                     drawCallParams.instances()));
 
     VertexDataManager::PromoteDynamicAttribs(context, mTranslatedAttribs, activeDynamicAttribs,
-                                             drawCallParams.vertexCount());
+                                             vertexCount);
 
     return angle::Result::Continue();
 }

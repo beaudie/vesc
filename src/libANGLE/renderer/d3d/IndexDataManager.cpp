@@ -318,8 +318,10 @@ angle::Result GetIndexTranslationDestType(const gl::Context *context,
             return angle::Result::Continue();
         }
 
-        ANGLE_TRY_HANDLE(context, drawCallParams.ensureIndexRangeResolved(context));
-        const gl::IndexRange &indexRange = drawCallParams.getIndexRange();
+        gl::IndexRange indexRange;
+        ANGLE_TRY_HANDLE(context, context->getGLState().getVertexArray()->getIndexRange(
+                                      context, drawCallParams.type(), drawCallParams.indexCount(),
+                                      drawCallParams.indices(), &indexRange));
         if (indexRange.end == gl::GetPrimitiveRestartIndex(drawCallParams.type()))
         {
             *destTypeOut = GL_UNSIGNED_INT;
