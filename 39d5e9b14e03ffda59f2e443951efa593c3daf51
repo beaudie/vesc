@@ -2,6 +2,121 @@
   "comments": [
     {
       "key": {
+        "uuid": "e38bbedd_a8c2bf1a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-24T20:31:22Z",
+      "side": 1,
+      "message": "nit: RendererVk::finish",
+      "range": {
+        "startLine": 843,
+        "startChar": 35,
+        "endLine": 843,
+        "endChar": 41
+      },
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c60a43a9_fa24d8ef",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1050,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-24T20:31:22Z",
+      "side": 1,
+      "message": "nit: RendererVk::flush",
+      "range": {
+        "startLine": 1050,
+        "startChar": 31,
+        "endLine": 1050,
+        "endChar": 36
+      },
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "519e9c3e_969e82bb",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-24T20:31:22Z",
+      "side": 1,
+      "message": "nit: might as well use a switch here.",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 9
+      },
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e1489ca_664084ed",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-24T20:31:22Z",
+      "side": 1,
+      "message": "nit: s/Present/WindowSurfaceVk/",
+      "range": {
+        "startLine": 569,
+        "startChar": 35,
+        "endLine": 569,
+        "endChar": 42
+      },
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e33acaf_d6fa1f8a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-24T20:31:22Z",
+      "side": 1,
+      "message": "micro-optimization nit: probaboy ?: is slightly faster.",
+      "range": {
+        "startLine": 588,
+        "startChar": 44,
+        "endLine": 588,
+        "endChar": 96
+      },
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "22df8a33_477aac61",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -13,6 +128,24 @@
       "writtenOn": "2018-10-24T20:18:10Z",
       "side": 1,
       "message": "I added the TRACE_EVENT0 here (instead of inside nextSwapchainImage) to work around the issue we talked about.",
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54a3e5b5_2f8c301b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-24T20:31:22Z",
+      "side": 1,
+      "message": "ah okay. Please leave a comment. Also use SurfaceVk::nextSwapchainImage.",
+      "parentUuid": "22df8a33_477aac61",
       "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
