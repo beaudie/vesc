@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5e2b332f_437e4aec",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-24T20:15:52Z",
+      "side": 1,
+      "message": "Probably possible. `waitEvents()` needs to get a `VkEvent *` though, so this is just for consistency.",
+      "parentUuid": "37b9c7f7_4cb248e1",
+      "range": {
+        "startLine": 426,
+        "startChar": 18,
+        "endLine": 426,
+        "endChar": 25
+      },
+      "revId": "93e4210c0061d3ab46a34e5fea5af1fee5155b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e7952e45_7757f9e7",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 2
