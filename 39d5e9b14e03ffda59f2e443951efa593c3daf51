@@ -71,6 +71,52 @@
     },
     {
       "key": {
+        "uuid": "3ada514d_ad51c6d9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-24T21:56:12Z",
+      "side": 1,
+      "message": "Are you sure this is the right logic?\nBased on the comment above, I would have thought that FIFO would be default, unless something enables MAILBOX, which would be triggered only in performance tests.\nOld comment said \"For now we hard-code Mailbox for perf testing\", but the new comment doesn\u0027t.",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 0
+      },
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84e04089_22f1c7a8",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-24T21:56:12Z",
+      "side": 1,
+      "message": "Formatting looks off.\nDid you run \"git cl format\"?",
+      "range": {
+        "startLine": 466,
+        "startChar": 40,
+        "endLine": 466,
+        "endChar": 47
+      },
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0e1489ca_664084ed",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
