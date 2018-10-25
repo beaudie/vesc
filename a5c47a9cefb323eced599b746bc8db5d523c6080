@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "3c60611d_c20a075d",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-25T14:24:44Z",
+      "side": 1,
+      "message": "Answer for all three: khronos headers don\u0027t define these to C\u0027s defined types, but they manually select `unsigned long` or `unsigned long long` for example. Using `intptr_t` or others would have worked, but the need for `static_cast\u003c\u003e` would not go away, so I didn\u0027t see much benefit in that.",
+      "parentUuid": "11300e1f_f8e16e8c",
+      "range": {
+        "startLine": 301,
+        "startChar": 17,
+        "endLine": 301,
+        "endChar": 35
+      },
+      "revId": "a5c47a9cefb323eced599b746bc8db5d523c6080",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4c9f7153_8768796b",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 3
