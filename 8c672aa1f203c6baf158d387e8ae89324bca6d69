@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0cf5d2e_1f79c713",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-25T21:20:23Z",
+      "side": 1,
+      "message": "Next two functions look identical to this one, can you merge them?",
+      "range": {
+        "startLine": 269,
+        "startChar": 14,
+        "endLine": 269,
+        "endChar": 37
+      },
+      "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72e0073f_880d55e6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-25T21:20:23Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be firstVertex?",
+      "range": {
+        "startLine": 399,
+        "startChar": 64,
+        "endLine": 399,
+        "endChar": 80
+      },
+      "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48fbf59c_14b08561",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-25T21:20:23Z",
+      "side": 1,
+      "message": "Looks duplicated with other backends",
+      "range": {
+        "startLine": 444,
+        "startChar": 0,
+        "endLine": 458,
+        "endChar": 0
+      },
+      "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
