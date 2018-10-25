@@ -91,6 +91,11 @@ void TranslatorESSL::translate(TIntermBlock *root,
         sink << "layout (local_size_x=" << localSize[0] << ", local_size_y=" << localSize[1]
              << ", local_size_z=" << localSize[2] << ") in;\n";
     }
+    if (getShaderType() == GL_COMPUTE_SHADER)
+    {
+        // shared variables intializer test
+        sink << "shared float temp_shared_variable = 0.1234f;\n";
+    }
 
     if (getShaderType() == GL_GEOMETRY_SHADER_EXT)
     {
