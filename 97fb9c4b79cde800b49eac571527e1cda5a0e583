@@ -16,6 +16,24 @@
       "revId": "97fb9c4b79cde800b49eac571527e1cda5a0e583",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9459fc7c_30b94060",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-25T14:29:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3085733_6f795fdc",
+      "revId": "97fb9c4b79cde800b49eac571527e1cda5a0e583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
