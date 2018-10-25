@@ -1,0 +1,326 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0115182_336ab92b",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-25T19:25:25Z",
+      "side": 1,
+      "message": "nit: angle_enable_vulkan_gpu_trace_events to be clear it\u0027s for Vulkan",
+      "range": {
+        "startLine": 25,
+        "startChar": 2,
+        "endLine": 25,
+        "endChar": 31
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "584e753a_3da3c6d3",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-25T19:25:25Z",
+      "side": 1,
+      "message": "nit: same",
+      "range": {
+        "startLine": 88,
+        "startChar": 18,
+        "endLine": 88,
+        "endChar": 47
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "698fcbf9_e3dbf13b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-25T19:25:25Z",
+      "side": 1,
+      "message": "this looks wrong to me - gonna have to dig into why you added it. but would prefer to avoid it.",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 0
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90dd666c_d661bded",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1230,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-25T19:25:25Z",
+      "side": 1,
+      "message": "looking at this - we can probably make do with a runtime behaviour instead of compile time. or at least through a static variable. I think there\u0027s only a few checks that we need:\n\n- in command graph, we can check if the static variable is enabled before recording the gpu events.\n- before calling checkGPUevents.\n\nThen we don\u0027t actually even call any extra functions, just add a few extra bool checks on a submit frame (Which should be ok)",
+      "range": {
+        "startLine": 1230,
+        "startChar": 4,
+        "endLine": 1230,
+        "endChar": 33
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23600efd_bef16368",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-25T19:25:25Z",
+      "side": 1,
+      "message": "nit: we should prefer avoiding auto for simple types for readability.",
+      "range": {
+        "startLine": 1253,
+        "startChar": 4,
+        "endLine": 1253,
+        "endChar": 8
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8c49137_7562fb6c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1258,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-25T19:25:25Z",
+      "side": 1,
+      "message": "very nice writeup",
+      "range": {
+        "startLine": 1256,
+        "startChar": 2,
+        "endLine": 1258,
+        "endChar": 6
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e6218c9_90132cc2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1317,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-25T19:25:25Z",
+      "side": 1,
+      "message": "nit: might be worth mentioning the display timing stuff Ian is working on.",
+      "range": {
+        "startLine": 1317,
+        "startChar": 7,
+        "endLine": 1317,
+        "endChar": 18
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea45ee09_113ec984",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1499,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-25T19:25:25Z",
+      "side": 1,
+      "message": "can we instead use a different category? like gpu.angle.gpu?",
+      "range": {
+        "startLine": 1498,
+        "startChar": 72,
+        "endLine": 1499,
+        "endChar": 82
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08809ecb_4382bcbd",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1506,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-25T19:25:25Z",
+      "side": 1,
+      "message": "Looks like our trace_event.h is out of date. The new one has \n\nTRACE_EVENT_CLOCK_SYNC_RECEIVER and TRACE_EVENT_CLOCK_SYNC_ISSUER\n\nhttps://cs.chromium.org/chromium/src/base/trace_event/common/trace_event_common.h?type\u003dcs\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d937\n\nGonna check to see if we can use that somehow.",
+      "range": {
+        "startLine": 1504,
+        "startChar": 8,
+        "endLine": 1506,
+        "endChar": 55
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26765c85_47054e2f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-25T19:25:25Z",
+      "side": 1,
+      "message": "would prefer if you could avoid using QueryHelper here. I looked at your implementation and didn\u0027t see anywhere you needed access to the command graph. Just storing a vk::Query and Serial should be possible. You\u0027ll need to change the init() and free APIs in the Dynamic Query Pool to be more explicit but that might not be a bad thing.",
+      "range": {
+        "startLine": 306,
+        "startChar": 9,
+        "endLine": 306,
+        "endChar": 30
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d48b5fad_d099ca61",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-25T19:25:25Z",
+      "side": 1,
+      "message": "nit: this should go in the cpp I think since at least QueryHelper has a nontrivial destructor.",
+      "range": {
+        "startLine": 311,
+        "startChar": 8,
+        "endLine": 311,
+        "endChar": 29
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccf712b3_73e15001",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-25T19:25:25Z",
+      "side": 1,
+      "message": "nit: methods first\n\nhttps://google.github.io/styleguide/cppguide.html#Declaration_Order",
+      "range": {
+        "startLine": 312,
+        "startChar": 1,
+        "endLine": 313,
+        "endChar": 46
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "585855b3_67beb990",
+        "filename": "src/tests/angle_perftests_main.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-25T19:25:25Z",
+      "side": 1,
+      "message": "whoops",
+      "range": {
+        "startLine": 30,
+        "startChar": 29,
+        "endLine": 30,
+        "endChar": 35
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bebd12ce_a99f6878",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-25T19:25:25Z",
+      "side": 1,
+      "message": "Are you able to output \u0027c\u0027 events and have Chromium read them per-spec? \n\nIf not, I think maybe we should shift to a slightly less specialized design. We could record timestamps into a second buffer and then flush them to the trace event callback on glFinish.",
+      "range": {
+        "startLine": 115,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 25
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
