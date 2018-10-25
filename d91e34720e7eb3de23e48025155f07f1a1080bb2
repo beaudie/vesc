@@ -2,6 +2,63 @@
   "comments": [
     {
       "key": {
+        "uuid": "099c84c3_57d3a118",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-25T09:39:11Z",
+      "side": 1,
+      "message": "nit: HLSL",
+      "range": {
+        "startLine": 11,
+        "startChar": 46,
+        "endLine": 11,
+        "endChar": 50
+      },
+      "revId": "d91e34720e7eb3de23e48025155f07f1a1080bb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb6e1c6b_c5d09c31",
+        "filename": "src/compiler/translator/AtomicCounterFunctionHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-25T09:39:11Z",
+      "side": 1,
+      "message": "nit: this could be an ImmutableStringBuilder",
+      "revId": "d91e34720e7eb3de23e48025155f07f1a1080bb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7b1f9d6_a4a1881f",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-25T09:39:11Z",
+      "side": 1,
+      "message": "Making atomic counters \"fat pointers\" sounds like a good approach, but are there cases that would be difficult to handle like ternary operations on atomic counters? (I don\u0027t know if it is allowed).",
+      "revId": "d91e34720e7eb3de23e48025155f07f1a1080bb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79669504_6cbb612a",
         "filename": "src/compiler/translator/OutputHLSL.h",
         "patchSetId": 4
@@ -19,6 +76,23 @@
         "endLine": 33,
         "endChar": 32
       },
+      "revId": "d91e34720e7eb3de23e48025155f07f1a1080bb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26b05bee_41a3f2da",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-25T09:39:11Z",
+      "side": 1,
+      "message": "It seems that this would also have been required for SSBO, but I assume things worked previously because uniformsHeader was called before shaderStorageHeader?",
       "revId": "d91e34720e7eb3de23e48025155f07f1a1080bb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
