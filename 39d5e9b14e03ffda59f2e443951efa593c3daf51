@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "71ac3681_9e35106e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-25T14:39:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e38bbedd_a8c2bf1a",
+      "range": {
+        "startLine": 843,
+        "startChar": 35,
+        "endLine": 843,
+        "endChar": 41
+      },
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c60a43a9_fa24d8ef",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb31e006_6a7c3bb1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1050,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-25T14:39:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c60a43a9_fa24d8ef",
+      "range": {
+        "startLine": 1050,
+        "startChar": 31,
+        "endLine": 1050,
+        "endChar": 36
+      },
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "aaab4345_2809c4c2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-25T14:39:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "519e9c3e_969e82bb",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 9
+      },
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ada514d_ad51c6d9",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -82,6 +154,30 @@
       "writtenOn": "2018-10-24T21:56:12Z",
       "side": 1,
       "message": "Are you sure this is the right logic?\nBased on the comment above, I would have thought that FIFO would be default, unless something enables MAILBOX, which would be triggered only in performance tests.\nOld comment said \"For now we hard-code Mailbox for perf testing\", but the new comment doesn\u0027t.",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 0
+      },
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "870f09fa_c179c1a4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-25T14:39:49Z",
+      "side": 1,
+      "message": "The comment is a little confusing, you are right, I\u0027ll fix that. The part that used to say \"for now use mailbox for perf test\" now says \"for perf test we want to use either of these too\". Probably adding a \"But\" in the beginning of that sentence would make it clear enough.",
+      "parentUuid": "3ada514d_ad51c6d9",
       "range": {
         "startLine": 58,
         "startChar": 0,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "bb4612f2_acb359c0",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-25T14:39:49Z",
+      "side": 1,
+      "message": "I did. I noticed this in another place too, it looks like it\u0027s aligning it with the `\u003d {}` at the top. If I remove the spaces and run `git cl format`, it puts it back! With the location I manually aligned all the equals together, so I\u0027m gonna do it with this too. It seems to be a bug in clang formatter either way.",
+      "parentUuid": "84e04089_22f1c7a8",
+      "range": {
+        "startLine": 466,
+        "startChar": 40,
+        "endLine": 466,
+        "endChar": 47
+      },
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0e1489ca_664084ed",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "f282dd03_5bbef5e8",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-25T14:39:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e1489ca_664084ed",
+      "range": {
+        "startLine": 569,
+        "startChar": 35,
+        "endLine": 569,
+        "endChar": 42
+      },
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e33acaf_d6fa1f8a",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -160,6 +304,30 @@
       "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7222e94a_5dec3425",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-25T14:39:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e33acaf_d6fa1f8a",
+      "range": {
+        "startLine": 588,
+        "startChar": 44,
+        "endLine": 588,
+        "endChar": 96
+      },
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -195,6 +363,24 @@
       "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cfdec89_a95ae275",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-25T14:39:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54a3e5b5_2f8c301b",
+      "revId": "39d5e9b14e03ffda59f2e443951efa593c3daf51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
