@@ -29,6 +29,7 @@ class FramebufferAttachment;
 
 namespace rx
 {
+class Context11;
 class Renderer11;
 class RenderTarget11;
 struct Renderer11DeviceCaps;
@@ -435,6 +436,10 @@ IndexStorageType ClassifyIndexStorage(const gl::State &glState,
                                       GLenum destElementType,
                                       unsigned int offset);
 
+angle::Result ComputeFirstVertex(Context11 *context11,
+                                 const gl::IndexRange &indexRange,
+                                 GLint baseVertex,
+                                 GLint *firstVertexOut);
 }  // namespace rx
 
 #endif // LIBANGLE_RENDERER_D3D_D3D11_RENDERER11_UTILS_H_
