@@ -1446,7 +1446,11 @@ angle::Result Renderer11::drawWithGeometryShaderAndTransformFeedback(Context11 *
     return angle::Result::Continue();
 }
 
-angle::Result Renderer11::drawArrays(const gl::Context *context, const gl::DrawCallParams &params)
+angle::Result Renderer11::drawArrays(const gl::Context *context,
+                                     gl::PrimitiveMode mode,
+                                     GLint firstVertex,
+                                     GLsizei vertexCount,
+                                     GLsizei instanceCount)
 {
     if (mStateManager.getCullEverything())
     {
@@ -1454,25 +1458,24 @@ angle::Result Renderer11::drawArrays(const gl::Context *context, const gl::DrawC
     }
 
     ProgramD3D *programD3D        = mStateManager.getProgramD3D();
-    GLsizei adjustedInstanceCount = GetAdjustedInstanceCount(programD3D, params.instances());
+    GLsizei adjustedInstanceCount = GetAdjustedInstanceCount(programD3D, instanceCount);
 
     // Note: vertex indexes can be arbitrarily large.
-    UINT clampedVertexCount = params.getClampedVertexCount<UINT>();
+    UINT clampedVertexCount = gl::GetClampedVertexCount<UINT>(vertexCount);
 
     const auto &glState = context->getGLState();
     if (glState.getCurrentTransformFeedback() && glState.isTransformFeedbackActiveUnpaused())
     {
         ANGLE_TRY(markTransformFeedbackUsage(context));
 
-        if (programD3D->usesGeometryShader(params.mode()))
+        if (programD3D->usesGeometryShader(mode))
         {
-            return drawWithGeometryShaderAndTransformFeedback(GetImplAs<Context11>(context),
-                                                              params.mode(), adjustedInstanceCount,
-                                                              clampedVertexCount);
+            return drawWithGeometryShaderAndTransformFeedback(
+                GetImplAs<Context11>(context), mode, adjustedInstanceCount, clampedVertexCount);
         }
     }
 
-    switch (params.mode())
+    switch (mode)
     {
         case gl::PrimitiveMode::LineLoop:
             return drawLineLoop(context, clampedVertexCount, GL_NONE, nullptr, 0,
@@ -1501,10 +1504,10 @@ angle::Result Renderer11::drawArrays(const gl::Context *context, const gl::DrawC
                 // calculated and applied on each iteration to ensure all instances are rendered
                 // correctly. Each instance being rendered requires the inputlayout cache to reapply
                 // buffers and offsets.
-                for (GLsizei i = 0; i < params.instances(); i++)
+                for (GLsizei i = 0; i < instanceCount; i++)
                 {
                     ANGLE_TRY(mStateManager.updateVertexOffsetsForPointSpritesEmulation(
-                        context, params.baseVertex(), i));
+                        context, firstVertex, i));
                     mDeviceContext->DrawIndexedInstanced(6, clampedVertexCount, 0, 0, 0);
                 }
 
@@ -1531,8 +1534,12 @@ angle::Result Renderer11::drawArrays(const gl::Context *context, const gl::DrawC
 }
 
 angle::Result Renderer11::drawElements(const gl::Context *context,
-                                       const gl::DrawCallParams &params,
-                                       GLint startVertex)
+                                       gl::PrimitiveMode mode,
+                                       GLint startVertex,
+                                       GLsizei indexCount,
+                                       GLenum indexType,
+                                       const void *indices,
+                                       GLsizei instanceCount)
 {
     if (mStateManager.getCullEverything())
     {
@@ -1541,7 +1548,7 @@ angle::Result Renderer11::drawElements(const gl::Context *context,
 
     // Transform feedback is not allowed for DrawElements, this error should have been caught at the
     // API validation layer.
-    const auto &glState = context->getGLState();
+    const gl::State &glState = context->getGLState();
     ASSERT(!glState.isTransformFeedbackActiveUnpaused());
 
     // If this draw call is coming from an indirect call, offset by the indirect call's base vertex.
@@ -1549,31 +1556,30 @@ angle::Result Renderer11::drawElements(const gl::Context *context,
     int baseVertex = -startVertex;
 
     const ProgramD3D *programD3D  = mStateManager.getProgramD3D();
-    GLsizei adjustedInstanceCount = GetAdjustedInstanceCount(programD3D, params.instances());
+    GLsizei adjustedInstanceCount = GetAdjustedInstanceCount(programD3D, instanceCount);
 
-    if (params.mode() == gl::PrimitiveMode::LineLoop)
+    if (mode == gl::PrimitiveMode::LineLoop)
     {
-        return drawLineLoop(context, params.indexCount(), params.type(), params.indices(),
-                            baseVertex, adjustedInstanceCount);
+        return drawLineLoop(context, indexCount, indexType, indices, baseVertex,
+                            adjustedInstanceCount);
     }
 
-    if (params.mode() == gl::PrimitiveMode::TriangleFan)
+    if (mode == gl::PrimitiveMode::TriangleFan)
     {
-        return drawTriangleFan(context, params.indexCount(), params.type(), params.indices(),
-                               baseVertex, adjustedInstanceCount);
+        return drawTriangleFan(context, indexCount, indexType, indices, baseVertex,
+                               adjustedInstanceCount);
     }
 
-    if (params.mode() != gl::PrimitiveMode::Points ||
-        !programD3D->usesInstancedPointSpriteEmulation())
+    if (mode != gl::PrimitiveMode::Points || !programD3D->usesInstancedPointSpriteEmulation())
     {
         if (adjustedInstanceCount == 0)
         {
-            mDeviceContext->DrawIndexed(params.indexCount(), 0, baseVertex);
+            mDeviceContext->DrawIndexed(indexCount, 0, baseVertex);
         }
         else
         {
-            mDeviceContext->DrawIndexedInstanced(params.indexCount(), adjustedInstanceCount, 0,
-                                                 baseVertex, 0);
+            mDeviceContext->DrawIndexedInstanced(indexCount, adjustedInstanceCount, 0, baseVertex,
+                                                 0);
         }
         return angle::Result::Continue();
     }
@@ -1591,9 +1597,9 @@ angle::Result Renderer11::drawElements(const gl::Context *context,
     // Indexed pointsprite emulation replicates data for duplicate entries found in the index
     // buffer. This is not an efficent rendering mechanism and is only used on downlevel renderers
     // that do not support geometry shaders.
-    if (params.instances() == 0)
+    if (instanceCount == 0)
     {
-        mDeviceContext->DrawIndexedInstanced(6, params.indexCount(), 0, 0, 0);
+        mDeviceContext->DrawIndexedInstanced(6, indexCount, 0, 0, 0);
         return angle::Result::Continue();
     }
 
@@ -1602,13 +1608,13 @@ angle::Result Renderer11::drawElements(const gl::Context *context,
     // batch of points. An offset into the instanced data buffer is calculated and applied on each
     // iteration to ensure all instances are rendered correctly.
     gl::IndexRange indexRange;
-    ANGLE_TRY(glState.getVertexArray()->getIndexRange(context, params.type(), params.indexCount(),
-                                                      params.indices(), &indexRange));
+    ANGLE_TRY(glState.getVertexArray()->getIndexRange(context, indexType, indexCount, indices,
+                                                      &indexRange));
 
     UINT clampedVertexCount = gl::clampCast<UINT>(indexRange.vertexCount());
 
     // Each instance being rendered requires the inputlayout cache to reapply buffers and offsets.
-    for (GLsizei i = 0; i < params.instances(); i++)
+    for (GLsizei i = 0; i < instanceCount; i++)
     {
         ANGLE_TRY(
             mStateManager.updateVertexOffsetsForPointSpritesEmulation(context, startVertex, i));
@@ -1618,8 +1624,7 @@ angle::Result Renderer11::drawElements(const gl::Context *context,
     return angle::Result::Continue();
 }
 
-angle::Result Renderer11::drawArraysIndirect(const gl::Context *context,
-                                             const gl::DrawCallParams &params)
+angle::Result Renderer11::drawArraysIndirect(const gl::Context *context, const void *indirect)
 {
     if (mStateManager.getCullEverything())
     {
@@ -1633,7 +1638,7 @@ angle::Result Renderer11::drawArraysIndirect(const gl::Context *context,
     ASSERT(drawIndirectBuffer);
     Buffer11 *storage = GetImplAs<Buffer11>(drawIndirectBuffer);
 
-    uintptr_t offset = reinterpret_cast<uintptr_t>(params.indirect());
+    uintptr_t offset = reinterpret_cast<uintptr_t>(indirect);
 
     ID3D11Buffer *buffer = nullptr;
     ANGLE_TRY(storage->getBuffer(context, BUFFER_USAGE_INDIRECT, &buffer));
@@ -1641,8 +1646,7 @@ angle::Result Renderer11::drawArraysIndirect(const gl::Context *context,
     return angle::Result::Continue();
 }
 
-angle::Result Renderer11::drawElementsIndirect(const gl::Context *context,
-                                               const gl::DrawCallParams &params)
+angle::Result Renderer11::drawElementsIndirect(const gl::Context *context, const void *indirect)
 {
     if (mStateManager.getCullEverything())
     {
@@ -1655,7 +1659,7 @@ angle::Result Renderer11::drawElementsIndirect(const gl::Context *context,
     gl::Buffer *drawIndirectBuffer = glState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
     ASSERT(drawIndirectBuffer);
     Buffer11 *storage = GetImplAs<Buffer11>(drawIndirectBuffer);
-    uintptr_t offset  = reinterpret_cast<uintptr_t>(params.indirect());
+    uintptr_t offset  = reinterpret_cast<uintptr_t>(indirect);
 
     ID3D11Buffer *buffer = nullptr;
     ANGLE_TRY(storage->getBuffer(context, BUFFER_USAGE_INDIRECT, &buffer));
