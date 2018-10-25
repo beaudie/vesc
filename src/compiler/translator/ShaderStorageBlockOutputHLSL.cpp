@@ -171,6 +171,8 @@ ShaderStorageBlockOutputHLSL::ShaderStorageBlockOutputHLSL(OutputHLSL *outputHLS
                                                            TSymbolTable *symbolTable,
                                                            ResourcesHLSL *resourcesHLSL)
     : TIntermTraverser(true, true, true, symbolTable),
+      mMatrixStride(0),
+      mRowMajor(false),
       mIsLoadFunctionCall(false),
       mOutputHLSL(outputHLSL),
       mResourcesHLSL(resourcesHLSL)
@@ -434,14 +436,25 @@ void ShaderStorageBlockOutputHLSL::writeEOpIndexDirectOrIndirectOutput(TInfoSink
         {
             if (node->getType().isVector() && type.isMatrix())
             {
-                int matrixStride = BlockLayoutEncoder::ComponentsPerRegister *
-                                   BlockLayoutEncoder::BytesPerComponent;
-                out << " + " << str(matrixStride);
+                if (mRowMajor)
+                {
+                    out << " + " << BlockLayoutEncoder::BytesPerComponent;
+                }
+                else
+                {
+                    out << " + " << mMatrixStride;
+                }
             }
             else if (node->getType().isScalar() && !type.isArray())
             {
-                int scalarStride = BlockLayoutEncoder::BytesPerComponent;
-                out << " + " << str(scalarStride);
+                if (mRowMajor)
+                {
+                    out << " + " << mMatrixStride;
+                }
+                else
+                {
+                    out << " + " << BlockLayoutEncoder::BytesPerComponent;
+                }
             }
 
             out << " * ";
@@ -472,6 +485,8 @@ void ShaderStorageBlockOutputHLSL::writeDotOperatorOutput(TInfoSinkBase &out, co
     auto fieldInfoIter = mBlockMemberInfoMap.find(field);
     ASSERT(fieldInfoIter != mBlockMemberInfoMap.end());
     const BlockMemberInfo &memberInfo = fieldInfoIter->second;
+    mMatrixStride                     = memberInfo.matrixStride;
+    mRowMajor                         = memberInfo.isRowMajorMatrix;
     out << memberInfo.offset;
 
     const TType &fieldType = *field->type();
