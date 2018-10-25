@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "e6406a0e_80a1fe39",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-25T20:11:49Z",
+      "side": 1,
+      "message": "I think you should also move this to angle.gni, so it can be triggered from args.gn and condition it on vulkan being enabled.",
+      "range": {
+        "startLine": 25,
+        "startChar": 2,
+        "endLine": 25,
+        "endChar": 31
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "584e753a_3da3c6d3",
         "filename": "BUILD.gn",
         "patchSetId": 4
@@ -41,6 +64,52 @@
         "startChar": 18,
         "endLine": 88,
         "endChar": 47
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbcd53a7_dfaaa432",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-25T20:11:49Z",
+      "side": 1,
+      "message": "We have ANGLE_UNUSED_VARIABLE, maybe this should be ANGLE_UNUSED_MEMBER?",
+      "range": {
+        "startLine": 302,
+        "startChar": 8,
+        "endLine": 302,
+        "endChar": 20
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50f15c02_30fd78ec",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-25T20:11:49Z",
+      "side": 1,
+      "message": "I don\u0027t think failure to trace should be reported as GL error.",
+      "range": {
+        "startLine": 653,
+        "startChar": 4,
+        "endLine": 653,
+        "endChar": 13
       },
       "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -202,6 +271,29 @@
         "startChar": 8,
         "endLine": 1506,
         "endChar": 55
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37283643_b58a95d4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-25T20:11:49Z",
+      "side": 1,
+      "message": "You could just append TRACE_EVENT_PHASE_ internally.",
+      "range": {
+        "startLine": 177,
+        "startChar": 69,
+        "endLine": 178,
+        "endChar": 30
       },
       "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
