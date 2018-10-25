@@ -171,8 +171,12 @@ class Context11 : public ContextD3D, public MultisampleTextureInitializer
     void handleError(const gl::Error &error);
 
   private:
-    angle::Result prepareForDrawCall(const gl::Context *context,
-                                     const gl::DrawCallParams &drawCallParams);
+    angle::Result drawElementsImpl(const gl::Context *context,
+                                   gl::PrimitiveMode mode,
+                                   GLsizei indexCount,
+                                   GLenum indexType,
+                                   const void *indices,
+                                   GLsizei instanceCount);
 
     Renderer11 *mRenderer;
     IncompleteTextureSet mIncompleteTextures;
