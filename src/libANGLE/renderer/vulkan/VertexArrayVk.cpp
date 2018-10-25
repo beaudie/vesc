@@ -437,7 +437,24 @@ angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
     const gl::AttributesMask &clientAttribs = context->getStateCache().getActiveClientAttribsMask();
 
     ASSERT(clientAttribs.any());
-    ANGLE_TRY_HANDLE(context, drawCallParams.ensureIndexRangeResolved(context));
+
+    GLint firstVertex;
+    size_t vertexCount;
+
+    if (drawCallParams.isDrawElements())
+    {
+        gl::IndexRange indexRange;
+        ANGLE_TRY(context->getGLState().getVertexArray()->getIndexRange(
+            context, drawCallParams.type(), drawCallParams.indexCount(), drawCallParams.indices(),
+            &indexRange));
+        firstVertex = indexRange.start;
+        vertexCount = indexRange.vertexCount();
+    }
+    else
+    {
+        firstVertex = drawCallParams.firstVertex();
+        vertexCount = drawCallParams.vertexCount();
+    }
 
     mDynamicVertexData.releaseRetainedBuffers(contextVk->getRenderer());
 
@@ -453,12 +470,11 @@ angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
         ASSERT(attrib.enabled && binding.getBuffer().get() == nullptr);
 
         const size_t bytesToAllocate =
-            (drawCallParams.firstVertex() + drawCallParams.vertexCount()) *
-            mCurrentArrayBufferStrides[attribIndex];
-        const uint8_t *src = static_cast<const uint8_t *>(attrib.pointer) +
-                             drawCallParams.firstVertex() * binding.getStride();
+            (firstVertex + vertexCount) * mCurrentArrayBufferStrides[attribIndex];
+        const uint8_t *src =
+            static_cast<const uint8_t *>(attrib.pointer) + firstVertex * binding.getStride();
 
-        size_t destOffset = drawCallParams.firstVertex() * mCurrentArrayBufferStrides[attribIndex];
+        size_t destOffset = firstVertex * mCurrentArrayBufferStrides[attribIndex];
         ASSERT(GetVertexInputAlignment(*mCurrentArrayBufferFormats[attribIndex]) <=
                kMaxVertexFormatAlignment);
 
@@ -467,11 +483,10 @@ angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
         // don't start at zero all the indices will be off.
         // TODO(fjhenigman): See if we can account for indices being off by adjusting the
         // offset, thus avoiding wasted memory.
-        ANGLE_TRY(StreamVertexData(contextVk, &mDynamicVertexData, src, bytesToAllocate, destOffset,
-                                   drawCallParams.vertexCount(), binding.getStride(),
-                                   mCurrentArrayBufferFormats[attribIndex]->vertexLoadFunction,
-                                   &mCurrentArrayBufferHandles[attribIndex],
-                                   &mCurrentArrayBufferOffsets[attribIndex]));
+        ANGLE_TRY(StreamVertexData(
+            contextVk, &mDynamicVertexData, src, bytesToAllocate, destOffset, vertexCount,
+            binding.getStride(), mCurrentArrayBufferFormats[attribIndex]->vertexLoadFunction,
+            &mCurrentArrayBufferHandles[attribIndex], &mCurrentArrayBufferOffsets[attribIndex]));
     }
 
     return angle::Result::Continue();
