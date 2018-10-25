@@ -263,6 +263,8 @@ class ANGLE_NO_DISCARD Result
     bool operator!=(Result other) const { return mValue != other.mValue; }
 
   private:
+    friend std::ostream &operator<<(std::ostream &os, const Result &result);
+
     enum class Value
     {
         Continue,
