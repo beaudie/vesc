@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3085733_6f795fdc",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-25T09:42:23Z",
+      "side": 1,
+      "message": "We shouldn\u0027t add a global variable, instead can it be a member of ShaderStorageBlockOutputHLSL and passed around?",
+      "revId": "97fb9c4b79cde800b49eac571527e1cda5a0e583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
