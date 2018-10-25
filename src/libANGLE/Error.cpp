@@ -122,4 +122,12 @@ Result::operator gl::Error() const
         return gl::Error(GL_INTERNAL_ERROR_ANGLEX);
     }
 }
+
+std::ostream &operator<<(std::ostream &os, const Result &result)
+{
+    const char *resultString = result.mValue == Result::Value::Continue
+                                   ? "Continue"
+                                   : result.mValue == Result::Value::Stop ? "Stop" : "Incomplete";
+    return os << resultString;
+}
 }  // namespace angle
