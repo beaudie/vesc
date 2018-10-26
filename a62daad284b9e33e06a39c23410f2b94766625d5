@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "3224219a_bbc35fb4",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2005,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-26T16:54:31Z",
+      "side": 1,
+      "message": "I don\u0027t think we should allow initializers for these types of variables if the spec disallows it.  At best, we should insert 0-initializers in our output shaders only when we know the driver can support it.",
+      "range": {
+        "startLine": 2004,
+        "startChar": 91,
+        "endLine": 2005,
+        "endChar": 32
+      },
+      "revId": "a62daad284b9e33e06a39c23410f2b94766625d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ff336e7_c59e05ed",
         "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
         "patchSetId": 1
