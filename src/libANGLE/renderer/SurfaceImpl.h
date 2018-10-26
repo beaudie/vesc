@@ -58,22 +58,22 @@ class SurfaceImpl : public FramebufferAttachmentObjectImpl
                                      EGLint width,
                                      EGLint height) = 0;
     virtual egl::Error setPresentationTime(EGLnsecsANDROID time);
-    virtual egl::Error querySurfacePointerANGLE(EGLint attribute, void **value) = 0;
+    virtual egl::Error querySurfacePointerANGLE(EGLint attribute, void **value)               = 0;
     virtual egl::Error bindTexImage(const gl::Context *context,
                                     gl::Texture *texture,
                                     EGLint buffer)                                            = 0;
     virtual egl::Error releaseTexImage(const gl::Context *context, EGLint buffer)             = 0;
     virtual egl::Error getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc) = 0;
-    virtual void setSwapInterval(EGLint interval) = 0;
+    virtual void setSwapInterval(EGLint interval)                                             = 0;
     virtual void setFixedWidth(EGLint width);
     virtual void setFixedHeight(EGLint height);
 
     // width and height can change with client window resizing
-    virtual EGLint getWidth() const = 0;
+    virtual EGLint getWidth() const  = 0;
     virtual EGLint getHeight() const = 0;
 
     virtual EGLint isPostSubBufferSupported() const = 0;
-    virtual EGLint getSwapBehavior() const = 0;
+    virtual EGLint getSwapBehavior() const          = 0;
 
     // Used to query color format from pbuffers created from D3D textures.
     virtual const angle::Format *getD3DTextureColorFormat() const
@@ -82,11 +82,44 @@ class SurfaceImpl : public FramebufferAttachmentObjectImpl
         return nullptr;
     }
 
+    // EGL_ANDROID_get_frame_timestamps
+    virtual void setTimestampsEnabled(bool enabled) { UNREACHABLE(); }
+
+    virtual bool isCompositorTimingSupported(EGLint name) const
+    {
+        UNREACHABLE();
+        return false;
+    }
+    virtual egl::Error getCompositorTiming(EGLint numTimestamps,
+                                           const EGLint *names,
+                                           EGLnsecsANDROID *values)
+    {
+        UNREACHABLE();
+        return egl::EglBadDisplay();
+    }
+
+    virtual egl::Error getNextFrameId(EGLuint64KHR *frameId)
+    {
+        UNREACHABLE();
+        return egl::EglBadDisplay();
+    }
+    virtual bool isFrameTimestampSupported(EGLint timestamp) const
+    {
+        UNREACHABLE();
+        return false;
+    }
+    virtual egl::Error getFrameTimestamps(EGLuint64KHR frameId,
+                                          EGLint numTimestamps,
+                                          const EGLint *timestamps,
+                                          EGLnsecsANDROID *values)
+    {
+        UNREACHABLE();
+        return egl::EglBadDisplay();
+    }
+
   protected:
     const egl::SurfaceState &mState;
 };
-
 }
 
-#endif // LIBANGLE_RENDERER_SURFACEIMPL_H_
-
+#endif  // LIBANGLE_RENDERER_SURFACEIMPL_H_

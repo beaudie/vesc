@@ -3024,6 +3024,23 @@ Error ValidateSurfaceAttrib(const Display *display,
             }
             break;
 
+        case EGL_TIMESTAMPS_ANDROID:
+            if (!display->getExtensions().getFrameTimestamps)
+            {
+                return EglBadAttribute() << "EGL_TIMESTAMPS_ANDROID cannot be used without "
+                                            "EGL_ANDROID_get_frame_timestamps support.";
+            }
+            switch (value)
+            {
+                case EGL_TRUE:
+                case EGL_FALSE:
+                    break;
+
+                default:
+                    return EglBadAttribute() << "Invalid value.";
+            }
+            break;
+
         default:
             return EglBadAttribute() << "Invalid surface attribute.";
     }
@@ -3114,6 +3131,14 @@ Error ValidateQuerySurface(const Display *display,
                 return EglBadAttribute() << "EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE cannot be "
                                             "used without EGL_ANGLE_robust_resource_initialization "
                                             "support.";
+            }
+            break;
+
+        case EGL_TIMESTAMPS_ANDROID:
+            if (!display->getExtensions().getFrameTimestamps)
+            {
+                return EglBadAttribute() << "EGL_TIMESTAMPS_ANDROID cannot be used without "
+                                            "EGL_ANDROID_get_frame_timestamps support.";
             }
             break;
 
@@ -3222,6 +3247,51 @@ Error ValidateLabelObjectKHR(Thread *thread,
     LabeledObject *labeledObject = nullptr;
     ANGLE_TRY(ValidateLabeledObject(thread, display, objectType, object, &labeledObject));
 
+    return NoError();
+}
+
+Error ValidateGetCompositorTimingSupportedANDROID(const Display *display,
+                                                  const Surface *surface,
+                                                  EGLint name)
+{
+    UNIMPLEMENTED();
+    return NoError();
+}
+
+Error ValidateGetCompositorTimingANDROID(const Display *display,
+                                         const Surface *surface,
+                                         EGLint numTimestamps,
+                                         const EGLint *names,
+                                         EGLnsecsANDROID *values)
+{
+    UNIMPLEMENTED();
+    return NoError();
+}
+
+Error ValidateGetNextFrameIdANDROID(const Display *display,
+                                    const Surface *surface,
+                                    EGLuint64KHR *frameId)
+{
+    UNIMPLEMENTED();
+    return NoError();
+}
+
+Error ValidateGetFrameTimestampSupportedANDROID(const Display *display,
+                                                const Surface *surface,
+                                                EGLint timestamp)
+{
+    UNIMPLEMENTED();
+    return NoError();
+}
+
+Error ValidateGetFrameTimestampsANDROID(const Display *display,
+                                        const Surface *surface,
+                                        EGLuint64KHR frameId,
+                                        EGLint numTimestamps,
+                                        const EGLint *timestamps,
+                                        EGLnsecsANDROID *values)
+{
+    UNIMPLEMENTED();
     return NoError();
 }
 
