@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ff336e7_c59e05ed",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2272,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-26T16:48:27Z",
+      "side": 1,
+      "message": "if you plan on tackling this work, please associate this TODO comment with an open ANGLE bug. Then we know not to close the bug until outstanding TODOs have been addressed. But if you don\u0027t plan to investigate all the failures then you can just remove the TODO.",
+      "range": {
+        "startLine": 2272,
+        "startChar": 7,
+        "endLine": 2272,
+        "endChar": 34
+      },
+      "revId": "a62daad284b9e33e06a39c23410f2b94766625d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
