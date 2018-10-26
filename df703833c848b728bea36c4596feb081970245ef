@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04fe206a_21a3921b",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-26T18:31:58Z",
+      "side": 1,
+      "message": "Couldn\u0027t you just use gl::clampCast everywhere?",
+      "range": {
+        "startLine": 143,
+        "startChar": 2,
+        "endLine": 143,
+        "endChar": 23
+      },
+      "revId": "df703833c848b728bea36c4596feb081970245ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "060245f5_6f2cf48e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-26T18:31:58Z",
+      "side": 1,
+      "message": "How come this is unused?",
+      "range": {
+        "startLine": 274,
+        "startChar": 55,
+        "endLine": 274,
+        "endChar": 76
+      },
+      "revId": "df703833c848b728bea36c4596feb081970245ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
