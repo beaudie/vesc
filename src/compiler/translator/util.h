@@ -65,6 +65,7 @@ bool IsOutputHLSL(ShShaderOutput output);
 bool IsOutputVulkan(ShShaderOutput output);
 
 bool IsInShaderStorageBlock(TIntermTyped *node);
+bool IsInShaderStorageBlock(TIntermTyped *node, TLayoutBlockStorage *storage, bool *rowMajor);
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_UTIL_H_
