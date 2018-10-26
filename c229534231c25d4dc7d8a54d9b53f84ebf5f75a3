@@ -46,6 +46,30 @@
       "revId": "c229534231c25d4dc7d8a54d9b53f84ebf5f75a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "828df75c_01520ec6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-26T20:11:42Z",
+      "side": 1,
+      "message": "Oh, you mean uint16? I could do that.",
+      "parentUuid": "3fe09a70_cddc2c17",
+      "range": {
+        "startLine": 246,
+        "startChar": 13,
+        "endLine": 246,
+        "endChar": 20
+      },
+      "revId": "c229534231c25d4dc7d8a54d9b53f84ebf5f75a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
