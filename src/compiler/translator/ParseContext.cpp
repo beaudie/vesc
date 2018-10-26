@@ -2001,7 +2001,8 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
     }
 
     // identifier must be of type constant, a global, or a temporary
-    if ((qualifier != EvqTemporary) && (qualifier != EvqGlobal) && (qualifier != EvqConst))
+    if ((qualifier != EvqTemporary) && (qualifier != EvqGlobal) && (qualifier != EvqConst) &&
+        (qualifier != EvqShared))
     {
         error(line, " cannot initialize this type of qualifier ",
               variable->getType().getQualifierString());
