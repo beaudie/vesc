@@ -248,6 +248,28 @@ Error ValidateLabelObjectKHR(Thread *thread,
                              EGLObjectKHR object,
                              EGLLabelKHR label);
 
+// ANDROID_get_frame_timestamps
+Error ValidateGetNextFrameIdANDROID(const Display *display,
+                                    const Surface *surface,
+                                    EGLuint64KHR *frameId);
+
+Error ValidateGetCompositorTimingANDROID(const Display *display,
+                                         const Surface *surface,
+                                         EGLint numTimestamps,
+                                         const EGLint *names,
+                                         EGLnsecsANDROID *values);
+
+Error ValidateGetFrameTimestampsANDROID(const Display *display,
+                                        const Surface *surface,
+                                        EGLuint64KHR frameId,
+                                        EGLint numTimestamps,
+                                        const EGLint *timestamps,
+                                        EGLnsecsANDROID *values);
+
+Error ValidateQueryTimestampSupportedANDROID(const Display *display,
+                                             const Surface *surface,
+                                             EGLint timestamp);
+
 }  // namespace egl
 
 #define ANGLE_EGL_TRY(THREAD, EXPR, FUNCNAME, LABELOBJECT)                               \
