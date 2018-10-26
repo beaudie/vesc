@@ -2266,6 +2266,36 @@ TEST_P(ComputeShaderTest, ShaderStorageBlocksWithSSBOSwizzle)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test that shared variable initializer can work correctly.
+TEST_P(ComputeShaderTest, SharedVariableInitializer)
+{
+    // TODO(jie.a.chen@intel.com): Figure out the below failures.
+    ANGLE_SKIP_TEST_IF(IsIntel() && IsWindows() && IsOpenGL());
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsWindows() && IsOpenGL());
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
+
+    const char kCSShader[] =
+        R"(#version 310 es
+        layout (local_size_x = 2, local_size_y = 2, local_size_z = 1) in;
+        layout (r32ui, binding = 0) readonly uniform highp uimage2D srcImage;
+        layout (r32ui, binding = 1) writeonly uniform highp uimage2D dstImage;
+        shared uint temp[4] = uint[4](10u, 20u, 30u, 40u);
+        void main()
+        {
+            uint value = imageLoad(srcImage, ivec2(gl_LocalInvocationID.xy)).x;
+            uint i = uint(gl_LocalInvocationID.x + 2u * gl_LocalInvocationID.y);
+            temp[i] += value;
+            groupMemoryBarrier();
+            barrier();
+            imageStore(dstImage, ivec2(gl_LocalInvocationID.xy), uvec4(temp[i]));
+        })";
+
+    const std::array<GLuint, 4> inputData      = {{100, 100, 100, 100}};
+    const std::array<GLuint, 4> expectedValues = {{110, 120, 130, 140}};
+    runSharedMemoryTest<GLuint, 2, 2>(kCSShader, GL_R32UI, GL_UNSIGNED_INT, inputData,
+                                      expectedValues);
+}
+
 // Check that it is not possible to create a compute shader when the context does not support ES
 // 3.10
 TEST_P(ComputeShaderTestES3, NotSupported)
