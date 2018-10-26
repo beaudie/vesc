@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e0a9d4b1_0cb73298",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-10-26T22:02:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "099c84c3_57d3a118",
+      "range": {
+        "startLine": 11,
+        "startChar": 46,
+        "endLine": 11,
+        "endChar": 50
+      },
+      "revId": "d91e34720e7eb3de23e48025155f07f1a1080bb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb6e1c6b_c5d09c31",
         "filename": "src/compiler/translator/AtomicCounterFunctionHLSL.cpp",
         "patchSetId": 4
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "14a682bc_9adc1bde",
+        "filename": "src/compiler/translator/AtomicCounterFunctionHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-10-26T22:02:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb6e1c6b_c5d09c31",
+      "revId": "d91e34720e7eb3de23e48025155f07f1a1080bb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e7b1f9d6_a4a1881f",
         "filename": "src/compiler/translator/OutputHLSL.cpp",
         "patchSetId": 4
@@ -53,6 +95,24 @@
       "writtenOn": "2018-10-25T09:39:11Z",
       "side": 1,
       "message": "Making atomic counters \"fat pointers\" sounds like a good approach, but are there cases that would be difficult to handle like ternary operations on atomic counters? (I don\u0027t know if it is allowed).",
+      "revId": "d91e34720e7eb3de23e48025155f07f1a1080bb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c24ea9a_d97ac359",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-10-26T22:02:24Z",
+      "side": 1,
+      "message": "I don\u0027t think we have to worry about those cases. atomicCounter, atomicCounterIncrement, and atomicCounterDecrement are the only allowed methods to read from/write to atomic_uints. All other operators are not allowed by the language.",
+      "parentUuid": "e7b1f9d6_a4a1881f",
       "revId": "d91e34720e7eb3de23e48025155f07f1a1080bb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "4332e7c6_1fd7d807",
+        "filename": "src/compiler/translator/OutputHLSL.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-10-26T22:02:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79669504_6cbb612a",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 32
+      },
+      "revId": "d91e34720e7eb3de23e48025155f07f1a1080bb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "26b05bee_41a3f2da",
         "filename": "src/compiler/translator/ResourcesHLSL.cpp",
         "patchSetId": 4
@@ -93,6 +177,24 @@
       "writtenOn": "2018-10-25T09:39:11Z",
       "side": 1,
       "message": "It seems that this would also have been required for SSBO, but I assume things worked previously because uniformsHeader was called before shaderStorageHeader?",
+      "revId": "d91e34720e7eb3de23e48025155f07f1a1080bb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a9e3d5a_bc9e2ad9",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-10-26T22:02:24Z",
+      "side": 1,
+      "message": "That is correct.",
+      "parentUuid": "26b05bee_41a3f2da",
       "revId": "d91e34720e7eb3de23e48025155f07f1a1080bb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
