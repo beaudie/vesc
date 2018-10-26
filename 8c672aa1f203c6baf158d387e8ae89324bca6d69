@@ -34,6 +34,24 @@
       "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c9f7ad7_259dcf7d",
+        "filename": "src/libANGLE/params.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-26T16:24:08Z",
+      "side": 0,
+      "message": "To explain a bit more:\n\nthe perf tests we were targeting right now are all DrawArrays. They don\u0027t call these helpers. There are perf tests that target DrawElements which would be improved by inlining. But the issues with the parameter packing are distinct.\n\nI linked in the prior CL but will re-link here:\n\nhttps://imgur.com/a/CHMdnuA\n\nSeems like the indirections + the slowness of packing are the main problems with the helper struct.",
+      "parentUuid": "89840682_138ea87b",
+      "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
