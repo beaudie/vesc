@@ -70,6 +70,30 @@
       "revId": "c229534231c25d4dc7d8a54d9b53f84ebf5f75a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "15515325_4260dc5b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-26T20:51:04Z",
+      "side": 1,
+      "message": "Sorry, looks like it needs 4 bytes padding.",
+      "parentUuid": "828df75c_01520ec6",
+      "range": {
+        "startLine": 246,
+        "startChar": 13,
+        "endLine": 246,
+        "endChar": 20
+      },
+      "revId": "c229534231c25d4dc7d8a54d9b53f84ebf5f75a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
