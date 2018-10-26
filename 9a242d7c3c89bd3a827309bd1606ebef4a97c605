@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "d02c3c96_0f9a771f",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-26T20:29:25Z",
+      "side": 1,
+      "message": "Yep, what I was thinking too. Can always change it later to be more general.",
+      "parentUuid": "7ef27ccf_60a16f75",
+      "range": {
+        "startLine": 25,
+        "startChar": 2,
+        "endLine": 25,
+        "endChar": 31
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "584e753a_3da3c6d3",
         "filename": "BUILD.gn",
         "patchSetId": 4
