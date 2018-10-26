@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5dad7e20_02f09afe",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:59:57Z",
+      "side": 1,
+      "message": "Anything we can do about this? The ostream operators for angle::Result are due to this.",
+      "revId": "b32b9f36abfa48a6ea0824812c1bb80f302a7d44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
