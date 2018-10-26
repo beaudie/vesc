@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "69546fab_e0c06538",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T01:52:18Z",
+      "side": 1,
+      "message": "This piece looks like it\u0027s repeated three times. Unless there\u0027s a subtle difference I\u0027m not noticing, you can turn that into an inline function.",
+      "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72e0073f_880d55e6",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
         "patchSetId": 7
@@ -42,6 +59,23 @@
         "endLine": 399,
         "endChar": 80
       },
+      "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6caf8c6_cc2f57a6",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T01:52:18Z",
+      "side": 1,
+      "message": "Did you end up trying to copy `drawCallParams` as a member of the vertex array on first entry to avoid all the dereferences? If that resulted in the same perf gain, then this change and it\u0027s code duplications would be unnecessary.",
       "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
