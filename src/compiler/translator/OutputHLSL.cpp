@@ -1179,6 +1179,9 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
             outputTriplet(out, visit, "(", ", ", ")");
             break;
         case EOpAssign:
+        {
+            TLayoutBlockStorage storage;
+            bool rowMajor;
             if (node->isArray())
             {
                 TIntermAggregate *rightAgg = node->getRight()->getAsAggregate();
@@ -1220,13 +1223,13 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                 out << ")";
                 return false;
             }
-            else if (IsInShaderStorageBlock(node->getLeft()))
+            else if (IsInShaderStorageBlock(node->getLeft(), &storage, &rowMajor))
             {
-                mSSBOOutputHLSL->outputStoreFunctionCallPrefix(node->getLeft());
+                mSSBOOutputHLSL->outputStoreFunctionCallPrefix(node->getLeft(), storage, rowMajor);
                 out << ", ";
-                if (IsInShaderStorageBlock(node->getRight()))
+                if (IsInShaderStorageBlock(node->getRight(), &storage, &rowMajor))
                 {
-                    mSSBOOutputHLSL->outputLoadFunctionCall(node->getRight());
+                    mSSBOOutputHLSL->outputLoadFunctionCall(node->getRight(), storage, rowMajor);
                 }
                 else
                 {
@@ -1236,16 +1239,17 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                 out << ")";
                 return false;
             }
-            else if (IsInShaderStorageBlock(node->getRight()))
+            else if (IsInShaderStorageBlock(node->getRight(), &storage, &rowMajor))
             {
                 node->getLeft()->traverse(this);
                 out << " = ";
-                mSSBOOutputHLSL->outputLoadFunctionCall(node->getRight());
+                mSSBOOutputHLSL->outputLoadFunctionCall(node->getRight(), storage, rowMajor);
                 return false;
             }
 
             outputAssign(visit, node->getType(), out);
             break;
+        }
         case EOpInitialize:
             if (visit == PreVisit)
             {
@@ -1274,9 +1278,11 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
             else if (visit == InVisit)
             {
                 out << " = ";
-                if (IsInShaderStorageBlock(node->getRight()))
+                TLayoutBlockStorage storage;
+                bool rowMajor;
+                if (IsInShaderStorageBlock(node->getRight(), &storage, &rowMajor))
                 {
-                    mSSBOOutputHLSL->outputLoadFunctionCall(node->getRight());
+                    mSSBOOutputHLSL->outputLoadFunctionCall(node->getRight(), storage, rowMajor);
                     return false;
                 }
             }

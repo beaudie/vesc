@@ -28,25 +28,21 @@ class ShaderStorageBufferTest31 : public ANGLETest
         setConfigAlphaBits(8);
     }
 
-    void runStd140RowMajorMatrixTest(const char *computeShaderSource)
+    template <unsigned int kColumns,
+              unsigned int kRows,
+              unsigned int kMatrixStride,
+              unsigned int kBytesPerComponent>
+    void runMatrixTest(const char *computeShaderSource,
+                       const float inputData[kRows][kMatrixStride / kBytesPerComponent],
+                       const float expectedData[kRows][kColumns])
     {
         ANGLE_GL_COMPUTE_PROGRAM(program, computeShaderSource);
-
         glUseProgram(program);
 
-        constexpr unsigned int kColumns           = 2;
-        constexpr unsigned int kRows              = 3;
-        constexpr unsigned int kBytesPerComponent = sizeof(float);
-        constexpr unsigned int kMatrixStride      = 16;
-        // kMatrixStride / kBytesPerComponent is used instead of kColumns is because std140 layout
-        // requires that base alignment and stride of arrays of scalars and vectors are rounded up a
-        // multiple of the base alignment of a vec4.
-        constexpr float kInputDada[kRows][kMatrixStride / kBytesPerComponent] = {
-            {0.1, 0.2, 0.0, 0.0}, {0.3, 0.4, 0.0, 0.0}, {0.5, 0.6, 0.0, 0.0}};
         // Create shader storage buffer
         GLBuffer shaderStorageBuffer[2];
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[0]);
-        glBufferData(GL_SHADER_STORAGE_BUFFER, kRows * kMatrixStride, kInputDada, GL_STATIC_DRAW);
+        glBufferData(GL_SHADER_STORAGE_BUFFER, kRows * kMatrixStride, inputData, GL_STATIC_DRAW);
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[1]);
         glBufferData(GL_SHADER_STORAGE_BUFFER, kRows * kMatrixStride, nullptr, GL_STATIC_DRAW);
 
@@ -58,7 +54,6 @@ class ShaderStorageBufferTest31 : public ANGLETest
         glFinish();
 
         // Read back shader storage buffer
-        constexpr float kExpectedValues[kRows][kColumns] = {{0.1, 0.2}, {0.3, 0.4}, {0.5, 0.6}};
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[1]);
         const GLfloat *ptr = reinterpret_cast<const GLfloat *>(
             glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, kRows * kMatrixStride, GL_MAP_READ_BIT));
@@ -66,7 +61,7 @@ class ShaderStorageBufferTest31 : public ANGLETest
         {
             for (unsigned int idy = 0; idy < kColumns; idy++)
             {
-                EXPECT_EQ(kExpectedValues[idx][idy],
+                EXPECT_EQ(expectedData[idx][idy],
                           *(ptr + idx * (kMatrixStride / kBytesPerComponent) + idy));
             }
         }
@@ -319,7 +314,82 @@ void main()
 }
 )";
 
-    runStd140RowMajorMatrixTest(kComputeShaderSource);
+    constexpr unsigned int kColumns           = 2;
+    constexpr unsigned int kRows              = 3;
+    constexpr unsigned int kBytesPerComponent = sizeof(float);
+    // std140 layout requires that base alignment and stride of arrays of scalars and vectors are
+    // rounded up a multiple of the base alignment of a vec4.
+    constexpr unsigned int kMatrixStride                                  = 16;
+    constexpr float kInputDada[kRows][kMatrixStride / kBytesPerComponent] = {
+        {0.1, 0.2, 0.0, 0.0}, {0.3, 0.4, 0.0, 0.0}, {0.5, 0.6, 0.0, 0.0}};
+    constexpr float kExpectedValues[kRows][kColumns] = {{0.1, 0.2}, {0.3, 0.4}, {0.5, 0.6}};
+    runMatrixTest<kColumns, kRows, kMatrixStride, kBytesPerComponent>(kComputeShaderSource,
+                                                                      kInputDada, kExpectedValues);
+}
+
+TEST_P(ShaderStorageBufferTest31, VectorDataInMatrixInSSBOWithRowMajorQualifier)
+{
+    ANGLE_SKIP_TEST_IF(IsAndroid());
+
+    constexpr char kComputeShaderSource[] =
+        R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(std140, binding = 0) buffer blockIn {
+    layout(row_major) mat2x3 data;
+} instanceIn;
+layout(std140, binding = 1) buffer blockOut {
+    layout(row_major) mat2x3 data;
+} instanceOut;
+void main()
+{
+    instanceOut.data[0] = instanceIn.data[0];
+    instanceOut.data[1] = instanceIn.data[1];
+}
+)";
+
+    constexpr unsigned int kColumns           = 2;
+    constexpr unsigned int kRows              = 3;
+    constexpr unsigned int kBytesPerComponent = sizeof(float);
+    // std140 layout requires that base alignment and stride of arrays of scalars and vectors are
+    // rounded up a multiple of the base alignment of a vec4.
+    constexpr unsigned int kMatrixStride                                  = 16;
+    constexpr float kInputDada[kRows][kMatrixStride / kBytesPerComponent] = {
+        {0.1, 0.2, 0.0, 0.0}, {0.3, 0.4, 0.0, 0.0}, {0.5, 0.6, 0.0, 0.0}};
+    constexpr float kExpectedValues[kRows][kColumns] = {{0.1, 0.2}, {0.3, 0.4}, {0.5, 0.6}};
+    runMatrixTest<kColumns, kRows, kMatrixStride, kBytesPerComponent>(kComputeShaderSource,
+                                                                      kInputDada, kExpectedValues);
+}
+
+TEST_P(ShaderStorageBufferTest31, MatrixDataInSSBOWithRowMajorQualifier)
+{
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsWindows() && IsOpenGL());
+
+    constexpr char kComputeShaderSource[] =
+        R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(std140, binding = 0) buffer blockIn {
+    layout(row_major) mat2x3 data;
+} instanceIn;
+layout(std140, binding = 1) buffer blockOut {
+    layout(row_major) mat2x3 data;
+} instanceOut;
+void main()
+{
+    instanceOut.data = instanceIn.data;
+}
+)";
+
+    constexpr unsigned int kColumns           = 2;
+    constexpr unsigned int kRows              = 3;
+    constexpr unsigned int kBytesPerComponent = sizeof(float);
+    // std140 layout requires that base alignment and stride of arrays of scalars and vectors are
+    // rounded up a multiple of the base alignment of a vec4.
+    constexpr unsigned int kMatrixStride                                  = 16;
+    constexpr float kInputDada[kRows][kMatrixStride / kBytesPerComponent] = {
+        {0.1, 0.2, 0.0, 0.0}, {0.3, 0.4, 0.0, 0.0}, {0.5, 0.6, 0.0, 0.0}};
+    constexpr float kExpectedValues[kRows][kColumns] = {{0.1, 0.2}, {0.3, 0.4}, {0.5, 0.6}};
+    runMatrixTest<kColumns, kRows, kMatrixStride, kBytesPerComponent>(kComputeShaderSource,
+                                                                      kInputDada, kExpectedValues);
 }
 
 // Test that access/write to scalar data in structure matrix in shader storage block with row major.
@@ -354,11 +424,21 @@ void main()
 }
 )";
 
-    runStd140RowMajorMatrixTest(kComputeShaderSource);
+    constexpr unsigned int kColumns           = 2;
+    constexpr unsigned int kRows              = 3;
+    constexpr unsigned int kBytesPerComponent = sizeof(float);
+    // std140 layout requires that base alignment and stride of arrays of scalars and vectors are
+    // rounded up a multiple of the base alignment of a vec4.
+    constexpr unsigned int kMatrixStride                                  = 16;
+    constexpr float kInputDada[kRows][kMatrixStride / kBytesPerComponent] = {
+        {0.1, 0.2, 0.0, 0.0}, {0.3, 0.4, 0.0, 0.0}, {0.5, 0.6, 0.0, 0.0}};
+    constexpr float kExpectedValues[kRows][kColumns] = {{0.1, 0.2}, {0.3, 0.4}, {0.5, 0.6}};
+    runMatrixTest<kColumns, kRows, kMatrixStride, kBytesPerComponent>(kComputeShaderSource,
+                                                                      kInputDada, kExpectedValues);
 }
 
 // Test that access/write to column major matrix data in shader storage buffer.
-TEST_P(ShaderStorageBufferTest31, ShaderStorageBufferMatrix)
+TEST_P(ShaderStorageBufferTest31, ScalarDataInMatrixInSSBO)
 {
     constexpr char kComputeShaderSource[] =
         R"(#version 310 es
@@ -380,49 +460,72 @@ void main()
 }
 )";
 
-    ANGLE_GL_COMPUTE_PROGRAM(program, kComputeShaderSource);
-
-    glUseProgram(program.get());
-
-    constexpr unsigned int kColumns           = 2;
-    constexpr unsigned int kRows              = 3;
-    constexpr unsigned int kBytesPerComponent = sizeof(float);
-    constexpr unsigned int kVectorStride      = 16;
-    // kVectorStride / kBytesPerComponent is used instead of kRows is because std140 layout requires
-    // that base alignment and stride of arrays of scalars and vectors are rounded up a multiple of
-    // the base alignment of a vec4.
-    constexpr float kInputDada[kColumns][kVectorStride / kBytesPerComponent] = {
+    constexpr unsigned int kColumns                                          = 2;
+    constexpr unsigned int kRows                                             = 3;
+    constexpr unsigned int kBytesPerComponent                                = sizeof(float);
+    constexpr unsigned int kMatrixStride                                     = 16;
+    constexpr float kInputDada[kColumns][kMatrixStride / kBytesPerComponent] = {
         {0.1, 0.2, 0.3, 0.0}, {0.4, 0.5, 0.6, 0.0}};
-    // Create shader storage buffer
-    GLBuffer shaderStorageBuffer[2];
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[0]);
-    glBufferData(GL_SHADER_STORAGE_BUFFER, kColumns * kVectorStride, kInputDada, GL_STATIC_DRAW);
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[1]);
-    glBufferData(GL_SHADER_STORAGE_BUFFER, kColumns * kVectorStride, nullptr, GL_STATIC_DRAW);
-
-    // Bind shader storage buffer
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, shaderStorageBuffer[0]);
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderStorageBuffer[1]);
-
-    glDispatchCompute(1, 1, 1);
-
-    glFinish();
-
-    // Read back shader storage buffer
     constexpr float kExpectedValues[kColumns][kRows] = {{0.1, 0.2, 0.3}, {0.4, 0.5, 0.6}};
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[1]);
-    const GLfloat *ptr = reinterpret_cast<const GLfloat *>(
-        glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, kColumns * kVectorStride, GL_MAP_READ_BIT));
-    for (unsigned int idx = 0; idx < kColumns; idx++)
-    {
-        for (unsigned int idy = 0; idy < kRows; idy++)
-        {
-            EXPECT_EQ(kExpectedValues[idx][idy],
-                      *(ptr + idx * (kVectorStride / kBytesPerComponent) + idy));
-        }
-    }
+    runMatrixTest<kRows, kColumns, kMatrixStride, kBytesPerComponent>(kComputeShaderSource,
+                                                                      kInputDada, kExpectedValues);
+}
 
-    EXPECT_GL_NO_ERROR();
+TEST_P(ShaderStorageBufferTest31, VectorDataInMatrixInSSBOWithColumnMajorQualifier)
+{
+    constexpr char kComputeShaderSource[] =
+        R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(std140, binding = 0) buffer blockIn {
+    layout(column_major) mat2x3 data;
+} instanceIn;
+layout(std140, binding = 1) buffer blockOut {
+    layout(column_major) mat2x3 data;
+} instanceOut;
+void main()
+{
+    instanceOut.data[0] = instanceIn.data[0];
+    instanceOut.data[1] = instanceIn.data[1];
+}
+)";
+
+    constexpr unsigned int kColumns                                          = 2;
+    constexpr unsigned int kRows                                             = 3;
+    constexpr unsigned int kBytesPerComponent                                = sizeof(float);
+    constexpr unsigned int kMatrixStride                                     = 16;
+    constexpr float kInputDada[kColumns][kMatrixStride / kBytesPerComponent] = {
+        {0.1, 0.2, 0.3, 0.0}, {0.4, 0.5, 0.6, 0.0}};
+    constexpr float kExpectedValues[kColumns][kRows] = {{0.1, 0.2, 0.3}, {0.4, 0.5, 0.6}};
+    runMatrixTest<kRows, kColumns, kMatrixStride, kBytesPerComponent>(kComputeShaderSource,
+                                                                      kInputDada, kExpectedValues);
+}
+
+TEST_P(ShaderStorageBufferTest31, MatrixDataInSSBOWithColumnMajorQualifier)
+{
+    constexpr char kComputeShaderSource[] =
+        R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(std140, binding = 0) buffer blockIn {
+    layout(column_major) mat2x3 data;
+} instanceIn;
+layout(std140, binding = 1) buffer blockOut {
+    layout(column_major) mat2x3 data;
+} instanceOut;
+void main()
+{
+    instanceOut.data = instanceIn.data;
+}
+)";
+
+    constexpr unsigned int kColumns                                          = 2;
+    constexpr unsigned int kRows                                             = 3;
+    constexpr unsigned int kBytesPerComponent                                = sizeof(float);
+    constexpr unsigned int kMatrixStride                                     = 16;
+    constexpr float kInputDada[kColumns][kMatrixStride / kBytesPerComponent] = {
+        {0.1, 0.2, 0.3, 0.0}, {0.4, 0.5, 0.6, 0.0}};
+    constexpr float kExpectedValues[kColumns][kRows] = {{0.1, 0.2, 0.3}, {0.4, 0.5, 0.6}};
+    runMatrixTest<kRows, kColumns, kMatrixStride, kBytesPerComponent>(kComputeShaderSource,
+                                                                      kInputDada, kExpectedValues);
 }
 
 // Test that access/write to structure data in shader storage buffer.

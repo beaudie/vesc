@@ -753,31 +753,86 @@ bool IsOutputVulkan(ShShaderOutput output)
 
 bool IsInShaderStorageBlock(TIntermTyped *node)
 {
+    TLayoutBlockStorage storage;
+    bool rowMajor;
+    return IsInShaderStorageBlock(node, &storage, &rowMajor);
+}
+
+bool IsInShaderStorageBlock(TIntermTyped *node,
+                            TLayoutBlockStorage *storage,
+                            bool *rowMajor,
+                            bool assignRowMajor)
+{
     TIntermBinary *binaryNode   = nullptr;
     TIntermSwizzle *swizzleNode = node->getAsSwizzleNode();
     if (swizzleNode)
     {
-        binaryNode = swizzleNode->getOperand()->getAsBinaryNode();
-        if (binaryNode)
-        {
-            return IsInShaderStorageBlock(binaryNode->getLeft());
-        }
         TIntermSymbol *symbolNode = swizzleNode->getOperand()->getAsSymbolNode();
         if (symbolNode)
         {
-            return symbolNode->getQualifier() == EvqBuffer;
+            const TType &type = symbolNode->getType();
+            bool isSSBO       = type.getQualifier() == EvqBuffer;
+            if (isSSBO)
+            {
+                const TInterfaceBlock *interfaceBlock = type.getInterfaceBlock();
+                ASSERT(interfaceBlock);
+                *storage = interfaceBlock->blockStorage();
+                if (!assignRowMajor)
+                {
+                    *rowMajor = type.getLayoutQualifier().matrixPacking == EmpRowMajor;
+                }
+            }
+            return isSSBO;
         }
+        binaryNode = swizzleNode->getOperand()->getAsBinaryNode();
     }
-    binaryNode = node->getAsBinaryNode();
+    else
+    {
+        binaryNode = node->getAsBinaryNode();
+    }
 
     if (binaryNode)
     {
-        return IsInShaderStorageBlock(binaryNode->getLeft());
+        switch (binaryNode->getOp())
+        {
+            case EOpIndexDirectInterfaceBlock:
+            {
+                // We should use the field member matrix packing rather than block matrix packing.
+                const TType &type = node->getType();
+                *rowMajor         = type.getLayoutQualifier().matrixPacking == EmpRowMajor;
+
+                return IsInShaderStorageBlock(binaryNode->getLeft(), storage, rowMajor, true);
+            }
+            case EOpIndexIndirect:
+            case EOpIndexDirect:
+            case EOpIndexDirectStruct:
+                return IsInShaderStorageBlock(binaryNode->getLeft(), storage, rowMajor,
+                                              assignRowMajor);
+            default:
+                return false;
+        }
     }
 
     const TType &type = node->getType();
+    bool isSSBO       = type.getQualifier() == EvqBuffer;
+    if (isSSBO)
+    {
+        const TInterfaceBlock *interfaceBlock = type.getInterfaceBlock();
+        ASSERT(interfaceBlock);
+        *storage = interfaceBlock->blockStorage();
+        // If the block doesn't have an instance name, assignRowMajor will be false. In this
+        // situation, we need to set value to rowMajor.
+        if (!assignRowMajor)
+        {
+            *rowMajor = type.getLayoutQualifier().matrixPacking == EmpRowMajor;
+        }
+    }
+    return isSSBO;
+}
 
-    return type.getQualifier() == EvqBuffer;
+bool IsInShaderStorageBlock(TIntermTyped *node, TLayoutBlockStorage *storage, bool *rowMajor)
+{
+    return IsInShaderStorageBlock(node, storage, rowMajor, false);
 }
 
 }  // namespace sh
