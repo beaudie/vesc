@@ -16,6 +16,24 @@
       "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89840682_138ea87b",
+        "filename": "src/libANGLE/params.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-26T11:41:03Z",
+      "side": 0,
+      "message": "Hey Shabi, these functions are not called in the perf test. I don\u0027t think a test is necessary. I can confirm the speedup will occur with and without inlining these accessors. I liked having the packed struct around too, but it was a performance hit that we couldn\u0027t avoid.",
+      "parentUuid": "4d19e818_a9489429",
+      "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
