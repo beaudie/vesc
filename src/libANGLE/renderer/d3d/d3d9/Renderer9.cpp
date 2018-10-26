@@ -1378,11 +1378,11 @@ angle::Result Renderer9::drawElementsImpl(const gl::Context *context,
 
     ANGLE_TRY(applyIndexBuffer(context, indices, count, mode, type, &indexInfo));
 
-    const auto &drawCallParams = context->getParams<gl::DrawCallParams>();
-    ANGLE_TRY_HANDLE(context, drawCallParams.ensureIndexRangeResolved(context));
+    gl::IndexRange indexRange;
+    ANGLE_TRY(context->getGLState().getVertexArray()->getIndexRange(context, type, count, indices,
+                                                                    &indexRange));
 
-    const gl::IndexRange &indexRange = drawCallParams.getIndexRange();
-    size_t vertexCount               = indexRange.vertexCount();
+    size_t vertexCount = indexRange.vertexCount();
     ANGLE_TRY(applyVertexBuffer(context, mode, static_cast<GLsizei>(indexRange.start),
                                 static_cast<GLsizei>(vertexCount), instances, &indexInfo));
 

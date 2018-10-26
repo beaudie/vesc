@@ -141,7 +141,7 @@ angle::Result TranslatedAttribute::computeOffset(const gl::Context *context,
     CheckedNumeric<unsigned int> checkedStride(stride);
 
     offset += checkedStride * static_cast<unsigned int>(startVertex);
-    ANGLE_CHECK_HR_MATH(GetImplAs<ContextD3D>(context), offset.IsValid());
+    ANGLE_CHECK_GL_MATH(GetImplAs<ContextD3D>(context), offset.IsValid());
     *offsetOut = offset.ValueOrDie();
     return angle::Result::Continue();
 }
@@ -382,7 +382,7 @@ angle::Result VertexDataManager::StoreStaticAttrib(const gl::Context *context,
     CheckedNumeric<unsigned int> checkedOffset(streamOffset);
     checkedOffset += firstElementOffset;
 
-    ANGLE_CHECK_HR_MATH(GetImplAs<ContextD3D>(context), checkedOffset.IsValid());
+    ANGLE_CHECK_GL_MATH(GetImplAs<ContextD3D>(context), checkedOffset.IsValid());
 
     translated->vertexBuffer.set(vertexBuffer);
     translated->serial = vertexBuffer->getSerial();
