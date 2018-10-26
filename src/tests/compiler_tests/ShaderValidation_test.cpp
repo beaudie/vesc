@@ -3422,24 +3422,6 @@ TEST_F(ComputeShaderValidationTest, CorrectUsageOfSharedMemory)
     }
 }
 
-// Shared memory variables cannot be initialized.
-// GLSL ES 3.10 Revision 4, 4.3.8 Shared Variables
-TEST_F(ComputeShaderValidationTest, SharedVariableInitialization)
-{
-    const std::string &shaderString =
-        "#version 310 es\n"
-        "precision mediump float;\n"
-        "layout(local_size_x = 5) in;\n"
-        "shared int myShared = 0;\n"
-        "void main() {\n"
-        "}\n";
-
-    if (compile(shaderString))
-    {
-        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
-    }
-}
-
 // Local variables cannot be qualified as shared.
 // GLSL ES 3.10 Revision 4, 4.3 Storage Qualifiers
 TEST_F(ComputeShaderValidationTest, SharedMemoryInFunctionBody)
