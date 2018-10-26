@@ -45,6 +45,9 @@ using SharedPipelineLayout      = RefCounted<PipelineLayout>;
 // packing nicely into the desired space. This is something we could also potentially fix
 // with a redesign to use bitfields or bit mask operations.
 
+#pragma clang diagnostic push
+#pragma clang diagnostic error "-Wpadded"
+
 struct alignas(4) PackedAttachmentDesc
 {
     uint8_t flags;
@@ -240,6 +243,7 @@ struct PackedColorBlendStateInfo final
     uint32_t logicOpEnable;
     uint32_t logicOp;
     uint32_t attachmentCount;
+    uint32_t padding;
     float blendConstants[4];
     PackedColorBlendAttachmentState attachments[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS];
 };
@@ -459,6 +463,9 @@ static_assert(sizeof(PipelineLayoutDesc) ==
                   (sizeof(DescriptorSetLayoutArray<DescriptorSetLayoutDesc>) +
                    sizeof(std::array<PackedPushConstantRange, kMaxPushConstantRanges>)),
               "Unexpected Size");
+
+#pragma clang diagnostic pop
+
 }  // namespace vk
 }  // namespace rx
 
