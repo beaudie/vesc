@@ -556,4 +556,28 @@ const angle::Format &GetFormatFromFormatType(GLenum format, GLenum type)
     angle::FormatID angleFormatID = angle::Format::InternalFormatToID(sizedInternalFormat);
     return angle::Format::Get(angleFormatID);
 }
+
+angle::Result GetVertexRangeInfo(const gl::Context *context,
+                                 GLint firstVertex,
+                                 GLsizei vertexOrIndexCount,
+                                 GLenum indexTypeOrNone,
+                                 const void *indices,
+                                 GLint *startVertexOut,
+                                 size_t *vertexCountOut)
+{
+    if (indexTypeOrNone != GL_NONE)
+    {
+        gl::IndexRange indexRange;
+        ANGLE_TRY(context->getGLState().getVertexArray()->getIndexRange(
+            context, indexTypeOrNone, vertexOrIndexCount, indices, &indexRange));
+        *startVertexOut = indexRange.start;
+        *vertexCountOut = indexRange.vertexCount();
+    }
+    else
+    {
+        *startVertexOut = firstVertex;
+        *vertexCountOut = vertexOrIndexCount;
+    }
+    return angle::Result::Continue();
+}
 }  // namespace rx

@@ -2516,4 +2516,34 @@ IndexStorageType ClassifyIndexStorage(const gl::State &glState,
     // Static buffer not available, fall back to streaming.
     return IndexStorageType::Dynamic;
 }
+
+angle::Result ComputeFirstVertex(Context11 *context11,
+                                 const gl::IndexRange &indexRange,
+                                 GLint baseVertex,
+                                 GLint *firstVertexOut)
+{
+    // The entire index range should be within the limits of a 32-bit uint because the largest
+    // GL index type is GL_UNSIGNED_INT.
+    ASSERT(indexRange.start <= std::numeric_limits<uint32_t>::max() &&
+           indexRange.end <= std::numeric_limits<uint32_t>::max());
+
+    // The base vertex is only used in DrawElementsIndirect. Given the assertion above and the
+    // type of mBaseVertex (GLint), adding them both as 64-bit ints is safe.
+    int64_t startVertexInt64 =
+        static_cast<int64_t>(baseVertex) + static_cast<int64_t>(indexRange.start);
+
+    // OpenGL ES 3.2 spec section 10.5: "Behavior of DrawElementsOneInstance is undefined if the
+    // vertex ID is negative for any element"
+    ANGLE_CHECK_HR_MATH(context11, startVertexInt64 >= 0);
+
+    // OpenGL ES 3.2 spec section 10.5: "If the vertex ID is larger than the maximum value
+    // representable by type, it should behave as if the calculation were upconverted to 32-bit
+    // unsigned integers(with wrapping on overflow conditions)." ANGLE does not fully handle
+    // these rules, an overflow error is returned if the start vertex cannot be stored in a
+    // 32-bit signed integer.
+    ANGLE_CHECK_HR_MATH(context11, startVertexInt64 <= std::numeric_limits<GLint>::max())
+
+    *firstVertexOut = static_cast<GLint>(startVertexInt64);
+    return angle::Result::Continue();
+}
 }  // namespace rx
