@@ -20,6 +20,7 @@ angle_perf_tests_sources = [
   "perf_tests/EGLMakeCurrentPerf.cpp",
   "perf_tests/ResultPerf.cpp",
   "perf_tests/IndexConversionPerf.cpp",
+  "perf_tests/InitializeSharedVariablePerf.cpp",
   "perf_tests/InstancingPerf.cpp",
   "perf_tests/InterleavedAttributeData.cpp",
   "perf_tests/LinkProgramPerfTest.cpp",
