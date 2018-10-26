@@ -648,12 +648,14 @@ angle::Result Renderer9::finish(const gl::Context *context)
     }
     ANGLE_TRY_HR(context9, result, "Failed to get event query data");
 
-    // Loop until the query completes
+    // Loop until the query completes.  A bug has been observed where the query result is always false, so we loop for a maximum
+    // of 100ms (with 1ms sleep each time).
     unsigned int attempt = 0;
-    while (result == S_FALSE)
+    constexpr unsigned int kMaxAttempts = 100;
+    while (result == S_FALSE && attempt < kMaxAttempts)
     {
         // Keep polling, but allow other threads to do something useful first
-        ScheduleYield();
+        Sleep(1);
 
         result = query->GetData(nullptr, 0, D3DGETDATA_FLUSH);
         attempt++;
