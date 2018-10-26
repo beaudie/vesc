@@ -16,38 +16,6 @@
 namespace sh
 {
 
-namespace
-{
-
-unsigned int GetMatrixStride(const TType &type)
-{
-    sh::Std140BlockEncoder std140Encoder;
-    sh::HLSLBlockEncoder hlslEncoder(sh::HLSLBlockEncoder::ENCODE_PACKED, false);
-    sh::BlockLayoutEncoder *encoder = nullptr;
-
-    if (type.getLayoutQualifier().blockStorage == EbsStd140)
-    {
-        encoder = &std140Encoder;
-    }
-    else
-    {
-        // TODO(jiajia.qin@intel.com): add std430 support. http://anglebug.com/1951
-        encoder = &hlslEncoder;
-    }
-    const bool isRowMajorLayout = (type.getLayoutQualifier().matrixPacking == EmpRowMajor);
-    std::vector<unsigned int> arraySizes;
-    auto *typeArraySizes = type.getArraySizes();
-    if (typeArraySizes != nullptr)
-    {
-        arraySizes.assign(typeArraySizes->begin(), typeArraySizes->end());
-    }
-    const BlockMemberInfo &memberInfo =
-        encoder->encodeType(GLVariableType(type), arraySizes, isRowMajorLayout);
-    return memberInfo.matrixStride;
-}
-
-}  // anonymous namespace
-
 // static
 void ShaderStorageBlockFunctionHLSL::OutputSSBOLoadFunctionBody(
     TInfoSinkBase &out,
@@ -80,17 +48,51 @@ void ShaderStorageBlockFunctionHLSL::OutputSSBOLoadFunctionBody(
     }
     else if (ssboFunction.type.isVector())
     {
-        out << " = " << convertString << "buffer.Load" << ssboFunction.type.getNominalSize()
-            << "(loc));\n";
+        if (ssboFunction.rowMajor)
+        {
+            out << " = {";
+            for (int index = 0; index < ssboFunction.type.getNominalSize(); index++)
+            {
+                out << convertString << "buffer.Load(loc + " << index * ssboFunction.matrixStride
+                    << ")),";
+            }
+            out << "};\n";
+        }
+        else
+        {
+            out << " = " << convertString << "buffer.Load" << ssboFunction.type.getNominalSize()
+                << "(loc));\n";
+        }
     }
     else if (ssboFunction.type.isMatrix())
     {
-        unsigned int matrixStride = GetMatrixStride(ssboFunction.type);
         out << " = {";
-        for (int rowIndex = 0; rowIndex < ssboFunction.type.getRows(); rowIndex++)
+        if (ssboFunction.rowMajor)
         {
-            out << "asfloat(buffer.Load" << ssboFunction.type.getCols() << "(loc +"
-                << rowIndex * matrixStride << ")), ";
+            for (int columnIndex = 0; columnIndex < ssboFunction.type.getCols(); columnIndex++)
+            {
+                out << "{ ";
+                for (int rowIndex = 0; rowIndex < ssboFunction.type.getRows(); rowIndex++)
+                {
+                    out << "asfloat(buffer.Load(loc + "
+                        << rowIndex * ssboFunction.matrixStride +
+                               columnIndex * BlockLayoutEncoder::BytesPerComponent
+                        << "))";
+                    if (rowIndex != (ssboFunction.type.getRows() - 1))
+                    {
+                        out << ",";
+                    }
+                }
+                out << "}, ";
+            }
+        }
+        else
+        {
+            for (int columnIndex = 0; columnIndex < ssboFunction.type.getCols(); columnIndex++)
+            {
+                out << "asfloat(buffer.Load" << ssboFunction.type.getRows() << "(loc + "
+                    << columnIndex * ssboFunction.matrixStride << ")), ";
+            }
         }
 
         out << "};\n";
@@ -124,25 +126,53 @@ void ShaderStorageBlockFunctionHLSL::OutputSSBOStoreFunctionBody(
     }
     else if (ssboFunction.type.isVector())
     {
-        if (ssboFunction.type.getBasicType() == EbtBool)
+        if (ssboFunction.rowMajor)
         {
-            out << "    uint" << ssboFunction.type.getNominalSize() << " _tmp = uint"
-                << ssboFunction.type.getNominalSize() << "(value);\n";
-            out << "    buffer.Store" << ssboFunction.type.getNominalSize() << "(loc, _tmp);\n";
+            for (int index = 0; index < ssboFunction.type.getNominalSize(); index++)
+            {
+                // Don't need to worry about bool value since there is no bool matrix.
+                out << "buffer.Store(loc + " << index * ssboFunction.matrixStride
+                    << ", asuint(value[" << index << "]));\n";
+            }
         }
         else
         {
-            out << "    buffer.Store" << ssboFunction.type.getNominalSize()
-                << "(loc, asuint(value));\n";
+            if (ssboFunction.type.getBasicType() == EbtBool)
+            {
+                out << "    uint" << ssboFunction.type.getNominalSize() << " _tmp = uint"
+                    << ssboFunction.type.getNominalSize() << "(value);\n";
+                out << "    buffer.Store" << ssboFunction.type.getNominalSize() << "(loc, _tmp);\n";
+            }
+            else
+            {
+                out << "    buffer.Store" << ssboFunction.type.getNominalSize()
+                    << "(loc, asuint(value));\n";
+            }
         }
     }
     else if (ssboFunction.type.isMatrix())
     {
-        unsigned int matrixStride = GetMatrixStride(ssboFunction.type);
-        for (int rowIndex = 0; rowIndex < ssboFunction.type.getRows(); rowIndex++)
+        if (ssboFunction.rowMajor)
         {
-            out << "    buffer.Store" << ssboFunction.type.getCols() << "(loc +"
-                << rowIndex * matrixStride << ", asuint(value[" << rowIndex << "]));\n";
+            for (int columnIndex = 0; columnIndex < ssboFunction.type.getCols(); columnIndex++)
+            {
+                for (int rowIndex = 0; rowIndex < ssboFunction.type.getRows(); rowIndex++)
+                {
+                    out << "    buffer.Store(loc + "
+                        << rowIndex * ssboFunction.matrixStride +
+                               columnIndex * BlockLayoutEncoder::BytesPerComponent
+                        << ", asuint(value[" << columnIndex << "][" << rowIndex << "]));\n";
+                }
+            }
+        }
+        else
+        {
+            for (int columnIndex = 0; columnIndex < ssboFunction.type.getCols(); columnIndex++)
+            {
+                out << "    buffer.Store" << ssboFunction.type.getRows() << "(loc + "
+                    << columnIndex * ssboFunction.matrixStride << ", asuint(value[" << columnIndex
+                    << "]));\n";
+            }
         }
     }
     else
@@ -158,13 +188,19 @@ bool ShaderStorageBlockFunctionHLSL::ShaderStorageBlockFunction::operator<(
            std::tie(rhs.functionName, rhs.typeString, rhs.method);
 }
 
-TString ShaderStorageBlockFunctionHLSL::registerShaderStorageBlockFunction(const TType &type,
-                                                                           SSBOMethod method)
+TString ShaderStorageBlockFunctionHLSL::registerShaderStorageBlockFunction(
+    const TType &type,
+    SSBOMethod method,
+    TLayoutBlockStorage storage,
+    bool rowMajor,
+    int matrixStride)
 {
     ShaderStorageBlockFunction ssboFunction;
     ssboFunction.typeString = TypeString(type);
     ssboFunction.method     = method;
     ssboFunction.type       = type;
+    ssboFunction.rowMajor     = rowMajor;
+    ssboFunction.matrixStride = matrixStride;
 
     switch (method)
     {
@@ -177,7 +213,18 @@ TString ShaderStorageBlockFunctionHLSL::registerShaderStorageBlockFunction(const
         default:
             UNREACHABLE();
     }
-
+    if (matrixStride > 0)
+    {
+        if (rowMajor)
+        {
+            ssboFunction.functionName += "_rm_";
+        }
+        else
+        {
+            ssboFunction.functionName += "_cm_";
+        }
+        ssboFunction.functionName += getBlockStorageString(storage);
+    }
     mRegisteredShaderStorageBlockFunctions.insert(ssboFunction);
     return ssboFunction.functionName;
 }

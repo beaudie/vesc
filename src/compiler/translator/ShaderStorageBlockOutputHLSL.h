@@ -46,9 +46,11 @@ class ShaderStorageBlockOutputHLSL : public TIntermTraverser
     // This writes part of the function call to store a value to a SSBO to the output stream. After
     // calling this, ", <stored value>)" should be written to the output stream to complete the
     // function call.
-    void outputStoreFunctionCallPrefix(TIntermTyped *node);
+    void outputStoreFunctionCallPrefix(TIntermTyped *node,
+                                       TLayoutBlockStorage storage,
+                                       bool rowMajor);
     // This writes the funciton call to load a SSBO value to the output stream.
-    void outputLoadFunctionCall(TIntermTyped *node);
+    void outputLoadFunctionCall(TIntermTyped *node, TLayoutBlockStorage storage, bool rowMajor);
 
     void writeShaderStorageBlocksHeader(TInfoSinkBase &out) const;
 
@@ -62,7 +64,10 @@ class ShaderStorageBlockOutputHLSL : public TIntermTraverser
     bool visitUnary(Visit visit, TIntermUnary *) override;
 
   private:
-    void traverseSSBOAccess(TIntermTyped *node, SSBOMethod method);
+    void traverseSSBOAccess(TIntermTyped *node,
+                            SSBOMethod method,
+                            TLayoutBlockStorage storage,
+                            bool rowMajor);
     bool isEndOfSSBOAccessChain();
     void writeEOpIndexDirectOrIndirectOutput(TInfoSinkBase &out, Visit visit, TIntermBinary *node);
     // Common part in dot operations.
