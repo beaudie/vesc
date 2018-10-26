@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b964b8cf_5b79b05c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T20:50:02Z",
+      "side": 1,
+      "message": "It won\u0027t be. `ANGLE_ENABLE_VULKAN_GPU_TRACE_EVENTS` will be undefined and `mGpuEventsEnabled` is initialized to `false`.",
+      "parentUuid": "a29b4a31_179232cd",
+      "range": {
+        "startLine": 638,
+        "startChar": 7,
+        "endLine": 638,
+        "endChar": 73
+      },
+      "revId": "282a13dc2c265a90281209990d4c9237036c92b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b27b8507_36c87589",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "282a13dc2c265a90281209990d4c9237036c92b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7db0144_b1b2366f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T20:50:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b27b8507_36c87589",
+      "range": {
+        "startLine": 179,
+        "startChar": 4,
+        "endLine": 179,
+        "endChar": 17
+      },
+      "revId": "282a13dc2c265a90281209990d4c9237036c92b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
