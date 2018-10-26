@@ -1161,4 +1161,102 @@ EGLint EGLAPIENTRY LabelObjectKHR(EGLDisplay dpy,
     return EGL_SUCCESS;
 }
 
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY GetNextFrameIdANDROID(EGLDisplay dpy,
+                                                          EGLSurface surface,
+                                                          EGLuint64KHR *frameId)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(EGLDisplay dpy = 0x%0.8pf, EGLSurface surface = 0x%0.8p, EGLuint64KHR *frameId = "
+        "0x%0.8p)",
+        dpy, surface, frameId);
+
+    Display *display    = static_cast<Display *>(dpy);
+    Surface *eglSurface = static_cast<Surface *>(surface);
+    Thread *thread      = GetCurrentThread();
+
+    ANGLE_EGL_TRY_RETURN(thread, ValidateGetNextFrameIdANDROID(display, eglSurface, frameId),
+                         "eglGetNextFrameIdANDROID", GetSurfaceIfValid(display, eglSurface),
+                         EGL_FALSE);
+    ANGLE_EGL_TRY_RETURN(thread, eglSurface->getNextFrameId(frameId), "eglGetNextFrameIdANDROID",
+                         GetSurfaceIfValid(display, eglSurface), EGL_FALSE);
+
+    return EGL_TRUE;
+}
+
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY GetCompositorTimingANDROID(EGLDisplay dpy,
+                                                               EGLSurface surface,
+                                                               EGLint numTimestamps,
+                                                               const EGLint *names,
+                                                               EGLnsecsANDROID *values)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(EGLDisplay dpy = 0x%0.8pf, EGLSurface surface = 0x%0.8p, EGLint numTimestamps = %d, "
+        "const EGLint *names = 0x%0.8p, EGLnsecsANDROID *values = 0x%0.8p)",
+        dpy, surface, numTimestamps, names, values);
+
+    Display *display    = static_cast<Display *>(dpy);
+    Surface *eglSurface = static_cast<Surface *>(surface);
+    Thread *thread      = GetCurrentThread();
+
+    ANGLE_EGL_TRY_RETURN(
+        thread,
+        ValidateGetCompositorTimingANDROID(display, eglSurface, numTimestamps, names, values),
+        "eglGetCompositorTimingANDROIDD", GetSurfaceIfValid(display, eglSurface), EGL_FALSE);
+    ANGLE_EGL_TRY_RETURN(thread, eglSurface->getCompositorTiming(numTimestamps, names, values),
+                         "eglGetCompositorTimingANDROIDD", GetSurfaceIfValid(display, eglSurface),
+                         EGL_FALSE);
+
+    return EGL_TRUE;
+}
+
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY GetFrameTimestampsANDROID(EGLDisplay dpy,
+                                                              EGLSurface surface,
+                                                              EGLuint64KHR frameId,
+                                                              EGLint numTimestamps,
+                                                              const EGLint *timestamps,
+                                                              EGLnsecsANDROID *values)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(EGLDisplay dpy = 0x%0.8pf, EGLSurface surface = 0x%0.8p, EGLuint64KHR frameId = %llu, "
+        "EGLint numTimestamps = %d, const EGLint *timestamps = 0x%0.8p, EGLnsecsANDROID *values = "
+        "0x%0.8p)",
+        dpy, surface, frameId, numTimestamps, timestamps, values);
+
+    Display *display    = static_cast<Display *>(dpy);
+    Surface *eglSurface = static_cast<Surface *>(surface);
+    Thread *thread      = GetCurrentThread();
+
+    ANGLE_EGL_TRY_RETURN(thread,
+                         ValidateGetFrameTimestampsANDROID(display, eglSurface, frameId,
+                                                           numTimestamps, timestamps, values),
+                         "eglGetFrameTimestampsANDROID", GetSurfaceIfValid(display, eglSurface),
+                         EGL_FALSE);
+    ANGLE_EGL_TRY_RETURN(
+        thread, eglSurface->getFrameTimestamps(frameId, numTimestamps, timestamps, values),
+        "eglGetFrameTimestampsANDROID", GetSurfaceIfValid(display, eglSurface), EGL_FALSE);
+
+    return EGL_TRUE;
+}
+
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY QueryTimestampSupportedANDROID(EGLDisplay dpy,
+                                                                   EGLSurface surface,
+                                                                   EGLint timestamp)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT("(EGLDisplay dpy = 0x%0.8pf, EGLSurface surface = 0x%0.8p, EGLint timestamp = %d)", dpy,
+          surface, timestamp);
+
+    Display *display    = static_cast<Display *>(dpy);
+    Surface *eglSurface = static_cast<Surface *>(surface);
+    Thread *thread      = GetCurrentThread();
+
+    ANGLE_EGL_TRY_RETURN(
+        thread, ValidateQueryTimestampSupportedANDROID(display, eglSurface, timestamp),
+        "eglQueryTimestampSupportedANDROID", GetSurfaceIfValid(display, eglSurface), EGL_FALSE);
+    return eglSurface->isTimestampSupported(timestamp) ? EGL_TRUE : EGL_FALSE;
+}
+
 }  // namespace egl

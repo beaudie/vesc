@@ -26,7 +26,7 @@ namespace egl
 {
 
 SurfaceState::SurfaceState(const egl::Config *configIn, const AttributeMap &attributesIn)
-    : label(nullptr), config(configIn), attributes(attributesIn)
+    : label(nullptr), config(configIn), attributes(attributesIn), timestampsEnabled(false)
 {
 }
 
@@ -479,6 +479,42 @@ gl::InitState Surface::initState(const gl::ImageIndex & /*imageIndex*/) const
 void Surface::setInitState(const gl::ImageIndex & /*imageIndex*/, gl::InitState initState)
 {
     mInitState = initState;
+}
+
+bool Surface::isTimestampSupported(EGLint timestamp) const
+{
+    return mImplementation->isTimestampSupported(timestamp);
+}
+
+void Surface::setTimestampsEnabled(bool enabled)
+{
+    mImplementation->setTimestampsEnabled(enabled);
+    mState.timestampsEnabled = enabled;
+}
+
+bool Surface::timestampsEnabled() const
+{
+    return mState.timestampsEnabled;
+}
+
+Error Surface::getNextFrameId(EGLuint64KHR *frameId)
+{
+    return mImplementation->getNextFrameId(frameId);
+}
+
+Error Surface::getCompositorTiming(EGLint numTimestamps,
+                                   const EGLint *names,
+                                   EGLnsecsANDROID *values)
+{
+    return mImplementation->getCompositorTiming(numTimestamps, names, values);
+}
+
+Error Surface::getFrameTimestamps(EGLuint64KHR frameId,
+                                  EGLint numTimestamps,
+                                  const EGLint *timestamps,
+                                  EGLnsecsANDROID *values)
+{
+    return mImplementation->getFrameTimestamps(frameId, numTimestamps, timestamps, values);
 }
 
 WindowSurface::WindowSurface(rx::EGLImplFactory *implFactory,
