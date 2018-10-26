@@ -48,6 +48,54 @@
     },
     {
       "key": {
+        "uuid": "59e27aa4_bb50677f",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6406a0e_80a1fe39",
+      "range": {
+        "startLine": 25,
+        "startChar": 2,
+        "endLine": 25,
+        "endChar": 31
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ef27ccf_60a16f75",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "My reasoning was that eventually this could be implemented for any backend. But ok, that may be far down the line, if at all, so I changed it.",
+      "parentUuid": "f0115182_336ab92b",
+      "range": {
+        "startLine": 25,
+        "startChar": 2,
+        "endLine": 25,
+        "endChar": 31
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "584e753a_3da3c6d3",
         "filename": "BUILD.gn",
         "patchSetId": 4
@@ -68,6 +116,30 @@
       "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3a21d62_da80d267",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "584e753a_3da3c6d3",
+      "range": {
+        "startLine": 88,
+        "startChar": 18,
+        "endLine": 88,
+        "endChar": 47
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "c8ba9a52_7e3cd526",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "Unnecessary now that the tracing is not compiled out.",
+      "parentUuid": "cbcd53a7_dfaaa432",
+      "range": {
+        "startLine": 302,
+        "startChar": 8,
+        "endLine": 302,
+        "endChar": 20
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50f15c02_30fd78ec",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
         "patchSetId": 4
@@ -114,6 +210,30 @@
       "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "060ce512_b61e5b33",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "I had a similar discussion previously with Jamie about pipeline caches (where failure is easily recoverable). Jamie\u0027s idea is that failure in these simple tasks hints at something seriously wrong, so you might as well give up now instead of a few function calls later.",
+      "parentUuid": "50f15c02_30fd78ec",
+      "range": {
+        "startLine": 653,
+        "startChar": 4,
+        "endLine": 653,
+        "endChar": 13
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "2d0b88db_2c44667c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "698fcbf9_e3dbf13b",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 0
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90dd666c_d661bded",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
@@ -160,6 +304,30 @@
       "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa2464d8_212f38ac",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1230,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "I added a runtime flag and split traceGpuEvent into a header-only function (with the same name) that returns immediately if flag is not set and traceGpuEventImpl that does the work. That way the callers don\u0027t need to deal with the flag.",
+      "parentUuid": "90dd666c_d661bded",
+      "range": {
+        "startLine": 1230,
+        "startChar": 4,
+        "endLine": 1230,
+        "endChar": 33
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "c7b6284d_ae5e7a90",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "Copy paste...",
+      "parentUuid": "23600efd_bef16368",
+      "range": {
+        "startLine": 1253,
+        "startChar": 4,
+        "endLine": 1253,
+        "endChar": 8
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8c49137_7562fb6c",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
@@ -206,6 +398,30 @@
       "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b41cbcc3_b8650785",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1258,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "Thanks",
+      "parentUuid": "c8c49137_7562fb6c",
+      "range": {
+        "startLine": 1256,
+        "startChar": 2,
+        "endLine": 1258,
+        "endChar": 6
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -232,6 +448,30 @@
     },
     {
       "key": {
+        "uuid": "e87bc315_4903ccc4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1317,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e6218c9_90132cc2",
+      "range": {
+        "startLine": 1317,
+        "startChar": 7,
+        "endLine": 1317,
+        "endChar": 18
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea45ee09_113ec984",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
@@ -252,6 +492,30 @@
       "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8fc6330_2cb43834",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1499,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "Category name is not passed to addTraceEvent, but I found how Chrome deals with that and I did the same (hint: it\u0027s a hack)",
+      "parentUuid": "ea45ee09_113ec984",
+      "range": {
+        "startLine": 1498,
+        "startChar": 72,
+        "endLine": 1499,
+        "endChar": 82
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -278,6 +542,30 @@
     },
     {
       "key": {
+        "uuid": "de7cbcad_cb2929b5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1506,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "Unnecessary with RendererVk adjusting the timestamps itself.",
+      "parentUuid": "08809ecb_4382bcbd",
+      "range": {
+        "startLine": 1504,
+        "startChar": 8,
+        "endLine": 1506,
+        "endChar": 55
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "37283643_b58a95d4",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 4
@@ -298,6 +586,30 @@
       "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "222a3a1c_86625c37",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "Those are defined to \u0027B\u0027, \u0027E\u0027, \u0027i\u0027 etc. Did you perhaps mistake them for strings?",
+      "parentUuid": "37283643_b58a95d4",
+      "range": {
+        "startLine": 177,
+        "startChar": 69,
+        "endLine": 178,
+        "endChar": 30
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -324,6 +636,30 @@
     },
     {
       "key": {
+        "uuid": "118c8b28_3e8af69f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "26765c85_47054e2f",
+      "range": {
+        "startLine": 306,
+        "startChar": 9,
+        "endLine": 306,
+        "endChar": 30
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d48b5fad_d099ca61",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 4
@@ -347,6 +683,30 @@
     },
     {
       "key": {
+        "uuid": "9d4815f3_d27b9382",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "d48b5fad_d099ca61",
+      "range": {
+        "startLine": 311,
+        "startChar": 8,
+        "endLine": 311,
+        "endChar": 29
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ccf712b3_73e15001",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 4
@@ -367,6 +727,30 @@
       "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "951fe455_f8f89cc5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "Removed. But not sure what you mean by that, there are just constructors and an assignment operator, in the same order as in the style guide.",
+      "parentUuid": "ccf712b3_73e15001",
+      "range": {
+        "startLine": 312,
+        "startChar": 1,
+        "endLine": 313,
+        "endChar": 46
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -413,6 +797,30 @@
       "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed9bf8a9_ecad3743",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-26T19:40:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bebd12ce_a99f6878",
+      "range": {
+        "startLine": 115,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 25
+      },
+      "revId": "9a242d7c3c89bd3a827309bd1606ebef4a97c605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
