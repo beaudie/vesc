@@ -2011,7 +2011,9 @@ bool OutputHLSL::visitDeclaration(Visit visit, TIntermDeclaration *node)
                 declarator->getAsSymbolNode()->variable().symbolType() !=
                     SymbolType::Empty)  // Variable declaration
             {
-                if (declarator->getQualifier() == EvqShared)
+                TIntermBinary *initNode = declarator->getAsBinaryNode();
+                if ((declarator->getQualifier() == EvqShared) ||
+                    (initNode != nullptr && initNode->getLeft()->getQualifier() == EvqShared))
                 {
                     out << "groupshared ";
                 }
