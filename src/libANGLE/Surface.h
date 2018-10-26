@@ -47,6 +47,8 @@ struct SurfaceState final : private angle::NonCopyable
     EGLLabelKHR label;
     const egl::Config *config;
     AttributeMap attributes;
+
+    bool timestampsEnabled;
 };
 
 class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
@@ -139,6 +141,17 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     bool isRobustResourceInitEnabled() const { return mRobustResourceInitialization; }
 
     const gl::Format &getBindTexImageFormat() const { return mColorFormat; }
+
+    // EGL_ANDROID_get_frame_timestamps entry points
+    bool isTimestampSupported(EGLint timestamp) const;
+    void setTimestampsEnabled(bool enabled);
+    bool timestampsEnabled() const;
+    Error getNextFrameId(EGLuint64KHR *frameId);
+    Error getCompositorTiming(EGLint numTimestamps, const EGLint *names, EGLnsecsANDROID *values);
+    Error getFrameTimestamps(EGLuint64KHR frameId,
+                             EGLint numTimestamps,
+                             const EGLint *timestamps,
+                             EGLnsecsANDROID *values);
 
   protected:
     Surface(EGLint surfaceType,

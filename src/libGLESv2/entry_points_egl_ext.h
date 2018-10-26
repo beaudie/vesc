@@ -151,6 +151,28 @@ ANGLE_EXPORT EGLint EGLAPIENTRY LabelObjectKHR(EGLDisplay display,
                                                EGLObjectKHR object,
                                                EGLLabelKHR label);
 
+// ANDROID_get_frame_timestamps
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY GetNextFrameIdANDROID(EGLDisplay dpy,
+                                                          EGLSurface surface,
+                                                          EGLuint64KHR *frameId);
+
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY GetCompositorTimingANDROID(EGLDisplay dpy,
+                                                               EGLSurface surface,
+                                                               EGLint numTimestamps,
+                                                               const EGLint *names,
+                                                               EGLnsecsANDROID *values);
+
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY GetFrameTimestampsANDROID(EGLDisplay dpy,
+                                                              EGLSurface surface,
+                                                              EGLuint64KHR frameId,
+                                                              EGLint numTimestamps,
+                                                              const EGLint *timestamps,
+                                                              EGLnsecsANDROID *values);
+
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY QueryTimestampSupportedANDROID(EGLDisplay dpy,
+                                                                   EGLSurface surface,
+                                                                   EGLint timestamp);
+
 }  // namespace egl
 
 #endif  // LIBGLESV2_ENTRYPOINTSEGLEXT_H_

@@ -54,6 +54,7 @@ ProcEntry g_procTable[] = {
     {"eglDestroyStreamKHR", P(egl::DestroyStreamKHR)},
     {"eglDestroySurface", P(egl::DestroySurface)},
     {"eglDestroySync", P(egl::DestroySync)},
+    {"eglGetCompositorTimingANDROID", P(egl::GetCompositorTimingANDROID)},
     {"eglGetConfigAttrib", P(egl::GetConfigAttrib)},
     {"eglGetConfigs", P(egl::GetConfigs)},
     {"eglGetCurrentContext", P(egl::GetCurrentContext)},
@@ -61,6 +62,8 @@ ProcEntry g_procTable[] = {
     {"eglGetCurrentSurface", P(egl::GetCurrentSurface)},
     {"eglGetDisplay", P(egl::GetDisplay)},
     {"eglGetError", P(egl::GetError)},
+    {"eglGetFrameTimestampsANDROID", P(egl::GetFrameTimestampsANDROID)},
+    {"eglGetNextFrameIdANDROID", P(egl::GetNextFrameIdANDROID)},
     {"eglGetPlatformDisplay", P(egl::GetPlatformDisplay)},
     {"eglGetPlatformDisplayEXT", P(egl::GetPlatformDisplayEXT)},
     {"eglGetProcAddress", P(egl::GetProcAddress)},
@@ -86,6 +89,7 @@ ProcEntry g_procTable[] = {
     {"eglQueryString", P(egl::QueryString)},
     {"eglQuerySurface", P(egl::QuerySurface)},
     {"eglQuerySurfacePointerANGLE", P(egl::QuerySurfacePointerANGLE)},
+    {"eglQueryTimestampSupportedANDROID", P(egl::QueryTimestampSupportedANDROID)},
     {"eglReleaseDeviceANGLE", P(egl::ReleaseDeviceANGLE)},
     {"eglReleaseTexImage", P(egl::ReleaseTexImage)},
     {"eglReleaseThread", P(egl::ReleaseThread)},
@@ -1264,5 +1268,5 @@ ProcEntry g_procTable[] = {
     {"glWeightPointerOES", P(gl::WeightPointerOES)},
     {"glWeightPointerOESContextANGLE", P(gl::WeightPointerOESContextANGLE)}};
 
-size_t g_numProcs = 1196;
+size_t g_numProcs = 1200;
 }  // namespace egl
