@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a8001c27_cefb686e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-26T15:51:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0cf5d2e_1f79c713",
+      "range": {
+        "startLine": 269,
+        "startChar": 14,
+        "endLine": 269,
+        "endChar": 37
+      },
+      "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "69546fab_e0c06538",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
         "patchSetId": 7
@@ -39,6 +63,24 @@
       "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4799f153_ff8d5dcb",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-26T15:51:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69546fab_e0c06538",
+      "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "a8706159_996703d5",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-26T15:51:36Z",
+      "side": 1,
+      "message": "Welcome to the totally not confusing world of D3D11 vertex indexing. This passes the bots, therefore it\u0027s correct. :)",
+      "parentUuid": "72e0073f_880d55e6",
+      "range": {
+        "startLine": 399,
+        "startChar": 64,
+        "endLine": 399,
+        "endChar": 80
+      },
+      "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b6caf8c6_cc2f57a6",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 7
@@ -79,6 +145,24 @@
       "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43223b13_15521dad",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-26T15:51:36Z",
+      "side": 1,
+      "message": "Documented some analysis here:\n\nhttps://imgur.com/a/CHMdnuA\n\nSeems like using DrawCallParams will always cause additional indirections and slow things down. I think the extra code is necessary. And in the grand scheme of things a few extra parameters isn\u0027t that bad.",
+      "parentUuid": "b6caf8c6_cc2f57a6",
+      "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -102,6 +186,30 @@
       "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da0d90ef_51e28543",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-26T15:51:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48fbf59c_14b08561",
+      "range": {
+        "startLine": 444,
+        "startChar": 0,
+        "endLine": 458,
+        "endChar": 0
+      },
+      "revId": "8c672aa1f203c6baf158d387e8ae89324bca6d69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
