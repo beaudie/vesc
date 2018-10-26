@@ -311,6 +311,22 @@ void OutputHLSL::output(TIntermNode *treeRoot, TInfoSinkBase &objSink)
     mInfoSinkStack.pop();
 
     objSink << mHeader.c_str();
+    objSink << "#define ZERO1 0\n";
+    objSink << "#define ZERO2 ZERO1, ZERO1\n";
+    objSink << "#define ZERO4 ZERO2, ZERO2\n";
+    objSink << "#define ZERO8 ZERO4, ZERO4\n";
+    objSink << "#define ZERO16 ZERO8, ZERO8\n";
+    objSink << "#define ZERO32 ZERO16, ZERO16\n";
+    objSink << "#define ZERO64 ZERO32, ZERO32\n";
+    objSink << "#define ZERO128 ZER64, ZERO64\n";
+    objSink << "#define ZERO256 ZERO128, ZERO128\n";
+    objSink << "#define ZERO512 ZERO256, ZERO256\n";
+    objSink << "#define ZERO1K ZERO512, ZERO512\n";
+    objSink << "#define ZERO2K ZERO1K, ZERO1K\n";
+    objSink << "#define ZERO4K ZERO2K, ZERO2K\n";
+    objSink << "#define ZERO8K ZERO8K, ZERO8K\n";
+    objSink << "#define ZERO16K ZERO16K, ZERO16K\n";
+
     objSink << mBody.c_str();
     objSink << mFooter.c_str();
 
@@ -2011,7 +2027,9 @@ bool OutputHLSL::visitDeclaration(Visit visit, TIntermDeclaration *node)
                 declarator->getAsSymbolNode()->variable().symbolType() !=
                     SymbolType::Empty)  // Variable declaration
             {
-                if (declarator->getQualifier() == EvqShared)
+                TIntermBinary *initNode = declarator->getAsBinaryNode();
+                if ((declarator->getQualifier() == EvqShared) ||
+                    (initNode != nullptr && initNode->getLeft()->getQualifier() == EvqShared))
                 {
                     out << "groupshared ";
                 }
@@ -2033,7 +2051,7 @@ bool OutputHLSL::visitDeclaration(Visit visit, TIntermDeclaration *node)
                     // code to initialize a groupshared array variable with a large array size.
                     // 2. It is unnecessary to initialize shared variables, as GLSL even does not
                     // allow initializing shared variables at all.
-                    if (declarator->getQualifier() != EvqShared)
+                    // if (declarator->getQualifier() != EvqShared)
                     {
                         out << " = " + zeroInitializer(symbol->getType());
                     }
@@ -2971,13 +2989,20 @@ TString OutputHLSL::zeroInitializer(const TType &type)
     TString string;
 
     size_t size = type.getObjectSize();
-    for (size_t component = 0; component < size; component++)
+    if (size == 16 * 1024)
     {
-        string += "0";
-
-        if (component + 1 < size)
+        string = "ZERO16K";
+    }
+    else
+    {
+        for (size_t component = 0; component < size; component++)
         {
-            string += ", ";
+            string += "0";
+
+            if (component + 1 < size)
+            {
+                string += ", ";
+            }
         }
     }
 
