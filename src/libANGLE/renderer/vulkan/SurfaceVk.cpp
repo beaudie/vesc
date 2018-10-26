@@ -293,6 +293,7 @@ WindowSurfaceVk::~WindowSurfaceVk()
 
 void WindowSurfaceVk::destroy(const egl::Display *display)
 {
+    fprintf(stderr, "WindowSurfaceVk::destroy\n");
     DisplayVk *displayVk = vk::GetImpl(display);
     RendererVk *renderer = displayVk->getRenderer();
     VkDevice device      = renderer->getDevice();

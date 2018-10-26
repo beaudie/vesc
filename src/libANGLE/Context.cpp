@@ -550,20 +550,24 @@ void Context::initialize()
 
 egl::Error Context::onDestroy(const egl::Display *display)
 {
+    fprintf(stderr, "Context::onDestroy\n");
     if (mGLES1Renderer)
     {
+        fprintf(stderr, "Context::onDestroy GLES1:\n");
         mGLES1Renderer->onDestroy(this, &mGLState);
     }
 
     // Delete the Surface first to trigger a finish() in Vulkan.
     ANGLE_TRY(releaseSurface(display));
 
+    fprintf(stderr, "Context::onDestroy Fs:\n");
     for (auto fence : mFenceNVMap)
     {
         SafeDelete(fence.second);
     }
     mFenceNVMap.clear();
 
+    fprintf(stderr, "Context::onDestroy Qs:\n");
     for (auto query : mQueryMap)
     {
         if (query.second != nullptr)
@@ -573,6 +577,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     }
     mQueryMap.clear();
 
+    fprintf(stderr, "Context::onDestroy VAs:\n");
     for (auto vertexArray : mVertexArrayMap)
     {
         if (vertexArray.second)
@@ -582,6 +587,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     }
     mVertexArrayMap.clear();
 
+    fprintf(stderr, "Context::onDestroy TFs:\n");
     for (auto transformFeedback : mTransformFeedbackMap)
     {
         if (transformFeedback.second != nullptr)
@@ -591,6 +597,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     }
     mTransformFeedbackMap.clear();
 
+    fprintf(stderr, "Context::onDestroy zTs:\n");
     for (BindingPointer<Texture> &zeroTexture : mZeroTextures)
     {
         if (zeroTexture.get() != nullptr)
@@ -700,34 +707,42 @@ egl::Error Context::makeCurrent(egl::Display *display, egl::Surface *surface)
 
 egl::Error Context::releaseSurface(const egl::Display *display)
 {
+    fprintf(stderr, "Context::releaseSurface\n");
     gl::Framebuffer *defaultFramebuffer = mState.mFramebuffers->getFramebuffer(0);
 
     // Remove the default framebuffer
     if (mGLState.getReadFramebuffer() == defaultFramebuffer)
     {
+        fprintf(stderr, "Context::releaseSurface: read FB == default:\n");
         mGLState.setReadFramebufferBinding(nullptr);
         mReadFramebufferObserverBinding.bind(nullptr);
     }
 
     if (mGLState.getDrawFramebuffer() == defaultFramebuffer)
     {
+        fprintf(stderr, "Context::releaseSurface: draw FB == default:\n");
         mGLState.setDrawFramebufferBinding(nullptr);
         mDrawFramebufferObserverBinding.bind(nullptr);
     }
 
     if (defaultFramebuffer)
     {
+        fprintf(stderr, "Context::releaseSurface: default != nullptr:\n");
         defaultFramebuffer->onDestroy(this);
         delete defaultFramebuffer;
     }
 
+    fprintf(stderr, "Context::releaseSurface: set default = nullptr:\n");
     mState.mFramebuffers->setDefaultFramebuffer(nullptr);
 
     if (mCurrentSurface)
     {
+        fprintf(stderr, "Context::releaseSurface: mCurrentSurface != nullptr:\n");
         ANGLE_TRY(mCurrentSurface->setIsCurrent(this, false));
         mCurrentSurface = nullptr;
     }
+
+    fprintf(stderr, "Context::releaseSurface: done\n");
 
     return egl::NoError();
 }
