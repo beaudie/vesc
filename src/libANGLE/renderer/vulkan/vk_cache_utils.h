@@ -45,6 +45,23 @@ using SharedPipelineLayout      = RefCounted<PipelineLayout>;
 // packing nicely into the desired space. This is something we could also potentially fix
 // with a redesign to use bitfields or bit mask operations.
 
+#if defined(__clang__)
+#define ANGLE_DIAGNOSTIC(PARAM) _Pragma("clang diagnostic PARAM")
+#define ANGLE_ENABLE_STRUCT_PADDING_WARNINGS _Pragma("clang diagnostic error \"-Wpadded\"")
+#elif defined(COMPILER_GCC)
+#define ANGLE_DIAGNOSTIC(PARAM) _Pragma("GCC diagnostic PARAM")
+#define ANGLE_ENABLE_STRUCT_PADDING_WARNINGS _Pragma("GCC diagnostic error \"-Wpadded\"")
+#elif defined(_MSC_VER)
+#define ANGLE_DIAGNOSTIC(PARAM) __pragma(warning(PARAM))
+#define ANGLE_ENABLE_STRUCT_PADDING_WARNINGS __pragma(warning(error:4820))
+#else
+#define ANGLE_DIAGNOSTIC(PARAM)
+#define ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
+#endif
+
+ANGLE_DIAGNOSTIC(push)
+ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
+
 struct alignas(4) PackedAttachmentDesc
 {
     uint8_t flags;
@@ -236,10 +253,11 @@ static_assert(sizeof(PackedColorBlendAttachmentState) == 8, "Size check failed")
 
 struct PackedColorBlendStateInfo final
 {
-    // Padded to round the strut size.
+    // Padded to round the struct size.
     uint32_t logicOpEnable;
     uint32_t logicOp;
     uint32_t attachmentCount;
+    uint32_t padding;
     float blendConstants[4];
     PackedColorBlendAttachmentState attachments[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS];
 };
@@ -459,6 +477,9 @@ static_assert(sizeof(PipelineLayoutDesc) ==
                   (sizeof(DescriptorSetLayoutArray<DescriptorSetLayoutDesc>) +
                    sizeof(std::array<PackedPushConstantRange, kMaxPushConstantRanges>)),
               "Unexpected Size");
+
+// Stop warning about struct padding.
+ANGLE_DIAGNOSTIC(pop)
 }  // namespace vk
 }  // namespace rx
 
