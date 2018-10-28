@@ -8,7 +8,9 @@
 //
 
 #include "ANGLEPerfTest.h"
+
 #include "third_party/perf/perf_test.h"
+#include "system_utils.h"
 
 #include <cassert>
 #include <cmath>
@@ -20,6 +22,9 @@
 namespace
 {
 constexpr size_t kInitialTraceEventBufferSize = 50000;
+constexpr size_t kWarmupIterations            = 3;
+constexpr double kMicroSecondsPerSecond       = 1000.0 * 1000.0;
+constexpr double kNanoSecondsPerSecond        = kMicroSecondsPerSecond * 1000.0;
 
 void EmptyPlatformMethod(angle::PlatformMethods *, const char *)
 {
@@ -112,13 +117,16 @@ bool g_OnlyOneRunFrame = false;
 bool gEnableTrace      = false;
 const char *gTraceFile = "ANGLETrace.json";
 
-ANGLEPerfTest::ANGLEPerfTest(const std::string &name, const std::string &suffix)
+ANGLEPerfTest::ANGLEPerfTest(const std::string &name,
+                             const std::string &suffix,
+                             unsigned int iterationsPerStep)
     : mName(name),
       mSuffix(suffix),
       mTimer(CreateTimer()),
-      mRunTimeSeconds(5.0),
+      mRunTimeSeconds(2.0),
       mSkipTest(false),
       mNumStepsPerformed(0),
+      mIterationsPerStep(iterationsPerStep),
       mRunning(true)
 {
 }
@@ -172,7 +180,24 @@ void ANGLEPerfTest::TearDown()
     {
         return;
     }
-    double relativeScore = static_cast<double>(mNumStepsPerformed) / mTimer->getElapsedTime();
+
+    double elapsedTimeSeconds = mTimer->getElapsedTime();
+
+    double secondsPerStep      = elapsedTimeSeconds / static_cast<double>(mNumStepsPerformed);
+    double secondsPerIteration = secondsPerStep / static_cast<double>(mIterationsPerStep);
+    double nanoSecPerIteration = secondsPerIteration * kNanoSecondsPerSecond;
+    if (nanoSecPerIteration > 1000000.0)
+    {
+        // Give the result a different name to ensure separate graphs if we transition.
+        double microSecondsPerIteration = secondsPerIteration * kMicroSecondsPerSecond;
+        printResult("microSecPerIteration", microSecondsPerIteration, "us", true);
+    }
+    else
+    {
+        printResult("nanoSecPerIteration", nanoSecPerIteration, "ns", true);
+    }
+
+    double relativeScore = static_cast<double>(mNumStepsPerformed) / elapsedTimeSeconds;
     printResult("score", static_cast<size_t>(std::round(relativeScore)), "score", true);
 }
 
@@ -204,7 +229,7 @@ std::string RenderTestParams::suffix() const
 }
 
 ANGLERenderTest::ANGLERenderTest(const std::string &name, const RenderTestParams &testParams)
-    : ANGLEPerfTest(name, testParams.suffix()),
+    : ANGLEPerfTest(name, testParams.suffix(), testParams.iterationsPerStep),
       mTestParams(testParams),
       mEGLWindow(createEGLWindow(testParams)),
       mOSWindow(nullptr)
@@ -213,26 +238,23 @@ ANGLERenderTest::ANGLERenderTest(const std::string &name, const RenderTestParams
     mTraceEventBuffer.reserve(kInitialTraceEventBufferSize);
 }
 
-ANGLERenderTest::ANGLERenderTest(const std::string &name,
-                                 const RenderTestParams &testParams,
-                                 const std::vector<std::string> &extensionPrerequisites)
-    : ANGLEPerfTest(name, testParams.suffix()),
-      mTestParams(testParams),
-      mEGLWindow(createEGLWindow(testParams)),
-      mOSWindow(nullptr),
-      mExtensionPrerequisites(extensionPrerequisites)
-{
-}
-
 ANGLERenderTest::~ANGLERenderTest()
 {
     SafeDelete(mOSWindow);
     SafeDelete(mEGLWindow);
 }
 
+void ANGLERenderTest::addExtensionPrerequisite(const char *extensionName)
+{
+    mExtensionPrerequisites.push_back(extensionName);
+}
+
 void ANGLERenderTest::SetUp()
 {
     ANGLEPerfTest::SetUp();
+
+    // Set a consistent CPU core affinity and high priority.
+    angle::StabilizeCPUForBenchmarking();
 
     mOSWindow = CreateOSWindow();
     ASSERT(mEGLWindow != nullptr);
@@ -268,11 +290,23 @@ void ANGLERenderTest::SetUp()
 
     if (mSkipTest)
     {
-        std::cout << "Test skipped due to missing extension." << std::endl;
         return;
     }
 
     initializeBenchmark();
+
+    if (mTestParams.iterationsPerStep == 0)
+    {
+        FAIL() << "Please initialize 'iterationsPerStep'.";
+        abortTest();
+        return;
+    }
+
+    // Warm up the benchmark to reduce variance.
+    for (size_t iteration = 0; iteration < kWarmupIterations; ++iteration)
+    {
+        drawBenchmark();
+    }
 }
 
 void ANGLERenderTest::TearDown()
@@ -343,11 +377,12 @@ OSWindow *ANGLERenderTest::getWindow()
 
 bool ANGLERenderTest::areExtensionPrerequisitesFulfilled() const
 {
-    for (const auto &extension : mExtensionPrerequisites)
+    for (const char *extension : mExtensionPrerequisites)
     {
         if (!CheckExtensionExists(reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS)),
                                   extension))
         {
+            std::cout << "Test skipped due to missing extension: " << extension << std::endl;
             return false;
         }
     }
