@@ -36,20 +36,20 @@ def mean(data):
         raise ValueError('mean requires at least one data point')
     return float(sum(data))/float(n) # in Python 2 use sum(data)/float(n)
 
-def _ss(data):
+def sum_of_square_deviations(data, c):
     """Return sum of square deviations of sequence data."""
-    c = mean(data)
     ss = sum((float(x)-c)**2 for x in data)
     return ss
 
-def pstdev(data):
+def variation(data):
     """Calculates the population standard deviation."""
     n = len(data)
     if n < 2:
         raise ValueError('variance requires at least two data points')
-    ss = _ss(data)
+    c = mean(data)
+    ss = sum_of_square_deviations(data, c)
     pvar = ss/n # the population variance
-    return pvar**0.5
+    return (pvar**0.5) / c
 
 def truncated_list(data, n):
     """Compute a truncated list, n is truncation size"""
@@ -60,8 +60,8 @@ def truncated_list(data, n):
 def truncated_mean(data, n):
     return mean(truncated_list(data, n))
 
-def truncated_stddev(data, n):
-    return pstdev(truncated_list(data, n))
+def truncated_variation(data, n):
+    return variation(truncated_list(data, n))
 
 # Find most recent binary
 newest_binary = None
@@ -123,14 +123,14 @@ while True:
     sys.stdout.write("score: " + str(score))
 
     scores.append(score)
-    sys.stdout.write(", mean: " + str(mean(scores)))
+    sys.stdout.write(", mean: %.2f" % mean(scores))
 
     if (len(scores) > 1):
-        sys.stdout.write(", stddev: " + str(pstdev(scores)))
+        sys.stdout.write(", variation: %.2f%%" % (variation(scores) * 100.0))
 
     if (len(scores) > 7):
         trucation_n = len(scores) >> 3
-        sys.stdout.write(", truncated mean: " + str(truncated_mean(scores, trucation_n)))
-        sys.stdout.write(", stddev: " + str(truncated_stddev(scores, trucation_n)))
+        sys.stdout.write(", truncated mean: %.2f" % truncated_mean(scores, trucation_n))
+        sys.stdout.write(", variation: %.2f%%" % (truncated_variation(scores, trucation_n) * 100.0))
 
     print("")
