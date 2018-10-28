@@ -57,7 +57,9 @@ struct TraceEvent final
 class ANGLEPerfTest : public testing::Test, angle::NonCopyable
 {
   public:
-    ANGLEPerfTest(const std::string &name, const std::string &suffix);
+    ANGLEPerfTest(const std::string &name,
+                  const std::string &suffix,
+                  unsigned int iterationsPerStep);
     virtual ~ANGLEPerfTest();
 
     virtual void step() = 0;
@@ -90,6 +92,7 @@ class ANGLEPerfTest : public testing::Test, angle::NonCopyable
 
   private:
     unsigned int mNumStepsPerformed;
+    unsigned int mIterationsPerStep;
     bool mRunning;
 };
 
@@ -99,16 +102,16 @@ struct RenderTestParams : public angle::PlatformParameters
 
     EGLint windowWidth  = 64;
     EGLint windowHeight = 64;
+    unsigned int iterationsPerStep = 0;
 };
 
 class ANGLERenderTest : public ANGLEPerfTest
 {
   public:
     ANGLERenderTest(const std::string &name, const RenderTestParams &testParams);
-    ANGLERenderTest(const std::string &name,
-                    const RenderTestParams &testParams,
-                    const std::vector<std::string> &extensionPrerequisites);
     ~ANGLERenderTest();
+
+    void addExtensionPrerequisite(const char *extensionName);
 
     virtual void initializeBenchmark() { }
     virtual void destroyBenchmark() { }
@@ -142,7 +145,7 @@ class ANGLERenderTest : public ANGLEPerfTest
 
     EGLWindow *mEGLWindow;
     OSWindow *mOSWindow;
-    std::vector<std::string> mExtensionPrerequisites;
+    std::vector<const char *> mExtensionPrerequisites;
     angle::PlatformMethods mPlatformMethods;
 
     // Trace event record that can be output.
