@@ -119,6 +119,24 @@
     },
     {
       "key": {
+        "uuid": "ace298de_70e75cbc",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-29T09:08:22Z",
+      "side": 1,
+      "message": "Ack.",
+      "parentUuid": "9c24ea9a_d97ac359",
+      "revId": "d91e34720e7eb3de23e48025155f07f1a1080bb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79669504_6cbb612a",
         "filename": "src/compiler/translator/OutputHLSL.h",
         "patchSetId": 4
@@ -195,6 +213,24 @@
       "side": 1,
       "message": "That is correct.",
       "parentUuid": "26b05bee_41a3f2da",
+      "revId": "d91e34720e7eb3de23e48025155f07f1a1080bb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "537835fe_692ad712",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-29T09:08:22Z",
+      "side": 1,
+      "message": "Ack.",
+      "parentUuid": "8a9e3d5a_bc9e2ad9",
       "revId": "d91e34720e7eb3de23e48025155f07f1a1080bb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
