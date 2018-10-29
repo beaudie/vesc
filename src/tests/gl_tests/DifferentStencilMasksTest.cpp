@@ -26,13 +26,15 @@ class DifferentStencilMasksTest : public ANGLETest
         setConfigAlphaBits(8);
         setConfigDepthBits(24);
         setConfigStencilBits(8);
+
+        setWebGLCompatibilityEnabled(true);
     }
 
     void SetUp() override
     {
         ANGLETest::SetUp();
 
-        mProgram = CompileProgram(essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
+        mProgram = CompileProgram(essl1_shaders::vs::Zero(), essl1_shaders::fs::Blue());
         ASSERT_NE(0u, mProgram);
 
         glEnable(GL_STENCIL_TEST);
@@ -60,7 +62,7 @@ TEST_P(DifferentStencilMasksTest, DrawWithSameEffectiveMask)
 
     glUseProgram(mProgram);
 
-    drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 
     EXPECT_GL_NO_ERROR();
 }
@@ -73,64 +75,56 @@ TEST_P(DifferentStencilMasksTest, DrawWithDifferentMask)
 
     glUseProgram(mProgram);
 
-    drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 }
 
-class DifferentStencilMasksWithoutStencilBufferTest : public ANGLETest
+class DifferentStencilMasksWithoutStencilBufferTest : public DifferentStencilMasksTest
 {
   protected:
-    DifferentStencilMasksWithoutStencilBufferTest() : mProgram(0)
+    DifferentStencilMasksWithoutStencilBufferTest()
     {
-        setWindowWidth(128);
-        setWindowHeight(128);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
-        setConfigDepthBits(0);
-        setConfigStencilBits(0);
+        // The following platforms don't have an appropriate EGL config to create the window with.
+        mUnsupported = (IsOSX() && (IsAMD() || IsIntel())) ||
+                        (IsLinux() && (IsAMD() || IsIntel()));
+
+        setConfigDepthBits(mUnsupported ? 24 : 0);
+        setConfigStencilBits(mUnsupported ? 8 : 0);
     }
 
-    void SetUp() override
-    {
-        ANGLETest::SetUp();
-
-        mProgram = CompileProgram(essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
-        ASSERT_NE(0u, mProgram);
-
-        glEnable(GL_STENCIL_TEST);
-        ASSERT_GL_NO_ERROR();
-    }
-
-    void TearDown() override
-    {
-        glDisable(GL_STENCIL_TEST);
-        if (mProgram != 0)
-            glDeleteProgram(mProgram);
-
-        ANGLETest::TearDown();
-    }
-
-    GLuint mProgram;
+    bool mUnsupported;
 };
 
 // Tests that effectively different front and back masks, without stencil bits, are legal.
 TEST_P(DifferentStencilMasksWithoutStencilBufferTest, DrawWithDifferentMask)
 {
+    ANGLE_SKIP_TEST_IF(mUnsupported);
+
     glStencilMaskSeparate(GL_FRONT, 0x0001);
     glStencilMaskSeparate(GL_BACK, 0x0002);
 
     glUseProgram(mProgram);
 
-    drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 
     EXPECT_GL_NO_ERROR();
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST(DifferentStencilMasksTest, ES2_D3D9(), ES2_D3D11(), ES3_D3D11(), ES2_OPENGL(), ES3_OPENGL());
-ANGLE_INSTANTIATE_TEST(DifferentStencilMasksWithoutStencilBufferTest, ES2_D3D9(), ES2_D3D11(), ES3_D3D11(), ES2_OPENGL(), ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST(DifferentStencilMasksTest,
+                       ES2_D3D9(),
+                       ES2_D3D11(),
+                       ES3_D3D11(),
+                       ES2_OPENGL(),
+                       ES3_OPENGL(),
+                       ES2_VULKAN());
+ANGLE_INSTANTIATE_TEST(DifferentStencilMasksWithoutStencilBufferTest,
+                       ES2_D3D9(),
+                       ES2_D3D11(),
+                       ES3_D3D11(),
+                       ES2_OPENGL(),
+                       ES3_OPENGL(),
+                       ES2_VULKAN());
 } // anonymous namespace
