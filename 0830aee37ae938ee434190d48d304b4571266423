@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3555e841_3f2c4a9d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-29T16:04:43Z",
+      "side": 1,
+      "message": "Maybe split this into another CL. The others are all about measuring performance, but this one is about enabling tests and bug fixing.",
+      "revId": "0830aee37ae938ee434190d48d304b4571266423",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "493b47b7_d616a1c7",
+        "filename": "scripts/perf_test_runner.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-29T16:04:43Z",
+      "side": 1,
+      "message": "You may want to update the comments everywhere to say \"coefficient of variation\" instead of \"standard deviation\".",
+      "revId": "0830aee37ae938ee434190d48d304b4571266423",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26ff5945_2eaf7f11",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-29T16:04:43Z",
+      "side": 1,
+      "message": "I fear this kind of thing may end up becoming necessary all over the place. Isn\u0027t the point of the mock ICD that you don\u0027t need to be doing this stuff?\n\nIn other words, can we fix mock ICD instead?",
+      "revId": "0830aee37ae938ee434190d48d304b4571266423",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56c9317b_5b3bc693",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-29T16:04:43Z",
+      "side": 1,
+      "message": "What an arbitrary limit!",
+      "range": {
+        "startLine": 100,
+        "startChar": 22,
+        "endLine": 100,
+        "endChar": 82
+      },
+      "revId": "0830aee37ae938ee434190d48d304b4571266423",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "246158d3_da3203d5",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-29T16:04:43Z",
+      "side": 1,
+      "message": "1e6 and 1e9 would be less error-prone in my opinion.",
+      "revId": "0830aee37ae938ee434190d48d304b4571266423",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
