@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e5e4178_434c9373",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-10-29T20:00:16Z",
+      "side": 1,
+      "message": "This (GL_NONE) does not seem to be a valid return value from glCheckFramebufferStatus.",
+      "range": {
+        "startLine": 996,
+        "startChar": 19,
+        "endLine": 996,
+        "endChar": 20
+      },
+      "revId": "ba1a9a97cfe346ba57f7181ca4dfd297ff45fd6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
