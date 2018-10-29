@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7397eb68_9248762c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-29T16:46:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba888e18_664b2a6e",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 14
+      },
+      "revId": "acf6324877c76ac142790210e93605c1942187cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a288a65_06101f95",
         "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "acf6324877c76ac142790210e93605c1942187cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "875ccc1c_195dfa65",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-29T16:46:02Z",
+      "side": 1,
+      "message": "I couldn\u0027t make this approach work.",
+      "parentUuid": "2a288a65_06101f95",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 53
+      },
+      "revId": "acf6324877c76ac142790210e93605c1942187cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
