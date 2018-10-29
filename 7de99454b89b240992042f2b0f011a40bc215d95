@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9636f260_13e5795b",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-29T09:35:57Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand why you need to modify this case. When is this branch taken?",
+      "revId": "7de99454b89b240992042f2b0f011a40bc215d95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
