@@ -22,6 +22,30 @@
       "revId": "ba1a9a97cfe346ba57f7181ca4dfd297ff45fd6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14626bd2_ae3857b6",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-29T20:08:59Z",
+      "side": 1,
+      "message": "From the spec:\n\n\"If CheckFramebufferStatus generates an error, zero is returned.\"",
+      "parentUuid": "8e5e4178_434c9373",
+      "range": {
+        "startLine": 996,
+        "startChar": 19,
+        "endLine": 996,
+        "endChar": 20
+      },
+      "revId": "ba1a9a97cfe346ba57f7181ca4dfd297ff45fd6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
