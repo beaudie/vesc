@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "55ea58b3_4fdce7d2",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-29T11:56:27Z",
+      "side": 1,
+      "message": "[1]",
+      "revId": "7de99454b89b240992042f2b0f011a40bc215d95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9636f260_13e5795b",
         "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
         "patchSetId": 1
@@ -13,6 +30,41 @@
       "writtenOn": "2018-10-29T09:35:57Z",
       "side": 1,
       "message": "I\u0027m not sure I understand why you need to modify this case. When is this branch taken?",
+      "revId": "7de99454b89b240992042f2b0f011a40bc215d95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7268fac0_03114d5a",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-29T11:56:27Z",
+      "side": 1,
+      "message": "If we use a scalar data from a matrix, it will go to this branch.\nAssume we have \u0027mat2 m\u0027 as the field member of SSBO. When we use m[i][j] in the main, the first \u0027[\u0027 node will match the condition of line 458 and enter [1] and the second \u0027[\u0027 node will match the condition of Line 469 and enter [2]. So we have locationOf(m[i][j]) \u003d m.offset + BytesPerComponent * i + mMatrixStride * j",
+      "parentUuid": "9636f260_13e5795b",
+      "revId": "7de99454b89b240992042f2b0f011a40bc215d95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f33618c_54351350",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-29T11:56:27Z",
+      "side": 1,
+      "message": "[2]",
       "revId": "7de99454b89b240992042f2b0f011a40bc215d95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
