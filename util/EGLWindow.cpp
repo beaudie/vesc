@@ -8,6 +8,7 @@
 #include <cassert>
 #include <iostream>
 #include <vector>
+#include <map>
 
 #include "EGLWindow.h"
 #include "OSWindow.h"
@@ -489,6 +490,41 @@ bool EGLWindow::isGLInitialized() const
            mDisplay != EGL_NO_DISPLAY;
 }
 
+static std::map<GLint, std::string> attrib_name_table = {
+    { EGL_BUFFER_SIZE, "EGL_BUFFER_SIZE" },
+    { EGL_RED_SIZE, "EGL_RED_SIZE" },
+    { EGL_GREEN_SIZE, "EGL_GREEN_SIZE" },
+    { EGL_BLUE_SIZE, "EGL_BLUE_SIZE" },
+    { EGL_LUMINANCE_SIZE, "EGL_LUMINANCE_SIZE" },
+    { EGL_ALPHA_SIZE, "EGL_ALPHA_SIZE" },
+    { EGL_ALPHA_MASK_SIZE, "EGL_ALPHA_MASK_SIZE" },
+    { EGL_BIND_TO_TEXTURE_RGB, "EGL_BIND_TO_TEXTURE_RGB" },
+    { EGL_BIND_TO_TEXTURE_RGBA, "EGL_BIND_TO_TEXTURE_RGBA" },
+    { EGL_COLOR_BUFFER_TYPE, "EGL_COLOR_BUFFER_TYPE" },
+    { EGL_CONFIG_CAVEAT, "EGL_CONFIG_CAVEAT" },
+    { EGL_CONFIG_ID, "EGL_CONFIG_ID" },
+    { EGL_CONFORMANT, "EGL_CONFORMANT" },
+    { EGL_DEPTH_SIZE, "EGL_DEPTH_SIZE" },
+    { EGL_LEVEL, "EGL_LEVEL" },
+    { EGL_MAX_PBUFFER_WIDTH, "EGL_MAX_PBUFFER_WIDTH" },
+    { EGL_MAX_PBUFFER_HEIGHT, "EGL_MAX_PBUFFER_HEIGHT" },
+    { EGL_MAX_PBUFFER_PIXELS, "EGL_MAX_PBUFFER_PIXELS" },
+    { EGL_MAX_SWAP_INTERVAL, "EGL_MAX_SWAP_INTERVAL" },
+    { EGL_MIN_SWAP_INTERVAL, "EGL_MIN_SWAP_INTERVAL" },
+    { EGL_NATIVE_RENDERABLE, "EGL_NATIVE_RENDERABLE" },
+    { EGL_NATIVE_VISUAL_ID, "EGL_NATIVE_VISUAL_ID" },
+    { EGL_NATIVE_VISUAL_TYPE, "EGL_NATIVE_VISUAL_TYPE" },
+    { EGL_RENDERABLE_TYPE, "EGL_RENDERABLE_TYPE" },
+    { EGL_SAMPLE_BUFFERS, "EGL_SAMPLE_BUFFERS" },
+    { EGL_SAMPLES, "EGL_SAMPLES" },
+    { EGL_STENCIL_SIZE, "EGL_STENCIL_SIZE" },
+    { EGL_SURFACE_TYPE, "EGL_SURFACE_TYPE" },
+    { EGL_TRANSPARENT_TYPE, "EGL_TRANSPARENT_TYPE" },
+    { EGL_TRANSPARENT_RED_VALUE, "EGL_TRANSPARENT_RED_VALUE" },
+    { EGL_TRANSPARENT_GREEN_VALUE, "EGL_TRANSPARENT_GREEN_VALUE" },
+    { EGL_TRANSPARENT_BLUE_VALUE, "EGL_TRANSPARENT_BLUE_VALUE" },
+};
+
 // Find an EGLConfig that is an exact match for the specified attributes. EGL_FALSE is returned if
 // the EGLConfig is found.  This indicates that the EGLConfig is not supported.
 EGLBoolean EGLWindow::FindEGLConfig(EGLDisplay dpy, const EGLint *attrib_list, EGLConfig *config)
@@ -498,8 +534,12 @@ EGLBoolean EGLWindow::FindEGLConfig(EGLDisplay dpy, const EGLint *attrib_list, E
     std::vector<EGLConfig> allConfigs(numConfigs);
     eglGetConfigs(dpy, allConfigs.data(), static_cast<EGLint>(allConfigs.size()), &numConfigs);
 
+    fprintf(stderr, "allConfigs.size(): %zu\n", allConfigs.size());
+
     for (size_t i = 0; i < allConfigs.size(); i++)
     {
+        fprintf(stderr, "Config %zu:\n", i);
+
         bool matchFound = true;
         for (const EGLint *curAttrib = attrib_list; curAttrib[0] != EGL_NONE; curAttrib += 2)
         {
@@ -510,6 +550,8 @@ EGLBoolean EGLWindow::FindEGLConfig(EGLDisplay dpy, const EGLint *attrib_list, E
 
             EGLint actualValue = EGL_DONT_CARE;
             eglGetConfigAttrib(dpy, allConfigs[i], curAttrib[0], &actualValue);
+            fprintf(stderr, "  Attrib: %d (%s), wants: %d, config has %d\n", curAttrib[0], attrib_name_table[curAttrib[0]].c_str(), curAttrib[1], actualValue);
+
             if (curAttrib[1] != actualValue)
             {
                 matchFound = false;
@@ -523,6 +565,8 @@ EGLBoolean EGLWindow::FindEGLConfig(EGLDisplay dpy, const EGLint *attrib_list, E
             return EGL_TRUE;
         }
     }
+
+    fprintf(stderr, "NO MATCH\n");
 
     return EGL_FALSE;
 }
