@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ae7c24a_76eda42d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-29T14:16:12Z",
+      "side": 1,
+      "message": "You can just cast to void here. Although the function should probably return angle::Result instead. But doing that will allow you to remove the stream operator.",
+      "range": {
+        "startLine": 904,
+        "startChar": 4,
+        "endLine": 904,
+        "endChar": 21
+      },
+      "revId": "199c9a3f72351a503074fa42b3c4b898e1ff7427",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fecf777_06f070c7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1324,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-29T14:16:12Z",
+      "side": 1,
+      "message": "this seems like a potential risk. Can\u0027t there be open commands that use secondary command buffers allocated from this pool? then we\u0027d be calling reset/init on a non-zero command pool. Seems like this might cause errors.",
+      "range": {
+        "startLine": 1324,
+        "startChar": 4,
+        "endLine": 1324,
+        "endChar": 41
+      },
+      "revId": "199c9a3f72351a503074fa42b3c4b898e1ff7427",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
