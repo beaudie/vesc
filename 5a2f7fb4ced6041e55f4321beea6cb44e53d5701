@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c83dd32_7d34dd22",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-29T16:57:38Z",
+      "side": 1,
+      "message": "Can be removed.",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 45
+      },
+      "revId": "5a2f7fb4ced6041e55f4321beea6cb44e53d5701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e059e79a_033f018b",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2988,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-29T16:57:38Z",
+      "side": 1,
+      "message": "nit: can remove the newline.",
+      "revId": "5a2f7fb4ced6041e55f4321beea6cb44e53d5701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e9d82b9_a3db6d6b",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-29T16:57:38Z",
+      "side": 1,
+      "message": "The type should not be neccessary, it can be inferred from the arguments. Below too.",
+      "range": {
+        "startLine": 230,
+        "startChar": 27,
+        "endLine": 230,
+        "endChar": 56
+      },
+      "revId": "5a2f7fb4ced6041e55f4321beea6cb44e53d5701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "add02ba6_53a496a9",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-29T16:57:38Z",
+      "side": 1,
+      "message": "This can live in the cpp file (anonymous namespace) it appears to only be referenced there.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 1
+      },
+      "revId": "5a2f7fb4ced6041e55f4321beea6cb44e53d5701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd57b806_58300c81",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/RoHelper.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-29T16:57:38Z",
+      "side": 1,
+      "message": "Remove this?",
+      "revId": "5a2f7fb4ced6041e55f4321beea6cb44e53d5701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

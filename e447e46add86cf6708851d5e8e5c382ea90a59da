@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "3b9e5410_99cea086",
+        "filename": "include/EGL/eglplatform.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-29T16:57:38Z",
+      "side": 1,
+      "message": "Let\u0027s just leave it as HWND in this CL.  You can follow up by updating the official headers with a pull request on https://www.khronos.org/registry/EGL/api/EGL/eglplatform.h if you want.\n\nRemember to undo the static_cast\u003cHWND\u003e that is throughout the CL.",
+      "parentUuid": "91d88946_0fc32430",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 35
+      },
+      "revId": "e447e46add86cf6708851d5e8e5c382ea90a59da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ab7d822_891451fa",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 1
