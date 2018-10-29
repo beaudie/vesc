@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be8a3d7d_a8b86924",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-29T16:01:48Z",
+      "side": 1,
+      "message": "nit: you can omit the TODO and just leave a note. Trying to clean up the TODO spam. :)",
+      "range": {
+        "startLine": 896,
+        "startChar": 7,
+        "endLine": 896,
+        "endChar": 24
+      },
+      "revId": "be442db30287e5c1d22ff2c2ec4d4753bef11abf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
