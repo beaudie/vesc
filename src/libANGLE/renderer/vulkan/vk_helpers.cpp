@@ -585,10 +585,7 @@ angle::Result DynamicQueryPool::allocateNewPool(Context *context)
 
 // QueryHelper implementation
 QueryHelper::QueryHelper()
-    : CommandGraphResource(CommandGraphResourceType::Query),
-      mDynamicQueryPool(nullptr),
-      mQueryPoolIndex(0),
-      mQuery(0)
+    : QueryGraphResource(), mDynamicQueryPool(nullptr), mQueryPoolIndex(0), mQuery(0)
 {
 }
 
@@ -869,7 +866,7 @@ void LineLoopHelper::Draw(uint32_t count, CommandBuffer *commandBuffer)
 
 // BufferHelper implementation.
 BufferHelper::BufferHelper()
-    : CommandGraphResource(CommandGraphResourceType::Buffer), mMemoryPropertyFlags{}
+    : RecordableGraphResource(CommandGraphResourceType::Buffer), mMemoryPropertyFlags{}
 {
 }
 
@@ -892,7 +889,7 @@ void BufferHelper::release(RendererVk *renderer)
 
 // ImageHelper implementation.
 ImageHelper::ImageHelper()
-    : CommandGraphResource(CommandGraphResourceType::Image),
+    : RecordableGraphResource(CommandGraphResourceType::Image),
       mFormat(nullptr),
       mSamples(0),
       mCurrentLayout(VK_IMAGE_LAYOUT_UNDEFINED),
@@ -901,7 +898,7 @@ ImageHelper::ImageHelper()
 }
 
 ImageHelper::ImageHelper(ImageHelper &&other)
-    : CommandGraphResource(CommandGraphResourceType::Image),
+    : RecordableGraphResource(CommandGraphResourceType::Image),
       mImage(std::move(other.mImage)),
       mDeviceMemory(std::move(other.mDeviceMemory)),
       mExtents(other.mExtents),
@@ -1382,7 +1379,8 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
 }
 
 // FramebufferHelper implementation.
-FramebufferHelper::FramebufferHelper() : CommandGraphResource(CommandGraphResourceType::Framebuffer)
+FramebufferHelper::FramebufferHelper()
+    : RecordableGraphResource(CommandGraphResourceType::Framebuffer)
 {
 }
 
