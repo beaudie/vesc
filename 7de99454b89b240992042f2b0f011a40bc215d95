@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "13fdca9f_61febdea",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-29T13:20:56Z",
+      "side": 1,
+      "message": "My worry is that this branch is also taken we when are indexing vectors and the statefulness of mRowMajor might make use go in the wrong path if it is still true when indexing the vector.\n\nFor example I think it might happen with something like this:\n\n layout(std140, binding \u003d 0) buffer blockIn {\n     layout(row_major) mat2x3 data;\n } instanceIn;\n\n layout(std140, binding \u003d 1) buffer vec2 myVec;\n\n main:\n   float a \u003d instanceIn.data[1][1] // mRowMajor is set to true\n   float b \u003d myVec[1] // mrowMajor is still set to true and we go in the wrong codepath.",
+      "parentUuid": "7268fac0_03114d5a",
+      "revId": "7de99454b89b240992042f2b0f011a40bc215d95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5f33618c_54351350",
         "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
         "patchSetId": 1
