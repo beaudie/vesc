@@ -44,13 +44,37 @@ void SetLowPriorityProcess()
 
 void WriteDebugMessage(const char *format, ...)
 {
-    // TODO(jmadill): Implement this
+    va_list vararg;
+    va_start(vararg, format);
+    vfprintf(stderr, format, vararg);
+    va_end(vararg);
 }
 
 bool StabilizeCPUForBenchmarking()
 {
-    // TODO(jmadill): Implement this. http://anglebug.com/2923
-    return true;
+    bool success = true;
+    errno = 0;
+    setpriority(PRIO_PROCESS, getpid(), -20);
+    if (errno)
+    {
+        // A friendly warning in case the test was run without appropriate permission.
+        perror("setpriority failed");
+        success = false;
+    }
+#if ANGLE_PLATFORM_LINUX
+    cpu_set_t affinity;
+    CPU_SET(0, &affinity);
+    errno = 0;
+    if (sched_setaffinity(getpid(), sizeof(affinity), &affinity))
+    {
+        perror("sched_setaffinity failed");
+        success = false;
+    }
+#else
+    // TODO(jmadill): Implement for non-linux. http://anglebug.com/2923
+#endif
+
+    return success;
 }
 
 } // namespace angle
