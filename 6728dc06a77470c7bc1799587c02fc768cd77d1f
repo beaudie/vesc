@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5eb3fc84_ab3a47ce",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-29T16:04:55Z",
+      "side": 1,
+      "message": "realizing it\u0027s unlikely to ever use GCC on Android. But just in case you can also add an is_clang if to this config.",
+      "range": {
+        "startLine": 95,
+        "startChar": 2,
+        "endLine": 95,
+        "endChar": 32
+      },
+      "revId": "6728dc06a77470c7bc1799587c02fc768cd77d1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
