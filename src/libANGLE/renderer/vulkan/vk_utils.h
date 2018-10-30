@@ -862,8 +862,6 @@ class BindingPointer final : angle::NonCopyable
   private:
     RefCounted<T> *mRefCounted;
 };
-
-using SharedDescriptorPool = RefCounted<DescriptorPool>;
 }  // namespace vk
 
 namespace gl_vk
