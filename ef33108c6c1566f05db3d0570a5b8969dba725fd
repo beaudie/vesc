@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b63ff5aa_cf023254",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-30T17:00:05Z",
+      "side": 1,
+      "message": "My reasoning at the time had been that any resource would be able to issue a barrier, but in hindsight, that\u0027s going to be very unlikely...",
+      "revId": "ef33108c6c1566f05db3d0570a5b8969dba725fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36d7c4c1_b4f507dd",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-30T17:00:05Z",
+      "side": 1,
+      "message": "I suggest moving this above the two subclasses, keeping the same order as header.",
+      "revId": "ef33108c6c1566f05db3d0570a5b8969dba725fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
