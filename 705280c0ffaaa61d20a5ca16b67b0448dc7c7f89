@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5bce0390_bc7ef5a1",
+        "filename": "include/EGL/eglplatform.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-30T16:46:34Z",
+      "side": 1,
+      "message": "Can you either upstream this change to https://github.com/KhronosGroup/EGL-Registry/blob/master/api/EGL/eglplatform.h, or move this static assert into an ANGLE-specific file? Ideally we could keep this file pretty much 1:1 with the upstream version.",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 33
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36ee16e2_98512b58",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1323,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-30T16:46:34Z",
+      "side": 1,
+      "message": "I think you are missing the default-init of your new extension variable here.",
+      "range": {
+        "startLine": 1323,
+        "startChar": 19,
+        "endLine": 1323,
+        "endChar": 36
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a57c94c7_344668de",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-30T16:46:34Z",
+      "side": 1,
+      "message": "will this compile if ANGLE_ENABLE_WINDOWS_STORE is defined?",
+      "range": {
+        "startLine": 1192,
+        "startChar": 8,
+        "endLine": 1192,
+        "endChar": 32
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6012835_c9b200df",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-30T16:46:34Z",
+      "side": 1,
+      "message": "nit: I think this can be a static_assert",
+      "range": {
+        "startLine": 1250,
+        "startChar": 4,
+        "endLine": 1250,
+        "endChar": 10
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d31a4ed7_ba2a468a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-30T16:46:34Z",
+      "side": 1,
+      "message": "same nit here",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f551e126_fe8e4000",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-30T16:46:34Z",
+      "side": 1,
+      "message": "update this comment",
+      "range": {
+        "startLine": 7,
+        "startChar": 3,
+        "endLine": 7,
+        "endChar": 22
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4d7ae40_52ce0062",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-30T16:46:34Z",
+      "side": 1,
+      "message": "can you also please default init all member variables in the initialization list for completeness\u0027 sake?",
+      "range": {
+        "startLine": 223,
+        "startChar": 10,
+        "endLine": 223,
+        "endChar": 18
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a550540b_179695a2",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-30T16:46:34Z",
+      "side": 1,
+      "message": "nit: just 2018 as per style guide\n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#comments",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddb757a1_a5dec171",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-30T16:46:34Z",
+      "side": 1,
+      "message": "nit: you can remove work in progress comments like this",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 23
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "872f7ea5_b769c522",
+        "filename": "src/tests/angle_white_box_tests.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-30T16:46:34Z",
+      "side": 1,
+      "message": "nit: sort (egl before gl)",
+      "range": {
+        "startLine": 21,
+        "startChar": 2,
+        "endLine": 21,
+        "endChar": 43
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1399837_a09a5c81",
+        "filename": "src/tests/egl_tests/EGLDirectCompositionTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-30T16:46:34Z",
+      "side": 1,
+      "message": "same nit",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "786a22ab_0b578477",
+        "filename": "src/tests/egl_tests/EGLDirectCompositionTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-10-30T16:46:34Z",
+      "side": 1,
+      "message": "nit: please add a description comment before each test.",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 6
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
