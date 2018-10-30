@@ -98,6 +98,8 @@ class CopyTexture3DTest : public ANGLETest
         EXPECT_GL_NO_ERROR();
 
         glActiveTexture(GL_TEXTURE0);
+        samplerUniformLocation = glGetUniformLocation(mProgram, "samplingTexture");
+        glUniform1i(samplerUniformLocation, 0);
         glBindTexture(testTarget, destTexture.get());
         glCopyTexture3DANGLE(sourceTexture.get(), 0, testTarget, destTexture.get(), 0,
                              destInternalFormat, destType, flipY, premultiplyAlpha,
@@ -243,6 +245,7 @@ class CopyTexture3DTest : public ANGLETest
     GLuint mProgram = 0;
     GLTexture sourceTexture;
     GLTexture destTexture;
+    GLint samplerUniformLocation = 0;
 
     PFNGLCOPYTEXTURE3DANGLEPROC glCopyTexture3DANGLE       = nullptr;
     PFNGLCOPYSUBTEXTURE3DANGLEPROC glCopySubTexture3DANGLE = nullptr;
@@ -257,12 +260,12 @@ class Texture3DCopy : public CopyTexture3DTest
     {
         return "#version 300 es\n"
                "precision highp float;\n"
-               "uniform highp sampler3D tex3D;\n"
+               "uniform highp sampler3D samplingTexture;\n"
                "in vec3 texcoord;\n"
                "out vec4 fragColor;\n"
                "void main()\n"
                "{\n"
-               "    fragColor = texture(tex3D, vec3(texcoord.x, texcoord.z, texcoord.y));\n"
+               "    fragColor = texture(samplingTexture, vec3(texcoord.x, texcoord.z, texcoord.y));\n"
                "}\n";
     }
 };
@@ -276,12 +279,12 @@ class Texture2DArrayCopy : public CopyTexture3DTest
     {
         return "#version 300 es\n"
                "precision highp float;\n"
-               "uniform highp sampler2DArray tex2DArray;\n"
+               "uniform highp sampler2DArray samplingTexture;\n"
                "in vec3 texcoord;\n"
                "out vec4 fragColor;\n"
                "void main()\n"
                "{\n"
-               "    fragColor = texture(tex2DArray, vec3(texcoord.x, texcoord.z, texcoord.y));\n"
+               "    fragColor = texture(samplingTexture, vec3(texcoord.x, texcoord.z, texcoord.y));\n"
                "}\n";
     }
 };
@@ -303,6 +306,8 @@ TEST_P(Texture3DCopy, CopySubTexture)
     EXPECT_GL_NO_ERROR();
 
     glActiveTexture(GL_TEXTURE0);
+    samplerUniformLocation = glGetUniformLocation(mProgram, "samplingTexture");
+    glUniform1i(samplerUniformLocation, 0);
     glBindTexture(GL_TEXTURE_3D, destTexture.get());
     glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                  texDataRed.data());
@@ -339,6 +344,8 @@ TEST_P(Texture3DCopy, CopyFromMipmap)
     EXPECT_GL_NO_ERROR();
 
     glActiveTexture(GL_TEXTURE0);
+    samplerUniformLocation = glGetUniformLocation(mProgram, "samplingTexture");
+    glUniform1i(samplerUniformLocation, 0);
     glBindTexture(GL_TEXTURE_3D, destTexture.get());
     glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -407,6 +414,8 @@ TEST_P(Texture3DCopy, OffsetSubCopy)
     glCopySubTexture3DANGLE(sourceTexture.get(), 0, GL_TEXTURE_3D, destTexture.get(), 0, 0, 0, 0, 1,
                             1, 1, 2, 2, 2, false, false, false);
     glBindTexture(GL_TEXTURE_3D, destTexture.get());
+    samplerUniformLocation = glGetUniformLocation(mProgram, "samplingTexture");
+    glUniform1i(samplerUniformLocation, 0);
     EXPECT_GL_NO_ERROR();
     drawQuad(mProgram, "position", 1.0f);
     int width  = getWindowWidth() - 1;
@@ -438,6 +447,8 @@ TEST_P(Texture3DCopy, FlipY)
                              GLColor::green, GLColor::green, GLColor::red, GLColor::red};
 
     glBindTexture(GL_TEXTURE_3D, sourceTexture.get());
+    samplerUniformLocation = glGetUniformLocation(mProgram, "samplingTexture");
+    glUniform1i(samplerUniformLocation, 0);
     glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgbaPixels);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -792,12 +803,12 @@ TEST_P(Texture3DCopy, IntFormats)
     constexpr char kFS[] =
         "#version 300 es\n"
         "precision highp float;\n"
-        "uniform highp isampler3D tex3D;\n"
+        "uniform highp isampler3D samplingTexture;\n"
         "in vec3 texcoord;\n"
         "out ivec4 fragColor;\n"
         "void main()\n"
         "{\n"
-        "    fragColor = texture(tex3D, vec3(texcoord.x, texcoord.z, texcoord.y));\n"
+        "    fragColor = texture(samplingTexture, vec3(texcoord.x, texcoord.z, texcoord.y));\n"
         "}\n";
 
     mProgram = CompileProgram(getVertexShaderSource(), kFS);
@@ -893,6 +904,7 @@ TEST_P(Texture3DCopy, IntFormats)
              GLColor(127, 77, 83, 115));
 }
 
+
 // Test passthrough, premultiply alpha, and unmultiply alpha copies for GL_TEXTURE_3D with unsigned
 // integer formats.
 TEST_P(Texture3DCopy, UintFormats)
@@ -902,12 +914,12 @@ TEST_P(Texture3DCopy, UintFormats)
     constexpr char kFS[] =
         "#version 300 es\n"
         "precision highp float;\n"
-        "uniform highp usampler3D tex3D;\n"
+        "uniform highp usampler3D samplingTexture;\n"
         "in vec3 texcoord;\n"
         "out uvec4 fragColor;\n"
         "void main()\n"
         "{\n"
-        "    fragColor = texture(tex3D, vec3(texcoord.x, texcoord.z, texcoord.y));\n"
+        "    fragColor = texture(samplingTexture, vec3(texcoord.x, texcoord.z, texcoord.y));\n"
         "}\n";
 
     mProgram = CompileProgram(getVertexShaderSource(), kFS);
@@ -1028,6 +1040,8 @@ TEST_P(Texture2DArrayCopy, CopySubTexture)
     EXPECT_GL_NO_ERROR();
 
     glActiveTexture(GL_TEXTURE0);
+    samplerUniformLocation = glGetUniformLocation(mProgram, "samplingTexture");
+    glUniform1i(samplerUniformLocation, 0);
     glBindTexture(GL_TEXTURE_2D_ARRAY, destTexture.get());
     glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                  texDataRed.data());
@@ -1067,6 +1081,8 @@ TEST_P(Texture2DArrayCopy, CopyFromMipmap)
     EXPECT_GL_NO_ERROR();
 
     glActiveTexture(GL_TEXTURE0);
+    samplerUniformLocation = glGetUniformLocation(mProgram, "samplingTexture");
+    glUniform1i(samplerUniformLocation, 0);
     glBindTexture(GL_TEXTURE_2D_ARRAY, destTexture.get());
     glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -1121,6 +1137,8 @@ TEST_P(Texture2DArrayCopy, OffsetSubCopy)
     EXPECT_GL_NO_ERROR();
 
     glActiveTexture(GL_TEXTURE0);
+    samplerUniformLocation = glGetUniformLocation(mProgram, "samplingTexture");
+    glUniform1i(samplerUniformLocation, 0);
     glBindTexture(GL_TEXTURE_2D_ARRAY, destTexture.get());
     glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -1167,6 +1185,8 @@ TEST_P(Texture2DArrayCopy, FlipY)
                              GLColor::green, GLColor::green, GLColor::red, GLColor::red};
 
     glBindTexture(GL_TEXTURE_2D_ARRAY, sourceTexture.get());
+    samplerUniformLocation = glGetUniformLocation(mProgram, "samplingTexture");
+    glUniform1i(samplerUniformLocation, 0);
     glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                  rgbaPixels);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -1284,9 +1304,6 @@ TEST_P(Texture2DArrayCopy, SnormFormats)
 {
     ANGLE_SKIP_TEST_IF(!checkExtensions());
 
-    // http://anglebug.com/2865
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsNVIDIA() && IsD3D11());
-
     testCopy(GL_TEXTURE_2D_ARRAY, GLColor(250, 200, 150, 190), GL_R8_SNORM, GL_BYTE, false, false,
              false, GLColor(251, 0, 0, 255));
     testCopy(GL_TEXTURE_2D_ARRAY, GLColor(250, 200, 150, 190), GL_R8_SNORM, GL_BYTE, false, true,
@@ -1329,8 +1346,6 @@ TEST_P(Texture2DArrayCopy, UnsignedByteFormats)
 {
     ANGLE_SKIP_TEST_IF(!checkExtensions());
 
-    // Flay on Windows D3D11. http://anglebug.com/2896
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsD3D11());
 
     testCopy(GL_TEXTURE_2D_ARRAY, GLColor(250, 200, 150, 100), GL_R8, GL_UNSIGNED_BYTE, false,
              false, false, GLColor(250, 0, 0, 255));
@@ -1432,9 +1447,6 @@ TEST_P(Texture2DArrayCopy, FloatFormats)
 {
     ANGLE_SKIP_TEST_IF(!checkExtensions());
 
-    // http://anglebug.com/2865
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsNVIDIA() && IsD3D11());
-
     std::vector<GLenum> floatTypes = {GL_FLOAT, GL_HALF_FLOAT, GL_UNSIGNED_INT_10F_11F_11F_REV,
                                       GL_UNSIGNED_INT_5_9_9_9_REV};
 
@@ -1531,12 +1543,12 @@ TEST_P(Texture2DArrayCopy, IntFormats)
     constexpr char kFS[] =
         "#version 300 es\n"
         "precision highp float;\n"
-        "uniform highp isampler2DArray tex2DArray;\n"
+        "uniform highp isampler2DArray samplingTexture;\n"
         "in vec3 texcoord;\n"
         "out ivec4 fragColor;\n"
         "void main()\n"
         "{\n"
-        "    fragColor = texture(tex2DArray, vec3(texcoord.x, texcoord.z, texcoord.y));\n"
+        "    fragColor = texture(samplingTexture, vec3(texcoord.x, texcoord.z, texcoord.y));\n"
         "}\n";
 
     mProgram = CompileProgram(getVertexShaderSource(), kFS);
@@ -1641,12 +1653,12 @@ TEST_P(Texture2DArrayCopy, UintFormats)
     constexpr char kFS[] =
         "#version 300 es\n"
         "precision highp float;\n"
-        "uniform highp usampler2DArray tex2DArray;\n"
+        "uniform highp usampler2DArray samplingTexture;\n"
         "in vec3 texcoord;\n"
         "out uvec4 fragColor;\n"
         "void main()\n"
         "{\n"
-        "    fragColor = texture(tex2DArray, vec3(texcoord.x, texcoord.z, texcoord.y));\n"
+        "    fragColor = texture(samplingTexture, vec3(texcoord.x, texcoord.z, texcoord.y));\n"
         "}\n";
 
     mProgram = CompileProgram(getVertexShaderSource(), kFS);
