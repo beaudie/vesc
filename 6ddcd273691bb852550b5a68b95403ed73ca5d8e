@@ -51,6 +51,24 @@
       "revId": "6ddcd273691bb852550b5a68b95403ed73ca5d8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd4890dd_1fcbc8e7",
+        "filename": "src/tests/gl_tests/DifferentStencilMasksTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-30T20:38:35Z",
+      "side": 1,
+      "message": "Ah, makes sense. SGTM",
+      "parentUuid": "09e5f870_06437980",
+      "revId": "6ddcd273691bb852550b5a68b95403ed73ca5d8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
