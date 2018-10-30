@@ -203,8 +203,6 @@ angle::Result FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
 
         if (clearDepth || clearStencil)
         {
-            // Masked stencil clears are currently not implemented.
-            // TODO(jmadill): Masked stencil clear. http://anglebug.com/2540
             ANGLE_TRY(clearWithClearAttachments(contextVk, false, clearDepth, clearStencil));
         }
         return angle::Result::Continue();
@@ -222,9 +220,6 @@ angle::Result FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
         // With scissor test enabled, we clear very differently and we don't need to access
         // the image inside each attachment we can just use clearCmdAttachments with our
         // scissor region instead.
-
-        // Masked stencil clears are currently not implemented.
-        // TODO(jmadill): Masked stencil clear. http://anglebug.com/2540
         ANGLE_TRY(clearWithClearAttachments(contextVk, clearColor, clearDepth, clearStencil));
         return angle::Result::Continue();
     }
@@ -936,6 +931,14 @@ angle::Result FramebufferVk::clearWithClearAttachments(ContextVk *contextVk,
         }
     }
 
+    VkClearValue depthStencilClearValue = contextVk->getClearDepthStencilValue();
+
+    // Apply the stencil mask to the clear value.  Stencil mask is generally respected through the respective pipeline state, but clear uses its own special function.
+    if (clearStencil)
+    {
+        depthStencilClearValue.depthStencil.stencil &= contextVk->getGLState().getDepthStencilState().stencilWritemask;
+    }
+
     if (clearDepth && clearStencil && mState.getDepthStencilAttachment() != nullptr)
     {
         // When we have a packed depth/stencil attachment we can do 1 clear for both when it
@@ -943,7 +946,7 @@ angle::Result FramebufferVk::clearWithClearAttachments(ContextVk *contextVk,
         VkClearAttachment &clearAttachment = clearAttachments[clearAttachmentIndex];
         clearAttachment.aspectMask      = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
         clearAttachment.colorAttachment = VK_ATTACHMENT_UNUSED;
-        clearAttachment.clearValue      = contextVk->getClearDepthStencilValue();
+        clearAttachment.clearValue      = depthStencilClearValue;
         ++clearAttachmentIndex;
     }
     else
@@ -953,7 +956,7 @@ angle::Result FramebufferVk::clearWithClearAttachments(ContextVk *contextVk,
             VkClearAttachment &clearAttachment = clearAttachments[clearAttachmentIndex];
             clearAttachment.aspectMask         = VK_IMAGE_ASPECT_DEPTH_BIT;
             clearAttachment.colorAttachment    = VK_ATTACHMENT_UNUSED;
-            clearAttachment.clearValue         = contextVk->getClearDepthStencilValue();
+            clearAttachment.clearValue         = depthStencilClearValue;
             ++clearAttachmentIndex;
         }
 
@@ -962,7 +965,7 @@ angle::Result FramebufferVk::clearWithClearAttachments(ContextVk *contextVk,
             VkClearAttachment &clearAttachment = clearAttachments[clearAttachmentIndex];
             clearAttachment.aspectMask         = VK_IMAGE_ASPECT_STENCIL_BIT;
             clearAttachment.colorAttachment    = VK_ATTACHMENT_UNUSED;
-            clearAttachment.clearValue         = contextVk->getClearDepthStencilValue();
+            clearAttachment.clearValue         = depthStencilClearValue;
             ++clearAttachmentIndex;
         }
     }
