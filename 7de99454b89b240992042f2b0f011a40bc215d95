@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "c06b15c8_afb065d8",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-30T02:01:50Z",
+      "side": 1,
+      "message": "[a]",
+      "range": {
+        "startLine": 134,
+        "startChar": 36,
+        "endLine": 134,
+        "endChar": 76
+      },
+      "revId": "7de99454b89b240992042f2b0f011a40bc215d95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55ea58b3_4fdce7d2",
         "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
         "patchSetId": 1
@@ -66,6 +89,23 @@
       "side": 1,
       "message": "My worry is that this branch is also taken we when are indexing vectors and the statefulness of mRowMajor might make use go in the wrong path if it is still true when indexing the vector.\n\nFor example I think it might happen with something like this:\n\n layout(std140, binding \u003d 0) buffer blockIn {\n     layout(row_major) mat2x3 data;\n } instanceIn;\n\n layout(std140, binding \u003d 1) buffer vec2 myVec;\n\n main:\n   float a \u003d instanceIn.data[1][1] // mRowMajor is set to true\n   float b \u003d myVec[1] // mrowMajor is still set to true and we go in the wrong codepath.",
       "parentUuid": "7268fac0_03114d5a",
+      "revId": "7de99454b89b240992042f2b0f011a40bc215d95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f385f2d3_31ec5246",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-30T02:01:50Z",
+      "side": 1,
+      "message": "\u003e float b \u003d myVec[1] // mrowMajor is still set to true and we go in the wrong codepath.\n\nmRowMajor is not true. It will be set to false in line 510 in writeDotOperatorOutput. You can see GetShaderStorageBlockFieldMemberInfo, in there, we always set memberInfo.isRowMajorMatrix \u003d                                     isRowMajorLayout \u0026\u0026 fieldType.isMatrix() (see [a]). Due to myVec is not a matrix, the corresponding row major will be set to false not true.\n\nNote that writeDotOperatorOutput is called when it\u0027s a field member of ssbo or structure including the field member of non-instance ssbo. So it\u0027s safe to use mRowMajor to check.",
       "revId": "7de99454b89b240992042f2b0f011a40bc215d95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
