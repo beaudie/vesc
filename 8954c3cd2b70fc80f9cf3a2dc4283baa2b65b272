@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47e91fde_779baded",
+        "filename": "extensions/ANGLE_multi_draw.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-30T03:03:55Z",
+      "side": 1,
+      "message": "Add period",
+      "revId": "8954c3cd2b70fc80f9cf3a2dc4283baa2b65b272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d70ac6b1_6c5abc4c",
+        "filename": "extensions/ANGLE_multi_draw.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-30T03:03:55Z",
+      "side": 1,
+      "message": "period",
+      "revId": "8954c3cd2b70fc80f9cf3a2dc4283baa2b65b272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74804c59_455c4f40",
+        "filename": "extensions/ANGLE_multi_draw.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-30T03:03:55Z",
+      "side": 1,
+      "message": "period",
+      "revId": "8954c3cd2b70fc80f9cf3a2dc4283baa2b65b272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39d3655d_d5581fa6",
+        "filename": "extensions/ANGLE_multi_draw.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-30T03:03:55Z",
+      "side": 1,
+      "message": "period",
+      "revId": "8954c3cd2b70fc80f9cf3a2dc4283baa2b65b272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83bf6775_913c8a3d",
+        "filename": "extensions/ANGLE_multi_draw.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-30T03:03:55Z",
+      "side": 1,
+      "message": "period",
+      "revId": "8954c3cd2b70fc80f9cf3a2dc4283baa2b65b272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3594991_40f24d6e",
+        "filename": "extensions/ANGLE_multi_draw.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-30T03:03:55Z",
+      "side": 1,
+      "message": "I think we should specify that if any of the calls would produce an error, no drawing is performed.",
+      "revId": "8954c3cd2b70fc80f9cf3a2dc4283baa2b65b272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c14e9535_3b28f96e",
+        "filename": "extensions/ANGLE_multi_draw.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-30T03:03:55Z",
+      "side": 1,
+      "message": "period",
+      "revId": "8954c3cd2b70fc80f9cf3a2dc4283baa2b65b272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
