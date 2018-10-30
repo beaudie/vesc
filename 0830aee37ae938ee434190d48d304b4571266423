@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "aa404c93_78a80c61",
+        "filename": "scripts/perf_test_runner.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-30T17:50:59Z",
+      "side": 1,
+      "message": "I was also confused by that at first, then I found this (hence my comment above): https://en.wikipedia.org/wiki/Coefficient_of_variation",
+      "parentUuid": "b8d54a48_f4f3426f",
+      "range": {
+        "startLine": 52,
+        "startChar": 11,
+        "endLine": 52,
+        "endChar": 26
+      },
+      "revId": "0830aee37ae938ee434190d48d304b4571266423",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "26ff5945_2eaf7f11",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 4
@@ -151,6 +175,30 @@
       "writtenOn": "2018-10-30T17:45:49Z",
       "side": 1,
       "message": "kMicroSecondsPerSecond",
+      "range": {
+        "startLine": 189,
+        "startChar": 30,
+        "endLine": 189,
+        "endChar": 39
+      },
+      "revId": "0830aee37ae938ee434190d48d304b4571266423",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a4a63f1_be3c8113",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-30T17:50:59Z",
+      "side": 1,
+      "message": "I\u0027m personally not in favor of giving names to constants like this, micro, nano etc are well known prefixes. That said, this is more like \"kOneMillisecondInNanoseconds\". Honestly, the if would look simpler to me with just `secondsPerIteration \u003e 1e-3`.",
+      "parentUuid": "1ce8674a_f63888e8",
       "range": {
         "startLine": 189,
         "startChar": 30,
