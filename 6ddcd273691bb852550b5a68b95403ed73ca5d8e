@@ -33,6 +33,24 @@
       "revId": "6ddcd273691bb852550b5a68b95403ed73ca5d8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09e5f870_06437980",
+        "filename": "src/tests/gl_tests/DifferentStencilMasksTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-10-30T20:32:16Z",
+      "side": 1,
+      "message": "The issue is that some platform/gpu configurations don\u0027t support this configuration:\n\n        setConfigDepthBits(0);\n        setConfigStencilBits(0);\n\nThis was causing the test to fail on multiple configurations. I switched it to FBO so we have proper support for no-stencil attachment.\n\nI can put this test in the other class though, you are right.",
+      "parentUuid": "cee6070e_8c50077b",
+      "revId": "6ddcd273691bb852550b5a68b95403ed73ca5d8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
