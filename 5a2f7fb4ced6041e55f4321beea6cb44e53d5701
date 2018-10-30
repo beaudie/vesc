@@ -155,6 +155,30 @@
     },
     {
       "key": {
+        "uuid": "ed39529e_4b69ce20",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-30T16:34:14Z",
+      "side": 1,
+      "message": "Ah OK, I was thinking of something different which is why i was confused.  Fixed.",
+      "parentUuid": "42830a38_54242798",
+      "range": {
+        "startLine": 230,
+        "startChar": 27,
+        "endLine": 230,
+        "endChar": 56
+      },
+      "revId": "5a2f7fb4ced6041e55f4321beea6cb44e53d5701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "add02ba6_53a496a9",
         "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.h",
         "patchSetId": 6
