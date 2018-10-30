@@ -156,6 +156,9 @@ ContextVk::~ContextVk() = default;
 
 void ContextVk::onDestroy(const gl::Context *context)
 {
+    // Make sure no command buffer is executing so none of the relevant resources are in use.
+    (void)finish(context);
+
     mDriverUniformsSetLayout.reset();
     mIncompleteTextures.onDestroy(context);
     mDriverUniformsBuffer.destroy(getDevice());

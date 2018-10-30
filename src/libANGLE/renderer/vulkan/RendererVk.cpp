@@ -319,6 +319,7 @@ RendererVk::~RendererVk()
 
 void RendererVk::onDestroy(vk::Context *context)
 {
+    fprintf(stderr, "RendererVk::onDestroy\n");
     if (!mInFlightCommands.empty() || !mGarbage.empty())
     {
         // TODO(jmadill): Not nice to pass nullptr here, but shouldn't be a problem.
@@ -865,6 +866,7 @@ const vk::CommandPool &RendererVk::getCommandPool() const
 
 angle::Result RendererVk::finish(vk::Context *context)
 {
+    fprintf(stderr, "RendererVk::finish\n");
     if (!mCommandGraph.empty())
     {
         TRACE_EVENT0("gpu.angle", "RendererVk::finish");
