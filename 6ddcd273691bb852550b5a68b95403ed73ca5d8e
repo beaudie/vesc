@@ -16,6 +16,23 @@
       "revId": "6ddcd273691bb852550b5a68b95403ed73ca5d8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cee6070e_8c50077b",
+        "filename": "src/tests/gl_tests/DifferentStencilMasksTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-30T20:17:16Z",
+      "side": 1,
+      "message": "Why replace this class\u0027s setup (setConfigStencilBits(0)) with the FBO? Seems a little clearer the old way.\n\nThat said, if the setup is not going to be different, why not just remove this class and rename to\nTEST_P(DifferentStencilMasksTest, DrawWithDifferentMask_NoStencilBuffer)\nor something?\n\nEither, or neither, is fine with me.",
+      "revId": "6ddcd273691bb852550b5a68b95403ed73ca5d8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
