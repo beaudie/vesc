@@ -131,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "42830a38_54242798",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-10-30T13:52:04Z",
+      "side": 1,
+      "message": "Explicitly declaring the type here doesn\u0027t add any type safety because we\u0027re reinterpret_casting the function pointer to this type anyways.  The types are declared when you created the member variables so it only adds noise to write them out twice.\n\nThe AssignProcAddress function can stay the same and just change this to AssignProcAddress(mComBaseModule, \"WindowsCreateStringReference\", mFpWindowsCreateStringReference)",
+      "parentUuid": "e0cd5673_0777117e",
+      "range": {
+        "startLine": 230,
+        "startChar": 27,
+        "endLine": 230,
+        "endChar": 56
+      },
+      "revId": "5a2f7fb4ced6041e55f4321beea6cb44e53d5701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "add02ba6_53a496a9",
         "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.h",
         "patchSetId": 6
