@@ -297,7 +297,8 @@ CommandGraphNode::CommandGraphNode(CommandGraphNodeFunction function)
       mQueryPool(VK_NULL_HANDLE),
       mQueryIndex(0),
       mHasChildren(false),
-      mVisitedState(VisitedState::Unvisited)
+      mVisitedState(VisitedState::Unvisited),
+     mGlobalMemoryBarrierSrcAccess(0), mGlobalMemoryBarrierDstAccess(0)
 {
 }
 
@@ -429,6 +430,12 @@ void CommandGraphNode::setQueryPool(const QueryPool *queryPool, uint32_t queryIn
     mQueryIndex = queryIndex;
 }
 
+void CommandGraphNode::addGlobalMemoryBarrier(VkFlags srcAccess, VkFlags dstAccess)
+{
+    mGlobalMemoryBarrierSrcAccess |= srcAccess;
+    mGlobalMemoryBarrierDstAccess |= dstAccess;
+}
+
 void CommandGraphNode::setHasChildren()
 {
     mHasChildren = true;
@@ -479,6 +486,21 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
     {
         case CommandGraphNodeFunction::Generic:
             ASSERT(mQueryPool == VK_NULL_HANDLE);
+
+            // Record the deferred pipeline barrier if necessary.
+            ASSERT((mGlobalMemoryBarrierDstAccess == 0) == (mGlobalMemoryBarrierSrcAccess == 0));
+            if (mGlobalMemoryBarrierSrcAccess)
+            {
+                VkMemoryBarrier memoryBarrier = {};
+                memoryBarrier.sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+                memoryBarrier.srcAccessMask = mGlobalMemoryBarrierSrcAccess;
+                memoryBarrier.dstAccessMask = mGlobalMemoryBarrierDstAccess;
+
+                // Use the top of pipe stage to keep the state management simple.
+                primaryCommandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                    VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 0, 1, &memoryBarrier, 0,
+                    nullptr, 0, nullptr);
+            }
 
             if (mOutsideRenderPassCommands.valid())
             {
