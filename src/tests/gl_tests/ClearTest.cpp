@@ -79,6 +79,8 @@ class ClearTestBase : public ANGLETest
 
 class ClearTest : public ClearTestBase
 {
+protected:
+    void MaskedColorDepthStencilClear(bool clearDepth, bool clearStencil);
 };
 class ClearTestES3 : public ClearTestBase
 {
@@ -610,46 +612,88 @@ TEST_P(ScissoredClearTest, ScissoredColorAndDepthClear)
     EXPECT_PIXEL_COLOR_EQ(whalf, hhalf, GLColor::blue) << "in-scissor area should be blue";
 }
 
-// Tests combined color+depth clear.
-TEST_P(ClearTest, MaskedColorAndDepthClear)
+void ClearTest::MaskedColorDepthStencilClear(bool clearDepth, bool clearStencil)
 {
     // Flaky on Android Nexus 5x, possible driver bug.
     // TODO(jmadill): Re-enable when possible. http://anglebug.com/2548
     ANGLE_SKIP_TEST_IF(IsOpenGLES() && IsAndroid());
 
-    // Clear to a random color and 1.0 depth.
+    // Clear to a random color, 1.0 depth and 0x00 stencil
     Vector4 color1(0.1f, 0.2f, 0.3f, 0.4f);
     GLColor color1RGB(color1);
 
     glClearColor(color1[0], color1[1], color1[2], color1[3]);
     glClearDepthf(1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearStencil(0x00);
+    glClear(GL_COLOR_BUFFER_BIT |
+            (clearDepth ? GL_DEPTH_BUFFER_BIT : 0) |
+            (clearStencil ? GL_STENCIL_BUFFER_BIT : 0));
     ASSERT_GL_NO_ERROR();
 
-    // Verify color and was cleared correctly.
+    // Verify color was cleared correctly.
     EXPECT_PIXEL_COLOR_NEAR(0, 0, color1RGB, 1);
 
-    // Use a color mask to clear to a second color and 0.5 depth.
+    // Use color and stencil masks to clear to a second color, 0.5 depth and 0x59 stencil.
     Vector4 color2(0.2f, 0.4f, 0.6f, 0.8f);
     GLColor color2RGB(color2);
     glClearColor(color2[0], color2[1], color2[2], color2[3]);
     glClearDepthf(0.5f);
+    glClearStencil(0xFF);
     glColorMask(GL_TRUE, GL_FALSE, GL_TRUE, GL_FALSE);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glStencilMask(0x59);
+    glClear(GL_COLOR_BUFFER_BIT |
+            (clearDepth ? GL_DEPTH_BUFFER_BIT : 0) |
+            (clearStencil ? GL_STENCIL_BUFFER_BIT : 0));
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glStencilMask(0xFF);
     ASSERT_GL_NO_ERROR();
 
     // Verify second clear mask worked as expected.
     GLColor color2Masked(color2RGB[0], color1RGB[1], color2RGB[2], color1RGB[3]);
     EXPECT_PIXEL_COLOR_EQ(0, 0, color2Masked);
 
-    // We use a small shader to verify depth.
-    ANGLE_GL_PROGRAM(depthTestProgram, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::Blue());
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_EQUAL);
-    drawQuad(depthTestProgram, essl1_shaders::PositionAttrib(), 0.0f);
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
-    ASSERT_GL_NO_ERROR();
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_STENCIL_TEST);
+
+    if (clearDepth)
+    {
+        // We use a small shader to verify depth.
+        ANGLE_GL_PROGRAM(depthTestProgram, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::Blue());
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_EQUAL);
+        drawQuad(depthTestProgram, essl1_shaders::PositionAttrib(), 0.0f);
+        glDisable(GL_DEPTH_TEST);
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+        ASSERT_GL_NO_ERROR();
+    }
+
+    if (clearStencil)
+    {
+        // And another small shader to verify stencil.
+        ANGLE_GL_PROGRAM(stencilTestProgram, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::Green());
+        glEnable(GL_STENCIL_TEST);
+        glStencilFunc(GL_EQUAL, 0x59, 0xFF);
+        drawQuad(stencilTestProgram, essl1_shaders::PositionAttrib(), 0.0f);
+        glDisable(GL_STENCIL_TEST);
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+        ASSERT_GL_NO_ERROR();
+    }
+}
+
+// Tests combined color+depth+stencil clears.
+TEST_P(ClearTest, MaskedColorAndDepthClear)
+{
+    MaskedColorDepthStencilClear(true, false);
+}
+
+TEST_P(ClearTest, MaskedColorAndStencilClear)
+{
+    MaskedColorDepthStencilClear(false, true);
+}
+
+TEST_P(ClearTest, MaskedColorAndDepthAndStencilClear)
+{
+    MaskedColorDepthStencilClear(true, true);
 }
 
 // Test that just clearing a nonexistent drawbuffer of the default framebuffer doesn't cause an
