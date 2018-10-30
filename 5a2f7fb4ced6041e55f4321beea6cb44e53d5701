@@ -107,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "e0cd5673_0777117e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-30T05:25:30Z",
+      "side": 1,
+      "message": "appols, not sure the best way to do that and maintain type safety?  I based the current approach on one of your previous suggestions.",
+      "parentUuid": "1e9d82b9_a3db6d6b",
+      "range": {
+        "startLine": 230,
+        "startChar": 27,
+        "endLine": 230,
+        "endChar": 56
+      },
+      "revId": "5a2f7fb4ced6041e55f4321beea6cb44e53d5701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "add02ba6_53a496a9",
         "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.h",
         "patchSetId": 6
