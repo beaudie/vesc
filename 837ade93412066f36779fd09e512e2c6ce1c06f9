@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e4f15f6_0b1a4a7d",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-30T12:46:23Z",
+      "side": 1,
+      "message": "Do you think we could get the matri using the regular function and then transpose?",
+      "revId": "837ade93412066f36779fd09e512e2c6ce1c06f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "547bf549_51008d5f",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-30T12:46:23Z",
+      "side": 1,
+      "message": "Do you think there would be a way for this to transpose the input matrix and call the regular store?",
+      "revId": "837ade93412066f36779fd09e512e2c6ce1c06f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01f854f7_eb2721bd",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-30T12:46:23Z",
+      "side": 1,
+      "message": "nit: don\u0027t have",
+      "range": {
+        "startLine": 248,
+        "startChar": 20,
+        "endLine": 248,
+        "endChar": 31
+      },
+      "revId": "837ade93412066f36779fd09e512e2c6ce1c06f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a91d434_6891a6f7",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-30T12:46:23Z",
+      "side": 1,
+      "message": "at the current point",
+      "range": {
+        "startLine": 248,
+        "startChar": 81,
+        "endLine": 248,
+        "endChar": 83
+      },
+      "revId": "837ade93412066f36779fd09e512e2c6ce1c06f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50fed554_b0f8fc44",
+        "filename": "src/compiler/translator/util.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-30T12:46:23Z",
+      "side": 1,
+      "message": "This function does a bit too many things at the same time. Can we push the complexity of this in GetMatrixStride instead? It\u0027s ok to walk the expression multiple times.",
+      "revId": "837ade93412066f36779fd09e512e2c6ce1c06f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a37b2ae_52604342",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-10-30T12:46:23Z",
+      "side": 1,
+      "message": "Instead of being a template, can it take arguments by values and const float* for arrays? Or maybe better to see the names of parameters in the caller, it could have a \"MatrixCase\" struct with a member for each parameter.",
+      "revId": "837ade93412066f36779fd09e512e2c6ce1c06f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
