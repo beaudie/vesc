@@ -146,14 +146,13 @@ struct alignas(4) PackedVertexInputBindingDesc final
 
 static_assert(sizeof(PackedVertexInputBindingDesc) == 4, "Size check failed");
 
-struct alignas(8) PackedVertexInputAttributeDesc final
+struct PackedVertexInputAttributeDesc final
 {
-    uint16_t location;
     uint16_t format;
-    uint32_t offset;
+    uint16_t offset;  // can only take 11 bits on NV
 };
 
-static_assert(sizeof(PackedVertexInputAttributeDesc) == 8, "Size check failed");
+static_assert(sizeof(PackedVertexInputAttributeDesc) == 4, "Size check failed");
 
 struct alignas(8) PackedInputAssemblyInfo
 {
@@ -193,65 +192,71 @@ struct alignas(16) PackedMultisampleStateInfo final
 
 static_assert(sizeof(PackedMultisampleStateInfo) == 16, "Size check failed");
 
-struct alignas(16) PackedStencilOpState final
+struct PackedStencilOpState final
 {
-    uint8_t failOp;
-    uint8_t passOp;
-    uint8_t depthFailOp;
-    uint8_t compareOp;
-    uint32_t compareMask;
-    uint32_t writeMask;
-    uint32_t reference;
+    uint8_t failOp : 4;
+    uint8_t passOp : 4;
+    uint8_t depthFailOp : 4;
+    uint8_t compareOp : 4;
+    uint8_t compareMask;
+    uint8_t writeMask;
 };
 
-static_assert(sizeof(PackedStencilOpState) == 16, "Size check failed");
+static constexpr size_t kPackedStencilOpSize = sizeof(PackedStencilOpState);
+static_assert(sizeof(PackedStencilOpState) == 4, "Size check failed");
 
 struct PackedDepthStencilStateInfo final
 {
-    uint8_t depthTestEnable;
-    uint8_t depthWriteEnable;
-    uint8_t depthCompareOp;
-    uint8_t depthBoundsTestEnable;
-    // 32-bits to pad the alignments.
-    uint32_t stencilTestEnable;
+    uint8_t depthTestEnable : 1;
+    uint8_t depthWriteEnable : 1;
+    uint8_t depthCompareOp : 4;
+    uint8_t depthBoundsTestEnable : 1;
+    uint8_t stencilTestEnable : 1;
+    uint8_t frontStencilReference;
+    uint8_t backStencilReference;
+    uint8_t padding;
     float minDepthBounds;
     float maxDepthBounds;
     PackedStencilOpState front;
     PackedStencilOpState back;
 };
 
-static_assert(sizeof(PackedDepthStencilStateInfo) == 48, "Size check failed");
+static constexpr size_t kPackedDepthStencilStateInfo = sizeof(PackedDepthStencilStateInfo);
+static_assert(sizeof(PackedDepthStencilStateInfo) == 20, "Size check failed");
 
-struct alignas(8) PackedColorBlendAttachmentState final
+struct PackedColorBlendAttachmentState final
 {
-    uint8_t blendEnable;
-    uint8_t srcColorBlendFactor;
-    uint8_t dstColorBlendFactor;
-    uint8_t colorBlendOp;
-    uint8_t srcAlphaBlendFactor;
-    uint8_t dstAlphaBlendFactor;
-    uint8_t alphaBlendOp;
-    uint8_t colorWriteMask;
+    uint16_t srcColorBlendFactor : 5;
+    uint16_t dstColorBlendFactor : 5;
+    uint16_t colorBlendOp : 6;
+    uint16_t srcAlphaBlendFactor : 5;
+    uint16_t dstAlphaBlendFactor : 5;
+    uint16_t alphaBlendOp : 6;
 };
 
-static_assert(sizeof(PackedColorBlendAttachmentState) == 8, "Size check failed");
+static_assert(sizeof(PackedColorBlendAttachmentState) == 4, "Size check failed");
 
 struct PackedColorBlendStateInfo final
 {
-    // Padded to round the struct size.
-    uint32_t logicOpEnable;
-    uint32_t logicOp;
-    uint32_t attachmentCount;
-    uint32_t padding;
-    float blendConstants[4];
+    uint8_t logicOpEnable : 1;
+    uint8_t logicOp : 7;
+    uint8_t blendEnableMask;
+    uint8_t colorWriteMask[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS];
     PackedColorBlendAttachmentState attachments[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS];
+    uint16_t padding;
+    float blendConstants[4];
 };
 
-static_assert(sizeof(PackedColorBlendStateInfo) == 96, "Size check failed");
+static constexpr size_t kPackedColorBlendStateSize = sizeof(PackedColorBlendStateInfo);
+static_assert(kPackedColorBlendStateSize == 60, "Size check failed");
 
 using ShaderStageInfo       = vk::ShaderMap<PackedShaderStageInfo>;
 using VertexInputBindings   = gl::AttribArray<PackedVertexInputBindingDesc>;
 using VertexInputAttributes = gl::AttribArray<PackedVertexInputAttributeDesc>;
+
+static constexpr size_t kShaderStageInfoSize = sizeof(ShaderStageInfo);
+static constexpr size_t kVertexInputBindingsSize = sizeof(VertexInputBindings);
+static constexpr size_t kVertexInputAttributesSize = sizeof(VertexInputAttributes);
 
 class PipelineDesc final
 {
@@ -356,8 +361,8 @@ class PipelineDesc final
     PackedColorBlendStateInfo mColorBlendStateInfo;
     // TODO(jmadill): Dynamic state.
     // TODO(jmadill): Pipeline layout
-    //uint8_t mPadding[20];
     RenderPassDesc mRenderPassDesc;
+    uint8_t mPadding[20];
 };
 
 // Verify the packed pipeline description has no gaps in the packing.
