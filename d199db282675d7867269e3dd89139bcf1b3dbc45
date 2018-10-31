@@ -485,6 +485,30 @@
     },
     {
       "key": {
+        "uuid": "2cf4e2e9_49691de2",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7495,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-31T19:26:33Z",
+      "side": 1,
+      "message": "That is what is currently implemented.  I sent a note to the extension author, and it looks like their contact information is no longer correct.",
+      "parentUuid": "fe766d80_1fb202fb",
+      "range": {
+        "startLine": 7495,
+        "startChar": 8,
+        "endLine": 7495,
+        "endChar": 32
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "693331c7_cdad5b5f",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 7
@@ -1734,6 +1758,30 @@
     },
     {
       "key": {
+        "uuid": "1b6391ed_c173cf53",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-31T19:26:33Z",
+      "side": 1,
+      "message": "How do I do that?  It looks like gl_bindings_data.json only picks up desktop entry points.  Is there another place where I can check for the native GLES entry point?",
+      "parentUuid": "a188b596_a456129c",
+      "range": {
+        "startLine": 671,
+        "startChar": 11,
+        "endLine": 681,
+        "endChar": 22
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01c9fcd1_42ca7dd5",
         "filename": "src/libANGLE/renderer/gl/SurfaceGL.h",
         "patchSetId": 7
@@ -1888,6 +1936,30 @@
       "side": 1,
       "message": "ANGLE currently virtualizes all contexts using a single context and pixel format so this forces all contexts and surfaces to use stereo or not.  Theoretically we can work around this with architectural changes, we already support some devirtualization but still no support for multiple pixel formats.\n\nWhat did you intend to use this extension for?  If an application knows that it will only use stereo surfaces, we could add an extension on top of this one to request that behaviour but we couldn\u0027t use it for cases like Chrome because that would allocate extra memory for every surface.",
       "parentUuid": "d0cdfc55_f934b8a6",
+      "range": {
+        "startLine": 161,
+        "startChar": 53,
+        "endLine": 161,
+        "endChar": 81
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e571c84_ac43b13e",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1147451
+      },
+      "writtenOn": "2018-10-31T19:26:33Z",
+      "side": 1,
+      "message": "Our immediate use case is for this to be used by Chrome.  I don\u0027t see WebGL apps ever really needing this, since WebXR exposes this in a different way.  In addition, I think this only applies to the OpenGL back end case.  When the DirectX back end is implemented, each surface gets its own swapchain, and therefore can support this extension correctly.  It seems like a lot of work - which could potentially destabalize things - to take the devirtualization approach.\n\nOur preference would be to have a EGL_PLATFORM_ANGLE type extension for the OpenGL back end that would enable the stereo pixel format for all surfaces.  For Chrome, it would only enable this extension when the OpenGL back end was being used in conjunction with WebXR.  Even if it was only enabled with a command line option, that would still be fine with us.  When running in default DirectX mode, none of this would be needed.",
+      "parentUuid": "038e4be7_c051c1e0",
       "range": {
         "startLine": 161,
         "startChar": 53,
