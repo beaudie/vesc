@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ea3ef959_d759a523",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-31T07:54:00Z",
+      "side": 1,
+      "message": "Good suggestion. Done.",
+      "parentUuid": "8e4f15f6_0b1a4a7d",
+      "revId": "837ade93412066f36779fd09e512e2c6ce1c06f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "547bf549_51008d5f",
         "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2018-10-30T12:46:23Z",
       "side": 1,
       "message": "Do you think there would be a way for this to transpose the input matrix and call the regular store?",
+      "revId": "837ade93412066f36779fd09e512e2c6ce1c06f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8697938c_ce81ccc8",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-31T07:54:00Z",
+      "side": 1,
+      "message": "Good suggestion. Done.",
+      "parentUuid": "547bf549_51008d5f",
       "revId": "837ade93412066f36779fd09e512e2c6ce1c06f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -82,6 +118,54 @@
     },
     {
       "key": {
+        "uuid": "0076abcb_0d9b2f44",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-31T07:54:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01f854f7_eb2721bd",
+      "range": {
+        "startLine": 248,
+        "startChar": 20,
+        "endLine": 248,
+        "endChar": 31
+      },
+      "revId": "837ade93412066f36779fd09e512e2c6ce1c06f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aec2b938_ae53f9d9",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-31T07:54:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a91d434_6891a6f7",
+      "range": {
+        "startLine": 248,
+        "startChar": 81,
+        "endLine": 248,
+        "endChar": 83
+      },
+      "revId": "837ade93412066f36779fd09e512e2c6ce1c06f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50fed554_b0f8fc44",
         "filename": "src/compiler/translator/util.h",
         "patchSetId": 4
@@ -99,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "8d4ef42f_a6390a7b",
+        "filename": "src/compiler/translator/util.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-31T07:54:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50fed554_b0f8fc44",
+      "revId": "837ade93412066f36779fd09e512e2c6ce1c06f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a37b2ae_52604342",
         "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
         "patchSetId": 4
@@ -113,6 +215,24 @@
       "revId": "837ade93412066f36779fd09e512e2c6ce1c06f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "161a6132_3a20e705",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-10-31T07:54:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a37b2ae_52604342",
+      "revId": "837ade93412066f36779fd09e512e2c6ce1c06f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
