@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bdf2d55f_0493073d",
+        "filename": "include/EGL/eglplatform.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-31T22:58:59Z",
+      "side": 1,
+      "message": "Since we already have an additional static_assert in Renderer11.cpp (1251) I propose reverting this header.  Rafael: please confirm you\u0027re good with that.",
+      "parentUuid": "5bce0390_bc7ef5a1",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 33
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "36ee16e2_98512b58",
         "filename": "src/libANGLE/Caps.cpp",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37a563d3_8bfb9afc",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1323,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-31T22:58:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36ee16e2_98512b58",
+      "range": {
+        "startLine": 1323,
+        "startChar": 19,
+        "endLine": 1323,
+        "endChar": 36
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "820f6dd1_9bf5f6c9",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-31T22:58:59Z",
+      "side": 1,
+      "message": "Compilation is currently broken with the above flag defined for reasons that appear outside of this CL hence resolving this:  \n\nC:\\Users\\jeclarke\\Source\\googlesource.com\\angle\\out\\Debug\u003eninja\n[190/759] CXX obj/libANGLE/DebugAnnotator11.obj\nFAILED: obj/libANGLE/DebugAnnotator11.obj\n../../third_party/llvm-build/Release+Asserts/bin/clang-cl.exe /nologo /showIncludes  \"-imsvc..\\..\\..\\..\\..\\..\\..\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\VC\\Tools\\MSVC\\14.14.26428\\ATLMFC\\include\" \"-imsvc..\\..\\..\\..\\..\\..\\..\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\VC\\Tools\\MSVC\\14.14.26428\\include\" \"-imsvc..\\..\\..\\..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.6.1\\include\\um\" \"-imsvc..\\..\\..\\..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.17134.0\\ucrt\" \"-imsvc..\\..\\..\\..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.17134.0\\shared\" \"-imsvc..\\..\\..\\..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.17134.0\\um\" \"-imsvc..\\..\\..\\..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.17134.0\\winrt\" \"-imsvc..\\..\\..\\..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.17134.0\\cppwinrt\" \"-DANGLE_PRELOADED_D3DCOMPILER_MODULE_NAMES\u003d{ \\\"d3dcompiler_47.dll\\\", \\\"d3dcompiler_46.dll\\\", \\\"d3dcompiler_43.dll\\\" }\" -DANGLE_GENERATE_SHADER_DEBUG_INFO -DV8_DEPRECATION_WARNINGS -DUSE_AURA\u003d1 -DNO_TCMALLOC -DFULL_SAFE_BROWSING -DSAFE_BROWSING_CSD -DSAFE_BROWSING_DB_LOCAL -DCHROMIUM_BUILD -DFIELDTRIAL_TESTING_ENABLED \"-DCR_CLANG_REVISION\u003d\\\"344066-1\\\"\" -D_HAS_NODISCARD -D_HAS_EXCEPTIONS\u003d0 -DCOMPONENT_BUILD -D__STD_C -D_CRT_RAND_S -D_CRT_SECURE_NO_DEPRECATE -D_SCL_SECURE_NO_DEPRECATE -D_ATL_NO_OPENGL -D_WINDOWS -DCERT_CHAIN_PARA_HAS_EXTRA_FIELDS -DPSAPI_VERSION\u003d1 -DWIN32 -D_SECURE_ATL -D_USING_V110_SDK71_ -DWINAPI_FAMILY\u003dWINAPI_FAMILY_DESKTOP_APP -DWIN32_LEAN_AND_MEAN -DNOMINMAX -D_UNICODE -DUNICODE -DNTDDI_VERSION\u003d0x0A000002 -D_WIN32_WINNT\u003d0x0A00 -DWINVER\u003d0x0A00 -D_DEBUG -DDYNAMIC_ANNOTATIONS_ENABLED\u003d1 -DWTF_USE_DYNAMIC_ANNOTATIONS\u003d1 -DANGLE_ENABLE_DEBUG_ANNOTATIONS -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES -DANGLE_IS_64_BIT_CPU -DANGLE_ENABLE_D3D9 -DANGLE_ENABLE_D3D11 -DANGLE_ENABLE_OPENGL -DANGLE_ENABLE_OPENGL_NULL -DANGLE_ENABLE_VULKAN -DANGLE_ENABLE_NULL -DLIBANGLE_IMPLEMENTATION -DVK_USE_PLATFORM_WIN32_KHR -DVK_USE_PLATFORM_WIN32_KHX \"-DAPI_NAME\u003d\\\"Vulkan\\\"\" \"-DANGLE_VK_DATA_DIR\u003d\\\"angledata\\\"\" \"-DANGLE_VK_ICD_JSON\u003d\\\"angledata/VkICD_mock_icd.json\\\"\" \"-DAPI_NAME\u003d\\\"Vulkan\\\"\" -I../../src/third_party/khronos -Igen/angle -I../../include -I../../src -I../../src/common/third_party/base -I../../third_party/vulkan-headers/src/include -I../../include -I../../src -I../../include -I../../src -I../../include -I../../third_party/glslang/src -I../../third_party/glslang/src/glslang/Public -Igen/third_party/vulkan-loader/angle/vulkan -I../../third_party/vulkan-headers/src/include -I../../third_party/vulkan-loader/src/loader /utf-8 /X -Wno-builtin-macro-redefined -D__DATE__\u003d -D__TIME__\u003d -D__TIMESTAMP__\u003d -fcolor-diagnostics -fmerge-all-constants -Xclang -mllvm -Xclang -instcombine-lower-dbg-declare\u003d0 -no-canonical-prefixes -fcomplete-member-pointers /Gy /FS /bigobj /d2FastFail /Zc:sizedDealloc- -fmsc-version\u003d1911 -m64 /Brepro /W4 -Wimplicit-fallthrough -Wthread-safety /WX /wd4091 /wd4127 /wd4251 /wd4275 /wd4312 /wd4324 /wd4351 /wd4355 /wd4503 /wd4589 /wd4611 /wd4100 /wd4121 /wd4244 /wd4505 /wd4510 /wd4512 /wd4610 /wd4838 /wd4995 /wd4996 /wd4456 /wd4457 /wd4458 /wd4459 /wd4200 /wd4201 /wd4204 /wd4221 /wd4245 /wd4267 /wd4305 /wd4389 /wd4702 /wd4701 /wd4703 /wd4661 /wd4706 /wd4715 /wd4702 -Wno-missing-field-initializers -Wno-unused-parameter -Wno-c++11-narrowing -Wno-covered-switch-default -Wno-unneeded-internal-declaration -Wno-undefined-var-template -Wno-nonportable-include-path -Wno-user-defined-warnings -Wno-unused-lambda-capture -Wno-null-pointer-arithmetic -Wno-enum-compare-switch -Wno-ignored-pragma-optimize -Wno-defaulted-function-deleted /Od /Ob0 /GF /Z7 -fno-standalone-debug /MDd -Wheader-hygiene -Wstring-conversion -Wtautological-overlap-compare /we4244 /we4456 /we4458 /we4800 /we4838 -Winconsistent-missing-override -Wunneeded-internal-declaration -Wnon-virtual-dtor /wd4530 /wd4201 -Wno-undefined-bool-conversion -Wno-tautological-undefined-compare /TP /wd4577 /GR- /c ../../src/libANGLE/renderer/d3d/d3d11/DebugAnnotator11.cpp /Foobj/libANGLE/DebugAnnotator11.obj /Fd\"obj/libANGLE_cc.pdb\"\nIn file included from ../../src/libANGLE/renderer/d3d/d3d11/DebugAnnotator11.cpp:9:\n../../src\\libANGLE/renderer/d3d/d3d11/DebugAnnotator11.h(31,13):  error: private field \u0027mD3d11Module\u0027 is not used [-Werror,-Wunused-private-field]\n    HMODULE mD3d11Module;",
+      "parentUuid": "a57c94c7_344668de",
+      "range": {
+        "startLine": 1192,
+        "startChar": 8,
+        "endLine": 1192,
+        "endChar": 32
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6012835_c9b200df",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 9
@@ -91,6 +163,30 @@
       "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70088c4e_ba6e7081",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-31T22:58:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6012835_c9b200df",
+      "range": {
+        "startLine": 1250,
+        "startChar": 4,
+        "endLine": 1250,
+        "endChar": 10
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "46b63001_fa60fa55",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-31T22:58:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d31a4ed7_ba2a468a",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f551e126_fe8e4000",
         "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp",
         "patchSetId": 9
@@ -137,6 +257,30 @@
       "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffadccb6_1829f020",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-31T22:58:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f551e126_fe8e4000",
+      "range": {
+        "startLine": 7,
+        "startChar": 3,
+        "endLine": 7,
+        "endChar": 22
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "ba13edeb_be07fd98",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-31T22:58:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4d7ae40_52ce0062",
+      "range": {
+        "startLine": 223,
+        "startChar": 10,
+        "endLine": 223,
+        "endChar": 18
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a550540b_179695a2",
         "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.h",
         "patchSetId": 9
@@ -183,6 +351,30 @@
       "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04411dce_1debe71e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-31T22:58:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a550540b_179695a2",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "bed614cd_c6c3a30e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-31T22:58:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddb757a1_a5dec171",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 23
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "872f7ea5_b769c522",
         "filename": "src/tests/angle_white_box_tests.gni",
         "patchSetId": 9
@@ -229,6 +445,30 @@
       "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7092277_3b1db409",
+        "filename": "src/tests/angle_white_box_tests.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-31T22:58:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "872f7ea5_b769c522",
+      "range": {
+        "startLine": 21,
+        "startChar": 2,
+        "endLine": 21,
+        "endChar": 43
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -255,6 +495,30 @@
     },
     {
       "key": {
+        "uuid": "d5bf1a07_73c0509f",
+        "filename": "src/tests/egl_tests/EGLDirectCompositionTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-31T22:58:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1399837_a09a5c81",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "786a22ab_0b578477",
         "filename": "src/tests/egl_tests/EGLDirectCompositionTest.cpp",
         "patchSetId": 9
@@ -275,6 +539,30 @@
       "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b12798f9_634f7d68",
+        "filename": "src/tests/egl_tests/EGLDirectCompositionTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-10-31T22:58:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "786a22ab_0b578477",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 6
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
