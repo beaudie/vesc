@@ -118,6 +118,91 @@
       "revId": "8954c3cd2b70fc80f9cf3a2dc4283baa2b65b272",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f54c470c_7b71c405",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 14
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-31T01:08:36Z",
+      "side": 1,
+      "message": "indentation",
+      "revId": "8954c3cd2b70fc80f9cf3a2dc4283baa2b65b272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fb74d66_923708d7",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 14
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-31T01:08:36Z",
+      "side": 1,
+      "message": "indentation",
+      "revId": "8954c3cd2b70fc80f9cf3a2dc4283baa2b65b272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4067a871_775aa5cc",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 5511,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-31T01:08:36Z",
+      "side": 1,
+      "message": "In principle, it could save some performance to do:\n\n  if (hasDrawID) {\n    for (...) {\n      ...\n      draw\n    }\n  } else {\n    for (...) {\n      ...\n      setDrawIDUniform\n      draw\n    }\n  }",
+      "revId": "8954c3cd2b70fc80f9cf3a2dc4283baa2b65b272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8eb21b81_7608527e",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 3123,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-31T01:08:36Z",
+      "side": 1,
+      "message": "as a matter of style, I prefer \"if\" to \"else if\" here. The two blocks are not really related, and the first one returns anyway.",
+      "revId": "8954c3cd2b70fc80f9cf3a2dc4283baa2b65b272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e2feb04_2b6a45e6",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 3159,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-10-31T01:08:36Z",
+      "side": 1,
+      "message": "same",
+      "revId": "8954c3cd2b70fc80f9cf3a2dc4283baa2b65b272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
