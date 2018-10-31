@@ -15,6 +15,7 @@
 #include "libANGLE/renderer/Format.h"
 #include "libANGLE/renderer/copyvertex.h"
 #include "libANGLE/renderer/renderer_utils.h"
+#include "platform/WorkaroundsVulkan.h"
 
 #include <array>
 
@@ -56,7 +57,9 @@ struct Format final : private angle::NonCopyable
     bool valid() const { return internalFormat != 0; }
 
     // This is an auto-generated method in vk_format_table_autogen.cpp.
-    void initialize(VkPhysicalDevice physicalDevice, const angle::Format &angleFormat);
+    void initialize(VkPhysicalDevice physicalDevice,
+                    const angle::Format &angleFormat,
+                    const angle::WorkaroundsVulkan &workaroundsVulkan);
 
     void initTextureFallback(VkPhysicalDevice physicalDevice,
                              const TextureFormatInitInfo *info,
@@ -93,6 +96,7 @@ class FormatTable final : angle::NonCopyable
 
     // Also initializes the TextureCapsMap and the compressedTextureCaps in the Caps instance.
     void initialize(VkPhysicalDevice physicalDevice,
+                    const angle::WorkaroundsVulkan &workaroundsVulkan,
                     gl::TextureCapsMap *outTextureCapsMap,
                     std::vector<GLenum> *outCompressedTextureFormats);
 

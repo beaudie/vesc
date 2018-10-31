@@ -382,6 +382,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                                      const egl::AttributeMap &attribs,
                                      const char *wsiName)
 {
+    angle::PlatformMethods *platform = ANGLEPlatformCurrent();
+    platform->overrideWorkaroundsVulkan(platform, &mWorkarounds);
+
     ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseDebugLayers(attribs),
                                                 ShouldEnableMockICD(attribs));
     mEnableValidationLayers = scopedEnvironment.canEnableValidationLayers();
@@ -531,7 +534,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     GlslangWrapper::Initialize();
 
     // Initialize the format table.
-    mFormatTable.initialize(mPhysicalDevice, &mNativeTextureCaps,
+    mFormatTable.initialize(mPhysicalDevice, mWorkarounds, &mNativeTextureCaps,
                             &mNativeCaps.compressedTextureFormats);
 
     return angle::Result::Continue();

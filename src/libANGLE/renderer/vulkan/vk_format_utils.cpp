@@ -186,6 +186,7 @@ FormatTable::~FormatTable()
 }
 
 void FormatTable::initialize(VkPhysicalDevice physicalDevice,
+                             const angle::WorkaroundsVulkan &workaroundsVulkan,
                              gl::TextureCapsMap *outTextureCapsMap,
                              std::vector<GLenum> *outCompressedTextureFormats)
 {
@@ -193,7 +194,7 @@ void FormatTable::initialize(VkPhysicalDevice physicalDevice,
     {
         const auto formatID              = static_cast<angle::FormatID>(formatIndex);
         const angle::Format &angleFormat = angle::Format::Get(formatID);
-        mFormatData[formatIndex].initialize(physicalDevice, angleFormat);
+        mFormatData[formatIndex].initialize(physicalDevice, angleFormat, workaroundsVulkan);
         const GLenum internalFormat = mFormatData[formatIndex].internalFormat;
         mFormatData[formatIndex].textureLoadFunctions =
             GetLoadFunctionsMap(internalFormat, mFormatData[formatIndex].textureFormatID);

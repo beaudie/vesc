@@ -357,6 +357,8 @@ class RendererVk : angle::NonCopyable
     // have a value close to zero, to avoid losing 12 bits when converting these 64 bit values to
     // double.
     uint64_t mGpuEventTimestampOrigin;
+
+    angle::WorkaroundsVulkan mWorkarounds;
 };
 
 uint32_t GetUniformBufferDescriptorCount();

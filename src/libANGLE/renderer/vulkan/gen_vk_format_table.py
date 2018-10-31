@@ -41,7 +41,9 @@ namespace rx
 namespace vk
 {{
 
-void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &angleFormat)
+void Format::initialize(VkPhysicalDevice physicalDevice,
+                        const angle::Format &angleFormat,
+                        const angle::WorkaroundsVulkan &workaroundsVulkan)
 {{
     switch (angleFormat.id)
     {{
@@ -80,6 +82,12 @@ static constexpr TextureFormatInitInfo kInfo[] = {{{texture_list}}};
 initTextureFallback(physicalDevice, kInfo, ArraySize(kInfo));
 }}"""
 
+texture_force_fallback_template = """{{
+static constexpr TextureFormatInitInfo kInfo[] = {{{texture_list}}};
+size_t skip = workaroundsVulkan.forceEmulateWithPackedDepthStencil ? 1 : 0;
+initTextureFallback(physicalDevice, kInfo + skip, ArraySize(kInfo) - skip);
+}}"""
+
 buffer_basic_template = """bufferFormatID = {buffer};
 vkBufferFormat = {vk_buffer_format};
 vkBufferFormatIsPacked = {vk_buffer_format_is_packed};
@@ -101,6 +109,7 @@ def gen_format_case(angle, internal_format, vk_json_data):
     vk_map = vk_json_data["map"]
     vk_overrides = vk_json_data["overrides"]
     vk_fallbacks = vk_json_data["fallbacks"]
+    vk_force_fallback_on_workaround = vk_json_data["force_fallback_on_workaround"]
     args = dict(format_id=angle, internal_format=internal_format,
                 texture_template="", buffer_template="")
 
@@ -139,8 +148,10 @@ def gen_format_case(angle, internal_format, vk_json_data):
         args.update(texture_template=texture_basic_template)
         args.update(texture_args(textures[0]))
     elif len(textures) > 1:
+        force_fallback = angle in vk_force_fallback_on_workaround
+        fallback_template = texture_force_fallback_template if force_fallback else texture_fallback_template
         args.update(
-            texture_template=texture_fallback_template,
+            texture_template=fallback_template,
             texture_list=", ".join(texture_struct_template.format(**texture_args(i))
                                    for i in textures)
         )
