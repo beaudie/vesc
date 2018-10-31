@@ -1137,6 +1137,7 @@ bool ValidateRenderbufferStorageParametersBase(Context *context,
                                                GLsizei width,
                                                GLsizei height)
 {
+    fprintf(stderr, "ValidateRenderbufferStorageParametersBase: %d\n", __LINE__);
     switch (target)
     {
         case GL_RENDERBUFFER:
@@ -1145,22 +1146,36 @@ bool ValidateRenderbufferStorageParametersBase(Context *context,
             ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidRenderbufferTarget);
             return false;
     }
+    fprintf(stderr, "ValidateRenderbufferStorageParametersBase: %d\n", __LINE__);
 
     if (width < 0 || height < 0 || samples < 0)
     {
         ANGLE_VALIDATION_ERR(context, InvalidValue(), InvalidRenderbufferWidthHeight);
         return false;
     }
+    fprintf(stderr, "ValidateRenderbufferStorageParametersBase: %d\n", __LINE__);
 
     // Hack for the special WebGL 1 "DEPTH_STENCIL" internal format.
     GLenum convertedInternalFormat = context->getConvertedRenderbufferFormat(internalformat);
 
+    fprintf(stderr,
+            "ValidateRenderbufferStorageParametersBase: %d (internalformat: %u, converted: %u)\n",
+            __LINE__, internalformat, convertedInternalFormat);
+
     const TextureCaps &formatCaps = context->getTextureCaps().get(convertedInternalFormat);
+    fprintf(stderr, "ValidateRenderbufferStorageParametersBase: %d (Caps: %d, %d, %d, %d)\n",
+            __LINE__, formatCaps.texturable, formatCaps.filterable, formatCaps.textureAttachment,
+            formatCaps.renderbuffer);
     if (!formatCaps.renderbuffer)
     {
+        fprintf(stderr,
+                "ValidateRenderbufferStorageParametersBase: %d (format not suitable for "
+                "renderbuffer)\n",
+                __LINE__);
         context->handleError(InvalidEnum());
         return false;
     }
+    fprintf(stderr, "ValidateRenderbufferStorageParametersBase: %d\n", __LINE__);
 
     // ANGLE_framebuffer_multisample does not explicitly state that the internal format must be
     // sized but it does state that the format must be in the ES2.0 spec table 4.5 which contains
@@ -1171,12 +1186,14 @@ bool ValidateRenderbufferStorageParametersBase(Context *context,
         ANGLE_VALIDATION_ERR(context, InvalidEnum(), InvalidRenderbufferInternalFormat);
         return false;
     }
+    fprintf(stderr, "ValidateRenderbufferStorageParametersBase: %d\n", __LINE__);
 
     if (static_cast<GLuint>(std::max(width, height)) > context->getCaps().maxRenderbufferSize)
     {
         context->handleError(InvalidValue());
         return false;
     }
+    fprintf(stderr, "ValidateRenderbufferStorageParametersBase: %d\n", __LINE__);
 
     GLuint handle = context->getGLState().getRenderbufferId();
     if (handle == 0)
@@ -1184,6 +1201,7 @@ bool ValidateRenderbufferStorageParametersBase(Context *context,
         ANGLE_VALIDATION_ERR(context, InvalidOperation(), InvalidRenderbufferTarget);
         return false;
     }
+    fprintf(stderr, "ValidateRenderbufferStorageParametersBase: %d\n", __LINE__);
 
     return true;
 }
