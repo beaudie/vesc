@@ -110,6 +110,7 @@ libangle_includes = [
   "include/KHR/khrplatform.h",
   "include/platform/Platform.h",
   "include/platform/WorkaroundsD3D.h",
+  "include/platform/WorkaroundsVulkan.h",
 ]
 libangle_sources = [
   "src/common/event_tracer.cpp",

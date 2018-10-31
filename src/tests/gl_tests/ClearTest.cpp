@@ -6,6 +6,7 @@
 
 #include "test_utils/ANGLETest.h"
 
+#include "platform/WorkaroundsVulkan.h"
 #include "random_utils.h"
 #include "shader_utils.h"
 #include "test_utils/gl_raii.h"
@@ -106,6 +107,55 @@ class ClearTestRGB : public ANGLETest
 
 class ScissoredClearTest : public ClearTest
 {
+};
+
+class VulkanClearTest : public ClearTest
+{
+  protected:
+    void SetUp() override
+    {
+        ANGLETest::SetUp();
+
+        glGenFramebuffers(1, &mFBO);
+        glGenTextures(1, &mColorTexture);
+        glGenRenderbuffers(1, &mStencilTexture);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+
+        glBindTexture(GL_TEXTURE_2D, mColorTexture);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mColorTexture,
+                               0);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getWindowWidth(), getWindowHeight(), 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, nullptr);
+
+        glBindRenderbuffer(GL_RENDERBUFFER, mStencilTexture);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, getWindowWidth(),
+                              getWindowHeight());
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                                  mStencilTexture);
+
+        ASSERT_GL_NO_ERROR();
+    }
+
+    void TearDown() override
+    {
+        glDeleteRenderbuffers(1, &mStencilTexture);
+        glDeleteTextures(1, &mColorTexture);
+        glDeleteFramebuffers(1, &mFBO);
+
+        ANGLETest::TearDown();
+    }
+
+    // Override a workaround to force emulation of STENCIL8 with a packed depth/stencil format
+    void overrideWorkaroundsVulkan(WorkaroundsVulkan *workarounds) override
+    {
+        workarounds->forceEmulateWithPackedDepthStencil = true;
+    }
+
+  private:
+    GLuint mFBO;
+    GLuint mColorTexture;
+    GLuint mStencilTexture;
 };
 
 // Test clearing the default framebuffer
@@ -709,6 +759,26 @@ TEST_P(ScissoredClearTest, MaskedScissoredColorAndDepthAndStencilClear)
     MaskedScissoredColorDepthStencilClear(true, true, true, true);
 }
 
+TEST_P(VulkanClearTest, ColorAndStencilClear)
+{
+    MaskedScissoredColorDepthStencilClear(false, false, false, true);
+}
+
+TEST_P(VulkanClearTest, MaskedColorAndStencilClear)
+{
+    MaskedScissoredColorDepthStencilClear(true, false, false, true);
+}
+
+TEST_P(VulkanClearTest, ScissoredColorAndStencilClear)
+{
+    MaskedScissoredColorDepthStencilClear(false, true, false, true);
+}
+
+TEST_P(VulkanClearTest, MaskedScissoredColorAndStencilClear)
+{
+    MaskedScissoredColorDepthStencilClear(true, true, false, true);
+}
+
 // Test that just clearing a nonexistent drawbuffer of the default framebuffer doesn't cause an
 // assert.
 TEST_P(ClearTestES3, ClearBuffer1OnDefaultFramebufferNoAssert)
@@ -735,6 +805,7 @@ ANGLE_INSTANTIATE_TEST(ClearTest,
                        ES2_VULKAN());
 ANGLE_INSTANTIATE_TEST(ClearTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 ANGLE_INSTANTIATE_TEST(ScissoredClearTest, ES2_D3D11(), ES2_OPENGL(), ES2_VULKAN());
+ANGLE_INSTANTIATE_TEST(VulkanClearTest, ES2_VULKAN());
 
 // Not all ANGLE backends support RGB backbuffers
 ANGLE_INSTANTIATE_TEST(ClearTestRGB, ES2_D3D11(), ES3_D3D11(), ES2_VULKAN());
