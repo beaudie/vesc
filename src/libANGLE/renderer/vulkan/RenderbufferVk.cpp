@@ -46,12 +46,15 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
                                          size_t width,
                                          size_t height)
 {
+    fprintf(stderr, "%d\n", __LINE__);
     ContextVk *contextVk       = vk::GetImpl(context);
     RendererVk *renderer       = contextVk->getRenderer();
     const vk::Format &vkFormat = renderer->getFormat(internalformat);
 
+    fprintf(stderr, "%d\n", __LINE__);
     if (mImage.valid())
     {
+    fprintf(stderr, "%d\n", __LINE__);
         // Check against the state if we need to recreate the storage.
         if (internalformat != mState.getFormat().info->internalFormat ||
             static_cast<GLsizei>(width) != mState.getWidth() ||
@@ -62,8 +65,10 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
         }
     }
 
+    fprintf(stderr, "%d\n", __LINE__);
     if (!mImage.valid() && (width != 0 && height != 0))
     {
+    fprintf(stderr, "%d\n", __LINE__);
         const angle::Format &textureFormat = vkFormat.textureFormat();
         bool isDepthOrStencilFormat = textureFormat.depthBits > 0 || textureFormat.stencilBits > 0;
         const VkImageUsageFlags usage =
@@ -74,28 +79,33 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
 
         gl::Extents extents(static_cast<int>(width), static_cast<int>(height), 1);
         ANGLE_TRY(mImage.init(contextVk, gl::TextureType::_2D, extents, vkFormat, 1, usage, 1));
+    fprintf(stderr, "%d\n", __LINE__);
 
         VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
         ANGLE_TRY(mImage.initMemory(contextVk, renderer->getMemoryProperties(), flags));
+    fprintf(stderr, "%d\n", __LINE__);
 
         VkImageAspectFlags aspect = vk::GetFormatAspectFlags(textureFormat);
 
         ANGLE_TRY(mImage.initImageView(contextVk, gl::TextureType::_2D, aspect, gl::SwizzleState(),
                                        &mImageView, 1));
+    fprintf(stderr, "%d\n", __LINE__);
 
         // TODO(jmadill): Fold this into the RenderPass load/store ops. http://anglebug.com/2361
         vk::CommandBuffer *commandBuffer = nullptr;
         ANGLE_TRY(mImage.recordCommands(contextVk, &commandBuffer));
+    fprintf(stderr, "%d\n", __LINE__);
 
         if (isDepthOrStencilFormat)
         {
-            mImage.clearDepthStencil(aspect, kDefaultClearDepthStencilValue, commandBuffer);
+            mImage.clearDepthStencil(aspect, aspect, kDefaultClearDepthStencilValue, commandBuffer);
         }
         else
         {
             mImage.clearColor(kBlackClearColorValue, 0, 1, commandBuffer);
         }
     }
+    fprintf(stderr, "%d\n", __LINE__);
 
     return angle::Result::Continue();
 }
