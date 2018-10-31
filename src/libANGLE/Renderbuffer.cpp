@@ -103,12 +103,17 @@ angle::Result Renderbuffer::setStorage(const Context *context,
                                        size_t width,
                                        size_t height)
 {
+    fprintf(stderr, "Framebuffer::setStorage: %d\n", __LINE__);
     ANGLE_TRY_HANDLE(context, orphanImages(context));
+    fprintf(stderr, "Framebuffer::setStorage: %d\n", __LINE__);
     ANGLE_TRY(mImplementation->setStorage(context, internalformat, width, height));
+    fprintf(stderr, "Framebuffer::setStorage: %d\n", __LINE__);
 
     mState.update(static_cast<GLsizei>(width), static_cast<GLsizei>(height), Format(internalformat),
                   0, InitState::MayNeedInit);
+    fprintf(stderr, "Framebuffer::setStorage: %d\n", __LINE__);
     onStorageChange(context);
+    fprintf(stderr, "Framebuffer::setStorage: %d\n", __LINE__);
 
     return angle::Result::Continue();
 }
