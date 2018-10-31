@@ -22,7 +22,9 @@ namespace rx
 namespace vk
 {
 
-void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &angleFormat)
+void Format::initialize(VkPhysicalDevice physicalDevice,
+                        const angle::Format &angleFormat,
+                        const angle::FeaturesVk &featuresVk)
 {
     switch (angleFormat.id)
     {
@@ -1814,7 +1816,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice, const angle::Format &an
                     {angle::FormatID::S8_UINT, VK_FORMAT_S8_UINT, nullptr},
                     {angle::FormatID::D24_UNORM_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT, nullptr},
                     {angle::FormatID::D32_FLOAT_S8X24_UINT, VK_FORMAT_D32_SFLOAT_S8_UINT, nullptr}};
-                initTextureFallback(physicalDevice, kInfo, ArraySize(kInfo));
+                size_t skip = featuresVk.forceEmulateWithPackedDepthStencil ? 1 : 0;
+                initTextureFallback(physicalDevice, kInfo + skip, ArraySize(kInfo) - skip);
             }
             bufferFormatID               = angle::FormatID::S8_UINT;
             vkBufferFormat               = VK_FORMAT_S8_UINT;
