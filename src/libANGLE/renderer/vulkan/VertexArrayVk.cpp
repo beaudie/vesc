@@ -64,7 +64,7 @@ VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state, RendererVk *rend
     : VertexArrayImpl(state),
       mCurrentArrayBufferHandles{},
       mCurrentArrayBufferOffsets{},
-      mCurrentArrayBufferResources{},
+      mCurrentArrayBuffers{},
       mCurrentArrayBufferFormats{},
       mCurrentArrayBufferStrides{},
       mCurrentArrayBufferConversion{{
@@ -74,7 +74,7 @@ VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state, RendererVk *rend
       mCurrentArrayBufferConversionCanRelease{},
       mCurrentElementArrayBufferHandle(VK_NULL_HANDLE),
       mCurrentElementArrayBufferOffset(0),
-      mCurrentElementArrayBufferResource(nullptr),
+      mCurrentElementArrayBuffer(nullptr),
       mPackedInputBindings{},
       mPackedInputAttributes{},
       mDynamicVertexData(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, kDynamicVertexDataSize),
@@ -85,7 +85,7 @@ VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state, RendererVk *rend
 {
     mCurrentArrayBufferHandles.fill(VK_NULL_HANDLE);
     mCurrentArrayBufferOffsets.fill(0);
-    mCurrentArrayBufferResources.fill(nullptr);
+    mCurrentArrayBuffers.fill(nullptr);
 
     for (vk::DynamicBuffer &buffer : mCurrentArrayBufferConversion)
     {
@@ -254,13 +254,13 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
                 if (bufferGL)
                 {
                     BufferVk *bufferVk                 = vk::GetImpl(bufferGL);
-                    mCurrentElementArrayBufferResource = &bufferVk->getBuffer();
+                    mCurrentElementArrayBuffer         = &bufferVk->getBuffer();
                     mCurrentElementArrayBufferHandle =
                         bufferVk->getBuffer().getBuffer().getHandle();
                 }
                 else
                 {
-                    mCurrentElementArrayBufferResource = nullptr;
+                    mCurrentElementArrayBuffer         = nullptr;
                     mCurrentElementArrayBufferHandle   = VK_NULL_HANDLE;
                 }
 
@@ -326,12 +326,12 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
 
                 ANGLE_TRY(convertVertexBuffer(contextVk, bufferVk, binding, attribIndex));
 
-                mCurrentArrayBufferResources[attribIndex] = nullptr;
+                mCurrentArrayBuffers[attribIndex]         = nullptr;
                 releaseConversion                         = false;
             }
             else
             {
-                mCurrentArrayBufferResources[attribIndex] = &bufferVk->getBuffer();
+                mCurrentArrayBuffers[attribIndex] = &bufferVk->getBuffer();
                 mCurrentArrayBufferHandles[attribIndex] =
                     bufferVk->getBuffer().getBuffer().getHandle();
                 mCurrentArrayBufferOffsets[attribIndex] = binding.getOffset();
@@ -340,7 +340,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
         }
         else
         {
-            mCurrentArrayBufferResources[attribIndex] = nullptr;
+            mCurrentArrayBuffers[attribIndex]         = nullptr;
             mCurrentArrayBufferHandles[attribIndex]   = VK_NULL_HANDLE;
             mCurrentArrayBufferOffsets[attribIndex]   = 0;
             mCurrentArrayBufferStrides[attribIndex] =
@@ -352,7 +352,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
         contextVk->invalidateDefaultAttribute(attribIndex);
 
         // These will be filled out by the ContextVk.
-        mCurrentArrayBufferResources[attribIndex] = nullptr;
+        mCurrentArrayBuffers[attribIndex]         = nullptr;
         mCurrentArrayBufferHandles[attribIndex]   = VK_NULL_HANDLE;
         mCurrentArrayBufferOffsets[attribIndex]   = 0;
         mCurrentArrayBufferStrides[attribIndex]   = 0;
@@ -584,7 +584,7 @@ void VertexArrayVk::updateDefaultAttrib(RendererVk *renderer,
     {
         mCurrentArrayBufferHandles[attribIndex]   = bufferHandle;
         mCurrentArrayBufferOffsets[attribIndex]   = offset;
-        mCurrentArrayBufferResources[attribIndex] = nullptr;
+        mCurrentArrayBuffers[attribIndex]         = nullptr;
         mCurrentArrayBufferStrides[attribIndex]   = 0;
         mCurrentArrayBufferFormats[attribIndex] =
             &renderer->getFormat(angle::FormatID::R32G32B32A32_FIXED);
