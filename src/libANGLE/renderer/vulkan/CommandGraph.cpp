@@ -506,7 +506,7 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
                     static_cast<uint32_t>(mRenderPassRenderArea.width);
                 beginInfo.renderArea.extent.height =
                     static_cast<uint32_t>(mRenderPassRenderArea.height);
-                beginInfo.clearValueCount = mRenderPassDesc.attachmentCount();
+                beginInfo.clearValueCount = mRenderPassDesc.attachmentCount();  // FIXME
                 beginInfo.pClearValues    = mRenderPassClearValues.data();
 
                 primaryCommandBuffer->beginRenderPass(

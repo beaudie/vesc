@@ -787,6 +787,7 @@ const vk::RenderPassDesc &FramebufferVk::getRenderPassDesc()
     }
 
     vk::RenderPassDesc desc;
+    desc.setSamples(getSamples());
 
     // TODO(jmadill): Support gaps in RenderTargets. http://anglebug.com/2394
     const auto &colorRenderTargets = mRenderTargetCache.getColors();
@@ -1211,4 +1212,24 @@ const gl::Extents &FramebufferVk::getReadImageExtents() const
 {
     return getColorReadRenderTarget()->getImageExtents();
 }
+
+RenderTargetVk *FramebufferVk::getFirstRenderTarget() const
+{
+    for (auto *renderTarget : mRenderTargetCache.getColors())
+    {
+        if (renderTarget)
+        {
+            return renderTarget;
+        }
+    }
+
+    return mRenderTargetCache.getDepthStencil();
+}
+
+GLint FramebufferVk::getSamples() const
+{
+    RenderTargetVk *firstRT = getFirstRenderTarget();
+    return firstRT ? firstRT->getImage().getSamples() : 0;
+}
+
 }  // namespace rx
