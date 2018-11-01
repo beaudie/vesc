@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "db1b21ed_15385015",
+        "filename": "include/EGL/eglplatform.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-11-01T21:45:43Z",
+      "side": 1,
+      "message": "I spoke to Rafael offline: \"So long as the static_assert is one location, I\u0027m fine with removing it in the official eglplatform.h file.\"\n\nAs this above is already the case, I will resolve this and revert eglplatform.h",
+      "parentUuid": "bdf2d55f_0493073d",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 33
+      },
+      "revId": "705280c0ffaaa61d20a5ca16b67b0448dc7c7f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "36ee16e2_98512b58",
         "filename": "src/libANGLE/Caps.cpp",
         "patchSetId": 9
