@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4b215807_e64d975a",
+        "filename": "extensions/ANGLE_memory_size.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-01T18:36:01Z",
+      "side": 1,
+      "message": "I agree that a bound would be better but I\u0027m not sure we\u0027ll be able to guarantee it on any platform except Vulkan right now.  I think the best we could do is specify it as a lower bound and assume the driver isn\u0027t compressing anything.  I added an issue about this.",
+      "parentUuid": "4239a7a1_b2d6ad9e",
+      "range": {
+        "startLine": 85,
+        "startChar": 60,
+        "endLine": 86,
+        "endChar": 19
+      },
+      "revId": "c012efa0c38deaae15fcb4da8b4d5d205e151d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "03466824_f4e430be",
         "filename": "src/tests/gl_tests/MemorySizeTest.cpp",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2018-11-01T18:17:16Z",
       "side": 1,
       "message": "Since the extension is always expected to be available, this should be unnecessary.",
+      "revId": "c012efa0c38deaae15fcb4da8b4d5d205e151d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4249c241_6c4a30b0",
+        "filename": "src/tests/gl_tests/MemorySizeTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-01T18:36:01Z",
+      "side": 1,
+      "message": "It is unnecessary but removes coupling between the tests because each test covers an isolated feature.",
+      "parentUuid": "03466824_f4e430be",
       "revId": "c012efa0c38deaae15fcb4da8b4d5d205e151d9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
