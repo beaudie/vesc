@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b45a0941_14450fee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-01T12:01:38Z",
+      "side": 1,
+      "message": "won\u0027t this fill the depth channel with garbage values? It might be possible to read from the depth channel somewhere.\n\nAlso what if the scissor test is enabled? We\u0027ll go into the clearWithClearAttachments case.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 59
+      },
+      "revId": "31c993cd4b3e19ccba68fc9eb3b06e87fc7274f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cdbcccf_7c935bdc",
+        "filename": "include/platform/WorkaroundsVulkan.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-01T12:01:38Z",
+      "side": 1,
+      "message": "sorry if I wasn\u0027t clear before -\n\nFeaturesVk replaces WorkaroundsVulkan. You should expose FeaturesVk instead of adding this new file. \"Features\" is a more general term than \"Workarounds\" and includes things that are optional but not necessary for correctness.",
+      "range": {
+        "startLine": 12,
+        "startChar": 7,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "31c993cd4b3e19ccba68fc9eb3b06e87fc7274f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53e16207_a6f544c7",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-01T12:01:38Z",
+      "side": 1,
+      "message": "nit: line wrapping",
+      "range": {
+        "startLine": 152,
+        "startChar": 83,
+        "endLine": 152,
+        "endChar": 108
+      },
+      "revId": "31c993cd4b3e19ccba68fc9eb3b06e87fc7274f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "561d4466_f31c8ddb",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-01T12:01:38Z",
+      "side": 1,
+      "message": "nit: comment before each new test",
+      "range": {
+        "startLine": 762,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 6
+      },
+      "revId": "31c993cd4b3e19ccba68fc9eb3b06e87fc7274f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
