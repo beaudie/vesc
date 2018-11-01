@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2d3226a9_4d27feec",
+        "filename": "src/common/packed_egl_enums.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-01T19:56:34Z",
+      "side": 1,
+      "message": "Yep, fixed.",
+      "parentUuid": "5617a9e2_494df03c",
+      "range": {
+        "startLine": 36,
+        "startChar": 9,
+        "endLine": 36,
+        "endChar": 29
+      },
+      "revId": "8a3bd93e72e43c627a6a1c979294ef8bdce07586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "994e199e_e9409871",
         "filename": "src/libANGLE/Surface.cpp",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "8a3bd93e72e43c627a6a1c979294ef8bdce07586",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e02808cf_674830f3",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-01T19:56:34Z",
+      "side": 1,
+      "message": "Yea, it\u0027s not clear.  Given that the surface is a parameter to the query this seems safest.  Also doubt that an Android application will make more than one window surface so performance will not be a concern.",
+      "parentUuid": "994e199e_e9409871",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 176,
+        "endChar": 0
+      },
+      "revId": "8a3bd93e72e43c627a6a1c979294ef8bdce07586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "80a99da0_562fef9b",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-01T19:56:34Z",
+      "side": 1,
+      "message": "I figured that some implementation may want to update state during these calls but it probably makes more sense to change it back to non-const if we ever encounter that.  Done.",
+      "parentUuid": "e56a5a55_e0d47310",
+      "range": {
+        "startLine": 91,
+        "startChar": 76,
+        "endLine": 91,
+        "endChar": 81
+      },
+      "revId": "8a3bd93e72e43c627a6a1c979294ef8bdce07586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f979f67_637a65bd",
         "filename": "src/libANGLE/renderer/gl/egl/SurfaceEGL.cpp",
         "patchSetId": 7
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "df5916c4_b9d4800f",
+        "filename": "src/libANGLE/renderer/gl/egl/SurfaceEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-01T19:56:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f979f67_637a65bd",
+      "range": {
+        "startLine": 196,
+        "startChar": 4,
+        "endLine": 196,
+        "endChar": 67
+      },
+      "revId": "8a3bd93e72e43c627a6a1c979294ef8bdce07586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba64c955_5f9e990d",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 7
@@ -114,6 +210,30 @@
       "revId": "8a3bd93e72e43c627a6a1c979294ef8bdce07586",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a378c465_ddd5ad27",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3331,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-01T19:56:34Z",
+      "side": 1,
+      "message": "Updated to only validate non-null when numTimestamps is \u003e 0.",
+      "parentUuid": "ba64c955_5f9e990d",
+      "range": {
+        "startLine": 3323,
+        "startChar": 0,
+        "endLine": 3331,
+        "endChar": 5
+      },
+      "revId": "8a3bd93e72e43c627a6a1c979294ef8bdce07586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -160,6 +280,30 @@
       "revId": "8a3bd93e72e43c627a6a1c979294ef8bdce07586",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c590e59a_c5f9965d",
+        "filename": "src/libGLESv2/entry_points_egl_ext.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-01T19:56:34Z",
+      "side": 1,
+      "message": "Typo copied from an entry point above.  Fixed.",
+      "parentUuid": "a5a4b82c_57ef1e46",
+      "range": {
+        "startLine": 1169,
+        "startChar": 46,
+        "endLine": 1169,
+        "endChar": 47
+      },
+      "revId": "8a3bd93e72e43c627a6a1c979294ef8bdce07586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
