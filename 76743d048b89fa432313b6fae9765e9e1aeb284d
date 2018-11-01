@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd126220_c9d3cc05",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-01T03:18:39Z",
+      "side": 1,
+      "message": "What\u0027s going on here? Shouldn\u0027t `init()` only be called once?",
+      "revId": "76743d048b89fa432313b6fae9765e9e1aeb284d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95f2bb0f_506ed0f5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-01T03:18:39Z",
+      "side": 1,
+      "message": "No more magic limits? ;)",
+      "revId": "76743d048b89fa432313b6fae9765e9e1aeb284d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
