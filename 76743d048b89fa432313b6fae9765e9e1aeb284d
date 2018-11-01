@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fe3b790c_a6f8d613",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-01T11:51:22Z",
+      "side": 1,
+      "message": "No, init is called twice in the correctness test. This just verifies no sets have been allocated.",
+      "parentUuid": "dd126220_c9d3cc05",
+      "revId": "76743d048b89fa432313b6fae9765e9e1aeb284d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "95f2bb0f_506ed0f5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "76743d048b89fa432313b6fae9765e9e1aeb284d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0028105c_50454ba9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-01T11:51:22Z",
+      "side": 1,
+      "message": "Yes yes. This is just a sanity check. I could remove it. :)",
+      "parentUuid": "95f2bb0f_506ed0f5",
+      "revId": "76743d048b89fa432313b6fae9765e9e1aeb284d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
