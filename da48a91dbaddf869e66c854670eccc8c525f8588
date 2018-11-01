@@ -22,6 +22,30 @@
       "revId": "da48a91dbaddf869e66c854670eccc8c525f8588",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87d87513_b7b39162",
+        "filename": "src/tests/gl_tests/MemorySizeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-01T19:39:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0138394f_c41bb5cf",
+      "range": {
+        "startLine": 52,
+        "startChar": 22,
+        "endLine": 52,
+        "endChar": 23
+      },
+      "revId": "da48a91dbaddf869e66c854670eccc8c525f8588",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
