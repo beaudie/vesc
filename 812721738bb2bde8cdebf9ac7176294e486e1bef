@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "77133eec_d79162bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-11-01T23:45:19Z",
+      "side": 1,
+      "message": "I did this and the act of doing so appeared to create a new change: https://chromium-review.googlesource.com/c/angle/angle/+/1313234 \n\nnot sure if that was expected?  Should I abandon this one and add you all to that or did i do something wrong and should abandon that one?",
+      "parentUuid": "ddebd1db_015b9e1e",
+      "revId": "812721738bb2bde8cdebf9ac7176294e486e1bef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f848cc80_c42d50e6",
         "filename": "src/tests/angle_white_box_tests.gni",
         "patchSetId": 11
@@ -39,6 +57,30 @@
       "revId": "812721738bb2bde8cdebf9ac7176294e486e1bef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f21174b0_9078b17b",
+        "filename": "src/tests/angle_white_box_tests.gni",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-11-01T23:45:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f848cc80_c42d50e6",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 31
+      },
+      "revId": "812721738bb2bde8cdebf9ac7176294e486e1bef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
