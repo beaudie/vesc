@@ -311,6 +311,30 @@
     },
     {
       "key": {
+        "uuid": "140d79fb_2fd0c6ef",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-01T18:37:41Z",
+      "side": 1,
+      "message": "Cool. Not sure if it\u0027s working on Windows right now. But can run it manually.",
+      "parentUuid": "167947c2_8d6d718a",
+      "range": {
+        "startLine": 152,
+        "startChar": 83,
+        "endLine": 152,
+        "endChar": 108
+      },
+      "revId": "31c993cd4b3e19ccba68fc9eb3b06e87fc7274f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "561d4466_f31c8ddb",
         "filename": "src/tests/gl_tests/ClearTest.cpp",
         "patchSetId": 2
