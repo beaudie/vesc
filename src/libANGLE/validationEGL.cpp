@@ -217,11 +217,55 @@ Error ValidateConfigAttribute(const Display *display, EGLAttrib attribute)
     return NoError();
 }
 
+Error ValidateConfigAttributeValue(const Display *display, EGLAttrib attribute, EGLAttrib value)
+{
+    switch (attribute)
+    {
+        case EGL_BIND_TO_TEXTURE_RGB:
+        case EGL_BIND_TO_TEXTURE_RGBA:
+            if ((value != EGL_DONT_CARE) && (value != EGL_TRUE) && (value != EGL_FALSE))
+            {
+                return EglBadAttribute() << "EGL_bind_to_texture invalid attribute: " << value;
+            }
+            break;
+
+        case EGL_COLOR_BUFFER_TYPE:
+            // EGL_DONT_CARE doesn't match the spec, but does match dEQP usage
+            if ((value != EGL_RGB_BUFFER) && (value != EGL_LUMINANCE_BUFFER) &&
+                (value != EGL_DONT_CARE))
+            {
+                return EglBadAttribute() << "EGL_color_buffer_type invalid attribute: " << value;
+            }
+            break;
+
+        case EGL_NATIVE_RENDERABLE:
+            if ((value != EGL_DONT_CARE) && (value != EGL_TRUE) && (value != EGL_FALSE))
+            {
+                return EglBadAttribute() << "EGL_native_renderable invalid attribute: " << value;
+            }
+            break;
+
+        case EGL_TRANSPARENT_TYPE:
+            // EGL_DONT_CARE doesn't match the spec, but does match dEQP usage
+            if ((value != EGL_NONE) && (value != EGL_TRANSPARENT_RGB) && (value != EGL_DONT_CARE))
+            {
+                return EglBadAttribute() << "EGL_transparent_type invalid attribute: " << value;
+            }
+            break;
+
+        default:
+            break;
+    }
+
+    return NoError();
+}
+
 Error ValidateConfigAttributes(const Display *display, const AttributeMap &attributes)
 {
     for (const auto &attrib : attributes)
     {
         ANGLE_TRY(ValidateConfigAttribute(display, attrib.first));
+        ANGLE_TRY(ValidateConfigAttributeValue(display, attrib.first, attrib.second));
     }
 
     return NoError();
@@ -2689,9 +2733,12 @@ Error ValidateReleaseTexImage(const Display *display,
     return NoError();
 }
 
-Error ValidateSwapInterval(const Display *display, const Surface *draw_surface)
+Error ValidateSwapInterval(const Display *display,
+                           const Surface *draw_surface,
+                           const gl::Context *context)
 {
     ANGLE_TRY(ValidateDisplay(display));
+    ANGLE_TRY(ValidateContext(display, context));
 
     if (draw_surface == nullptr)
     {
