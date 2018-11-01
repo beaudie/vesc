@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "fe7877cb_d1716d34",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-01T17:08:25Z",
+      "side": 1,
+      "message": "Ok that sounds reasonable. I\u0027m writing a test right now to make sure draw and clear at least correctly ignore the missing aspect even if it exists in the underlying one. I\u0027ll add code to detect and init the missing aspect to 0, but I\u0027m not sure I can turn that into an automated test.",
+      "parentUuid": "dd347b07_4e9b9bce",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 59
+      },
+      "revId": "31c993cd4b3e19ccba68fc9eb3b06e87fc7274f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1cdbcccf_7c935bdc",
         "filename": "include/platform/WorkaroundsVulkan.h",
         "patchSetId": 2
