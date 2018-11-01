@@ -37,6 +37,23 @@
     },
     {
       "key": {
+        "uuid": "ea6567da_9754d500",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-11-01T21:47:18Z",
+      "side": 1,
+      "message": "This comment seems out-of-date. Is it now something more like:\nDon\u0027t allocate a new pool if any previously allocated pool is available.",
+      "revId": "76743d048b89fa432313b6fae9765e9e1aeb284d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "95f2bb0f_506ed0f5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
