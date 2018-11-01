@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4239a7a1_b2d6ad9e",
+        "filename": "extensions/ANGLE_memory_size.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-01T18:17:16Z",
+      "side": 1,
+      "message": "It would be a good idea if this was a bit more strict, e.g. always giving a lower bound (or upper bound, not sure which would be better). I have a feeling applications would be able to make better judgements that way.",
+      "range": {
+        "startLine": 85,
+        "startChar": 60,
+        "endLine": 86,
+        "endChar": 19
+      },
+      "revId": "c012efa0c38deaae15fcb4da8b4d5d205e151d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03466824_f4e430be",
+        "filename": "src/tests/gl_tests/MemorySizeTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-01T18:17:16Z",
+      "side": 1,
+      "message": "Since the extension is always expected to be available, this should be unnecessary.",
+      "revId": "c012efa0c38deaae15fcb4da8b4d5d205e151d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
