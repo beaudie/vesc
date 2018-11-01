@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0138394f_c41bb5cf",
+        "filename": "src/tests/gl_tests/MemorySizeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-01T19:11:02Z",
+      "side": 1,
+      "message": "Maybe 15? (For all EXPECT_GT)",
+      "range": {
+        "startLine": 52,
+        "startChar": 22,
+        "endLine": 52,
+        "endChar": 23
+      },
+      "revId": "da48a91dbaddf869e66c854670eccc8c525f8588",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
