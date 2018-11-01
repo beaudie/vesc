@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b9b5d634_072e77f4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-01T12:36:21Z",
+      "side": 1,
+      "message": "Well, it looks as though you maybe cover the scissored case. since your test has several permutations. but it looks as though we may store the depth clear value in the unused depth part. It might be theoretically possible to read from the unused depth part in the draw call. For the color part, we\u0027ve found that keeping the unused channels to their initialization values is the best bet. Maybe we could detect this situation in FramebufferVk::clear and override the depth part of the VkClearDepthStencilValue.\n\nAlso it might be the case that we have an unused stencil channel. See D24_UNORM_X8_UINT. Similar stuff applies for this format.",
+      "parentUuid": "b45a0941_14450fee",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 59
+      },
+      "revId": "31c993cd4b3e19ccba68fc9eb3b06e87fc7274f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1cdbcccf_7c935bdc",
         "filename": "include/platform/WorkaroundsVulkan.h",
         "patchSetId": 2
