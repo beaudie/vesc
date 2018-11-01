@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ddebd1db_015b9e1e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-01T22:18:11Z",
+      "side": 1,
+      "message": "can you please open a bug for this in the ANGLE tracker and add a tag\n\nBug:\u003cspace\u003eangleproject:####\n\nOr if there is one already you can just add the tag.",
+      "revId": "812721738bb2bde8cdebf9ac7176294e486e1bef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f848cc80_c42d50e6",
+        "filename": "src/tests/angle_white_box_tests.gni",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-01T22:18:11Z",
+      "side": 1,
+      "message": "nit: sorting still needs this to be the first one in the list.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 31
+      },
+      "revId": "812721738bb2bde8cdebf9ac7176294e486e1bef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
