@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "2dd8dda8_7097c098",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-01T15:37:21Z",
+      "side": 1,
+      "message": "_won\u0027t this fill the depth channel with garbage values?_\n\nIt wouldn\u0027t fill the depth with garbage values, but the default value for depth/stencil clear. Essentially `ContextVk::mClearDepthStencilValue` (which is memset to 0 in the constructor) is used to clear both aspects.\n\n_Also what if the scissor test is enabled? We\u0027ll go into the clearWithClearAttachments case._\n\nIn that case the depth aspect won\u0027t be cleared, so yes it would retain its (possibly garbage) value. That\u0027s essentially the same as reading from an uncleared image. I see a point here though.\n\n_it looks as though we may store the depth clear value in the unused depth part. It might be theoretically possible to read from the unused depth part in the draw call._\n\nThat is true. But say the application does `glClearDepthf(0.5)` before the clear, and end up somehow reading the \"hidden\" depth, which would be 0.5 instead of 0.0. What\u0027s the problem?\n\n_we\u0027ve found that keeping the unused channels to their initialization values is the best bet_\n\nTo be clear, best bet against what? Are you saying an application could read back the garbage values somehow and that\u0027s a security issue? How is that different from an application allocating an image, never clear it and read the garbage value?\n\n_Also it might be the case that we have an unused stencil channel. See D24_UNORM_X8_UINT. Similar stuff applies for this format._\n\nD24_UNORM_X8_UINT has always been emulated with VK_FORMAT_D24_UNORM_S8_UINT, so all the tests have been applied to that all along, but I\u0027ll make a specific one since I removed possible testing of that format in a previous change.\n\n---\n\nAll that said, I\u0027m beginning to think maybe I should also add a test to make a sure a stencil-only format is never affected by depth testing (and vice versa). I think the front end should be taking care of that, but there may a bug when it comes to emulated formats.",
+      "parentUuid": "b9b5d634_072e77f4",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 59
+      },
+      "revId": "31c993cd4b3e19ccba68fc9eb3b06e87fc7274f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1cdbcccf_7c935bdc",
         "filename": "include/platform/WorkaroundsVulkan.h",
         "patchSetId": 2
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "a22b340d_1dcbe26f",
+        "filename": "include/platform/WorkaroundsVulkan.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-01T15:37:21Z",
+      "side": 1,
+      "message": "Ok, I\u0027ll move FeaturesVk here and merge the two.",
+      "parentUuid": "1cdbcccf_7c935bdc",
+      "range": {
+        "startLine": 12,
+        "startChar": 7,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "31c993cd4b3e19ccba68fc9eb3b06e87fc7274f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "53e16207_a6f544c7",
         "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
         "patchSetId": 2
@@ -83,6 +131,30 @@
       "writtenOn": "2018-11-01T12:01:38Z",
       "side": 1,
       "message": "nit: line wrapping",
+      "range": {
+        "startLine": 152,
+        "startChar": 83,
+        "endLine": 152,
+        "endChar": 108
+      },
+      "revId": "31c993cd4b3e19ccba68fc9eb3b06e87fc7274f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9dcf5f1_7cb73736",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-01T15:37:21Z",
+      "side": 1,
+      "message": "`git cl format` doesn\u0027t do python I see.",
+      "parentUuid": "53e16207_a6f544c7",
       "range": {
         "startLine": 152,
         "startChar": 83,
@@ -115,6 +187,30 @@
       "revId": "31c993cd4b3e19ccba68fc9eb3b06e87fc7274f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbae3e88_ea3b1ba0",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-01T15:37:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "561d4466_f31c8ddb",
+      "range": {
+        "startLine": 762,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 6
+      },
+      "revId": "31c993cd4b3e19ccba68fc9eb3b06e87fc7274f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
