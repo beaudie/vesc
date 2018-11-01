@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15512c26_d1d48217",
+        "filename": "src/tests/gl_tests/MultiDrawTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-01T21:07:20Z",
+      "side": 1,
+      "message": "nit: 2018",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 18
+      },
+      "revId": "faa468fc6733fe941ab70dfea45cc9359f796fed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f12a742c_afa1687b",
+        "filename": "src/tests/gl_tests/MultiDrawTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-01T21:07:20Z",
+      "side": 1,
+      "message": "nit: all the constexpr stuff can be kWidth/kThis/kThat/etc",
+      "range": {
+        "startLine": 19,
+        "startChar": 19,
+        "endLine": 19,
+        "endChar": 24
+      },
+      "revId": "faa468fc6733fe941ab70dfea45cc9359f796fed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bfcf436_2bc6ab0b",
+        "filename": "src/tests/gl_tests/MultiDrawTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-01T21:07:20Z",
+      "side": 1,
+      "message": "nit: minor request- but is it possible to change this tuple to a struct with the platform params and two named enums for clarity? or at least to a struct with named bools.",
+      "range": {
+        "startLine": 50,
+        "startChar": 28,
+        "endLine": 50,
+        "endChar": 38
+      },
+      "revId": "faa468fc6733fe941ab70dfea45cc9359f796fed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa7afeab_36ddf3a1",
+        "filename": "src/tests/gl_tests/MultiDrawTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-01T21:07:20Z",
+      "side": 1,
+      "message": "above comment only feasible if you can still use Combine",
+      "range": {
+        "startLine": 502,
+        "startChar": 0,
+        "endLine": 505,
+        "endChar": 44
+      },
+      "revId": "faa468fc6733fe941ab70dfea45cc9359f796fed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
