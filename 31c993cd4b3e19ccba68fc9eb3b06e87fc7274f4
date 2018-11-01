@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "dd347b07_4e9b9bce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-01T16:56:08Z",
+      "side": 1,
+      "message": "\u003e That is true. But say the application does `glClearDepthf(0.5)` before the clear, and end up\n\u003e somehow reading the \"hidden\" depth, which would be 0.5 instead of 0.0. What\u0027s the problem?\n\nIt depends on the command. Each command has some defined behaviour that might be broken if the depth was 0.5 instead of 0.0. For draw calls, we\u0027re supposed to always pass the depth test if there\u0027s no depth buffer. I\u0027m not sure if we could create a failing test specific to 0.5. Blit and depth textures are two other cases but again it might be hard to come up with a counterexample.\n\nI guess both for safety and consistency reasons I was hoping we could keep unused channels as their initial value. This is how we handled it for color channels where the problems are a bit easier to surface. For instance you can blit from RGB to RGBA and get the wrong values in the A channel. It might be harder to come up with a counterexample for the depth case. If you don\u0027t mind it would feel safer to ensure the depth values are always consistent (0.0) as they with unused color channels (0.0/1.0 as required). That\u0027s the intent of the issue I filed anyway.",
+      "parentUuid": "2dd8dda8_7097c098",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 59
+      },
+      "revId": "31c993cd4b3e19ccba68fc9eb3b06e87fc7274f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1cdbcccf_7c935bdc",
         "filename": "include/platform/WorkaroundsVulkan.h",
         "patchSetId": 2
@@ -164,6 +188,30 @@
       "revId": "31c993cd4b3e19ccba68fc9eb3b06e87fc7274f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d53f2fca_13344ef9",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-01T16:56:08Z",
+      "side": 1,
+      "message": "Nope. No auto-formatter for Python yet unfortunately.",
+      "parentUuid": "d9dcf5f1_7cb73736",
+      "range": {
+        "startLine": 152,
+        "startChar": 83,
+        "endLine": 152,
+        "endChar": 108
+      },
+      "revId": "31c993cd4b3e19ccba68fc9eb3b06e87fc7274f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
