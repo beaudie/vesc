@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "ca6aa5ef_3213c76c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T04:53:46Z",
+      "side": 1,
+      "message": "Updated comment.",
+      "parentUuid": "ea6567da_9754d500",
+      "revId": "76743d048b89fa432313b6fae9765e9e1aeb284d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "95f2bb0f_506ed0f5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
