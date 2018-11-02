@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7b5a40c_17c86108",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T19:14:29Z",
+      "side": 1,
+      "message": "instead of modifying the generation script and adding a special flag to the format map, could you instead pass FeatureVk to Format::initTextureFallback and do the logic there?",
+      "range": {
+        "startLine": 45,
+        "startChar": 9,
+        "endLine": 45,
+        "endChar": 44
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bdab02f_d6faf8da",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T19:14:29Z",
+      "side": 1,
+      "message": "to keep the computations in Vulkan or ANGLE world, can you check instead that format.angleFormat().depthBits \u003d\u003d 0 ? \"angleFormat\" is the non-emulated format, whereas textureFormat() is the emulated/native/actual/real one.",
+      "range": {
+        "startLine": 208,
+        "startChar": 8,
+        "endLine": 208,
+        "endChar": 58
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b21c46e8_17851a0b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T19:14:29Z",
+      "side": 1,
+      "message": "similar comment here, checking stencilBits.",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 214,
+        "endChar": 62
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13c8847e_86566c73",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T19:14:29Z",
+      "side": 1,
+      "message": "nit: featuresVk",
+      "range": {
+        "startLine": 189,
+        "startChar": 54,
+        "endLine": 189,
+        "endChar": 71
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3841171_26975a52",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T19:14:29Z",
+      "side": 1,
+      "message": "nit: featuresVk",
+      "range": {
+        "startLine": 197,
+        "startChar": 73,
+        "endLine": 197,
+        "endChar": 90
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e303020d_0490c22f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T19:14:29Z",
+      "side": 1,
+      "message": "nit: featuresVk",
+      "range": {
+        "startLine": 62,
+        "startChar": 45,
+        "endLine": 62,
+        "endChar": 62
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04f883ac_4ddbeca1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T19:14:29Z",
+      "side": 1,
+      "message": "nit: featuresVk",
+      "range": {
+        "startLine": 99,
+        "startChar": 45,
+        "endLine": 99,
+        "endChar": 62
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0353fa57_ba167566",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T19:14:29Z",
+      "side": 1,
+      "message": "nit: small comments before each new test",
+      "range": {
+        "startLine": 843,
+        "startChar": 0,
+        "endLine": 843,
+        "endChar": 6
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
