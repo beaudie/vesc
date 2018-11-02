@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5d59fde7_2c5a7a92",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T04:48:09Z",
+      "side": 1,
+      "message": "I think the problem was you added the Bug: tag underneath the Change-Id tag. Could you edit your CL to remove the second change-id (keeping the one here) and putting the Bug: tag just above it? Think Gerrit just got confused.",
+      "parentUuid": "77133eec_d79162bf",
+      "revId": "812721738bb2bde8cdebf9ac7176294e486e1bef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f848cc80_c42d50e6",
         "filename": "src/tests/angle_white_box_tests.gni",
         "patchSetId": 11
