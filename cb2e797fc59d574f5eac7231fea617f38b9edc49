@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6ed22c37_5d2367ba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-11-02T17:50:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b994dcae_e694283c",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 49
+      },
+      "revId": "cb2e797fc59d574f5eac7231fea617f38b9edc49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f885bbae_9db4996b",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Blit11.h",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "cb2e797fc59d574f5eac7231fea617f38b9edc49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4bca6f7_71b15339",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Blit11.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-11-02T17:50:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f885bbae_9db4996b",
+      "range": {
+        "startLine": 168,
+        "startChar": 11,
+        "endLine": 168,
+        "endChar": 33
+      },
+      "revId": "cb2e797fc59d574f5eac7231fea617f38b9edc49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -119,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "6bf56cd2_80da4977",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/gen_blit11helper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-11-02T17:50:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d901f5f_1ef5fa32",
+      "range": {
+        "startLine": 61,
+        "startChar": 33,
+        "endLine": 67,
+        "endChar": 75
+      },
+      "revId": "cb2e797fc59d574f5eac7231fea617f38b9edc49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00079851_d8f77e18",
         "filename": "src/libANGLE/renderer/d3d/d3d11/shaders/MultiplyAlpha.hlsl",
         "patchSetId": 3
@@ -142,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "85c5b47b_1456ebba",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/shaders/MultiplyAlpha.hlsl",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-11-02T17:50:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00079851_d8f77e18",
+      "range": {
+        "startLine": 177,
+        "startChar": 6,
+        "endLine": 177,
+        "endChar": 23
+      },
+      "revId": "cb2e797fc59d574f5eac7231fea617f38b9edc49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da67f2b8_94cc0a98",
         "filename": "src/libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_luma_2d_ps.h",
         "patchSetId": 3
@@ -162,6 +258,30 @@
       "revId": "cb2e797fc59d574f5eac7231fea617f38b9edc49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41567890_0433f5c4",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/shaders/compiled/multiplyalpha_ftof_pm_luma_2d_ps.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-11-02T17:50:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da67f2b8_94cc0a98",
+      "range": {
+        "startLine": 3,
+        "startChar": 51,
+        "endLine": 3,
+        "endChar": 64
+      },
+      "revId": "cb2e797fc59d574f5eac7231fea617f38b9edc49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

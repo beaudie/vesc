@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "db08ae21_6c617aa1",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/gen_blit11helper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-11-02T17:50:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f1aa5bf_e10911d0",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 274,
+        "endChar": 10
+      },
+      "revId": "5a96865e104e2011034d9ac032800f3f47756088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "29ed50ea_21950940",
         "filename": "src/libGLESv2.gni",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "5a96865e104e2011034d9ac032800f3f47756088",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0db02685_47d32aff",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1221469
+      },
+      "writtenOn": "2018-11-02T17:50:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29ed50ea_21950940",
+      "range": {
+        "startLine": 510,
+        "startChar": 23,
+        "endLine": 519,
+        "endChar": 77
+      },
+      "revId": "5a96865e104e2011034d9ac032800f3f47756088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
