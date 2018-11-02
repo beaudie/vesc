@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "63a70281_06b937e6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1304759
+      },
+      "writtenOn": "2018-11-02T14:47:30Z",
+      "side": 1,
+      "message": "Thx Jamie, that was it.",
+      "parentUuid": "5d59fde7_2c5a7a92",
+      "revId": "812721738bb2bde8cdebf9ac7176294e486e1bef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f848cc80_c42d50e6",
         "filename": "src/tests/angle_white_box_tests.gni",
         "patchSetId": 11
