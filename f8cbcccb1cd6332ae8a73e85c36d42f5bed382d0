@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "3ad228b9_c1bb4edc",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-02T20:52:53Z",
+      "side": 1,
+      "message": "In that case, I\u0027d call it `forceFallbackFormat`, which I\u0027d be fine with.",
+      "parentUuid": "c1a077e2_bc6786e5",
+      "range": {
+        "startLine": 45,
+        "startChar": 9,
+        "endLine": 45,
+        "endChar": 44
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0bdab02f_d6faf8da",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
