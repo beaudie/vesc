@@ -16,6 +16,7 @@
 
 #include "common/debug.h"
 #include "common/system_utils.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/CompilerVk.h"
@@ -368,9 +369,10 @@ void RendererVk::onDestroy(vk::Context *context)
     mPhysicalDevice = VK_NULL_HANDLE;
 }
 
-void RendererVk::markDeviceLost()
+void RendererVk::notifyDeviceLost()
 {
     mDeviceLost = true;
+    mDisplay->notifyDeviceLost();
 }
 
 bool RendererVk::isDeviceLost() const
@@ -379,9 +381,11 @@ bool RendererVk::isDeviceLost() const
 }
 
 angle::Result RendererVk::initialize(DisplayVk *displayVk,
-                                     const egl::AttributeMap &attribs,
+                                     egl::Display *display,
                                      const char *wsiName)
 {
+    mDisplay                         = display;
+    const egl::AttributeMap &attribs = mDisplay->getAttributeMap();
     ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseDebugLayers(attribs),
                                                 ShouldEnableMockICD(attribs));
     mEnableValidationLayers = scopedEnvironment.canEnableValidationLayers();
