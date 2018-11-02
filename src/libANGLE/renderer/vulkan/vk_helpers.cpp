@@ -1092,8 +1092,8 @@ angle::Result ImageHelper::init2DStaging(Context *context,
     imageInfo.flags                 = 0;
     imageInfo.imageType             = VK_IMAGE_TYPE_2D;
     imageInfo.format                = format.vkTextureFormat;
-    imageInfo.extent.width          = static_cast<uint32_t>(extents.width);
-    imageInfo.extent.height         = static_cast<uint32_t>(extents.height);
+    imageInfo.extent.width          = static_cast<uint32_t>(std::max(extents.width, 1));
+    imageInfo.extent.height         = static_cast<uint32_t>(std::max(extents.height, 1));
     imageInfo.extent.depth          = 1;
     imageInfo.mipLevels             = 1;
     imageInfo.arrayLayers           = 1;
