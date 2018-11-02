@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14054c82_0fa4512f",
+        "filename": "util/posix/Posix_system_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-02T17:48:19Z",
+      "side": 1,
+      "message": "I added this particularly because it\u0027s very easy to not run the perf test with sudo (or CAP_SYS_NICE added), at which point setpriority would not be doing anything.",
+      "revId": "83c333da276793f4593400524df3405eafb2aacf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
