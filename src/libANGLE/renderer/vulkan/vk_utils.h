@@ -621,7 +621,7 @@ class Event final : public WrappedObject<Event, VkEvent>
 {
   public:
     Event();
-    void destroy(VkDevice fence);
+    void destroy(VkDevice device);
     using WrappedObject::operator=;
 
     angle::Result init(Context *context, const VkEventCreateInfo &createInfo);
@@ -634,12 +634,13 @@ class Fence final : public WrappedObject<Fence, VkFence>
 {
   public:
     Fence();
-    void destroy(VkDevice fence);
+    void destroy(VkDevice device);
     using WrappedObject::operator=;
 
     angle::Result init(Context *context, const VkFenceCreateInfo &createInfo);
     angle::Result getStatus(Context *context) const;
     angle::Result wait(Context *context, uint64_t timeout) const;
+    void waitOnDeviceLoss(VkDevice device) const;
 };
 
 // Similar to StagingImage, for Buffers.

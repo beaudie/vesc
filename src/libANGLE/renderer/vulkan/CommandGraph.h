@@ -306,6 +306,7 @@ class CommandGraph final : angle::NonCopyable
                                  CommandPool *commandPool,
                                  CommandBuffer *primaryCommandBufferOut);
     bool empty() const;
+    void clear();
 
     CommandGraphNode *getLastBarrierNode(size_t *indexOut);
 

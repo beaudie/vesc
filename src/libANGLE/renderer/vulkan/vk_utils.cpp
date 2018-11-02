@@ -1118,6 +1118,14 @@ angle::Result Fence::wait(Context *context, uint64_t timeout) const
         context, vkWaitForFences(context->getDevice(), 1, &mHandle, true, timeout));
 }
 
+void Fence::waitOnDeviceLoss(VkDevice device) const
+{
+    constexpr uint64_t kMaxFenceWaitTimeNs = 10'000'000'000llu;
+    VkResult status = vkWaitForFences(device, 1, &mHandle, true, kMaxFenceWaitTimeNs);
+    // If kMaxFenceWaitTimeNs times out, it is probably not possible to recover from lost device
+    ASSERT(status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST);
+}
+
 // MemoryProperties implementation.
 MemoryProperties::MemoryProperties() : mMemoryProperties{0}
 {

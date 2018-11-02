@@ -16,6 +16,7 @@
 
 #include "common/debug.h"
 #include "common/system_utils.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/CompilerVk.h"
@@ -368,9 +369,16 @@ void RendererVk::onDestroy(vk::Context *context)
     mPhysicalDevice = VK_NULL_HANDLE;
 }
 
-void RendererVk::markDeviceLost()
+void RendererVk::notifyDeviceLost()
 {
     mDeviceLost = true;
+
+    mCommandGraph.clear();
+    mLastSubmittedQueueSerial = mCurrentQueueSerial;
+    mCurrentQueueSerial       = mQueueSerialFactory.generate();
+    freeAllInFlightResources();
+
+    mDisplay->notifyDeviceLost();
 }
 
 bool RendererVk::isDeviceLost() const
@@ -379,9 +387,11 @@ bool RendererVk::isDeviceLost() const
 }
 
 angle::Result RendererVk::initialize(DisplayVk *displayVk,
-                                     const egl::AttributeMap &attribs,
+                                     egl::Display *display,
                                      const char *wsiName)
 {
+    mDisplay                         = display;
+    const egl::AttributeMap &attribs = mDisplay->getAttributeMap();
     ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseDebugLayers(attribs),
                                                 ShouldEnableMockICD(attribs));
     mEnableValidationLayers = scopedEnvironment.canEnableValidationLayers();
@@ -917,6 +927,11 @@ void RendererVk::freeAllInFlightResources()
 {
     for (CommandBatch &batch : mInFlightCommands)
     {
+        // On device loss we need to wait for fence to be signaled before destroying it
+        if (mDeviceLost)
+        {
+            batch.fence.waitOnDeviceLoss(mDevice);
+        }
         batch.fence.destroy(mDevice);
         batch.commandPool.destroy(mDevice);
     }
