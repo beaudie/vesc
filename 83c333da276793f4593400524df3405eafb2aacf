@@ -16,6 +16,47 @@
       "revId": "83c333da276793f4593400524df3405eafb2aacf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53729af6_d92b36cb",
+        "filename": "util/posix/Posix_system_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T18:10:11Z",
+      "side": 1,
+      "message": "Maybe make this clear this is a warning diagnostic? Like \"Warning: setpriority failed in StabilizeCPUForBenchmarking. Process will retain default priority\"",
+      "parentUuid": "14054c82_0fa4512f",
+      "revId": "83c333da276793f4593400524df3405eafb2aacf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20c9bffb_b77282f5",
+        "filename": "util/posix/Posix_system_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T18:10:11Z",
+      "side": 1,
+      "message": "nit: similarly here.",
+      "range": {
+        "startLine": 70,
+        "startChar": 16,
+        "endLine": 70,
+        "endChar": 40
+      },
+      "revId": "83c333da276793f4593400524df3405eafb2aacf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
