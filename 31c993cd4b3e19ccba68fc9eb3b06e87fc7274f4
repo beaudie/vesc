@@ -168,6 +168,29 @@
     },
     {
       "key": {
+        "uuid": "5f84fe7a_c805f803",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-02T03:54:56Z",
+      "side": 1,
+      "message": "This was not true. The reason clearDepthStencil didn\u0027t work was that the same aspect mask was used to transition the image and clear it. Transition is the one that has this limitation (which makes sense). I separated the masks and let this case go through clearDepthStencil.",
+      "range": {
+        "startLine": 215,
+        "startChar": 80,
+        "endLine": 216,
+        "endChar": 52
+      },
+      "revId": "31c993cd4b3e19ccba68fc9eb3b06e87fc7274f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "53e16207_a6f544c7",
         "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
         "patchSetId": 2
