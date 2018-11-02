@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "01c0345c_b94de65e",
+        "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-02T19:55:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f67e2332_1430c8c4",
+      "revId": "c6e591cd78516b9dd125275baa116ffa5dbfb6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d310487_3f9fb631",
         "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
         "patchSetId": 3
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "cd736a17_f82edaf0",
+        "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-02T19:55:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "69261c4e_c9bf8ab7",
+      "revId": "c6e591cd78516b9dd125275baa116ffa5dbfb6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf78e1cd_b3669189",
         "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
         "patchSetId": 3
@@ -77,6 +113,30 @@
     },
     {
       "key": {
+        "uuid": "6895211c_cf0c246f",
+        "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-02T19:55:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf78e1cd_b3669189",
+      "range": {
+        "startLine": 234,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 6
+      },
+      "revId": "c6e591cd78516b9dd125275baa116ffa5dbfb6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "136d3adc_8ed595e0",
         "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
         "patchSetId": 3
@@ -97,6 +157,30 @@
       "revId": "c6e591cd78516b9dd125275baa116ffa5dbfb6ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c89e98f8_140a534c",
+        "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-02T19:55:28Z",
+      "side": 1,
+      "message": "Done. I thought it would fail (since a similar test fails for clear), so I was sure I have to put it back! ;)",
+      "parentUuid": "136d3adc_8ed595e0",
+      "range": {
+        "startLine": 251,
+        "startChar": 7,
+        "endLine": 251,
+        "endChar": 25
+      },
+      "revId": "c6e591cd78516b9dd125275baa116ffa5dbfb6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
