@@ -211,8 +211,7 @@ angle::Result FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
             clearDepthStencilValue.stencil = 0;
         }
         // GL_STENCIL_INDEX8 may or may not be emulated.
-        else if (format.angleFormat().depthBits == 0 &&
-                 format.vkTextureFormat != VK_FORMAT_S8_UINT)
+        else if (format.angleFormat().depthBits == 0 && format.vkTextureFormat != VK_FORMAT_S8_UINT)
         {
             clearDepth                   = true;
             clearDepthStencilValue.depth = 0;
