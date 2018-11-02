@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "9637f9c5_8bc81470",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-11-02T14:29:58Z",
+      "side": 1,
+      "message": "That\u0027s where we started but GetConfigAttribute wants to validate just the attributes so we either had to add a flag to check values if appropriate or split to separate function which seemed cleaner.",
+      "parentUuid": "895ce064_aad36b89",
+      "range": {
+        "startLine": 220,
+        "startChar": 6,
+        "endLine": 220,
+        "endChar": 34
+      },
+      "revId": "1fc2e6535fe20b89877a0d209dc9b0f1851e0535",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c76b2c61_87616619",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 1
