@@ -605,9 +605,12 @@ EGLint SwapChain11::reset(DisplayD3D *displayD3D,
 
     if (mNativeWindow->getNativeWindow())
     {
+      /*
         HRESULT hr = mNativeWindow->createSwapChain(
             device, mRenderer->getDxgiFactory(), getSwapChainNativeFormat(), backbufferWidth,
-            backbufferHeight, mNeedsOffscreenTexture ? 1 : getD3DSamples(), &mSwapChain);
+            backbufferHeight, mNeedsOffscreenTexture ? 1 : getD3DSamples(), &mSwapChain);*/
+
+        HRESULT hr = D3DERR_DEVICELOST;
 
         if (FAILED(hr))
         {

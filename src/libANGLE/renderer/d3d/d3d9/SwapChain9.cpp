@@ -210,7 +210,7 @@ EGLint SwapChain9::reset(DisplayD3D *displayD3D,
             presentParameters.BackBufferWidth = (presentParameters.BackBufferWidth + 63) / 64 * 64;
         }
 
-        result = device->CreateAdditionalSwapChain(&presentParameters, &mSwapChain);
+        result = D3DERR_DEVICELOST; //device->CreateAdditionalSwapChain(&presentParameters, &mSwapChain);
 
         if (FAILED(result))
         {
