@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "62056216_8555178b",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-11-02T15:32:32Z",
+      "side": 1,
+      "message": "I\u0027m sorry, that doesn\u0027t make sense to me. In the case of GetConfigAttribute, there is no value to pass in.",
+      "parentUuid": "5bb10c4b_8cd15fd0",
+      "range": {
+        "startLine": 220,
+        "startChar": 6,
+        "endLine": 220,
+        "endChar": 34
+      },
+      "revId": "1fc2e6535fe20b89877a0d209dc9b0f1851e0535",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c76b2c61_87616619",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 1
