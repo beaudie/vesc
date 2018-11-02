@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "70f3e68d_a18da5db",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-11-02T15:39:13Z",
+      "side": 1,
+      "message": "To add to this, the problem is here:\n\nError ValidateGetConfigAttrib(const Display *display, const Config *config, EGLint attribute)\n{\n    ANGLE_TRY(ValidateConfig(display, config));\n    ANGLE_TRY(ValidateConfigAttribute(display, static_cast\u003cEGLAttrib\u003e(attribute)));\n    return NoError();\n}\n\nWith this call to ValidateConfigAttribute(), we don\u0027t have a corresponding attribute value to check.   Going up another level in the call to GetConfigAttrib(), there is a \u0027value\u0027 parameter that\u0027s available, so presumably that could be passed along so ValidateConfigAttribute() could be updated to check both attributes and values.   This touches a few more lines of code, but would remove the duplicate checking.\n\nFor reference, here is entry_points_egl.cpp::GetConfigAttrib() where ValidateConfigAttribute() is called:\n\nEGLBoolean EGLAPIENTRY GetConfigAttrib(EGLDisplay dpy,\n                                       EGLConfig config,\n                                       EGLint attribute,\n                                       EGLint *value)\n{\n    ANGLE_SCOPED_GLOBAL_LOCK();\n    EVENT(\"(EGLDisplay dpy \u003d 0x%016\" PRIxPTR \", EGLConfig config \u003d 0x%016\" PRIxPTR\n          \", EGLint attribute \u003d %d, EGLint \"\n          \"*value \u003d 0x%016\" PRIxPTR \")\",\n          (uintptr_t)dpy, (uintptr_t)config, attribute, (uintptr_t)value);\n    Thread *thread \u003d GetCurrentThread();\n\n    Display *display      \u003d static_cast\u003cDisplay *\u003e(dpy);\n    Config *configuration \u003d static_cast\u003cConfig *\u003e(config);\n\n    ANGLE_EGL_TRY_RETURN(thread, ValidateGetConfigAttrib(display, configuration, attribute),\n                         \"eglGetConfigAttrib\", GetDisplayIfValid(display), EGL_FALSE);\n\n    QueryConfigAttrib(configuration, attribute, value);\n\n    thread-\u003esetSuccess();\n    return EGL_TRUE;\n}",
+      "parentUuid": "62056216_8555178b",
+      "range": {
+        "startLine": 220,
+        "startChar": 6,
+        "endLine": 220,
+        "endChar": 34
+      },
+      "revId": "1fc2e6535fe20b89877a0d209dc9b0f1851e0535",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c76b2c61_87616619",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 1
