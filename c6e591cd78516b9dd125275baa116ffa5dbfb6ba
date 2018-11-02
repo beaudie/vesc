@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d310487_3f9fb631",
+        "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-02T17:43:14Z",
+      "side": 1,
+      "message": "This doesn\u0027t really tell if the depth buffer hadn\u0027t got affected by the clear/draw calls, so I\u0027m not sure how useful this test actually is... It at least does make sure that glDepthFunc() is indeed without effect.",
+      "revId": "c6e591cd78516b9dd125275baa116ffa5dbfb6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
