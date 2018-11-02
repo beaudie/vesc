@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "f67e2332_1430c8c4",
+        "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T19:16:02Z",
+      "side": 1,
+      "message": "nit: top-level comment",
+      "revId": "c6e591cd78516b9dd125275baa116ffa5dbfb6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9d310487_3f9fb631",
         "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
         "patchSetId": 3
@@ -13,6 +30,70 @@
       "writtenOn": "2018-11-02T17:43:14Z",
       "side": 1,
       "message": "This doesn\u0027t really tell if the depth buffer hadn\u0027t got affected by the clear/draw calls, so I\u0027m not sure how useful this test actually is... It at least does make sure that glDepthFunc() is indeed without effect.",
+      "revId": "c6e591cd78516b9dd125275baa116ffa5dbfb6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69261c4e_c9bf8ab7",
+        "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T19:16:02Z",
+      "side": 1,
+      "message": "I\u0027m fine with adding almost any valid test. If they\u0027re at all difficult they sometimes can turn up driver bugs.",
+      "parentUuid": "9d310487_3f9fb631",
+      "revId": "c6e591cd78516b9dd125275baa116ffa5dbfb6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf78e1cd_b3669189",
+        "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T19:16:02Z",
+      "side": 1,
+      "message": "nit: comment before each new tests.",
+      "range": {
+        "startLine": 234,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 6
+      },
+      "revId": "c6e591cd78516b9dd125275baa116ffa5dbfb6ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "136d3adc_8ed595e0",
+        "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T19:16:02Z",
+      "side": 1,
+      "message": "you should remove the comments if the skip isn\u0027t needed.",
+      "range": {
+        "startLine": 251,
+        "startChar": 7,
+        "endLine": 251,
+        "endChar": 25
+      },
       "revId": "c6e591cd78516b9dd125275baa116ffa5dbfb6ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
