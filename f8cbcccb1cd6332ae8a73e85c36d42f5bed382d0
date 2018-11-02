@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b36913ee_1b02816a",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T19:49:19Z",
+      "side": 1,
+      "message": "My thought was the flag could force initTextureFallback to just skip the first entry in the fallback lists. I.e. force fallback for everything.",
+      "parentUuid": "a176eed4_9bbd891a",
+      "range": {
+        "startLine": 45,
+        "startChar": 9,
+        "endLine": 45,
+        "endChar": 44
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0bdab02f_d6faf8da",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -375,6 +399,30 @@
       "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c199101_63be1247",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T19:49:19Z",
+      "side": 1,
+      "message": "No, it\u0027s fine. Maybe minor preference but it\u0027s not worth changing.",
+      "parentUuid": "4582e8c3_29dfe473",
+      "range": {
+        "startLine": 843,
+        "startChar": 0,
+        "endLine": 843,
+        "endChar": 6
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
