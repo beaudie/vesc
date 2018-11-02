@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "c1a077e2_bc6786e5",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-02T20:41:57Z",
+      "side": 1,
+      "message": "Yeah, it could have side effects on the other formats. But it\u0027s only for testing code. And could be useful for other unit tests that want to force fallback formats. What do you think? The perf impact would be minimal.",
+      "parentUuid": "2344dc48_3579d03f",
+      "range": {
+        "startLine": 45,
+        "startChar": 9,
+        "endLine": 45,
+        "endChar": 44
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0bdab02f_d6faf8da",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
