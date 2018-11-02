@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "6a025c3a_3915c44d",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-11-02T15:46:39Z",
+      "side": 1,
+      "message": "GetConfigAttrib\u0027s value is a return parameter, it\u0027s value is undefined at the point where we call ValidateGetConfigAttrib so that\u0027s not going to help us.",
+      "parentUuid": "70f3e68d_a18da5db",
+      "range": {
+        "startLine": 220,
+        "startChar": 6,
+        "endLine": 220,
+        "endChar": 34
+      },
+      "revId": "1fc2e6535fe20b89877a0d209dc9b0f1851e0535",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c76b2c61_87616619",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 1
