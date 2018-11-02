@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a176eed4_9bbd891a",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-02T19:44:06Z",
+      "side": 1,
+      "message": "I have two objects to that:\n\n- `initTextureFallback` is called by many cases, which would all be paying some cost instead of just the one where the feature applies.\n- `initTextureFallback` would have to add ifs and checks to detect if this flag is applicable and see which / how many fallbacks it should ignore.  The caller on the other hand has this information readily available.\n\nThis way, the implementation is both simpler and more efficient.",
+      "parentUuid": "b7b5a40c_17c86108",
+      "range": {
+        "startLine": 45,
+        "startChar": 9,
+        "endLine": 45,
+        "endChar": 44
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0bdab02f_d6faf8da",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90b50cbe_ce06c05f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-02T19:44:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bdab02f_d6faf8da",
+      "range": {
+        "startLine": 208,
+        "startChar": 8,
+        "endLine": 208,
+        "endChar": 58
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "afba5839_160f0eeb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-02T19:44:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b21c46e8_17851a0b",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 214,
+        "endChar": 62
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "13c8847e_86566c73",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 4
@@ -91,6 +163,30 @@
       "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4068ed57_3427eb18",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-02T19:44:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13c8847e_86566c73",
+      "range": {
+        "startLine": 189,
+        "startChar": 54,
+        "endLine": 189,
+        "endChar": 71
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "8586dd47_b7f1f430",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-02T19:44:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3841171_26975a52",
+      "range": {
+        "startLine": 197,
+        "startChar": 73,
+        "endLine": 197,
+        "endChar": 90
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e303020d_0490c22f",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
         "patchSetId": 4
@@ -128,6 +248,30 @@
       "writtenOn": "2018-11-02T19:14:29Z",
       "side": 1,
       "message": "nit: featuresVk",
+      "range": {
+        "startLine": 62,
+        "startChar": 45,
+        "endLine": 62,
+        "endChar": 62
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e6af0d8_65d2f3ab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-02T19:44:06Z",
+      "side": 1,
+      "message": "Missed these",
+      "parentUuid": "e303020d_0490c22f",
       "range": {
         "startLine": 62,
         "startChar": 45,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "82372801_67cc3499",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-02T19:44:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04f883ac_4ddbeca1",
+      "range": {
+        "startLine": 99,
+        "startChar": 45,
+        "endLine": 99,
+        "endChar": 62
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0353fa57_ba167566",
         "filename": "src/tests/gl_tests/ClearTest.cpp",
         "patchSetId": 4
@@ -174,6 +342,30 @@
       "writtenOn": "2018-11-02T19:14:29Z",
       "side": 1,
       "message": "nit: small comments before each new test",
+      "range": {
+        "startLine": 843,
+        "startChar": 0,
+        "endLine": 843,
+        "endChar": 6
+      },
+      "revId": "f8cbcccb1cd6332ae8a73e85c36d42f5bed382d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4582e8c3_29dfe473",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-02T19:44:06Z",
+      "side": 1,
+      "message": "There\u0027s a comment about the test \"group\" that essentially runs different variations:\n\n\u003e // Tests combined color+depth scissored masked clears for a depth-stencil-emulated\n\u003e // depth-only-type.\n\nDo you still want me to specialize that comment for each test case?",
+      "parentUuid": "0353fa57_ba167566",
       "range": {
         "startLine": 843,
         "startChar": 0,
