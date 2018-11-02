@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "895ce064_aad36b89",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-02T14:24:51Z",
+      "side": 1,
+      "message": "Could you merge this into ValidateConfigAttribute above?  Might as well only switch on the attribute once.",
+      "range": {
+        "startLine": 220,
+        "startChar": 6,
+        "endLine": 220,
+        "endChar": 34
+      },
+      "revId": "1fc2e6535fe20b89877a0d209dc9b0f1851e0535",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c76b2c61_87616619",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-02T14:24:51Z",
+      "side": 1,
+      "message": "nit: can you turn these into swiches?  It\u0027s easier to read and minimizes diffs when adding new values.",
+      "range": {
+        "startLine": 226,
+        "startChar": 12,
+        "endLine": 226,
+        "endChar": 88
+      },
+      "revId": "1fc2e6535fe20b89877a0d209dc9b0f1851e0535",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08ec95f4_59afcacf",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2737,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-02T14:24:51Z",
+      "side": 1,
+      "message": "nit: you can remove this, ValidateContext will validate the display.",
+      "range": {
+        "startLine": 2737,
+        "startChar": 4,
+        "endLine": 2737,
+        "endChar": 40
+      },
+      "revId": "1fc2e6535fe20b89877a0d209dc9b0f1851e0535",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
