@@ -152,7 +152,9 @@ void UnpackAttachmentDesc(VkAttachmentDescription *desc,
     desc->finalLayout    = static_cast<VkImageLayout>(ops.finalLayout);
 }
 
-void UnpackStencilState(const vk::PackedStencilOpState &packedState, VkStencilOpState *stateOut)
+void UnpackStencilState(const vk::PackedStencilOpState &packedState,
+                        uint8_t stencilReference,
+                        VkStencilOpState *stateOut)
 {
     stateOut->failOp      = static_cast<VkStencilOp>(packedState.failOp);
     stateOut->passOp      = static_cast<VkStencilOp>(packedState.passOp);
@@ -160,20 +162,7 @@ void UnpackStencilState(const vk::PackedStencilOpState &packedState, VkStencilOp
     stateOut->compareOp   = static_cast<VkCompareOp>(packedState.compareOp);
     stateOut->compareMask = packedState.compareMask;
     stateOut->writeMask   = packedState.writeMask;
-    stateOut->reference   = packedState.reference;
-}
-
-void UnpackBlendAttachmentState(const vk::PackedColorBlendAttachmentState &packedState,
-                                VkPipelineColorBlendAttachmentState *stateOut)
-{
-    stateOut->blendEnable         = static_cast<VkBool32>(packedState.blendEnable);
-    stateOut->srcColorBlendFactor = static_cast<VkBlendFactor>(packedState.srcColorBlendFactor);
-    stateOut->dstColorBlendFactor = static_cast<VkBlendFactor>(packedState.dstColorBlendFactor);
-    stateOut->colorBlendOp        = static_cast<VkBlendOp>(packedState.colorBlendOp);
-    stateOut->srcAlphaBlendFactor = static_cast<VkBlendFactor>(packedState.srcAlphaBlendFactor);
-    stateOut->dstAlphaBlendFactor = static_cast<VkBlendFactor>(packedState.dstAlphaBlendFactor);
-    stateOut->alphaBlendOp        = static_cast<VkBlendOp>(packedState.alphaBlendOp);
-    stateOut->colorWriteMask      = static_cast<VkColorComponentFlags>(packedState.colorWriteMask);
+    stateOut->reference   = stencilReference;
 }
 
 angle::Result InitializeRenderPassFromDesc(vk::Context *context,
@@ -240,6 +229,43 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
     return angle::Result::Continue();
 }
 
+template <typename SrcT>
+void Pack4BitInt(uint8_t *words, uint32_t index, SrcT value)
+{
+    uint32_t shiftedIndex = index >> 1;
+    ASSERT(value < 64);
+
+    if ((index & 1) == 0)
+    {
+        words[shiftedIndex] &= 0xF0;
+        words[shiftedIndex] |= static_cast<uint8_t>(value);
+    }
+    else
+    {
+        words[shiftedIndex] &= 0x0F;
+        words[shiftedIndex] |= static_cast<uint8_t>(value) << 4;
+    }
+}
+
+template <typename DestT>
+DestT Unpack4BitInt(const uint8_t *words, uint32_t index)
+{
+    if ((index & 1) == 0)
+    {
+        return static_cast<DestT>(words[index >> 1] & 0xF);
+    }
+    else
+    {
+        return static_cast<DestT>(words[index >> 1] >> 4);
+    }
+}
+
+template <typename DestT, typename SrcT>
+ANGLE_INLINE DestT ValidatedCast(SrcT value)
+{
+    ASSERT(static_cast<SrcT>(static_cast<DestT>(value)) == value);
+    return static_cast<DestT>(value);
+}
 }  // anonymous namespace
 
 // RenderPassDesc implementation.
@@ -255,9 +281,14 @@ RenderPassDesc::RenderPassDesc(const RenderPassDesc &other)
     memcpy(this, &other, sizeof(RenderPassDesc));
 }
 
+size_t RenderPassDesc::colorAttachmentCount() const
+{
+    return mColorAttachmentCount;
+}
+
 size_t RenderPassDesc::attachmentCount() const
 {
-    return mAttachmentCount;
+    return mColorAttachmentCount + mDepthStencilAttachmentCount;
 }
 
 void RenderPassDesc::setSamples(GLint samples)
@@ -268,10 +299,19 @@ void RenderPassDesc::setSamples(GLint samples)
 
 void RenderPassDesc::packAttachment(const Format &format)
 {
-    ASSERT(mAttachmentCount < mAttachmentFormats.size() - 1);
+    ASSERT(attachmentCount() < mAttachmentFormats.size() - 1);
     static_assert(angle::kNumANGLEFormats < std::numeric_limits<uint8_t>::max(),
                   "Too many ANGLE formats to fit in uint8_t");
-    mAttachmentFormats[mAttachmentCount++] = static_cast<uint8_t>(format.angleFormatID);
+    mAttachmentFormats[attachmentCount()] = ValidatedCast<uint8_t>(format.angleFormatID);
+    if (format.angleFormat().hasDepthOrStencilBits())
+    {
+        mDepthStencilAttachmentCount++;
+    }
+    else
+    {
+        ASSERT(mDepthStencilAttachmentCount == 0);
+        mColorAttachmentCount++;
+    }
 }
 
 RenderPassDesc &RenderPassDesc::operator=(const RenderPassDesc &other)
@@ -304,7 +344,6 @@ void PipelineDesc::operator delete(void *ptr)
 
 PipelineDesc::PipelineDesc()
 {
-    ANGLE_UNUSED_VARIABLE(mPadding);
     memset(this, 0, sizeof(PipelineDesc));
 }
 
@@ -331,78 +370,80 @@ bool PipelineDesc::operator==(const PipelineDesc &other) const
     return (memcmp(this, &other, sizeof(PipelineDesc)) == 0);
 }
 
+// TODO(jmadill): We should prefer using Packed GLenums. http://anglebug.com/2169
+
 void PipelineDesc::initDefaults()
 {
-    mInputAssemblyInfo.topology = static_cast<uint32_t>(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
-    mInputAssemblyInfo.primitiveRestartEnable = 0;
+    mRasterizationAndMultisampleStateInfo.depthClampEnable           = 0;
+    mRasterizationAndMultisampleStateInfo.rasterizationDiscardEnable = 0;
+    mRasterizationAndMultisampleStateInfo.polygonMode =
+        ValidatedCast<uint16_t>(VK_POLYGON_MODE_FILL);
+    mRasterizationAndMultisampleStateInfo.cullMode = ValidatedCast<uint16_t>(VK_CULL_MODE_NONE);
+    mRasterizationAndMultisampleStateInfo.frontFace =
+        ValidatedCast<uint16_t>(VK_FRONT_FACE_CLOCKWISE);
+    mRasterizationAndMultisampleStateInfo.depthBiasEnable         = 0;
+    mRasterizationAndMultisampleStateInfo.depthBiasConstantFactor = 0.0f;
+    mRasterizationAndMultisampleStateInfo.depthBiasClamp          = 0.0f;
+    mRasterizationAndMultisampleStateInfo.depthBiasSlopeFactor    = 0.0f;
+    mRasterizationAndMultisampleStateInfo.lineWidth               = 1.0f;
 
-    mRasterizationStateInfo.depthClampEnable           = 0;
-    mRasterizationStateInfo.rasterizationDiscardEnable = 0;
-    mRasterizationStateInfo.polygonMode     = static_cast<uint16_t>(VK_POLYGON_MODE_FILL);
-    mRasterizationStateInfo.cullMode        = static_cast<uint16_t>(VK_CULL_MODE_NONE);
-    mRasterizationStateInfo.frontFace       = static_cast<uint16_t>(VK_FRONT_FACE_CLOCKWISE);
-    mRasterizationStateInfo.depthBiasEnable = 0;
-    mRasterizationStateInfo.depthBiasConstantFactor = 0.0f;
-    mRasterizationStateInfo.depthBiasClamp          = 0.0f;
-    mRasterizationStateInfo.depthBiasSlopeFactor    = 0.0f;
-    mRasterizationStateInfo.lineWidth               = 1.0f;
-
-    mMultisampleStateInfo.rasterizationSamples = 1;
-    mMultisampleStateInfo.sampleShadingEnable  = 0;
-    mMultisampleStateInfo.minSampleShading     = 0.0f;
-    for (uint32_t &sampleMask : mMultisampleStateInfo.sampleMask)
+    mRasterizationAndMultisampleStateInfo.rasterizationSamples = 1;
+    mRasterizationAndMultisampleStateInfo.sampleShadingEnable  = 0;
+    mRasterizationAndMultisampleStateInfo.minSampleShading     = 0.0f;
+    for (uint32_t &sampleMask : mRasterizationAndMultisampleStateInfo.sampleMask)
     {
         sampleMask = 0;
     }
-    mMultisampleStateInfo.alphaToCoverageEnable = 0;
-    mMultisampleStateInfo.alphaToOneEnable      = 0;
+    mRasterizationAndMultisampleStateInfo.alphaToCoverageEnable = 0;
+    mRasterizationAndMultisampleStateInfo.alphaToOneEnable      = 0;
 
     mDepthStencilStateInfo.depthTestEnable       = 0;
     mDepthStencilStateInfo.depthWriteEnable      = 1;
-    mDepthStencilStateInfo.depthCompareOp        = static_cast<uint8_t>(VK_COMPARE_OP_LESS);
+    mDepthStencilStateInfo.depthCompareOp        = ValidatedCast<uint8_t>(VK_COMPARE_OP_LESS);
     mDepthStencilStateInfo.depthBoundsTestEnable = 0;
     mDepthStencilStateInfo.stencilTestEnable     = 0;
     mDepthStencilStateInfo.minDepthBounds        = 0.0f;
     mDepthStencilStateInfo.maxDepthBounds        = 0.0f;
-    mDepthStencilStateInfo.front.failOp          = static_cast<uint8_t>(VK_STENCIL_OP_KEEP);
-    mDepthStencilStateInfo.front.passOp          = static_cast<uint8_t>(VK_STENCIL_OP_KEEP);
-    mDepthStencilStateInfo.front.depthFailOp     = static_cast<uint8_t>(VK_STENCIL_OP_KEEP);
-    mDepthStencilStateInfo.front.compareOp       = static_cast<uint8_t>(VK_COMPARE_OP_ALWAYS);
-    mDepthStencilStateInfo.front.compareMask     = static_cast<uint32_t>(-1);
-    mDepthStencilStateInfo.front.writeMask       = static_cast<uint32_t>(-1);
-    mDepthStencilStateInfo.front.reference       = 0;
-    mDepthStencilStateInfo.back.failOp           = static_cast<uint8_t>(VK_STENCIL_OP_KEEP);
-    mDepthStencilStateInfo.back.passOp           = static_cast<uint8_t>(VK_STENCIL_OP_KEEP);
-    mDepthStencilStateInfo.back.depthFailOp      = static_cast<uint8_t>(VK_STENCIL_OP_KEEP);
-    mDepthStencilStateInfo.back.compareOp        = static_cast<uint8_t>(VK_COMPARE_OP_ALWAYS);
-    mDepthStencilStateInfo.back.compareMask      = static_cast<uint32_t>(-1);
-    mDepthStencilStateInfo.back.writeMask        = static_cast<uint32_t>(-1);
-    mDepthStencilStateInfo.back.reference        = 0;
+    mDepthStencilStateInfo.front.failOp          = ValidatedCast<uint8_t>(VK_STENCIL_OP_KEEP);
+    mDepthStencilStateInfo.front.passOp          = ValidatedCast<uint8_t>(VK_STENCIL_OP_KEEP);
+    mDepthStencilStateInfo.front.depthFailOp     = ValidatedCast<uint8_t>(VK_STENCIL_OP_KEEP);
+    mDepthStencilStateInfo.front.compareOp       = ValidatedCast<uint8_t>(VK_COMPARE_OP_ALWAYS);
+    mDepthStencilStateInfo.front.compareMask     = ValidatedCast<uint8_t>(0);
+    mDepthStencilStateInfo.front.writeMask       = ValidatedCast<uint8_t>(0xFF);
+    mDepthStencilStateInfo.frontStencilReference = 0;
+    mDepthStencilStateInfo.back.failOp           = ValidatedCast<uint8_t>(VK_STENCIL_OP_KEEP);
+    mDepthStencilStateInfo.back.passOp           = ValidatedCast<uint8_t>(VK_STENCIL_OP_KEEP);
+    mDepthStencilStateInfo.back.depthFailOp      = ValidatedCast<uint8_t>(VK_STENCIL_OP_KEEP);
+    mDepthStencilStateInfo.back.compareOp        = ValidatedCast<uint8_t>(VK_COMPARE_OP_ALWAYS);
+    mDepthStencilStateInfo.back.compareMask      = ValidatedCast<uint8_t>(0xFF);
+    mDepthStencilStateInfo.back.writeMask        = ValidatedCast<uint8_t>(0xFF);
+    mDepthStencilStateInfo.backStencilReference  = 0;
 
-    // TODO(jmadill): Blend state/MRT.
-    PackedColorBlendAttachmentState blendAttachmentState;
-    blendAttachmentState.blendEnable         = 0;
-    blendAttachmentState.srcColorBlendFactor = static_cast<uint8_t>(VK_BLEND_FACTOR_ONE);
-    blendAttachmentState.dstColorBlendFactor = static_cast<uint8_t>(VK_BLEND_FACTOR_ONE);
-    blendAttachmentState.colorBlendOp        = static_cast<uint8_t>(VK_BLEND_OP_ADD);
-    blendAttachmentState.srcAlphaBlendFactor = static_cast<uint8_t>(VK_BLEND_FACTOR_ONE);
-    blendAttachmentState.dstAlphaBlendFactor = static_cast<uint8_t>(VK_BLEND_FACTOR_ONE);
-    blendAttachmentState.alphaBlendOp        = static_cast<uint8_t>(VK_BLEND_OP_ADD);
-    blendAttachmentState.colorWriteMask =
-        static_cast<uint8_t>(VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
-                             VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
+    PackedInputAssemblyAndColorBlendStateInfo &inputAndBlend =
+        mInputAssembltyAndColorBlendStateInfo;
+    inputAndBlend.logicOpEnable     = 0;
+    inputAndBlend.logicOp           = static_cast<uint32_t>(VK_LOGIC_OP_CLEAR);
+    inputAndBlend.blendConstants[0] = 0.0f;
+    inputAndBlend.blendConstants[1] = 0.0f;
+    inputAndBlend.blendConstants[2] = 0.0f;
+    inputAndBlend.blendConstants[3] = 0.0f;
 
-    mColorBlendStateInfo.logicOpEnable     = 0;
-    mColorBlendStateInfo.logicOp           = static_cast<uint32_t>(VK_LOGIC_OP_CLEAR);
-    mColorBlendStateInfo.attachmentCount   = 1;
-    mColorBlendStateInfo.blendConstants[0] = 0.0f;
-    mColorBlendStateInfo.blendConstants[1] = 0.0f;
-    mColorBlendStateInfo.blendConstants[2] = 0.0f;
-    mColorBlendStateInfo.blendConstants[3] = 0.0f;
+    VkFlags allColorBits = (VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                            VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
 
-    std::fill(&mColorBlendStateInfo.attachments[0],
-              &mColorBlendStateInfo.attachments[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS],
-              blendAttachmentState);
+    for (uint32_t colorIndex = 0; colorIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; ++colorIndex)
+    {
+        Pack4BitInt(inputAndBlend.srcColorBlendFactorBits, colorIndex, VK_BLEND_FACTOR_ONE);
+        Pack4BitInt(inputAndBlend.dstColorBlendFactorBits, colorIndex, VK_BLEND_FACTOR_ONE);
+        inputAndBlend.colorBlendOpBits[colorIndex] = ValidatedCast<uint8_t>(VK_BLEND_OP_ADD);
+        Pack4BitInt(inputAndBlend.srcAlphaBlendFactorBits, colorIndex, VK_BLEND_FACTOR_ONE);
+        Pack4BitInt(inputAndBlend.dstAlphaBlendFactorBits, colorIndex, VK_BLEND_FACTOR_ONE);
+        inputAndBlend.alphaBlendOpBits[colorIndex] = ValidatedCast<uint8_t>(VK_BLEND_OP_ADD);
+        Pack4BitInt(inputAndBlend.colorWriteMaskBits, colorIndex, allColorBits);
+    }
+
+    inputAndBlend.topology = static_cast<uint16_t>(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+    inputAndBlend.primitiveRestartEnable = 0;
 }
 
 angle::Result PipelineDesc::initializePipeline(vk::Context *context,
@@ -448,21 +489,21 @@ angle::Result PipelineDesc::initializePipeline(vk::Context *context,
 
     for (size_t attribIndexSizeT : activeAttribLocationsMask)
     {
-        const auto attribIndex = static_cast<uint32_t>(attribIndexSizeT);
+        const uint32_t attribIndex = static_cast<uint32_t>(attribIndexSizeT);
 
         VkVertexInputBindingDescription &bindingDesc       = bindingDescs[vertexAttribCount];
         VkVertexInputAttributeDescription &attribDesc      = attributeDescs[vertexAttribCount];
         const PackedVertexInputBindingDesc &packedBinding  = mVertexInputBindings[attribIndex];
-        const PackedVertexInputAttributeDesc &packedAttrib = mVertexInputAttribs[attribIndex];
 
         bindingDesc.binding   = attribIndex;
         bindingDesc.inputRate = static_cast<VkVertexInputRate>(packedBinding.inputRate);
         bindingDesc.stride    = static_cast<uint32_t>(packedBinding.stride);
 
+        // The binding or location might change in future ES versions.
         attribDesc.binding  = attribIndex;
-        attribDesc.format   = static_cast<VkFormat>(packedAttrib.format);
-        attribDesc.location = static_cast<uint32_t>(packedAttrib.location);
-        attribDesc.offset   = packedAttrib.offset;
+        attribDesc.format   = static_cast<VkFormat>(mVertexInputAttribs.formats[attribIndex]);
+        attribDesc.location = static_cast<uint32_t>(attribIndex);
+        attribDesc.offset   = mVertexInputAttribs.offsets[attribIndex];
 
         vertexAttribCount++;
     }
@@ -478,9 +519,10 @@ angle::Result PipelineDesc::initializePipeline(vk::Context *context,
     // Primitive topology is filled in at draw time.
     inputAssemblyState.sType    = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
     inputAssemblyState.flags    = 0;
-    inputAssemblyState.topology = static_cast<VkPrimitiveTopology>(mInputAssemblyInfo.topology);
+    inputAssemblyState.topology =
+        static_cast<VkPrimitiveTopology>(mInputAssembltyAndColorBlendStateInfo.topology);
     inputAssemblyState.primitiveRestartEnable =
-        static_cast<VkBool32>(mInputAssemblyInfo.primitiveRestartEnable);
+        static_cast<VkBool32>(mInputAssembltyAndColorBlendStateInfo.primitiveRestartEnable);
 
     // Set initial viewport and scissor state.
 
@@ -491,35 +533,35 @@ angle::Result PipelineDesc::initializePipeline(vk::Context *context,
     viewportState.scissorCount  = 1;
     viewportState.pScissors     = &mScissor;
 
+    const PackedRasterizationAndMultisampleStateInfo &rasterAndMS =
+        mRasterizationAndMultisampleStateInfo;
+
     // Rasterizer state.
     rasterState.sType            = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
     rasterState.flags            = 0;
-    rasterState.depthClampEnable = static_cast<VkBool32>(mRasterizationStateInfo.depthClampEnable);
+    rasterState.depthClampEnable = static_cast<VkBool32>(rasterAndMS.depthClampEnable);
     rasterState.rasterizerDiscardEnable =
-        static_cast<VkBool32>(mRasterizationStateInfo.rasterizationDiscardEnable);
-    rasterState.polygonMode     = static_cast<VkPolygonMode>(mRasterizationStateInfo.polygonMode);
-    rasterState.cullMode        = static_cast<VkCullModeFlags>(mRasterizationStateInfo.cullMode);
-    rasterState.frontFace       = static_cast<VkFrontFace>(mRasterizationStateInfo.frontFace);
-    rasterState.depthBiasEnable = static_cast<VkBool32>(mRasterizationStateInfo.depthBiasEnable);
-    rasterState.depthBiasConstantFactor = mRasterizationStateInfo.depthBiasConstantFactor;
-    rasterState.depthBiasClamp          = mRasterizationStateInfo.depthBiasClamp;
-    rasterState.depthBiasSlopeFactor    = mRasterizationStateInfo.depthBiasSlopeFactor;
-    rasterState.lineWidth               = mRasterizationStateInfo.lineWidth;
+        static_cast<VkBool32>(rasterAndMS.rasterizationDiscardEnable);
+    rasterState.polygonMode             = static_cast<VkPolygonMode>(rasterAndMS.polygonMode);
+    rasterState.cullMode                = static_cast<VkCullModeFlags>(rasterAndMS.cullMode);
+    rasterState.frontFace               = static_cast<VkFrontFace>(rasterAndMS.frontFace);
+    rasterState.depthBiasEnable         = static_cast<VkBool32>(rasterAndMS.depthBiasEnable);
+    rasterState.depthBiasConstantFactor = rasterAndMS.depthBiasConstantFactor;
+    rasterState.depthBiasClamp          = rasterAndMS.depthBiasClamp;
+    rasterState.depthBiasSlopeFactor    = rasterAndMS.depthBiasSlopeFactor;
+    rasterState.lineWidth               = rasterAndMS.lineWidth;
 
     // Multisample state.
     multisampleState.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     multisampleState.flags = 0;
-    multisampleState.rasterizationSamples =
-        gl_vk::GetSamples(mMultisampleStateInfo.rasterizationSamples);
-    multisampleState.sampleShadingEnable =
-        static_cast<VkBool32>(mMultisampleStateInfo.sampleShadingEnable);
-    multisampleState.minSampleShading = mMultisampleStateInfo.minSampleShading;
+    multisampleState.rasterizationSamples = gl_vk::GetSamples(rasterAndMS.rasterizationSamples);
+    multisampleState.sampleShadingEnable  = static_cast<VkBool32>(rasterAndMS.sampleShadingEnable);
+    multisampleState.minSampleShading     = rasterAndMS.minSampleShading;
     // TODO(jmadill): sample masks
     multisampleState.pSampleMask = nullptr;
     multisampleState.alphaToCoverageEnable =
-        static_cast<VkBool32>(mMultisampleStateInfo.alphaToCoverageEnable);
-    multisampleState.alphaToOneEnable =
-        static_cast<VkBool32>(mMultisampleStateInfo.alphaToOneEnable);
+        static_cast<VkBool32>(rasterAndMS.alphaToCoverageEnable);
+    multisampleState.alphaToOneEnable = static_cast<VkBool32>(rasterAndMS.alphaToOneEnable);
 
     // Depth/stencil state.
     depthStencilState.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
@@ -534,27 +576,47 @@ angle::Result PipelineDesc::initializePipeline(vk::Context *context,
         static_cast<VkBool32>(mDepthStencilStateInfo.depthBoundsTestEnable);
     depthStencilState.stencilTestEnable =
         static_cast<VkBool32>(mDepthStencilStateInfo.stencilTestEnable);
-    UnpackStencilState(mDepthStencilStateInfo.front, &depthStencilState.front);
-    UnpackStencilState(mDepthStencilStateInfo.back, &depthStencilState.back);
+    UnpackStencilState(mDepthStencilStateInfo.front, mDepthStencilStateInfo.frontStencilReference,
+                       &depthStencilState.front);
+    UnpackStencilState(mDepthStencilStateInfo.back, mDepthStencilStateInfo.backStencilReference,
+                       &depthStencilState.back);
     depthStencilState.minDepthBounds = mDepthStencilStateInfo.minDepthBounds;
     depthStencilState.maxDepthBounds = mDepthStencilStateInfo.maxDepthBounds;
 
+    const PackedInputAssemblyAndColorBlendStateInfo &inputAndBlend =
+        mInputAssembltyAndColorBlendStateInfo;
+
     blendState.sType           = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     blendState.flags           = 0;
-    blendState.logicOpEnable   = static_cast<VkBool32>(mColorBlendStateInfo.logicOpEnable);
-    blendState.logicOp         = static_cast<VkLogicOp>(mColorBlendStateInfo.logicOp);
-    blendState.attachmentCount = mColorBlendStateInfo.attachmentCount;
+    blendState.logicOpEnable   = static_cast<VkBool32>(inputAndBlend.logicOpEnable);
+    blendState.logicOp         = static_cast<VkLogicOp>(inputAndBlend.logicOp);
+    blendState.attachmentCount = mRenderPassDesc.colorAttachmentCount();
     blendState.pAttachments    = blendAttachmentState.data();
 
     for (int i = 0; i < 4; i++)
     {
-        blendState.blendConstants[i] = mColorBlendStateInfo.blendConstants[i];
+        blendState.blendConstants[i] = inputAndBlend.blendConstants[i];
     }
+
+    const gl::DrawBufferMask blendEnableMask(inputAndBlend.blendEnableMask);
 
     for (uint32_t colorIndex = 0; colorIndex < blendState.attachmentCount; ++colorIndex)
     {
-        UnpackBlendAttachmentState(mColorBlendStateInfo.attachments[colorIndex],
-                                   &blendAttachmentState[colorIndex]);
+        VkPipelineColorBlendAttachmentState &state = blendAttachmentState[colorIndex];
+
+        state.blendEnable = blendEnableMask[colorIndex] ? VK_TRUE : VK_FALSE;
+        state.srcColorBlendFactor =
+            Unpack4BitInt<VkBlendFactor>(inputAndBlend.srcColorBlendFactorBits, colorIndex);
+        state.dstColorBlendFactor =
+            Unpack4BitInt<VkBlendFactor>(inputAndBlend.dstColorBlendFactorBits, colorIndex);
+        state.colorBlendOp = static_cast<VkBlendOp>(inputAndBlend.colorBlendOpBits[colorIndex]);
+        state.srcAlphaBlendFactor =
+            Unpack4BitInt<VkBlendFactor>(inputAndBlend.srcAlphaBlendFactorBits, colorIndex);
+        state.dstAlphaBlendFactor =
+            Unpack4BitInt<VkBlendFactor>(inputAndBlend.dstAlphaBlendFactorBits, colorIndex);
+        state.alphaBlendOp = static_cast<VkBlendOp>(inputAndBlend.alphaBlendOpBits[colorIndex]);
+        state.colorWriteMask =
+            Unpack4BitInt<VkColorComponentFlags>(inputAndBlend.colorWriteMaskBits, colorIndex);
     }
 
     // TODO(jmadill): Dynamic state.
@@ -636,23 +698,25 @@ void PipelineDesc::updateVertexInputInfo(const VertexInputBindings &bindings,
 
 void PipelineDesc::updateTopology(gl::PrimitiveMode drawMode)
 {
-    mInputAssemblyInfo.topology = static_cast<uint32_t>(gl_vk::GetPrimitiveTopology(drawMode));
+    mInputAssembltyAndColorBlendStateInfo.topology =
+        static_cast<uint32_t>(gl_vk::GetPrimitiveTopology(drawMode));
 }
 
 void PipelineDesc::updateCullMode(const gl::RasterizerState &rasterState)
 {
-    mRasterizationStateInfo.cullMode = static_cast<uint16_t>(gl_vk::GetCullMode(rasterState));
+    mRasterizationAndMultisampleStateInfo.cullMode =
+        static_cast<uint16_t>(gl_vk::GetCullMode(rasterState));
 }
 
 void PipelineDesc::updateFrontFace(const gl::RasterizerState &rasterState, bool invertFrontFace)
 {
-    mRasterizationStateInfo.frontFace =
+    mRasterizationAndMultisampleStateInfo.frontFace =
         static_cast<uint16_t>(gl_vk::GetFrontFace(rasterState.frontFace, invertFrontFace));
 }
 
 void PipelineDesc::updateLineWidth(float lineWidth)
 {
-    mRasterizationStateInfo.lineWidth = lineWidth;
+    mRasterizationAndMultisampleStateInfo.lineWidth = lineWidth;
 }
 
 const RenderPassDesc &PipelineDesc::getRenderPassDesc() const
@@ -662,49 +726,62 @@ const RenderPassDesc &PipelineDesc::getRenderPassDesc() const
 
 void PipelineDesc::updateBlendColor(const gl::ColorF &color)
 {
-    mColorBlendStateInfo.blendConstants[0] = color.red;
-    mColorBlendStateInfo.blendConstants[1] = color.green;
-    mColorBlendStateInfo.blendConstants[2] = color.blue;
-    mColorBlendStateInfo.blendConstants[3] = color.alpha;
+    mInputAssembltyAndColorBlendStateInfo.blendConstants[0] = color.red;
+    mInputAssembltyAndColorBlendStateInfo.blendConstants[1] = color.green;
+    mInputAssembltyAndColorBlendStateInfo.blendConstants[2] = color.blue;
+    mInputAssembltyAndColorBlendStateInfo.blendConstants[3] = color.alpha;
 }
 
 void PipelineDesc::updateBlendEnabled(bool isBlendEnabled)
 {
-    for (auto &blendAttachmentState : mColorBlendStateInfo.attachments)
-    {
-        blendAttachmentState.blendEnable = isBlendEnabled;
-    }
+    gl::DrawBufferMask blendEnabled;
+    if (isBlendEnabled)
+        blendEnabled.set();
+    mInputAssembltyAndColorBlendStateInfo.blendEnableMask =
+        static_cast<uint8_t>(blendEnabled.bits());
 }
 
 void PipelineDesc::updateBlendEquations(const gl::BlendState &blendState)
 {
-    for (auto &blendAttachmentState : mColorBlendStateInfo.attachments)
+    PackedInputAssemblyAndColorBlendStateInfo &inputAndBlend =
+        mInputAssembltyAndColorBlendStateInfo;
+
+    for (uint32_t colorIndex = 0; colorIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; ++colorIndex)
     {
-        blendAttachmentState.colorBlendOp = PackGLBlendOp(blendState.blendEquationRGB);
-        blendAttachmentState.alphaBlendOp = PackGLBlendOp(blendState.blendEquationAlpha);
+        inputAndBlend.colorBlendOpBits[colorIndex] = PackGLBlendOp(blendState.blendEquationRGB);
+        inputAndBlend.alphaBlendOpBits[colorIndex] = PackGLBlendOp(blendState.blendEquationAlpha);
     }
 }
 
 void PipelineDesc::updateBlendFuncs(const gl::BlendState &blendState)
 {
-    for (auto &blendAttachmentState : mColorBlendStateInfo.attachments)
+    PackedInputAssemblyAndColorBlendStateInfo &inputAndBlend =
+        mInputAssembltyAndColorBlendStateInfo;
+
+    for (uint32_t colorIndex = 0; colorIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; ++colorIndex)
     {
-        blendAttachmentState.srcColorBlendFactor = PackGLBlendFactor(blendState.sourceBlendRGB);
-        blendAttachmentState.dstColorBlendFactor = PackGLBlendFactor(blendState.destBlendRGB);
-        blendAttachmentState.srcAlphaBlendFactor = PackGLBlendFactor(blendState.sourceBlendAlpha);
-        blendAttachmentState.dstAlphaBlendFactor = PackGLBlendFactor(blendState.destBlendAlpha);
+        Pack4BitInt(inputAndBlend.srcColorBlendFactorBits, colorIndex,
+                    PackGLBlendFactor(blendState.sourceBlendRGB));
+        Pack4BitInt(inputAndBlend.dstColorBlendFactorBits, colorIndex,
+                    PackGLBlendFactor(blendState.destBlendRGB));
+        Pack4BitInt(inputAndBlend.srcAlphaBlendFactorBits, colorIndex,
+                    PackGLBlendFactor(blendState.sourceBlendAlpha));
+        Pack4BitInt(inputAndBlend.dstAlphaBlendFactorBits, colorIndex,
+                    PackGLBlendFactor(blendState.destBlendAlpha));
     }
 }
 
 void PipelineDesc::updateColorWriteMask(VkColorComponentFlags colorComponentFlags,
                                         const gl::DrawBufferMask &alphaMask)
 {
+    PackedInputAssemblyAndColorBlendStateInfo &inputAndBlend =
+        mInputAssembltyAndColorBlendStateInfo;
     uint8_t colorMask = static_cast<uint8_t>(colorComponentFlags);
 
     for (size_t colorIndex = 0; colorIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; colorIndex++)
     {
-        mColorBlendStateInfo.attachments[colorIndex].colorWriteMask =
-            alphaMask[colorIndex] ? (colorMask & ~VK_COLOR_COMPONENT_A_BIT) : colorMask;
+        uint8_t mask = alphaMask[colorIndex] ? (colorMask & ~VK_COLOR_COMPONENT_A_BIT) : colorMask;
+        Pack4BitInt(inputAndBlend.colorWriteMaskBits, colorIndex, mask);
     }
 }
 
@@ -742,17 +819,17 @@ void PipelineDesc::updateStencilTestEnabled(const gl::DepthStencilState &depthSt
 void PipelineDesc::updateStencilFrontFuncs(GLint ref,
                                            const gl::DepthStencilState &depthStencilState)
 {
-    mDepthStencilStateInfo.front.reference   = ref;
+    mDepthStencilStateInfo.frontStencilReference = static_cast<uint8_t>(ref);
     mDepthStencilStateInfo.front.compareOp   = PackGLCompareFunc(depthStencilState.stencilFunc);
-    mDepthStencilStateInfo.front.compareMask = static_cast<uint32_t>(depthStencilState.stencilMask);
+    mDepthStencilStateInfo.front.compareMask = static_cast<uint8_t>(depthStencilState.stencilMask);
 }
 
 void PipelineDesc::updateStencilBackFuncs(GLint ref, const gl::DepthStencilState &depthStencilState)
 {
-    mDepthStencilStateInfo.back.reference = ref;
+    mDepthStencilStateInfo.backStencilReference = static_cast<uint8_t>(ref);
     mDepthStencilStateInfo.back.compareOp = PackGLCompareFunc(depthStencilState.stencilBackFunc);
     mDepthStencilStateInfo.back.compareMask =
-        static_cast<uint32_t>(depthStencilState.stencilBackMask);
+        static_cast<uint8_t>(depthStencilState.stencilBackMask);
 }
 
 void PipelineDesc::updateStencilFrontOps(const gl::DepthStencilState &depthStencilState)
@@ -776,7 +853,7 @@ void PipelineDesc::updateStencilFrontWriteMask(const gl::DepthStencilState &dept
                                                const gl::Framebuffer *drawFramebuffer)
 {
     // Don't write to stencil buffers that should not exist
-    mDepthStencilStateInfo.front.writeMask = static_cast<uint32_t>(
+    mDepthStencilStateInfo.front.writeMask = static_cast<uint8_t>(
         drawFramebuffer->hasStencil() ? depthStencilState.stencilWritemask : 0);
 }
 
@@ -784,19 +861,19 @@ void PipelineDesc::updateStencilBackWriteMask(const gl::DepthStencilState &depth
                                               const gl::Framebuffer *drawFramebuffer)
 {
     // Don't write to stencil buffers that should not exist
-    mDepthStencilStateInfo.back.writeMask = static_cast<uint32_t>(
+    mDepthStencilStateInfo.back.writeMask = static_cast<uint8_t>(
         drawFramebuffer->hasStencil() ? depthStencilState.stencilBackWritemask : 0);
 }
 
 void PipelineDesc::updatePolygonOffsetFillEnabled(bool enabled)
 {
-    mRasterizationStateInfo.depthBiasEnable = enabled;
+    mRasterizationAndMultisampleStateInfo.depthBiasEnable = enabled;
 }
 
 void PipelineDesc::updatePolygonOffset(const gl::RasterizerState &rasterState)
 {
-    mRasterizationStateInfo.depthBiasSlopeFactor    = rasterState.polygonOffsetFactor;
-    mRasterizationStateInfo.depthBiasConstantFactor = rasterState.polygonOffsetUnits;
+    mRasterizationAndMultisampleStateInfo.depthBiasSlopeFactor    = rasterState.polygonOffsetFactor;
+    mRasterizationAndMultisampleStateInfo.depthBiasConstantFactor = rasterState.polygonOffsetUnits;
 }
 
 void PipelineDesc::updateRenderPassDesc(const RenderPassDesc &renderPassDesc)
