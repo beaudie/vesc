@@ -19,6 +19,8 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
+#include "common/third_party/xxhash/xxhash.h"
+
 namespace rx
 {
 namespace vk
@@ -362,7 +364,9 @@ PipelineDesc &PipelineDesc::operator=(const PipelineDesc &other)
 
 size_t PipelineDesc::hash() const
 {
-    return angle::ComputeGenericHash(*this);
+    unsigned long long const seed = 0;   /* or any other value */
+    unsigned long long const hash = XXH64(this, sizeof(*this), seed);
+    return hash;
 }
 
 bool PipelineDesc::operator==(const PipelineDesc &other) const
