@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6a127f0_fbff6e1c",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-05T12:53:08Z",
+      "side": 1,
+      "message": "Can we do this in a new encoder instead of modifying increaseSize at the end? Also wouldn\u0027t it work if we gave 1 instead of innermostArraySize?",
+      "revId": "08edff73ec51239c62f962e4e8850bcdfb673ef6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da44e823_7d9cb66e",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-05T12:53:08Z",
+      "side": 1,
+      "message": "Since innermostArraySize won\u0027t have been counted in increaseSize, we can just call the method that computes the product of all array sizes.",
+      "revId": "08edff73ec51239c62f962e4e8850bcdfb673ef6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d462c58_3264ae02",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-05T12:53:08Z",
+      "side": 1,
+      "message": "Basically the function would do:\n\n - Create a new encoder\n - memberInfo \u003d tempEncoder.encode(array of 1 element)\n - encoder-\u003eincreaseCurrentOffset(memberInfo.arrayStride * product of array sizes)",
+      "revId": "08edff73ec51239c62f962e4e8850bcdfb673ef6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22026d74_09254ff5",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-05T12:53:08Z",
+      "side": 1,
+      "message": "Why are there 3 zeros in between the actual values? I don\u0027t see an array stride specified so I would have thought it would be 4.",
+      "revId": "08edff73ec51239c62f962e4e8850bcdfb673ef6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
