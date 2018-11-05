@@ -44,17 +44,48 @@ void ShaderStorageBlockFunctionHLSL::OutputSSBOLoadFunctionBody(
     out << "    " << ssboFunction.typeString << " result";
     if (ssboFunction.type.isScalar())
     {
-        out << " = " << convertString << "buffer.Load(loc));\n";
+        if (ssboFunction.swizzleNode != nullptr)
+        {
+            ASSERT(ssboFunction.swizzleNode->getSwizzleOffsets().size() == 1);
+            int offset = ssboFunction.swizzleNode->getSwizzleOffsets()[0] *
+                         BlockLayoutEncoder::BytesPerComponent;
+            out << " = " << convertString << "buffer.Load(loc + " << offset << "));\n ";
+        }
+        else
+        {
+            out << " = " << convertString << "buffer.Load(loc));\n";
+        }
     }
     else if (ssboFunction.type.isVector())
     {
         if (ssboFunction.rowMajor)
         {
             out << " = {";
-            for (int index = 0; index < ssboFunction.type.getNominalSize(); index++)
+            if (ssboFunction.swizzleNode != nullptr)
             {
-                out << convertString << "buffer.Load(loc + " << index * ssboFunction.matrixStride
-                    << ")),";
+                for (const int offset : ssboFunction.swizzleNode->getSwizzleOffsets())
+                {
+                    int offsetInBytes = offset * ssboFunction.matrixStride;
+                    out << convertString << "buffer.Load(loc + " << offsetInBytes << ")),";
+                }
+            }
+            else
+            {
+                for (int index = 0; index < ssboFunction.type.getNominalSize(); index++)
+                {
+                    out << convertString << "buffer.Load(loc + "
+                        << index * ssboFunction.matrixStride << ")),";
+                }
+            }
+            out << "};\n";
+        }
+        else if (ssboFunction.swizzleNode != nullptr)
+        {
+            out << " = {";
+            for (const int offset : ssboFunction.swizzleNode->getSwizzleOffsets())
+            {
+                int offsetInBytes = offset * BlockLayoutEncoder::BytesPerComponent;
+                out << convertString << "buffer.Load(loc + " << offsetInBytes << ")),";
             }
             out << "};\n";
         }
@@ -107,25 +138,82 @@ void ShaderStorageBlockFunctionHLSL::OutputSSBOStoreFunctionBody(
 {
     if (ssboFunction.type.isScalar())
     {
-        if (ssboFunction.type.getBasicType() == EbtBool)
+        if (ssboFunction.swizzleNode != nullptr)
         {
-            out << "    uint _tmp = uint(value);\n"
-                << "    buffer.Store(loc, _tmp);\n";
+            ASSERT(ssboFunction.swizzleNode->getSwizzleOffsets().size() == 1);
+            int offset = ssboFunction.swizzleNode->getSwizzleOffsets()[0] *
+                         BlockLayoutEncoder::BytesPerComponent;
+            if (ssboFunction.type.getBasicType() == EbtBool)
+            {
+                out << "    uint _tmp = uint(value);\n"
+                    << "    buffer.Store(loc + " << offset << ", _tmp);\n";
+            }
+            else
+            {
+                out << "    buffer.Store(loc + " << offset << ", asuint(value));\n";
+            }
         }
         else
         {
-            out << "    buffer.Store(loc, asuint(value));\n";
+            if (ssboFunction.type.getBasicType() == EbtBool)
+            {
+                out << "    uint _tmp = uint(value);\n"
+                    << "    buffer.Store(loc, _tmp);\n";
+            }
+            else
+            {
+                out << "    buffer.Store(loc, asuint(value));\n";
+            }
         }
     }
     else if (ssboFunction.type.isVector())
     {
         if (ssboFunction.rowMajor)
         {
-            for (int index = 0; index < ssboFunction.type.getNominalSize(); index++)
+            if (ssboFunction.swizzleNode != nullptr)
             {
-                // Don't need to worry about bool value since there is no bool matrix.
-                out << "buffer.Store(loc + " << index * ssboFunction.matrixStride
-                    << ", asuint(value[" << index << "]));\n";
+                const TVector<int> &swizzleOffsets = ssboFunction.swizzleNode->getSwizzleOffsets();
+                for (int index = 0; index < static_cast<int>(swizzleOffsets.size()); index++)
+                {
+                    int offsetInBytes = swizzleOffsets[index] * ssboFunction.matrixStride;
+                    // Don't need to worry about bool value since there is no bool
+                    // matrix.
+                    out << "buffer.Store(loc + " << offsetInBytes << ", asuint(value[" << index
+                        << "]));\n";
+                }
+            }
+            else
+            {
+                for (int index = 0; index < ssboFunction.type.getNominalSize(); index++)
+                {
+                    // Don't need to worry about bool value since there is no bool
+                    // matrix.
+                    out << "buffer.Store(loc + " << index * ssboFunction.matrixStride
+                        << ", asuint(value[" << index << "]));\n";
+                }
+            }
+        }
+        else if (ssboFunction.swizzleNode != nullptr)
+        {
+            const TVector<int> &swizzleOffsets = ssboFunction.swizzleNode->getSwizzleOffsets();
+            if (ssboFunction.type.getBasicType() == EbtBool)
+            {
+                out << "    uint" << ssboFunction.type.getNominalSize() << " _tmp = uint"
+                    << ssboFunction.type.getNominalSize() << "(value);\n";
+            }
+            for (int index = 0; index < static_cast<int>(swizzleOffsets.size()); index++)
+            {
+                int offsetInBytes = swizzleOffsets[index] * BlockLayoutEncoder::BytesPerComponent;
+                if (ssboFunction.type.getBasicType() == EbtBool)
+                {
+                    out << "    buffer.Store(loc + " << offsetInBytes << ", _tmp[" << index
+                        << "]);\n";
+                }
+                else
+                {
+                    out << "    buffer.Store(loc + " << offsetInBytes << ", asuint(value[" << index
+                        << "]));\n";
+                }
             }
         }
         else
@@ -184,12 +272,14 @@ TString ShaderStorageBlockFunctionHLSL::registerShaderStorageBlockFunction(
     SSBOMethod method,
     TLayoutBlockStorage storage,
     bool rowMajor,
-    int matrixStride)
+    int matrixStride,
+    TIntermSwizzle *swizzleNode)
 {
     ShaderStorageBlockFunction ssboFunction;
     ssboFunction.typeString = TypeString(type);
     ssboFunction.method     = method;
     ssboFunction.type       = type;
+    ssboFunction.swizzleNode  = swizzleNode;
     ssboFunction.rowMajor     = rowMajor;
     ssboFunction.matrixStride = matrixStride;
     ssboFunction.functionName =
@@ -215,6 +305,31 @@ TString ShaderStorageBlockFunctionHLSL::registerShaderStorageBlockFunction(
     {
         ssboFunction.functionName += "_cm_";
     }
+
+    if (swizzleNode != nullptr)
+    {
+        for (const int offset : swizzleNode->getSwizzleOffsets())
+        {
+            switch (offset)
+            {
+                case 0:
+                    ssboFunction.functionName += "x";
+                    break;
+                case 1:
+                    ssboFunction.functionName += "y";
+                    break;
+                case 2:
+                    ssboFunction.functionName += "z";
+                    break;
+                case 3:
+                    ssboFunction.functionName += "w";
+                    break;
+                default:
+                    UNREACHABLE();
+            }
+        }
+    }
+
     mRegisteredShaderStorageBlockFunctions.insert(ssboFunction);
     return ssboFunction.functionName;
 }
