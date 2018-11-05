@@ -666,6 +666,8 @@ bool ValidateGetTexLevelParameterfvANGLE(Context *context,
                                          GLint level,
                                          GLenum pname,
                                          GLfloat *params);
+bool ValidateGetMultisamplefvANGLE(Context *context, GLenum pname, GLuint index, GLfloat *val);
+bool ValidateSampleMaskiANGLE(Context *context, GLuint maskNumber, GLbitfield mask);
 
 }  // namespace gl
 

@@ -72,6 +72,9 @@ class TextureMultisampleTest : public ANGLETest
     void getTexLevelParameterfv(GLenum target, GLint level, GLenum pname, GLfloat *params);
     void getTexLevelParameteriv(GLenum target, GLint level, GLenum pname, GLint *params);
 
+    void getMultisamplefv(GLenum pname, GLuint index, GLfloat *val);
+    void sampleMaski(GLuint maskNumber, GLbitfield mask);
+
     GLuint mFramebuffer = 0;
     GLuint mTexture     = 0;
 
@@ -229,6 +232,7 @@ void TextureMultisampleTest::getTexLevelParameterfv(GLenum target,
         glGetTexLevelParameterfv(target, level, pname, params);
     }
 }
+
 void TextureMultisampleTest::getTexLevelParameteriv(GLenum target,
                                                     GLint level,
                                                     GLenum pname,
@@ -242,6 +246,32 @@ void TextureMultisampleTest::getTexLevelParameteriv(GLenum target,
     else
     {
         glGetTexLevelParameteriv(target, level, pname, params);
+    }
+}
+
+void TextureMultisampleTest::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
+{
+    if (getClientMajorVersion() <= 3 && getClientMinorVersion() < 1 &&
+        ensureExtensionEnabled("GL_ANGLE_texture_multisample"))
+    {
+        glGetMultisamplefvANGLE(pname, index, val);
+    }
+    else
+    {
+        glGetMultisamplefv(pname, index, val);
+    }
+}
+
+void TextureMultisampleTest::sampleMaski(GLuint maskNumber, GLbitfield mask)
+{
+    if (getClientMajorVersion() <= 3 && getClientMinorVersion() < 1 &&
+        ensureExtensionEnabled("GL_ANGLE_texture_multisample"))
+    {
+        glSampleMaskiANGLE(maskNumber, mask);
+    }
+    else
+    {
+        glSampleMaski(maskNumber, mask);
     }
 }
 
@@ -380,7 +410,7 @@ TEST_P(TextureMultisampleTest, GetTexLevelParameter)
 // The value of sample position should be equal to standard pattern on D3D.
 TEST_P(TextureMultisampleTest, CheckSamplePositions)
 {
-    ANGLE_SKIP_TEST_IF(!IsD3D11() || (getClientMajorVersion() <= 3 && getClientMinorVersion() < 1));
+    ANGLE_SKIP_TEST_IF(!IsD3D11());
 
     GLsizei maxSamples = 0;
     glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
@@ -394,7 +424,7 @@ TEST_P(TextureMultisampleTest, CheckSamplePositions)
         GLTexture texture;
         size_t indexKey = static_cast<size_t>(ceil(log2(sampleCount)));
         glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture);
-        glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, sampleCount, GL_RGBA8, 1, 1, GL_TRUE);
+        texStorageMultisample(GL_TEXTURE_2D_MULTISAMPLE, sampleCount, GL_RGBA8, 1, 1, GL_TRUE);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE,
                                texture, 0);
         EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
@@ -402,7 +432,7 @@ TEST_P(TextureMultisampleTest, CheckSamplePositions)
 
         for (int sampleIndex = 0; sampleIndex < sampleCount; sampleIndex++)
         {
-            glGetMultisamplefv(GL_SAMPLE_POSITION, sampleIndex, samplePosition);
+            getMultisamplefv(GL_SAMPLE_POSITION, sampleIndex, samplePosition);
             EXPECT_EQ(samplePosition[0], kSamplePositions[indexKey][2 * sampleIndex]);
             EXPECT_EQ(samplePosition[1], kSamplePositions[indexKey][2 * sampleIndex + 1]);
         }
@@ -501,6 +531,11 @@ TEST_P(NegativeTextureMultisampleTest, Negtive)
     getTexLevelParameteriv(GL_TEXTURE_2D_MULTISAMPLE, 0, GL_TEXTURE_FIXED_SAMPLE_LOCATIONS,
                            &fixedSampleLocation);
     ASSERT_GL_ERROR(GL_INVALID_OPERATION);
+
+    GLint maxSampleMaskWords = 0;
+    glGetIntegerv(GL_MAX_SAMPLE_MASK_WORDS, &maxSampleMaskWords);
+    sampleMaski(maxSampleMaskWords + 1, 0x1);
+    ASSERT_GL_ERROR(GL_INVALID_VALUE);
 }
 
 // Tests that GL_TEXTURE_2D_MULTISAMPLE_ARRAY is not supported in GetInternalformativ when the
