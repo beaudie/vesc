@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "33c7bc7d_13d67cb4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-05T15:41:02Z",
+      "side": 1,
+      "message": "This sets vertex and index buffers as dirty too, is that really necessary?",
+      "revId": "a6ca95d39994fe52ff23130e63544541dbd9b6b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "739f0cbb_6236b283",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 4
