@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d0cf8c2_349398f7",
+        "filename": "src/tests/perf_tests/InitializeSharedVariablePerf.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-05T16:46:02Z",
+      "side": 1,
+      "message": "If you still want to have a single workgroup able to clear the whole shared array, please change this to:\n\n            uint i \u003d gl_LocalInvocationID.x + gl_LocalInvocationID.y * 4u;\n            for (; i \u003c 256; i +\u003d 16)\n            {\n                data[i] \u003d 0.0f;\n            }\n\nAs I said, this will greatly reduce the number of LDS bank conflicts.",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 13
+      },
+      "revId": "00491f8b68841e7f0609a38ae14c6ca87b9c05c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ec76a94_d5369296",
+        "filename": "src/tests/perf_tests/InitializeSharedVariablePerf.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-05T16:46:02Z",
+      "side": 1,
+      "message": "Your test is still unfair. The case with \"initializer in definition\" has the chance (even if not implemented) that the initialization is done once by the driver. The case with \"initializer in code\" is run 8x8x8 time, even though even a 1x1x1 dispatch would have cleared the whole array. In the latter case you are doing the initialization possibly 512 times more often.\n\nHowever, if this is intentional (you know that no driver is optimizing \"initializer in definition\" especially), then it\u0027s ok (I presume you want the code to run long enough to reduce the measurement error).",
+      "revId": "00491f8b68841e7f0609a38ae14c6ca87b9c05c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
