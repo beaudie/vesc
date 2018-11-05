@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "b012ae65_1862fefe",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-05T13:55:19Z",
+      "side": 1,
+      "message": "Thanks, I had forgotten we output that memberInfo. What you suggested sounds good, but can we have comments explaining what\u0027s going on it details?",
+      "parentUuid": "bae530a4_535119b5",
+      "revId": "08edff73ec51239c62f962e4e8850bcdfb673ef6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da44e823_7d9cb66e",
         "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
         "patchSetId": 1
@@ -118,6 +136,24 @@
       "side": 1,
       "message": "For std140, if the member is an array of scalars or vectors, the base alignment and array\nstride are rounded up to the base alignment of a vec4. See spec https://www.khronos.org/registry/OpenGL/specs/es/3.1/es_spec_3.1.pdf 7.6.2.2 Standard Uniform Block Layout, rule 4.\n\nFor std430, it is not rounded up a multiple of the base alignment of a vec4. It would be one component(4 bytes). But here, the arrayStride would be 16 bytes.",
       "parentUuid": "22026d74_09254ff5",
+      "revId": "08edff73ec51239c62f962e4e8850bcdfb673ef6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22801a61_d7d3fbae",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-05T13:55:19Z",
+      "side": 1,
+      "message": "Ewww std140 wastes so much space, good thing we\u0027re adding std430.\n\nThanks for the explanation!",
+      "parentUuid": "b4cee46c_55769e56",
       "revId": "08edff73ec51239c62f962e4e8850bcdfb673ef6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
