@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cfabc305_49bffe64",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-05T16:31:40Z",
+      "side": 1,
+      "message": "16?",
+      "range": {
+        "startLine": 236,
+        "startChar": 19,
+        "endLine": 236,
+        "endChar": 21
+      },
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f303cf5b_9f0f2abe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-05T16:31:40Z",
+      "side": 1,
+      "message": "This (and the few after this) are 4-bit numbers. Why are they ValidatedCast to uint16_t? I think it\u0027s better to have another form of ValidatedCast that takes the number of bits too, and checks that specifically.\n\nSome extremely ugly magic might make getting the number of bits in the bitfield automatic, but I\u0027m not sure I\u0027d want to even think about that ;)",
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "669acf8a_23bd7152",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-05T16:31:40Z",
+      "side": 1,
+      "message": "Here too. There are more, I won\u0027t tag them all.",
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0087c350_b9565e96",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-05T16:31:40Z",
+      "side": 1,
+      "message": "`blendEnableMask` is uninitialized.",
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "986ed7b7_8dd6625b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-05T16:31:40Z",
+      "side": 1,
+      "message": "16 maybe?",
+      "range": {
+        "startLine": 72,
+        "startChar": 23,
+        "endLine": 72,
+        "endChar": 24
+      },
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eda6ed92_05ca1b6f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-05T16:31:40Z",
+      "side": 1,
+      "message": "From what I see in the specs:\n- Write Mask Bits: needs 4 bits.\n- Blend Factor: The enum has values from 0 through 18, so needs 5 bits.\n- Blend Op: Ignoring extensions, the enum has values from 0 through 4, so needs 3 bits.\n\nIf you do something like this:\n\nstruct PackedColorBlendAttachmentState final\n{\n    uint8_t blendEnable : 1;\n    uint8_t srcColorBlendFactor : 5;\n    uint8_t dstColorBlendFactor : 5;\n    uint8_t colorBlendOp : 3;\n    uint8_t srcAlphaBlendFactor : 5;\n    uint8_t dstAlphaBlendFactor : 5;\n    uint8_t alphaBlendOp : 3;\n    uint8_t colorWriteMask : 4;\n    uint8_t padding : 1;\n};\n\nYou will be able to pack the whole thing in a 32-bit number, and then keep an array here. Right now you have 36 bits per attachment state (+ one enable mask for all). The slight size save aside, writing or reading the state becomes a single memory access.",
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
