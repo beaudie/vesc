@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "8eb6a5d7_844e8b53",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-05T16:50:51Z",
+      "side": 1,
+      "message": "I think words is machine dependent size. On Win WORD is 16 bits. Maybe use \"bytes\"?",
+      "range": {
+        "startLine": 233,
+        "startChar": 26,
+        "endLine": 233,
+        "endChar": 31
+      },
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f92c32a8_5fde8253",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-05T16:50:51Z",
+      "side": 1,
+      "message": "I couldn\u0027t understand what \"shifted\" means here without context.\nCan I suggest halfByteIndex for the parameter and byteIndex for the variable?",
+      "range": {
+        "startLine": 235,
+        "startChar": 13,
+        "endLine": 235,
+        "endChar": 25
+      },
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cfabc305_49bffe64",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 2
@@ -18,6 +64,29 @@
         "startChar": 19,
         "endLine": 236,
         "endChar": 21
+      },
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8507d501_ef9741de",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-05T16:50:51Z",
+      "side": 1,
+      "message": "Is there a rule that you have to pack color first, and only the depth and stencil?",
+      "range": {
+        "startLine": 312,
+        "startChar": 0,
+        "endLine": 312,
+        "endChar": 50
       },
       "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -87,6 +156,30 @@
       "writtenOn": "2018-11-05T16:31:40Z",
       "side": 1,
       "message": "16 maybe?",
+      "range": {
+        "startLine": 72,
+        "startChar": 23,
+        "endLine": 72,
+        "endChar": 24
+      },
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e872af0_76fa58a2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-05T16:50:51Z",
+      "side": 1,
+      "message": "I think, IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS, actually. Which is 10.\nBut, std::array is supposed to check this automatically. Or, is this a no-op since we compile without exceptions enabled?",
+      "parentUuid": "986ed7b7_8dd6625b",
       "range": {
         "startLine": 72,
         "startChar": 23,
