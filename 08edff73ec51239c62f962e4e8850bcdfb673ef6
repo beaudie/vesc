@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bae530a4_535119b5",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-05T13:40:41Z",
+      "side": 1,
+      "message": "If you use a new encoder, the offset will be zero rather than the current encoder\u0027s offset, which is not what we want. I think it\u0027s ok to use memberInfo.arrayStride * fieldType.getArraySizeProduct() minus the value due to calling encoder-\u003eencodeType.\nThe code will be:\nmemberInfo \u003d encoder-\u003eencodeType\nsize_t increaseSize \u003d memberInfo.arrayStride * fieldType.getArraySizeProduct();\nincreaseSize -\u003d (endSize - beginSize);  // minus the value due to calling encoder-\u003eencodeType\nencoder-\u003eincreaseCurrentOffset(increaseSize);\n\nHow do you think? If you still think using a new encoder is better, I can change it.",
+      "parentUuid": "f6a127f0_fbff6e1c",
+      "revId": "08edff73ec51239c62f962e4e8850bcdfb673ef6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da44e823_7d9cb66e",
         "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
         "patchSetId": 1
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "d56cfc7d_44eb02e0",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-05T13:40:41Z",
+      "side": 1,
+      "message": "In this case, memberInfo.offset is not correct. We still need to save encoder-\u003egetBlockSize() as the current field\u0027s offset.",
+      "parentUuid": "6d462c58_3264ae02",
+      "revId": "08edff73ec51239c62f962e4e8850bcdfb673ef6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "22026d74_09254ff5",
         "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
         "patchSetId": 1
@@ -64,6 +100,24 @@
       "writtenOn": "2018-11-05T12:53:08Z",
       "side": 1,
       "message": "Why are there 3 zeros in between the actual values? I don\u0027t see an array stride specified so I would have thought it would be 4.",
+      "revId": "08edff73ec51239c62f962e4e8850bcdfb673ef6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4cee46c_55769e56",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-05T13:40:41Z",
+      "side": 1,
+      "message": "For std140, if the member is an array of scalars or vectors, the base alignment and array\nstride are rounded up to the base alignment of a vec4. See spec https://www.khronos.org/registry/OpenGL/specs/es/3.1/es_spec_3.1.pdf 7.6.2.2 Standard Uniform Block Layout, rule 4.\n\nFor std430, it is not rounded up a multiple of the base alignment of a vec4. It would be one component(4 bytes). But here, the arrayStride would be 16 bytes.",
+      "parentUuid": "22026d74_09254ff5",
       "revId": "08edff73ec51239c62f962e4e8850bcdfb673ef6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
