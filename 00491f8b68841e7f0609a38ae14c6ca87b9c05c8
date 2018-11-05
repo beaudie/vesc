@@ -39,6 +39,24 @@
       "revId": "00491f8b68841e7f0609a38ae14c6ca87b9c05c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "034386ba_d2dd27a9",
+        "filename": "src/tests/perf_tests/InitializeSharedVariablePerf.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-05T17:03:51Z",
+      "side": 1,
+      "message": "On second though, even if intentional that\u0027s unfair. The driver is able to perform the \"initializer in definition\" case by sharing the work among all invocations and eventually initialize every element only once. The \"initializer in code\" case definitely reinitializes the array over and over.",
+      "parentUuid": "8ec76a94_d5369296",
+      "revId": "00491f8b68841e7f0609a38ae14c6ca87b9c05c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
