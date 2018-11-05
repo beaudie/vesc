@@ -24,7 +24,7 @@ namespace egl
 {
 class Display;
 class Image;
-}
+}  // namespace egl
 
 namespace gl
 {
@@ -589,6 +589,9 @@ bool ValidateES3TexStorage3DParameters(Context *context,
                                        GLsizei width,
                                        GLsizei height,
                                        GLsizei depth);
+
+bool ValidateGetMultisamplefvBase(Context *context, GLenum pname, GLuint index, GLfloat *val);
+bool ValidateSampleMaskiBase(Context *context, GLuint maskNumber, GLbitfield mask);
 
 // Utility macro for handling implementation methods inside Validation.
 #define ANGLE_HANDLE_VALIDATION_ERR(X) \

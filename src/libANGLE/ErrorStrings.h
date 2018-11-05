@@ -263,6 +263,7 @@ constexpr const char *kErrorInvalidRenderbufferTextureParameter =
     "Invalid parameter name for renderbuffer attachment.";
 constexpr const char *kErrorInvalidRenderbufferWidthHeight =
     "Renderbuffer width and height cannot be negative and cannot exceed maximum texture size.";
+constexpr const char *kErrorInvalidSampleCount = "Index must be less than the value of SAMPLES.";
 constexpr const char *kErrorInvalidSampleMaskNumber =
     "MaskNumber cannot be greater than or equal to the value of MAX_SAMPLE_MASK_WORDS.";
 constexpr const char *kErrorInvalidSampler       = "Sampler is not valid";

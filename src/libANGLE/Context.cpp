@@ -612,9 +612,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     return egl::NoError();
 }
 
-Context::~Context()
-{
-}
+Context::~Context() {}
 
 void Context::setLabel(EGLLabelKHR label)
 {
@@ -7875,6 +7873,7 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
             case GL_MAX_INTEGER_SAMPLES_ANGLE:
             case GL_MAX_DEPTH_TEXTURE_SAMPLES_ANGLE:
             case GL_TEXTURE_BINDING_2D_MULTISAMPLE_ANGLE:
+            case GL_MAX_SAMPLE_MASK_WORDS:
                 *type      = GL_INT;
                 *numParams = 1;
                 return true;
@@ -8163,9 +8162,7 @@ void Context::onSubjectStateChange(const Context *context,
 }
 
 // ErrorSet implementation.
-ErrorSet::ErrorSet(Context *context) : mContext(context)
-{
-}
+ErrorSet::ErrorSet(Context *context) : mContext(context) {}
 
 ErrorSet::~ErrorSet() = default;
 
@@ -8233,8 +8230,7 @@ StateCache::StateCache()
       mCachedNonInstancedVertexElementLimit(0),
       mCachedInstancedVertexElementLimit(0),
       mCachedBasicDrawStatesError(kInvalidPointer)
-{
-}
+{}
 
 StateCache::~StateCache() = default;
 
