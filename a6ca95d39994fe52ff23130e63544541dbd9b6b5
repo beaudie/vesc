@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "739f0cbb_6236b283",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-05T15:20:10Z",
+      "side": 1,
+      "message": "I think you also need this in updateDepthRange(), no?",
+      "range": {
+        "startLine": 661,
+        "startChar": 4,
+        "endLine": 661,
+        "endChar": 28
+      },
+      "revId": "a6ca95d39994fe52ff23130e63544541dbd9b6b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
