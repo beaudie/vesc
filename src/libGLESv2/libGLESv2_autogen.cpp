@@ -3204,6 +3204,16 @@ void GL_APIENTRY glGetTexLevelParameterfvANGLE(GLenum target,
     return gl::GetTexLevelParameterfvANGLE(target, level, pname, params);
 }
 
+void GL_APIENTRY glGetMultisamplefvANGLE(GLenum pname, GLuint index, GLfloat *val)
+{
+    return gl::GetMultisamplefvANGLE(pname, index, val);
+}
+
+void GL_APIENTRY glSampleMaskiANGLE(GLuint maskNumber, GLbitfield mask)
+{
+    return gl::SampleMaskiANGLE(maskNumber, mask);
+}
+
 // GL_ANGLE_translated_shader_source
 void GL_APIENTRY glGetTranslatedShaderSourceANGLE(GLuint shader,
                                                   GLsizei bufsize,
@@ -9053,6 +9063,21 @@ void GL_APIENTRY glGetTexLevelParameterfvANGLEContextANGLE(GLeglContext ctx,
                                                            GLfloat *params)
 {
     return gl::GetTexLevelParameterfvANGLEContextANGLE(ctx, target, level, pname, params);
+}
+
+void GL_APIENTRY glGetMultisamplefvANGLEContextANGLE(GLeglContext ctx,
+                                                     GLenum pname,
+                                                     GLuint index,
+                                                     GLfloat *val)
+{
+    return gl::GetMultisamplefvANGLEContextANGLE(ctx, pname, index, val);
+}
+
+void GL_APIENTRY glSampleMaskiANGLEContextANGLE(GLeglContext ctx,
+                                                GLuint maskNumber,
+                                                GLbitfield mask)
+{
+    return gl::SampleMaskiANGLEContextANGLE(ctx, maskNumber, mask);
 }
 
 }  // extern "C"

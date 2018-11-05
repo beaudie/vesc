@@ -327,6 +327,8 @@ typedef void (GL_APIENTRYP PFNGLCOPYSUBTEXTURE3DANGLECONTEXTANGLE)(GLeglContext 
 typedef void (GL_APIENTRYP PFNGLTEXSTORAGE2DMULTISAMPLEANGLECONTEXTANGLE)(GLeglContext ctx, GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations);
 typedef void (GL_APIENTRYP PFNGLGETTEXLEVELPARAMETERIVANGLECONTEXTANGLE)(GLeglContext ctx, GLenum target, GLint level, GLenum pname, GLint * params);
 typedef void (GL_APIENTRYP PFNGLGETTEXLEVELPARAMETERFVANGLECONTEXTANGLE)(GLeglContext ctx, GLenum target, GLint level, GLenum pname, GLfloat * params);
+typedef void (GL_APIENTRYP PFNGLGETMULTISAMPLEFVANGLECONTEXTANGLE)(GLeglContext ctx, GLenum pname, GLuint index, GLfloat * val);
+typedef void (GL_APIENTRYP PFNGLSAMPLEMASKIANGLECONTEXTANGLE)(GLeglContext ctx, GLuint maskNumber, GLbitfield mask);
 #ifdef GL_GLEXT_PROTOTYPES
 GL_APICALL void GL_APIENTRY glActiveTextureContextANGLE(GLeglContext ctx, GLenum texture);
 GL_APICALL void GL_APIENTRY glAttachShaderContextANGLE(GLeglContext ctx, GLuint program, GLuint shader);
@@ -647,4 +649,6 @@ GL_APICALL void GL_APIENTRY glCopySubTexture3DANGLEContextANGLE(GLeglContext ctx
 GL_APICALL void GL_APIENTRY glTexStorage2DMultisampleANGLEContextANGLE(GLeglContext ctx, GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations);
 GL_APICALL void GL_APIENTRY glGetTexLevelParameterivANGLEContextANGLE(GLeglContext ctx, GLenum target, GLint level, GLenum pname, GLint * params);
 GL_APICALL void GL_APIENTRY glGetTexLevelParameterfvANGLEContextANGLE(GLeglContext ctx, GLenum target, GLint level, GLenum pname, GLfloat * params);
+GL_APICALL void GL_APIENTRY glGetMultisamplefvANGLEContextANGLE(GLeglContext ctx, GLenum pname, GLuint index, GLfloat * val);
+GL_APICALL void GL_APIENTRY glSampleMaskiANGLEContextANGLE(GLeglContext ctx, GLuint maskNumber, GLbitfield mask);
 #endif
