@@ -422,6 +422,24 @@
       "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "93ca5732_88125833",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-06T15:21:51Z",
+      "side": 1,
+      "message": "I noticed the numerous cases of extended blend modes. Their values are all like 1 billion something, so simply storing them in 6 bits (or 4 bits as you did before) won\u0027t work. That\u0027s why I figured you are ignoring the values that come from the extensions because we don\u0027t support them.\n\nIf we do support them, this still won\u0027t work.",
+      "parentUuid": "da641041_efa0d712",
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
