@@ -214,6 +214,29 @@
     },
     {
       "key": {
+        "uuid": "819bd6da_c730cc8f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-06T16:23:25Z",
+      "side": 1,
+      "message": "TODO logged here.",
+      "range": {
+        "startLine": 373,
+        "startChar": 0,
+        "endLine": 373,
+        "endChar": 81
+      },
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f303cf5b_9f0f2abe",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 2
@@ -455,6 +478,24 @@
       "side": 1,
       "message": "I think there are 51 blend ops, which should fit into 6 bits.\nWe just need to ignore Vk spec values and store our own.\nFor now, I think we use only 3 ops, so it should work.",
       "parentUuid": "93ca5732_88125833",
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5680e034_b521891d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-06T16:23:25Z",
+      "side": 1,
+      "message": "Yuly is correct. We have transitioned a good portion of GLenums to packed enums. See http://anglebug.com/2169 . Once we do this we can store the ANGLE enum instead of the GL or Vulkan enum. Like we do for formats. I have a TODO for this so we shouldn\u0027t lose track of it when we get to ES 3.1+.",
+      "parentUuid": "a63d69bf_0d8b86cb",
       "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
