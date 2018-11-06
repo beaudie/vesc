@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5fa89d52_5e64ba3b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-06T12:45:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8eb6a5d7_844e8b53",
+      "range": {
+        "startLine": 233,
+        "startChar": 26,
+        "endLine": 233,
+        "endChar": 31
+      },
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f92c32a8_5fde8253",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "e43a74af_2a953a00",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-06T12:45:59Z",
+      "side": 1,
+      "message": "Did a bunch of renaming. PTAL.",
+      "parentUuid": "f92c32a8_5fde8253",
+      "range": {
+        "startLine": 235,
+        "startChar": 13,
+        "endLine": 235,
+        "endChar": 25
+      },
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cfabc305_49bffe64",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 2
@@ -68,6 +116,30 @@
       "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f44f379b_344688ab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-06T12:45:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfabc305_49bffe64",
+      "range": {
+        "startLine": 236,
+        "startChar": 19,
+        "endLine": 236,
+        "endChar": 21
+      },
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -118,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "42050230_6790faf1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-06T12:45:59Z",
+      "side": 1,
+      "message": "Added comment. There can\u0027t be separate depth/stencil in vulkan.",
+      "parentUuid": "c95703e4_eaacaf6b",
+      "range": {
+        "startLine": 312,
+        "startChar": 0,
+        "endLine": 312,
+        "endChar": 50
+      },
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f303cf5b_9f0f2abe",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 2
@@ -132,6 +228,24 @@
       "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4992451c_a6367352",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-06T12:45:59Z",
+      "side": 1,
+      "message": "Good point. I addressed this through macro magic instead. The macro checks that the resulting number is the same as the input. Should be foolproof and doesn\u0027t require explicitly storing the bit count.\n\nNote that the spec does guarantee the result of an overflow is the modulus.",
+      "parentUuid": "f303cf5b_9f0f2abe",
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -152,6 +266,24 @@
     },
     {
       "key": {
+        "uuid": "13579bb4_9ab73786",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-06T12:45:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "669acf8a_23bd7152",
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0087c350_b9565e96",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 2
@@ -166,6 +298,24 @@
       "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb5ff5ad_7fe58778",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-06T12:45:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0087c350_b9565e96",
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -216,6 +366,30 @@
     },
     {
       "key": {
+        "uuid": "dc0d610b_f8e0e8ae",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-06T12:45:59Z",
+      "side": 1,
+      "message": "std::array doesn\u0027t check this automatically in release. But on our bots ASSERT will work.\n\nFixed to a named constant. 9 is correct since it\u0027s max_draw_buffers (8) + 1 for the single depth/stencil. PTAL",
+      "parentUuid": "7e872af0_76fa58a2",
+      "range": {
+        "startLine": 72,
+        "startChar": 23,
+        "endLine": 72,
+        "endChar": 24
+      },
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eda6ed92_05ca1b6f",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 2
@@ -230,6 +404,24 @@
       "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da641041_efa0d712",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-06T12:45:59Z",
+      "side": 1,
+      "message": "Good observation that the blend factors need 5 bits. Unfortunately your packing scheme isn\u0027t quite perfect either as the blend ops need 6 bits for the possible 50+ value from the extended blend modes. I packed this instead a bit differently, PTAL.",
+      "parentUuid": "eda6ed92_05ca1b6f",
+      "revId": "7beb6422aa4d4983b9767eb74ee40d67e30826db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

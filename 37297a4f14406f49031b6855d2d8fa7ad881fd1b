@@ -22,6 +22,30 @@
       "revId": "37297a4f14406f49031b6855d2d8fa7ad881fd1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de5ff432_804c3a67",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-06T12:45:59Z",
+      "side": 0,
+      "message": "no, I think the new code was the bugged one. thanks for catching.",
+      "parentUuid": "50c3af39_1783e6e2",
+      "range": {
+        "startLine": 371,
+        "startChar": 73,
+        "endLine": 371,
+        "endChar": 75
+      },
+      "revId": "37297a4f14406f49031b6855d2d8fa7ad881fd1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
