@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "15d88de2_1ac047eb",
+        "filename": "src/tests/perf_tests/InitializeSharedVariablePerf.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-11-06T03:10:29Z",
+      "side": 1,
+      "message": "Great! I saw a considerable improvement with this change applied. You can refer to the updated perf data sheet. Thank you, Shahbaz.",
+      "parentUuid": "4d0cf8c2_349398f7",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 13
+      },
+      "revId": "00491f8b68841e7f0609a38ae14c6ca87b9c05c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8ec76a94_d5369296",
         "filename": "src/tests/perf_tests/InitializeSharedVariablePerf.cpp",
         "patchSetId": 9
@@ -54,6 +78,24 @@
       "side": 1,
       "message": "On second though, even if intentional that\u0027s unfair. The driver is able to perform the \"initializer in definition\" case by sharing the work among all invocations and eventually initialize every element only once. The \"initializer in code\" case definitely reinitializes the array over and over.",
       "parentUuid": "8ec76a94_d5369296",
+      "revId": "00491f8b68841e7f0609a38ae14c6ca87b9c05c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebd5a2d2_7247ce54",
+        "filename": "src/tests/perf_tests/InitializeSharedVariablePerf.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-11-06T03:10:29Z",
+      "side": 1,
+      "message": "I just wanted to make the workload significant enough to be measured. If the driver can optimize to initialize once, I don\u0027t think it\u0027s unfair. It\u0027s just an advantage for \"initializer in definition\".",
+      "parentUuid": "034386ba_d2dd27a9",
       "revId": "00491f8b68841e7f0609a38ae14c6ca87b9c05c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
