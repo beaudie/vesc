@@ -64,9 +64,10 @@
 #ifdef ANGLE_ENABLE_WINDOWS_STORE
 #include "libANGLE/renderer/d3d/d3d11/winrt/NativeWindow11WinRT.h"
 #else
-#include "libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.h"
 #include "libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.h"
 #endif
+
+#include "libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.h"
 
 // Include the D3D9 debug annotator header for use by the desktop D3D11 renderer
 // because the D3D11 interface method ID3DUserDefinedAnnotation::GetStatus
@@ -1266,7 +1267,10 @@ NativeWindowD3D *Renderer11::createNativeWindow(EGLNativeWindowType window,
                                                 const egl::Config *config,
                                                 const egl::AttributeMap &attribs) const
 {
-    auto useWinUiComp = !NativeWindow11Win32::IsValidNativeWindow(window);
+    bool useWinUiComp = false;
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+    useWinUiComp = !NativeWindow11Win32::IsValidNativeWindow(window);
+#endif
 
     if (useWinUiComp)
     {
@@ -1275,7 +1279,7 @@ NativeWindowD3D *Renderer11::createNativeWindow(EGLNativeWindowType window,
     else
     {
 #ifdef ANGLE_ENABLE_WINDOWS_STORE
-        UNUSED_VARIABLE(attribs);
+        ANGLE_UNUSED_VARIABLE(attribs);
         return new NativeWindow11WinRT(window, config->alphaSize > 0);
 #else
         return new NativeWindow11Win32(

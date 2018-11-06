@@ -29,9 +29,10 @@ DebugAnnotator11::~DebugAnnotator11()
     {
         SafeRelease(mUserDefinedAnnotation);
 
-#if !defined(ANGLE_ENABLE_WINDOWS_STORE)
-        FreeLibrary(mD3d11Module);
-#endif // !ANGLE_ENABLE_WINDOWS_STORE
+        if (mD3d11Module != nullptr)
+        {
+            FreeLibrary(mD3d11Module);
+        }
     }
 }
 
