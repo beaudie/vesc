@@ -16,6 +16,24 @@
       "revId": "07d229fbdaf037941de2ffb994f8d95cecc7c441",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77ce56f1_8898a00d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-07T19:23:07Z",
+      "side": 1,
+      "message": "Drat. Oh well, LGTM if the bots pass.",
+      "parentUuid": "18a9dc22_c511f927",
+      "revId": "07d229fbdaf037941de2ffb994f8d95cecc7c441",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
