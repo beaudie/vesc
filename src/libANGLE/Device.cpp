@@ -46,6 +46,7 @@ static DeviceSet *GetDeviceSet()
 // Static factory methods
 egl::Error Device::CreateDevice(EGLint deviceType, void *nativeDevice, Device **outDevice)
 {
+    PROFILE;
     *outDevice = nullptr;
 
     std::unique_ptr<rx::DeviceImpl> newDeviceImpl;

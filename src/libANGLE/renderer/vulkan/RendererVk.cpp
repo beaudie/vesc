@@ -389,26 +389,29 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     // Gather global layer properties.
     uint32_t instanceLayerCount = 0;
+    fprintf(stderr, "vkEnumerateInstanceLayerProperties(&count, nullptr);\n");
     ANGLE_VK_TRY(displayVk, vkEnumerateInstanceLayerProperties(&instanceLayerCount, nullptr));
 
     std::vector<VkLayerProperties> instanceLayerProps(instanceLayerCount);
     if (instanceLayerCount > 0)
     {
+        fprintf(stderr, "vkEnumerateInstanceLayerProperties(%u, data);\n", instanceLayerCount);
         ANGLE_VK_TRY(displayVk, vkEnumerateInstanceLayerProperties(&instanceLayerCount,
                                                                    instanceLayerProps.data()));
     }
 
     uint32_t instanceExtensionCount = 0;
-    ANGLE_VK_TRY(displayVk,
-                 vkEnumerateInstanceExtensionProperties(nullptr, &instanceExtensionCount, nullptr));
+    fprintf(stderr, "vkEnumerateInstanceExtensionProperties(&count, nullptr);\n");
+    ANGLE_VK_TRY(displayVk, vkEnumerateInstanceExtensionProperties(nullptr, &instanceExtensionCount, nullptr));
 
     std::vector<VkExtensionProperties> instanceExtensionProps(instanceExtensionCount);
     if (instanceExtensionCount > 0)
     {
-        ANGLE_VK_TRY(displayVk,
-                     vkEnumerateInstanceExtensionProperties(nullptr, &instanceExtensionCount,
+        fprintf(stderr, "vkEnumerateInstanceExtensionProperties(%u, data);\n", instanceExtensionCount);
+        ANGLE_VK_TRY(displayVk, vkEnumerateInstanceExtensionProperties(nullptr, &instanceExtensionCount,
                                                             instanceExtensionProps.data()));
     }
+    fprintf(stderr, "vkEnumerateInstance*() done\n");
 
     const char *const *enabledLayerNames = nullptr;
     uint32_t enabledLayerCount           = 0;
@@ -454,7 +457,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     instanceInfo.enabledLayerCount   = enabledLayerCount;
     instanceInfo.ppEnabledLayerNames = enabledLayerNames;
 
+    fprintf(stderr, "vkCreateInstance()\n");
     ANGLE_VK_TRY(displayVk, vkCreateInstance(&instanceInfo, nullptr, &mInstance));
+    fprintf(stderr, "vkCreateInstance() done\n");
 
     if (mEnableValidationLayers)
     {
@@ -475,15 +480,18 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     }
 
     uint32_t physicalDeviceCount = 0;
+    fprintf(stderr, "vkEnumeratePhysicalDevices(&count, nullptr);\n");
     ANGLE_VK_TRY(displayVk, vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount, nullptr));
     ANGLE_VK_CHECK(displayVk, physicalDeviceCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
     // TODO(jmadill): Handle multiple physical devices. For now, use the first device.
     std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
+    fprintf(stderr, "vkEnumeratePhysicalDevices(%u, data);\n", physicalDeviceCount);
     ANGLE_VK_TRY(displayVk, vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount,
                                                        physicalDevices.data()));
     ChoosePhysicalDevice(physicalDevices, mEnableMockICD, &mPhysicalDevice,
                          &mPhysicalDeviceProperties);
+    fprintf(stderr, "vkEnumeratePhysicalDevices() done\n");
 
     vkGetPhysicalDeviceFeatures(mPhysicalDevice, &mPhysicalDeviceFeatures);
 
@@ -540,27 +548,31 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex)
 {
     uint32_t deviceLayerCount = 0;
-    ANGLE_VK_TRY(displayVk,
-                 vkEnumerateDeviceLayerProperties(mPhysicalDevice, &deviceLayerCount, nullptr));
+    fprintf(stderr, "vkEnumerateDeviceLayerProperties(&count, nullptr);\n");
+    ANGLE_VK_TRY(displayVk, vkEnumerateDeviceLayerProperties(mPhysicalDevice, &deviceLayerCount, nullptr));
 
     std::vector<VkLayerProperties> deviceLayerProps(deviceLayerCount);
     if (deviceLayerCount > 0)
     {
+        fprintf(stderr, "vkEnumerateDeviceLayerProperties(%u, data);\n", deviceLayerCount);
         ANGLE_VK_TRY(displayVk, vkEnumerateDeviceLayerProperties(mPhysicalDevice, &deviceLayerCount,
                                                                  deviceLayerProps.data()));
     }
 
     uint32_t deviceExtensionCount = 0;
+    fprintf(stderr, "vkEnumerateDeviceExtensionProperties(&count, nullptr);\n");
     ANGLE_VK_TRY(displayVk, vkEnumerateDeviceExtensionProperties(mPhysicalDevice, nullptr,
                                                                  &deviceExtensionCount, nullptr));
 
     std::vector<VkExtensionProperties> deviceExtensionProps(deviceExtensionCount);
     if (deviceExtensionCount > 0)
     {
+        fprintf(stderr, "vkEnumerateDeviceExtensionProperties(%u, data);\n", deviceExtensionCount);
         ANGLE_VK_TRY(displayVk, vkEnumerateDeviceExtensionProperties(mPhysicalDevice, nullptr,
                                                                      &deviceExtensionCount,
                                                                      deviceExtensionProps.data()));
     }
+    fprintf(stderr, "vkEnumerateDevice*() done\n");
 
     const char *const *enabledLayerNames = nullptr;
     uint32_t enabledLayerCount           = 0;
@@ -609,7 +621,9 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         enabledDeviceExtensions.empty() ? nullptr : enabledDeviceExtensions.data();
     createInfo.pEnabledFeatures = &enabledFeatures;
 
+    fprintf(stderr, "vkCreateDevice()\n");
     ANGLE_VK_TRY(displayVk, vkCreateDevice(mPhysicalDevice, &createInfo, nullptr, &mDevice));
+    fprintf(stderr, "vkCreateDevice() done\n");
 
     mCurrentQueueFamilyIndex = queueFamilyIndex;
 

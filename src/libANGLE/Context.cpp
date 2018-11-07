@@ -382,6 +382,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
 
 void Context::initialize()
 {
+    PROFILE;
     mImplementation->setMemoryProgramCache(mMemoryProgramCache);
 
     initCaps();

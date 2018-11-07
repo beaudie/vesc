@@ -451,6 +451,8 @@ void Display::setAttributes(rx::DisplayImpl *impl, const AttributeMap &attribMap
 
 Error Display::initialize()
 {
+    PROFILE;
+
     mImplementation->setBlobCache(&mBlobCache);
 
     // TODO(jmadill): Store Platform in Display and init here.
@@ -609,6 +611,7 @@ Error Display::createWindowSurface(const Config *configuration,
                                    const AttributeMap &attribs,
                                    Surface **outSurface)
 {
+    PROFILE;
     if (mImplementation->testDeviceLost())
     {
         ANGLE_TRY(restoreLostDevice());

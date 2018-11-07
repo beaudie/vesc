@@ -243,6 +243,8 @@ State::~State()
 
 void State::initialize(Context *context)
 {
+    PROFILE;
+
     const Caps &caps                   = context->getCaps();
     const Extensions &extensions       = context->getExtensions();
     const Extensions &nativeExtensions = context->getImplementation()->getNativeExtensions();
