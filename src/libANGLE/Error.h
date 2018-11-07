@@ -18,6 +18,7 @@
 #include <memory>
 #include <ostream>
 #include <string>
+#include <time.h>
 
 namespace angle
 {
@@ -276,5 +277,31 @@ class ANGLE_NO_DISCARD Result
 }  // namespace angle
 
 #include "Error.inl"
+
+static uint64_t get_time_ns()
+{
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
+    return ts.tv_sec * 1'000'000'000llu + ts.tv_nsec;
+}
+
+struct profile
+{
+    uint64_t start_time;
+    const char *func;
+
+    profile(const char *f): func(f)
+    {
+        start_time = get_time_ns();
+    }
+    ~profile()
+    {
+        uint64_t exec_time = get_time_ns() - start_time;
+
+        fprintf(stderr, "%s: %lfus\n", func, exec_time / 1e3);
+    }
+};
+
+#define PROFILE struct profile __profile(__PRETTY_FUNCTION__)
 
 #endif // LIBANGLE_ERROR_H_
