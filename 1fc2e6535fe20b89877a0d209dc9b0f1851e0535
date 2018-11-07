@@ -239,6 +239,30 @@
     },
     {
       "key": {
+        "uuid": "e3bb2cd6_0347dea2",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-07T23:14:04Z",
+      "side": 1,
+      "message": "I don\u0027t see this change in the latest patch.",
+      "parentUuid": "e6146192_f104c631",
+      "range": {
+        "startLine": 226,
+        "startChar": 12,
+        "endLine": 226,
+        "endChar": 88
+      },
+      "revId": "1fc2e6535fe20b89877a0d209dc9b0f1851e0535",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08ec95f4_59afcacf",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 1
@@ -274,6 +298,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "08ec95f4_59afcacf",
+      "range": {
+        "startLine": 2737,
+        "startChar": 4,
+        "endLine": 2737,
+        "endChar": 40
+      },
+      "revId": "1fc2e6535fe20b89877a0d209dc9b0f1851e0535",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "730da008_f969b23d",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2737,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-07T23:14:04Z",
+      "side": 1,
+      "message": "Same for this.",
+      "parentUuid": "4c1bf706_669bbd14",
       "range": {
         "startLine": 2737,
         "startChar": 4,
