@@ -402,12 +402,14 @@ ANGLE_INSTANTIATE_TEST(WebGLReadOutsideFramebufferTest,
                        ES2_OPENGL(),
                        ES3_OPENGL(),
                        ES2_OPENGLES(),
-                       ES3_OPENGLES());
+                       ES3_OPENGLES(),
+                       ES2_VULKAN());
 
 ANGLE_INSTANTIATE_TEST(WebGL2ReadOutsideFramebufferTest,
                        ES3_D3D11(),
                        ES3_OPENGL(),
                        ES2_OPENGLES(),
-                       ES3_OPENGLES());
+                       ES3_OPENGLES(),
+                       ES2_VULKAN());
 
 }  // namespace
