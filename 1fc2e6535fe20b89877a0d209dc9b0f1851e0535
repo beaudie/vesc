@@ -287,6 +287,30 @@
     },
     {
       "key": {
+        "uuid": "a257d55d_905a3af0",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-07T23:42:26Z",
+      "side": 1,
+      "message": "Oh, sorry, I didn\u0027t explain this well enough. What I meant here was please turn these into something like: \n\n        case EGL_BIND_TO_TEXTURE_RGB:\n        case EGL_BIND_TO_TEXTURE_RGBA:\n            switch(value)\n            {\n                case EGL_DONT_CARE:\n                case EGL_TRUE:\n                case EGL_FALSE:\n                    break;\n                default:\n                    return EglBadAttribute() \u003c\u003c \"EGL_bind_to_texture invalid attribute: \" \u003c\u003c value;\n            }\n            break;",
+      "parentUuid": "e752a20d_99aa1e10",
+      "range": {
+        "startLine": 226,
+        "startChar": 12,
+        "endLine": 226,
+        "endChar": 88
+      },
+      "revId": "1fc2e6535fe20b89877a0d209dc9b0f1851e0535",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08ec95f4_59afcacf",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 1
