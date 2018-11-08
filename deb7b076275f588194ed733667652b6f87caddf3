@@ -139,6 +139,30 @@
       "revId": "deb7b076275f588194ed733667652b6f87caddf3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaa8d3c0_c5dff02f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-08T20:42:33Z",
+      "side": 1,
+      "message": "WrappedObject. Replace angle::Result with VkResult in these methods. And then update the calling code to call ANGLE_VK_TRY or what have you as necessary. Not hard work but a bit of refactoring. I\u0027d prefer this because it gives flexibility while wrapping the vkWaitForFences call.",
+      "parentUuid": "0c914f50_5a8fa60c",
+      "range": {
+        "startLine": 1120,
+        "startChar": 0,
+        "endLine": 1128,
+        "endChar": 0
+      },
+      "revId": "deb7b076275f588194ed733667652b6f87caddf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
