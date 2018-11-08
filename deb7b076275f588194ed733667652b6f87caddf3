@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0528ade_b9c183e1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-08T19:58:12Z",
+      "side": 1,
+      "message": "can you update this to:\n\nTODO(jmadill): Use pool allocator for performance. http://anglebug.com/2951",
+      "range": {
+        "startLine": 707,
+        "startChar": 6,
+        "endLine": 707,
+        "endChar": 87
+      },
+      "revId": "deb7b076275f588194ed733667652b6f87caddf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1e377bc_b2c19cc1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-08T19:58:12Z",
+      "side": 1,
+      "message": "nit: missing init.",
+      "range": {
+        "startLine": 297,
+        "startChar": 12,
+        "endLine": 297,
+        "endChar": 22
+      },
+      "revId": "deb7b076275f588194ed733667652b6f87caddf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09ec0e2b_0b730a8f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-08T19:58:12Z",
+      "side": 1,
+      "message": "just to confirm - this is necessary to fix the crash?",
+      "range": {
+        "startLine": 931,
+        "startChar": 0,
+        "endLine": 934,
+        "endChar": 9
+      },
+      "revId": "deb7b076275f588194ed733667652b6f87caddf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f48d5af_5538726f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-08T19:58:12Z",
+      "side": 1,
+      "message": "i\u0027m trying to keep these methods autogeneratable. instead of making a special helper method, we should try to implement this by calling Fence::wait() from RendererVk.\n\ncurrently you\u0027re blocked because the return macro passes on the device lost error. I propose we return VkResult directly from these methods. Let the calling code call ANGLE_VK_TRY or use custom handling as they prefer. This would also fix the need for the TRY_RETURN macro.\n\nHappy to do this if you want help. Or would you want to try doing this as a prior patch?",
+      "range": {
+        "startLine": 1120,
+        "startChar": 0,
+        "endLine": 1128,
+        "endChar": 0
+      },
+      "revId": "deb7b076275f588194ed733667652b6f87caddf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
