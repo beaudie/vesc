@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d779b990_5726a030",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-08T16:12:21Z",
+      "side": 1,
+      "message": "Looks like these get accumulated and performed before the whole secondary command buffer of this resource is executed. Would it be possible that this barrier ends up executing too early?\n\nFor example, say you do:\n\n   barrier1, draw, barrier2, draw, barrier3, draw\n\nyou will end up with:\n\n   barrier123, draw, draw, draw\n\nwhich would stall the earlier draws.\n\nUnless this cannot happen because of the reading/writing node relationship. Let\u0027s talk about this.",
+      "revId": "982052fc376411cf410ff9604db7191eb424fa3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7368dbd_03c51d5b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-08T16:12:21Z",
+      "side": 1,
+      "message": "Do we need to consider this node !childless if it has a barrier?",
+      "revId": "982052fc376411cf410ff9604db7191eb424fa3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "160a956f_05a6d950",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-08T16:12:21Z",
+      "side": 1,
+      "message": "Nit: Missing `git cl format`",
+      "revId": "982052fc376411cf410ff9604db7191eb424fa3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62564777_62dee49d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-08T16:12:21Z",
+      "side": 1,
+      "message": "(mCurrentReadAccess \u0026 accessType) !\u003d accessType\n\nBecause some bits in accessType may already exist, but some not.",
+      "range": {
+        "startLine": 918,
+        "startChar": 39,
+        "endLine": 918,
+        "endChar": 77
+      },
+      "revId": "982052fc376411cf410ff9604db7191eb424fa3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "615956a1_96e788f0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-08T16:12:21Z",
+      "side": 1,
+      "message": "I\u0027m not sure if this is enough. Say current write access is VK_ACCESS_SHADER_WRITE_BIT, which means a dispatch is writing to the buffer. Then you do a transfer (i.e. DMA write) which may not go through the same caches. The result of dispatch writes would be dirty, stale and unflushed (whoever coined these terms really needed to clean their toilet).",
+      "revId": "982052fc376411cf410ff9604db7191eb424fa3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
