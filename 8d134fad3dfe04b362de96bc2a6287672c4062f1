@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad102294_e106ce79",
+        "filename": "src/libANGLE/SizedMRUCache.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-08T21:06:32Z",
+      "side": 1,
+      "message": "Could we add a common/hash.h that wraps this into an angle namespace function?",
+      "range": {
+        "startLine": 169,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 39
+      },
+      "revId": "8d134fad3dfe04b362de96bc2a6287672c4062f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
