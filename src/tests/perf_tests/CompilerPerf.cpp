@@ -209,7 +209,7 @@ class CompilerPerfTest : public ANGLEPerfTest,
 };
 
 CompilerPerfTest::CompilerPerfTest()
-    : ANGLEPerfTest("CompilerPerf", GetParam().testId, kNumIterationsPerStep)
+    : ANGLEPerfTest("CompilerPerf", GetParam().testId, kNumIterationsPerStep, 2.0)
 {
 }
 
