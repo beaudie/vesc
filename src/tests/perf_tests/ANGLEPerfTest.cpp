@@ -17,15 +17,20 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 #include <json/json.h>
 
 namespace
 {
 constexpr size_t kInitialTraceEventBufferSize = 50000;
-constexpr size_t kWarmupIterations            = 3;
 constexpr double kMicroSecondsPerSecond       = 1e6;
 constexpr double kNanoSecondsPerSecond        = 1e9;
+constexpr double kCalibrationRunTimeSeconds   = 1.0;
+constexpr unsigned int kNumTrials             = 3;
+
+bool gCalibration = false;
+Optional<unsigned int> gStepsToRunOverride;
 
 struct TraceCategory
 {
@@ -150,12 +155,13 @@ const char *gTraceFile = "ANGLETrace.json";
 
 ANGLEPerfTest::ANGLEPerfTest(const std::string &name,
                              const std::string &suffix,
-                             unsigned int iterationsPerStep)
+                             unsigned int iterationsPerStep,
+                             double runTimeSeconds)
     : mName(name),
       mSuffix(suffix),
       mTimer(CreateTimer()),
-      mRunTimeSeconds(2.0),
       mSkipTest(false),
+      mRunTimeSeconds(runTimeSeconds),
       mNumStepsPerformed(0),
       mIterationsPerStep(iterationsPerStep),
       mRunning(true)
@@ -174,17 +180,52 @@ void ANGLEPerfTest::run()
         return;
     }
 
+    // Calibrate to a fixed number of steps during an initial set time.
+    if (!gStepsToRunOverride.valid())
+    {
+        doRunLoop(kCalibrationRunTimeSeconds);
+
+        // Calibration allows the perf test runner script to save some time.
+        if (gCalibration)
+        {
+            printResult("steps", static_cast<size_t>(mNumStepsPerformed), "count", false);
+            return;
+        }
+
+        gStepsToRunOverride = mNumStepsPerformed;
+    }
+
+    // Do another warmup run. Seems to consistently improve results.
+    doRunLoop(mRunTimeSeconds);
+
+    for (unsigned int trial = 0; trial < kNumTrials; ++trial)
+    {
+        doRunLoop(mRunTimeSeconds);
+        printResults();
+    }
+}
+
+void ANGLEPerfTest::doRunLoop(double runTime)
+{
+    mNumStepsPerformed = 0;
+    mRunning           = true;
     mTimer->start();
+
     while (mRunning)
     {
         step();
         if (mRunning)
         {
             ++mNumStepsPerformed;
-        }
-        if (mTimer->getElapsedTime() > mRunTimeSeconds || g_OnlyOneRunFrame)
-        {
-            mRunning = false;
+            if (mTimer->getElapsedTime() > runTime)
+            {
+                mRunning = false;
+            }
+            else if (gStepsToRunOverride.valid() &&
+                     mNumStepsPerformed >= gStepsToRunOverride.value())
+            {
+                mRunning = false;
+            }
         }
     }
     finishTest();
@@ -207,11 +248,10 @@ void ANGLEPerfTest::SetUp()
 
 void ANGLEPerfTest::TearDown()
 {
-    if (mSkipTest)
-    {
-        return;
-    }
+}
 
+void ANGLEPerfTest::printResults()
+{
     double elapsedTimeSeconds = mTimer->getElapsedTime();
 
     double secondsPerStep      = elapsedTimeSeconds / static_cast<double>(mNumStepsPerformed);
@@ -221,16 +261,13 @@ void ANGLEPerfTest::TearDown()
     if (secondsPerIteration > 1e-3)
     {
         double microSecondsPerIteration = secondsPerIteration * kMicroSecondsPerSecond;
-        printResult("microSecPerIteration", microSecondsPerIteration, "us", true);
+        printResult("wall_time", microSecondsPerIteration, "us", true);
     }
     else
     {
         double nanoSecPerIteration = secondsPerIteration * kNanoSecondsPerSecond;
-        printResult("nanoSecPerIteration", nanoSecPerIteration, "ns", true);
+        printResult("wall_time", nanoSecPerIteration, "ns", true);
     }
-
-    double relativeScore = static_cast<double>(mNumStepsPerformed) / elapsedTimeSeconds;
-    printResult("score", static_cast<size_t>(std::round(relativeScore)), "score", true);
 }
 
 double ANGLEPerfTest::normalizedTime(size_t value) const
@@ -263,7 +300,8 @@ std::string RenderTestParams::suffix() const
 ANGLERenderTest::ANGLERenderTest(const std::string &name, const RenderTestParams &testParams)
     : ANGLEPerfTest(name,
                     testParams.suffix(),
-                    g_OnlyOneRunFrame ? 1 : testParams.iterationsPerStep),
+                    g_OnlyOneRunFrame ? 1 : testParams.iterationsPerStep,
+                    testParams.runTimeSeconds),
       mTestParams(testParams),
       mEGLWindow(createEGLWindow(testParams)),
       mOSWindow(nullptr)
@@ -340,15 +378,6 @@ void ANGLERenderTest::SetUp()
         FAIL() << "Please initialize 'iterationsPerStep'.";
         abortTest();
         return;
-    }
-
-    // Warm up the benchmark to reduce variance.
-    if (!g_OnlyOneRunFrame)
-    {
-        for (size_t iteration = 0; iteration < kWarmupIterations; ++iteration)
-        {
-            drawBenchmark();
-        }
     }
 }
 
@@ -452,4 +481,56 @@ EGLWindow *ANGLERenderTest::createEGLWindow(const RenderTestParams &testParams)
 {
     return new EGLWindow(testParams.majorVersion, testParams.minorVersion,
                          testParams.eglParameters);
+}
+
+void DeleteArg(int *argc, int argIndex, char **argv)
+{
+    (*argc)--;
+    for (int moveIndex = argIndex; moveIndex < *argc; ++moveIndex)
+    {
+        argv[moveIndex] = argv[moveIndex + 1];
+    }
+}
+
+void ANGLEProcessPerfTestArgs(int *argc, char **argv)
+{
+    for (int i = 0; i < *argc;)
+    {
+        if (strcmp("--one-frame-only", argv[i]) == 0)
+        {
+            g_OnlyOneRunFrame   = true;
+            gStepsToRunOverride = 1;
+            DeleteArg(argc, i, argv);
+        }
+        else if (strcmp("--enable-trace", argv[i]) == 0)
+        {
+            gEnableTrace = true;
+            DeleteArg(argc, i, argv);
+        }
+        else if (strcmp("--trace-file", argv[i]) == 0 && i < *argc - 1)
+        {
+            gTraceFile = argv[i];
+            DeleteArg(argc, i, argv);
+            DeleteArg(argc, i, argv);
+        }
+        else if (strcmp("--calibration", argv[i]) == 0)
+        {
+            gCalibration = true;
+            DeleteArg(argc, i, argv);
+        }
+        else if (strcmp("--steps", argv[i]) == 0)
+        {
+            unsigned int stepsToRun = 0;
+            std::stringstream strstr;
+            strstr << argv[i + 1];
+            strstr >> stepsToRun;
+            gStepsToRunOverride = stepsToRun;
+            DeleteArg(argc, i, argv);
+            DeleteArg(argc, i, argv);
+        }
+        else
+        {
+            i++;
+        }
+    }
 }

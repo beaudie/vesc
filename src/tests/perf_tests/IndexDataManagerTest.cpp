@@ -159,7 +159,7 @@ class IndexDataManagerPerfTest : public ANGLEPerfTest
 };
 
 IndexDataManagerPerfTest::IndexDataManagerPerfTest()
-    : ANGLEPerfTest("IndexDataManger", "_run", kIterationsPerStep),
+    : ANGLEPerfTest("IndexDataManger", "_run", kIterationsPerStep, 2.0),
       mIndexDataManager(&mMockBufferFactory),
       mIndexCount(4000),
       mBufferSize(mIndexCount * sizeof(GLushort)),

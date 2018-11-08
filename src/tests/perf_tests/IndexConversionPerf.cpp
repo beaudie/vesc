@@ -18,6 +18,8 @@ namespace
 {
 struct IndexConversionPerfParams final : public RenderTestParams
 {
+    IndexConversionPerfParams() { runTimeSeconds = 3.0; }
+
     std::string suffix() const override
     {
         std::stringstream strstr;
@@ -72,7 +74,6 @@ IndexConversionPerfTest::IndexConversionPerfTest()
       mVertexBuffer(0),
       mIndexBuffer(0)
 {
-    mRunTimeSeconds = 3.0;
 }
 
 void IndexConversionPerfTest::initializeBenchmark()
