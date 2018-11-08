@@ -159,8 +159,7 @@ StreamProducerImpl *DisplayVk::createStreamProducerD3DTexture(
 
 gl::Version DisplayVk::getMaxSupportedESVersion() const
 {
-    UNIMPLEMENTED();
-    return gl::Version(0, 0);
+    return gl::Version(3, 0);
 }
 
 void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const

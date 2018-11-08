@@ -93,6 +93,7 @@ class FormatTable final : angle::NonCopyable
 
     // Also initializes the TextureCapsMap and the compressedTextureCaps in the Caps instance.
     void initialize(VkPhysicalDevice physicalDevice,
+                    const VkPhysicalDeviceProperties &physicalDeviceProperties,
                     gl::TextureCapsMap *outTextureCapsMap,
                     std::vector<GLenum> *outCompressedTextureFormats);
 
