@@ -531,8 +531,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     GlslangWrapper::Initialize();
 
     // Initialize the format table.
-    mFormatTable.initialize(mPhysicalDevice, mFeatures, &mNativeTextureCaps,
-                            &mNativeCaps.compressedTextureFormats);
+    mFormatTable.initialize(mPhysicalDevice, mPhysicalDeviceProperties, mFeatures,
+                            &mNativeTextureCaps, &mNativeCaps.compressedTextureFormats);
 
     return angle::Result::Continue();
 }

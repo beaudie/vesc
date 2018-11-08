@@ -232,7 +232,7 @@ egl::Config GenerateDefaultConfig(const VkPhysicalDeviceProperties &physicalDevi
     config.nativeRenderable      = EGL_TRUE;
     config.nativeVisualID        = 0;
     config.nativeVisualType      = EGL_NONE;
-    config.renderableType        = EGL_OPENGL_ES2_BIT;
+    config.renderableType        = EGL_OPENGL_ES2_BIT | EGL_OPENGL_ES3_BIT;
     config.sampleBuffers         = (sampleCount > 0) ? 1 : 0;
     config.samples               = sampleCount;
     config.surfaceType           = EGL_WINDOW_BIT | EGL_PBUFFER_BIT;
