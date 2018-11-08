@@ -60,7 +60,8 @@ class ANGLEPerfTest : public testing::Test, angle::NonCopyable
   public:
     ANGLEPerfTest(const std::string &name,
                   const std::string &suffix,
-                  unsigned int iterationsPerStep);
+                  unsigned int iterationsPerStep,
+                  double runTimeSeconds);
     virtual ~ANGLEPerfTest();
 
     virtual void step() = 0;
@@ -84,14 +85,17 @@ class ANGLEPerfTest : public testing::Test, angle::NonCopyable
     void abortTest() { mRunning = false; }
 
     unsigned int getNumStepsPerformed() const { return mNumStepsPerformed; }
+    void doRunLoop(double runTime);
 
     std::string mName;
     std::string mSuffix;
     Timer *mTimer;
-    double mRunTimeSeconds;
     bool mSkipTest;
 
   private:
+    void printResults();
+
+    double mRunTimeSeconds;
     unsigned int mNumStepsPerformed;
     unsigned int mIterationsPerStep;
     bool mRunning;
@@ -104,6 +108,7 @@ struct RenderTestParams : public angle::PlatformParameters
     EGLint windowWidth  = 64;
     EGLint windowHeight = 64;
     unsigned int iterationsPerStep = 0;
+    double runTimeSeconds          = 2.0;
 };
 
 class ANGLERenderTest : public ANGLEPerfTest

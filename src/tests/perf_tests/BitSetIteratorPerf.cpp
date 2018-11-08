@@ -31,7 +31,8 @@ class BitSetIteratorPerfTest : public ANGLEPerfTest
 };
 
 template <typename T>
-BitSetIteratorPerfTest<T>::BitSetIteratorPerfTest() : ANGLEPerfTest("BitSetIteratorPerf", "_run", 1)
+BitSetIteratorPerfTest<T>::BitSetIteratorPerfTest()
+    : ANGLEPerfTest("BitSetIteratorPerf", "_run", 1, 2.0)
 {
 }
 
