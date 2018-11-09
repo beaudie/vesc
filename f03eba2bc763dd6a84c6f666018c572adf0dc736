@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f4e80bb_484488c5",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-09T21:15:02Z",
+      "side": 1,
+      "message": "Changed the behavior here in Release to fail on VK_NOT_READY.\nHope that\u0027s OK.",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 44
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f123803d_cb8c4d79",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-09T21:15:02Z",
+      "side": 1,
+      "message": "I hope it\u0027s OK to use mDevice throughout RendererVk instead of displayVk-\u003egetDevice() and contextVk-\u003egetDevice().\nI\u0027m not sure if it will be the same device in all cases, and if that would be a problem if it\u0027s not.",
+      "range": {
+        "startLine": 624,
+        "startChar": 46,
+        "endLine": 624,
+        "endChar": 53
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0961e95_00d2b6df",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-09T21:15:02Z",
+      "side": 1,
+      "message": "Changed the behavior here in Release to fail on VK_INCOMPLETE.\nHope that\u0027s OK.",
+      "range": {
+        "startLine": 1195,
+        "startChar": 0,
+        "endLine": 1195,
+        "endChar": 36
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
