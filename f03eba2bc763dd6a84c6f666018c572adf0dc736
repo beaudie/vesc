@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "671c8f2f_7e190d99",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-09T21:39:56Z",
+      "side": 1,
+      "message": "I\u0027d suggest just getting rid of the ANGLE_VK_TRY_RETURN macro to reduce macro proliferation.",
+      "range": {
+        "startLine": 119,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 23
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3b30ae7_3e8d5268",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-09T21:39:56Z",
+      "side": 1,
+      "message": "much better!",
+      "range": {
+        "startLine": 142,
+        "startChar": 18,
+        "endLine": 142,
+        "endChar": 30
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f4e80bb_484488c5",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 1
@@ -22,6 +68,30 @@
       "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23e28258_f30ee1b0",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-09T21:39:56Z",
+      "side": 1,
+      "message": "That\u0027s fine.",
+      "parentUuid": "3f4e80bb_484488c5",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 44
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -48,6 +118,53 @@
     },
     {
       "key": {
+        "uuid": "021bc58a_11fded2a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-09T21:39:56Z",
+      "side": 1,
+      "message": "Yes, please use mDevice.",
+      "parentUuid": "f123803d_cb8c4d79",
+      "range": {
+        "startLine": 624,
+        "startChar": 46,
+        "endLine": 624,
+        "endChar": 53
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4dc13b15_18acb29e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1181,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-09T21:39:56Z",
+      "side": 1,
+      "message": "can you process the result directly here? why do we allow incomplete again? ideally we could at least get rid of this macro.",
+      "range": {
+        "startLine": 1181,
+        "startChar": 4,
+        "endLine": 1181,
+        "endChar": 33
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b0961e95_00d2b6df",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -64,6 +181,98 @@
         "startChar": 0,
         "endLine": 1195,
         "endChar": 36
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c11fecb7_e42cbac5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-09T21:39:56Z",
+      "side": 1,
+      "message": "nit: can you process the result here instead of using the macro?",
+      "range": {
+        "startLine": 1328,
+        "startChar": 4,
+        "endLine": 1328,
+        "endChar": 32
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9aacb58_dd1a9ccb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1511,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-09T21:39:56Z",
+      "side": 1,
+      "message": "same here - can we do this without a macro?",
+      "range": {
+        "startLine": 1511,
+        "startChar": 12,
+        "endLine": 1511,
+        "endChar": 37
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "116c2808_3321ac7d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1522,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-09T21:39:56Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 1522,
+        "startChar": 8,
+        "endLine": 1522,
+        "endChar": 36
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95c07152_99eae0fd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-09T21:39:56Z",
+      "side": 1,
+      "message": "these would be the macros I\u0027d target for removal.",
+      "range": {
+        "startLine": 922,
+        "startChar": 0,
+        "endLine": 947,
+        "endChar": 76
       },
       "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
