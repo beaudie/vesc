@@ -50,8 +50,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
 
         case angle::FormatID::A8_UNORM:
             internalFormat             = GL_ALPHA8_EXT;
-            textureFormatID            = angle::FormatID::R8_UNORM;
-            vkTextureFormat            = VK_FORMAT_R8_UNORM;
+            textureFormatID            = angle::FormatID::R8G8B8A8_UNORM;
+            vkTextureFormat            = VK_FORMAT_R8G8B8A8_UNORM;
             textureInitializerFunction = nullptr;
 
             break;
@@ -742,17 +742,17 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
 
         case angle::FormatID::L8A8_UNORM:
             internalFormat             = GL_LUMINANCE8_ALPHA8_EXT;
-            textureFormatID            = angle::FormatID::R8G8_UNORM;
-            vkTextureFormat            = VK_FORMAT_R8G8_UNORM;
+            textureFormatID            = angle::FormatID::R8G8B8A8_UNORM;
+            vkTextureFormat            = VK_FORMAT_R8G8B8A8_UNORM;
             textureInitializerFunction = nullptr;
 
             break;
 
         case angle::FormatID::L8_UNORM:
             internalFormat             = GL_LUMINANCE8_EXT;
-            textureFormatID            = angle::FormatID::R8_UNORM;
-            vkTextureFormat            = VK_FORMAT_R8_UNORM;
-            textureInitializerFunction = nullptr;
+            textureFormatID            = angle::FormatID::R8G8B8A8_UNORM;
+            vkTextureFormat            = VK_FORMAT_R8G8B8A8_UNORM;
+            textureInitializerFunction = Initialize4ComponentData<GLubyte, 0x00, 0x00, 0x00, 0xFF>;
 
             break;
 
