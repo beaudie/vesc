@@ -21,36 +21,6 @@ namespace rx
 {
 namespace
 {
-void MapSwizzleState(GLenum internalFormat,
-                     const gl::SwizzleState &swizzleState,
-                     gl::SwizzleState *swizzleStateOut)
-{
-    switch (internalFormat)
-    {
-        case GL_LUMINANCE8_OES:
-            swizzleStateOut->swizzleRed   = swizzleState.swizzleRed;
-            swizzleStateOut->swizzleGreen = swizzleState.swizzleRed;
-            swizzleStateOut->swizzleBlue  = swizzleState.swizzleRed;
-            swizzleStateOut->swizzleAlpha = GL_ONE;
-            break;
-        case GL_LUMINANCE8_ALPHA8_OES:
-            swizzleStateOut->swizzleRed   = swizzleState.swizzleRed;
-            swizzleStateOut->swizzleGreen = swizzleState.swizzleRed;
-            swizzleStateOut->swizzleBlue  = swizzleState.swizzleRed;
-            swizzleStateOut->swizzleAlpha = swizzleState.swizzleGreen;
-            break;
-        case GL_ALPHA8_OES:
-            swizzleStateOut->swizzleRed   = GL_ZERO;
-            swizzleStateOut->swizzleGreen = GL_ZERO;
-            swizzleStateOut->swizzleBlue  = GL_ZERO;
-            swizzleStateOut->swizzleAlpha = swizzleState.swizzleRed;
-            break;
-        default:
-            *swizzleStateOut = swizzleState;
-            break;
-    }
-}
-
 constexpr VkBufferUsageFlags kStagingBufferFlags =
     (VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
 constexpr size_t kStagingBufferSize = 1024 * 16;
@@ -644,13 +614,11 @@ gl::Error TextureVk::copySubTextureImpl(ContextVk *contextVk,
     uint8_t *sourceData = nullptr;
     ANGLE_TRY(source->copyImageDataToBuffer(contextVk, sourceLevel, 1, sourceArea, &sourceData));
 
-    // Using the front-end ANGLE format for the colorRead and colorWrite functions.  Otherwise
-    // emulated formats like luminance-alpha would not know how to interpret the data.
-    const angle::Format &sourceAngleFormat = source->getImage().getFormat().angleFormat();
-    const angle::Format &destAngleFormat =
-        renderer->getFormat(destFormat.sizedInternalFormat).angleFormat();
+    const angle::Format &sourceTextureFormat = source->getImage().getFormat().textureFormat();
+    const angle::Format &destTextureFormat =
+        renderer->getFormat(destFormat.sizedInternalFormat).textureFormat();
     size_t destinationAllocationSize =
-        sourceArea.width * sourceArea.height * destAngleFormat.pixelBytes;
+        sourceArea.width * sourceArea.height * destTextureFormat.pixelBytes;
 
     // Allocate memory in the destination texture for the copy/conversion
     uint8_t *destData = nullptr;
@@ -659,12 +627,12 @@ gl::Error TextureVk::copySubTextureImpl(ContextVk *contextVk,
         gl::Extents(sourceArea.width, sourceArea.height, 1), destOffset, &destData));
 
     // Source and dest data is tightly packed
-    GLuint sourceDataRowPitch = sourceArea.width * sourceAngleFormat.pixelBytes;
-    GLuint destDataRowPitch   = sourceArea.width * destAngleFormat.pixelBytes;
+    GLuint sourceDataRowPitch = sourceArea.width * sourceTextureFormat.pixelBytes;
+    GLuint destDataRowPitch   = sourceArea.width * destTextureFormat.pixelBytes;
 
-    CopyImageCHROMIUM(sourceData, sourceDataRowPitch, sourceAngleFormat.pixelBytes, 0,
-                      sourceAngleFormat.pixelReadFunction, destData, destDataRowPitch,
-                      destAngleFormat.pixelBytes, 0, destAngleFormat.pixelWriteFunction,
+    CopyImageCHROMIUM(sourceData, sourceDataRowPitch, sourceTextureFormat.pixelBytes, 0,
+                      sourceTextureFormat.pixelReadFunction, destData, destDataRowPitch,
+                      destTextureFormat.pixelBytes, 0, destTextureFormat.pixelWriteFunction,
                       destFormat.format, destFormat.componentType, sourceArea.width,
                       sourceArea.height, 1, unpackFlipY, unpackPremultiplyAlpha,
                       unpackUnmultiplyAlpha);
@@ -1054,18 +1022,17 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
 
     ANGLE_TRY(mImage.initMemory(contextVk, renderer->getMemoryProperties(), flags));
 
-    gl::SwizzleState mappedSwizzle;
-    MapSwizzleState(format.internalFormat, mState.getSwizzleState(), &mappedSwizzle);
+    gl::SwizzleState swizzleState = mState.getSwizzleState();
 
     // Renderable textures cannot have a swizzle.
     ASSERT(!contextVk->getTextureCaps().get(format.internalFormat).textureAttachment ||
-           !mappedSwizzle.swizzleRequired());
+           !swizzleState.swizzleRequired());
 
     // TODO(jmadill): Separate imageviews for RenderTargets and Sampling.
     ANGLE_TRY(mImage.initImageView(contextVk, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
-                                   mappedSwizzle, &mMipmapImageView, levelCount));
+                                   swizzleState, &mMipmapImageView, levelCount));
     ANGLE_TRY(mImage.initImageView(contextVk, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
-                                   mappedSwizzle, &mBaseLevelImageView, 1));
+                                   swizzleState, &mBaseLevelImageView, 1));
 
     // TODO(jmadill): Fold this into the RenderPass load/store ops. http://anglebug.com/2361
     VkClearColorValue black = {{0, 0, 0, 1.0f}};
