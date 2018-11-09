@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "bef7240a_816cae48",
+        "filename": "additional_readme_paths.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-11-09T01:20:24Z",
+      "side": 1,
+      "message": "I don\u0027t think we have other third party licenses in here; should we?",
+      "revId": "8d134fad3dfe04b362de96bc2a6287672c4062f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ad102294_e106ce79",
         "filename": "src/libANGLE/SizedMRUCache.h",
         "patchSetId": 9
