@@ -163,6 +163,30 @@
       "revId": "deb7b076275f588194ed733667652b6f87caddf3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14d9feba_9c686a89",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-09T15:11:29Z",
+      "side": 1,
+      "message": "This pattern:\n\n```\n    constexpr uint64_t kMaxFenceWaitTimeNs \u003d 10\u0027000\u0027000\u0027000llu;\n    VkResult status \u003d vkWaitForFences(device, 1, \u0026mHandle, true, kMaxFenceWaitTimeNs);\n```\n\nand the comment explaining the ten seconds limit (and Timeout turning into a failure) is showing up in a few places. I think you can simply put a helper in `RendererVk` instead of here (this file just \"wraps\" what vulkan offers), that waits on a fence and returns an angle::Result with all that logic put together.",
+      "parentUuid": "eaa8d3c0_c5dff02f",
+      "range": {
+        "startLine": 1120,
+        "startChar": 0,
+        "endLine": 1128,
+        "endChar": 0
+      },
+      "revId": "deb7b076275f588194ed733667652b6f87caddf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
