@@ -37,13 +37,13 @@ void MapSwizzleState(GLenum internalFormat,
             swizzleStateOut->swizzleRed   = swizzleState.swizzleRed;
             swizzleStateOut->swizzleGreen = swizzleState.swizzleRed;
             swizzleStateOut->swizzleBlue  = swizzleState.swizzleRed;
-            swizzleStateOut->swizzleAlpha = swizzleState.swizzleGreen;
+            swizzleStateOut->swizzleAlpha = swizzleState.swizzleAlpha;
             break;
         case GL_ALPHA8_OES:
             swizzleStateOut->swizzleRed   = GL_ZERO;
             swizzleStateOut->swizzleGreen = GL_ZERO;
             swizzleStateOut->swizzleBlue  = GL_ZERO;
-            swizzleStateOut->swizzleAlpha = swizzleState.swizzleRed;
+            swizzleStateOut->swizzleAlpha = swizzleState.swizzleAlpha;
             break;
         default:
             *swizzleStateOut = swizzleState;
@@ -644,13 +644,11 @@ gl::Error TextureVk::copySubTextureImpl(ContextVk *contextVk,
     uint8_t *sourceData = nullptr;
     ANGLE_TRY(source->copyImageDataToBuffer(contextVk, sourceLevel, 1, sourceArea, &sourceData));
 
-    // Using the front-end ANGLE format for the colorRead and colorWrite functions.  Otherwise
-    // emulated formats like luminance-alpha would not know how to interpret the data.
-    const angle::Format &sourceAngleFormat = source->getImage().getFormat().angleFormat();
-    const angle::Format &destAngleFormat =
-        renderer->getFormat(destFormat.sizedInternalFormat).angleFormat();
+    const angle::Format &sourceTextureFormat = source->getImage().getFormat().textureFormat();
+    const angle::Format &destTextureFormat =
+        renderer->getFormat(destFormat.sizedInternalFormat).textureFormat();
     size_t destinationAllocationSize =
-        sourceArea.width * sourceArea.height * destAngleFormat.pixelBytes;
+        sourceArea.width * sourceArea.height * destTextureFormat.pixelBytes;
 
     // Allocate memory in the destination texture for the copy/conversion
     uint8_t *destData = nullptr;
@@ -659,12 +657,12 @@ gl::Error TextureVk::copySubTextureImpl(ContextVk *contextVk,
         gl::Extents(sourceArea.width, sourceArea.height, 1), destOffset, &destData));
 
     // Source and dest data is tightly packed
-    GLuint sourceDataRowPitch = sourceArea.width * sourceAngleFormat.pixelBytes;
-    GLuint destDataRowPitch   = sourceArea.width * destAngleFormat.pixelBytes;
+    GLuint sourceDataRowPitch = sourceArea.width * sourceTextureFormat.pixelBytes;
+    GLuint destDataRowPitch   = sourceArea.width * destTextureFormat.pixelBytes;
 
-    CopyImageCHROMIUM(sourceData, sourceDataRowPitch, sourceAngleFormat.pixelBytes, 0,
-                      sourceAngleFormat.pixelReadFunction, destData, destDataRowPitch,
-                      destAngleFormat.pixelBytes, 0, destAngleFormat.pixelWriteFunction,
+    CopyImageCHROMIUM(sourceData, sourceDataRowPitch, sourceTextureFormat.pixelBytes, 0,
+                      sourceTextureFormat.pixelReadFunction, destData, destDataRowPitch,
+                      destTextureFormat.pixelBytes, 0, destTextureFormat.pixelWriteFunction,
                       destFormat.format, destFormat.componentType, sourceArea.width,
                       sourceArea.height, 1, unpackFlipY, unpackPremultiplyAlpha,
                       unpackUnmultiplyAlpha);
