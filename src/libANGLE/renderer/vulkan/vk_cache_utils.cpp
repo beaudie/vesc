@@ -238,8 +238,7 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
     createInfo.dependencyCount = 0;
     createInfo.pDependencies   = nullptr;
 
-    ANGLE_TRY(renderPass->init(context, createInfo));
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(context, renderPass->init(context->getDevice(), createInfo));
 }
 
 // Utility for setting a value on a packed 4-bit integer array.
@@ -666,9 +665,8 @@ angle::Result PipelineDesc::initializePipeline(vk::Context *context,
     createInfo.basePipelineHandle  = VK_NULL_HANDLE;
     createInfo.basePipelineIndex   = 0;
 
-    ANGLE_TRY(pipelineOut->initGraphics(context, createInfo, pipelineCacheVk));
-
-    return angle::Result::Continue();
+    ANGLE_VK_TRY_RETURN(
+        context, pipelineOut->initGraphics(context->getDevice(), createInfo, pipelineCacheVk));
 }
 
 const ShaderStageInfo &PipelineDesc::getShaderStageInfo() const
@@ -1235,7 +1233,7 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
     createInfo.pBindings    = bindings.data();
 
     vk::DescriptorSetLayout newLayout;
-    ANGLE_TRY(newLayout.init(context, createInfo));
+    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
 
     auto insertedItem = mPayload.emplace(desc, vk::SharedDescriptorSetLayout(std::move(newLayout)));
     vk::SharedDescriptorSetLayout &insertedLayout = insertedItem.first->second;
@@ -1319,7 +1317,7 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
     createInfo.pPushConstantRanges    = pushConstantRanges.data();
 
     vk::PipelineLayout newLayout;
-    ANGLE_TRY(newLayout.init(context, createInfo));
+    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
 
     auto insertedItem = mPayload.emplace(desc, vk::SharedPipelineLayout(std::move(newLayout)));
     vk::SharedPipelineLayout &insertedLayout = insertedItem.first->second;
