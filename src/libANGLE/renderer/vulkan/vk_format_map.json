@@ -203,13 +203,13 @@
     },
     "overrides": {
         "A8_UNORM": {
-            "texture": "R8_UNORM"
+            "texture": "R8G8B8A8_UNORM"
         },
         "L8_UNORM": {
-            "texture": "R8_UNORM"
+            "texture": "R8G8B8A8_UNORM"
         },
         "L8A8_UNORM": {
-            "texture": "R8G8_UNORM"
+            "texture": "R8G8B8A8_UNORM"
         },
         "R4G4B4A4_UNORM": {
             "texture": "R8G8B8A8_UNORM"
