@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "79604a88_69efbc53",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-09T21:57:13Z",
+      "side": 1,
+      "message": "Talked in person. The graph should guarantee this is broken up.",
+      "parentUuid": "d779b990_5726a030",
+      "revId": "982052fc376411cf410ff9604db7191eb424fa3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c7368dbd_03c51d5b",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "236b28e6_2be835b0",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-09T21:57:13Z",
+      "side": 1,
+      "message": "Hm. I don\u0027t think so because the barriers happen before the node rather than after it.",
+      "parentUuid": "c7368dbd_03c51d5b",
+      "revId": "982052fc376411cf410ff9604db7191eb424fa3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "160a956f_05a6d950",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 4
@@ -50,6 +86,24 @@
       "revId": "982052fc376411cf410ff9604db7191eb424fa3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a066d07_e57b48fb",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-09T21:57:13Z",
+      "side": 1,
+      "message": "git cl format doesn\u0027t handle the \u003d alignment too well. fixed manually and ran git cl format --full.",
+      "parentUuid": "160a956f_05a6d950",
+      "revId": "982052fc376411cf410ff9604db7191eb424fa3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -76,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "165f5945_383d0f1b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-09T21:57:13Z",
+      "side": 1,
+      "message": "accessType can only have one bit set. VkFlags is used in Vulkan for bit combinations. When you use the specific type (e.g. VkAccessFlagBits) you\u0027re limited to one value. In type-ness anyway, although implementations doing things with static_cast can violate this. But that would be an internal error.",
+      "parentUuid": "62564777_62dee49d",
+      "range": {
+        "startLine": 918,
+        "startChar": 39,
+        "endLine": 918,
+        "endChar": 77
+      },
+      "revId": "982052fc376411cf410ff9604db7191eb424fa3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "615956a1_96e788f0",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -90,6 +168,24 @@
       "revId": "982052fc376411cf410ff9604db7191eb424fa3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a0709c8_6d6191d3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-09T21:57:13Z",
+      "side": 1,
+      "message": "Done - changed to use a memory barrier if read or write bits are nonzero.",
+      "parentUuid": "615956a1_96e788f0",
+      "revId": "982052fc376411cf410ff9604db7191eb424fa3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
