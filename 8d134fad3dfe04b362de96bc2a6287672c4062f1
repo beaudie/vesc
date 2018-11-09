@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "90ec32b1_f578818d",
+        "filename": "additional_readme_paths.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-09T12:56:00Z",
+      "side": 1,
+      "message": "Which ones were you thinking of? I took a look through our code base and didn\u0027t see any others that needed to be included in about:credits.",
+      "parentUuid": "bef7240a_816cae48",
+      "revId": "8d134fad3dfe04b362de96bc2a6287672c4062f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ad102294_e106ce79",
         "filename": "src/libANGLE/SizedMRUCache.h",
         "patchSetId": 9
