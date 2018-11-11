@@ -187,7 +187,6 @@ angle::Result HLSLCompiler::compileToBinary(d3d::Context *context,
                                             std::string *outDebugInfo)
 {
     ASSERT(mInitialized);
-
 #if !defined(ANGLE_ENABLE_WINDOWS_STORE)
     ASSERT(mD3DCompilerModule);
 #endif
