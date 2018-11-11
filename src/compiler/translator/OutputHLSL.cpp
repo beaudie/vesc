@@ -2028,12 +2028,14 @@ bool OutputHLSL::visitDeclaration(Visit visit, TIntermDeclaration *node)
                 {
                     symbol->traverse(this);
                     out << ArrayString(symbol->getType());
-                    // We don't initialize shared variables because:
+                    // Unless SH_INIT_SHARED_VARIABLES is specified, We don't initialize shared
+                    // variables because:
                     // 1. It is very slow for D3D11 drivers to compile a compute shader if we add
                     // code to initialize a groupshared array variable with a large array size.
                     // 2. It is unnecessary to initialize shared variables, as GLSL even does not
                     // allow initializing shared variables at all.
-                    if (declarator->getQualifier() != EvqShared)
+                    if (declarator->getQualifier() != EvqShared ||
+                        mCompileOptions & SH_INIT_SHARED_VARIABLES)
                     {
                         out << " = " + zeroInitializer(symbol->getType());
                     }
