@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12ecbf47_d7f7bf90",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-12T04:54:12Z",
+      "side": 1,
+      "message": "Maybe you should point it out clearly that initializing shared variables to zero is only used for HLSL. For GLSL, we need to assign zero to shared variables at the beginning of main. And this patch is only for HLSL.",
+      "revId": "831e9eec6ca40195d4733e799882b46932b56b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "829e4c55_01f0af1a",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2284,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-12T04:54:12Z",
+      "side": 1,
+      "message": "I don\u0027t understand this test\u0027s purpose. I think you should test that whether an uninitialized shared variable\u0027s value is zero when we use. Maybe directly store the uninitialized shared variable\u0027s value to an image. Then read back the value from the image to check whether it\u0027s zero.",
+      "revId": "831e9eec6ca40195d4733e799882b46932b56b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6902514c_b726a873",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2304,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-12T04:54:12Z",
+      "side": 1,
+      "message": "Remove these tabs.",
+      "revId": "831e9eec6ca40195d4733e799882b46932b56b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
