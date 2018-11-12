@@ -22,6 +22,30 @@
       "revId": "bc1953cc660292973e6dca00878eb8b014f3a43b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11bf9410_5f2ed2b1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-12T16:44:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e097a14f_47d0a9f4",
+      "range": {
+        "startLine": 235,
+        "startChar": 56,
+        "endLine": 235,
+        "endChar": 74
+      },
+      "revId": "bc1953cc660292973e6dca00878eb8b014f3a43b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
