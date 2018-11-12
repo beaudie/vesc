@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d81889f6_e9e03f45",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-12T20:05:27Z",
+      "side": 1,
+      "message": "I.e. our gerrit only supports bug numbers from bugs.chromium.org",
+      "parentUuid": "7e21a0a7_5edc0bbd",
+      "range": {
+        "startLine": 15,
+        "startChar": 5,
+        "endLine": 15,
+        "endChar": 13
+      },
+      "revId": "6a63916f2b4d932a4893edd86b9c5623be4aa4c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8a0e9945_40a0fd9d",
         "filename": "android/src/com/android/angle/MainFragment.java",
         "patchSetId": 3
@@ -64,6 +88,29 @@
         "startChar": 12,
         "endLine": 2,
         "endChar": 17
+      },
+      "revId": "6a63916f2b4d932a4893edd86b9c5623be4aa4c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7604210a_9c45623c",
+        "filename": "src/feature_support_util/a4a_rules.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-12T20:05:27Z",
+      "side": 1,
+      "message": "Is this needed? Doesn\u0027t look like ANGLE settings are using ANGLE.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 38
       },
       "revId": "6a63916f2b4d932a4893edd86b9c5623be4aa4c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
