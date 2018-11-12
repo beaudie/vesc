@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "98332206_04efd0c2",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-12T21:38:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "671c8f2f_7e190d99",
+      "range": {
+        "startLine": 119,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 23
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b3b30ae7_3e8d5268",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e68f3571_fbca9228",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-12T21:38:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b3b30ae7_3e8d5268",
+      "range": {
+        "startLine": 142,
+        "startChar": 18,
+        "endLine": 142,
+        "endChar": 30
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -83,6 +131,30 @@
       "side": 1,
       "message": "That\u0027s fine.",
       "parentUuid": "3f4e80bb_484488c5",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 44
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3bb0a467_8cb37a65",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-12T21:38:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "23e28258_f30ee1b0",
       "range": {
         "startLine": 170,
         "startChar": 0,
@@ -142,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "b58d18a2_ec48d0cd",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-12T21:38:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "021bc58a_11fded2a",
+      "range": {
+        "startLine": 624,
+        "startChar": 46,
+        "endLine": 624,
+        "endChar": 53
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4dc13b15_18acb29e",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -153,6 +249,30 @@
       "writtenOn": "2018-11-09T21:39:56Z",
       "side": 1,
       "message": "can you process the result directly here? why do we allow incomplete again? ideally we could at least get rid of this macro.",
+      "range": {
+        "startLine": 1181,
+        "startChar": 4,
+        "endLine": 1181,
+        "endChar": 33
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67f79ab7_206768ea",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1181,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-12T21:38:02Z",
+      "side": 1,
+      "message": "My understanding of the spec is for size 0 the status should be incomplete.",
+      "parentUuid": "4dc13b15_18acb29e",
       "range": {
         "startLine": 1181,
         "startChar": 4,
@@ -211,6 +331,30 @@
     },
     {
       "key": {
+        "uuid": "a06d3262_d0c28b4c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-12T21:38:02Z",
+      "side": 1,
+      "message": "Figured out this actually cannot be not ready because of VK_QUERY_RESULT_WAIT_BIT.",
+      "parentUuid": "c11fecb7_e42cbac5",
+      "range": {
+        "startLine": 1328,
+        "startChar": 4,
+        "endLine": 1328,
+        "endChar": 32
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9aacb58_dd1a9ccb",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -231,6 +375,30 @@
       "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e89d19a5_0b639fe5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1511,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-12T21:38:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9aacb58_dd1a9ccb",
+      "range": {
+        "startLine": 1511,
+        "startChar": 12,
+        "endLine": 1511,
+        "endChar": 37
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -257,6 +425,30 @@
     },
     {
       "key": {
+        "uuid": "56845949_c8da308d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1522,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-12T21:38:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "116c2808_3321ac7d",
+      "range": {
+        "startLine": 1522,
+        "startChar": 8,
+        "endLine": 1522,
+        "endChar": 36
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "95c07152_99eae0fd",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 1
@@ -277,6 +469,30 @@
       "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0afcc73_32f5ce0e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-12T21:38:02Z",
+      "side": 1,
+      "message": "Since there are Vulkan commands for which there are several success statuses, I don\u0027t see a problem with these macros, but whatever.",
+      "parentUuid": "95c07152_99eae0fd",
+      "range": {
+        "startLine": 922,
+        "startChar": 0,
+        "endLine": 947,
+        "endChar": 76
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
