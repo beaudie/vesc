@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe677718_a31a911f",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-12T08:32:00Z",
+      "side": 1,
+      "message": "nit: it actually is to avoid compute shaders being able to read undefined values that could be coming from another web page / application. Not undefined behavior.",
+      "revId": "b2c4fab31212b46fc037b032e18fa98768d0f7a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68bdc8ea_61eb6a19",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2031,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-12T08:32:00Z",
+      "side": 1,
+      "message": "I think the whole comment can be replaced because it makes it look like we don\u0027t want to initialize unless we really need to, when it should be the contrary. The default should be to initialize. Maybe something like:\n\n Avoid initializing variables when not requested to because it is very slow for D3D11 drivers...\n\nI don\u0027t think reason 2) is valid.",
+      "revId": "b2c4fab31212b46fc037b032e18fa98768d0f7a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
