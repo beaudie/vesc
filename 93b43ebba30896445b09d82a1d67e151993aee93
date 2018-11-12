@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2585130e_45b73bdf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1141499
+      },
+      "writtenOn": "2018-11-12T22:17:26Z",
+      "side": 1,
+      "message": "note: due to a bug in luci-config, you\u0027ll need to land an additional change to cq.cfg after this CL lands, s.t. your new CQ location is picked up.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 38
+      },
+      "revId": "93b43ebba30896445b09d82a1d67e151993aee93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a46e25f0_9790cc61",
+        "filename": "infra/config/OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1141499
+      },
+      "writtenOn": "2018-11-12T22:17:26Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 20
+      },
+      "revId": "93b43ebba30896445b09d82a1d67e151993aee93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e40061be_70ac81de",
+        "filename": "infra/config/branch/OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1141499
+      },
+      "writtenOn": "2018-11-12T22:17:26Z",
+      "side": 1,
+      "message": "aren\u0027t CQ maintainers any more.",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 20
+      },
+      "revId": "93b43ebba30896445b09d82a1d67e151993aee93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e537c8e7_55739b78",
+        "filename": "infra/config/branch/OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1141499
+      },
+      "writtenOn": "2018-11-12T22:17:26Z",
+      "side": 1,
+      "message": "and even this you don\u0027t really have to copy around :)",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 20
+      },
+      "revId": "93b43ebba30896445b09d82a1d67e151993aee93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
