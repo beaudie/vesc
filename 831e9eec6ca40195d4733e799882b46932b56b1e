@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "35f4ba4b_a25520c8",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2284,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-12T04:56:58Z",
+      "side": 1,
+      "message": "Sorry, please ignore this comment. I missed \u0027uint value \u003d (zeroS \u003d\u003d vars[tid] ? 127u : 0u);\u0027",
+      "parentUuid": "829e4c55_01f0af1a",
+      "revId": "831e9eec6ca40195d4733e799882b46932b56b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6902514c_b726a873",
         "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
         "patchSetId": 2
