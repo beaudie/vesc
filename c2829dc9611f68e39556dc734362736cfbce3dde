@@ -22,6 +22,30 @@
       "revId": "c2829dc9611f68e39556dc734362736cfbce3dde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca1af2a6_951cd5af",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-11-12T22:22:21Z",
+      "side": 1,
+      "message": "I\u0027ll just keep things simple and follow what the other fixes did and keep building on 2546.",
+      "parentUuid": "a7da9e94_a3212192",
+      "range": {
+        "startLine": 22,
+        "startChar": 18,
+        "endLine": 22,
+        "endChar": 22
+      },
+      "revId": "c2829dc9611f68e39556dc734362736cfbce3dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
