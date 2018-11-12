@@ -493,6 +493,30 @@
       "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0dbc9093_87f88281",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-12T21:50:07Z",
+      "side": 1,
+      "message": "Thanks. I think we can remove angle::Result::Incomplete now. That was part of the motivation.",
+      "parentUuid": "a0afcc73_32f5ce0e",
+      "range": {
+        "startLine": 922,
+        "startChar": 0,
+        "endLine": 947,
+        "endChar": 76
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
