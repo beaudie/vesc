@@ -366,7 +366,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
     return angle::Result::Continue();
 }
 
-void VertexArrayVk::getPackedInputDescriptions(vk::PipelineDesc *pipelineDesc)
+void VertexArrayVk::getPackedInputDescriptions(vk::GraphicsPipelineDesc *pipelineDesc)
 {
     updatePackedInputDescriptions();
     pipelineDesc->updateVertexInputInfo(mPackedInputBindings, mPackedInputAttributes);
