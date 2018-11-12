@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "61c2e7b6_7bc7207e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-12T14:36:19Z",
+      "side": 1,
+      "message": "Nit: update comment to say both read and write",
+      "range": {
+        "startLine": 935,
+        "startChar": 38,
+        "endLine": 935,
+        "endChar": 59
+      },
+      "revId": "7f29d8d223a03ed562bdf5c69b944a38e24448c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
