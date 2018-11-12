@@ -262,6 +262,8 @@ const char *GetOperatorString(TOperator op);
 // Say whether or not a binary or unary operation changes the value of a variable.
 bool IsAssignment(TOperator op);
 
+bool IsCompoundAssignment(TOperator op);
+
 // Say whether or not an operator represents an atomic function.
 bool IsAtomicFunction(TOperator op);
 

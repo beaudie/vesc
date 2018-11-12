@@ -381,6 +381,7 @@ class TIntermOperator : public TIntermExpression
     TOperator getOp() const { return mOp; }
 
     bool isAssignment() const;
+    bool isCompoundAssignment() const;
     bool isMultiplication() const;
     bool isConstructor() const;
 

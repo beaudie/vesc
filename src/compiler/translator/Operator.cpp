@@ -401,6 +401,30 @@ bool IsAssignment(TOperator op)
     }
 }
 
+bool IsCompoundAssignment(TOperator op)
+{
+    switch (op)
+    {
+        case EOpAddAssign:
+        case EOpSubAssign:
+        case EOpMulAssign:
+        case EOpVectorTimesMatrixAssign:
+        case EOpVectorTimesScalarAssign:
+        case EOpMatrixTimesScalarAssign:
+        case EOpMatrixTimesMatrixAssign:
+        case EOpDivAssign:
+        case EOpIModAssign:
+        case EOpBitShiftLeftAssign:
+        case EOpBitShiftRightAssign:
+        case EOpBitwiseAndAssign:
+        case EOpBitwiseXorAssign:
+        case EOpBitwiseOrAssign:
+            return true;
+        default:
+            return false;
+    }
+}
+
 bool IsAtomicFunction(TOperator op)
 {
     switch (op)

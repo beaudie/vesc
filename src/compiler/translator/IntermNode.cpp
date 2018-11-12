@@ -1073,6 +1073,11 @@ bool TIntermOperator::isAssignment() const
     return IsAssignment(mOp);
 }
 
+bool TIntermOperator::isCompoundAssignment() const
+{
+    return IsCompoundAssignment(mOp);
+}
+
 bool TIntermOperator::isMultiplication() const
 {
     switch (mOp)
