@@ -1135,9 +1135,9 @@ angle::Result RendererVk::getPipeline(vk::Context *context,
                                       vk::PipelineAndSerial **pipelineOut)
 {
     ASSERT(vertexShader.getSerial() ==
-           pipelineDesc.getShaderStageInfo()[vk::ShaderType::VertexShader].moduleSerial);
+           pipelineDesc.getShaderStageInfo()[gl::ShaderType::Vertex].moduleSerial);
     ASSERT(fragmentShader.getSerial() ==
-           pipelineDesc.getShaderStageInfo()[vk::ShaderType::FragmentShader].moduleSerial);
+           pipelineDesc.getShaderStageInfo()[gl::ShaderType::Fragment].moduleSerial);
 
     // Pull in a compatible RenderPass.
     vk::RenderPass *compatibleRenderPass = nullptr;

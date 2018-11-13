@@ -362,13 +362,15 @@ angle::Result ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
     vk::ShaderMap<size_t> requiredBufferSize;
     requiredBufferSize.fill(0);
 
-    for (vk::ShaderType shaderType : vk::AllShaderTypes())
+    for (gl::ShaderType shaderType : vk::AllShaderTypes())
     {
-        gl::ShaderType glShaderType              = static_cast<gl::ShaderType>(shaderType);
-        gl::Shader *shader                       = mState.getAttachedShader(glShaderType);
-        const std::vector<sh::Uniform> &uniforms = shader->getUniforms();
-        InitDefaultUniformBlock(uniforms, shader, &layoutMap[shaderType],
-                                &requiredBufferSize[shaderType]);
+        gl::Shader *shader = mState.getAttachedShader(shaderType);
+        if (shader)
+        {
+            const std::vector<sh::Uniform> &uniforms = shader->getUniforms();
+            InitDefaultUniformBlock(uniforms, shader, &layoutMap[shaderType],
+                                    &requiredBufferSize[shaderType]);
+        }
     }
 
     // Init the default block layout info.
@@ -391,7 +393,7 @@ angle::Result ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
 
                 bool found = false;
 
-                for (vk::ShaderType shaderType : vk::AllShaderTypes())
+                for (gl::ShaderType shaderType : vk::AllShaderTypes())
                 {
                     auto it = layoutMap[shaderType].find(uniformName);
                     if (it != layoutMap[shaderType].end())
@@ -405,13 +407,13 @@ angle::Result ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
             }
         }
 
-        for (vk::ShaderType shaderType : vk::AllShaderTypes())
+        for (gl::ShaderType shaderType : vk::AllShaderTypes())
         {
             mDefaultUniformBlocks[shaderType].uniformLayout.push_back(layoutInfo[shaderType]);
         }
     }
 
-    for (vk::ShaderType shaderType : vk::AllShaderTypes())
+    for (gl::ShaderType shaderType : vk::AllShaderTypes())
     {
         if (requiredBufferSize[shaderType] > 0)
         {
@@ -482,7 +484,7 @@ void ProgramVk::setUniformImpl(GLint location, GLsizei count, const T *v, GLenum
 
     if (linkedUniform.typeInfo->type == entryPointType)
     {
-        for (vk::ShaderType shaderType : vk::AllShaderTypes())
+        for (gl::ShaderType shaderType : vk::AllShaderTypes())
         {
             DefaultUniformBlock &uniformBlock     = mDefaultUniformBlocks[shaderType];
             const sh::BlockMemberInfo &layoutInfo = uniformBlock.uniformLayout[location];
@@ -501,7 +503,7 @@ void ProgramVk::setUniformImpl(GLint location, GLsizei count, const T *v, GLenum
     }
     else
     {
-        for (vk::ShaderType shaderType : vk::AllShaderTypes())
+        for (gl::ShaderType shaderType : vk::AllShaderTypes())
         {
             DefaultUniformBlock &uniformBlock     = mDefaultUniformBlocks[shaderType];
             const sh::BlockMemberInfo &layoutInfo = uniformBlock.uniformLayout[location];
@@ -547,8 +549,7 @@ void ProgramVk::getUniformImpl(GLint location, T *v, GLenum entryPointType) cons
     const gl::ShaderType shaderType = linkedUniform.getFirstShaderTypeWhereActive();
     ASSERT(shaderType != gl::ShaderType::InvalidEnum);
 
-    const DefaultUniformBlock &uniformBlock =
-        mDefaultUniformBlocks[static_cast<vk::ShaderType>(shaderType)];
+    const DefaultUniformBlock &uniformBlock = mDefaultUniformBlocks[shaderType];
     const sh::BlockMemberInfo &layoutInfo = uniformBlock.uniformLayout[location];
 
     ASSERT(linkedUniform.typeInfo->componentType == entryPointType ||
@@ -636,7 +637,7 @@ void ProgramVk::setUniformMatrixfv(GLint location,
     const gl::VariableLocation &locationInfo = mState.getUniformLocations()[location];
     const gl::LinkedUniform &linkedUniform   = mState.getUniforms()[locationInfo.index];
 
-    for (vk::ShaderType shaderType : vk::AllShaderTypes())
+    for (gl::ShaderType shaderType : vk::AllShaderTypes())
     {
         DefaultUniformBlock &uniformBlock     = mDefaultUniformBlocks[shaderType];
         const sh::BlockMemberInfo &layoutInfo = uniformBlock.uniformLayout[location];
@@ -808,7 +809,7 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
 
     // Update buffer memory by immediate mapping. This immediate update only works once.
     bool anyNewBufferAllocated = false;
-    for (vk::ShaderType shaderType : vk::AllShaderTypes())
+    for (gl::ShaderType shaderType : vk::AllShaderTypes())
     {
         DefaultUniformBlock &uniformBlock = mDefaultUniformBlocks[shaderType];
 
@@ -843,7 +844,7 @@ angle::Result ProgramVk::updateDefaultUniformsDescriptorSet(ContextVk *contextVk
     vk::ShaderMap<VkDescriptorBufferInfo> descriptorBufferInfo;
     vk::ShaderMap<VkWriteDescriptorSet> writeDescriptorInfo;
 
-    for (vk::ShaderType shaderType : vk::AllShaderTypes())
+    for (gl::ShaderType shaderType : vk::AllShaderTypes())
     {
         DefaultUniformBlock &uniformBlock  = mDefaultUniformBlocks[shaderType];
         VkDescriptorBufferInfo &bufferInfo = descriptorBufferInfo[shaderType];
