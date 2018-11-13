@@ -679,10 +679,10 @@ const ShaderStageInfo &PipelineDesc::getShaderStageInfo() const
 void PipelineDesc::updateShaders(Serial vertexSerial, Serial fragmentSerial)
 {
     ASSERT(vertexSerial < std::numeric_limits<uint32_t>::max());
-    mShaderStageInfo[ShaderType::VertexShader].moduleSerial =
+    mShaderStageInfo[gl::ShaderType::Vertex].moduleSerial =
         static_cast<uint32_t>(vertexSerial.getValue());
     ASSERT(fragmentSerial < std::numeric_limits<uint32_t>::max());
-    mShaderStageInfo[ShaderType::FragmentShader].moduleSerial =
+    mShaderStageInfo[gl::ShaderType::Fragment].moduleSerial =
         static_cast<uint32_t>(fragmentSerial.getValue());
 }
 
