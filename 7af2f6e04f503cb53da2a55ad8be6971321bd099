@@ -46,6 +46,30 @@
       "revId": "7af2f6e04f503cb53da2a55ad8be6971321bd099",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7285f253_ccfaecf5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-13T17:47:11Z",
+      "side": 1,
+      "message": "I think we might as well cover all the bits, it will future proof us.",
+      "parentUuid": "8007ded0_321c44d0",
+      "range": {
+        "startLine": 34,
+        "startChar": 34,
+        "endLine": 34,
+        "endChar": 35
+      },
+      "revId": "7af2f6e04f503cb53da2a55ad8be6971321bd099",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
