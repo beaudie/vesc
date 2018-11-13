@@ -230,7 +230,7 @@ constexpr size_t kPackedInputAssemblyAndColorBlendStateSize =
     sizeof(PackedInputAssemblyAndColorBlendStateInfo);
 static_assert(kPackedInputAssemblyAndColorBlendStateSize == 56, "Size check failed");
 
-using ShaderStageInfo       = vk::ShaderMap<PackedShaderStageInfo>;
+using ShaderStageInfo       = gl::ShaderMap<PackedShaderStageInfo>;
 using VertexInputBindings   = gl::AttribArray<PackedVertexInputBindingDesc>;
 
 struct VertexInputAttributes final
