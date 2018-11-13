@@ -232,6 +232,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
                             gl::PrimitiveMode mode,
                             GLint firstVertex,
                             GLsizei vertexOrIndexCount,
+                            GLsizei instanceCount,
                             gl::DrawElementsType indexTypeOrInvalid,
                             const void *indices,
                             DirtyBits dirtyBitMask,
@@ -239,6 +240,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     angle::Result setupIndexedDraw(const gl::Context *context,
                                    gl::PrimitiveMode mode,
                                    GLsizei indexCount,
+                                   GLsizei instances,
                                    gl::DrawElementsType indexType,
                                    const void *indices,
                                    vk::CommandBuffer **commandBufferOut);

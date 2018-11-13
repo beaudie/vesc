@@ -490,6 +490,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
 angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
                                                  GLint firstVertex,
                                                  GLsizei vertexOrIndexCount,
+                                                 GLsizei instances,
                                                  gl::DrawElementsType indexTypeOrInvalid,
                                                  const void *indices)
 {
@@ -516,26 +517,37 @@ angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
         const gl::VertexAttribute &attrib = attribs[attribIndex];
         const gl::VertexBinding &binding  = bindings[attrib.bindingIndex];
         ASSERT(attrib.enabled && binding.getBuffer().get() == nullptr);
-
         const vk::Format &vertexFormat = renderer->getFormat(GetVertexFormatID(attrib));
-        GLuint stride                  = vertexFormat.bufferFormat().pixelBytes;
-
-        const size_t bytesToAllocate = (startVertex + vertexCount) * stride;
-        const uint8_t *src =
-            static_cast<const uint8_t *>(attrib.pointer) + startVertex * binding.getStride();
-
-        size_t destOffset = startVertex * stride;
         ASSERT(GetVertexInputAlignment(vertexFormat) <= kMaxVertexFormatAlignment);
+        GLuint stride                  = vertexFormat.bufferFormat().pixelBytes;
+        const uint8_t *src             = static_cast<const uint8_t *>(attrib.pointer);
 
-        // Only vertexCount() vertices will be used by the upcoming draw. so that is all we copy.
-        // We allocate space for startVertex + vertexCount so indexing will work.  If we
-        // don't start at zero all the indices will be off.
-        // TODO(fjhenigman): See if we can account for indices being off by adjusting the
-        // offset, thus avoiding wasted memory.
-        ANGLE_TRY(StreamVertexData(
-            contextVk, &mDynamicVertexData, src, bytesToAllocate, destOffset, vertexCount,
-            binding.getStride(), vertexFormat.vertexLoadFunction,
-            &mCurrentArrayBuffers[attribIndex], &mCurrentArrayBufferOffsets[attribIndex]));
+        if (binding.getDivisor() > 0)
+        {
+            // instanced attrib
+            size_t count                 = UnsignedCeilDivide(instances, binding.getDivisor());
+            const size_t bytesToAllocate = count * stride;
+
+            ANGLE_TRY(StreamVertexData(contextVk, &mDynamicVertexData, src, bytesToAllocate, 0,
+                                       count, binding.getStride(), vertexFormat.vertexLoadFunction,
+                                       &mCurrentArrayBuffers[attribIndex],
+                                       &mCurrentArrayBufferOffsets[attribIndex]));
+        }
+        else
+        {
+            // Allocate space for startVertex + vertexCount so indexing will work.  If we don't
+            // start at zero all the indices will be off.
+            // Only vertexCount vertices will be used by the upcoming draw so that is all we copy.
+            const size_t bytesToAllocate = (startVertex + vertexCount) * stride;
+            src += startVertex * binding.getStride();
+            size_t destOffset = startVertex * stride;
+
+            ANGLE_TRY(StreamVertexData(
+                contextVk, &mDynamicVertexData, src, bytesToAllocate, destOffset, vertexCount,
+                binding.getStride(), vertexFormat.vertexLoadFunction,
+                &mCurrentArrayBuffers[attribIndex], &mCurrentArrayBufferOffsets[attribIndex]));
+        }
+
         mCurrentArrayBufferHandles[attribIndex] =
             mCurrentArrayBuffers[attribIndex]->getBuffer().getHandle();
     }

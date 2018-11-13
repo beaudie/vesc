@@ -39,6 +39,7 @@ class VertexArrayVk : public VertexArrayImpl
     angle::Result updateClientAttribs(const gl::Context *context,
                                       GLint firstVertex,
                                       GLsizei vertexOrIndexCount,
+                                      GLsizei instances,
                                       gl::DrawElementsType indexTypeOrInvalid,
                                       const void *indices);
 
