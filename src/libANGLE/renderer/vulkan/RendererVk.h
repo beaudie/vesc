@@ -137,6 +137,11 @@ class RendererVk : angle::NonCopyable
                               const vk::GraphicsPipelineDesc &pipelineDesc,
                               const gl::AttributesMask &activeAttribLocationsMask,
                               vk::PipelineAndSerial **pipelineOut);
+    angle::Result getPipeline(vk::Context *context,
+                              const vk::ShaderAndSerial &computeShader,
+                              const vk::PipelineLayout &pipelineLayout,
+                              const vk::ComputePipelineDesc &pipelineDesc,
+                              vk::PipelineAndSerial **pipelineOut);
 
     // Queries the descriptor set layout cache. Creates the layout if not present.
     angle::Result getDescriptorSetLayout(
@@ -268,6 +273,7 @@ class RendererVk : angle::NonCopyable
 
     RenderPassCache mRenderPassCache;
     GraphicsPipelineCache mGraphicsPipelineCache;
+    ComputePipelineCache mComputePipelineCache;
 
     vk::PipelineCache mPipelineCacheVk;
     egl::BlobCache::Key mPipelineCacheVkBlobKey;
