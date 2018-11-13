@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9be62893_cd475622",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-11-13T00:48:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe677718_a31a911f",
+      "revId": "b2c4fab31212b46fc037b032e18fa98768d0f7a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68bdc8ea_61eb6a19",
         "filename": "src/compiler/translator/OutputHLSL.cpp",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "b2c4fab31212b46fc037b032e18fa98768d0f7a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0407b0ed_4bc29fae",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2031,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-11-13T00:48:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68bdc8ea_61eb6a19",
+      "revId": "b2c4fab31212b46fc037b032e18fa98768d0f7a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
