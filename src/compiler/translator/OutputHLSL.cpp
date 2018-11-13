@@ -116,6 +116,63 @@ bool IsAtomicFunctionDirectAssign(const TIntermBinary &node)
            IsAtomicFunction(node.getRight()->getAsAggregate()->getOp());
 }
 
+const std::string &kZeroPrefix = "_ANGLE_ZERO_POW2_";
+constexpr int MAX_BIT          = 24;
+
+// Define the macros representing zero sequence of pow2 length. For example,
+// #define _ANGLE_ZERO_POW2_0 0
+// #define _ANGLE_ZERO_POW2_1 _ANGLE_ZERO_POW2_0, _ANGLE_ZERO_POW2_0
+// #define _ANGLE_ZERO_POW2_2 _ANGLE_ZERO_POW2_1, _ANGLE_ZERO_POW2_1
+// #define _ANGLE_ZERO_POW2_3 _ANGLE_ZERO_POW2_2, _ANGLE_ZERO_POW2_2
+// ...
+// With the help of these macros, we can avoid using lengthy {0, 0, 0, 0, ...}. D3D drivers are very
+// slow to compile such flat zero sequences.
+std::string DefineZeroMacros()
+{
+    std::stringstream ss;
+    for (int bit = 0; bit < MAX_BIT; ++bit)
+    {
+        std::string name = kZeroPrefix + std::to_string(bit);
+        std::string impl;
+        if (bit == 0)
+        {
+            impl = "0";
+        }
+        else
+        {
+            impl = kZeroPrefix + std::to_string(bit - 1);
+            impl = impl + ", " + impl;
+        }
+        ss << "#define " << name << " " << impl << "\n";
+    }
+    return ss.str();
+}
+
+std::string GetZeroInitializer(size_t size)
+{
+    ASSERT(size < (1ul << MAX_BIT));
+
+    bool first_nonzero_bit = true;
+    std::stringstream ss;
+    for (int bit = 0; bit < MAX_BIT; ++bit)
+    {
+        if (size & 1u)
+        {
+            if (first_nonzero_bit)
+            {
+                first_nonzero_bit = false;
+            }
+            else
+            {
+                ss << ", ";
+            }
+            ss << kZeroPrefix << bit;
+        }
+        size = size >> 1;
+    }
+    return ss.str();
+}
+
 }  // anonymous namespace
 
 TReferencedBlock::TReferencedBlock(const TInterfaceBlock *aBlock,
@@ -552,6 +609,8 @@ void OutputHLSL::header(TInfoSinkBase &out,
     // ARB_shader_atomic_counters and discussion on
     // https://github.com/KhronosGroup/OpenGL-API/issues/5
     out << "\n#define ATOMIC_COUNTER_ARRAY_STRIDE 4\n\n";
+
+    out << DefineZeroMacros() << "\n";
 
     if (mShaderType == GL_FRAGMENT_SHADER)
     {
@@ -2028,14 +2087,7 @@ bool OutputHLSL::visitDeclaration(Visit visit, TIntermDeclaration *node)
                 {
                     symbol->traverse(this);
                     out << ArrayString(symbol->getType());
-                    // Add initializer only when requested. It is very slow for D3D11 drivers to
-                    // compile a compute shader if we add code to initialize a groupshared array
-                    // variable with a large array size.
-                    if (declarator->getQualifier() != EvqShared ||
-                        mCompileOptions & SH_INIT_SHARED_VARIABLES)
-                    {
-                        out << " = " + zeroInitializer(symbol->getType());
-                    }
+                    out << " = " + zeroInitializer(symbol->getType());
                 }
                 else
                 {
@@ -2970,15 +3022,7 @@ TString OutputHLSL::zeroInitializer(const TType &type)
     TString string;
 
     size_t size = type.getObjectSize();
-    for (size_t component = 0; component < size; component++)
-    {
-        string += "0";
-
-        if (component + 1 < size)
-        {
-            string += ", ";
-        }
-    }
+    string      = GetZeroInitializer(size).c_str();
 
     return "{" + string + "}";
 }
