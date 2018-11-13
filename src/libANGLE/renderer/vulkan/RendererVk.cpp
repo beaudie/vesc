@@ -331,6 +331,7 @@ void RendererVk::onDestroy(vk::Context *context)
 
     mRenderPassCache.destroy(mDevice);
     mGraphicsPipelineCache.destroy(mDevice);
+    mComputePipelineCache.destroy(mDevice);
     mPipelineCacheVk.destroy(mDevice);
     mSubmitSemaphorePool.destroy(mDevice);
     mShaderLibrary.destroy(mDevice);
@@ -502,7 +503,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     for (uint32_t familyIndex = 0; familyIndex < queueCount; ++familyIndex)
     {
         const auto &queueInfo = mQueueFamilyProperties[familyIndex];
-        if ((queueInfo.queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0)
+        if ((queueInfo.queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0 &&
+            (queueInfo.queueFlags & VK_QUEUE_COMPUTE_BIT) != 0)
         {
             ASSERT(queueInfo.queueCount > 0);
             graphicsQueueFamilyCount++;
@@ -680,7 +682,8 @@ angle::Result RendererVk::selectPresentQueueForSurface(DisplayVk *displayVk,
     for (uint32_t queueIndex = 0; queueIndex < queueCount; ++queueIndex)
     {
         const auto &queueInfo = mQueueFamilyProperties[queueIndex];
-        if ((queueInfo.queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0)
+        if ((queueInfo.queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0 &&
+            (queueInfo.queueFlags & VK_QUEUE_COMPUTE_BIT) != 0)
         {
             VkBool32 supportsPresent = VK_FALSE;
             ANGLE_VK_TRY(displayVk, vkGetPhysicalDeviceSurfaceSupportKHR(
@@ -1147,6 +1150,18 @@ angle::Result RendererVk::getPipeline(vk::Context *context,
     return mGraphicsPipelineCache.getPipeline(
         context, mPipelineCacheVk, *compatibleRenderPass, pipelineLayout, activeAttribLocationsMask,
         vertexShader.get(), fragmentShader.get(), pipelineDesc, pipelineOut);
+}
+
+angle::Result RendererVk::getPipeline(vk::Context *context,
+                                      const vk::ShaderAndSerial &computeShader,
+                                      const vk::PipelineLayout &pipelineLayout,
+                                      const vk::ComputePipelineDesc &pipelineDesc,
+                                      vk::PipelineAndSerial **pipelineOut)
+{
+    ASSERT(computeShader.getSerial() == pipelineDesc.getShaderStageInfo().moduleSerial);
+
+    return mComputePipelineCache.getPipeline(context, mPipelineCacheVk, pipelineLayout,
+                                             computeShader.get(), pipelineDesc, pipelineOut);
 }
 
 angle::Result RendererVk::getDescriptorSetLayout(
