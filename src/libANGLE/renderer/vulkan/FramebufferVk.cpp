@@ -1050,9 +1050,9 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
     pipelineDesc.updateShaders(fullScreenQuad->getSerial(), pushConstantColor->getSerial());
 
     vk::PipelineAndSerial *pipeline = nullptr;
-    ANGLE_TRY(renderer->getPipeline(contextVk, *fullScreenQuad, *pushConstantColor,
-                                    pipelineLayout.get(), pipelineDesc, gl::AttributesMask(),
-                                    &pipeline));
+    ANGLE_TRY(renderer->getGraphicsPipeline(contextVk, *fullScreenQuad, *pushConstantColor,
+                                            pipelineLayout.get(), pipelineDesc,
+                                            gl::AttributesMask(), &pipeline));
     pipeline->updateSerial(renderer->getCurrentQueueSerial());
 
     vk::CommandBuffer *writeCommands = nullptr;

@@ -347,18 +347,20 @@ bool operator==(const RenderPassDesc &lhs, const RenderPassDesc &rhs)
     return (memcmp(&lhs, &rhs, sizeof(RenderPassDesc)) == 0);
 }
 
-// GraphicsPipelineDesc implementation.
+// PipelineDesc implementation.
+
 // Use aligned allocation and free so we can use the alignas keyword.
-void *GraphicsPipelineDesc::operator new(std::size_t size)
+void *PipelineDesc::operator new(std::size_t size)
 {
     return angle::AlignedAlloc(size, 32);
 }
 
-void GraphicsPipelineDesc::operator delete(void *ptr)
+void PipelineDesc::operator delete(void *ptr)
 {
     return angle::AlignedFree(ptr);
 }
 
+// GraphicsPipelineDesc implementation.
 GraphicsPipelineDesc::GraphicsPipelineDesc()
 {
     memset(this, 0, sizeof(GraphicsPipelineDesc));
@@ -875,6 +877,80 @@ void GraphicsPipelineDesc::updateRenderPassDesc(const RenderPassDesc &renderPass
     mRenderPassDesc = renderPassDesc;
 }
 
+// ComputePipelineDesc implementation.
+ComputePipelineDesc::ComputePipelineDesc()
+{
+    memset(this, 0, sizeof(ComputePipelineDesc));
+}
+
+ComputePipelineDesc::~ComputePipelineDesc() = default;
+
+ComputePipelineDesc::ComputePipelineDesc(const ComputePipelineDesc &other)
+{
+    memcpy(this, &other, sizeof(ComputePipelineDesc));
+}
+
+ComputePipelineDesc &ComputePipelineDesc::operator=(const ComputePipelineDesc &other)
+{
+    memcpy(this, &other, sizeof(ComputePipelineDesc));
+    return *this;
+}
+
+size_t ComputePipelineDesc::hash() const
+{
+    return angle::ComputeGenericHash(*this);
+}
+
+bool ComputePipelineDesc::operator==(const ComputePipelineDesc &other) const
+{
+    return (memcmp(this, &other, sizeof(ComputePipelineDesc)) == 0);
+}
+
+void ComputePipelineDesc::initDefaults()
+{
+    // Nothing to initialize
+}
+
+angle::Result ComputePipelineDesc::initializePipeline(vk::Context *context,
+                                                      const vk::PipelineCache &pipelineCacheVk,
+                                                      const PipelineLayout &pipelineLayout,
+                                                      const ShaderModule &computeModule,
+                                                      Pipeline *pipelineOut) const
+{
+    VkPipelineShaderStageCreateInfo shaderStage = {};
+    VkComputePipelineCreateInfo createInfo      = {};
+
+    shaderStage.sType               = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    shaderStage.flags               = 0;
+    shaderStage.stage               = VK_SHADER_STAGE_COMPUTE_BIT;
+    shaderStage.module              = computeModule.getHandle();
+    shaderStage.pName               = "main";
+    shaderStage.pSpecializationInfo = nullptr;
+
+    createInfo.sType              = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
+    createInfo.flags              = 0;
+    createInfo.stage              = shaderStage;
+    createInfo.layout             = pipelineLayout.getHandle();
+    createInfo.basePipelineHandle = VK_NULL_HANDLE;
+    createInfo.basePipelineIndex  = 0;
+
+    ANGLE_VK_TRY(context,
+                 pipelineOut->initCompute(context->getDevice(), createInfo, pipelineCacheVk));
+
+    return angle::Result::Continue();
+}
+
+const PackedShaderStageInfo &ComputePipelineDesc::getShaderStageInfo() const
+{
+    return mShaderStageInfo;
+}
+
+void ComputePipelineDesc::updateShaders(Serial computeSerial)
+{
+    ASSERT(computeSerial < std::numeric_limits<uint32_t>::max());
+    mShaderStageInfo.moduleSerial = static_cast<uint32_t>(computeSerial.getValue());
+}
+
 // AttachmentOpsArray implementation.
 AttachmentOpsArray::AttachmentOpsArray()
 {
@@ -1018,7 +1094,8 @@ void PipelineLayoutDesc::updatePushConstantRange(gl::ShaderType shaderType,
                                                  uint32_t offset,
                                                  uint32_t size)
 {
-    ASSERT(shaderType == gl::ShaderType::Vertex || shaderType == gl::ShaderType::Fragment);
+    ASSERT(shaderType == gl::ShaderType::Vertex || shaderType == gl::ShaderType::Fragment ||
+           shaderType == gl::ShaderType::Compute);
     PackedPushConstantRange &packed = mPushConstantRanges[static_cast<size_t>(shaderType)];
     packed.offset                   = offset;
     packed.size                     = size;
@@ -1132,24 +1209,22 @@ angle::Result RenderPassCache::getRenderPassWithOps(vk::Context *context,
     return angle::Result::Continue();
 }
 
-// GraphicsPipelineCache implementation.
-GraphicsPipelineCache::GraphicsPipelineCache() = default;
-
-GraphicsPipelineCache::~GraphicsPipelineCache()
+// PipelineCache implementation.
+template <typename PipelineDesc>
+bool PipelineCache<PipelineDesc>::findPipeline(const PipelineDesc &desc,
+                                               vk::PipelineAndSerial **pipelineOut)
 {
-    ASSERT(mPayload.empty());
-}
-
-void GraphicsPipelineCache::destroy(VkDevice device)
-{
-    for (auto &item : mPayload)
+    auto item = mPayload.find(desc);
+    if (item != mPayload.end())
     {
-        item.second.get().destroy(device);
+        *pipelineOut = &item->second;
+        return true;
     }
 
-    mPayload.clear();
+    return false;
 }
 
+// GraphicsPipelineCache implementation.
 angle::Result GraphicsPipelineCache::getPipeline(
     vk::Context *context,
     const vk::PipelineCache &pipelineCacheVk,
@@ -1161,15 +1236,12 @@ angle::Result GraphicsPipelineCache::getPipeline(
     const vk::GraphicsPipelineDesc &desc,
     vk::PipelineAndSerial **pipelineOut)
 {
-    auto item = mPayload.find(desc);
-    if (item != mPayload.end())
+    if (findPipeline(desc, pipelineOut))
     {
-        *pipelineOut = &item->second;
         return angle::Result::Continue();
     }
 
     vk::Pipeline newPipeline;
-
     // This "if" is left here for the benefit of VulkanPipelineCachePerfTest.
     if (context != nullptr)
     {
@@ -1178,23 +1250,33 @@ angle::Result GraphicsPipelineCache::getPipeline(
                                           fragmentModule, &newPipeline));
     }
 
-    // The Serial will be updated outside of this query.
-    auto insertedItem =
-        mPayload.emplace(desc, vk::PipelineAndSerial(std::move(newPipeline), Serial()));
-    *pipelineOut = &insertedItem.first->second;
-
+    putPipeline(desc, std::move(newPipeline), pipelineOut);
     return angle::Result::Continue();
 }
 
-void GraphicsPipelineCache::populate(const vk::GraphicsPipelineDesc &desc, vk::Pipeline &&pipeline)
+// ComputePipelineCache implementation.
+angle::Result ComputePipelineCache::getPipeline(vk::Context *context,
+                                                const vk::PipelineCache &pipelineCacheVk,
+                                                const vk::PipelineLayout &pipelineLayout,
+                                                const vk::ShaderModule &computeModule,
+                                                const vk::ComputePipelineDesc &desc,
+                                                vk::PipelineAndSerial **pipelineOut)
 {
-    auto item = mPayload.find(desc);
-    if (item != mPayload.end())
+    if (findPipeline(desc, pipelineOut))
     {
-        return;
+        return angle::Result::Continue();
     }
 
-    mPayload.emplace(desc, vk::PipelineAndSerial(std::move(pipeline), Serial()));
+    vk::Pipeline newPipeline;
+    // This "if" is left here for the benefit of VulkanPipelineCachePerfTest.
+    if (context != nullptr)
+    {
+        ANGLE_TRY(desc.initializePipeline(context, pipelineCacheVk, pipelineLayout, computeModule,
+                                          &newPipeline));
+    }
+
+    putPipeline(desc, std::move(newPipeline), pipelineOut);
+    return angle::Result::Continue();
 }
 
 // DescriptorSetLayoutCache implementation.

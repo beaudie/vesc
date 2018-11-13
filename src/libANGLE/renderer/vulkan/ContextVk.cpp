@@ -258,9 +258,9 @@ angle::Result ContextVk::initPipeline()
     mGraphicsPipelineDesc->updateShaders(vertexShaderAndSerial->getSerial(),
                                          fragmentShaderAndSerial->getSerial());
 
-    ANGLE_TRY(mRenderer->getPipeline(this, *vertexShaderAndSerial, *fragmentShaderAndSerial,
-                                     *pipelineLayout, *mGraphicsPipelineDesc,
-                                     activeAttribLocationsMask, &mCurrentPipeline));
+    ANGLE_TRY(mRenderer->getGraphicsPipeline(this, *vertexShaderAndSerial, *fragmentShaderAndSerial,
+                                             *pipelineLayout, *mGraphicsPipelineDesc,
+                                             activeAttribLocationsMask, &mCurrentPipeline));
 
     return angle::Result::Continue();
 }
