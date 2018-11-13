@@ -140,9 +140,10 @@ struct PackedVertexInputBindingDesc final
     // introduced in ES 3.1.
     uint16_t stride;
     uint16_t inputRate;
+    uint32_t divisor;
 };
 
-static_assert(sizeof(PackedVertexInputBindingDesc) == 4, "Size check failed");
+static_assert(sizeof(PackedVertexInputBindingDesc) == 8, "Size check failed");
 
 struct PackedRasterizationAndMultisampleStateInfo final
 {
