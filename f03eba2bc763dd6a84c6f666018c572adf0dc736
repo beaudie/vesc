@@ -517,6 +517,30 @@
       "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de88acd6_5d60dba7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-13T17:09:27Z",
+      "side": 1,
+      "message": "No, there are more Incomplete usages, like ProgramD3D::load() and MemoryProgramCache::Deserialize().\nIf that was the goal, I\u0027d suggest another approach - WrappedObject methods would return either Stop or Continue, but they\u0027d receive an additional parameter where they can return Event status and such.",
+      "parentUuid": "0dbc9093_87f88281",
+      "range": {
+        "startLine": 922,
+        "startChar": 0,
+        "endLine": 947,
+        "endChar": 76
+      },
+      "revId": "f03eba2bc763dd6a84c6f666018c572adf0dc736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
