@@ -116,6 +116,53 @@ bool IsAtomicFunctionDirectAssign(const TIntermBinary &node)
            IsAtomicFunction(node.getRight()->getAsAggregate()->getOp());
 }
 
+const std::string &kZeroPrefix = "_ZERO_2ND_POWER_";
+constexpr int MAX_BITS         = 32;
+std::string DefineZeroMacros()
+{
+    std::stringstream ss;
+    for (int bit = 0; bit < MAX_BITS; ++bit)
+    {
+        std::string name = kZeroPrefix + std::to_string(bit + 1);
+        std::string impl;
+        if (bit == 0)
+        {
+            impl = "0";
+        }
+        else
+        {
+            impl = kZeroPrefix + std::to_string(bit);
+            impl = impl + ", " + impl;
+        }
+        ss << "#define " << name << " " << impl << "\n";
+    }
+    return ss.str();
+}
+
+std::string GetZeroInitializer(size_t size)
+{
+    ASSERT(size < (1ul << MAX_BITS));
+    bool first_nonzero_bit = true;
+    std::stringstream ss;
+    for (int bit = 0; bit < MAX_BITS; ++bit)
+    {
+        if (size & 1u)
+        {
+            if (first_nonzero_bit)
+            {
+                first_nonzero_bit = false;
+            }
+            else
+            {
+                ss << ", ";
+            }
+            ss << kZeroPrefix << bit + 1;
+        }
+        size = size >> 1;
+    }
+    return ss.str();
+}
+
 }  // anonymous namespace
 
 TReferencedBlock::TReferencedBlock(const TInterfaceBlock *aBlock,
@@ -552,6 +599,8 @@ void OutputHLSL::header(TInfoSinkBase &out,
     // ARB_shader_atomic_counters and discussion on
     // https://github.com/KhronosGroup/OpenGL-API/issues/5
     out << "\n#define ATOMIC_COUNTER_ARRAY_STRIDE 4\n\n";
+
+    out << DefineZeroMacros();
 
     if (mShaderType == GL_FRAGMENT_SHADER)
     {
@@ -2970,6 +3019,7 @@ TString OutputHLSL::zeroInitializer(const TType &type)
     TString string;
 
     size_t size = type.getObjectSize();
+    /*
     for (size_t component = 0; component < size; component++)
     {
         string += "0";
@@ -2979,7 +3029,9 @@ TString OutputHLSL::zeroInitializer(const TType &type)
             string += ", ";
         }
     }
+    */
 
+    string = GetZeroInitializer(size).c_str();
     return "{" + string + "}";
 }
 
