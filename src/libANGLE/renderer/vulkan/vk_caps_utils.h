@@ -36,6 +36,7 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
                   const VkPhysicalDeviceFeatures &physicalDeviceFeatures,
                   const VkQueueFamilyProperties &queueFamilyProperties,
                   const gl::TextureCapsMap &textureCaps,
+                  uint32_t maxVertexAttribDivisor,
                   gl::Caps *outCaps,
                   gl::Extensions *outExtensions,
                   gl::Limitations * /* outLimitations */);

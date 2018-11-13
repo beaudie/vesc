@@ -65,25 +65,19 @@ bool ShouldEnableMockICD(const egl::AttributeMap &attribs)
 #endif  // !defined(ANGLE_PLATFORM_ANDROID)
 }
 
-VkResult VerifyExtensionsPresent(const std::vector<VkExtensionProperties> &extensionProps,
+bool StrLess(const char *a, const char *b)
+{
+    return strcmp(a, b) < 0;
+}
+
+VkResult VerifyExtensionsPresent(const std::vector<const char *> &extensionNames,
                                  const std::vector<const char *> &enabledExtensionNames)
 {
-    // Compile the extensions names into a set.
-    std::set<std::string> extensionNames;
-    for (const auto &extensionProp : extensionProps)
-    {
-        extensionNames.insert(extensionProp.extensionName);
-    }
-
-    for (const char *extensionName : enabledExtensionNames)
-    {
-        if (extensionNames.count(extensionName) == 0)
-        {
-            return VK_ERROR_EXTENSION_NOT_PRESENT;
-        }
-    }
-
-    return VK_SUCCESS;
+    // NOTE: The lists must be sorted.
+    return std::includes(extensionNames.begin(), extensionNames.end(),
+                         enabledExtensionNames.begin(), enabledExtensionNames.end(), StrLess)
+               ? VK_SUCCESS
+               : VK_ERROR_EXTENSION_NOT_PRESENT;
 }
 
 // Array of Validation error/warning messages that will be ignored, should include bugID
@@ -304,8 +298,10 @@ RendererVk::RendererVk()
       mEnableMockICD(false),
       mDebugReportCallback(VK_NULL_HANDLE),
       mPhysicalDevice(VK_NULL_HANDLE),
+      mHavePhysicalDeviceProperties2(false),
       mQueue(VK_NULL_HANDLE),
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
+      mMaxVertexAttribDivisor(1),
       mDevice(VK_NULL_HANDLE),
       mLastCompletedQueueSerial(mQueueSerialFactory.generate()),
       mCurrentQueueSerial(mQueueSerialFactory.generate()),
@@ -416,11 +412,16 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                  vkEnumerateInstanceExtensionProperties(nullptr, &instanceExtensionCount, nullptr));
 
     std::vector<VkExtensionProperties> instanceExtensionProps(instanceExtensionCount);
+    std::vector<const char *> instanceExtensionNames;
     if (instanceExtensionCount > 0)
     {
         ANGLE_VK_TRY(displayVk,
                      vkEnumerateInstanceExtensionProperties(nullptr, &instanceExtensionCount,
                                                             instanceExtensionProps.data()));
+        instanceExtensionNames.reserve(instanceExtensionCount);
+        for (const auto &i : instanceExtensionProps)
+            instanceExtensionNames.push_back(i.extensionName);
+        std::sort(instanceExtensionNames.begin(), instanceExtensionNames.end(), StrLess);
     }
 
     const char *const *enabledLayerNames = nullptr;
@@ -444,8 +445,17 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     }
 
     // Verify the required extensions are in the extension names set. Fail if not.
+    std::sort(enabledInstanceExtensions.begin(), enabledInstanceExtensions.end(), StrLess);
     ANGLE_VK_TRY(displayVk,
-                 VerifyExtensionsPresent(instanceExtensionProps, enabledInstanceExtensions));
+                 VerifyExtensionsPresent(instanceExtensionNames, enabledInstanceExtensions));
+
+    // Enable VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME if available.
+    if (std::binary_search(instanceExtensionNames.begin(), instanceExtensionNames.end(),
+                           VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME, StrLess))
+    {
+        enabledInstanceExtensions.push_back(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
+        mHavePhysicalDeviceProperties2 = true;
+    }
 
     VkApplicationInfo applicationInfo  = {};
     applicationInfo.sType              = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -568,11 +578,16 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
                                                                  &deviceExtensionCount, nullptr));
 
     std::vector<VkExtensionProperties> deviceExtensionProps(deviceExtensionCount);
+    std::vector<const char *> deviceExtensionNames;
     if (deviceExtensionCount > 0)
     {
         ANGLE_VK_TRY(displayVk, vkEnumerateDeviceExtensionProperties(mPhysicalDevice, nullptr,
                                                                      &deviceExtensionCount,
                                                                      deviceExtensionProps.data()));
+        deviceExtensionNames.reserve(deviceExtensionCount);
+        for (const auto &i : deviceExtensionProps)
+            deviceExtensionNames.push_back(i.extensionName);
+        std::sort(deviceExtensionNames.begin(), deviceExtensionNames.end(), StrLess);
     }
 
     const char *const *enabledLayerNames = nullptr;
@@ -592,11 +607,35 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         enabledDeviceExtensions.push_back(VK_KHR_MAINTENANCE1_EXTENSION_NAME);
     }
 
-    ANGLE_VK_TRY(displayVk, VerifyExtensionsPresent(deviceExtensionProps, enabledDeviceExtensions));
+    std::sort(enabledDeviceExtensions.begin(), enabledDeviceExtensions.end(), StrLess);
+    ANGLE_VK_TRY(displayVk, VerifyExtensionsPresent(deviceExtensionNames, enabledDeviceExtensions));
 
     // Select additional features to be enabled
-    VkPhysicalDeviceFeatures enabledFeatures = {};
-    enabledFeatures.inheritedQueries         = mPhysicalDeviceFeatures.inheritedQueries;
+    VkPhysicalDeviceFeatures2 enabledFeatures = {};
+    enabledFeatures.sType                     = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+    enabledFeatures.features.inheritedQueries = mPhysicalDeviceFeatures.inheritedQueries;
+
+    VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT divisorFeatures = {};
+    divisorFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_ATTRIBUTE_DIVISOR_FEATURES_EXT;
+
+    if (mHavePhysicalDeviceProperties2 &&
+        std::binary_search(deviceExtensionNames.begin(), deviceExtensionNames.end(),
+                           VK_EXT_VERTEX_ATTRIBUTE_DIVISOR_EXTENSION_NAME, StrLess))
+    {
+        enabledDeviceExtensions.push_back(VK_EXT_VERTEX_ATTRIBUTE_DIVISOR_EXTENSION_NAME);
+        enabledFeatures.pNext = &divisorFeatures;
+
+        VkPhysicalDeviceVertexAttributeDivisorPropertiesEXT divisorProperties = {};
+        divisorProperties.sType =
+            VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_ATTRIBUTE_DIVISOR_PROPERTIES_EXT;
+
+        VkPhysicalDeviceProperties2 deviceProperties = {};
+        deviceProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+        deviceProperties.pNext = &divisorProperties;
+
+        vkGetPhysicalDeviceProperties2(mPhysicalDevice, &deviceProperties);
+        mMaxVertexAttribDivisor = divisorProperties.maxVertexAttribDivisor;
+    }
 
     VkDeviceQueueCreateInfo queueCreateInfo = {};
 
@@ -612,6 +651,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     VkDeviceCreateInfo createInfo = {};
 
     createInfo.sType                 = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+    createInfo.pNext                 = &enabledFeatures;
     createInfo.flags                 = 0;
     createInfo.queueCreateInfoCount  = 1;
     createInfo.pQueueCreateInfos     = &queueCreateInfo;
@@ -620,7 +660,6 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     createInfo.enabledExtensionCount = static_cast<uint32_t>(enabledDeviceExtensions.size());
     createInfo.ppEnabledExtensionNames =
         enabledDeviceExtensions.empty() ? nullptr : enabledDeviceExtensions.data();
-    createInfo.pEnabledFeatures = &enabledFeatures;
 
     ANGLE_VK_TRY(displayVk, vkCreateDevice(mPhysicalDevice, &createInfo, nullptr, &mDevice));
 
@@ -834,7 +873,8 @@ void RendererVk::ensureCapsInitialized() const
         ASSERT(mCurrentQueueFamilyIndex < mQueueFamilyProperties.size());
         vk::GenerateCaps(mPhysicalDeviceProperties, mPhysicalDeviceFeatures,
                          mQueueFamilyProperties[mCurrentQueueFamilyIndex], mNativeTextureCaps,
-                         &mNativeCaps, &mNativeExtensions, &mNativeLimitations);
+                         mMaxVertexAttribDivisor, &mNativeCaps, &mNativeExtensions,
+                         &mNativeLimitations);
         mCapsInitialized = true;
     }
 }
