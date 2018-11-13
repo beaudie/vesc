@@ -202,18 +202,6 @@ inline Error NoError()
 #define ANGLE_RETURN(X) return X;
 #define ANGLE_TRY(EXPR) ANGLE_TRY_TEMPLATE(EXPR, ANGLE_RETURN);
 
-// TODO(jmadill): Remove this once refactor is complete. http://anglebug.com/2491
-#define ANGLE_TRY_HANDLE(CONTEXT, EXPR)                \
-    do                                                 \
-    {                                                  \
-        auto ANGLE_LOCAL_VAR = (EXPR);                 \
-        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR.isError())) \
-        {                                              \
-            CONTEXT->handleError(ANGLE_LOCAL_VAR);     \
-            return angle::Result::Stop();              \
-        }                                              \
-    } while (0)
-
 // TODO(jmadill): Introduce way to store errors to a const Context. http://anglebug.com/2491
 #define ANGLE_SWALLOW_ERR(EXPR)                                       \
     do                                                                \
