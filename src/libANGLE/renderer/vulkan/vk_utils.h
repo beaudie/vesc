@@ -743,21 +743,12 @@ angle::Result AllocateImageMemory(vk::Context *context,
 
 using ShaderAndSerial = ObjectAndSerial<ShaderModule>;
 
-// TODO(jmadill): Use gl::ShaderType when possible. http://anglebug.com/2522
-enum class ShaderType
-{
-    VertexShader,
-    FragmentShader,
-    EnumCount,
-    InvalidEnum = EnumCount,
-};
-
 template <typename T>
-using ShaderMap = angle::PackedEnumMap<ShaderType, T>;
+using ShaderMap = angle::PackedEnumMap<gl::ShaderType, T>;
 
-using ShaderBitSet = angle::PackedEnumBitSet<ShaderType>;
+using ShaderBitSet = angle::PackedEnumBitSet<gl::ShaderType>;
 
-using AllShaderTypes = angle::AllEnums<vk::ShaderType>;
+using AllShaderTypes = angle::AllEnums<gl::ShaderType>;
 
 angle::Result InitShaderAndSerial(Context *context,
                                   ShaderAndSerial *shaderAndSerial,
