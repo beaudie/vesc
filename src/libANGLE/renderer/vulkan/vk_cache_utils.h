@@ -139,7 +139,7 @@ struct PackedVertexInputBindingDesc final
     // greater than MAX_USHORT should not be that helpful. Note that stride limits are
     // introduced in ES 3.1.
     uint16_t stride;
-    uint16_t inputRate;
+    uint16_t divisor;
 };
 
 static_assert(sizeof(PackedVertexInputBindingDesc) == 4, "Size check failed");
