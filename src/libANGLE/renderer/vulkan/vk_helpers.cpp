@@ -1526,5 +1526,41 @@ angle::Result ShaderProgramHelper::getGraphicsPipeline(
         mShaders[gl::ShaderType::Fragment].get().get(), pipelineDesc, pipelineOut);
 }
 
+angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
+                                                      const PipelineLayout &pipelineLayout,
+                                                      PipelineAndSerial **pipelineOut)
+{
+    if (mComputePipeline.valid())
+    {
+        *pipelineOut = &mComputePipeline;
+        return angle::Result::Continue();
+    }
+
+    RendererVk *renderer = context->getRenderer();
+
+    VkPipelineShaderStageCreateInfo shaderStage = {};
+    VkComputePipelineCreateInfo createInfo      = {};
+
+    shaderStage.sType               = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    shaderStage.flags               = 0;
+    shaderStage.stage               = VK_SHADER_STAGE_COMPUTE_BIT;
+    shaderStage.module              = mShaders[gl::ShaderType::Compute].get().get().getHandle();
+    shaderStage.pName               = "main";
+    shaderStage.pSpecializationInfo = nullptr;
+
+    createInfo.sType              = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
+    createInfo.flags              = 0;
+    createInfo.stage              = shaderStage;
+    createInfo.layout             = pipelineLayout.getHandle();
+    createInfo.basePipelineHandle = VK_NULL_HANDLE;
+    createInfo.basePipelineIndex  = 0;
+
+    ANGLE_VK_TRY(context, mComputePipeline.get().initCompute(context->getDevice(), createInfo,
+                                                             renderer->getPipelineCache()));
+
+    *pipelineOut = &mComputePipeline;
+    return angle::Result::Continue();
+}
+
 }  // namespace vk
 }  // namespace rx
