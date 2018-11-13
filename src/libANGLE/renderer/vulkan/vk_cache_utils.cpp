@@ -517,6 +517,11 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
                           sizeof(attributeDescs);
     ANGLE_UNUSED_VARIABLE(unpackedSize);
 
+    gl::AttribArray<VkVertexInputBindingDivisorDescriptionEXT> divisorDesc;
+    VkPipelineVertexInputDivisorStateCreateInfoEXT divisorState = {};
+    divisorState.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
+    divisorState.pVertexBindingDivisors = divisorDesc.data();
+
     for (size_t attribIndexSizeT : activeAttribLocationsMask)
     {
         const uint32_t attribIndex = static_cast<uint32_t>(attribIndexSizeT);
@@ -526,8 +531,18 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         const PackedVertexInputBindingDesc &packedBinding  = mVertexInputBindings[attribIndex];
 
         bindingDesc.binding   = attribIndex;
-        bindingDesc.inputRate = static_cast<VkVertexInputRate>(packedBinding.inputRate);
         bindingDesc.stride    = static_cast<uint32_t>(packedBinding.stride);
+        if (packedBinding.divisor)
+        {
+            bindingDesc.inputRate = static_cast<VkVertexInputRate>(VK_VERTEX_INPUT_RATE_INSTANCE);
+            divisorDesc[divisorState.vertexBindingDivisorCount].binding = bindingDesc.binding;
+            divisorDesc[divisorState.vertexBindingDivisorCount].divisor = packedBinding.divisor;
+            ++divisorState.vertexBindingDivisorCount;
+        }
+        else
+        {
+            bindingDesc.inputRate = static_cast<VkVertexInputRate>(VK_VERTEX_INPUT_RATE_VERTEX);
+        }
 
         // The binding or location might change in future ES versions.
         attribDesc.binding  = attribIndex;
@@ -545,6 +560,8 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     vertexInputState.pVertexBindingDescriptions      = bindingDescs.data();
     vertexInputState.vertexAttributeDescriptionCount = vertexAttribCount;
     vertexInputState.pVertexAttributeDescriptions    = attributeDescs.data();
+    if (divisorState.vertexBindingDivisorCount)
+        vertexInputState.pNext = &divisorState;
 
     // Primitive topology is filled in at draw time.
     inputAssemblyState.sType    = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
