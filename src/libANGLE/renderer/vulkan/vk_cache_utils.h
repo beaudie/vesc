@@ -239,17 +239,22 @@ struct VertexInputAttributes final
     uint16_t offsets[gl::MAX_VERTEX_ATTRIBS];  // can only take 11 bits on NV
 };
 
+constexpr size_t kPackedShaderStageInfoSize = sizeof(PackedShaderStageInfo);
 constexpr size_t kShaderStageInfoSize       = sizeof(ShaderStageInfo);
 constexpr size_t kVertexInputBindingsSize   = sizeof(VertexInputBindings);
 constexpr size_t kVertexInputAttributesSize = sizeof(VertexInputAttributes);
 
-class GraphicsPipelineDesc final
+class PipelineDesc
 {
   public:
     // Use aligned allocation and free so we can use the alignas keyword.
     void *operator new(std::size_t size);
     void operator delete(void *ptr);
+};
 
+class GraphicsPipelineDesc final : public PipelineDesc
+{
+  public:
     GraphicsPipelineDesc();
     ~GraphicsPipelineDesc();
     GraphicsPipelineDesc(const GraphicsPipelineDesc &other);
@@ -330,6 +335,33 @@ class GraphicsPipelineDesc final
     // Viewport and scissor are applied as dynamic state.
 };
 
+class ComputePipelineDesc final : public PipelineDesc
+{
+  public:
+    ComputePipelineDesc();
+    ~ComputePipelineDesc();
+    ComputePipelineDesc(const ComputePipelineDesc &other);
+    ComputePipelineDesc &operator=(const ComputePipelineDesc &other);
+
+    size_t hash() const;
+    bool operator==(const ComputePipelineDesc &other) const;
+
+    void initDefaults();
+
+    angle::Result initializePipeline(vk::Context *context,
+                                     const vk::PipelineCache &pipelineCacheVk,
+                                     const PipelineLayout &pipelineLayout,
+                                     const ShaderModule &computeModule,
+                                     Pipeline *pipelineOut) const;
+
+    // Shader stage info
+    const PackedShaderStageInfo &getShaderStageInfo() const;
+    void updateShaders(Serial computeSerial);
+
+  private:
+    PackedShaderStageInfo mShaderStageInfo;
+};
+
 // Verify the packed pipeline description has no gaps in the packing.
 // This is not guaranteed by the spec, but is validated by a compile-time check.
 // No gaps or padding at the end ensures that hashing and memcmp checks will not run
@@ -338,9 +370,12 @@ constexpr size_t kGraphicsPipelineDescSumOfSizes =
     kShaderStageInfoSize + kVertexInputBindingsSize + kVertexInputAttributesSize +
     kPackedInputAssemblyAndColorBlendStateSize + kPackedRasterizationAndMultisampleStateSize +
     kPackedDepthStencilStateSize + kRenderPassDescSize;
+constexpr size_t kComputePipelineDescSumOfSizes = kPackedShaderStageInfoSize;
 
 static constexpr size_t kGraphicsPipelineDescSize = sizeof(GraphicsPipelineDesc);
 static_assert(kGraphicsPipelineDescSize == kGraphicsPipelineDescSumOfSizes, "Size mismatch");
+static constexpr size_t kComputePipelineDescSize = sizeof(ComputePipelineDesc);
+static_assert(kComputePipelineDescSize == kComputePipelineDescSumOfSizes, "Size mismatch");
 
 constexpr uint32_t kMaxDescriptorSetLayoutBindings = gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES;
 
@@ -460,6 +495,12 @@ struct hash<rx::vk::GraphicsPipelineDesc>
 };
 
 template <>
+struct hash<rx::vk::ComputePipelineDesc>
+{
+    size_t operator()(const rx::vk::ComputePipelineDesc &key) const { return key.hash(); }
+};
+
+template <>
 struct hash<rx::vk::DescriptorSetLayoutDesc>
 {
     size_t operator()(const rx::vk::DescriptorSetLayoutDesc &key) const { return key.hash(); }
@@ -503,15 +544,30 @@ class RenderPassCache final : angle::NonCopyable
 };
 
 // TODO(jmadill): Add cache trimming/eviction.
-class GraphicsPipelineCache final : angle::NonCopyable
+template <typename PipelineDesc>
+class PipelineCache : angle::NonCopyable
 {
   public:
-    GraphicsPipelineCache();
-    ~GraphicsPipelineCache();
+    PipelineCache();
+    ~PipelineCache();
 
     void destroy(VkDevice device);
 
-    void populate(const vk::GraphicsPipelineDesc &desc, vk::Pipeline &&pipeline);
+    void populate(const PipelineDesc &desc, vk::Pipeline &&pipeline);
+
+    template <typename initFunction>
+    angle::Result getPipelineCommon(vk::Context *context,
+                                    const PipelineDesc &desc,
+                                    initFunction init,
+                                    vk::PipelineAndSerial **pipelineOut);
+
+  protected:
+    std::unordered_map<PipelineDesc, vk::PipelineAndSerial> mPayload;
+};
+
+class GraphicsPipelineCache final : public PipelineCache<vk::GraphicsPipelineDesc>
+{
+  public:
     angle::Result getPipeline(vk::Context *context,
                               const vk::PipelineCache &pipelineCacheVk,
                               const vk::RenderPass &compatibleRenderPass,
@@ -521,9 +577,17 @@ class GraphicsPipelineCache final : angle::NonCopyable
                               const vk::ShaderModule &fragmentModule,
                               const vk::GraphicsPipelineDesc &desc,
                               vk::PipelineAndSerial **pipelineOut);
+};
 
-  private:
-    std::unordered_map<vk::GraphicsPipelineDesc, vk::PipelineAndSerial> mPayload;
+class ComputePipelineCache final : public PipelineCache<vk::ComputePipelineDesc>
+{
+  public:
+    angle::Result getPipeline(vk::Context *context,
+                              const vk::PipelineCache &pipelineCacheVk,
+                              const vk::PipelineLayout &pipelineLayout,
+                              const vk::ShaderModule &computeModule,
+                              const vk::ComputePipelineDesc &desc,
+                              vk::PipelineAndSerial **pipelineOut);
 };
 
 class DescriptorSetLayoutCache final : angle::NonCopyable
@@ -566,6 +630,39 @@ constexpr uint32_t kFragmentUniformsBindingIndex     = 1;
 constexpr uint32_t kUniformsDescriptorSetIndex       = 0;
 constexpr uint32_t kTextureDescriptorSetIndex        = 1;
 constexpr uint32_t kDriverUniformsDescriptorSetIndex = 2;
+
+// PipelineCache implementation.
+template <typename PipelineDesc>
+PipelineCache<PipelineDesc>::PipelineCache() = default;
+
+template <typename PipelineDesc>
+PipelineCache<PipelineDesc>::~PipelineCache()
+{
+    ASSERT(mPayload.empty());
+}
+
+template <typename PipelineDesc>
+void PipelineCache<PipelineDesc>::destroy(VkDevice device)
+{
+    for (auto &item : mPayload)
+    {
+        item.second.get().destroy(device);
+    }
+
+    mPayload.clear();
+}
+
+template <typename PipelineDesc>
+void PipelineCache<PipelineDesc>::populate(const PipelineDesc &desc, vk::Pipeline &&pipeline)
+{
+    auto item = mPayload.find(desc);
+    if (item != mPayload.end())
+    {
+        return;
+    }
+
+    mPayload.emplace(desc, vk::PipelineAndSerial(std::move(pipeline), Serial()));
+}
 
 }  // namespace rx
 
