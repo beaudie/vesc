@@ -414,6 +414,10 @@ void VertexArrayVk::updatePackedInputInfo(uint32_t attribIndex,
     bindingDesc.stride    = static_cast<uint16_t>(mCurrentArrayBufferStrides[attribIndex]);
     bindingDesc.inputRate = static_cast<uint16_t>(
         binding.getDivisor() > 0 ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX);
+    bindingDesc.divisor = binding.getDivisor();
+
+    printf("VertexArrayVk::updatePackedInputInfo attribIndex %d divisor %d\n", (int)attribIndex,
+           (int)binding.getDivisor());
 
     VkFormat vkFormat = mCurrentArrayBufferFormats[attribIndex]->vkBufferFormat;
     ASSERT(vkFormat <= std::numeric_limits<uint16_t>::max());

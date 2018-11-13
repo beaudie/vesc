@@ -233,10 +233,12 @@ class RendererVk : angle::NonCopyable
     VkDebugReportCallbackEXT mDebugReportCallback;
     VkPhysicalDevice mPhysicalDevice;
     VkPhysicalDeviceProperties mPhysicalDeviceProperties;
+    bool mHavePhysicalDeviceProperties2;
     VkPhysicalDeviceFeatures mPhysicalDeviceFeatures;
     std::vector<VkQueueFamilyProperties> mQueueFamilyProperties;
     VkQueue mQueue;
     uint32_t mCurrentQueueFamilyIndex;
+    uint32_t mMaxVertexAttribDivisor;
     VkDevice mDevice;
     vk::CommandPool mCommandPool;
     SerialFactory mQueueSerialFactory;

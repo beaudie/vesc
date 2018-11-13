@@ -516,6 +516,11 @@ angle::Result PipelineDesc::initializePipeline(vk::Context *context,
                           sizeof(attributeDescs);
     ANGLE_UNUSED_VARIABLE(unpackedSize);
 
+    gl::AttribArray<VkVertexInputBindingDivisorDescriptionEXT> divisorDesc;
+    VkPipelineVertexInputDivisorStateCreateInfoEXT divisorState = {};
+    divisorState.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
+    divisorState.pVertexBindingDivisors = divisorDesc.data();
+
     for (size_t attribIndexSizeT : activeAttribLocationsMask)
     {
         const uint32_t attribIndex = static_cast<uint32_t>(attribIndexSizeT);
@@ -526,6 +531,14 @@ angle::Result PipelineDesc::initializePipeline(vk::Context *context,
 
         bindingDesc.binding   = attribIndex;
         bindingDesc.inputRate = static_cast<VkVertexInputRate>(packedBinding.inputRate);
+        printf("index %d rate %d\n", attribIndex, bindingDesc.inputRate);
+        if (bindingDesc.inputRate == VK_VERTEX_INPUT_RATE_INSTANCE)
+        {
+            printf("INST\n");
+            divisorDesc[divisorState.vertexBindingDivisorCount].binding = bindingDesc.binding;
+            divisorDesc[divisorState.vertexBindingDivisorCount].divisor = packedBinding.divisor;
+            ++divisorState.vertexBindingDivisorCount;
+        }
         bindingDesc.stride    = static_cast<uint32_t>(packedBinding.stride);
 
         // The binding or location might change in future ES versions.
@@ -544,6 +557,9 @@ angle::Result PipelineDesc::initializePipeline(vk::Context *context,
     vertexInputState.pVertexBindingDescriptions      = bindingDescs.data();
     vertexInputState.vertexAttributeDescriptionCount = vertexAttribCount;
     vertexInputState.pVertexAttributeDescriptions    = attributeDescs.data();
+    printf("# instanced %d\n", (int)divisorState.vertexBindingDivisorCount);
+    if (divisorState.vertexBindingDivisorCount)
+        vertexInputState.pNext = &divisorState;
 
     // Primitive topology is filled in at draw time.
     inputAssemblyState.sType    = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
