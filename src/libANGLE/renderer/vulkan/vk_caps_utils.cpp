@@ -32,6 +32,7 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
                   const VkPhysicalDeviceFeatures &physicalDeviceFeatures,
                   const VkQueueFamilyProperties &queueFamilyProperties,
                   const gl::TextureCapsMap &textureCaps,
+                  uint32_t maxVertexAttribDivisor,
                   gl::Caps *outCaps,
                   gl::Extensions *outExtensions,
                   gl::Limitations * /* outLimitations */)
@@ -48,6 +49,7 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
     outExtensions->debugMarker     = true;
     outExtensions->robustness      = true;
     outExtensions->textureBorderClamp = false;  // not implemented yet
+    outExtensions->instancedArrays    = maxVertexAttribDivisor > 1;
 
     // We use secondary command buffers almost everywhere and they require a feature to be
     // able to execute in the presence of queries.  As a result, we won't support queries
