@@ -22,6 +22,30 @@
       "revId": "7af2f6e04f503cb53da2a55ad8be6971321bd099",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8007ded0_321c44d0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-13T15:33:40Z",
+      "side": 1,
+      "message": "It comes from the fields in `VkSampleCountFlagBits`, and I don\u0027t see a limit to it. I could go up to 32 to cover all possible bits in case they get added in the future? Otherwise I\u0027ll just give that `6` a name and a comment.",
+      "parentUuid": "beca6c0b_9d402bd6",
+      "range": {
+        "startLine": 34,
+        "startChar": 34,
+        "endLine": 34,
+        "endChar": 35
+      },
+      "revId": "7af2f6e04f503cb53da2a55ad8be6971321bd099",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
