@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "319717f0_eb80d145",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-13T14:57:46Z",
+      "side": 1,
+      "message": "I would add a sanity check here, in case somebody used `--steps` as the last argument. A simple `\u0026\u0026 argIndex + 1 \u003c *argc` would suffice (skipping the flag). Alternatively, you can check it inside the `if` and warn about it before skipping it.\n\nEdit: Like you did with `--trace-file`.",
+      "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
