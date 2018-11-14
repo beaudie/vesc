@@ -614,10 +614,12 @@ class PipelineLayoutCache final : angle::NonCopyable
 
     void destroy(VkDevice device);
 
-    angle::Result getPipelineLayout(vk::Context *context,
-                                    const vk::PipelineLayoutDesc &desc,
-                                    const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
-                                    vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
+    angle::Result getPipelineLayout(
+        vk::Context *context,
+        const vk::PipelineLayoutDesc &desc,
+        const vk::BindingPointer<DescriptorSetLayout> *descriptorSetLayouts,
+        size_t descriptorSetLayoutCount,
+        vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
 
   private:
     std::unordered_map<vk::PipelineLayoutDesc, vk::SharedPipelineLayout> mPayload;

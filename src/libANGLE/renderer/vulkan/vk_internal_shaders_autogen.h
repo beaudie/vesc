@@ -11,32 +11,74 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_VK_INTERNAL_SHADERS_AUTOGEN_H_
 #define LIBANGLE_RENDERER_VULKAN_VK_INTERNAL_SHADERS_AUTOGEN_H_
 
-#include <stddef.h>
-#include <stdint.h>
-
-#include <utility>
+#include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace rx
 {
 namespace vk
 {
-enum class InternalShaderID
+namespace InternalShader
 {
-    FullScreenQuad_vert,
-    PushConstantColor_frag,
-    EnumCount
+namespace DispatchUtils_comp
+{
+enum flags
+{
+    IS_ALIGNED = 0x00000001,
+    IS_INT     = 0x00000002,
+    flagsMask  = 0x00000003,
 };
+enum function
+{
+    IS_CLEAR     = 0x00000000,
+    IS_COPY      = 0x00000004,
+    functionMask = 0x00000004,
+};
+enum resourcetype
+{
+    IS_BUFFER         = 0x00000000,
+    IS_TEXTURE1D      = 0x00000008,
+    IS_TEXTURE2D      = 0x00000010,
+    IS_TEXTURE3D      = 0x00000018,
+    IS_TEXTURE2DArray = 0x00000020,
+    resourcetypeMask  = 0x00000038,
+};
+}  // namespace DispatchUtils_comp
 
-namespace priv
+namespace FullScreenQuad_vert
 {
-// This is SPIR-V binary blob and the size.
-struct ShaderBlob
+}  // namespace FullScreenQuad_vert
+
+namespace PushConstantColor_frag
 {
-    const uint32_t *code;
-    size_t codeSize;
+}  // namespace PushConstantColor_frag
+
+}  // namespace InternalShader
+
+class ShaderLibrary final : angle::NonCopyable
+{
+  public:
+    ShaderLibrary();
+    ~ShaderLibrary();
+
+    void destroy(VkDevice device);
+
+    angle::Result getDispatchUtils_comp(Context *context,
+                                        uint32_t shaderFlags,
+                                        const ShaderAndSerial **shaderOut);
+    angle::Result getFullScreenQuad_vert(Context *context,
+                                         uint32_t shaderFlags,
+                                         const ShaderAndSerial **shaderOut);
+    angle::Result getPushConstantColor_frag(Context *context,
+                                            uint32_t shaderFlags,
+                                            const ShaderAndSerial **shaderOut);
+
+  private:
+    ShaderAndSerial mDispatchUtils_comp_shaders[DispatchUtils_comp::flagsMask |
+                                                DispatchUtils_comp::functionMask |
+                                                DispatchUtils_comp::resourcetypeMask];
+    ShaderAndSerial mFullScreenQuad_vert_shaders[1];
+    ShaderAndSerial mPushConstantColor_frag_shaders[1];
 };
-const ShaderBlob &GetInternalShaderBlob(InternalShaderID shaderID);
-}  // priv
 }  // namespace vk
 }  // namespace rx
 

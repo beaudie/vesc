@@ -1,0 +1,25 @@
+{
+    "description": [
+        "Copyright 2018 The ANGLE Project Authors. All rights reserved.",
+        "Use of this source code is governed by a BSD-style license that can be",
+        "found in the LICENSE file.",
+        "",
+        "DispatchUtils.comp.json: Build parameters for DispatchUtils.comp."
+    ],
+    "flags": [
+        "IS_ALIGNED",
+        "IS_INT"
+    ],
+    "function": [
+        "IS_CLEAR",
+        "IS_COPY"
+    ],
+    "resourcetype": [
+        "IS_BUFFER",
+        "IS_TEXTURE1D",
+        "IS_TEXTURE2D",
+        "IS_TEXTURE3D",
+        "IS_TEXTURE2DArray"
+    ]
+}
+
