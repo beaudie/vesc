@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1db96ec1_6f7453fe",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-11-14T20:48:08Z",
+      "side": 1,
+      "message": "How are we going to handle having 2 manifest files?   How do we tell each build with manifest file to use?\n\nGoing further, how do we tell the CTS tests which name should be used when interacting with the ANGLE APK?",
+      "revId": "6634cd028873eaeaab3faaa1df4ed90b06b23ad0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
