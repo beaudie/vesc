@@ -52,6 +52,24 @@
       "revId": "6634cd028873eaeaab3faaa1df4ed90b06b23ad0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7801c82e_cacadb52",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2018-11-14T21:09:43Z",
+      "side": 1,
+      "message": "I haven\u0027t looked into the details yet, but I\u0027m thinking the platform code will check a build flag when deciding which ANGLE package to load from.  Does the CTS test need to know the name of the ANGLE package?",
+      "parentUuid": "c6b0f0d7_85cb0fef",
+      "revId": "6634cd028873eaeaab3faaa1df4ed90b06b23ad0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
