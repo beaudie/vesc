@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2b46038_69188aa2",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3001,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-14T12:20:49Z",
+      "side": 1,
+      "message": "This method\u0027s complexity is O(size^2) currently, it could be made O(size) with ImmutableStringBuilder or ostrinstream.",
+      "revId": "de69d793689b61bb531c6688bb96b78c69a96808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
