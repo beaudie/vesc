@@ -16,7 +16,10 @@
 
 namespace gl
 {
+ERRMSG(3DDepthStencil,
+       "Format cannot be GL_DEPTH_COMPONENT or GL_DEPTH_STENCIL if target is GL_TEXTURE_3D");
 ERRMSG(ANGLECopyTexture3DUnavailable, "GL_ANGLE_copy_texture_3d extension not available.");
+ERRMSG(BaseLevelOutOfRange, "Texture base level out of range");
 ERRMSG(BlitDimensionsOutOfRange, "BlitFramebuffer dimensions out of 32-bit integer range.");
 ERRMSG(BlitExtensionDepthStencilWholeBufferBlit,
        "Only whole-buffer depth and stencil blits are supported by this extension.");
@@ -77,6 +80,7 @@ ERRMSG(ColorNumberGreaterThanMaxDualSourceDrawBuffers,
        "Color number for secondary color greater than or equal to MAX_DUAL_SOURCE_DRAW_BUFFERS");
 ERRMSG(ColorNumberGreaterThanMaxDrawBuffers,
        "Color number for primary color greater than or equal to MAX_DRAW_BUFFERS");
+ERRMSG(CompressedMismatch, "Compressed data is valid if-and-only-if the texture is compressed.");
 ERRMSG(CompressedTextureDimensionsMustMatchData,
        "Compressed texture dimensions must exactly match the dimensions of the data passed in.");
 ERRMSG(CompressedTexturesNotAttachable, "Compressed textures cannot be attached to a framebuffer.");
@@ -86,11 +90,14 @@ ERRMSG(CubemapIncomplete,
 ERRMSG(DefaultFramebufferInvalidAttachment,
        "Invalid attachment when the default framebuffer is bound.");
 ERRMSG(DefaultFramebufferTarget, "It is invalid to change default FBO's attachments");
+ERRMSG(DefaultVertexArray, "Default vertex array object is bound.");
 ERRMSG(DestinationImmutable, "Destination texture cannot be immutable.");
 ERRMSG(DestinationLevelNotDefined,
        "The destination level of the destination texture must be defined.");
 ERRMSG(DestinationTextureTooSmall, "Destination texture too small.");
+ERRMSG(DimensionsMustBePow2, "Texture dimensions must be power-of-two.");
 ERRMSG(DispatchIndirectBufferNotBound, "Dispatch indirect buffer must be bound.");
+ERRMSG(DrawIndirectBufferNotBound, "Draw indirect buffer must be bound.");
 ERRMSG(DrawBufferTypeMismatch,
        "Fragment shader output type does not match the bound framebuffer attachment type.");
 ERRMSG(DrawFramebufferIncomplete, "Draw framebuffer is incomplete");
@@ -107,6 +114,7 @@ ERRMSG(ExpectedShaderName, "Expected a shader name, but found a program name.");
 ERRMSG(ExtensionNotEnabled, "Extension is not enabled.");
 ERRMSG(FeedbackLoop, "Feedback loop formed between Framebuffer and active Texture.");
 ERRMSG(FragDataBindingIndexOutOfRange, "Fragment output color index must be zero or one.");
+ERRMSG(FramebufferIncomplete, "Framebuffer is incomplete.");
 ERRMSG(FramebufferIncompleteAttachment,
        "Attachment type must be compatible with attachment object.");
 ERRMSG(FramebufferTextureInvalidLayer, "Layer invalid for framebuffer texture attachment.");
@@ -124,6 +132,7 @@ ERRMSG(IncompatibleDrawModeAgainstGeometryShader,
 ERRMSG(IndexExceedsMaxActiveUniform, "Index exceeds program active uniform count.");
 ERRMSG(IndexExceedsMaxDrawBuffer, "Index exceeds MAX_DRAW_BUFFERS.");
 ERRMSG(IndexExceedsMaxVertexAttribute, "Index exceeds MAX_VERTEX_ATTRIBS.");
+ERRMSG(IndexExceedsSamples, "Index must be less than the value of SAMPLES.");
 ERRMSG(InsufficientBufferSize, "Insufficient buffer size.");
 ERRMSG(InsufficientVertexBufferSize, "Vertex buffer is not big enough for the draw call");
 ERRMSG(IntegerOverflow, "Integer overflow.");
@@ -140,10 +149,12 @@ ERRMSG(InvalidClientState, "Invalid client vertex array type.");
 ERRMSG(InvalidClipPlane, "Invalid clip plane.");
 ERRMSG(InvalidCombinedImageUnit,
        "Specified unit must be in [GL_TEXTURE0, GL_TEXTURE0 + GL_MAX_COMBINED_IMAGE_UNITS)");
+ERRMSG(InvalidCompressedImageSize, "Invalid compressed image size.");
 ERRMSG(InvalidConstantColor,
        "CONSTANT_COLOR (or ONE_MINUS_CONSTANT_COLOR) and CONSTANT_ALPHA (or "
        "ONE_MINUS_CONSTANT_ALPHA) cannot be used together as source and destination factors in the "
        "blend function.");
+ERRMSG(InvalidCopyCombination, "Invalid copy texture format combination.");
 ERRMSG(InvalidCoverMode, "Invalid cover mode.");
 ERRMSG(InvalidCullMode, "Cull mode not recognized.");
 ERRMSG(InvalidDebugSeverity, "Invalid debug severity.");
@@ -156,6 +167,7 @@ ERRMSG(InvalidDrawMode, "Invalid draw mode.");
 ERRMSG(InvalidDrawModeTransformFeedback,
        "Draw mode must match current transform feedback object's draw mode.");
 ERRMSG(InvalidFence, "Invalid fence object.");
+ERRMSG(InvalidFenceCondition, "Condition must be GL_ALL_COMPLETED_NV");
 ERRMSG(InvalidFenceState, "Fence must be set.");
 ERRMSG(InvalidFillMode, "Invalid fill mode.");
 ERRMSG(InvalidFilterTexture, "Texture only supports NEAREST and LINEAR filtering.");
@@ -163,11 +175,14 @@ ERRMSG(InvalidFogDensity, "Invalid fog density (must be nonnegative).");
 ERRMSG(InvalidFogMode, "Invalid fog mode.");
 ERRMSG(InvalidFogParameter, "Invalid fog parameter.");
 ERRMSG(InvalidFormat, "Invalid format.");
+ERRMSG(InvalidFormatCombination, "Invalid combination of format, type and internalFormat.");
 ERRMSG(InvalidFramebufferTarget, "Invalid framebuffer target.");
 ERRMSG(InvalidFramebufferTextureLevel, "Mipmap level must be 0 when attaching a texture.");
 ERRMSG(InvalidFramebufferAttachmentParameter, "Invalid parameter name for framebuffer attachment.");
 ERRMSG(InvalidFramebufferLayer,
        "Framebuffer layer cannot be less than 0 or greater than GL_MAX_FRAMEBUFFER_LAYERS_EXT.");
+ERRMSG(InvalidIndirectOffset,
+       "indirect must be a multiple of the size of uint in basic machine units.");
 ERRMSG(InvalidImageUnit,
        "Image unit cannot be greater than or equal to the value of MAX_IMAGE_UNITS.");
 ERRMSG(InvalidInternalFormat, "Invalid internal format.");
@@ -180,6 +195,7 @@ ERRMSG(InvalidMaterialParameter, "Invalid material parameter.");
 ERRMSG(InvalidMatrixMode, "Invalid matrix mode.");
 ERRMSG(InvalidMemoryBarrierBit, "Invalid memory barrier bit.");
 ERRMSG(InvalidMipLevel, "Level of detail outside of range.");
+ERRMSG(InvalidMipLevels, "Invalid level count.");
 ERRMSG(InvalidMultitextureUnit,
        "Specified unit must be in [GL_TEXTURE0, GL_TEXTURE0 + GL_MAX_TEXTURE_UNITS)");
 ERRMSG(InvalidMultisampledFramebufferOperation, "Invalid operation on multisampled framebuffer");
@@ -230,7 +246,10 @@ ERRMSG(InvalidTextureTarget, "Invalid or unsupported texture target.");
 ERRMSG(InvalidTextureWrap, "Texture wrap mode not recognized.");
 ERRMSG(InvalidType, "Invalid type.");
 ERRMSG(InvalidTypePureInt, "Invalid type, should be integer");
+ERRMSG(InvalidUniformCount, "Only array uniforms may have count > 1.");
+ERRMSG(InvalidUniformLocation, "Invalid uniform location");
 ERRMSG(InvalidUnpackAlignment, "Unpack alignment must be 1, 2, 4, or 8.");
+ERRMSG(InvalidVertexArray, "Vertex array does not exist.");
 ERRMSG(InvalidVertexAttrSize, "Vertex attribute size must be 1, 2, 3, or 4.");
 ERRMSG(InvalidVertexPointerSize, "Size for built-in vertex attribute is outside allowed range.");
 ERRMSG(InvalidVertexPointerStride, "Invalid stride for built-in vertex attribute.");
@@ -248,7 +267,12 @@ ERRMSG(MismatchedTargetAndFormat, "Invalid texture target and format combination
 ERRMSG(MismatchedTypeAndFormat, "Invalid format and type combination.");
 ERRMSG(MismatchedVariableProgram, "Variable is not part of the current program.");
 ERRMSG(MissingReadAttachment, "Missing read attachment.");
-ERRMSG(MustHaveElementArrayBinding, "Must have element array buffer binding.");
+ERRMSG(MissingTexture, "No Texture is bound to the specified target.");
+ERRMSG(MustHaveElementArrayBinding, "Must have element array buffer bound.");
+ERRMSG(MultiviewActive, "The number of views in the active draw framebuffer is greater than 1.");
+ERRMSG(MultiviewViewsTooLarge, "numViews cannot be greater than GL_MAX_VIEWS_ANGLE.");
+ERRMSG(MultiviewViewsTooSmall, "numViews cannot be less than 1.");
+ERRMSG(MultiviewNotAvailable, "ANGLE_multiview is not available.");
 ERRMSG(MultiviewMismatch,
        "The number of views in the active program and draw "
        "framebuffer does not match.");
@@ -293,6 +317,7 @@ ERRMSG(ObjectNotGenerated, "Object cannot be used because it has not been genera
 ERRMSG(OffsetMustBeMultipleOfType, "Offset must be a multiple of the passed in datatype.");
 ERRMSG(OffsetMustBeMultipleOfUint,
        "Offset must be a multiple of the size, in basic machine units, of uint");
+ERRMSG(OffsetOverflow, "Offset overflows texture dimensions.");
 ERRMSG(OutsideOfBounds, "Parameter outside of bounds.");
 ERRMSG(ParamOverflow, "The provided parameters overflow with the provided buffer.");
 ERRMSG(PixelDataNotNull, "Pixel data must be null.");
@@ -310,9 +335,14 @@ ERRMSG(ProgramNotLinked, "Program not linked.");
 ERRMSG(QueryActive, "Query is active.");
 ERRMSG(QueryExtensionNotEnabled, "Query extension not enabled.");
 ERRMSG(ReadBufferNone, "Read buffer is GL_NONE.");
+ERRMSG(ReadBufferNotAttached, "Read buffer has no attachment.");
+ERRMSG(RectangleTextureCompressed, "Rectangle texture cannot have a compressed format.");
+ERRMSG(RelativeOffsetTooLarge,
+       "relativeOffset cannot be greater than MAX_VERTEX_ATTRIB_RELATIVE_OFFSET.");
 ERRMSG(RenderableInternalFormat,
        "SizedInternalformat must be color-renderable, depth-renderable, or stencil-renderable.");
 ERRMSG(RenderbufferNotBound, "A renderbuffer must be bound.");
+ERRMSG(ResourceMaxRenderbufferSize, "Desired resource size is greater than max renderbuffer size.");
 ERRMSG(ResourceMaxTextureSize, "Desired resource size is greater than max texture size.");
 ERRMSG(SamplesZero, "Samples may not be zero.");
 ERRMSG(SamplesOutOfRange,
@@ -329,8 +359,10 @@ ERRMSG(StencilReferenceMaskOrMismatch,
 ERRMSG(StrideMustBeMultipleOfType, "Stride must be a multiple of the passed in datatype.");
 ERRMSG(TargetMustBeTexture2DMultisampleArrayOES,
        "Target must be TEXTURE_2D_MULTISAMPLE_ARRAY_OES.");
+ERRMSG(TextureIsImmutable, "Texture is immutable.");
 ERRMSG(TextureNotBound, "A texture must be bound.");
 ERRMSG(TextureNotPow2, "The texture is a non-power-of-two texture.");
+ERRMSG(TextureSizeTooSmall, "Texture dimensions must all be greater than zero.");
 ERRMSG(TextureTargetRequiresES31, "Texture target requires at least OpenGL ES 3.1.");
 ERRMSG(TextureTypeConflict, "Two textures of different types use the same sampler location.");
 ERRMSG(TextureWidthOrHeightOutOfRange,
