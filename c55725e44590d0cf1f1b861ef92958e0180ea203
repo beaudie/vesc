@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4cb63932_21341d4f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-14T12:47:22Z",
+      "side": 1,
+      "message": "nit: AllGLES2ShaderTypes. You might be able to use this in a few other places too.",
+      "range": {
+        "startLine": 365,
+        "startChar": 4,
+        "endLine": 365,
+        "endChar": 58
+      },
+      "revId": "c55725e44590d0cf1f1b861ef92958e0180ea203",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc87d627_1383e9e7",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 969,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-14T12:47:22Z",
+      "side": 1,
+      "message": "nit: use kGLES2ShaderTypeMin / kGLES2ShaderTypeMax",
+      "range": {
+        "startLine": 969,
+        "startChar": 8,
+        "endLine": 969,
+        "endChar": 56
+      },
+      "revId": "c55725e44590d0cf1f1b861ef92958e0180ea203",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c18f2b4c_133d2645",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-14T12:47:22Z",
+      "side": 1,
+      "message": "this will inflate the pipelinedesc size slightly. But I\u0027ll probably be removing the shader stuff entirely in the future so that\u0027s ok.",
+      "range": {
+        "startLine": 682,
+        "startChar": 45,
+        "endLine": 682,
+        "endChar": 57
+      },
+      "revId": "c55725e44590d0cf1f1b861ef92958e0180ea203",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a6ba2a3a_7fba5fc1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-14T12:47:22Z",
+      "side": 1,
+      "message": "you can remove these enums and use the existing types.",
+      "range": {
+        "startLine": 746,
+        "startChar": 0,
+        "endLine": 751,
+        "endChar": 55
+      },
+      "revId": "c55725e44590d0cf1f1b861ef92958e0180ea203",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
