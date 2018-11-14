@@ -22,6 +22,30 @@
       "revId": "1bf18ce9e2caca7067b4439373f4fb04a5cd7d21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "371b1065_e015ba43",
+        "filename": "src/tests/gl_tests/InstancingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-11-14T21:36:59Z",
+      "side": 0,
+      "message": "I could only figure it out by and commenting out different lines, putting in a sleep and observing what was drawn.  :)\nrunDrawArraysTest(0, 6, ...) draws the same as runDrawArraysTest(6, 6, ...) because vertices 0-5 are the same as vertices 6-11.  And they only draw two instances, i.e. two quads.\nThe offset shifts up the second two quads to produce the square arrangement of four quads that checkQuads() expects.\n\nThe new code also draws the same thing whether starting at vertex 0 or vertex 4/6 (for points/quads respectively).  I believe the point of the test is that even with a non-zero start vertex, we still start the instanced attribute at the beginning.",
+      "parentUuid": "05c13023_d8f0d289",
+      "range": {
+        "startLine": 315,
+        "startChar": 22,
+        "endLine": 315,
+        "endChar": 30
+      },
+      "revId": "1bf18ce9e2caca7067b4439373f4fb04a5cd7d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
