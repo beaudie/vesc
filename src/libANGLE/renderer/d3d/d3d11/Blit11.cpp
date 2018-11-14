@@ -2117,11 +2117,8 @@ angle::Result Blit11::getBlitShader(const gl::Context *context,
                                                   unpackUnmultiplyAlpha, destTypeForDownsampling);
     }
 
-    if (blitShaderType == BLITSHADER_INVALID)
-    {
-        context->handleError(gl::InternalError() << "Internal blit shader type mismatch");
-        return angle::Result::Stop();
-    }
+    ANGLE_CHECK_HR(GetImplAs<Context11>(context), blitShaderType != BLITSHADER_INVALID,
+                   "Internal blit shader type mismatch", E_FAIL);
 
     auto blitShaderIt = mBlitShaderMap.find(blitShaderType);
     if (blitShaderIt != mBlitShaderMap.end())
@@ -2781,9 +2778,7 @@ angle::Result Blit11::getBlitShader(const gl::Context *context,
             break;
 
         default:
-            UNREACHABLE();
-            context->handleError(gl::InternalError());
-            return angle::Result::Stop();
+            ANGLE_HR_UNREACHABLE(GetImplAs<Context11>(context));
     }
 
     blitShaderIt = mBlitShaderMap.find(blitShaderType);
@@ -2799,11 +2794,8 @@ angle::Result Blit11::getSwizzleShader(const gl::Context *context,
 {
     SwizzleShaderType swizzleShaderType = GetSwizzleShaderType(type, viewDimension);
 
-    if (swizzleShaderType == SWIZZLESHADER_INVALID)
-    {
-        context->handleError(gl::InternalError() << "Swizzle shader type not found");
-        return angle::Result::Stop();
-    }
+    ANGLE_CHECK_HR(GetImplAs<Context11>(context), swizzleShaderType != SWIZZLESHADER_INVALID,
+                   "Swizzle shader type not found", E_FAIL);
 
     auto swizzleShaderIt = mSwizzleShaderMap.find(swizzleShaderType);
     if (swizzleShaderIt != mSwizzleShaderMap.end())
@@ -2878,9 +2870,7 @@ angle::Result Blit11::getSwizzleShader(const gl::Context *context,
                                             "Blit11 2D Array I swizzle pixel shader"));
             break;
         default:
-            UNREACHABLE();
-            context->handleError(gl::InternalError());
-            return angle::Result::Stop();
+            ANGLE_HR_UNREACHABLE(GetImplAs<Context11>(context));
     }
 
     swizzleShaderIt = mSwizzleShaderMap.find(swizzleShaderType);
