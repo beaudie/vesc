@@ -373,9 +373,9 @@ class DescriptorSetLayoutDesc final
 };
 
 // The following are for caching descriptor set layouts. Limited to max two descriptor set layouts
-// and two push constants. One push constant per shader stage. This can be extended in the future.
+// and one push constant per shader stage. This can be extended in the future.
 constexpr size_t kMaxDescriptorSetLayouts = 3;
-constexpr size_t kMaxPushConstantRanges   = 2;
+constexpr size_t kMaxPushConstantRanges   = static_cast<size_t>(gl::kAfterShaderTypeMax);
 
 struct PackedPushConstantRange
 {
@@ -544,10 +544,12 @@ class PipelineLayoutCache final : angle::NonCopyable
 
     void destroy(VkDevice device);
 
-    angle::Result getPipelineLayout(vk::Context *context,
-                                    const vk::PipelineLayoutDesc &desc,
-                                    const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
-                                    vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
+    angle::Result getPipelineLayout(
+        vk::Context *context,
+        const vk::PipelineLayoutDesc &desc,
+        const vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayouts,
+        size_t descriptorSetLayoutCount,
+        vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
 
   private:
     std::unordered_map<vk::PipelineLayoutDesc, vk::SharedPipelineLayout> mPayload;

@@ -43,6 +43,7 @@ angle::Result StreamVertexData(ContextVk *contextVk,
                                VkBuffer *bufferHandleOut,
                                VkDeviceSize *bufferOffsetOut)
 {
+    // TODO(syoussefi): unless loaded from CPU, look at all the callers and convert them to dispatch
     uint8_t *dst = nullptr;
     ANGLE_TRY(dynamicBuffer->allocate(contextVk, bytesToAllocate, &dst, bufferHandleOut,
                                       bufferOffsetOut, nullptr));
@@ -55,9 +56,9 @@ angle::Result StreamVertexData(ContextVk *contextVk,
 
 }  // anonymous namespace
 
-#define INIT                                        \
-    {                                               \
-        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, 1024 * 8 \
+#define INIT                                                                                   \
+    {                                                                                          \
+        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT, 1024 * 8 \
     }
 
 VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state, RendererVk *renderer)
@@ -77,9 +78,14 @@ VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state, RendererVk *rend
       mCurrentElementArrayBuffer(nullptr),
       mPackedInputBindings{},
       mPackedInputAttributes{},
-      mDynamicVertexData(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, kDynamicVertexDataSize),
-      mDynamicIndexData(VK_BUFFER_USAGE_INDEX_BUFFER_BIT, kDynamicIndexDataSize),
-      mTranslatedByteIndexData(VK_BUFFER_USAGE_INDEX_BUFFER_BIT, kDynamicIndexDataSize),
+      mDynamicVertexData(
+          VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT,
+          kDynamicVertexDataSize),
+      mDynamicIndexData(VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT,
+                        kDynamicIndexDataSize),
+      mTranslatedByteIndexData(
+          VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT,
+          kDynamicIndexDataSize),
       mLineLoopHelper(renderer),
       mDirtyLineLoopTranslation(true)
 {
@@ -123,6 +129,7 @@ angle::Result VertexArrayVk::streamIndexData(ContextVk *contextVk,
                                              const void *sourcePointer,
                                              vk::DynamicBuffer *dynamicBuffer)
 {
+    // TODO(syoussefi): unless loaded from CPU, look at all the callers and convert them to dispatch
     ASSERT(!mState.getElementArrayBuffer() || indexType == GL_UNSIGNED_BYTE);
 
     dynamicBuffer->releaseRetainedBuffers(contextVk->getRenderer());
@@ -160,6 +167,7 @@ angle::Result VertexArrayVk::convertVertexBuffer(ContextVk *contextVk,
                                                  const gl::VertexBinding &binding,
                                                  size_t attribIndex)
 {
+    // TODO(syoussefi): convert to dispatch
 
     // Needed before reading buffer or we could get stale data.
     ANGLE_TRY(contextVk->getRenderer()->finish(contextVk));

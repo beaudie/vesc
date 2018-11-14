@@ -959,7 +959,8 @@ void DescriptorSetLayoutDesc::unpackBindings(DescriptorSetLayoutBindingVector *b
         binding.binding            = bindingIndex;
         binding.descriptorCount    = packedBinding.count;
         binding.descriptorType     = static_cast<VkDescriptorType>(packedBinding.type);
-        binding.stageFlags         = (VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+        binding.stageFlags         = (VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT |
+                              VK_SHADER_STAGE_COMPUTE_BIT);
         binding.pImmutableSamplers = nullptr;
 
         bindings->push_back(binding);
@@ -1270,7 +1271,8 @@ void PipelineLayoutCache::destroy(VkDevice device)
 angle::Result PipelineLayoutCache::getPipelineLayout(
     vk::Context *context,
     const vk::PipelineLayoutDesc &desc,
-    const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
+    const vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayouts,
+    size_t descriptorSetLayoutCount,
     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
 {
     auto iter = mPayload.find(desc);
@@ -1283,8 +1285,9 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
 
     // Note this does not handle gaps in descriptor set layouts gracefully.
     angle::FixedVector<VkDescriptorSetLayout, vk::kMaxDescriptorSetLayouts> setLayoutHandles;
-    for (const vk::BindingPointer<vk::DescriptorSetLayout> &layoutPtr : descriptorSetLayouts)
+    for (size_t i = 0; i < descriptorSetLayoutCount; ++i)
     {
+        const vk::BindingPointer<vk::DescriptorSetLayout> &layoutPtr = descriptorSetLayouts[i];
         if (layoutPtr.valid())
         {
             VkDescriptorSetLayout setLayout = layoutPtr.get().getHandle();
@@ -1303,9 +1306,14 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
         const vk::PackedPushConstantRange &pushConstantDesc = descPushConstantRanges[shaderIndex];
         if (pushConstantDesc.size > 0)
         {
+            static constexpr VkShaderStageFlagBits shaderStage[vk::kMaxPushConstantRanges] = {
+                VK_SHADER_STAGE_VERTEX_BIT,
+                VK_SHADER_STAGE_FRAGMENT_BIT,
+                VK_SHADER_STAGE_GEOMETRY_BIT,
+                VK_SHADER_STAGE_COMPUTE_BIT,
+            };
             VkPushConstantRange pushConstantRange = {};
-            pushConstantRange.stageFlags =
-                shaderIndex == 0 ? VK_SHADER_STAGE_VERTEX_BIT : VK_SHADER_STAGE_FRAGMENT_BIT;
+            pushConstantRange.stageFlags          = shaderStage[shaderIndex];
             pushConstantRange.offset = pushConstantDesc.offset;
             pushConstantRange.size   = pushConstantDesc.size;
 

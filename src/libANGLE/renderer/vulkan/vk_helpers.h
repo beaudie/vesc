@@ -39,7 +39,8 @@ class DynamicBuffer : angle::NonCopyable
 
     // This call will allocate a new region at the end of the buffer. It internally may trigger
     // a new buffer to be created (which is returned in 'newBufferAllocatedOut'. This param may
-    // be nullptr.
+    // be nullptr. TODO(syoussefi): remove ptrOut and add an option to map, because conversions and
+    // clears should now be done in compute, so filling this in on CPU is optional.
     angle::Result allocate(Context *context,
                            size_t sizeInBytes,
                            uint8_t **ptrOut,
@@ -103,7 +104,9 @@ class DescriptorPoolHelper
     bool valid() { return mDescriptorPool.valid(); }
 
     bool hasCapacity(uint32_t descriptorSetCount) const;
-    angle::Result init(Context *context, const VkDescriptorPoolSize &poolSize, uint32_t maxSets);
+    angle::Result init(Context *context,
+                       const std::vector<VkDescriptorPoolSize> &poolSizes,
+                       uint32_t maxSets);
     void destroy(VkDevice device);
 
     angle::Result allocateSets(Context *context,
@@ -131,14 +134,16 @@ class DynamicDescriptorPool final : angle::NonCopyable
     ~DynamicDescriptorPool();
 
     // The DynamicDescriptorPool only handles one pool size at this time.
-    angle::Result init(ContextVk *contextVk,
-                       VkDescriptorType descriptorType,
-                       uint32_t descriptorsPerSet);
+    // Note that setSizes[i].descriptorCount is expected to be the number of descriptors in
+    // an individual set.  The pool size will be calculated accordingly.
+    angle::Result init(Context *context,
+                       const VkDescriptorPoolSize *setSizes,
+                       uint32_t setSizeCount);
     void destroy(VkDevice device);
 
     // We use the descriptor type to help count the number of free sets.
     // By convention, sets are indexed according to the constants in vk_cache_utils.h.
-    angle::Result allocateSets(ContextVk *contextVk,
+    angle::Result allocateSets(Context *context,
                                const VkDescriptorSetLayout *descriptorSetLayout,
                                uint32_t descriptorSetCount,
                                SharedDescriptorPoolBinding *bindingOut,
@@ -148,12 +153,12 @@ class DynamicDescriptorPool final : angle::NonCopyable
     void setMaxSetsPerPoolForTesting(uint32_t maxSetsPerPool);
 
   private:
-    angle::Result allocateNewPool(ContextVk *contextVk);
+    angle::Result allocateNewPool(Context *context);
 
     uint32_t mMaxSetsPerPool;
     size_t mCurrentPoolIndex;
     std::vector<SharedDescriptorPoolHelper *> mDescriptorPools;
-    VkDescriptorPoolSize mPoolSize;
+    std::vector<VkDescriptorPoolSize> mPoolSizes;
 };
 
 template <typename Pool>

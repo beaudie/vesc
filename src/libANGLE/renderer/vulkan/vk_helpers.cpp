@@ -20,8 +20,9 @@ namespace vk
 {
 namespace
 {
-constexpr VkBufferUsageFlags kLineLoopDynamicBufferUsage =
-    (VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
+constexpr VkBufferUsageFlags kLineLoopDynamicBufferUsage = VK_BUFFER_USAGE_INDEX_BUFFER_BIT |
+                                                           VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+                                                           VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
 constexpr int kLineLoopDynamicBufferMinSize = 1024 * 1024;
 
 // This is an arbitrary max. We can change this later if necessary.
@@ -175,6 +176,7 @@ angle::Result DynamicBuffer::allocate(Context *context,
         *handleOut = mBuffer.getHandle();
     }
 
+    // TODO(syoussefi): make mapping optional
     ASSERT(mMappedMemory);
     *ptrOut    = mMappedMemory + mNextAllocationOffset;
     *offsetOut = static_cast<VkDeviceSize>(mNextAllocationOffset);
@@ -297,7 +299,7 @@ bool DescriptorPoolHelper::hasCapacity(uint32_t descriptorSetCount) const
 }
 
 angle::Result DescriptorPoolHelper::init(Context *context,
-                                         const VkDescriptorPoolSize &poolSize,
+                                         const std::vector<VkDescriptorPoolSize> &poolSizes,
                                          uint32_t maxSets)
 {
     if (mDescriptorPool.valid())
@@ -310,8 +312,8 @@ angle::Result DescriptorPoolHelper::init(Context *context,
     descriptorPoolInfo.sType                      = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
     descriptorPoolInfo.flags                      = 0;
     descriptorPoolInfo.maxSets                    = maxSets;
-    descriptorPoolInfo.poolSizeCount              = 1u;
-    descriptorPoolInfo.pPoolSizes                 = &poolSize;
+    descriptorPoolInfo.poolSizeCount              = static_cast<uint32_t>(poolSizes.size());
+    descriptorPoolInfo.pPoolSizes                 = poolSizes.data();
 
     mFreeDescriptorSets = maxSets;
 
@@ -345,25 +347,28 @@ angle::Result DescriptorPoolHelper::allocateSets(Context *context,
 
 // DynamicDescriptorPool implementation.
 DynamicDescriptorPool::DynamicDescriptorPool()
-    : mMaxSetsPerPool(kDefaultDescriptorPoolMaxSets), mCurrentPoolIndex(0), mPoolSize{}
+    : mMaxSetsPerPool(kDefaultDescriptorPoolMaxSets), mCurrentPoolIndex(0)
 {
 }
 
 DynamicDescriptorPool::~DynamicDescriptorPool() = default;
 
-angle::Result DynamicDescriptorPool::init(ContextVk *contextVk,
-                                          VkDescriptorType descriptorType,
-                                          uint32_t descriptorsPerSet)
+angle::Result DynamicDescriptorPool::init(Context *context,
+                                          const VkDescriptorPoolSize *setSizes,
+                                          uint32_t setSizeCount)
 {
     ASSERT(mCurrentPoolIndex == 0);
     ASSERT(mDescriptorPools.empty() || (mDescriptorPools.size() == 1 &&
                                         mDescriptorPools[0]->get().hasCapacity(mMaxSetsPerPool)));
 
-    mPoolSize.type            = descriptorType;
-    mPoolSize.descriptorCount = descriptorsPerSet * mMaxSetsPerPool;
+    mPoolSizes.insert(mPoolSizes.end(), setSizes, setSizes + setSizeCount);
+    for (uint32_t i = 0; i < setSizeCount; ++i)
+    {
+        mPoolSizes[i].descriptorCount *= mMaxSetsPerPool;
+    }
 
     mDescriptorPools.push_back(new SharedDescriptorPoolHelper());
-    return mDescriptorPools[0]->get().init(contextVk, mPoolSize, mMaxSetsPerPool);
+    return mDescriptorPools[0]->get().init(context, mPoolSizes, mMaxSetsPerPool);
 }
 
 void DynamicDescriptorPool::destroy(VkDevice device)
@@ -378,7 +383,7 @@ void DynamicDescriptorPool::destroy(VkDevice device)
     mDescriptorPools.clear();
 }
 
-angle::Result DynamicDescriptorPool::allocateSets(ContextVk *contextVk,
+angle::Result DynamicDescriptorPool::allocateSets(Context *context,
                                                   const VkDescriptorSetLayout *descriptorSetLayout,
                                                   uint32_t descriptorSetCount,
                                                   SharedDescriptorPoolBinding *bindingOut,
@@ -388,7 +393,7 @@ angle::Result DynamicDescriptorPool::allocateSets(ContextVk *contextVk,
     {
         if (!mDescriptorPools[mCurrentPoolIndex]->get().hasCapacity(descriptorSetCount))
         {
-            ANGLE_TRY(allocateNewPool(contextVk));
+            ANGLE_TRY(allocateNewPool(context));
         }
 
         // Make sure the old binding knows the descriptor sets can still be in-use. We only need
@@ -396,20 +401,20 @@ angle::Result DynamicDescriptorPool::allocateSets(ContextVk *contextVk,
         // when we move to a new pool.
         if (bindingOut->valid())
         {
-            Serial currentSerial = contextVk->getRenderer()->getCurrentQueueSerial();
+            Serial currentSerial = context->getRenderer()->getCurrentQueueSerial();
             bindingOut->get().updateSerial(currentSerial);
         }
 
         bindingOut->set(mDescriptorPools[mCurrentPoolIndex]);
     }
 
-    return bindingOut->get().allocateSets(contextVk, descriptorSetLayout, descriptorSetCount,
+    return bindingOut->get().allocateSets(context, descriptorSetLayout, descriptorSetCount,
                                           descriptorSetsOut);
 }
 
-angle::Result DynamicDescriptorPool::allocateNewPool(ContextVk *contextVk)
+angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
 {
-    RendererVk *renderer = contextVk->getRenderer();
+    RendererVk *renderer = context->getRenderer();
 
     bool found = false;
 
@@ -432,10 +437,10 @@ angle::Result DynamicDescriptorPool::allocateNewPool(ContextVk *contextVk)
         mCurrentPoolIndex = mDescriptorPools.size() - 1;
 
         static constexpr size_t kMaxPools = 99999;
-        ANGLE_VK_CHECK(contextVk, mDescriptorPools.size() < kMaxPools, VK_ERROR_TOO_MANY_OBJECTS);
+        ANGLE_VK_CHECK(context, mDescriptorPools.size() < kMaxPools, VK_ERROR_TOO_MANY_OBJECTS);
     }
 
-    return mDescriptorPools[mCurrentPoolIndex]->get().init(contextVk, mPoolSize, mMaxSetsPerPool);
+    return mDescriptorPools[mCurrentPoolIndex]->get().init(context, mPoolSizes, mMaxSetsPerPool);
 }
 
 void DynamicDescriptorPool::setMaxSetsPerPoolForTesting(uint32_t maxSetsPerPool)
@@ -795,6 +800,7 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
                                                                   VkBuffer *bufferHandleOut,
                                                                   VkDeviceSize *bufferOffsetOut)
 {
+    // TODO(syoussefi): go through compute
     if (glIndexType == GL_UNSIGNED_BYTE)
     {
         // Needed before reading buffer or we could get stale data.
@@ -853,6 +859,7 @@ angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
                                            reinterpret_cast<uint8_t **>(&indices), bufferHandleOut,
                                            bufferOffsetOut, nullptr));
 
+    // TODO(syoussefi): go through compute
     if (glIndexType == GL_UNSIGNED_BYTE)
     {
         // Vulkan doesn't support uint8 index types, so we need to emulate it.
