@@ -268,7 +268,7 @@ void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
 }
 
 // Initially dumping the command graphs is disabled.
-constexpr bool kEnableCommandGraphDiagnostics = false;
+constexpr bool kEnableCommandGraphDiagnostics = true;  // false;
 }  // anonymous namespace
 
 // CommandBatch implementation.
@@ -325,6 +325,8 @@ void RendererVk::onDestroy(vk::Context *context)
         // TODO(jmadill): Not nice to pass nullptr here, but shouldn't be a problem.
         (void)finish(context);
     }
+
+    mDispatchUtils.destroy(mDevice);
 
     mPipelineLayoutCache.destroy(mDevice);
     mDescriptorSetLayoutCache.destroy(mDevice);
@@ -544,6 +546,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // Initialize the format table.
     mFormatTable.initialize(mPhysicalDevice, mPhysicalDeviceProperties, mFeatures,
                             &mNativeTextureCaps, &mNativeCaps.compressedTextureFormats);
+
+    // Initialize utility functions
+    ANGLE_TRY(mDispatchUtils.initialize(displayVk));
 
     return angle::Result::Continue();
 }
@@ -1175,11 +1180,12 @@ angle::Result RendererVk::getDescriptorSetLayout(
 angle::Result RendererVk::getPipelineLayout(
     vk::Context *context,
     const vk::PipelineLayoutDesc &desc,
-    const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
+    const vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayouts,
+    size_t descriptorSetLayoutCount,
     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
 {
     return mPipelineLayoutCache.getPipelineLayout(context, desc, descriptorSetLayouts,
-                                                  pipelineLayoutOut);
+                                                  descriptorSetLayoutCount, pipelineLayoutOut);
 }
 
 angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk)

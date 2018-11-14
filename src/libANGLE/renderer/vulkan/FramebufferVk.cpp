@@ -977,7 +977,7 @@ angle::Result FramebufferVk::clearWithClearAttachments(
         VkClearAttachment &clearAttachment = clearAttachments[clearAttachmentIndex];
         clearAttachment.aspectMask      = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
         clearAttachment.colorAttachment = VK_ATTACHMENT_UNUSED;
-        clearAttachment.clearValue         = depthStencilClearValue;
+        clearAttachment.clearValue      = depthStencilClearValue;
         ++clearAttachmentIndex;
     }
     else
@@ -1026,7 +1026,8 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
     vk::DescriptorSetLayoutPointerArray descriptorSetLayouts;
 
     vk::BindingPointer<vk::PipelineLayout> pipelineLayout;
-    ANGLE_TRY(renderer->getPipelineLayout(contextVk, pipelineLayoutDesc, descriptorSetLayouts,
+    ANGLE_TRY(renderer->getPipelineLayout(contextVk, pipelineLayoutDesc,
+                                          descriptorSetLayouts.data(), descriptorSetLayouts.size(),
                                           &pipelineLayout));
 
     vk::RecordingMode recordingMode = vk::RecordingMode::Start;
