@@ -20,8 +20,9 @@ namespace vk
 {
 namespace
 {
-constexpr VkBufferUsageFlags kLineLoopDynamicBufferUsage =
-    (VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
+constexpr VkBufferUsageFlags kLineLoopDynamicBufferUsage = VK_BUFFER_USAGE_INDEX_BUFFER_BIT |
+                                                           VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+                                                           VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
 constexpr int kLineLoopDynamicBufferMinSize = 1024 * 1024;
 
 // This is an arbitrary max. We can change this later if necessary.
@@ -796,6 +797,7 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
                                                                   VkBuffer *bufferHandleOut,
                                                                   VkDeviceSize *bufferOffsetOut)
 {
+    // TODO(syoussefi): go through compute
     if (glIndexType == GL_UNSIGNED_BYTE)
     {
         // Needed before reading buffer or we could get stale data.
@@ -854,6 +856,7 @@ angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
                                            reinterpret_cast<uint8_t **>(&indices), bufferHandleOut,
                                            bufferOffsetOut, nullptr));
 
+    // TODO(syoussefi): go through compute
     if (glIndexType == GL_UNSIGNED_BYTE)
     {
         // Vulkan doesn't support uint8 index types, so we need to emulate it.
