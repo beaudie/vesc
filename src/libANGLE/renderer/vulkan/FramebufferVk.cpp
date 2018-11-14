@@ -1016,12 +1016,10 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
     mFramebuffer.finishCurrentCommands(renderer);
 
     const vk::ShaderAndSerial *fullScreenQuad = nullptr;
-    ANGLE_TRY(shaderLibrary->getShader(contextVk, vk::InternalShaderID::FullScreenQuad_vert,
-                                       &fullScreenQuad));
+    ANGLE_TRY(shaderLibrary->getFullScreenQuad_vert(contextVk, 0, &fullScreenQuad));
 
     const vk::ShaderAndSerial *pushConstantColor = nullptr;
-    ANGLE_TRY(shaderLibrary->getShader(contextVk, vk::InternalShaderID::PushConstantColor_frag,
-                                       &pushConstantColor));
+    ANGLE_TRY(shaderLibrary->getPushConstantColor_frag(contextVk, 0, &pushConstantColor));
 
     // The shader uses a simple pipeline layout with a push constant range.
     vk::PipelineLayoutDesc pipelineLayoutDesc;
@@ -1032,7 +1030,8 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
     vk::DescriptorSetLayoutPointerArray descriptorSetLayouts;
 
     vk::BindingPointer<vk::PipelineLayout> pipelineLayout;
-    ANGLE_TRY(renderer->getPipelineLayout(contextVk, pipelineLayoutDesc, descriptorSetLayouts,
+    ANGLE_TRY(renderer->getPipelineLayout(contextVk, pipelineLayoutDesc,
+                                          descriptorSetLayouts.data(), descriptorSetLayouts.size(),
                                           &pipelineLayout));
 
     vk::RecordingMode recordingMode = vk::RecordingMode::Start;

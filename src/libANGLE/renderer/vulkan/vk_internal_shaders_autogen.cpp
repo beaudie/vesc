@@ -10,28 +10,221 @@
 
 #include "libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h"
 
-#include "common/debug.h"
-
 namespace rx
 {
 namespace vk
 {
-namespace priv
-{
 namespace
 {
-#include "libANGLE/renderer/vulkan/shaders/gen/FullScreenQuad.vert.inc"
-#include "libANGLE/renderer/vulkan/shaders/gen/PushConstantColor.frag.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000000.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000001.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000002.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000003.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000004.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000005.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000006.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000007.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000008.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000009.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000000A.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000000B.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000000C.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000000D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000000E.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000000F.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000010.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000011.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000012.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000013.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000014.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000015.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000016.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000017.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000018.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000019.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000001A.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000001B.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000001C.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000001D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000001E.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000001F.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000020.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000021.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000022.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000023.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000024.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000025.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000026.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000027.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/FullScreenQuad.vert.00000000.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/PushConstantColor.frag.00000000.inc"
 
-constexpr ShaderBlob kShaderBlobs[] = {{kFullScreenQuad_vert, sizeof(kFullScreenQuad_vert)},
-                                       {kPushConstantColor_frag, sizeof(kPushConstantColor_frag)}};
+// This is SPIR-V binary blob and the size.
+struct ShaderBlob
+{
+    const uint32_t *code;
+    size_t codeSize;
+};
+
+constexpr ShaderBlob kDispatchUtils_comp_shaders[] = {
+    {kDispatchUtils_comp_00000000, sizeof(kDispatchUtils_comp_00000000)},
+    {kDispatchUtils_comp_00000001, sizeof(kDispatchUtils_comp_00000001)},
+    {kDispatchUtils_comp_00000002, sizeof(kDispatchUtils_comp_00000002)},
+    {kDispatchUtils_comp_00000003, sizeof(kDispatchUtils_comp_00000003)},
+    {kDispatchUtils_comp_00000004, sizeof(kDispatchUtils_comp_00000004)},
+    {kDispatchUtils_comp_00000005, sizeof(kDispatchUtils_comp_00000005)},
+    {kDispatchUtils_comp_00000006, sizeof(kDispatchUtils_comp_00000006)},
+    {kDispatchUtils_comp_00000007, sizeof(kDispatchUtils_comp_00000007)},
+    {kDispatchUtils_comp_00000008, sizeof(kDispatchUtils_comp_00000008)},
+    {kDispatchUtils_comp_00000009, sizeof(kDispatchUtils_comp_00000009)},
+    {kDispatchUtils_comp_0000000A, sizeof(kDispatchUtils_comp_0000000A)},
+    {kDispatchUtils_comp_0000000B, sizeof(kDispatchUtils_comp_0000000B)},
+    {kDispatchUtils_comp_0000000C, sizeof(kDispatchUtils_comp_0000000C)},
+    {kDispatchUtils_comp_0000000D, sizeof(kDispatchUtils_comp_0000000D)},
+    {kDispatchUtils_comp_0000000E, sizeof(kDispatchUtils_comp_0000000E)},
+    {kDispatchUtils_comp_0000000F, sizeof(kDispatchUtils_comp_0000000F)},
+    {kDispatchUtils_comp_00000010, sizeof(kDispatchUtils_comp_00000010)},
+    {kDispatchUtils_comp_00000011, sizeof(kDispatchUtils_comp_00000011)},
+    {kDispatchUtils_comp_00000012, sizeof(kDispatchUtils_comp_00000012)},
+    {kDispatchUtils_comp_00000013, sizeof(kDispatchUtils_comp_00000013)},
+    {kDispatchUtils_comp_00000014, sizeof(kDispatchUtils_comp_00000014)},
+    {kDispatchUtils_comp_00000015, sizeof(kDispatchUtils_comp_00000015)},
+    {kDispatchUtils_comp_00000016, sizeof(kDispatchUtils_comp_00000016)},
+    {kDispatchUtils_comp_00000017, sizeof(kDispatchUtils_comp_00000017)},
+    {kDispatchUtils_comp_00000018, sizeof(kDispatchUtils_comp_00000018)},
+    {kDispatchUtils_comp_00000019, sizeof(kDispatchUtils_comp_00000019)},
+    {kDispatchUtils_comp_0000001A, sizeof(kDispatchUtils_comp_0000001A)},
+    {kDispatchUtils_comp_0000001B, sizeof(kDispatchUtils_comp_0000001B)},
+    {kDispatchUtils_comp_0000001C, sizeof(kDispatchUtils_comp_0000001C)},
+    {kDispatchUtils_comp_0000001D, sizeof(kDispatchUtils_comp_0000001D)},
+    {kDispatchUtils_comp_0000001E, sizeof(kDispatchUtils_comp_0000001E)},
+    {kDispatchUtils_comp_0000001F, sizeof(kDispatchUtils_comp_0000001F)},
+    {kDispatchUtils_comp_00000020, sizeof(kDispatchUtils_comp_00000020)},
+    {kDispatchUtils_comp_00000021, sizeof(kDispatchUtils_comp_00000021)},
+    {kDispatchUtils_comp_00000022, sizeof(kDispatchUtils_comp_00000022)},
+    {kDispatchUtils_comp_00000023, sizeof(kDispatchUtils_comp_00000023)},
+    {kDispatchUtils_comp_00000024, sizeof(kDispatchUtils_comp_00000024)},
+    {kDispatchUtils_comp_00000025, sizeof(kDispatchUtils_comp_00000025)},
+    {kDispatchUtils_comp_00000026, sizeof(kDispatchUtils_comp_00000026)},
+    {kDispatchUtils_comp_00000027, sizeof(kDispatchUtils_comp_00000027)},
+    {nullptr, 0},  // 0x00000028
+    {nullptr, 0},  // 0x00000029
+    {nullptr, 0},  // 0x0000002A
+    {nullptr, 0},  // 0x0000002B
+    {nullptr, 0},  // 0x0000002C
+    {nullptr, 0},  // 0x0000002D
+    {nullptr, 0},  // 0x0000002E
+    {nullptr, 0},  // 0x0000002F
+    {nullptr, 0},  // 0x00000030
+    {nullptr, 0},  // 0x00000031
+    {nullptr, 0},  // 0x00000032
+    {nullptr, 0},  // 0x00000033
+    {nullptr, 0},  // 0x00000034
+    {nullptr, 0},  // 0x00000035
+    {nullptr, 0},  // 0x00000036
+    {nullptr, 0},  // 0x00000037
+    {nullptr, 0},  // 0x00000038
+    {nullptr, 0},  // 0x00000039
+    {nullptr, 0},  // 0x0000003A
+    {nullptr, 0},  // 0x0000003B
+    {nullptr, 0},  // 0x0000003C
+    {nullptr, 0},  // 0x0000003D
+    {nullptr, 0},  // 0x0000003E
+    {nullptr, 0},  // 0x0000003F
+};
+constexpr ShaderBlob kFullScreenQuad_vert_shaders[] = {
+    {kFullScreenQuad_vert_00000000, sizeof(kFullScreenQuad_vert_00000000)},
+};
+constexpr ShaderBlob kPushConstantColor_frag_shaders[] = {
+    {kPushConstantColor_frag_00000000, sizeof(kPushConstantColor_frag_00000000)},
+};
 }  // anonymous namespace
 
-const ShaderBlob &GetInternalShaderBlob(InternalShaderID shaderID)
+ShaderLibrary::ShaderLibrary()
 {
-    ASSERT(static_cast<size_t>(shaderID) < static_cast<size_t>(InternalShaderID::EnumCount));
-    return kShaderBlobs[static_cast<size_t>(shaderID)];
 }
-}  // namespace priv
+
+ShaderLibrary::~ShaderLibrary()
+{
+}
+
+void ShaderLibrary::destroy(VkDevice device)
+{
+    for (ShaderAndSerial &shader : mDispatchUtils_comp_shaders)
+    {
+        shader.get().destroy(device);
+    }
+    for (ShaderAndSerial &shader : mFullScreenQuad_vert_shaders)
+    {
+        shader.get().destroy(device);
+    }
+    for (ShaderAndSerial &shader : mPushConstantColor_frag_shaders)
+    {
+        shader.get().destroy(device);
+    }
+}
+
+angle::Result ShaderLibrary::getDispatchUtils_comp(Context *context,
+                                                   uint32_t shaderFlags,
+                                                   const ShaderAndSerial **shaderOut)
+{
+    ASSERT(shaderFlags < ArraySize(kDispatchUtils_comp_shaders));
+    ASSERT((shaderFlags & InternalShader::DispatchUtils_comp::functionMask) >=
+               InternalShader::DispatchUtils_comp::IS_CLEAR &&
+           (shaderFlags & InternalShader::DispatchUtils_comp::functionMask) <=
+               InternalShader::DispatchUtils_comp::IS_COPY);
+    ASSERT((shaderFlags & InternalShader::DispatchUtils_comp::resourcetypeMask) >=
+               InternalShader::DispatchUtils_comp::IS_BUFFER &&
+           (shaderFlags & InternalShader::DispatchUtils_comp::resourcetypeMask) <=
+               InternalShader::DispatchUtils_comp::IS_TEXTURE2DArray);
+    ShaderAndSerial &shader = mDispatchUtils_comp_shaders[shaderFlags];
+    *shaderOut              = &shader;
+
+    if (shader.get().valid())
+    {
+        return angle::Result::Continue();
+    }
+
+    // Create shader lazily. Access will need to be locked for multi-threading.
+    const ShaderBlob &shaderCode = kDispatchUtils_comp_shaders[shaderFlags];
+    return InitShaderAndSerial(context, &shader, shaderCode.code, shaderCode.codeSize);
+}
+
+angle::Result ShaderLibrary::getFullScreenQuad_vert(Context *context,
+                                                    uint32_t shaderFlags,
+                                                    const ShaderAndSerial **shaderOut)
+{
+    ASSERT(shaderFlags < ArraySize(kFullScreenQuad_vert_shaders));
+    ShaderAndSerial &shader = mFullScreenQuad_vert_shaders[shaderFlags];
+    *shaderOut              = &shader;
+
+    if (shader.get().valid())
+    {
+        return angle::Result::Continue();
+    }
+
+    // Create shader lazily. Access will need to be locked for multi-threading.
+    const ShaderBlob &shaderCode = kFullScreenQuad_vert_shaders[shaderFlags];
+    return InitShaderAndSerial(context, &shader, shaderCode.code, shaderCode.codeSize);
+}
+
+angle::Result ShaderLibrary::getPushConstantColor_frag(Context *context,
+                                                       uint32_t shaderFlags,
+                                                       const ShaderAndSerial **shaderOut)
+{
+    ASSERT(shaderFlags < ArraySize(kPushConstantColor_frag_shaders));
+    ShaderAndSerial &shader = mPushConstantColor_frag_shaders[shaderFlags];
+    *shaderOut              = &shader;
+
+    if (shader.get().valid())
+    {
+        return angle::Result::Continue();
+    }
+
+    // Create shader lazily. Access will need to be locked for multi-threading.
+    const ShaderBlob &shaderCode = kPushConstantColor_frag_shaders[shaderFlags];
+    return InitShaderAndSerial(context, &shader, shaderCode.code, shaderCode.codeSize);
+}
+
 }  // namespace vk
 }  // namespace rx
