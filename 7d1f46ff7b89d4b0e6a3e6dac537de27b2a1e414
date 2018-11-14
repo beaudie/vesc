@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cd3c4aa8_e775eaba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-14T21:28:20Z",
+      "side": 1,
+      "message": "Didn\u0027t take any action on this. It\u0027s important for the infra to run the tests in a fixed amount of time. If you\u0027re interested you could try some experiments. I\u0027d be happy to help.\n\nNote: my current approach is based on the approach used by the python perf tool.\n\nhttps://vstinner.github.io/journey-to-stable-benchmark-system.html\n\nThere\u0027s an article series that starts with the above. A decent summary can be found here:\n\nhttps://blog.phusion.nl/2017/07/13/understanding-your-benchmarks-and-easy-tips-for-fixing-them/",
+      "parentUuid": "2213f530_69bdb0ee",
+      "range": {
+        "startLine": 25,
+        "startChar": 31,
+        "endLine": 25,
+        "endChar": 67
+      },
+      "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ff0cd42_ea927e85",
         "filename": "scripts/perf_test_runner.py",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f63b073_f2a91498",
+        "filename": "scripts/perf_test_runner.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-14T21:28:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ff0cd42_ea927e85",
+      "range": {
+        "startLine": 124,
+        "startChar": 4,
+        "endLine": 124,
+        "endChar": 14
+      },
+      "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "d062ee04_8848202b",
+        "filename": "scripts/perf_test_runner.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-14T21:28:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac0813ad_5b2642ad",
+      "range": {
+        "startLine": 135,
+        "startChar": 12,
+        "endLine": 135,
+        "endChar": 21
+      },
+      "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a0e04b94_b9a86317",
         "filename": "src/tests/BUILD.gn",
         "patchSetId": 9
@@ -91,6 +163,30 @@
       "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af59e994_e4e74fad",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 9
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-14T21:28:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0e04b94_b9a86317",
+      "range": {
+        "startLine": 258,
+        "startChar": 17,
+        "endLine": 258,
+        "endChar": 63
+      },
+      "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "d5c691bc_54a889ff",
+        "filename": "src/tests/angle_perftests_main.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-14T21:28:20Z",
+      "side": 1,
+      "message": "Yeah, if we want to use the new arguments in Chromium there will be a src-side CL for this. Thanks for the pointer to the prior issue.",
+      "parentUuid": "1cb66352_3cb199e2",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 42
+      },
+      "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d70f8c3_5d513cd7",
         "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
         "patchSetId": 9
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "92e79248_64c6921c",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-14T21:28:20Z",
+      "side": 1,
+      "message": "I\u0027d like to at some point. But it\u0027s currently referenced directly in the Chromium perftests main. Will need this CL to be rolled into Chromium before we can remove it.\n\nI left a TODO to track this.",
+      "parentUuid": "1d70f8c3_5d513cd7",
+      "range": {
+        "startLine": 311,
+        "startChar": 8,
+        "endLine": 311,
+        "endChar": 27
+      },
+      "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "319717f0_eb80d145",
         "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
         "patchSetId": 9
@@ -154,6 +298,24 @@
       "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3d2a1c0_69ae5027",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-14T21:28:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "319717f0_eb80d145",
+      "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
