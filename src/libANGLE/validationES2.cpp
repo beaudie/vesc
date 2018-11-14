@@ -4412,7 +4412,7 @@ bool ValidateBufferSubData(Context *context,
     checkedSize += offset;
     if (!checkedSize.IsValid())
     {
-        context->handleError(OutOfMemory());
+        context->handleError(InvalidValue());
         return false;
     }
 
@@ -4835,7 +4835,7 @@ bool ValidateRenderbufferStorageMultisampleANGLE(Context *context,
         const TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
         if (static_cast<GLuint>(samples) > formatCaps.getMaxSamples())
         {
-            context->handleError(OutOfMemory());
+            context->handleError(InvalidValue());
             return false;
         }
     }
