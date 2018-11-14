@@ -34,6 +34,24 @@
       "revId": "6634cd028873eaeaab3faaa1df4ed90b06b23ad0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "513ccde0_ad0166fc",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:09:14Z",
+      "side": 1,
+      "message": "Chrome uses jinja to edit AndroidManifest.xml.\ne.g. https://cs.chromium.org/chromium/src/testing/android/native_test/java/AndroidManifest.xml.jinja2\nHere is the code that modifies it.\nhttps://cs.chromium.org/chromium/src/build/config/android/rules.gni?type\u003dcs\u0026q\u003dAndroidManifest.xml.jinja2\u0026g\u003d0\u0026l\u003d3257\n\nSo, you can have public and signed targets which build the manifest with different package names.",
+      "parentUuid": "1db96ec1_6f7453fe",
+      "revId": "6634cd028873eaeaab3faaa1df4ed90b06b23ad0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
