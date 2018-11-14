@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05c13023_d8f0d289",
+        "filename": "src/tests/gl_tests/InstancingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T17:28:03Z",
+      "side": 0,
+      "message": "I couldn\u0027t figure out what was the use of u_offset in the old code, (i.e. doesn\u0027t looks like checkQuads() pays any attention to it), and whether the new code needs it or not (i.e. is just passing the offset to draw*InstancedANGLE() is enough, since it would draw the same thing with and without the offset).",
+      "range": {
+        "startLine": 315,
+        "startChar": 22,
+        "endLine": 315,
+        "endChar": 30
+      },
+      "revId": "1bf18ce9e2caca7067b4439373f4fb04a5cd7d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

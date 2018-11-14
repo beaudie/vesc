@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdc32513_07529455",
+        "filename": "src/tests/gl_tests/InstancingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T17:28:03Z",
+      "side": 1,
+      "message": "Could you please add a comment about this clever arrangement and how it works with indexes and offsets, and what does it draw in the end?\nIt took me a while to answer the question above (mainly due to having no experience in graphics programming).",
+      "range": {
+        "startLine": 149,
+        "startChar": 0,
+        "endLine": 172,
+        "endChar": 61
+      },
+      "revId": "369cfb79e6351ec8a6d5bcfa0f9a3f27442070fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
