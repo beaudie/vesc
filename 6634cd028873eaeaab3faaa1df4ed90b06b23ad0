@@ -16,6 +16,24 @@
       "revId": "6634cd028873eaeaab3faaa1df4ed90b06b23ad0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6b0f0d7_85cb0fef",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-11-14T21:02:55Z",
+      "side": 1,
+      "message": "\u003e How are we going to handle having 2 manifest files?   How do we tell each build with manifest file to use?\n\nThe Chrome apk building tools allows you to specify a manifest file, check BUILD.gn:\nandroid_manifest \u003d \"AndroidManifest.xml\" \n\n\u003e how do we tell the CTS tests which name should be used when interacting with the ANGLE APK?\nHmm. Not sure. What does an OEM put onto their system image? Seems like it has to be the Google signed apk otherwise the Play store won\u0027t update it, right? Chrome would have the same issue we chat with them.",
+      "parentUuid": "1db96ec1_6f7453fe",
+      "revId": "6634cd028873eaeaab3faaa1df4ed90b06b23ad0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
