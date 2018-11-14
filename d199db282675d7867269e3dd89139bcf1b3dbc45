@@ -509,6 +509,30 @@
     },
     {
       "key": {
+        "uuid": "11601183_34879d28",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7495,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-14T16:40:04Z",
+      "side": 1,
+      "message": "Sounds good.",
+      "parentUuid": "2cf4e2e9_49691de2",
+      "range": {
+        "startLine": 7495,
+        "startChar": 8,
+        "endLine": 7495,
+        "endChar": 32
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "693331c7_cdad5b5f",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 7
@@ -1782,6 +1806,30 @@
     },
     {
       "key": {
+        "uuid": "3d4a3cf2_7f4e68a4",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-14T16:40:04Z",
+      "side": 1,
+      "message": "In the gl_bindings_data.json file we add some extra non-desktop entry points at the bottom.",
+      "parentUuid": "1b6391ed_c173cf53",
+      "range": {
+        "startLine": 671,
+        "startChar": 11,
+        "endLine": 681,
+        "endChar": 22
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01c9fcd1_42ca7dd5",
         "filename": "src/libANGLE/renderer/gl/SurfaceGL.h",
         "patchSetId": 7
@@ -1960,6 +2008,30 @@
       "side": 1,
       "message": "Our immediate use case is for this to be used by Chrome.  I don\u0027t see WebGL apps ever really needing this, since WebXR exposes this in a different way.  In addition, I think this only applies to the OpenGL back end case.  When the DirectX back end is implemented, each surface gets its own swapchain, and therefore can support this extension correctly.  It seems like a lot of work - which could potentially destabalize things - to take the devirtualization approach.\n\nOur preference would be to have a EGL_PLATFORM_ANGLE type extension for the OpenGL back end that would enable the stereo pixel format for all surfaces.  For Chrome, it would only enable this extension when the OpenGL back end was being used in conjunction with WebXR.  Even if it was only enabled with a command line option, that would still be fine with us.  When running in default DirectX mode, none of this would be needed.",
       "parentUuid": "038e4be7_c051c1e0",
+      "range": {
+        "startLine": 161,
+        "startChar": 53,
+        "endLine": 161,
+        "endChar": 81
+      },
+      "revId": "d199db282675d7867269e3dd89139bcf1b3dbc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7e46240_3502f467",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-14T16:40:04Z",
+      "side": 1,
+      "message": "Ok, this sounds doable.\n\nIn the interest of getting things landed and stopping all the rebases, I think it\u0027s reasonable to land the patch with the display attribute just so that we can test the feature while we get a better solution in place.\n\nFor what it\u0027s worth, Chrome actually uses D3D interop to create window surfaces with ANGLE\u0027s GL backend using the DXGISwapChainWindowSurfaceWGL class and it may be feasible to support the Chrome use case on top of that surface type only.\n\nOtherwise, we could add a new platform ANGLE extension that accepts the EGL_MULTIVIEW_VIEW_COUNT_EXT parameter to display creation.  We would still always expose the EXT_multiview_window extension but always return 1 for SurfaceImpl::getCreatedMultiviewViewCount query unless a higher number was specified at display creation time.",
+      "parentUuid": "2e571c84_ac43b13e",
       "range": {
         "startLine": 161,
         "startChar": 53,

@@ -470,6 +470,30 @@
       "revId": "e762d5a56bcb35f0ad9c5aeed06fffd2c23a26d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8c8813f_adbc9246",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-14T16:40:04Z",
+      "side": 1,
+      "message": "Ok, I think that we should keep the EXT_multiview_draw_buffers check as is because the extension will gracefully support the case where the window is not multiview.",
+      "parentUuid": "ac54a8b5_1b670258",
+      "range": {
+        "startLine": 991,
+        "startChar": 39,
+        "endLine": 991,
+        "endChar": 81
+      },
+      "revId": "e762d5a56bcb35f0ad9c5aeed06fffd2c23a26d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
