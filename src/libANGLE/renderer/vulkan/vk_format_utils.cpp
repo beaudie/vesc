@@ -72,7 +72,7 @@ void FillTextureFormatCaps(const VkPhysicalDeviceLimits &physicalDeviceLimits,
     }
 }
 
-bool HasFullTextureFormatSupport(VkPhysicalDevice physicalDevice, VkFormat vkFormat)
+bool HasFullTextureFormatSupport(VkPhysicalDevice physicalDevice, VkFormat vkFormat, void *userData)
 {
     VkFormatProperties formatProperties;
     vk::GetFormatProperties(physicalDevice, vkFormat, &formatProperties);
@@ -86,20 +86,26 @@ bool HasFullTextureFormatSupport(VkPhysicalDevice physicalDevice, VkFormat vkFor
            HasFormatFeatureBits(kBitsDepth, formatProperties);
 }
 
-bool HasFullBufferFormatSupport(VkPhysicalDevice physicalDevice, VkFormat vkFormat)
+bool HasFullBufferFormatSupport(VkPhysicalDevice physicalDevice, VkFormat vkFormat, void *userData)
 {
+    bool *supportsStorageBuffer = reinterpret_cast<bool *>(userData);
+
     VkFormatProperties formatProperties;
     vk::GetFormatProperties(physicalDevice, vkFormat, &formatProperties);
+
+    *supportsStorageBuffer =
+        formatProperties.bufferFeatures & VK_FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_BIT;
     return formatProperties.bufferFeatures & VK_FORMAT_FEATURE_VERTEX_BUFFER_BIT;
 }
 
-using SupportTest = bool (*)(VkPhysicalDevice physicalDevice, VkFormat vkFormat);
+using SupportTest = bool (*)(VkPhysicalDevice physicalDevice, VkFormat vkFormat, void *userData);
 
-template <class FormatInitInfo>
+template <typename FormatInitInfo>
 int FindSupportedFormat(VkPhysicalDevice physicalDevice,
                         const FormatInitInfo *info,
                         int numInfo,
-                        SupportTest hasSupport)
+                        SupportTest hasSupport,
+                        void *userData)
 {
     ASSERT(numInfo > 0);
     const int last = numInfo - 1;
@@ -107,13 +113,13 @@ int FindSupportedFormat(VkPhysicalDevice physicalDevice,
     for (int i = 0; i < last; ++i)
     {
         ASSERT(info[i].format != angle::FormatID::NONE);
-        if (hasSupport(physicalDevice, info[i].vkFormat))
+        if (hasSupport(physicalDevice, info[i].vkFormat, userData))
             return i;
     }
 
     // List must contain a supported item.  We failed on all the others so the last one must be it.
     ASSERT(info[last].format != angle::FormatID::NONE);
-    ASSERT(hasSupport(physicalDevice, info[last].vkFormat));
+    ASSERT(hasSupport(physicalDevice, info[last].vkFormat, userData));
     return last;
 }
 
@@ -154,6 +160,9 @@ Format::Format()
       bufferFormatID(angle::FormatID::NONE),
       vkBufferFormat(VK_FORMAT_UNDEFINED),
       vkBufferFormatIsPacked(false),
+      vkSupportsStorageBuffer(false),
+      vkFormatIsInt(false),
+      vkFormatIsUnsigned(false),
       textureInitializerFunction(nullptr),
       textureLoadFunctions()
 {}
@@ -165,7 +174,7 @@ void Format::initTextureFallback(VkPhysicalDevice physicalDevice,
 {
     size_t skip = featuresVk.forceFallbackFormat ? 1 : 0;
     int i       = FindSupportedFormat(physicalDevice, info + skip, numInfo - skip,
-                                HasFullTextureFormatSupport);
+                                HasFullTextureFormatSupport, nullptr);
     i += skip;
 
     textureFormatID            = info[i].format;
@@ -177,7 +186,8 @@ void Format::initBufferFallback(VkPhysicalDevice physicalDevice,
                                 const BufferFormatInitInfo *info,
                                 int numInfo)
 {
-    int i          = FindSupportedFormat(physicalDevice, info, numInfo, HasFullBufferFormatSupport);
+    int i          = FindSupportedFormat(physicalDevice, info, numInfo, HasFullBufferFormatSupport,
+                                &vkSupportsStorageBuffer);
     bufferFormatID = info[i].format;
     vkBufferFormat = info[i].vkFormat;
     vkBufferFormatIsPacked       = info[i].vkFormatIsPacked;

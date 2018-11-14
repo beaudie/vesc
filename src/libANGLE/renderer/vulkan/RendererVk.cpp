@@ -326,6 +326,8 @@ void RendererVk::onDestroy(vk::Context *context)
         (void)finish(context);
     }
 
+    mDispatchUtils.destroy(mDevice);
+
     mPipelineLayoutCache.destroy(mDevice);
     mDescriptorSetLayoutCache.destroy(mDevice);
 
@@ -544,6 +546,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // Initialize the format table.
     mFormatTable.initialize(mPhysicalDevice, mPhysicalDeviceProperties, mFeatures,
                             &mNativeTextureCaps, &mNativeCaps.compressedTextureFormats);
+
+    // Initialize utility functions
+    ANGLE_TRY(mDispatchUtils.initialize(displayVk));
 
     return angle::Result::Continue();
 }
