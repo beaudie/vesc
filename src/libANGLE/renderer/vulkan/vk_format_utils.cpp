@@ -154,6 +154,9 @@ Format::Format()
       bufferFormatID(angle::FormatID::NONE),
       vkBufferFormat(VK_FORMAT_UNDEFINED),
       vkBufferFormatIsPacked(false),
+      vkSupportsStorageBuffer(false),
+      vkFormatIsInt(false),
+      vkFormatIsUnsigned(false),
       textureInitializerFunction(nullptr),
       textureLoadFunctions()
 {}
@@ -223,25 +226,37 @@ void FormatTable::initialize(VkPhysicalDevice physicalDevice,
 {
     for (size_t formatIndex = 0; formatIndex < angle::kNumANGLEFormats; ++formatIndex)
     {
+        vk::Format &format = mFormatData[formatIndex];
+
         const auto formatID              = static_cast<angle::FormatID>(formatIndex);
         const angle::Format &angleFormat = angle::Format::Get(formatID);
-        mFormatData[formatIndex].initialize(physicalDevice, angleFormat, featuresVk);
-        const GLenum internalFormat = mFormatData[formatIndex].internalFormat;
-        mFormatData[formatIndex].textureLoadFunctions =
-            GetLoadFunctionsMap(internalFormat, mFormatData[formatIndex].textureFormatID);
-        mFormatData[formatIndex].angleFormatID = formatID;
+        format.initialize(physicalDevice, angleFormat, featuresVk);
+        const GLenum internalFormat = format.internalFormat;
+        format.textureLoadFunctions = GetLoadFunctionsMap(internalFormat, format.textureFormatID);
+        format.angleFormatID        = formatID;
 
-        if (!mFormatData[formatIndex].valid())
+        if (!format.valid())
         {
             continue;
         }
 
-        const VkFormat vkFormat = mFormatData[formatIndex].vkTextureFormat;
+        const VkFormat vkBufferFormat  = format.vkBufferFormat;
+        const VkFormat vkTextureFormat = format.vkTextureFormat;
 
         // Try filling out the info from our hard coded format data, if we can't find the
         // information we need, we'll make the call to Vulkan.
         VkFormatProperties formatProperties;
-        GetFormatProperties(physicalDevice, vkFormat, &formatProperties);
+        GetFormatProperties(physicalDevice, vkBufferFormat, &formatProperties);
+
+        // Buffer properties:
+        format.vkSupportsStorageBuffer =
+            formatProperties.bufferFeatures & VK_FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_BIT;
+
+        // Texture properties:
+        if (vkTextureFormat != vkBufferFormat)
+        {
+            GetFormatProperties(physicalDevice, vkTextureFormat, &formatProperties);
+        }
         gl::TextureCaps textureCaps;
         FillTextureFormatCaps(physicalDeviceProperties.limits, formatProperties, &textureCaps);
         outTextureCapsMap->set(formatID, textureCaps);
