@@ -80,6 +80,9 @@ struct Format final : private angle::NonCopyable
     angle::FormatID bufferFormatID;
     VkFormat vkBufferFormat;
     bool vkBufferFormatIsPacked;
+    bool vkSupportsStorageBuffer;
+    bool vkFormatIsInt;
+    bool vkFormatIsUnsigned;
     InitializeTextureDataFunction textureInitializerFunction;
     LoadFunctionMap textureLoadFunctions;
     VertexCopyFunction vertexLoadFunction;
