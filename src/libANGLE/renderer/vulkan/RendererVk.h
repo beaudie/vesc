@@ -20,7 +20,7 @@
 #include "libANGLE/renderer/vulkan/QueryVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
-#include "libANGLE/renderer/vulkan/vk_internal_shaders.h"
+#include "libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h"
 
 namespace egl
 {
@@ -136,10 +136,12 @@ class RendererVk : angle::NonCopyable
         vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut);
 
     // Queries the pipeline layout cache. Creates the layout if not present.
-    angle::Result getPipelineLayout(vk::Context *context,
-                                    const vk::PipelineLayoutDesc &desc,
-                                    const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
-                                    vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
+    angle::Result getPipelineLayout(
+        vk::Context *context,
+        const vk::PipelineLayoutDesc &desc,
+        const vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayouts,
+        size_t descriptorSetLayoutCount,
+        vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
 
     angle::Result syncPipelineCacheVk(DisplayVk *displayVk);
 
@@ -160,6 +162,7 @@ class RendererVk : angle::NonCopyable
     // Issues a new serial for linked shader modules. Used in the pipeline cache.
     Serial issueShaderSerial();
 
+    vk::ShaderLibrary *getShaderLibrary() { return &mShaderLibrary; }
     angle::Result getFullScreenClearShaderProgram(vk::Context *context,
                                                   vk::ShaderProgramHelper **programOut);
     const angle::FeaturesVk &getFeatures() const { return mFeatures; }
