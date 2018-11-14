@@ -531,8 +531,15 @@ class State : angle::NonCopyable
     using BufferBindingSetter = void (State::*)(const Context *, Buffer *);
 
   private:
-    void syncSamplers(const Context *context);
+    using DirtyObjectHandler = angle::Result(State::*)(const Context *);
+
+    // Dirty object handlers
+    angle::Result syncReadFramebuffer(const Context *context);
+    angle::Result syncDrawFramebuffer(const Context *context);
+    angle::Result syncVertexArray(const Context *context);
+    angle::Result syncSamplers(const Context *context);
     angle::Result syncProgramTextures(const Context *context);
+    angle::Result syncProgram(const Context *context);
     void unsetActiveTextures(ActiveTextureMask textureMask);
     angle::Result updateActiveTexture(const Context *context,
                                       size_t textureIndex,
@@ -675,6 +682,8 @@ class State : angle::NonCopyable
     DirtyObjects mDirtyObjects;
     mutable AttributesMask mDirtyCurrentValues;
     ActiveTextureMask mDirtySamplers;
+
+    std::array<DirtyObjectHandler, DIRTY_OBJECT_MAX> mDirtyObjectHandlers;
 };
 
 }  // namespace gl

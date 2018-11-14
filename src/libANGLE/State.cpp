@@ -233,7 +233,8 @@ State::State(bool debug,
       mFramebufferSRGB(true),
       mRobustResourceInit(robustResourceInit),
       mProgramBinaryCacheEnabled(programBinaryCacheEnabled),
-      mMaxShaderCompilerThreads(std::numeric_limits<GLuint>::max())
+      mMaxShaderCompilerThreads(std::numeric_limits<GLuint>::max()),
+      mDirtyObjectHandlers{&State::syncReadFramebuffer, &State::syncDrawFramebuffer, &State::syncVertexArray, &State::syncSamplers, &State::syncProgramTextures, &State::syncProgram}
 {
 }
 
@@ -2777,46 +2778,39 @@ void State::getBooleani_v(GLenum target, GLuint index, GLboolean *data)
 angle::Result State::syncDirtyObjects(const Context *context, const DirtyObjects &bitset)
 {
     const DirtyObjects &dirtyObjects = mDirtyObjects & bitset;
-    for (auto dirtyObject : dirtyObjects)
-    {
-        switch (dirtyObject)
-        {
-            case DIRTY_OBJECT_READ_FRAMEBUFFER:
-                ASSERT(mReadFramebuffer);
-                ANGLE_TRY(mReadFramebuffer->syncState(context));
-                break;
-            case DIRTY_OBJECT_DRAW_FRAMEBUFFER:
-                ASSERT(mDrawFramebuffer);
-                ANGLE_TRY(mDrawFramebuffer->syncState(context));
-                break;
-            case DIRTY_OBJECT_VERTEX_ARRAY:
-                ASSERT(mVertexArray);
-                ANGLE_TRY(mVertexArray->syncState(context));
-                break;
-            case DIRTY_OBJECT_SAMPLERS:
-                syncSamplers(context);
-                break;
-            case DIRTY_OBJECT_PROGRAM_TEXTURES:
-                ANGLE_TRY(syncProgramTextures(context));
-                break;
-            case DIRTY_OBJECT_PROGRAM:
-                ANGLE_TRY(mProgram->syncState(context));
-                break;
+    ASSERT(dirtyObjects.any());
 
-            default:
-                UNREACHABLE();
-                break;
-        }
+    for (size_t dirtyObject : dirtyObjects)
+    {
+        mDirtyObjects.reset(dirtyObject);
+        ANGLE_TRY((this->*mDirtyObjectHandlers[dirtyObject])(context));
     }
 
-    mDirtyObjects &= ~dirtyObjects;
     return angle::Result::Continue();
 }
 
-void State::syncSamplers(const Context *context)
+angle::Result State::syncReadFramebuffer(const Context *context)
+{
+    ASSERT(mReadFramebuffer);
+    return mReadFramebuffer->syncState(context);
+}
+
+angle::Result State::syncDrawFramebuffer(const Context *context)
+{
+    ASSERT(mDrawFramebuffer);
+    return mDrawFramebuffer->syncState(context);
+}
+
+angle::Result State::syncVertexArray(const Context *context)
+{
+    ASSERT(mVertexArray);
+    return mVertexArray->syncState(context);
+}
+
+angle::Result State::syncSamplers(const Context *context)
 {
     if (mDirtySamplers.none())
-        return;
+        return angle::Result::Continue();
 
     // This could be optimized by tracking which samplers are dirty.
     for (size_t samplerIndex : mDirtySamplers)
@@ -2829,6 +2823,7 @@ void State::syncSamplers(const Context *context)
     }
 
     mDirtySamplers.reset();
+    return angle::Result::Continue();
 }
 
 angle::Result State::syncProgramTextures(const Context *context)
@@ -2891,6 +2886,12 @@ angle::Result State::syncProgramTextures(const Context *context)
     }
 
     return angle::Result::Continue();
+}
+
+angle::Result State::syncProgram(const Context *context)
+{
+    ASSERT(mProgram);
+    return mProgram->syncState(context);
 }
 
 angle::Result State::syncDirtyObject(const Context *context, GLenum target)
