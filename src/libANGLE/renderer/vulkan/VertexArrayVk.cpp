@@ -47,6 +47,7 @@ angle::Result StreamVertexData(ContextVk *contextVk,
                                VkBuffer *bufferHandleOut,
                                VkDeviceSize *bufferOffsetOut)
 {
+    // TODO(syoussefi): unless loaded from CPU, look at all the callers and convert them to dispatch
     uint8_t *dst = nullptr;
     ANGLE_TRY(dynamicBuffer->allocate(contextVk, bytesToAllocate, &dst, bufferHandleOut,
                                       bufferOffsetOut, nullptr));
@@ -127,6 +128,7 @@ angle::Result VertexArrayVk::streamIndexData(ContextVk *contextVk,
                                              const void *sourcePointer,
                                              vk::DynamicBuffer *dynamicBuffer)
 {
+    // TODO(syoussefi): unless loaded from CPU, look at all the callers and convert them to dispatch
     ASSERT(!mState.getElementArrayBuffer() || indexType == GL_UNSIGNED_BYTE);
 
     dynamicBuffer->releaseRetainedBuffers(contextVk->getRenderer());
@@ -164,6 +166,7 @@ angle::Result VertexArrayVk::convertVertexBuffer(ContextVk *contextVk,
                                                  const gl::VertexBinding &binding,
                                                  size_t attribIndex)
 {
+    // TODO(syoussefi): convert to dispatch
 
     // Needed before reading buffer or we could get stale data.
     ANGLE_TRY(contextVk->getRenderer()->finish(contextVk));

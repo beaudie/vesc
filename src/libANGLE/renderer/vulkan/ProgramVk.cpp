@@ -324,8 +324,9 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext,
     pipelineLayoutDesc.updateDescriptorSetLayout(kDriverUniformsDescriptorSetIndex,
                                                  driverUniformsSetDesc);
 
-    ANGLE_TRY(renderer->getPipelineLayout(contextVk, pipelineLayoutDesc, mDescriptorSetLayouts,
-                                          &mPipelineLayout));
+    ANGLE_TRY(renderer->getPipelineLayout(contextVk, pipelineLayoutDesc,
+                                          mDescriptorSetLayouts.data(),
+                                          mDescriptorSetLayouts.size(), &mPipelineLayout));
 
     if (!mState.getUniforms().empty())
     {
