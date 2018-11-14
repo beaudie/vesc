@@ -1175,10 +1175,11 @@ angle::Result RendererVk::getDescriptorSetLayout(
 angle::Result RendererVk::getPipelineLayout(
     vk::Context *context,
     const vk::PipelineLayoutDesc &desc,
-    const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
+    const vk::BindingPointer<DescriptorSetLayout> *descriptorSetLayouts,
+    size_t descriptorSetLayoutCount,
     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
 {
-    return mPipelineLayoutCache.getPipelineLayout(context, desc, descriptorSetLayouts,
+    return mPipelineLayoutCache.getPipelineLayout(context, desc, descriptorSetLayouts, descriptorSetLayoutCount,
                                                   pipelineLayoutOut);
 }
 

@@ -20,11 +20,94 @@ namespace priv
 {
 namespace
 {
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedClearBuffer.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedClearTexture1D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedClearTexture2D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedClearTexture2DArray.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedClearTexture3D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedCopyBuffer.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedCopyTexture1D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedCopyTexture2D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedCopyTexture2DArray.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedCopyTexture3D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedIntClearBuffer.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedIntClearTexture1D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedIntClearTexture2D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedIntClearTexture2DArray.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedIntClearTexture3D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedIntCopyBuffer.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedIntCopyTexture1D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedIntCopyTexture2D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedIntCopyTexture2DArray.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/AlignedIntCopyTexture3D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ClearBuffer.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture1D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture2D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture2DArray.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture3D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/CopyBuffer.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/CopyTexture1D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/CopyTexture2D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/CopyTexture2DArray.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/CopyTexture3D.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/FullScreenQuad.vert.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/IntClearBuffer.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/IntClearTexture1D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/IntClearTexture2D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/IntClearTexture2DArray.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/IntClearTexture3D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/IntCopyBuffer.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/IntCopyTexture1D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/IntCopyTexture2D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/IntCopyTexture2DArray.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/IntCopyTexture3D.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/PushConstantColor.frag.inc"
 
-constexpr ShaderBlob kShaderBlobs[] = {{kFullScreenQuad_vert, sizeof(kFullScreenQuad_vert)},
-                                       {kPushConstantColor_frag, sizeof(kPushConstantColor_frag)}};
+constexpr ShaderBlob kShaderBlobs[] = {
+{nullptr, 0},
+{kAlignedClearBuffer, sizeof(kAlignedClearBuffer)},
+{kAlignedClearTexture1D, sizeof(kAlignedClearTexture1D)},
+{kAlignedClearTexture2D, sizeof(kAlignedClearTexture2D)},
+{kAlignedClearTexture2DArray, sizeof(kAlignedClearTexture2DArray)},
+{kAlignedClearTexture3D, sizeof(kAlignedClearTexture3D)},
+{kAlignedCopyBuffer, sizeof(kAlignedCopyBuffer)},
+{kAlignedCopyTexture1D, sizeof(kAlignedCopyTexture1D)},
+{kAlignedCopyTexture2D, sizeof(kAlignedCopyTexture2D)},
+{kAlignedCopyTexture2DArray, sizeof(kAlignedCopyTexture2DArray)},
+{kAlignedCopyTexture3D, sizeof(kAlignedCopyTexture3D)},
+{kAlignedIntClearBuffer, sizeof(kAlignedIntClearBuffer)},
+{kAlignedIntClearTexture1D, sizeof(kAlignedIntClearTexture1D)},
+{kAlignedIntClearTexture2D, sizeof(kAlignedIntClearTexture2D)},
+{kAlignedIntClearTexture2DArray, sizeof(kAlignedIntClearTexture2DArray)},
+{kAlignedIntClearTexture3D, sizeof(kAlignedIntClearTexture3D)},
+{kAlignedIntCopyBuffer, sizeof(kAlignedIntCopyBuffer)},
+{kAlignedIntCopyTexture1D, sizeof(kAlignedIntCopyTexture1D)},
+{kAlignedIntCopyTexture2D, sizeof(kAlignedIntCopyTexture2D)},
+{kAlignedIntCopyTexture2DArray, sizeof(kAlignedIntCopyTexture2DArray)},
+{kAlignedIntCopyTexture3D, sizeof(kAlignedIntCopyTexture3D)},
+{kClearBuffer, sizeof(kClearBuffer)},
+{kClearTexture1D, sizeof(kClearTexture1D)},
+{kClearTexture2D, sizeof(kClearTexture2D)},
+{kClearTexture2DArray, sizeof(kClearTexture2DArray)},
+{kClearTexture3D, sizeof(kClearTexture3D)},
+{kCopyBuffer, sizeof(kCopyBuffer)},
+{kCopyTexture1D, sizeof(kCopyTexture1D)},
+{kCopyTexture2D, sizeof(kCopyTexture2D)},
+{kCopyTexture2DArray, sizeof(kCopyTexture2DArray)},
+{kCopyTexture3D, sizeof(kCopyTexture3D)},
+{kFullScreenQuad_vert, sizeof(kFullScreenQuad_vert)},
+{kIntClearBuffer, sizeof(kIntClearBuffer)},
+{kIntClearTexture1D, sizeof(kIntClearTexture1D)},
+{kIntClearTexture2D, sizeof(kIntClearTexture2D)},
+{kIntClearTexture2DArray, sizeof(kIntClearTexture2DArray)},
+{kIntClearTexture3D, sizeof(kIntClearTexture3D)},
+{kIntCopyBuffer, sizeof(kIntCopyBuffer)},
+{kIntCopyTexture1D, sizeof(kIntCopyTexture1D)},
+{kIntCopyTexture2D, sizeof(kIntCopyTexture2D)},
+{kIntCopyTexture2DArray, sizeof(kIntCopyTexture2DArray)},
+{kIntCopyTexture3D, sizeof(kIntCopyTexture3D)},
+{kPushConstantColor_frag, sizeof(kPushConstantColor_frag)}
+};
 }  // anonymous namespace
 
 const ShaderBlob &GetInternalShaderBlob(InternalShaderID shaderID)

@@ -611,7 +611,8 @@ class PipelineLayoutCache final : angle::NonCopyable
 
     angle::Result getPipelineLayout(vk::Context *context,
                                     const vk::PipelineLayoutDesc &desc,
-                                    const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
+                                    const vk::BindingPointer<DescriptorSetLayout> *descriptorSetLayouts,
+                                    size_t descriptorSetLayoutCount,
                                     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
 
   private:

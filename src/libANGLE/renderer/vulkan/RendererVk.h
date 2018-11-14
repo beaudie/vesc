@@ -152,7 +152,8 @@ class RendererVk : angle::NonCopyable
     // Queries the pipeline layout cache. Creates the layout if not present.
     angle::Result getPipelineLayout(vk::Context *context,
                                     const vk::PipelineLayoutDesc &desc,
-                                    const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
+                                    const vk::BindingPointer<DescriptorSetLayout> *descriptorSetLayouts,
+                                    size_t descriptorSetLayoutCount,
                                     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
 
     angle::Result syncPipelineCacheVk(DisplayVk *displayVk);

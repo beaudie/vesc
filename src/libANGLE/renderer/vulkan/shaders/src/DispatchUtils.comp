@@ -1,0 +1,179 @@
+//
+// Copyright 2018 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// DispatchUtils.comp: various utilities such as clear and copy.
+//
+// The following defines tweak the functionality, and a differnt shader is built based on these
+//
+//   - Flags:
+//     * IS_ALIGNED: if true, assumes the workgroup size divides the resource size, so there is no need for bound checking
+//     * IS_INT: if true, assumes the texture types are uint, otherwise they are float
+//   - Function:
+//     * IS_CLEAR: the resource will be created
+//     * IS_COPY: a resource will be copied to another
+//   - Resource Type:
+//     * IS_BUFFER: operates on a buffer
+//     * IS_TEXTURE1D: operates on a 1D texture
+//     * IS_TEXTURE2D: operates on a 2D texture
+//     * IS_TEXTURE3D: operates on a 3D texture
+//     * IS_TEXTURE2DArray: operates on a 2D array texture
+//
+
+#version 450 core
+
+// Choose a workgroup size that's likely to result in better cache locality w.r.t to texture tiling.
+#if IS_BUFFER || IS_TEXTURE1D
+layout (local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
+#elif IS_TEXTURE2D || IS_TEXTURE2DArray
+layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
+#elif IS_TEXTURE3D
+layout (local_size_x = 4, local_size_y = 4, local_size_z = 4) in;
+#else
+#error "Not all resource types are accounted for"
+#endif // Resource Type
+
+#if IS_INT
+#define IMAGE1D uimage1D
+#define IMAGE2D uimage2D
+#define IMAGE3D uimage3D
+#define IMAGE2DARRAY uimage2DArray
+#define IMAGE_READ_FORMAT rgba32ui
+#else
+#define IMAGE1D image1D
+#define IMAGE2D image2D
+#define IMAGE3D image3D
+#define IMAGE2DARRAY image2DArray
+#define IMAGE_READ_FORMAT rgba32f
+#endif // IS_INT
+
+// Define the resources.  Destination is always on set 0, binding 0.  If copy, source is on set 0, binding 1
+#if IS_BUFFER
+layout (set = 0, binding = 0) buffer dest
+{
+#if IS_INT
+    uint destData[];
+#else
+    float destData[];
+#endif // IS_INT
+};
+#elif IS_TEXTURE1D
+layout (set = 0, binding = 0) uniform writeonly IMAGE1D dest;
+#elif IS_TEXTURE2D
+layout (set = 0, binding = 0) uniform writeonly IMAGE2D dest;
+#elif IS_TEXTURE3D
+layout (set = 0, binding = 0) uniform writeonly IMAGE3D dest;
+#elif IS_TEXTURE2DArray
+layout (set = 0, binding = 0) uniform writeonly IMAGE2DARRAY dest;
+#else
+#error "Not all resource types are accounted for"
+#endif // Resource Type
+
+#if IS_COPY
+#if IS_BUFFER
+layout (set = 0, binding = 1) buffer src
+{
+#if IS_INT
+    uint srcData[];
+#else
+    float srcData[];
+#endif // IS_INT
+};
+#elif IS_TEXTURE1D
+layout (set = 0, binding = 1, IMAGE_READ_FORMAT) uniform readonly IMAGE1D src;
+#elif IS_TEXTURE2D
+layout (set = 0, binding = 1, IMAGE_READ_FORMAT) uniform readonly IMAGE2D src;
+#elif IS_TEXTURE3D
+layout (set = 0, binding = 1, IMAGE_READ_FORMAT) uniform readonly IMAGE3D src;
+#elif IS_TEXTURE2DArray
+layout (set = 0, binding = 1, IMAGE_READ_FORMAT) uniform readonly IMAGE2DARRAY src;
+#else
+#error "Not all resource types are accounted for"
+#endif // Resource Type
+#endif // IS_COPY
+
+layout (push_constant) uniform push_constants
+{
+    // srcOffset: used in all cases
+    uvec3 destOffset;
+    // extents: used if !IS_ALIGNED
+    uvec3 extents;
+    // srcOffset: used if IS_COPY
+    uvec3 srcOffset;
+    // clearValue and clearValuef: used if IS_CLEAR, value taken based on IS_INT
+    uvec4 clearValue;
+    vec4 clearValuef;
+} params;
+
+
+#if IS_BUFFER
+void main()
+{
+#if !IS_ALIGNED
+    if (gl_GlobalInvocationID.x >= params.extents.x)
+        return;
+#endif
+
+    uint destIndex = params.destOffset.x + gl_GlobalInvocationID.x;
+    uint srcIndex = params.srcOffset.x + gl_GlobalInvocationID.x;
+
+#if IS_CLEAR
+#if IS_INT
+    destData[destIndex] = params.clearValue.x;
+#else
+    destData[destIndex] = params.clearValuef.x;
+#endif // IS_INT
+#elif IS_COPY
+    destData[destIndex] = srcData[srcIndex];
+#else
+#error "Not all functions are accounted for"
+#endif // Function
+}
+#else
+void main()
+{
+#if !IS_ALIGNED
+#if IS_TEXTURE1D
+    if (gl_GlobalInvocationID.x >= params.extents.x)
+        return;
+#elif IS_TEXTURE2D
+    if (gl_GlobalInvocationID.x >= params.extents.x
+            || gl_GlobalInvocationID.y >= params.extents.y)
+        return;
+#elif IS_TEXTURE3D || IS_TEXTURE2DArray
+    if (gl_GlobalInvocationID.x >= params.extents.x
+            || gl_GlobalInvocationID.y >= params.extents.y
+            || gl_GlobalInvocationID.z >= params.extents.z)
+        return;
+#else
+#error "Not all texture types are accounted for"
+#endif // IS_TEXTURE*
+#endif // IS_ALIGNED
+
+#if IS_TEXTURE1D
+    int destIndex = int(params.destOffset.x + gl_GlobalInvocationID.x);
+    int srcIndex = int(params.srcOffset.x + gl_GlobalInvocationID.x);
+#elif IS_TEXTURE2D
+    ivec2 destIndex = ivec2(params.destOffset.xy + gl_GlobalInvocationID.xy);
+    ivec2 srcIndex = ivec2(params.srcOffset.xy + gl_GlobalInvocationID.xy);
+#elif IS_TEXTURE3D || IS_TEXTURE2DArray
+    ivec3 destIndex = ivec3(params.destOffset.xyz + gl_GlobalInvocationID.xyz);
+    ivec3 srcIndex = ivec3(params.srcOffset.xyz + gl_GlobalInvocationID.xyz);
+#else
+#error "Not all texture types are accounted for"
+#endif // IS_TEXTURE*
+
+#if IS_CLEAR
+#if IS_INT
+    imageStore(dest, destIndex, params.clearValue);
+#else
+    imageStore(dest, destIndex, params.clearValuef);
+#endif // IS_INT
+#elif IS_COPY
+    imageStore(dest, destIndex, imageLoad(src, srcIndex));
+#else
+#error "Not all functions are accounted for"
+#endif // Function
+}
+#endif // Resource Type

@@ -8,6 +8,7 @@
 #  shader program is changed, added or removed.
 
 from datetime import date
+import json
 import os
 import subprocess
 import sys
@@ -42,6 +43,7 @@ namespace
 {internal_shader_includes}
 
 constexpr ShaderBlob kShaderBlobs[] = {{
+{{nullptr, 0}},
 {internal_shader_array_entries}
 }};
 }}  // anonymous namespace
@@ -115,8 +117,8 @@ angle_vulkan_internal_shaders = [
 """
 
 # Gets the constant variable name for a generated shader.
-def get_var_name(shader):
-    return "k" + os.path.basename(shader).replace(".", "_")
+def get_var_name(output):
+    return "k" + output.replace(".", "_")
 
 # Gets the internal ID string for a particular shader.
 def get_shader_id(shader):
@@ -124,8 +126,8 @@ def get_shader_id(shader):
     return file.replace(".", "_")
 
 # Returns the name of the generated SPIR-V file for a shader.
-def get_output_name(shader):
-    return os.path.join('shaders', 'gen', os.path.basename(shader) + ".inc")
+def get_output_path(name):
+    return os.path.join('shaders', 'gen', name + ".inc")
 
 # Finds a path to GN's out directory
 def find_build_path(path):
@@ -155,21 +157,59 @@ def slash(s):
 def gen_shader_include(shader):
     return '#include "libANGLE/renderer/vulkan/%s"' % slash(shader)
 
+def get_shader_variations(shader):
+    variation_file = shader + '.json'
+    if not os.path.exists(variation_file):
+        # If there is no variation file, assume none and use the file name as its output
+        return (os.path.basename(shader), {}, [])
+
+    with open(variation_file) as fin:
+        variations = json.loads(fin.read())
+        output_suffix = ""
+        flags = {}
+        enums = []
+
+        for key, value in variations.iteritems():
+            if key == "description":
+                continue
+            if key == "output":
+                output_suffix = value
+            elif key == "flags":
+                flags = value
+            else:
+                enums.append(value)
+
+        return (output_suffix, flags, enums)
+
+def next_enum_variation(enums, enum_indices):
+    """Loop through indices from [0, 0, ...] to [L0-1, L1-1, ...]
+    where Li is len(enums[i]).  The list can be though of as a number with many
+    digits, where each digit is in [0, Li), and this function effectively implements
+    the increment operation."""
+    for i in reversed(range(len(enums))):
+        current = enum_indices[i]
+        # if current digit has room, increment it.
+        if current + 1 < len(enums[i]):
+            enum_indices[i] = current + 1
+            return True;
+        # otherwise reset it to 0 and carry to the next digit.
+        enum_indices[i] = 0
+
+    # if this is reached, the number has overflowed and the loop is finished.
+    return False
+
 # STEP 0: Handle inputs/outputs for run_code_generation.py's auto_script
 shaders_dir = os.path.join('shaders', 'src')
 if not os.path.isdir(shaders_dir):
     raise Exception("Could not find shaders directory")
 
-input_shaders = sorted([os.path.join(shaders_dir, shader) for shader in os.listdir(shaders_dir)])
-output_shaders = sorted([get_output_name(shader) for shader in input_shaders])
-
-outputs = output_shaders + [out_file_cpp, out_file_h]
-
+input_shaders = sorted([os.path.join(shaders_dir, shader)
+    for shader in os.listdir(shaders_dir)
+    if os.path.splitext(shader)[1] != '.json'
+       and os.path.splitext(shader)[1] != '.md'
+       and os.path.splitext(shader)[1] != '.swp'])
 if len(sys.argv) == 2 and sys.argv[1] == 'inputs':
     print(",".join(input_shaders))
-    sys.exit(0)
-elif len(sys.argv) == 2 and sys.argv[1] == 'outputs':
-    print(",".join(outputs))
     sys.exit(0)
 
 # STEP 1: Call glslang to generate the internal shaders into small .inc files.
@@ -189,17 +229,66 @@ if not os.path.isfile(glslang_path):
     raise Exception("Could not find " + glslang_binary)
 
 # b) Iterate over the shaders and call glslang with the right arguments.
+output_shaders = []
+
+def compile_variation(shader_file, output_suffix, flags, enums, flags_active, enum_indices, do_compile):
+
+    glslang_args = [glslang_path, '-V'] # Output mode is Vulkan
+
+    # generate -D defines and the output file name
+    output_name = ''
+    for f in range(len(flags)):
+        if flags_active & (1 << f):
+            flag = flags[f]
+            flag_name = flag[0]
+            glslang_args.append('-D' + flag_name + '=1')
+
+            output_prefix = flag[-1]
+            output_name += output_prefix
+
+    for e in range(len(enums)):
+        enum = enums[e][enum_indices[e]]
+        enum_name = enum[0]
+        glslang_args.append('-D' + enum_name + '=1')
+
+        output_prefix = enum[-1]
+        output_name += output_prefix
+
+    output_name += output_suffix
+    output_shaders.append(get_output_path(output_name))
+
+    glslang_args += ['--variable-name', get_var_name(output_name)] # C-style variable name
+    glslang_args += ['-o', get_output_path(output_name)]           # Output file
+    glslang_args.append(shader_file)                               # Input GLSL shader
+
+    if do_compile:
+        print get_output_path(output_name)
+        result = subprocess.call(glslang_args)
+        if result != 0:
+            raise Exception("Error compiling " + shader_file)
+
+print_outputs = len(sys.argv) == 2 and sys.argv[1] == 'outputs'
+
 for shader_file in input_shaders:
-    glslang_args = [
-        glslang_path,
-        '-V',                                            # Output mode is Vulkan
-        '--variable-name', get_var_name(shader_file),    # C-style variable name
-        '-o', get_output_name(shader_file),              # Output file
-        shader_file,                                     # Input GLSL shader
-    ]
-    result = subprocess.call(glslang_args)
-    if result != 0:
-        raise Exception("Error compiling " + shader_file)
+    (output_suffix, flags, enums) = get_shader_variations(shader_file)
+
+    # an array where each element i is in [0, len(enums[i])), telling which enum is currently selected
+    enum_indices = [0] * len(enums)
+
+    while True:
+        # a number where each bit says whether a flag is active or not, with values in [0, 2^len(flags))
+        for flags_active in range(1 << len(flags)):
+            compile_variation(shader_file, output_suffix, flags, enums, flags_active, enum_indices, not print_outputs)
+
+        if not next_enum_variation(enums, enum_indices):
+            break
+
+output_shaders = sorted(output_shaders)
+outputs = output_shaders + [out_file_cpp, out_file_h]
+
+if print_outputs:
+    print("\n".join(outputs))
+    sys.exit(0)
 
 # STEP 2: Consolidate the .inc files into an auto-generated cpp/h library.
 with open(out_file_cpp, 'w') as outfile:
