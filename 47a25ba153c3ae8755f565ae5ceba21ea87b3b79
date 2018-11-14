@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9b170a0_2c1fac89",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-11-14T23:39:28Z",
+      "side": 1,
+      "message": "Are we moving away from including \"Prebuilt\" in these names?\n\nMaybe call the internal one \"angle.apk\" and the AOSP build \"angle-aosp.apk\"?\n\nThen in the Android tree it would look like:\nAOSP (unsigned):\n~/android/master/external/chromium-angle/prebuilt/\u003cabi\u003e/angle-aosp.apk\nINTERNAL (Google signed):\n~/android/master/vendor/unbundled_google/packages/ANGLEPrebuilt/apks/\u003cabi\u003e/angle.apk",
+      "range": {
+        "startLine": 998,
+        "startChar": 16,
+        "endLine": 998,
+        "endChar": 33
+      },
+      "revId": "47a25ba153c3ae8755f565ae5ceba21ea87b3b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
