@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea553848_139da30b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-14T17:39:03Z",
+      "side": 1,
+      "message": "nit: refactor this into a helper, I think there are a couple more formats than these (GL_ALPHA16F_EXT, etc).  Alternatively you can use the slightly slower gl::GetSizedInternalFormatInfo(sourceInternalFormat).isLUMA()",
+      "range": {
+        "startLine": 673,
+        "startChar": 8,
+        "endLine": 674,
+        "endChar": 56
+      },
+      "revId": "2c7e6f7147884510cfb59a6613cdb4a4e1dea753",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
