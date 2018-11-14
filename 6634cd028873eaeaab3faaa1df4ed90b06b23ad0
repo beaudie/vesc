@@ -70,6 +70,24 @@
       "revId": "6634cd028873eaeaab3faaa1df4ed90b06b23ad0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79ebf78e_8713f2e8",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-11-14T21:17:22Z",
+      "side": 1,
+      "message": "In order to test the developer options it needs to start the activity so ANGLE can do stuff (e.g., clean up Global.Settings), and it needs to know the name of the package to do that.\n\nI\u0027m using CTS since that infrastructure is there already, but maybe that testing should be somewhere else?",
+      "parentUuid": "7801c82e_cacadb52",
+      "revId": "6634cd028873eaeaab3faaa1df4ed90b06b23ad0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
