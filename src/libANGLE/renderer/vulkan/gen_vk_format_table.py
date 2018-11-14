@@ -68,6 +68,7 @@ format_entry_template = """case angle::FormatID::{format_id}:
 internalFormat = {internal_format};
 {texture_template}
 {buffer_template}
+{properties_template}
 break;
 """
 
@@ -75,7 +76,7 @@ texture_basic_template = """textureFormatID = {texture};
 vkTextureFormat = {vk_texture_format};
 textureInitializerFunction = {texture_initializer};"""
 
-texture_struct_template="{{{texture}, {vk_texture_format}, {texture_initializer}}}"
+texture_struct_template = "{{{texture}, {vk_texture_format}, {texture_initializer}}}"
 
 texture_fallback_template = """{{
 static constexpr TextureFormatInitInfo kInfo[] = {{{texture_list}}};
@@ -88,13 +89,16 @@ vkBufferFormatIsPacked = {vk_buffer_format_is_packed};
 vertexLoadFunction = {vertex_load_function};
 vertexLoadRequiresConversion = {vertex_load_converts};"""
 
-buffer_struct_template="""{{{buffer}, {vk_buffer_format}, {vk_buffer_format_is_packed}, 
+buffer_struct_template = """{{{buffer}, {vk_buffer_format}, {vk_buffer_format_is_packed},
 {vertex_load_function}, {vertex_load_converts}}}"""
 
 buffer_fallback_template = """{{
 static constexpr BufferFormatInitInfo kInfo[] = {{{buffer_list}}};
 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
 }}"""
+
+properties_template = """vkFormatIsInt = {vk_format_is_int};
+vkFormatIsUnsigned = {vk_format_is_unsigned};"""
 
 def is_packed(format_id):
   return "true" if "_PACK" in format_id else "false"
@@ -140,6 +144,17 @@ def gen_format_case(angle, internal_format, vk_json_data):
         vertex_load_converts='false' if angle == format else 'true',
     )
 
+  def properties_args(format):
+    vk_format_is_int=("_UINT" in format or
+                      "_SINT" in format)
+    vk_format_is_unsigned=("_UINT" in format or
+                           "_UNORM" in format or
+                           "_UFLOAT" in format or
+                           "_USCALED" in format)
+    return dict(vk_format_is_int=str(vk_format_is_int).lower(),
+            vk_format_is_unsigned=str(vk_format_is_unsigned).lower(),
+    )
+
   textures = get_formats(angle, "texture")
   if len(textures) == 1:
     args.update(texture_template=texture_basic_template)
@@ -160,6 +175,9 @@ def gen_format_case(angle, internal_format, vk_json_data):
         buffer_template=buffer_fallback_template,
         buffer_list=", ".join(
             buffer_struct_template.format(**buffer_args(i)) for i in buffers))
+
+  args.update(properties_template=properties_template)
+  args.update(properties_args(angle))
 
   return format_entry_template.format(**args).format(**args)
 

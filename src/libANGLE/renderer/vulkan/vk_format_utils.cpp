@@ -154,6 +154,8 @@ Format::Format()
       bufferFormatID(angle::FormatID::NONE),
       vkBufferFormat(VK_FORMAT_UNDEFINED),
       vkBufferFormatIsPacked(false),
+      vkFormatIsInt(false),
+      vkFormatIsUnsigned(false),
       textureInitializerFunction(nullptr),
       textureLoadFunctions()
 {
