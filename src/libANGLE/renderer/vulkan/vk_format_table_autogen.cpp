@@ -42,6 +42,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = true;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::A32_FLOAT:
@@ -54,6 +56,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkTextureFormat            = VK_FORMAT_R8_UNORM;
             textureInitializerFunction = nullptr;
 
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::ASTC_10x10_SRGB_BLOCK:
@@ -66,6 +70,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ASTC_10x10_UNORM_BLOCK:
@@ -78,6 +84,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::ASTC_10x5_SRGB_BLOCK:
@@ -90,6 +98,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ASTC_10x5_UNORM_BLOCK:
@@ -102,6 +112,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::ASTC_10x6_SRGB_BLOCK:
@@ -114,6 +126,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ASTC_10x6_UNORM_BLOCK:
@@ -126,6 +140,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::ASTC_10x8_SRGB_BLOCK:
@@ -138,6 +154,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ASTC_10x8_UNORM_BLOCK:
@@ -150,6 +168,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::ASTC_12x10_SRGB_BLOCK:
@@ -162,6 +182,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ASTC_12x10_UNORM_BLOCK:
@@ -174,10 +196,22 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::ASTC_12x12_SRGB_BLOCK:
-            // This format is not implemented in Vulkan.
+            internalFormat               = GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR;
+            textureFormatID              = angle::FormatID::ASTC_12x12_SRGB_BLOCK;
+            vkTextureFormat              = VK_FORMAT_ASTC_12x12_SRGB_BLOCK;
+            textureInitializerFunction   = nullptr;
+            bufferFormatID               = angle::FormatID::ASTC_12x12_SRGB_BLOCK;
+            vkBufferFormat               = VK_FORMAT_ASTC_12x12_SRGB_BLOCK;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = nullptr;
+            vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ASTC_12x12_UNORM_BLOCK:
@@ -190,6 +224,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::ASTC_4x4_SRGB_BLOCK:
@@ -202,6 +238,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ASTC_4x4_UNORM_BLOCK:
@@ -214,6 +252,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::ASTC_5x4_SRGB_BLOCK:
@@ -226,6 +266,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ASTC_5x4_UNORM_BLOCK:
@@ -238,6 +280,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::ASTC_5x5_SRGB_BLOCK:
@@ -250,6 +294,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ASTC_5x5_UNORM_BLOCK:
@@ -262,6 +308,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::ASTC_6x5_SRGB_BLOCK:
@@ -274,6 +322,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ASTC_6x5_UNORM_BLOCK:
@@ -286,6 +336,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::ASTC_6x6_SRGB_BLOCK:
@@ -298,6 +350,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ASTC_6x6_UNORM_BLOCK:
@@ -310,6 +364,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::ASTC_8x5_SRGB_BLOCK:
@@ -322,6 +378,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ASTC_8x5_UNORM_BLOCK:
@@ -334,6 +392,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::ASTC_8x6_SRGB_BLOCK:
@@ -346,6 +406,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ASTC_8x6_UNORM_BLOCK:
@@ -358,6 +420,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::ASTC_8x8_SRGB_BLOCK:
@@ -370,6 +434,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ASTC_8x8_UNORM_BLOCK:
@@ -382,6 +448,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::B4G4R4A4_UNORM:
@@ -394,6 +462,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = true;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::B5G5R5A1_UNORM:
@@ -406,6 +476,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = true;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::B5G6R5_UNORM:
@@ -418,6 +490,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = true;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::B8G8R8A8_TYPELESS:
@@ -438,6 +512,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLubyte, 4, 4, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::B8G8R8A8_UNORM_SRGB:
@@ -454,6 +530,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = true;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::BC1_RGBA_UNORM_BLOCK:
@@ -466,6 +544,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::BC1_RGBA_UNORM_SRGB_BLOCK:
@@ -482,6 +562,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::BC1_RGB_UNORM_SRGB_BLOCK:
@@ -530,6 +612,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::D24_UNORM_S8_UINT:
@@ -546,6 +630,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::D24_UNORM_X8_UINT:
@@ -562,6 +648,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = true;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::D32_FLOAT:
@@ -574,6 +662,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLfloat, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::D32_FLOAT_S8X24_UINT:
@@ -590,6 +680,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLfloat, 3, 3, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::D32_UNORM:
@@ -606,6 +698,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::EAC_R11G11_UNORM_BLOCK:
@@ -618,6 +712,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::EAC_R11_SNORM_BLOCK:
@@ -630,6 +726,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::EAC_R11_UNORM_BLOCK:
@@ -642,6 +740,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::ETC1_LOSSY_DECODE_R8G8B8_UNORM_BLOCK:
@@ -662,6 +762,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLbyte, 4, 4, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ETC2_R8G8B8A1_UNORM_BLOCK:
@@ -674,6 +776,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked     = false;
             vertexLoadFunction         = CopyNativeVertexData<GLubyte, 4, 4, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::ETC2_R8G8B8A8_SRGB_BLOCK:
@@ -686,6 +790,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLbyte, 4, 4, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ETC2_R8G8B8A8_UNORM_BLOCK:
@@ -698,6 +804,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLubyte, 4, 4, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::ETC2_R8G8B8_SRGB_BLOCK:
@@ -710,6 +818,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLbyte, 3, 3, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::ETC2_R8G8B8_UNORM_BLOCK:
@@ -722,6 +832,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLubyte, 3, 3, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::L16A16_FLOAT:
@@ -746,6 +858,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkTextureFormat            = VK_FORMAT_R8G8_UNORM;
             textureInitializerFunction = nullptr;
 
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::L8_UNORM:
@@ -754,6 +868,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkTextureFormat            = VK_FORMAT_R8_UNORM;
             textureInitializerFunction = nullptr;
 
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::NONE:
@@ -798,6 +914,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLfloat, 4, 4, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R16G16B16A16_SINT:
@@ -810,6 +928,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLshort, 4, 4, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R16G16B16A16_SNORM:
@@ -825,6 +945,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLshort, 4, 4, true>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = false;
             break;
 
         case angle::FormatID::R16G16B16A16_SSCALED:
@@ -840,6 +962,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLshort, 4, 4, false>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = false;
             break;
 
         case angle::FormatID::R16G16B16A16_UINT:
@@ -852,6 +976,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLushort, 4, 4, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::R16G16B16A16_UNORM:
@@ -867,6 +993,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLushort, 4, 4, true>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::R16G16B16A16_USCALED:
@@ -882,6 +1010,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLushort, 4, 4, false>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::R16G16B16_FLOAT:
@@ -894,6 +1024,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLfloat, 3, 3, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R16G16B16_SINT:
@@ -906,6 +1038,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLshort, 3, 3, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R16G16B16_SNORM:
@@ -921,6 +1055,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLshort, 3, 3, true>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = false;
             break;
 
         case angle::FormatID::R16G16B16_SSCALED:
@@ -936,6 +1072,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLshort, 3, 3, false>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = false;
             break;
 
         case angle::FormatID::R16G16B16_UINT:
@@ -948,6 +1086,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLushort, 3, 3, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::R16G16B16_UNORM:
@@ -963,6 +1103,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLushort, 3, 3, true>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::R16G16B16_USCALED:
@@ -978,6 +1120,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLushort, 3, 3, false>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::R16G16_FLOAT:
@@ -990,6 +1134,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLfloat, 2, 2, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R16G16_SINT:
@@ -1002,6 +1148,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLshort, 2, 2, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R16G16_SNORM:
@@ -1017,6 +1165,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLshort, 2, 2, true>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = false;
             break;
 
         case angle::FormatID::R16G16_SSCALED:
@@ -1032,6 +1182,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLshort, 2, 2, false>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = false;
             break;
 
         case angle::FormatID::R16G16_UINT:
@@ -1044,6 +1196,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLushort, 2, 2, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::R16G16_UNORM:
@@ -1059,6 +1213,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLushort, 2, 2, true>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::R16G16_USCALED:
@@ -1074,6 +1230,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLushort, 2, 2, false>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::R16_FLOAT:
@@ -1086,6 +1244,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLfloat, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R16_SINT:
@@ -1098,6 +1258,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLshort, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R16_SNORM:
@@ -1113,6 +1275,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLshort, 1, 1, true>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = false;
             break;
 
         case angle::FormatID::R16_SSCALED:
@@ -1128,6 +1292,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLshort, 1, 1, false>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = false;
             break;
 
         case angle::FormatID::R16_UINT:
@@ -1140,6 +1306,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLushort, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::R16_UNORM:
@@ -1155,6 +1323,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLushort, 1, 1, true>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::R16_USCALED:
@@ -1170,6 +1340,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLushort, 1, 1, false>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::R32G32B32A32_FIXED:
@@ -1180,6 +1352,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = Copy32FixedTo32FVertexData<4, 4>;
             vertexLoadRequiresConversion = true;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R32G32B32A32_FLOAT:
@@ -1192,6 +1366,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLfloat, 4, 4, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R32G32B32A32_SINT:
@@ -1204,6 +1380,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLint, 4, 4, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R32G32B32A32_SNORM:
@@ -1224,6 +1402,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLuint, 4, 4, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::R32G32B32A32_UNORM:
@@ -1242,6 +1422,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = Copy32FixedTo32FVertexData<3, 3>;
             vertexLoadRequiresConversion = true;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R32G32B32_FLOAT:
@@ -1254,6 +1436,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLfloat, 3, 3, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R32G32B32_SINT:
@@ -1266,6 +1450,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLint, 3, 3, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R32G32B32_SNORM:
@@ -1286,6 +1472,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLuint, 3, 3, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::R32G32B32_UNORM:
@@ -1304,6 +1492,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = Copy32FixedTo32FVertexData<2, 2>;
             vertexLoadRequiresConversion = true;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R32G32_FLOAT:
@@ -1316,6 +1506,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLfloat, 2, 2, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R32G32_SINT:
@@ -1328,6 +1520,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLint, 2, 2, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R32G32_SNORM:
@@ -1348,6 +1542,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLuint, 2, 2, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::R32G32_UNORM:
@@ -1366,6 +1562,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = Copy32FixedTo32FVertexData<1, 1>;
             vertexLoadRequiresConversion = true;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R32_FLOAT:
@@ -1378,6 +1576,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLfloat, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R32_SINT:
@@ -1390,6 +1590,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLint, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R32_SNORM:
@@ -1410,6 +1612,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLuint, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::R32_UNORM:
@@ -1430,6 +1634,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = true;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::R5G5B5A1_UNORM:
@@ -1442,6 +1648,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = true;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::R5G6B5_UNORM:
@@ -1454,6 +1662,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = true;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = false;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::R8G8B8A8_SINT:
@@ -1466,6 +1676,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLbyte, 4, 4, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R8G8B8A8_SNORM:
@@ -1481,6 +1693,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLbyte, 4, 4, true>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = false;
             break;
 
         case angle::FormatID::R8G8B8A8_SSCALED:
@@ -1496,6 +1710,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLbyte, 4, 4, false>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = false;
             break;
 
         case angle::FormatID::R8G8B8A8_TYPELESS:
@@ -1516,6 +1732,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLubyte, 4, 4, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::R8G8B8A8_UNORM:
@@ -1531,6 +1749,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLubyte, 4, 4, true>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::R8G8B8A8_UNORM_SRGB:
@@ -1550,6 +1770,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLubyte, 4, 4, false>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::R8G8B8_SINT:
@@ -1562,6 +1784,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLbyte, 3, 3, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R8G8B8_SNORM:
@@ -1577,6 +1801,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLbyte, 3, 3, true>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = false;
             break;
 
         case angle::FormatID::R8G8B8_SSCALED:
@@ -1592,6 +1818,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLbyte, 3, 3, false>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = false;
             break;
 
         case angle::FormatID::R8G8B8_UINT:
@@ -1604,6 +1832,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLubyte, 3, 3, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::R8G8B8_UNORM:
@@ -1619,6 +1849,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLubyte, 3, 3, true>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::R8G8B8_UNORM_SRGB:
@@ -1638,6 +1870,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLubyte, 3, 3, false>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::R8G8_SINT:
@@ -1650,6 +1884,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLbyte, 2, 2, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R8G8_SNORM:
@@ -1665,6 +1901,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLbyte, 2, 2, true>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = false;
             break;
 
         case angle::FormatID::R8G8_SSCALED:
@@ -1680,6 +1918,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLbyte, 2, 2, false>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = false;
             break;
 
         case angle::FormatID::R8G8_UINT:
@@ -1692,6 +1932,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLubyte, 2, 2, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::R8G8_UNORM:
@@ -1707,6 +1949,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLubyte, 2, 2, true>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::R8G8_USCALED:
@@ -1722,6 +1966,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLubyte, 2, 2, false>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::R8_SINT:
@@ -1734,6 +1980,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLbyte, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = false;
             break;
 
         case angle::FormatID::R8_SNORM:
@@ -1749,6 +1997,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLbyte, 1, 1, true>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = false;
             break;
 
         case angle::FormatID::R8_SSCALED:
@@ -1764,6 +2014,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLbyte, 1, 1, false>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = false;
             break;
 
         case angle::FormatID::R8_UINT:
@@ -1776,6 +2028,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = CopyNativeVertexData<GLubyte, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = true;
             break;
 
         case angle::FormatID::R8_UNORM:
@@ -1791,6 +2045,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLubyte, 1, 1, true>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::R8_USCALED:
@@ -1806,6 +2062,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
                      CopyTo32FVertexData<GLubyte, 1, 1, false>, true}};
                 initBufferFallback(physicalDevice, kInfo, ArraySize(kInfo));
             }
+            vkFormatIsInt      = false;
+            vkFormatIsUnsigned = true;
             break;
 
         case angle::FormatID::R9G9B9E5_SHAREDEXP:
@@ -1827,6 +2085,8 @@ void Format::initialize(VkPhysicalDevice physicalDevice,
             vkBufferFormatIsPacked       = false;
             vertexLoadFunction           = nullptr;
             vertexLoadRequiresConversion = false;
+            vkFormatIsInt                = true;
+            vkFormatIsUnsigned           = true;
             break;
 
         default:
