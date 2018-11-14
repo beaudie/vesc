@@ -23,13 +23,15 @@ namespace rx
 {
 namespace
 {
-constexpr size_t kDynamicVertexDataSize    = 1024 * 1024;
-constexpr size_t kDynamicIndexDataSize     = 1024 * 8;
-constexpr size_t kMaxVertexFormatAlignment = 4;
-constexpr VkBufferUsageFlags kVertexBufferUsageFlags =
-    VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
-constexpr VkBufferUsageFlags kIndexBufferUsageFlags =
-    VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
+constexpr size_t kDynamicVertexDataSize              = 1024 * 1024;
+constexpr size_t kDynamicIndexDataSize               = 1024 * 8;
+constexpr size_t kMaxVertexFormatAlignment           = 4;
+constexpr VkBufferUsageFlags kVertexBufferUsageFlags = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT |
+                                                       VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT |
+                                                       VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
+constexpr VkBufferUsageFlags kIndexBufferUsageFlags = VK_BUFFER_USAGE_INDEX_BUFFER_BIT |
+                                                      VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT |
+                                                      VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
 
 bool BindingIsAligned(const gl::VertexBinding &binding, unsigned componentSize)
 {
@@ -138,18 +140,24 @@ angle::Result VertexArrayVk::streamIndexData(ContextVk *contextVk,
                                              const void *sourcePointer,
                                              vk::DynamicBuffer *dynamicBuffer)
 {
-    ASSERT(!mState.getElementArrayBuffer() || indexType == gl::DrawElementsType::UnsignedByte);
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+    ASSERT(!mState.getElementArrayBuffer());
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     dynamicBuffer->releaseRetainedBuffers(contextVk->getRenderer());
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
 
     const size_t amount = sizeof(GLushort) * indexCount;
     GLubyte *dst        = nullptr;
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     ANGLE_TRY(dynamicBuffer->allocate(contextVk, amount, &dst, nullptr,
                                       &mCurrentElementArrayBufferOffset, nullptr));
     mCurrentElementArrayBuffer = dynamicBuffer->getCurrentBuffer();
+    fprintf(stderr, "%s:%d (%p)\n", __FILE__, __LINE__, dst);
     if (indexType == gl::DrawElementsType::UnsignedByte)
     {
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
         // Unsigned bytes don't have direct support in Vulkan so we have to expand the
         // memory to a GLushort.
         const GLubyte *in     = static_cast<const GLubyte *>(sourcePointer);
@@ -161,9 +169,12 @@ angle::Result VertexArrayVk::streamIndexData(ContextVk *contextVk,
     }
     else
     {
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
         memcpy(dst, sourcePointer, amount);
     }
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     ANGLE_TRY(dynamicBuffer->flush(contextVk));
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     return angle::Result::Continue();
 }
 
@@ -176,7 +187,6 @@ angle::Result VertexArrayVk::convertVertexBuffer(ContextVk *contextVk,
                                                  const gl::VertexBinding &binding,
                                                  size_t attribIndex)
 {
-
     // Needed before reading buffer or we could get stale data.
     ANGLE_TRY(contextVk->getRenderer()->finish(contextVk));
 
@@ -557,24 +567,89 @@ angle::Result VertexArrayVk::updateIndexTranslation(ContextVk *contextVk,
 {
     ASSERT(type != gl::DrawElementsType::InvalidEnum);
 
+    RendererVk *renderer = contextVk->getRenderer();
     gl::Buffer *glBuffer = mState.getElementArrayBuffer();
 
     if (!glBuffer)
     {
         ANGLE_TRY(streamIndexData(contextVk, type, indexCount, indices, &mDynamicIndexData));
     }
-    else
+    else if (renderer->getFormat(angle::FormatID::R16_UINT).vkSupportsStorageBuffer)
     {
-        // Needed before reading buffer or we could get stale data.
-        ANGLE_TRY(contextVk->getRenderer()->finish(contextVk));
+        fprintf(stderr, "R16_UINT has storage buffer support\n");
+
+        BufferVk *bufferVk = vk::GetImpl(glBuffer);
 
         ASSERT(type == gl::DrawElementsType::UnsignedByte);
+
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+
+        intptr_t offsetIntoSrcData = reinterpret_cast<intptr_t>(indices);
+        size_t srcDataSize         = static_cast<size_t>(bufferVk->getSize()) - offsetIntoSrcData;
+
+        mTranslatedByteIndexData.releaseRetainedBuffers(contextVk->getRenderer());
+
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+
+        ANGLE_TRY(mTranslatedByteIndexData.allocate(contextVk, sizeof(GLushort) * srcDataSize,
+                                                    nullptr, nullptr,
+                                                    &mCurrentElementArrayBufferOffset, nullptr));
+        mCurrentElementArrayBuffer = mTranslatedByteIndexData.getCurrentBuffer();
+
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+
+        vk::BufferHelper *dest = mTranslatedByteIndexData.getCurrentBuffer();
+        vk::BufferHelper *src  = &bufferVk->getBuffer();
+
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+
+        ANGLE_TRY(src->initBufferView(contextVk, renderer->getFormat(angle::FormatID::R8_UINT)));
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+
+        ANGLE_TRY(dest->initBufferView(contextVk, renderer->getFormat(angle::FormatID::R16_UINT)));
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+
+        // Copy relevant section of the source into destination at allocated offset.  Note that the
+        // offset returned by allocate() above is in bytes, while our allocated array is of
+        // GLushorts.
+        DispatchUtilsVk::CopyParameters params = {};
+        params.destOffset =
+            static_cast<size_t>(mCurrentElementArrayBufferOffset) / sizeof(GLushort);
+        params.srcOffset = offsetIntoSrcData;
+        params.size      = srcDataSize;
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+
+        // Note: this is a copy, which implicitly converts between formats.  Once support for
+        // primitive restart is added, a specialized shader is likely needed to special case 0xFF ->
+        // 0xFFFF.
+        ANGLE_TRY(renderer->getDispatchUtils()->copyBuffer(contextVk, dest, src, params));
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+    }
+    else
+    {
+        // If it's not possible to convert the buffer with compute, opt for a CPU read back for now.
+        // TODO(syoussefi): R8G8B8A8_UINT is required to have storage texel buffer support, so a
+        // specialized shader code can be made to read two ubyte indices and output them in R and B
+        // (or A and G based on endianness?) with 0 on the other channels.  If specialized, we might
+        // as well support the ubyte to ushort case with correct handling of primitive restart.
+        // http://anglebug.com/2958
+        fprintf(stderr, "R16_UINT DOES NOT have storage buffer support\n");
+
+        // Needed before reading buffer or we could get stale data.
+        ANGLE_TRY(contextVk->getRenderer()->finish(contextVk));
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+
+        ASSERT(type == gl::DrawElementsType::UnsignedByte);
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
         // Unsigned bytes don't have direct support in Vulkan so we have to expand the
         // memory to a GLushort.
         BufferVk *bufferVk   = vk::GetImpl(glBuffer);
         void *srcDataMapping = nullptr;
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
         ASSERT(!glBuffer->isMapped());
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
         ANGLE_TRY(bufferVk->mapImpl(contextVk, &srcDataMapping));
+        fprintf(stderr, "%s:%d (%p, %p)\n", __FILE__, __LINE__, srcDataMapping, indices);
         uint8_t *srcData           = static_cast<uint8_t *>(srcDataMapping);
         intptr_t offsetIntoSrcData = reinterpret_cast<intptr_t>(indices);
         srcData += offsetIntoSrcData;
@@ -582,8 +657,10 @@ angle::Result VertexArrayVk::updateIndexTranslation(ContextVk *contextVk,
         ANGLE_TRY(streamIndexData(contextVk, type,
                                   static_cast<size_t>(bufferVk->getSize()) - offsetIntoSrcData,
                                   srcData, &mTranslatedByteIndexData));
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
 
         ANGLE_TRY(bufferVk->unmapImpl(contextVk));
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     }
 
     return angle::Result::Continue();
