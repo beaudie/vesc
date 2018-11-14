@@ -2888,9 +2888,9 @@ angle::Result Blit11::resolveDepth(const gl::Context *context,
     // Multisampled depth stencil SRVs are not available in feature level 10.0
     ASSERT(mRenderer->getRenderer11DeviceCaps().featureLevel > D3D_FEATURE_LEVEL_10_0);
 
-    const auto &extents          = depth->getExtents();
-    auto *deviceContext          = mRenderer->getDeviceContext();
-    auto *stateManager           = mRenderer->getStateManager();
+    const auto &extents = depth->getExtents();
+    auto *deviceContext = mRenderer->getDeviceContext();
+    auto *stateManager  = mRenderer->getStateManager();
 
     ANGLE_TRY(initResolveDepthOnly(context, depth->getFormatSet(), extents));
 
@@ -3025,8 +3025,8 @@ angle::Result Blit11::resolveStencil(const gl::Context *context,
     ANGLE_TRY(initResolveDepthStencil(context, extents));
 
     ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
-    auto *stateManager              = mRenderer->getStateManager();
-    ID3D11Resource *stencilResource = depthStencil->getTexture().get();
+    auto *stateManager                 = mRenderer->getStateManager();
+    ID3D11Resource *stencilResource    = depthStencil->getTexture().get();
 
     // Check if we need to re-create the stencil SRV.
     if (mStencilSRV.valid())
