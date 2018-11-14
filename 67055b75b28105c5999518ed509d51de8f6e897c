@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9014d211_5aa09f34",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:56:04Z",
+      "side": 1,
+      "message": "Maybe we can have ANGLE_TRY_HANDLE for egl::Error?",
+      "range": {
+        "startLine": 1422,
+        "startChar": 0,
+        "endLine": 1427,
+        "endChar": 0
+      },
+      "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2f2c30a_0e52da5e",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2485,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:56:04Z",
+      "side": 1,
+      "message": "This was UNIMPLEMENTED, suggesting that is can be, compared to other UNREACHABLE?",
+      "range": {
+        "startLine": 2485,
+        "startChar": 4,
+        "endLine": 2485,
+        "endChar": 24
+      },
+      "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6500c3a0_6cd3743d",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3173,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:56:04Z",
+      "side": 1,
+      "message": "Here, too.",
+      "range": {
+        "startLine": 3173,
+        "startChar": 4,
+        "endLine": 3173,
+        "endChar": 24
+      },
+      "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "252a096b_f29dcd2c",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:56:04Z",
+      "side": 1,
+      "message": "This would change the behavior in Release.\nSame concern with other ASSERTs below.",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 51
+      },
+      "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a00f139_07ca661b",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:56:04Z",
+      "side": 1,
+      "message": "Here was UNIMPLEMENTED, too.",
+      "range": {
+        "startLine": 1048,
+        "startChar": 4,
+        "endLine": 1048,
+        "endChar": 24
+      },
+      "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "918a6658_1bc78c7e",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:56:04Z",
+      "side": 1,
+      "message": "Was UNIMPLEMENTED",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 24
+      },
+      "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88b9950d_937dc744",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:56:04Z",
+      "side": 1,
+      "message": "More changes from UNIMPLEMENTED to UNREACHABLE in this file.",
+      "range": {
+        "startLine": 505,
+        "startChar": 4,
+        "endLine": 505,
+        "endChar": 24
+      },
+      "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

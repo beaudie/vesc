@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64f73f2e_40778d2a",
+        "filename": "src/libANGLE/renderer/TextureImpl.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:56:04Z",
+      "side": 0,
+      "message": "It was nice that we had this additional info with the errors.",
+      "range": {
+        "startLine": 38,
+        "startChar": 35,
+        "endLine": 38,
+        "endChar": 84
+      },
+      "revId": "d1a55e393e65601ba26e2d76bd46a12fc6bc4e3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a9e58c5_c7419794",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:56:04Z",
+      "side": 0,
+      "message": "Wasn\u0027t this useful?",
+      "range": {
+        "startLine": 418,
+        "startChar": 0,
+        "endLine": 418,
+        "endChar": 56
+      },
+      "revId": "d1a55e393e65601ba26e2d76bd46a12fc6bc4e3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53d4a8ec_ef12ec50",
+        "filename": "src/libANGLE/renderer/null/PathNULL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:56:04Z",
+      "side": 0,
+      "message": "You gave up on implementing those? Maybe it should return Stop, if it was InternalError before?",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 17
+      },
+      "revId": "d1a55e393e65601ba26e2d76bd46a12fc6bc4e3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
