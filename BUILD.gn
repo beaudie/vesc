@@ -982,4 +982,28 @@ if (is_android) {
       "//third_party/angle:libfeature_support${angle_libs_suffix}",
     ]
   }
+  android_apk("angle_aosp_apk") {
+    deps = [
+      ":angle_apk_assets",
+    ]
+    if (build_apk_secondary_abi && android_64bit_target_cpu) {
+      secondary_abi_shared_libraries = [
+        "//third_party/angle:libEGL${angle_libs_suffix}($android_secondary_abi_toolchain)",
+        "//third_party/angle:libGLESv1_CM${angle_libs_suffix}($android_secondary_abi_toolchain)",
+        "//third_party/angle:libGLESv2${angle_libs_suffix}($android_secondary_abi_toolchain)",
+        "//third_party/angle:libfeature_support${angle_libs_suffix}($android_secondary_abi_toolchain)",
+      ]
+    }
+
+    android_manifest = "AOSPAndroidManifest.xml"
+
+    apk_name = "AOSPANGLEPrebuilt"
+    uncompress_shared_libraries = true
+    shared_libraries = [
+      "//third_party/angle:libEGL${angle_libs_suffix}",
+      "//third_party/angle:libGLESv1_CM${angle_libs_suffix}",
+      "//third_party/angle:libGLESv2${angle_libs_suffix}",
+      "//third_party/angle:libfeature_support${angle_libs_suffix}",
+    ]
+  }
 }
