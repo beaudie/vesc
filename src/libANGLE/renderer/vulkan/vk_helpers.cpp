@@ -21,7 +21,8 @@ namespace vk
 namespace
 {
 constexpr VkBufferUsageFlags kLineLoopDynamicBufferUsage =
-    (VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
+    VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
 constexpr int kLineLoopDynamicBufferMinSize = 1024 * 1024;
 
 // This is an arbitrary max. We can change this later if necessary.
@@ -783,6 +784,7 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
                                                                   VkBuffer *bufferHandleOut,
                                                                   VkDeviceSize *bufferOffsetOut)
 {
+    // TODO(syoussefi): go through compute
     if (glIndexType == GL_UNSIGNED_BYTE)
     {
         // Needed before reading buffer or we could get stale data.
@@ -841,6 +843,7 @@ angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
                                            reinterpret_cast<uint8_t **>(&indices), bufferHandleOut,
                                            bufferOffsetOut, nullptr));
 
+    // TODO(syoussefi): go through compute
     if (glIndexType == GL_UNSIGNED_BYTE)
     {
         // Vulkan doesn't support uint8 index types, so we need to emulate it.
@@ -887,6 +890,7 @@ BufferHelper::BufferHelper()
       mMemoryPropertyFlags{},
       mSize(0),
       mMappedMemory(nullptr),
+      mViewFormat(nullptr),
       mCurrentWriteAccess(0),
       mCurrentReadAccess(0)
 {}
@@ -906,7 +910,8 @@ angle::Result BufferHelper::init(Context *context,
 void BufferHelper::destroy(VkDevice device)
 {
     unmap(device);
-    mSize = 0;
+    mSize       = 0;
+    mViewFormat = nullptr;
 
     mBuffer.destroy(device);
     mBufferView.destroy(device);
@@ -916,22 +921,34 @@ void BufferHelper::destroy(VkDevice device)
 void BufferHelper::release(RendererVk *renderer)
 {
     unmap(renderer->getDevice());
-    mSize = 0;
+    mSize       = 0;
+    mViewFormat = nullptr;
 
     renderer->releaseObject(getStoredQueueSerial(), &mBuffer);
     renderer->releaseObject(getStoredQueueSerial(), &mBufferView);
     renderer->releaseObject(getStoredQueueSerial(), &mDeviceMemory);
 }
 
-void BufferHelper::onFramebufferRead(FramebufferHelper *framebuffer, VkAccessFlagBits accessType)
+void BufferHelper::onRead(RecordableGraphResource *reader, VkAccessFlagBits readAccessType)
 {
-    addReadDependency(framebuffer);
+    addReadDependency(reader);
 
-    if ((mCurrentWriteAccess != 0) && ((mCurrentReadAccess & accessType) == 0))
+    if (mCurrentWriteAccess != 0 && (mCurrentReadAccess & readAccessType) == 0)
     {
-        framebuffer->addGlobalMemoryBarrier(mCurrentWriteAccess, accessType);
-        mCurrentReadAccess |= accessType;
+        reader->addGlobalMemoryBarrier(mCurrentWriteAccess, readAccessType);
+        mCurrentReadAccess |= readAccessType;
     }
+}
+
+void BufferHelper::onWrite(VkAccessFlagBits writeAccessType)
+{
+    if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
+    {
+        addGlobalMemoryBarrier(mCurrentReadAccess | mCurrentWriteAccess, writeAccessType);
+    }
+
+    mCurrentWriteAccess = writeAccessType;
+    mCurrentReadAccess  = 0;
 }
 
 angle::Result BufferHelper::copyFromBuffer(Context *context,
@@ -948,7 +965,7 @@ angle::Result BufferHelper::copyFromBuffer(Context *context,
         // Use a global memory barrier to keep things simple.
         VkMemoryBarrier memoryBarrier = {};
         memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-        memoryBarrier.srcAccessMask   = mCurrentReadAccess;
+        memoryBarrier.srcAccessMask   = mCurrentReadAccess | mCurrentWriteAccess;
         memoryBarrier.dstAccessMask   = VK_ACCESS_TRANSFER_WRITE_BIT;
 
         commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
@@ -977,6 +994,7 @@ angle::Result BufferHelper::initBufferView(Context *context, const Format &forma
     viewCreateInfo.range                  = mSize;
 
     ANGLE_VK_TRY(context, mBufferView.init(context->getDevice(), viewCreateInfo));
+    mViewFormat = &format;
 
     return angle::Result::Continue();
 }

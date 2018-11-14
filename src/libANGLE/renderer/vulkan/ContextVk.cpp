@@ -432,7 +432,7 @@ angle::Result ContextVk::handleDirtyVertexBuffers(const gl::Context *context,
         vk::BufferHelper *arrayBuffer = arrayBufferResources[attribIndex];
         if (arrayBuffer)
         {
-            arrayBuffer->onFramebufferRead(framebuffer, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
+            arrayBuffer->onRead(framebuffer, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
         }
     }
 
@@ -450,7 +450,7 @@ angle::Result ContextVk::handleDirtyIndexBuffer(const gl::Context *context,
     if (elementArrayBuffer)
     {
         vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
-        elementArrayBuffer->onFramebufferRead(framebuffer, VK_ACCESS_INDEX_READ_BIT);
+        elementArrayBuffer->onRead(framebuffer, VK_ACCESS_INDEX_READ_BIT);
     }
     return angle::Result::Continue();
 }
@@ -1300,6 +1300,7 @@ angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
     const gl::VertexAttribCurrentValueData &defaultValue =
         glState.getVertexAttribCurrentValues()[attribIndex];
 
+    // TODO(syoussefi): clear with dispatch
     ASSERT(defaultValue.Type == GL_FLOAT);
 
     memcpy(ptr, defaultValue.FloatValues, kDefaultValueSize);
