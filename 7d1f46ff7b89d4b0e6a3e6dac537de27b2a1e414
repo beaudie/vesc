@@ -2,6 +2,144 @@
   "comments": [
     {
       "key": {
+        "uuid": "2213f530_69bdb0ee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:02:10Z",
+      "side": 1,
+      "message": "I\u0027d like to suggest the following approach:\n1. Run N iterations and measure variance.\n2. Do:\n2.1. Run 1 iteration.\n2.2. Measure variance of last N iterations.\n2.3. While variance of last N iterations is smaller than the variance of previous N iterations or timeout T is reached.\n3. Return the result of previous N iterations.",
+      "range": {
+        "startLine": 25,
+        "startChar": 31,
+        "endLine": 25,
+        "endChar": 67
+      },
+      "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ff0cd42_ea927e85",
+        "filename": "scripts/perf_test_runner.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:02:10Z",
+      "side": 1,
+      "message": "experiment_scores?",
+      "range": {
+        "startLine": 124,
+        "startChar": 4,
+        "endLine": 124,
+        "endChar": 14
+      },
+      "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac0813ad_5b2642ad",
+        "filename": "scripts/perf_test_runner.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:02:10Z",
+      "side": 1,
+      "message": "truncation",
+      "range": {
+        "startLine": 135,
+        "startChar": 12,
+        "endLine": 135,
+        "endChar": 21
+      },
+      "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0e04b94_b9a86317",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 9
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:02:10Z",
+      "side": 1,
+      "message": "Maybe also merge this into angle_perf_tests_vulkan_sources?",
+      "range": {
+        "startLine": 258,
+        "startChar": 17,
+        "endLine": 258,
+        "endChar": 63
+      },
+      "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cb66352_3cb199e2",
+        "filename": "src/tests/angle_perftests_main.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:02:10Z",
+      "side": 1,
+      "message": "I suppose there would also be Chromium-side CL for this?\nTake note of https://chromium-review.googlesource.com/1121039, removing arguments on Linux has unexpected consequences.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 42
+      },
+      "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d70f8c3_5d513cd7",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-14T21:02:10Z",
+      "side": 1,
+      "message": "Doesn\u0027t seem to be needed here. Maybe logic would be simpler if you replace g_OnlyOneRunFrame with gIterationsPerStepOverride.",
+      "range": {
+        "startLine": 311,
+        "startChar": 8,
+        "endLine": 311,
+        "endChar": 27
+      },
+      "revId": "7d1f46ff7b89d4b0e6a3e6dac537de27b2a1e414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "319717f0_eb80d145",
         "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
         "patchSetId": 9
