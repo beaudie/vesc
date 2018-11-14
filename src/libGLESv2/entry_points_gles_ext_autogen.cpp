@@ -11,14 +11,15 @@
 #include "libGLESv2/entry_points_gles_ext_autogen.h"
 
 #include "libANGLE/Context.h"
-#include "libANGLE/validationES.h"
+#include "libANGLE/validationESEXT_autogen.h"
+#include "libANGLE/validationESEXT_inlines.h"
 #include "libGLESv2/entry_points_utils.h"
 #include "libGLESv2/global_state.h"
 
-#include "libANGLE/validationES.h"
-#include "libANGLE/validationES1.h"
-#include "libANGLE/validationES3.h"
-#include "libANGLE/validationES31.h"
+#include "libANGLE/validationES1_autogen.h"
+#include "libANGLE/validationES2_autogen.h"
+#include "libANGLE/validationES31_autogen.h"
+#include "libANGLE/validationES3_autogen.h"
 
 namespace gl
 {
