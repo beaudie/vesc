@@ -21,7 +21,8 @@ namespace vk
 namespace
 {
 constexpr VkBufferUsageFlags kLineLoopDynamicBufferUsage =
-    (VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
+    VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
 constexpr int kLineLoopDynamicBufferMinSize = 1024 * 1024;
 
 // This is an arbitrary max. We can change this later if necessary.
@@ -784,6 +785,7 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
                                                                   vk::BufferHelper **bufferOut,
                                                                   VkDeviceSize *bufferOffsetOut)
 {
+    // TODO(syoussefi): go through compute
     if (glIndexType == GL_UNSIGNED_BYTE)
     {
         // Needed before reading buffer or we could get stale data.
@@ -820,8 +822,8 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
     if (contextVk->getRenderer()->getFeatures().extraCopyBufferRegion)
         copies.push_back({sourceOffset, *bufferOffsetOut + (unitCount + 1) * unitSize, 1});
 
-    ANGLE_TRY(elementArrayBufferVk->copyToBuffer(contextVk, *bufferOut, copies.size(),
-                                                 copies.data()));
+    ANGLE_TRY(
+        elementArrayBufferVk->copyToBuffer(contextVk, *bufferOut, copies.size(), copies.data()));
     ANGLE_TRY(mDynamicIndexBuffer.flush(contextVk));
     return angle::Result::Continue();
 }
@@ -844,6 +846,7 @@ angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
                                            bufferOffsetOut, nullptr));
     *bufferOut = mDynamicIndexBuffer.getCurrentBuffer();
 
+    // TODO(syoussefi): go through compute
     if (glIndexType == GL_UNSIGNED_BYTE)
     {
         // Vulkan doesn't support uint8 index types, so we need to emulate it.
@@ -890,6 +893,7 @@ BufferHelper::BufferHelper()
       mMemoryPropertyFlags{},
       mSize(0),
       mMappedMemory(nullptr),
+      mViewFormat(nullptr),
       mCurrentWriteAccess(0),
       mCurrentReadAccess(0)
 {}
@@ -909,7 +913,8 @@ angle::Result BufferHelper::init(Context *context,
 void BufferHelper::destroy(VkDevice device)
 {
     unmap(device);
-    mSize = 0;
+    mSize       = 0;
+    mViewFormat = nullptr;
 
     mBuffer.destroy(device);
     mBufferView.destroy(device);
@@ -919,7 +924,8 @@ void BufferHelper::destroy(VkDevice device)
 void BufferHelper::release(RendererVk *renderer)
 {
     unmap(renderer->getDevice());
-    mSize = 0;
+    mSize       = 0;
+    mViewFormat = nullptr;
 
     renderer->releaseObject(getStoredQueueSerial(), &mBuffer);
     renderer->releaseObject(getStoredQueueSerial(), &mBufferView);
@@ -991,6 +997,7 @@ angle::Result BufferHelper::initBufferView(Context *context, const Format &forma
     viewCreateInfo.range                  = mSize;
 
     ANGLE_VK_TRY(context, mBufferView.init(context->getDevice(), viewCreateInfo));
+    mViewFormat = &format;
 
     return angle::Result::Continue();
 }

@@ -16,6 +16,66 @@ namespace vk
 {
 namespace
 {
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000000.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000001.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000002.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000003.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000004.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000005.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000006.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000007.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000008.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000009.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000000A.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000000B.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000010.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000011.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000012.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000013.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000014.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000015.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000016.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000017.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000018.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000019.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000001A.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000001B.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000020.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000021.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000022.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000023.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000024.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000025.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000026.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000027.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000028.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000029.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000002A.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000002B.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000030.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000031.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000032.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000033.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000034.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000035.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000036.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000037.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000038.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000039.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000003A.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000003B.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000040.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000041.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000042.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000043.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000044.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000045.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000046.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000047.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000048.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.00000049.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000004A.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/DispatchUtils.comp.0000004B.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/FullScreenQuad.vert.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/PushConstantColor.frag.00000000.inc"
 
@@ -26,6 +86,84 @@ struct ShaderBlob
     size_t codeSize;
 };
 
+constexpr ShaderBlob kDispatchUtils_comp_shaders[] = {
+    {kDispatchUtils_comp_00000000, sizeof(kDispatchUtils_comp_00000000)},
+    {kDispatchUtils_comp_00000001, sizeof(kDispatchUtils_comp_00000001)},
+    {kDispatchUtils_comp_00000002, sizeof(kDispatchUtils_comp_00000002)},
+    {kDispatchUtils_comp_00000003, sizeof(kDispatchUtils_comp_00000003)},
+    {kDispatchUtils_comp_00000004, sizeof(kDispatchUtils_comp_00000004)},
+    {kDispatchUtils_comp_00000005, sizeof(kDispatchUtils_comp_00000005)},
+    {kDispatchUtils_comp_00000006, sizeof(kDispatchUtils_comp_00000006)},
+    {kDispatchUtils_comp_00000007, sizeof(kDispatchUtils_comp_00000007)},
+    {kDispatchUtils_comp_00000008, sizeof(kDispatchUtils_comp_00000008)},
+    {kDispatchUtils_comp_00000009, sizeof(kDispatchUtils_comp_00000009)},
+    {kDispatchUtils_comp_0000000A, sizeof(kDispatchUtils_comp_0000000A)},
+    {kDispatchUtils_comp_0000000B, sizeof(kDispatchUtils_comp_0000000B)},
+    {nullptr, 0},  // 0x0000000C
+    {nullptr, 0},  // 0x0000000D
+    {nullptr, 0},  // 0x0000000E
+    {nullptr, 0},  // 0x0000000F
+    {kDispatchUtils_comp_00000010, sizeof(kDispatchUtils_comp_00000010)},
+    {kDispatchUtils_comp_00000011, sizeof(kDispatchUtils_comp_00000011)},
+    {kDispatchUtils_comp_00000012, sizeof(kDispatchUtils_comp_00000012)},
+    {kDispatchUtils_comp_00000013, sizeof(kDispatchUtils_comp_00000013)},
+    {kDispatchUtils_comp_00000014, sizeof(kDispatchUtils_comp_00000014)},
+    {kDispatchUtils_comp_00000015, sizeof(kDispatchUtils_comp_00000015)},
+    {kDispatchUtils_comp_00000016, sizeof(kDispatchUtils_comp_00000016)},
+    {kDispatchUtils_comp_00000017, sizeof(kDispatchUtils_comp_00000017)},
+    {kDispatchUtils_comp_00000018, sizeof(kDispatchUtils_comp_00000018)},
+    {kDispatchUtils_comp_00000019, sizeof(kDispatchUtils_comp_00000019)},
+    {kDispatchUtils_comp_0000001A, sizeof(kDispatchUtils_comp_0000001A)},
+    {kDispatchUtils_comp_0000001B, sizeof(kDispatchUtils_comp_0000001B)},
+    {nullptr, 0},  // 0x0000001C
+    {nullptr, 0},  // 0x0000001D
+    {nullptr, 0},  // 0x0000001E
+    {nullptr, 0},  // 0x0000001F
+    {kDispatchUtils_comp_00000020, sizeof(kDispatchUtils_comp_00000020)},
+    {kDispatchUtils_comp_00000021, sizeof(kDispatchUtils_comp_00000021)},
+    {kDispatchUtils_comp_00000022, sizeof(kDispatchUtils_comp_00000022)},
+    {kDispatchUtils_comp_00000023, sizeof(kDispatchUtils_comp_00000023)},
+    {kDispatchUtils_comp_00000024, sizeof(kDispatchUtils_comp_00000024)},
+    {kDispatchUtils_comp_00000025, sizeof(kDispatchUtils_comp_00000025)},
+    {kDispatchUtils_comp_00000026, sizeof(kDispatchUtils_comp_00000026)},
+    {kDispatchUtils_comp_00000027, sizeof(kDispatchUtils_comp_00000027)},
+    {kDispatchUtils_comp_00000028, sizeof(kDispatchUtils_comp_00000028)},
+    {kDispatchUtils_comp_00000029, sizeof(kDispatchUtils_comp_00000029)},
+    {kDispatchUtils_comp_0000002A, sizeof(kDispatchUtils_comp_0000002A)},
+    {kDispatchUtils_comp_0000002B, sizeof(kDispatchUtils_comp_0000002B)},
+    {nullptr, 0},  // 0x0000002C
+    {nullptr, 0},  // 0x0000002D
+    {nullptr, 0},  // 0x0000002E
+    {nullptr, 0},  // 0x0000002F
+    {kDispatchUtils_comp_00000030, sizeof(kDispatchUtils_comp_00000030)},
+    {kDispatchUtils_comp_00000031, sizeof(kDispatchUtils_comp_00000031)},
+    {kDispatchUtils_comp_00000032, sizeof(kDispatchUtils_comp_00000032)},
+    {kDispatchUtils_comp_00000033, sizeof(kDispatchUtils_comp_00000033)},
+    {kDispatchUtils_comp_00000034, sizeof(kDispatchUtils_comp_00000034)},
+    {kDispatchUtils_comp_00000035, sizeof(kDispatchUtils_comp_00000035)},
+    {kDispatchUtils_comp_00000036, sizeof(kDispatchUtils_comp_00000036)},
+    {kDispatchUtils_comp_00000037, sizeof(kDispatchUtils_comp_00000037)},
+    {kDispatchUtils_comp_00000038, sizeof(kDispatchUtils_comp_00000038)},
+    {kDispatchUtils_comp_00000039, sizeof(kDispatchUtils_comp_00000039)},
+    {kDispatchUtils_comp_0000003A, sizeof(kDispatchUtils_comp_0000003A)},
+    {kDispatchUtils_comp_0000003B, sizeof(kDispatchUtils_comp_0000003B)},
+    {nullptr, 0},  // 0x0000003C
+    {nullptr, 0},  // 0x0000003D
+    {nullptr, 0},  // 0x0000003E
+    {nullptr, 0},  // 0x0000003F
+    {kDispatchUtils_comp_00000040, sizeof(kDispatchUtils_comp_00000040)},
+    {kDispatchUtils_comp_00000041, sizeof(kDispatchUtils_comp_00000041)},
+    {kDispatchUtils_comp_00000042, sizeof(kDispatchUtils_comp_00000042)},
+    {kDispatchUtils_comp_00000043, sizeof(kDispatchUtils_comp_00000043)},
+    {kDispatchUtils_comp_00000044, sizeof(kDispatchUtils_comp_00000044)},
+    {kDispatchUtils_comp_00000045, sizeof(kDispatchUtils_comp_00000045)},
+    {kDispatchUtils_comp_00000046, sizeof(kDispatchUtils_comp_00000046)},
+    {kDispatchUtils_comp_00000047, sizeof(kDispatchUtils_comp_00000047)},
+    {kDispatchUtils_comp_00000048, sizeof(kDispatchUtils_comp_00000048)},
+    {kDispatchUtils_comp_00000049, sizeof(kDispatchUtils_comp_00000049)},
+    {kDispatchUtils_comp_0000004A, sizeof(kDispatchUtils_comp_0000004A)},
+    {kDispatchUtils_comp_0000004B, sizeof(kDispatchUtils_comp_0000004B)},
+};
 constexpr ShaderBlob kFullScreenQuad_vert_shaders[] = {
     {kFullScreenQuad_vert_00000000, sizeof(kFullScreenQuad_vert_00000000)},
 };
@@ -40,6 +178,10 @@ ShaderLibrary::~ShaderLibrary() {}
 
 void ShaderLibrary::destroy(VkDevice device)
 {
+    for (RefCounted<ShaderAndSerial> &shader : mDispatchUtils_comp_shaders)
+    {
+        shader.get().destroy(device);
+    }
     for (RefCounted<ShaderAndSerial> &shader : mFullScreenQuad_vert_shaders)
     {
         shader.get().destroy(device);
@@ -48,6 +190,36 @@ void ShaderLibrary::destroy(VkDevice device)
     {
         shader.get().destroy(device);
     }
+}
+
+angle::Result ShaderLibrary::getDispatchUtils_comp(Context *context,
+                                                   uint32_t shaderFlags,
+                                                   RefCounted<ShaderAndSerial> **shaderOut)
+{
+    ASSERT(shaderFlags < ArraySize(kDispatchUtils_comp_shaders));
+    ASSERT((shaderFlags & InternalShader::DispatchUtils_comp::kFunctionMask) >=
+               InternalShader::DispatchUtils_comp::kIsClear &&
+           (shaderFlags & InternalShader::DispatchUtils_comp::kFunctionMask) <=
+               InternalShader::DispatchUtils_comp::kIsCopy);
+    ASSERT((shaderFlags & InternalShader::DispatchUtils_comp::kFormatMask) >=
+               InternalShader::DispatchUtils_comp::kIsFloat &&
+           (shaderFlags & InternalShader::DispatchUtils_comp::kFormatMask) <=
+               InternalShader::DispatchUtils_comp::kIsUint);
+    ASSERT((shaderFlags & InternalShader::DispatchUtils_comp::kResourceTypeMask) >=
+               InternalShader::DispatchUtils_comp::kIsBuffer &&
+           (shaderFlags & InternalShader::DispatchUtils_comp::kResourceTypeMask) <=
+               InternalShader::DispatchUtils_comp::kIsTexture2darray);
+    RefCounted<ShaderAndSerial> &shader = mDispatchUtils_comp_shaders[shaderFlags];
+    *shaderOut                          = &shader;
+
+    if (shader.get().valid())
+    {
+        return angle::Result::Continue();
+    }
+
+    // Create shader lazily. Access will need to be locked for multi-threading.
+    const ShaderBlob &shaderCode = kDispatchUtils_comp_shaders[shaderFlags];
+    return InitShaderAndSerial(context, &shader.get(), shaderCode.code, shaderCode.codeSize);
 }
 
 angle::Result ShaderLibrary::getFullScreenQuad_vert(Context *context,
