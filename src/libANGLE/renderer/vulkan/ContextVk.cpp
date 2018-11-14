@@ -1159,9 +1159,9 @@ angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
         static_cast<float>(mDrawFramebuffer->getState().getDimensions().height) * 0.5f;
 
     // Allocate a new region in the dynamic buffer.
-    uint8_t *ptr            = nullptr;
-    VkBuffer buffer         = VK_NULL_HANDLE;
-    VkDeviceSize offset     = 0;
+    uint8_t *ptr        = nullptr;
+    VkBuffer buffer     = VK_NULL_HANDLE;
+    VkDeviceSize offset = 0;
     ANGLE_TRY(mDriverUniformsBuffer.allocate(this, sizeof(DriverUniforms), &ptr, &buffer, &offset,
                                              nullptr));
     float scaleY = isViewportFlipEnabledForDrawFBO() ? -1.0f : 1.0f;
@@ -1304,6 +1304,7 @@ angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
     const gl::VertexAttribCurrentValueData &defaultValue =
         glState.getVertexAttribCurrentValues()[attribIndex];
 
+    // TODO(syoussefi): clear with dispatch
     ASSERT(defaultValue.Type == GL_FLOAT);
 
     memcpy(ptr, defaultValue.FloatValues, kDefaultValueSize);

@@ -977,7 +977,7 @@ angle::Result FramebufferVk::clearWithClearAttachments(
         VkClearAttachment &clearAttachment = clearAttachments[clearAttachmentIndex];
         clearAttachment.aspectMask      = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
         clearAttachment.colorAttachment = VK_ATTACHMENT_UNUSED;
-        clearAttachment.clearValue         = depthStencilClearValue;
+        clearAttachment.clearValue      = depthStencilClearValue;
         ++clearAttachmentIndex;
     }
     else
