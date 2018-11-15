@@ -57,6 +57,24 @@
       "revId": "de69d793689b61bb531c6688bb96b78c69a96808",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51a63d60_bcdfc00c",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3001,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-15T12:04:14Z",
+      "side": 1,
+      "message": "In the original version of the code (before your change) the complexity was O(size^2) because there\u0027s a loop on size, and because the string\u0027s operator +\u003d is in linear complexity.\n\nI\u0027d like to see if we can have the same gains by making the original version use ostringstream instead of doing the zero array trick. If it works, it would be better because it would be simpler than the trick.",
+      "parentUuid": "611e9c1f_5a4e0d9a",
+      "revId": "de69d793689b61bb531c6688bb96b78c69a96808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
