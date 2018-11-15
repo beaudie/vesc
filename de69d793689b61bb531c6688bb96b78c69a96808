@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d04da9ad_8e6844b6",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-11-15T00:52:05Z",
+      "side": 1,
+      "message": "O(size/C + C).",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 5
+      },
+      "revId": "de69d793689b61bb531c6688bb96b78c69a96808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c2b46038_69188aa2",
         "filename": "src/compiler/translator/OutputHLSL.cpp",
         "patchSetId": 5
@@ -13,6 +36,24 @@
       "writtenOn": "2018-11-14T12:20:49Z",
       "side": 1,
       "message": "This method\u0027s complexity is O(size^2) currently, it could be made O(size) with ImmutableStringBuilder or ostrinstream.",
+      "revId": "de69d793689b61bb531c6688bb96b78c69a96808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "611e9c1f_5a4e0d9a",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3001,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-11-15T00:52:05Z",
+      "side": 1,
+      "message": "Sorry, still not clear about the \u0027O(size^2)\u0027 you mentioned.",
+      "parentUuid": "c2b46038_69188aa2",
       "revId": "de69d793689b61bb531c6688bb96b78c69a96808",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

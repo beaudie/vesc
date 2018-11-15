@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f076cd5c_4961f28b",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2982,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-11-15T00:52:05Z",
+      "side": 0,
+      "message": "O(size).",
+      "range": {
+        "startLine": 2973,
+        "startChar": 0,
+        "endLine": 2982,
+        "endChar": 0
+      },
+      "revId": "cd47a379f9606a2ff47c047acabaeea73eeeaaef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
