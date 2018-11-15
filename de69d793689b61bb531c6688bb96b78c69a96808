@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "d63a4ef8_b760ccd1",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-15T20:08:46Z",
+      "side": 1,
+      "message": "make this a char*, avoid non-POD globals.",
+      "range": {
+        "startLine": 119,
+        "startChar": 6,
+        "endLine": 119,
+        "endChar": 19
+      },
+      "revId": "de69d793689b61bb531c6688bb96b78c69a96808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a367203_2c546592",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-15T20:08:46Z",
+      "side": 1,
+      "message": "Could we determine the size of shared variables before declaring this array?  This could be allocating 256 floats for every shader even if they have no shared variables.",
+      "range": {
+        "startLine": 120,
+        "startChar": 28,
+        "endLine": 120,
+        "endChar": 31
+      },
+      "revId": "de69d793689b61bb531c6688bb96b78c69a96808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d04da9ad_8e6844b6",
         "filename": "src/compiler/translator/OutputHLSL.cpp",
         "patchSetId": 5
