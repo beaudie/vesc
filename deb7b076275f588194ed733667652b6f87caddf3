@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c5d41231_d93e965b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-15T17:58:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0528ade_b9c183e1",
+      "range": {
+        "startLine": 707,
+        "startChar": 6,
+        "endLine": 707,
+        "endChar": 87
+      },
+      "revId": "deb7b076275f588194ed733667652b6f87caddf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b1e377bc_b2c19cc1",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "deb7b076275f588194ed733667652b6f87caddf3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc3b6750_e2b73b9f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-15T17:58:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1e377bc_b2c19cc1",
+      "range": {
+        "startLine": 297,
+        "startChar": 12,
+        "endLine": 297,
+        "endChar": 22
+      },
+      "revId": "deb7b076275f588194ed733667652b6f87caddf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -187,6 +235,30 @@
       "revId": "deb7b076275f588194ed733667652b6f87caddf3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0a439e0_1ec6414d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-15T17:58:29Z",
+      "side": 1,
+      "message": "Done the refactoring and made the const global. Wasn\u0027t worth it adding a helper method for one line.",
+      "parentUuid": "14d9feba_9c686a89",
+      "range": {
+        "startLine": 1120,
+        "startChar": 0,
+        "endLine": 1128,
+        "endChar": 0
+      },
+      "revId": "deb7b076275f588194ed733667652b6f87caddf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
