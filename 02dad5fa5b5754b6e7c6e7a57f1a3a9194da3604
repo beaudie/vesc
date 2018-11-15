@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "470f4a13_8cbcbb5b",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4838,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-15T20:21:09Z",
+      "side": 1,
+      "message": "If I understand the comment above correctly, this must be GL_OUT_OF_MEMORY.",
+      "range": {
+        "startLine": 4838,
+        "startChar": 33,
+        "endLine": 4838,
+        "endChar": 45
+      },
+      "revId": "02dad5fa5b5754b6e7c6e7a57f1a3a9194da3604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
