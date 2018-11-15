@@ -75,6 +75,24 @@
       "revId": "de69d793689b61bb531c6688bb96b78c69a96808",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f120dd4_ce5b8df2",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3001,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-11-15T12:50:41Z",
+      "side": 1,
+      "message": "Ah, I got it. Thanks for clarification. Your concern is string\u0027s +\u003d operator.\n\nI tried with ostringstream like this:\n   std::ostringstream ss;\n    ss \u003c\u003c \"{\";\n    size_t size \u003d type.getObjectSize();\n    for (size_t component \u003d 0; component \u003c size; component++)\n    {\n        ss \u003c\u003c \"0\";\n\n        if (component + 1 \u003c size)\n        {\n            ss \u003c\u003c \", \";\n        }\n    }\n    ss \u003c\u003c \"}\";\n\n    return TString(ss.str().c_str());\n\n\nBut I didn\u0027t see any perceivable perf improvement:\n\nc:\\workspace\\angle\u003eout\\Release\\angle_perftests.exe --gtest_filter\u003dZeroInitializer*\nSkipping tests using configuration ES2_OPENGLES because it is not available.\nNote: Google Test filter \u003d ZeroInitializer*\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] Running 2 tests from 1 test case.\n[----------] Global test environment set-up.\n[----------] 2 tests from ZeroInitializerBenchmark\n[ RUN      ] ZeroInitializerBenchmark.Run/d3d11_local\n*RESULT ZeroInitializer_d3d11_local: microSecPerIteration\u003d 1347034.2241983102 us\n*RESULT ZeroInitializer_d3d11_local: score\u003d 1 score\n[       OK ] ZeroInitializerBenchmark.Run/d3d11_local (6722 ms)\n[ RUN      ] ZeroInitializerBenchmark.Run/d3d11_shared\n*RESULT ZeroInitializer_d3d11_shared: microSecPerIteration\u003d 1231438.3428049614 us\n*RESULT ZeroInitializer_d3d11_shared: score\u003d 1 score\n[       OK ] ZeroInitializerBenchmark.Run/d3d11_shared (6140 ms)\n[----------] 2 tests from ZeroInitializerBenchmark (12862 ms total)\n\n[----------] Global test environment tear-down\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] 2 tests from 1 test case ran. (12863 ms total)\n[  PASSED  ] 2 tests.",
+      "parentUuid": "51a63d60_bcdfc00c",
+      "revId": "de69d793689b61bb531c6688bb96b78c69a96808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
