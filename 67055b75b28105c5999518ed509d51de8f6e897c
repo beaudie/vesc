@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4a31cd5f_c1681871",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-15T14:47:21Z",
+      "side": 1,
+      "message": "Well, I plan to remove egl::Error as well. So hopefully not. :)",
+      "parentUuid": "9014d211_5aa09f34",
+      "range": {
+        "startLine": 1422,
+        "startChar": 0,
+        "endLine": 1427,
+        "endChar": 0
+      },
+      "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e2f2c30a_0e52da5e",
         "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbc85762_ba1a57b8",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2485,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-15T14:47:21Z",
+      "side": 1,
+      "message": "It was both unimplemented and unreachable. :)",
+      "parentUuid": "e2f2c30a_0e52da5e",
+      "range": {
+        "startLine": 2485,
+        "startChar": 4,
+        "endLine": 2485,
+        "endChar": 24
+      },
+      "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3454f032_0e46248d",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3173,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-15T14:47:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6500c3a0_6cd3743d",
+      "range": {
+        "startLine": 3173,
+        "startChar": 4,
+        "endLine": 3173,
+        "endChar": 24
+      },
+      "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "252a096b_f29dcd2c",
         "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ab6c2cb_23a56520",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-15T14:47:21Z",
+      "side": 1,
+      "message": "It wouldn\u0027t change behaviour in practice since this is an implementation error.",
+      "parentUuid": "252a096b_f29dcd2c",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 51
+      },
+      "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "215de232_46dfc0a3",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-15T14:47:21Z",
+      "side": 1,
+      "message": "Ack\n\nSee earlier answer.",
+      "parentUuid": "3a00f139_07ca661b",
+      "range": {
+        "startLine": 1048,
+        "startChar": 4,
+        "endLine": 1048,
+        "endChar": 24
+      },
+      "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "918a6658_1bc78c7e",
         "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
         "patchSetId": 7
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "4341f5ea_06943b9f",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-15T14:47:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "918a6658_1bc78c7e",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 24
+      },
+      "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "88b9950d_937dc744",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 7
@@ -160,6 +304,30 @@
       "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b95256b_7be7bb96",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-15T14:47:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "88b9950d_937dc744",
+      "range": {
+        "startLine": 505,
+        "startChar": 4,
+        "endLine": 505,
+        "endChar": 24
+      },
+      "revId": "67055b75b28105c5999518ed509d51de8f6e897c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
