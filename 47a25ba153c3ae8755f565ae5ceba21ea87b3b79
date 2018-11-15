@@ -70,6 +70,30 @@
       "revId": "47a25ba153c3ae8755f565ae5ceba21ea87b3b79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25fe60d2_9801a027",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-11-15T15:48:56Z",
+      "side": 1,
+      "message": "Watching Courtney do this change, the BUILD.gn system gets upset if you try and build two APKs with the same name, so we\u0027ll need to differentiate them somehow.",
+      "parentUuid": "95b1fc35_36d7b8cf",
+      "range": {
+        "startLine": 998,
+        "startChar": 16,
+        "endLine": 998,
+        "endChar": 33
+      },
+      "revId": "47a25ba153c3ae8755f565ae5ceba21ea87b3b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
