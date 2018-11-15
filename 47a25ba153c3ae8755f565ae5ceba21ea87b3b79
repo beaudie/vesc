@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "0a8d5065_0557c7b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-15T16:09:08Z",
+      "side": 1,
+      "message": "please when you make ANGLE CL\u0027s don\u0027t forget to associate them with public bugs in the ANGLE tracker.",
+      "revId": "47a25ba153c3ae8755f565ae5ceba21ea87b3b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fe6afd74_5e496642",
         "filename": "AOSPAndroidManifest.xml",
         "patchSetId": 1
@@ -13,6 +30,30 @@
       "writtenOn": "2018-11-15T15:56:09Z",
       "side": 1,
       "message": "Please use jinja as I\u0027ve suggested in https://chromium-review.googlesource.com/c/angle/angle/+/1335896.\nI\u0027d like to avoid duplication as much as possible. This xml might be small now, but Tim is adding more stuff to it in https://chromium-review.googlesource.com/c/angle/angle/+/1330315.",
+      "range": {
+        "startLine": 10,
+        "startChar": 13,
+        "endLine": 10,
+        "endChar": 30
+      },
+      "revId": "47a25ba153c3ae8755f565ae5ceba21ea87b3b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa827568_b5b85765",
+        "filename": "AOSPAndroidManifest.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-15T16:09:08Z",
+      "side": 1,
+      "message": "+1 to this.",
+      "parentUuid": "fe6afd74_5e496642",
       "range": {
         "startLine": 10,
         "startChar": 13,
