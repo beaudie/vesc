@@ -46,6 +46,30 @@
       "revId": "47a25ba153c3ae8755f565ae5ceba21ea87b3b79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95b1fc35_36d7b8cf",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2018-11-15T01:46:45Z",
+      "side": 1,
+      "message": "If we follow the webview example (which is the plan):\n\n  external/chromium-webview/prebuilt/x86/webview.apk\n  external/chromium-webview/prebuilt/x86_64/webview.apk\n  external/chromium-webview/prebuilt/arm64/webview.apk\n  external/chromium-webview/prebuilt/arm/webview.apk\n\nthe ANGLE APK names would become:\n\n  external/chromium-angle/prebuilt/x86/angle.apk\n  external/chromium-angle/prebuilt/x86_64/angle.apk\n  external/chromium-angle/prebuilt/arm64/angle.apk\n  external/chromium-angle/prebuilt/arm/angle.apk\n\nI don\u0027t know that we need to tag it as AOSP at all.",
+      "parentUuid": "7ec43691_4ced9dee",
+      "range": {
+        "startLine": 998,
+        "startChar": 16,
+        "endLine": 998,
+        "endChar": 33
+      },
+      "revId": "47a25ba153c3ae8755f565ae5ceba21ea87b3b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
