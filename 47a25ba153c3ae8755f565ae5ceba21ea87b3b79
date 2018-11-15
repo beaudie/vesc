@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "fe6afd74_5e496642",
+        "filename": "AOSPAndroidManifest.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-15T15:56:09Z",
+      "side": 1,
+      "message": "Please use jinja as I\u0027ve suggested in https://chromium-review.googlesource.com/c/angle/angle/+/1335896.\nI\u0027d like to avoid duplication as much as possible. This xml might be small now, but Tim is adding more stuff to it in https://chromium-review.googlesource.com/c/angle/angle/+/1330315.",
+      "range": {
+        "startLine": 10,
+        "startChar": 13,
+        "endLine": 10,
+        "endChar": 30
+      },
+      "revId": "47a25ba153c3ae8755f565ae5ceba21ea87b3b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "306ce7f3_7d1b7b2d",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-15T15:56:09Z",
+      "side": 1,
+      "message": "Please use \"foreach\" and \"target\", like angle_util does above, to minimize duplication.",
+      "range": {
+        "startLine": 983,
+        "startChar": 2,
+        "endLine": 983,
+        "endChar": 31
+      },
+      "revId": "47a25ba153c3ae8755f565ae5ceba21ea87b3b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a9b170a0_2c1fac89",
         "filename": "BUILD.gn",
         "patchSetId": 1
