@@ -22,6 +22,30 @@
       "revId": "2c7e6f7147884510cfb59a6613cdb4a4e1dea753",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c67eb4d_a8bc62ac",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-15T16:32:27Z",
+      "side": 1,
+      "message": "I wonder if this check can just be skipped and we can always use angleFormat() read/write funcitons? Maybe just calculating the right sizes fixes the problem?",
+      "parentUuid": "ea553848_139da30b",
+      "range": {
+        "startLine": 673,
+        "startChar": 8,
+        "endLine": 674,
+        "endChar": 56
+      },
+      "revId": "2c7e6f7147884510cfb59a6613cdb4a4e1dea753",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
