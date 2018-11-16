@@ -218,7 +218,7 @@ class Texture final : public RefCountObject,
     void setSwizzleAlpha(GLenum swizzleAlpha);
     GLenum getSwizzleAlpha() const;
 
-    void setMinFilter(GLenum minFilter);
+    void setMinFilter(const Context *context, GLenum minFilter);
     GLenum getMinFilter() const;
 
     void setMagFilter(GLenum magFilter);
@@ -256,10 +256,10 @@ class Texture final : public RefCountObject,
     angle::Result setBaseLevel(const Context *context, GLuint baseLevel);
     GLuint getBaseLevel() const;
 
-    void setMaxLevel(GLuint maxLevel);
+    void setMaxLevel(const Context *context, GLuint maxLevel);
     GLuint getMaxLevel() const;
 
-    void setDepthStencilTextureMode(GLenum mode);
+    void setDepthStencilTextureMode(const Context *context, GLenum mode);
     GLenum getDepthStencilTextureMode() const;
 
     bool getImmutableFormat() const;
@@ -377,7 +377,7 @@ class Texture final : public RefCountObject,
     GLint getMemorySize() const;
     GLint getLevelMemorySize(TextureTarget target, GLint level) const;
 
-    void signalDirty(const Context *context, InitState initState);
+    void signalDirtyStorage(const Context *context, InitState initState);
 
     bool isSamplerComplete(const Context *context, const Sampler *optionalSampler);
 
@@ -479,6 +479,8 @@ class Texture final : public RefCountObject,
                                             const gl::Box &area);
 
     angle::Result handleMipmapGenerationHint(Context *context, int level);
+
+    void signalDirtyState(const Context *context, size_t dirtyBit);
 
     TextureState mState;
     DirtyBits mDirtyBits;

@@ -3941,6 +3941,8 @@ void Program::updateSamplerUniform(const VariableLocation &locationInfo,
         }
         else if (oldSamplerType == TextureType::InvalidEnum)
         {
+            // FIXME
+
             // Previous conflict. Check if this new change fixed the conflict.
             oldSamplerType = mState.getSamplerUniformTextureType(oldSamplerIndex);
         }

@@ -2140,14 +2140,12 @@ void Context::texParameterf(TextureType target, GLenum pname, GLfloat param)
 {
     Texture *const texture = getTargetTexture(target);
     SetTexParameterf(this, texture, pname, param);
-    onTextureChange(texture);
 }
 
 void Context::texParameterfv(TextureType target, GLenum pname, const GLfloat *params)
 {
     Texture *const texture = getTargetTexture(target);
     SetTexParameterfv(this, texture, pname, params);
-    onTextureChange(texture);
 }
 
 void Context::texParameterfvRobust(TextureType target,
@@ -2162,28 +2160,24 @@ void Context::texParameteri(TextureType target, GLenum pname, GLint param)
 {
     Texture *const texture = getTargetTexture(target);
     SetTexParameteri(this, texture, pname, param);
-    onTextureChange(texture);
 }
 
 void Context::texParameteriv(TextureType target, GLenum pname, const GLint *params)
 {
     Texture *const texture = getTargetTexture(target);
     SetTexParameteriv(this, texture, pname, params);
-    onTextureChange(texture);
 }
 
 void Context::texParameterIiv(TextureType target, GLenum pname, const GLint *params)
 {
     Texture *const texture = getTargetTexture(target);
     SetTexParameterIiv(this, texture, pname, params);
-    onTextureChange(texture);
 }
 
 void Context::texParameterIuiv(TextureType target, GLenum pname, const GLuint *params)
 {
     Texture *const texture = getTargetTexture(target);
     SetTexParameterIuiv(this, texture, pname, params);
-    onTextureChange(texture);
 }
 
 void Context::texParameterivRobust(TextureType target,
@@ -3143,7 +3137,7 @@ void Context::requestExtension(const char *name)
     {
         if (zeroTexture.get() != nullptr)
         {
-            zeroTexture->signalDirty(this, InitState::Initialized);
+            zeroTexture->signalDirtyStorage(this, InitState::Initialized);
         }
     }
 
@@ -6096,6 +6090,13 @@ void Context::setUniform1iImpl(Program *program, GLint location, GLsizei count, 
 {
     if (program->setUniform1iv(location, count, v) == Program::SetUniformResult::SamplerChanged)
     {
+        const ActiveTextureArray<TextureType> &samplerTypes = program->getActiveSamplerTypes();
+
+        for (GLsizei index = 0; index < count; ++index)
+        {
+            if (mGLState->getSamples)
+        }
+
         mGLState.setObjectDirty(GL_PROGRAM);
         mStateCache.onActiveTextureChange(this);
     }
@@ -7012,13 +7013,6 @@ void Context::programUniformMatrix4x3fv(GLuint program,
     Program *programObject = getProgramResolveLink(program);
     ASSERT(programObject);
     programObject->setUniformMatrix4x3fv(location, count, transpose, value);
-}
-
-void Context::onTextureChange(const Texture *texture)
-{
-    // Conservatively assume all textures are dirty.
-    // TODO(jmadill): More fine-grained update.
-    mGLState.setObjectDirty(GL_TEXTURE);
 }
 
 bool Context::isCurrentTransformFeedback(const TransformFeedback *tf) const
@@ -8117,7 +8111,7 @@ void Context::onSubjectStateChange(const Context *context,
         default:
             if (index < kTextureMaxSubjectIndex)
             {
-                mGLState.onActiveTextureStateChange(index);
+                mGLState.onActiveTextureStateChange(this, index);
                 mStateCache.onActiveTextureChange(this);
             }
             else if (index < kUniformBufferMaxSubjectIndex)

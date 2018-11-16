@@ -533,7 +533,7 @@ class State : angle::NonCopyable
     const ActiveTexturePointerArray &getActiveTexturesCache() const { return mActiveTexturesCache; }
     ComponentTypeMask getCurrentValuesTypeMask() const { return mCurrentValuesTypeMask; }
 
-    void onActiveTextureStateChange(size_t textureIndex);
+    void onActiveTextureStateChange(const Context *context, size_t textureIndex);
     void onUniformBufferStateChange(size_t uniformBufferIndex);
 
     angle::Result clearUnclearedActiveTextures(const Context *context);

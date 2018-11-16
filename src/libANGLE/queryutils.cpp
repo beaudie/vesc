@@ -327,7 +327,7 @@ void SetTexParameterBase(Context *context, Texture *texture, GLenum pname, const
             texture->setWrapR(ConvertToGLenum(pname, params[0]));
             break;
         case GL_TEXTURE_MIN_FILTER:
-            texture->setMinFilter(ConvertToGLenum(pname, params[0]));
+            texture->setMinFilter(context, ConvertToGLenum(pname, params[0]));
             break;
         case GL_TEXTURE_MAG_FILTER:
             texture->setMagFilter(ConvertToGLenum(pname, params[0]));
@@ -363,7 +363,7 @@ void SetTexParameterBase(Context *context, Texture *texture, GLenum pname, const
             break;
         }
         case GL_TEXTURE_MAX_LEVEL:
-            texture->setMaxLevel(clampCast<GLuint>(CastQueryValueTo<GLint>(pname, params[0])));
+            texture->setMaxLevel(context, clampCast<GLuint>(CastQueryValueTo<GLint>(pname, params[0])));
             break;
         case GL_TEXTURE_MIN_LOD:
             texture->setMinLod(CastQueryValueTo<GLfloat>(pname, params[0]));
@@ -372,7 +372,7 @@ void SetTexParameterBase(Context *context, Texture *texture, GLenum pname, const
             texture->setMaxLod(CastQueryValueTo<GLfloat>(pname, params[0]));
             break;
         case GL_DEPTH_STENCIL_TEXTURE_MODE:
-            texture->setDepthStencilTextureMode(ConvertToGLenum(pname, params[0]));
+            texture->setDepthStencilTextureMode(context, ConvertToGLenum(pname, params[0]));
             break;
         case GL_TEXTURE_SRGB_DECODE_EXT:
             texture->setSRGBDecode(ConvertToGLenum(pname, params[0]));

@@ -486,11 +486,6 @@ ANGLE_INLINE angle::Result State::updateActiveTexture(const Context *context,
         ANGLE_TRY(texture->syncState(context));
     }
 
-    if (texture->initState() == InitState::MayNeedInit)
-    {
-        mCachedTexturesInitState = InitState::MayNeedInit;
-    }
-
     return angle::Result::Continue();
 }
 
@@ -1024,6 +1019,11 @@ angle::Result State::setSamplerTexture(const Context *context, TextureType type,
         mProgram->getActiveSamplerTypes()[mActiveSampler] == type)
     {
         ANGLE_TRY(updateActiveTexture(context, mActiveSampler, texture));
+
+        if (texture->initState() == InitState::MayNeedInit)
+        {
+            mCachedTexturesInitState = InitState::MayNeedInit;
+        }
     }
 
     mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
@@ -2585,6 +2585,11 @@ angle::Result State::syncProgramTextures(const Context *context)
 
         newActiveTextures.set(textureUnitIndex);
         ANGLE_TRY(updateActiveTexture(context, textureUnitIndex, texture));
+
+        if (texture->initState() == InitState::MayNeedInit)
+        {
+            mCachedTexturesInitState = InitState::MayNeedInit;
+        }
     }
 
     // Unset now missing textures.
@@ -2752,14 +2757,12 @@ void State::setImageUnit(const Context *context,
 }
 
 // Handle a dirty texture event.
-void State::onActiveTextureStateChange(size_t textureIndex)
+void State::onActiveTextureStateChange(const Context *context, size_t textureIndex)
 {
-    // Conservatively assume all textures are dirty.
-    // TODO(jmadill): More fine-grained update.
-    mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_TEXTURES);
+    Texture *texture = mActiveTexturesCache[textureIndex];
+    updateActiveTexture(context, textureIndex, texture);
 
-    if (!mActiveTexturesCache[textureIndex] ||
-        mActiveTexturesCache[textureIndex]->initState() == InitState::MayNeedInit)
+    if (!texture || texture->initState() == InitState::MayNeedInit)
     {
         mCachedTexturesInitState = InitState::MayNeedInit;
     }
