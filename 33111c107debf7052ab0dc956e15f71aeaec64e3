@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4bcb105_271b23b1",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-16T15:30:53Z",
+      "side": 1,
+      "message": "I think this should be the other way around, this should include the validationES{}{}.h and the validationES{}{}.h will include the inline files at the bottom.",
+      "range": {
+        "startLine": 318,
+        "startChar": 9,
+        "endLine": 318,
+        "endChar": 46
+      },
+      "revId": "33111c107debf7052ab0dc956e15f71aeaec64e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
