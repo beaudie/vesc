@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "7e4379dd_a42a0363",
+        "filename": "src/feature_support_util/a4a_rules.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-16T18:57:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1138e1b9_9171b2b5",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 0
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e0f106a0_d5ecd2fd",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 2
@@ -163,6 +187,30 @@
     },
     {
       "key": {
+        "uuid": "5a857c27_602a46f5",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-16T18:57:56Z",
+      "side": 1,
+      "message": "\u003e nit: ...\n\nMakes sense to use a different name.  I\u0027ll deprecate this name, and add a new name.  The way API changes take place (since it involves two different source trees, with different policies and potentials to revert changes after they go in) is to support 2 versions of the API until it\u0027s clear that the new version is in both places and won\u0027t be reverted.  Changing the name/signature/semantics of the version negotiation is tougher, and so the sequence will be (within ANGLE):\n\n- Add a version-2 function with new name/etc.\n- Once version-2 is fully in place, remove version-1 functions.\n\nOn the Android side, it will be:\n\n- Use this function to determine if the ANGLE APK is version 1 or version 2.\n- If version 2, start using the rest of the version-2 API\n- At the same time we remove checking-for/using the version-1 API, replace the Android code that finds/uses this function with code that finds/uses the new function.\n\n\u003e Also, the decision of the \"best\" version to use seems like it doesn\u0027t have to be embedded into this API. ...\n\nI know that there are lots of ways to do version negotiation.  This is modeled after how the desktop Vulkan loader works with drivers.",
+      "parentUuid": "0535627e_dc0c149f",
+      "range": {
+        "startLine": 35,
+        "startChar": 18,
+        "endLine": 35,
+        "endChar": 36
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "744711b3_fa3751a2",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 2
@@ -231,6 +279,30 @@
       "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33103aa0_db4d52fb",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-16T18:57:56Z",
+      "side": 1,
+      "message": "I\u0027m going to resolve this old discussion because we moved it elsewhere, and are making progress in those other forums.",
+      "parentUuid": "d62b0be4_e3c5d462",
+      "range": {
+        "startLine": 48,
+        "startChar": 18,
+        "endLine": 48,
+        "endChar": 47
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
