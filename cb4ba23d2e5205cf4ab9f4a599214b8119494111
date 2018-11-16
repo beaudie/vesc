@@ -95,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "1cb3d024_9d13c32d",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-16T22:53:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0f106a0_d5ecd2fd",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 3
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8cb64b0c_a79efbca",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 2
@@ -115,6 +139,30 @@
       "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e9afdb7_8c8c8c58",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-16T22:53:28Z",
+      "side": 1,
+      "message": "I\u0027m going to port this comment to the latest Patch Set, so it\u0027s easy to find.",
+      "parentUuid": "8cb64b0c_a79efbca",
+      "range": {
+        "startLine": 874,
+        "startChar": 4,
+        "endLine": 874,
+        "endChar": 13
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -141,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "e24e21d5_cead7380",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-16T22:53:28Z",
+      "side": 1,
+      "message": "Good idea in general.  I think it\u0027s not worth it here (quick allocate/use/delete).",
+      "parentUuid": "259ce14b_f8ca8e38",
+      "range": {
+        "startLine": 927,
+        "startChar": 4,
+        "endLine": 927,
+        "endChar": 58
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec22c24b_682f7beb",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 2
@@ -161,6 +233,30 @@
       "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c8737f3_1dcab7c2",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 932,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-16T22:53:28Z",
+      "side": 1,
+      "message": "Good to know, thanks.  The version-2 API will move deletion responsibilities up to the Android EGL loader, and so I probably won\u0027t make the change in this function (which will be deleted once the version-2 API is firmly in place).",
+      "parentUuid": "ec22c24b_682f7beb",
+      "range": {
+        "startLine": 932,
+        "startChar": 4,
+        "endLine": 932,
+        "endChar": 19
+      },
+      "revId": "cb4ba23d2e5205cf4ab9f4a599214b8119494111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

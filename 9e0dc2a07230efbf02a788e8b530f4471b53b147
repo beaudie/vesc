@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f494bbd_b789cf53",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-16T22:53:28Z",
+      "side": 1,
+      "message": "From Jamie in an earlier Patch Set:\n\nnit: std::list can be heavy weight. consider using std::vector unless you need to insert and delete in the middle of the list quite often.",
+      "revId": "9e0dc2a07230efbf02a788e8b530f4471b53b147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
