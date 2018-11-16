@@ -57,6 +57,24 @@
       "revId": "cd47a379f9606a2ff47c047acabaeea73eeeaaef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e413d71_c9fb071a",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2035,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-16T14:45:03Z",
+      "side": 0,
+      "message": "If you zero initialize a variable that is initialized in the code, the compiler can optimize the zero initialization out. But if it\u0027s a shared variable, it cannot do that, which may lead to inefficiencies. I presume SH_INIT_SHARED_VARIABLES was introduced to let the caller determine whether they are more concerned with safety (e.g. webgl) or performance (desktop).",
+      "parentUuid": "f421e032_7f739b98",
+      "revId": "cd47a379f9606a2ff47c047acabaeea73eeeaaef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
