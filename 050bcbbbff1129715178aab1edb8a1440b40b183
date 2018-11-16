@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24a0840b_6fa794d3",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-16T19:06:36Z",
+      "side": 1,
+      "message": "Proposal to change name to ANGLEEvalRulesForApplication",
+      "revId": "050bcbbbff1129715178aab1edb8a1440b40b183",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
