@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d51a73a_55dd9632",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1332,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-16T20:04:55Z",
+      "side": 0,
+      "message": "There are a few instances where I removed extra logging. Understood that there\u0027s a viewpoint that these are valuable. If we want to add them back, we can do this by extending validationError to either take an optional fixed parameter or using c-style format strings. There are strong performance reasons to prefer the c-style approach to the c++-style streams. The code size being smaller is better for caching and inlining. And the code size savings are real.",
+      "range": {
+        "startLine": 1332,
+        "startChar": 47,
+        "endLine": 1332,
+        "endChar": 75
+      },
+      "revId": "67b5cf371e35f56a595cd035bcb1a3abd99cbba3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
