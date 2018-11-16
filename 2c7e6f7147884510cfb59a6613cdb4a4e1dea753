@@ -94,6 +94,30 @@
       "revId": "2c7e6f7147884510cfb59a6613cdb4a4e1dea753",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b9c3a862_3c2f0bde",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-16T16:25:13Z",
+      "side": 1,
+      "message": "Ah, OK. I assumed all the emulated and emulating formats will always be 8 bits, just a different number of components.",
+      "parentUuid": "95677624_a0b164dc",
+      "range": {
+        "startLine": 673,
+        "startChar": 8,
+        "endLine": 674,
+        "endChar": 56
+      },
+      "revId": "2c7e6f7147884510cfb59a6613cdb4a4e1dea753",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
