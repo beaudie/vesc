@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a6f8ef0_08de4a7e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-16T20:29:11Z",
+      "side": 1,
+      "message": "nit: you can OR VK_QUEUE_GRAPHICS_BIT and VK_QUEUE_COMPUTE_BIT into a temporary and do a single (queueFlags \u0026 grahicsAndCompute) \u003d\u003d graphicsAndCompute",
+      "range": {
+        "startLine": 506,
+        "startChar": 0,
+        "endLine": 507,
+        "endChar": 63
+      },
+      "revId": "347889b9fa729c0338a027a8916819fe0f868f10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cab4ccc1_e374ac12",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-16T20:29:11Z",
+      "side": 1,
+      "message": "same deal here",
+      "range": {
+        "startLine": 685,
+        "startChar": 0,
+        "endLine": 686,
+        "endChar": 63
+      },
+      "revId": "347889b9fa729c0338a027a8916819fe0f868f10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eae47af7_623865c7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-16T20:29:11Z",
+      "side": 1,
+      "message": "nit: instead of using overloading, can you make these explicitly named?",
+      "range": {
+        "startLine": 142,
+        "startChar": 18,
+        "endLine": 142,
+        "endChar": 29
+      },
+      "revId": "347889b9fa729c0338a027a8916819fe0f868f10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e40d540_8162c854",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1260,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-16T20:29:11Z",
+      "side": 1,
+      "message": "can you please restructure this to not use lambdas. they are bad for performance.",
+      "range": {
+        "startLine": 1253,
+        "startChar": 0,
+        "endLine": 1260,
+        "endChar": 42
+      },
+      "revId": "347889b9fa729c0338a027a8916819fe0f868f10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df1d7a27_a2c7b10f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-16T20:29:11Z",
+      "side": 1,
+      "message": "interesting. are there any other bits at all? because if we bundle compute pipelines with complete compute programs, then there won\u0027t be any need for caches at all.",
+      "range": {
+        "startLine": 362,
+        "startChar": 4,
+        "endLine": 362,
+        "endChar": 25
+      },
+      "revId": "347889b9fa729c0338a027a8916819fe0f868f10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
