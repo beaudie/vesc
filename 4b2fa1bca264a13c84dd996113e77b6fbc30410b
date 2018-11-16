@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "252b9e78_4b1cade5",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-16T18:25:11Z",
+      "side": 0,
+      "message": "Is it OK that the new code always includes gl2.h and not the matching version as before?\nSame for gl2ext.h",
+      "range": {
+        "startLine": 674,
+        "startChar": 30,
+        "endLine": 674,
+        "endChar": 70
+      },
+      "revId": "4b2fa1bca264a13c84dd996113e77b6fbc30410b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
