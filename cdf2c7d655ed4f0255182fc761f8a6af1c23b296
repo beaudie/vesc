@@ -22,6 +22,30 @@
       "revId": "cdf2c7d655ed4f0255182fc761f8a6af1c23b296",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7946e1b1_e22914f8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-16T03:46:45Z",
+      "side": 1,
+      "message": "Yeap, done in an up-coming CL I haven\u0027t put up for review yet.",
+      "parentUuid": "5fcbbf69_107d034b",
+      "range": {
+        "startLine": 506,
+        "startChar": 6,
+        "endLine": 506,
+        "endChar": 27
+      },
+      "revId": "cdf2c7d655ed4f0255182fc761f8a6af1c23b296",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
