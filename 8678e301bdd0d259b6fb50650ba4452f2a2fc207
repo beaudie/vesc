@@ -16,6 +16,24 @@
       "revId": "8678e301bdd0d259b6fb50650ba4452f2a2fc207",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "457a9f4a_1bbc6efe",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-11-16T07:01:18Z",
+      "side": 1,
+      "message": "Sounds good. Do you think we could save \u0027static\u0027 if in anonymous namespace?",
+      "parentUuid": "e8151033_7c5dde92",
+      "revId": "8678e301bdd0d259b6fb50650ba4452f2a2fc207",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

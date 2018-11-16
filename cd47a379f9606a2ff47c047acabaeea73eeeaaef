@@ -39,6 +39,24 @@
       "revId": "cd47a379f9606a2ff47c047acabaeea73eeeaaef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f421e032_7f739b98",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2035,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-11-16T07:01:18Z",
+      "side": 0,
+      "message": "Currently we always use zero initializer for most types of variables. I can\u0027t imagine an excuse for shared variables not to follow it if there is no longer the slow compiling/linking problem. SH_INIT_SHARED_VARIABLES could be removed in this CL. I just keep it for future use in GLSL backend.",
+      "parentUuid": "19d999a5_55774a0d",
+      "revId": "cd47a379f9606a2ff47c047acabaeea73eeeaaef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
