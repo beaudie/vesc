@@ -22,6 +22,30 @@
       "revId": "4b2fa1bca264a13c84dd996113e77b6fbc30410b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3ff99e8_e7d635fa",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-16T19:59:34Z",
+      "side": 0,
+      "message": "These were redundant. They all get included with PackedEnums.h. Removed.",
+      "parentUuid": "252b9e78_4b1cade5",
+      "range": {
+        "startLine": 674,
+        "startChar": 30,
+        "endLine": 674,
+        "endChar": 70
+      },
+      "revId": "4b2fa1bca264a13c84dd996113e77b6fbc30410b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

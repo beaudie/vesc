@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "808493b4_fd31c49e",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-16T19:59:34Z",
+      "side": 1,
+      "message": "Redid this. No more \"_inlines\" files. Just validationES2.h which includes validationES2_autogen.h, etc.\n\nI was looking at the c++ style guide for guidance. No clear wording on if includes are preferred at the top but non-standalone .inc files are discouraged.\n\nhttps://google.github.io/styleguide/cppguide.html#Self_contained_Headers\nhttps://google.github.io/styleguide/cppguide.html#Names_and_Order_of_Includes",
+      "parentUuid": "d4bcb105_271b23b1",
+      "range": {
+        "startLine": 318,
+        "startChar": 9,
+        "endLine": 318,
+        "endChar": 46
+      },
+      "revId": "33111c107debf7052ab0dc956e15f71aeaec64e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "567d117d_3de76af8",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 8
@@ -45,6 +69,30 @@
       "revId": "33111c107debf7052ab0dc956e15f71aeaec64e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4379d66e_efdc9f6c",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-16T19:59:34Z",
+      "side": 1,
+      "message": "Extensions are a bit loose. Sometimes ES2 extensions work in ES1 and sometimes not. And vice versa. Some extensions use both ES2 and ES3+ and expose different APIs in each version. I think keeping a separate file just for extensions is the most straight-forward approach.\n\nThough I\u0027m thinking of splitting the *Context* special extension into its own entry points. There\u0027s potential gains to be made there in terms of organization and binary size.",
+      "parentUuid": "567d117d_3de76af8",
+      "range": {
+        "startLine": 960,
+        "startChar": 0,
+        "endLine": 960,
+        "endChar": 66
+      },
+      "revId": "33111c107debf7052ab0dc956e15f71aeaec64e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
