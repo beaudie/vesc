@@ -22,6 +22,23 @@
       "revId": "cd47a379f9606a2ff47c047acabaeea73eeeaaef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19d999a5_55774a0d",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2035,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-16T03:19:01Z",
+      "side": 0,
+      "message": "The description says this is an optimization CL, but there is a behavior change here. You are initializing the shared arrays always now. Is SH_INIT_SHARED_VARIABLES not to be respected anymore?",
+      "revId": "cd47a379f9606a2ff47c047acabaeea73eeeaaef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

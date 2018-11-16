@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8151033_7c5dde92",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-16T03:19:01Z",
+      "side": 1,
+      "message": "nit: add `static` to these global variables.",
+      "revId": "8678e301bdd0d259b6fb50650ba4452f2a2fc207",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
