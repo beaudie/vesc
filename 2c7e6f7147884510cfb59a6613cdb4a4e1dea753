@@ -46,6 +46,30 @@
       "revId": "2c7e6f7147884510cfb59a6613cdb4a4e1dea753",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "069e33c7_f4c50cdc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-16T02:49:56Z",
+      "side": 1,
+      "message": "@Yuly, no that was the original problem. The read/write functions assume a strict pattern that can\u0027t be corrected for emulated formats. For example, if you emulate say R16G16 with R32G32 (made-up formats), then the angleFormat()\u0027s reader would read two consecutive 16-bit numbers as R and G, but that would really be the two halves of the textureFormat()\u0027s R.\n\nThe only reason this hack works is that L8A8 is emulated with R8G8, so there are the same number of components and they have the same sizes. If L8A8 was emulated with say R16G16, even this couldn\u0027t have been possible.",
+      "parentUuid": "5c67eb4d_a8bc62ac",
+      "range": {
+        "startLine": 673,
+        "startChar": 8,
+        "endLine": 674,
+        "endChar": 56
+      },
+      "revId": "2c7e6f7147884510cfb59a6613cdb4a4e1dea753",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
