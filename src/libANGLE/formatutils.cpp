@@ -41,23 +41,15 @@ bool CheckedMathResult(const CheckedNumeric<GLuint> &value, GLuint *resultOut)
 }
 }  // anonymous namespace
 
-FormatType::FormatType() : format(GL_NONE), type(GL_NONE)
-{
-}
+FormatType::FormatType() : format(GL_NONE), type(GL_NONE) {}
 
-FormatType::FormatType(GLenum format_, GLenum type_) : format(format_), type(type_)
-{
-}
+FormatType::FormatType(GLenum format_, GLenum type_) : format(format_), type(type_) {}
 
 bool FormatType::operator<(const FormatType &other) const
 {
     if (format != other.format)
         return format < other.format;
     return type < other.type;
-}
-
-Type::Type() : bytes(0), bytesShift(0), specialInterpretation(false)
-{
 }
 
 static Type GenTypeInfo(GLuint bytes, bool specialInterpretation)
@@ -494,13 +486,9 @@ bool InternalFormat::isRequiredRenderbufferFormat(const Version &version) const
     }
 }
 
-Format::Format(GLenum internalFormat) : Format(GetSizedInternalFormatInfo(internalFormat))
-{
-}
+Format::Format(GLenum internalFormat) : Format(GetSizedInternalFormatInfo(internalFormat)) {}
 
-Format::Format(const InternalFormat &internalFormat) : info(&internalFormat)
-{
-}
+Format::Format(const InternalFormat &internalFormat) : info(&internalFormat) {}
 
 Format::Format(GLenum internalFormat, GLenum type)
     : info(&GetInternalFormatInfo(internalFormat, type))
@@ -1043,30 +1031,53 @@ static FormatSet BuildAllSizedInternalFormatSet()
     return result;
 }
 
-const Type &GetTypeInfo(GLenum type)
+constexpr uint32_t packTypeInfo(GLuint bytes, bool specialized)
+{
+    GLuint i = 0;
+    switch (bytes)
+    {
+        case 1:
+            i = 0;
+            break;
+        case 2:
+            i = 1;
+            break;
+        case 4:
+            i = 2;
+            break;
+        case 8:
+            i = 3;
+            break;
+        case 16:
+            i = 4;
+            break;
+        default:
+            ASSERT(false);
+    }
+    return bytes | (i << 8) | (specialized << 16);
+}
+
+uint32_t GetPackedTypeInfo(GLenum type)
 {
     switch (type)
     {
         case GL_UNSIGNED_BYTE:
         case GL_BYTE:
         {
-            static const Type info = GenTypeInfo(1, false);
-            return info;
+            return packTypeInfo(1, false);
         }
         case GL_UNSIGNED_SHORT:
         case GL_SHORT:
         case GL_HALF_FLOAT:
         case GL_HALF_FLOAT_OES:
         {
-            static const Type info = GenTypeInfo(2, false);
-            return info;
+            return packTypeInfo(2, false);
         }
         case GL_UNSIGNED_INT:
         case GL_INT:
         case GL_FLOAT:
         {
-            static const Type info = GenTypeInfo(4, false);
-            return info;
+            return packTypeInfo(4, false);
         }
         case GL_UNSIGNED_SHORT_5_6_5:
         case GL_UNSIGNED_SHORT_4_4_4_4:
@@ -1074,8 +1085,7 @@ const Type &GetTypeInfo(GLenum type)
         case GL_UNSIGNED_SHORT_4_4_4_4_REV_EXT:
         case GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT:
         {
-            static const Type info = GenTypeInfo(2, true);
-            return info;
+            return packTypeInfo(2, true);
         }
         case GL_UNSIGNED_INT_2_10_10_10_REV:
         case GL_UNSIGNED_INT_24_8:
@@ -1083,18 +1093,15 @@ const Type &GetTypeInfo(GLenum type)
         case GL_UNSIGNED_INT_5_9_9_9_REV:
         {
             ASSERT(GL_UNSIGNED_INT_24_8_OES == GL_UNSIGNED_INT_24_8);
-            static const Type info = GenTypeInfo(4, true);
-            return info;
+            return packTypeInfo(4, true);
         }
         case GL_FLOAT_32_UNSIGNED_INT_24_8_REV:
         {
-            static const Type info = GenTypeInfo(8, true);
-            return info;
+            return packTypeInfo(8, true);
         }
         default:
         {
-            static const Type defaultInfo;
-            return defaultInfo;
+            return 0;
         }
     }
 }
@@ -2253,4 +2260,4 @@ VertexFormat::VertexFormat(GLenum typeIn,
     ASSERT(!(type == GL_FLOAT || type == GL_HALF_FLOAT || type == GL_FIXED) ||
            normalized == GL_FALSE);
 }
-}
+}  // namespace gl
