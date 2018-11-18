@@ -1043,6 +1043,12 @@ static FormatSet BuildAllSizedInternalFormatSet()
     return result;
 }
 
+// TypeInfos: index = specialized, log2(bytes)
+static const Type typeInfos[2][4] = {
+    {GenTypeInfo(1, false), GenTypeInfo(2, false), GenTypeInfo(4, false), GenTypeInfo(8, false)},
+    {GenTypeInfo(1, true), GenTypeInfo(2, true), GenTypeInfo(4, true), GenTypeInfo(8, true)}};
+static const Type typeInfoDefault;
+
 const Type &GetTypeInfo(GLenum type)
 {
     switch (type)
@@ -1050,23 +1056,20 @@ const Type &GetTypeInfo(GLenum type)
         case GL_UNSIGNED_BYTE:
         case GL_BYTE:
         {
-            static const Type info = GenTypeInfo(1, false);
-            return info;
+            return typeInfos[0][0];
         }
         case GL_UNSIGNED_SHORT:
         case GL_SHORT:
         case GL_HALF_FLOAT:
         case GL_HALF_FLOAT_OES:
         {
-            static const Type info = GenTypeInfo(2, false);
-            return info;
+            return typeInfos[0][1];
         }
         case GL_UNSIGNED_INT:
         case GL_INT:
         case GL_FLOAT:
         {
-            static const Type info = GenTypeInfo(4, false);
-            return info;
+            return typeInfos[0][2];
         }
         case GL_UNSIGNED_SHORT_5_6_5:
         case GL_UNSIGNED_SHORT_4_4_4_4:
@@ -1074,8 +1077,7 @@ const Type &GetTypeInfo(GLenum type)
         case GL_UNSIGNED_SHORT_4_4_4_4_REV_EXT:
         case GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT:
         {
-            static const Type info = GenTypeInfo(2, true);
-            return info;
+            return typeInfos[1][1];
         }
         case GL_UNSIGNED_INT_2_10_10_10_REV:
         case GL_UNSIGNED_INT_24_8:
@@ -1083,18 +1085,15 @@ const Type &GetTypeInfo(GLenum type)
         case GL_UNSIGNED_INT_5_9_9_9_REV:
         {
             ASSERT(GL_UNSIGNED_INT_24_8_OES == GL_UNSIGNED_INT_24_8);
-            static const Type info = GenTypeInfo(4, true);
-            return info;
+            return typeInfos[1][2];
         }
         case GL_FLOAT_32_UNSIGNED_INT_24_8_REV:
         {
-            static const Type info = GenTypeInfo(8, true);
-            return info;
+            return typeInfos[1][3];
         }
         default:
         {
-            static const Type defaultInfo;
-            return defaultInfo;
+            return typeInfoDefault;
         }
     }
 }
