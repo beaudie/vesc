@@ -237,9 +237,7 @@ State::State(bool debug,
 {
 }
 
-State::~State()
-{
-}
+State::~State() {}
 
 void State::initialize(Context *context)
 {
@@ -2774,44 +2772,55 @@ void State::getBooleani_v(GLenum target, GLuint index, GLboolean *data)
     }
 }
 
-angle::Result State::syncDirtyObjects(const Context *context, const DirtyObjects &bitset)
+angle::Result State::syncStateReadFramebuffer(const Context *context)
 {
-    const DirtyObjects &dirtyObjects = mDirtyObjects & bitset;
-    for (auto dirtyObject : dirtyObjects)
-    {
-        switch (dirtyObject)
-        {
-            case DIRTY_OBJECT_READ_FRAMEBUFFER:
-                ASSERT(mReadFramebuffer);
-                ANGLE_TRY(mReadFramebuffer->syncState(context));
-                break;
-            case DIRTY_OBJECT_DRAW_FRAMEBUFFER:
-                ASSERT(mDrawFramebuffer);
-                ANGLE_TRY(mDrawFramebuffer->syncState(context));
-                break;
-            case DIRTY_OBJECT_VERTEX_ARRAY:
-                ASSERT(mVertexArray);
-                ANGLE_TRY(mVertexArray->syncState(context));
-                break;
-            case DIRTY_OBJECT_SAMPLERS:
-                syncSamplers(context);
-                break;
-            case DIRTY_OBJECT_PROGRAM_TEXTURES:
-                ANGLE_TRY(syncProgramTextures(context));
-                break;
-            case DIRTY_OBJECT_PROGRAM:
-                ANGLE_TRY(mProgram->syncState(context));
-                break;
+    ASSERT(mReadFramebuffer);
+    ANGLE_TRY(mReadFramebuffer->syncState(context));
+}
 
-            default:
-                UNREACHABLE();
-                break;
-        }
-    }
+angle::Result State::syncStateWriteFramebuffer(const Context *context)
+{
+    ASSERT(mDrawFramebuffer);
+    ANGLE_TRY(mDrawFramebuffer->syncState(context));
+}
 
-    mDirtyObjects &= ~dirtyObjects;
+angle::Result State::syncStateVertexArray(const Context *context)
+{
+    ASSERT(mVertexArray);
+    ANGLE_TRY(mVertexArray->syncState(context));
+}
+
+angle::Result State::syncStateSamplers(const Context *context)
+{
+    syncSamplers(context);
     return angle::Result::Continue();
 }
+
+angle::Result State::syncStateProgramTextures(const Context *context)
+{
+    ANGLE_TRY(syncProgramTextures(context));
+}
+
+angle::Result State::syncStateProgram(const Context *context)
+{
+    ANGLE_TRY(mProgram->syncState(context));
+}
+
+angle::Result State::syncStateUnreachable(const Context *context)
+{
+    UNREACHABLE();
+    return angle::Result::Incomplete();
+}
+
+using SyncStateFunction                      = angle::Result (State::*)(const Context *context);
+const SyncStateFunction syncStateFunctions[] = {
+    &State::syncStateReadFramebuffer, &State::syncStateWriteFramebuffer,
+    &State::syncStateVertexArray,     &State::syncStateSamplers,
+    &State::syncStateProgramTextures, &State::syncStateProgram,
+    &State::syncStateUnreachable};
+
+// TODO assert on correct size of syncStateFunctions array
+// static_assert(DIRTY_OBJECT_MAX =)
 
 void State::syncSamplers(const Context *context)
 {

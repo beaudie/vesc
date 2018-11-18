@@ -465,7 +465,7 @@ class State : angle::NonCopyable
     // TODO(jmadill): Consider storing dirty objects in a list instead of by binding.
     enum DirtyObjectType
     {
-        DIRTY_OBJECT_READ_FRAMEBUFFER,
+        DIRTY_OBJECT_READ_FRAMEBUFFER = 0,
         DIRTY_OBJECT_DRAW_FRAMEBUFFER,
         DIRTY_OBJECT_VERTEX_ARRAY,
         DIRTY_OBJECT_SAMPLERS,
@@ -529,6 +529,15 @@ class State : angle::NonCopyable
     void setGenericBufferBinding(const Context *context, Buffer *buffer);
 
     using BufferBindingSetter = void (State::*)(const Context *, Buffer *);
+
+    // TODO matavenrath make private?
+    angle::Result State::syncStateReadFramebuffer(const Context *context);
+    angle::Result State::syncStateWriteFramebuffer(const Context *context);
+    angle::Result State::syncStateVertexArray(const Context *context);
+    angle::Result State::syncStateSamplers(const Context *context);
+    angle::Result State::syncStateProgramTextures(const Context *context);
+    angle::Result State::syncStateProgram(const Context *context);
+    angle::Result State::syncStateUnreachable(const Context *context);
 
   private:
     void syncSamplers(const Context *context);
@@ -676,6 +685,26 @@ class State : angle::NonCopyable
     mutable AttributesMask mDirtyCurrentValues;
     ActiveTextureMask mDirtySamplers;
 };
+
+using SyncStateFunction = angle::Result (State::*)(const Context *context);
+extern const SyncStateFunction syncStateFunctions[];
+
+ANGLE_INLINE
+angle::Result State::syncDirtyObjects(const Context *context, const DirtyObjects &bitset)
+{
+    const DirtyObjects &dirtyObjects = mDirtyObjects & bitset;
+    for (auto dirtyObject : dirtyObjects)
+    {
+        auto result = (this->*syncStateFunctions[dirtyObject])(context);
+        if (result.isError())
+        {
+            return result;
+        }
+    }
+
+    mDirtyObjects &= ~dirtyObjects;
+    return angle::Result::Continue();
+}
 
 }  // namespace gl
 
