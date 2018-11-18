@@ -483,7 +483,7 @@ class State : angle::NonCopyable
     // TODO(jmadill): Consider storing dirty objects in a list instead of by binding.
     enum DirtyObjectType
     {
-        DIRTY_OBJECT_READ_FRAMEBUFFER,
+        DIRTY_OBJECT_READ_FRAMEBUFFER = 0,
         DIRTY_OBJECT_DRAW_FRAMEBUFFER,
         DIRTY_OBJECT_VERTEX_ARRAY,
         DIRTY_OBJECT_SAMPLERS,
@@ -551,12 +551,35 @@ class State : angle::NonCopyable
     using BufferBindingSetter = void (State::*)(const Context *, Buffer *);
 
   private:
-    void syncSamplers(const Context *context);
-    angle::Result syncProgramTextures(const Context *context);
     void unsetActiveTextures(ActiveTextureMask textureMask);
     angle::Result updateActiveTexture(const Context *context,
                                       size_t textureIndex,
                                       Texture *texture);
+
+    // Functions to synchronize dirty states
+    angle::Result syncReadFramebuffer(const Context *context);
+    angle::Result syncWriteFramebuffer(const Context *context);
+    angle::Result syncVertexArray(const Context *context);
+    angle::Result syncSamplers(const Context *context);
+    angle::Result syncProgramTextures(const Context *context);
+    angle::Result syncProgram(const Context *context);
+    angle::Result syncUnreachable(const Context *context);
+
+    using DirtyObjectHandler = angle::Result (State::*)(const Context *context);
+    static constexpr DirtyObjectHandler mDirtyObjectHandlers[] = {
+        &State::syncReadFramebuffer, &State::syncWriteFramebuffer, &State::syncVertexArray,
+        &State::syncSamplers,        &State::syncProgramTextures,  &State::syncProgram,
+        &State::syncUnreachable};
+    static_assert(DIRTY_OBJECT_READ_FRAMEBUFFER == 0, "check mDirtyObjectHandlersPosition");
+    static_assert(DIRTY_OBJECT_DRAW_FRAMEBUFFER == 1, "check mDirtyObjectHandlersPosition");
+    static_assert(DIRTY_OBJECT_VERTEX_ARRAY == 2, "check mDirtyObjectHandlersPosition");
+    static_assert(DIRTY_OBJECT_SAMPLERS == 3, "check mDirtyObjectHandlersPosition");
+    static_assert(DIRTY_OBJECT_PROGRAM_TEXTURES == 4, "check mDirtyObjectHandlersPosition");
+    static_assert(DIRTY_OBJECT_PROGRAM == 5, "check mDirtyObjectHandlersPosition");
+    static_assert(DIRTY_OBJECT_UNKNOWN == 6, "check mDirtyObjectHandlersPosition");
+    static_assert(DIRTY_OBJECT_MAX ==
+                      (sizeof(mDirtyObjectHandlers) / sizeof(*(mDirtyObjectHandlers))) - 1,
+                  "DirtyObjectHandler size check");
 
     // Dispatch table for buffer update functions.
     static const angle::PackedEnumMap<BufferBinding, BufferBindingSetter> kBufferSetters;
@@ -696,6 +719,20 @@ class State : angle::NonCopyable
     mutable AttributesMask mDirtyCurrentValues;
     ActiveTextureMask mDirtySamplers;
 };
+
+ANGLE_INLINE angle::Result State::syncDirtyObjects(const Context *context,
+                                                   const DirtyObjects &bitset)
+{
+    const DirtyObjects &dirtyObjects = mDirtyObjects & bitset;
+
+    for (size_t dirtyObject : dirtyObjects)
+    {
+        ANGLE_TRY((this->*mDirtyObjectHandlers[dirtyObject])(context));
+    }
+
+    mDirtyObjects &= ~dirtyObjects;
+    return angle::Result::Continue();
+}
 
 }  // namespace gl
 
