@@ -285,9 +285,11 @@ ANGLE_INSTANTIATE_TEST(
                            kRealWorldESSL100FragSource,
                            kRealWorldESSL100Id),
     CompilerPerfParameters(SH_GLSL_450_CORE_OUTPUT, kTrickyESSL300FragSource, kTrickyESSL300Id),
-    CompilerPerfParameters(SH_ESSL_OUTPUT, kSimpleESSL100FragSource, kSimpleESSL100Id),
-    CompilerPerfParameters(SH_ESSL_OUTPUT, kSimpleESSL300FragSource, kSimpleESSL300Id),
-    CompilerPerfParameters(SH_ESSL_OUTPUT, kRealWorldESSL100FragSource, kRealWorldESSL100Id),
-    CompilerPerfParameters(SH_ESSL_OUTPUT, kTrickyESSL300FragSource, kTrickyESSL300Id));
+    CompilerPerfParameters(SH_ESSL_310_CORE_OUTPUT, kSimpleESSL100FragSource, kSimpleESSL100Id),
+    CompilerPerfParameters(SH_ESSL_310_CORE_OUTPUT, kSimpleESSL300FragSource, kSimpleESSL300Id),
+    CompilerPerfParameters(SH_ESSL_310_CORE_OUTPUT,
+                           kRealWorldESSL100FragSource,
+                           kRealWorldESSL100Id),
+    CompilerPerfParameters(SH_ESSL_310_CORE_OUTPUT, kTrickyESSL300FragSource, kTrickyESSL300Id));
 
 }  // anonymous namespace
