@@ -56,8 +56,8 @@ TEST_F(EmulateGLDrawIDTest, RequiresEmulation)
 TEST_F(EmulateGLDrawIDTest, EmulatesUniform)
 {
     addOutputType(SH_GLSL_COMPATIBILITY_OUTPUT);
-    addOutputType(SH_ESSL_OUTPUT);
-    #ifdef ANGLE_ENABLE_VULKAN
+    addOutputType(SH_ESSL_COMPATIBILITY_OUTPUT);
+#ifdef ANGLE_ENABLE_VULKAN
     addOutputType(SH_GLSL_VULKAN_OUTPUT);
     #endif
     #ifdef ANGLE_ENABLE_HLSL
@@ -78,9 +78,9 @@ TEST_F(EmulateGLDrawIDTest, EmulatesUniform)
     EXPECT_TRUE(notFoundInCode("GL_ANGLE_multi_draw"));
 
     EXPECT_TRUE(foundInCode(SH_GLSL_COMPATIBILITY_OUTPUT, "uniform int angle_DrawID"));
-    EXPECT_TRUE(foundInCode(SH_ESSL_OUTPUT, "uniform highp int angle_DrawID"));
+    EXPECT_TRUE(foundInCode(SH_ESSL_COMPATIBILITY_OUTPUT, "uniform highp int angle_DrawID"));
 
-    #ifdef ANGLE_ENABLE_VULKAN
+#ifdef ANGLE_ENABLE_VULKAN
     EXPECT_TRUE(foundInCode(SH_GLSL_VULKAN_OUTPUT, "uniform defaultUniforms\n{\n    int angle_DrawID;"));
     #endif
     #ifdef ANGLE_ENABLE_HLSL
@@ -130,8 +130,8 @@ TEST_F(EmulateGLDrawIDTest, DisallowsUserDefinedGLDrawID)
 TEST_F(EmulateGLDrawIDTest, AllowsUserDefinedANGLEDrawID)
 {
     addOutputType(SH_GLSL_COMPATIBILITY_OUTPUT);
-    addOutputType(SH_ESSL_OUTPUT);
-    #ifdef ANGLE_ENABLE_VULKAN
+    addOutputType(SH_ESSL_COMPATIBILITY_OUTPUT);
+#ifdef ANGLE_ENABLE_VULKAN
     addOutputType(SH_GLSL_VULKAN_OUTPUT);
     #endif
     #ifdef ANGLE_ENABLE_HLSL

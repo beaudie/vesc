@@ -106,7 +106,7 @@ RoundingHelperWriter *RoundingHelperWriter::createHelperWriter(const ShShaderOut
     {
         case SH_HLSL_4_1_OUTPUT:
             return new RoundingHelperWriterHLSL(outputLanguage);
-        case SH_ESSL_OUTPUT:
+        case SH_ESSL_COMPATIBILITY_OUTPUT:
             return new RoundingHelperWriterESSL(outputLanguage);
         default:
             return new RoundingHelperWriterGLSL(outputLanguage);
@@ -692,7 +692,7 @@ bool EmulatePrecision::SupportedInLanguage(const ShShaderOutput outputLanguage)
     switch (outputLanguage)
     {
         case SH_HLSL_4_1_OUTPUT:
-        case SH_ESSL_OUTPUT:
+        case SH_ESSL_COMPATIBILITY_OUTPUT:
             return true;
         default:
             // Other languages not yet supported

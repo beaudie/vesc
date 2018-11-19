@@ -42,7 +42,10 @@ enum ShShaderSpec
 enum ShShaderOutput
 {
     // ESSL output only supported in some configurations.
-    SH_ESSL_OUTPUT = 0x8B45,
+    SH_ESSL_COMPATIBILITY_OUTPUT = 0x8B45,
+    SH_ESSL_100_CORE_OUTPUT      = 0x8B90,
+    SH_ESSL_300_CORE_OUTPUT      = 0x8B91,
+    SH_ESSL_310_CORE_OUTPUT      = 0x8B92,
 
     // GLSL output only supported in some configurations.
     SH_GLSL_COMPATIBILITY_OUTPUT = 0x8B46,
@@ -65,6 +68,7 @@ enum ShShaderOutput
 
     // Output specialized GLSL to be fed to glslang for Vulkan SPIR.
     SH_GLSL_VULKAN_OUTPUT = 0x8B4B,
+
 };
 
 // Compile options.

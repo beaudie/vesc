@@ -94,7 +94,10 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
     }
 
     std::vector<uint32_t> validOutputs;
-    validOutputs.push_back(SH_ESSL_OUTPUT);
+    validOutputs.push_back(SH_ESSL_COMPATIBILITY_OUTPUT);
+    validOutputs.push_back(SH_ESSL_100_CORE_OUTPUT);
+    validOutputs.push_back(SH_ESSL_300_CORE_OUTPUT);
+    validOutputs.push_back(SH_ESSL_310_CORE_OUTPUT);
     validOutputs.push_back(SH_GLSL_COMPATIBILITY_OUTPUT);
     validOutputs.push_back(SH_GLSL_130_OUTPUT);
     validOutputs.push_back(SH_GLSL_140_OUTPUT);

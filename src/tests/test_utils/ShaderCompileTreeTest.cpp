@@ -120,7 +120,8 @@ void ShaderCompileTreeTest::SetUp()
 
     initResources(&resources);
 
-    mTranslator = new TranslatorESSL(getShaderType(), getShaderSpec());
+    mTranslator =
+        new TranslatorESSL(getShaderType(), getShaderSpec(), SH_ESSL_COMPATIBILITY_OUTPUT);
     ASSERT_TRUE(mTranslator->Init(resources));
 }
 

@@ -1055,6 +1055,7 @@ void GenerateCaps(const FunctionsGL *functions,
         extensions->textureStorageMultisample2DArray && extensions->multiview;
 
     extensions->textureMultisample = functions->isAtLeastGL(gl::Version(3, 2)) ||
+                                     functions->isAtLeastGLES(gl::Version(3, 1)) ||
                                      functions->hasGLExtension("GL_ARB_texture_multisample");
 
     // NV_path_rendering

@@ -18,7 +18,9 @@ class RegenerateStructNamesTest : public MatchOutputCodeTest
 {
   public:
     RegenerateStructNamesTest()
-        : MatchOutputCodeTest(GL_FRAGMENT_SHADER, SH_REGENERATE_STRUCT_NAMES, SH_ESSL_OUTPUT)
+        : MatchOutputCodeTest(GL_FRAGMENT_SHADER,
+                              SH_REGENERATE_STRUCT_NAMES,
+                              SH_ESSL_COMPATIBILITY_OUTPUT)
     {
     }
 };

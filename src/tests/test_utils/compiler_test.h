@@ -56,7 +56,7 @@ class MatchOutputCodeTest : public testing::Test
 
     bool foundInESSLCode(const char *stringToFind) const
     {
-        return foundInCode(SH_ESSL_OUTPUT, stringToFind);
+        return foundInCode(SH_ESSL_COMPATIBILITY_OUTPUT, stringToFind);
     }
 
     bool foundInGLSLCode(const char *stringToFind) const

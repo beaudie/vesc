@@ -27,7 +27,8 @@ class TypeTrackingTest : public testing::Test
         InitBuiltInResources(&resources);
         resources.FragmentPrecisionHigh = 1;
 
-        mTranslator = new TranslatorESSL(GL_FRAGMENT_SHADER, SH_GLES3_1_SPEC);
+        mTranslator =
+            new TranslatorESSL(GL_FRAGMENT_SHADER, SH_GLES3_1_SPEC, SH_ESSL_COMPATIBILITY_OUTPUT);
         ASSERT_TRUE(mTranslator->Init(resources));
     }
 

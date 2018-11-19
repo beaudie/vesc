@@ -26,8 +26,8 @@ const char *CompilerParameters::str() const
             return "HLSL_4_1";
         case SH_GLSL_450_CORE_OUTPUT:
             return "GLSL_4_50";
-        case SH_ESSL_OUTPUT:
-            return "ESSL";
+        case SH_ESSL_310_CORE_OUTPUT:
+            return "ESSL_3_10";
         default:
             UNREACHABLE();
             return "unk";

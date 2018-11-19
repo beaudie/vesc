@@ -26,7 +26,8 @@ class WorkGroupSizeTest : public testing::Test
         ShBuiltInResources resources;
         InitBuiltInResources(&resources);
 
-        mTranslator = new TranslatorESSL(GL_COMPUTE_SHADER, SH_GLES3_1_SPEC);
+        mTranslator =
+            new TranslatorESSL(GL_COMPUTE_SHADER, SH_GLES3_1_SPEC, SH_ESSL_COMPATIBILITY_OUTPUT);
         ASSERT_TRUE(mTranslator->Init(resources));
     }
 

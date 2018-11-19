@@ -20,7 +20,10 @@ namespace
 class PruneUnusedFunctionsTest : public MatchOutputCodeTest
 {
   public:
-    PruneUnusedFunctionsTest() : MatchOutputCodeTest(GL_FRAGMENT_SHADER, 0, SH_ESSL_OUTPUT) {}
+    PruneUnusedFunctionsTest()
+        : MatchOutputCodeTest(GL_FRAGMENT_SHADER, 0, SH_ESSL_COMPATIBILITY_OUTPUT)
+    {
+    }
 
   protected:
     void compile(const std::string &shaderString, bool prune)
