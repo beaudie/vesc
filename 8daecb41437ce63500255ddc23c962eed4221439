@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d053537_93a3a086",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1051,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T12:42:52Z",
+      "side": 1,
+      "message": "these can actually be constexpr. you\u0027ll need to remove TypeInfo\u0027s constructor and update GenTypeInfo to:\n\nconstexpr Type GenTypeInfo(GLuint bytes, bool specialInterpretation)\n{\n    GLuint i \u003d 0;\n    while ((1u \u003c\u003c i) \u003c bytes)\n    {\n        ++i;\n    }\n\n    return { bytes, i, specialInterpretation };\n}\n\nAlso we might want to just make this an internal enum and store a PackedEnumMap of TypeInfos instead. This would allow us to optimize any other switches or calls to GetTypeInfo.",
+      "range": {
+        "startLine": 1045,
+        "startChar": 0,
+        "endLine": 1051,
+        "endChar": 0
+      },
+      "revId": "8daecb41437ce63500255ddc23c962eed4221439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
