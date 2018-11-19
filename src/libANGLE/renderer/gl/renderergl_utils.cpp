@@ -1201,6 +1201,12 @@ void GenerateCaps(const FunctionsGL *functions,
     // ES driver.
     extensions->compressedTextureETC = functions->standard == STANDARD_GL_ES &&
                                        gl::DetermineCompressedTextureETCSupport(*textureCapsMap);
+
+    // Disable EXT_srgb if we can't read back from unsized sRGB textures
+    if (workarounds.unsizedSRGBFormatsFailReadPixels)
+    {
+        extensions->sRGB = false;
+    }
 }
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds)
@@ -1295,6 +1301,13 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
 #endif
 
     workarounds->disableBlendFuncExtended = IsAMD(vendor) || IsIntel(vendor);
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+    if (IsQualcomm(vendor))
+    {
+        workarounds->unsizedSRGBFormatsFailReadPixels = true;
+    }
+#endif
 }
 
 void ApplyWorkarounds(const FunctionsGL *functions, gl::Workarounds *workarounds)
