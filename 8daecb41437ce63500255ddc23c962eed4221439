@@ -22,6 +22,30 @@
       "revId": "8daecb41437ce63500255ddc23c962eed4221439",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4820c86d_c87a8c9b",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1051,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-19T15:45:11Z",
+      "side": 1,
+      "message": "I\u0027ll apply the change.\n\nI was wondering about an internal packed enum and I decided that it\u0027s useful because there are too many types total which would belong to this enum. Instead, I\u0027m wondering if we use a completely different approach:\n\nuint32_t GetPackedTypeInfo(GLenum type) {\n  switch (...)\n  case ...:\n    return pack(bytes, compute_i(bytes), special);\n};\n\nclass Type {\n  Type::Type(GLenum type)\n  {\n     uint32_t packed \u003d GetPackedTypeInfo(type);\n     bytes \u003d packed \u0026 8;\n     shift \u003d (packed \u003e\u003e 8) \u0026 8;\n     special \u003d (packed \u0026 0x0100) !\u003d 0;\n  }\n\n  uint8_t bytes;\n  uint8_t shift;\n  bool specialized;\n};\n\nI haven\u0027t checked if the compiler eliminates the operations which generate the shift and specialized fields yet, but I do assume it\u0027ll eliminate those. Since a 32-bit value gets returned in a register this will replace the memory load from the Type struct by a simple AND operation to extract the bytes field in the performance critical path.\n\nWe could also have functions which do extract only the field(s) of interest based on the enum.",
+      "parentUuid": "9d053537_93a3a086",
+      "range": {
+        "startLine": 1045,
+        "startChar": 0,
+        "endLine": 1051,
+        "endChar": 0
+      },
+      "revId": "8daecb41437ce63500255ddc23c962eed4221439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
