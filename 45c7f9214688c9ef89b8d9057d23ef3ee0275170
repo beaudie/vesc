@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd536e62_d62ba201",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1200,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-11-19T23:23:45Z",
+      "side": 1,
+      "message": "are -\u003e or",
+      "range": {
+        "startLine": 1200,
+        "startChar": 62,
+        "endLine": 1200,
+        "endChar": 65
+      },
+      "revId": "45c7f9214688c9ef89b8d9057d23ef3ee0275170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b21723c_441095f6",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2018-11-19T23:23:45Z",
+      "side": 1,
+      "message": "Will this set compressedTextureETC if the underlying driver is ES2?",
+      "range": {
+        "startLine": 1202,
+        "startChar": 62,
+        "endLine": 1202,
+        "endChar": 76
+      },
+      "revId": "45c7f9214688c9ef89b8d9057d23ef3ee0275170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
