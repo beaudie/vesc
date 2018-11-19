@@ -46,6 +46,30 @@
       "revId": "8daecb41437ce63500255ddc23c962eed4221439",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fc97e13_d0a8516c",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1051,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T16:15:21Z",
+      "side": 1,
+      "message": "I like the thought of returning a 32-bit value instead of a reference. You can use ANGLE_ENABLE_STRUCT_PADDING_WARNINGS and ANGLE_DISABLE_STRUCT_PADDING_WARNINGS and static_assert to verify your struct fits in 32 bits.\n\nI suspect using the packed enum is will also be a general improvement. We have to make sure that we use PackedEnumMap instead of \"switch\" even if we only care about a few particular values. But that might be a bigger change. Maybe I\u0027d suggest doing the 32 bit packing change but keeping the constexpr array instead of moving switch into the constructor for now. Also mild preference for 1D array or just using static constexpr with inline types, as that also eliminates the thread locking.",
+      "parentUuid": "4820c86d_c87a8c9b",
+      "range": {
+        "startLine": 1045,
+        "startChar": 0,
+        "endLine": 1051,
+        "endChar": 0
+      },
+      "revId": "8daecb41437ce63500255ddc23c962eed4221439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
