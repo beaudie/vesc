@@ -486,6 +486,7 @@ class State : angle::NonCopyable
     {
         DIRTY_OBJECT_READ_FRAMEBUFFER,
         DIRTY_OBJECT_DRAW_FRAMEBUFFER,
+        DIRTY_OBJECT_INIT_DRAW_ATTACHMENTS,
         DIRTY_OBJECT_VERTEX_ARRAY,
         DIRTY_OBJECT_SAMPLERS,
         // Use a very coarse bit for any program or texture change.

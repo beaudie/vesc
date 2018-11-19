@@ -2503,6 +2503,12 @@ angle::Result State::syncDirtyObjects(const Context *context, const DirtyObjects
                 ASSERT(mDrawFramebuffer);
                 ANGLE_TRY(mDrawFramebuffer->syncState(context));
                 break;
+            case DIRTY_OBJECT_INIT_DRAW_ATTACHMENTS:
+                ASSERT(mDrawFramebuffer);
+                ASSERT(!mDrawFramebuffer->hasAnyDirtyBit());
+                ASSERT(mRobustResourceInit);
+                ANGLE_TRY(mDrawFramebuffer->ensureDrawAttachmentsInitialized(context));
+                break;
             case DIRTY_OBJECT_VERTEX_ARRAY:
                 ASSERT(mVertexArray);
                 ANGLE_TRY(mVertexArray->syncState(context));
@@ -2651,6 +2657,7 @@ void State::setObjectDirty(GLenum target)
             break;
         case GL_DRAW_FRAMEBUFFER:
             mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+            mDirtyObjects.set(DIRTY_OBJECT_INIT_DRAW_ATTACHMENTS);
             break;
         case GL_FRAMEBUFFER:
             mDirtyObjects.set(DIRTY_OBJECT_READ_FRAMEBUFFER);

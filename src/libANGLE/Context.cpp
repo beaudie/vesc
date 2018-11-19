@@ -3482,6 +3482,10 @@ void Context::updateCaps()
 
     mThreadPool = angle::WorkerThreadPool::Create(mExtensions.parallelShaderCompile);
 
+    // Reinitialize some dirty bits that depend on extensions.
+    mDrawDirtyObjects.set(State::DIRTY_OBJECT_INIT_DRAW_ATTACHMENTS,
+                          mGLState.isRobustResourceInitEnabled());
+
     // Reinitialize state cache after extension changes.
     mStateCache.initialize(this);
 }
@@ -3528,7 +3532,6 @@ angle::Result Context::prepareForDraw(PrimitiveMode mode)
     if (isRobustResourceInitEnabled())
     {
         ANGLE_TRY(mGLState.clearUnclearedActiveTextures(this));
-        ANGLE_TRY(mGLState.getDrawFramebuffer()->ensureDrawAttachmentsInitialized(this));
     }
 
     ANGLE_TRY(syncDirtyBits());
