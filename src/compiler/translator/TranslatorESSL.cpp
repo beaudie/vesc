@@ -9,14 +9,15 @@
 #include "angle_gl.h"
 #include "compiler/translator/BuiltInFunctionEmulatorGLSL.h"
 #include "compiler/translator/OutputESSL.h"
+#include "compiler/translator/VersionESSL.h"
 #include "compiler/translator/tree_ops/EmulatePrecision.h"
 #include "compiler/translator/tree_ops/RecordConstantPrecision.h"
 
 namespace sh
 {
 
-TranslatorESSL::TranslatorESSL(sh::GLenum type, ShShaderSpec spec)
-    : TCompiler(type, spec, SH_ESSL_OUTPUT)
+TranslatorESSL::TranslatorESSL(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output)
+    : TCompiler(type, spec, output)
 {
 }
 
@@ -35,10 +36,15 @@ void TranslatorESSL::translate(TIntermBlock *root,
 {
     TInfoSinkBase &sink = getInfoSink().obj;
 
+    // Write ELSL version.
     int shaderVer = getShaderVersion();
-    if (shaderVer > 100)
+    if (shaderVer < 300)
     {
         sink << "#version " << shaderVer << " es\n";
+    }
+    else
+    {
+        writeVersion(root);
     }
 
     // Write built-in extension behaviors.
@@ -121,6 +127,20 @@ bool TranslatorESSL::shouldFlattenPragmaStdglInvariantAll()
     return true;
 }
 
+void TranslatorESSL::writeVersion(TIntermNode *root)
+{
+    TVersionESSL versionESSL(getShaderType(), getPragma(), getOutputType());
+    root->traverse(&versionESSL);
+    int version = versionESSL.getVersion();
+    // We need to write version directive only if it is greater than 110.
+    // If there is no version directive in the shader, 110 is implied.
+    if (version > 100)
+    {
+        TInfoSinkBase &sink = getInfoSink().obj;
+        sink << "#version " << version << " es\n";
+    }
+}
+
 void TranslatorESSL::writeExtensionBehavior(ShCompileOptions compileOptions)
 {
     TInfoSinkBase &sink                   = getInfoSink().obj;
@@ -176,6 +196,10 @@ void TranslatorESSL::writeExtensionBehavior(ShCompileOptions compileOptions)
             {
                 // Don't emit anything. This extension is emulated
                 ASSERT((compileOptions & SH_EMULATE_GL_DRAW_ID) != 0);
+                continue;
+            }
+            else if (iter->first == TExtension::ANGLE_texture_multisample)
+            {
                 continue;
             }
             else

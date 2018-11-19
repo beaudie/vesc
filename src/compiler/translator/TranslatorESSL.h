@@ -15,7 +15,7 @@ namespace sh
 class TranslatorESSL : public TCompiler
 {
   public:
-    TranslatorESSL(sh::GLenum type, ShShaderSpec spec);
+    TranslatorESSL(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output);
 
   protected:
     void initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu,
@@ -27,6 +27,7 @@ class TranslatorESSL : public TCompiler
     bool shouldFlattenPragmaStdglInvariantAll() override;
 
   private:
+    void writeVersion(TIntermNode *root);
     void writeExtensionBehavior(ShCompileOptions compileOptions);
 };
 

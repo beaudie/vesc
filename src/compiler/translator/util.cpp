@@ -484,7 +484,7 @@ ImmutableString ArrayString(const TType &type)
     if (!type.isArray())
         return ImmutableString("");
 
-    const TVector<unsigned int> &arraySizes = *type.getArraySizes();
+    const TVector<unsigned int> &arraySizes         = *type.getArraySizes();
     constexpr const size_t kMaxDecimalDigitsPerSize = 10u;
     ImmutableStringBuilder arrayString(arraySizes.size() * (kMaxDecimalDigitsPerSize + 2u));
     for (auto arraySizeIter = arraySizes.rbegin(); arraySizeIter != arraySizes.rend();
@@ -709,7 +709,17 @@ bool IsBuiltinFragmentInputVariable(TQualifier qualifier)
 
 bool IsOutputESSL(ShShaderOutput output)
 {
-    return output == SH_ESSL_OUTPUT;
+    switch (output)
+    {
+        case SH_ESSL_100_CORE_OUTPUT:
+        case SH_ESSL_300_CORE_OUTPUT:
+        case SH_ESSL_310_CORE_OUTPUT:
+        case SH_ESSL_OUTPUT:
+            return true;
+        default:
+            break;
+    }
+    return false;
 }
 
 bool IsOutputGLSL(ShShaderOutput output)

@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
                     switch (argv[0][3])
                     {
                         case 'e':
-                            output = SH_ESSL_OUTPUT;
+                            output = SH_ESSL_COMPATIBILITY_OUTPUT;
                             compileOptions |= SH_INITIALIZE_UNINITIALIZED_LOCALS;
                             break;
                         case 'g':
