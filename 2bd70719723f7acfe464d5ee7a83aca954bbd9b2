@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6f68b9c_50b8f62b",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2820,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T12:54:36Z",
+      "side": 1,
+      "message": "this can be initialized in the constructor initializer list if we make it a member variable.",
+      "range": {
+        "startLine": 2816,
+        "startChar": 0,
+        "endLine": 2820,
+        "endChar": 34
+      },
+      "revId": "2bd70719723f7acfe464d5ee7a83aca954bbd9b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08b7dc09_0293ef53",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T12:54:36Z",
+      "side": 1,
+      "message": "yeah, these should be private.",
+      "range": {
+        "startLine": 533,
+        "startChar": 4,
+        "endLine": 533,
+        "endChar": 37
+      },
+      "revId": "2bd70719723f7acfe464d5ee7a83aca954bbd9b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b242917f_24944d68",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T12:54:36Z",
+      "side": 1,
+      "message": "nit: mild preference for just calling them syncReadFramebuffer ... etc (no state)",
+      "range": {
+        "startLine": 534,
+        "startChar": 25,
+        "endLine": 534,
+        "endChar": 49
+      },
+      "revId": "2bd70719723f7acfe464d5ee7a83aca954bbd9b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce456464_c4371cef",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T12:54:36Z",
+      "side": 1,
+      "message": "nit: this can also be defined private to State. For naming, I\u0027d suggest DirtyObjectHandler and mDirtyObjectHandlers.",
+      "range": {
+        "startLine": 689,
+        "startChar": 0,
+        "endLine": 690,
+        "endChar": 52
+      },
+      "revId": "2bd70719723f7acfe464d5ee7a83aca954bbd9b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97e34691_34ac996e",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T12:54:36Z",
+      "side": 1,
+      "message": "nit: size_t",
+      "range": {
+        "startLine": 696,
+        "startChar": 9,
+        "endLine": 696,
+        "endChar": 14
+      },
+      "revId": "2bd70719723f7acfe464d5ee7a83aca954bbd9b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89f1810a_02586ad7",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T12:54:36Z",
+      "side": 1,
+      "message": "nit: ANGLE_TRY()",
+      "range": {
+        "startLine": 698,
+        "startChar": 0,
+        "endLine": 702,
+        "endChar": 9
+      },
+      "revId": "2bd70719723f7acfe464d5ee7a83aca954bbd9b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
