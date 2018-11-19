@@ -187,18 +187,23 @@ bool DisplayVk::getScratchBuffer(size_t requstedSizeBytes,
     return mScratchBuffer.get(requstedSizeBytes, scratchBufferOut);
 }
 
-void DisplayVk::handleError(VkResult result, const char *file, unsigned int line)
+void DisplayVk::handleError(VkResult result,
+                            const char *file,
+                            const char *function,
+                            unsigned int line)
 {
-    std::stringstream errorStream;
-    errorStream << "Internal Vulkan error: " << VulkanResultString(result) << ", in " << file
-                << ", line " << line << ".";
-    mStoredErrorString = errorStream.str();
+    ASSERT(result != VK_SUCCESS);
 
     if (result == VK_ERROR_DEVICE_LOST)
     {
         WARN() << mStoredErrorString;
         mRenderer->notifyDeviceLost();
     }
+
+    std::stringstream errorStream;
+    errorStream << "Internal Vulkan error: " << VulkanResultString(result) << ", in " << file
+                << ", " << function << ":" << line << ".";
+    mStoredErrorString = errorStream.str();
 }
 
 // TODO(jmadill): Remove this. http://anglebug.com/2491
