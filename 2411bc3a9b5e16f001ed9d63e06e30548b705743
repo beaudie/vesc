@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46918c7d_1df4f04c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T12:39:31Z",
+      "side": 1,
+      "message": "Markus, one request. For your changes, can you format the description as\n\n\u003cone small title line\u003e\n\u003cblank line\u003e\n\u003cparagraph with full description\u003e\n\nThis makes them play better with git history and gerrit.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 237
+      },
+      "revId": "2411bc3a9b5e16f001ed9d63e06e30548b705743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
