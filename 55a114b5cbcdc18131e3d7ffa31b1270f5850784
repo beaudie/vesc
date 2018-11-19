@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8b4e5d8_b9eb2da2",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-19T10:43:16Z",
+      "side": 1,
+      "message": "I suggest storing a \"default\" swizzle so that we don\u0027t need to have both code for swizzleNode  \u003d\u003d nullptr and !\u003d nullptr. We\u0027d always have a swizzle, just that sometimes it happens to be the same as no swizzle.\n\nSame in all blocks below.",
+      "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acac235d_ed4083d6",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-19T10:43:16Z",
+      "side": 1,
+      "message": "Doesn\u0027t this depend on the type? What is we have half-floats stored?",
+      "range": {
+        "startLine": 51,
+        "startChar": 25,
+        "endLine": 51,
+        "endChar": 63
+      },
+      "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1df9124_e08b91df",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-19T10:43:16Z",
+      "side": 1,
+      "message": "This needs to be updated and we actually forgot to do it in the last patches that added members to ShaderStorageBlockFunction",
+      "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "593d15eb_8e8c4e36",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-19T10:43:16Z",
+      "side": 1,
+      "message": "Same here: we\u0027d use a default swizzle so the default functions would be called \u003csomething\u003exyzw for example.",
+      "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "572b0a5b_8ee30595",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-19T10:43:16Z",
+      "side": 1,
+      "message": "This should store the swizzle offsets and not the node. Right now I think we\u0027d get duplicated function if the same offset is used twice.",
+      "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "453f5085_7749d4bf",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-19T10:43:16Z",
+      "side": 1,
+      "message": "lose",
+      "range": {
+        "startLine": 328,
+        "startChar": 3,
+        "endLine": 328,
+        "endChar": 7
+      },
+      "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
