@@ -121,7 +121,7 @@ class WEBGLMultiviewOutputCodeTest : public MatchOutputCodeTest
 {
   public:
     WEBGLMultiviewOutputCodeTest(sh::GLenum shaderType)
-        : MatchOutputCodeTest(shaderType, 0, SH_ESSL_OUTPUT)
+        : MatchOutputCodeTest(shaderType, 0, SH_ESSL_COMPATIBILITY_OUTPUT)
     {
         addOutputType(SH_GLSL_COMPATIBILITY_OUTPUT);
 
@@ -718,7 +718,7 @@ TEST_F(WEBGLMultiviewVertexShaderOutputCodeTest, GlViewportIndexIsSet)
 
     std::vector<const char *> expectedStrings = {"ViewID_OVR = (uint(gl_InstanceID) % 3u)",
                                                  "gl_ViewportIndex = int(ViewID_OVR)"};
-    EXPECT_TRUE(foundInCodeInOrder(SH_ESSL_OUTPUT, expectedStrings));
+    EXPECT_TRUE(foundInCodeInOrder(SH_ESSL_COMPATIBILITY_OUTPUT, expectedStrings));
     EXPECT_TRUE(foundInCodeInOrder(SH_GLSL_COMPATIBILITY_OUTPUT, expectedStrings));
 }
 
@@ -739,7 +739,7 @@ TEST_F(WEBGLMultiviewVertexShaderOutputCodeTest, GlLayerIsSet)
     std::vector<const char *> expectedStrings = {
         "ViewID_OVR = (uint(gl_InstanceID) % 3u)",
         "gl_Layer = (int(ViewID_OVR) + multiviewBaseViewLayerIndex)"};
-    EXPECT_TRUE(foundInCodeInOrder(SH_ESSL_OUTPUT, expectedStrings));
+    EXPECT_TRUE(foundInCodeInOrder(SH_ESSL_COMPATIBILITY_OUTPUT, expectedStrings));
     EXPECT_TRUE(foundInCodeInOrder(SH_GLSL_COMPATIBILITY_OUTPUT, expectedStrings));
 }
 

@@ -17,7 +17,8 @@ using namespace sh;
 class RemoveUnreferencedVariablesTest : public MatchOutputCodeTest
 {
   public:
-    RemoveUnreferencedVariablesTest() : MatchOutputCodeTest(GL_FRAGMENT_SHADER, 0, SH_ESSL_OUTPUT)
+    RemoveUnreferencedVariablesTest()
+        : MatchOutputCodeTest(GL_FRAGMENT_SHADER, 0, SH_ESSL_COMPATIBILITY_OUTPUT)
     {
     }
 };

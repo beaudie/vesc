@@ -305,8 +305,8 @@ void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root, ShCompileOptions 
     }
 
     // Need to enable gpu_shader5 to have index constant sampler array indexing
-    if (getOutputType() != SH_ESSL_OUTPUT && getOutputType() < SH_GLSL_400_CORE_OUTPUT &&
-        getShaderVersion() == 100)
+    if (getOutputType() != SH_ESSL_COMPATIBILITY_OUTPUT &&
+        getOutputType() < SH_GLSL_400_CORE_OUTPUT && getShaderVersion() == 100)
     {
         // Don't use "require" on to avoid breaking WebGL 1 on drivers that silently
         // support index constant sampler array indexing, but don't have the extension or

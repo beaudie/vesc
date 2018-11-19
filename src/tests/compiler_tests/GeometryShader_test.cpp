@@ -116,7 +116,7 @@ class GeometryShaderOutputCodeTest : public MatchOutputCodeTest
 {
   public:
     GeometryShaderOutputCodeTest()
-        : MatchOutputCodeTest(GL_GEOMETRY_SHADER_EXT, SH_OBJECT_CODE, SH_ESSL_OUTPUT)
+        : MatchOutputCodeTest(GL_GEOMETRY_SHADER_EXT, SH_OBJECT_CODE, SH_ESSL_COMPATIBILITY_OUTPUT)
     {
         getResources()->EXT_geometry_shader = 1;
     }

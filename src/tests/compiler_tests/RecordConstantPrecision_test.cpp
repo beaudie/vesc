@@ -17,7 +17,10 @@ using namespace sh;
 class RecordConstantPrecisionTest : public MatchOutputCodeTest
 {
   public:
-    RecordConstantPrecisionTest() : MatchOutputCodeTest(GL_FRAGMENT_SHADER, 0, SH_ESSL_OUTPUT) {}
+    RecordConstantPrecisionTest()
+        : MatchOutputCodeTest(GL_FRAGMENT_SHADER, 0, SH_ESSL_COMPATIBILITY_OUTPUT)
+    {
+    }
 };
 
 // The constant cannot be folded if its precision is higher than the other operands, since it

@@ -17,7 +17,8 @@ using namespace sh;
 class DebugShaderPrecisionTest : public MatchOutputCodeTest
 {
   public:
-    DebugShaderPrecisionTest() : MatchOutputCodeTest(GL_FRAGMENT_SHADER, 0, SH_ESSL_OUTPUT)
+    DebugShaderPrecisionTest()
+        : MatchOutputCodeTest(GL_FRAGMENT_SHADER, 0, SH_ESSL_COMPATIBILITY_OUTPUT)
     {
         addOutputType(SH_GLSL_COMPATIBILITY_OUTPUT);
 #if defined(ANGLE_ENABLE_HLSL)
@@ -29,7 +30,8 @@ class DebugShaderPrecisionTest : public MatchOutputCodeTest
   protected:
     bool foundInAllGLSLCode(const char *str)
     {
-        return foundInCode(SH_GLSL_COMPATIBILITY_OUTPUT, str) && foundInCode(SH_ESSL_OUTPUT, str);
+        return foundInCode(SH_GLSL_COMPATIBILITY_OUTPUT, str) &&
+               foundInCode(SH_ESSL_COMPATIBILITY_OUTPUT, str);
     }
 
     bool foundInHLSLCode(const char *stringToFind) const

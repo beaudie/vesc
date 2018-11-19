@@ -23,7 +23,7 @@ class ScalarizeVecAndMatConstructorArgsTest : public MatchOutputCodeTest
     ScalarizeVecAndMatConstructorArgsTest()
         : MatchOutputCodeTest(GL_FRAGMENT_SHADER,
                               SH_SCALARIZE_VEC_AND_MAT_CONSTRUCTOR_ARGS,
-                              SH_ESSL_OUTPUT)
+                              SH_ESSL_COMPATIBILITY_OUTPUT)
     {
     }
 };

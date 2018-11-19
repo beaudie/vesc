@@ -71,8 +71,22 @@ ShShaderOutput GetShaderOutputType(const FunctionsGL *functions)
     }
     else if (functions->standard == STANDARD_GL_ES)
     {
-        // ESSL outputs
-        return SH_ESSL_OUTPUT;
+        if (functions->isAtLeastGLES(gl::Version(3, 1)))
+        {
+            return SH_ESSL_310_CORE_OUTPUT;
+        }
+        else if (functions->isAtLeastGL(gl::Version(3, 0)))
+        {
+            return SH_ESSL_300_CORE_OUTPUT;
+        }
+        else if (functions->isAtLeastGL(gl::Version(2, 0)))
+        {
+            return SH_ESSL_100_CORE_OUTPUT;
+        }
+        else
+        {
+            return SH_ESSL_COMPATIBILITY_OUTPUT;
+        }
     }
     else
     {

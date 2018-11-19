@@ -25,7 +25,7 @@ TOutputESSL::TOutputESSL(TInfoSinkBase &objSink,
                       symbolTable,
                       shaderType,
                       shaderVersion,
-                      SH_ESSL_OUTPUT,
+                      SH_ESSL_COMPATIBILITY_OUTPUT,
                       compileOptions),
       mForceHighp(forceHighp)
 {

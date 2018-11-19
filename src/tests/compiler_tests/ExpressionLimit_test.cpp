@@ -258,7 +258,7 @@ const char *ExpressionLimitTest::kGlobalVariableInit =
 TEST_F(ExpressionLimitTest, ExpressionComplexity)
 {
     ShShaderSpec spec = SH_WEBGL_SPEC;
-    ShShaderOutput output = SH_ESSL_OUTPUT;
+    ShShaderOutput output   = SH_ESSL_COMPATIBILITY_OUTPUT;
     ShHandle vertexCompiler = sh::ConstructCompiler(GL_FRAGMENT_SHADER, spec, output, &resources);
     ShCompileOptions compileOptions = SH_LIMIT_EXPRESSION_COMPLEXITY;
 
@@ -282,7 +282,7 @@ TEST_F(ExpressionLimitTest, ExpressionComplexity)
 TEST_F(ExpressionLimitTest, UnusedExpressionComplexity)
 {
     ShShaderSpec spec = SH_WEBGL_SPEC;
-    ShShaderOutput output = SH_ESSL_OUTPUT;
+    ShShaderOutput output   = SH_ESSL_COMPATIBILITY_OUTPUT;
     ShHandle vertexCompiler = sh::ConstructCompiler(GL_FRAGMENT_SHADER, spec, output, &resources);
     ShCompileOptions compileOptions = SH_LIMIT_EXPRESSION_COMPLEXITY;
 
@@ -308,7 +308,7 @@ TEST_F(ExpressionLimitTest, UnusedExpressionComplexity)
 TEST_F(ExpressionLimitTest, CallStackDepth)
 {
     ShShaderSpec spec = SH_WEBGL_SPEC;
-    ShShaderOutput output = SH_ESSL_OUTPUT;
+    ShShaderOutput output   = SH_ESSL_COMPATIBILITY_OUTPUT;
     ShHandle vertexCompiler = sh::ConstructCompiler(GL_FRAGMENT_SHADER, spec, output, &resources);
     ShCompileOptions compileOptions = SH_LIMIT_CALL_STACK_DEPTH;
 
@@ -332,7 +332,7 @@ TEST_F(ExpressionLimitTest, CallStackDepth)
 TEST_F(ExpressionLimitTest, UnusedCallStackDepth)
 {
     ShShaderSpec spec = SH_WEBGL_SPEC;
-    ShShaderOutput output = SH_ESSL_OUTPUT;
+    ShShaderOutput output   = SH_ESSL_COMPATIBILITY_OUTPUT;
     ShHandle vertexCompiler = sh::ConstructCompiler(GL_FRAGMENT_SHADER, spec, output, &resources);
     ShCompileOptions compileOptions = SH_LIMIT_CALL_STACK_DEPTH;
 
@@ -356,7 +356,7 @@ TEST_F(ExpressionLimitTest, UnusedCallStackDepth)
 TEST_F(ExpressionLimitTest, Recursion)
 {
     ShShaderSpec spec = SH_WEBGL_SPEC;
-    ShShaderOutput output = SH_ESSL_OUTPUT;
+    ShShaderOutput output   = SH_ESSL_COMPATIBILITY_OUTPUT;
     ShHandle vertexCompiler = sh::ConstructCompiler(GL_FRAGMENT_SHADER, spec, output, &resources);
     ShCompileOptions compileOptions = 0;
 
@@ -569,7 +569,7 @@ TEST_F(ExpressionLimitTest, Recursion)
 TEST_F(ExpressionLimitTest, FunctionParameterCount)
 {
     ShShaderSpec spec     = SH_WEBGL_SPEC;
-    ShShaderOutput output = SH_ESSL_OUTPUT;
+    ShShaderOutput output = SH_ESSL_COMPATIBILITY_OUTPUT;
     ShHandle compiler     = sh::ConstructCompiler(GL_FRAGMENT_SHADER, spec, output, &resources);
     ShCompileOptions compileOptions = SH_LIMIT_EXPRESSION_COMPLEXITY;
 
@@ -591,7 +591,7 @@ TEST_F(ExpressionLimitTest, FunctionParameterCount)
 TEST_F(ExpressionLimitTest, NestingInsideSwitch)
 {
     ShShaderSpec spec     = SH_WEBGL2_SPEC;
-    ShShaderOutput output = SH_ESSL_OUTPUT;
+    ShShaderOutput output = SH_ESSL_COMPATIBILITY_OUTPUT;
     ShHandle compiler     = sh::ConstructCompiler(GL_FRAGMENT_SHADER, spec, output, &resources);
     ShCompileOptions compileOptions = SH_LIMIT_EXPRESSION_COMPLEXITY;
 
@@ -614,7 +614,7 @@ TEST_F(ExpressionLimitTest, NestingInsideSwitch)
 TEST_F(ExpressionLimitTest, NestingInsideGlobalInitializer)
 {
     ShShaderSpec spec     = SH_WEBGL_SPEC;
-    ShShaderOutput output = SH_ESSL_OUTPUT;
+    ShShaderOutput output = SH_ESSL_COMPATIBILITY_OUTPUT;
     ShHandle compiler     = sh::ConstructCompiler(GL_FRAGMENT_SHADER, spec, output, &resources);
     ShCompileOptions compileOptions = SH_LIMIT_EXPRESSION_COMPLEXITY;
 

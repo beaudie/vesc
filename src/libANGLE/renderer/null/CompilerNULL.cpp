@@ -24,7 +24,7 @@ CompilerNULL::~CompilerNULL()
 
 ShShaderOutput CompilerNULL::getTranslatorOutputType() const
 {
-    return SH_ESSL_OUTPUT;
+    return SH_ESSL_COMPATIBILITY_OUTPUT;
 }
 
 }  // namespace rx

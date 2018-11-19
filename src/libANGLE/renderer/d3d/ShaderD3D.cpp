@@ -77,7 +77,7 @@ std::string ShaderD3D::getDebugInfo() const
 void ShaderD3D::uncompile()
 {
     // set by compileToHLSL
-    mCompilerOutputType = SH_ESSL_OUTPUT;
+    mCompilerOutputType = SH_ESSL_COMPATIBILITY_OUTPUT;
 
     mUsesMultipleRenderTargets = false;
     mUsesFragColor = false;
