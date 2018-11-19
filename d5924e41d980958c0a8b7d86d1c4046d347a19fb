@@ -1,0 +1,694 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0adce7fb_9cb5fc51",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "can you fix up the message? it has two messages combined into one.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 22
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8cdd24e_6f04ae7c",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "seems like too much info for normal debug builds. Can you make this an option in declare_args?",
+      "range": {
+        "startLine": 922,
+        "startChar": 20,
+        "endLine": 922,
+        "endChar": 50
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14d076ec_bf2a07fe",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 926,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "I think we should probably put this outside of the is_android block. also preference to avoid prefixing with \u0027lib\u0027 if possible. say \u0027angle_feature_support\u0027 if that\u0027s doable.",
+      "range": {
+        "startLine": 926,
+        "startChar": 18,
+        "endLine": 926,
+        "endChar": 36
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30e4878d_ec3d89a0",
+        "filename": "src/feature_support_util/a4a_rules.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "something\u0027d odd with the newlines in this file. can you run it through dos2unix? We can add the right endings for json files to .gitattributes if necessary.",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 1,
+        "endChar": 3
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d3b0d23_2d4ca71f",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "comment suggestion: Helps client APIs make decisions based on rules data files. For example, the Android EGL loader...",
+      "range": {
+        "startLine": 7,
+        "startChar": 35,
+        "endLine": 8,
+        "endChar": 60
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b48fe833_1d533ee8",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "just angle for the namespace. No need to separate it.",
+      "range": {
+        "startLine": 18,
+        "startChar": 10,
+        "endLine": 18,
+        "endChar": 27
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c69161b0_7956a5f6",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "nit: please place this include in a separate if defined before the namespace. Also please use ANGLE_PLATFORM_ANDROID if possible. defined in common/platform.h.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 24
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df51da6e_ce290f0f",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "be careful with the (void)0 pattern. Can sometimes lead to unreferenced variables.",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 34,
+        "endChar": 13
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "22d6122d_0e84dab5",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "debug.h is supposed to be our one-stop-shop for logging routines. We should probably revamp it to support your use case. Right now I don\u0027t think it will out of the box.\n\nMaybe we could do this after your CL lands. But to be consistent could you rename your macros to ERR/WARN/INFO? Info would merge info+debug+verbose. It doesn\u0027t look like you actually use the separate levels. Seems like INFO is always the \"way too much for normal use\" level. :)",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 0
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29caac21_b2d9732e",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "lots of comments below all of the same form. don\u0027t use non-cosnt \u0026 for parameters:\n\nhttps://google.github.io/styleguide/cppguide.html#Reference_Arguments",
+      "range": {
+        "startLine": 170,
+        "startChar": 17,
+        "endLine": 170,
+        "endChar": 25
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55db13e7_690b84d1",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "const \u0026",
+      "range": {
+        "startLine": 695,
+        "startChar": 9,
+        "endLine": 695,
+        "endChar": 20
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa7f0bfa_4462847d",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "const \u0026. or use std::move if you want to use move semantics and pass by value.",
+      "range": {
+        "startLine": 704,
+        "startChar": 16,
+        "endLine": 704,
+        "endChar": 27
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bee5f07d_9b4aa19a",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 705,
+        "startChar": 4,
+        "endLine": 705,
+        "endChar": 51
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1af4aa32_deecf6ad",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 706,
+        "startChar": 3,
+        "endLine": 706,
+        "endChar": 33
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "588785e6_47c00469",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "nit : omit duplicate public:",
+      "range": {
+        "startLine": 723,
+        "startChar": 0,
+        "endLine": 723,
+        "endChar": 9
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44fc2fad_e22df47b",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "const \u0026",
+      "range": {
+        "startLine": 749,
+        "startChar": 17,
+        "endLine": 749,
+        "endChar": 21
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88921486_bee14014",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 750,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "const \u0026",
+      "range": {
+        "startLine": 750,
+        "startChar": 22,
+        "endLine": 750,
+        "endChar": 30
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce26470e_9905928c",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "same as below",
+      "range": {
+        "startLine": 758,
+        "startChar": 13,
+        "endLine": 758,
+        "endChar": 17
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9965557c_8232d61a",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "const \u0026",
+      "range": {
+        "startLine": 776,
+        "startChar": 19,
+        "endLine": 776,
+        "endChar": 27
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfef2181_9b17c5c9",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "nit: can you replace the auto with the type for simple types? makes the code more readable.",
+      "range": {
+        "startLine": 784,
+        "startChar": 13,
+        "endLine": 784,
+        "endChar": 17
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cb3db1c_5202daee",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "nit: const \u0026.",
+      "range": {
+        "startLine": 802,
+        "startChar": 45,
+        "endLine": 802,
+        "endChar": 56
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e37ab555_c5f98e20",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "this is a bit unconventional for angle code. Can you omit this?",
+      "range": {
+        "startLine": 807,
+        "startChar": 8,
+        "endLine": 807,
+        "endChar": 28
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f490913_05f2f136",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "nit: can you give these slightly descriptive names? i,j,k make me uneasy about shadowing. e.g. ruleIndex, appIndex, deviceIndex, gpuIndex.",
+      "range": {
+        "startLine": 812,
+        "startChar": 26,
+        "endLine": 812,
+        "endChar": 27
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c76a9fb_1da3f771",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "nit: addDevice. \u0027dev\u0027 is a bit too curt.",
+      "range": {
+        "startLine": 844,
+        "startChar": 25,
+        "endLine": 844,
+        "endChar": 31
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0c125de_c0ae39a8",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "prefer std::vector. std::list is too slow. only faster for highly dynamic data with a lot of middle insertions/deletions.",
+      "range": {
+        "startLine": 869,
+        "startChar": 9,
+        "endLine": 869,
+        "endChar": 13
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba568f2c_d86ad362",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "nit: please use a c++ type with RAII. it makes the code cleaner and it\u0027s generally better IMO to use.",
+      "range": {
+        "startLine": 980,
+        "startChar": 4,
+        "endLine": 980,
+        "endChar": 58
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43dd67ca_a9f706ea",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "I would recommend a design where we keep the rules lists in a vector and return unsigned int indices as rules handles. Prevents any kind of memory leak shenanigans.",
+      "range": {
+        "startLine": 985,
+        "startChar": 0,
+        "endLine": 986,
+        "endChar": 22
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "475bb5cf_932281db",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "Thinking we should make a predeclared type for SystemInfo. As simple as \"class/struct SystemInfo;\". Also one other concern I have is versioning of the SystemInfo. But maybe we if make a new SystemInfo struct we should just call it SystemInfo1. Otherwise we can pass in a version as well. WDYT?",
+      "range": {
+        "startLine": 128,
+        "startChar": 49,
+        "endLine": 128,
+        "endChar": 73
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbbc1a0a_35bff1ad",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "naming nit: \"camelCase\" for variables.",
+      "range": {
+        "startLine": 144,
+        "startChar": 53,
+        "endLine": 144,
+        "endChar": 65
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83681d64_466cc714",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-19T18:46:49Z",
+      "side": 1,
+      "message": "can you please define a type for a rules handle?\n\nusing RulesHandle \u003d const void *;",
+      "range": {
+        "startLine": 154,
+        "startChar": 39,
+        "endLine": 154,
+        "endChar": 45
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
