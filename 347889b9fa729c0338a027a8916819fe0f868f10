@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a4d30262_0a7ba0dd",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-19T18:23:23Z",
+      "side": 1,
+      "message": "I\u0027m not very familiar with how Vulkan / Graphics hardware work, but maybe it would be better to have separate queues for graphics and compute?\nMy line of thought: there is no advantage of doing both of these on the same queue, but on separate queues they might be done in parallel, thus faster + I\u0027d expect some drivers would have separate queues for these or maybe no compute at all, so we\u0027d fail to initialize on those.",
+      "parentUuid": "8a6f8ef0_08de4a7e",
+      "range": {
+        "startLine": 506,
+        "startChar": 0,
+        "endLine": 507,
+        "endChar": 63
+      },
+      "revId": "347889b9fa729c0338a027a8916819fe0f868f10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cab4ccc1_e374ac12",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
@@ -110,6 +134,29 @@
         "startChar": 4,
         "endLine": 362,
         "endChar": 25
+      },
+      "revId": "347889b9fa729c0338a027a8916819fe0f868f10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68e4e781_9f183239",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-19T18:23:23Z",
+      "side": 1,
+      "message": "I thought the style for typenames is to start with a CapitalLetter.",
+      "range": {
+        "startLine": 558,
+        "startChar": 23,
+        "endLine": 558,
+        "endChar": 35
       },
       "revId": "347889b9fa729c0338a027a8916819fe0f868f10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
