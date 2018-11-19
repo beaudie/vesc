@@ -118,6 +118,11 @@ test("angle_unittests") {
            angle_root + ":preprocessor",
            angle_root + ":translator",
          ]
+  if (is_android) {
+      deps += [
+          angle_root + ":libfeature_support${angle_libs_suffix}"
+      ]
+  }
 }
 
 if (is_win || is_linux || is_mac || is_android) {
