@@ -1,0 +1,331 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f304fda_4770021c",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-19T21:33:07Z",
+      "side": 1,
+      "message": "Looks like this needs a final \u0027git cl format\u0027",
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac8a305e_103edd3e",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2898,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-19T21:33:07Z",
+      "side": 1,
+      "message": "With surfaceless, it\u0027s possible that this surface is null.",
+      "range": {
+        "startLine": 2897,
+        "startChar": 20,
+        "endLine": 2898,
+        "endChar": 58
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4611c3c9_2b65586d",
+        "filename": "src/libANGLE/renderer/d3d/RendererD3D.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-19T21:33:07Z",
+      "side": 1,
+      "message": "For D3D, the multiview count will be per-surface, no need to have a method on the renderer.",
+      "range": {
+        "startLine": 386,
+        "startChar": 4,
+        "endLine": 386,
+        "endChar": 61
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67fe35bd_599996ad",
+        "filename": "src/libANGLE/renderer/d3d/SwapChainD3D.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-19T21:33:07Z",
+      "side": 1,
+      "message": "nit: extra whitespace change.",
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebeac203_a66a960f",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-19T21:33:07Z",
+      "side": 1,
+      "message": "nit: ASSERT that index is 0 or 1?  A helper could be used to convert this, it\u0027s used below too.",
+      "range": {
+        "startLine": 670,
+        "startChar": 24,
+        "endLine": 674,
+        "endChar": 25
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ad2ff6e_8d58aa31",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-19T21:33:07Z",
+      "side": 1,
+      "message": "Could you put comments in these emulation cases to explain how the emulation works?",
+      "range": {
+        "startLine": 667,
+        "startChar": 20,
+        "endLine": 682,
+        "endChar": 21
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef848950_915cdfde",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-19T21:33:07Z",
+      "side": 1,
+      "message": "nit: ASSERT(index \u003d\u003d 1)?",
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "886cdbf1_7253a5a9",
+        "filename": "src/libANGLE/renderer/gl/gl_bindings_data.json",
+        "patchSetId": 18
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-19T21:33:07Z",
+      "side": 1,
+      "message": "nit: extra whitespace.",
+      "range": {
+        "startLine": 795,
+        "startChar": 36,
+        "endLine": 795,
+        "endChar": 37
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "427dfcca_318ec928",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-19T21:33:07Z",
+      "side": 1,
+      "message": "I think it would be possible to always expose the EXT_multiview_draw_buffers if draw buffers is available but not expose the EGL_EXT_multiview_window extension when it has this issue.  That way, MAX_MULTIVIEW_BUFFERS_EXT would always be 1 and no emulation would be needed, the extension would be a no-op.\n\nThis workaround could move into DisplayWGL::initializeImpl.",
+      "range": {
+        "startLine": 1060,
+        "startChar": 0,
+        "endLine": 1063,
+        "endChar": 58
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8811c958_88df34d6",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-19T21:33:07Z",
+      "side": 1,
+      "message": "This may need to be split up more, if the driver supports EXT_multiview_draw_buffers natively we should be able to always expose it.  This case is just for desktop GL.",
+      "range": {
+        "startLine": 1064,
+        "startChar": 8,
+        "endLine": 1064,
+        "endChar": 30
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e6b3391_b29b9209",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-19T21:33:07Z",
+      "side": 1,
+      "message": "This will have to be a loop until getError returns GL_NO_ERROR.",
+      "range": {
+        "startLine": 1066,
+        "startChar": 0,
+        "endLine": 1067,
+        "endChar": 46
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb5ac326_95b45db1",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-19T21:33:07Z",
+      "side": 1,
+      "message": "This would only work on the default framebuffer, right?  Could you either assert that framebuffer 0 is bound or bind it here?  Finally, would this depend on the surface that is bound?",
+      "range": {
+        "startLine": 1071,
+        "startChar": 8,
+        "endLine": 1071,
+        "endChar": 43
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b0ece30_c2a14d10",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-19T21:33:07Z",
+      "side": 1,
+      "message": "Let\u0027s query what it was before to be not change any state.",
+      "range": {
+        "startLine": 1075,
+        "startChar": 8,
+        "endLine": 1076,
+        "endChar": 43
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1a3857f_cc7d3eba",
+        "filename": "src/libANGLE/renderer/null/SurfaceNULL.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-19T21:33:07Z",
+      "side": 1,
+      "message": "I think we should either return 1 or return the requested multiview count for this surface.",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 13
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be67ab1b_fa5a3da8",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2692,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-19T21:33:07Z",
+      "side": 1,
+      "message": "static_cast",
+      "range": {
+        "startLine": 2692,
+        "startChar": 24,
+        "endLine": 2692,
+        "endChar": 32
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
