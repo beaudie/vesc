@@ -124,6 +124,11 @@ angle_unittests_sources = [
   "../tests/test_utils/ShaderCompileTreeTest.cpp",
   "../tests/test_utils/ShaderExtensionTest.h",
 ]
+if(is_android) {
+  angle_unittests_sources += [
+    "../feature_support_util/feature_support_util_unittest.cpp",
+  ]
+}
 
 # TODO(jmadill): should probably call this windows sources
 angle_unittests_hlsl_sources = [
