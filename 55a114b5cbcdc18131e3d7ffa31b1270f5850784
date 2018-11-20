@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "e4cac3ba_3832f9a3",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-20T10:26:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88781fd9_24a9b382",
+      "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "acac235d_ed4083d6",
         "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
         "patchSetId": 2
@@ -75,6 +93,30 @@
       "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "468e16ee_4668410e",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-20T10:26:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "acac235d_ed4083d6",
+      "range": {
+        "startLine": 51,
+        "startChar": 25,
+        "endLine": 51,
+        "endChar": 63
+      },
+      "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -131,6 +173,24 @@
     },
     {
       "key": {
+        "uuid": "8dd4f1ad_63cb74a5",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-20T10:26:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17d66566_8c86525a",
+      "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "593d15eb_8e8c4e36",
         "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
         "patchSetId": 2
@@ -145,6 +205,24 @@
       "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd77ee49_f3f0aabd",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-20T10:26:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "593d15eb_8e8c4e36",
+      "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -185,6 +263,30 @@
       "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d33d55d5_9a7ca54d",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-20T10:26:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "453f5085_7749d4bf",
+      "range": {
+        "startLine": 328,
+        "startChar": 3,
+        "endLine": 328,
+        "endChar": 7
+      },
+      "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
