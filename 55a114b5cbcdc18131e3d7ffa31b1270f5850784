@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "88781fd9_24a9b382",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-20T09:23:43Z",
+      "side": 1,
+      "message": "Yes, we should check for it, but there\u0027s a lot of code that does the N iterations already has soon as we have row-major matrices etc. So it I think it would still be a code complexity win.",
+      "parentUuid": "46aaec25_c7536871",
+      "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "acac235d_ed4083d6",
         "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
         "patchSetId": 2
@@ -89,6 +107,24 @@
       "side": 1,
       "message": "Can we only compare \u0027functionName\u0027 since it will contain all necessary information? Change it like blow:\n    return std::tie(functionName) \u003c std::tie(rhs.functionName);\n\nIt seems it\u0027s not necessary to tie other structure members.",
       "parentUuid": "e1df9124_e08b91df",
+      "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17d66566_8c86525a",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-20T09:23:43Z",
+      "side": 1,
+      "message": "That would probably work yes (and you don\u0027t need to use std::tie for a single variable)",
+      "parentUuid": "7b12d848_ad3a95af",
       "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
