@@ -77,6 +77,24 @@
     },
     {
       "key": {
+        "uuid": "7b12d848_ad3a95af",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-20T05:56:59Z",
+      "side": 1,
+      "message": "Can we only compare \u0027functionName\u0027 since it will contain all necessary information? Change it like blow:\n    return std::tie(functionName) \u003c std::tie(rhs.functionName);\n\nIt seems it\u0027s not necessary to tie other structure members.",
+      "parentUuid": "e1df9124_e08b91df",
+      "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "593d15eb_8e8c4e36",
         "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
         "patchSetId": 2
