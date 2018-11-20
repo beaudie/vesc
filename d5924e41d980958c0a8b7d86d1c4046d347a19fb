@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f7b4f5cb_b41f24f9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0adce7fb_9cb5fc51",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 22
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b8cdd24e_6f04ae7c",
         "filename": "BUILD.gn",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2018-11-19T18:46:49Z",
       "side": 1,
       "message": "seems like too much info for normal debug builds. Can you make this an option in declare_args?",
+      "range": {
+        "startLine": 922,
+        "startChar": 20,
+        "endLine": 922,
+        "endChar": 50
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d57162a_904fcb38",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "What is \"declare_args\", and how can we turn on our messages again (for our debugging)?",
+      "parentUuid": "b8cdd24e_6f04ae7c",
       "range": {
         "startLine": 922,
         "startChar": 20,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b505cc7e_404a6042",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 926,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "Courtney said that you and he already went through this a while back, and that Android requires the \"lib\".  Also, while it\u0027s possible to change the library name, it would be very inconvenient.  Is it a big deal, or can we just keep this as-is?",
+      "parentUuid": "14d076ec_bf2a07fe",
+      "range": {
+        "startLine": 926,
+        "startChar": 18,
+        "endLine": 926,
+        "endChar": 36
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "30e4878d_ec3d89a0",
         "filename": "src/feature_support_util/a4a_rules.json",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce2a28ac_6c21b9a4",
+        "filename": "src/feature_support_util/a4a_rules.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "Apparently, that website that you suggested, just adds extra characters after an open brace.  I manually took them out.  I\u0027ll push the new version tomorrow.",
+      "parentUuid": "30e4878d_ec3d89a0",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 1,
+        "endChar": 3
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "63fbf6b7_c2db6e42",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d3b0d23_2d4ca71f",
+      "range": {
+        "startLine": 7,
+        "startChar": 35,
+        "endLine": 8,
+        "endChar": 60
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b48fe833_1d533ee8",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 7
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "5a80d645_3feeb44c",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b48fe833_1d533ee8",
+      "range": {
+        "startLine": 18,
+        "startChar": 10,
+        "endLine": 18,
+        "endChar": 27
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c69161b0_7956a5f6",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 7
@@ -160,6 +304,30 @@
       "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77aa52ad_1e228a98",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "I initially did this, but then I didn\u0027t get the Android version of these macros.",
+      "parentUuid": "c69161b0_7956a5f6",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 24
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -209,6 +377,30 @@
     },
     {
       "key": {
+        "uuid": "9e1862d9_c9d31abe",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "I looked at debug.h, and it wasn\u0027t at all clear how to use it, etc.  So, I ported the Android API here (i.e. ALOG*).  It\u0027s very simple/easy.  So, if we can modify debug.h, that would be good (agree--do it after this CL lands).\n\nIt\u0027s not clear that ERR/WARN/INFO do anything, or what they do.  Will those be the names for logging errors/warnings/info messages?\n\nAt this point, we\u0027re not using info+debug+verbose, but I was earlier, and suspect we may again (especially temporarily, when we turn on new functionality).  In fact, we converted a bunch of messages to verbose (which only show up with debug builds) recently, per Android guidance.  Thus, I want to be careful here since this was originally Android code that we are porting to the ANGLE APK so that we can update it every 6 weeks.\n\nBacking up, if ERR/WARN/INFO (and DEBUG/VERBOSE) are the names to use in the future, I will port to them.  Please advise.",
+      "parentUuid": "22d6122d_0e84dab5",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 0
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "29caac21_b2d9732e",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 7
@@ -229,6 +421,30 @@
       "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cb10d78_d753de02",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "Okay, I\u0027ve tried to handle this.",
+      "parentUuid": "29caac21_b2d9732e",
+      "range": {
+        "startLine": 170,
+        "startChar": 17,
+        "endLine": 170,
+        "endChar": 25
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -255,6 +471,30 @@
     },
     {
       "key": {
+        "uuid": "26025060_deb57e5b",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55db13e7_690b84d1",
+      "range": {
+        "startLine": 695,
+        "startChar": 9,
+        "endLine": 695,
+        "endChar": 20
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa7f0bfa_4462847d",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 7
@@ -275,6 +515,30 @@
       "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d62c1ae4_40055d2e",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "aa7f0bfa_4462847d",
+      "range": {
+        "startLine": 704,
+        "startChar": 16,
+        "endLine": 704,
+        "endChar": 27
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -301,6 +565,30 @@
     },
     {
       "key": {
+        "uuid": "45b77200_df4079be",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "bee5f07d_9b4aa19a",
+      "range": {
+        "startLine": 705,
+        "startChar": 4,
+        "endLine": 705,
+        "endChar": 51
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1af4aa32_deecf6ad",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 7
@@ -321,6 +609,30 @@
       "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a575d0c7_c87072dd",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "1af4aa32_deecf6ad",
+      "range": {
+        "startLine": 706,
+        "startChar": 3,
+        "endLine": 706,
+        "endChar": 33
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -347,6 +659,30 @@
     },
     {
       "key": {
+        "uuid": "4e81c92a_f26f849f",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "588785e6_47c00469",
+      "range": {
+        "startLine": 723,
+        "startChar": 0,
+        "endLine": 723,
+        "endChar": 9
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "44fc2fad_e22df47b",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 7
@@ -367,6 +703,30 @@
       "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cafa56ab_661d5bfc",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "44fc2fad_e22df47b",
+      "range": {
+        "startLine": 749,
+        "startChar": 17,
+        "endLine": 749,
+        "endChar": 21
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -393,6 +753,30 @@
     },
     {
       "key": {
+        "uuid": "40ea524a_f4cfbc59",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 750,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "88921486_bee14014",
+      "range": {
+        "startLine": 750,
+        "startChar": 22,
+        "endLine": 750,
+        "endChar": 30
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce26470e_9905928c",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 7
@@ -413,6 +797,30 @@
       "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ab97b39_6c81d356",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce26470e_9905928c",
+      "range": {
+        "startLine": 758,
+        "startChar": 13,
+        "endLine": 758,
+        "endChar": 17
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -439,6 +847,30 @@
     },
     {
       "key": {
+        "uuid": "76d128ec_02ddb154",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9965557c_8232d61a",
+      "range": {
+        "startLine": 776,
+        "startChar": 19,
+        "endLine": 776,
+        "endChar": 27
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfef2181_9b17c5c9",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 7
@@ -459,6 +891,30 @@
       "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d585ede_909844c0",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfef2181_9b17c5c9",
+      "range": {
+        "startLine": 784,
+        "startChar": 13,
+        "endLine": 784,
+        "endChar": 17
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -485,6 +941,30 @@
     },
     {
       "key": {
+        "uuid": "94d6aa17_af357d48",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cb3db1c_5202daee",
+      "range": {
+        "startLine": 802,
+        "startChar": 45,
+        "endLine": 802,
+        "endChar": 56
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e37ab555_c5f98e20",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 7
@@ -505,6 +985,30 @@
       "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ce465fd_064a2c28",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e37ab555_c5f98e20",
+      "range": {
+        "startLine": 807,
+        "startChar": 8,
+        "endLine": 807,
+        "endChar": 28
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -531,6 +1035,30 @@
     },
     {
       "key": {
+        "uuid": "a56a3a1e_eb5b7419",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f490913_05f2f136",
+      "range": {
+        "startLine": 812,
+        "startChar": 26,
+        "endLine": 812,
+        "endChar": 27
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c76a9fb_1da3f771",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 7
@@ -551,6 +1079,30 @@
       "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db9471b6_773ac942",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c76a9fb_1da3f771",
+      "range": {
+        "startLine": 844,
+        "startChar": 25,
+        "endLine": 844,
+        "endChar": 31
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -577,6 +1129,30 @@
     },
     {
       "key": {
+        "uuid": "32c6f83f_a70052aa",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0c125de_c0ae39a8",
+      "range": {
+        "startLine": 869,
+        "startChar": 9,
+        "endLine": 869,
+        "endChar": 13
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba568f2c_d86ad362",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 7
@@ -597,6 +1173,30 @@
       "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8840db1c_fd1c8592",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "This moved out of this library.",
+      "parentUuid": "ba568f2c_d86ad362",
+      "range": {
+        "startLine": 980,
+        "startChar": 4,
+        "endLine": 980,
+        "endChar": 58
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -623,6 +1223,30 @@
     },
     {
       "key": {
+        "uuid": "20f91aa9_f659bc30",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "If I understand what you\u0027re saying, I\u0027d rather not.  I think you\u0027re saying that we have a vector of RulesList classes, and hide that from the Android EGL loader?  The loader will only ever have one RulesList.  It already frees it explicitly.",
+      "parentUuid": "43dd67ca_a9f706ea",
+      "range": {
+        "startLine": 985,
+        "startChar": 0,
+        "endLine": 986,
+        "endChar": 22
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "475bb5cf_932281db",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 7
@@ -634,6 +1258,30 @@
       "writtenOn": "2018-11-19T18:46:49Z",
       "side": 1,
       "message": "Thinking we should make a predeclared type for SystemInfo. As simple as \"class/struct SystemInfo;\". Also one other concern I have is versioning of the SystemInfo. But maybe we if make a new SystemInfo struct we should just call it SystemInfo1. Otherwise we can pass in a version as well. WDYT?",
+      "range": {
+        "startLine": 128,
+        "startChar": 49,
+        "endLine": 128,
+        "endChar": 73
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f061a7c_df5e44d0",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "For this function, we want the Android EGL loader to see an opaque handle, and not be able to look inside the struct.\n\nGiven your comment below, about RulesHandle, I did a SystemInfoHandle type as well.\n\nAt first, I shared your versioning concern.  As I think through this though, if Android code never looks inside of it, I think that makes the concern go away.  Any handle passed back by this function will go to another function that\u0027s in the same ANGLE APK, and so both functions should be using the same version of the SystemInfo struct.  Do you agree?",
+      "parentUuid": "475bb5cf_932281db",
       "range": {
         "startLine": 128,
         "startChar": 49,
@@ -669,6 +1317,30 @@
     },
     {
       "key": {
+        "uuid": "75d69d5f_3b833f7b",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "Fixed in latest Patch Set.",
+      "parentUuid": "cbbc1a0a_35bff1ad",
+      "range": {
+        "startLine": 144,
+        "startChar": 53,
+        "endLine": 144,
+        "endChar": 65
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83681d64_466cc714",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 7
@@ -689,6 +1361,30 @@
       "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e05e0d05_a798f12d",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-20T18:42:32Z",
+      "side": 1,
+      "message": "I did the typedef, but didn\u0027t make the type constant, only specific uses of it.",
+      "parentUuid": "83681d64_466cc714",
+      "range": {
+        "startLine": 154,
+        "startChar": 39,
+        "endLine": 154,
+        "endChar": 45
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
