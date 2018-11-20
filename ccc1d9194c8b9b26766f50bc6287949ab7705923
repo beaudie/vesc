@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "f6c67b37_9e7fe6dc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-20T13:00:06Z",
+      "side": 1,
+      "message": "nit: can you make this a helper? Might be useful in the future.",
+      "range": {
+        "startLine": 453,
+        "startChar": 3,
+        "endLine": 454,
+        "endChar": 92
+      },
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fe7db3ac_8e9ef1ed",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
@@ -59,6 +82,116 @@
     },
     {
       "key": {
+        "uuid": "529263c5_cff44f92",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-20T13:00:06Z",
+      "side": 1,
+      "message": "I\u0027d like ANGLE still to be able to initialize on Vulkan 1.0. If you want to conditionally initialize the max version (1.1 or 1.0) and only support instanced draw on 1.1 that\u0027s fine with me. Also agree it would be nice to not store the function pointer as a member, but it does persist outside of this method.",
+      "parentUuid": "e442c6c1_46127a5a",
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbe8afb2_92afa128",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-20T13:00:06Z",
+      "side": 1,
+      "message": "nit: what type is this? Can you make it explicit?",
+      "range": {
+        "startLine": 596,
+        "startChar": 19,
+        "endLine": 596,
+        "endChar": 23
+      },
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e78c42a3_2f482560",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-20T13:00:06Z",
+      "side": 1,
+      "message": "could use helper here.",
+      "range": {
+        "startLine": 630,
+        "startChar": 2,
+        "endLine": 631,
+        "endChar": 84
+      },
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "144913fc_43bdfea5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-20T13:00:06Z",
+      "side": 1,
+      "message": "this is weird. you\u0027re sure this is correct?",
+      "range": {
+        "startLine": 662,
+        "startChar": 3,
+        "endLine": 662,
+        "endChar": 56
+      },
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c365321d_3feba46e",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-20T13:00:06Z",
+      "side": 1,
+      "message": "better remove this TODO if you don\u0027t plan to resolve it.",
+      "range": {
+        "startLine": 486,
+        "startChar": 0,
+        "endLine": 487,
+        "endChar": 51
+      },
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ec8635c6_29a0ff1a",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 5
@@ -76,6 +209,24 @@
     },
     {
       "key": {
+        "uuid": "c76fd06a_5b4bee37",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-20T13:00:06Z",
+      "side": 1,
+      "message": "inputRate was supposed to be the divisor. You can rename inputRate if you want. Your plan SGTM. Would prefer not to inject this 32 bits here.",
+      "parentUuid": "ec8635c6_29a0ff1a",
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "27a4c3cf_8e18bd99",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 5
@@ -87,6 +238,24 @@
       "writtenOn": "2018-11-20T04:21:08Z",
       "side": 1,
       "message": "This seems dumb.  Can this function move into the RendererVk class?",
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3455de9c_4fe925aa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-20T13:00:06Z",
+      "side": 1,
+      "message": "How about keeping this function here but making it a member of RendererVk? It\u0027s a bit weird to have it in a separate file, but seems harmless.",
+      "parentUuid": "27a4c3cf_8e18bd99",
       "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
