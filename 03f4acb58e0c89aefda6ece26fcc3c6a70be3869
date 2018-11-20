@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a2984aa_307c4608",
+        "filename": "src/tests/gl_tests/SRGBTextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-20T18:53:16Z",
+      "side": 1,
+      "message": "Could you check if this maybe passes now? The other tests, too.\nIf not, we should probably report a bug and add it here.",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 66
+      },
+      "revId": "03f4acb58e0c89aefda6ece26fcc3c6a70be3869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
