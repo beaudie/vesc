@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "48e1d34d_41e13d62",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-20T03:52:58Z",
+      "side": 1,
+      "message": "@Jamie: Done.\n\n@Yuly: First, there\u0027s always guaranteed to be one queue with both graphics and compute.\n\nSecond, draw/dispatch calls within the same submission are perfectly allowed to overlap as long as there is no barrier stopping them (that\u0027s actually the reasons I recommend VkEvents over pipeline barriers).\n\nSubmitting the graphics and compute work on the same queue (at least in the use cases of ANGLE) is quite more efficient than calling them on different queues. The dispatch calls are going to do work that\u0027s closely related to the graphics work, and inter-queue synchronization on Vulkan requires semaphores and therefore multiple submissions which is quite expensive.\n\nNow if we had cheap cross-queue VkEvent\u0027s, that would have changed everything (https://github.com/KhronosGroup/Vulkan-Docs/issues/771).",
+      "parentUuid": "a4d30262_0a7ba0dd",
+      "range": {
+        "startLine": 506,
+        "startChar": 0,
+        "endLine": 507,
+        "endChar": 63
+      },
+      "revId": "347889b9fa729c0338a027a8916819fe0f868f10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cab4ccc1_e374ac12",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
@@ -69,6 +93,30 @@
       "revId": "347889b9fa729c0338a027a8916819fe0f868f10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c866ed90_d07d21fe",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-20T03:52:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cab4ccc1_e374ac12",
+      "range": {
+        "startLine": 685,
+        "startChar": 0,
+        "endLine": 686,
+        "endChar": 63
+      },
+      "revId": "347889b9fa729c0338a027a8916819fe0f868f10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -95,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "48877a12_628e5b2a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-20T03:52:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eae47af7_623865c7",
+      "range": {
+        "startLine": 142,
+        "startChar": 18,
+        "endLine": 142,
+        "endChar": 29
+      },
+      "revId": "347889b9fa729c0338a027a8916819fe0f868f10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e40d540_8162c854",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 4
@@ -115,6 +187,30 @@
       "revId": "347889b9fa729c0338a027a8916819fe0f868f10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53bf3e5a_167e1d24",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1260,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-20T03:52:58Z",
+      "side": 1,
+      "message": "Done. Though I wonder why you say that. Granted, I should have sent the lambda by reference instead, but having done that, the performance shouldn\u0027t be any different from using function pointers (which I agree is still not as efficient as no function pointers!).",
+      "parentUuid": "1e40d540_8162c854",
+      "range": {
+        "startLine": 1253,
+        "startChar": 0,
+        "endLine": 1260,
+        "endChar": 42
+      },
+      "revId": "347889b9fa729c0338a027a8916819fe0f868f10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -141,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "6dc62cd4_14046e33",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-20T03:52:58Z",
+      "side": 1,
+      "message": "Yes, that\u0027s true. Do you mind if we defer that work to ES3 support? Right now, the cache is used because there is no `ProgramVk` backing to the internal compute shaders. Once that class gets support for compute, this can be removed (although then the compute shaders would need a cache of `ProgramVk`s).\n\nAt the moment, I\u0027d prefer to focus on getting the functionality there and remove the `finish()` calls.",
+      "parentUuid": "df1d7a27_a2c7b10f",
+      "range": {
+        "startLine": 362,
+        "startChar": 4,
+        "endLine": 362,
+        "endChar": 25
+      },
+      "revId": "347889b9fa729c0338a027a8916819fe0f868f10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "68e4e781_9f183239",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 4
@@ -152,6 +272,30 @@
       "writtenOn": "2018-11-19T18:23:23Z",
       "side": 1,
       "message": "I thought the style for typenames is to start with a CapitalLetter.",
+      "range": {
+        "startLine": 558,
+        "startChar": 23,
+        "endLine": 558,
+        "endChar": 35
+      },
+      "revId": "347889b9fa729c0338a027a8916819fe0f868f10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "376c0bae_6375463a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-20T03:52:58Z",
+      "side": 1,
+      "message": "Removed the function, so irrelevant now. You\u0027re probably right.",
+      "parentUuid": "68e4e781_9f183239",
       "range": {
         "startLine": 558,
         "startChar": 23,
