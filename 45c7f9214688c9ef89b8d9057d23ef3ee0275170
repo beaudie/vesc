@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "04bec872_8fd2b9f5",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1200,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-20T18:30:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd536e62_d62ba201",
+      "range": {
+        "startLine": 1200,
+        "startChar": 62,
+        "endLine": 1200,
+        "endChar": 65
+      },
+      "revId": "45c7f9214688c9ef89b8d9057d23ef3ee0275170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b21723c_441095f6",
         "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "45c7f9214688c9ef89b8d9057d23ef3ee0275170",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9377be1c_34e06918",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-20T18:30:35Z",
+      "side": 1,
+      "message": "Only if the formats are supported, which I don\u0027t think is possible.",
+      "parentUuid": "6b21723c_441095f6",
+      "range": {
+        "startLine": 1202,
+        "startChar": 62,
+        "endLine": 1202,
+        "endChar": 76
+      },
+      "revId": "45c7f9214688c9ef89b8d9057d23ef3ee0275170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
