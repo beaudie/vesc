@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec8635c6_29a0ff1a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-11-20T04:21:08Z",
+      "side": 1,
+      "message": "If we want to get this space back, I suggest get rid of inputRate (it is just a flag), make divisor 16 bits and have 0 mean not instanced (thus doing the job of inputRate) and if we really want to handle divisors over 16 bits, fall back to emulation for that.",
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27a4c3cf_8e18bd99",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2018-11-20T04:21:08Z",
+      "side": 1,
+      "message": "This seems dumb.  Can this function move into the RendererVk class?",
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
