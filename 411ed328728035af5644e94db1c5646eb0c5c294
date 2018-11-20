@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "beaf647c_be2e210f",
+        "filename": "src/feature_support_util/feature_support_util_unittest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-20T22:19:28Z",
+      "side": 1,
+      "message": "ssize_t is a nonstandard type - prefer size_t. this is where the compile is failing.",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 72,
+        "endChar": 12
+      },
+      "revId": "411ed328728035af5644e94db1c5646eb0c5c294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

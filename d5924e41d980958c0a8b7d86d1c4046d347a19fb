@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "9baf3702_fc66d67d",
+        "filename": "src/feature_support_util/a4a_rules.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-20T22:19:28Z",
+      "side": 1,
+      "message": "Oh, sorry. I was thinking the command.\n\nhttps://linux.die.net/man/1/dos2unix\n\nBut yeah SGTM to fix manually.",
+      "parentUuid": "ce2a28ac_6c21b9a4",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 1,
+        "endChar": 3
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d3b0d23_2d4ca71f",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 7
