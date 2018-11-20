@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "46aaec25_c7536871",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-20T03:19:03Z",
+      "side": 1,
+      "message": "But we still need to check if the current swizzle is the default swizzle, specially for the vector data, for non-swizzle case, we can directly call buffer.Load[2|3|4]/Store[2|3|4] method to access/write data only once. But for swizzle case, we have to iterate N times to access/write data, N is the component count.",
+      "parentUuid": "e8b4e5d8_b9eb2da2",
+      "revId": "55a114b5cbcdc18131e3d7ffa31b1270f5850784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "acac235d_ed4083d6",
         "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
         "patchSetId": 2
