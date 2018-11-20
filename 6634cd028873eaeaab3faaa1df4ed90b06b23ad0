@@ -88,6 +88,24 @@
       "revId": "6634cd028873eaeaab3faaa1df4ed90b06b23ad0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0f13af0_1bcac9fa",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-11-20T22:59:31Z",
+      "side": 1,
+      "message": "We will address an AOSP apk in the future based on feedback above.",
+      "parentUuid": "79ebf78e_8713f2e8",
+      "revId": "6634cd028873eaeaab3faaa1df4ed90b06b23ad0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
