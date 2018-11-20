@@ -169,6 +169,30 @@
     },
     {
       "key": {
+        "uuid": "0eaf3af9_428f379f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-20T15:34:14Z",
+      "side": 1,
+      "message": "This is how you pass data to extensions that affect a function (vkCreateDevice in this case).",
+      "parentUuid": "144913fc_43bdfea5",
+      "range": {
+        "startLine": 662,
+        "startChar": 3,
+        "endLine": 662,
+        "endChar": 56
+      },
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c365321d_3feba46e",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 5
