@@ -2,6 +2,63 @@
   "comments": [
     {
       "key": {
+        "uuid": "d3eaebfb_d3ef9c47",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-20T07:29:55Z",
+      "side": 1,
+      "message": "Is this intended? Is non-instanced different from 1-instanced?",
+      "range": {
+        "startLine": 506,
+        "startChar": 57,
+        "endLine": 506,
+        "endChar": 58
+      },
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe7db3ac_8e9ef1ed",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-20T07:29:55Z",
+      "side": 1,
+      "message": "You just decided whether to add this extension just above. You can keep a flag to avoid doing another linear search. The extension is added in the back, so you can alternatively search in `rbegin()` and `rend()`.",
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e442c6c1_46127a5a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-20T07:29:55Z",
+      "side": 1,
+      "message": "If we set `apiVersion` above to 1.1 (which I think Android is enforcing), this function should be core so you shouldn\u0027t need to go through all these hoops.\n\nAlso, looks like the function pointer doesn\u0027t need to persistent beyond this function, so maybe don\u0027t put it in the class?",
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ec8635c6_29a0ff1a",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 5
