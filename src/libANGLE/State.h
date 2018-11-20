@@ -486,6 +486,7 @@ class State : angle::NonCopyable
     {
         DIRTY_OBJECT_READ_FRAMEBUFFER,
         DIRTY_OBJECT_DRAW_FRAMEBUFFER,
+        DIRTY_OBJECT_INIT_DRAW_ATTACHMENTS,
         DIRTY_OBJECT_VERTEX_ARRAY,
         DIRTY_OBJECT_SAMPLERS,
         // Use a very coarse bit for any program or texture change.
@@ -509,6 +510,12 @@ class State : angle::NonCopyable
     angle::Result syncDirtyObject(const Context *context, GLenum target);
     void setObjectDirty(GLenum target);
     void setSamplerDirty(size_t samplerIndex);
+
+    ANGLE_INLINE void setDrawFramebufferDirty()
+    {
+        mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+        mDirtyObjects.set(DIRTY_OBJECT_INIT_DRAW_ATTACHMENTS);
+    }
 
     // This actually clears the current value dirty bits.
     // TODO(jmadill): Pass mutable dirty bits into Impl.
