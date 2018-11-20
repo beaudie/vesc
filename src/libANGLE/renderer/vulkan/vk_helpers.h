@@ -547,6 +547,30 @@ class FramebufferHelper : public RecordableGraphResource
     Framebuffer mFramebuffer;
 };
 
+class ShaderProgramHelper : angle::NonCopyable
+{
+  public:
+    ShaderProgramHelper();
+    ~ShaderProgramHelper();
+
+    bool valid() const;
+    void destroy(VkDevice device);
+
+    vk::ShaderAndSerial &getShader(gl::ShaderType shaderType) { return mShaders[shaderType].get(); }
+
+    void setShader(gl::ShaderType shaderType, RefCounted<ShaderAndSerial> *shader);
+
+    // For getting a vk::Pipeline and from the pipeline cache.
+    angle::Result getGraphicsPipeline(Context *context,
+                                      const PipelineLayout &pipelineLayout,
+                                      const GraphicsPipelineDesc &pipelineDesc,
+                                      const gl::AttributesMask &activeAttribLocationsMask,
+                                      PipelineAndSerial **pipelineOut);
+
+  private:
+    gl::ShaderMap<BindingPointer<ShaderAndSerial>> mShaders;
+    GraphicsPipelineCache mGraphicsPipelines;
+};
 }  // namespace vk
 }  // namespace rx
 

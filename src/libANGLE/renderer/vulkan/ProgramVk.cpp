@@ -144,13 +144,10 @@ ProgramVk::ShaderInfo::ShaderInfo()
 
 ProgramVk::ShaderInfo::~ShaderInfo() = default;
 
-angle::Result ProgramVk::ShaderInfo::getShaders(
-    ContextVk *contextVk,
-    const std::string &vertexSource,
-    const std::string &fragmentSource,
-    bool enableLineRasterEmulation,
-    const vk::ShaderAndSerial **vertexShaderAndSerialOut,
-    const vk::ShaderAndSerial **fragmentShaderAndSerialOut)
+angle::Result ProgramVk::ShaderInfo::initShaders(ContextVk *contextVk,
+                                                 const std::string &vertexSource,
+                                                 const std::string &fragmentSource,
+                                                 bool enableLineRasterEmulation)
 {
     if (!valid())
     {
@@ -160,26 +157,32 @@ angle::Result ProgramVk::ShaderInfo::getShaders(
                                                 enableLineRasterEmulation, vertexSource,
                                                 fragmentSource, &vertexCode, &fragmentCode));
 
-        ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mVertexShaderAndSerial, vertexCode.data(),
-                                          vertexCode.size() * sizeof(uint32_t)));
-        ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mFragmentShaderAndSerial, fragmentCode.data(),
+        ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[gl::ShaderType::Vertex].get(),
+                                          vertexCode.data(), vertexCode.size() * sizeof(uint32_t)));
+        ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[gl::ShaderType::Fragment].get(),
+                                          fragmentCode.data(),
                                           fragmentCode.size() * sizeof(uint32_t)));
+
+        mProgramHelper.setShader(gl::ShaderType::Vertex, &mShaders[gl::ShaderType::Vertex]);
+        mProgramHelper.setShader(gl::ShaderType::Fragment, &mShaders[gl::ShaderType::Fragment]);
     }
 
-    *fragmentShaderAndSerialOut = &mFragmentShaderAndSerial;
-    *vertexShaderAndSerialOut   = &mVertexShaderAndSerial;
     return angle::Result::Continue();
 }
 
 void ProgramVk::ShaderInfo::destroy(VkDevice device)
 {
-    mVertexShaderAndSerial.destroy(device);
-    mFragmentShaderAndSerial.destroy(device);
+    mProgramHelper.destroy(device);
+
+    for (vk::RefCounted<vk::ShaderAndSerial> &shader : mShaders)
+    {
+        shader.get().destroy(device);
+    }
 }
 
 bool ProgramVk::ShaderInfo::valid() const
 {
-    return mVertexShaderAndSerial.valid();
+    return mShaders[gl::ShaderType::Vertex].get().valid();
 }
 
 // ProgramVk implementation.
@@ -743,26 +746,21 @@ void ProgramVk::setPathFragmentInputGen(const std::string &inputName,
 
 angle::Result ProgramVk::initShaders(ContextVk *contextVk,
                                      gl::PrimitiveMode mode,
-                                     const vk::ShaderAndSerial **vertexShaderAndSerialOut,
-                                     const vk::ShaderAndSerial **fragmentShaderAndSerialOut,
-                                     const vk::PipelineLayout **pipelineLayoutOut)
+                                     vk::ShaderProgramHelper **programOut)
 {
     if (UseLineRaster(contextVk, mode))
     {
-        ANGLE_TRY(mLineRasterShaderInfo.getShaders(contextVk, mVertexSource, mFragmentSource, true,
-                                                   vertexShaderAndSerialOut,
-                                                   fragmentShaderAndSerialOut));
+        ANGLE_TRY(
+            mLineRasterShaderInfo.initShaders(contextVk, mVertexSource, mFragmentSource, true));
         ASSERT(mLineRasterShaderInfo.valid());
+        *programOut = &mLineRasterShaderInfo.getShaderProgram();
     }
     else
     {
-        ANGLE_TRY(mDefaultShaderInfo.getShaders(contextVk, mVertexSource, mFragmentSource, false,
-                                                vertexShaderAndSerialOut,
-                                                fragmentShaderAndSerialOut));
+        ANGLE_TRY(mDefaultShaderInfo.initShaders(contextVk, mVertexSource, mFragmentSource, false));
         ASSERT(mDefaultShaderInfo.valid());
+        *programOut = &mDefaultShaderInfo.getShaderProgram();
     }
-
-    *pipelineLayoutOut = &mPipelineLayout.get();
 
     return angle::Result::Continue();
 }
