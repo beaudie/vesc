@@ -1099,7 +1099,7 @@ void State::detachTexture(const Context *context, const TextureMap &zeroTextures
 
     if (mDrawFramebuffer && mDrawFramebuffer->detachTexture(context, texture))
     {
-        mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+        setDrawFramebufferDirty();
     }
 }
 
@@ -1175,7 +1175,7 @@ void State::detachRenderbuffer(const Context *context, GLuint renderbuffer)
     {
         if (drawFramebuffer->detachRenderbuffer(context, renderbuffer))
         {
-            mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+            setDrawFramebufferDirty();
         }
     }
 }
@@ -1202,9 +1202,16 @@ void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
     mDrawFramebuffer = framebuffer;
     mDirtyBits.set(DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
 
-    if (mDrawFramebuffer && mDrawFramebuffer->hasAnyDirtyBit())
+    if (mDrawFramebuffer)
     {
-        mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+        if (mDrawFramebuffer->hasAnyDirtyBit())
+        {
+            mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+        }
+        if (mDrawFramebuffer->hasResourceThatNeedsInit())
+        {
+            mDirtyObjects.set(DIRTY_OBJECT_INIT_DRAW_ATTACHMENTS);
+        }
     }
 }
 
@@ -2503,6 +2510,12 @@ angle::Result State::syncDirtyObjects(const Context *context, const DirtyObjects
                 ASSERT(mDrawFramebuffer);
                 ANGLE_TRY(mDrawFramebuffer->syncState(context));
                 break;
+            case DIRTY_OBJECT_INIT_DRAW_ATTACHMENTS:
+                ASSERT(mDrawFramebuffer);
+                ASSERT(!mDrawFramebuffer->hasAnyDirtyBit());
+                ASSERT(mRobustResourceInit);
+                ANGLE_TRY(mDrawFramebuffer->ensureDrawAttachmentsInitialized(context));
+                break;
             case DIRTY_OBJECT_VERTEX_ARRAY:
                 ASSERT(mVertexArray);
                 ANGLE_TRY(mVertexArray->syncState(context));
@@ -2618,10 +2631,18 @@ angle::Result State::syncDirtyObject(const Context *context, GLenum target)
             break;
         case GL_DRAW_FRAMEBUFFER:
             localSet.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+            if (mRobustResourceInit)
+            {
+                localSet.set(DIRTY_OBJECT_INIT_DRAW_ATTACHMENTS);
+            }
             break;
         case GL_FRAMEBUFFER:
             localSet.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
             localSet.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+            if (mRobustResourceInit)
+            {
+                localSet.set(DIRTY_OBJECT_INIT_DRAW_ATTACHMENTS);
+            }
             break;
         case GL_VERTEX_ARRAY:
             localSet.set(DIRTY_OBJECT_VERTEX_ARRAY);
@@ -2650,11 +2671,11 @@ void State::setObjectDirty(GLenum target)
             mDirtyObjects.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
             break;
         case GL_DRAW_FRAMEBUFFER:
-            mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+            setDrawFramebufferDirty();
             break;
         case GL_FRAMEBUFFER:
             mDirtyObjects.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
-            mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+            setDrawFramebufferDirty();
             break;
         case GL_VERTEX_ARRAY:
             mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
