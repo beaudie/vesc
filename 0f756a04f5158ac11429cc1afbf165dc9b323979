@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "590f2331_04e82efc",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-20T13:44:56Z",
+      "side": 1,
+      "message": "These blocks of code are so similar, I wish we could factor them but I didn\u0027t find a nice way to do it.",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 26
+      },
+      "revId": "0f756a04f5158ac11429cc1afbf165dc9b323979",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02a1531c_a8a5e031",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-20T13:44:56Z",
+      "side": 1,
+      "message": "Instead of having separate code paths for bool in every case, could we do the change at the top of the functions? The code generate now looks like this:\n\n  void myfunction(RMByteAddressBuffer buffer, uint loc, bool value) {\n    uint _tmp \u003d asuint(value);\n    buffer.Store(loc, _tmp);\n  }\n\nCould it look like this instead so we only need to special case at the function header?\n\n  void myfunction(RMByteAddressBuffer buffer, uint loc, bool _value) {\n    uint value \u003d asuint(_value);\n    buffer.Store(loc, value);\n  }",
+      "revId": "0f756a04f5158ac11429cc1afbf165dc9b323979",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
