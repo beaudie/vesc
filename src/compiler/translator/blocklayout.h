@@ -14,8 +14,8 @@
 #include <map>
 #include <vector>
 
-#include "angle_gl.h"
 #include <GLSLANG/ShaderLang.h>
+#include "angle_gl.h"
 
 namespace sh
 {
@@ -67,6 +67,13 @@ struct BlockMemberInfo
     int topLevelArrayStride;  // Only used for shader storage block members.
 };
 
+enum class EncoderType
+{
+    STD140_ENCODER,
+    STD430_ENCODER,
+    HLSL_ENCODER
+};
+
 class BlockLayoutEncoder
 {
   public:
@@ -79,6 +86,7 @@ class BlockLayoutEncoder
 
     size_t getBlockSize() const { return mCurrentOffset * BytesPerComponent; }
     size_t getStructureBaseAlignment() const { return mStructureBaseAlignment; }
+    EncoderType getEncoderType() const { return mType; }
     void increaseCurrentOffset(size_t offsetInBytes);
     void setStructureBaseAlignment(size_t baseAlignment);
 
@@ -94,6 +102,7 @@ class BlockLayoutEncoder
   protected:
     size_t mCurrentOffset;
     size_t mStructureBaseAlignment;
+    EncoderType mType;
 
     virtual void nextRegister();
 
