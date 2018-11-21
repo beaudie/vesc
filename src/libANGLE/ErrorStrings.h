@@ -489,5 +489,7 @@ constexpr const char *kErrorWebglBindAttribLocationReservedPrefix =
 constexpr const char *kErrorWebglNameLengthLimitExceeded =
     "Location name lengths must not be greater than 256 characters.";
 constexpr const char *kErrorZeroBoundToTarget = "Zero is bound to target.";
+constexpr const char *kDoubleBoundTransformFeedbackBuffer =
+    "Transform feedback has a buffer bound to multiple outputs.";
 }  // namespace gl
 #endif  // LIBANGLE_ERRORSTRINGS_H_
