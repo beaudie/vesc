@@ -425,6 +425,30 @@
     },
     {
       "key": {
+        "uuid": "9489b7ba_05eda848",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-21T13:48:52Z",
+      "side": 1,
+      "message": "Yeah, ERR/WARN/INFO are the names to use the future. I\u0027m suggesting we don\u0027t support DEBUG/VERBOSE. They seem to overlap.",
+      "parentUuid": "9e1862d9_c9d31abe",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 0
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "29caac21_b2d9732e",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 7
