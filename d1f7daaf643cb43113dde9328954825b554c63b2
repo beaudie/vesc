@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "57bba651_5f658139",
+        "filename": "src/compiler/translator/UniformHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2018-11-21T12:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b820ac24_14ffada0",
+      "range": {
+        "startLine": 502,
+        "startChar": 8,
+        "endLine": 502,
+        "endChar": 60
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18eb5f8c_710a3e79",
         "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e35d99d4_8b8dab4e",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2018-11-21T12:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18eb5f8c_710a3e79",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 2
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "4ad5a457_fdf0ca25",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2018-11-21T12:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7fc5a225_55a87928",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 488,
+        "endChar": 1
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4b0fa63_515e8775",
         "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
         "patchSetId": 9
@@ -88,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "481cddde_ee5bba5e",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2018-11-21T12:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4b0fa63_515e8775",
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "313be82b_349cc6c2",
         "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
         "patchSetId": 9
@@ -99,6 +189,30 @@
       "writtenOn": "2018-08-10T04:26:51Z",
       "side": 1,
       "message": "It seems that this part is repeated with the calculation of image2DUniformTexture2DCount, image2DUniformTexture3DCount, image2DUniformTexture2DArrayCount in generateComputeShaderForImage2DBoundSignature. Can you reuse them?",
+      "range": {
+        "startLine": 695,
+        "startChar": 0,
+        "endLine": 720,
+        "endChar": 5
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6904bc0d_385564ed",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2018-11-21T12:01:19Z",
+      "side": 1,
+      "message": "It only counts Texture2D, Texture3D and Texture2DArray in one group here. It is not the same as count the total of all groups.",
+      "parentUuid": "313be82b_349cc6c2",
       "range": {
         "startLine": 695,
         "startChar": 0,
@@ -131,6 +245,30 @@
       "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd063720_e8fb2095",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2018-11-21T12:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53a8d401_ea36d7d9",
+      "range": {
+        "startLine": 743,
+        "startChar": 34,
+        "endLine": 743,
+        "endChar": 52
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -180,6 +318,30 @@
     },
     {
       "key": {
+        "uuid": "d110f47b_547856ca",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2018-11-21T12:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b8cc73a_d380f490",
+      "range": {
+        "startLine": 806,
+        "startChar": 27,
+        "endLine": 806,
+        "endChar": 33
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ad88931b_9ce3ec5b",
         "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
         "patchSetId": 9
@@ -203,6 +365,30 @@
     },
     {
       "key": {
+        "uuid": "25e53334_4a92d369",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2018-11-21T12:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad88931b_9ce3ec5b",
+      "range": {
+        "startLine": 1154,
+        "startChar": 63,
+        "endLine": 1154,
+        "endChar": 95
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "806db348_388180d5",
         "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
         "patchSetId": 9
@@ -223,6 +409,30 @@
       "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec666f3a_2537abfc",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2018-11-21T12:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "806db348_388180d5",
+      "range": {
+        "startLine": 87,
+        "startChar": 8,
+        "endLine": 87,
+        "endChar": 44
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -260,6 +470,24 @@
     },
     {
       "key": {
+        "uuid": "3dfb7902_e90186b4",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2948,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2018-11-21T12:01:19Z",
+      "side": 1,
+      "message": "Could you explain why map is better? I think vector is OK here as pixel and vertex shaders. If map is better, we could refactor all code in future.",
+      "parentUuid": "49c442fe_099bed71",
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae70f770_32e368f5",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 9
@@ -280,6 +508,30 @@
       "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "841a0e17_0bc7bfc5",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2018-11-21T12:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae70f770_32e368f5",
+      "range": {
+        "startLine": 484,
+        "startChar": 38,
+        "endLine": 484,
+        "endChar": 68
+      },
+      "revId": "d1f7daaf643cb43113dde9328954825b554c63b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
