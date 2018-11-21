@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e1be170c_02df7b79",
+        "filename": "BUILD.gn",
+        "patchSetId": 17
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-21T22:59:07Z",
+      "side": 1,
+      "message": "Looks like you did this",
+      "parentUuid": "09660c77_a78c201a",
+      "range": {
+        "startLine": 934,
+        "startChar": 2,
+        "endLine": 934,
+        "endChar": 10
+      },
+      "revId": "5ab16a24d1dca39f02aac3b934bd9f6d3849efaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "778b2257_a0aaeae9",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 17
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "294a86c4_13659359",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-21T22:59:07Z",
+      "side": 1,
+      "message": "Sorry, no.  Most of the data members are and have been public, like SystemInfo.",
+      "parentUuid": "778b2257_a0aaeae9",
+      "range": {
+        "startLine": 215,
+        "startChar": 4,
+        "endLine": 215,
+        "endChar": 19
+      },
+      "revId": "5ab16a24d1dca39f02aac3b934bd9f6d3849efaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea164f99_048e8c0a",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 17
@@ -68,6 +116,30 @@
       "revId": "5ab16a24d1dca39f02aac3b934bd9f6d3849efaf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbd88628_32d4fb9d",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-21T22:59:07Z",
+      "side": 1,
+      "message": "I just removed it--already took care of the issue.",
+      "parentUuid": "ea164f99_048e8c0a",
+      "range": {
+        "startLine": 1028,
+        "startChar": 12,
+        "endLine": 1028,
+        "endChar": 22
+      },
+      "revId": "5ab16a24d1dca39f02aac3b934bd9f6d3849efaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
