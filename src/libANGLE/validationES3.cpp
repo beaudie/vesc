@@ -2457,10 +2457,22 @@ bool ValidateBeginTransformFeedback(Context *context, PrimitiveMode primitiveMod
     for (size_t i = 0; i < transformFeedback->getIndexedBufferCount(); i++)
     {
         const auto &buffer = transformFeedback->getIndexedBuffer(i);
-        if (buffer.get() && buffer->isMapped())
+        if (buffer.get())
         {
-            context->handleError(InvalidOperation() << "Transform feedback has a mapped buffer.");
-            return false;
+            if (buffer->isMapped())
+            {
+                context->handleError(InvalidOperation()
+                                     << "Transform feedback has a mapped buffer.");
+                return false;
+            }
+            if ((context->getLimitations().noDoubleBoundTransformFeedbackBuffers ||
+                 context->getExtensions().webglCompatibility) &&
+                buffer->isDoubleBoundForTransformFeedback())
+            {
+                ANGLE_VALIDATION_ERR(context, InvalidOperation(),
+                                     DoubleBoundTransformFeedbackBuffer);
+                return false;
+            }
         }
     }
 
