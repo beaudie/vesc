@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3a438c2a_e4dd4ef0",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-21T06:50:48Z",
+      "side": 1,
+      "message": "Change it to below:\n        if (ssboFunction.rowMajor || !ssboFunction.isDefaultSwizzle)\n        {\n            size_t componentStride \u003d bytesPerComponent;\n            if (ssboFunction.rowMajor)\n            {\n                componentStride \u003d ssboFunction.matrixStride;\n            }\n\n            out \u003c\u003c \" \u003d {\";\n            for (const int offset : ssboFunction.swizzleOffsets)\n            {\n                size_t offsetInBytes \u003d offset * componentStride;\n                out \u003c\u003c convertString \u003c\u003c \"buffer.Load(loc + \" \u003c\u003c offsetInBytes \u003c\u003c \")),\";\n            }\n            out \u003c\u003c \"};\\n\";\n        }",
+      "parentUuid": "590f2331_04e82efc",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 26
+      },
+      "revId": "0f756a04f5158ac11429cc1afbf165dc9b323979",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "02a1531c_a8a5e031",
         "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "0f756a04f5158ac11429cc1afbf165dc9b323979",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "056986b4_25a6e3d9",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-21T06:50:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02a1531c_a8a5e031",
+      "revId": "0f756a04f5158ac11429cc1afbf165dc9b323979",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
