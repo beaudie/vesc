@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d5f04a7_107457c1",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-21T20:16:36Z",
+      "side": 1,
+      "message": "Seems inconsistent that some strings have a constant and some don\u0027t.",
+      "range": {
+        "startLine": 954,
+        "startChar": 38,
+        "endLine": 954,
+        "endChar": 88
+      },
+      "revId": "508644fe6f6d5da64602d8a8ecebd99570ffc3ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44a3c4e6_5df0f1cb",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2632,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-21T20:16:36Z",
+      "side": 1,
+      "message": "\u003c\u003c",
+      "range": {
+        "startLine": 2632,
+        "startChar": 26,
+        "endLine": 2632,
+        "endChar": 27
+      },
+      "revId": "508644fe6f6d5da64602d8a8ecebd99570ffc3ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "759f150d_99f1dc1b",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4864,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-21T20:16:36Z",
+      "side": 1,
+      "message": "Looks like the comment is wrong and GL_INVALID_VALUE is the right error.",
+      "range": {
+        "startLine": 4864,
+        "startChar": 70,
+        "endLine": 4864,
+        "endChar": 90
+      },
+      "revId": "508644fe6f6d5da64602d8a8ecebd99570ffc3ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a56a21a0_ec9920eb",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2629,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-21T20:16:36Z",
+      "side": 1,
+      "message": "Maybe kErrorEnumRequiresGLES31",
+      "range": {
+        "startLine": 2629,
+        "startChar": 58,
+        "endLine": 2629,
+        "endChar": 76
+      },
+      "revId": "508644fe6f6d5da64602d8a8ecebd99570ffc3ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1902ba2a_91efc2b0",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2647,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-21T20:16:36Z",
+      "side": 1,
+      "message": "kErrorES31Required or kErrorEnumRequiresGLES31",
+      "range": {
+        "startLine": 2647,
+        "startChar": 21,
+        "endLine": 2647,
+        "endChar": 83
+      },
+      "revId": "508644fe6f6d5da64602d8a8ecebd99570ffc3ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2a040f8_1eb72b4c",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2667,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-21T20:16:36Z",
+      "side": 1,
+      "message": "kErrorES31Required or kErrorEnumRequiresGLES31",
+      "range": {
+        "startLine": 2667,
+        "startChar": 21,
+        "endLine": 2667,
+        "endChar": 83
+      },
+      "revId": "508644fe6f6d5da64602d8a8ecebd99570ffc3ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
