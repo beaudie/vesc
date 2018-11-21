@@ -2457,11 +2457,18 @@ bool ValidateBeginTransformFeedback(Context *context, PrimitiveMode primitiveMod
     for (size_t i = 0; i < transformFeedback->getIndexedBufferCount(); i++)
     {
         const auto &buffer = transformFeedback->getIndexedBuffer(i);
-        if (buffer.get() && buffer->isMapped())
+        if (buffer.get())
         {
-            context->handleError(InvalidOperation() << "Transform feedback has a mapped buffer.");
-            return false;
+            if (buffer->isMapped()) {
+                context->handleError(InvalidOperation() << "Transform feedback has a mapped buffer.");
+                return false;
+            }
+            if (buffer->isDoubleBoundForTransformFeedback()) {
+                context->handleError(InvalidOperation() << "Transform feedback has a buffer bound to multiple outputs.");
+                return false;
+            }
         }
+
     }
 
     Program *program = context->getGLState().getLinkedProgram(context);
