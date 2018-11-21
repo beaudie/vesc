@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "17aea873_892af99d",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-21T22:30:16Z",
+      "side": 1,
+      "message": "Yep, ideally we could move them all into constants. I started doing this but it would have taken me probably a full day to do this. If you or anyone wants to help out here that\u0027d be welcome.",
+      "parentUuid": "9d5f04a7_107457c1",
+      "range": {
+        "startLine": 954,
+        "startChar": 38,
+        "endLine": 954,
+        "endChar": 88
+      },
+      "revId": "508644fe6f6d5da64602d8a8ecebd99570ffc3ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "44a3c4e6_5df0f1cb",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 11
@@ -45,6 +69,30 @@
       "revId": "508644fe6f6d5da64602d8a8ecebd99570ffc3ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5b0edf3_d30a7999",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2632,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-21T22:30:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44a3c4e6_5df0f1cb",
+      "range": {
+        "startLine": 2632,
+        "startChar": 26,
+        "endLine": 2632,
+        "endChar": 27
+      },
+      "revId": "508644fe6f6d5da64602d8a8ecebd99570ffc3ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "382b12e2_1da1dd9b",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4864,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-21T22:30:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "759f150d_99f1dc1b",
+      "range": {
+        "startLine": 4864,
+        "startChar": 70,
+        "endLine": 4864,
+        "endChar": 90
+      },
+      "revId": "508644fe6f6d5da64602d8a8ecebd99570ffc3ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a56a21a0_ec9920eb",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 11
@@ -91,6 +163,30 @@
       "revId": "508644fe6f6d5da64602d8a8ecebd99570ffc3ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45d09ba7_497e9930",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2629,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-21T22:30:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a56a21a0_ec9920eb",
+      "range": {
+        "startLine": 2629,
+        "startChar": 58,
+        "endLine": 2629,
+        "endChar": 76
+      },
+      "revId": "508644fe6f6d5da64602d8a8ecebd99570ffc3ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "183f7d76_cedeb919",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2647,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-21T22:30:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1902ba2a_91efc2b0",
+      "range": {
+        "startLine": 2647,
+        "startChar": 21,
+        "endLine": 2647,
+        "endChar": 83
+      },
+      "revId": "508644fe6f6d5da64602d8a8ecebd99570ffc3ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d2a040f8_1eb72b4c",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 11
@@ -137,6 +257,30 @@
       "revId": "508644fe6f6d5da64602d8a8ecebd99570ffc3ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebc39bc1_3331b65d",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2667,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-21T22:30:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2a040f8_1eb72b4c",
+      "range": {
+        "startLine": 2667,
+        "startChar": 21,
+        "endLine": 2667,
+        "endChar": 83
+      },
+      "revId": "508644fe6f6d5da64602d8a8ecebd99570ffc3ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
