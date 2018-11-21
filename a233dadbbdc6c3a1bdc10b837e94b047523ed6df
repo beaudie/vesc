@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "0d11706d_439848e2",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-21T15:52:41Z",
+      "side": 1,
+      "message": "Could you please move the #if defined includes after the normal includes.\n\nhttps://google.github.io/styleguide/cppguide.html#Names_and_Order_of_Includes",
+      "parentUuid": "b10a7e91_c0d30b96",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 24
+      },
+      "revId": "a233dadbbdc6c3a1bdc10b837e94b047523ed6df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "06878758_f6e05a20",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 16
@@ -237,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "35d35409_b7f48509",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-21T15:52:41Z",
+      "side": 1,
+      "message": "Right. Please do the following edits:\n\n* make front() return const \u0026\n\n const T \u0026front() const { return (mList.front()); }\n\n* make getString const\n\n std::string getString() const\n\n* make all logItem const\n\n void logItem() const\n\nthen you can remove mutable here.",
+      "parentUuid": "86ea38cb_6474d85b",
+      "range": {
+        "startLine": 218,
+        "startChar": 4,
+        "endLine": 218,
+        "endChar": 31
+      },
+      "revId": "a233dadbbdc6c3a1bdc10b837e94b047523ed6df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3fab2f6b_aa01b7bc",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 16
@@ -328,6 +376,29 @@
       "revId": "a233dadbbdc6c3a1bdc10b837e94b047523ed6df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "74f23d95_321fe6d4",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-21T15:52:41Z",
+      "side": 1,
+      "message": "can you tag this with your ldap and the bug tag to track this?",
+      "range": {
+        "startLine": 1030,
+        "startChar": 7,
+        "endLine": 1030,
+        "endChar": 11
+      },
+      "revId": "a233dadbbdc6c3a1bdc10b837e94b047523ed6df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
@@ -774,6 +845,30 @@
       "revId": "a233dadbbdc6c3a1bdc10b837e94b047523ed6df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5d0a9cf7_b677527a",
+        "filename": "src/feature_support_util/feature_support_util_unittest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-21T15:52:41Z",
+      "side": 1,
+      "message": "You\u0027re going to need add the fixture class to land this CL without errors. GetSystemInfo does not have consistent results across platforms. Generally you want to be testing only the relevant module in a unit test. Rather than an integration test. And it\u0027s difficult to mock the internal API, so better to just use the fixture.",
+      "parentUuid": "bcd7c123_a62014de",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 85
+      },
+      "revId": "a233dadbbdc6c3a1bdc10b837e94b047523ed6df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {

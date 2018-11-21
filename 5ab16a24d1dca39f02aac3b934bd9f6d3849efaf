@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "778b2257_a0aaeae9",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-21T15:52:41Z",
+      "side": 1,
+      "message": "Sorry, I misread this. We shouldn\u0027t have public members. Can you make this private and use an accessor or setter to query or set its value?",
+      "range": {
+        "startLine": 215,
+        "startChar": 4,
+        "endLine": 215,
+        "endChar": 19
+      },
+      "revId": "5ab16a24d1dca39f02aac3b934bd9f6d3849efaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea164f99_048e8c0a",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-21T15:52:41Z",
+      "side": 1,
+      "message": "please tag with the bug for this issue as well.",
+      "range": {
+        "startLine": 1028,
+        "startChar": 12,
+        "endLine": 1028,
+        "endChar": 22
+      },
+      "revId": "5ab16a24d1dca39f02aac3b934bd9f6d3849efaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
