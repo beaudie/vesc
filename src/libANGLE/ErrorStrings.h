@@ -369,6 +369,8 @@ ERRMSG(WebglBindAttribLocationReservedPrefix,
 ERRMSG(WebglNameLengthLimitExceeded,
        "Location name lengths must not be greater than 256 characters.");
 ERRMSG(ZeroBoundToTarget, "Zero is bound to target.");
+ERRMSG(DoubleBoundTransformFeedbackBuffer,
+       "Transform feedback has a buffer bound to multiple outputs.");
 }
 #undef ERRMSG
 #endif  // LIBANGLE_ERRORSTRINGS_H_

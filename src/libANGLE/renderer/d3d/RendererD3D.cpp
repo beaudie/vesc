@@ -141,6 +141,7 @@ void RendererD3D::ensureCapsInitialized() const
 {
     if (!mCapsInitialized)
     {
+        mNativeLimitations.noDoubleBoundTransformFeedbackBuffers = true;
         generateCaps(&mNativeCaps, &mNativeTextureCaps, &mNativeExtensions, &mNativeLimitations);
         mCapsInitialized = true;
     }
