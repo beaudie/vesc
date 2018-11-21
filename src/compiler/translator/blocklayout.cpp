@@ -35,15 +35,27 @@ void GetInterfaceBlockInfo(const std::vector<VarT> &fields,
                            BlockLayoutMap *blockInfoOut);
 
 template <typename VarT>
+size_t GetStructureBaseAlignment(const std::vector<VarT> &fields, bool inRowMajorLayout)
+{
+    sh::Std430BlockEncoder std430Encoder;
+    sh::BlockLayoutMap blockLayoutMap;
+    GetInterfaceBlockInfo(fields, "", &std430Encoder, inRowMajorLayout, &blockLayoutMap);
+    std430Encoder.exitAggregateType();
+    return std430Encoder.getStructureBaseAlignment();
+}
+
+template <typename VarT>
 void GetInterfaceBlockStructMemberInfo(const std::vector<VarT> &fields,
                                        const std::string &fieldName,
                                        sh::BlockLayoutEncoder *encoder,
                                        bool inRowMajorLayout,
                                        BlockLayoutMap *blockInfoOut)
 {
-    // TODO(jiajia.qin@intel.com):we need to set the right structure base alignment before
-    // enterAggregateType for std430 layout just like GetShaderStorageBlockFieldMemberInfo did in
-    // ShaderStorageBlockOutputHLSL.cpp. http://anglebug.com/1920
+    if (encoder->getEncoderType() == EncoderType::STD430_ENCODER)
+    {
+        size_t structureBaseAlignment = GetStructureBaseAlignment(fields, inRowMajorLayout);
+        encoder->setStructureBaseAlignment(structureBaseAlignment);
+    }
     encoder->enterAggregateType();
     GetInterfaceBlockInfo(fields, fieldName, encoder, inRowMajorLayout, blockInfoOut);
     encoder->exitAggregateType();
@@ -152,7 +164,10 @@ void GetInterfaceBlockInfo(const std::vector<VarT> &fields,
 
 }  // anonymous namespace
 
-BlockLayoutEncoder::BlockLayoutEncoder() : mCurrentOffset(0), mStructureBaseAlignment(0) {}
+BlockLayoutEncoder::BlockLayoutEncoder()
+    : mCurrentOffset(0), mStructureBaseAlignment(0), mType(EncoderType::STD140_ENCODER)
+{
+}
 
 BlockMemberInfo BlockLayoutEncoder::encodeType(GLenum type,
                                                const std::vector<unsigned int> &arraySizes,
@@ -276,7 +291,10 @@ void Std140BlockEncoder::advanceOffset(GLenum type,
     }
 }
 
-Std430BlockEncoder::Std430BlockEncoder() {}
+Std430BlockEncoder::Std430BlockEncoder()
+{
+    mType = EncoderType::STD430_ENCODER;
+}
 
 void Std430BlockEncoder::nextRegister()
 {

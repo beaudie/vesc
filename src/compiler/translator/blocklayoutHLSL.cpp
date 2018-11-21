@@ -18,6 +18,7 @@ namespace sh
 HLSLBlockEncoder::HLSLBlockEncoder(HLSLBlockEncoderStrategy strategy, bool transposeMatrices)
     : mEncoderStrategy(strategy), mTransposeMatrices(transposeMatrices)
 {
+    mType = EncoderType::HLSL_ENCODER;
 }
 
 void HLSLBlockEncoder::enterAggregateType()

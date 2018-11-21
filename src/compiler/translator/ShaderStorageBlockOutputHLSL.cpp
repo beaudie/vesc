@@ -134,13 +134,12 @@ const TField *GetFieldMemberInShaderStorageBlock(const TInterfaceBlock *interfac
 
 void GetShaderStorageBlockFieldMemberInfo(const TFieldList &fields,
                                           sh::BlockLayoutEncoder *encoder,
-                                          TLayoutBlockStorage storage,
                                           bool rowMajor,
                                           bool isSSBOFieldMember,
                                           BlockMemberInfoMap *blockInfoOut);
 
 size_t GetBlockFieldMemberInfoAndReturnBlockSize(const TFieldList &fields,
-                                                 TLayoutBlockStorage storage,
+                                                 EncoderType encoderType,
                                                  bool rowMajor,
                                                  BlockMemberInfoMap *blockInfoOut,
                                                  int *structureBaseAlignment)
@@ -150,11 +149,11 @@ size_t GetBlockFieldMemberInfoAndReturnBlockSize(const TFieldList &fields,
     sh::HLSLBlockEncoder hlslEncoder(sh::HLSLBlockEncoder::ENCODE_PACKED, false);
     sh::BlockLayoutEncoder *structureEncoder = nullptr;
 
-    if (storage == EbsStd140)
+    if (encoderType == EncoderType::STD140_ENCODER)
     {
         structureEncoder = &std140Encoder;
     }
-    else if (storage == EbsStd430)
+    else if (encoderType == EncoderType::STD430_ENCODER)
     {
         structureEncoder = &std430Encoder;
     }
@@ -163,8 +162,7 @@ size_t GetBlockFieldMemberInfoAndReturnBlockSize(const TFieldList &fields,
         structureEncoder = &hlslEncoder;
     }
 
-    GetShaderStorageBlockFieldMemberInfo(fields, structureEncoder, storage, rowMajor, false,
-                                         blockInfoOut);
+    GetShaderStorageBlockFieldMemberInfo(fields, structureEncoder, rowMajor, false, blockInfoOut);
     structureEncoder->exitAggregateType();
     *structureBaseAlignment = static_cast<int>(structureEncoder->getStructureBaseAlignment());
     return structureEncoder->getBlockSize();
@@ -172,7 +170,6 @@ size_t GetBlockFieldMemberInfoAndReturnBlockSize(const TFieldList &fields,
 
 void GetShaderStorageBlockFieldMemberInfo(const TFieldList &fields,
                                           sh::BlockLayoutEncoder *encoder,
-                                          TLayoutBlockStorage storage,
                                           bool rowMajor,
                                           bool isSSBOFieldMember,
                                           BlockMemberInfoMap *blockInfoOut)
@@ -191,8 +188,8 @@ void GetShaderStorageBlockFieldMemberInfo(const TFieldList &fields,
             // This is to set structure member offset and array stride using a new encoder to ensure
             // that the first field member offset in structure is always zero.
             size_t structureStride = GetBlockFieldMemberInfoAndReturnBlockSize(
-                fieldType.getStruct()->fields(), storage, isRowMajorLayout, blockInfoOut,
-                &structureBaseAlignment);
+                fieldType.getStruct()->fields(), encoder->getEncoderType(), isRowMajorLayout,
+                blockInfoOut, &structureBaseAlignment);
             // According to OpenGL ES 3.1 spec, session 7.6.2.2 Standard Uniform Block Layout. In
             // rule 9, if the member is a structure, the base alignment of the structure is N, where
             // N is the largest base alignment value of any of its members. When using the std430
@@ -273,8 +270,8 @@ void GetShaderStorageBlockMembersInfo(const TInterfaceBlock *interfaceBlock,
         encoder = &hlslEncoder;
     }
 
-    GetShaderStorageBlockFieldMemberInfo(interfaceBlock->fields(), encoder,
-                                         interfaceBlock->blockStorage(), false, true, blockInfoOut);
+    GetShaderStorageBlockFieldMemberInfo(interfaceBlock->fields(), encoder, false, true,
+                                         blockInfoOut);
 }
 
 bool IsInArrayOfArraysChain(TIntermTyped *node)
