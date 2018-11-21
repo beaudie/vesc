@@ -88,7 +88,7 @@ Renderbuffer::~Renderbuffer()
 {
 }
 
-void Renderbuffer::setLabel(const std::string &label)
+void Renderbuffer::setLabel(const Context *context, const std::string &label)
 {
     mLabel = label;
 }

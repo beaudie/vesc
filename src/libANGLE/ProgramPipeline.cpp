@@ -46,7 +46,7 @@ void ProgramPipeline::onDestroy(const Context *context)
 {
 }
 
-void ProgramPipeline::setLabel(const std::string &label)
+void ProgramPipeline::setLabel(const Context *context, const std::string &label)
 {
     mState.mLabel = label;
 }
