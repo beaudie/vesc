@@ -70,6 +70,30 @@
       "revId": "c06eaf936cbe622fe3761bd06a5121bd5233b483",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff66f829_3ca3a5af",
+        "filename": "src/compiler/translator/blocklayout.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-22T13:59:53Z",
+      "side": 1,
+      "message": "Let me try thinking about this. Feels like if we need this kind of workaround then it would better done be redesigning the encoder class. But I don\u0027t fully understand the code right now.",
+      "parentUuid": "c4373254_2dbbef59",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 5
+      },
+      "revId": "c06eaf936cbe622fe3761bd06a5121bd5233b483",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
