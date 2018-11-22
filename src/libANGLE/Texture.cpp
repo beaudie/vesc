@@ -638,7 +638,7 @@ Texture::~Texture()
 void Texture::setLabel(const Context *context, const std::string &label)
 {
     mLabel = label;
-    mDirtyBits.set(DIRTY_BIT_LABEL);
+    signalDirtyState(context, DIRTY_BIT_LABEL);
 }
 
 const std::string &Texture::getLabel() const
@@ -646,10 +646,10 @@ const std::string &Texture::getLabel() const
     return mLabel;
 }
 
-void Texture::setSwizzleRed(GLenum swizzleRed)
+void Texture::setSwizzleRed(const Context *context, GLenum swizzleRed)
 {
     mState.mSwizzleState.swizzleRed = swizzleRed;
-    mDirtyBits.set(DIRTY_BIT_SWIZZLE_RED);
+    signalDirtyState(context, DIRTY_BIT_SWIZZLE_RED);
 }
 
 GLenum Texture::getSwizzleRed() const
@@ -657,10 +657,10 @@ GLenum Texture::getSwizzleRed() const
     return mState.mSwizzleState.swizzleRed;
 }
 
-void Texture::setSwizzleGreen(GLenum swizzleGreen)
+void Texture::setSwizzleGreen(const Context *context, GLenum swizzleGreen)
 {
     mState.mSwizzleState.swizzleGreen = swizzleGreen;
-    mDirtyBits.set(DIRTY_BIT_SWIZZLE_GREEN);
+    signalDirtyState(context, DIRTY_BIT_SWIZZLE_GREEN);
 }
 
 GLenum Texture::getSwizzleGreen() const
@@ -668,10 +668,10 @@ GLenum Texture::getSwizzleGreen() const
     return mState.mSwizzleState.swizzleGreen;
 }
 
-void Texture::setSwizzleBlue(GLenum swizzleBlue)
+void Texture::setSwizzleBlue(const Context *context, GLenum swizzleBlue)
 {
     mState.mSwizzleState.swizzleBlue = swizzleBlue;
-    mDirtyBits.set(DIRTY_BIT_SWIZZLE_BLUE);
+    signalDirtyState(context, DIRTY_BIT_SWIZZLE_BLUE);
 }
 
 GLenum Texture::getSwizzleBlue() const
@@ -679,10 +679,10 @@ GLenum Texture::getSwizzleBlue() const
     return mState.mSwizzleState.swizzleBlue;
 }
 
-void Texture::setSwizzleAlpha(GLenum swizzleAlpha)
+void Texture::setSwizzleAlpha(const Context *context, GLenum swizzleAlpha)
 {
     mState.mSwizzleState.swizzleAlpha = swizzleAlpha;
-    mDirtyBits.set(DIRTY_BIT_SWIZZLE_ALPHA);
+    signalDirtyState(context, DIRTY_BIT_SWIZZLE_ALPHA);
 }
 
 GLenum Texture::getSwizzleAlpha() const
@@ -690,10 +690,10 @@ GLenum Texture::getSwizzleAlpha() const
     return mState.mSwizzleState.swizzleAlpha;
 }
 
-void Texture::setMinFilter(GLenum minFilter)
+void Texture::setMinFilter(const Context *context, GLenum minFilter)
 {
     mState.mSamplerState.setMinFilter(minFilter);
-    mDirtyBits.set(DIRTY_BIT_MIN_FILTER);
+    signalDirtyState(context, DIRTY_BIT_MIN_FILTER);
 }
 
 GLenum Texture::getMinFilter() const
@@ -701,10 +701,10 @@ GLenum Texture::getMinFilter() const
     return mState.mSamplerState.getMinFilter();
 }
 
-void Texture::setMagFilter(GLenum magFilter)
+void Texture::setMagFilter(const Context *context, GLenum magFilter)
 {
     mState.mSamplerState.setMagFilter(magFilter);
-    mDirtyBits.set(DIRTY_BIT_MAG_FILTER);
+    signalDirtyState(context, DIRTY_BIT_MAG_FILTER);
 }
 
 GLenum Texture::getMagFilter() const
@@ -712,10 +712,10 @@ GLenum Texture::getMagFilter() const
     return mState.mSamplerState.getMagFilter();
 }
 
-void Texture::setWrapS(GLenum wrapS)
+void Texture::setWrapS(const Context *context, GLenum wrapS)
 {
     mState.mSamplerState.setWrapS(wrapS);
-    mDirtyBits.set(DIRTY_BIT_WRAP_S);
+    signalDirtyState(context, DIRTY_BIT_WRAP_S);
 }
 
 GLenum Texture::getWrapS() const
@@ -723,10 +723,10 @@ GLenum Texture::getWrapS() const
     return mState.mSamplerState.getWrapS();
 }
 
-void Texture::setWrapT(GLenum wrapT)
+void Texture::setWrapT(const Context *context, GLenum wrapT)
 {
     mState.mSamplerState.setWrapT(wrapT);
-    mDirtyBits.set(DIRTY_BIT_WRAP_T);
+    signalDirtyState(context, DIRTY_BIT_WRAP_T);
 }
 
 GLenum Texture::getWrapT() const
@@ -734,10 +734,10 @@ GLenum Texture::getWrapT() const
     return mState.mSamplerState.getWrapT();
 }
 
-void Texture::setWrapR(GLenum wrapR)
+void Texture::setWrapR(const Context *context, GLenum wrapR)
 {
     mState.mSamplerState.setWrapR(wrapR);
-    mDirtyBits.set(DIRTY_BIT_WRAP_R);
+    signalDirtyState(context, DIRTY_BIT_WRAP_R);
 }
 
 GLenum Texture::getWrapR() const
@@ -745,10 +745,10 @@ GLenum Texture::getWrapR() const
     return mState.mSamplerState.getWrapR();
 }
 
-void Texture::setMaxAnisotropy(float maxAnisotropy)
+void Texture::setMaxAnisotropy(const Context *context, float maxAnisotropy)
 {
     mState.mSamplerState.setMaxAnisotropy(maxAnisotropy);
-    mDirtyBits.set(DIRTY_BIT_MAX_ANISOTROPY);
+    signalDirtyState(context, DIRTY_BIT_MAX_ANISOTROPY);
 }
 
 float Texture::getMaxAnisotropy() const
@@ -756,10 +756,10 @@ float Texture::getMaxAnisotropy() const
     return mState.mSamplerState.getMaxAnisotropy();
 }
 
-void Texture::setMinLod(GLfloat minLod)
+void Texture::setMinLod(const Context *context, GLfloat minLod)
 {
     mState.mSamplerState.setMinLod(minLod);
-    mDirtyBits.set(DIRTY_BIT_MIN_LOD);
+    signalDirtyState(context, DIRTY_BIT_MIN_LOD);
 }
 
 GLfloat Texture::getMinLod() const
@@ -767,10 +767,10 @@ GLfloat Texture::getMinLod() const
     return mState.mSamplerState.getMinLod();
 }
 
-void Texture::setMaxLod(GLfloat maxLod)
+void Texture::setMaxLod(const Context *context, GLfloat maxLod)
 {
     mState.mSamplerState.setMaxLod(maxLod);
-    mDirtyBits.set(DIRTY_BIT_MAX_LOD);
+    signalDirtyState(context, DIRTY_BIT_MAX_LOD);
 }
 
 GLfloat Texture::getMaxLod() const
@@ -778,10 +778,10 @@ GLfloat Texture::getMaxLod() const
     return mState.mSamplerState.getMaxLod();
 }
 
-void Texture::setCompareMode(GLenum compareMode)
+void Texture::setCompareMode(const Context *context, GLenum compareMode)
 {
     mState.mSamplerState.setCompareMode(compareMode);
-    mDirtyBits.set(DIRTY_BIT_COMPARE_MODE);
+    signalDirtyState(context, DIRTY_BIT_COMPARE_MODE);
 }
 
 GLenum Texture::getCompareMode() const
@@ -789,10 +789,10 @@ GLenum Texture::getCompareMode() const
     return mState.mSamplerState.getCompareMode();
 }
 
-void Texture::setCompareFunc(GLenum compareFunc)
+void Texture::setCompareFunc(const Context *context, GLenum compareFunc)
 {
     mState.mSamplerState.setCompareFunc(compareFunc);
-    mDirtyBits.set(DIRTY_BIT_COMPARE_FUNC);
+    signalDirtyState(context, DIRTY_BIT_COMPARE_FUNC);
 }
 
 GLenum Texture::getCompareFunc() const
@@ -800,10 +800,10 @@ GLenum Texture::getCompareFunc() const
     return mState.mSamplerState.getCompareFunc();
 }
 
-void Texture::setSRGBDecode(GLenum sRGBDecode)
+void Texture::setSRGBDecode(const Context *context, GLenum sRGBDecode)
 {
     mState.mSamplerState.setSRGBDecode(sRGBDecode);
-    mDirtyBits.set(DIRTY_BIT_SRGB_DECODE);
+    signalDirtyState(context, DIRTY_BIT_SRGB_DECODE);
 }
 
 GLenum Texture::getSRGBDecode() const
@@ -821,8 +821,7 @@ angle::Result Texture::setBaseLevel(const Context *context, GLuint baseLevel)
     if (mState.setBaseLevel(baseLevel))
     {
         ANGLE_TRY(mTexture->setBaseLevel(context, mState.getEffectiveBaseLevel()));
-        mDirtyBits.set(DIRTY_BIT_BASE_LEVEL);
-        invalidateCompletenessCache();
+        signalDirtyState(context, DIRTY_BIT_BASE_LEVEL);
     }
 
     return angle::Result::Continue();
@@ -833,12 +832,11 @@ GLuint Texture::getBaseLevel() const
     return mState.mBaseLevel;
 }
 
-void Texture::setMaxLevel(GLuint maxLevel)
+void Texture::setMaxLevel(const Context *context, GLuint maxLevel)
 {
     if (mState.setMaxLevel(maxLevel))
     {
-        mDirtyBits.set(DIRTY_BIT_MAX_LEVEL);
-        invalidateCompletenessCache();
+        signalDirtyState(context, DIRTY_BIT_MAX_LEVEL);
     }
 }
 
@@ -847,13 +845,12 @@ GLuint Texture::getMaxLevel() const
     return mState.mMaxLevel;
 }
 
-void Texture::setDepthStencilTextureMode(GLenum mode)
+void Texture::setDepthStencilTextureMode(const Context *context, GLenum mode)
 {
     if (mState.mDepthStencilTextureMode != mode)
     {
         mState.mDepthStencilTextureMode = mode;
-        mDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_TEXTURE_MODE);
-        invalidateCompletenessCache();
+        signalDirtyState(context, DIRTY_BIT_DEPTH_STENCIL_TEXTURE_MODE);
     }
 }
 
@@ -872,10 +869,10 @@ GLuint Texture::getImmutableLevels() const
     return mState.mImmutableLevels;
 }
 
-void Texture::setUsage(GLenum usage)
+void Texture::setUsage(const Context *context, GLenum usage)
 {
     mState.mUsage = usage;
-    mDirtyBits.set(DIRTY_BIT_USAGE);
+    signalDirtyState(context, DIRTY_BIT_USAGE);
 }
 
 GLenum Texture::getUsage() const
@@ -971,11 +968,18 @@ GLint Texture::getLevelMemorySize(TextureTarget target, GLint level) const
     return mState.getImageDesc(target, level).getMemorySize();
 }
 
-void Texture::signalDirty(const Context *context, InitState initState)
+void Texture::signalDirtyStorage(const Context *context, InitState initState)
 {
     mState.mInitState = initState;
-    onStateChange(context, angle::SubjectMessage::STORAGE_CHANGED);
     invalidateCompletenessCache();
+    onStateChange(context, angle::SubjectMessage::STORAGE_CHANGED);
+}
+
+void Texture::signalDirtyState(const Context *context, size_t dirtyBit)
+{
+    mDirtyBits.set(dirtyBit);
+    invalidateCompletenessCache();
+    onStateChange(context, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 }
 
 angle::Result Texture::setImage(Context *context,
@@ -1004,7 +1008,7 @@ angle::Result Texture::setImage(Context *context,
 
     ANGLE_TRY(handleMipmapGenerationHint(context, level));
 
-    signalDirty(context, initState);
+    signalDirtyStorage(context, initState);
 
     return angle::Result::Continue();
 }
@@ -1055,7 +1059,7 @@ angle::Result Texture::setCompressedImage(Context *context,
 
     InitState initState = DetermineInitState(context, pixels);
     mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat), initState));
-    signalDirty(context, initState);
+    signalDirtyStorage(context, initState);
 
     return angle::Result::Continue();
 }
@@ -1113,7 +1117,7 @@ angle::Result Texture::copyImage(Context *context,
     ANGLE_TRY(handleMipmapGenerationHint(context, level));
 
     // We need to initialize this texture only if the source attachment is not initialized.
-    signalDirty(context, InitState::Initialized);
+    signalDirtyStorage(context, InitState::Initialized);
 
     return angle::Result::Continue();
 }
@@ -1175,7 +1179,7 @@ angle::Result Texture::copyTexture(Context *context,
         target, level,
         ImageDesc(sourceDesc.size, Format(internalFormatInfo), InitState::Initialized));
 
-    signalDirty(context, InitState::Initialized);
+    signalDirtyStorage(context, InitState::Initialized);
 
     return angle::Result::Continue();
 }
@@ -1249,7 +1253,7 @@ angle::Result Texture::setStorage(Context *context,
     mDirtyBits.set(DIRTY_BIT_BASE_LEVEL);
     mDirtyBits.set(DIRTY_BIT_MAX_LEVEL);
 
-    signalDirty(context, InitState::MayNeedInit);
+    signalDirtyStorage(context, InitState::MayNeedInit);
 
     return angle::Result::Continue();
 }
@@ -1276,7 +1280,7 @@ angle::Result Texture::setStorageMultisample(Context *context,
     mState.setImageDescChainMultisample(size, Format(internalFormat), samples, fixedSampleLocations,
                                         InitState::MayNeedInit);
 
-    signalDirty(context, InitState::MayNeedInit);
+    signalDirtyStorage(context, InitState::MayNeedInit);
 
     return angle::Result::Continue();
 }
@@ -1332,7 +1336,7 @@ angle::Result Texture::generateMipmap(Context *context)
     mState.setImageDescChain(baseLevel, maxLevel, baseImageInfo.size, baseImageInfo.format,
                              InitState::Initialized);
 
-    signalDirty(context, InitState::Initialized);
+    signalDirtyStorage(context, InitState::Initialized);
 
     return angle::Result::Continue();
 }
@@ -1354,7 +1358,7 @@ angle::Result Texture::bindTexImageFromSurface(Context *context, egl::Surface *s
     Extents size(surface->getWidth(), surface->getHeight(), 1);
     ImageDesc desc(size, surface->getBindTexImageFormat(), InitState::Initialized);
     mState.setImageDesc(NonCubeTextureTypeToTarget(mState.mType), 0, desc);
-    signalDirty(context, InitState::Initialized);
+    signalDirtyStorage(context, InitState::Initialized);
     return angle::Result::Continue();
 }
 
@@ -1367,7 +1371,7 @@ angle::Result Texture::releaseTexImageFromSurface(const Context *context)
     // Erase the image info for level 0
     ASSERT(mState.mType == TextureType::_2D || mState.mType == TextureType::Rectangle);
     mState.clearImageDesc(NonCubeTextureTypeToTarget(mState.mType), 0);
-    signalDirty(context, InitState::Initialized);
+    signalDirtyStorage(context, InitState::Initialized);
     return angle::Result::Continue();
 }
 
@@ -1398,7 +1402,7 @@ angle::Result Texture::acquireImageFromStream(const Context *context,
     Extents size(desc.width, desc.height, 1);
     mState.setImageDesc(NonCubeTextureTypeToTarget(mState.mType), 0,
                         ImageDesc(size, Format(desc.internalFormat), InitState::Initialized));
-    signalDirty(context, InitState::Initialized);
+    signalDirtyStorage(context, InitState::Initialized);
     return angle::Result::Continue();
 }
 
@@ -1410,7 +1414,7 @@ angle::Result Texture::releaseImageFromStream(const Context *context)
 
     // Set to incomplete
     mState.clearImageDesc(NonCubeTextureTypeToTarget(mState.mType), 0);
-    signalDirty(context, InitState::Initialized);
+    signalDirtyStorage(context, InitState::Initialized);
     return angle::Result::Continue();
 }
 
@@ -1456,7 +1460,7 @@ angle::Result Texture::setEGLImageTarget(Context *context,
     mState.clearImageDescs();
     mState.setImageDesc(NonCubeTextureTypeToTarget(type), 0,
                         ImageDesc(size, imageTarget->getFormat(), initState));
-    signalDirty(context, initState);
+    signalDirtyStorage(context, initState);
 
     return angle::Result::Continue();
 }
@@ -1535,10 +1539,10 @@ bool Texture::getAttachmentFixedSampleLocations(const ImageIndex &imageIndex) co
     return getFixedSampleLocations(imageIndex.getTarget(), imageIndex.getLevelIndex());
 }
 
-void Texture::setBorderColor(const ColorGeneric &color)
+void Texture::setBorderColor(const Context *context, const ColorGeneric &color)
 {
     mState.mSamplerState.setBorderColor(color);
-    mDirtyBits.set(DIRTY_BIT_BORDER_COLOR);
+    signalDirtyState(context, DIRTY_BIT_BORDER_COLOR);
 }
 
 const ColorGeneric &Texture::getBorderColor() const
@@ -1649,7 +1653,7 @@ angle::Result Texture::ensureInitialized(const Context *context)
     }
     if (anyDirty)
     {
-        signalDirty(context, InitState::Initialized);
+        signalDirtyStorage(context, InitState::Initialized);
     }
     mState.mInitState = InitState::Initialized;
 
