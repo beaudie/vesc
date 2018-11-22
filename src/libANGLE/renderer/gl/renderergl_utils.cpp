@@ -1201,6 +1201,14 @@ void GenerateCaps(const FunctionsGL *functions,
     // ES driver.
     extensions->compressedTextureETC = functions->standard == STANDARD_GL_ES &&
                                        gl::DetermineCompressedTextureETCSupport(*textureCapsMap);
+
+    // To work around broken unsized sRGB textures, sized sRGB textures are used. Disable EXT_sRGB
+    // if those formats are not available.
+    if (workarounds.unsizedsRGBReadPixelsDoesntTransform &&
+        !functions->isAtLeastGLES(gl::Version(3, 0)))
+    {
+        extensions->sRGB = false;
+    }
 }
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds)
@@ -1295,6 +1303,13 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
 #endif
 
     workarounds->disableBlendFuncExtended = IsAMD(vendor) || IsIntel(vendor);
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+    if (IsQualcomm(vendor))
+    {
+        workarounds->unsizedSRGBFormatsFailReadPixels = true;
+    }
+#endif
 }
 
 void ApplyWorkarounds(const FunctionsGL *functions, gl::Workarounds *workarounds)
@@ -1315,6 +1330,13 @@ void ApplyWorkarounds(const FunctionsGL *functions, gl::Workarounds *workarounds
         workarounds->syncFramebufferBindingsOnTexImage = true;
     }
 #endif  // defined(ANGLE_PLATFORM_WINDOWS)
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+    if (IsQualcomm(vendor))
+    {
+        workarounds->incorrectUnsizedsRGBReadPixels = true;
+    }
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
 }
 
 }  // namespace nativegl_gl
