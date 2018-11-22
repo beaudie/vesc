@@ -29,7 +29,7 @@ void Sampler::onDestroy(const Context *context)
 {
 }
 
-void Sampler::setLabel(const std::string &label)
+void Sampler::setLabel(const Context *context, const std::string &label)
 {
     mLabel = label;
 }
