@@ -179,7 +179,7 @@ class State : angle::NonCopyable
     void setActiveSampler(unsigned int active);
     unsigned int getActiveSampler() const { return static_cast<unsigned int>(mActiveSampler); }
 
-    angle::Result setSamplerTexture(const Context *context, TextureType type, Texture *texture);
+    void setSamplerTexture(const Context *context, TextureType type, Texture *texture);
     Texture *getTargetTexture(TextureType type) const;
 
     Texture *getSamplerTexture(unsigned int sampler, TextureType type) const
@@ -487,10 +487,8 @@ class State : angle::NonCopyable
         DIRTY_OBJECT_DRAW_FRAMEBUFFER,
         DIRTY_OBJECT_INIT_DRAW_ATTACHMENTS,
         DIRTY_OBJECT_VERTEX_ARRAY,
-        DIRTY_OBJECT_SAMPLERS,
-        // Use a very coarse bit for any program or texture change.
-        // TODO(jmadill): Fine-grained dirty bits for each texture/sampler.
-        DIRTY_OBJECT_PROGRAM_TEXTURES,
+        DIRTY_OBJECT_TEXTURES,  // Top-level dirty bit. Also see mDirtyTextures.
+        DIRTY_OBJECT_SAMPLERS,  // Top-level dirty bit. Also see mDirtySamplers.
         DIRTY_OBJECT_PROGRAM,
         DIRTY_OBJECT_UNKNOWN,
         DIRTY_OBJECT_MAX = DIRTY_OBJECT_UNKNOWN,
@@ -508,6 +506,7 @@ class State : angle::NonCopyable
     angle::Result syncDirtyObjects(const Context *context, const DirtyObjects &bitset);
     angle::Result syncDirtyObject(const Context *context, GLenum target);
     void setObjectDirty(GLenum target);
+    void setTextureDirty(size_t textureUnitIndex);
     void setSamplerDirty(size_t samplerIndex);
 
     ANGLE_INLINE void setDrawFramebufferDirty()
@@ -533,7 +532,12 @@ class State : angle::NonCopyable
     const ActiveTexturePointerArray &getActiveTexturesCache() const { return mActiveTexturesCache; }
     ComponentTypeMask getCurrentValuesTypeMask() const { return mCurrentValuesTypeMask; }
 
-    void onActiveTextureStateChange(size_t textureIndex);
+    // "onActiveTextureChange" is called when a texture binding changes.
+    void onActiveTextureChange(const Context *context, size_t textureUnit);
+
+    // "onActiveTextureStateChange" calls when the Texture itself changed but the binding did not.
+    void onActiveTextureStateChange(const Context *context, size_t textureUnit);
+
     void onUniformBufferStateChange(size_t uniformBufferIndex);
 
     angle::Result clearUnclearedActiveTextures(const Context *context);
@@ -558,12 +562,15 @@ class State : angle::NonCopyable
     using BufferBindingSetter = void (State::*)(const Context *, Buffer *);
 
   private:
+    angle::Result syncTextures(const Context *context);
     void syncSamplers(const Context *context);
-    angle::Result syncProgramTextures(const Context *context);
+    angle::Result syncProgramImages(const Context *context);
     void unsetActiveTextures(ActiveTextureMask textureMask);
-    angle::Result updateActiveTexture(const Context *context,
-                                      size_t textureIndex,
-                                      Texture *texture);
+    void updateActiveTexture(const Context *context, size_t textureIndex, Texture *texture);
+    void updateActiveTextureState(const Context *context,
+                                  size_t textureIndex,
+                                  const Sampler *sampler,
+                                  Texture *texture);
 
     // Dispatch table for buffer update functions.
     static const angle::PackedEnumMap<BufferBinding, BufferBindingSetter> kBufferSetters;
@@ -701,6 +708,7 @@ class State : angle::NonCopyable
     DirtyBits mDirtyBits;
     DirtyObjects mDirtyObjects;
     mutable AttributesMask mDirtyCurrentValues;
+    ActiveTextureMask mDirtyTextures;
     ActiveTextureMask mDirtySamplers;
 };
 
