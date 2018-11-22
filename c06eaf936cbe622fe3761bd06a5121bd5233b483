@@ -22,6 +22,30 @@
       "revId": "c06eaf936cbe622fe3761bd06a5121bd5233b483",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f433bec3_dabfd339",
+        "filename": "src/compiler/translator/blocklayout.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-22T10:15:07Z",
+      "side": 1,
+      "message": "No. \u0027encoder\u0027 is the fist time to meet a structure. It couldn\u0027t know the structure\u0027s largest base alignment value of any of its members in advance. So we must use a new encoder to iterate this structure member and find the largest base alignment value.\nFor std140, we don\u0027t need to do this since it is always rounded up to the base alignment of a vec4.\nSee spec https://www.khronos.org/registry/OpenGL/specs/es/3.1/es_spec_3.1.pdf 7.6.2.2 Standard Uniform Block Layout, rule 9 and the std430 part.\n\nWe also did the same thing in ShaderStorageBlockOutputHLSL.cpp.",
+      "parentUuid": "beb69462_370ceb55",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 5
+      },
+      "revId": "c06eaf936cbe622fe3761bd06a5121bd5233b483",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
