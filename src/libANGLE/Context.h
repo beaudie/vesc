@@ -1577,12 +1577,12 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     void multiDrawElements(PrimitiveMode mode,
                            const GLsizei *counts,
                            GLenum type,
-                           const GLsizei *offsets,
+                           const GLsizeiptr *offsets,
                            GLsizei drawcount);
     void multiDrawElementsInstanced(PrimitiveMode mode,
                                     const GLsizei *counts,
                                     GLenum type,
-                                    const GLsizei *offsets,
+                                    const GLsizeiptr *offsets,
                                     const GLsizei *instanceCounts,
                                     GLsizei drawcount);
 

@@ -99,13 +99,13 @@ bool ValidateMultiDrawElementsANGLE(Context *context,
                                     PrimitiveMode modePacked,
                                     const GLsizei *counts,
                                     GLenum type,
-                                    const GLsizei *offsets,
+                                    const GLsizeiptr *offsets,
                                     GLsizei drawcount);
 bool ValidateMultiDrawElementsInstancedANGLE(Context *context,
                                              PrimitiveMode modePacked,
                                              const GLsizei *counts,
                                              GLenum type,
-                                             const GLsizei *offsets,
+                                             const GLsizeiptr *offsets,
                                              const GLsizei *instanceCounts,
                                              GLsizei drawcount);
 

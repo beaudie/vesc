@@ -5488,7 +5488,7 @@ void Context::multiDrawArraysInstanced(PrimitiveMode mode,
 void Context::multiDrawElements(PrimitiveMode mode,
                                 const GLsizei *counts,
                                 GLenum type,
-                                const GLsizei *offsets,
+                                const GLsizeiptr *offsets,
                                 GLsizei drawcount)
 {
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
@@ -5526,7 +5526,7 @@ void Context::multiDrawElements(PrimitiveMode mode,
 void Context::multiDrawElementsInstanced(PrimitiveMode mode,
                                          const GLsizei *counts,
                                          GLenum type,
-                                         const GLsizei *offsets,
+                                         const GLsizeiptr *offsets,
                                          const GLsizei *instanceCounts,
                                          GLsizei drawcount)
 {
