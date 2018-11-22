@@ -282,7 +282,7 @@ void main()
         glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
         std::vector<GLsizei> counts(kTriCount, 3);
-        std::vector<GLsizei> offsets(kTriCount);
+        std::vector<GLsizeiptr> offsets(kTriCount);
         for (uint32_t i = 0; i < kTriCount; ++i)
             offsets[i] = i * 3 * 2;
 
@@ -476,7 +476,7 @@ TEST_P(MultiDrawNoInstancingSupportTest, InvalidOperation)
 
     GLint first       = 0;
     GLsizei count     = 3;
-    GLsizei offset    = 0;
+    GLsizeiptr offset = 0;
     GLsizei instances = 1;
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

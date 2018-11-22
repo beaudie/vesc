@@ -2528,7 +2528,7 @@ void GL_APIENTRY glMultiDrawArraysInstancedANGLE(GLenum mode,
 void GL_APIENTRY glMultiDrawElementsANGLE(GLenum mode,
                                           const GLsizei *counts,
                                           GLenum type,
-                                          const GLsizei *offsets,
+                                          const GLsizeiptr *offsets,
                                           GLsizei drawcount)
 {
     return gl::MultiDrawElementsANGLE(mode, counts, type, offsets, drawcount);
@@ -2537,7 +2537,7 @@ void GL_APIENTRY glMultiDrawElementsANGLE(GLenum mode,
 void GL_APIENTRY glMultiDrawElementsInstancedANGLE(GLenum mode,
                                                    const GLsizei *counts,
                                                    GLenum type,
-                                                   const GLsizei *offsets,
+                                                   const GLsizeiptr *offsets,
                                                    const GLsizei *instanceCounts,
                                                    GLsizei drawcount)
 {
@@ -9117,7 +9117,7 @@ void GL_APIENTRY glMultiDrawElementsANGLEContextANGLE(GLeglContext ctx,
                                                       GLenum mode,
                                                       const GLsizei *counts,
                                                       GLenum type,
-                                                      const GLsizei *offsets,
+                                                      const GLsizeiptr *offsets,
                                                       GLsizei drawcount)
 {
     return gl::MultiDrawElementsANGLEContextANGLE(ctx, mode, counts, type, offsets, drawcount);
@@ -9127,7 +9127,7 @@ void GL_APIENTRY glMultiDrawElementsInstancedANGLEContextANGLE(GLeglContext ctx,
                                                                GLenum mode,
                                                                const GLsizei *counts,
                                                                GLenum type,
-                                                               const GLsizei *offsets,
+                                                               const GLsizeiptr *offsets,
                                                                const GLsizei *instanceCounts,
                                                                GLsizei drawcount)
 {

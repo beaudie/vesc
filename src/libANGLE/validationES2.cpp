@@ -6783,7 +6783,7 @@ bool ValidateMultiDrawElementsANGLE(Context *context,
                                     PrimitiveMode mode,
                                     const GLsizei *counts,
                                     GLenum type,
-                                    const GLsizei *offsets,
+                                    const GLsizeiptr *offsets,
                                     GLsizei drawcount)
 {
     if (!context->getExtensions().multiDraw)

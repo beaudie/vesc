@@ -666,8 +666,8 @@ typedef void (GL_APIENTRYP PFNGLMULTIDRAWELEMENTSINSTANCEDANGLEPROC) (GLenum mod
 #ifdef GL_GLEXT_PROTOTYPES
 GL_APICALL void GL_APIENTRY glMultiDrawArraysANGLE (GLenum mode, const GLint *firsts, const GLsizei *counts, GLsizei drawcount);
 GL_APICALL void GL_APIENTRY glMultiDrawArraysInstancedANGLE (GLenum mode, const GLint *firsts, const GLsizei *counts, const GLsizei *instanceCounts, GLsizei drawcount);
-GL_APICALL void GL_APIENTRY glMultiDrawElementsANGLE (GLenum mode, const GLsizei *counts, GLenum type, const GLsizei *offsets, GLsizei drawcount);
-GL_APICALL void GL_APIENTRY glMultiDrawElementsInstancedANGLE (GLenum mode, const GLsizei *counts, GLenum type, const GLsizei *offsets, const GLsizei *instanceCounts, GLsizei drawcount);
+GL_APICALL void GL_APIENTRY glMultiDrawElementsANGLE (GLenum mode, const GLsizei *counts, GLenum type, const GLsizeiptr *offsets, GLsizei drawcount);
+GL_APICALL void GL_APIENTRY glMultiDrawElementsInstancedANGLE (GLenum mode, const GLsizei *counts, GLenum type, const GLsizeiptr *offsets, const GLsizei *instanceCounts, GLsizei drawcount);
 #endif
 #endif /* GL_ANGLE_multi_draw */
 

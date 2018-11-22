@@ -3149,7 +3149,7 @@ bool ValidateMultiDrawElementsInstancedANGLE(Context *context,
                                              PrimitiveMode mode,
                                              const GLsizei *counts,
                                              GLenum type,
-                                             const GLsizei *offsets,
+                                             const GLsizeiptr *offsets,
                                              const GLsizei *instanceCounts,
                                              GLsizei drawcount)
 {
