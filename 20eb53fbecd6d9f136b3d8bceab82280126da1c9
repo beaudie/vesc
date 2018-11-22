@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf16f583_9870fad5",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2466,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-22T00:16:19Z",
+      "side": 1,
+      "message": "Can you narrow this to WebGL only? It\u0027s not part of the base spec I don\u0027t think. You can use context-\u003eisWebGL or check the extensions for webglCompatibility.",
+      "range": {
+        "startLine": 2466,
+        "startChar": 24,
+        "endLine": 2466,
+        "endChar": 57
+      },
+      "revId": "20eb53fbecd6d9f136b3d8bceab82280126da1c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2c5e4ce_b854bcb5",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2467,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-22T00:16:19Z",
+      "side": 1,
+      "message": "can you put this in ErrorMessages.h?\n\nAlso can you git cl format to clear up the style issues?",
+      "range": {
+        "startLine": 2467,
+        "startChar": 61,
+        "endLine": 2467,
+        "endChar": 121
+      },
+      "revId": "20eb53fbecd6d9f136b3d8bceab82280126da1c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
