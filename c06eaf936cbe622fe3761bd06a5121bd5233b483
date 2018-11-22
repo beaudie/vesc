@@ -46,6 +46,30 @@
       "revId": "c06eaf936cbe622fe3761bd06a5121bd5233b483",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4373254_2dbbef59",
+        "filename": "src/compiler/translator/blocklayout.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-22T13:51:53Z",
+      "side": 1,
+      "message": "Thanks for the explanation, it\u0027s unfortunate we have to create a whole new encoder for this :/",
+      "parentUuid": "f433bec3_dabfd339",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 5
+      },
+      "revId": "c06eaf936cbe622fe3761bd06a5121bd5233b483",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
