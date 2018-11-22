@@ -3149,7 +3149,7 @@ bool ValidateMultiDrawElementsInstancedANGLE(Context *context,
                                              PrimitiveMode mode,
                                              const GLsizei *counts,
                                              GLenum type,
-                                             const GLsizei *offsets,
+                                             const GLvoid *const *indices,
                                              const GLsizei *instanceCounts,
                                              GLsizei drawcount)
 {
@@ -3172,9 +3172,8 @@ bool ValidateMultiDrawElementsInstancedANGLE(Context *context,
     }
     for (GLsizei drawID = 0; drawID < drawcount; ++drawID)
     {
-        const void *indices = reinterpret_cast<void *>(static_cast<long>(offsets[drawID]));
-        if (!ValidateDrawElementsInstancedCommon(context, mode, counts[drawID], type, indices,
-                                                 instanceCounts[drawID]))
+        if (!ValidateDrawElementsInstancedCommon(context, mode, counts[drawID], type,
+                                                 indices[drawID], instanceCounts[drawID]))
         {
             return false;
         }
