@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "aab8ff21_0d6185be",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2466,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-22T01:34:59Z",
+      "side": 1,
+      "message": "That\u0027s nice if you to offer but I don\u0027t think we need a workaround. If you want you can add a flag to gl::Limitations in Caps.h that represents this D3D limitation. Then here you can check for WebGL || your newly added limitation and throw an error.\n\nVulkan and OpenGL back-ends probably don\u0027t have this limitation so it\u0027s probably best not to force it in the validation in all cases.",
+      "parentUuid": "b4fb7581_90e763ad",
+      "range": {
+        "startLine": 2466,
+        "startChar": 24,
+        "endLine": 2466,
+        "endChar": 57
+      },
+      "revId": "20eb53fbecd6d9f136b3d8bceab82280126da1c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e2c5e4ce_b854bcb5",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 1
