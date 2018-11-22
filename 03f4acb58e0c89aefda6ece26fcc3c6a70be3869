@@ -22,6 +22,30 @@
       "revId": "03f4acb58e0c89aefda6ece26fcc3c6a70be3869",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "959db619_f6b91127",
+        "filename": "src/tests/gl_tests/SRGBTextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-22T21:20:47Z",
+      "side": 1,
+      "message": "Looks like we don\u0027t have a trybot of this.  I\u0027ll try lifting it in a followup CL and watch the FYI bot.",
+      "parentUuid": "4a2984aa_307c4608",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 66
+      },
+      "revId": "03f4acb58e0c89aefda6ece26fcc3c6a70be3869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
