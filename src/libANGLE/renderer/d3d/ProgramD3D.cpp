@@ -2191,7 +2191,7 @@ void ProgramD3D::defineStructUniformFields(gl::ShaderType shaderType,
                                            D3DUniformMap *uniformMap)
 {
     if (encoder)
-        encoder->enterAggregateType();
+        encoder->enterAggregateType(fields.data(), fields.size());
 
     for (size_t fieldIndex = 0; fieldIndex < fields.size(); fieldIndex++)
     {
@@ -2250,7 +2250,7 @@ void ProgramD3D::defineArrayUniformElements(gl::ShaderType shaderType,
                                             D3DUniformMap *uniformMap)
 {
     if (encoder)
-        encoder->enterAggregateType();
+        encoder->enterAggregateType(uniform.fields.data(), uniform.fields.size());
 
     sh::ShaderVariable uniformElement = uniform;
     uniformElement.arraySizes.pop_back();
@@ -2294,7 +2294,7 @@ void ProgramD3D::defineUniform(gl::ShaderType shaderType,
     // Not a struct. Arrays are treated as aggregate types.
     if (uniform.isArray() && encoder)
     {
-        encoder->enterAggregateType();
+        encoder->enterAggregateType(uniform.fields.data(), uniform.fields.size());
     }
 
     // Advance the uniform offset, to track registers allocation for structs

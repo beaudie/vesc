@@ -34,12 +34,14 @@ using ReferencedInterfaceBlocks = std::map<int, const TReferencedBlock *>;
 // Used to save shader storage block field member information.
 using BlockMemberInfoMap = std::map<const TField *, BlockMemberInfo>;
 
+using FieldToVarMap = std::map<const TField *, const ShaderVariable *>;
+
 class ShaderStorageBlockOutputHLSL : public TIntermTraverser
 {
   public:
     ShaderStorageBlockOutputHLSL(OutputHLSL *outputHLSL,
                                  TSymbolTable *symbolTable,
-                                 ResourcesHLSL *resourcesHLSL);
+                                 ResourcesHLSL *resourcesHLSL, const std::vector<InterfaceBlock> &shaderStorageBlocks);
 
     ~ShaderStorageBlockOutputHLSL();
 
@@ -78,6 +80,8 @@ class ShaderStorageBlockOutputHLSL : public TIntermTraverser
     ReferencedInterfaceBlocks mReferencedShaderStorageBlocks;
 
     BlockMemberInfoMap mBlockMemberInfoMap;
+    const std::vector<InterfaceBlock> &mShaderStorageBlocks;
+    std::map<const TStructure *, size_t> mStructOffsets;
 };
 }  // namespace sh
 

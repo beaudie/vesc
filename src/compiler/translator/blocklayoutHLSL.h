@@ -35,7 +35,7 @@ class HLSLBlockEncoder : public BlockLayoutEncoder
 
     HLSLBlockEncoder(HLSLBlockEncoderStrategy strategy, bool transposeMatrices);
 
-    void enterAggregateType() override;
+    size_t enterAggregateType(const ShaderVariable *fields, size_t fieldCount) override;
     void exitAggregateType() override;
     void skipRegisters(unsigned int numRegisters);
 

@@ -19,9 +19,10 @@ HLSLBlockEncoder::HLSLBlockEncoder(HLSLBlockEncoderStrategy strategy, bool trans
     : mEncoderStrategy(strategy), mTransposeMatrices(transposeMatrices)
 {}
 
-void HLSLBlockEncoder::enterAggregateType()
+size_t HLSLBlockEncoder::enterAggregateType(const ShaderVariable *fields, size_t fieldCount)
 {
     nextRegister();
+    return mCurrentOffset;
 }
 
 void HLSLBlockEncoder::exitAggregateType() {}
@@ -134,11 +135,11 @@ void HLSLVariableRegisterCount(const ShaderVarType &variable, HLSLBlockEncoder *
     {
         for (size_t arrayElement = 0; arrayElement < variable.getArraySizeProduct(); arrayElement++)
         {
-            encoder->enterAggregateType();
+            encoder->enterAggregateType(variable.fields.data(), variable.fields.size());
 
-            for (size_t fieldIndex = 0; fieldIndex < variable.fields.size(); fieldIndex++)
+            for (const ShaderVariable &field : variable.fields)
             {
-                HLSLVariableRegisterCount(variable.fields[fieldIndex], encoder);
+                HLSLVariableRegisterCount(field, encoder);
             }
 
             encoder->exitAggregateType();

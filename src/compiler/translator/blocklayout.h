@@ -75,12 +75,12 @@ class BlockLayoutEncoder
                                bool isRowMajorMatrix);
 
     size_t getBlockSize() const { return mCurrentOffset * BytesPerComponent; }
-    size_t getStructureBaseAlignment() const { return mStructureBaseAlignment; }
-    void increaseCurrentOffset(size_t offsetInBytes);
-    void setStructureBaseAlignment(size_t baseAlignment);
 
-    virtual void enterAggregateType() = 0;
-    virtual void exitAggregateType()  = 0;
+    // Called when entering a new structure or array.
+    // Returns the offset of the aggregate type.
+    virtual size_t enterAggregateType(const ShaderVariable *fields, size_t fieldCount) = 0;
+
+    virtual void exitAggregateType() = 0;
 
     static const size_t BytesPerComponent           = 4u;
     static const unsigned int ComponentsPerRegister = 4u;
@@ -90,9 +90,8 @@ class BlockLayoutEncoder
 
   protected:
     size_t mCurrentOffset;
-    size_t mStructureBaseAlignment;
 
-    virtual void nextRegister();
+    void nextRegister();
 
     virtual void getBlockLayoutInfo(GLenum type,
                                     const std::vector<unsigned int> &arraySizes,
@@ -114,7 +113,7 @@ class Std140BlockEncoder : public BlockLayoutEncoder
   public:
     Std140BlockEncoder();
 
-    void enterAggregateType() override;
+    size_t enterAggregateType(const ShaderVariable *fields, size_t fieldCount) override;
     void exitAggregateType() override;
 
   protected:
@@ -135,13 +134,7 @@ class Std430BlockEncoder : public Std140BlockEncoder
   public:
     Std430BlockEncoder();
 
-  protected:
-    void nextRegister() override;
-    void getBlockLayoutInfo(GLenum type,
-                            const std::vector<unsigned int> &arraySizes,
-                            bool isRowMajorMatrix,
-                            int *arrayStrideOut,
-                            int *matrixStrideOut) override;
+    size_t enterAggregateType(const ShaderVariable *fields, size_t fieldCount) override;
 };
 
 using BlockLayoutMap = std::map<std::string, BlockMemberInfo>;
