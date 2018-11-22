@@ -490,6 +490,8 @@ class State : angle::NonCopyable
         DIRTY_OBJECT_TEXTURES,  // Top-level dirty bit. Also see mDirtyTextures.
         DIRTY_OBJECT_SAMPLERS,  // Top-level dirty bit. Also see mDirtySamplers.
         DIRTY_OBJECT_PROGRAM,
+        DIRTY_OBJECT_INIT_TEXTURES,
+        DIRTY_OBJECT_INIT_TEXTURE_IMAGES,
         DIRTY_OBJECT_UNKNOWN,
         DIRTY_OBJECT_MAX = DIRTY_OBJECT_UNKNOWN,
     };
@@ -535,8 +537,6 @@ class State : angle::NonCopyable
     void onActiveTextureStateChange(const Context *context, size_t textureUnit);
     void onUniformBufferStateChange(size_t uniformBufferIndex);
 
-    angle::Result clearUnclearedActiveTextures(const Context *context);
-
     bool isCurrentTransformFeedback(const TransformFeedback *tf) const
     {
         return tf == mTransformFeedback.get();
@@ -562,6 +562,8 @@ class State : angle::NonCopyable
     angle::Result syncProgramImages(const Context *context);
     void unsetActiveTextures(ActiveTextureMask textureMask);
     void updateActiveTexture(const Context *context, size_t textureIndex, Texture *texture);
+    angle::Result clearUnclearedActiveTextures(const Context *context);
+    angle::Result clearUnclearedActiveTextureImages(const Context *context);
 
     // Dispatch table for buffer update functions.
     static const angle::PackedEnumMap<BufferBinding, BufferBindingSetter> kBufferSetters;
@@ -637,9 +639,6 @@ class State : angle::NonCopyable
     // Also stores a notification channel to the texture itself to handle texture change events.
     ActiveTexturePointerArray mActiveTexturesCache;
     std::vector<angle::ObserverBinding> mCompleteTextureBindings;
-    InitState mCachedTexturesInitState;
-
-    InitState mCachedImageTexturesInitState;
 
     SamplerBindingVector mSamplers;
 
