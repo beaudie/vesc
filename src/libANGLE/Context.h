@@ -1636,9 +1636,6 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     MemoryProgramCache *getMemoryProgramCache() const { return mMemoryProgramCache; }
 
-    // Notification for a state change in a Texture.
-    void onTextureChange(const Texture *texture);
-
     bool hasBeenCurrent() const { return mHasBeenCurrent; }
     egl::Display *getCurrentDisplay() const { return mCurrentDisplay; }
     egl::Surface *getCurrentDrawSurface() const { return mCurrentSurface; }
@@ -1719,6 +1716,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     void onSubjectStateChange(const Context *context,
                               angle::SubjectIndex index,
                               angle::SubjectMessage message) override;
+
+    void onSamplerUniformChange(size_t textureUnitIndex);
 
   private:
     void initialize();
