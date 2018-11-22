@@ -220,8 +220,6 @@ State::State(bool debug,
       mVertexArray(nullptr),
       mActiveSampler(0),
       mActiveTexturesCache{},
-      mCachedTexturesInitState(InitState::MayNeedInit),
-      mCachedImageTexturesInitState(InitState::MayNeedInit),
       mPrimitiveRestart(false),
       mDebug(debug),
       mMultiSampling(false),
@@ -333,8 +331,6 @@ void State::initialize(Context *context)
         mSamplerTextures[TextureType::External].resize(caps.maxCombinedTextureImageUnits);
     }
     mCompleteTextureBindings.reserve(caps.maxCombinedTextureImageUnits);
-    mCachedTexturesInitState      = InitState::MayNeedInit;
-    mCachedImageTexturesInitState = InitState::MayNeedInit;
     for (uint32_t textureIndex = 0; textureIndex < caps.maxCombinedTextureImageUnits;
          ++textureIndex)
     {
@@ -478,7 +474,7 @@ ANGLE_INLINE void State::updateActiveTextureState(const Context *context,
 
         if (texture->initState() == InitState::MayNeedInit)
         {
-            mCachedTexturesInitState = InitState::MayNeedInit;
+            mDirtyObjects.set(DIRTY_OBJECT_INIT_TEXTURES);
         }
     }
 }
@@ -2529,6 +2525,12 @@ angle::Result State::syncDirtyObjects(const Context *context, const DirtyObjects
             case DIRTY_OBJECT_PROGRAM:
                 ANGLE_TRY(mProgram->syncState(context));
                 break;
+            case DIRTY_OBJECT_INIT_TEXTURES:
+                ANGLE_TRY(clearUnclearedActiveTextures(context));
+                break;
+            case DIRTY_OBJECT_INIT_TEXTURE_IMAGES:
+                ANGLE_TRY(clearUnclearedActiveTextureImages(context));
+                break;
 
             default:
                 UNREACHABLE();
@@ -2591,7 +2593,7 @@ angle::Result State::syncProgramImages(const Context *context)
         }
         if (texture->initState() == InitState::MayNeedInit)
         {
-            mCachedImageTexturesInitState = InitState::MayNeedInit;
+            mDirtyObjects.set(DIRTY_OBJECT_INIT_TEXTURE_IMAGES);
         }
     }
 
@@ -2698,7 +2700,7 @@ angle::Result State::onProgramExecutableChange(const Context *context, Program *
 
         if (image->initState() == InitState::MayNeedInit)
         {
-            mCachedImageTexturesInitState = InitState::MayNeedInit;
+            mDirtyObjects.set(DIRTY_OBJECT_INIT_TEXTURE_IMAGES);
         }
     }
 
@@ -2776,29 +2778,28 @@ angle::Result State::clearUnclearedActiveTextures(const Context *context)
     if (!mProgram)
         return angle::Result::Continue();
 
-    if (mCachedTexturesInitState != InitState::Initialized)
+    for (size_t textureUnitIndex : mProgram->getActiveSamplersMask())
     {
-        for (size_t textureUnitIndex : mProgram->getActiveSamplersMask())
+        Texture *texture = mActiveTexturesCache[textureUnitIndex];
+        if (texture)
         {
-            Texture *texture = mActiveTexturesCache[textureUnitIndex];
-            if (texture)
-            {
-                ANGLE_TRY(texture->ensureInitialized(context));
-            }
+            ANGLE_TRY(texture->ensureInitialized(context));
         }
-        mCachedTexturesInitState = InitState::Initialized;
     }
-    if (mCachedImageTexturesInitState != InitState::Initialized)
+    return angle::Result::Continue();
+}
+
+angle::Result State::clearUnclearedActiveTextureImages(const Context *context)
+{
+    ASSERT(mRobustResourceInit);
+    ASSERT(mProgram);
+    for (size_t imageUnitIndex : mProgram->getActiveImagesMask())
     {
-        for (size_t imageUnitIndex : mProgram->getActiveImagesMask())
+        Texture *texture = mImageUnits[imageUnitIndex].texture.get();
+        if (texture)
         {
-            Texture *texture = mImageUnits[imageUnitIndex].texture.get();
-            if (texture)
-            {
-                ANGLE_TRY(texture->ensureInitialized(context));
-            }
+            ANGLE_TRY(texture->ensureInitialized(context));
         }
-        mCachedImageTexturesInitState = InitState::Initialized;
     }
     return angle::Result::Continue();
 }
