@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5ec5c47_3e4fb2e0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-22T00:11:45Z",
+      "side": 1,
+      "message": "nit: objects",
+      "range": {
+        "startLine": 9,
+        "startChar": 18,
+        "endLine": 9,
+        "endChar": 27
+      },
+      "revId": "56d6606535758999e44e063420b77738b56f0647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13d3f3e7_ed4df93f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-22T00:11:45Z",
+      "side": 1,
+      "message": "nit: grammar suggestion - break this up into smaller sentences.\n\n... results in multithread safe code. This code generates the static objects upon the first execution of the line that declares the object. This results in high runtime cost for synchronization and a bigger code size.",
+      "range": {
+        "startLine": 10,
+        "startChar": 4,
+        "endLine": 12,
+        "endChar": 39
+      },
+      "revId": "56d6606535758999e44e063420b77738b56f0647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a9d9428_a7d14539",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-22T00:11:45Z",
+      "side": 1,
+      "message": "nit: sentence break here would help.",
+      "range": {
+        "startLine": 15,
+        "startChar": 56,
+        "endLine": 15,
+        "endChar": 60
+      },
+      "revId": "56d6606535758999e44e063420b77738b56f0647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c4e96b5_4b08bc02",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-22T00:11:45Z",
+      "side": 1,
+      "message": "an",
+      "range": {
+        "startLine": 17,
+        "startChar": 47,
+        "endLine": 17,
+        "endChar": 49
+      },
+      "revId": "56d6606535758999e44e063420b77738b56f0647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1920708a_b248871b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-22T00:11:45Z",
+      "side": 1,
+      "message": "can",
+      "range": {
+        "startLine": 18,
+        "startChar": 39,
+        "endLine": 18,
+        "endChar": 42
+      },
+      "revId": "56d6606535758999e44e063420b77738b56f0647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7189c245_b12e2540",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-22T00:11:45Z",
+      "side": 1,
+      "message": "nit: reduces \u0027the\u0027 cost",
+      "range": {
+        "startLine": 19,
+        "startChar": 24,
+        "endLine": 19,
+        "endChar": 27
+      },
+      "revId": "56d6606535758999e44e063420b77738b56f0647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45d78ae4_36c29a5c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-22T00:11:45Z",
+      "side": 1,
+      "message": "nit: indirection",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 12
+      },
+      "revId": "56d6606535758999e44e063420b77738b56f0647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2eb9143_4e8de91c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-22T00:11:45Z",
+      "side": 1,
+      "message": "yeah, very nice. seems to completely elide it from the profiler when I tried.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 0
+      },
+      "revId": "56d6606535758999e44e063420b77738b56f0647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48db2dee_0639279a",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1019,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-22T00:11:45Z",
+      "side": 1,
+      "message": "nit: Capitalize for static functions - also place in the anonymous namespace {} block at the top since it is a local helper function.",
+      "range": {
+        "startLine": 1019,
+        "startChar": 19,
+        "endLine": 1019,
+        "endChar": 31
+      },
+      "revId": "56d6606535758999e44e063420b77738b56f0647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5632fb4_f49bba01",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-22T00:11:45Z",
+      "side": 1,
+      "message": "I believe a compact way to evaluate this can be:\n\nconstexpr GLuint log2(GLuint bytes)\n{\n    return (bytes \u003d\u003d 1 ? 0 : (1 + log2(bytes - 1)));\n}\n\nThis could also be templated. But it\u0027ll be compile-time evaluated.",
+      "range": {
+        "startLine": 1022,
+        "startChar": 0,
+        "endLine": 1041,
+        "endChar": 5
+      },
+      "revId": "56d6606535758999e44e063420b77738b56f0647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "618cadc6_a17794e9",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-22T00:11:45Z",
+      "side": 1,
+      "message": "Compilers can be finicky about constexpr, but sometimes you can force them. If you were to rewrite these as \n\nstatic constexpr uint32_t kPacked \u003d PackTypeInfo(1, false);\nreturn kPacked;\n\nI believe all implementations would be forced to evaluate kPacked at compile time. This might have fixed your loop not being compiled.",
+      "range": {
+        "startLine": 1052,
+        "startChar": 12,
+        "endLine": 1052,
+        "endChar": 42
+      },
+      "revId": "56d6606535758999e44e063420b77738b56f0647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
