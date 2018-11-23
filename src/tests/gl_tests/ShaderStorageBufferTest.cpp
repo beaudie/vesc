@@ -1395,6 +1395,41 @@ void main()
     EXPECT_GL_NO_ERROR();
 }
 
+// Test that ssbo as an argument of a function can be translated. The shader comes from the deqp
+// ssbo layout test.
+TEST_P(ShaderStorageBufferTest31, SSBOAsFunctionArgument)
+{
+    constexpr char kComputeShaderSource[] =
+        R"(#version 310 es
+layout(local_size_x = 1) in;
+
+layout(shared, binding = 0) buffer Block
+{
+    lowp float var;
+};
+
+layout(binding = 0) uniform atomic_uint ac_numPassed;
+
+bool compare_float(highp float a, highp float b)
+{
+    return abs(a - b) < 0.05;
+}
+
+void main(void)
+{
+    bool allOk = true;
+    allOk      = allOk && compare_float(var, -9.0);
+    if (allOk)
+        atomicCounterIncrement(ac_numPassed);
+
+    var = -9.0;
+}
+)";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kComputeShaderSource);
+    EXPECT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST(ShaderStorageBufferTest31, ES31_OPENGL(), ES31_OPENGLES(), ES31_D3D11());
 
 }  // namespace
