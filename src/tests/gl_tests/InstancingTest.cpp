@@ -78,11 +78,28 @@ class InstancingTest : public ANGLETest
         bool offset,               // true: pass nonzero offset to DrawArrays, false: zero offset
         bool buffer)               // true: use instance data in buffer, false: in client memory
     {
+        ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_ANGLE_instanced_arrays"));
+        /*
+        ANGLE_SKIP_TEST_IF(IsD3D9() && indexed && points);
+        ANGLE_SKIP_TEST_IF(IsD3D9() && IsAMD() && points);
+        */
+
         // The window is divided into kMaxDrawn slices of size kDrawSize.
         // The slice drawn into is determined by the instance datum.
         // The instance data array selects all the slices in order.
         // 'lastDrawn' is the index (zero-based) of the last slice into which we draw.
         const unsigned lastDrawn = (numInstance - 1) / divisor;
+
+        std::ostringstream desc;
+        desc << " numInstance " << numInstance
+             << " divisor " << divisor
+             << " attribZeroInstanced " << attribZeroInstanced
+             << " points " << points
+             << " indexed " << indexed
+             << " offset " << offset
+             << " buffer " << buffer
+             << " lastDrawn " << lastDrawn
+             << " backend " << GetParam();
 
         const int instanceAttrib = attribZeroInstanced ? 0 : 1;
         const int positionAttrib = attribZeroInstanced ? 1 : 0;
@@ -121,10 +138,10 @@ class InstancingTest : public ANGLETest
         }
 
         ASSERT_GL_NO_ERROR();
-        checkDrawing(lastDrawn);
+        checkDrawing(lastDrawn, desc.str());
     }
 
-    void checkDrawing(unsigned lastDrawn)
+    void checkDrawing(unsigned lastDrawn, const std::string& msg)
     {
         for (unsigned i = 0; i < kMaxDrawn; ++i)
         {
@@ -134,7 +151,7 @@ class InstancingTest : public ANGLETest
             for (unsigned j = 0; j < 8; j += 2)
             {
                 int ix = static_cast<int>((kPointVertices[j] + 1.0f) / 2.0f * getWindowWidth());
-                EXPECT_PIXEL_COLOR_EQ(ix, iy, i <= lastDrawn ? GLColor::red : GLColor::blue);
+                EXPECT_PIXEL_COLOR_EQ(ix, iy, i <= lastDrawn ? GLColor::red : GLColor::blue) << msg << std::endl;
             }
         }
     }
@@ -143,7 +160,7 @@ class InstancingTest : public ANGLETest
     GLuint mProgram1;
     GLuint mInstanceBuffer;
 
-    static constexpr int kMaxDrawn   = 4;
+    static constexpr int kMaxDrawn   = 16;
     static constexpr float kDrawSize = 2.0 / kMaxDrawn;
     GLfloat mInstanceData[kMaxDrawn];
 
@@ -188,6 +205,27 @@ constexpr GLfloat InstancingTest::kPointVertices[];
 constexpr GLushort InstancingTest::kQuadIndices[];
 constexpr GLushort InstancingTest::kPointIndices[];
 
+TEST_P(InstancingTest, AllCombinations)
+{
+    for (bool indexed : {true, false})
+        for (bool offset : {true, false})
+        {
+            if (indexed && offset) continue;
+            for (bool a0 : {true, false})
+                for (bool points : {true, false})
+                    for (bool buffer : {true, false})
+                        runTest(11, 2, a0, points, indexed, offset, buffer);
+        }
+}
+
+TEST_P(InstancingTest, Divisors)
+{
+    for (unsigned i=1; i<=kMaxDrawn*2+3; ++i)
+        for (unsigned d=i*2+3; d>0 && (i-1)/d<kMaxDrawn; --d)
+            runTest(i, d, false, false, false, 0, true);
+}
+
+#if 0
 class InstancingTestAllConfigs : public InstancingTest
 {
   protected:
@@ -332,7 +370,7 @@ TEST_P(InstancingTestES31, UpdateAttribBindingByVertexAttribDivisor)
     glClear(GL_COLOR_BUFFER_BIT);
     glDrawElementsInstanced(GL_TRIANGLES, ArraySize(kQuadIndices), GL_UNSIGNED_SHORT, kQuadIndices,
                             numInstance);
-    checkDrawing(lastDrawn);
+    checkDrawing(lastDrawn, "bite me");
 
     // Disable instancing.
     glVertexBindingDivisor(instanceBinding, 0);
@@ -353,7 +391,7 @@ TEST_P(InstancingTestES31, UpdateAttribBindingByVertexAttribDivisor)
     glClear(GL_COLOR_BUFFER_BIT);
     glDrawElementsInstanced(GL_TRIANGLES, ArraySize(kQuadIndices), GL_UNSIGNED_SHORT, kQuadIndices,
                             numInstance);
-    checkDrawing(lastDrawn);
+    checkDrawing(lastDrawn, "harder");
 
     glDeleteVertexArrays(1, &vao);
 }
@@ -485,6 +523,16 @@ ANGLE_INSTANTIATE_TEST(InstancingTestNo9_3, ES2_D3D9(), ES2_D3D11());
 
 ANGLE_INSTANTIATE_TEST(InstancingTestPoints, ES2_D3D11(), ES2_D3D11_FL9_3());
 
-ANGLE_INSTANTIATE_TEST(InstancingTestES3, ES3_OPENGL(), ES3_OPENGLES(), ES3_D3D11());
+#endif
+ANGLE_INSTANTIATE_TEST(InstancingTest,
+                       ES2_D3D9(),
+                       ES2_D3D11(),
+                       //ES2_D3D11_FL9_3(),
+                       ES2_OPENGL(),
+                       ES2_OPENGLES(),
+                       ES2_VULKAN()
+                       );
 
-ANGLE_INSTANTIATE_TEST(InstancingTestES31, ES31_OPENGL(), ES31_OPENGLES(), ES31_D3D11());
+//ANGLE_INSTANTIATE_TEST(InstancingTestES3, ES3_OPENGL(), ES3_OPENGLES(), ES3_D3D11());
+
+//ANGLE_INSTANTIATE_TEST(InstancingTestES31, ES31_OPENGL(), ES31_OPENGLES(), ES31_D3D11());
