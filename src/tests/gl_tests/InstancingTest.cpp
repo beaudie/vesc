@@ -78,11 +78,21 @@ class InstancingTest : public ANGLETest
         bool offset,               // true: pass nonzero offset to DrawArrays, false: zero offset
         bool buffer)               // true: use instance data in buffer, false: in client memory
     {
+        ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_ANGLE_instanced_arrays"));
+        ANGLE_SKIP_TEST_IF(IsD3D9() && indexed && points);
+        ANGLE_SKIP_TEST_IF(IsD3D9() && IsAMD() && points);
+
         // The window is divided into kMaxDrawn slices of size kDrawSize.
         // The slice drawn into is determined by the instance datum.
         // The instance data array selects all the slices in order.
         // 'lastDrawn' is the index (zero-based) of the last slice into which we draw.
         const unsigned lastDrawn = (numInstance - 1) / divisor;
+
+        std::ostringstream desc;
+        desc << " numInstance " << numInstance << " divisor " << divisor << " attribZeroInstanced "
+             << attribZeroInstanced << " points " << points << " indexed " << indexed << " offset "
+             << offset << " buffer " << buffer << " lastDrawn " << lastDrawn << " backend "
+             << GetParam();
 
         const int instanceAttrib = attribZeroInstanced ? 0 : 1;
         const int positionAttrib = attribZeroInstanced ? 1 : 0;
@@ -121,10 +131,10 @@ class InstancingTest : public ANGLETest
         }
 
         ASSERT_GL_NO_ERROR();
-        checkDrawing(lastDrawn);
+        checkDrawing(lastDrawn, desc.str());
     }
 
-    void checkDrawing(unsigned lastDrawn)
+    void checkDrawing(unsigned lastDrawn, const std::string &msg)
     {
         for (unsigned i = 0; i < kMaxDrawn; ++i)
         {
@@ -134,7 +144,8 @@ class InstancingTest : public ANGLETest
             for (unsigned j = 0; j < 8; j += 2)
             {
                 int ix = static_cast<int>((kPointVertices[j] + 1.0f) / 2.0f * getWindowWidth());
-                EXPECT_PIXEL_COLOR_EQ(ix, iy, i <= lastDrawn ? GLColor::red : GLColor::blue);
+                EXPECT_PIXEL_COLOR_EQ(ix, iy, i <= lastDrawn ? GLColor::red : GLColor::blue)
+                    << msg << std::endl;
             }
         }
     }
@@ -143,7 +154,7 @@ class InstancingTest : public ANGLETest
     GLuint mProgram1;
     GLuint mInstanceBuffer;
 
-    static constexpr int kMaxDrawn   = 4;
+    static constexpr int kMaxDrawn   = 16;
     static constexpr float kDrawSize = 2.0 / kMaxDrawn;
     GLfloat mInstanceData[kMaxDrawn];
 
@@ -188,6 +199,29 @@ constexpr GLfloat InstancingTest::kPointVertices[];
 constexpr GLushort InstancingTest::kQuadIndices[];
 constexpr GLushort InstancingTest::kPointIndices[];
 
+// Test all combinations excluding number of instances and divisors.
+TEST_P(InstancingTest, AllCombinations)
+{
+    for (bool indexed : {true, false})
+        for (bool offset : {true, false})
+        {
+            if (indexed && offset)
+                continue;
+            for (bool a0 : {true, false})
+                for (bool points : {true, false})
+                    for (bool buffer : {true, false})
+                        runTest(11, 2, a0, points, indexed, offset, buffer);
+        }
+}
+
+// Test numerous combinations of number of instances and divisors.
+TEST_P(InstancingTest, Divisors)
+{
+    for (unsigned i = 1; i <= kMaxDrawn + 5; ++i)
+        for (unsigned d = i + 5; d > 0 && (i - 1) / d < kMaxDrawn; --d)
+            runTest(i, d, false, false, false, 0, true);
+}
+
 class InstancingTestAllConfigs : public InstancingTest
 {
   protected:
@@ -211,8 +245,6 @@ class InstancingTestPoints : public InstancingTest
 // to D3D, to ensure that slot/stream zero of the input layout doesn't contain per-instance data.
 TEST_P(InstancingTestAllConfigs, AttributeZeroInstanced)
 {
-    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_ANGLE_instanced_arrays"));
-
     runTest(4, 1, true /* attrib 0 instanced */, false /* quads */, true /* DrawElements */,
             false /* N/A */, false /* no buffer */);
 }
@@ -222,8 +254,6 @@ TEST_P(InstancingTestAllConfigs, AttributeZeroInstanced)
 // expected.
 TEST_P(InstancingTestAllConfigs, AttributeZeroNotInstanced)
 {
-    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_ANGLE_instanced_arrays"));
-
     runTest(4, 1, false /* attrib 1 instanced */, false /* quads */, true /* DrawElements */,
             false /* N/A */, false /* no buffer */);
 }
@@ -232,8 +262,6 @@ TEST_P(InstancingTestAllConfigs, AttributeZeroNotInstanced)
 // the non-instanced vertex attributes.
 TEST_P(InstancingTestNo9_3, DrawArraysWithOffset)
 {
-    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_ANGLE_instanced_arrays"));
-
     runTest(4, 1, false /* attribute 1 instanced */, false /* quads */, false /* DrawArrays */,
             true /* offset>0 */, true /* buffer */);
 }
@@ -242,8 +270,6 @@ TEST_P(InstancingTestNo9_3, DrawArraysWithOffset)
 // On D3D11 FL9_3, this triggers a special codepath that emulates instanced points rendering.
 TEST_P(InstancingTestPoints, DrawArrays)
 {
-    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_ANGLE_instanced_arrays"));
-
     // Disable D3D11 SDK Layers warnings checks, see ANGLE issue 667 for details
     // On Win7, the D3D SDK Layers emits a false warning for these tests.
     // This doesn't occur on Windows 10 (Version 1511) though.
@@ -257,8 +283,6 @@ TEST_P(InstancingTestPoints, DrawArrays)
 // On D3D11 FL9_3, this triggers a special codepath that emulates instanced points rendering.
 TEST_P(InstancingTestPoints, DrawElements)
 {
-    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_ANGLE_instanced_arrays"));
-
     // Disable D3D11 SDK Layers warnings checks, see ANGLE issue 667 for details
     // On Win7, the D3D SDK Layers emits a false warning for these tests.
     // This doesn't occur on Windows 10 (Version 1511) though.
@@ -332,7 +356,7 @@ TEST_P(InstancingTestES31, UpdateAttribBindingByVertexAttribDivisor)
     glClear(GL_COLOR_BUFFER_BIT);
     glDrawElementsInstanced(GL_TRIANGLES, ArraySize(kQuadIndices), GL_UNSIGNED_SHORT, kQuadIndices,
                             numInstance);
-    checkDrawing(lastDrawn);
+    checkDrawing(lastDrawn, "");
 
     // Disable instancing.
     glVertexBindingDivisor(instanceBinding, 0);
@@ -353,7 +377,7 @@ TEST_P(InstancingTestES31, UpdateAttribBindingByVertexAttribDivisor)
     glClear(GL_COLOR_BUFFER_BIT);
     glDrawElementsInstanced(GL_TRIANGLES, ArraySize(kQuadIndices), GL_UNSIGNED_SHORT, kQuadIndices,
                             numInstance);
-    checkDrawing(lastDrawn);
+    checkDrawing(lastDrawn, "");
 
     glDeleteVertexArrays(1, &vao);
 }
@@ -483,8 +507,17 @@ ANGLE_INSTANTIATE_TEST(InstancingTestAllConfigs,
 // TODO(jmadill): Figure out the situation with DrawInstanced on FL 9_3
 ANGLE_INSTANTIATE_TEST(InstancingTestNo9_3, ES2_D3D9(), ES2_D3D11());
 
-ANGLE_INSTANTIATE_TEST(InstancingTestPoints, ES2_D3D11(), ES2_D3D11_FL9_3());
+// D3D11_FL9_3 is too broken to include here, and not officially supported anyway.
+ANGLE_INSTANTIATE_TEST(InstancingTestPoints, ES2_D3D11());
 
 ANGLE_INSTANTIATE_TEST(InstancingTestES3, ES3_OPENGL(), ES3_OPENGLES(), ES3_D3D11());
 
 ANGLE_INSTANTIATE_TEST(InstancingTestES31, ES31_OPENGL(), ES31_OPENGLES(), ES31_D3D11());
+
+// D3D11_FL9_3 is too broken to include here, and not officially supported anyway.
+ANGLE_INSTANTIATE_TEST(InstancingTest,
+                       ES2_D3D9(),
+                       ES2_D3D11(),
+                       ES2_OPENGL(),
+                       ES2_OPENGLES(),
+                       ES2_VULKAN());
