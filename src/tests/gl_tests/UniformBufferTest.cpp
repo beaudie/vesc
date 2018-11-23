@@ -1518,6 +1518,33 @@ TEST_P(UniformBufferTest, DependentBufferChange)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+TEST_P(UniformBufferTest, LargeArray)
+{
+    constexpr char kVertexShader[] = R"(#version 300 es
+    #define MAX_INSTANCE_COUNT 1024
+
+    layout(std140) uniform InstanceBlock
+    {
+	    mat4 instances[MAX_INSTANCE_COUNT];
+    };
+
+    void main()
+    {
+	    gl_Position = vec4(1.0) * instances[gl_InstanceID];
+    })";
+
+    constexpr char kFragmentShader[] = R"(#version 300 es
+    precision mediump float;
+	out vec4 outFragColor;
+	void main()
+	{
+        outFragColor = vec4(0.0);
+	}
+)";
+
+    ANGLE_GL_PROGRAM(program, kVertexShader, kFragmentShader);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(UniformBufferTest,
                        ES3_D3D11(),
