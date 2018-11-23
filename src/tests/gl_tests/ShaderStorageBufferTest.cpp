@@ -1430,6 +1430,75 @@ void main(void)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test that ssbo as binary operand works well.
+TEST_P(ShaderStorageBufferTest31, SSBOAsBinaryOperand)
+{
+    constexpr char kComputeShaderSource[] =
+        R"(#version 310 es
+ layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+ layout(std430, binding = 0) buffer blockIn1 {
+     uvec2 data;
+ } instanceIn1;
+ layout(std430, binding = 1) buffer blockIn2 {
+     uvec2 data;
+ } instanceIn2;
+ layout(std430, binding = 2) buffer blockIn3 {
+     uvec2 data;
+ } instanceIn3;
+ layout(std430, binding = 3) buffer blockOut {
+     uvec2 data;
+ } instanceOut;
+ void main()
+ {
+     instanceOut.data = instanceIn1.data + instanceIn2.data + instanceIn3.data;
+ }
+ )";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kComputeShaderSource);
+    glUseProgram(program.get());
+
+    constexpr unsigned int kComponentCount                = 2;
+    constexpr unsigned int kBytesPerComponent             = sizeof(unsigned int);
+    constexpr unsigned int kInputValues1[kComponentCount] = {1u, 2u};
+    constexpr unsigned int kInputValues2[kComponentCount] = {3u, 4u};
+    constexpr unsigned int kInputValues3[kComponentCount] = {5u, 6u};
+    // Create shader storage buffer
+    GLBuffer shaderStorageBuffer[4];
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[0]);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kComponentCount * kBytesPerComponent, kInputValues1,
+                 GL_STATIC_DRAW);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[1]);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kComponentCount * kBytesPerComponent, kInputValues2,
+                 GL_STATIC_DRAW);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[2]);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kComponentCount * kBytesPerComponent, kInputValues3,
+                 GL_STATIC_DRAW);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[3]);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kComponentCount * kBytesPerComponent, nullptr,
+                 GL_STATIC_DRAW);
+
+    // Bind shader storage buffer
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, shaderStorageBuffer[0]);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderStorageBuffer[1]);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, shaderStorageBuffer[2]);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, shaderStorageBuffer[3]);
+
+    glDispatchCompute(1, 1, 1);
+    glFinish();
+
+    // Read back shader storage buffer
+    constexpr unsigned int kExpectedValues[kComponentCount] = {9u, 12u};
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer[3]);
+    const GLuint *ptr = reinterpret_cast<const GLuint *>(glMapBufferRange(
+        GL_SHADER_STORAGE_BUFFER, 0, kComponentCount * kBytesPerComponent, GL_MAP_READ_BIT));
+    for (unsigned int idx = 0; idx < kComponentCount; idx++)
+    {
+        EXPECT_EQ(kExpectedValues[idx], *(ptr + idx));
+    }
+
+    EXPECT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST(ShaderStorageBufferTest31, ES31_OPENGL(), ES31_OPENGLES(), ES31_D3D11());
 
 }  // namespace

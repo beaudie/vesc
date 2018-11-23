@@ -1240,7 +1240,98 @@ bool OutputHLSL::visitSwizzle(Visit visit, TIntermSwizzle *node)
 bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
 {
     TInfoSinkBase &out = getInfoSink();
-
+    if (visit == PreVisit &&
+        (IsInShaderStorageBlock(node->getLeft()) || IsInShaderStorageBlock(node->getRight())))
+    {
+        switch (node->getOp())
+        {
+            case EOpAdd:
+                outputSSBOTriplet(out, node, "(", " + ", ")");
+                return false;
+            case EOpSub:
+                outputSSBOTriplet(out, node, "(", " - ", ")");
+                return false;
+            case EOpMul:
+                outputSSBOTriplet(out, node, "(", " * ", ")");
+                return false;
+            case EOpDiv:
+                outputSSBOTriplet(out, node, "(", " / ", ")");
+                return false;
+            case EOpIMod:
+                outputSSBOTriplet(out, node, "(", " % ", ")");
+                return false;
+            case EOpBitShiftLeft:
+                outputSSBOTriplet(out, node, "(", " << ", ")");
+                return false;
+            case EOpBitShiftRight:
+                outputSSBOTriplet(out, node, "(", " >> ", ")");
+                return false;
+            case EOpBitwiseAnd:
+                outputSSBOTriplet(out, node, "(", " & ", ")");
+                return false;
+            case EOpBitwiseXor:
+                outputSSBOTriplet(out, node, "(", " ^ ", ")");
+                return false;
+            case EOpBitwiseOr:
+                outputSSBOTriplet(out, node, "(", " | ", ")");
+                return false;
+            case EOpEqual:
+                // TODO(jiajia.qin@intel.com): Need to consider whether it's a non-scalr array type
+                // or structure type. // http://anglebug.com/1951
+                outputSSBOTriplet(out, node, "(", "==", ")");
+                return false;
+            case EOpNotEqual:
+                // TODO(jiajia.qin@intel.com): Need to consider whether it's a non-scalr array type
+                // or structure type. // http://anglebug.com/1951
+                outputSSBOTriplet(out, node, "(", "!=", ")");
+                return false;
+            case EOpLessThan:
+                outputSSBOTriplet(out, node, "(", " < ", ")");
+                return false;
+            case EOpGreaterThan:
+                outputSSBOTriplet(out, node, "(", " > ", ")");
+                return false;
+            case EOpLessThanEqual:
+                outputSSBOTriplet(out, node, "(", " <= ", ")");
+                return false;
+            case EOpGreaterThanEqual:
+                outputSSBOTriplet(out, node, "(", " >= ", ")");
+                return false;
+            case EOpVectorTimesScalar:
+                outputSSBOTriplet(out, node, "(", " * ", ")");
+                return false;
+            case EOpMatrixTimesScalar:
+                outputSSBOTriplet(out, node, "(", " * ", ")");
+                return false;
+            case EOpVectorTimesMatrix:
+                outputSSBOTriplet(out, node, "mul(", ", transpose(", "))");
+                return false;
+            case EOpMatrixTimesVector:
+                outputSSBOTriplet(out, node, "mul(transpose(", "), ", ")");
+                return false;
+            case EOpMatrixTimesMatrix:
+                outputSSBOTriplet(out, node, "transpose(mul(transpose(", "), transpose(", ")))");
+                return false;
+            case EOpLogicalOr:
+                // HLSL doesn't short-circuit ||, so we assume that || affected by short-circuiting
+                // have been unfolded.
+                ASSERT(!node->getRight()->hasSideEffects());
+                outputSSBOTriplet(out, node, "(", " || ", ")");
+                return false;
+            case EOpLogicalXor:
+                mUsesXor = true;
+                outputSSBOTriplet(out, node, "xor(", ", ", ")");
+                return false;
+            case EOpLogicalAnd:
+                // HLSL doesn't short-circuit &&, so we assume that && affected by short-circuiting
+                // have been unfolded.
+                ASSERT(!node->getRight()->hasSideEffects());
+                outputSSBOTriplet(out, node, "(", " && ", ")");
+                return false;
+            default:
+                break;
+        }
+    }
     switch (node->getOp())
     {
         case EOpComma:
@@ -2903,6 +2994,34 @@ bool OutputHLSL::handleExcessiveLoop(TInfoSinkBase &out, TIntermLoop *node)
     }
 
     return false;  // Not handled as an excessive loop
+}
+
+void OutputHLSL::outputSSBOTriplet(TInfoSinkBase &out,
+                                   TIntermBinary *node,
+                                   const char *preString,
+                                   const char *inString,
+                                   const char *postString)
+{
+    out << preString;
+    if (IsInShaderStorageBlock(node->getLeft()))
+    {
+        mSSBOOutputHLSL->outputLoadFunctionCall(node->getLeft());
+    }
+    else
+    {
+        node->getLeft()->traverse(this);
+    }
+    out << inString;
+    if (IsInShaderStorageBlock(node->getRight()))
+    {
+        mSSBOOutputHLSL->outputLoadFunctionCall(node->getRight());
+    }
+    else
+    {
+        node->getRight()->traverse(this);
+    }
+
+    out << postString;
 }
 
 void OutputHLSL::outputTriplet(TInfoSinkBase &out,

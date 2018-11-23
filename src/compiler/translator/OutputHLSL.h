@@ -108,6 +108,11 @@ class OutputHLSL : public TIntermTraverser
                        const char *preString,
                        const char *inString,
                        const char *postString);
+    void outputSSBOTriplet(TInfoSinkBase &out,
+                           TIntermBinary *node,
+                           const char *preString,
+                           const char *inString,
+                           const char *postString);
     void outputLineDirective(TInfoSinkBase &out, int line);
     void writeParameter(const TVariable *param, TInfoSinkBase &out);
 
