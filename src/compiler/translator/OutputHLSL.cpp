@@ -2222,7 +2222,18 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                     out << ", sampler_";
                 }
 
-                (*arg)->traverse(this);
+                if (IsInShaderStorageBlock(typedArg))
+                {
+                    // TODO(jiajia.qin@intel.com): For 'out'/'intout' arguments, maybe we need to
+                    // adjust the AST tree. http://anglebug.com/1951
+                    TQualifier qual = typedArg->getType().getQualifier();
+                    ASSERT(qual != EvqInOut && qual != EvqOut);
+                    mSSBOOutputHLSL->outputLoadFunctionCall(typedArg);
+                }
+                else
+                {
+                    (*arg)->traverse(this);
+                }
 
                 if (typedArg->getType().isStructureContainingSamplers())
                 {
