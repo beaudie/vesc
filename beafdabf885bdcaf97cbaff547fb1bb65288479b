@@ -1,0 +1,1568 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1eb3e61_39bc675c",
+        "filename": "BUILD.gn",
+        "patchSetId": 23
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Looks like this is not used anymore.\nCould you remove from here and delete the file itself as well.",
+      "range": {
+        "startLine": 953,
+        "startChar": 0,
+        "endLine": 953,
+        "endChar": 60
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd2ab5f9_502b9822",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "I couldn\u0027t figure out how this \"multiple types of answer\" scheme is supposed to work.\nCan I have these rules:\n1. On DeviceA all apps are allowed to choose whether to use ANGLE.\n2. On DeviceB all apps are NOT allowed to choose whether to use ANGLE.\n3. App1 should default to Native on all devices.\nMaybe we should allow rules to give a partial answer, i.e. not to all of the questions.",
+      "range": {
+        "startLine": 54,
+        "startChar": 59,
+        "endLine": 54,
+        "endChar": 87
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a51f4689_fa4bb858",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "and the value is a",
+      "range": {
+        "startLine": 59,
+        "startChar": 42,
+        "endLine": 59,
+        "endChar": 47
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aac5a0e6_15a4013c",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "the applications on the devices matching the rule",
+      "range": {
+        "startLine": 63,
+        "startChar": 3,
+        "endLine": 63,
+        "endChar": 18
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e878429a_35ff81a0",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "I\u0027d like to suggest \"AppChoiceAllowed\".",
+      "range": {
+        "startLine": 64,
+        "startChar": 35,
+        "endLine": 64,
+        "endChar": 44
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "432f952d_872a89d9",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "It took me a while to understand this.\nCould you elaborate more, like:\nThis determines whether ANGLE would be used or not when:\n1. AppChoiceAllowed is false for an application / device combination matching the rule\n2. AppChoiceAllowed is true for an application / device combination matching the rule, but the application doesn\u0027t make an explicit choice",
+      "range": {
+        "startLine": 65,
+        "startChar": 95,
+        "endLine": 66,
+        "endChar": 60
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdcc7554_5f4b15c3",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "I\u0027d like to suggest \"DefaultIsANGLE\"",
+      "range": {
+        "startLine": 68,
+        "startChar": 35,
+        "endLine": 68,
+        "endChar": 44
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3386c300_af789341",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Should we allow wildcards / regexp?",
+      "range": {
+        "startLine": 78,
+        "startChar": 53,
+        "endLine": 78,
+        "endChar": 59
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fbd022b_201d5077",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Since this is not exposed in the API, I don\u0027t see a reason to add it at this time.\nWhen we have a real usage, will know more on what is the best way to add this filter to JSON.\n\nThe way it is now, to specify multiple intents, you\u0027d need to specify the application each time.\nAnother option is to have an array of intents inside a singe application object.\n\nThen, how do you treat matching if no intent is specified? Does this match \"no intent\" or does this match \"any intent\"? Both approaches have a problem. For \"no intent\", if you want not to allow ANGLE without intents, then you\u0027d need to explicitly list all the intents for which ANGLE is allowed. For \"any intent\", you\u0027d need to explicitly list all the intents for which ANGLE is not allowed.\n\nI\u0027d prefer to have some real use cases before we attempt to solve these problems.",
+      "range": {
+        "startLine": 79,
+        "startChar": 32,
+        "endLine": 79,
+        "endChar": 38
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e54ec259_3967b1bb",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "nit: most other identifiers start with a capital letter.",
+      "range": {
+        "startLine": 99,
+        "startChar": 32,
+        "endLine": 99,
+        "endChar": 38
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a86279a_96b82659",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "nit: ditto",
+      "range": {
+        "startLine": 103,
+        "startChar": 34,
+        "endLine": 103,
+        "endChar": 42
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80fa9335_50ea0515",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "It is confusing that StringPart() is a wildcard, but StringPart(\"\") is not.\nMaybe you should reject \"\" as valid input to StringPart(const std::string part) by making the constructor private and using a factory method which will enforce this.\nThen, you can make isWildcard() { return mPart.empty(); }",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 73
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b772cbf_1d4ae32b",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "each of which?",
+      "range": {
+        "startLine": 164,
+        "startChar": 46,
+        "endLine": 164,
+        "endChar": 60
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4ce41c7_9f0cd8a4",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "match() and logItem() methods?",
+      "range": {
+        "startLine": 164,
+        "startChar": 73,
+        "endLine": 164,
+        "endChar": 87
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95d003e3_89f3c2e4",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Can you use mListType here?",
+      "range": {
+        "startLine": 198,
+        "startChar": 45,
+        "endLine": 198,
+        "endChar": 67
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24c897ca_06a6cd7a",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "This duplicates the data of mList.size().\nWould be better if you turn this into \"bool isWildcard() { return mList.size() \u003d\u003d 0; }\"",
+      "range": {
+        "startLine": 215,
+        "startChar": 9,
+        "endLine": 215,
+        "endChar": 18
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d8b7397_393c1de3",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Could you visually separate static methods from the rest?\nI think we follow this convention in ANGLE: static methods come after the constructors and destructor and there is a new line before and after them.",
+      "range": {
+        "startLine": 267,
+        "startChar": 4,
+        "endLine": 267,
+        "endChar": 10
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d940a1d_b54ebabb",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Maybe WARN here like in CreateGpuFromJson",
+      "range": {
+        "startLine": 299,
+        "startChar": 8,
+        "endLine": 299,
+        "endChar": 9
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14bf6bb2_a1c5ddde",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Can this be \"bool isWildcard() { return mMajor.isWildcard(); }\"?\nThis will make this class simpler to understand.",
+      "range": {
+        "startLine": 346,
+        "startChar": 9,
+        "endLine": 346,
+        "endChar": 18
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa5845a4_432669ab",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "I think you are leaking memory here, consider std::unique_ptr",
+      "range": {
+        "startLine": 385,
+        "startChar": 17,
+        "endLine": 385,
+        "endChar": 24
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9af83de0_c564f17a",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "nit: formatting (line is too long)",
+      "range": {
+        "startLine": 420,
+        "startChar": 0,
+        "endLine": 420,
+        "endChar": 102
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a49d968b_beae36e1",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "isWildcard() { return mName.isWildcard(); }",
+      "range": {
+        "startLine": 444,
+        "startChar": 9,
+        "endLine": 444,
+        "endChar": 18
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ad47512_cd3970c1",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Is this constructor needed? The comment on rules above says that \"vendor\" must be a first field in GPU.",
+      "range": {
+        "startLine": 457,
+        "startChar": 0,
+        "endLine": 460,
+        "endChar": 5
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b51fd6dd_fd189d02",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 466,
+        "startChar": 0,
+        "endLine": 469,
+        "endChar": 5
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cce9ffaf_2db16b67",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "leaked",
+      "range": {
+        "startLine": 500,
+        "startChar": 25,
+        "endLine": 500,
+        "endChar": 32
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e6e93d4_40f1ad0e",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "vendor?",
+      "range": {
+        "startLine": 517,
+        "startChar": 47,
+        "endLine": 517,
+        "endChar": 50
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea737b3d_a4c97799",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "isWildcard() { return mVendor.isWildcard(); }",
+      "range": {
+        "startLine": 554,
+        "startChar": 9,
+        "endLine": 554,
+        "endChar": 18
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34c62c63_6c157fac",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "This is very confusing, since mWildcard has different meanings in this and other classes.\nMy advice is to drop mWildcard from this class entirely and check whether members are wildcards directly.\nBasically, \"bool isWildcard() { return mManufacturer.isWildcard() \u0026\u0026 mGpuList.isWildcard(); }\", but I\u0027m not sure if you need this function at all here.",
+      "range": {
+        "startLine": 587,
+        "startChar": 0,
+        "endLine": 587,
+        "endChar": 98
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "905fc03f_ab0effd1",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "This contradicts the comment on kJsonManufacturer, saying it must be the first attribute of Device if any other attributes are specified. Or list of GPUs is not considered an attribute?\nOther code seems to allow Device to only have GPU list, so could you modify kJsonManufacturer comment to clarify that GPUs can be listed without manufacturer.",
+      "range": {
+        "startLine": 612,
+        "startChar": 0,
+        "endLine": 613,
+        "endChar": 68
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d052bbf_d13dd132",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Doesn\u0027t look like you\u0027re using those, so why have them?",
+      "range": {
+        "startLine": 687,
+        "startChar": 0,
+        "endLine": 688,
+        "endChar": 45
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cf829a9_8ecb6cee",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "unused?",
+      "range": {
+        "startLine": 732,
+        "startChar": 0,
+        "endLine": 739,
+        "endChar": 5
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f6ab267_e90c6612",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "How come this is never used?\nEither remove everything related to AppChoice from JSON and implementation, or expose this in the API.",
+      "range": {
+        "startLine": 751,
+        "startChar": 9,
+        "endLine": 751,
+        "endChar": 21
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "858bf59a_b1773606",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "JSON comments imply that there are many types of answers, but getAnswer() only applies to NonChoice answer. This should either receive the type of answer as an argument or be renamed.\nIt\u0027s not clear to me what the new name should be, because AppChoice is unused, and it\u0027s not clear to me what is the relationship between AppChoice and NonChoice. Maybe \"bool useANGLE()\".",
+      "range": {
+        "startLine": 777,
+        "startChar": 9,
+        "endLine": 777,
+        "endChar": 18
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8f468ab_7ea28053",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "It\u0027s a bit inefficient to check all the rules twice.\nIf you end up deciding to keep AppChoice, could you merge these two into\nvoid getAppChoiceAndDefault(const Scenario \u0026toCheck, bool *appChoiceAllowed, bool *defaultIsANGLE)?",
+      "range": {
+        "startLine": 777,
+        "startChar": 0,
+        "endLine": 802,
+        "endChar": 5
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c5ba53e_8f7ece57",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "leaked",
+      "range": {
+        "startLine": 818,
+        "startChar": 18,
+        "endLine": 818,
+        "endChar": 25
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab701f14_2969160d",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "leaked",
+      "range": {
+        "startLine": 824,
+        "startChar": 29,
+        "endLine": 824,
+        "endChar": 35
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f40998c3_3380ac00",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "leaked",
+      "range": {
+        "startLine": 832,
+        "startChar": 24,
+        "endLine": 832,
+        "endChar": 30
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c771f1b7_36d0e8f6",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "leaked",
+      "range": {
+        "startLine": 838,
+        "startChar": 25,
+        "endLine": 838,
+        "endChar": 31
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2adb4bb_40a9189b",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Since GPUs are nested inside Device, it makes sense to me to move this functionality into Device::CreateDeviceFromJson().",
+      "range": {
+        "startLine": 834,
+        "startChar": 0,
+        "endLine": 843,
+        "endChar": 17
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42320124_b03bd8b7",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Check that it\u0027s not nullptr?",
+      "range": {
+        "startLine": 880,
+        "startChar": 37,
+        "endLine": 880,
+        "endChar": 63
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3adb8ba_d384c558",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "You could just call ANGLEGetFeatureSupportUtilAPIVersion.",
+      "range": {
+        "startLine": 882,
+        "startChar": 0,
+        "endLine": 901,
+        "endChar": 5
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d6e68f9_9d413c82",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Check that these are not nullptr?\nBTW, I\u0027ve just learned that constructing std::string from nullptr is an undefined behavior.",
+      "range": {
+        "startLine": 908,
+        "startChar": 0,
+        "endLine": 910,
+        "endChar": 72
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b74260da_7b199e1a",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "I guess it\u0027s too late to make rules_offset and rules_length unsized?\nCould you at least check that they are not negative here?",
+      "range": {
+        "startLine": 917,
+        "startChar": 8,
+        "endLine": 917,
+        "endChar": 20
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88762c56_3dc4a81f",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Check it\u0027s not null",
+      "range": {
+        "startLine": 942,
+        "startChar": 55,
+        "endLine": 942,
+        "endChar": 81
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea1dec41_4fbd9b37",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "nit: You could reduce nesting and improve readability rewriting this as:\nif (*versionToUse \u003c kFeatureVersion_LowestSupported)\n{\n    return false;\n}\nif (*versionToUse \u003e kFeatureVersion_HighestSupported)\n{\n    *versionToUse \u003d kFeatureVersion_HighestSupported;\n}\nreturn true;",
+      "range": {
+        "startLine": 944,
+        "startChar": 0,
+        "endLine": 963,
+        "endChar": 5
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26a92e18_71cdfa85",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 973,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "This has a problem if rulesLength is negative. I\u0027ve suggested making it unsigned in .h, so it won\u0027t be a problem after that. Though, maybe better to be explicit \"rulesLength \u003d\u003d 0\".\nPlease also check that rulesString, rulesHandle and rulesVersion are not nullptr.",
+      "range": {
+        "startLine": 973,
+        "startChar": 8,
+        "endLine": 973,
+        "endChar": 20
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53b1d852_1a0fde5e",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "string",
+      "range": {
+        "startLine": 975,
+        "startChar": 43,
+        "endLine": 975,
+        "endChar": 47
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "381c4a72_317e673b",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Since you always add a default rule, maybe this should not be an error.",
+      "range": {
+        "startLine": 976,
+        "startChar": 15,
+        "endLine": 976,
+        "endChar": 20
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e97264d_3fcfa9ba",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Could you have a constant for this? Or even better, read this from JSON. But, have a constant for JSON files which don\u0027t have version, if there is need to be backward compatible with them (I guess not, since we didn\u0027t release anything yet).",
+      "range": {
+        "startLine": 983,
+        "startChar": 20,
+        "endLine": 983,
+        "endChar": 21
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5eea612b_49a5914a",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Check it\u0027s not nullptr",
+      "range": {
+        "startLine": 988,
+        "startChar": 37,
+        "endLine": 988,
+        "endChar": 71
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51568769_57752a6b",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1001,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Check that these are not null",
+      "range": {
+        "startLine": 1000,
+        "startChar": 49,
+        "endLine": 1001,
+        "endChar": 72
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15768580_93e5bc12",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1004,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "I think static_cast is more appropriate here and the 4 instances below, since we know that handles are void*.",
+      "range": {
+        "startLine": 1004,
+        "startChar": 36,
+        "endLine": 1004,
+        "endChar": 52
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f51a96de_e1ef649d",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1021,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Check that these two and appName are not nullptr.",
+      "range": {
+        "startLine": 1020,
+        "startChar": 0,
+        "endLine": 1021,
+        "endChar": 92
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a192954_072a1f1b",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "nit: formatting",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 5
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddc8ebac_aea78586",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "nit: formatting",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 11
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21258dc2_214f8eb2",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "What\u0027s the security implication of this?\nFor example, can malicious code pass a string which is not null terminated and cause this to do bad stuff?\nOr libfeature_support is somehow prevented from being called by entities other than EGL loader?\nIn general, is there security review process for Android system code?",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 0
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0fcf8fd_00febb67",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "nit: formatting",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 5
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "324d383e_1b74378e",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Will it be possible to drop support for ANGLEGetUtilityAPI in the future?\nIf not, maybe this is not needed.\nIf yes, is there an open bug to drop version 1 support?",
+      "range": {
+        "startLine": 89,
+        "startChar": 18,
+        "endLine": 89,
+        "endChar": 54
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70853d75_5245c26e",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "This doesn\u0027t match the function signature.",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 58
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1bcd78e_71d24083",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "String?",
+      "range": {
+        "startLine": 105,
+        "startChar": 40,
+        "endLine": 105,
+        "endChar": 44
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4faac3e_45ef6c4e",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Maybe size_t or unsigned long?",
+      "range": {
+        "startLine": 106,
+        "startChar": 45,
+        "endLine": 106,
+        "endChar": 49
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d24352bc_bff35c63",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Does it make sense to have rulesVersion as the first field in RulesHandle instead?\nI.e. rulesVersion \u003d *(int*)rulesHandle.",
+      "range": {
+        "startLine": 108,
+        "startChar": 45,
+        "endLine": 108,
+        "endChar": 62
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01b4623d_b4c82296",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "nit: formatting",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 32
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1743fd7_f89a6859",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "nit: formatting",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 0
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4581806b_0464977f",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "I\u0027d prefer a name that will hint that the returned bool is not success / fail, like in other functions.\nLike, ANGLEShouldBeUsedForApplication().",
+      "range": {
+        "startLine": 153,
+        "startChar": 13,
+        "endLine": 153,
+        "endChar": 46
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9ec22ef_3fb4d5ef",
+        "filename": "src/feature_support_util/feature_support_util_unittest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Doesn\u0027t test ANGLEGetSystemInfo",
+      "range": {
+        "startLine": 39,
+        "startChar": 12,
+        "endLine": 39,
+        "endChar": 30
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c76ffd4_5c3cb84f",
+        "filename": "src/feature_support_util/feature_support_util_unittest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "RulesHandle",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 10
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ab4f28b_dd96f766",
+        "filename": "src/feature_support_util/feature_support_util_unittest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-23T21:29:56Z",
+      "side": 1,
+      "message": "Also check that rulesHandle is not null now",
+      "range": {
+        "startLine": 80,
+        "startChar": 70,
+        "endLine": 80,
+        "endChar": 81
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
