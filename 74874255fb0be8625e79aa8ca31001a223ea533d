@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0563432a_6d26af5e",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1243,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-23T14:52:18Z",
+      "side": 1,
+      "message": "This corresponds to method 2 of the \"SSBO to RWByteAddressBuffer\" when we agreed to go with method 1 instead.",
+      "revId": "74874255fb0be8625e79aa8ca31001a223ea533d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
