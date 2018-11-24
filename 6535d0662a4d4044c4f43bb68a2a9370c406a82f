@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c92aecef_60b2aabd",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-24T21:48:36Z",
+      "side": 1,
+      "message": "Actually the whole thing is useless for power of two cases. bytesShift contains the number of bytes to shift to the right to clear the value. The input to this function is always a power of two, so all we have to do is take bytes unmodified for bytesShift.",
+      "parentUuid": "5fb19df1_6cf337a4",
+      "range": {
+        "startLine": 50,
+        "startChar": 19,
+        "endLine": 50,
+        "endChar": 30
+      },
+      "revId": "6535d0662a4d4044c4f43bb68a2a9370c406a82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0313cd69_f0e21199",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "6535d0662a4d4044c4f43bb68a2a9370c406a82f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f2a7e3d_e513cc52",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-24T21:48:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0313cd69_f0e21199",
+      "range": {
+        "startLine": 1037,
+        "startChar": 38,
+        "endLine": 1037,
+        "endChar": 44
+      },
+      "revId": "6535d0662a4d4044c4f43bb68a2a9370c406a82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
