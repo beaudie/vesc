@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "00127d4c_b789416c",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-25T23:04:11Z",
+      "side": 1,
+      "message": "You\u0027re correct. I stumbled upon my own test program which had a bug. I\u0027ll revert the code to using Log2(bytes) \u003c\u003c 8.",
+      "parentUuid": "df86cfed_ede8cc5c",
+      "range": {
+        "startLine": 50,
+        "startChar": 19,
+        "endLine": 50,
+        "endChar": 30
+      },
+      "revId": "6535d0662a4d4044c4f43bb68a2a9370c406a82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0313cd69_f0e21199",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 4
