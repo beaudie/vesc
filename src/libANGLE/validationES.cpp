@@ -6664,4 +6664,43 @@ bool ValidateGetTexLevelParameterBase(Context *context,
     }
     return true;
 }
+
+void RecordBindTextureTypeError(Context *context, TextureType target)
+{
+    ASSERT(!context->getStateCache().isValidBindTextureType(target));
+
+    switch (target)
+    {
+        case TextureType::Rectangle:
+            ASSERT(!context->getExtensions().textureRectangle);
+            context->validationError(GL_INVALID_ENUM, kTextureRectangleNotSupported);
+            break;
+
+        case TextureType::_3D:
+        case TextureType::_2DArray:
+            ASSERT(context->getClientMajorVersion() < 3);
+            context->validationError(GL_INVALID_ENUM, kES3Required);
+            break;
+
+        case TextureType::_2DMultisample:
+            ASSERT(context->getClientVersion() < Version(3, 1) &&
+                   !context->getExtensions().textureMultisample);
+            context->validationError(GL_INVALID_ENUM, kMultisampleTextureExtensionOrES31Required);
+            break;
+
+        case TextureType::_2DMultisampleArray:
+            ASSERT(!context->getExtensions().textureStorageMultisample2DArray);
+            context->validationError(GL_INVALID_ENUM, kMultisampleArrayExtensionRequired);
+            break;
+
+        case TextureType::External:
+            ASSERT(!context->getExtensions().eglImageExternal &&
+                   !context->getExtensions().eglStreamConsumerExternal);
+            context->validationError(GL_INVALID_ENUM, kExternalTextureNotSupported);
+            break;
+
+        default:
+            context->validationError(GL_INVALID_ENUM, kInvalidTextureTarget);
+    }
+}
 }  // namespace gl

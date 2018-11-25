@@ -613,6 +613,7 @@ ANGLE_INLINE bool ValidateFramebufferComplete(Context *context, Framebuffer *fra
 }
 
 const char *ValidateDrawStates(Context *context);
+void RecordBindTextureTypeError(Context *context, TextureType target);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES_H_

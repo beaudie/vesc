@@ -45,6 +45,36 @@ ANGLE_INLINE bool ValidateBindBuffer(Context *context, BufferBinding target, GLu
 
     return true;
 }
+
+ANGLE_INLINE bool ValidateBindTexture(Context *context, TextureType target, GLuint texture)
+{
+    if (!context->getStateCache().isValidBindTextureType(target))
+    {
+        RecordBindTextureTypeError(context, target);
+        return false;
+    }
+
+    if (texture == 0)
+    {
+        return true;
+    }
+
+    Texture *textureObject = context->getTexture(texture);
+    if (textureObject && textureObject->getType() != target)
+    {
+        context->validationError(GL_INVALID_OPERATION, err::kTypeMismatch);
+        return false;
+    }
+
+    if (!context->getGLState().isBindGeneratesResourceEnabled() &&
+        !context->isTextureGenerated(texture))
+    {
+        context->validationError(GL_INVALID_OPERATION, err::kObjectNotGenerated);
+        return false;
+    }
+
+    return true;
+}
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES2_H_
