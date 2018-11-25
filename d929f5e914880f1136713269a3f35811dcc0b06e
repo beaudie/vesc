@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6a7d8de_05bf707f",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-25T23:53:05Z",
+      "side": 1,
+      "message": "I think this needs to be Log2(bytes / 2) or Log2(bytes \u003e\u003e 1). Currently returning \"3\" for bytesShift for a 64-bit uint, which is causing a D3D9 test to fail.",
+      "range": {
+        "startLine": 45,
+        "startChar": 33,
+        "endLine": 45,
+        "endChar": 48
+      },
+      "revId": "d929f5e914880f1136713269a3f35811dcc0b06e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
