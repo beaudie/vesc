@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "847ced01_ea319623",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-26T18:30:06Z",
+      "side": 1,
+      "message": "I think it might be a good idea to still use ANGLE_CONTEXT_TRY in such cases.\nSo, if someone adds code after a line like this, it won\u0027t get executed when this line fails.",
+      "range": {
+        "startLine": 540,
+        "startChar": 4,
+        "endLine": 540,
+        "endChar": 10
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a44fc85_11b124e4",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-26T18:30:06Z",
+      "side": 1,
+      "message": "TRY is bad here",
+      "range": {
+        "startLine": 1220,
+        "startChar": 0,
+        "endLine": 1220,
+        "endChar": 93
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3103130_868680ea",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 6007,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-26T18:30:06Z",
+      "side": 1,
+      "message": "I hope TRY is OK here",
+      "range": {
+        "startLine": 6007,
+        "startChar": 4,
+        "endLine": 6007,
+        "endChar": 21
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49e4d984_c790361f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 6262,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-26T18:30:06Z",
+      "side": 1,
+      "message": "I hope TRY is OK here",
+      "range": {
+        "startLine": 6262,
+        "startChar": 4,
+        "endLine": 6262,
+        "endChar": 21
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f1ed2b4_c1581dc3",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 8180,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-26T18:30:06Z",
+      "side": 1,
+      "message": "I guess you can call this from handleError to remove a few lines of code?",
+      "range": {
+        "startLine": 8180,
+        "startChar": 15,
+        "endLine": 8180,
+        "endChar": 30
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd7ae768_aedadb1f",
+        "filename": "src/libANGLE/RefCountObject.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-26T18:30:06Z",
+      "side": 1,
+      "message": "Is this ever used?",
+      "range": {
+        "startLine": 56,
+        "startChar": 56,
+        "endLine": 56,
+        "endChar": 62
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de09dcab_618e3550",
+        "filename": "src/libANGLE/RefCountObject.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-26T18:30:06Z",
+      "side": 1,
+      "message": "Is this ever used?",
+      "range": {
+        "startLine": 138,
+        "startChar": 58,
+        "endLine": 138,
+        "endChar": 71
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd881cf5_1a8f37e4",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-26T18:30:06Z",
+      "side": 1,
+      "message": "// TODO(jmadill): Remove this once refactor is complete. http://anglebug.com/2491\n?",
+      "range": {
+        "startLine": 442,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 71
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44bcfc56_2e5f0bca",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-26T18:30:06Z",
+      "side": 1,
+      "message": "We would output a wrong message here now.",
+      "range": {
+        "startLine": 199,
+        "startChar": 18,
+        "endLine": 199,
+        "endChar": 36
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
