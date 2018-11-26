@@ -81,6 +81,24 @@
       "revId": "23e4ce66aac78de2540fc9b48f050052393f7165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46fadba3_8ffda64b",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1421,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-26T10:51:53Z",
+      "side": 1,
+      "message": "Oh, this is going to be complicated: to support this usecase completely we\u0027ll have to turn these into \"fat pointers\" that are a combination of RWByteAddressBuffer and offset.",
+      "parentUuid": "25badb85_84bfaa54",
+      "revId": "23e4ce66aac78de2540fc9b48f050052393f7165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
