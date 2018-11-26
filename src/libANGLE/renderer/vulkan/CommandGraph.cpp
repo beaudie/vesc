@@ -85,7 +85,22 @@ CommandGraphResource::CommandGraphResource(CommandGraphResourceType resourceType
     : mResourceType(resourceType), mCurrentWritingNode(nullptr)
 {}
 
+CommandGraphResource::CommandGraphResource() = default;
+
 CommandGraphResource::~CommandGraphResource() = default;
+
+CommandGraphResource::CommandGraphResource(CommandGraphResource &&other)
+{
+    *this = std::move(other);
+}
+
+CommandGraphResource &CommandGraphResource::operator=(CommandGraphResource &&other)
+{
+    std::swap(mStoredQueueSerial, other.mStoredQueueSerial);
+    std::swap(mResourceType, other.mResourceType);
+    std::swap(mCurrentWritingNode, other.mCurrentWritingNode);
+    return *this;
+}
 
 bool CommandGraphResource::isResourceInUse(RendererVk *renderer) const
 {
@@ -109,7 +124,21 @@ RecordableGraphResource::RecordableGraphResource(CommandGraphResourceType resour
     : CommandGraphResource(resourceType)
 {}
 
+RecordableGraphResource::RecordableGraphResource() = default;
+
 RecordableGraphResource::~RecordableGraphResource() = default;
+
+RecordableGraphResource::RecordableGraphResource(RecordableGraphResource &&other)
+{
+    *this = std::move(other);
+}
+
+RecordableGraphResource &RecordableGraphResource::operator=(RecordableGraphResource &&other)
+{
+    CommandGraphResource::operator=(std::move(other));
+    std::swap(mCurrentReadingNodes, other.mCurrentReadingNodes);
+    return *this;
+}
 
 void RecordableGraphResource::updateQueueSerial(Serial queueSerial)
 {

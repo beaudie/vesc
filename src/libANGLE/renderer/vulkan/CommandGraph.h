@@ -159,7 +159,11 @@ class CommandGraphNode final : angle::NonCopyable
 class CommandGraphResource : angle::NonCopyable
 {
   public:
+    CommandGraphResource();
     virtual ~CommandGraphResource();
+
+    CommandGraphResource(CommandGraphResource &&other);
+    CommandGraphResource &operator=(CommandGraphResource &&other);
 
     // Returns true if the resource is in use by the renderer.
     bool isResourceInUse(RendererVk *renderer) const;
@@ -188,13 +192,21 @@ class CommandGraphResource : angle::NonCopyable
 class RecordableGraphResource : public CommandGraphResource
 {
   public:
+    RecordableGraphResource();
     ~RecordableGraphResource() override;
+
+    RecordableGraphResource(RecordableGraphResource &&other);
+    RecordableGraphResource &operator=(RecordableGraphResource &&other);
 
     // Sets up dependency relations. 'this' resource is the resource being written to.
     void addWriteDependency(RecordableGraphResource *writingResource);
 
     // Sets up dependency relations. 'this' resource is the resource being read.
     void addReadDependency(RecordableGraphResource *readingResource);
+
+    // Updates the in-use serial tracked for this resource. Will clear dependencies if the resource
+    // was not used in this set of command nodes.
+    void updateQueueSerial(Serial queueSerial);
 
     // Allocates a write node via getNewWriteNode and returns a started command buffer.
     // The started command buffer will render outside of a RenderPass.
@@ -250,10 +262,6 @@ class RecordableGraphResource : public CommandGraphResource
         return hasChildlessWritingNode() &&
                mCurrentWritingNode->getInsideRenderPassCommands()->valid();
     }
-
-    // Updates the in-use serial tracked for this resource. Will clear dependencies if the resource
-    // was not used in this set of command nodes.
-    void updateQueueSerial(Serial queueSerial);
 
     void startNewCommands(RendererVk *renderer);
 
