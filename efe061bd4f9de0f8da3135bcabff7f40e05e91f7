@@ -22,6 +22,30 @@
       "revId": "efe061bd4f9de0f8da3135bcabff7f40e05e91f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f7b6e11_e5aeb3e7",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-26T21:44:03Z",
+      "side": 0,
+      "message": "Turns out it\u0027s GL_RGB16F that is not supported and blocks the extension from being exposed.  Going to have to mark the test as failing once I see where it doesn\u0027t work.",
+      "parentUuid": "d23cb4f7_8051c095",
+      "range": {
+        "startLine": 383,
+        "startChar": 4,
+        "endLine": 383,
+        "endChar": 79
+      },
+      "revId": "efe061bd4f9de0f8da3135bcabff7f40e05e91f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
