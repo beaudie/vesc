@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eba1b9d3_4bb6f341",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-26T19:30:32Z",
+      "side": 1,
+      "message": "init size here.",
+      "range": {
+        "startLine": 897,
+        "startChar": 14,
+        "endLine": 897,
+        "endChar": 26
+      },
+      "revId": "cdf9c32ccaee5fadb37aec775a1ce4a76d0d3307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b87ba92c_918ceefb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-26T19:30:32Z",
+      "side": 1,
+      "message": "deinit size here too.",
+      "range": {
+        "startLine": 917,
+        "startChar": 19,
+        "endLine": 917,
+        "endChar": 26
+      },
+      "revId": "cdf9c32ccaee5fadb37aec775a1ce4a76d0d3307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edd04cc4_04170ea2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 973,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-26T19:30:32Z",
+      "side": 1,
+      "message": "could you redo this to use an initView and getView function? For totally maximal efficiency. Then getView can be inlined.",
+      "range": {
+        "startLine": 969,
+        "startChar": 0,
+        "endLine": 973,
+        "endChar": 16
+      },
+      "revId": "cdf9c32ccaee5fadb37aec775a1ce4a76d0d3307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
