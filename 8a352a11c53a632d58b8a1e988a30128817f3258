@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6257ef87_98b25051",
+        "filename": "src/libANGLE/renderer/gl/FenceNVGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-26T17:01:20Z",
+      "side": 1,
+      "message": "Yea, this is more of a sanity check, an assert could work too.  The GL_OUT_OF_MEMORY error will result in a context loss.",
+      "parentUuid": "946aeca4_dcf08cd1",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 83
+      },
+      "revId": "8a352a11c53a632d58b8a1e988a30128817f3258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9487e7a_1a664f7b",
         "filename": "src/libANGLE/renderer/gl/FenceNVGL.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "8a352a11c53a632d58b8a1e988a30128817f3258",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaf5c3d0_bed13334",
+        "filename": "src/libANGLE/renderer/gl/FenceNVGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-26T17:01:20Z",
+      "side": 1,
+      "message": "Me too, it\u0027s the closest we can get to a glFinish with the sync api.",
+      "parentUuid": "a9487e7a_1a664f7b",
+      "range": {
+        "startLine": 95,
+        "startChar": 76,
+        "endLine": 95,
+        "endChar": 94
+      },
+      "revId": "8a352a11c53a632d58b8a1e988a30128817f3258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
