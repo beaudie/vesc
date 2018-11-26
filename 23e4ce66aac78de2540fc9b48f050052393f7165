@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bc0514d3_7ef98cfb",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2227,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-26T09:56:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a697b2b4_a9d7d91b",
+      "range": {
+        "startLine": 2227,
+        "startChar": 62,
+        "endLine": 2227,
+        "endChar": 68
+      },
+      "revId": "23e4ce66aac78de2540fc9b48f050052393f7165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48c22505_21b5f1d6",
         "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2018-11-23T14:49:20Z",
       "side": 1,
       "message": "In GLSL, is it possible to pass structures that are in SSBO? Like this:\n\n  struct S {int a, b;};\n  layout(shared, binding \u003d 0) buffer Block {\n     S s;\n  }\n\n  my_function(s);",
+      "revId": "23e4ce66aac78de2540fc9b48f050052393f7165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25badb85_84bfaa54",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1421,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-26T09:56:00Z",
+      "side": 1,
+      "message": "Yes, it\u0027s supported in GLSL. We need to add structure support and array assignment support for SSBO.",
+      "parentUuid": "48c22505_21b5f1d6",
       "revId": "23e4ce66aac78de2540fc9b48f050052393f7165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
