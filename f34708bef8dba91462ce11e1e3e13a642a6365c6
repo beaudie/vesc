@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1dea5c1f_7ce16a3f",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-26T23:26:36Z",
+      "side": 1,
+      "message": "You must check for Unused1-Unused3 too. I\u0027d use a bitmask (1 \u003c\u003c Unused1) | (1 \u003c\u003c Unused2) | (1 \u003c\u003c Unused3) to test for the invalid indices.",
+      "revId": "f34708bef8dba91462ce11e1e3e13a642a6365c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85ee89c2_eb4e12bf",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-26T23:26:36Z",
+      "side": 1,
+      "message": "Unrelated change?",
+      "revId": "f34708bef8dba91462ce11e1e3e13a642a6365c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
