@@ -20,7 +20,7 @@
 #include "libANGLE/renderer/vulkan/QueryVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
-#include "libANGLE/renderer/vulkan/vk_internal_shaders.h"
+#include "libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h"
 
 namespace egl
 {
@@ -160,6 +160,7 @@ class RendererVk : angle::NonCopyable
     // Issues a new serial for linked shader modules. Used in the pipeline cache.
     Serial issueShaderSerial();
 
+    vk::ShaderLibrary *getShaderLibrary() { return &mShaderLibrary; }
     angle::Result getFullScreenClearShaderProgram(vk::Context *context,
                                                   vk::ShaderProgramHelper **programOut);
     const angle::FeaturesVk &getFeatures() const { return mFeatures; }
