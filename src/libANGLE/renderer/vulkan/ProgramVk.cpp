@@ -119,6 +119,8 @@ angle::Result SyncDefaultUniformBlock(ContextVk *contextVk,
                                       uint32_t *outOffset,
                                       bool *outBufferModified)
 {
+    dynamicBuffer->releaseRetainedBuffers(contextVk->getRenderer());
+
     ASSERT(!bufferData.empty());
     uint8_t *data       = nullptr;
     VkBuffer *outBuffer = nullptr;
@@ -188,7 +190,8 @@ bool ProgramVk::ShaderInfo::valid() const
 // ProgramVk implementation.
 ProgramVk::DefaultUniformBlock::DefaultUniformBlock()
     : storage(VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-              kUniformBlockDynamicBufferMinSize)
+              kUniformBlockDynamicBufferMinSize,
+              true)
 {
 }
 
@@ -223,9 +226,7 @@ void ProgramVk::reset(RendererVk *renderer)
     mDefaultShaderInfo.release(renderer);
     mLineRasterShaderInfo.release(renderer);
 
-    Serial currentSerial = renderer->getCurrentQueueSerial();
-    renderer->releaseObject(currentSerial, &mEmptyUniformBlockStorage.memory);
-    renderer->releaseObject(currentSerial, &mEmptyUniformBlockStorage.buffer);
+    mEmptyUniformBlockStorage.release(renderer);
 
     mDescriptorSets.clear();
     mUsedDescriptorSetRange.invalidate();
@@ -440,16 +441,10 @@ angle::Result ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
             uniformBufferInfo.queueFamilyIndexCount = 0;
             uniformBufferInfo.pQueueFamilyIndices   = nullptr;
 
-            ANGLE_VK_TRY(contextVk, mEmptyUniformBlockStorage.buffer.init(contextVk->getDevice(),
-                                                                          uniformBufferInfo));
-
             // Assume host visible/coherent memory available.
             VkMemoryPropertyFlags flags =
                 (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-            VkMemoryPropertyFlags flagsOut = 0;
-            ANGLE_TRY(AllocateBufferMemory(contextVk, flags, &flagsOut,
-                                           &mEmptyUniformBlockStorage.buffer,
-                                           &mEmptyUniformBlockStorage.memory));
+            ANGLE_TRY(mEmptyUniformBlockStorage.init(contextVk, uniformBufferInfo, flags));
         }
     }
 
@@ -840,11 +835,11 @@ angle::Result ProgramVk::updateDefaultUniformsDescriptorSet(ContextVk *contextVk
 
         if (!uniformBlock.uniformData.empty())
         {
-            bufferInfo.buffer = uniformBlock.storage.getCurrentBufferHandle();
+            bufferInfo.buffer = uniformBlock.storage.getCurrentBuffer()->getBuffer().getHandle();
         }
         else
         {
-            bufferInfo.buffer = mEmptyUniformBlockStorage.buffer.getHandle();
+            bufferInfo.buffer = mEmptyUniformBlockStorage.getBuffer().getHandle();
         }
 
         bufferInfo.offset = 0;
