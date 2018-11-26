@@ -577,6 +577,30 @@
     },
     {
       "key": {
+        "uuid": "4816df1e_21e1e348",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-26T18:41:43Z",
+      "side": 1,
+      "message": "Would be nice if we could manipulate object by-value and use move constructors and assignment operators. Ian are you familiar with this?",
+      "parentUuid": "cce9ffaf_2db16b67",
+      "range": {
+        "startLine": 500,
+        "startChar": 25,
+        "endLine": 500,
+        "endChar": 32
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5e6e93d4_40f1ad0e",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 23
@@ -1382,6 +1406,30 @@
     },
     {
       "key": {
+        "uuid": "17b1545f_a1120141",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-26T18:41:43Z",
+      "side": 1,
+      "message": "I was hoping we could make this take a generic binary blob. If you want to use char * that would rule out the possiblity of using the same API for binary data. But as you guys wish.",
+      "parentUuid": "a1bcd78e_71d24083",
+      "range": {
+        "startLine": 105,
+        "startChar": 40,
+        "endLine": 105,
+        "endChar": 44
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f4faac3e_45ef6c4e",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 23
@@ -1405,6 +1453,30 @@
     },
     {
       "key": {
+        "uuid": "cdb7cf10_46c535f6",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-26T18:41:43Z",
+      "side": 1,
+      "message": "Preference for size_t.",
+      "parentUuid": "f4faac3e_45ef6c4e",
+      "range": {
+        "startLine": 106,
+        "startChar": 45,
+        "endLine": 106,
+        "endChar": 49
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d24352bc_bff35c63",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 23
@@ -1416,6 +1488,30 @@
       "writtenOn": "2018-11-23T21:29:56Z",
       "side": 1,
       "message": "Does it make sense to have rulesVersion as the first field in RulesHandle instead?\nI.e. rulesVersion \u003d *(int*)rulesHandle.",
+      "range": {
+        "startLine": 108,
+        "startChar": 45,
+        "endLine": 108,
+        "endChar": 62
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef9f0897_e9c8c537",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-26T18:41:43Z",
+      "side": 1,
+      "message": "It would be nice to keep rules version a separate value. Just for simplicity. It certainly is technically feasible to do as you suggest.",
+      "parentUuid": "d24352bc_bff35c63",
       "range": {
         "startLine": 108,
         "startChar": 45,
@@ -1485,6 +1581,30 @@
       "writtenOn": "2018-11-23T21:29:56Z",
       "side": 1,
       "message": "I\u0027d prefer a name that will hint that the returned bool is not success / fail, like in other functions.\nLike, ANGLEShouldBeUsedForApplication().",
+      "range": {
+        "startLine": 153,
+        "startChar": 13,
+        "endLine": 153,
+        "endChar": 46
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31ab1517_a2d4a2fa",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-26T18:41:43Z",
+      "side": 1,
+      "message": "I\u0027m fine with this.",
+      "parentUuid": "4581806b_0464977f",
       "range": {
         "startLine": 153,
         "startChar": 13,

@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "b01de894_1a1844a5",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-26T18:41:43Z",
+      "side": 1,
+      "message": "declare_args is a block in BUILD.gn were you set build options. So you\u0027d make this a feature you could turn on the \"gn args\" like we do for other various build-time things. \n\nhttps://github.com/o-lim/generate-ninja/blob/master/tools/gn/docs/reference.md#declare_args",
+      "parentUuid": "2d57162a_904fcb38",
+      "range": {
+        "startLine": 922,
+        "startChar": 20,
+        "endLine": 922,
+        "endChar": 50
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "14d076ec_bf2a07fe",
         "filename": "BUILD.gn",
         "patchSetId": 7
@@ -140,6 +164,30 @@
       "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41f7c948_addf9ee6",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 926,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-26T18:41:43Z",
+      "side": 1,
+      "message": "That\u0027s fine. I do recall having a conversation something like this.",
+      "parentUuid": "b505cc7e_404a6042",
+      "range": {
+        "startLine": 926,
+        "startChar": 18,
+        "endLine": 926,
+        "endChar": 36
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -461,6 +509,30 @@
       "side": 1,
       "message": "\u003e don\u0027t support DEBUG/VERBOSE.\n\nSorry, can\u0027t do that.  This is Android code, and we have to follow the rules, with some being able to have some INFO messages, and with verbose ones being labeled verbose (with potential for some in the middle).",
       "parentUuid": "9489b7ba_05eda848",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 0
+      },
+      "revId": "d5924e41d980958c0a8b7d86d1c4046d347a19fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1ee733b_907f62c7",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-26T18:41:43Z",
+      "side": 1,
+      "message": "That\u0027s fine. I\u0027m not sure if you understood what I was implying - just that we by convention don\u0027t separate three streams of info messages into debug/verbose/info. Certainly there\u0027s no rule in Android that says we can\u0027t output zero messages to a channel? Anyway no strong objection to this, just want to make sure we understood each other.",
+      "parentUuid": "7b375ced_fff02df6",
       "range": {
         "startLine": 27,
         "startChar": 0,

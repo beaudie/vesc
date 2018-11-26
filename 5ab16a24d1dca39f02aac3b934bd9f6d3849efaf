@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "be0fb40c_c177877e",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-26T18:41:43Z",
+      "side": 1,
+      "message": "SystemInfo is a struct with public data, see \n\nhttps://google.github.io/styleguide/cppguide.html#Structs_vs._Classes\nhttps://google.github.io/styleguide/cppguide.html#Variable_Names\n\nI\u0027m fine with fixing stuff later if you\u0027re under time pressure. I just wasn\u0027t sure if you were refusing to do this because you disagreed or because you didn\u0027t have time to fix it.",
+      "parentUuid": "294a86c4_13659359",
+      "range": {
+        "startLine": 215,
+        "startChar": 4,
+        "endLine": 215,
+        "endChar": 19
+      },
+      "revId": "5ab16a24d1dca39f02aac3b934bd9f6d3849efaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ea164f99_048e8c0a",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 17
