@@ -373,27 +373,14 @@ static bool DetermineBGRA8TextureSupport(const TextureCapsMap &textureCaps)
 static bool DetermineColorBufferHalfFloatSupport(const TextureCapsMap &textureCaps,
                                                  bool checkRGFormats)
 {
-    constexpr GLenum requiredRGRenderbufferFormats[] = {
-        GL_R16F, GL_RG16F,
-    };
-    constexpr GLenum requiredRenderbufferFormats[] = {
-        GL_RGB16F, GL_RGBA16F,
-    };
-    // GL_RGBA16F since the extension says format=RGBA type=HALF_FLOAT_OES textures are renderable
-    // GL_RGB16F because dEQP GLES3 tests for it in es3fFboColorbufferTests.cpp
-    constexpr GLenum requiredTextureAttachmentFormats[] = {
-        GL_RGB16F, GL_RGBA16F,
+    // EXT_color_buffer_half_float issue #2 states that an implementation doesn't need to support
+    // rendering to any of the formats but is expected to be able to render to at least one. WebGL
+    // requires that at least RGBA16F is renderable so we make the same requirement.
+    constexpr GLenum requiredFormats[] = {
+        GL_RGBA16F,
     };
 
-    if (checkRGFormats &&
-        !GetFormatSupport(textureCaps, requiredRGRenderbufferFormats, false, false, false, true))
-    {
-        return false;
-    }
-
-    return GetFormatSupport(textureCaps, requiredRenderbufferFormats, false, false, false, true) &&
-           GetFormatSupport(textureCaps, requiredTextureAttachmentFormats, false, false, true,
-                            false);
+    return GetFormatSupport(textureCaps, requiredFormats, false, false, true, true);
 }
 
 // Checks for GL_OES_texture_half_float support
