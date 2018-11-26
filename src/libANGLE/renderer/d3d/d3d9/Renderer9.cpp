@@ -1299,13 +1299,13 @@ angle::Result Renderer9::applyIndexBuffer(const gl::Context *context,
                                           const void *indices,
                                           GLsizei count,
                                           gl::PrimitiveMode mode,
-                                          GLenum type,
+                                          gl::DrawElementsType type,
                                           TranslatedIndexData *indexInfo)
 {
     gl::VertexArray *vao           = context->getGLState().getVertexArray();
     gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer();
 
-    GLenum dstType = GL_NONE;
+    gl::DrawElementsType dstType = gl::DrawElementsType::InvalidEnum;
     ANGLE_TRY(GetIndexTranslationDestType(context, count, type, indices, false, &dstType));
 
     ANGLE_TRY(mIndexDataManager->prepareIndexData(context, type, dstType, count, elementArrayBuffer,
@@ -1337,7 +1337,7 @@ angle::Result Renderer9::drawArraysImpl(const gl::Context *context,
 
     if (mode == gl::PrimitiveMode::LineLoop)
     {
-        return drawLineLoop(context, count, GL_NONE, nullptr, 0, nullptr);
+        return drawLineLoop(context, count, gl::DrawElementsType::InvalidEnum, nullptr, 0, nullptr);
     }
 
     if (instances > 0)
@@ -1369,7 +1369,7 @@ angle::Result Renderer9::drawArraysImpl(const gl::Context *context,
 angle::Result Renderer9::drawElementsImpl(const gl::Context *context,
                                           gl::PrimitiveMode mode,
                                           GLsizei count,
-                                          GLenum type,
+                                          gl::DrawElementsType type,
                                           const void *indices,
                                           GLsizei instances)
 {
@@ -1413,13 +1413,13 @@ angle::Result Renderer9::drawElementsImpl(const gl::Context *context,
 
 angle::Result Renderer9::drawLineLoop(const gl::Context *context,
                                       GLsizei count,
-                                      GLenum type,
+                                      gl::DrawElementsType type,
                                       const void *indices,
                                       int minIndex,
                                       gl::Buffer *elementArrayBuffer)
 {
     // Get the raw indices for an indexed draw
-    if (type != GL_NONE && elementArrayBuffer)
+    if (type != gl::DrawElementsType::InvalidEnum && elementArrayBuffer)
     {
         BufferD3D *storage        = GetImplAs<BufferD3D>(elementArrayBuffer);
         intptr_t offset           = reinterpret_cast<intptr_t>(indices);
@@ -1437,7 +1437,7 @@ angle::Result Renderer9::drawLineLoop(const gl::Context *context,
         {
             mLineLoopIB = new StreamingIndexBufferInterface(this);
             ANGLE_TRY(mLineLoopIB->reserveBufferSpace(context, INITIAL_INDEX_BUFFER_SIZE,
-                                                      GL_UNSIGNED_INT));
+                                                      gl::DrawElementsType::UnsignedInt));
         }
 
         // Checked by Renderer9::applyPrimitiveType
@@ -1452,7 +1452,8 @@ angle::Result Renderer9::drawLineLoop(const gl::Context *context,
 
         const unsigned int spaceNeeded =
             (static_cast<unsigned int>(count) + 1) * sizeof(unsigned int);
-        ANGLE_TRY(mLineLoopIB->reserveBufferSpace(context, spaceNeeded, GL_UNSIGNED_INT));
+        ANGLE_TRY(mLineLoopIB->reserveBufferSpace(context, spaceNeeded,
+                                                  gl::DrawElementsType::UnsignedInt));
 
         void *mappedMemory  = nullptr;
         unsigned int offset = 0;
@@ -1463,28 +1464,28 @@ angle::Result Renderer9::drawLineLoop(const gl::Context *context,
 
         switch (type)
         {
-            case GL_NONE:  // Non-indexed draw
+            case gl::DrawElementsType::InvalidEnum:  // Non-indexed draw
                 for (int i = 0; i < count; i++)
                 {
                     data[i] = i;
                 }
                 data[count] = 0;
                 break;
-            case GL_UNSIGNED_BYTE:
+            case gl::DrawElementsType::UnsignedByte:
                 for (int i = 0; i < count; i++)
                 {
                     data[i] = static_cast<const GLubyte *>(indices)[i];
                 }
                 data[count] = static_cast<const GLubyte *>(indices)[0];
                 break;
-            case GL_UNSIGNED_SHORT:
+            case gl::DrawElementsType::UnsignedShort:
                 for (int i = 0; i < count; i++)
                 {
                     data[i] = static_cast<const GLushort *>(indices)[i];
                 }
                 data[count] = static_cast<const GLushort *>(indices)[0];
                 break;
-            case GL_UNSIGNED_INT:
+            case gl::DrawElementsType::UnsignedInt:
                 for (int i = 0; i < count; i++)
                 {
                     data[i] = static_cast<const GLuint *>(indices)[i];
@@ -1503,7 +1504,7 @@ angle::Result Renderer9::drawLineLoop(const gl::Context *context,
         {
             mLineLoopIB = new StreamingIndexBufferInterface(this);
             ANGLE_TRY(mLineLoopIB->reserveBufferSpace(context, INITIAL_INDEX_BUFFER_SIZE,
-                                                      GL_UNSIGNED_SHORT));
+                                                      gl::DrawElementsType::UnsignedShort));
         }
 
         // Checked by Renderer9::applyPrimitiveType
@@ -1518,7 +1519,8 @@ angle::Result Renderer9::drawLineLoop(const gl::Context *context,
 
         const unsigned int spaceNeeded =
             (static_cast<unsigned int>(count) + 1) * sizeof(unsigned short);
-        ANGLE_TRY(mLineLoopIB->reserveBufferSpace(context, spaceNeeded, GL_UNSIGNED_SHORT));
+        ANGLE_TRY(mLineLoopIB->reserveBufferSpace(context, spaceNeeded,
+                                                  gl::DrawElementsType::UnsignedShort));
 
         void *mappedMemory = nullptr;
         unsigned int offset;
@@ -1529,28 +1531,28 @@ angle::Result Renderer9::drawLineLoop(const gl::Context *context,
 
         switch (type)
         {
-            case GL_NONE:  // Non-indexed draw
+            case gl::DrawElementsType::InvalidEnum:  // Non-indexed draw
                 for (int i = 0; i < count; i++)
                 {
                     data[i] = static_cast<unsigned short>(i);
                 }
                 data[count] = 0;
                 break;
-            case GL_UNSIGNED_BYTE:
+            case gl::DrawElementsType::UnsignedByte:
                 for (int i = 0; i < count; i++)
                 {
                     data[i] = static_cast<const GLubyte *>(indices)[i];
                 }
                 data[count] = static_cast<const GLubyte *>(indices)[0];
                 break;
-            case GL_UNSIGNED_SHORT:
+            case gl::DrawElementsType::UnsignedShort:
                 for (int i = 0; i < count; i++)
                 {
                     data[i] = static_cast<const GLushort *>(indices)[i];
                 }
                 data[count] = static_cast<const GLushort *>(indices)[0];
                 break;
-            case GL_UNSIGNED_INT:
+            case gl::DrawElementsType::UnsignedInt:
                 for (int i = 0; i < count; i++)
                 {
                     data[i] = static_cast<unsigned short>(static_cast<const GLuint *>(indices)[i]);
@@ -1579,7 +1581,7 @@ angle::Result Renderer9::drawLineLoop(const gl::Context *context,
 
 angle::Result Renderer9::drawIndexedPoints(const gl::Context *context,
                                            GLsizei count,
-                                           GLenum type,
+                                           gl::DrawElementsType type,
                                            const void *indices,
                                            int minIndex,
                                            gl::Buffer *elementArrayBuffer)
@@ -1599,13 +1601,13 @@ angle::Result Renderer9::drawIndexedPoints(const gl::Context *context,
 
     switch (type)
     {
-        case GL_UNSIGNED_BYTE:
+        case gl::DrawElementsType::UnsignedByte:
             DrawPoints<GLubyte>(mDevice, count, indices, minIndex);
             return angle::Result::Continue();
-        case GL_UNSIGNED_SHORT:
+        case gl::DrawElementsType::UnsignedShort:
             DrawPoints<GLushort>(mDevice, count, indices, minIndex);
             return angle::Result::Continue();
-        case GL_UNSIGNED_INT:
+        case gl::DrawElementsType::UnsignedInt:
             DrawPoints<GLuint>(mDevice, count, indices, minIndex);
             return angle::Result::Continue();
         default:
@@ -1626,7 +1628,8 @@ angle::Result Renderer9::getCountingIB(const gl::Context *context,
         {
             SafeDelete(mCountingIB);
             mCountingIB = new StaticIndexBufferInterface(this);
-            ANGLE_TRY(mCountingIB->reserveBufferSpace(context, spaceNeeded, GL_UNSIGNED_SHORT));
+            ANGLE_TRY(mCountingIB->reserveBufferSpace(context, spaceNeeded,
+                                                      gl::DrawElementsType::UnsignedShort));
 
             void *mappedMemory = nullptr;
             ANGLE_TRY(mCountingIB->mapBuffer(context, spaceNeeded, &mappedMemory, nullptr));
@@ -1648,7 +1651,8 @@ angle::Result Renderer9::getCountingIB(const gl::Context *context,
         {
             SafeDelete(mCountingIB);
             mCountingIB = new StaticIndexBufferInterface(this);
-            ANGLE_TRY(mCountingIB->reserveBufferSpace(context, spaceNeeded, GL_UNSIGNED_INT));
+            ANGLE_TRY(mCountingIB->reserveBufferSpace(context, spaceNeeded,
+                                                      gl::DrawElementsType::UnsignedInt));
 
             void *mappedMemory = nullptr;
             ANGLE_TRY(mCountingIB->mapBuffer(context, spaceNeeded, &mappedMemory, nullptr));
@@ -2971,7 +2975,7 @@ Renderer9::CurSamplerState::CurSamplerState()
 angle::Result Renderer9::genericDrawElements(const gl::Context *context,
                                              gl::PrimitiveMode mode,
                                              GLsizei count,
-                                             GLenum type,
+                                             gl::DrawElementsType type,
                                              const void *indices,
                                              GLsizei instances)
 {

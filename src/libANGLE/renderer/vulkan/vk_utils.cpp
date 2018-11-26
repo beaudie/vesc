@@ -270,13 +270,9 @@ VkImageAspectFlags GetDepthStencilAspectFlagsForCopy(bool copyDepth, bool copySt
 }
 
 // Context implementation.
-Context::Context(RendererVk *renderer) : mRenderer(renderer)
-{
-}
+Context::Context(RendererVk *renderer) : mRenderer(renderer) {}
 
-Context::~Context()
-{
-}
+Context::~Context() {}
 
 VkDevice Context::getDevice() const
 {
@@ -288,13 +284,11 @@ BufferAndMemory::BufferAndMemory() = default;
 
 BufferAndMemory::BufferAndMemory(Buffer &&buffer, DeviceMemory &&deviceMemory)
     : buffer(std::move(buffer)), memory(std::move(deviceMemory))
-{
-}
+{}
 
 BufferAndMemory::BufferAndMemory(BufferAndMemory &&other)
     : buffer(std::move(other.buffer)), memory(std::move(other.memory))
-{
-}
+{}
 
 BufferAndMemory &BufferAndMemory::operator=(BufferAndMemory &&other)
 {
@@ -304,9 +298,7 @@ BufferAndMemory &BufferAndMemory::operator=(BufferAndMemory &&other)
 }
 
 // CommandPool implementation.
-CommandPool::CommandPool()
-{
-}
+CommandPool::CommandPool() {}
 
 void CommandPool::destroy(VkDevice device)
 {
@@ -324,9 +316,7 @@ VkResult CommandPool::init(VkDevice device, const VkCommandPoolCreateInfo &creat
 }
 
 // CommandBuffer implementation.
-CommandBuffer::CommandBuffer()
-{
-}
+CommandBuffer::CommandBuffer() {}
 
 VkCommandBuffer CommandBuffer::releaseHandle()
 {
@@ -639,9 +629,7 @@ void CommandBuffer::setScissor(uint32_t firstScissor,
 }
 
 // Image implementation.
-Image::Image()
-{
-}
+Image::Image() {}
 
 void Image::setHandle(VkImage handle)
 {
@@ -695,9 +683,7 @@ void Image::getSubresourceLayout(VkDevice device,
 }
 
 // ImageView implementation.
-ImageView::ImageView()
-{
-}
+ImageView::ImageView() {}
 
 void ImageView::destroy(VkDevice device)
 {
@@ -714,9 +700,7 @@ VkResult ImageView::init(VkDevice device, const VkImageViewCreateInfo &createInf
 }
 
 // Semaphore implementation.
-Semaphore::Semaphore()
-{
-}
+Semaphore::Semaphore() {}
 
 void Semaphore::destroy(VkDevice device)
 {
@@ -739,9 +723,7 @@ VkResult Semaphore::init(VkDevice device)
 }
 
 // Framebuffer implementation.
-Framebuffer::Framebuffer()
-{
-}
+Framebuffer::Framebuffer() {}
 
 void Framebuffer::destroy(VkDevice device)
 {
@@ -764,9 +746,7 @@ void Framebuffer::setHandle(VkFramebuffer handle)
 }
 
 // DeviceMemory implementation.
-DeviceMemory::DeviceMemory()
-{
-}
+DeviceMemory::DeviceMemory() {}
 
 void DeviceMemory::destroy(VkDevice device)
 {
@@ -800,9 +780,7 @@ void DeviceMemory::unmap(VkDevice device) const
 }
 
 // RenderPass implementation.
-RenderPass::RenderPass()
-{
-}
+RenderPass::RenderPass() {}
 
 void RenderPass::destroy(VkDevice device)
 {
@@ -820,9 +798,7 @@ VkResult RenderPass::init(VkDevice device, const VkRenderPassCreateInfo &createI
 }
 
 // Buffer implementation.
-Buffer::Buffer()
-{
-}
+Buffer::Buffer() {}
 
 void Buffer::destroy(VkDevice device)
 {
@@ -869,9 +845,7 @@ VkResult BufferView::init(VkDevice device, const VkBufferViewCreateInfo &createI
 }
 
 // ShaderModule implementation.
-ShaderModule::ShaderModule()
-{
-}
+ShaderModule::ShaderModule() {}
 
 void ShaderModule::destroy(VkDevice device)
 {
@@ -889,9 +863,7 @@ VkResult ShaderModule::init(VkDevice device, const VkShaderModuleCreateInfo &cre
 }
 
 // PipelineLayout implementation.
-PipelineLayout::PipelineLayout()
-{
-}
+PipelineLayout::PipelineLayout() {}
 
 void PipelineLayout::destroy(VkDevice device)
 {
@@ -909,9 +881,7 @@ VkResult PipelineLayout::init(VkDevice device, const VkPipelineLayoutCreateInfo 
 }
 
 // PipelineCache implementation.
-PipelineCache::PipelineCache()
-{
-}
+PipelineCache::PipelineCache() {}
 
 void PipelineCache::destroy(VkDevice device)
 {
@@ -944,9 +914,7 @@ VkResult PipelineCache::getCacheData(VkDevice device, size_t *cacheSize, void *c
 }
 
 // Pipeline implementation.
-Pipeline::Pipeline()
-{
-}
+Pipeline::Pipeline() {}
 
 void Pipeline::destroy(VkDevice device)
 {
@@ -976,9 +944,7 @@ VkResult Pipeline::initCompute(VkDevice device,
 }
 
 // DescriptorSetLayout implementation.
-DescriptorSetLayout::DescriptorSetLayout()
-{
-}
+DescriptorSetLayout::DescriptorSetLayout() {}
 
 void DescriptorSetLayout::destroy(VkDevice device)
 {
@@ -997,9 +963,7 @@ VkResult DescriptorSetLayout::init(VkDevice device,
 }
 
 // DescriptorPool implementation.
-DescriptorPool::DescriptorPool()
-{
-}
+DescriptorPool::DescriptorPool() {}
 
 void DescriptorPool::destroy(VkDevice device)
 {
@@ -1034,9 +998,7 @@ VkResult DescriptorPool::freeDescriptorSets(VkDevice device,
 }
 
 // Sampler implementation.
-Sampler::Sampler()
-{
-}
+Sampler::Sampler() {}
 
 void Sampler::destroy(VkDevice device)
 {
@@ -1054,9 +1016,7 @@ VkResult Sampler::init(VkDevice device, const VkSamplerCreateInfo &createInfo)
 }
 
 // Event implementation.
-Event::Event()
-{
-}
+Event::Event() {}
 
 void Event::destroy(VkDevice device)
 {
@@ -1089,9 +1049,7 @@ VkResult Event::reset(VkDevice device) const
 }
 
 // Fence implementation.
-Fence::Fence()
-{
-}
+Fence::Fence() {}
 
 void Fence::destroy(VkDevice device)
 {
@@ -1119,9 +1077,7 @@ VkResult Fence::wait(VkDevice device, uint64_t timeout) const
 }
 
 // MemoryProperties implementation.
-MemoryProperties::MemoryProperties() : mMemoryProperties{0}
-{
-}
+MemoryProperties::MemoryProperties() : mMemoryProperties{0} {}
 
 void MemoryProperties::init(VkPhysicalDevice physicalDevice)
 {
@@ -1167,9 +1123,7 @@ angle::Result MemoryProperties::findCompatibleMemoryIndex(
 }
 
 // StagingBuffer implementation.
-StagingBuffer::StagingBuffer() : mSize(0)
-{
-}
+StagingBuffer::StagingBuffer() : mSize(0) {}
 
 void StagingBuffer::destroy(VkDevice device)
 {
@@ -1206,9 +1160,7 @@ void StagingBuffer::dumpResources(Serial serial, std::vector<vk::GarbageObject> 
 }
 
 // QueryPool implementation.
-QueryPool::QueryPool()
-{
-}
+QueryPool::QueryPool() {}
 
 void QueryPool::destroy(VkDevice device)
 {
@@ -1276,8 +1228,7 @@ angle::Result InitShaderAndSerial(Context *context,
 // GarbageObject implementation.
 GarbageObject::GarbageObject()
     : mSerial(), mHandleType(HandleType::Invalid), mHandle(VK_NULL_HANDLE)
-{
-}
+{}
 
 GarbageObject::GarbageObject(const GarbageObject &other) = default;
 
@@ -1529,14 +1480,14 @@ VkComponentSwizzle GetSwizzle(const GLenum swizzle)
     }
 }
 
-VkIndexType GetIndexType(GLenum elementType)
+VkIndexType GetIndexType(gl::DrawElementsType elementType)
 {
     switch (elementType)
     {
-        case GL_UNSIGNED_BYTE:
-        case GL_UNSIGNED_SHORT:
+        case gl::DrawElementsType::UnsignedByte:
+        case gl::DrawElementsType::UnsignedShort:
             return VK_INDEX_TYPE_UINT16;
-        case GL_UNSIGNED_INT:
+        case gl::DrawElementsType::UnsignedInt:
             return VK_INDEX_TYPE_UINT32;
         default:
             UNREACHABLE();

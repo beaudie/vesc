@@ -159,8 +159,7 @@ class BindingPointer : public angle::BindingPointer<ObjectType, Context, Error>
     BindingPointer() {}
 
     BindingPointer(ObjectType *object) : angle::BindingPointer<ObjectType, Context, Error>(object)
-    {
-    }
+    {}
 
     GLuint id() const
     {
@@ -220,8 +219,7 @@ class SubjectBindingPointer : protected BindingPointer<SubjectT>, public angle::
   public:
     SubjectBindingPointer(angle::ObserverInterface *observer, angle::SubjectIndex index)
         : ObserverBindingBase(observer, index)
-    {
-    }
+    {}
     ~SubjectBindingPointer() {}
     SubjectBindingPointer(const SubjectBindingPointer &other) = default;
     SubjectBindingPointer &operator=(const SubjectBindingPointer &other) = default;

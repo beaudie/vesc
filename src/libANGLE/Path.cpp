@@ -24,8 +24,7 @@ Path::Path(rx::PathImpl *impl)
       mStrokeWidth(1.0f),
       mStrokeBound(0.2f),
       mMiterLimit(4.0f)
-{
-}
+{}
 
 Path::~Path()
 {
@@ -75,4 +74,4 @@ void Path::setMiterLimit(GLfloat value)
     mPath->setPathParameter(GL_PATH_MITER_LIMIT_CHROMIUM, value);
 }
 
-}  // gl
+}  // namespace gl

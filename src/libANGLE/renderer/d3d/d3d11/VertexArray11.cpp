@@ -25,7 +25,7 @@ VertexArray11::VertexArray11(const gl::VertexArrayState &data)
       mTranslatedAttribs(data.getMaxAttribs()),
       mAppliedNumViewsToDivisor(1),
       mCurrentElementArrayStorage(IndexStorageType::Invalid),
-      mCachedDestinationIndexType(GL_NONE)
+      mCachedDestinationIndexType(gl::DrawElementsType::InvalidEnum)
 {
 }
 
@@ -127,7 +127,7 @@ angle::Result VertexArray11::syncState(const gl::Context *context,
 angle::Result VertexArray11::syncStateForDraw(const gl::Context *context,
                                               GLint firstVertex,
                                               GLsizei vertexOrIndexCount,
-                                              GLenum indexTypeOrNone,
+                                              gl::DrawElementsType indexTypeOrInvalid,
                                               const void *indices,
                                               GLsizei instances,
                                               GLint baseVertex)
@@ -161,24 +161,24 @@ angle::Result VertexArray11::syncStateForDraw(const gl::Context *context,
         if (activeDynamicAttribs.any())
         {
             ANGLE_TRY(updateDynamicAttribs(context, stateManager->getVertexDataManager(),
-                                           firstVertex, vertexOrIndexCount, indexTypeOrNone,
+                                           firstVertex, vertexOrIndexCount, indexTypeOrInvalid,
                                            indices, instances, baseVertex, activeDynamicAttribs));
             stateManager->invalidateInputLayout();
         }
     }
 
-    if (indexTypeOrNone != GL_NONE)
+    if (indexTypeOrInvalid != gl::DrawElementsType::InvalidEnum)
     {
         bool restartEnabled = context->getGLState().isPrimitiveRestartEnabled();
-        if (!mLastDrawElementsType.valid() || mLastDrawElementsType.value() != indexTypeOrNone ||
+        if (!mLastDrawElementsType.valid() || mLastDrawElementsType.value() != indexTypeOrInvalid ||
             mLastDrawElementsIndices.value() != indices ||
             mLastPrimitiveRestartEnabled.value() != restartEnabled)
         {
-            mLastDrawElementsType        = indexTypeOrNone;
+            mLastDrawElementsType        = indexTypeOrInvalid;
             mLastDrawElementsIndices     = indices;
             mLastPrimitiveRestartEnabled = restartEnabled;
 
-            ANGLE_TRY(updateElementArrayStorage(context, vertexOrIndexCount, indexTypeOrNone,
+            ANGLE_TRY(updateElementArrayStorage(context, vertexOrIndexCount, indexTypeOrInvalid,
                                                 indices, restartEnabled));
             stateManager->invalidateIndexBuffer();
         }
@@ -193,7 +193,7 @@ angle::Result VertexArray11::syncStateForDraw(const gl::Context *context,
 
 angle::Result VertexArray11::updateElementArrayStorage(const gl::Context *context,
                                                        GLsizei indexCount,
-                                                       GLenum indexType,
+                                                       gl::DrawElementsType indexType,
                                                        const void *indices,
                                                        bool restartEnabled)
 {
@@ -291,7 +291,7 @@ angle::Result VertexArray11::updateDynamicAttribs(const gl::Context *context,
                                                   VertexDataManager *vertexDataManager,
                                                   GLint firstVertex,
                                                   GLsizei vertexOrIndexCount,
-                                                  GLenum indexTypeOrNone,
+                                                  gl::DrawElementsType indexTypeOrInvalid,
                                                   const void *indices,
                                                   GLsizei instances,
                                                   GLint baseVertex,
@@ -303,8 +303,8 @@ angle::Result VertexArray11::updateDynamicAttribs(const gl::Context *context,
 
     GLint startVertex;
     size_t vertexCount;
-    ANGLE_TRY(GetVertexRangeInfo(context, firstVertex, vertexOrIndexCount, indexTypeOrNone, indices,
-                                 baseVertex, &startVertex, &vertexCount));
+    ANGLE_TRY(GetVertexRangeInfo(context, firstVertex, vertexOrIndexCount, indexTypeOrInvalid,
+                                 indices, baseVertex, &startVertex, &vertexCount));
 
     for (size_t dynamicAttribIndex : activeDynamicAttribs)
     {
@@ -357,7 +357,7 @@ bool VertexArray11::isCachedIndexInfoValid() const
     return mCachedIndexInfo.valid();
 }
 
-GLenum VertexArray11::getCachedDestinationIndexType() const
+gl::DrawElementsType VertexArray11::getCachedDestinationIndexType() const
 {
     return mCachedDestinationIndexType;
 }

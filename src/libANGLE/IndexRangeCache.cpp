@@ -23,7 +23,7 @@ IndexRangeCache::~IndexRangeCache()
 {
 }
 
-void IndexRangeCache::addRange(GLenum type,
+void IndexRangeCache::addRange(DrawElementsType type,
                                size_t offset,
                                size_t count,
                                bool primitiveRestartEnabled,
@@ -32,7 +32,7 @@ void IndexRangeCache::addRange(GLenum type,
     mIndexRangeCache[IndexRangeKey(type, offset, count, primitiveRestartEnabled)] = range;
 }
 
-bool IndexRangeCache::findRange(GLenum type,
+bool IndexRangeCache::findRange(DrawElementsType type,
                                 size_t offset,
                                 size_t count,
                                 bool primitiveRestartEnabled,
@@ -66,7 +66,8 @@ void IndexRangeCache::invalidateRange(size_t offset, size_t size)
     while (i != mIndexRangeCache.end())
     {
         size_t rangeStart = i->first.offset;
-        size_t rangeEnd   = i->first.offset + (GetTypeInfo(i->first.type).bytes * i->first.count);
+        size_t rangeEnd =
+            i->first.offset + (GetDrawElementsTypeSize(i->first.type) * i->first.count);
 
         if (invalidateEnd < rangeStart || invalidateStart > rangeEnd)
         {
@@ -85,11 +86,11 @@ void IndexRangeCache::clear()
 }
 
 IndexRangeCache::IndexRangeKey::IndexRangeKey()
-    : IndexRangeCache::IndexRangeKey(GL_NONE, 0, 0, false)
+    : IndexRangeCache::IndexRangeKey(DrawElementsType::InvalidEnum, 0, 0, false)
 {
 }
 
-IndexRangeCache::IndexRangeKey::IndexRangeKey(GLenum type_,
+IndexRangeCache::IndexRangeKey::IndexRangeKey(DrawElementsType type_,
                                               size_t offset_,
                                               size_t count_,
                                               bool primitiveRestartEnabled_)

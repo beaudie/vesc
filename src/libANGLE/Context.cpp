@@ -594,9 +594,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     return egl::NoError();
 }
 
-Context::~Context()
-{
-}
+Context::~Context() {}
 
 void Context::setLabel(EGLLabelKHR label)
 {
@@ -2245,7 +2243,10 @@ void Context::drawArraysInstanced(PrimitiveMode mode,
                                      instanceCount);
 }
 
-void Context::drawElements(PrimitiveMode mode, GLsizei count, GLenum type, const void *indices)
+void Context::drawElements(PrimitiveMode mode,
+                           GLsizei count,
+                           DrawElementsType type,
+                           const void *indices)
 {
     // No-op if count draws no primitives for given mode
     if (noopDraw(mode, count))
@@ -2259,7 +2260,7 @@ void Context::drawElements(PrimitiveMode mode, GLsizei count, GLenum type, const
 
 void Context::drawElementsInstanced(PrimitiveMode mode,
                                     GLsizei count,
-                                    GLenum type,
+                                    DrawElementsType type,
                                     const void *indices,
                                     GLsizei instances)
 {
@@ -2278,7 +2279,7 @@ void Context::drawRangeElements(PrimitiveMode mode,
                                 GLuint start,
                                 GLuint end,
                                 GLsizei count,
-                                GLenum type,
+                                DrawElementsType type,
                                 const void *indices)
 {
     // No-op if count draws no primitives for given mode
@@ -2298,7 +2299,7 @@ void Context::drawArraysIndirect(PrimitiveMode mode, const void *indirect)
     ANGLE_CONTEXT_TRY(mImplementation->drawArraysIndirect(this, mode, indirect));
 }
 
-void Context::drawElementsIndirect(PrimitiveMode mode, GLenum type, const void *indirect)
+void Context::drawElementsIndirect(PrimitiveMode mode, DrawElementsType type, const void *indirect)
 {
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     ANGLE_CONTEXT_TRY(mImplementation->drawElementsIndirect(this, mode, type, indirect));
@@ -5475,7 +5476,7 @@ void Context::multiDrawArraysInstanced(PrimitiveMode mode,
 
 void Context::multiDrawElements(PrimitiveMode mode,
                                 const GLsizei *counts,
-                                GLenum type,
+                                DrawElementsType type,
                                 const GLsizei *offsets,
                                 GLsizei drawcount)
 {
@@ -5513,7 +5514,7 @@ void Context::multiDrawElements(PrimitiveMode mode,
 
 void Context::multiDrawElementsInstanced(PrimitiveMode mode,
                                          const GLsizei *counts,
-                                         GLenum type,
+                                         DrawElementsType type,
                                          const GLsizei *offsets,
                                          const GLsizei *instanceCounts,
                                          GLsizei drawcount)
@@ -8145,9 +8146,7 @@ void Context::onSubjectStateChange(const Context *context,
 }
 
 // ErrorSet implementation.
-ErrorSet::ErrorSet(Context *context) : mContext(context)
-{
-}
+ErrorSet::ErrorSet(Context *context) : mContext(context) {}
 
 ErrorSet::~ErrorSet() = default;
 
@@ -8215,8 +8214,7 @@ StateCache::StateCache()
       mCachedNonInstancedVertexElementLimit(0),
       mCachedInstancedVertexElementLimit(0),
       mCachedBasicDrawStatesError(kInvalidPointer)
-{
-}
+{}
 
 StateCache::~StateCache() = default;
 

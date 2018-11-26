@@ -17,7 +17,11 @@ namespace rx
 {
 
 IndexBuffer11::IndexBuffer11(Renderer11 *const renderer)
-    : mRenderer(renderer), mBuffer(), mBufferSize(0), mIndexType(GL_NONE), mDynamicUsage(false)
+    : mRenderer(renderer),
+      mBuffer(),
+      mBufferSize(0),
+      mIndexType(gl::DrawElementsType::InvalidEnum),
+      mDynamicUsage(false)
 {
 }
 
@@ -27,7 +31,7 @@ IndexBuffer11::~IndexBuffer11()
 
 angle::Result IndexBuffer11::initialize(const gl::Context *context,
                                         unsigned int bufferSize,
-                                        GLenum indexType,
+                                        gl::DrawElementsType indexType,
                                         bool dynamic)
 {
     mBuffer.reset();
@@ -96,7 +100,7 @@ angle::Result IndexBuffer11::unmapBuffer(const gl::Context *context)
     return angle::Result::Continue();
 }
 
-GLenum IndexBuffer11::getIndexType() const
+gl::DrawElementsType IndexBuffer11::getIndexType() const
 {
     return mIndexType;
 }
@@ -108,7 +112,7 @@ unsigned int IndexBuffer11::getBufferSize() const
 
 angle::Result IndexBuffer11::setSize(const gl::Context *context,
                                      unsigned int bufferSize,
-                                     GLenum indexType)
+                                     gl::DrawElementsType indexType)
 {
     if (bufferSize > mBufferSize || indexType != mIndexType)
     {
@@ -139,11 +143,11 @@ DXGI_FORMAT IndexBuffer11::getIndexFormat() const
 {
     switch (mIndexType)
     {
-        case GL_UNSIGNED_BYTE:
+        case gl::DrawElementsType::UnsignedByte:
             return DXGI_FORMAT_R16_UINT;
-        case GL_UNSIGNED_SHORT:
+        case gl::DrawElementsType::UnsignedShort:
             return DXGI_FORMAT_R16_UINT;
-        case GL_UNSIGNED_INT:
+        case gl::DrawElementsType::UnsignedInt:
             return DXGI_FORMAT_R32_UINT;
         default:
             UNREACHABLE();

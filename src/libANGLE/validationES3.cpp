@@ -1418,7 +1418,7 @@ bool ValidateDrawRangeElements(Context *context,
                                GLuint start,
                                GLuint end,
                                GLsizei count,
-                               GLenum type,
+                               DrawElementsType type,
                                const void *indices)
 {
     if (context->getClientMajorVersion() < 3)
@@ -3097,7 +3097,7 @@ bool ValidateGetSynciv(Context *context,
 bool ValidateDrawElementsInstanced(Context *context,
                                    PrimitiveMode mode,
                                    GLsizei count,
-                                   GLenum type,
+                                   DrawElementsType type,
                                    const void *indices,
                                    GLsizei instanceCount)
 {
@@ -3148,7 +3148,7 @@ bool ValidateMultiDrawArraysInstancedANGLE(Context *context,
 bool ValidateMultiDrawElementsInstancedANGLE(Context *context,
                                              PrimitiveMode mode,
                                              const GLsizei *counts,
-                                             GLenum type,
+                                             DrawElementsType type,
                                              const GLsizei *offsets,
                                              const GLsizei *instanceCounts,
                                              GLsizei drawcount)

@@ -53,7 +53,7 @@ IndexBufferInterface::~IndexBufferInterface()
     }
 }
 
-GLenum IndexBufferInterface::getIndexType() const
+gl::DrawElementsType IndexBufferInterface::getIndexType() const
 {
     return mIndexBuffer->getIndexType();
 }
@@ -125,7 +125,7 @@ angle::Result IndexBufferInterface::discard(const gl::Context *context)
 
 angle::Result IndexBufferInterface::setBufferSize(const gl::Context *context,
                                                   unsigned int bufferSize,
-                                                  GLenum indexType)
+                                                  gl::DrawElementsType indexType)
 {
     if (mIndexBuffer->getBufferSize() == 0)
     {
@@ -148,7 +148,7 @@ StreamingIndexBufferInterface::~StreamingIndexBufferInterface()
 
 angle::Result StreamingIndexBufferInterface::reserveBufferSpace(const gl::Context *context,
                                                                 unsigned int size,
-                                                                GLenum indexType)
+                                                                gl::DrawElementsType indexType)
 {
     unsigned int curBufferSize = getBufferSize();
     unsigned int writePos = getWritePosition();
@@ -178,7 +178,7 @@ StaticIndexBufferInterface::~StaticIndexBufferInterface()
 
 angle::Result StaticIndexBufferInterface::reserveBufferSpace(const gl::Context *context,
                                                              unsigned int size,
-                                                             GLenum indexType)
+                                                             gl::DrawElementsType indexType)
 {
     unsigned int curSize = getBufferSize();
     if (curSize == 0)

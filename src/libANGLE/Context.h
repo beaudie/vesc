@@ -694,20 +694,23 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     void drawArrays(PrimitiveMode mode, GLint first, GLsizei count);
     void drawArraysInstanced(PrimitiveMode mode, GLint first, GLsizei count, GLsizei instanceCount);
 
-    void drawElements(PrimitiveMode mode, GLsizei count, GLenum type, const void *indices);
+    void drawElements(PrimitiveMode mode,
+                      GLsizei count,
+                      DrawElementsType type,
+                      const void *indices);
     void drawElementsInstanced(PrimitiveMode mode,
                                GLsizei count,
-                               GLenum type,
+                               DrawElementsType type,
                                const void *indices,
                                GLsizei instances);
     void drawRangeElements(PrimitiveMode mode,
                            GLuint start,
                            GLuint end,
                            GLsizei count,
-                           GLenum type,
+                           DrawElementsType type,
                            const void *indices);
     void drawArraysIndirect(PrimitiveMode mode, const void *indirect);
-    void drawElementsIndirect(PrimitiveMode mode, GLenum type, const void *indirect);
+    void drawElementsIndirect(PrimitiveMode mode, DrawElementsType type, const void *indirect);
 
     void blitFramebuffer(GLint srcX0,
                          GLint srcY0,
@@ -1576,12 +1579,12 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
                                   GLsizei drawcount);
     void multiDrawElements(PrimitiveMode mode,
                            const GLsizei *counts,
-                           GLenum type,
+                           DrawElementsType type,
                            const GLsizei *offsets,
                            GLsizei drawcount);
     void multiDrawElementsInstanced(PrimitiveMode mode,
                                     const GLsizei *counts,
-                                    GLenum type,
+                                    DrawElementsType type,
                                     const GLsizei *offsets,
                                     const GLsizei *instanceCounts,
                                     GLsizei drawcount);

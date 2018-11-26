@@ -166,7 +166,7 @@ angle::Result Context9::drawArraysInstanced(const gl::Context *context,
 angle::Result Context9::drawElements(const gl::Context *context,
                                      gl::PrimitiveMode mode,
                                      GLsizei count,
-                                     GLenum type,
+                                     gl::DrawElementsType type,
                                      const void *indices)
 {
     return mRenderer->genericDrawElements(context, mode, count, type, indices, 0);
@@ -175,7 +175,7 @@ angle::Result Context9::drawElements(const gl::Context *context,
 angle::Result Context9::drawElementsInstanced(const gl::Context *context,
                                               gl::PrimitiveMode mode,
                                               GLsizei count,
-                                              GLenum type,
+                                              gl::DrawElementsType type,
                                               const void *indices,
                                               GLsizei instances)
 {
@@ -187,7 +187,7 @@ angle::Result Context9::drawRangeElements(const gl::Context *context,
                                           GLuint start,
                                           GLuint end,
                                           GLsizei count,
-                                          GLenum type,
+                                          gl::DrawElementsType type,
                                           const void *indices)
 {
     return mRenderer->genericDrawElements(context, mode, count, type, indices, 0);
@@ -203,7 +203,7 @@ angle::Result Context9::drawArraysIndirect(const gl::Context *context,
 
 angle::Result Context9::drawElementsIndirect(const gl::Context *context,
                                              gl::PrimitiveMode mode,
-                                             GLenum type,
+                                             gl::DrawElementsType type,
                                              const void *indirect)
 {
     ANGLE_HR_UNREACHABLE(this);

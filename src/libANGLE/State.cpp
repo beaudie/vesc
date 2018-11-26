@@ -67,7 +67,7 @@ constexpr std::pair<BufferBinding, State::BufferBindingSetter> GetBufferBindingS
                                       ? &State::setGenericBufferBindingWithBit<Target>
                                       : &State::setGenericBufferBinding<Target>);
 }
-}  // anonymous namepace
+}  // namespace
 
 template <typename BindingT, typename... ArgsT>
 ANGLE_INLINE void UpdateNonTFBufferBinding(const Context *context,
@@ -230,12 +230,9 @@ State::State(bool debug,
       mRobustResourceInit(robustResourceInit),
       mProgramBinaryCacheEnabled(programBinaryCacheEnabled),
       mMaxShaderCompilerThreads(std::numeric_limits<GLuint>::max())
-{
-}
+{}
 
-State::~State()
-{
-}
+State::~State() {}
 
 void State::initialize(Context *context)
 {

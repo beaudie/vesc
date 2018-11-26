@@ -199,11 +199,13 @@ void GL_APIENTRY DrawElementsInstancedANGLE(GLenum mode,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
-        if (context->skipValidation() || ValidateDrawElementsInstancedANGLE(
-                                             context, modePacked, count, type, indices, primcount))
+        PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
+        if (context->skipValidation() ||
+            ValidateDrawElementsInstancedANGLE(context, modePacked, count, typePacked, indices,
+                                               primcount))
         {
-            context->drawElementsInstanced(modePacked, count, type, indices, primcount);
+            context->drawElementsInstanced(modePacked, count, typePacked, indices, primcount);
         }
     }
 }
@@ -287,11 +289,13 @@ void GL_APIENTRY MultiDrawElementsANGLE(GLenum mode,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
         if (context->skipValidation() ||
-            ValidateMultiDrawElementsANGLE(context, modePacked, counts, type, offsets, drawcount))
+            ValidateMultiDrawElementsANGLE(context, modePacked, counts, typePacked, offsets,
+                                           drawcount))
         {
-            context->multiDrawElements(modePacked, counts, type, offsets, drawcount);
+            context->multiDrawElements(modePacked, counts, typePacked, offsets, drawcount);
         }
     }
 }
@@ -312,13 +316,14 @@ void GL_APIENTRY MultiDrawElementsInstancedANGLE(GLenum mode,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
         if (context->skipValidation() ||
-            ValidateMultiDrawElementsInstancedANGLE(context, modePacked, counts, type, offsets,
-                                                    instanceCounts, drawcount))
+            ValidateMultiDrawElementsInstancedANGLE(context, modePacked, counts, typePacked,
+                                                    offsets, instanceCounts, drawcount))
         {
-            context->multiDrawElementsInstanced(modePacked, counts, type, offsets, instanceCounts,
-                                                drawcount);
+            context->multiDrawElementsInstanced(modePacked, counts, typePacked, offsets,
+                                                instanceCounts, drawcount);
         }
     }
 }
@@ -6790,11 +6795,12 @@ void GL_APIENTRY DrawElementsContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
         if (context->skipValidation() ||
-            ValidateDrawElements(context, modePacked, count, type, indices))
+            ValidateDrawElements(context, modePacked, count, typePacked, indices))
         {
-            context->drawElements(modePacked, count, type, indices);
+            context->drawElements(modePacked, count, typePacked, indices);
         }
     }
 }
@@ -6812,11 +6818,12 @@ void GL_APIENTRY DrawElementsIndirectContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
         if (context->skipValidation() ||
-            ValidateDrawElementsIndirect(context, modePacked, type, indirect))
+            ValidateDrawElementsIndirect(context, modePacked, typePacked, indirect))
         {
-            context->drawElementsIndirect(modePacked, type, indirect);
+            context->drawElementsIndirect(modePacked, typePacked, indirect);
         }
     }
 }
@@ -6838,11 +6845,13 @@ void GL_APIENTRY DrawElementsInstancedContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
         if (context->skipValidation() ||
-            ValidateDrawElementsInstanced(context, modePacked, count, type, indices, instancecount))
+            ValidateDrawElementsInstanced(context, modePacked, count, typePacked, indices,
+                                          instancecount))
         {
-            context->drawElementsInstanced(modePacked, count, type, indices, instancecount);
+            context->drawElementsInstanced(modePacked, count, typePacked, indices, instancecount);
         }
     }
 }
@@ -6864,11 +6873,13 @@ void GL_APIENTRY DrawElementsInstancedANGLEContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
-        if (context->skipValidation() || ValidateDrawElementsInstancedANGLE(
-                                             context, modePacked, count, type, indices, primcount))
+        PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
+        if (context->skipValidation() ||
+            ValidateDrawElementsInstancedANGLE(context, modePacked, count, typePacked, indices,
+                                               primcount))
         {
-            context->drawElementsInstanced(modePacked, count, type, indices, primcount);
+            context->drawElementsInstanced(modePacked, count, typePacked, indices, primcount);
         }
     }
 }
@@ -6891,11 +6902,12 @@ void GL_APIENTRY DrawRangeElementsContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
         if (context->skipValidation() ||
-            ValidateDrawRangeElements(context, modePacked, start, end, count, type, indices))
+            ValidateDrawRangeElements(context, modePacked, start, end, count, typePacked, indices))
         {
-            context->drawRangeElements(modePacked, start, end, count, type, indices);
+            context->drawRangeElements(modePacked, start, end, count, typePacked, indices);
         }
     }
 }
@@ -17844,11 +17856,13 @@ void GL_APIENTRY MultiDrawElementsANGLEContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
         if (context->skipValidation() ||
-            ValidateMultiDrawElementsANGLE(context, modePacked, counts, type, offsets, drawcount))
+            ValidateMultiDrawElementsANGLE(context, modePacked, counts, typePacked, offsets,
+                                           drawcount))
         {
-            context->multiDrawElements(modePacked, counts, type, offsets, drawcount);
+            context->multiDrawElements(modePacked, counts, typePacked, offsets, drawcount);
         }
     }
 }
@@ -17871,13 +17885,14 @@ void GL_APIENTRY MultiDrawElementsInstancedANGLEContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
         if (context->skipValidation() ||
-            ValidateMultiDrawElementsInstancedANGLE(context, modePacked, counts, type, offsets,
-                                                    instanceCounts, drawcount))
+            ValidateMultiDrawElementsInstancedANGLE(context, modePacked, counts, typePacked,
+                                                    offsets, instanceCounts, drawcount))
         {
-            context->multiDrawElementsInstanced(modePacked, counts, type, offsets, instanceCounts,
-                                                drawcount);
+            context->multiDrawElementsInstanced(modePacked, counts, typePacked, offsets,
+                                                instanceCounts, drawcount);
         }
     }
 }
