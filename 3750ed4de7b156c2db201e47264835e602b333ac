@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93e7616f_0b92aa25",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-26T20:53:32Z",
+      "side": 1,
+      "message": "please remove this",
+      "range": {
+        "startLine": 374,
+        "startChar": 54,
+        "endLine": 374,
+        "endChar": 68
+      },
+      "revId": "3750ed4de7b156c2db201e47264835e602b333ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33bbd6e8_6fb564b3",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-26T20:53:32Z",
+      "side": 1,
+      "message": "Could you add a comment that this essentially checks that version is exactly 2.0 because this is \"else\" of the \"if \u003e\u003d 3.0\" above? Or maybe add an isExactlyGLES() check.",
+      "range": {
+        "startLine": 525,
+        "startChar": 0,
+        "endLine": 525,
+        "endChar": 57
+      },
+      "revId": "3750ed4de7b156c2db201e47264835e602b333ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f3d0996_6636ef66",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-26T20:53:32Z",
+      "side": 1,
+      "message": "I think you need a similar test for renderbuffer attachment as well.",
+      "range": {
+        "startLine": 179,
+        "startChar": 74,
+        "endLine": 179,
+        "endChar": 98
+      },
+      "revId": "3750ed4de7b156c2db201e47264835e602b333ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

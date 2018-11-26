@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d23cb4f7_8051c095",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-26T20:53:32Z",
+      "side": 0,
+      "message": "Could you also check for this, otherwise we\u0027d get into trouble with dEQP testing",
+      "range": {
+        "startLine": 383,
+        "startChar": 4,
+        "endLine": 383,
+        "endChar": 79
+      },
+      "revId": "efe061bd4f9de0f8da3135bcabff7f40e05e91f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
