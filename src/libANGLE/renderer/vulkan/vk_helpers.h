@@ -28,22 +28,24 @@ namespace vk
 //
 // Dynamic buffers are used to implement a variety of data streaming operations in Vulkan, such
 // as for immediate vertex array and element array data, uniform updates, and other dynamic data.
+class BufferHelper;
 class DynamicBuffer : angle::NonCopyable
 {
   public:
-    DynamicBuffer(VkBufferUsageFlags usage, size_t minSize);
+    DynamicBuffer(VkBufferUsageFlags usage, size_t minSize, bool hostVisible);
     ~DynamicBuffer();
 
     // Init is called after the buffer creation so that the alignment can be specified later.
     void init(size_t alignment, RendererVk *renderer);
 
     // This call will allocate a new region at the end of the buffer. It internally may trigger
-    // a new buffer to be created (which is returned in 'newBufferAllocatedOut'. This param may
-    // be nullptr.
+    // a new buffer to be created (which is returned in the optional parameter
+    // `newBufferAllocatedOut`).  The new region will be in the returned buffer at given offset. If
+    // a memory pointer is given, the buffer will be automatically map()ed.
     angle::Result allocate(Context *context,
                            size_t sizeInBytes,
                            uint8_t **ptrOut,
-                           VkBuffer *handleOut,
+                           VkBuffer *bufferOut,
                            VkDeviceSize *offsetOut,
                            bool *newBufferAllocatedOut);
 
@@ -62,27 +64,24 @@ class DynamicBuffer : angle::NonCopyable
     // This frees resources immediately.
     void destroy(VkDevice device);
 
-    VkBuffer getCurrentBufferHandle() const;
+    BufferHelper *getCurrentBuffer() { return mBuffer; };
 
     // For testing only!
     void setMinimumSizeForTesting(size_t minSize);
 
   private:
-    void unmap(VkDevice device);
     void reset();
 
     VkBufferUsageFlags mUsage;
+    bool mHostVisible;
     size_t mMinSize;
-    Buffer mBuffer;
-    DeviceMemory mMemory;
-    bool mHostCoherent;
+    BufferHelper *mBuffer;
     uint32_t mNextAllocationOffset;
     uint32_t mLastFlushOrInvalidateOffset;
     size_t mSize;
     size_t mAlignment;
-    uint8_t *mMappedMemory;
 
-    std::vector<BufferAndMemory> mRetainedBuffers;
+    std::vector<BufferHelper *> mRetainedBuffers;
 };
 
 // Uses DescriptorPool to allocate descriptor sets as needed. If a descriptor pool becomes full, we
@@ -327,49 +326,6 @@ class SemaphoreHelper final : angle::NonCopyable
     const Semaphore *mSemaphore;
 };
 
-// This class' responsibility is to create index buffers needed to support line loops in Vulkan.
-// In the setup phase of drawing, the createIndexBuffer method should be called with the
-// current draw call parameters. If an element array buffer is bound for an indexed draw, use
-// createIndexBufferFromElementArrayBuffer.
-//
-// If the user wants to draw a loop between [v1, v2, v3], we will create an indexed buffer with
-// these indexes: [0, 1, 2, 3, 0] to emulate the loop.
-class LineLoopHelper final : angle::NonCopyable
-{
-  public:
-    LineLoopHelper(RendererVk *renderer);
-    ~LineLoopHelper();
-
-    angle::Result getIndexBufferForDrawArrays(ContextVk *contextVk,
-                                              uint32_t clampedVertexCount,
-                                              GLint firstVertex,
-                                              VkBuffer *bufferHandleOut,
-                                              VkDeviceSize *offsetOut);
-
-    angle::Result getIndexBufferForElementArrayBuffer(ContextVk *contextVk,
-                                                      BufferVk *elementArrayBufferVk,
-                                                      GLenum glIndexType,
-                                                      int indexCount,
-                                                      intptr_t elementArrayOffset,
-                                                      VkBuffer *bufferHandleOut,
-                                                      VkDeviceSize *bufferOffsetOut);
-
-    angle::Result streamIndices(ContextVk *contextVk,
-                                GLenum glIndexType,
-                                GLsizei indexCount,
-                                const uint8_t *srcPtr,
-                                VkBuffer *bufferHandleOut,
-                                VkDeviceSize *bufferOffsetOut);
-
-    void release(RendererVk *renderer);
-    void destroy(VkDevice device);
-
-    static void Draw(uint32_t count, CommandBuffer *commandBuffer);
-
-  private:
-    DynamicBuffer mDynamicIndexBuffer;
-};
-
 class FramebufferHelper;
 
 class BufferHelper final : public RecordableGraphResource
@@ -378,9 +334,13 @@ class BufferHelper final : public RecordableGraphResource
     BufferHelper();
     ~BufferHelper();
 
+    BufferHelper(BufferHelper &&other);
+    BufferHelper &operator=(BufferHelper &&other);
+
     angle::Result init(Context *context,
                        const VkBufferCreateInfo &createInfo,
                        VkMemoryPropertyFlags memoryPropertyFlags);
+    void destroy(VkDevice device);
     void release(RendererVk *renderer);
 
     bool valid() const { return mBuffer.valid(); }
@@ -408,7 +368,25 @@ class BufferHelper final : public RecordableGraphResource
         return angle::Result::Continue();
     }
 
+    angle::Result map(Context *context, uint8_t **ptrOut)
+    {
+        if (!mMappedMemory)
+        {
+            ANGLE_TRY(mapImpl(context));
+        }
+        *ptrOut = mMappedMemory;
+        return angle::Result::Continue();
+    }
+    void unmap(VkDevice device);
+
+    // After a sequence of writes, call flush to ensure the data is visible to the device.
+    angle::Result flush(Context *context, size_t offset, size_t size);
+
+    // After a sequence of writes, call invalidate to ensure the data is visible to the host.
+    angle::Result invalidate(Context *context, size_t offset, size_t size);
+
   private:
+    angle::Result mapImpl(Context *context);
     angle::Result initBufferView(Context *context, const Format &format);
 
     // Vulkan objects.
@@ -419,6 +397,7 @@ class BufferHelper final : public RecordableGraphResource
     // Cached properties.
     VkMemoryPropertyFlags mMemoryPropertyFlags;
     VkDeviceSize mSize;
+    uint8_t *mMappedMemory;
 
     // For memory barriers.
     VkFlags mCurrentWriteAccess;
@@ -534,6 +513,49 @@ class ImageHelper final : public RecordableGraphResource
 
     // Cached properties.
     uint32_t mLayerCount;
+};
+
+// This class' responsibility is to create index buffers needed to support line loops in Vulkan.
+// In the setup phase of drawing, the createIndexBuffer method should be called with the
+// current draw call parameters. If an element array buffer is bound for an indexed draw, use
+// createIndexBufferFromElementArrayBuffer.
+//
+// If the user wants to draw a loop between [v1, v2, v3], we will create an indexed buffer with
+// these indexes: [0, 1, 2, 3, 0] to emulate the loop.
+class LineLoopHelper final : angle::NonCopyable
+{
+  public:
+    LineLoopHelper(RendererVk *renderer);
+    ~LineLoopHelper();
+
+    angle::Result getIndexBufferForDrawArrays(ContextVk *contextVk,
+                                              uint32_t clampedVertexCount,
+                                              GLint firstVertex,
+                                              VkBuffer *bufferHandleOut,
+                                              VkDeviceSize *offsetOut);
+
+    angle::Result getIndexBufferForElementArrayBuffer(ContextVk *contextVk,
+                                                      BufferVk *elementArrayBufferVk,
+                                                      GLenum glIndexType,
+                                                      int indexCount,
+                                                      intptr_t elementArrayOffset,
+                                                      VkBuffer *bufferHandleOut,
+                                                      VkDeviceSize *bufferOffsetOut);
+
+    angle::Result streamIndices(ContextVk *contextVk,
+                                GLenum glIndexType,
+                                GLsizei indexCount,
+                                const uint8_t *srcPtr,
+                                VkBuffer *bufferHandleOut,
+                                VkDeviceSize *bufferOffsetOut);
+
+    void release(RendererVk *renderer);
+    void destroy(VkDevice device);
+
+    static void Draw(uint32_t count, CommandBuffer *commandBuffer);
+
+  private:
+    DynamicBuffer mDynamicIndexBuffer;
 };
 
 class FramebufferHelper : public RecordableGraphResource
