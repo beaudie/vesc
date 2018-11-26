@@ -46,6 +46,30 @@
       "revId": "d929f5e914880f1136713269a3f35811dcc0b06e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a52476c_80a9a9e1",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-26T12:34:45Z",
+      "side": 1,
+      "message": "Whoops, I mistyped that. It currently is returning \"3\" for a 32-bit int (GL_UNSIGNED_INT). It should be returning \"2\". I\u0027m not sure what it is returning for the 64-bit value.\n\nThe test is IndexBufferOffsetTest.UInt32Index/ES2_D3D9\n\nYou can see it in the failing Windows try job here:\n\nhttps://ci.chromium.org/p/chromium/builders/luci.chromium.try/win_angle_rel_ng/4267",
+      "parentUuid": "a5716700_09a29425",
+      "range": {
+        "startLine": 45,
+        "startChar": 33,
+        "endLine": 45,
+        "endChar": 48
+      },
+      "revId": "d929f5e914880f1136713269a3f35811dcc0b06e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
