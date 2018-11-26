@@ -110,9 +110,9 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
                                                          memoryPropertyFlagsOut, &memoryTypeIndex));
 
     VkMemoryAllocateInfo allocInfo = {};
-    allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    allocInfo.memoryTypeIndex = memoryTypeIndex;
-    allocInfo.allocationSize  = memoryRequirements.size;
+    allocInfo.sType                = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocInfo.memoryTypeIndex      = memoryTypeIndex;
+    allocInfo.allocationSize       = memoryRequirements.size;
 
     ANGLE_VK_TRY(context, deviceMemoryOut->allocate(context->getDevice(), allocInfo));
     return angle::Result::Continue();
@@ -687,9 +687,9 @@ void Image::getSubresourceLayout(VkDevice device,
                                  VkSubresourceLayout *outSubresourceLayout) const
 {
     VkImageSubresource subresource = {};
-    subresource.aspectMask = aspectMask;
-    subresource.mipLevel   = mipLevel;
-    subresource.arrayLayer = arrayLayer;
+    subresource.aspectMask         = aspectMask;
+    subresource.mipLevel           = mipLevel;
+    subresource.arrayLayer         = arrayLayer;
 
     vkGetImageSubresourceLayout(device, getHandle(), &subresource, outSubresourceLayout);
 }
@@ -732,8 +732,8 @@ VkResult Semaphore::init(VkDevice device)
     ASSERT(!valid());
 
     VkSemaphoreCreateInfo semaphoreInfo = {};
-    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-    semaphoreInfo.flags = 0;
+    semaphoreInfo.sType                 = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+    semaphoreInfo.flags                 = 0;
 
     return vkCreateSemaphore(device, &semaphoreInfo, nullptr, &mHandle);
 }
@@ -1156,7 +1156,7 @@ angle::Result MemoryProperties::findCompatibleMemoryIndex(
              requestedMemoryPropertyFlags) == requestedMemoryPropertyFlags)
         {
             *memoryPropertyFlagsOut = mMemoryProperties.memoryTypes[memoryIndex].propertyFlags;
-            *typeIndexOut = static_cast<uint32_t>(memoryIndex);
+            *typeIndexOut           = static_cast<uint32_t>(memoryIndex);
             return angle::Result::Continue();
         }
     }
@@ -1263,10 +1263,10 @@ angle::Result InitShaderAndSerial(Context *context,
                                   size_t shaderCodeSize)
 {
     VkShaderModuleCreateInfo createInfo = {};
-    createInfo.sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-    createInfo.flags    = 0;
-    createInfo.codeSize = shaderCodeSize;
-    createInfo.pCode    = shaderCode;
+    createInfo.sType                    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+    createInfo.flags                    = 0;
+    createInfo.codeSize                 = shaderCodeSize;
+    createInfo.pCode                    = shaderCode;
 
     ANGLE_VK_TRY(context, shaderAndSerial->get().init(context->getDevice(), createInfo));
     shaderAndSerial->updateSerial(context->getRenderer()->issueShaderSerial());

@@ -60,10 +60,7 @@ class BindingPointer
     using ContextType = ContextT;
     using ErrorType   = ErrorT;
 
-    BindingPointer()
-        : mObject(nullptr)
-    {
-    }
+    BindingPointer() : mObject(nullptr) {}
 
     BindingPointer(ObjectType *object) : mObject(object)
     {
@@ -89,7 +86,8 @@ class BindingPointer
 
     virtual ~BindingPointer()
     {
-        // Objects have to be released before the resource manager is destroyed, so they must be explicitly cleaned up.
+        // Objects have to be released before the resource manager is destroyed, so they must be
+        // explicitly cleaned up.
         ASSERT(mObject == nullptr);
     }
 
@@ -104,7 +102,7 @@ class BindingPointer
         // Store the old pointer in a temporary so we can set the pointer before calling release.
         // Otherwise the object could still be referenced when its destructor is called.
         ObjectType *oldObject = mObject;
-        mObject = newObject;
+        mObject               = newObject;
         if (oldObject != nullptr)
         {
             reinterpret_cast<RefCountObject<ContextType, ErrorType> *>(oldObject)->release(context);
@@ -178,13 +176,13 @@ class OffsetBindingPointer : public BindingPointer<ObjectType>
     using ContextType = typename BindingPointer<ObjectType>::ContextType;
     using ErrorType   = typename BindingPointer<ObjectType>::ErrorType;
 
-    OffsetBindingPointer() : mOffset(0), mSize(0) { }
+    OffsetBindingPointer() : mOffset(0), mSize(0) {}
 
     void set(const ContextType *context, ObjectType *newObject, GLintptr offset, GLsizeiptr size)
     {
         set(context, newObject);
         mOffset = offset;
-        mSize = size;
+        mSize   = size;
     }
 
     GLintptr getOffset() const { return mOffset; }
@@ -264,4 +262,4 @@ using BindingPointer = angle::BindingPointer<ObjectType, Display, Error>;
 
 }  // namespace egl
 
-#endif   // LIBANGLE_REFCOUNTOBJECT_H_
+#endif  // LIBANGLE_REFCOUNTOBJECT_H_

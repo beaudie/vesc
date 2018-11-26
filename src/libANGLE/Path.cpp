@@ -10,8 +10,8 @@
 #include "libANGLE/Path.h"
 #include "libANGLE/renderer/PathImpl.h"
 
-#include "common/mathutil.h"
 #include "common/debug.h"
+#include "common/mathutil.h"
 
 namespace gl
 {

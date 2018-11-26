@@ -152,7 +152,7 @@ inline const char *MakeStaticString(const std::string &str)
 {
     // On the heap so that no destructor runs on application exit.
     static std::set<std::string> *strings = new std::set<std::string>;
-    std::set<std::string>::iterator it = strings->find(str);
+    std::set<std::string>::iterator it    = strings->find(str);
     if (it != strings->end())
     {
         return it->c_str();
