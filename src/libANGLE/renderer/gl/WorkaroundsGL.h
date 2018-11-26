@@ -163,6 +163,14 @@ struct WorkaroundsGL
     // glReadPixels on unsized sRGB texture formats. http://crbug.com/550292 and
     // http://crbug.com/565179
     bool unsizedsRGBReadPixelsDoesntTransform = false;
+
+    // Most Android devices fail to allocate a texture that is larger than 4096. Limit the caps
+    // instead of generating GL_OUT_OF_MEMORY errors.
+    bool limitMaxTextureSizeTo4096 = false;
+
+    // Prevent excessive MSAA allocations on Android devices, various rendering bugs have been
+    // observed and they tend to be high DPI anyways. http://crbug.com/797243
+    bool limitMaxMSAASamplesTo4 = false;
 };
 
 inline WorkaroundsGL::WorkaroundsGL() = default;

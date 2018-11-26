@@ -110,6 +110,7 @@ static bool MeetsRequirements(const FunctionsGL *functions,
 }
 
 static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
+                                                 const WorkaroundsGL &workarounds,
                                                  GLenum internalFormat)
 {
     ASSERT(functions->getError() == GL_NO_ERROR);
@@ -159,6 +160,11 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
             }
             for (size_t sampleIndex = 0; sampleIndex < samples.size(); sampleIndex++)
             {
+                if (workarounds.limitMaxMSAASamplesTo4 && samples[sampleIndex] > 4)
+                {
+                    continue;
+                }
+
                 // Some NVIDIA drivers expose multisampling modes implemented as a combination of
                 // multisampling and supersampling. These are non-conformant and should not be
                 // exposed through ANGLE. Query which formats are conformant from the driver if
@@ -269,6 +275,15 @@ static void LimitVersion(gl::Version *curVersion, const gl::Version &maxVersion)
     }
 }
 
+template <typename T>
+static void LimitCap(T *curValue, const T &maxValue)
+{
+    if (*curValue >= maxValue)
+    {
+        *curValue = maxValue;
+    }
+}
+
 void GenerateCaps(const FunctionsGL *functions,
                   const WorkaroundsGL &workarounds,
                   gl::Caps *caps,
@@ -281,7 +296,8 @@ void GenerateCaps(const FunctionsGL *functions,
     const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats();
     for (GLenum internalFormat : allFormats)
     {
-        gl::TextureCaps textureCaps = GenerateTextureFormatCaps(functions, internalFormat);
+        gl::TextureCaps textureCaps =
+            GenerateTextureFormatCaps(functions, workarounds, internalFormat);
         textureCapsMap->insert(internalFormat, textureCaps);
 
         if (gl::GetSizedInternalFormatInfo(internalFormat).compressed)
@@ -1209,6 +1225,26 @@ void GenerateCaps(const FunctionsGL *functions,
     {
         extensions->sRGB = false;
     }
+
+    if (workarounds.limitMaxTextureSizeTo4096)
+    {
+        constexpr GLuint kArtificialTextureSizeLimit = 4096;
+        LimitCap(&caps->max3DTextureSize, kArtificialTextureSizeLimit);
+        LimitCap(&caps->max2DTextureSize, kArtificialTextureSizeLimit);
+        LimitCap(&caps->maxRectangleTextureSize, kArtificialTextureSizeLimit);
+        LimitCap(&caps->maxArrayTextureLayers, kArtificialTextureSizeLimit);
+        LimitCap(&caps->maxCubeMapTextureSize, kArtificialTextureSizeLimit);
+    }
+
+    if (workarounds.limitMaxMSAASamplesTo4)
+    {
+        constexpr GLuint kArtificialMSAASampleLimit = 4;
+        LimitCap(&caps->maxFramebufferSamples, kArtificialMSAASampleLimit);
+        LimitCap(&caps->maxColorTextureSamples, kArtificialMSAASampleLimit);
+        LimitCap(&caps->maxDepthTextureSamples, kArtificialMSAASampleLimit);
+        LimitCap(&caps->maxIntegerSamples, kArtificialMSAASampleLimit);
+        LimitCap(&caps->maxSamples, kArtificialMSAASampleLimit);
+    }
 }
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds)
@@ -1310,6 +1346,11 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
         workarounds->unsizedsRGBReadPixelsDoesntTransform = true;
     }
 #endif  // defined(ANGLE_PLATFORM_ANDROID)
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+    workarounds->limitMaxTextureSizeTo4096 = true;
+    workarounds->limitMaxMSAASamplesTo4    = true;
+#endif
 }
 
 void ApplyWorkarounds(const FunctionsGL *functions, gl::Workarounds *workarounds)
