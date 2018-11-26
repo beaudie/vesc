@@ -99,6 +99,24 @@
       "revId": "23e4ce66aac78de2540fc9b48f050052393f7165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2dc66f2b_9b0990b2",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1421,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-26T11:57:15Z",
+      "side": 1,
+      "message": "Either that, or we need to make a copy of the structure in a local variable but that could be extremely expensive if the structure is large.",
+      "parentUuid": "46fadba3_8ffda64b",
+      "revId": "23e4ce66aac78de2540fc9b48f050052393f7165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
