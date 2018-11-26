@@ -904,18 +904,20 @@ BufferHelper::BufferHelper()
 
 BufferHelper::~BufferHelper() = default;
 
-angle::Result BufferHelper::init(ContextVk *contextVk,
+angle::Result BufferHelper::init(Context *context,
                                  const VkBufferCreateInfo &createInfo,
                                  VkMemoryPropertyFlags memoryPropertyFlags)
 {
-    ANGLE_VK_TRY(contextVk, mBuffer.init(contextVk->getDevice(), createInfo));
-    return vk::AllocateBufferMemory(contextVk, memoryPropertyFlags, &mMemoryPropertyFlags, &mBuffer,
+    mSize = createInfo.size;
+    ANGLE_VK_TRY(context, mBuffer.init(context->getDevice(), createInfo));
+    return vk::AllocateBufferMemory(context, memoryPropertyFlags, &mMemoryPropertyFlags, &mBuffer,
                                     &mDeviceMemory);
 }
 
 void BufferHelper::release(RendererVk *renderer)
 {
     renderer->releaseObject(getStoredQueueSerial(), &mBuffer);
+    renderer->releaseObject(getStoredQueueSerial(), &mBufferView);
     renderer->releaseObject(getStoredQueueSerial(), &mDeviceMemory);
 }
 
@@ -930,13 +932,13 @@ void BufferHelper::onFramebufferRead(FramebufferHelper *framebuffer, VkAccessFla
     }
 }
 
-angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
+angle::Result BufferHelper::copyFromBuffer(Context *context,
                                            const Buffer &buffer,
                                            const VkBufferCopy &copyRegion)
 {
     // 'recordCommands' will implicitly stop any reads from using the old buffer data.
     vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
+    ANGLE_TRY(recordCommands(context, &commandBuffer));
 
     if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
     {
@@ -957,6 +959,29 @@ angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
 
     commandBuffer->copyBuffer(buffer, mBuffer, 1, &copyRegion);
 
+    return angle::Result::Continue();
+}
+
+angle::Result BufferHelper::getBufferView(Context *context,
+                                          Format format,
+                                          BufferView **bufferViewOut)
+{
+    // Note: currently only one view is allowed.  If needs be, multiple views can be created based
+    // on format.
+    if (!mBufferView.valid())
+    {
+        ASSERT(format.valid());
+
+        VkBufferViewCreateInfo viewCreateInfo = {};
+        viewCreateInfo.sType                  = VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO;
+        viewCreateInfo.buffer                 = mBuffer.getHandle();
+        viewCreateInfo.format                 = format.vkBufferFormat;
+        viewCreateInfo.offset                 = 0;
+        viewCreateInfo.range                  = mSize;
+        ANGLE_VK_TRY(context, mBufferView.init(context->getDevice(), viewCreateInfo));
+    }
+
+    *bufferViewOut = &mBufferView;
     return angle::Result::Continue();
 }
 

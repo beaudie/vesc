@@ -378,7 +378,7 @@ class BufferHelper final : public RecordableGraphResource
     BufferHelper();
     ~BufferHelper();
 
-    angle::Result init(ContextVk *contextVk,
+    angle::Result init(Context *context,
                        const VkBufferCreateInfo &createInfo,
                        VkMemoryPropertyFlags memoryPropertyFlags);
     void release(RendererVk *renderer);
@@ -391,17 +391,21 @@ class BufferHelper final : public RecordableGraphResource
     void onFramebufferRead(FramebufferHelper *framebuffer, VkAccessFlagBits accessType);
 
     // Also implicitly sets up the correct barriers.
-    angle::Result copyFromBuffer(ContextVk *contextVk,
+    angle::Result copyFromBuffer(Context *context,
                                  const Buffer &buffer,
                                  const VkBufferCopy &copyRegion);
+
+    angle::Result getBufferView(Context *context, Format format, BufferView **bufferViewOut);
 
   private:
     // Vulkan objects.
     Buffer mBuffer;
+    BufferView mBufferView;
     DeviceMemory mDeviceMemory;
 
     // Cached properties.
     VkMemoryPropertyFlags mMemoryPropertyFlags;
+    VkDeviceSize mSize;
 
     // For memory barriers.
     VkFlags mCurrentWriteAccess;
