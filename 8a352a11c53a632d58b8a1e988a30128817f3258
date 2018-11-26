@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "946aeca4_dcf08cd1",
+        "filename": "src/libANGLE/renderer/gl/FenceNVGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-26T16:53:12Z",
+      "side": 1,
+      "message": "The extension doesn\u0027t mention that SetFenceNV can fail in that way. Don\u0027t know if there is a solution, though.",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 83
+      },
+      "revId": "8a352a11c53a632d58b8a1e988a30128817f3258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9487e7a_1a664f7b",
+        "filename": "src/libANGLE/renderer/gl/FenceNVGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-26T16:53:12Z",
+      "side": 1,
+      "message": "Looks like in GLES you can actually specify a timeout, which you can\u0027t do in desktop GL.\nGL_TIMEOUT_IGNORED is 0xFFFFFFFFFFFFFFFFull, so I hope we never get GL_TIMEOUT_EXPIRED here :).",
+      "range": {
+        "startLine": 95,
+        "startChar": 76,
+        "endLine": 95,
+        "endChar": 94
+      },
+      "revId": "8a352a11c53a632d58b8a1e988a30128817f3258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
