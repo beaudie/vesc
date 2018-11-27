@@ -138,6 +138,8 @@ constexpr const char *kErrorFramebufferTextureLayerIncorrectTextureType =
     "Texture is not a three-dimensional or two-dimensionsal array texture.";
 constexpr const char *kErrorGenerateMipmapNotAllowed =
     "Texture format does not support mipmap generation.";
+constexpr const char *kErrorGenerateMipmapZeroSize =
+    "Cannot generate mipmaps for a zero-size texture in a WebGL context.";
 constexpr const char *kErrorGeometryShaderExtensionNotEnabled =
     "GL_EXT_geometry_shader extension not enabled.";
 constexpr const char *kErrorGLES1Only = "GLES1-only function.";

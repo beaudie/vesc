@@ -6213,6 +6213,14 @@ bool ValidateGenerateMipmap(Context *context, TextureType target)
         return false;
     }
 
+    if (context->getExtensions().webglCompatibility &&
+        (texture->getWidth(baseTarget, effectiveBaseLevel) == 0 ||
+         texture->getHeight(baseTarget, effectiveBaseLevel) == 0))
+    {
+        context->validationError(GL_INVALID_OPERATION, kErrorGenerateMipmapZeroSize);
+        return false;
+    }
+
     return true;
 }
 
