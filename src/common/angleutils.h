@@ -311,6 +311,7 @@ std::string ToString(const T &value)
 #ifndef ANGLE_STRINGIFY
 #    define ANGLE_STRINGIFY(x) #x
 #endif
+// clang-format on
 
 #ifndef ANGLE_MACRO_STRINGIFY
 #    define ANGLE_MACRO_STRINGIFY(x) ANGLE_STRINGIFY(x)
