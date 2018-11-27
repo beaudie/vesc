@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "283178a9_5aa2d4d2",
+        "filename": "src/libANGLE/renderer/d3d/IndexDataManager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-27T19:50:14Z",
+      "side": 1,
+      "message": "I\u0027d make this an inline function in the header. It\u0027s called from two different source files",
+      "range": {
+        "startLine": 114,
+        "startChar": 5,
+        "endLine": 114,
+        "endChar": 20
+      },
+      "revId": "8ce58179bd335312fe97378da9fbcb891ae042f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a20da66_2832d9a3",
+        "filename": "src/libANGLE/renderer/d3d/IndexDataManager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-27T19:50:14Z",
+      "side": 1,
+      "message": "Did you take a look at the generated code? Does the compiler figure out the dependencies and generate perfect code?",
+      "revId": "8ce58179bd335312fe97378da9fbcb891ae042f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
