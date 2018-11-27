@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "923d2790_9d035979",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2820,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-27T23:16:47Z",
+      "side": 1,
+      "message": "It\u0027s a static constexpr now in the class definition. There is no need to have a \u0027per class instance\u0027 definition which is getting initialized in the constructor.",
+      "parentUuid": "e6f68b9c_50b8f62b",
+      "range": {
+        "startLine": 2816,
+        "startChar": 0,
+        "endLine": 2820,
+        "endChar": 34
+      },
+      "revId": "2bd70719723f7acfe464d5ee7a83aca954bbd9b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08b7dc09_0293ef53",
         "filename": "src/libANGLE/State.h",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "2bd70719723f7acfe464d5ee7a83aca954bbd9b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e977f8db_95ba2a82",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-27T23:16:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08b7dc09_0293ef53",
+      "range": {
+        "startLine": 533,
+        "startChar": 4,
+        "endLine": 533,
+        "endChar": 37
+      },
+      "revId": "2bd70719723f7acfe464d5ee7a83aca954bbd9b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "47fb6707_2cb94608",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-27T23:16:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b242917f_24944d68",
+      "range": {
+        "startLine": 534,
+        "startChar": 25,
+        "endLine": 534,
+        "endChar": 49
+      },
+      "revId": "2bd70719723f7acfe464d5ee7a83aca954bbd9b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce456464_c4371cef",
         "filename": "src/libANGLE/State.h",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "2bd70719723f7acfe464d5ee7a83aca954bbd9b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60a22279_c60ecb54",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-27T23:16:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce456464_c4371cef",
+      "range": {
+        "startLine": 689,
+        "startChar": 0,
+        "endLine": 690,
+        "endChar": 52
+      },
+      "revId": "2bd70719723f7acfe464d5ee7a83aca954bbd9b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "014f8424_2b1daa5e",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-27T23:16:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97e34691_34ac996e",
+      "range": {
+        "startLine": 696,
+        "startChar": 9,
+        "endLine": 696,
+        "endChar": 14
+      },
+      "revId": "2bd70719723f7acfe464d5ee7a83aca954bbd9b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "89f1810a_02586ad7",
         "filename": "src/libANGLE/State.h",
         "patchSetId": 1
@@ -137,6 +257,30 @@
       "revId": "2bd70719723f7acfe464d5ee7a83aca954bbd9b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc1b731c_143b023c",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-27T23:16:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89f1810a_02586ad7",
+      "range": {
+        "startLine": 698,
+        "startChar": 0,
+        "endLine": 702,
+        "endChar": 9
+      },
+      "revId": "2bd70719723f7acfe464d5ee7a83aca954bbd9b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
