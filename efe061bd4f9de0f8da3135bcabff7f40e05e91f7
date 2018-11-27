@@ -118,6 +118,30 @@
       "revId": "efe061bd4f9de0f8da3135bcabff7f40e05e91f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e4d716d3_dd7c6f78",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-27T15:55:46Z",
+      "side": 0,
+      "message": "Ok, I think we\u0027re safe then.\n\nAn exception is thrown when the FBO doesn\u0027t return GL_FRAMEBUFFER_COMPLETE here:\nhttps://chromium.googlesource.com/external/deqp/+/master/modules/gles3/functional/es3fFboTestCase.cpp#141\n\nAnd it is caught here:\nhttps://chromium.googlesource.com/external/deqp/+/master/modules/gles3/functional/es3fFboTestCase.cpp#94\n\nBecause we\u0027re now returning GL_FRAMEBUFFER_UNSUPPORTED, the test passes.",
+      "parentUuid": "14edf17e_bfbc0a3f",
+      "range": {
+        "startLine": 383,
+        "startChar": 4,
+        "endLine": 383,
+        "endChar": 79
+      },
+      "revId": "efe061bd4f9de0f8da3135bcabff7f40e05e91f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
