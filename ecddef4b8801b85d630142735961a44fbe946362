@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b2eeabc_30e1db3b",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1529,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2018-11-27T18:44:04Z",
+      "side": 1,
+      "message": "The shader which causes the hang/freeze uses an array of structs. Here\u0027s the fragment shader which causes the problem:\n\n\t\t\tprecision mediump float;\n\n\t\t\tstruct InstancingData\n\t\t\t{\n\t\t\t\tmat4 transformation;\n\t\t\t};\n\n\t\t\t#define MAX_INSTANCE_COUNT 800\n\n\t\t\tlayout(std140) uniform InstanceBlock\n\t\t\t{\n\t\t\t\tInstancingData instances[MAX_INSTANCE_COUNT];\n\t\t\t};\n\n\t\t\tvoid main()\n\t\t\t{\n\t\t\t\tgl_Position \u003d vec4(1.0) * instances[gl_InstanceID].transformation;\n\t\t\t}",
+      "revId": "ecddef4b8801b85d630142735961a44fbe946362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
