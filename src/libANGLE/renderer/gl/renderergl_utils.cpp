@@ -1391,7 +1391,7 @@ bool UseTexImage3D(gl::TextureType textureType)
     return textureType == gl::TextureType::_2DArray || textureType == gl::TextureType::_3D ||
            textureType == gl::TextureType::_2DMultisampleArray;
 }
-}
+}  // namespace nativegl
 
 const FunctionsGL *GetFunctionsGL(const gl::Context *context)
 {
@@ -1565,4 +1565,4 @@ std::vector<ContextCreationTry> GenerateContextCreationToTry(EGLint requestedTyp
 
     return contextsToTry;
 }
-}
+}  // namespace rx
