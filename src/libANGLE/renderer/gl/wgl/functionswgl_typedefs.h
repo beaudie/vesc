@@ -11,8 +11,8 @@
 
 #include "common/platform.h"
 
-#include <angle_gl.h>
 #include <GL/wglext.h>
+#include <angle_gl.h>
 
 namespace rx
 {
@@ -29,8 +29,22 @@ typedef BOOL(WINAPI *PFNWGLSHARELISTSPROC)(HGLRC, HGLRC);
 typedef BOOL(WINAPI *PFNWGLUSEFONTBITMAPSAPROC)(HDC, DWORD, DWORD, DWORD);
 typedef BOOL(WINAPI *PFNWGLUSEFONTBITMAPSWPROC)(HDC, DWORD, DWORD, DWORD);
 typedef BOOL(WINAPI *PFNSWAPBUFFERSPROC)(HDC);
-typedef BOOL(WINAPI *PFNWGLUSEFONTOUTLINESAPROC)(HDC, DWORD, DWORD, DWORD, FLOAT, FLOAT, int, LPGLYPHMETRICSFLOAT);
-typedef BOOL(WINAPI *PFNWGLUSEFONTOUTLINESWPROC)(HDC, DWORD, DWORD, DWORD, FLOAT, FLOAT, int, LPGLYPHMETRICSFLOAT);
+typedef BOOL(WINAPI *PFNWGLUSEFONTOUTLINESAPROC)(HDC,
+                                                 DWORD,
+                                                 DWORD,
+                                                 DWORD,
+                                                 FLOAT,
+                                                 FLOAT,
+                                                 int,
+                                                 LPGLYPHMETRICSFLOAT);
+typedef BOOL(WINAPI *PFNWGLUSEFONTOUTLINESWPROC)(HDC,
+                                                 DWORD,
+                                                 DWORD,
+                                                 DWORD,
+                                                 FLOAT,
+                                                 FLOAT,
+                                                 int,
+                                                 LPGLYPHMETRICSFLOAT);
 typedef BOOL(WINAPI *PFNWGLDESCRIBELAYERPLANEPROC)(HDC, int, int, UINT, LPLAYERPLANEDESCRIPTOR);
 typedef int(WINAPI *PFNWGLSETLAYERPALETTEENTRIESPROC)(HDC, int, int, int, CONST COLORREF *);
 typedef int(WINAPI *PFNWGLGETLAYERPALETTEENTRIESPROC)(HDC, int, int, int, COLORREF *);
@@ -38,6 +52,6 @@ typedef BOOL(WINAPI *PFNWGLREALIZELAYERPALETTEPROC)(HDC, int, BOOL);
 typedef BOOL(WINAPI *PFNWGLSWAPLAYERBUFFERSPROC)(HDC, UINT);
 typedef DWORD(WINAPI *PFNWGLSWAPMULTIPLEBUFFERSPROC)(UINT, CONST WGLSWAP *);
 
-}
+}  // namespace rx
 
-#endif // LIBANGLE_RENDERER_GL_WGL_FUNCTIONSWGLTYPEDEFS_H_
+#endif  // LIBANGLE_RENDERER_GL_WGL_FUNCTIONSWGLTYPEDEFS_H_
