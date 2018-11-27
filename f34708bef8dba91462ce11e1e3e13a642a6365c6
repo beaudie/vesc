@@ -33,6 +33,41 @@
       "revId": "f34708bef8dba91462ce11e1e3e13a642a6365c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7673684_0f5d5788",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-27T05:28:20Z",
+      "side": 1,
+      "message": "From the commit message:\n\n\u003e Also update the PackedEnumMap initialization to take an intializer.\nThe initializer is a list of key/values which is much more robust to\nchanges in the packed map.",
+      "parentUuid": "85ee89c2_eb4e12bf",
+      "revId": "f34708bef8dba91462ce11e1e3e13a642a6365c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66048360_5075186b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-27T05:28:20Z",
+      "side": 1,
+      "message": "With 7fa8824b1 I see a lot of files affected by fixes like this. Perhaps it\u0027s better to submit all of that formatting changes separately.\n\nThat commit by the way changes:\n\nfunction()\n{\n}\n\nto:\n\nfunction() {}\n\nwhich is fine by me, but not applied anywhere yet either.",
+      "revId": "f34708bef8dba91462ce11e1e3e13a642a6365c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
