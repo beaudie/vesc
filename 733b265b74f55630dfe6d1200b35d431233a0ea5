@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7deedfc5_d90779a3",
+        "filename": "BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T20:58:56Z",
+      "side": 1,
+      "message": "this seems a bit fishy. wonder if there\u0027s another way you can get what you need here.",
+      "range": {
+        "startLine": 991,
+        "startChar": 4,
+        "endLine": 991,
+        "endChar": 19
+      },
+      "revId": "733b265b74f55630dfe6d1200b35d431233a0ea5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cde06803_32b8373e",
+        "filename": "android/res/values/strings.xml",
+        "patchSetId": 10
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T20:58:56Z",
+      "side": 1,
+      "message": "nit: line wrap",
+      "range": {
+        "startLine": 12,
+        "startChar": 80,
+        "endLine": 12,
+        "endChar": 81
+      },
+      "revId": "733b265b74f55630dfe6d1200b35d431233a0ea5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d3b3083_3e4f832f",
+        "filename": "android/res/xml/main.xml",
+        "patchSetId": 10
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T20:58:56Z",
+      "side": 1,
+      "message": "nit: maybe include your LDAP in the TODO? We also like to include bug tags if possible.",
+      "range": {
+        "startLine": 15,
+        "startChar": 12,
+        "endLine": 15,
+        "endChar": 16
+      },
+      "revId": "733b265b74f55630dfe6d1200b35d431233a0ea5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
