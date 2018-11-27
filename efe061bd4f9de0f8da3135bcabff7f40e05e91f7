@@ -46,6 +46,30 @@
       "revId": "efe061bd4f9de0f8da3135bcabff7f40e05e91f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b6441248_3985fd3f",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-27T15:29:36Z",
+      "side": 0,
+      "message": "Based on your new understanding of the spec, I think es3fFboColorbufferTests are actually wrong to require GL_RGB16F renderability, so maybe you can work with Chris or someone from dEQP team to fix that test.",
+      "parentUuid": "7f7b6e11_e5aeb3e7",
+      "range": {
+        "startLine": 383,
+        "startChar": 4,
+        "endLine": 383,
+        "endChar": 79
+      },
+      "revId": "efe061bd4f9de0f8da3135bcabff7f40e05e91f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
