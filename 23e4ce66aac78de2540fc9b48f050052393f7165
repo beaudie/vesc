@@ -117,6 +117,24 @@
       "revId": "23e4ce66aac78de2540fc9b48f050052393f7165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea85c91b_564b16c7",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1421,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-27T09:10:53Z",
+      "side": 1,
+      "message": "What do you mean using a \u0027fat pointers\u0027? I think it\u0027s not workable for self-defined functions since it can take any structure from any where. We can\u0027t assume that it must come from the SSBO. I think your latter method is a general method. We need to process structure type in ShaderStorageBlockFunctionHLSL. In this way, it won\u0027t affect this patch\u0027s purpose to support ssbo as the argument of a function. We can implement structure in separate patch. How do you think?",
+      "parentUuid": "2dc66f2b_9b0990b2",
+      "revId": "23e4ce66aac78de2540fc9b48f050052393f7165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
