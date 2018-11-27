@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0f02bec4_19c93d33",
+        "filename": "src/libANGLE/renderer/d3d/IndexDataManager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T22:11:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "283178a9_5aa2d4d2",
+      "range": {
+        "startLine": 114,
+        "startChar": 5,
+        "endLine": 114,
+        "endChar": 20
+      },
+      "revId": "8ce58179bd335312fe97378da9fbcb891ae042f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a20da66_2832d9a3",
         "filename": "src/libANGLE/renderer/d3d/IndexDataManager.cpp",
         "patchSetId": 2
@@ -39,6 +63,24 @@
       "revId": "8ce58179bd335312fe97378da9fbcb891ae042f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa5ff7fd_4d0a9232",
+        "filename": "src/libANGLE/renderer/d3d/IndexDataManager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T22:11:22Z",
+      "side": 1,
+      "message": "Yep looks good. TypeSize is converted into a move and shift left. I think the typeShift are completely elided.",
+      "parentUuid": "3a20da66_2832d9a3",
+      "revId": "8ce58179bd335312fe97378da9fbcb891ae042f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
