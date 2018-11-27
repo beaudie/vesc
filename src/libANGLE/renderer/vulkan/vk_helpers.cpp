@@ -775,13 +775,13 @@ angle::Result LineLoopHelper::getIndexBufferForDrawArrays(ContextVk *contextVk,
 
 angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *contextVk,
                                                                   BufferVk *elementArrayBufferVk,
-                                                                  GLenum glIndexType,
+                                                                  gl::DrawElementsType glIndexType,
                                                                   int indexCount,
                                                                   intptr_t elementArrayOffset,
                                                                   VkBuffer *bufferHandleOut,
                                                                   VkDeviceSize *bufferOffsetOut)
 {
-    if (glIndexType == GL_UNSIGNED_BYTE)
+    if (glIndexType == gl::DrawElementsType::UnsignedByte)
     {
         // Needed before reading buffer or we could get stale data.
         ANGLE_TRY(contextVk->getRenderer()->finish(contextVk));
@@ -823,7 +823,7 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
 }
 
 angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
-                                            GLenum glIndexType,
+                                            gl::DrawElementsType glIndexType,
                                             GLsizei indexCount,
                                             const uint8_t *srcPtr,
                                             VkBuffer *bufferHandleOut,
@@ -839,7 +839,7 @@ angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
                                            reinterpret_cast<uint8_t **>(&indices), bufferHandleOut,
                                            bufferOffsetOut, nullptr));
 
-    if (glIndexType == GL_UNSIGNED_BYTE)
+    if (glIndexType == gl::DrawElementsType::UnsignedByte)
     {
         // Vulkan doesn't support uint8 index types, so we need to emulate it.
         ASSERT(indexType == VK_INDEX_TYPE_UINT16);

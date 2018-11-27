@@ -631,7 +631,7 @@ bool ValidateTransformFeedbackPrimitiveMode(const Context *context,
 bool ValidateDrawElementsInstancedBase(Context *context,
                                        PrimitiveMode mode,
                                        GLsizei count,
-                                       GLenum type,
+                                       DrawElementsType type,
                                        const GLvoid *indices,
                                        GLsizei primcount)
 {
@@ -2960,14 +2960,14 @@ bool ValidateDrawArraysInstancedANGLE(Context *context,
     return ValidateDrawInstancedANGLE(context);
 }
 
-bool ValidateDrawElementsBase(Context *context, PrimitiveMode mode, GLenum type)
+bool ValidateDrawElementsBase(Context *context, PrimitiveMode mode, DrawElementsType type)
 {
     switch (type)
     {
-        case GL_UNSIGNED_BYTE:
-        case GL_UNSIGNED_SHORT:
+        case DrawElementsType::UnsignedByte:
+        case DrawElementsType::UnsignedShort:
             break;
-        case GL_UNSIGNED_INT:
+        case DrawElementsType::UnsignedInt:
             if (context->getClientMajorVersion() < 3 && !context->getExtensions().elementIndexUint)
             {
                 context->validationError(GL_INVALID_ENUM, kErrorTypeNotUnsignedShortByte);
@@ -2975,7 +2975,7 @@ bool ValidateDrawElementsBase(Context *context, PrimitiveMode mode, GLenum type)
             }
             break;
         default:
-            context->validationError(GL_INVALID_ENUM, kErrorTypeNotUnsignedShortByte);
+            context->validationError(GL_INVALID_ENUM, kErrorEnumNotSupported);
             return false;
     }
 
@@ -3014,7 +3014,7 @@ bool ValidateDrawElementsBase(Context *context, PrimitiveMode mode, GLenum type)
 bool ValidateDrawElementsCommon(Context *context,
                                 PrimitiveMode mode,
                                 GLsizei count,
-                                GLenum type,
+                                DrawElementsType type,
                                 const void *indices,
                                 GLsizei primcount)
 {
@@ -3031,7 +3031,7 @@ bool ValidateDrawElementsCommon(Context *context,
     const VertexArray *vao     = state.getVertexArray();
     Buffer *elementArrayBuffer = vao->getElementArrayBuffer();
 
-    GLuint typeBytes = GetTypeInfo(type).bytes;
+    GLuint typeBytes = GetDrawElementsTypeSize(type);
 
     if (context->getExtensions().webglCompatibility)
     {
@@ -3162,7 +3162,7 @@ bool ValidateDrawElementsCommon(Context *context,
 bool ValidateDrawElementsInstancedCommon(Context *context,
                                          PrimitiveMode mode,
                                          GLsizei count,
-                                         GLenum type,
+                                         DrawElementsType type,
                                          const void *indices,
                                          GLsizei primcount)
 {
@@ -3172,7 +3172,7 @@ bool ValidateDrawElementsInstancedCommon(Context *context,
 bool ValidateDrawElementsInstancedANGLE(Context *context,
                                         PrimitiveMode mode,
                                         GLsizei count,
-                                        GLenum type,
+                                        DrawElementsType type,
                                         const void *indices,
                                         GLsizei primcount)
 {

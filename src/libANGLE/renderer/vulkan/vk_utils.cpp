@@ -1480,14 +1480,14 @@ VkComponentSwizzle GetSwizzle(const GLenum swizzle)
     }
 }
 
-VkIndexType GetIndexType(GLenum elementType)
+VkIndexType GetIndexType(gl::DrawElementsType elementType)
 {
     switch (elementType)
     {
-        case GL_UNSIGNED_BYTE:
-        case GL_UNSIGNED_SHORT:
+        case gl::DrawElementsType::UnsignedByte:
+        case gl::DrawElementsType::UnsignedShort:
             return VK_INDEX_TYPE_UINT16;
-        case GL_UNSIGNED_INT:
+        case gl::DrawElementsType::UnsignedInt:
             return VK_INDEX_TYPE_UINT32;
         default:
             UNREACHABLE();
