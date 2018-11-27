@@ -135,6 +135,24 @@
       "revId": "23e4ce66aac78de2540fc9b48f050052393f7165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19f0cffa_7928e235",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1421,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-27T12:57:12Z",
+      "side": 1,
+      "message": "We could imagine producing multiple copies of the functions in HLSL code if they are passed structures coming from SSBOs. It is very complex though, so we should probably go with . the . copy method first.\n\nThat said in the spirit of Method 1, we can use an AST pass to move the SSBO access out of the function call.",
+      "parentUuid": "ea85c91b_564b16c7",
+      "revId": "23e4ce66aac78de2540fc9b48f050052393f7165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
