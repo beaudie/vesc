@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dd1d48e2_fe541b60",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T21:48:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "847ced01_ea319623",
+      "range": {
+        "startLine": 540,
+        "startChar": 4,
+        "endLine": 540,
+        "endChar": 10
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a44fc85_11b124e4",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 13
@@ -45,6 +69,30 @@
       "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1108a15e_1d04f0c6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T21:48:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a44fc85_11b124e4",
+      "range": {
+        "startLine": 1220,
+        "startChar": 0,
+        "endLine": 1220,
+        "endChar": 93
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1a63b466_562566c3",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 6007,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T21:48:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d3103130_868680ea",
+      "range": {
+        "startLine": 6007,
+        "startChar": 4,
+        "endLine": 6007,
+        "endChar": 21
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "49e4d984_c790361f",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 13
@@ -91,6 +163,30 @@
       "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d183a643_5aae5a8a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 6262,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T21:48:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "49e4d984_c790361f",
+      "range": {
+        "startLine": 6262,
+        "startChar": 4,
+        "endLine": 6262,
+        "endChar": 21
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "0cb7f817_36a97e4b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 8180,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T21:48:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f1ed2b4_c1581dc3",
+      "range": {
+        "startLine": 8180,
+        "startChar": 15,
+        "endLine": 8180,
+        "endChar": 30
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bd7ae768_aedadb1f",
         "filename": "src/libANGLE/RefCountObject.h",
         "patchSetId": 13
@@ -137,6 +257,30 @@
       "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5d0d67a_fe28ac32",
+        "filename": "src/libANGLE/RefCountObject.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T21:48:14Z",
+      "side": 1,
+      "message": "Yes, below.",
+      "parentUuid": "bd7ae768_aedadb1f",
+      "range": {
+        "startLine": 56,
+        "startChar": 56,
+        "endLine": 56,
+        "endChar": 62
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,53 @@
     },
     {
       "key": {
+        "uuid": "5e049339_ed46f6db",
+        "filename": "src/libANGLE/RefCountObject.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T21:48:14Z",
+      "side": 1,
+      "message": "Yes, below.",
+      "parentUuid": "de09dcab_618e3550",
+      "range": {
+        "startLine": 138,
+        "startChar": 58,
+        "endLine": 138,
+        "endChar": 71
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d61a86ad_e0bbd358",
+        "filename": "src/libANGLE/RefCountObject.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T21:48:14Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 73
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bd881cf5_1a8f37e4",
         "filename": "src/libANGLE/renderer/renderer_utils.cpp",
         "patchSetId": 13
@@ -186,6 +377,30 @@
     },
     {
       "key": {
+        "uuid": "6367762c_2259c346",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T21:48:14Z",
+      "side": 1,
+      "message": "Was reluctant to do this since it is a deceptively hard refactor. I think we can solve this by always passing ContextImpl instead of gl::Context to impl methods. But I didn\u0027t want to scope that out and undertake it immediately. Didn\u0027t change anything here yet.",
+      "parentUuid": "bd881cf5_1a8f37e4",
+      "range": {
+        "startLine": 442,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 71
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "44bcfc56_2e5f0bca",
         "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
         "patchSetId": 13
@@ -206,6 +421,30 @@
       "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3faa896_6e3afa52",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T21:48:14Z",
+      "side": 1,
+      "message": "Done, good catch.",
+      "parentUuid": "44bcfc56_2e5f0bca",
+      "range": {
+        "startLine": 199,
+        "startChar": 18,
+        "endLine": 199,
+        "endChar": 36
+      },
+      "revId": "098aa1979428ecb74f603d2f65e16cec5213af5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
