@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6c066e2d_125036bf",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T18:33:02Z",
+      "side": 1,
+      "message": "Good thought. But it is handled already by the calls to context-\u003egetStateCache().isValidDrawMode(mode) in the validation logic. isValidDrawMode checks the enum against a flat array. We just need to make sure the enum is in the valid range before indexing into the array. And that we don\u0027t static_cast to an enum value that isn\u0027t defined.\n\nI added specialized tests to verify these values return INVALID_ENUM when used in draw calls.",
+      "parentUuid": "1dea5c1f_7ce16a3f",
+      "revId": "f34708bef8dba91462ce11e1e3e13a642a6365c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "85ee89c2_eb4e12bf",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 5
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "58be3eea_112900fb",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T18:33:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f7673684_0f5d5788",
+      "revId": "f34708bef8dba91462ce11e1e3e13a642a6365c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66048360_5075186b",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
         "patchSetId": 5
@@ -68,6 +104,24 @@
       "revId": "f34708bef8dba91462ce11e1e3e13a642a6365c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2ac04f9_f8cc2ba4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-27T18:33:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66048360_5075186b",
+      "revId": "f34708bef8dba91462ce11e1e3e13a642a6365c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
