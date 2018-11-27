@@ -70,6 +70,30 @@
       "revId": "efe061bd4f9de0f8da3135bcabff7f40e05e91f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0748d008_ff03e3b2",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-27T15:39:29Z",
+      "side": 0,
+      "message": "It looks like the test is part of the ES3 suite and I\u0027m not sure where the actual check for the presence of GL_EXT_color_buffer_half_float is done.  I need to look into it a bit more.",
+      "parentUuid": "b6441248_3985fd3f",
+      "range": {
+        "startLine": 383,
+        "startChar": 4,
+        "endLine": 383,
+        "endChar": 79
+      },
+      "revId": "efe061bd4f9de0f8da3135bcabff7f40e05e91f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
