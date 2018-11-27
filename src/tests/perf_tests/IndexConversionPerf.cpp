@@ -71,8 +71,7 @@ IndexConversionPerfTest::IndexConversionPerfTest()
       mProgram(0),
       mVertexBuffer(0),
       mIndexBuffer(0)
-{
-}
+{}
 
 void IndexConversionPerfTest::initializeBenchmark()
 {
@@ -187,28 +186,28 @@ void IndexConversionPerfTest::drawIndexRange()
 IndexConversionPerfParams IndexConversionPerfD3D11Params()
 {
     IndexConversionPerfParams params;
-    params.eglParameters    = egl_platform::D3D11_NULL();
-    params.majorVersion     = 2;
-    params.minorVersion     = 0;
-    params.windowWidth      = 256;
-    params.windowHeight     = 256;
+    params.eglParameters     = egl_platform::D3D11_NULL();
+    params.majorVersion      = 2;
+    params.minorVersion      = 0;
+    params.windowWidth       = 256;
+    params.windowHeight      = 256;
     params.iterationsPerStep = 225;
-    params.numIndexTris     = 3000;
-    params.indexRangeOffset = 0;
+    params.numIndexTris      = 3000;
+    params.indexRangeOffset  = 0;
     return params;
 }
 
 IndexConversionPerfParams IndexRangeOffsetPerfD3D11Params()
 {
     IndexConversionPerfParams params;
-    params.eglParameters    = egl_platform::D3D11_NULL();
-    params.majorVersion     = 2;
-    params.minorVersion     = 0;
-    params.windowWidth      = 256;
-    params.windowHeight     = 256;
+    params.eglParameters     = egl_platform::D3D11_NULL();
+    params.majorVersion      = 2;
+    params.minorVersion      = 0;
+    params.windowWidth       = 256;
+    params.windowHeight      = 256;
     params.iterationsPerStep = 16;
-    params.numIndexTris     = 50000;
-    params.indexRangeOffset = 64;
+    params.numIndexTris      = 50000;
+    params.indexRangeOffset  = 64;
     return params;
 }
 

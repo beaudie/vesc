@@ -35,8 +35,7 @@ TextureCaps::TextureCaps()
       textureAttachment(false),
       renderbuffer(false),
       sampleCounts()
-{
-}
+{}
 
 TextureCaps::TextureCaps(const TextureCaps &other) = default;
 
@@ -92,13 +91,9 @@ TextureCaps GenerateMinimumTextureCaps(GLenum sizedInternalFormat,
     return caps;
 }
 
-TextureCapsMap::TextureCapsMap()
-{
-}
+TextureCapsMap::TextureCapsMap() {}
 
-TextureCapsMap::~TextureCapsMap()
-{
-}
+TextureCapsMap::~TextureCapsMap() {}
 
 void TextureCapsMap::insert(GLenum internalFormat, const TextureCaps &caps)
 {
@@ -261,8 +256,7 @@ Extensions::Extensions()
       memorySize(false),
       textureMultisample(false),
       multiDraw(false)
-{
-}
+{}
 
 std::vector<std::string> Extensions::getStrings() const
 {
@@ -288,8 +282,7 @@ Limitations::Limitations()
       noSimultaneousConstantColorAndAlphaBlendFunc(false),
       noFlexibleVaryingPacking(false),
       noDoubleBoundTransformFeedbackBuffers(false)
-{
-}
+{}
 
 static bool GetFormatSupportBase(const TextureCapsMap &textureCaps,
                                  const GLenum *requiredFormats,
@@ -354,7 +347,8 @@ static bool DeterminePackedDepthStencilSupport(const TextureCapsMap &textureCaps
 static bool DetermineRGB8AndRGBA8TextureSupport(const TextureCapsMap &textureCaps)
 {
     constexpr GLenum requiredFormats[] = {
-        GL_RGB8, GL_RGBA8,
+        GL_RGB8,
+        GL_RGBA8,
     };
 
     return GetFormatSupport(textureCaps, requiredFormats, false, false, false, true);
@@ -375,15 +369,18 @@ static bool DetermineColorBufferHalfFloatSupport(const TextureCapsMap &textureCa
                                                  bool checkRGFormats)
 {
     constexpr GLenum requiredRGRenderbufferFormats[] = {
-        GL_R16F, GL_RG16F,
+        GL_R16F,
+        GL_RG16F,
     };
     constexpr GLenum requiredRenderbufferFormats[] = {
-        GL_RGB16F, GL_RGBA16F,
+        GL_RGB16F,
+        GL_RGBA16F,
     };
     // GL_RGBA16F since the extension says format=RGBA type=HALF_FLOAT_OES textures are renderable
     // GL_RGB16F because dEQP GLES3 tests for it in es3fFboColorbufferTests.cpp
     constexpr GLenum requiredTextureAttachmentFormats[] = {
-        GL_RGB16F, GL_RGBA16F,
+        GL_RGB16F,
+        GL_RGBA16F,
     };
 
     if (checkRGFormats &&
@@ -443,13 +440,16 @@ static bool DetermineRGTextureSupport(const TextureCapsMap &textureCaps,
                                       bool checkFloatFormats)
 {
     constexpr GLenum requiredFormats[] = {
-        GL_R8, GL_RG8,
+        GL_R8,
+        GL_RG8,
     };
     constexpr GLenum requiredHalfFloatFormats[] = {
-        GL_R16F, GL_RG16F,
+        GL_R16F,
+        GL_RG16F,
     };
     constexpr GLenum requiredFloatFormats[] = {
-        GL_R32F, GL_RG32F,
+        GL_R32F,
+        GL_RG32F,
     };
 
     if (checkHalfFloatFormats &&
@@ -471,7 +471,8 @@ static bool DetermineRGTextureSupport(const TextureCapsMap &textureCaps,
 static bool DetermineDXT1TextureSupport(const TextureCapsMap &textureCaps)
 {
     constexpr GLenum requiredFormats[] = {
-        GL_COMPRESSED_RGB_S3TC_DXT1_EXT, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,
+        GL_COMPRESSED_RGB_S3TC_DXT1_EXT,
+        GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,
     };
 
     return GetFormatSupport(textureCaps, requiredFormats, true, true, false, false);
@@ -501,8 +502,10 @@ static bool DetermineDXT5TextureSupport(const TextureCapsMap &textureCaps)
 static bool DetermineS3TCsRGBTextureSupport(const TextureCapsMap &textureCaps)
 {
     constexpr GLenum requiredFormats[] = {
-        GL_COMPRESSED_SRGB_S3TC_DXT1_EXT, GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT,
-        GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT, GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT,
+        GL_COMPRESSED_SRGB_S3TC_DXT1_EXT,
+        GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT,
+        GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT,
+        GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT,
     };
 
     return GetFormatSupport(textureCaps, requiredFormats, true, true, false, false);
@@ -645,7 +648,8 @@ static bool DetermineEACRG11SignedTextureSupport(const TextureCapsMap &textureCa
 static bool DetermineSRGBTextureSupport(const TextureCapsMap &textureCaps)
 {
     constexpr GLenum requiredFilterFormats[] = {
-        GL_SRGB8, GL_SRGB8_ALPHA8,
+        GL_SRGB8,
+        GL_SRGB8_ALPHA8,
     };
 
     constexpr GLenum requiredRenderFormats[] = {
@@ -660,7 +664,9 @@ static bool DetermineSRGBTextureSupport(const TextureCapsMap &textureCaps)
 static bool DetermineDepthTextureSupport(const TextureCapsMap &textureCaps)
 {
     constexpr GLenum requiredFormats[] = {
-        GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT32_OES, GL_DEPTH24_STENCIL8_OES,
+        GL_DEPTH_COMPONENT16,
+        GL_DEPTH_COMPONENT32_OES,
+        GL_DEPTH24_STENCIL8_OES,
     };
 
     return GetFormatSupport(textureCaps, requiredFormats, true, true, true, true);
@@ -715,7 +721,9 @@ static bool DetermineTextureNorm16Support(const TextureCapsMap &textureCaps)
     };
 
     constexpr GLenum requiredRenderFormats[] = {
-        GL_R16_EXT, GL_RG16_EXT, GL_RGBA16_EXT,
+        GL_R16_EXT,
+        GL_RG16_EXT,
+        GL_RGBA16_EXT,
     };
 
     return GetFormatSupport(textureCaps, requiredFilterFormats, true, true, false, false) &&
@@ -930,9 +938,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
     return extensionInfo;
 }
 
-TypePrecision::TypePrecision() : range({{0, 0}}), precision(0)
-{
-}
+TypePrecision::TypePrecision() : range({{0, 0}}), precision(0) {}
 
 TypePrecision::TypePrecision(const TypePrecision &other) = default;
 
@@ -1330,14 +1336,12 @@ Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensi
 
     return caps;
 }
-}
+}  // namespace gl
 
 namespace egl
 {
 
-Caps::Caps() : textureNPOT(false)
-{
-}
+Caps::Caps() : textureNPOT(false) {}
 
 DisplayExtensions::DisplayExtensions()
     : createContextRobustness(false),
@@ -1383,8 +1387,7 @@ DisplayExtensions::DisplayExtensions()
       blobCache(false),
       imageNativeBuffer(false),
       getFrameTimestamps(false)
-{
-}
+{}
 
 std::vector<std::string> DisplayExtensions::getStrings() const
 {
@@ -1441,9 +1444,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     return extensionStrings;
 }
 
-DeviceExtensions::DeviceExtensions() : deviceD3D(false)
-{
-}
+DeviceExtensions::DeviceExtensions() : deviceD3D(false) {}
 
 std::vector<std::string> DeviceExtensions::getStrings() const
 {
@@ -1473,8 +1474,7 @@ ClientExtensions::ClientExtensions()
       clientGetAllProcAddresses(false),
       debug(false),
       explicitContext(false)
-{
-}
+{}
 
 ClientExtensions::ClientExtensions(const ClientExtensions &other) = default;
 
