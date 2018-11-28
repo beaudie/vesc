@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a58850df_3a877dd2",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2796,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-28T21:32:47Z",
+      "side": 1,
+      "message": "Yes. Without this linux \u0026 mac complain about mDirtyObjectHandlers being undefined.",
+      "parentUuid": "88bbd310_02c70003",
+      "range": {
+        "startLine": 2796,
+        "startChar": 0,
+        "endLine": 2796,
+        "endChar": 86
+      },
+      "revId": "54d9f9e93f14fd86585a49166086cf99d5140161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da4c96aa_ebd99a30",
         "filename": "src/libANGLE/State.h",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2018-11-28T03:39:05Z",
       "side": 1,
       "message": "It\u0027s possible some compilers would instantiate this array multiple times. I\u0027d be tempted to just make this a nonstatic nonconst member variable and init it in the constructor. I believe the code gen for the access would be the same. But if you are pretty sure it only gets instantiated once or that the multiple instantiations are harmless I\u0027m fine with that.\n\nnits: if this is constexpr it should be kDirtyObjectHandlers. Also you can remove the +1.",
+      "range": {
+        "startLine": 569,
+        "startChar": 3,
+        "endLine": 572,
+        "endChar": 33
+      },
+      "revId": "54d9f9e93f14fd86585a49166086cf99d5140161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baf0f6c6_c18f6642",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-28T21:32:47Z",
+      "side": 1,
+      "message": "Are you sure? gcc/clang on Linux \u0026 MAC complain about mDirtyObjectHandlers being undefined without the definition in State.cpp and Windows doesn\u0027t complain about duplicated symbols.\n\nIf the variable would be a member variable we\u0027d add one additional indirection through the this pointer. I\u0027m sure that we don\u0027t want to do this.",
+      "parentUuid": "da4c96aa_ebd99a30",
       "range": {
         "startLine": 569,
         "startChar": 3,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "57f865b4_4f52a9e6",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-28T21:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80953a4f_7aa9e505",
+      "range": {
+        "startLine": 573,
+        "startChar": 61,
+        "endLine": 573,
+        "endChar": 89
+      },
+      "revId": "54d9f9e93f14fd86585a49166086cf99d5140161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6af6c0cc_51a1a0eb",
         "filename": "src/libANGLE/State.h",
         "patchSetId": 5
@@ -91,6 +163,30 @@
       "revId": "54d9f9e93f14fd86585a49166086cf99d5140161",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02c40407_c3d2971b",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-11-28T21:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6af6c0cc_51a1a0eb",
+      "range": {
+        "startLine": 580,
+        "startChar": 0,
+        "endLine": 582,
+        "endChar": 51
+      },
+      "revId": "54d9f9e93f14fd86585a49166086cf99d5140161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
