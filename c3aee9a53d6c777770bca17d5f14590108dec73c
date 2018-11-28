@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e62470e_634ec980",
+        "filename": "src/libANGLE/ErrorStrings.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-28T00:45:54Z",
+      "side": 1,
+      "message": "nit: you can remove the \u0027Error\u0027 part of the string.",
+      "range": {
+        "startLine": 91,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 33
+      },
+      "revId": "c3aee9a53d6c777770bca17d5f14590108dec73c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
