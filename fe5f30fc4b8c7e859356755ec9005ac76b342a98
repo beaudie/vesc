@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "96050cbe_45dc534e",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-28T22:17:15Z",
+      "side": 1,
+      "message": "Could this be more conservative and check (resourceInitEnabled \u0026\u0026 framebufferNeedsInit)?",
+      "range": {
+        "startLine": 1203,
+        "startChar": 12,
+        "endLine": 1203,
+        "endChar": 56
+      },
+      "revId": "fe5f30fc4b8c7e859356755ec9005ac76b342a98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
