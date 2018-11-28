@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c94db25_5ad61245",
+        "filename": "src/libANGLE/ErrorStrings.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-28T22:27:39Z",
+      "side": 1,
+      "message": "here",
+      "range": {
+        "startLine": 102,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 24
+      },
+      "revId": "cc7c67d851bdf0c8afa36090d6e14af59057178a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e03c9ea0_ae8defc6",
+        "filename": "src/libANGLE/ErrorStrings.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-28T22:27:39Z",
+      "side": 1,
+      "message": "we already have kIndexExceedsSamples",
+      "range": {
+        "startLine": 181,
+        "startChar": 4,
+        "endLine": 181,
+        "endChar": 24
+      },
+      "revId": "cc7c67d851bdf0c8afa36090d6e14af59057178a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
