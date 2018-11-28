@@ -22,6 +22,30 @@
       "revId": "254b32cb9bf753842459c6719ce98ae8b049cd78",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bb108bc_a39324f3",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3122,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-28T22:40:34Z",
+      "side": 0,
+      "message": "The fix part was to the test. But yeah the functional change was removing this check. It\u0027s not part of the spec.",
+      "parentUuid": "3bb35104_26d3fbf3",
+      "range": {
+        "startLine": 3118,
+        "startChar": 1,
+        "endLine": 3122,
+        "endChar": 9
+      },
+      "revId": "254b32cb9bf753842459c6719ce98ae8b049cd78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
