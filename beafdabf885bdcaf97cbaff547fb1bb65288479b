@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "64e87df1_1ee447b6",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-28T18:27:40Z",
+      "side": 1,
+      "message": "First, the \"apps allowed to choose\" answer has been deprecated, and will be removed.  I thought I would be removing it once the version-2 API becomes adopted and the version-1 API is removed (thus I will \"ACK\" some of your comments, but not make any changes, since the code is going away).  However, your other comments caused me to look, and I can remove it now.  I\u0027m trying to think if I want to remove it now (this CL), or right after this CL (from an Android risk-management perspective).\n\nSecond, with the old scheme, what you proposed is possible.",
+      "parentUuid": "dd2ab5f9_502b9822",
+      "range": {
+        "startLine": 54,
+        "startChar": 59,
+        "endLine": 54,
+        "endChar": 87
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a51f4689_fa4bb858",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 23
@@ -118,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "185aaf8b_b328985a",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-28T18:27:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "aac5a0e6_15a4013c",
+      "range": {
+        "startLine": 63,
+        "startChar": 3,
+        "endLine": 63,
+        "endChar": 18
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e878429a_35ff81a0",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 23
@@ -138,6 +186,30 @@
       "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ebc7454_8110f332",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-28T18:27:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e878429a_35ff81a0",
+      "range": {
+        "startLine": 64,
+        "startChar": 35,
+        "endLine": 64,
+        "endChar": 44
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
