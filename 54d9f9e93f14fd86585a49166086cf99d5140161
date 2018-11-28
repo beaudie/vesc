@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "b194fd1e_0610ba77",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-28T21:49:03Z",
+      "side": 1,
+      "message": "I\u0027m not sure at all. :) If you have a chance to verify there\u0027s no indirect via the constexpr in the header that would be good to know for future dev. I\u0027ve been tending to put things in the cpp files. In any case, current design LGTM.",
+      "parentUuid": "baf0f6c6_c18f6642",
+      "range": {
+        "startLine": 569,
+        "startChar": 3,
+        "endLine": 572,
+        "endChar": 33
+      },
+      "revId": "54d9f9e93f14fd86585a49166086cf99d5140161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "80953a4f_7aa9e505",
         "filename": "src/libANGLE/State.h",
         "patchSetId": 5
