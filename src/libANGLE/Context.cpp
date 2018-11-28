@@ -1475,8 +1475,6 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
         case GL_MAX_DRAW_BUFFERS_EXT:
             *params = mCaps.maxDrawBuffers;
             break;
-        // case GL_FRAMEBUFFER_BINDING:                    // now equivalent to
-        // GL_DRAW_FRAMEBUFFER_BINDING_ANGLE
         case GL_SUBPIXEL_BITS:
             *params = 4;
             break;
@@ -3469,6 +3467,12 @@ void Context::updateCaps()
 
     mThreadPool = angle::WorkerThreadPool::Create(mExtensions.parallelShaderCompile);
 
+    // Reinitialize some dirty bits that depend on extensions.
+    mDrawDirtyObjects.set(State::DIRTY_OBJECT_DRAW_ATTACHMENTS,
+                          mGLState.isRobustResourceInitEnabled());
+    mBlitDirtyObjects.set(State::DIRTY_OBJECT_DRAW_ATTACHMENTS,
+                          mGLState.isRobustResourceInitEnabled());
+
     // Reinitialize state cache after extension changes.
     mStateCache.initialize(this);
 }
@@ -3515,7 +3519,7 @@ angle::Result Context::prepareForDraw(PrimitiveMode mode)
     if (isRobustResourceInitEnabled())
     {
         ANGLE_TRY(mGLState.clearUnclearedActiveTextures(this));
-        ANGLE_TRY(mGLState.getDrawFramebuffer()->ensureDrawAttachmentsInitialized(this));
+        ASSERT(!mGLState.getDrawFramebuffer()->hasResourceThatNeedsInit());
     }
 
     ANGLE_TRY(syncDirtyBits());
@@ -3961,7 +3965,7 @@ void Context::drawBuffers(GLsizei n, const GLenum *bufs)
     Framebuffer *framebuffer = mGLState.getDrawFramebuffer();
     ASSERT(framebuffer);
     framebuffer->setDrawBuffers(n, bufs);
-    mGLState.setObjectDirty(GL_DRAW_FRAMEBUFFER);
+    mGLState.setDrawFramebufferDirty();
     mStateCache.onDrawFramebufferChange(this);
 }
 
@@ -7248,7 +7252,8 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
         case GL_NUM_SHADER_BINARY_FORMATS:
         case GL_NUM_COMPRESSED_TEXTURE_FORMATS:
         case GL_ARRAY_BUFFER_BINDING:
-        case GL_FRAMEBUFFER_BINDING:
+        case GL_FRAMEBUFFER_BINDING:  // GL_FRAMEBUFFER_BINDING now equivalent to
+                                      // GL_DRAW_FRAMEBUFFER_BINDING_ANGLE
         case GL_RENDERBUFFER_BINDING:
         case GL_CURRENT_PROGRAM:
         case GL_PACK_ALIGNMENT:
@@ -7550,7 +7555,7 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
     // Check for ES3.0+ parameter names which are also exposed as ES2 extensions
     switch (pname)
     {
-        // case GL_DRAW_FRAMEBUFFER_BINDING_ANGLE  // equivalent to FRAMEBUFFER_BINDING
+        // GL_DRAW_FRAMEBUFFER_BINDING_ANGLE equivalent to FRAMEBUFFER_BINDING
         case GL_READ_FRAMEBUFFER_BINDING_ANGLE:
             if ((getClientMajorVersion() < 3) && !getExtensions().framebufferBlit)
             {
@@ -8101,7 +8106,7 @@ void Context::onSubjectStateChange(const Context *context,
         case kDrawFramebufferSubjectIndex:
             if (message == angle::SubjectMessage::STORAGE_CHANGED)
             {
-                mGLState.setObjectDirty(GL_DRAW_FRAMEBUFFER);
+                mGLState.setDrawFramebufferDirty();
             }
             mStateCache.onDrawFramebufferChange(this);
             break;
