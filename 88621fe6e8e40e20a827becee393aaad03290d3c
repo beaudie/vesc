@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a286a01f_ec4f34ce",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-28T22:48:56Z",
+      "side": 1,
+      "message": "Do you want to append the flags if there are multiple elements?  Otherwise maybe assert that flags is empty",
+      "range": {
+        "startLine": 193,
+        "startChar": 16,
+        "endLine": 193,
+        "endChar": 29
+      },
+      "revId": "88621fe6e8e40e20a827becee393aaad03290d3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23a85093_a2f455b4",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-11-28T22:48:56Z",
+      "side": 1,
+      "message": "Maybe factor this into a set above for skipped file types?  Actually, is it possible to list valid types instead?",
+      "range": {
+        "startLine": 235,
+        "startChar": 7,
+        "endLine": 237,
+        "endChar": 49
+      },
+      "revId": "88621fe6e8e40e20a827becee393aaad03290d3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
