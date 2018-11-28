@@ -833,7 +833,7 @@ UniformLinker::ShaderUniformCount UniformLinker::flattenUniformImpl(
         ASSERT(uniform.arraySizes.size() <= 1u);
         LinkedUniform linkedUniform(uniform.type, uniform.precision, fullNameWithArrayIndex,
                                     uniform.arraySizes, binding, offset, *location, -1,
-                                    sh::BlockMemberInfo::getDefaultBlockInfo());
+                                    sh::kDefaultBlockMemberInfo);
         linkedUniform.mappedName                    = fullMappedNameWithArrayIndex;
         linkedUniform.active                        = markActive;
         linkedUniform.staticUse                     = markStaticUse;

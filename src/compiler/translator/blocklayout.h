@@ -12,6 +12,7 @@
 
 #include <cstddef>
 #include <map>
+#include <stack>
 #include <vector>
 
 #include <GLSLANG/ShaderLang.h>
@@ -27,27 +28,13 @@ struct InterfaceBlock;
 
 struct BlockMemberInfo
 {
-    BlockMemberInfo()
-        : offset(-1),
-          arrayStride(-1),
-          matrixStride(-1),
-          isRowMajorMatrix(false),
-          topLevelArrayStride(-1)
-    {}
+    constexpr BlockMemberInfo() = default;
 
-    BlockMemberInfo(int offset, int arrayStride, int matrixStride, bool isRowMajorMatrix)
-        : offset(offset),
-          arrayStride(arrayStride),
-          matrixStride(matrixStride),
-          isRowMajorMatrix(isRowMajorMatrix),
-          topLevelArrayStride(-1)
-    {}
-
-    BlockMemberInfo(int offset,
-                    int arrayStride,
-                    int matrixStride,
-                    bool isRowMajorMatrix,
-                    int topLevelArrayStride)
+    constexpr BlockMemberInfo(int offset,
+                              int arrayStride,
+                              int matrixStride,
+                              bool isRowMajorMatrix,
+                              int topLevelArrayStride)
         : offset(offset),
           arrayStride(arrayStride),
           matrixStride(matrixStride),
@@ -55,14 +42,25 @@ struct BlockMemberInfo
           topLevelArrayStride(topLevelArrayStride)
     {}
 
-    static BlockMemberInfo getDefaultBlockInfo() { return BlockMemberInfo(-1, -1, -1, false, -1); }
+    // A single integer identifying the offset of an active variable.
+    int offset = -1;
 
-    int offset;
-    int arrayStride;
-    int matrixStride;
-    bool isRowMajorMatrix;
-    int topLevelArrayStride;  // Only used for shader storage block members.
+    // A single integer identifying the stride between array elements in an active variable.
+    int arrayStride = -1;
+
+    // A single integer identifying the stride between columns of a column-major matrix or rows of a
+    // row-major matrix.
+    int matrixStride = -1;
+
+    // A single integer identifying whether an active variable is a row-major matrix.
+    bool isRowMajorMatrix = false;
+
+    // A single integer identifying the number of active array elements of the top-level shader
+    // storage block member containing the active variable.
+    int topLevelArrayStride = -1;
 };
+
+constexpr BlockMemberInfo kDefaultBlockMemberInfo;
 
 class BlockLayoutEncoder
 {
@@ -74,25 +72,25 @@ class BlockLayoutEncoder
                                const std::vector<unsigned int> &arraySizes,
                                bool isRowMajorMatrix);
 
-    size_t getBlockSize() const { return mCurrentOffset * BytesPerComponent; }
-    size_t getStructureBaseAlignment() const { return mStructureBaseAlignment; }
-    void increaseCurrentOffset(size_t offsetInBytes);
-    void setStructureBaseAlignment(size_t baseAlignment);
+    size_t getBlockSize() const { return mCurrentOffset * kBytesPerComponent; }
 
-    virtual void enterAggregateType() = 0;
-    virtual void exitAggregateType()  = 0;
+    // Called when entering a new structure or array.
+    // Returns the offset of the aggregate type.
+    virtual void enterAggregateType(const ShaderVariable *fields, size_t fieldCount) = 0;
 
-    static const size_t BytesPerComponent           = 4u;
-    static const unsigned int ComponentsPerRegister = 4u;
+    virtual BlockMemberInfo exitAggregateType(bool isRowMajor) = 0;
+
+    static constexpr size_t kBytesPerComponent           = 4u;
+    static constexpr unsigned int kComponentsPerRegister = 4u;
 
     static size_t getBlockRegister(const BlockMemberInfo &info);
     static size_t getBlockRegisterElement(const BlockMemberInfo &info);
 
   protected:
     size_t mCurrentOffset;
-    size_t mStructureBaseAlignment;
+    std::stack<size_t> mAggregateOffsetStack;
 
-    virtual void nextRegister();
+    void nextRegister();
 
     virtual void getBlockLayoutInfo(GLenum type,
                                     const std::vector<unsigned int> &arraySizes,
@@ -114,8 +112,8 @@ class Std140BlockEncoder : public BlockLayoutEncoder
   public:
     Std140BlockEncoder();
 
-    void enterAggregateType() override;
-    void exitAggregateType() override;
+    void enterAggregateType(const ShaderVariable *fields, size_t fieldCount) override;
+    BlockMemberInfo exitAggregateType(bool isRowMajor) override;
 
   protected:
     void getBlockLayoutInfo(GLenum type,
@@ -135,13 +133,7 @@ class Std430BlockEncoder : public Std140BlockEncoder
   public:
     Std430BlockEncoder();
 
-  protected:
-    void nextRegister() override;
-    void getBlockLayoutInfo(GLenum type,
-                            const std::vector<unsigned int> &arraySizes,
-                            bool isRowMajorMatrix,
-                            int *arrayStrideOut,
-                            int *matrixStrideOut) override;
+    void enterAggregateType(const ShaderVariable *fields, size_t fieldCount) override;
 };
 
 using BlockLayoutMap = std::map<std::string, BlockMemberInfo>;

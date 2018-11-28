@@ -238,7 +238,7 @@ bool InterfaceBlockInfo::getBlockMemberInfo(const std::string &name,
     auto infoIter = mBlockLayout.find(name);
     if (infoIter == mBlockLayout.end())
     {
-        *infoOut = sh::BlockMemberInfo::getDefaultBlockInfo();
+        *infoOut = sh::kDefaultBlockMemberInfo;
         return false;
     }
 
@@ -2191,7 +2191,7 @@ void ProgramD3D::defineStructUniformFields(gl::ShaderType shaderType,
                                            D3DUniformMap *uniformMap)
 {
     if (encoder)
-        encoder->enterAggregateType();
+        encoder->enterAggregateType(fields.data(), fields.size());
 
     for (size_t fieldIndex = 0; fieldIndex < fields.size(); fieldIndex++)
     {
@@ -2212,7 +2212,7 @@ void ProgramD3D::defineStructUniformFields(gl::ShaderType shaderType,
     }
 
     if (encoder)
-        encoder->exitAggregateType();
+        encoder->exitAggregateType(false);
 }
 
 void ProgramD3D::defineArrayOfStructsUniformFields(gl::ShaderType shaderType,
@@ -2250,7 +2250,7 @@ void ProgramD3D::defineArrayUniformElements(gl::ShaderType shaderType,
                                             D3DUniformMap *uniformMap)
 {
     if (encoder)
-        encoder->enterAggregateType();
+        encoder->enterAggregateType(uniform.fields.data(), uniform.fields.size());
 
     sh::ShaderVariable uniformElement = uniform;
     uniformElement.arraySizes.pop_back();
@@ -2261,7 +2261,7 @@ void ProgramD3D::defineArrayUniformElements(gl::ShaderType shaderType,
     }
 
     if (encoder)
-        encoder->exitAggregateType();
+        encoder->exitAggregateType(false);
 }
 
 void ProgramD3D::defineUniform(gl::ShaderType shaderType,
@@ -2294,13 +2294,13 @@ void ProgramD3D::defineUniform(gl::ShaderType shaderType,
     // Not a struct. Arrays are treated as aggregate types.
     if (uniform.isArray() && encoder)
     {
-        encoder->enterAggregateType();
+        encoder->enterAggregateType(uniform.fields.data(), uniform.fields.size());
     }
 
     // Advance the uniform offset, to track registers allocation for structs
     sh::BlockMemberInfo blockInfo =
         encoder ? encoder->encodeType(uniform.type, uniform.arraySizes, false)
-                : sh::BlockMemberInfo::getDefaultBlockInfo();
+                : sh::kDefaultBlockMemberInfo;
 
     auto uniformMapEntry   = uniformMap->find(fullName);
     D3DUniform *d3dUniform = nullptr;
@@ -2328,7 +2328,7 @@ void ProgramD3D::defineUniform(gl::ShaderType shaderType,
         // Arrays are treated as aggregate types
         if (uniform.isArray())
         {
-            encoder->exitAggregateType();
+            encoder->exitAggregateType(false);
         }
     }
 }
