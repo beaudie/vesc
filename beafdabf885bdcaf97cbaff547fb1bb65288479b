@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8bf94100_3ca3b7b9",
+        "filename": "BUILD.gn",
+        "patchSetId": 23
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-28T01:10:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1eb3e61_39bc675c",
+      "range": {
+        "startLine": 953,
+        "startChar": 0,
+        "endLine": 953,
+        "endChar": 60
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dd2ab5f9_502b9822",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 23
@@ -1268,6 +1292,30 @@
     },
     {
       "key": {
+        "uuid": "a8ad1f8e_5ebb5b38",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-28T01:10:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a192954_072a1f1b",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 5
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ddc8ebac_aea78586",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 23
@@ -1288,6 +1336,30 @@
       "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "454addd3_728ce366",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-28T01:10:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddc8ebac_aea78586",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 11
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1314,6 +1386,30 @@
     },
     {
       "key": {
+        "uuid": "aa68a651_ea7eb5b5",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-28T01:10:07Z",
+      "side": 1,
+      "message": "First, this particular function is deprecated, and will soon be deleted.\n\nIf something other than the EGL loader were to load and call this function (or the other functions), there\u0027s very little that it can do.  We don\u0027t provide privilege escalation.  The calling code provides a file descriptor that we read from (that it presumably had privilege to open).  If the file contents aren\u0027t valid, the parsing code quits quickly (in my experience).  Beyond that, there\u0027s little that we do that they might find interesting.  They can provide app/device strings and get back a bool answer.\n\nYes, there are security review process for Android, but not every piece of code is security reviewed.  They seem to use a risk-based approach for which code to review.  This is not considered high-risk code.",
+      "parentUuid": "21258dc2_214f8eb2",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 0
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d0fcf8fd_00febb67",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 23
@@ -1334,6 +1430,30 @@
       "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "377f1566_64be928a",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-28T01:10:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0fcf8fd_00febb67",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 5
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1360,6 +1480,30 @@
     },
     {
       "key": {
+        "uuid": "e614dcdb_59ca2536",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-28T01:10:07Z",
+      "side": 1,
+      "message": "Yes, once both CLs (Android and ANGLE) land and aren\u0027t considered as candidates to be reverted, I\u0027ll follow up with another CL that removes the old (version 1) functions.\n\nBTW, at that point, I can also remove some of the code that the version-1 functions use (e.g. the ability for applications to express a preference).",
+      "parentUuid": "324d383e_1b74378e",
+      "range": {
+        "startLine": 89,
+        "startChar": 18,
+        "endLine": 89,
+        "endChar": 54
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70853d75_5245c26e",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 23
@@ -1380,6 +1524,30 @@
       "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03325130_7a0ff1d5",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-28T01:10:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70853d75_5245c26e",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 58
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1427,6 +1595,30 @@
       "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18ba4580_a2a0f0f7",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-28T01:10:07Z",
+      "side": 1,
+      "message": "We don\u0027t need a binary blob.  If the EGL loader or any other piece of code needs a binary blob, we\u0027ll create a version-3 API function.",
+      "parentUuid": "17b1545f_a1120141",
+      "range": {
+        "startLine": 105,
+        "startChar": 40,
+        "endLine": 105,
+        "endChar": 44
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1524,6 +1716,30 @@
     },
     {
       "key": {
+        "uuid": "4a0a5682_5533a775",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-28T01:10:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ef9f0897_e9c8c537",
+      "range": {
+        "startLine": 108,
+        "startChar": 45,
+        "endLine": 108,
+        "endChar": 62
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "01b4623d_b4c82296",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 23
@@ -1547,6 +1763,30 @@
     },
     {
       "key": {
+        "uuid": "de3ad92e_e5550924",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-28T01:10:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01b4623d_b4c82296",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 32
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f1743fd7_f89a6859",
         "filename": "src/feature_support_util/feature_support_util.h",
         "patchSetId": 23
@@ -1567,6 +1807,30 @@
       "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bb2ff52_edb406ae",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-28T01:10:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1743fd7_f89a6859",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 0
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1605,6 +1869,30 @@
       "side": 1,
       "message": "I\u0027m fine with this.",
       "parentUuid": "4581806b_0464977f",
+      "range": {
+        "startLine": 153,
+        "startChar": 13,
+        "endLine": 153,
+        "endChar": 46
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33e17e35_a7c17cf9",
+        "filename": "src/feature_support_util/feature_support_util.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-28T01:10:07Z",
+      "side": 1,
+      "message": "I had such a name, but was requested to go with this name:-).  I\u0027ll think about it overnight.",
+      "parentUuid": "31ab1517_a2d4a2fa",
       "range": {
         "startLine": 153,
         "startChar": 13,
