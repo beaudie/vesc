@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d7fc1e61_d97d65f9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-28T22:11:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91078ba2_f838a9f0",
+      "range": {
+        "startLine": 163,
+        "startChar": 0,
+        "endLine": 163,
+        "endChar": 69
+      },
+      "revId": "45d71c304bea7b5814cc426f93e9287218594adb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "830e99ba_a9cfe32b",
         "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "45d71c304bea7b5814cc426f93e9287218594adb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee450c37_62d237b2",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-28T22:11:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "830e99ba_a9cfe32b",
+      "range": {
+        "startLine": 208,
+        "startChar": 48,
+        "endLine": 208,
+        "endChar": 54
+      },
+      "revId": "45d71c304bea7b5814cc426f93e9287218594adb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "27880beb_689033ed",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-28T22:11:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b640fb5b_a0f37d9b",
+      "range": {
+        "startLine": 317,
+        "startChar": 0,
+        "endLine": 317,
+        "endChar": 102
+      },
+      "revId": "45d71c304bea7b5814cc426f93e9287218594adb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "edb593f8_fb2fc312",
         "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
         "patchSetId": 6
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "72bc886c_4c6e62a6",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-28T22:11:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edb593f8_fb2fc312",
+      "range": {
+        "startLine": 323,
+        "startChar": 0,
+        "endLine": 323,
+        "endChar": 104
+      },
+      "revId": "45d71c304bea7b5814cc426f93e9287218594adb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a3ce259c_409edeb6",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/README.md",
         "patchSetId": 6
@@ -114,6 +210,30 @@
       "revId": "45d71c304bea7b5814cc426f93e9287218594adb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa7f4254_e639228f",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/README.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-28T22:11:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3ce259c_409edeb6",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 0
+      },
+      "revId": "45d71c304bea7b5814cc426f93e9287218594adb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
