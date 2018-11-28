@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91078ba2_f838a9f0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-28T18:59:52Z",
+      "side": 1,
+      "message": "Maybe add this in the CL where you use it?",
+      "range": {
+        "startLine": 163,
+        "startChar": 0,
+        "endLine": 163,
+        "endChar": 69
+      },
+      "revId": "45d71c304bea7b5814cc426f93e9287218594adb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "830e99ba_a9cfe32b",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-28T18:59:52Z",
+      "side": 1,
+      "message": "thought",
+      "range": {
+        "startLine": 208,
+        "startChar": 48,
+        "endLine": 208,
+        "endChar": 54
+      },
+      "revId": "45d71c304bea7b5814cc426f93e9287218594adb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b640fb5b_a0f37d9b",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-28T18:59:52Z",
+      "side": 1,
+      "message": "nit: too long",
+      "range": {
+        "startLine": 317,
+        "startChar": 0,
+        "endLine": 317,
+        "endChar": 102
+      },
+      "revId": "45d71c304bea7b5814cc426f93e9287218594adb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edb593f8_fb2fc312",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-28T18:59:52Z",
+      "side": 1,
+      "message": "nit: too long",
+      "range": {
+        "startLine": 323,
+        "startChar": 0,
+        "endLine": 323,
+        "endChar": 104
+      },
+      "revId": "45d71c304bea7b5814cc426f93e9287218594adb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3ce259c_409edeb6",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/README.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-28T18:59:52Z",
+      "side": 1,
+      "message": "This description is a bit unclear. What I understood: \"Flags\" is a set of boolean variables, and every combination of assigning \"true\" and \"false\" to these variables will be tried. \"Variation\" is a set of enum values, and each of these enum values will be tried.\nIf my understanding is correct, could you use it to improve your description?",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 0
+      },
+      "revId": "45d71c304bea7b5814cc426f93e9287218594adb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
