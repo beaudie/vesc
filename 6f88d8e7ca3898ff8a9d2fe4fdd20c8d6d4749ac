@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef9adaed_d73efbd3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-28T18:58:08Z",
+      "side": 1,
+      "message": "I think you can use vector.assign here:\n\nhttps://en.cppreference.com/w/cpp/container/vector/assign",
+      "range": {
+        "startLine": 355,
+        "startChar": 3,
+        "endLine": 355,
+        "endChar": 75
+      },
+      "revId": "6f88d8e7ca3898ff8a9d2fe4fdd20c8d6d4749ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
