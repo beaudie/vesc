@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88bbd310_02c70003",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2796,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-28T03:39:05Z",
+      "side": 1,
+      "message": "is this necessary? I would suspect not given that it\u0027s defined in the header.",
+      "range": {
+        "startLine": 2796,
+        "startChar": 0,
+        "endLine": 2796,
+        "endChar": 86
+      },
+      "revId": "54d9f9e93f14fd86585a49166086cf99d5140161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da4c96aa_ebd99a30",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-28T03:39:05Z",
+      "side": 1,
+      "message": "It\u0027s possible some compilers would instantiate this array multiple times. I\u0027d be tempted to just make this a nonstatic nonconst member variable and init it in the constructor. I believe the code gen for the access would be the same. But if you are pretty sure it only gets instantiated once or that the multiple instantiations are harmless I\u0027m fine with that.\n\nnits: if this is constexpr it should be kDirtyObjectHandlers. Also you can remove the +1.",
+      "range": {
+        "startLine": 569,
+        "startChar": 3,
+        "endLine": 572,
+        "endChar": 33
+      },
+      "revId": "54d9f9e93f14fd86585a49166086cf99d5140161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80953a4f_7aa9e505",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-28T03:39:05Z",
+      "side": 1,
+      "message": "nit: update names in static_asserts",
+      "range": {
+        "startLine": 573,
+        "startChar": 61,
+        "endLine": 573,
+        "endChar": 89
+      },
+      "revId": "54d9f9e93f14fd86585a49166086cf99d5140161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6af6c0cc_51a1a0eb",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-28T03:39:05Z",
+      "side": 1,
+      "message": "nit: you can omit this.",
+      "range": {
+        "startLine": 580,
+        "startChar": 0,
+        "endLine": 582,
+        "endChar": 51
+      },
+      "revId": "54d9f9e93f14fd86585a49166086cf99d5140161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b68b1167_9f97474e",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-28T03:39:05Z",
+      "side": 1,
+      "message": "nit: you can omit this.",
+      "range": {
+        "startLine": 566,
+        "startChar": 0,
+        "endLine": 566,
+        "endChar": 58
+      },
+      "revId": "38d4461bfab0608f67c3090ffb7db0cf0d4b9547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "096da49f_e4e4fd48",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-28T03:39:05Z",
+      "side": 1,
+      "message": "nit: you can omit these.",
+      "range": {
+        "startLine": 579,
+        "startChar": 0,
+        "endLine": 583,
+        "endChar": 0
+      },
+      "revId": "38d4461bfab0608f67c3090ffb7db0cf0d4b9547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
