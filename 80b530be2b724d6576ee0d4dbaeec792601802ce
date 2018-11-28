@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2aed8865_fbe45d0e",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-28T12:38:26Z",
+      "side": 1,
+      "message": "Are there other types of binary operands that could be used on SSBOs?",
+      "revId": "80b530be2b724d6576ee0d4dbaeec792601802ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb81680e_9ca74e1a",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-28T12:38:26Z",
+      "side": 1,
+      "message": "nit: we can early out if (!leftSSBO) \u0026\u0026 (!rightSSBO), then set mFoundSSBO unconditionnally and apply some code simplifications to the rest of the function.",
+      "revId": "80b530be2b724d6576ee0d4dbaeec792601802ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78c5b401_9960ef88",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-28T12:38:26Z",
+      "side": 1,
+      "message": "The code could be slightly less duplicated by doing the following:\n\n TIntermSequence insertions;\n\n rightNode \u003d node-\u003egetRight();\n if (rightSSBO) {\n   // create temp node\n   rightNode \u003d tempNode\n }\n\n if (leftSSBO) {\n   Same as current patch\n } else {\n   Same as current patch\n }",
+      "revId": "80b530be2b724d6576ee0d4dbaeec792601802ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92b15bda_9517273a",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-28T12:38:26Z",
+      "side": 1,
+      "message": "nit: Compound with a u",
+      "range": {
+        "startLine": 150,
+        "startChar": 27,
+        "endLine": 150,
+        "endChar": 45
+      },
+      "revId": "80b530be2b724d6576ee0d4dbaeec792601802ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9276183_1e46e43f",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-28T12:38:26Z",
+      "side": 1,
+      "message": "These could be called \"leftNode\" and \"rightNode\", initialized to the original nodes and overwritten with temp nodes if needed.\n\nThen the newExpr constructor can be simplified.",
+      "range": {
+        "startLine": 189,
+        "startChar": 0,
+        "endLine": 190,
+        "endChar": 49
+      },
+      "revId": "80b530be2b724d6576ee0d4dbaeec792601802ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f6dacd1_268d2e79",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1580,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-28T12:38:26Z",
+      "side": 1,
+      "message": "nit: can we also test that this computes the correct values?",
+      "revId": "80b530be2b724d6576ee0d4dbaeec792601802ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
