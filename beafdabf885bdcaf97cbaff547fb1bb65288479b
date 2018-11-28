@@ -420,6 +420,30 @@
     },
     {
       "key": {
+        "uuid": "f522d0fd_ace393e8",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-11-28T21:57:32Z",
+      "side": 1,
+      "message": "Taking this further, this comment could be removed if each type that ListOf can hold inherits from an abstract class that declares the necessary virtual functions, like match() and logItem().   This would help enforce all classes meet all of the requirements, making it easier to add new functions to the base class or new derived classes by catching missing functions at compile time.",
+      "parentUuid": "c4ce41c7_9f0cd8a4",
+      "range": {
+        "startLine": 164,
+        "startChar": 73,
+        "endLine": 164,
+        "endChar": 87
+      },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "95d003e3_89f3c2e4",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 23
@@ -460,6 +484,23 @@
         "endLine": 215,
         "endChar": 18
       },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1d22897_13685933",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-11-28T21:57:32Z",
+      "side": 1,
+      "message": "Is this necessary?   Instead, I would expect each T to have a .toString() since they know what they are and how they want to be represented to the user.   This also lets us update the name for a type within that class, rather than tracking down where the log message is called.\n\nBuilding on my previous comment, the presence of .toString() could be enforced by having them all inherit from an abstract class with the required virtual functions.",
       "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -1111,6 +1152,23 @@
     },
     {
       "key": {
+        "uuid": "ee82a206_625380b1",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-11-28T21:57:32Z",
+      "side": 1,
+      "message": "What happens here if read() returns an error (-1)?",
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "88762c56_3dc4a81f",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 23
@@ -1335,6 +1393,23 @@
         "endLine": 1021,
         "endChar": 92
       },
+      "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2e83a66_b4d5fb3e",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-11-28T21:57:32Z",
+      "side": 1,
+      "message": "Since systemInfo-\u003egpus[] is a vector, presumably it can have \u003e1 entries.   Should this iterate through gpus.size()?\n\n// assuming we have c++11 support\nfor (auto\u0026 it : systemInfo-\u003egpus) {...}\n// or\nfor (auto it \u003d systemInfo-\u003egpus.begin(); it !\u003d systemInfo-\u003egpus.end(); it++) {...}\n\nThis would also protect against the case where gpus[] is empty but we try and index into it anyway.",
       "revId": "beafdabf885bdcaf97cbaff547fb1bb65288479b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
