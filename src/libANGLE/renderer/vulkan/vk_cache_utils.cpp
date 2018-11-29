@@ -1266,7 +1266,8 @@ void PipelineLayoutCache::destroy(VkDevice device)
 angle::Result PipelineLayoutCache::getPipelineLayout(
     vk::Context *context,
     const vk::PipelineLayoutDesc &desc,
-    const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
+    const vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayouts,
+    size_t descriptorSetLayoutCount,
     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
 {
     auto iter = mPayload.find(desc);
@@ -1279,8 +1280,9 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
 
     // Note this does not handle gaps in descriptor set layouts gracefully.
     angle::FixedVector<VkDescriptorSetLayout, vk::kMaxDescriptorSetLayouts> setLayoutHandles;
-    for (const vk::BindingPointer<vk::DescriptorSetLayout> &layoutPtr : descriptorSetLayouts)
+    for (size_t i = 0; i < descriptorSetLayoutCount; ++i)
     {
+        const vk::BindingPointer<vk::DescriptorSetLayout> &layoutPtr = descriptorSetLayouts[i];
         if (layoutPtr.valid())
         {
             VkDescriptorSetLayout setLayout = layoutPtr.get().getHandle();

@@ -1026,7 +1026,8 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
     vk::DescriptorSetLayoutPointerArray descriptorSetLayouts;
 
     vk::BindingPointer<vk::PipelineLayout> pipelineLayout;
-    ANGLE_TRY(renderer->getPipelineLayout(contextVk, pipelineLayoutDesc, descriptorSetLayouts,
+    ANGLE_TRY(renderer->getPipelineLayout(contextVk, pipelineLayoutDesc,
+                                          descriptorSetLayouts.data(), descriptorSetLayouts.size(),
                                           &pipelineLayout));
 
     vk::RecordingMode recordingMode = vk::RecordingMode::Start;
