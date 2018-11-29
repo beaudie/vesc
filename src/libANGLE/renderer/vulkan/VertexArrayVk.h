@@ -40,7 +40,7 @@ class VertexArrayVk : public VertexArrayImpl
 
     void updateDefaultAttrib(RendererVk *renderer,
                              size_t attribIndex,
-                             VkBuffer bufferHandle,
+                             vk::BufferHelper *buffer,
                              uint32_t offset);
 
     angle::Result updateClientAttribs(const gl::Context *context,
