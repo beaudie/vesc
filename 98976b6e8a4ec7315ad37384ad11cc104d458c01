@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6e8c8606_272f6503",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-29T16:47:34Z",
+      "side": 1,
+      "message": "Reworded this. The packing actually takes 8 instructions, which is more than I expected. Could possibly be improved using careful micro-optimization. I also refactored the validation to not use a switch. The net result is that the speed is about the same for Vulkan and GL and faster for D3D11.",
+      "parentUuid": "4bc66078_0e4a0a8e",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 19
+      },
+      "revId": "98976b6e8a4ec7315ad37384ad11cc104d458c01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0e8de222_3efaa278",
         "filename": "src/common/angleutils.h",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "98976b6e8a4ec7315ad37384ad11cc104d458c01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca27d5dc_d9cd9347",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-29T16:47:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e8de222_3efaa278",
+      "revId": "98976b6e8a4ec7315ad37384ad11cc104d458c01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
