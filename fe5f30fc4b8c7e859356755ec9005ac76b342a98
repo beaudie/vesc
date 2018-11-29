@@ -22,6 +22,30 @@
       "revId": "fe5f30fc4b8c7e859356755ec9005ac76b342a98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6550c40f_a2905023",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-29T17:32:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96050cbe_45dc534e",
+      "range": {
+        "startLine": 1203,
+        "startChar": 12,
+        "endLine": 1203,
+        "endChar": 56
+      },
+      "revId": "fe5f30fc4b8c7e859356755ec9005ac76b342a98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
