@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c37ad4ac_3dd9313b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-29T10:27:20Z",
+      "side": 1,
+      "message": "This is the fix for missing barrier.",
+      "revId": "b34829d5896f084f1729e426afebb326d40049ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b877e1f_2c458b68",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-29T10:27:20Z",
+      "side": 1,
+      "message": "Once all users of `allocate()` are converted to use `getCurrentBuffer()`, the function will be changed to return the `vk::BufferHelper` directly instead of the `VkBuffer`.",
+      "revId": "b34829d5896f084f1729e426afebb326d40049ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f8970af_11427cdf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-29T10:27:20Z",
+      "side": 1,
+      "message": "`addWriteDependency()` not automatically added as I have not yet encountered a case that would need it. It might be added in the future.",
+      "revId": "b34829d5896f084f1729e426afebb326d40049ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc2ef161_9dc345eb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-29T10:27:20Z",
+      "side": 1,
+      "message": "This is the fix for WaW hazards.",
+      "revId": "b34829d5896f084f1729e426afebb326d40049ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
