@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1f93a99e_ad2492ce",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-29T15:21:16Z",
+      "side": 1,
+      "message": "Nothing was failing in the tests. I just happened to notice it.\n\nNote that `destBuffer` was previously a CPU-only buffer, so the first line `destBuffer-\u003eonRead()` is new (and due to this change).\n\nThe second line is the correction, which tells `mBuffer` it\u0027s being written to by transfer, which means reads from it technically need a memory barrier. The fact that it didn\u0027t trigger an issue is likely other reasons, such as other barriers that happen to be in place in the tests that get here.\n\n---\n\nAlso, this _does_ set the access flag for the lazy barrier.",
+      "parentUuid": "df9c6430_d79b36b3",
+      "revId": "b34829d5896f084f1729e426afebb326d40049ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "95210b09_002fabcf",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
@@ -57,6 +75,30 @@
       "revId": "b34829d5896f084f1729e426afebb326d40049ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4688d8e7_d99b5a16",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-29T15:21:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95210b09_002fabcf",
+      "range": {
+        "startLine": 447,
+        "startChar": 35,
+        "endLine": 447,
+        "endChar": 53
+      },
+      "revId": "b34829d5896f084f1729e426afebb326d40049ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -95,6 +137,24 @@
     },
     {
       "key": {
+        "uuid": "ea445a65_687c37de",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-29T15:21:16Z",
+      "side": 1,
+      "message": "There are still users in TextureVk, ProgramVk, FramebufferVk, and ContextVk unfortunately",
+      "parentUuid": "c90a0890_88a82b50",
+      "revId": "b34829d5896f084f1729e426afebb326d40049ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f8970af_11427cdf",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -124,6 +184,24 @@
       "side": 1,
       "message": "Can revisit this once I understand why you needed to add it.",
       "parentUuid": "2f8970af_11427cdf",
+      "revId": "b34829d5896f084f1729e426afebb326d40049ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d3da10a_02c31cdc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-11-29T15:21:16Z",
+      "side": 1,
+      "message": "Your first comment is already one use of this. Another use I have is the following:\n\n    vk::BufferHelper *src \u003d ..., *dest \u003d ...;\n\n    vk::CommandBuffer *commandBuffer;\n    ANGLE_TRY(dest-\u003erecordCommands(context, \u0026commandBuffer));\n\n    // Tell src we are going to read from it.\n    src-\u003eonRead(dest, VK_ACCESS_SHADER_READ_BIT);\n    // Tell dest it\u0027s being written to.\n    dest-\u003eonWrite(VK_ACCESS_SHADER_WRITE_BIT);\n\n    commandBuffer-\u003edispatch(...);\n\nThe point is that `onRead` stores the **read** access in the source buffer, but there was no way to store the **write** access in the destination buffer for pipeline barrier insertion.",
+      "parentUuid": "bf241f15_e50e39c1",
       "revId": "b34829d5896f084f1729e426afebb326d40049ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
