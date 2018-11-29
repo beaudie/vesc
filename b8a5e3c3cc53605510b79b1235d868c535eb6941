@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77865ba2_87afdc81",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-29T18:01:53Z",
+      "side": 1,
+      "message": "can you change this type to use angle::FixedVector instead of std::array? Then you can keep the signature of the APIs the same.",
+      "range": {
+        "startLine": 1026,
+        "startChar": 8,
+        "endLine": 1026,
+        "endChar": 39
+      },
+      "revId": "b8a5e3c3cc53605510b79b1235d868c535eb6941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
