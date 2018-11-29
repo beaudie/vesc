@@ -347,10 +347,8 @@ bool IsValidCopyTextureSourceTarget(Context *context, TextureType type)
             return true;
         case TextureType::Rectangle:
             return context->getExtensions().textureRectangle;
-
-            // TODO(geofflang): accept GL_TEXTURE_EXTERNAL_OES if the texture_external extension is
-            // supported
-
+        case TextureType::External:
+            return context->getExtensions().eglImageExternal;
         default:
             return false;
     }
