@@ -409,7 +409,7 @@ class BufferHelper final : public RecordableGraphResource
         }
 
         *bufferViewOut = &mBufferView;
-        return angle::Result::Continue();
+        return angle::Result::Continue;
     }
 
     angle::Result map(Context *context, uint8_t **ptrOut)
@@ -419,7 +419,7 @@ class BufferHelper final : public RecordableGraphResource
             ANGLE_TRY(mapImpl(context));
         }
         *ptrOut = mMappedMemory;
-        return angle::Result::Continue();
+        return angle::Result::Continue;
     }
     void unmap(VkDevice device);
 

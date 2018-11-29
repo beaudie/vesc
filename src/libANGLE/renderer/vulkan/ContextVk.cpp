@@ -226,7 +226,7 @@ angle::Result ContextVk::initialize()
         buffer.init(1, mRenderer);
     }
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::flush(const gl::Context *context)
@@ -298,7 +298,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     DirtyBits dirtyBits = mDirtyBits & dirtyBitMask;
 
     if (dirtyBits.none())
-        return angle::Result::Continue();
+        return angle::Result::Continue;
 
     // Flush any relevant dirty bits.
     for (size_t dirtyBit : dirtyBits)
@@ -307,7 +307,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         ANGLE_TRY((this->*mDirtyBitHandlers[dirtyBit])(context, *commandBufferOut));
     }
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
@@ -375,7 +375,7 @@ angle::Result ContextVk::handleDirtyDefaultAttribs(const gl::Context *context,
     }
 
     mDirtyDefaultAttribsMask.reset();
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::handleDirtyPipeline(const gl::Context *context,
@@ -391,7 +391,7 @@ angle::Result ContextVk::handleDirtyPipeline(const gl::Context *context,
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentPipeline && mCurrentPipeline->valid());
     mCurrentPipeline->updateSerial(mRenderer->getCurrentQueueSerial());
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::handleDirtyTextures(const gl::Context *context,
@@ -412,7 +412,7 @@ angle::Result ContextVk::handleDirtyTextures(const gl::Context *context,
     {
         ANGLE_TRY(mProgram->updateTexturesDescriptorSet(this));
     }
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::handleDirtyVertexBuffers(const gl::Context *context,
@@ -436,7 +436,7 @@ angle::Result ContextVk::handleDirtyVertexBuffers(const gl::Context *context,
         }
     }
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::handleDirtyIndexBuffer(const gl::Context *context,
@@ -452,7 +452,7 @@ angle::Result ContextVk::handleDirtyIndexBuffer(const gl::Context *context,
         vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
         elementArrayBuffer->onFramebufferRead(framebuffer, VK_ACCESS_INDEX_READ_BIT);
     }
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::handleDirtyDescriptorSets(const gl::Context *context,
@@ -464,21 +464,21 @@ angle::Result ContextVk::handleDirtyDescriptorSets(const gl::Context *context,
     commandBuffer->bindDescriptorSets(
         VK_PIPELINE_BIND_POINT_GRAPHICS, mProgram->getPipelineLayout(),
         kDriverUniformsDescriptorSetIndex, 1, &mDriverUniformsDescriptorSet, 0, nullptr);
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::handleDirtyViewport(const gl::Context *context,
                                              vk::CommandBuffer *commandBuffer)
 {
     commandBuffer->setViewport(0, 1, &mViewport);
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::handleDirtyScissor(const gl::Context *context,
                                             vk::CommandBuffer *commandBuffer)
 {
     commandBuffer->setScissor(0, 1, &mScissor);
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::drawArrays(const gl::Context *context,
@@ -501,7 +501,7 @@ angle::Result ContextVk::drawArrays(const gl::Context *context,
         commandBuffer->draw(clampedVertexCount, 1, first, 0);
     }
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::drawArraysInstanced(const gl::Context *context,
@@ -511,7 +511,7 @@ angle::Result ContextVk::drawArraysInstanced(const gl::Context *context,
                                              GLsizei instanceCount)
 {
     ANGLE_VK_UNREACHABLE(this);
-    return angle::Result::Stop();
+    return angle::Result::Stop;
 }
 
 angle::Result ContextVk::drawElements(const gl::Context *context,
@@ -532,7 +532,7 @@ angle::Result ContextVk::drawElements(const gl::Context *context,
         commandBuffer->drawIndexed(count, 1, 0, 0, 0);
     }
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::drawElementsInstanced(const gl::Context *context,
@@ -543,7 +543,7 @@ angle::Result ContextVk::drawElementsInstanced(const gl::Context *context,
                                                GLsizei instances)
 {
     ANGLE_VK_UNREACHABLE(this);
-    return angle::Result::Stop();
+    return angle::Result::Stop;
 }
 
 angle::Result ContextVk::drawRangeElements(const gl::Context *context,
@@ -555,7 +555,7 @@ angle::Result ContextVk::drawRangeElements(const gl::Context *context,
                                            const void *indices)
 {
     ANGLE_VK_UNREACHABLE(this);
-    return angle::Result::Stop();
+    return angle::Result::Stop;
 }
 
 VkDevice ContextVk::getDevice() const
@@ -568,7 +568,7 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
                                             const void *indirect)
 {
     ANGLE_VK_UNREACHABLE(this);
-    return angle::Result::Stop();
+    return angle::Result::Stop;
 }
 
 angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
@@ -577,7 +577,7 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
                                               const void *indirect)
 {
     ANGLE_VK_UNREACHABLE(this);
-    return angle::Result::Stop();
+    return angle::Result::Stop;
 }
 
 GLenum ContextVk::getResetStatus()
@@ -913,7 +913,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
         }
     }
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 GLint ContextVk::getGPUDisjoint()
@@ -944,7 +944,7 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
     updateFlipViewportDrawFramebuffer(glState);
     updateFlipViewportReadFramebuffer(glState);
     invalidateDriverUniforms();
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void ContextVk::updateFlipViewportDrawFramebuffer(const gl::State &glState)
@@ -1093,25 +1093,25 @@ angle::Result ContextVk::dispatchCompute(const gl::Context *context,
                                          GLuint numGroupsZ)
 {
     ANGLE_VK_UNREACHABLE(this);
-    return angle::Result::Stop();
+    return angle::Result::Stop;
 }
 
 angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLintptr indirect)
 {
     ANGLE_VK_UNREACHABLE(this);
-    return angle::Result::Stop();
+    return angle::Result::Stop;
 }
 
 angle::Result ContextVk::memoryBarrier(const gl::Context *context, GLbitfield barriers)
 {
     ANGLE_VK_UNREACHABLE(this);
-    return angle::Result::Stop();
+    return angle::Result::Stop;
 }
 
 angle::Result ContextVk::memoryBarrierByRegion(const gl::Context *context, GLbitfield barriers)
 {
     ANGLE_VK_UNREACHABLE(this);
-    return angle::Result::Stop();
+    return angle::Result::Stop;
 }
 
 vk::DynamicDescriptorPool *ContextVk::getDynamicDescriptorPool(uint32_t descriptorSetIndex)
@@ -1216,7 +1216,7 @@ angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
 
     vkUpdateDescriptorSets(getDevice(), 1, &writeInfo, 0, nullptr);
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void ContextVk::handleError(VkResult errorCode,
@@ -1265,7 +1265,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         mActiveTextures[textureUnit] = vk::GetImpl(texture);
     }
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 const gl::ActiveTextureArray<TextureVk *> &ContextVk::getActiveTextures() const
@@ -1312,6 +1312,6 @@ angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
 
     mVertexArray->updateDefaultAttrib(mRenderer, attribIndex, bufferHandle,
                                       static_cast<uint32_t>(offset));
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 }  // namespace rx

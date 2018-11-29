@@ -184,7 +184,7 @@ angle::Result DynamicBuffer::allocate(Context *context,
 
     *offsetOut = static_cast<VkDeviceSize>(mNextAllocationOffset);
     mNextAllocationOffset += static_cast<uint32_t>(sizeToAllocate);
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result DynamicBuffer::flush(Context *context)
@@ -196,7 +196,7 @@ angle::Result DynamicBuffer::flush(Context *context)
                                  mNextAllocationOffset - mLastFlushOrInvalidateOffset));
         mLastFlushOrInvalidateOffset = mNextAllocationOffset;
     }
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result DynamicBuffer::invalidate(Context *context)
@@ -208,7 +208,7 @@ angle::Result DynamicBuffer::invalidate(Context *context)
                                       mNextAllocationOffset - mLastFlushOrInvalidateOffset));
         mLastFlushOrInvalidateOffset = mNextAllocationOffset;
     }
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void DynamicBuffer::release(RendererVk *renderer)
@@ -310,7 +310,7 @@ angle::Result DescriptorPoolHelper::init(Context *context,
     mFreeDescriptorSets = maxSets;
 
     ANGLE_VK_TRY(context, mDescriptorPool.init(context->getDevice(), descriptorPoolInfo));
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void DescriptorPoolHelper::destroy(VkDevice device)
@@ -334,7 +334,7 @@ angle::Result DescriptorPoolHelper::allocateSets(Context *context,
 
     ANGLE_VK_TRY(context, mDescriptorPool.allocateDescriptorSets(context->getDevice(), allocInfo,
                                                                  descriptorSetsOut));
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 // DynamicDescriptorPool implementation.
@@ -453,7 +453,7 @@ angle::Result DynamicallyGrowingPool<Pool>::initEntryPool(Context *context, uint
 {
     ASSERT(mPools.empty() && mPoolStats.empty());
     mPoolSize = poolSize;
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 template <typename Pool>
@@ -495,7 +495,7 @@ angle::Result DynamicallyGrowingPool<Pool>::allocateNewEntryPool(Context *contex
     mCurrentPool      = mPools.size() - 1;
     mCurrentFreeEntry = 0;
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 template <typename Pool>
@@ -520,7 +520,7 @@ angle::Result DynamicQueryPool::init(Context *context, VkQueryType type, uint32_
     mQueryType = type;
     ANGLE_TRY(allocateNewPool(context));
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void DynamicQueryPool::destroy(VkDevice device)
@@ -543,7 +543,7 @@ angle::Result DynamicQueryPool::allocateQuery(Context *context, QueryHelper *que
 
     queryOut->init(this, poolIndex, queryIndex);
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void DynamicQueryPool::freeQuery(Context *context, QueryHelper *query)
@@ -572,7 +572,7 @@ angle::Result DynamicQueryPool::allocateQuery(Context *context,
     *poolIndex  = mCurrentPool;
     *queryIndex = mCurrentFreeEntry++;
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void DynamicQueryPool::freeQuery(Context *context, size_t poolIndex, uint32_t queryIndex)
@@ -585,7 +585,7 @@ angle::Result DynamicQueryPool::allocateNewPool(Context *context)
 {
     if (findFreeEntryPool(context))
     {
-        return angle::Result::Continue();
+        return angle::Result::Continue;
     }
 
     VkQueryPoolCreateInfo queryPoolInfo = {};
@@ -634,7 +634,7 @@ angle::Result DynamicSemaphorePool::init(Context *context, uint32_t poolSize)
 {
     ANGLE_TRY(initEntryPool(context, poolSize));
     ANGLE_TRY(allocateNewPool(context));
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void DynamicSemaphorePool::destroy(VkDevice device)
@@ -663,7 +663,7 @@ angle::Result DynamicSemaphorePool::allocateSemaphore(Context *context,
 
     semaphoreOut->init(mCurrentPool, &mPools[mCurrentPool][mCurrentFreeEntry++]);
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void DynamicSemaphorePool::freeSemaphore(Context *context, SemaphoreHelper *semaphore)
@@ -679,7 +679,7 @@ angle::Result DynamicSemaphorePool::allocateNewPool(Context *context)
 {
     if (findFreeEntryPool(context))
     {
-        return angle::Result::Continue();
+        return angle::Result::Continue;
     }
 
     std::vector<Semaphore> newPool(mPoolSize);
@@ -697,7 +697,7 @@ angle::Result DynamicSemaphorePool::allocateNewPool(Context *context)
 
     ASSERT(assertMove == nullptr || assertMove == mPools[0].data());
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 // SemaphoreHelper implementation
@@ -772,7 +772,7 @@ angle::Result LineLoopHelper::getIndexBufferForDrawArrays(ContextVk *contextVk,
     // writing.
     ANGLE_TRY(mDynamicIndexBuffer.flush(contextVk));
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *contextVk,
@@ -794,7 +794,7 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
                                 static_cast<const uint8_t *>(srcDataMapping) + elementArrayOffset,
                                 bufferHandleOut, bufferOffsetOut));
         ANGLE_TRY(elementArrayBufferVk->unmapImpl(contextVk));
-        return angle::Result::Continue();
+        return angle::Result::Continue;
     }
 
     VkIndexType indexType = gl_vk::GetIndexType(glIndexType);
@@ -821,7 +821,7 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
     ANGLE_TRY(elementArrayBufferVk->copyToBuffer(contextVk, *bufferHandleOut, copies.size(),
                                                  copies.data()));
     ANGLE_TRY(mDynamicIndexBuffer.flush(contextVk));
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
@@ -860,7 +860,7 @@ angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
     }
 
     ANGLE_TRY(mDynamicIndexBuffer.flush(contextVk));
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void LineLoopHelper::release(RendererVk *renderer)
@@ -961,7 +961,7 @@ angle::Result BufferHelper::copyFromBuffer(Context *context,
 
     commandBuffer->copyBuffer(buffer, mBuffer, 1, &copyRegion);
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result BufferHelper::initBufferView(Context *context, const Format &format)
@@ -978,13 +978,13 @@ angle::Result BufferHelper::initBufferView(Context *context, const Format &forma
 
     ANGLE_VK_TRY(context, mBufferView.init(context->getDevice(), viewCreateInfo));
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result BufferHelper::mapImpl(Context *context)
 {
     ANGLE_VK_TRY(context, mDeviceMemory.map(context->getDevice(), 0, mSize, 0, &mMappedMemory));
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void BufferHelper::unmap(VkDevice device)
@@ -1009,7 +1009,7 @@ angle::Result BufferHelper::flush(Context *context, size_t offset, size_t size)
         range.size                = size;
         ANGLE_VK_TRY(context, vkFlushMappedMemoryRanges(context->getDevice(), 1, &range));
     }
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result BufferHelper::invalidate(Context *context, size_t offset, size_t size)
@@ -1025,7 +1025,7 @@ angle::Result BufferHelper::invalidate(Context *context, size_t offset, size_t s
         range.size                = size;
         ANGLE_VK_TRY(context, vkInvalidateMappedMemoryRanges(context->getDevice(), 1, &range));
     }
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 // ImageHelper implementation.
@@ -1092,7 +1092,7 @@ angle::Result ImageHelper::init(Context *context,
     mCurrentLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
     ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void ImageHelper::release(RendererVk *renderer)
@@ -1112,7 +1112,7 @@ angle::Result ImageHelper::initMemory(Context *context,
 {
     // TODO(jmadill): Memory sub-allocation. http://anglebug.com/2162
     ANGLE_TRY(AllocateImageMemory(context, flags, &mImage, &mDeviceMemory));
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result ImageHelper::initImageView(Context *context,
@@ -1162,7 +1162,7 @@ angle::Result ImageHelper::initLayerImageView(Context *context,
     viewInfo.subresourceRange.layerCount     = layerCount;
 
     ANGLE_VK_TRY(context, imageViewOut->init(context->getDevice(), viewInfo));
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void ImageHelper::destroy(VkDevice device)
@@ -1235,7 +1235,7 @@ angle::Result ImageHelper::init2DStaging(Context *context,
         (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
     ANGLE_TRY(initMemory(context, memoryProperties, memoryPropertyFlags));
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 VkImageAspectFlags ImageHelper::getAspectFlags() const
@@ -1516,7 +1516,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
     // to changeLayoutWithStages will use this layout as the "oldLayout" argument.
     mCurrentLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 // FramebufferHelper implementation.
@@ -1530,7 +1530,7 @@ angle::Result FramebufferHelper::init(ContextVk *contextVk,
                                       const VkFramebufferCreateInfo &createInfo)
 {
     ANGLE_VK_TRY(contextVk, mFramebuffer.init(contextVk->getDevice(), createInfo));
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void FramebufferHelper::release(RendererVk *renderer)
@@ -1601,7 +1601,7 @@ angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
     if (mComputePipeline.valid())
     {
         *pipelineOut = &mComputePipeline;
-        return angle::Result::Continue();
+        return angle::Result::Continue;
     }
 
     RendererVk *renderer = context->getRenderer();
@@ -1627,7 +1627,7 @@ angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
                                                              renderer->getPipelineCache()));
 
     *pipelineOut = &mComputePipeline;
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 }  // namespace vk

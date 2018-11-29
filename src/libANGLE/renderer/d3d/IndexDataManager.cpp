@@ -107,7 +107,7 @@ angle::Result StreamInIndexBuffer(const gl::Context *context,
     ConvertIndices(srcType, dstType, data, count, output, usePrimitiveRestartFixedIndex);
 
     ANGLE_TRY(buffer->unmapBuffer(context));
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 unsigned int ElementTypeSize(GLenum elementType)
@@ -199,7 +199,7 @@ angle::Result IndexDataManager::prepareIndexData(const gl::Context *context,
         translated->serial      = buffer->getSerial();
         translated->startIndex  = (offset >> srcTypeInfo.bytesShift);
         translated->startOffset = offset;
-        return angle::Result::Continue();
+        return angle::Result::Continue;
     }
 
     translated->storage = nullptr;
@@ -248,7 +248,7 @@ angle::Result IndexDataManager::prepareIndexData(const gl::Context *context,
         translated->startOffset = (offset >> srcTypeInfo.bytesShift) << dstTypeInfo.bytesShift;
     }
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result IndexDataManager::streamIndexData(const gl::Context *context,
@@ -274,7 +274,7 @@ angle::Result IndexDataManager::streamIndexData(const gl::Context *context,
     translated->startIndex  = (offset >> dstTypeInfo.bytesShift);
     translated->startOffset = offset;
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result IndexDataManager::getStreamingIndexBuffer(const gl::Context *context,
@@ -296,7 +296,7 @@ angle::Result IndexDataManager::getStreamingIndexBuffer(const gl::Context *conte
     }
 
     *outBuffer = streamingBuffer.get();
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result GetIndexTranslationDestType(const gl::Context *context,
@@ -315,7 +315,7 @@ angle::Result GetIndexTranslationDestType(const gl::Context *context,
         if (indexCount == 0)
         {
             *destTypeOut = GL_UNSIGNED_INT;
-            return angle::Result::Continue();
+            return angle::Result::Continue;
         }
 
         gl::IndexRange indexRange;
@@ -324,12 +324,12 @@ angle::Result GetIndexTranslationDestType(const gl::Context *context,
         if (indexRange.end == gl::GetPrimitiveRestartIndex(indexType))
         {
             *destTypeOut = GL_UNSIGNED_INT;
-            return angle::Result::Continue();
+            return angle::Result::Continue;
         }
     }
 
     *destTypeOut = (indexType == GL_UNSIGNED_INT) ? GL_UNSIGNED_INT : GL_UNSIGNED_SHORT;
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 }  // namespace rx

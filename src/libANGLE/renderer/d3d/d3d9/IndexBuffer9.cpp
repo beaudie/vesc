@@ -67,7 +67,7 @@ angle::Result IndexBuffer9::initialize(const gl::Context *context,
     mIndexType  = indexType;
     mDynamic    = dynamic;
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result IndexBuffer9::mapBuffer(const gl::Context *context,
@@ -84,7 +84,7 @@ angle::Result IndexBuffer9::mapBuffer(const gl::Context *context,
     ANGLE_TRY_HR(GetImplAs<Context9>(context), result, "Failed to lock internal index buffer");
 
     *outMappedMemory = mapPtr;
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result IndexBuffer9::unmapBuffer(const gl::Context *context)
@@ -93,7 +93,7 @@ angle::Result IndexBuffer9::unmapBuffer(const gl::Context *context)
     HRESULT result = mIndexBuffer->Unlock();
     ANGLE_TRY_HR(GetImplAs<Context9>(context), result, "Failed to unlock internal index buffer");
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 GLenum IndexBuffer9::getIndexType() const
@@ -115,7 +115,7 @@ angle::Result IndexBuffer9::setSize(const gl::Context *context,
         return initialize(context, bufferSize, indexType, mDynamic);
     }
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result IndexBuffer9::discard(const gl::Context *context)
@@ -133,7 +133,7 @@ angle::Result IndexBuffer9::discard(const gl::Context *context)
     result = mIndexBuffer->Unlock();
     ANGLE_TRY_HR(context9, result, "Failed to unlock internal index buffer");
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 D3DFORMAT IndexBuffer9::getIndexFormat() const
