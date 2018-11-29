@@ -34,6 +34,24 @@
       "revId": "050bcbbbff1129715178aab1edb8a1440b40b183",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fa381e0_c74f0083",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-11-29T19:33:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df8d6526_0067d902",
+      "revId": "050bcbbbff1129715178aab1edb8a1440b40b183",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
