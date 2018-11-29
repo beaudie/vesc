@@ -176,7 +176,7 @@ class RendererVk : angle::NonCopyable
     {
         if (mGpuEventsEnabled)
             return traceGpuEventImpl(context, commandBuffer, phase, name);
-        return angle::Result::Continue();
+        return angle::Result::Continue;
     }
 
     bool isMockICDEnabled() const { return mEnableMockICD; }
