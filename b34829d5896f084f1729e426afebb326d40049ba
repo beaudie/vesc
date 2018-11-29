@@ -19,6 +19,47 @@
     },
     {
       "key": {
+        "uuid": "df9c6430_d79b36b3",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-29T12:58:39Z",
+      "side": 1,
+      "message": "Which command was failing after the copy? The barriers are supposed to be lazy, and inserted just before the command they\u0027re needed. If you could help fix the graph so it insert the right barriers just before use that would be awesome.",
+      "parentUuid": "c37ad4ac_3dd9313b",
+      "revId": "b34829d5896f084f1729e426afebb326d40049ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95210b09_002fabcf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-29T12:58:39Z",
+      "side": 1,
+      "message": "can you ASSERT this is non-null and valid?",
+      "range": {
+        "startLine": 447,
+        "startChar": 35,
+        "endLine": 447,
+        "endChar": 53
+      },
+      "revId": "b34829d5896f084f1729e426afebb326d40049ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5b877e1f_2c458b68",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -30,6 +71,24 @@
       "writtenOn": "2018-11-29T10:27:20Z",
       "side": 1,
       "message": "Once all users of `allocate()` are converted to use `getCurrentBuffer()`, the function will be changed to return the `vk::BufferHelper` directly instead of the `VkBuffer`.",
+      "revId": "b34829d5896f084f1729e426afebb326d40049ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c90a0890_88a82b50",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-29T12:58:39Z",
+      "side": 1,
+      "message": "It seems to be changed already!",
+      "parentUuid": "5b877e1f_2c458b68",
       "revId": "b34829d5896f084f1729e426afebb326d40049ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +112,24 @@
     },
     {
       "key": {
+        "uuid": "bf241f15_e50e39c1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-29T12:58:39Z",
+      "side": 1,
+      "message": "Can revisit this once I understand why you needed to add it.",
+      "parentUuid": "2f8970af_11427cdf",
+      "revId": "b34829d5896f084f1729e426afebb326d40049ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fc2ef161_9dc345eb",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -67,6 +144,24 @@
       "revId": "b34829d5896f084f1729e426afebb326d40049ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdb522b2_8e5dd96d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-29T12:58:39Z",
+      "side": 1,
+      "message": "Thanks for catching this.",
+      "parentUuid": "fc2ef161_9dc345eb",
+      "revId": "b34829d5896f084f1729e426afebb326d40049ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
