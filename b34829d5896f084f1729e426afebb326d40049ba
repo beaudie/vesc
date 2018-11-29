@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "70f6f544_04fbcb6e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-29T18:57:25Z",
+      "side": 1,
+      "message": "Thanks for the explanation. I missed that the barriers are not actually recorded until we submit.\n\nNote we might have to add an API for copying from a Dynamic Buffer for faster uploads at some point. We can do uploads without needing any barriers or dependencies using DynamicBuffer.",
+      "parentUuid": "1f93a99e_ad2492ce",
+      "revId": "b34829d5896f084f1729e426afebb326d40049ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "95210b09_002fabcf",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
@@ -149,6 +167,24 @@
       "side": 1,
       "message": "There are still users in TextureVk, ProgramVk, FramebufferVk, and ContextVk unfortunately",
       "parentUuid": "c90a0890_88a82b50",
+      "revId": "b34829d5896f084f1729e426afebb326d40049ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6e247314_1ade77bf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-29T18:57:25Z",
+      "side": 1,
+      "message": "Oh yes, I misread that.",
+      "parentUuid": "ea445a65_687c37de",
       "revId": "b34829d5896f084f1729e426afebb326d40049ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
