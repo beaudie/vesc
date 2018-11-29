@@ -54,7 +54,7 @@ angle::Result StreamVertexData(ContextVk *contextVk,
     vertexLoadFunction(sourceData, stride, vertexCount, dst);
 
     ANGLE_TRY(dynamicBuffer->flush(contextVk));
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 }  // anonymous namespace
@@ -164,7 +164,7 @@ angle::Result VertexArrayVk::streamIndexData(ContextVk *contextVk,
         memcpy(dst, sourcePointer, amount);
     }
     ANGLE_TRY(dynamicBuffer->flush(contextVk));
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 // We assume the buffer is completely full of the same kind of data and convert
@@ -188,7 +188,7 @@ angle::Result VertexArrayVk::convertVertexBuffer(ContextVk *contextVk,
     // Bytes usable for vertex data.
     GLint64 bytes = srcBuffer->getSize() - binding.getOffset();
     if (bytes < srcFormatSize)
-        return angle::Result::Continue();
+        return angle::Result::Continue;
 
     // Count the last vertex.  It may occupy less than a full stride.
     size_t numVertices = 1;
@@ -213,7 +213,7 @@ angle::Result VertexArrayVk::convertVertexBuffer(ContextVk *contextVk,
 
     mCurrentArrayBufferConversionCanRelease[attribIndex] = true;
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void VertexArrayVk::ensureConversionReleased(RendererVk *renderer, size_t attribIndex)
@@ -307,7 +307,7 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
         contextVk->invalidateVertexAndIndexBuffers();
     }
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
@@ -377,7 +377,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
     if (releaseConversion)
         ensureConversionReleased(renderer, attribIndex);
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void VertexArrayVk::getPackedInputDescriptions(vk::GraphicsPipelineDesc *pipelineDesc)
@@ -489,7 +489,7 @@ angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
             &mCurrentArrayBufferHandles[attribIndex], &mCurrentArrayBufferOffsets[attribIndex]));
     }
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result VertexArrayVk::handleLineLoop(ContextVk *contextVk,
@@ -528,7 +528,7 @@ angle::Result VertexArrayVk::handleLineLoop(ContextVk *contextVk,
         // both calls.
         mLineLoopBufferFirstIndex.reset();
         mLineLoopBufferLastIndex.reset();
-        return angle::Result::Continue();
+        return angle::Result::Continue;
     }
 
     // Note: Vertex indexes can be arbitrarily large.
@@ -547,7 +547,7 @@ angle::Result VertexArrayVk::handleLineLoop(ContextVk *contextVk,
         mLineLoopBufferLastIndex  = lastVertex;
     }
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 angle::Result VertexArrayVk::updateIndexTranslation(ContextVk *contextVk,
@@ -586,7 +586,7 @@ angle::Result VertexArrayVk::updateIndexTranslation(ContextVk *contextVk,
         ANGLE_TRY(bufferVk->unmapImpl(contextVk));
     }
 
-    return angle::Result::Continue();
+    return angle::Result::Continue;
 }
 
 void VertexArrayVk::updateDefaultAttrib(RendererVk *renderer,
