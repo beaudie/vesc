@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86d03ee0_d297330a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-11-29T20:54:23Z",
+      "side": 1,
+      "message": "This isn\u0027t correct. Our current glslang is from Sep 28 2018. But we used the \"upstream-master\" branch. Seeing as this was a repeated source of confusion your repo switch seems like a good idea.\n\nAlso at some point we could remove our BUILD.gn and use the one integrated into glslang.\n\nhttps://github.com/KhronosGroup/glslang/blob/master/BUILD.gn",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 37
+      },
+      "revId": "47f0fcb5970f3f4d4ba1c4e529f687a04c7aa5cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
