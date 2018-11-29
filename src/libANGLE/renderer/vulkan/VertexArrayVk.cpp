@@ -46,12 +46,13 @@ angle::Result StreamVertexData(ContextVk *contextVk,
                                size_t vertexCount,
                                size_t stride,
                                VertexCopyFunction vertexLoadFunction,
-                               VkBuffer *bufferHandleOut,
+                               vk::BufferHelper **bufferOut,
                                VkDeviceSize *bufferOffsetOut)
 {
     uint8_t *dst = nullptr;
-    ANGLE_TRY(dynamicBuffer->allocate(contextVk, bytesToAllocate, &dst, bufferHandleOut,
-                                      bufferOffsetOut, nullptr));
+    ANGLE_TRY(dynamicBuffer->allocate(contextVk, bytesToAllocate, &dst, nullptr, bufferOffsetOut,
+                                      nullptr));
+    *bufferOut = dynamicBuffer->getCurrentBuffer();
     dst += destOffset;
     vertexLoadFunction(sourceData, stride, vertexCount, dst);
 
@@ -178,6 +179,33 @@ angle::Result VertexArrayVk::convertVertexBuffer(ContextVk *contextVk,
                                                  const gl::VertexBinding &binding,
                                                  size_t attribIndex)
 {
+    // TODO(syoussefi): if the problem is only offset alignment, just do a transfer copy
+
+    // There are a couple of solutions to this, and each has different requirements:
+    // - If the input format size divides the stride, a compute shader can be used to do the copy,
+    // taking care of the stride. This requires storage texel buffer support.
+    // - Probably the universal fallback would be to write to a storage buffer (not texel) in
+    // compute.  That would require some trickery to get the data out of the 4-byte values
+    // accessible to storage buffer.  Luckily, attributes are required to be aligned to 4-bytes, so
+    // data doesn't cross buffer entrie boundaries.  However, care must still be taken to get the
+    // channel right w.r.t to alignment.  That is, the compute shader would have:
+    //
+    // srcbuffer {
+    //    uint element[];
+    // };
+    //
+    // and for example for R16G16B16, buffer[i] & 0xFFFF, buffer[i] >> 16 would constitute the first
+    // two elements, but that order of values could be either RG or GR based on endianness (or it
+    // could just work out, needs investigation).
+    //
+    if (binding.getStride() % 4 == 0)
+    {
+        // TODO: GPU copy
+        // return angle::Result::Continue();
+    }
+
+    // Fallback to CPU conversion if we cannot do it on the GPU.
+
     // Needed before reading buffer or we could get stale data.
     ANGLE_TRY(contextVk->getRenderer()->finish(contextVk));
 
@@ -208,8 +236,10 @@ angle::Result VertexArrayVk::convertVertexBuffer(ContextVk *contextVk,
     ANGLE_TRY(StreamVertexData(contextVk, &mCurrentArrayBufferConversion[attribIndex], srcBytes,
                                numVertices * dstFormatSize, 0, numVertices, binding.getStride(),
                                mCurrentArrayBufferFormats[attribIndex]->vertexLoadFunction,
-                               &mCurrentArrayBufferHandles[attribIndex],
+                               &mCurrentArrayBuffers[attribIndex],
                                &mCurrentArrayBufferOffsets[attribIndex]));
+    mCurrentArrayBufferHandles[attribIndex] =
+        mCurrentArrayBuffers[attribIndex]->getBuffer().getHandle();
     ANGLE_TRY(srcBuffer->unmapImpl(contextVk));
 
     mCurrentArrayBufferConversionCanRelease[attribIndex] = true;
@@ -341,7 +371,6 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
 
                 ANGLE_TRY(convertVertexBuffer(contextVk, bufferVk, binding, attribIndex));
 
-                mCurrentArrayBuffers[attribIndex] = nullptr;
                 releaseConversion                 = false;
             }
             else
@@ -487,7 +516,9 @@ angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
         ANGLE_TRY(StreamVertexData(
             contextVk, &mDynamicVertexData, src, bytesToAllocate, destOffset, vertexCount,
             binding.getStride(), mCurrentArrayBufferFormats[attribIndex]->vertexLoadFunction,
-            &mCurrentArrayBufferHandles[attribIndex], &mCurrentArrayBufferOffsets[attribIndex]));
+            &mCurrentArrayBuffers[attribIndex], &mCurrentArrayBufferOffsets[attribIndex]));
+        mCurrentArrayBufferHandles[attribIndex] =
+            mCurrentArrayBuffers[attribIndex]->getBuffer().getHandle();
     }
 
     return angle::Result::Continue();
@@ -636,14 +667,14 @@ angle::Result VertexArrayVk::updateIndexTranslation(ContextVk *contextVk,
 
 void VertexArrayVk::updateDefaultAttrib(RendererVk *renderer,
                                         size_t attribIndex,
-                                        VkBuffer bufferHandle,
+                                        vk::BufferHelper *buffer,
                                         uint32_t offset)
 {
     if (!mState.getEnabledAttributesMask().test(attribIndex))
     {
-        mCurrentArrayBufferHandles[attribIndex] = bufferHandle;
+        mCurrentArrayBuffers[attribIndex]       = buffer;
+        mCurrentArrayBufferHandles[attribIndex] = buffer->getBuffer().getHandle();
         mCurrentArrayBufferOffsets[attribIndex] = offset;
-        mCurrentArrayBuffers[attribIndex]       = nullptr;
         mCurrentArrayBufferStrides[attribIndex] = 0;
         mCurrentArrayBufferFormats[attribIndex] =
             &renderer->getFormat(angle::FormatID::R32G32B32A32_FIXED);
