@@ -1675,6 +1675,64 @@ TEST_P(ShaderStorageBufferTest31, ReadonlyBinaryOperator)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test that ssbo as an argument of a function can be translated.
+TEST_P(ShaderStorageBufferTest31, SSBOAsFunctionArgument)
+{
+    // http://anglebug.com/2990
+    ANGLE_SKIP_TEST_IF(IsD3D11());
+
+    constexpr char kComputeShaderSource[] =
+        R"(#version 310 es
+layout(local_size_x = 1) in;
+
+layout(std430, binding = 0) buffer Block
+{
+    uint var;
+};
+
+bool compare(uint a, uint b)
+{
+    return a == b;
+}
+
+void increate(inout uint a)
+{
+    a++;
+}
+
+void main(void)
+{
+    bool isEqual = compare(var, 2u);
+    if (isEqual)
+    {
+        increate(var);
+    }
+}
+)";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kComputeShaderSource);
+    glUseProgram(program);
+
+    constexpr unsigned int kBytesPerComponent = sizeof(unsigned int);
+    constexpr unsigned int kInputValue        = 2u;
+    constexpr unsigned int kExpectedValue     = 3u;
+    GLBuffer shaderStorageBuffer;
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kBytesPerComponent, &kInputValue, GL_STATIC_DRAW);
+
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, shaderStorageBuffer);
+
+    glDispatchCompute(1, 1, 1);
+    glFinish();
+
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
+    const GLuint *ptr = reinterpret_cast<const GLuint *>(
+        glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, kBytesPerComponent, GL_MAP_READ_BIT));
+    EXPECT_EQ(kExpectedValue, *ptr);
+
+    EXPECT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST(ShaderStorageBufferTest31, ES31_OPENGL(), ES31_OPENGLES(), ES31_D3D11());
 
 }  // namespace

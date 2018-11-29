@@ -13,12 +13,14 @@
 
 #include "compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.h"
 
+#include "compiler/translator/Symbol.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
 #include "compiler/translator/util.h"
 
 namespace sh
 {
+
 namespace
 {
 bool IsCompoundAssignment(TOperator op)
@@ -79,6 +81,19 @@ bool IsReadonlyBinaryOperator(TOperator op)
     }
 }
 
+bool IsSSBOAsFunctionArgument(TIntermSequence *arguments)
+{
+    for (TIntermNode *arg : *arguments)
+    {
+        TIntermTyped *typedArg = arg->getAsTyped();
+        if (IsInShaderStorageBlock(typedArg))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 class RewriteExpressionsWithShaderStorageBlockTraverser : public TIntermTraverser
 {
   public:
@@ -88,8 +103,14 @@ class RewriteExpressionsWithShaderStorageBlockTraverser : public TIntermTraverse
 
   private:
     bool visitBinary(Visit, TIntermBinary *node) override;
+    bool visitAggregate(Visit visit, TIntermAggregate *node) override;
     TIntermSymbol *insertInitStatementAndReturnTempSymbol(TIntermTyped *node,
                                                           TIntermSequence *insertions);
+    void readBackToSSBOForOutInoutArgs(const TFunction *function,
+                                       const TIntermSequence &assignSSBOToTemps,
+                                       TIntermSequence *insertions,
+                                       const TVector<int> &argumentPositions);
+
     bool mFoundSSBO;
 };
 
@@ -109,6 +130,29 @@ RewriteExpressionsWithShaderStorageBlockTraverser::insertInitStatementAndReturnT
 
     insertions->push_back(variableDeclaration);
     return CreateTempSymbolNode(tempVariable);
+}
+
+void RewriteExpressionsWithShaderStorageBlockTraverser::readBackToSSBOForOutInoutArgs(
+    const TFunction *function,
+    const TIntermSequence &assignSSBOToTemps,
+    TIntermSequence *insertions,
+    const TVector<int> &argumentPositions)
+{
+    for (size_t i = 0; i < assignSSBOToTemps.size(); i++)
+    {
+        TIntermNode *assignSSBOToTemp           = assignSSBOToTemps[i];
+        TIntermDeclaration *variableDeclaration = assignSSBOToTemp->getAsDeclarationNode();
+        ASSERT(variableDeclaration && (variableDeclaration->getChildCount() == 1));
+        TIntermBinary *binaryNode = (*variableDeclaration->getSequence())[0]->getAsBinaryNode();
+        ASSERT(binaryNode);
+        TQualifier qual = function->getParam(argumentPositions[i])->getType().getQualifier();
+        if (qual == EvqInOut || qual == EvqOut)
+        {
+            TIntermBinary *readBackToSSBO =
+                new TIntermBinary(EOpAssign, binaryNode->getRight(), binaryNode->getLeft());
+            insertions->push_back(readBackToSSBO);
+        }
+    }
 }
 
 bool RewriteExpressionsWithShaderStorageBlockTraverser::visitBinary(Visit, TIntermBinary *node)
@@ -205,6 +249,79 @@ bool RewriteExpressionsWithShaderStorageBlockTraverser::visitBinary(Visit, TInte
         queueReplacement(newExpr, OriginalNode::IS_DROPPED);
     }
     return !mFoundSSBO;
+}
+
+// case 3: ssbo as the argument of aggregate type
+//  original:
+//      foo(ssbo);
+//  new:
+//      var tempArg = ssbo;
+//      foo(tempArg);
+//      ssbo = tempArg;  (Optional based on whether ssbo is an out|input argument)
+//
+//  original:
+//      foo(ssbo) * expr;
+//  new:
+//      var tempArg = ssbo;
+//      var tempReturn = foo(tempArg);
+//      ssbo = tempArg;  (Optional based on whether ssbo is an out|input argument)
+//      tempReturn * expr;
+bool RewriteExpressionsWithShaderStorageBlockTraverser::visitAggregate(Visit visit,
+                                                                       TIntermAggregate *node)
+{
+    if (mFoundSSBO)
+    {
+        return false;
+    }
+
+    if (IsAtomicFunction(node->getOp()))
+    {
+        return true;
+    }
+
+    if (!IsSSBOAsFunctionArgument(node->getSequence()))
+    {
+        return true;
+    }
+
+    mFoundSSBO = true;
+    TIntermSequence insertions;
+    TIntermSequence *originalArguments = node->getSequence();
+    TVector<int> argumentPositions;
+    for (size_t i = 0; i < node->getChildCount(); ++i)
+    {
+        TIntermTyped *argument = (*originalArguments)[i]->getAsTyped();
+        if (IsInShaderStorageBlock(argument))
+        {
+            TIntermSymbol *newArgument =
+                insertInitStatementAndReturnTempSymbol(argument, &insertions);
+            node->replaceChildNode(argument, newArgument);
+            argumentPositions.push_back(i);
+        }
+    }
+
+    TIntermBlock *parentBlock = getParentNode()->getAsBlock();
+    if (parentBlock)
+    {
+        // Aggregate node is as a single sentence.
+        TIntermSequence assignSSBOToTemps(insertions);
+        insertions.push_back(node);
+        readBackToSSBOForOutInoutArgs(node->getFunction(), assignSSBOToTemps, &insertions,
+                                      argumentPositions);
+        mMultiReplacements.push_back(NodeReplaceWithMultipleEntry(parentBlock, node, insertions));
+    }
+    else
+    {
+        // Aggregate node is inside an expression.
+        TIntermSequence assignSSBOToTemps(insertions);
+        TIntermSymbol *tempSymbol = insertInitStatementAndReturnTempSymbol(node, &insertions);
+        readBackToSSBOForOutInoutArgs(node->getFunction(), assignSSBOToTemps, &insertions,
+                                      argumentPositions);
+        insertStatementsInParentBlock(insertions);
+        queueReplacement(tempSymbol, OriginalNode::IS_DROPPED);
+    }
+
+    return false;
 }
 
 void RewriteExpressionsWithShaderStorageBlockTraverser::nextIteration()
