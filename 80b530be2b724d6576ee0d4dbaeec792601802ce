@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "4df7185c_3ff6608f",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-29T12:27:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0c07c2b4_6bac2f3c",
+      "revId": "80b530be2b724d6576ee0d4dbaeec792601802ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78c5b401_9960ef88",
         "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
         "patchSetId": 3
@@ -230,6 +248,24 @@
       "side": 1,
       "message": "There is a bug in API side to get the right raw buffer content. That\u0027s why I didn\u0027t test the value. Anyway, I filed that bug in http://anglebug.com/2990. We already have a internal patch to fix it. But the guy who will submit the patch still needs to go through some legal process. Hope it will be soon. Sorry for that.",
       "parentUuid": "4f6dacd1_268d2e79",
+      "revId": "80b530be2b724d6576ee0d4dbaeec792601802ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6ed18cf_1e5519a7",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1580,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-11-29T12:27:55Z",
+      "side": 1,
+      "message": "No worries, that\u0027s fine. At least we have test coverage.",
+      "parentUuid": "d4ffa75f_ab074a70",
       "revId": "80b530be2b724d6576ee0d4dbaeec792601802ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
