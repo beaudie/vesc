@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c81cd923_438685d6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-11-30T17:46:25Z",
+      "side": 1,
+      "message": "kTextureMaxSubjectIndex?",
+      "range": {
+        "startLine": 288,
+        "startChar": 34,
+        "endLine": 288,
+        "endChar": 55
+      },
+      "revId": "78a6f2be0124e36b23d873d61c58dea8fb3244f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
