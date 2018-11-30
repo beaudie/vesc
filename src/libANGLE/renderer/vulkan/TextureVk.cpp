@@ -757,7 +757,8 @@ angle::Result TextureVk::copyImageDataToBuffer(ContextVk *contextVk,
     ANGLE_TRY(ensureImageInitialized(contextVk));
 
     const angle::Format &imageFormat = getImage().getFormat().textureFormat();
-    size_t sourceCopyAllocationSize = sourceArea.width * sourceArea.height * imageFormat.pixelBytes;
+    size_t sourceCopyAllocationSize =
+        sourceArea.width * sourceArea.height * imageFormat.pixelBytes * layerCount;
 
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(mImage.recordCommands(contextVk, &commandBuffer));
@@ -853,13 +854,11 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
     }
 
     RendererVk *renderer = contextVk->getRenderer();
-    VkFormatProperties imageProperties;
-    vk::GetFormatProperties(renderer->getPhysicalDevice(), mImage.getFormat().vkTextureFormat,
-                            &imageProperties);
 
     // Check if the image supports blit. If it does, we can do the mipmap generation on the gpu
     // only.
-    if (IsMaskFlagSet(kBlitFeatureFlags, imageProperties.linearTilingFeatures))
+    if (vk::HasLinearTextureFormatFeatureBits(renderer->getPhysicalDevice(), mImage.getFormat(),
+                                              kBlitFeatureFlags))
     {
         ANGLE_TRY(ensureImageInitialized(contextVk));
         ANGLE_TRY(mImage.generateMipmapsWithBlit(contextVk, mState.getMipmapMaxLevel()));
