@@ -609,28 +609,35 @@ def write_file(annotation, comment, template, entry_points, suffix, includes, fi
         out.write(content)
         out.close()
 
-def write_export_files(entry_points, includes, exports):
+def write_export_files(export_info):
 
-    content = template_libgles_entry_point_source.format(
+    basename = export_info["name"]
+    template = export_info["template"]
+    entry_points = export_info["entry_points"]
+    includes = export_info["includes"]
+    template_export = export_info["template_export"]
+    exports = export_info["exports"]
+
+    content = template.format(
         script_name = os.path.basename(sys.argv[0]),
         data_source_name = "gl.xml and gl_angle_ext.xml",
         year = date.today().year,
         includes = includes,
-        entry_points = entry_points)
+        entry_points = "\n".join([item for item in entry_points]))
 
-    path = path_to("libGLESv2", "libGLESv2_autogen.cpp")
+    path = path_to(basename, "%s_autogen.cpp" % basename)
 
     with open(path, "w") as out:
         out.write(content)
         out.close()
 
-    content = template_libgles_entry_point_export.format(
+    content = template_export.format(
         script_name = os.path.basename(sys.argv[0]),
         data_source_name = "gl.xml and gl_angle_ext.xml",
-        exports = exports,
+        exports = "\n".join([item for item in exports]),
         year = date.today().year)
 
-    path = path_to("libGLESv2", "libGLESv2_autogen.def")
+    path = path_to(basename, "%s_autogen.def" % basename)
 
     with open(path, "w") as out:
         out.write(content)
@@ -983,4 +990,16 @@ source_includes = """
 #include "common/event_tracer.h"
 """
 
-write_export_files("\n".join([item for item in libgles_ep_defs]), source_includes, "\n".join([item for item in libgles_ep_exports]))
+export_generations = [
+    {
+        "name" : "libGLESv2",
+        "template": template_libgles_entry_point_source,
+        "entry_points" : libgles_ep_defs,
+        "includes" : source_includes,
+        "template_export" : template_libgles_entry_point_export,
+        "exports" : libgles_ep_exports,
+    },
+]
+
+for export_info in export_generations:
+    write_export_files(export_info)
