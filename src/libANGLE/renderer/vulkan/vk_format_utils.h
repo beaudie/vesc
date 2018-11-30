@@ -30,10 +30,6 @@ namespace rx
 namespace vk
 {
 
-void GetFormatProperties(VkPhysicalDevice physicalDevice,
-                         VkFormat vkFormat,
-                         VkFormatProperties *propertiesOut);
-
 struct TextureFormatInitInfo final
 {
     angle::FormatID format;
@@ -79,11 +75,22 @@ struct Format final : private angle::NonCopyable
     VkFormat vkTextureFormat;
     angle::FormatID bufferFormatID;
     VkFormat vkBufferFormat;
-    bool vkBufferFormatIsPacked;
     InitializeTextureDataFunction textureInitializerFunction;
     LoadFunctionMap textureLoadFunctions;
     VertexCopyFunction vertexLoadFunction;
+
+    // The following vkProperties does not correspond to a single format.
+    // The linear and optimal tiling fields correspond to vkTextureFormat,
+    // and the bufferFeatures correspond to vkBufferFormat.
+    mutable VkFormatProperties vkProperties;
+
     bool vertexLoadRequiresConversion;
+    bool vkBufferFormatIsPacked;
+
+    // Whether vkProperties::linear/optimalTilingFeatures is valid
+    mutable bool isTextureVkPropertiesSet;
+    // Whether vkProperties::bufferFeatures is valid
+    mutable bool isBufferVkPropertiesSet;
 };
 
 bool operator==(const Format &lhs, const Format &rhs);
@@ -109,6 +116,19 @@ class FormatTable final : angle::NonCopyable
     // The table data is indexed by angle::FormatID.
     std::array<Format, angle::kNumANGLEFormats> mFormatData;
 };
+
+// Query the format properties for select bits (linearTilingFeatires, optimalTilingFeatures and
+// bufferFeatures).  Looks through mandatory features first, and falls back to querying the device
+// (first time only).
+bool HasLinearTextureFormatFeatureBits(VkPhysicalDevice physicalDevice,
+                                       const Format &format,
+                                       const VkFormatFeatureFlags featureBits);
+bool HasTextureFormatFeatureBits(VkPhysicalDevice physicalDevice,
+                                 const Format &format,
+                                 const VkFormatFeatureFlags featureBits);
+bool HasBufferFormatFeatureBits(VkPhysicalDevice physicalDevice,
+                                const Format &format,
+                                const VkFormatFeatureFlags featureBits);
 
 // This will return a reference to a VkFormatProperties with the feature flags supported
 // if the format is a mandatory format described in section 31.3.3. Required Format Support

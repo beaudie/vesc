@@ -53,19 +53,14 @@ bool HasSrcAndDstBlitProperties(const VkPhysicalDevice &physicalDevice,
                                 RenderTargetVk *srcRenderTarget,
                                 RenderTargetVk *dstRenderTarget)
 {
-    VkFormatProperties drawImageProperties;
-    vk::GetFormatProperties(physicalDevice, srcRenderTarget->getImageFormat().vkTextureFormat,
-                            &drawImageProperties);
-
-    VkFormatProperties readImageProperties;
-    vk::GetFormatProperties(physicalDevice, dstRenderTarget->getImageFormat().vkTextureFormat,
-                            &readImageProperties);
+    const vk::Format &srcFormat = srcRenderTarget->getImageFormat();
+    const vk::Format &dstFormat = dstRenderTarget->getImageFormat();
 
     // Verifies if the draw and read images have the necessary prerequisites for blitting.
-    return (IsMaskFlagSet<VkFormatFeatureFlags>(drawImageProperties.optimalTilingFeatures,
-                                                VK_FORMAT_FEATURE_BLIT_DST_BIT) &&
-            IsMaskFlagSet<VkFormatFeatureFlags>(readImageProperties.optimalTilingFeatures,
-                                                VK_FORMAT_FEATURE_BLIT_SRC_BIT));
+    return vk::HasTextureFormatFeatureBits(physicalDevice, srcFormat,
+                                           VK_FORMAT_FEATURE_BLIT_SRC_BIT) &&
+           vk::HasTextureFormatFeatureBits(physicalDevice, dstFormat,
+                                           VK_FORMAT_FEATURE_BLIT_DST_BIT);
 }
 
 // Special rules apply to VkBufferImageCopy with depth/stencil. The components are tightly packed
