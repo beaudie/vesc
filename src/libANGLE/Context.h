@@ -143,6 +143,20 @@ class StateCache final : angle::NonCopyable
         return getBasicDrawStatesErrorImpl(context);
     }
 
+    // Places that can trigger updateBasicDrawElementsError:
+    // 1. onActiveTransformFeedbackChange.
+    // 2. onVertexArrayBufferStateChange.
+    // 3. onBufferBindingChange.
+    intptr_t getBasicDrawElementsError(Context *context) const
+    {
+        if (mCachedBasicDrawElementsError != kInvalidPointer)
+        {
+            return mCachedBasicDrawElementsError;
+        }
+
+        return getBasicDrawElementsErrorImpl(context);
+    }
+
     // Places that can trigger updateValidDrawModes:
     // 1. onProgramExecutableChange.
     // 2. onActiveTransformFeedbackChange.
@@ -185,12 +199,14 @@ class StateCache final : angle::NonCopyable
     // Cache update functions.
     void updateActiveAttribsMask(Context *context);
     void updateVertexElementLimits(Context *context);
-    void updateBasicDrawStatesError();
     void updateValidDrawModes(Context *context);
     void updateValidBindTextureTypes(Context *context);
     void updateValidDrawElementsTypes(Context *context);
+    void updateBasicDrawStatesError();
+    void updateBasicDrawElementsError();
 
     intptr_t getBasicDrawStatesErrorImpl(Context *context) const;
+    intptr_t getBasicDrawElementsErrorImpl(Context *context) const;
 
     static constexpr intptr_t kInvalidPointer = 1;
 
@@ -201,6 +217,7 @@ class StateCache final : angle::NonCopyable
     GLint64 mCachedNonInstancedVertexElementLimit;
     GLint64 mCachedInstancedVertexElementLimit;
     mutable intptr_t mCachedBasicDrawStatesError;
+    mutable intptr_t mCachedBasicDrawElementsError;
 
     // Reserve an extra slot at the end of these maps for invalid enum.
     angle::PackedEnumMap<PrimitiveMode, bool, angle::EnumSize<PrimitiveMode>() + 1>
