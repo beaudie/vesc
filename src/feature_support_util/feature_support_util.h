@@ -164,7 +164,6 @@ ANGLE_EXPORT void ANGLEFreeRulesHandle(const RulesHandle rulesHandle);
 ANGLE_EXPORT void ANGLEFreeSystemInfoHandle(const SystemInfoHandle systemInfoHandle);
 
 // The following are internal versions supported by the current  feature-support-utility API.
-
 constexpr unsigned int kFeatureVersion_LowestSupported  = 1;
 constexpr unsigned int kFeatureVersion_HighestSupported = 2;
 

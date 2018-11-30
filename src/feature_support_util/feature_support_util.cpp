@@ -12,12 +12,14 @@
 #include <json/json.h>
 #include <string.h>
 #include "common/platform.h"
+
 #if defined(ANGLE_PLATFORM_ANDROID)
 #include <android/log.h>
 #include <unistd.h>
 #endif
 #include <fstream>
 #include <list>
+
 #include "../gpu_info_util/SystemInfo.h"
 
 namespace angle
@@ -129,6 +131,8 @@ class StringPart
     {
         return (mWildcard || toCheck.mWildcard || (toCheck.mPart == mPart));
     }
+    std::string getPart() { return mPart; }
+    bool getWildcard() { return mWildcard; }
 
   public:
     std::string mPart;
@@ -147,6 +151,8 @@ class IntegerPart
     {
         return (mWildcard || toCheck.mWildcard || (toCheck.mPart == mPart));
     }
+    uint32_t getPart() { return mPart; }
+    bool getWildcard() { return mWildcard; }
 
   public:
     uint32_t mPart;
@@ -186,12 +192,29 @@ class ListOf
         }
         return false;
     }
-    const T &front() const { return (mList.front()); }
+    bool match(const ListOf<T> &toCheck) const
+    {
+        VERBOSE("\t\t Within ListOf<%s> match: wildcards are %s and %s,\n", mListType.c_str(),
+                mWildcard ? "true" : "false", toCheck.mWildcard ? "true" : "false");
+        if (mWildcard || toCheck.mWildcard)
+        {
+            return true;
+        }
+        // If we make it to here, both this and toCheck have at least one item in their mList
+        for (const T &it : toCheck.mList)
+        {
+            if (match(it))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     void logListOf(const std::string prefix, const std::string name) const
     {
         if (mWildcard)
         {
-            VERBOSE("%sListOf%s is wildcarded to always match", prefix.c_str(), name.c_str());
+            VERBOSE("%sListOf%s is wildcarded to always match\n", prefix.c_str(), name.c_str());
         }
         else
         {
@@ -563,7 +586,7 @@ class Device
                  (toCheck.mManufacturer.match(mManufacturer) && toCheck.mModel.match(mModel))) &&
                 // Note: toCheck.mGpuList is for the device and must contain exactly one item,
                 // where mGpuList may contain zero or more items:
-                mGpuList.match(toCheck.mGpuList.front()));
+                mGpuList.match(toCheck.mGpuList));
     }
     void logItem() const
     {
@@ -683,7 +706,7 @@ class RuleList
     {
         RuleList *rules = new RuleList;
 
-        // Open the file and start parsing it:
+        // Prepare JsonCpp for use with the string and start parsing it:
         Json::Reader jReader;
         Json::Value jTopLevelObject;
         jReader.parse(jsonFileContents, jTopLevelObject);
@@ -754,13 +777,13 @@ class RuleList
                     rule.mDescription.c_str());
             if (rule.match(toCheck))
             {
-                VERBOSE("  -> Rule matches.  Setting useANGLE to %s",
+                VERBOSE("  -> Rule matches.  Setting useANGLE to %s\n",
                         rule.getUseANGLE() ? "true" : "false");
                 useANGLE = rule.getUseANGLE();
             }
             else
             {
-                VERBOSE("  -> Rule doesn't match.");
+                VERBOSE("  -> Rule doesn't match.\n");
             }
         }
 
@@ -942,7 +965,7 @@ ANGLE_EXPORT bool ANGLEShouldBeUsedForApplication(const RulesHandle rulesHandle,
     scenario.logScenario();
 
     bool rtn = rules->getUseANGLE(scenario);
-    VERBOSE("Application \"%s\" should %s ANGLE", appName, rtn ? "use" : "NOT use");
+    VERBOSE("Application \"%s\" should %s ANGLE\n", appName, rtn ? "use" : "NOT use");
 
     return rtn;
 }

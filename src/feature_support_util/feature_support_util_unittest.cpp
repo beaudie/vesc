@@ -79,3 +79,78 @@ TEST(FeatureSupportUtilTest, ParseRules)
     EXPECT_NE(nullptr, rulesHandle);
     ANGLEFreeRulesHandle(rulesHandle);
 }
+
+// Test the ANGLEAndroidParseRulesString and ANGLEShouldBeUsedForApplication functions
+TEST(FeatureSupportUtilTest, TestRuleProcessing)
+{
+    // TODO(ianelliott): Replace this with a gtest "fixture", per review feedback.
+    SystemInfo systemInfo;
+    systemInfo.machineManufacturer = "MfrFoo";
+    systemInfo.machineModelName    = "ModelX";
+    systemInfo.gpus.resize(1);
+    systemInfo.gpus[0].vendorId              = 123;
+    systemInfo.gpus[0].deviceId              = 234;
+    systemInfo.gpus[0].driverVendor          = "GPUVendorA";
+    systemInfo.gpus[0].detailedDriverVersion = {1, 2, 3, 4};
+
+    constexpr char rulesFileContents[] =
+        "{\n"
+        "    \"Rules\":[\n"
+        "        {\n"
+        "            \"Rule\":\"Default Rule (i.e. do not use ANGLE)\",\n"
+        "            \"UseANGLE\":false\n"
+        "        },\n"
+        "        {\n"
+        "            \"Rule\":\"Supported application(s)\",\n"
+        "            \"UseANGLE\":true,\n"
+        "            \"Applications\":[\n"
+        "                {\n"
+        "                    \"AppName\":\"com.isvA.app1\"\n"
+        "                }\n"
+        "            ]\n"
+        "        },\n"
+        "        {\n"
+        "            \"Rule\":\"Exceptions for bad drivers(s)\",\n"
+        "            \"UseANGLE\":false,\n"
+        "            \"Applications\":[\n"
+        "                {\n"
+        "                    \"AppName\":\"com.isvA.app1\"\n"
+        "                }\n"
+        "            ],\n"
+        "            \"Devices\":[\n"
+        "                {\n"
+        "                    \"Manufacturer\":\"MfrFoo\",\n"
+        "                    \"Model\":\"ModelX\",\n"
+        "                    \"GPUs\":[\n"
+        "                        {\n"
+        "                            \"Vendor\" : \"GPUVendorA\",\n"
+        "                            \"DeviceId\" : 234,\n"
+        "                            \"VerMajor\" : 1, \"VerMinor\" : 2,\n"
+        "                            \"VerSubMinor\" : 3, \"VerPatch\" : 4}\n"
+        "                        }\n"
+        "                    ]\n"
+        "                }\n"
+        "            ]\n"
+        "        }\n"
+        "    ]\n"
+        "}\n";
+    RulesHandle rulesHandle = nullptr;
+    int rulesVersion        = 0;
+    EXPECT_TRUE(ANGLEAndroidParseRulesString(rulesFileContents, &rulesHandle, &rulesVersion));
+    EXPECT_NE(nullptr, rulesHandle);
+
+    // Test app1 with a SystemInfo that has an unsupported driver--should fail:
+    char app1[] = "com.isvA.app1";
+    EXPECT_FALSE(ANGLEShouldBeUsedForApplication(rulesHandle, rulesVersion, &systemInfo, app1));
+
+    // Test app1 with a SystemInfo that has a supported driver--should pass:
+    systemInfo.gpus[0].detailedDriverVersion = {1, 2, 3, 5};
+    EXPECT_TRUE(ANGLEShouldBeUsedForApplication(rulesHandle, rulesVersion, &systemInfo, app1));
+
+    // Test unsupported app2--should fail:
+    char app2[] = "com.isvB.app2";
+    EXPECT_FALSE(ANGLEShouldBeUsedForApplication(rulesHandle, rulesVersion, &systemInfo, app2));
+
+    // Free the rules data structures:
+    ANGLEFreeRulesHandle(rulesHandle);
+}
