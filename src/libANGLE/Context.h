@@ -130,7 +130,7 @@ class StateCache final : angle::NonCopyable
     // 9. onDefaultVertexAttributeChange.
     // 10. onActiveTextureChange.
     // 11. onQueryChange.
-    // 12. onTransformFeedbackChange.
+    // 12. onActiveTransformFeedbackChange.
     // 13. onUniformBufferStateChange.
     // 14. onBufferBindingChange.
     intptr_t getBasicDrawStatesError(Context *context) const
@@ -145,6 +145,7 @@ class StateCache final : angle::NonCopyable
 
     // Places that can trigger updateValidDrawModes:
     // 1. onProgramExecutableChange.
+    // 2. onActiveTransformFeedbackChange.
     bool isValidDrawMode(PrimitiveMode primitiveMode) const
     {
         return mCachedValidDrawModes[primitiveMode];
