@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f860254_f932ba69",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-11-30T06:27:52Z",
+      "side": 1,
+      "message": "We should explicitly point out the temp qualifier is EvqTemporary. Otherwise, if we directly use CreateTempVariable(mSymbolTable, \u0026node-\u003egetType()), it will use the node\u0027s qualifier, such as \u0027EvqBuffer\u0027 which will result the ASSERT failure as below in some situation:\nAssertion failed: tempVariable-\u003egetType().getQualifier() \u003d\u003d EvqTemporary || tempVariable-\u003egetType().getQualifier() \u003d\u003d EvqConst || tempVariable-\u003egetType().getQualifier() \u003d\u003d EvqGlobal, file ../../src/compiler/translator/tree_util/IntermNode_util.cpp, line 161",
+      "range": {
+        "startLine": 108,
+        "startChar": 48,
+        "endLine": 108,
+        "endChar": 60
+      },
+      "revId": "d42f6a22aaed284a34409d0d16781e715e8ab97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
