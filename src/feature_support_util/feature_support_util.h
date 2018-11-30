@@ -9,11 +9,126 @@
 #ifndef FEATURE_SUPPORT_UTIL_H_
 #define FEATURE_SUPPORT_UTIL_H_
 
+#include <string>
+
 #include "export.h"
+#include <json/json.h>
+
+/**************************************************************************************************
+ *
+ * The following are the declarations of the internal classes:
+ *
+ **************************************************************************************************/
+
+namespace angle
+{
+
+// This encapsulates a std::string.  The default constructor (not given a string) assumes that this
+// is a wildcard (i.e. will match all other StringPart objects).
+class StringPart
+{
+  public:
+    StringPart() : mPart(""), mWildcard(true) {}
+    StringPart(const std::string part) : mPart(part), mWildcard(false) {}
+    ~StringPart() {}
+    bool match(const StringPart &toCheck) const
+    {
+        return (mWildcard || toCheck.mWildcard || (toCheck.mPart == mPart));
+    }
+    std::string getPart() { return mPart; }
+    bool getWildcard() { return mWildcard; }
+
+  public:
+    std::string mPart;
+    bool mWildcard;
+};
+
+// This encapsulates a 32-bit unsigned integer.  The default constructor (not given a number)
+// assumes that this is a wildcard (i.e. will match all other IntegerPart objects).
+class IntegerPart
+{
+  public:
+    IntegerPart() : mPart(0), mWildcard(true) {}
+    IntegerPart(uint32_t part) : mPart(part), mWildcard(false) {}
+    ~IntegerPart() {}
+    bool match(const IntegerPart &toCheck) const
+    {
+        return (mWildcard || toCheck.mWildcard || (toCheck.mPart == mPart));
+    }
+    uint32_t getPart() { return mPart; }
+    bool getWildcard() { return mWildcard; }
+
+  public:
+    uint32_t mPart;
+    bool mWildcard;
+};
+
+// This encapsulates up-to four 32-bit unsigned integers, that represent a potentially-complex
+// version number.  The default constructor (not given any numbers) assumes that this is a wildcard
+// (i.e. will match all other Version objects).  Each part of a Version is stored in an IntegerPart
+// class, and so may be wildcarded as well.
+class Version
+{
+  public:
+    Version(uint32_t major, uint32_t minor, uint32_t subminor, uint32_t patch)
+        : mMajor(major), mMinor(minor), mSubminor(subminor), mPatch(patch), mWildcard(false)
+    {}
+    Version(uint32_t major, uint32_t minor, uint32_t subminor)
+        : mMajor(major), mMinor(minor), mSubminor(subminor), mWildcard(false)
+    {}
+    Version(uint32_t major, uint32_t minor) : mMajor(major), mMinor(minor), mWildcard(false) {}
+    Version(uint32_t major) : mMajor(major), mWildcard(false) {}
+    Version() : mWildcard(true) {}
+    Version(const Version &toCopy)
+        : mMajor(toCopy.mMajor),
+          mMinor(toCopy.mMinor),
+          mSubminor(toCopy.mSubminor),
+          mPatch(toCopy.mPatch),
+          mWildcard(toCopy.mWildcard)
+    {}
+    ~Version() {}
+
+    static Version *CreateVersionFromJson(const Json::Value &jObject);
+
+    bool match(const Version &toCheck) const;
+    std::string getString() const;
+
+  public:
+    IntegerPart mMajor;
+    IntegerPart mMinor;
+    IntegerPart mSubminor;
+    IntegerPart mPatch;
+    bool mWildcard;
+};
+
+// This encapsulates a list of other classes, each of which will have a match() and logItem()
+// method.  The common constructor (given a type, but not any list items) assumes that this is
+// a wildcard (i.e. will match all other ListOf<t> objects).
+template <class T>
+class ListOf
+{
+  public:
+    ListOf(const std::string listType) : mWildcard(true), mListType(listType) {}
+    ~ListOf() { mList.clear(); }
+    void addItem(const T &toAdd);
+    bool match(const T &toCheck) const;
+    const T &front() const { return (mList.front()); }
+    void logListOf(const std::string prefix, const std::string name) const;
+
+    bool mWildcard;
+
+  private:
+    std::string mListType;
+    std::vector<T> mList;
+};
+
+}  // namespace angle
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 
 /**************************************************************************************************
  *

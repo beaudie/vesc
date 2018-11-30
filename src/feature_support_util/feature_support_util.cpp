@@ -9,15 +9,15 @@
 // determine whether to use ANGLE or a native GLES driver.
 
 #include "feature_support_util.h"
-#include <json/json.h>
-#include <string.h>
 #include "common/platform.h"
+
 #if defined(ANGLE_PLATFORM_ANDROID)
 #include <android/log.h>
 #include <unistd.h>
 #endif
 #include <fstream>
 #include <list>
+
 #include "../gpu_info_util/SystemInfo.h"
 
 namespace angle
@@ -117,225 +117,144 @@ constexpr char kJsonVerSubMinor[] = "VerSubMinor";
 // patch value of a version.
 constexpr char kJsonVerPatch[] = "VerPatch";
 
-// This encapsulates a std::string.  The default constructor (not given a string) assumes that this
-// is a wildcard (i.e. will match all other StringPart objects).
-class StringPart
-{
-  public:
-    StringPart() : mPart(""), mWildcard(true) {}
-    StringPart(const std::string part) : mPart(part), mWildcard(false) {}
-    ~StringPart() {}
-    bool match(const StringPart &toCheck) const
-    {
-        return (mWildcard || toCheck.mWildcard || (toCheck.mPart == mPart));
-    }
-
-  public:
-    std::string mPart;
-    bool mWildcard;
-};
-
-// This encapsulates a 32-bit unsigned integer.  The default constructor (not given a number)
-// assumes that this is a wildcard (i.e. will match all other IntegerPart objects).
-class IntegerPart
-{
-  public:
-    IntegerPart() : mPart(0), mWildcard(true) {}
-    IntegerPart(uint32_t part) : mPart(part), mWildcard(false) {}
-    ~IntegerPart() {}
-    bool match(const IntegerPart &toCheck) const
-    {
-        return (mWildcard || toCheck.mWildcard || (toCheck.mPart == mPart));
-    }
-
-  public:
-    uint32_t mPart;
-    bool mWildcard;
-};
-
-// This encapsulates a list of other classes, each of which will have a match() and logItem()
-// method.  The common constructor (given a type, but not any list items) assumes that this is
-// a wildcard (i.e. will match all other ListOf<t> objects).
 template <class T>
-class ListOf
+void ListOf<T>::addItem(const T &toAdd)
 {
-  public:
-    ListOf(const std::string listType) : mWildcard(true), mListType(listType) {}
-    ~ListOf() { mList.clear(); }
-    void addItem(const T &toAdd)
+    mList.push_back(toAdd);
+    mWildcard = false;
+}
+
+template <class T>
+bool ListOf<T>::match(const T &toCheck) const
+{
+    VERBOSE("\t\t Within ListOf<%s> match: wildcards are %s and %s,\n", mListType.c_str(),
+            mWildcard ? "true" : "false", toCheck.mWildcard ? "true" : "false");
+    if (mWildcard || toCheck.mWildcard)
     {
-        mList.push_back(toAdd);
-        mWildcard = false;
+        return true;
     }
-    bool match(const T &toCheck) const
+    for (const T &it : mList)
     {
-        VERBOSE("\t\t Within ListOf<%s> match: wildcards are %s and %s,\n", mListType.c_str(),
-                mWildcard ? "true" : "false", toCheck.mWildcard ? "true" : "false");
-        if (mWildcard || toCheck.mWildcard)
+        VERBOSE("\t\t   Within ListOf<%s> match: calling match on sub-item is %s,\n",
+                mListType.c_str(), it.match(toCheck) ? "true" : "false");
+        if (it.match(toCheck))
         {
             return true;
         }
-        for (const T &it : mList)
-        {
-            VERBOSE("\t\t   Within ListOf<%s> match: calling match on sub-item is %s,\n",
-                    mListType.c_str(), it.match(toCheck) ? "true" : "false");
-            if (it.match(toCheck))
-            {
-                return true;
-            }
-        }
-        return false;
     }
-    const T &front() const { return (mList.front()); }
-    void logListOf(const std::string prefix, const std::string name) const
-    {
-        if (mWildcard)
-        {
-            VERBOSE("%sListOf%s is wildcarded to always match", prefix.c_str(), name.c_str());
-        }
-        else
-        {
-            VERBOSE("%sListOf%s has %d item(s):", prefix.c_str(), name.c_str(),
-                    static_cast<int>(mList.size()));
-            for (auto &it : mList)
-            {
-                it.logItem();
-            }
-        }
-    }
+    return false;
+}
 
-    bool mWildcard;
-
-  private:
-    std::string mListType;
-    std::vector<T> mList;
-};
-
-// This encapsulates up-to four 32-bit unsigned integers, that represent a potentially-complex
-// version number.  The default constructor (not given any numbers) assumes that this is a wildcard
-// (i.e. will match all other Version objects).  Each part of a Version is stored in an IntegerPart
-// class, and so may be wildcarded as well.
-class Version
+template <class T>
+void ListOf<T>::logListOf(const std::string prefix, const std::string name) const
 {
-  public:
-    Version(uint32_t major, uint32_t minor, uint32_t subminor, uint32_t patch)
-        : mMajor(major), mMinor(minor), mSubminor(subminor), mPatch(patch), mWildcard(false)
-    {}
-    Version(uint32_t major, uint32_t minor, uint32_t subminor)
-        : mMajor(major), mMinor(minor), mSubminor(subminor), mWildcard(false)
-    {}
-    Version(uint32_t major, uint32_t minor) : mMajor(major), mMinor(minor), mWildcard(false) {}
-    Version(uint32_t major) : mMajor(major), mWildcard(false) {}
-    Version() : mWildcard(true) {}
-    Version(const Version &toCopy)
-        : mMajor(toCopy.mMajor),
-          mMinor(toCopy.mMinor),
-          mSubminor(toCopy.mSubminor),
-          mPatch(toCopy.mPatch),
-          mWildcard(toCopy.mWildcard)
-    {}
-    ~Version() {}
-
-    static Version *CreateVersionFromJson(const Json::Value &jObject)
+    if (mWildcard)
     {
-        Version *version = nullptr;
-        // A major version must be provided before a minor, and so on:
-        if (jObject.isMember(kJsonVerMajor) && jObject[kJsonVerMajor].isInt())
+        VERBOSE("%sListOf%s is wildcarded to always match", prefix.c_str(), name.c_str());
+    }
+    else
+    {
+        VERBOSE("%sListOf%s has %d item(s):", prefix.c_str(), name.c_str(),
+                static_cast<int>(mList.size()));
+        for (auto &it : mList)
         {
-            int major = jObject[kJsonVerMajor].asInt();
-            if (jObject.isMember(kJsonVerMinor) && jObject[kJsonVerMinor].isInt())
+            it.logItem();
+        }
+    }
+}
+
+Version *Version::CreateVersionFromJson(const Json::Value &jObject)
+{
+    Version *version = nullptr;
+    // A major version must be provided before a minor, and so on:
+    if (jObject.isMember(kJsonVerMajor) && jObject[kJsonVerMajor].isInt())
+    {
+        int major = jObject[kJsonVerMajor].asInt();
+        if (jObject.isMember(kJsonVerMinor) && jObject[kJsonVerMinor].isInt())
+        {
+            int minor = jObject[kJsonVerMinor].asInt();
+            if (jObject.isMember(kJsonVerSubMinor) && jObject[kJsonVerSubMinor].isInt())
             {
-                int minor = jObject[kJsonVerMinor].asInt();
-                if (jObject.isMember(kJsonVerSubMinor) && jObject[kJsonVerSubMinor].isInt())
+                int subMinor = jObject[kJsonVerSubMinor].asInt();
+                if (jObject.isMember(kJsonVerPatch) && jObject[kJsonVerPatch].isInt())
                 {
-                    int subMinor = jObject[kJsonVerSubMinor].asInt();
-                    if (jObject.isMember(kJsonVerPatch) && jObject[kJsonVerPatch].isInt())
-                    {
-                        int patch = jObject[kJsonVerPatch].asInt();
-                        version   = new Version(major, minor, subMinor, patch);
-                    }
-                    else
-                    {
-                        version = new Version(major, minor, subMinor);
-                    }
+                    int patch = jObject[kJsonVerPatch].asInt();
+                    version   = new Version(major, minor, subMinor, patch);
                 }
                 else
                 {
-                    version = new Version(major, minor);
+                    version = new Version(major, minor, subMinor);
                 }
             }
             else
             {
-                version = new Version(major);
+                version = new Version(major, minor);
             }
-        }
-        return version;
-    }
-
-    bool match(const Version &toCheck) const
-    {
-        VERBOSE("\t\t\t Within Version %d,%d,%d,%d match(%d,%d,%d,%d): wildcards are %s and %s,\n",
-                mMajor.mPart, mMinor.mPart, mSubminor.mPart, mPatch.mPart, toCheck.mMajor.mPart,
-                toCheck.mMinor.mPart, toCheck.mSubminor.mPart, toCheck.mPatch.mPart,
-                mWildcard ? "true" : "false", toCheck.mWildcard ? "true" : "false");
-        if (!(mWildcard || toCheck.mWildcard))
-        {
-            VERBOSE("\t\t\t   mMajor match is %s, mMinor is %s, mSubminor is %s, mPatch is %s\n",
-                    mMajor.match(toCheck.mMajor) ? "true" : "false",
-                    mMinor.match(toCheck.mMinor) ? "true" : "false",
-                    mSubminor.match(toCheck.mSubminor) ? "true" : "false",
-                    mPatch.match(toCheck.mPatch) ? "true" : "false");
-        }
-        return (mWildcard || toCheck.mWildcard ||
-                (mMajor.match(toCheck.mMajor) && mMinor.match(toCheck.mMinor) &&
-                 mSubminor.match(toCheck.mSubminor) && mPatch.match(toCheck.mPatch)));
-    }
-    std::string getString() const
-    {
-        if (mWildcard)
-        {
-            return "*";
         }
         else
         {
-            char ret[100];
-            // Must at least have a major version:
-            if (!mMinor.mWildcard)
+            version = new Version(major);
+        }
+    }
+    return version;
+}
+
+bool Version::match(const Version &toCheck) const
+{
+    VERBOSE("\t\t\t Within Version %d,%d,%d,%d match(%d,%d,%d,%d): wildcards are %s and %s,\n",
+            mMajor.mPart, mMinor.mPart, mSubminor.mPart, mPatch.mPart, toCheck.mMajor.mPart,
+            toCheck.mMinor.mPart, toCheck.mSubminor.mPart, toCheck.mPatch.mPart,
+            mWildcard ? "true" : "false", toCheck.mWildcard ? "true" : "false");
+    if (!(mWildcard || toCheck.mWildcard))
+    {
+        VERBOSE("\t\t\t   mMajor match is %s, mMinor is %s, mSubminor is %s, mPatch is %s\n",
+                mMajor.match(toCheck.mMajor) ? "true" : "false",
+                mMinor.match(toCheck.mMinor) ? "true" : "false",
+                mSubminor.match(toCheck.mSubminor) ? "true" : "false",
+                mPatch.match(toCheck.mPatch) ? "true" : "false");
+    }
+    return (mWildcard || toCheck.mWildcard ||
+            (mMajor.match(toCheck.mMajor) && mMinor.match(toCheck.mMinor) &&
+             mSubminor.match(toCheck.mSubminor) && mPatch.match(toCheck.mPatch)));
+}
+std::string Version::getString() const
+{
+    if (mWildcard)
+    {
+        return "*";
+    }
+    else
+    {
+        char ret[100];
+        // Must at least have a major version:
+        if (!mMinor.mWildcard)
+        {
+            if (!mSubminor.mWildcard)
             {
-                if (!mSubminor.mWildcard)
+                if (!mPatch.mWildcard)
                 {
-                    if (!mPatch.mWildcard)
-                    {
-                        snprintf(ret, 100, "%d.%d.%d.%d", mMajor.mPart, mMinor.mPart,
-                                 mSubminor.mPart, mPatch.mPart);
-                    }
-                    else
-                    {
-                        snprintf(ret, 100, "%d.%d.%d.*", mMajor.mPart, mMinor.mPart,
-                                 mSubminor.mPart);
-                    }
+                    snprintf(ret, 100, "%d.%d.%d.%d", mMajor.mPart, mMinor.mPart,
+                             mSubminor.mPart, mPatch.mPart);
                 }
                 else
                 {
-                    snprintf(ret, 100, "%d.%d.*", mMajor.mPart, mMinor.mPart);
+                    snprintf(ret, 100, "%d.%d.%d.*", mMajor.mPart, mMinor.mPart,
+                             mSubminor.mPart);
                 }
             }
             else
             {
-                snprintf(ret, 100, "%d.*", mMajor.mPart);
+                snprintf(ret, 100, "%d.%d.*", mMajor.mPart, mMinor.mPart);
             }
-            std::string retString = ret;
-            return retString;
         }
+        else
+        {
+            snprintf(ret, 100, "%d.*", mMajor.mPart);
+        }
+        std::string retString = ret;
+        return retString;
     }
-
-  public:
-    IntegerPart mMajor;
-    IntegerPart mMinor;
-    IntegerPart mSubminor;
-    IntegerPart mPatch;
-    bool mWildcard;
-};
+}
 
 // This encapsulates an application, and potentially the application's Version.  The default
 // constructor (not given any values) assumes that this is a wildcard (i.e. will match all
