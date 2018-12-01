@@ -124,7 +124,7 @@ config("build_id_config") {
   ldflags = [ "-Wl,--build-id" ]
 }
 
-# Windows ARM64 is available since 10.0.10240 so no need to copy
+# Windows ARM64 is available since 10.0.16299 so no need to copy
 # d3dcompiler_47.dll because this file is available as inbox.
 if (is_win && target_cpu != "arm64") {
   copy("copy_compiler_dll") {
@@ -607,7 +607,7 @@ static_library("libANGLE") {
 
   public_configs = [ ":libANGLE_config" ]
 
-  # Windows ARM64 is available since 10.0.10240 so no need to copy
+  # Windows ARM64 is available since 10.0.16299 so no need to copy
   # d3dcompiler_47.dll because this file is available as inbox.
   if (is_win && target_cpu != "arm64") {
     data_deps = [
