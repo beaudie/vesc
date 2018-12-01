@@ -808,6 +808,28 @@ static_library("libEGL_static") {
   ]
 }
 
+config("glad_config") {
+  include_dirs = [
+    "third_party/glad/include",
+    "include",
+  ]
+}
+
+source_set("glad") {
+  sources = [
+    "includes/EGL/eglplatform.h",
+    "includes/KHR/khrplatform.h",
+    "third_party/glad/include/glad/egl.h",
+    # "third_party/glad/include/glad/gles1.h",
+    "third_party/glad/include/glad/gles2.h",
+    "third_party/glad/src/egl.c",
+    # "third_party/glad/src/gles1.c",
+    "third_party/glad/src/gles2.c",
+  ]
+
+  public_configs = [ ":glad_config" ]
+}
+
 import("util/util.gni")
 
 config("angle_util_config") {
@@ -891,6 +913,7 @@ foreach(is_shared_library,
 
     deps = [
       ":angle_common",
+      ":glad",
       ":libEGL${dep_suffix}",
       ":libGLESv2${dep_suffix}",
     ]

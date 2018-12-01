@@ -13,6 +13,7 @@
 
 #include "test_utils/ANGLETest.h"
 #include "test_utils/angle_test_configs.h"
+#include "util/EGLWindow.h"
 
 using namespace angle;
 

@@ -61,6 +61,8 @@
 #define EXPECT_EGLENUM_EQ(expected, actual) \
     EXPECT_EQ(static_cast<EGLenum>(expected), static_cast<EGLenum>(actual))
 
+using GLuint = unsigned int;
+
 namespace angle
 {
 struct GLColorRGB

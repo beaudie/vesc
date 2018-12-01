@@ -11,8 +11,9 @@
 
 #include <vector>
 
-#include "OSWindow.h"
 #include "test_utils/ANGLETest.h"
+#include "util/EGLWindow.h"
+#include "util/OSWindow.h"
 
 #if defined(ANGLE_ENABLE_D3D11)
 #    define INITGUID

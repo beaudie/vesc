@@ -4,15 +4,17 @@
 // found in the LICENSE file.
 //
 
-#include <string.h>
+#include "util/EGLWindow.h"
+
 #include <cassert>
 #include <iostream>
 #include <vector>
 
-#include "EGLWindow.h"
-#include "OSWindow.h"
+#include <string.h>
+
 #include "common/debug.h"
 #include "platform/Platform.h"
+#include "util/OSWindow.h"
 
 EGLPlatformParameters::EGLPlatformParameters()
     : renderer(EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE),

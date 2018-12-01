@@ -12,15 +12,20 @@
 #include <memory>
 #include <string>
 
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
-#include <GLES3/gl3.h>
 #include <export.h>
 
 #include "common/Optional.h"
 #include "common/angleutils.h"
+#include "util/EGLPlatformParameters.h"
+
+#include <glad/egl.h>
+
+// We don't want to link against the function prototypes.
+#ifdef EGL_EGLEXT_PROTOTYPES
+#    undef EGL_EGLEXT_PROTOTYPES
+#    include <EGL/eglext.h>
+#    include <EGL/eglext_angle.h>
+#endif  // EGL_EGLEXT_PROTOTYPES
 
 class OSWindow;
 
@@ -28,30 +33,6 @@ namespace angle
 {
 struct PlatformMethods;
 }
-
-struct ANGLE_EXPORT EGLPlatformParameters
-{
-    EGLint renderer;
-    EGLint majorVersion;
-    EGLint minorVersion;
-    EGLint deviceType;
-    EGLint presentPath;
-
-    EGLPlatformParameters();
-    explicit EGLPlatformParameters(EGLint renderer);
-    EGLPlatformParameters(EGLint renderer,
-                          EGLint majorVersion,
-                          EGLint minorVersion,
-                          EGLint deviceType);
-    EGLPlatformParameters(EGLint renderer,
-                          EGLint majorVersion,
-                          EGLint minorVersion,
-                          EGLint deviceType,
-                          EGLint presentPath);
-};
-
-ANGLE_EXPORT bool operator<(const EGLPlatformParameters &a, const EGLPlatformParameters &b);
-ANGLE_EXPORT bool operator==(const EGLPlatformParameters &a, const EGLPlatformParameters &b);
 
 class ANGLE_EXPORT EGLWindow : angle::NonCopyable
 {

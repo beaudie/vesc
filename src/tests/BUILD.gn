@@ -292,11 +292,15 @@ if (is_win || is_linux || is_android || is_mac) {
 
     deps = googletest_deps + [
              angle_root + ":angle_common",
-             angle_root + ":angle_util_static",
-             angle_root + ":libEGL",
-             angle_root + ":libGLESv2",
+             angle_root + ":angle_util",
              angle_root + "/third_party/jsoncpp:jsoncpp",
+             angle_root + ":glad",
            ]
+
+    data_deps = [
+      angle_root + ":libGLESv2",
+      angle_root + ":libEGL",
+    ]
 
     if (is_android) {
       use_native_activity = true

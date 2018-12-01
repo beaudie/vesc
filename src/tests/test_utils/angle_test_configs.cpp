@@ -6,6 +6,15 @@
 
 #include "test_utils/angle_test_configs.h"
 
+#include <glad/egl.h>
+
+// We don't want to link against the function prototypes.
+#ifdef EGL_EGLEXT_PROTOTYPES
+#    undef EGL_EGLEXT_PROTOTYPES
+#    include <EGL/eglext.h>
+#    include <EGL/eglext_angle.h>
+#endif  // EGL_EGLEXT_PROTOTYPES
+
 namespace angle
 {
 

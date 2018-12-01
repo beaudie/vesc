@@ -372,6 +372,12 @@ void ANGLERenderTest::SetUp()
         return;
     }
 
+    if (gladLoadGLES2(eglGetProcAddress) == 0)
+    {
+        FAIL() << "Failed loading GLES entry points.";
+        mSkipTest = true;
+    }
+
     if (!areExtensionPrerequisitesFulfilled())
     {
         mSkipTest = true;
