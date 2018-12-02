@@ -7,9 +7,9 @@
 #ifndef SAMPLE_UTIL_SAMPLE_APPLICATION_H
 #define SAMPLE_UTIL_SAMPLE_APPLICATION_H
 
+#include <stdint.h>
 #include <list>
 #include <memory>
-#include <stdint.h>
 #include <string>
 
 #include <EGL/egl.h>
@@ -19,6 +19,9 @@
 #include "Timer.h"
 
 class EGLWindow;
+
+using GLuint = unsigned int;
+struct ShaderFuncs;
 
 class SampleApplication
 {
@@ -51,6 +54,9 @@ class SampleApplication
     int run();
     void exit();
 
+  protected:
+    const ShaderFuncs *getShaderFuncs() const { return mShaderFuncs; }
+
   private:
     std::string mName;
     size_t mWidth;
@@ -60,6 +66,7 @@ class SampleApplication
     std::unique_ptr<Timer> mTimer;
     std::unique_ptr<EGLWindow> mEGLWindow;
     std::unique_ptr<OSWindow> mOSWindow;
+    ShaderFuncs *mShaderFuncs;
 };
 
-#endif // SAMPLE_UTIL_SAMPLE_APPLICATION_H
+#endif  // SAMPLE_UTIL_SAMPLE_APPLICATION_H

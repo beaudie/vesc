@@ -7,20 +7,20 @@
 #ifndef UTIL_EGLWINDOW_H_
 #define UTIL_EGLWINDOW_H_
 
+#include <stdint.h>
 #include <list>
 #include <memory>
-#include <stdint.h>
 #include <string>
 
-#include <export.h>
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 #include <GLES3/gl3.h>
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
+#include <export.h>
 
-#include "common/angleutils.h"
 #include "common/Optional.h"
+#include "common/angleutils.h"
 
 class OSWindow;
 
@@ -39,7 +39,10 @@ struct ANGLE_EXPORT EGLPlatformParameters
 
     EGLPlatformParameters();
     explicit EGLPlatformParameters(EGLint renderer);
-    EGLPlatformParameters(EGLint renderer, EGLint majorVersion, EGLint minorVersion, EGLint deviceType);
+    EGLPlatformParameters(EGLint renderer,
+                          EGLint majorVersion,
+                          EGLint minorVersion,
+                          EGLint deviceType);
     EGLPlatformParameters(EGLint renderer,
                           EGLint majorVersion,
                           EGLint minorVersion,
@@ -49,6 +52,9 @@ struct ANGLE_EXPORT EGLPlatformParameters
 
 ANGLE_EXPORT bool operator<(const EGLPlatformParameters &a, const EGLPlatformParameters &b);
 ANGLE_EXPORT bool operator==(const EGLPlatformParameters &a, const EGLPlatformParameters &b);
+
+using ReturningFunc = void (*)();
+using GetProcFunc   = ReturningFunc (*)(const char *);
 
 class ANGLE_EXPORT EGLWindow : angle::NonCopyable
 {
@@ -132,6 +138,8 @@ class ANGLE_EXPORT EGLWindow : angle::NonCopyable
 
     static bool ClientExtensionEnabled(const std::string &extName);
 
+    GetProcFunc getGetProcFunc() const;
+
   private:
     EGLConfig mConfig;
     EGLDisplay mDisplay;
@@ -169,4 +177,4 @@ class ANGLE_EXPORT EGLWindow : angle::NonCopyable
 
 ANGLE_EXPORT bool CheckExtensionExists(const char *allExtensions, const std::string &extName);
 
-#endif // UTIL_EGLWINDOW_H_
+#endif  // UTIL_EGLWINDOW_H_
