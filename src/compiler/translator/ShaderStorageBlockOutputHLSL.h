@@ -49,6 +49,8 @@ class ShaderStorageBlockOutputHLSL : public TIntermTraverser
     void outputStoreFunctionCallPrefix(TIntermTyped *node);
     // This writes the funciton call to load a SSBO value to the output stream.
     void outputLoadFunctionCall(TIntermTyped *node);
+    // This writes the funciton call to get the lengh of unsized array member of SSBO.
+    void outputLengthFunctionCall(TIntermTyped *node);
 
     void writeShaderStorageBlocksHeader(TInfoSinkBase &out) const;
 
@@ -71,7 +73,7 @@ class ShaderStorageBlockOutputHLSL : public TIntermTraverser
 
     int mMatrixStride;
     bool mRowMajor;
-    bool mIsLoadFunctionCall;
+    bool mLocationAsTheLastArgument;
     OutputHLSL *mOutputHLSL;
     ShaderStorageBlockFunctionHLSL *mSSBOFunctionHLSL;
     ResourcesHLSL *mResourcesHLSL;

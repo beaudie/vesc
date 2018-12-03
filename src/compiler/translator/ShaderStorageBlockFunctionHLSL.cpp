@@ -189,6 +189,14 @@ void ShaderStorageBlockFunctionHLSL::OutputSSBOStoreFunctionBody(
     }
 }
 
+// static
+void ShaderStorageBlockFunctionHLSL::OutputSSBOLengthFunctionBody(TInfoSinkBase &out)
+{
+    out << "    uint dim = 0;\n";
+    out << "    buffer.GetDimensions(dim);\n";
+    out << "    return int(dim - loc);\n";
+}
+
 bool ShaderStorageBlockFunctionHLSL::ShaderStorageBlockFunction::operator<(
     const ShaderStorageBlockFunction &rhs) const
 {
@@ -204,8 +212,25 @@ TString ShaderStorageBlockFunctionHLSL::registerShaderStorageBlockFunction(
     TIntermSwizzle *swizzleNode)
 {
     ShaderStorageBlockFunction ssboFunction;
-    ssboFunction.typeString = TypeString(type);
     ssboFunction.method     = method;
+    switch (method)
+    {
+        case SSBOMethod::LOAD:
+            ssboFunction.functionName = "_Load_";
+            break;
+        case SSBOMethod::STORE:
+            ssboFunction.functionName = "_Store_";
+            break;
+        case SSBOMethod::LENGTH:
+            ssboFunction.functionName = "_Length_";
+            mRegisteredShaderStorageBlockFunctions.insert(ssboFunction);
+            return ssboFunction.functionName;
+        default:
+            UNREACHABLE();
+    }
+
+    ssboFunction.typeString = TypeString(type);
+    ssboFunction.functionName += ssboFunction.typeString;
     ssboFunction.type       = type;
     if (swizzleNode != nullptr)
     {
@@ -230,20 +255,7 @@ TString ShaderStorageBlockFunctionHLSL::registerShaderStorageBlockFunction(
     }
     ssboFunction.rowMajor     = rowMajor;
     ssboFunction.matrixStride = matrixStride;
-    ssboFunction.functionName =
-        TString(getBlockStorageString(storage)) + "_" + ssboFunction.typeString;
-
-    switch (method)
-    {
-        case SSBOMethod::LOAD:
-            ssboFunction.functionName += "_Load";
-            break;
-        case SSBOMethod::STORE:
-            ssboFunction.functionName += "_Store";
-            break;
-        default:
-            UNREACHABLE();
-    }
+    ssboFunction.functionName += "_" + TString(getBlockStorageString(storage));
 
     if (rowMajor)
     {
@@ -291,13 +303,20 @@ void ShaderStorageBlockFunctionHLSL::shaderStorageBlockFunctionHeader(TInfoSinkB
             out << "{\n";
             OutputSSBOLoadFunctionBody(out, ssboFunction);
         }
-        else
+        else if (ssboFunction.method == SSBOMethod::STORE)
         {
             // Function header
             out << "void " << ssboFunction.functionName << "(RWByteAddressBuffer buffer, uint loc, "
                 << ssboFunction.typeString << " value)\n";
             out << "{\n";
             OutputSSBOStoreFunctionBody(out, ssboFunction);
+        }
+        else
+        {
+            out << "int " << ssboFunction.functionName
+                << "(RWByteAddressBuffer buffer, uint loc)\n";
+            out << "{\n";
+            OutputSSBOLengthFunctionBody(out);
         }
 
         out << "}\n"

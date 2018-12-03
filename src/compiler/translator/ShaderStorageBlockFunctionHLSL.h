@@ -38,7 +38,8 @@ class TIntermSwizzle;
 enum class SSBOMethod
 {
     LOAD,
-    STORE
+    STORE,
+    LENGTH
 };
 
 class ShaderStorageBlockFunctionHLSL final : angle::NonCopyable
@@ -68,9 +69,10 @@ class ShaderStorageBlockFunctionHLSL final : angle::NonCopyable
     };
 
     static void OutputSSBOLoadFunctionBody(TInfoSinkBase &out,
-                                           const ShaderStorageBlockFunction &imageFunction);
+                                           const ShaderStorageBlockFunction &ssboFunction);
     static void OutputSSBOStoreFunctionBody(TInfoSinkBase &out,
-                                            const ShaderStorageBlockFunction &imageFunction);
+                                            const ShaderStorageBlockFunction &ssboFunction);
+    static void OutputSSBOLengthFunctionBody(TInfoSinkBase &out);
     using ShaderStorageBlockFunctionSet = std::set<ShaderStorageBlockFunction>;
     ShaderStorageBlockFunctionSet mRegisteredShaderStorageBlockFunctions;
 };

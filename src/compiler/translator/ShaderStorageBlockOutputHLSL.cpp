@@ -299,7 +299,7 @@ ShaderStorageBlockOutputHLSL::ShaderStorageBlockOutputHLSL(OutputHLSL *outputHLS
     : TIntermTraverser(true, true, true, symbolTable),
       mMatrixStride(0),
       mRowMajor(false),
-      mIsLoadFunctionCall(false),
+      mLocationAsTheLastArgument(false),
       mOutputHLSL(outputHLSL),
       mResourcesHLSL(resourcesHLSL)
 {
@@ -313,14 +313,20 @@ ShaderStorageBlockOutputHLSL::~ShaderStorageBlockOutputHLSL()
 
 void ShaderStorageBlockOutputHLSL::outputStoreFunctionCallPrefix(TIntermTyped *node)
 {
-    mIsLoadFunctionCall = false;
+    mLocationAsTheLastArgument = false;
     traverseSSBOAccess(node, SSBOMethod::STORE);
 }
 
 void ShaderStorageBlockOutputHLSL::outputLoadFunctionCall(TIntermTyped *node)
 {
-    mIsLoadFunctionCall = true;
+    mLocationAsTheLastArgument = true;
     traverseSSBOAccess(node, SSBOMethod::LOAD);
+}
+
+void ShaderStorageBlockOutputHLSL::outputLengthFunctionCall(TIntermTyped *node)
+{
+    mLocationAsTheLastArgument = true;
+    traverseSSBOAccess(node, SSBOMethod::LENGTH);
 }
 
 // Note that we must calculate the matrix stride here instead of ShaderStorageBlockFunctionHLSL.
@@ -488,7 +494,7 @@ bool ShaderStorageBlockOutputHLSL::visitSwizzle(Visit visit, TIntermSwizzle *nod
         TInfoSinkBase &out = mOutputHLSL->getInfoSink();
         // TODO(jiajia.qin@intel.com): add swizzle process if the swizzle node is not the last node
         // of ssbo access chain. Such as, data.xy[0]
-        if (mIsLoadFunctionCall && isEndOfSSBOAccessChain())
+        if (mLocationAsTheLastArgument && isEndOfSSBOAccessChain())
         {
             out << ")";
         }
@@ -657,7 +663,7 @@ void ShaderStorageBlockOutputHLSL::writeEOpIndexDirectOrIndirectOutput(TInfoSink
         {
             out << ")";
         }
-        if (mIsLoadFunctionCall && isEndOfSSBOAccessChain())
+        if (mLocationAsTheLastArgument && isEndOfSSBOAccessChain())
         {
             out << ")";
         }
@@ -683,7 +689,7 @@ void ShaderStorageBlockOutputHLSL::writeDotOperatorOutput(TInfoSinkBase &out, co
             out << " * (";
         }
     }
-    if (mIsLoadFunctionCall && isEndOfSSBOAccessChain())
+    if (mLocationAsTheLastArgument && isEndOfSSBOAccessChain())
     {
         out << ")";
     }
