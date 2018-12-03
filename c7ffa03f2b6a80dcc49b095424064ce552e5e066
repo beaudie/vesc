@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ff6cb514_4ab7dc91",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-12-03T10:23:46Z",
+      "side": 1,
+      "message": "Could we only do InVisit and remove PreVisit? It would remove the need for visit checks at the beginning of functions. I don\u0027t think visitAggregate needs to be in PreVisit.",
+      "parentUuid": "eb882e7b_7f565eda",
+      "range": {
+        "startLine": 114,
+        "startChar": 29,
+        "endLine": 114,
+        "endChar": 33
+      },
+      "revId": "c7ffa03f2b6a80dcc49b095424064ce552e5e066",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "63f168b6_267de0fb",
         "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
         "patchSetId": 4
@@ -41,6 +65,53 @@
         "startChar": 12,
         "endLine": 155,
         "endChar": 29
+      },
+      "revId": "c7ffa03f2b6a80dcc49b095424064ce552e5e066",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f3ed211_d84d46ed",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-12-03T10:23:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "63f168b6_267de0fb",
+      "range": {
+        "startLine": 155,
+        "startChar": 12,
+        "endLine": 155,
+        "endChar": 29
+      },
+      "revId": "c7ffa03f2b6a80dcc49b095424064ce552e5e066",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cdab7130_698506ec",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-12-03T10:23:46Z",
+      "side": 1,
+      "message": "I believe these two nodes need to be cloned.",
+      "range": {
+        "startLine": 280,
+        "startChar": 53,
+        "endLine": 280,
+        "endChar": 79
       },
       "revId": "c7ffa03f2b6a80dcc49b095424064ce552e5e066",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
