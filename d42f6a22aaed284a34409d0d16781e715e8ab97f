@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "363a0a9a_440e7ea7",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-03T18:43:31Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 15
+      },
+      "revId": "d42f6a22aaed284a34409d0d16781e715e8ab97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05ec59b9_13de09d5",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-03T18:43:31Z",
+      "side": 1,
+      "message": "feels like these helpers could go in util.h/cpp",
+      "range": {
+        "startLine": 24,
+        "startChar": 5,
+        "endLine": 24,
+        "endChar": 25
+      },
+      "revId": "d42f6a22aaed284a34409d0d16781e715e8ab97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9e9c7f9_365cb899",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-03T18:43:31Z",
+      "side": 1,
+      "message": "are there binary operators besides assignment that are not read only? If no, you could reword this as \u0027IsBinaryAssignmentOperator\u0027",
+      "range": {
+        "startLine": 48,
+        "startChar": 5,
+        "endLine": 48,
+        "endChar": 29
+      },
+      "revId": "d42f6a22aaed284a34409d0d16781e715e8ab97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6f860254_f932ba69",
         "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
         "patchSetId": 5
@@ -18,6 +87,76 @@
         "startChar": 48,
         "endLine": 108,
         "endChar": 60
+      },
+      "revId": "d42f6a22aaed284a34409d0d16781e715e8ab97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74d7fb84_07cc18f3",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-03T18:43:31Z",
+      "side": 1,
+      "message": "This seems fine.",
+      "parentUuid": "6f860254_f932ba69",
+      "range": {
+        "startLine": 108,
+        "startChar": 48,
+        "endLine": 108,
+        "endChar": 60
+      },
+      "revId": "d42f6a22aaed284a34409d0d16781e715e8ab97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6218e058_5e1420b5",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-03T18:43:31Z",
+      "side": 1,
+      "message": "no (c) is necessary\n\nsee https://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#comments",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "d42f6a22aaed284a34409d0d16781e715e8ab97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1c62886_e62b70d2",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-03T18:43:31Z",
+      "side": 1,
+      "message": "maybe you could mention what the \u0027bad\u0027 access patterns are.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 45
       },
       "revId": "d42f6a22aaed284a34409d0d16781e715e8ab97f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
