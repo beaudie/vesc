@@ -185,26 +185,32 @@ if (!is_android) {
 
   action("vulkan_gen_icd_json_file") {
     script = "$angle_root/scripts/generate_vulkan_layers_json.py"
+    sources = [ "../vulkan-headers/src/include/vulkan/vulkan_core.h" ]
+    args = [ "--icd" ]
     if (is_win) {
-      sources = [
+      sources += [
         "src/icd/windows/VkICD_mock_icd.json",
       ]
-      args = [ "$raw_vulkan_icd_dir/icd/windows" ]
+      args += [ "$raw_vulkan_icd_dir/icd/windows" ]
     }
-    if (is_linux) {
-      sources = [
+    if (is_linux || is_mac) {
+      set_sources_assignment_filter([])
+      sources += [
         "src/icd/linux/VkICD_mock_icd.json",
       ]
-      args = [ "$raw_vulkan_icd_dir/icd/linux" ]
+      set_sources_assignment_filter(sources_assignment_filter)
+      args += [ "$raw_vulkan_icd_dir/icd/linux" ]
     }
 
     # The layer JSON files are part of the necessary data deps.
     outputs = [
       "$root_out_dir/$data_dir/VkICD_mock_icd.json",
     ]
-    data = [
-      "$root_out_dir/$data_dir/VkICD_mock_icd.json",
-    ]
-    args += [ rebase_path("$root_out_dir/$data_dir", root_build_dir) ]
+    data = outputs
+    args += [
+      rebase_path("$root_out_dir/$data_dir", root_build_dir),
+    ] + rebase_path(sources, root_build_dir)
+    print(sources)
+    print(args)
   }
 }
