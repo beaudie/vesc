@@ -168,7 +168,11 @@ void SimplifyLoopConditionsTraverser::traverseLoop(TIntermLoop *node)
             TIntermBlock *newBody = new TIntermBlock();
             if (node->getBody())
             {
-                newBody->getSequence()->push_back(node->getBody());
+                TIntermBranch *branchNode = (*node->getBody()->getSequence())[0]->getAsBranchNode();
+                if (branchNode && branchNode->getFlowOp() != EOpContinue)
+                {
+                    newBody->getSequence()->push_back(node->getBody());
+                }
             }
             newBody->getSequence()->push_back(
                 CreateTempAssignmentNode(conditionVariable, node->getCondition()->deepCopy()));
@@ -198,7 +202,11 @@ void SimplifyLoopConditionsTraverser::traverseLoop(TIntermLoop *node)
             TIntermBlock *newBody = new TIntermBlock();
             if (node->getBody())
             {
-                newBody->getSequence()->push_back(node->getBody());
+                TIntermBranch *branchNode = (*node->getBody()->getSequence())[0]->getAsBranchNode();
+                if (branchNode && branchNode->getFlowOp() != EOpContinue)
+                {
+                    newBody->getSequence()->push_back(node->getBody());
+                }
             }
             newBody->getSequence()->push_back(
                 CreateTempAssignmentNode(conditionVariable, node->getCondition()->deepCopy()));
@@ -250,7 +258,11 @@ void SimplifyLoopConditionsTraverser::traverseLoop(TIntermLoop *node)
             TIntermBlock *whileLoopBody = new TIntermBlock();
             if (node->getBody())
             {
-                whileLoopBody->getSequence()->push_back(node->getBody());
+                TIntermBranch *branchNode = (*node->getBody()->getSequence())[0]->getAsBranchNode();
+                if (branchNode && branchNode->getFlowOp() != EOpContinue)
+                {
+                    whileLoopBody->getSequence()->push_back(node->getBody());
+                }
             }
             // Insert "exprB;" in the while loop
             if (node->getExpression())

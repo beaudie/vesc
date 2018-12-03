@@ -1461,6 +1461,51 @@ void main()
     EXPECT_GL_NO_ERROR();
 }
 
+// Test that 'continue' as loop body won't result infinite loop.
+TEST_P(ShaderStorageBufferTest31, ContinueAsLoopBody)
+{
+    // jiajia.qin@intel.com: Add buf.length() support in SSBO for d3d. http://anglebug.com/1951
+    ANGLE_SKIP_TEST_IF(IsD3D11);
+    constexpr char kComputeShaderSource[] =
+        R"(#version 310 es
+layout (local_size_x=1) in;
+layout(std430, binding = 0) buffer Buf {
+  uint data;
+  uint buf[];
+};
+
+void main()
+{
+  for (int i = 0; i < buf.length(); i++) {
+    continue;
+  }
+  data = 2u;
+}
+)";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kComputeShaderSource);
+    glUseProgram(program);
+
+    constexpr unsigned int kBytesPerComponent = sizeof(unsigned int);
+    constexpr unsigned int kInputValues[4]    = {1u, 2u, 3u, 4u};
+    constexpr unsigned int kExpectedValue     = 2u;
+    GLBuffer shaderStorageBuffer;
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, 4 * kBytesPerComponent, &kInputValues, GL_STATIC_DRAW);
+
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, shaderStorageBuffer);
+
+    glDispatchCompute(1, 1, 1);
+    glFinish();
+
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
+    const GLuint *ptr = reinterpret_cast<const GLuint *>(
+        glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, 4 * kBytesPerComponent, GL_MAP_READ_BIT));
+    EXPECT_EQ(kExpectedValue, *ptr);
+
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test that non-structure array of arrays is supported in SSBO.
 TEST_P(ShaderStorageBufferTest31, SimpleArrayOfArrays)
 {
