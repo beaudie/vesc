@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "09702fbd_10492d9e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-03T20:40:51Z",
+      "side": 1,
+      "message": "clearing",
+      "range": {
+        "startLine": 15,
+        "startChar": 34,
+        "endLine": 15,
+        "endChar": 43
+      },
+      "revId": "8b54ec82a3736437677c92dc2f063025df91c225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce4ed6fc_7b6e26ac",
+        "filename": "scripts/update_canary_angle.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-03T20:40:51Z",
+      "side": 1,
+      "message": "nit: might look better in its own CL.",
+      "revId": "8b54ec82a3736437677c92dc2f063025df91c225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56041c1a_1736ffdb",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3858,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-03T20:40:51Z",
+      "side": 1,
+      "message": "context doesn\u0027t need notification here?",
+      "range": {
+        "startLine": 3858,
+        "startChar": 26,
+        "endLine": 3858,
+        "endChar": 33
+      },
+      "revId": "8b54ec82a3736437677c92dc2f063025df91c225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
