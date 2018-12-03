@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "47129004_aecfbc74",
+        "filename": "scripts/generate_vulkan_layers_json.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-03T14:53:14Z",
+      "side": 1,
+      "message": "print() works in Python 2. I don\u0027t think this is necessary.",
+      "parentUuid": "5d7be77f_ad410d60",
+      "revId": "788f74b67454242598f4b544738f549721e133e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2301f64b_13a29f4c",
         "filename": "scripts/generate_vulkan_layers_json.py",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "788f74b67454242598f4b544738f549721e133e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0286fc54_8c0d825f",
+        "filename": "scripts/generate_vulkan_layers_json.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-03T14:53:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2301f64b_13a29f4c",
+      "revId": "788f74b67454242598f4b544738f549721e133e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
