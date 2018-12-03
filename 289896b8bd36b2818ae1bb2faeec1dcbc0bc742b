@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50092be0_850a155b",
+        "filename": "scripts/generate_vulkan_layers_json.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2018-12-03T15:25:51Z",
+      "side": 1,
+      "message": "Does this want to check the host system, or should this check the target system? If I\u0027m building chrome/win on a linux host, should these json files contain the linux-style lib locaiton, or the windows-style one (where the dll is right in the out dir)? I\u0027m guessing this should likely check the target os instead?\n\nAlso, does it matter that this uses a backslash on Windows? Wouldn\u0027t a forward slash work there too?",
+      "revId": "289896b8bd36b2818ae1bb2faeec1dcbc0bc742b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
