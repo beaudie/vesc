@@ -17,91 +17,25 @@ namespace sh
 
 namespace
 {
-bool IsRowMajorLayout(const InterfaceBlockField &var)
+class BlockLayoutMapVisitor : public VariableNameBlockVisitor
 {
-    return var.isRowMajorLayout;
-}
+  public:
+    BlockLayoutMapVisitor(BlockLayoutMap *blockInfoOut, const std::string &instanceName)
+        : VariableNameBlockVisitor(instanceName), mInfoOut(blockInfoOut)
+    {}
 
-bool IsRowMajorLayout(const ShaderVariable &var)
-{
-    return false;
-}
-
-template <typename VarT>
-void GetInterfaceBlockInfo(const std::vector<VarT> &fields,
-                           const std::string &prefix,
-                           sh::BlockLayoutEncoder *encoder,
-                           bool inRowMajorLayout,
-                           BlockLayoutMap *blockInfoOut);
-
-template <typename VarT>
-void GetInterfaceBlockStructMemberInfo(const std::vector<VarT> &fields,
-                                       const std::string &fieldName,
-                                       sh::BlockLayoutEncoder *encoder,
-                                       bool inRowMajorLayout,
-                                       BlockLayoutMap *blockInfoOut)
-{
-    // TODO(jiajia.qin@intel.com):we need to set the right structure base alignment before
-    // enterAggregateType for std430 layout just like GetShaderStorageBlockFieldMemberInfo did in
-    // ShaderStorageBlockOutputHLSL.cpp. http://anglebug.com/1920
-    encoder->enterAggregateType();
-    GetInterfaceBlockInfo(fields, fieldName, encoder, inRowMajorLayout, blockInfoOut);
-    encoder->exitAggregateType();
-}
-
-template <typename VarT>
-void GetInterfaceBlockStructArrayMemberInfo(const VarT &field,
-                                            unsigned int arrayNestingIndex,
-                                            const std::string &arrayName,
-                                            sh::BlockLayoutEncoder *encoder,
-                                            bool inRowMajorLayout,
-                                            BlockLayoutMap *blockInfoOut)
-{
-    // Nested arrays are processed starting from outermost (arrayNestingIndex 0u) and ending at the
-    // innermost.
-    const unsigned int currentArraySize = field.getNestedArraySize(arrayNestingIndex);
-    for (unsigned int arrayElement = 0u; arrayElement < currentArraySize; ++arrayElement)
+    void visitVariable(const ShaderVariable &variable, const BlockMemberInfo &variableInfo) override
     {
-        const std::string elementName = arrayName + ArrayString(arrayElement);
-        if (arrayNestingIndex + 1u < field.arraySizes.size())
-        {
-            GetInterfaceBlockStructArrayMemberInfo(field, arrayNestingIndex + 1u, elementName,
-                                                   encoder, inRowMajorLayout, blockInfoOut);
-        }
-        else
-        {
-            GetInterfaceBlockStructMemberInfo(field.fields, elementName, encoder, inRowMajorLayout,
-                                              blockInfoOut);
-        }
-    }
-}
+        if (gl::IsSamplerType(variable.type))
+            return;
 
-template <typename VarT>
-void GetInterfaceBlockArrayOfArraysMemberInfo(const VarT &field,
-                                              unsigned int arrayNestingIndex,
-                                              const std::string &arrayName,
-                                              sh::BlockLayoutEncoder *encoder,
-                                              bool isRowMajorMatrix,
-                                              BlockLayoutMap *blockInfoOut)
-{
-    const unsigned int currentArraySize = field.getNestedArraySize(arrayNestingIndex);
-    for (unsigned int arrayElement = 0u; arrayElement < currentArraySize; ++arrayElement)
-    {
-        const std::string elementName = arrayName + ArrayString(arrayElement);
-        if (arrayNestingIndex + 2u < field.arraySizes.size())
-        {
-            GetInterfaceBlockArrayOfArraysMemberInfo(field, arrayNestingIndex + 1u, elementName,
-                                                     encoder, isRowMajorMatrix, blockInfoOut);
-        }
-        else
-        {
-            std::vector<unsigned int> innermostArraySize(
-                1u, field.getNestedArraySize(arrayNestingIndex + 1u));
-            (*blockInfoOut)[elementName] =
-                encoder->encodeType(field.type, innermostArraySize, isRowMajorMatrix);
-        }
+        std::string name  = collapseNameStack(variable.name);
+        (*mInfoOut)[name] = variableInfo;
     }
-}
+
+  private:
+    BlockLayoutMap *mInfoOut;
+};
 
 template <typename VarT>
 void GetInterfaceBlockInfo(const std::vector<VarT> &fields,
@@ -110,46 +44,78 @@ void GetInterfaceBlockInfo(const std::vector<VarT> &fields,
                            bool inRowMajorLayout,
                            BlockLayoutMap *blockInfoOut)
 {
-    for (const VarT &field : fields)
+    BlockLayoutMapVisitor visitor(blockInfoOut, prefix);
+    EncodeShaderVariables(fields.data(), fields.size(), inRowMajorLayout, encoder, &visitor);
+}
+
+void EncodeStructVariable(const ShaderVariable &variable,
+                          bool isRowMajorLayout,
+                          BlockLayoutEncoder *encoder,
+                          BlockEncodingVisitor *visitor)
+{
+    const std::vector<ShaderVariable> &fields = variable.fields;
+
+    visitor->enterStructAccess(variable);
+
+    encoder->enterAggregateType();
+    EncodeShaderVariables(fields.data(), fields.size(), isRowMajorLayout, encoder, visitor);
+    encoder->exitAggregateType();
+
+    visitor->exitStructAccess(variable);
+}
+
+void EncodeStructArrayVariable(const ShaderVariable &variable,
+                               unsigned int arrayNestingIndex,
+                               bool inRowMajorLayout,
+                               BlockLayoutEncoder *encoder,
+                               BlockEncodingVisitor *visitor)
+{
+    // Nested arrays are processed starting from outermost (arrayNestingIndex 0u) and ending at the
+    // innermost.
+    const unsigned int currentArraySize = variable.getNestedArraySize(arrayNestingIndex);
+    for (unsigned int arrayElement = 0u; arrayElement < currentArraySize; ++arrayElement)
     {
-        // Skip samplers. On Vulkan we use this for the default uniform block, so samplers may be
-        // included.
-        if (gl::IsSamplerType(field.type))
-        {
-            continue;
-        }
+        visitor->enterArrayElement(variable, arrayNestingIndex, arrayElement);
 
-        const std::string &fieldName = (prefix.empty() ? field.name : prefix + "." + field.name);
-
-        bool rowMajorLayout = (inRowMajorLayout || IsRowMajorLayout(field));
-
-        if (field.isStruct())
+        if (arrayNestingIndex + 1u < variable.arraySizes.size())
         {
-            if (field.isArray())
-            {
-                GetInterfaceBlockStructArrayMemberInfo(field, 0u, fieldName, encoder,
-                                                       rowMajorLayout, blockInfoOut);
-            }
-            else
-            {
-                GetInterfaceBlockStructMemberInfo(field.fields, fieldName, encoder, rowMajorLayout,
-                                                  blockInfoOut);
-            }
-        }
-        else if (field.isArrayOfArrays())
-        {
-            GetInterfaceBlockArrayOfArraysMemberInfo(field, 0u, fieldName, encoder,
-                                                     rowMajorLayout && gl::IsMatrixType(field.type),
-                                                     blockInfoOut);
+            EncodeStructArrayVariable(variable, arrayNestingIndex + 1u, inRowMajorLayout, encoder,
+                                      visitor);
         }
         else
         {
-            (*blockInfoOut)[fieldName] = encoder->encodeType(
-                field.type, field.arraySizes, rowMajorLayout && gl::IsMatrixType(field.type));
+            EncodeStructVariable(variable, inRowMajorLayout, encoder, visitor);
         }
+
+        visitor->exitArrayElement(variable, arrayNestingIndex, arrayElement);
     }
 }
 
+void EncodeArrayOfArraysVariable(const ShaderVariable &variable,
+                                 unsigned int arrayNestingIndex,
+                                 bool isRowMajorMatrix,
+                                 BlockLayoutEncoder *encoder,
+                                 BlockEncodingVisitor *visitor)
+{
+    const unsigned int currentArraySize = variable.getNestedArraySize(arrayNestingIndex);
+    for (unsigned int arrayElement = 0u; arrayElement < currentArraySize; ++arrayElement)
+    {
+        if (arrayNestingIndex + 2u < variable.arraySizes.size())
+        {
+            EncodeArrayOfArraysVariable(variable, arrayNestingIndex + 1u, isRowMajorMatrix, encoder,
+                                        visitor);
+        }
+        else
+        {
+            std::vector<unsigned int> innermostArraySize(
+                1u, variable.getNestedArraySize(arrayNestingIndex + 1u));
+            BlockMemberInfo variableInfo =
+                encoder->encodeType(variable.type, innermostArraySize, isRowMajorMatrix);
+
+            visitor->visitVariable(variable, variableInfo);
+        }
+    }
+}
 }  // anonymous namespace
 
 BlockLayoutEncoder::BlockLayoutEncoder() : mCurrentOffset(0), mStructureBaseAlignment(0) {}
@@ -184,13 +150,13 @@ void BlockLayoutEncoder::setStructureBaseAlignment(size_t baseAlignment)
 }
 
 // static
-size_t BlockLayoutEncoder::getBlockRegister(const BlockMemberInfo &info)
+size_t BlockLayoutEncoder::GetBlockRegister(const BlockMemberInfo &info)
 {
     return (info.offset / BytesPerComponent) / ComponentsPerRegister;
 }
 
 // static
-size_t BlockLayoutEncoder::getBlockRegisterElement(const BlockMemberInfo &info)
+size_t BlockLayoutEncoder::GetBlockRegisterElement(const BlockMemberInfo &info)
 {
     return (info.offset / BytesPerComponent) % ComponentsPerRegister;
 }
@@ -342,4 +308,74 @@ void GetUniformBlockInfo(const std::vector<Uniform> &uniforms,
     GetInterfaceBlockInfo(uniforms, prefix, encoder, false, blockInfoOut);
 }
 
+void EncodeShaderVariable(const ShaderVariable &variable,
+                          bool isRowMajorLayout,
+                          BlockLayoutEncoder *encoder,
+                          BlockEncodingVisitor *visitor)
+{
+    bool rowMajorLayout = (isRowMajorLayout || variable.isRowMajorLayout);
+    bool isRowMajor     = rowMajorLayout && gl::IsMatrixType(variable.type);
+
+    if (variable.isStruct())
+    {
+        visitor->enterStruct(variable);
+
+        if (variable.isArray())
+        {
+            EncodeStructArrayVariable(variable, 0u, rowMajorLayout, encoder, visitor);
+        }
+        else
+        {
+            EncodeStructVariable(variable, rowMajorLayout, encoder, visitor);
+        }
+
+        visitor->exitStruct(variable);
+    }
+    else if (variable.isArrayOfArrays())
+    {
+        EncodeArrayOfArraysVariable(variable, 0u, isRowMajor, encoder, visitor);
+    }
+    else
+    {
+        BlockMemberInfo variableInfo =
+            encoder->encodeType(variable.type, variable.arraySizes, isRowMajor);
+        if (visitor)
+        {
+            visitor->visitVariable(variable, variableInfo);
+        }
+    }
+}
+
+void EncodeShaderVariables(const ShaderVariable *vars,
+                           size_t numVars,
+                           bool isRowMajorLayout,
+                           BlockLayoutEncoder *encoder,
+                           BlockEncodingVisitor *visitor)
+{
+    for (size_t variableIndex = 0; variableIndex < numVars; ++variableIndex)
+    {
+        const ShaderVariable &variable = vars[variableIndex];
+        EncodeShaderVariable(variable, isRowMajorLayout, encoder, visitor);
+    }
+}
+
+void VariableNameBlockVisitor::enterArrayElement(const ShaderVariable &arrayVar,
+                                                 unsigned int arrayNestingIndex,
+                                                 unsigned int arrayElement)
+{
+    std::stringstream strstr;
+    strstr << "[" << arrayElement << "]";
+    mNameStack.push_back(strstr.str());
+}
+
+std::string VariableNameBlockVisitor::collapseNameStack(const std::string &top) const
+{
+    std::stringstream strstr;
+    for (const std::string &part : mNameStack)
+    {
+        strstr << part;
+    }
+    strstr << top;
+    return strstr.str();
+}
 }  // namespace sh

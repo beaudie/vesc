@@ -2126,37 +2126,89 @@ void ProgramD3D::defineUniformsAndAssignRegisters()
     initializeUniformStorage(attachedShaders);
 }
 
+class BlockEncodingVisitorD3D : public sh::VariableNameBlockVisitor
+{
+  public:
+    BlockEncodingVisitorD3D(gl::ShaderType shaderType,
+                            HLSLRegisterType registerType,
+                            D3DUniformMap *uniformMapOut)
+        : VariableNameBlockVisitor(""),
+          mShaderType(shaderType),
+          mRegisterType(registerType),
+          mUniformMapOut(uniformMapOut)
+    {}
+
+    void visitVariable(const sh::ShaderVariable &variable,
+                       const sh::BlockMemberInfo &variableInfo) override
+    {
+        std::string fullName = collapseNameStack(variable.name);
+
+        auto uniformMapEntry   = mUniformMapOut->find(fullName);
+        D3DUniform *d3dUniform = nullptr;
+
+        if (uniformMapEntry != mUniformMapOut->end())
+        {
+            d3dUniform = uniformMapEntry->second;
+        }
+        else
+        {
+            d3dUniform =
+                new D3DUniform(variable.type, mRegisterType, fullName, variable.arraySizes, true);
+            (*mUniformMapOut)[fullName] = d3dUniform;
+        }
+
+        d3dUniform->registerElement = static_cast<unsigned int>(
+            sh::BlockLayoutEncoder::GetBlockRegisterElement(variableInfo));
+        unsigned int reg =
+            static_cast<unsigned int>(sh::BlockLayoutEncoder::GetBlockRegister(variableInfo));
+
+        ASSERT(mShaderType != gl::ShaderType::InvalidEnum);
+        d3dUniform->mShaderRegisterIndexes[mShaderType] = reg;
+    }
+
+  private:
+    gl::ShaderType mShaderType;
+    HLSLRegisterType mRegisterType;
+    D3DUniformMap *mUniformMapOut;
+};
+
 void ProgramD3D::defineUniformBase(const gl::Shader *shader,
                                    const sh::Uniform &uniform,
                                    D3DUniformMap *uniformMap)
 {
+    sh::DummyBlockEncoder dummyEncoder;
+
     // Samplers get their registers assigned in assignAllSamplerRegisters, and images get their
     // registers assigned in assignAllImageRegisters.
     if (gl::IsSamplerType(uniform.type))
     {
-        defineUniform(shader->getType(), uniform, uniform.name, HLSLRegisterType::Texture, nullptr,
-                      uniformMap);
+        BlockEncodingVisitorD3D visitor(shader->getType(), HLSLRegisterType::Texture, uniformMap);
+        sh::EncodeShaderVariable(uniform, false, &dummyEncoder, &visitor);
         return;
     }
-    else if (gl::IsImageType(uniform.type))
+
+    if (gl::IsImageType(uniform.type))
     {
         if (uniform.readonly)
         {
-            defineUniform(shader->getType(), uniform, uniform.name, HLSLRegisterType::Texture,
-                          nullptr, uniformMap);
+            BlockEncodingVisitorD3D visitor(shader->getType(), HLSLRegisterType::Texture,
+                                            uniformMap);
+            sh::EncodeShaderVariable(uniform, false, &dummyEncoder, &visitor);
         }
         else
         {
-            defineUniform(shader->getType(), uniform, uniform.name,
-                          HLSLRegisterType::UnorderedAccessView, nullptr, uniformMap);
+            BlockEncodingVisitorD3D visitor(shader->getType(),
+                                            HLSLRegisterType::UnorderedAccessView, uniformMap);
+            sh::EncodeShaderVariable(uniform, false, &dummyEncoder, &visitor);
         }
         mImageBindingMap[uniform.name] = uniform.binding;
         return;
     }
-    else if (uniform.isBuiltIn() && !uniform.isEmulatedBuiltIn())
+
+    if (uniform.isBuiltIn() && !uniform.isEmulatedBuiltIn())
     {
-        defineUniform(shader->getType(), uniform, uniform.name, HLSLRegisterType::None, nullptr,
-                      uniformMap);
+        BlockEncodingVisitorD3D visitor(shader->getType(), HLSLRegisterType::None, uniformMap);
+        sh::EncodeShaderVariable(uniform, false, &dummyEncoder, &visitor);
         return;
     }
 
@@ -2166,8 +2218,8 @@ void ProgramD3D::defineUniformBase(const gl::Shader *shader,
     sh::HLSLBlockEncoder encoder(sh::HLSLBlockEncoder::GetStrategyFor(outputType), true);
     encoder.skipRegisters(startRegister);
 
-    defineUniform(shader->getType(), uniform, uniform.name, HLSLRegisterType::None, &encoder,
-                  uniformMap);
+    BlockEncodingVisitorD3D visitor(shader->getType(), HLSLRegisterType::None, uniformMap);
+    sh::EncodeShaderVariable(uniform, false, &encoder, &visitor);
 }
 
 D3DUniform *ProgramD3D::getD3DUniformByName(const std::string &name)
@@ -2181,156 +2233,6 @@ D3DUniform *ProgramD3D::getD3DUniformByName(const std::string &name)
     }
 
     return nullptr;
-}
-
-void ProgramD3D::defineStructUniformFields(gl::ShaderType shaderType,
-                                           const std::vector<sh::ShaderVariable> &fields,
-                                           const std::string &namePrefix,
-                                           const HLSLRegisterType regType,
-                                           sh::HLSLBlockEncoder *encoder,
-                                           D3DUniformMap *uniformMap)
-{
-    if (encoder)
-        encoder->enterAggregateType();
-
-    for (size_t fieldIndex = 0; fieldIndex < fields.size(); fieldIndex++)
-    {
-        const sh::ShaderVariable &field  = fields[fieldIndex];
-        const std::string &fieldFullName = (namePrefix + "." + field.name);
-
-        // Samplers get their registers assigned in assignAllSamplerRegisters.
-        // Also they couldn't use the same encoder as the rest of the struct, since they are
-        // extracted out of the struct by the shader translator.
-        if (gl::IsSamplerType(field.type))
-        {
-            defineUniform(shaderType, field, fieldFullName, regType, nullptr, uniformMap);
-        }
-        else
-        {
-            defineUniform(shaderType, field, fieldFullName, regType, encoder, uniformMap);
-        }
-    }
-
-    if (encoder)
-        encoder->exitAggregateType();
-}
-
-void ProgramD3D::defineArrayOfStructsUniformFields(gl::ShaderType shaderType,
-                                                   const sh::ShaderVariable &uniform,
-                                                   unsigned int arrayNestingIndex,
-                                                   const std::string &prefix,
-                                                   const HLSLRegisterType regType,
-                                                   sh::HLSLBlockEncoder *encoder,
-                                                   D3DUniformMap *uniformMap)
-{
-    // Nested arrays are processed starting from outermost (arrayNestingIndex 0u) and ending at the
-    // innermost.
-    const unsigned int currentArraySize = uniform.getNestedArraySize(arrayNestingIndex);
-    for (unsigned int arrayElement = 0u; arrayElement < currentArraySize; ++arrayElement)
-    {
-        const std::string &elementString = prefix + ArrayString(arrayElement);
-        if (arrayNestingIndex + 1u < uniform.arraySizes.size())
-        {
-            defineArrayOfStructsUniformFields(shaderType, uniform, arrayNestingIndex + 1u,
-                                              elementString, regType, encoder, uniformMap);
-        }
-        else
-        {
-            defineStructUniformFields(shaderType, uniform.fields, elementString, regType, encoder,
-                                      uniformMap);
-        }
-    }
-}
-
-void ProgramD3D::defineArrayUniformElements(gl::ShaderType shaderType,
-                                            const sh::ShaderVariable &uniform,
-                                            const std::string &fullName,
-                                            const HLSLRegisterType regType,
-                                            sh::HLSLBlockEncoder *encoder,
-                                            D3DUniformMap *uniformMap)
-{
-    if (encoder)
-        encoder->enterAggregateType();
-
-    sh::ShaderVariable uniformElement = uniform;
-    uniformElement.arraySizes.pop_back();
-    for (unsigned int arrayIndex = 0u; arrayIndex < uniform.getOutermostArraySize(); ++arrayIndex)
-    {
-        std::string elementFullName = fullName + ArrayString(arrayIndex);
-        defineUniform(shaderType, uniformElement, elementFullName, regType, encoder, uniformMap);
-    }
-
-    if (encoder)
-        encoder->exitAggregateType();
-}
-
-void ProgramD3D::defineUniform(gl::ShaderType shaderType,
-                               const sh::ShaderVariable &uniform,
-                               const std::string &fullName,
-                               const HLSLRegisterType regType,
-                               sh::HLSLBlockEncoder *encoder,
-                               D3DUniformMap *uniformMap)
-{
-    if (uniform.isStruct())
-    {
-        if (uniform.isArray())
-        {
-            defineArrayOfStructsUniformFields(shaderType, uniform, 0u, fullName, regType, encoder,
-                                              uniformMap);
-        }
-        else
-        {
-            defineStructUniformFields(shaderType, uniform.fields, fullName, regType, encoder,
-                                      uniformMap);
-        }
-        return;
-    }
-    if (uniform.isArrayOfArrays())
-    {
-        defineArrayUniformElements(shaderType, uniform, fullName, regType, encoder, uniformMap);
-        return;
-    }
-
-    // Not a struct. Arrays are treated as aggregate types.
-    if (uniform.isArray() && encoder)
-    {
-        encoder->enterAggregateType();
-    }
-
-    // Advance the uniform offset, to track registers allocation for structs
-    sh::BlockMemberInfo blockInfo =
-        encoder ? encoder->encodeType(uniform.type, uniform.arraySizes, false)
-                : sh::BlockMemberInfo::getDefaultBlockInfo();
-
-    auto uniformMapEntry   = uniformMap->find(fullName);
-    D3DUniform *d3dUniform = nullptr;
-
-    if (uniformMapEntry != uniformMap->end())
-    {
-        d3dUniform = uniformMapEntry->second;
-    }
-    else
-    {
-        d3dUniform = new D3DUniform(uniform.type, regType, fullName, uniform.arraySizes, true);
-        (*uniformMap)[fullName] = d3dUniform;
-    }
-
-    if (encoder)
-    {
-        d3dUniform->registerElement =
-            static_cast<unsigned int>(sh::HLSLBlockEncoder::getBlockRegisterElement(blockInfo));
-        unsigned int reg =
-            static_cast<unsigned int>(sh::HLSLBlockEncoder::getBlockRegister(blockInfo));
-
-        ASSERT(shaderType != gl::ShaderType::InvalidEnum);
-        d3dUniform->mShaderRegisterIndexes[shaderType] = reg;
-
-        // Arrays are treated as aggregate types
-        if (uniform.isArray())
-        {
-            encoder->exitAggregateType();
-        }
-    }
 }
 
 // Assume count is already clamped.

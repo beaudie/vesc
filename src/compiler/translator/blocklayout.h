@@ -85,8 +85,8 @@ class BlockLayoutEncoder
     static const size_t BytesPerComponent           = 4u;
     static const unsigned int ComponentsPerRegister = 4u;
 
-    static size_t getBlockRegister(const BlockMemberInfo &info);
-    static size_t getBlockRegisterElement(const BlockMemberInfo &info);
+    static size_t GetBlockRegister(const BlockMemberInfo &info);
+    static size_t GetBlockRegisterElement(const BlockMemberInfo &info);
 
   protected:
     size_t mCurrentOffset;
@@ -104,6 +104,34 @@ class BlockLayoutEncoder
                                bool isRowMajorMatrix,
                                int arrayStride,
                                int matrixStride)          = 0;
+};
+
+// Will return default values for everything.
+class DummyBlockEncoder : public BlockLayoutEncoder
+{
+  public:
+    DummyBlockEncoder() = default;
+
+    void enterAggregateType() override {}
+    void exitAggregateType() override {}
+
+  protected:
+    void getBlockLayoutInfo(GLenum type,
+                            const std::vector<unsigned int> &arraySizes,
+                            bool isRowMajorMatrix,
+                            int *arrayStrideOut,
+                            int *matrixStrideOut) override
+    {
+        *arrayStrideOut  = 0;
+        *matrixStrideOut = 0;
+    }
+
+    void advanceOffset(GLenum type,
+                       const std::vector<unsigned int> &arraySizes,
+                       bool isRowMajorMatrix,
+                       int arrayStride,
+                       int matrixStride) override
+    {}
 };
 
 // Block layout according to the std140 block layout
@@ -148,15 +176,94 @@ using BlockLayoutMap = std::map<std::string, BlockMemberInfo>;
 
 void GetInterfaceBlockInfo(const std::vector<InterfaceBlockField> &fields,
                            const std::string &prefix,
-                           sh::BlockLayoutEncoder *encoder,
+                           BlockLayoutEncoder *encoder,
                            BlockLayoutMap *blockInfoOut);
 
 // Used for laying out the default uniform block on the Vulkan backend.
 void GetUniformBlockInfo(const std::vector<Uniform> &uniforms,
                          const std::string &prefix,
-                         sh::BlockLayoutEncoder *encoder,
+                         BlockLayoutEncoder *encoder,
                          BlockLayoutMap *blockInfoOut);
 
+class BlockEncodingVisitor
+{
+  public:
+    virtual ~BlockEncodingVisitor() {}
+
+    virtual void enterStruct(const ShaderVariable &structVar) {}
+    virtual void exitStruct(const ShaderVariable &structVar) {}
+
+    virtual void enterStructAccess(const ShaderVariable &structVar) {}
+    virtual void exitStructAccess(const ShaderVariable &structVar) {}
+
+    virtual void enterArray(const ShaderVariable &arrayVar, unsigned int arrayNestingIndex) {}
+    virtual void exitArray(const ShaderVariable &arrayVar, unsigned int arrayNestingIndex) {}
+
+    virtual void enterArrayElement(const ShaderVariable &arrayVar,
+                                   unsigned int arrayNestingIndex,
+                                   unsigned int arrayElement)
+    {}
+    virtual void exitArrayElement(const ShaderVariable &arrayVar,
+                                  unsigned int arrayNestingIndex,
+                                  unsigned int arrayElement)
+    {}
+
+    virtual void visitVariable(const ShaderVariable &variable,
+                               const BlockMemberInfo &variableInfo) = 0;
+
+  protected:
+    BlockEncodingVisitor() {}
+};
+
+void EncodeShaderVariable(const ShaderVariable &variable,
+                          bool isRowMajorLayout,
+                          BlockLayoutEncoder *encoder,
+                          BlockEncodingVisitor *visitor);
+void EncodeShaderVariables(const ShaderVariable *vars,
+                           size_t numVars,
+                           bool isRowMajorLayout,
+                           BlockLayoutEncoder *encoder,
+                           BlockEncodingVisitor *visitor);
+
+class VariableNameBlockVisitor : public BlockEncodingVisitor
+{
+  public:
+    VariableNameBlockVisitor(const std::string &instanceName)
+    {
+        if (!instanceName.empty())
+        {
+            mNameStack.push_back(instanceName + ".");
+        }
+    }
+
+    void enterStruct(const ShaderVariable &structVar) override
+    {
+        mNameStack.push_back(structVar.name);
+    }
+
+    void exitStruct(const ShaderVariable &structVar) override { mNameStack.pop_back(); }
+
+    void enterStructAccess(const ShaderVariable &structVar) override { mNameStack.push_back("."); }
+
+    void exitStructAccess(const ShaderVariable &structVar) override { mNameStack.pop_back(); }
+
+    void enterArrayElement(const ShaderVariable &arrayVar,
+                           unsigned int arrayNestingIndex,
+                           unsigned int arrayElement) override;
+
+    void exitArrayElement(const ShaderVariable &arrayVar,
+                          unsigned int arrayNestingIndex,
+                          unsigned int arrayElement) override
+    {
+        mNameStack.pop_back();
+    }
+
+  protected:
+    std::string collapseNameStack(const std::string &top) const;
+
+  private:
+    std::vector<std::string> mNameStack;
+};
 }  // namespace sh
 
 #endif  // COMMON_BLOCKLAYOUT_H_

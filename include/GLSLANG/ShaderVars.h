@@ -136,6 +136,9 @@ struct ShaderVariable
     std::vector<ShaderVariable> fields;
     std::string structName;
 
+    // Only applies to interface block fields. Kept here for simplicity.
+    bool isRowMajorLayout;
+
   protected:
     bool isSameVariableAtLinkTime(const ShaderVariable &other,
                                   bool matchPrecision,
@@ -227,8 +230,6 @@ struct InterfaceBlockField : public ShaderVariable
     // See GLSL ES Spec 3.00.3, sec 4.3.7.
     bool isSameInterfaceBlockFieldAtLinkTime(
         const InterfaceBlockField &other) const;
-
-    bool isRowMajorLayout;
 };
 
 struct Varying : public VariableWithLocation
