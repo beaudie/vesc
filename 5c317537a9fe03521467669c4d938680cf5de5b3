@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67ad7303_6eeb7260",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-03T21:33:49Z",
+      "side": 0,
+      "message": "I think this was a bug in 26581113047a8a656e6af0a164bdf976e6543270. The src image was being checked for BLIT_DST and the dst image was being checked for BLIT_SRC.\n\nIt\u0027s possible (though I haven\u0027t verified) that this was resulting in some tests choosing a slow path where they could have chosen the fast path (in addition to the fact that `vk::GetFormatProperties` was not returning the complete features)",
+      "revId": "5c317537a9fe03521467669c4d938680cf5de5b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd109116_a3166207",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-03T21:33:49Z",
+      "side": 0,
+      "message": "An accidental bug fix here: IsMaskFlagSet(m, v) translates to `(m \u0026 v) \u003d\u003d v`. This usage had the parameters reversed, and when `linearTilingFeatures` was 0^, this would just get accepted.\n\n^ especially since linearTilingFeatures was never queried from the device, given the original bug this CL was set out to resolve.",
+      "revId": "5c317537a9fe03521467669c4d938680cf5de5b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9eadfdc_4e17c507",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-03T21:33:49Z",
+      "side": 0,
+      "message": "Wondering why the previous issue wasn\u0027t causing a validation error, I realized that checking linearTilingFeatures was yet another bug here. generateMipmapsWithBlit() happens with the image in optimal tiling.",
+      "revId": "5c317537a9fe03521467669c4d938680cf5de5b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

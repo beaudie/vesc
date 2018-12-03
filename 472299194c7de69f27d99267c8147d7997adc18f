@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecec9362_ba49108e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-03T21:33:49Z",
+      "side": 1,
+      "message": "The bug below was causing the cube mipmap test to not reach here, which in turn exposed this bug.",
+      "revId": "472299194c7de69f27d99267c8147d7997adc18f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39d5c078_ad17f783",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-03T21:33:49Z",
+      "side": 1,
+      "message": "Don\u0027t know about you, but this was new to me!",
+      "range": {
+        "startLine": 34,
+        "startChar": 10,
+        "endLine": 34,
+        "endChar": 42
+      },
+      "revId": "472299194c7de69f27d99267c8147d7997adc18f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
