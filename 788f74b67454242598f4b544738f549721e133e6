@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d7be77f_ad410d60",
+        "filename": "scripts/generate_vulkan_layers_json.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2018-12-03T14:23:34Z",
+      "side": 1,
+      "message": "The script was already using the print-function print() style, despite explicitly asking for python 2 -- I\u0027m guessing the error paths never run, since they used to fail with a syntax error before due to this.",
+      "revId": "788f74b67454242598f4b544738f549721e133e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2301f64b_13a29f4c",
+        "filename": "scripts/generate_vulkan_layers_json.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2018-12-03T14:23:34Z",
+      "side": 1,
+      "message": "The script has two completely distinct modes for .json and .json.in inputs. One caller passes in only .json files, the other only .json.in. Maybe it should be two distinct scripts? But probably for another patch.",
+      "revId": "788f74b67454242598f4b544738f549721e133e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
