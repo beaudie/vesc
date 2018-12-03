@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "2950cc15_1f4edf56",
+        "filename": "scripts/generate_vulkan_layers_json.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2018-12-03T15:06:53Z",
+      "side": 1,
+      "message": "Ooooh I see! In Python 2,\n\n  print(\u0027hi\u0027)\n\nprints the expression `(\u0027hi\u0027)` and\n\n  print(\u0027hi\u0027, \u0027there\u0027)\n\nprints the tuple `(\u0027hi\u0027, \u0027there\u0027)`. So I agree it would\u0027ve worked for the uses in this file. But it\u0027s a bit misleading since it uses the statement form of print but uses like it uses a function call, due to the tuple / parenthesized expression after print.\n\nIf I wanted to print the error messages to stderr, without this line I\u0027d say\n\n  print \u003e\u003esys.stderr, (\u0027hi\u0027, \u0027there\u0027)\n\nwhile with it it\u0027s\n\n  print(\u0027hi\u0027, \u0027there\u0027, file\u003dsys.stderr)\n\nSo I think it\u0027s good to have this line if you write print lines that look like function calls, even though often they happen to work in the old statement form too.\n\n(Also, having this makes `print` in statement form a syntax error, enforcing consistent usage of function-style print, which seems to be what this script wants.)",
+      "parentUuid": "47129004_aecfbc74",
+      "revId": "788f74b67454242598f4b544738f549721e133e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2301f64b_13a29f4c",
         "filename": "scripts/generate_vulkan_layers_json.py",
         "patchSetId": 2
