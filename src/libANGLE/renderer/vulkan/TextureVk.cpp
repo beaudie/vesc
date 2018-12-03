@@ -865,7 +865,10 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
     }
     else
     {
-        ANGLE_TRY(generateMipmapsWithCPU(context));
+        // ANGLE_TRY(generateMipmapsWithCPU(context));
+        // BUG: NO VALIDATION ERROR WHEN RUNNING MipmapTest.TextureCubeGeneralLevelZero/ES2_VULKAN
+        ANGLE_TRY(ensureImageInitialized(contextVk));
+        ANGLE_TRY(mImage.generateMipmapsWithBlit(contextVk, mState.getMipmapMaxLevel()));
     }
 
     // We're changing this textureVk content, make sure we let the graph know.
