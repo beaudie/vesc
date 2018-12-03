@@ -16,6 +16,24 @@
       "revId": "289896b8bd36b2818ae1bb2faeec1dcbc0bc742b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30faaa42_fab8a8be",
+        "filename": "scripts/generate_vulkan_layers_json.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-03T15:30:03Z",
+      "side": 1,
+      "message": "You\u0027d have to test the backslash on the bots. This text is parsed by the Vulkan loader. I don\u0027t recall off-hand if it\u0027s sensitive to OS type when parsing slashes.\n\nYour first question: yes, destination system. The script is currently assuming the host and dest are the same. But for cross compiling Windows on Linux this assumption is not valid.",
+      "parentUuid": "50092be0_850a155b",
+      "revId": "289896b8bd36b2818ae1bb2faeec1dcbc0bc742b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
