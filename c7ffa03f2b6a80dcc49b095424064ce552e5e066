@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb882e7b_7f565eda",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-03T05:45:19Z",
+      "side": 1,
+      "message": "For binary operator, we should adjust the AST in \u0027InVisit\u0027 pass to make sure that the expression is caculated from left to right.",
+      "range": {
+        "startLine": 114,
+        "startChar": 29,
+        "endLine": 114,
+        "endChar": 33
+      },
+      "revId": "c7ffa03f2b6a80dcc49b095424064ce552e5e066",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63f168b6_267de0fb",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-03T05:45:19Z",
+      "side": 1,
+      "message": "We should unconditionally set a temp value \u0027rvalue\u0027 to point to \u0027expr\u0027 since \u0027expr\u0027 may include a ssbo or is a ssbo. In both situation, we should execute \u0027var rvalue \u003d expr\u0027 before \u0027var temp \u003d lssbo\u0027 since expr may change lssbo\u0027s value.",
+      "range": {
+        "startLine": 155,
+        "startChar": 12,
+        "endLine": 155,
+        "endChar": 29
+      },
+      "revId": "c7ffa03f2b6a80dcc49b095424064ce552e5e066",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
