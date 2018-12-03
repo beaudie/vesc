@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "cb32d4bc_794ce092",
+        "filename": "scripts/generate_vulkan_layers_json.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-03T15:10:10Z",
+      "side": 1,
+      "message": "OK, that\u0027s fair. Didn\u0027t realize that.",
+      "parentUuid": "2950cc15_1f4edf56",
+      "revId": "788f74b67454242598f4b544738f549721e133e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2301f64b_13a29f4c",
         "filename": "scripts/generate_vulkan_layers_json.py",
         "patchSetId": 2
