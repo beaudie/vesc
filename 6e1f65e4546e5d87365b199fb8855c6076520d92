@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f96dc749_133cc1ae",
+        "filename": "src/compiler/translator/tree_ops/SimplifyLoopConditions.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-12-03T10:31:48Z",
+      "side": 1,
+      "message": "I don\u0027t think that\u0027s correct because the following code will get translated differently (variable will be incremented even if \"some condition\" is true).\n\n  while (foo) {\n    if (some condition) {\n      continue;\n    }\n    variable ++;\n  }\n\nInstead we should insert a copy of \"s0 \u003d expr;\" before every continue (that\u0027s not in an extra loop nesting level). That\u0027s a way more complicated fix though.",
+      "revId": "6e1f65e4546e5d87365b199fb8855c6076520d92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
