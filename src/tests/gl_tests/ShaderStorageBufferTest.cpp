@@ -306,6 +306,61 @@ TEST_P(ShaderStorageBufferTest31, ShaderStorageBufferReadWrite)
     EXPECT_GL_NO_ERROR();
 }
 
+// Tests modifying an existing shader storage buffer
+TEST_P(ShaderStorageBufferTest31, ShaderStorageBufferReadWriteSame)
+{
+    constexpr char kComputeShaderSource[] =
+        R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(std140, binding = 0) buffer block {
+    uint data;
+} instance;
+void main()
+{
+    uint temp = instance.data;
+    instance.data = temp + 1u;
+}
+)";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kComputeShaderSource);
+
+    glUseProgram(program);
+
+    constexpr unsigned int kBytesPerComponent = sizeof(GLuint);
+    constexpr unsigned int kInitialData       = 123u;
+
+    // Create shader storage buffer
+    GLBuffer shaderStorageBuffer;
+
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kBytesPerComponent, &kInitialData, GL_STATIC_DRAW);
+
+    // Bind shader storage buffer
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, shaderStorageBuffer);
+
+    glDispatchCompute(1, 1, 1);
+
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
+    const void *bufferData =
+        glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, kBytesPerComponent, GL_MAP_READ_BIT);
+
+    constexpr unsigned int kExpectedData = 124u;
+    EXPECT_EQ(kExpectedData, *static_cast<const GLuint *>(bufferData));
+    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
+    // Running shader twice to make sure that the buffer gets updated correctly 123->124->125
+    glDispatchCompute(1, 1, 1);
+
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+
+    bufferData = glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, kBytesPerComponent, GL_MAP_READ_BIT);
+
+    constexpr unsigned int kExpectedData2 = 125u;
+    EXPECT_EQ(kExpectedData2, *static_cast<const GLuint *>(bufferData));
+}
+
 // Test that access/write to vector data in shader storage buffer.
 TEST_P(ShaderStorageBufferTest31, ShaderStorageBufferVector)
 {
