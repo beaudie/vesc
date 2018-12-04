@@ -77,6 +77,7 @@ ANGLE_INLINE angle::Result Context::syncDirtyObjects(const State::DirtyObjects &
 
 ANGLE_INLINE angle::Result Context::prepareForDraw(PrimitiveMode mode)
 {
+    mPrimitiveMode = mode;
     if (mGLES1Renderer)
     {
         ANGLE_TRY(mGLES1Renderer->prepareForDraw(mode, this, &mState));
