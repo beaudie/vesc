@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "560fb5fe_f061cbd1",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5279,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-04T04:09:30Z",
+      "side": 0,
+      "message": "Not sure if changing these messages to a generic \"not supported\" is a good idea. The messages make it quick to understand what extension is missing, while the generic message requires a (little) bit of search to uncover what exactly is wrong.",
+      "revId": "c248e39e924c4d3b549d63b7d015afd57de8494c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

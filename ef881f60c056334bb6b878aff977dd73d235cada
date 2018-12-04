@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "423aa630_34222f59",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-04T04:09:30Z",
+      "side": 1,
+      "message": "Should it be extension not present? There are similar cases below.",
+      "revId": "ef881f60c056334bb6b878aff977dd73d235cada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
