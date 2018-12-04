@@ -426,6 +426,7 @@ void Context::initialize()
     if (getClientVersion() < Version(2, 0))
     {
         mGLES1Renderer.reset(new GLES1Renderer());
+        mDrawDirtyObjects.set(State::DIRTY_OBJECT_GLES1_PREPARE_DRAW);
     }
 
     // Initialize dirty bit masks
@@ -488,6 +489,15 @@ void Context::initialize()
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
 
     ANGLE_CONTEXT_TRY(mImplementation->initialize());
+
+    // Initialize shaders right after implementation is initialized---otherwise,
+    // the first gles1 prepareToDraw / program init will come after the dirty
+    // program objects are synced in the dirty object handlers, and we get a
+    // segfault.
+    if (getClientVersion() < Version(2, 0))
+    {
+        ANGLE_CONTEXT_TRY(mGLES1Renderer->initializeRendererProgram(this, &mState));
+    }
 }
 
 egl::Error Context::onDestroy(const egl::Display *display)
@@ -6011,6 +6021,12 @@ void Context::onSamplerUniformChange(size_t textureUnitIndex)
 {
     mState.onActiveTextureChange(this, textureUnitIndex);
     mStateCache.onActiveTextureChange(this);
+}
+
+angle::Result Context::gles1PrepareDraw(PrimitiveMode mode) const
+{
+    ANGLE_TRY(mGLES1Renderer->prepareForDraw(mode, (Context *)this, (State *)&mState));
+    return angle::Result::Continue;
 }
 
 void Context::uniform1i(GLint location, GLint x)

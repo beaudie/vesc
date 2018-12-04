@@ -1808,6 +1808,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     bool isBufferAccessValidationEnabled() const { return mBufferAccessValidationEnabled; }
 
+    angle::Result gles1PrepareDraw(PrimitiveMode mode) const;
+
   private:
     void initialize();
 
