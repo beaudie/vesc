@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "393bbb34_db78865a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-04T20:50:19Z",
+      "side": 1,
+      "message": "This is called through DIRTY_BIT_PROGRAM_SHADER_STORAGE_BUFFERS in StateManager11::updateStateForCompute. Because dirty bits are lazy, I\u0027m not sure this single update is enough to fix all the potential bugs. Imagine a scenario where\n\na) buffer is used as a UAV in a compute shader.\nb) the same buffer is used as a pixel pack buffer in a readpixels call\nc) buffer is again used as a UAV, possibly without the dirty bits getting triggered.\n\nThere are probably a bunch of permutations of this. Do you expect these cases to be problematic?",
+      "range": {
+        "startLine": 703,
+        "startChar": 0,
+        "endLine": 706,
+        "endChar": 5
+      },
+      "revId": "49e2c1ae38343f32a01addda4cd455471141f965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
