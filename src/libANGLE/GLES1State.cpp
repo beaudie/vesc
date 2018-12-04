@@ -52,7 +52,8 @@ GLES1State::GLES1State()
       mLineSmoothHint(HintSetting::DontCare),
       mPointSmoothHint(HintSetting::DontCare),
       mPerspectiveCorrectionHint(HintSetting::DontCare),
-      mFogHint(HintSetting::DontCare)
+      mFogHint(HintSetting::DontCare),
+      mDirty(false)
 {}
 
 GLES1State::~GLES1State() = default;
@@ -145,16 +146,20 @@ void GLES1State::initialize(const Context *context, const State *state)
     // The user-specified point size, GL_POINT_SIZE_MAX,
     // is initially equal to the implementation maximum.
     mPointParameters.pointSizeMax = caps.maxAliasedPointSize;
+
+    mDirty = true;
 }
 
 void GLES1State::setAlphaFunc(AlphaTestFunc func, GLfloat ref)
 {
+    setDirty();
     mAlphaTestFunc = func;
     mAlphaTestRef  = ref;
 }
 
 void GLES1State::setClientTextureUnit(unsigned int unit)
 {
+    setDirty();
     mClientActiveTexture = unit;
 }
 
@@ -165,6 +170,7 @@ unsigned int GLES1State::getClientTextureUnit() const
 
 void GLES1State::setCurrentColor(const ColorF &color)
 {
+    setDirty();
     mCurrentColor = color;
 }
 
@@ -175,6 +181,7 @@ const ColorF &GLES1State::getCurrentColor() const
 
 void GLES1State::setCurrentNormal(const angle::Vector3 &normal)
 {
+    setDirty();
     mCurrentNormal = normal;
 }
 
@@ -185,6 +192,7 @@ const angle::Vector3 &GLES1State::getCurrentNormal() const
 
 void GLES1State::setCurrentTextureCoords(unsigned int unit, const TextureCoordF &coords)
 {
+    setDirty();
     mCurrentTextureCoords[unit] = coords;
 }
 
@@ -195,6 +203,7 @@ const TextureCoordF &GLES1State::getCurrentTextureCoords(unsigned int unit) cons
 
 void GLES1State::setMatrixMode(MatrixType mode)
 {
+    setDirty();
     mMatrixMode = mode;
 }
 
@@ -221,18 +230,21 @@ GLint GLES1State::getCurrentMatrixStackDepth(GLenum queryType) const
 
 void GLES1State::pushMatrix()
 {
+    setDirty();
     auto &stack = currentMatrixStack();
     stack.push_back(stack.back());
 }
 
 void GLES1State::popMatrix()
 {
+    setDirty();
     auto &stack = currentMatrixStack();
     stack.pop_back();
 }
 
 GLES1State::MatrixStack &GLES1State::currentMatrixStack()
 {
+    setDirty();
     switch (mMatrixMode)
     {
         case MatrixType::Modelview:
@@ -270,22 +282,26 @@ const GLES1State::MatrixStack &GLES1State::currentMatrixStack() const
 
 void GLES1State::loadMatrix(const angle::Mat4 &m)
 {
+    setDirty();
     currentMatrixStack().back() = m;
 }
 
 void GLES1State::multMatrix(const angle::Mat4 &m)
 {
+    setDirty();
     angle::Mat4 currentMatrix   = currentMatrixStack().back();
     currentMatrixStack().back() = currentMatrix.product(m);
 }
 
 void GLES1State::setLogicOp(LogicalOperation opcodePacked)
 {
+    setDirty();
     mLogicOp = opcodePacked;
 }
 
 void GLES1State::setClientStateEnabled(ClientVertexArrayType clientState, bool enable)
 {
+    setDirty();
     switch (clientState)
     {
         case ClientVertexArrayType::Vertex:
@@ -311,6 +327,7 @@ void GLES1State::setClientStateEnabled(ClientVertexArrayType clientState, bool e
 
 void GLES1State::setTexCoordArrayEnabled(unsigned int unit, bool enable)
 {
+    setDirty();
     mTexCoordArrayEnabled[unit] = enable;
 }
 
@@ -347,6 +364,7 @@ bool GLES1State::isTextureTargetEnabled(unsigned int unit, const TextureType typ
 
 LightModelParameters &GLES1State::lightModelParameters()
 {
+    setDirty();
     return mLightModel;
 }
 
@@ -357,6 +375,7 @@ const LightModelParameters &GLES1State::lightModelParameters() const
 
 LightParameters &GLES1State::lightParameters(unsigned int light)
 {
+    setDirty();
     return mLights[light];
 }
 
@@ -367,6 +386,7 @@ const LightParameters &GLES1State::lightParameters(unsigned int light) const
 
 MaterialParameters &GLES1State::materialParameters()
 {
+    setDirty();
     return mMaterial;
 }
 
@@ -382,11 +402,13 @@ bool GLES1State::isColorMaterialEnabled() const
 
 void GLES1State::setShadeModel(ShadingModel model)
 {
+    setDirty();
     mShadeModel = model;
 }
 
 void GLES1State::setClipPlane(unsigned int plane, const GLfloat *equation)
 {
+    setDirty();
     assert(plane < mClipPlanes.size());
     mClipPlanes[plane].equation[0] = equation[0];
     mClipPlanes[plane].equation[1] = equation[1];
@@ -405,6 +427,7 @@ void GLES1State::getClipPlane(unsigned int plane, GLfloat *equation) const
 
 FogParameters &GLES1State::fogParameters()
 {
+    setDirty();
     return mFog;
 }
 
@@ -415,6 +438,7 @@ const FogParameters &GLES1State::fogParameters() const
 
 TextureEnvironmentParameters &GLES1State::textureEnvironment(unsigned int unit)
 {
+    setDirty();
     assert(unit < mTextureEnvironments.size());
     return mTextureEnvironments[unit];
 }
@@ -427,6 +451,7 @@ const TextureEnvironmentParameters &GLES1State::textureEnvironment(unsigned int 
 
 PointParameters &GLES1State::pointParameters()
 {
+    setDirty();
     return mPointParameters;
 }
 
@@ -462,6 +487,7 @@ AttributesMask GLES1State::getVertexArraysAttributeMask() const
 
 void GLES1State::setHint(GLenum target, GLenum mode)
 {
+    setDirty();
     HintSetting setting = FromGLenum<HintSetting>(mode);
     switch (target)
     {
@@ -499,4 +525,17 @@ GLenum GLES1State::getHint(GLenum target)
             return 0;
     }
 }
+
+void GLES1State::setDirty() {
+    mDirty = true;
+}
+
+bool GLES1State::isDirty() const {
+    return mDirty;
+}
+
+void GLES1State::clearDirty() {
+    mDirty = false;
+}
+
 }  // namespace gl

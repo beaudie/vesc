@@ -132,6 +132,19 @@ class GLES1State final : angle::NonCopyable
 
     void initialize(const Context *context, const State *state);
 
+    void setAlphaTestEnabled(bool enable);
+    void setMultitextureUnitEnabled(unsigned int unit, TextureType textureType, bool enable);
+    void setLightingEnabled(bool enable);
+    void setLightEnabled(GLenum light, bool enable);
+    void setNormalizeEnabled(bool enable);
+    void setRescaleNormalEnabled(bool enable);
+    void setColorMaterialEnabled(bool enable);
+    void setClipPlaneEnabled(GLenum plane, bool enable);
+    void setFogEnabled(bool enable);
+    void setPointSmoothEnabled(bool enable);
+    void setLineSmoothEnabled(bool enable);
+    void setLogicOpEnabled(bool enable);
+
     void setAlphaFunc(AlphaTestFunc func, GLfloat ref);
     void setClientTextureUnit(unsigned int unit);
     unsigned int getClientTextureUnit() const;
@@ -198,6 +211,10 @@ class GLES1State final : angle::NonCopyable
 
     void setHint(GLenum target, GLenum mode);
     GLenum getHint(GLenum target);
+
+    void setDirty();
+    bool isDirty() const;
+    void clearDirty();
 
   private:
     friend class State;
@@ -276,6 +293,12 @@ class GLES1State final : angle::NonCopyable
     HintSetting mPointSmoothHint;
     HintSetting mPerspectiveCorrectionHint;
     HintSetting mFogHint;
+
+    // Dirty state - currently, just one: whether anything in GLES1State
+    // has been set. If the state is dirty, then the renderer needs to do
+    // some uniform update (so the state starts out as dirty and is cleared
+    // by the renderer)
+    bool mDirty;
 };
 
 }  // namespace gl
