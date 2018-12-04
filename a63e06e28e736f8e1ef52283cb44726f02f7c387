@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "f34e4bb8_a81f3f86",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-04T17:28:03Z",
+      "side": 1,
+      "message": "Thanks!\nMaybe in order to not break the builder, do it like this:\n1. Have a temporary target angle_apk depending on angle_apks.\n2. Fix builder to build angle_apks\n3. Remove temporary target.",
+      "parentUuid": "e1efd3e0_fa416eab",
+      "range": {
+        "startLine": 986,
+        "startChar": 9,
+        "endLine": 986,
+        "endChar": 18
+      },
+      "revId": "a63e06e28e736f8e1ef52283cb44726f02f7c387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d58a41b7_cb64edd7",
         "filename": "android/angle_apk.gni",
         "patchSetId": 1
