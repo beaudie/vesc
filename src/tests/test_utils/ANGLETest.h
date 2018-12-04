@@ -14,13 +14,13 @@
 #include <algorithm>
 #include <array>
 
-#include "angle_gl.h"
 #include "angle_test_configs.h"
 #include "common/angleutils.h"
 #include "common/vector_utils.h"
 #include "platform/Platform.h"
-#include "shader_utils.h"
-#include "system_utils.h"
+#include "util/egl_loader_autogen.h"
+#include "util/shader_utils.h"
+#include "util/system_utils.h"
 
 #define ASSERT_GL_TRUE(a) ASSERT_EQ(static_cast<GLboolean>(GL_TRUE), (a))
 #define ASSERT_GL_FALSE(a) ASSERT_EQ(static_cast<GLboolean>(GL_FALSE), (a))
@@ -60,6 +60,8 @@
     ASSERT_EQ(static_cast<EGLenum>(expected), static_cast<EGLenum>(actual))
 #define EXPECT_EGLENUM_EQ(expected, actual) \
     EXPECT_EQ(static_cast<EGLenum>(expected), static_cast<EGLenum>(actual))
+
+using GLuint = unsigned int;
 
 namespace angle
 {
@@ -359,6 +361,8 @@ class ANGLETestBase
     int getWindowHeight() const;
     bool isMultisampleEnabled() const;
 
+    angle::Library *getEntryPointsLib() const { return mEntryPointsLib.get(); }
+
     EGLint getPlatformRenderer() const;
 
     void ignoreD3D11SDKLayersWarnings();
@@ -434,6 +438,18 @@ class ANGLETestEnvironment : public testing::Environment
   public:
     void SetUp() override;
     void TearDown() override;
+};
+
+// This base fixture loads the EGL entry points.
+class EGLTest : public testing::Test
+{
+  public:
+    EGLTest();
+    ~EGLTest();
+
+    void SetUp() override;
+
+    std::unique_ptr<angle::Library> mEntryPointsLib;
 };
 
 // Driver vendors

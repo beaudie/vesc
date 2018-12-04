@@ -68,8 +68,8 @@ config("internal_config") {
 
   # Prevent the GL headers from redeclaring ANGLE entry points.
   defines = [
-    "GL_GLEXT_PROTOTYPES",
-    "EGL_EGLEXT_PROTOTYPES",
+    "GL_GLES_PROTOTYPES=0",
+    "EGL_EGL_PROTOTYPES=0",
   ]
 
   if (angle_64bit_current_cpu) {
@@ -631,6 +631,13 @@ config("shared_library_public_config") {
   }
 }
 
+config("library_name_config") {
+  defines = [
+    "ANGLE_EGL_LIBRARY_NAME=\"libEGL${angle_libs_suffix}\"",
+    "ANGLE_GLESV2_LIBRARY_NAME=\"libGLESv2${angle_libs_suffix}\"",
+  ]
+}
+
 # This config controls export definitions on ANGLE API calls.
 config("angle_static") {
   defines = [
@@ -892,8 +899,6 @@ foreach(is_shared_library,
 
     deps = [
       ":angle_common",
-      ":libEGL${dep_suffix}",
-      ":libGLESv2${dep_suffix}",
     ]
 
     if (is_shared_library) {
@@ -906,6 +911,8 @@ foreach(is_shared_library,
         ]
         public_configs += [ ":shared_library_public_config" ]
       }
+    } else {
+      public_configs += [ ":angle_static" ]
     }
   }
 }

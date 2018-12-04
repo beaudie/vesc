@@ -29,12 +29,19 @@ static_library("sample_util") {
   ]
   deps = [
     "../:angle_common",
-    "../:angle_util",
+    "../:angle_util_static",
+  ]
+  data_deps = [
     "../:libEGL${angle_libs_suffix}",
     "../:libGLESv1_CM${angle_libs_suffix}",
     "../:libGLESv2${angle_libs_suffix}",
   ]
-  public_configs = [ ":sample_util_config" ]
+  configs += [ "../:library_name_config" ]
+  public_configs = [
+    ":sample_util_config",
+    "../:internal_config",
+    "../:angle_static",
+  ]
 }
 
 template("angle_sample") {
@@ -50,7 +57,6 @@ template("angle_sample") {
   executable(target_name) {
     deps = [
       ":sample_util",
-      "../:angle_util",
     ]
     if (defined(invoker.data)) {
       deps += [ ":${target_name}_data" ]
