@@ -944,6 +944,7 @@ void State::setEnableFeature(GLenum feature, bool enabled)
         default:
             UNREACHABLE();
     }
+    mDirtyObjects.set(DIRTY_OBJECT_GLES1_PREPARE_DRAW);
 }
 
 bool State::getEnableFeature(GLenum feature) const
@@ -2553,19 +2554,19 @@ void State::getBooleani_v(GLenum target, GLuint index, GLboolean *data)
     }
 }
 
-angle::Result State::syncReadFramebuffer(const Context *context)
+angle::Result State::syncReadFramebuffer(Context *context, unsigned int /* param */)
 {
     ASSERT(mReadFramebuffer);
     return mReadFramebuffer->syncState(context);
 }
 
-angle::Result State::syncDrawFramebuffer(const Context *context)
+angle::Result State::syncDrawFramebuffer(Context *context, unsigned int /* param */)
 {
     ASSERT(mDrawFramebuffer);
     return mDrawFramebuffer->syncState(context);
 }
 
-angle::Result State::syncDrawAttachments(const Context *context)
+angle::Result State::syncDrawAttachments(Context *context, unsigned int /* param */)
 {
     ASSERT(mDrawFramebuffer);
     ASSERT(!mDrawFramebuffer->hasAnyDirtyBit());
@@ -2573,7 +2574,7 @@ angle::Result State::syncDrawAttachments(const Context *context)
     return mDrawFramebuffer->ensureDrawAttachmentsInitialized(context);
 }
 
-angle::Result State::syncTextures(const Context *context)
+angle::Result State::syncTextures(Context *context, unsigned int /* param */)
 {
     if (mDirtyTextures.none())
         return angle::Result::Continue;
@@ -2591,7 +2592,7 @@ angle::Result State::syncTextures(const Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result State::syncSamplers(const Context *context)
+angle::Result State::syncSamplers(Context *context, unsigned int /* param */)
 {
     if (mDirtySamplers.none())
         return angle::Result::Continue;
@@ -2610,18 +2611,18 @@ angle::Result State::syncSamplers(const Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result State::syncVertexArray(const Context *context)
+angle::Result State::syncVertexArray(Context *context, unsigned int /* param */)
 {
     ASSERT(mVertexArray);
     return mVertexArray->syncState(context);
 }
 
-angle::Result State::syncProgram(const Context *context)
+angle::Result State::syncProgram(Context *context, unsigned int /* param */)
 {
     return mProgram->syncState(context);
 }
 
-angle::Result State::syncTexturesInit(const Context *context)
+angle::Result State::syncTexturesInit(Context *context, unsigned int /* param */)
 {
     ASSERT(mRobustResourceInit);
 
@@ -2639,7 +2640,7 @@ angle::Result State::syncTexturesInit(const Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result State::syncImagesInit(const Context *context)
+angle::Result State::syncImagesInit(Context *context, unsigned int /* param */)
 {
     ASSERT(mRobustResourceInit);
     ASSERT(mProgram);
@@ -2654,7 +2655,12 @@ angle::Result State::syncImagesInit(const Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result State::syncDirtyObject(const Context *context, GLenum target)
+angle::Result State::syncGles1PrepareDraw(Context *context, unsigned int param)
+{
+    return context->gles1PrepareDraw(FromGLenum<PrimitiveMode>(static_cast<GLenum>(param)));
+}
+
+angle::Result State::syncDirtyObject(Context *context, GLenum target)
 {
     DirtyObjects localSet;
 
@@ -2706,6 +2712,9 @@ void State::setObjectDirty(GLenum target)
             break;
         case GL_PROGRAM:
             mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
+            break;
+        case DIRTY_OBJECT_GLES1_PREPARE_DRAW:
+            mDirtyObjects.set(DIRTY_OBJECT_GLES1_PREPARE_DRAW);
             break;
         default:
             break;

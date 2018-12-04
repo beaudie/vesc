@@ -1778,6 +1778,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     void onSamplerUniformChange(size_t textureUnitIndex);
 
+    angle::Result gles1PrepareDraw(PrimitiveMode mode);
+
   private:
     void initialize();
 
@@ -1790,7 +1792,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     angle::Result syncState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);
     angle::Result syncDirtyBits();
     angle::Result syncDirtyBits(const State::DirtyBits &bitMask);
-    angle::Result syncDirtyObjects(const State::DirtyObjects &objectMask);
+    angle::Result syncDirtyObjects(const State::DirtyObjects &objectMask, unsigned int param = 0);
     angle::Result syncStateForReadPixels();
     angle::Result syncStateForTexImage();
     angle::Result syncStateForBlit();
