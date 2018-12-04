@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6fb3306b_28be796c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-12-04T21:54:14Z",
+      "side": 1,
+      "message": "Hard-coded 185 is not ideal. Can we use VK_FORMAT_RANGE_SIZE instead?",
+      "revId": "6e78bc3ced09ad2cfdfa1dcd1df5d1e10722f020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "376c1e1b_2f726d74",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mandatory_format_support_table_autogen.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-12-04T21:54:14Z",
+      "side": 1,
+      "message": "This assert is good and helps address my earlier comment. Would it be better to just use VK_FORMAT_RANGE_SIZE in both places, though?",
+      "revId": "6e78bc3ced09ad2cfdfa1dcd1df5d1e10722f020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
