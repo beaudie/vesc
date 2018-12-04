@@ -8,8 +8,19 @@
 //
 
 #include "ANGLETest.h"
-#include "EGLWindow.h"
-#include "OSWindow.h"
+
+#include "util/EGLWindow.h"
+#include "util/OSWindow.h"
+
+#if defined(ANGLE_PLATFORM_WINDOWS)
+
+// Must be included before d3d11.h.
+#    if defined(FAR)
+#        undef FAR
+#    endif
+
+#    include <d3d11.h>
+#endif  // defined(ANGLE_PLATFORM_WINDOWS)
 
 namespace angle
 {
@@ -357,7 +368,9 @@ void ANGLETestBase::ANGLETestSetUp()
     mPlatformMethods.context                = &mPlatformContext;
     mEGLWindow->setPlatformMethods(&mPlatformMethods);
 
-    if (!mEGLWindow->initializeDisplayAndSurface(mOSWindow))
+    mEntryPointsLib.reset(angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME));
+
+    if (!mEGLWindow->initializeDisplayAndSurface(mOSWindow, mEntryPointsLib.get()))
     {
         FAIL() << "egl display or surface init failed.";
     }
@@ -366,6 +379,8 @@ void ANGLETestBase::ANGLETestSetUp()
     {
         FAIL() << "GL Context init failed.";
     }
+
+    angle::LoadGLES(eglGetProcAddress);
 
     if (needSwap)
     {
@@ -1254,4 +1269,20 @@ void ANGLETestEnvironment::SetUp()
 void ANGLETestEnvironment::TearDown()
 {
     ANGLETestBase::DestroyTestWindow();
+}
+
+EGLTest::EGLTest() = default;
+
+EGLTest::~EGLTest() = default;
+
+void EGLTest::SetUp()
+{
+    mEntryPointsLib.reset(angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME));
+
+    PFNEGLGETPROCADDRESSPROC getProcAddress;
+    mEntryPointsLib->getAs("eglGetProcAddress", &getProcAddress);
+    ASSERT_NE(nullptr, getProcAddress);
+
+    angle::LoadEGL(getProcAddress);
+    angle::LoadGLES(getProcAddress);
 }
