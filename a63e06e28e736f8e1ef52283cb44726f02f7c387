@@ -22,6 +22,30 @@
       "revId": "a63e06e28e736f8e1ef52283cb44726f02f7c387",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "685254bb_bfba705d",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2018-12-04T16:59:31Z",
+      "side": 1,
+      "message": "Sure, I noticed that line was long as well, but figured the cl formatter new best.\n\nFixed!",
+      "parentUuid": "d58a41b7_cb64edd7",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 103
+      },
+      "revId": "a63e06e28e736f8e1ef52283cb44726f02f7c387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
