@@ -1778,6 +1778,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     void onSamplerUniformChange(size_t textureUnitIndex);
 
+    angle::Result gles1PrepareDraw() const;
+
   private:
     void initialize();
 
@@ -1873,6 +1875,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     // GLES1 renderer state
     std::unique_ptr<GLES1Renderer> mGLES1Renderer;
+    PrimitiveMode mPrimitiveMode;
 
     // Current/lost context flags
     bool mHasBeenCurrent;

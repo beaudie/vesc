@@ -944,6 +944,7 @@ void State::setEnableFeature(GLenum feature, bool enabled)
         default:
             UNREACHABLE();
     }
+    mDirtyObjects.set(DIRTY_OBJECT_GLES1_PREPARE_DRAW);
 }
 
 bool State::getEnableFeature(GLenum feature) const
@@ -2652,6 +2653,11 @@ angle::Result State::syncImagesInit(const Context *context)
         }
     }
     return angle::Result::Continue;
+}
+
+angle::Result State::syncGles1PrepareDraw(const Context *context)
+{
+    return context->gles1PrepareDraw();
 }
 
 angle::Result State::syncDirtyObject(const Context *context, GLenum target)
