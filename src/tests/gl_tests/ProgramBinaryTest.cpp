@@ -639,13 +639,15 @@ class ProgramBinariesAcrossPlatforms : public testing::TestWithParam<PlatformsWi
         {
             FAIL() << "Failed to create OS window";
         }
+
+        mEntryPointsLib.reset(angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME));
     }
 
     EGLWindow *createAndInitEGLWindow(angle::PlatformParameters &param)
     {
         EGLWindow *eglWindow =
             new EGLWindow(param.majorVersion, param.minorVersion, param.eglParameters);
-        bool result = eglWindow->initializeGL(mOSWindow);
+        bool result = eglWindow->initializeGL(mOSWindow, mEntryPointsLib.get());
         if (result == false)
         {
             SafeDelete(eglWindow);
@@ -706,6 +708,7 @@ class ProgramBinariesAcrossPlatforms : public testing::TestWithParam<PlatformsWi
     }
 
     OSWindow *mOSWindow = nullptr;
+    std::unique_ptr<angle::Library> mEntryPointsLib;
 };
 
 // Tries to create a program binary using one set of platform params, then load it using a different

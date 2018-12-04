@@ -89,20 +89,16 @@ generators = {
         ],
         'script': 'src/libANGLE/renderer/d3d/d3d11/gen_dxgi_support_tables.py',
     },
+    'GL/EGL/WGL loader':
+        auto_script('scripts/generate_loader.py'),
     'GL copy conversion table': {
         'inputs': [
             'src/libANGLE/es3_copy_conversion_formats.json',
         ],
         'script': 'src/libANGLE/gen_copy_conversion_table.py',
     },
-    'GL entry point': {
-        'inputs': [
-            'scripts/entry_point_packed_gl_enums.json',
-            'scripts/gl.xml',
-            'scripts/gl_angle_ext.xml',
-        ],
-        'script': 'scripts/generate_entry_points.py',
-    },
+    'GL entry points':
+        auto_script('scripts/generate_entry_points.py'),
     'GL format map': {
         'inputs': [
             'src/libANGLE/es3_format_type_combinations.json',

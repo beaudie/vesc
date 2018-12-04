@@ -10,8 +10,6 @@
 //   rendering works, otherwise it checks an error is generated one MakeCurrent.
 #include <gtest/gtest.h>
 
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
 #include <vector>
 
 #include "OSWindow.h"
