@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d58a41b7_cb64edd7",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-04T16:46:58Z",
+      "side": 1,
+      "message": "Looks like \"git cl format\" doesn\u0027t know that this line is too long.\nCould you please break it up manually?\nSomething like:\n        \"//third_party/angle:libfeature_support${angle_libs_suffix}\" +\n            \"($android_secondary_abi_toolchain)\",",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 103
+      },
+      "revId": "a63e06e28e736f8e1ef52283cb44726f02f7c387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
