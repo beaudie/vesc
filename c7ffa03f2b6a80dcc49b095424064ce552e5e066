@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "238f7774_1614ca79",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-04T05:54:57Z",
+      "side": 1,
+      "message": "No, we can\u0027t do that. See https://cs.chromium.org/chromium/src/third_party/angle/src/compiler/translator/tree_util/IntermTraverse.cpp?sq\u003dpackage:chromium\u0026dr\u003dCSs\u0026g\u003d0\u0026l\u003d217. Only enabling inVisit is not supported.\n\n\u003eI don\u0027t think visitAggregate needs to be in PreVisit.\nIn fact, visitAggregate is not called in InVisit based on my test (ShaderStorageBufferTest31.SSBOAsFunctionArgument/ES3_1_D3D11).",
+      "parentUuid": "ff6cb514_4ab7dc91",
+      "range": {
+        "startLine": 114,
+        "startChar": 29,
+        "endLine": 114,
+        "endChar": 33
+      },
+      "revId": "c7ffa03f2b6a80dcc49b095424064ce552e5e066",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "63f168b6_267de0fb",
         "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
         "patchSetId": 4
@@ -116,6 +140,30 @@
       "revId": "c7ffa03f2b6a80dcc49b095424064ce552e5e066",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c51d0c9_bb26715a",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-04T05:54:57Z",
+      "side": 1,
+      "message": "Done. But I am not sure in what kind of situation we should use deep copy. I think ssboArgument still points to the old argument memory. \u0027node-\u003ereplaceChildNode\u0027 just lets (*node-\u003egetSequence())[i] point to argumentCopy not ssboArgument.",
+      "parentUuid": "cdab7130_698506ec",
+      "range": {
+        "startLine": 280,
+        "startChar": 53,
+        "endLine": 280,
+        "endChar": 79
+      },
+      "revId": "c7ffa03f2b6a80dcc49b095424064ce552e5e066",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
