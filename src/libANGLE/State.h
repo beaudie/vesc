@@ -550,6 +550,7 @@ class State : angle::NonCopyable
         DIRTY_OBJECT_PROGRAM,
         DIRTY_OBJECT_TEXTURES_INIT,
         DIRTY_OBJECT_IMAGES_INIT,
+        DIRTY_OBJECT_GLES1_PREPARE_DRAW,
         DIRTY_OBJECT_UNKNOWN,
         DIRTY_OBJECT_MAX = DIRTY_OBJECT_UNKNOWN,
     };
@@ -563,6 +564,7 @@ class State : angle::NonCopyable
     using DirtyObjects = angle::BitSet<DIRTY_OBJECT_MAX>;
     void clearDirtyObjects() { mDirtyObjects.reset(); }
     void setAllDirtyObjects() { mDirtyObjects.set(); }
+    void setGles1Dirty() { mDirtyObjects.set(DIRTY_OBJECT_GLES1_PREPARE_DRAW); }
     angle::Result syncDirtyObjects(const Context *context, const DirtyObjects &bitset);
     angle::Result syncDirtyObject(const Context *context, GLenum target);
     void setObjectDirty(GLenum target);
@@ -653,12 +655,14 @@ class State : angle::NonCopyable
     angle::Result syncProgram(const Context *context);
     angle::Result syncTexturesInit(const Context *context);
     angle::Result syncImagesInit(const Context *context);
+    angle::Result syncGles1PrepareDraw(const Context *context);
 
     using DirtyObjectHandler = angle::Result (State::*)(const Context *context);
     static constexpr DirtyObjectHandler kDirtyObjectHandlers[DIRTY_OBJECT_MAX] = {
         &State::syncReadFramebuffer, &State::syncDrawFramebuffer, &State::syncDrawAttachments,
         &State::syncVertexArray,     &State::syncTextures,        &State::syncSamplers,
-        &State::syncProgram,         &State::syncTexturesInit,    &State::syncImagesInit};
+        &State::syncProgram,         &State::syncTexturesInit,    &State::syncImagesInit,
+        &State::syncGles1PrepareDraw};
 
     static_assert(DIRTY_OBJECT_READ_FRAMEBUFFER == 0, "check DIRTY_OBJECT_READ_FRAMEBUFFER index");
     static_assert(DIRTY_OBJECT_DRAW_FRAMEBUFFER == 1, "check DIRTY_OBJECT_DRAW_FRAMEBUFFER index");
@@ -669,7 +673,8 @@ class State : angle::NonCopyable
     static_assert(DIRTY_OBJECT_PROGRAM == 6, "check DIRTY_OBJECT_PROGRAM index");
     static_assert(DIRTY_OBJECT_TEXTURES_INIT == 7, "check DIRTY_OBJECT_TEXTURES_INIT index");
     static_assert(DIRTY_OBJECT_IMAGES_INIT == 8, "check DIRTY_OBJECT_IMAGES_INIT index");
-    static_assert(DIRTY_OBJECT_MAX == 9, "check DIRTY_OBJECT_MAX");
+    static_assert(DIRTY_OBJECT_GLES1_PREPARE_DRAW == 9, "check DIRTY_OBJECT_IMAGES_INIT index");
+    static_assert(DIRTY_OBJECT_MAX == 10, "check DIRTY_OBJECT_MAX");
 
     // Dispatch table for buffer update functions.
     static const angle::PackedEnumMap<BufferBinding, BufferBindingSetter> kBufferSetters;

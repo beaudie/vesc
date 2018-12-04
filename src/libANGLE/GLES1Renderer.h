@@ -33,6 +33,8 @@ class GLES1Renderer final : angle::NonCopyable
     GLES1Renderer();
     ~GLES1Renderer();
 
+    angle::Result initializeRendererProgram(Context *context, State *glState);
+
     void onDestroy(Context *context, State *state);
 
     angle::Result prepareForDraw(PrimitiveMode mode, Context *context, State *glState);
@@ -68,7 +70,6 @@ class GLES1Renderer final : angle::NonCopyable
                               GLuint fshader,
                               const std::unordered_map<GLint, std::string> &attribLocs,
                               GLuint *programOut);
-    angle::Result initializeRendererProgram(Context *context, State *glState);
 
     void setUniform1i(Context *context, Program *programObject, GLint loc, GLint value);
     void setUniform1iv(Context *context,
