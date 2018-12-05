@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bba2df4e_c1961f6f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-05T07:28:14Z",
+      "side": 1,
+      "message": "Replied in the other comment.",
+      "parentUuid": "6fb3306b_28be796c",
+      "revId": "6e78bc3ced09ad2cfdfa1dcd1df5d1e10722f020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "376c1e1b_2f726d74",
         "filename": "src/libANGLE/renderer/vulkan/vk_mandatory_format_support_table_autogen.cpp",
         "patchSetId": 11
@@ -33,6 +51,24 @@
       "revId": "6e78bc3ced09ad2cfdfa1dcd1df5d1e10722f020",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86bec860_37f2b442",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mandatory_format_support_table_autogen.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-05T07:28:14Z",
+      "side": 1,
+      "message": "185 was always here, I just gave it a name. Interesting point about RANGE_SIZE. There are a number of formats that are in the millions, but the headers seem to exclude them from the range. The spec has this warning though:\n\n\u003e The meaning of these special tokens is not exposed in the Vulkan Specification. They are not part of the API, and they should not be used by applications. Their original intended use was for internal consumption by Vulkan implementations. Even that use will no longer be supported in the future, but they will be retained for backwards compatibility reasons.\n\nLooks like we shouldn\u0027t be using it.",
+      "parentUuid": "376c1e1b_2f726d74",
+      "revId": "6e78bc3ced09ad2cfdfa1dcd1df5d1e10722f020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
