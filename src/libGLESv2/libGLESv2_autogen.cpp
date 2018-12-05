@@ -9099,6 +9099,7 @@ void GL_APIENTRY glMultiDrawArraysANGLEContextANGLE(GLeglContext ctx,
                                                     const GLsizei *counts,
                                                     GLsizei drawcount)
 {
+    fprintf(stderr, "glMultiDrawArraysANGLEContextANGLE\n");
     return gl::MultiDrawArraysANGLEContextANGLE(ctx, mode, firsts, counts, drawcount);
 }
 
@@ -9120,6 +9121,7 @@ void GL_APIENTRY glMultiDrawElementsANGLEContextANGLE(GLeglContext ctx,
                                                       const GLvoid *const *indices,
                                                       GLsizei drawcount)
 {
+    fprintf(stderr, "glMultiDrawElementsANGLEContextANGLE\n");
     return gl::MultiDrawElementsANGLEContextANGLE(ctx, mode, counts, type, indices, drawcount);
 }
 
