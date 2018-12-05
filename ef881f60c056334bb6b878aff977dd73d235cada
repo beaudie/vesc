@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "8ead2cd5_228f4972",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-05T20:56:38Z",
+      "side": 1,
+      "message": "nit: I would be nice to follow the convention that the object in question comes first, and the error type afterwards, so that the errors would be sorted nicely in ErrorStrings.h.\nFor example, kQueryIdInvalid.\n(This applies to some other names, too, like kOtherQueryActive could be changed to kQueryOtherActive).",
+      "range": {
+        "startLine": 1620,
+        "startChar": 55,
+        "endLine": 1620,
+        "endChar": 70
+      },
+      "revId": "ef881f60c056334bb6b878aff977dd73d235cada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "423aa630_34222f59",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 9
@@ -13,6 +36,93 @@
       "writtenOn": "2018-12-04T04:09:30Z",
       "side": 1,
       "message": "Should it be extension not present? There are similar cases below.",
+      "revId": "ef881f60c056334bb6b878aff977dd73d235cada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "324331bd_29dcbfe7",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2227,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-05T20:56:38Z",
+      "side": 1,
+      "message": "Also, kEnumNotSupported message doesn\u0027t add any info to GL_INVALID_ENUM, so might as well drop it entirely.\n\nIf you do change it to \"extension not present\", would it be possible to have validationError() accepting two strings and concatenating them, so you can also pass the name of the extension in the second string? I think this will also reduce some already existing messages from ErrorStrings.h for different extensions not being present.",
+      "parentUuid": "423aa630_34222f59",
+      "revId": "ef881f60c056334bb6b878aff977dd73d235cada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "628bad40_d254edb0",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4627,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-05T20:56:38Z",
+      "side": 1,
+      "message": "Does it make sense to rewrite this without using msg?\nLike, would compiler optimize things better if we don\u0027t put constexpr into a variable?",
+      "range": {
+        "startLine": 4627,
+        "startChar": 12,
+        "endLine": 4627,
+        "endChar": 28
+      },
+      "revId": "ef881f60c056334bb6b878aff977dd73d235cada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97f3fbe9_be0d1dd8",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5884,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-05T20:56:38Z",
+      "side": 1,
+      "message": "Here, too.",
+      "range": {
+        "startLine": 5884,
+        "startChar": 20,
+        "endLine": 5884,
+        "endChar": 32
+      },
+      "revId": "ef881f60c056334bb6b878aff977dd73d235cada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "635d0d1c_3a1fc915",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6589,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-05T20:56:38Z",
+      "side": 1,
+      "message": "And here",
+      "range": {
+        "startLine": 6589,
+        "startChar": 24,
+        "endLine": 6589,
+        "endChar": 36
+      },
       "revId": "ef881f60c056334bb6b878aff977dd73d235cada",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

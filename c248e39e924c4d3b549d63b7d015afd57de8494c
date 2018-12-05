@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d8c054be_1e784250",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3820,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-05T20:56:38Z",
+      "side": 0,
+      "message": "Looks like you are missing this check in ValidateGetBufferPointervRobustANGLE now.\nI\u0027d prefer if you did this change in a separate CL from pure renaming, or at least comment about it in commit message.",
+      "range": {
+        "startLine": 3813,
+        "startChar": 0,
+        "endLine": 3820,
+        "endChar": 0
+      },
+      "revId": "c248e39e924c4d3b549d63b7d015afd57de8494c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "560fb5fe_f061cbd1",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 9
