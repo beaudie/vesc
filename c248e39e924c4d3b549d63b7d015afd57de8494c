@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c94a0b2a_837a7daa",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3486,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-05T17:42:48Z",
+      "side": 1,
+      "message": "So, only Draw and Compute have DIRTY_OBJECT_TEXTURES_INIT and DIRTY_OBJECT_IMAGES_INIT, but not Blit?",
+      "range": {
+        "startLine": 3480,
+        "startChar": 0,
+        "endLine": 3486,
+        "endChar": 0
+      },
+      "revId": "c248e39e924c4d3b549d63b7d015afd57de8494c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
