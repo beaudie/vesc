@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8345dc49_d8baed77",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-05T19:55:50Z",
+      "side": 1,
+      "message": "Not sure what\u0027s the Android convention here, maybe you should append \".common\" to \"${invoker.package_name}\" instead? Or maybe just \"${invoker.package_name}\" is also fine?",
+      "range": {
+        "startLine": 21,
+        "startChar": 22,
+        "endLine": 21,
+        "endChar": 46
+      },
+      "revId": "b10f7953b4a1a5d34cbcb3417fbc02aefa837570",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0c3348b_86771db8",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-05T19:55:50Z",
+      "side": 1,
+      "message": "Do you expect these files growing in the future, or maybe having more files that are a bit different between google and aosp?\nI\u0027m thinking it might be better to generate these .java files via python script or jinja inside out directory and then building them from there.\nFor now, current solution may be fine, but think about it for the future.\n\nAlso, checking target name doesn\u0027t seem robust to me. Like, if it\u0027s something different from these two values, you\u0027ll be left without MainActivity. I\u0027d replace it with some bool, like is_aosp.",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 5
+      },
+      "revId": "b10f7953b4a1a5d34cbcb3417fbc02aefa837570",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
