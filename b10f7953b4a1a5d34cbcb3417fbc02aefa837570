@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f5f13e5a_cbe4ceae",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-05T20:00:41Z",
+      "side": 1,
+      "message": "Ah, I think you wanted this specific name because of com.android.angle.common.MainFragment.\nWell, consider generating the resources and java files in out dir in the future, with different packages for aosp and google targets.",
+      "parentUuid": "8345dc49_d8baed77",
+      "range": {
+        "startLine": 21,
+        "startChar": 22,
+        "endLine": 21,
+        "endChar": 46
+      },
+      "revId": "b10f7953b4a1a5d34cbcb3417fbc02aefa837570",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0c3348b_86771db8",
         "filename": "android/angle_apk.gni",
         "patchSetId": 6
