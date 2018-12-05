@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a43c9ad2_3d67f28a",
+        "filename": "android/AndroidManifest.xml.jinja2",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-12-05T16:59:43Z",
+      "side": 1,
+      "message": "Trying this, it seems git already knew that the file was moved/renamed.   I suspect that Gerrit is having a hard time because that file didn\u0027t exist when this review was created.",
+      "parentUuid": "e2c202db_824ff4d9",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 38
+      },
+      "revId": "c49f21aaf88ec025c86714181d498655454ac905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "76329b93_7d3286e9",
         "filename": "android/angle_apk.gni",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2018-12-05T00:48:05Z",
       "side": 1,
       "message": "You can set the java_files to the common bits outside the if and then just need to java_files +\u003d  the appropriate missing file inside the if to reduce code dup.",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 58
+      },
+      "revId": "c49f21aaf88ec025c86714181d498655454ac905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3f2e4c7_6944272b",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-12-05T16:59:43Z",
+      "side": 1,
+      "message": "That does look nicer. Done.",
+      "parentUuid": "76329b93_7d3286e9",
       "range": {
         "startLine": 69,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "fd261f0c_85de804c",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-12-05T16:59:43Z",
+      "side": 1,
+      "message": "I like how BUILD.gn is set up now, where it just tells the Android build what targets to build and what they are called, while leaving the details up to the Android build itself.   I think moving the subdirectory into BUILD.gn spreads out the details for how an Android build is done (and the overall structure of the Android code) outside of the Android environment too much, so I\u0027m going to keep the target check here.\n\nI\u0027d actually like to take what\u0027s here even further and have BUILD.gn just know the target names and have angle_apk.gni configure the package names based on the target.   This would let BUILD.gn be completely naive about Android and let us entirely encapsulate the details where they are needed.   That\u0027s outside of the scope of my changes though.",
+      "parentUuid": "0bde9b03_853dcf5d",
+      "range": {
+        "startLine": 76,
+        "startChar": 25,
+        "endLine": 76,
+        "endChar": 32
+      },
+      "revId": "c49f21aaf88ec025c86714181d498655454ac905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5baf3010_e7a1e3e4",
         "filename": "android/src/com/android/angle/common/GlobalSettings.java",
         "patchSetId": 4
@@ -88,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "7d2340a1_c06b5750",
+        "filename": "android/src/com/android/angle/common/GlobalSettings.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-12-05T16:59:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5baf3010_e7a1e3e4",
+      "revId": "c49f21aaf88ec025c86714181d498655454ac905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64b1204b_7765e993",
         "filename": "android/src/com/android/angle/common/MainFragment.java",
         "patchSetId": 4
@@ -99,6 +189,30 @@
       "writtenOn": "2018-12-05T00:48:05Z",
       "side": 1,
       "message": "What\u0027s this comment for?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 78
+      },
+      "revId": "c49f21aaf88ec025c86714181d498655454ac905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf200524_9c4afdd4",
+        "filename": "android/src/com/android/angle/common/MainFragment.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-12-05T16:59:43Z",
+      "side": 1,
+      "message": "Ah, oops, should have been cleaned up when GlobalSettings.java was created.",
+      "parentUuid": "64b1204b_7765e993",
       "range": {
         "startLine": 39,
         "startChar": 0,
