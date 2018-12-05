@@ -22,6 +22,30 @@
       "revId": "c248e39e924c4d3b549d63b7d015afd57de8494c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87e3ffb1_76ef712e",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3486,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-05T18:04:41Z",
+      "side": 1,
+      "message": "Yes. Blit doesn\u0027t use the active texture or image state. It reads from the read framebuffer.",
+      "parentUuid": "c94a0b2a_837a7daa",
+      "range": {
+        "startLine": 3480,
+        "startChar": 0,
+        "endLine": 3486,
+        "endChar": 0
+      },
+      "revId": "c248e39e924c4d3b549d63b7d015afd57de8494c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
