@@ -2252,6 +2252,13 @@ angle::Result State::getIntegerv(const Context *context, GLenum pname, GLint *pa
             *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler),
                                           TextureType::External);
             break;
+        case GL_TEXTURE_BINDING_EXTERNAL_NATIVE_ID_ANGLE:
+        {
+            ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
+            Texture *texture = getTargetTexture(TextureType::External);
+            *params =                texture ? texture->getNativeID() : 0;
+        }
+        break;
         case GL_UNIFORM_BUFFER_BINDING:
             *params = mBoundBuffers[BufferBinding::Uniform].id();
             break;

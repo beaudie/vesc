@@ -168,7 +168,17 @@ std::vector<PathImpl *> ContextGL::createPaths(GLsizei range)
 
 angle::Result ContextGL::flush(const gl::Context *context)
 {
-    return mRenderer->flush();
+    ANGLE_TRY(mRenderer->flush());
+
+    gl::Texture* externalTexture = context->getTargetTexture(gl::TextureType::External);
+    if (externalTexture)
+    {
+      TextureGL* textureGL = GetImplAs<TextureGL>(externalTexture);
+        mRenderer->getStateManager()->forceBindTexture(externalTexture->getType(), textureGL->getTextureID());
+        //ANGLE_TRY(externalTexture->syncExternalImageState(context));
+    }
+
+    return angle::Result::Continue();
 }
 
 angle::Result ContextGL::finish(const gl::Context *context)

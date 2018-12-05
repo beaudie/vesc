@@ -5382,6 +5382,17 @@ void Context::texStorage3D(TextureType target,
     ANGLE_CONTEXT_TRY(texture->setStorage(this, target, levels, internalFormat, size));
 }
 
+    void Context::texStorage2DExternal(TextureType target,
+                      GLsizei levels,
+                      GLenum internalFormat,
+                      GLsizei width,
+                      GLsizei height)
+    {
+    Extents size(width, height, 1);
+    Texture *texture = getTargetTexture(target);
+    ANGLE_CONTEXT_TRY(texture->setStorageExternal(this, target, levels, internalFormat, size));
+    }
+
 void Context::memoryBarrier(GLbitfield barriers)
 {
     ANGLE_CONTEXT_TRY(mImplementation->memoryBarrier(this, barriers));
@@ -7441,6 +7452,11 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
             {
                 return false;
             }
+            *type      = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_TEXTURE_BINDING_EXTERNAL_NATIVE_ID_ANGLE:
+            // TODO: check extensions
             *type      = GL_INT;
             *numParams = 1;
             return true;

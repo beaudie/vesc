@@ -407,6 +407,9 @@
     "glTexStorage2DEXT": {
         "target": "TextureType"
     },
+    "glTexStorage2DExternalANGLE": {
+        "target": "TextureType"
+    },
     "glTexStorage2DMultisample": {
         "target": "TextureType"
     },

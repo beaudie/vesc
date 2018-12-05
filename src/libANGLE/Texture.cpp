@@ -1250,6 +1250,36 @@ angle::Result Texture::setStorage(Context *context,
     return angle::Result::Continue();
 }
 
+angle::Result Texture::setStorageExternal(Context *context,
+                                  TextureType type,
+                                  GLsizei levels,
+                                  GLenum internalFormat,
+                                  const Extents &size)
+{
+    ASSERT(type == mState.mType);
+
+    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
+    ANGLE_TRY(releaseTexImageInternal(context));
+    ANGLE_TRY(orphanImages(context));
+
+    ANGLE_TRY(mTexture->setStorageExternal(context, type, levels, internalFormat, size));
+
+    mState.mImmutableFormat = true;
+    mState.mImmutableLevels = static_cast<GLuint>(levels);
+    mState.clearImageDescs();
+    mState.setImageDescChain(0, static_cast<GLuint>(levels - 1), size, Format(internalFormat),
+                             InitState::Initialized);
+
+    // Changing the texture to immutable can trigger a change in the base and max levels:
+    // GLES 3.0.4 section 3.8.10 pg 158:
+    // "For immutable-format textures, levelbase is clamped to the range[0;levels],levelmax is then
+    // clamped to the range[levelbase;levels].
+    mDirtyBits.set(DIRTY_BIT_BASE_LEVEL);
+    mDirtyBits.set(DIRTY_BIT_MAX_LEVEL);
+
+    return angle::Result::Continue();
+}
+
 angle::Result Texture::setStorageMultisample(Context *context,
                                              TextureType type,
                                              GLsizei samples,
@@ -1457,6 +1487,21 @@ angle::Result Texture::setEGLImageTarget(Context *context,
     return angle::Result::Continue();
 }
 
+angle::Result Texture::syncExternalImageState(const Context *context)
+{
+    ASSERT(mState.mType == TextureType::External);
+    TextureTarget target = NonCubeTextureTypeToTarget(mState.mType);
+    size_t level = 0;
+
+    ImageDesc newDesc;
+    ANGLE_TRY(mTexture->syncExternalImageState(context, target, level, &newDesc));
+
+    mState.setImageDesc(target, level,
+                        newDesc);
+
+    return angle::Result::Continue();
+ }
+
 Extents Texture::getAttachmentSize(const ImageIndex &imageIndex) const
 {
     // As an ImageIndex that represents an entire level of a cube map corresponds to 6 ImageDescs,
@@ -1575,6 +1620,11 @@ void Texture::onDetach(const Context *context)
 GLuint Texture::getId() const
 {
     return id();
+}
+
+GLuint Texture::getNativeID() const
+{
+    return mTexture->getNativeID();
 }
 
 angle::Result Texture::syncState(const Context *context)

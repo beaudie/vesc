@@ -427,10 +427,15 @@ void StateManagerGL::bindTexture(gl::TextureType type, GLuint texture)
 {
     if (mTextures[type][mTextureUnitIndex] != texture)
     {
-        mTextures[type][mTextureUnitIndex] = texture;
-        mFunctions->bindTexture(ToGLenum(type), texture);
-        mLocalDirtyBits.set(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);
+      forceBindTexture(type, texture);
     }
+}
+
+void StateManagerGL::forceBindTexture(gl::TextureType type, GLuint texture)
+{
+      mTextures[type][mTextureUnitIndex] = texture;
+      mFunctions->bindTexture(ToGLenum(type), texture);
+      mLocalDirtyBits.set(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);
 }
 
 void StateManagerGL::bindSampler(size_t unit, GLuint sampler)

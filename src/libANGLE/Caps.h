@@ -466,6 +466,9 @@ struct Extensions
 
     // GL_ANGLE_multi_draw
     bool multiDraw;
+
+    // GL_ANGLE_texture_storage_external
+    bool textureStorageExternal;
 };
 
 struct ExtensionInfo

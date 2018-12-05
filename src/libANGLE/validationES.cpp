@@ -6773,4 +6773,5 @@ bool ValidateSampleMaskiBase(Context *context, GLuint maskNumber, GLbitfield mas
 
     return true;
 }
+
 }  // namespace gl

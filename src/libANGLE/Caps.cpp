@@ -255,7 +255,8 @@ Extensions::Extensions()
       maxDualSourceDrawBuffers(0),
       memorySize(false),
       textureMultisample(false),
-      multiDraw(false)
+      multiDraw(false),
+      textureStorageExternal(false)
 {}
 
 std::vector<std::string> Extensions::getStrings() const
@@ -911,6 +912,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_OES_point_sprite"] = enableableExtension(&Extensions::pointSprite);
         map["GL_OES_draw_texture"] = enableableExtension(&Extensions::drawTexture);
         map["GL_ANGLE_memory_size"] = enableableExtension(&Extensions::memorySize);
+        map["GL_ANGLE_texture_storage_external"] = enableableExtension(&Extensions::textureStorageExternal);
         // clang-format on
 
         return map;

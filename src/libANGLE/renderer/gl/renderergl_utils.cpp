@@ -1323,6 +1323,10 @@ void GenerateCaps(const FunctionsGL *functions,
     {
         extensions->sRGB = false;
     }
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+        extensions->textureStorageExternal = true;
+#endif
 }
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds)

@@ -999,6 +999,22 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
     return angle::Result::Continue();
 }
 
+
+    angle::Result TextureGL::setStorageExternal(const gl::Context *context,
+                             gl::TextureType type,
+                             size_t levels,
+                             GLenum internalFormat,
+                             const gl::Extents &size)
+    {
+    StateManagerGL *stateManager     = GetStateManagerGL(context);
+    stateManager->bindTexture(getType(), mTextureID);
+    
+    setLevelInfo(context, type, 0, levels,
+                 GetLevelInfo(internalFormat, internalFormat));
+
+    return angle::Result::Continue();
+    }
+
 angle::Result TextureGL::setStorageMultisample(const gl::Context *context,
                                                gl::TextureType type,
                                                GLsizei samples,
@@ -1113,6 +1129,36 @@ angle::Result TextureGL::setEGLImageTarget(const gl::Context *context,
 
     setLevelInfo(context, type, 0, 1,
                  GetLevelInfo(image->getFormat().info->internalFormat, imageNativeInternalFormat));
+
+    return angle::Result::Continue();
+}
+
+angle::Result TextureGL::syncExternalImageState(const gl::Context *context, gl::TextureTarget target, size_t level, gl::ImageDesc* outImageDesc)
+{
+  ASSERT(target == gl::TextureTarget::External);
+  ASSERT(level == 0);
+  ASSERT(outImageDesc);
+
+    const FunctionsGL *functions = GetFunctionsGL(context);
+    StateManagerGL *stateManager = GetStateManagerGL(context);
+
+  // Force the texture to be bound, some system APIs change the external texture binding out from under us
+    stateManager->forceBindTexture(getType(), mTextureID);
+
+//    GLenum targetGLEnum = ToGLenum(target);
+
+    gl::Extents newSize;
+    functions->getTexLevelParameteriv(GL_TEXTURE_EXTERNAL_OES, level, GL_TEXTURE_WIDTH, &newSize.width);
+    functions->getTexLevelParameteriv(GL_TEXTURE_EXTERNAL_OES, level, GL_TEXTURE_WIDTH, &newSize.height);
+    functions->getTexLevelParameteriv(GL_TEXTURE_EXTERNAL_OES, level, GL_TEXTURE_HEIGHT, &newSize.depth);
+
+    GLint newInternalFormat = 0;
+    functions->getTexLevelParameteriv(GL_TEXTURE_EXTERNAL_OES, level, GL_TEXTURE_INTERNAL_FORMAT, &newInternalFormat);
+
+    *outImageDesc = gl::ImageDesc(newSize, gl::Format(newInternalFormat), gl::InitState::Initialized);
+
+    setLevelInfo(context, target, level, 1,
+                 GetLevelInfo(newInternalFormat, newInternalFormat));
 
     return angle::Result::Continue();
 }

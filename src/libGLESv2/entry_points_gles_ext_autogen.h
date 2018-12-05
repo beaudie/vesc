@@ -506,6 +506,13 @@ ANGLE_EXPORT void GL_APIENTRY GetTexLevelParameterfvANGLE(GLenum target,
 ANGLE_EXPORT void GL_APIENTRY GetMultisamplefvANGLE(GLenum pname, GLuint index, GLfloat *val);
 ANGLE_EXPORT void GL_APIENTRY SampleMaskiANGLE(GLuint maskNumber, GLbitfield mask);
 
+// GL_ANGLE_texture_storage_external
+ANGLE_EXPORT void GL_APIENTRY TexStorage2DExternalANGLE(GLenum target,
+                                                        GLsizei levels,
+                                                        GLenum internalformat,
+                                                        GLsizei width,
+                                                        GLsizei height);
+
 // GL_ANGLE_translated_shader_source
 ANGLE_EXPORT void GL_APIENTRY GetTranslatedShaderSourceANGLE(GLuint shader,
                                                              GLsizei bufsize,
@@ -3521,6 +3528,12 @@ ANGLE_EXPORT void GL_APIENTRY GetMultisamplefvANGLEContextANGLE(GLeglContext ctx
 ANGLE_EXPORT void GL_APIENTRY SampleMaskiANGLEContextANGLE(GLeglContext ctx,
                                                            GLuint maskNumber,
                                                            GLbitfield mask);
+ANGLE_EXPORT void GL_APIENTRY TexStorage2DExternalANGLEContextANGLE(GLeglContext ctx,
+                                                                    GLenum target,
+                                                                    GLsizei levels,
+                                                                    GLenum internalformat,
+                                                                    GLsizei width,
+                                                                    GLsizei height);
 }  // namespace gl
 
 #endif  // LIBGLESV2_ENTRY_POINTS_GLES_EXT_AUTOGEN_H_

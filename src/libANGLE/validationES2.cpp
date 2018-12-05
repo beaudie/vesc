@@ -6795,4 +6795,31 @@ bool ValidateMultiDrawElementsANGLE(Context *context,
     return true;
 }
 
+// GL_ANGLE_texture_storage_external
+bool ValidateTexStorage2DExternalANGLE(Context *context,
+                                       TextureType type,
+                                       GLsizei levels,
+                                       GLenum internalformat,
+                                       GLsizei width,
+                                       GLsizei height)
+{
+    // TODO: extension check
+
+    if (!context->getExtensions().textureStorage)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    if (context->getClientMajorVersion() < 3)
+    {
+        return ValidateES2TexStorageParameters(context, type, levels, internalformat, width,
+                                               height);
+    }
+
+    ASSERT(context->getClientMajorVersion() >= 3);
+    return ValidateES3TexStorage2DParameters(context, type, levels, internalformat, width, height,
+                                             1);
+}
+
 }  // namespace gl

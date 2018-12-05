@@ -7,6 +7,7 @@
 // RendererGL.cpp: Implements the class methods for RendererGL.
 
 #include "libANGLE/renderer/gl/RendererGL.h"
+#include <android/log.h>
 
 #include <EGL/eglext.h>
 
@@ -142,6 +143,7 @@ static void INTERNAL_GL_APIENTRY LogGLDebugMessage(GLenum source,
 
     if (type == GL_DEBUG_TYPE_ERROR)
     {
+      //ASSERT(false);
         ERR() << std::endl
               << "\tSource: " << sourceText << std::endl
               << "\tType: " << typeText << std::endl

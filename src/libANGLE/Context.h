@@ -1571,6 +1571,12 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
                       GLsizei height,
                       GLsizei depth);
 
+    void texStorage2DExternal(TextureType target,
+                      GLsizei levels,
+                      GLenum internalFormat,
+                      GLsizei width,
+                      GLsizei height);
+
     void memoryBarrier(GLbitfield barriers);
     void memoryBarrierByRegion(GLbitfield barriers);
     void multiDrawArrays(PrimitiveMode mode,

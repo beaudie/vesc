@@ -140,6 +140,12 @@ class TextureGL : public TextureImpl
                              GLenum internalFormat,
                              const gl::Extents &size) override;
 
+    angle::Result setStorageExternal(const gl::Context *context,
+                             gl::TextureType type,
+                             size_t levels,
+                             GLenum internalFormat,
+                             const gl::Extents &size) override;
+
     angle::Result setStorageMultisample(const gl::Context *context,
                                         gl::TextureType type,
                                         GLsizei samples,
@@ -160,6 +166,10 @@ class TextureGL : public TextureImpl
     angle::Result setEGLImageTarget(const gl::Context *context,
                                     gl::TextureType type,
                                     egl::Image *image) override;
+
+    GLint getNativeID() const override { return mTextureID; }
+
+    angle::Result syncExternalImageState(const gl::Context *context, gl::TextureTarget target, size_t level, gl::ImageDesc* outImageDesc) override;
 
     GLuint getTextureID() const { return mTextureID; }
 

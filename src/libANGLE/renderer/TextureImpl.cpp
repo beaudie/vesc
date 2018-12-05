@@ -80,4 +80,16 @@ angle::Result TextureImpl::copy3DSubTexture(const gl::Context *context,
     UNREACHABLE();
     return angle::Result::Stop();
 }
+
+
+    angle::Result TextureImpl::setStorageExternal(const gl::Context *context,
+                             gl::TextureType type,
+                             size_t levels,
+                             GLenum internalFormat,
+                             const gl::Extents &size)
+    {
+    UNREACHABLE();
+    return angle::Result::Stop();
+    }
+
 }  // namespace rx
