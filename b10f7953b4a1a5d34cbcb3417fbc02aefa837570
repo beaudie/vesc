@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9b08b81c_968525f2",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-12-05T21:37:45Z",
+      "side": 1,
+      "message": "Yeah, as you saw we need a well known package name to reference when opening the developer options fragment layout, which will be shared by each of the version of this APK.   This was the cleanest way I could get it to generate and build everything, but we can certainly revisit it when things settle down and we\u0027ve got a better idea of how thing work.",
+      "parentUuid": "f5f13e5a_cbe4ceae",
+      "range": {
+        "startLine": 21,
+        "startChar": 22,
+        "endLine": 21,
+        "endChar": 46
+      },
+      "revId": "b10f7953b4a1a5d34cbcb3417fbc02aefa837570",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0c3348b_86771db8",
         "filename": "android/angle_apk.gni",
         "patchSetId": 6
@@ -60,6 +84,30 @@
       "writtenOn": "2018-12-05T19:55:50Z",
       "side": 1,
       "message": "Do you expect these files growing in the future, or maybe having more files that are a bit different between google and aosp?\nI\u0027m thinking it might be better to generate these .java files via python script or jinja inside out directory and then building them from there.\nFor now, current solution may be fine, but think about it for the future.\n\nAlso, checking target name doesn\u0027t seem robust to me. Like, if it\u0027s something different from these two values, you\u0027ll be left without MainActivity. I\u0027d replace it with some bool, like is_aosp.",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 5
+      },
+      "revId": "b10f7953b4a1a5d34cbcb3417fbc02aefa837570",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0048cd79_261470b6",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-12-05T21:37:45Z",
+      "side": 1,
+      "message": "We are hoping there will only ever be the Google and AOSP versions of ANGLE, and that everyone uses the Google version so they can get our updates from the Play Store.   I think we currently only expect to build AOSP and Google APKs from the public version of ANGLE, but we could certainly add additional builds if it makes sense (though I\u0027m not sure how they would be signed, uploaded, etc.).\n\nHowever, I think we expect there may be additional APKs generated for other vendors.   If that\u0027s the case, I believe our expectation is that they will fork ANGLE to add their secret sauce they don\u0027t want to make public and merge into ANGLE.   In that case, they would likely replace our \"google_apk\" with their \"oem_apk\", rather than building an additional (Google) APK they don\u0027t want/need.\n\nEither way, I think this is a clean starting point to indicate the differences between the builds of ANGLE.   I mentioned to Cody that I expect there to be additional differences between the Google and AOSP versions of ANGLE, like the rules file that determines where to run it.   We may not want to make any assumptions about devices/GPUs/apps/etc. in the AOSP version so it truly can be run anywhere, but be more restricting in the Google version for stability/performance reasons.   As with my other comment, we can always clean things up in the future if it makes sense or we get more feedback.",
+      "parentUuid": "a0c3348b_86771db8",
       "range": {
         "startLine": 73,
         "startChar": 0,
