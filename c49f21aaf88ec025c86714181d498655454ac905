@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "e2c202db_824ff4d9",
+        "filename": "android/AndroidManifest.xml.jinja2",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2018-12-05T16:43:24Z",
+      "side": 1,
+      "message": "Can you use \"git mv\" to relocate this file?  Then we can see the new diffs, rather than an entirely new file.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 38
+      },
+      "revId": "c49f21aaf88ec025c86714181d498655454ac905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "76329b93_7d3286e9",
         "filename": "android/angle_apk.gni",
         "patchSetId": 4
@@ -18,6 +41,29 @@
         "startChar": 0,
         "endLine": 69,
         "endChar": 58
+      },
+      "revId": "c49f21aaf88ec025c86714181d498655454ac905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bde9b03_853dcf5d",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2018-12-05T16:43:24Z",
+      "side": 1,
+      "message": "This could be turned into a variable passed into the template, like subdir \u003d \"google/\" and subdir \u003d \"\", then use it as ${subdir} without checking the target_name.",
+      "range": {
+        "startLine": 76,
+        "startChar": 25,
+        "endLine": 76,
+        "endChar": 32
       },
       "revId": "c49f21aaf88ec025c86714181d498655454ac905",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
