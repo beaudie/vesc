@@ -589,7 +589,10 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     // Selectively enable KHR_MAINTENANCE1 to support viewport flipping.
     if (getFeatures().flipViewportY)
     {
-        enabledDeviceExtensions.push_back(VK_KHR_MAINTENANCE1_EXTENSION_NAME);
+        if (mPhysicalDeviceProperties.driverVersion < VK_MAKE_VERSION(1, 1, 0))
+        {
+            enabledDeviceExtensions.push_back(VK_KHR_MAINTENANCE1_EXTENSION_NAME);
+        }
     }
 
     ANGLE_VK_TRY(displayVk, VerifyExtensionsPresent(deviceExtensionProps, enabledDeviceExtensions));
@@ -771,7 +774,17 @@ void RendererVk::initFeatures()
 
     // TODO(lucferron): Currently disabled on Intel only since many tests are failing and need
     // investigation. http://anglebug.com/2728
-    mFeatures.flipViewportY = !IsIntel(mPhysicalDeviceProperties.vendorID);
+    // We can do flipViewportY if Vulkan version is 1.1 or
+    // (VK_KHR_MAINTENANCE1_EXTENSION_NAME is supported and !intel)
+    if (mPhysicalDeviceProperties.driverVersion >= VK_MAKE_VERSION(1, 1, 0))
+    {
+        mFeatures.flipViewportY = true;
+    }
+    else
+    {
+        // check for required extension will be done in initializeDevice
+        mFeatures.flipViewportY = !IsIntel(mPhysicalDeviceProperties.vendorID);
+    }
 
 #ifdef ANGLE_PLATFORM_WINDOWS
     // http://anglebug.com/2838
