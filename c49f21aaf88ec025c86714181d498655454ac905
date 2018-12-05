@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76329b93_7d3286e9",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-05T00:48:05Z",
+      "side": 1,
+      "message": "You can set the java_files to the common bits outside the if and then just need to java_files +\u003d  the appropriate missing file inside the if to reduce code dup.",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 58
+      },
+      "revId": "c49f21aaf88ec025c86714181d498655454ac905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5baf3010_e7a1e3e4",
+        "filename": "android/src/com/android/angle/common/GlobalSettings.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-05T00:48:05Z",
+      "side": 1,
+      "message": "nit: blank line can be removed",
+      "revId": "c49f21aaf88ec025c86714181d498655454ac905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64b1204b_7765e993",
+        "filename": "android/src/com/android/angle/common/MainFragment.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-05T00:48:05Z",
+      "side": 1,
+      "message": "What\u0027s this comment for?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 78
+      },
+      "revId": "c49f21aaf88ec025c86714181d498655454ac905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
