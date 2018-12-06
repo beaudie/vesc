@@ -37,7 +37,7 @@ namespace
 const uint32_t kMockVendorID            = 0xba5eba11;
 const uint32_t kMockDeviceID            = 0xf005ba11;
 constexpr char kMockDeviceName[]        = "Vulkan Mock Device";
-constexpr size_t kInFlightCommandsLimit = 100u;
+constexpr size_t kInFlightCommandsLimit = 1000u;
 constexpr VkFormatFeatureFlags kInvalidFormatFeatureFlags = static_cast<VkFormatFeatureFlags>(-1);
 }  // anonymous namespace
 
