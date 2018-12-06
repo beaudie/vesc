@@ -93,6 +93,30 @@
       "revId": "ea26c9bb55ebe3b9f298dd4df40f04b0bdd7fc28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3930cd49_51d37587",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-06T18:51:43Z",
+      "side": 1,
+      "message": "You sure about \u0027every\u0027 buffer? If the data comes in from a user pointer, and doesn\u0027t need to be converted on the GPU, we can memcpy it and avoid a compute shader. The graph resource isn\u0027t necessary. Though it isn\u0027t a huge cost, so I\u0027m totally fine with that.",
+      "parentUuid": "ddeae63b_2c2c7fbe",
+      "range": {
+        "startLine": 442,
+        "startChar": 0,
+        "endLine": 443,
+        "endChar": 78
+      },
+      "revId": "ea26c9bb55ebe3b9f298dd4df40f04b0bdd7fc28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
