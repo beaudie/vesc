@@ -11,4 +11,4 @@
 
 #include "util/OSPixmap.h"
 
-#endif // UTIL_OSX_PIXMAP_H_
+#endif  // UTIL_OSX_PIXMAP_H_

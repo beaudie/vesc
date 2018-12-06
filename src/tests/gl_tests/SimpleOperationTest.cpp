@@ -1092,6 +1092,7 @@ ANGLE_INSTANTIATE_TEST(SimpleOperationTest,
                        ES3_OPENGL(),
                        ES2_OPENGLES(),
                        ES3_OPENGLES(),
+                       ES2_WGL(),
                        ES2_VULKAN());
 
 }  // namespace
