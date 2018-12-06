@@ -37,4 +37,40 @@ bool StabilizeCPUForBenchmarking()
     return true;
 }
 
+class Win32Library : public Library
+{
+  public:
+    Win32Library(const char *libraryName)
+    {
+        char buffer[MAX_PATH];
+        snprintf(buffer, MAX_PATH, "%s.%s", libraryName, GetSharedLibraryExtension());
+        mModule = LoadLibraryA(buffer);
+    }
+
+    ~Win32Library() override
+    {
+        if (mModule)
+        {
+            FreeLibrary(mModule);
+        }
+    }
+
+    void *getSymbol(const char *symbolName) override
+    {
+        if (!mModule)
+        {
+            return nullptr;
+        }
+
+        return reinterpret_cast<void *>(GetProcAddress(mModule, symbolName));
+    }
+
+  private:
+    HMODULE mModule = nullptr;
+};
+
+Library *OpenSharedLibrary(const char *libraryName)
+{
+    return new Win32Library(libraryName);
+}
 }  // namespace angle

@@ -30,6 +30,14 @@ ANGLE_EXPORT void WriteDebugMessage(const char *format, ...);
 // Set thread affinity and priority.
 ANGLE_EXPORT bool StabilizeCPUForBenchmarking();
 
+class ANGLE_EXPORT Library : angle::NonCopyable
+{
+  public:
+    virtual ~Library() {}
+    virtual void *getSymbol(const char *symbolName) = 0;
+};
+
+ANGLE_EXPORT Library *OpenSharedLibrary(const char *libraryName);
 } // namespace angle
 
 #endif  // UTIL_SYSTEM_UTILS_H_
