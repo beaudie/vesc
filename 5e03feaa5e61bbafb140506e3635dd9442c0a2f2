@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7dae9415_471fb9f7",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-06T17:26:08Z",
+      "side": 1,
+      "message": "If we ever allowed a Scenario to have more than one GPU, then all GPUs of both the Scenario and Rule would be compared against each other (with any match resulting in a match).  However, since a Scenario only gets one GPU, it really won\u0027t be a problem.  In my detailed unit tests (which will never be merged), I believe I tested both directions of multi-GPU situations.",
+      "parentUuid": "09ba0669_d6a3a672",
+      "range": {
+        "startLine": 198,
+        "startChar": 0,
+        "endLine": 205,
+        "endChar": 0
+      },
+      "revId": "5e03feaa5e61bbafb140506e3635dd9442c0a2f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ae4b4b3_b0b63052",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "5e03feaa5e61bbafb140506e3635dd9442c0a2f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "481ad2b6_69c7f6f4",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 956,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-06T17:26:08Z",
+      "side": 1,
+      "message": "This list will always have one and only one GPU.  The list that\u0027s part of the rule may not have any GPU.  It was the list I was calling front() on.  For the default rule, there are no GPUs listed, and hence the crash.",
+      "parentUuid": "7ae4b4b3_b0b63052",
+      "range": {
+        "startLine": 956,
+        "startChar": 0,
+        "endLine": 956,
+        "endChar": 39
+      },
+      "revId": "5e03feaa5e61bbafb140506e3635dd9442c0a2f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
