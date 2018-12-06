@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "17b26853_82289579",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-06T23:41:13Z",
+      "side": 1,
+      "message": "I thought about this several times as I was refactoring. Agree but I didn\u0027t want to do it as it was even more work. Also pretty minor impact. Will defer this for another refactor if you\u0027re okay with that.",
+      "parentUuid": "8ead2cd5_228f4972",
+      "range": {
+        "startLine": 1620,
+        "startChar": 55,
+        "endLine": 1620,
+        "endChar": 70
+      },
+      "revId": "ef881f60c056334bb6b878aff977dd73d235cada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "423aa630_34222f59",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 9
@@ -60,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "619c0826_1a574e01",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2227,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-06T23:41:13Z",
+      "side": 1,
+      "message": "I think a general good message handler could take a second parameter, like your two strings approach. Then you could tag additional info along with the message. I don\u0027t know if I\u0027d go so far as to do a full printf implementation but maybe one parameter. This again I decided not to implement in this CL as it was already quite large.\n\nRegarding the specific error - I\u0027d like to eventually make the error constants a pair of {code,error message}. So having a different error for INVALID_ENUM cases vs INVALID_OPERATIONS cases would be necessary.",
+      "parentUuid": "324331bd_29dcbfe7",
+      "revId": "ef881f60c056334bb6b878aff977dd73d235cada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "628bad40_d254edb0",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 9
@@ -80,6 +122,30 @@
       "revId": "ef881f60c056334bb6b878aff977dd73d235cada",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b18da8ac_c81ef368",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4627,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-06T23:41:13Z",
+      "side": 1,
+      "message": "Done. It\u0027s cleaner. I\u0027m not sure if the code gen is any better.",
+      "parentUuid": "628bad40_d254edb0",
+      "range": {
+        "startLine": 4627,
+        "startChar": 12,
+        "endLine": 4627,
+        "endChar": 28
+      },
+      "revId": "ef881f60c056334bb6b878aff977dd73d235cada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -106,6 +172,30 @@
     },
     {
       "key": {
+        "uuid": "d9671def_4b287fc0",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5884,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-06T23:41:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97f3fbe9_be0d1dd8",
+      "range": {
+        "startLine": 5884,
+        "startChar": 20,
+        "endLine": 5884,
+        "endChar": 32
+      },
+      "revId": "ef881f60c056334bb6b878aff977dd73d235cada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "635d0d1c_3a1fc915",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 9
@@ -126,6 +216,30 @@
       "revId": "ef881f60c056334bb6b878aff977dd73d235cada",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ad819f0_3fdd4e94",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6589,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-06T23:41:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "635d0d1c_3a1fc915",
+      "range": {
+        "startLine": 6589,
+        "startChar": 24,
+        "endLine": 6589,
+        "endChar": 36
+      },
+      "revId": "ef881f60c056334bb6b878aff977dd73d235cada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

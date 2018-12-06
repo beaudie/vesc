@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5d9303d5_539c80a7",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3820,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-06T23:41:13Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "d8c054be_1e784250",
+      "range": {
+        "startLine": 3813,
+        "startChar": 0,
+        "endLine": 3820,
+        "endChar": 0
+      },
+      "revId": "c248e39e924c4d3b549d63b7d015afd57de8494c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "560fb5fe_f061cbd1",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 9
@@ -39,6 +63,24 @@
       "revId": "c248e39e924c4d3b549d63b7d015afd57de8494c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ede1d9b_2d8be94a",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5279,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-06T23:41:13Z",
+      "side": 0,
+      "message": "I took a little liberty in time savings as the CL was quite labor intensive. Also I think the impact is very small. But if anyone wants to pitch in and re-add (or add anew) explicit errors I\u0027d welcome it.",
+      "parentUuid": "560fb5fe_f061cbd1",
+      "revId": "c248e39e924c4d3b549d63b7d015afd57de8494c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
