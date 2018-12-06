@@ -120,6 +120,8 @@ angle::Result DynamicBuffer::allocate(Context *context,
                                       bool *newBufferAllocatedOut)
 {
     size_t sizeToAllocate = roundUp(sizeInBytes, mAlignment);
+    fprintf(stderr, "Allocating buffer of size %zu (requsted.  Granted: %zu)\n", sizeInBytes,
+            sizeToAllocate);
 
     angle::base::CheckedNumeric<size_t> checkedNextWriteOffset = mNextAllocationOffset;
     checkedNextWriteOffset += sizeToAllocate;

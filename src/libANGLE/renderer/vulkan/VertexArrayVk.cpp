@@ -26,9 +26,8 @@ namespace
 constexpr size_t kDynamicVertexDataSize              = 1024 * 1024;
 constexpr size_t kDynamicIndexDataSize               = 1024 * 8;
 constexpr size_t kMaxVertexFormatAlignment           = 4;
-constexpr VkBufferUsageFlags kVertexBufferUsageFlags = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT |
-                                                       VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT |
-                                                       VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
+constexpr VkBufferUsageFlags kVertexBufferUsageFlags =
+    VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
 constexpr VkBufferUsageFlags kIndexBufferUsageFlags = VK_BUFFER_USAGE_INDEX_BUFFER_BIT |
                                                       VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT |
                                                       VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
@@ -60,6 +59,23 @@ angle::Result StreamVertexData(ContextVk *contextVk,
     return angle::Result::Continue();
 }
 
+size_t GetVertexCount(BufferVk *srcBuffer, const gl::VertexBinding &binding, uint32_t srcFormatSize)
+{
+    // Bytes usable for vertex data.
+    GLint64 bytes = srcBuffer->getSize() - binding.getOffset();
+    if (bytes < srcFormatSize)
+        return 0;
+
+    // Count the last vertex.  It may occupy less than a full stride.
+    size_t numVertices = 1;
+    bytes -= srcFormatSize;
+
+    // Count how many strides fit remaining space.
+    if (bytes > 0)
+        numVertices += static_cast<size_t>(bytes) / binding.getStride();
+
+    return numVertices;
+}
 }  // anonymous namespace
 
 #define INIT                                    \
@@ -107,7 +123,10 @@ VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state, RendererVk *rend
 
     for (vk::DynamicBuffer &buffer : mCurrentArrayBufferConversion)
     {
-        buffer.init(kMaxVertexFormatAlignment, renderer);
+        VkDeviceSize vertexFormatAlignment = std::max(
+            vertexFormatAlignment,
+            renderer->getPhysicalDeviceProperties().limits.minStorageBufferOffsetAlignment);
+        buffer.init(static_cast<size_t>(vertexFormatAlignment), renderer);
     }
     mDynamicVertexData.init(kMaxVertexFormatAlignment, renderer);
     mDynamicIndexData.init(1, renderer);
@@ -168,6 +187,39 @@ angle::Result VertexArrayVk::streamIndexData(ContextVk *contextVk,
     return angle::Result::Continue();
 }
 
+size_t g_num_components = 0;
+angle::Result printConvertedBuffer(ContextVk *contextVk,
+                                   vk::BufferHelper *buffer,
+                                   size_t offset,
+                                   std::vector<float> &out)
+{
+    ANGLE_TRY(contextVk->getRenderer()->finish(contextVk));
+
+    uint8_t *data;
+    ANGLE_TRY(buffer->map(contextVk, &data));
+    VkDeviceSize size = buffer->getSize() - offset;
+    data += offset;
+
+    ANGLE_TRY(buffer->invalidate(contextVk, 0, buffer->getSize()));
+
+    fprintf(stderr, "data:\n%04zu:", offset / 4);
+    for (VkDeviceSize i = 0; i < g_num_components /*size / 4*/; ++i)
+    {
+        fprintf(stderr, " %f", ((float *)data)[i]);
+        if (i % 16 == 15 && i + 1 != size / 4)
+            fprintf(stderr, "\n%04zu:", i + 1 + offset / 4);
+    }
+    fprintf(stderr, "\n");
+
+    out.clear();
+    for (VkDeviceSize i = 0; i < g_num_components /*size / 4*/; ++i)
+        out.push_back(((float *)data)[i]);
+
+    buffer->unmap(contextVk->getDevice());
+
+    return angle::Result::Continue();
+}
+
 // We assume the buffer is completely full of the same kind of data and convert
 // and/or align it as we copy it to a DynamicBuffer. The assumption could be wrong
 // but the alternative of copying it piecemeal on each draw would have a lot more
@@ -177,6 +229,65 @@ angle::Result VertexArrayVk::convertVertexBuffer(ContextVk *contextVk,
                                                  const gl::VertexBinding &binding,
                                                  size_t attribIndex)
 {
+    fprintf(stderr, "HERE, so exciting!\n");
+    RendererVk *renderer = contextVk->getRenderer();
+
+    const angle::Format &srcFormat  = mCurrentArrayBufferFormats[attribIndex]->angleFormat();
+    const angle::Format &destFormat = mCurrentArrayBufferFormats[attribIndex]->bufferFormat();
+
+    ASSERT(binding.getStride() % (srcFormat.pixelBytes / srcFormat.channelCount()) == 0);
+
+    unsigned srcFormatSize  = srcFormat.pixelBytes;
+    unsigned destFormatSize = destFormat.pixelBytes;
+
+    size_t numVertices = GetVertexCount(srcBuffer, binding, srcFormatSize);
+    if (numVertices == 0)
+    {
+        return angle::Result::Continue();
+    }
+
+    fprintf(stderr,
+            " -- converting %zu vertices.\n"
+            "    srcFormat: %u bytes, %u channels\n"
+            "    destFormat: %u bytes, %u channels\n",
+            numVertices, srcFormat.pixelBytes, srcFormat.channelCount(), destFormat.pixelBytes,
+            destFormat.channelCount());
+    ASSERT(GetVertexInputAlignment(*mCurrentArrayBufferFormats[attribIndex]) <=
+           kMaxVertexFormatAlignment);
+
+    // Allocate buffer for results
+    mCurrentArrayBufferConversion[attribIndex].releaseRetainedBuffers(contextVk->getRenderer());
+    ANGLE_TRY(mCurrentArrayBufferConversion[attribIndex].allocate(
+        contextVk, numVertices * destFormatSize, nullptr, nullptr,
+        &mCurrentArrayBufferOffsets[attribIndex], nullptr));
+    mCurrentArrayBuffers[attribIndex] =
+        mCurrentArrayBufferConversion[attribIndex].getCurrentBuffer();
+    g_num_components = numVertices * destFormat.channelCount();
+
+    DispatchUtilsVk::ConvertVertexParameters params;
+    params.vertexCount = numVertices;
+    params.srcFormat   = &srcFormat;
+    params.destFormat  = &destFormat;
+    params.srcStride   = binding.getStride();
+    params.srcOffset   = binding.getOffset();
+    params.destOffset  = static_cast<size_t>(mCurrentArrayBufferOffsets[attribIndex]);
+    params.srcSize     = static_cast<size_t>(srcBuffer->getSize() - binding.getOffset());
+    params.destSize    = numVertices * destFormatSize;
+
+    ANGLE_TRY(renderer->getDispatchUtils()->convertVertexBuffer(
+        contextVk, mCurrentArrayBuffers[attribIndex], &srcBuffer->getBuffer(), params));
+
+    mCurrentArrayBufferConversionCanRelease[attribIndex] = true;
+
+    return angle::Result::Continue();
+}
+
+angle::Result VertexArrayVk::convertVertexBufferCpu(ContextVk *contextVk,
+                                                    BufferVk *srcBuffer,
+                                                    const gl::VertexBinding &binding,
+                                                    size_t attribIndex)
+{
+    fprintf(stderr, "CPU, so boring!\n");
     // Needed before reading buffer or we could get stale data.
     ANGLE_TRY(contextVk->getRenderer()->finish(contextVk));
 
@@ -185,18 +296,17 @@ angle::Result VertexArrayVk::convertVertexBuffer(ContextVk *contextVk,
 
     mCurrentArrayBufferConversion[attribIndex].releaseRetainedBuffers(contextVk->getRenderer());
 
-    // Bytes usable for vertex data.
-    GLint64 bytes = srcBuffer->getSize() - binding.getOffset();
-    if (bytes < srcFormatSize)
+    size_t numVertices = GetVertexCount(srcBuffer, binding, srcFormatSize);
+    if (numVertices == 0)
+    {
         return angle::Result::Continue();
+    }
 
-    // Count the last vertex.  It may occupy less than a full stride.
-    size_t numVertices = 1;
-    bytes -= srcFormatSize;
-
-    // Count how many strides fit remaining space.
-    if (bytes > 0)
-        numVertices += static_cast<size_t>(bytes) / binding.getStride();
+    fprintf(stderr,
+            " -- converting %zu vertices.\n"
+            "    srcFormat: %u bytes\n"
+            "    destFormat: %u bytes\n",
+            numVertices, srcFormatSize, dstFormatSize);
 
     void *src = nullptr;
     ANGLE_TRY(srcBuffer->mapImpl(contextVk, &src));
@@ -331,14 +441,45 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
             BufferVk *bufferVk = vk::GetImpl(bufferGL);
             unsigned componentSize =
                 mCurrentArrayBufferFormats[attribIndex]->angleFormat().pixelBytes / attrib.size;
+            bool bindingIsAligned = BindingIsAligned(binding, componentSize);
 
             if (mCurrentArrayBufferFormats[attribIndex]->vertexLoadRequiresConversion ||
-                !BindingIsAligned(binding, componentSize))
+                !bindingIsAligned)
             {
                 mCurrentArrayBufferStrides[attribIndex] =
                     mCurrentArrayBufferFormats[attribIndex]->bufferFormat().pixelBytes;
 
-                ANGLE_TRY(convertVertexBuffer(contextVk, bufferVk, binding, attribIndex));
+                if (bindingIsAligned)
+                {
+                    std::vector<float> gpu, cpu;
+                    ANGLE_TRY(convertVertexBuffer(contextVk, bufferVk, binding, attribIndex));
+#if 0
+                    fprintf(stderr, "** with gpu: offset: %zu\n", mCurrentArrayBufferOffsets[attribIndex]);
+                    ANGLE_TRY(printConvertedBuffer(contextVk, mCurrentArrayBuffers[attribIndex],
+                                                   mCurrentArrayBufferOffsets[attribIndex], gpu));
+
+                    fprintf(stderr, "If done on CPU:\n");
+                    ANGLE_TRY(convertVertexBufferCpu(contextVk, bufferVk, binding, attribIndex));
+                    fprintf(stderr, "** with cpu: offset: %zu\n", mCurrentArrayBufferOffsets[attribIndex]);
+                    ANGLE_TRY(printConvertedBuffer(contextVk, mCurrentArrayBuffers[attribIndex],
+                                                   mCurrentArrayBufferOffsets[attribIndex], cpu));
+
+                    fprintf(stderr, "%zu vs %zu\n", gpu.size(), cpu.size());
+                    for (size_t i = 0; i < gpu.size() && i < cpu.size(); ++i)
+                        if (gpu[i] != cpu[i])
+                        {
+                            fprintf(stderr, "Diff starts at %zu\n", i * 4);
+                            ASSERT(false);
+                            break;
+                        }
+#endif
+                }
+                else
+                {
+                    // TODO(syoussefi): Implement unaligned vertex buffer conversions in compute.
+                    // http://anglebug.com/2958
+                    ANGLE_TRY(convertVertexBufferCpu(contextVk, bufferVk, binding, attribIndex));
+                }
 
                 releaseConversion                 = false;
             }
