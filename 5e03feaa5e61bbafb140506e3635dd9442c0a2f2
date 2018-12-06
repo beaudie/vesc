@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "20fa0c9f_0a494a36",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-06T17:39:40Z",
+      "side": 1,
+      "message": "The example above is for a device which has both GPU1 and GPU2.",
+      "parentUuid": "171ac871_f91956df",
+      "range": {
+        "startLine": 198,
+        "startChar": 0,
+        "endLine": 205,
+        "endChar": 0
+      },
+      "revId": "5e03feaa5e61bbafb140506e3635dd9442c0a2f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ae4b4b3_b0b63052",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 2
