@@ -1,0 +1,337 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c257d2c0_139752e9",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-06T20:43:05Z",
+      "side": 1,
+      "message": "Comments to explain what these functions return would be good, it\u0027s not clear what an Index is.",
+      "range": {
+        "startLine": 631,
+        "startChar": 0,
+        "endLine": 633,
+        "endChar": 60
+      },
+      "revId": "d835d5e8b8fa5766ec85e6f0b4f97689aac895b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d0a8f88_c0d6b1ef",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-06T20:43:05Z",
+      "side": 1,
+      "message": "nit: Used",
+      "range": {
+        "startLine": 634,
+        "startChar": 32,
+        "endLine": 634,
+        "endChar": 36
+      },
+      "revId": "d835d5e8b8fa5766ec85e6f0b4f97689aac895b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e5da084_9c38d814",
+        "filename": "include/GLSLANG/ShaderVars.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-06T20:43:05Z",
+      "side": 1,
+      "message": "Initialize this in the constructor.",
+      "range": {
+        "startLine": 178,
+        "startChar": 4,
+        "endLine": 178,
+        "endChar": 27
+      },
+      "revId": "d835d5e8b8fa5766ec85e6f0b4f97689aac895b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35e41abf_424f9c3c",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-06T20:43:05Z",
+      "side": 1,
+      "message": "nit: Bind",
+      "range": {
+        "startLine": 78,
+        "startChar": 22,
+        "endLine": 78,
+        "endChar": 27
+      },
+      "revId": "d835d5e8b8fa5766ec85e6f0b4f97689aac895b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdec746f_0febba3b",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-06T20:43:05Z",
+      "side": 1,
+      "message": "Can be const",
+      "range": {
+        "startLine": 84,
+        "startChar": 9,
+        "endLine": 84,
+        "endChar": 15
+      },
+      "revId": "d835d5e8b8fa5766ec85e6f0b4f97689aac895b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dacc2a4c_f555023d",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-06T20:43:05Z",
+      "side": 1,
+      "message": "std::make_pair(",
+      "range": {
+        "startLine": 91,
+        "startChar": 20,
+        "endLine": 91,
+        "endChar": 60
+      },
+      "revId": "d835d5e8b8fa5766ec85e6f0b4f97689aac895b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e58798d7_b6688e28",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-06T20:43:05Z",
+      "side": 1,
+      "message": "std::make_pair",
+      "range": {
+        "startLine": 97,
+        "startChar": 47,
+        "endLine": 97,
+        "endChar": 87
+      },
+      "revId": "d835d5e8b8fa5766ec85e6f0b4f97689aac895b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc365019_8932c3d4",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-06T20:43:05Z",
+      "side": 1,
+      "message": "nit: extra new line",
+      "revId": "d835d5e8b8fa5766ec85e6f0b4f97689aac895b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c415be7_ea9bfa00",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-06T20:43:05Z",
+      "side": 1,
+      "message": "nit: extra new line",
+      "revId": "d835d5e8b8fa5766ec85e6f0b4f97689aac895b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17644177_1b1df125",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-06T20:43:05Z",
+      "side": 1,
+      "message": "Can you comment to explain what the indicies in these maps are from/to?",
+      "range": {
+        "startLine": 325,
+        "startChar": 4,
+        "endLine": 332,
+        "endChar": 5
+      },
+      "revId": "d835d5e8b8fa5766ec85e6f0b4f97689aac895b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a754a949_322f1eed",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-06T20:43:05Z",
+      "side": 1,
+      "message": "This should be typedef\u0027d somewhere.",
+      "range": {
+        "startLine": 399,
+        "startChar": 32,
+        "endLine": 399,
+        "endChar": 71
+      },
+      "revId": "d835d5e8b8fa5766ec85e6f0b4f97689aac895b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a272d2d0_d1a4c7af",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-06T20:43:05Z",
+      "side": 1,
+      "message": "Let\u0027s use a std::unique_ptr",
+      "range": {
+        "startLine": 413,
+        "startChar": 8,
+        "endLine": 413,
+        "endChar": 47
+      },
+      "revId": "d835d5e8b8fa5766ec85e6f0b4f97689aac895b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa72559c_cee16b2e",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-06T20:43:05Z",
+      "side": 1,
+      "message": "nit: Bind",
+      "range": {
+        "startLine": 519,
+        "startChar": 28,
+        "endLine": 519,
+        "endChar": 33
+      },
+      "revId": "d835d5e8b8fa5766ec85e6f0b4f97689aac895b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "489e0718_daa2f3d6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-06T20:43:05Z",
+      "side": 1,
+      "message": "Please factor these offsets and sizes into variables, it\u0027s very fragile with the copied offsets and sizes from above.",
+      "range": {
+        "startLine": 559,
+        "startChar": 11,
+        "endLine": 559,
+        "endChar": 99
+      },
+      "revId": "d835d5e8b8fa5766ec85e6f0b4f97689aac895b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "717b6111_725c1493",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-06T20:43:05Z",
+      "side": 1,
+      "message": "Can we pack this better into a single array of integers instead of 4 integers per sampler?",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 65
+      },
+      "revId": "d835d5e8b8fa5766ec85e6f0b4f97689aac895b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
