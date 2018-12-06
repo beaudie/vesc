@@ -7,8 +7,6 @@
 // EGLSyncControlTest.cpp:
 //   Tests pertaining to eglGetSyncValuesCHROMIUM.
 
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
 #include <d3d11.h>
 
 #include "OSWindow.h"

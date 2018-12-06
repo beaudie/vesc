@@ -10,8 +10,6 @@
 #include "ANGLEPerfTest.h"
 #include "shader_utils.h"
 
-#include "angle_gl.h"
-
 namespace
 {
 unsigned int kIterationsPerStep = 50;
