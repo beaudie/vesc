@@ -34,4 +34,4 @@ class OSXTimer : public Timer
     double mSecondCoeff;
 };
 
-#endif // UTIL_OSX_TIMER_H_
+#endif  // UTIL_OSX_TIMER_H_
