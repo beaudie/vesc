@@ -22,6 +22,30 @@
       "revId": "49e2c1ae38343f32a01addda4cd455471141f965",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3d0bf8f_79b87cc6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1166724
+      },
+      "writtenOn": "2018-12-06T20:02:33Z",
+      "side": 1,
+      "message": "SSBOs only invalidate their storage on new/switching program or on activated SSBO blocks. I haven\u0027t seen PBOs used to transfer data to/from SSBOs (even possible?). Usually, they\u0027re mapped instead (aka glMapBuffer) for read-back. But if there were active SSBO blocks, it would be invalidated.",
+      "parentUuid": "393bbb34_db78865a",
+      "range": {
+        "startLine": 703,
+        "startChar": 0,
+        "endLine": 706,
+        "endChar": 5
+      },
+      "revId": "49e2c1ae38343f32a01addda4cd455471141f965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
