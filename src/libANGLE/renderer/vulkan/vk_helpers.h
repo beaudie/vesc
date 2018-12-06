@@ -390,6 +390,7 @@ class BufferHelper final : public RecordableGraphResource
     bool valid() const { return mBuffer.valid(); }
     const Buffer &getBuffer() const { return mBuffer; }
     const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
+    VkDeviceSize getSize() const { return mSize; }
 
     // Helpers for setting the graph dependencies *and* setting the appropriate barrier.
     void onRead(RecordableGraphResource *reader, VkAccessFlagBits readAccessType);

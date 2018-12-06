@@ -41,6 +41,28 @@ enum Format
 };
 }  // namespace BufferUtils_comp
 
+namespace ConvertVertex_comp
+{
+enum flags
+{
+    kIsAligned   = 0x00000001,
+    kIsBigEndian = 0x00000002,
+    kFlagsMask   = 0x00000003,
+};
+enum Conversion
+{
+    kIntToInt       = 0x00000000,
+    kUintToUint     = 0x00000004,
+    kIntToFloat     = 0x00000008,
+    kUintToFloat    = 0x0000000C,
+    kSnormToFloat   = 0x00000010,
+    kUnormToFloat   = 0x00000014,
+    kFixedToFloat   = 0x00000018,
+    kFloatToFloat   = 0x0000001C,
+    kConversionMask = 0x0000001C,
+};
+}  // namespace ConvertVertex_comp
+
 namespace FullScreenQuad_vert
 {}  // namespace FullScreenQuad_vert
 
@@ -60,6 +82,9 @@ class ShaderLibrary final : angle::NonCopyable
     angle::Result getBufferUtils_comp(Context *context,
                                       uint32_t shaderFlags,
                                       RefCounted<ShaderAndSerial> **shaderOut);
+    angle::Result getConvertVertex_comp(Context *context,
+                                        uint32_t shaderFlags,
+                                        RefCounted<ShaderAndSerial> **shaderOut);
     angle::Result getFullScreenQuad_vert(Context *context,
                                          uint32_t shaderFlags,
                                          RefCounted<ShaderAndSerial> **shaderOut);
@@ -72,6 +97,9 @@ class ShaderLibrary final : angle::NonCopyable
         mBufferUtils_comp_shaders[InternalShader::BufferUtils_comp::kFlagsMask |
                                   InternalShader::BufferUtils_comp::kFunctionMask |
                                   InternalShader::BufferUtils_comp::kFormatMask];
+    RefCounted<ShaderAndSerial>
+        mConvertVertex_comp_shaders[InternalShader::ConvertVertex_comp::kFlagsMask |
+                                    InternalShader::ConvertVertex_comp::kConversionMask];
     RefCounted<ShaderAndSerial> mFullScreenQuad_vert_shaders[1];
     RefCounted<ShaderAndSerial> mPushConstantColor_frag_shaders[1];
 };
