@@ -17,7 +17,6 @@
 
 namespace rx
 {
-
 BufferVk::BufferVk(const gl::BufferState &state) : BufferImpl(state) {}
 
 BufferVk::~BufferVk() {}
@@ -53,7 +52,7 @@ angle::Result BufferVk::setData(const gl::Context *context,
         const VkImageUsageFlags usageFlags =
             VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
             VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
-            VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT;
+            VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT;
 
         VkBufferCreateInfo createInfo    = {};
         createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
