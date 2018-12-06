@@ -6,7 +6,7 @@
 
 // Win32Window.cpp: Implementation of OSWindow for Win32 (Windows)
 
-#include "windows/win32/Win32Window.h"
+#include "util/windows/win32/Win32Window.h"
 
 #include <sstream>
 

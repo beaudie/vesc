@@ -6,11 +6,11 @@
 
 // X11Window.cpp: Implementation of OSWindow for X11
 
-#include "x11/X11Window.h"
+#include "util/x11/X11Window.h"
 
 #include "common/debug.h"
-#include "system_utils.h"
-#include "Timer.h"
+#include "util/Timer.h"
+#include "util/system_utils.h"
 
 namespace {
 

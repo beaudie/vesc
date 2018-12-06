@@ -6,7 +6,7 @@
 
 // Win32Pixmap.cpp: Implementation of OSPixmap for Win32 (Windows)
 
-#include "windows/win32/Win32Pixmap.h"
+#include "util/windows/win32/Win32Pixmap.h"
 
 Win32Pixmap::Win32Pixmap() : mBitmap(nullptr)
 {
