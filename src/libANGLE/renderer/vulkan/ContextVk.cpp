@@ -83,7 +83,6 @@ void BindNonNullVertexBufferRanges(vk::CommandBuffer *commandBuffer,
             {
                 rangeCount++;
             }
-
             commandBuffer->bindVertexBuffers(attribIdx, rangeCount, &arrayBufferHandles[attribIdx],
                                              &arrayBufferOffsets[attribIdx]);
             attribIdx += rangeCount;
@@ -432,10 +431,8 @@ angle::Result ContextVk::handleDirtyVertexBuffers(const gl::Context *context,
     for (size_t attribIndex : context->getStateCache().getActiveBufferedAttribsMask())
     {
         vk::BufferHelper *arrayBuffer = arrayBufferResources[attribIndex];
-        if (arrayBuffer)
-        {
-            arrayBuffer->onRead(framebuffer, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
-        }
+        ASSERT(arrayBuffer);
+        arrayBuffer->onRead(framebuffer, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
     }
 
     return angle::Result::Continue();
@@ -1298,10 +1295,9 @@ angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
     defaultBuffer.releaseRetainedBuffers(mRenderer);
 
     uint8_t *ptr;
-    VkBuffer bufferHandle = VK_NULL_HANDLE;
     VkDeviceSize offset   = 0;
-    ANGLE_TRY(
-        defaultBuffer.allocate(this, kDefaultValueSize, &ptr, &bufferHandle, &offset, nullptr));
+    ANGLE_TRY(defaultBuffer.allocate(this, kDefaultValueSize, &ptr, nullptr, &offset, nullptr));
+    vk::BufferHelper *buffer = defaultBuffer.getCurrentBuffer();
 
     const gl::State &glState = mState.getState();
     const gl::VertexAttribCurrentValueData &defaultValue =
@@ -1313,7 +1309,7 @@ angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
 
     ANGLE_TRY(defaultBuffer.flush(this));
 
-    mVertexArray->updateDefaultAttrib(mRenderer, attribIndex, bufferHandle,
+    mVertexArray->updateDefaultAttrib(mRenderer, attribIndex, buffer,
                                       static_cast<uint32_t>(offset));
     return angle::Result::Continue();
 }
