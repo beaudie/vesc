@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e58c75e8_edcafba7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-06T18:44:28Z",
+      "side": 1,
+      "message": "The reason I removed the handles cache was to avoid bugs with CurrentArrayBuffers and CurrentArrayBufferHandles getting out of sync.\n\nBut I understand your concern. I\u0027ll put it back.",
+      "parentUuid": "437bf6e2_fdbb70cf",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 9
+      },
+      "revId": "ea26c9bb55ebe3b9f298dd4df40f04b0bdd7fc28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "20a1a988_35e9c947",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "ea26c9bb55ebe3b9f298dd4df40f04b0bdd7fc28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddeae63b_2c2c7fbe",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-06T18:44:28Z",
+      "side": 1,
+      "message": "This is in preparation for the next CL, where every buffer needs to be added.",
+      "parentUuid": "20a1a988_35e9c947",
+      "range": {
+        "startLine": 442,
+        "startChar": 0,
+        "endLine": 443,
+        "endChar": 78
+      },
+      "revId": "ea26c9bb55ebe3b9f298dd4df40f04b0bdd7fc28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
