@@ -69,6 +69,30 @@
       "revId": "98589f96c2086789cfd767ec566f76eaa3e2ef81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "226be537_737d9f89",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-06T17:06:21Z",
+      "side": 1,
+      "message": "caps ASSERT in common/debug.h.",
+      "parentUuid": "07638485_68ee4599",
+      "range": {
+        "startLine": 197,
+        "startChar": 8,
+        "endLine": 197,
+        "endChar": 93
+      },
+      "revId": "98589f96c2086789cfd767ec566f76eaa3e2ef81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
