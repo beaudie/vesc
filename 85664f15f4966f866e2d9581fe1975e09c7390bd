@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce3770af_a921604e",
+        "filename": "src/feature_support_util/feature_support_util_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-06T23:25:34Z",
+      "side": 1,
+      "message": "appears to be unreferenced, you can probably remove it.",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 40
+      },
+      "revId": "85664f15f4966f866e2d9581fe1975e09c7390bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ddd988d_e1216ff6",
+        "filename": "src/feature_support_util/feature_support_util_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-06T23:25:34Z",
+      "side": 1,
+      "message": "just checking, but this is the test that reproduces the crash?",
+      "range": {
+        "startLine": 87,
+        "startChar": 31,
+        "endLine": 87,
+        "endChar": 49
+      },
+      "revId": "85664f15f4966f866e2d9581fe1975e09c7390bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "420e10f7_32966c29",
+        "filename": "src/feature_support_util/feature_support_util_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-06T23:25:34Z",
+      "side": 1,
+      "message": "you can use the block string feature:\n\n    constexpr char kRulesFileContents[] \u003d R\"(\n...\n..\n..\n...\n\");\n\n    RulesHandle rulesHandle \u003d nullptr;\n    \u003csnip\u003e",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 14
+      },
+      "revId": "85664f15f4966f866e2d9581fe1975e09c7390bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8676c9c_56c2e64f",
+        "filename": "src/feature_support_util/feature_support_util_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-06T23:25:34Z",
+      "side": 1,
+      "message": "constexpr char kApp1[]",
+      "range": {
+        "startLine": 138,
+        "startChar": 4,
+        "endLine": 138,
+        "endChar": 13
+      },
+      "revId": "85664f15f4966f866e2d9581fe1975e09c7390bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "571f2a94_94593f3b",
+        "filename": "src/feature_support_util/feature_support_util_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-06T23:25:34Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 146,
+        "startChar": 4,
+        "endLine": 146,
+        "endChar": 13
+      },
+      "revId": "85664f15f4966f866e2d9581fe1975e09c7390bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
