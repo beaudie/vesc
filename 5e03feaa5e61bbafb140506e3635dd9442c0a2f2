@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "171ac871_f91956df",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-06T17:37:13Z",
+      "side": 1,
+      "message": "Replying to your reply:\nYour suggestion \"all GPUs of both the Scenario and Rule would be compared against each other (with any match resulting in a match).\" looks ill defined to me.\nIf you have RuleA saying \"no ANGLE for GPU1\" and RuleB saying \"ANGLE for GPU2\", then since last matching rule overrides a previous one, what determines whether ANGLE will be used or not is the order between the rules, and this seems wrong to me.\nI can\u0027t think quickly of a good solution either.\n\nTo clarify my initial comment:\n1. Please change the \"for\" loop into examining only the first element in toCheck.mList in this CL or a followup, because your rules schema doesn\u0027t specify how to deal with multiple GPU devices, and examining only the first element keeps the old behavior and would be correct for single GPU devices.\n2. Add to your \"address more feedback\" bug an item to separate StringPart, IntegerPart, Version, Application, GPU, Device classes into Rule and Scenario versions. The classes in Scenario version should not have \"match()\" method, for example.\n3. And another item in the \"more feedback\" bug - specify how rules should be applied to devices with multiple GPUs.",
+      "parentUuid": "09ba0669_d6a3a672",
+      "range": {
+        "startLine": 198,
+        "startChar": 0,
+        "endLine": 205,
+        "endChar": 0
+      },
+      "revId": "5e03feaa5e61bbafb140506e3635dd9442c0a2f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ae4b4b3_b0b63052",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 2

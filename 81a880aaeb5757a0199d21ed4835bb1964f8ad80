@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce84fa4d_8ad6ceb5",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-06T17:37:13Z",
+      "side": 0,
+      "message": "Reading the above, your analysis of the problem looks wrong, as you call front() only on the scenario\u0027s gpu list, so not having a gpu in the rules would not be a problem.",
+      "range": {
+        "startLine": 564,
+        "startChar": 25,
+        "endLine": 564,
+        "endChar": 93
+      },
+      "revId": "81a880aaeb5757a0199d21ed4835bb1964f8ad80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
