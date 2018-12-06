@@ -148,7 +148,7 @@ ANGLE_LIBTESTER_EXPORT bool deqp_libtester_init_platform(int argc,
         g_archive = new tcu::DirArchive(deqpDataDir.c_str());
         g_log     = new tcu::TestLog(GetLogFileName(deqpDataDir).c_str(), g_cmdLine->getLogFlags());
         g_testCtx = new tcu::TestContext(*g_platform, *g_archive, *g_log, *g_cmdLine, DE_NULL);
-        g_root     = new tcu::TestPackageRoot(*g_testCtx, tcu::TestPackageRegistry::getSingleton());
+        g_root    = new tcu::TestPackageRoot(*g_testCtx, tcu::TestPackageRegistry::getSingleton());
         g_executor = new tcu::RandomOrderExecutor(*g_root, *g_testCtx);
     }
     catch (const std::exception &e)
