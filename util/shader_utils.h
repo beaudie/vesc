@@ -7,19 +7,13 @@
 #ifndef SAMPLE_UTIL_SHADER_UTILS_H
 #define SAMPLE_UTIL_SHADER_UTILS_H
 
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
-#include <GLES3/gl3.h>
-#include <GLES3/gl31.h>
 #include <export.h>
 
 #include <functional>
 #include <string>
 #include <vector>
 
-struct ShaderFuncs;
+#include "util/gles_loader_autogen.h"
 
 ANGLE_EXPORT GLuint CheckLinkStatusAndReturnProgram(GLuint program, bool outputErrorMessages);
 ANGLE_EXPORT GLuint CompileShader(GLenum type, const char *source);
