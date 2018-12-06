@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "09ba0669_d6a3a672",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-06T17:11:22Z",
+      "side": 1,
+      "message": "This changes the logic of how rules are applied for devices with multiple GPUs.\nThis will be very confusing if answer is different for different GPUs.\nI wanted to suggest this in my original review, but didn\u0027t want to burden you too much - in my opinion the subobjects used by Rules and Scenarios should be different. So, the new ScenarioDevice class should have a single ScenarioGPU instead of list of GPUs. Unless you are prepared to deal with multiple GPU devices.",
+      "range": {
+        "startLine": 198,
+        "startChar": 0,
+        "endLine": 205,
+        "endChar": 0
+      },
+      "revId": "5e03feaa5e61bbafb140506e3635dd9442c0a2f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ae4b4b3_b0b63052",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 956,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-06T17:11:22Z",
+      "side": 1,
+      "message": "Since you always add a GPU here, how is it possible that the list will not have a GPU?",
+      "range": {
+        "startLine": 956,
+        "startChar": 0,
+        "endLine": 956,
+        "endChar": 39
+      },
+      "revId": "5e03feaa5e61bbafb140506e3635dd9442c0a2f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
