@@ -117,6 +117,30 @@
       "revId": "ea26c9bb55ebe3b9f298dd4df40f04b0bdd7fc28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3939eb0f_6fdc14af",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-06T19:10:55Z",
+      "side": 1,
+      "message": "If I\u0027m not mistaken, data coming from a user pointer turns into a BufferVk and was already a graph resource. The only case where `arrayBuffer` was null (and active), was where there was a conversion, which now also results in a graph resource.\n\nOn closer look, default attributes also had a handle but not a BufferHelper. This change does turn those buffers into a graph resource.\n\nSo, it\u0027s true, not every buffer needs to be a resource. I\u0027ll add back the if, there is no reason to make the graph larger with unused buffers.",
+      "parentUuid": "3930cd49_51d37587",
+      "range": {
+        "startLine": 442,
+        "startChar": 0,
+        "endLine": 443,
+        "endChar": 78
+      },
+      "revId": "ea26c9bb55ebe3b9f298dd4df40f04b0bdd7fc28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
