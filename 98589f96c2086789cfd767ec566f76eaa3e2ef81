@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d2b51a4d_4f0621b5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-06T17:28:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50a228df_40699083",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 17,
+        "endChar": 8
+      },
+      "revId": "98589f96c2086789cfd767ec566f76eaa3e2ef81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "599999c4_b2d5ddf3",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 1
@@ -93,6 +117,30 @@
       "revId": "98589f96c2086789cfd767ec566f76eaa3e2ef81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f84958fa_3ccac504",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-06T17:28:38Z",
+      "side": 1,
+      "message": "Results in new, duplicate-symbol errors since ALOGE was renamed to ERR, and ALOGW was renamed to WARN.  Those symbol names already exist in \"common/debug.h\".",
+      "parentUuid": "226be537_737d9f89",
+      "range": {
+        "startLine": 197,
+        "startChar": 8,
+        "endLine": 197,
+        "endChar": 93
+      },
+      "revId": "98589f96c2086789cfd767ec566f76eaa3e2ef81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
