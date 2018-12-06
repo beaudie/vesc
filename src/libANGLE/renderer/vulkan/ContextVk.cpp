@@ -55,17 +55,23 @@ GLenum DefaultGLErrorCode(VkResult result)
 void BindNonNullVertexBufferRanges(vk::CommandBuffer *commandBuffer,
                                    const gl::AttributesMask &nonNullAttribMask,
                                    uint32_t maxAttrib,
-                                   const gl::AttribArray<VkBuffer> &arrayBufferHandles,
+                                   const gl::AttribArray<vk::BufferHelper *> &arrayBuffers,
                                    const gl::AttribArray<VkDeviceSize> &arrayBufferOffsets)
 {
     // Vulkan does not allow binding a null vertex buffer but the default state of null buffers is
     // valid.
+
+    gl::AttribArray<VkBuffer> arrayBufferHandles;
 
     // We can detect if there are no gaps in active attributes by using the mask of the program
     // attribs and the max enabled attrib.
     ASSERT(maxAttrib > 0);
     if (nonNullAttribMask.to_ulong() == (maxAttrib - 1))
     {
+        for (uint32_t attribIdx = 0; attribIdx < maxAttrib; attribIdx++)
+        {
+            arrayBufferHandles[attribIdx] = arrayBuffers[attribIdx]->getBuffer().getHandle();
+        }
         commandBuffer->bindVertexBuffers(0, maxAttrib, arrayBufferHandles.data(),
                                          arrayBufferOffsets.data());
         return;
@@ -74,19 +80,20 @@ void BindNonNullVertexBufferRanges(vk::CommandBuffer *commandBuffer,
     // Find ranges of non-null buffers and bind them all together.
     for (uint32_t attribIdx = 0; attribIdx < maxAttrib; attribIdx++)
     {
-        if (arrayBufferHandles[attribIdx] != VK_NULL_HANDLE)
+        if (arrayBuffers[attribIdx] != nullptr)
         {
-            // Find the end of this range of non-null handles
-            uint32_t rangeCount = 1;
-            while (attribIdx + rangeCount < maxAttrib &&
-                   arrayBufferHandles[attribIdx + rangeCount] != VK_NULL_HANDLE)
+            // Find the end of this range of non-null buffers
+            uint32_t startAttrib = attribIdx;
+            while (attribIdx < maxAttrib && arrayBuffers[attribIdx] != nullptr)
             {
-                rangeCount++;
+                arrayBufferHandles[attribIdx] = arrayBuffers[attribIdx]->getBuffer().getHandle();
+                ++attribIdx;
             }
 
-            commandBuffer->bindVertexBuffers(attribIdx, rangeCount, &arrayBufferHandles[attribIdx],
-                                             &arrayBufferOffsets[attribIdx]);
-            attribIdx += rangeCount;
+            uint32_t rangeCount = attribIdx - startAttrib;
+            commandBuffer->bindVertexBuffers(startAttrib, rangeCount,
+                                             &arrayBufferHandles[startAttrib],
+                                             &arrayBufferOffsets[startAttrib]);
         }
     }
 }
@@ -422,8 +429,8 @@ angle::Result ContextVk::handleDirtyVertexBuffers(const gl::Context *context,
 {
     BindNonNullVertexBufferRanges(
         commandBuffer, mProgram->getState().getActiveAttribLocationsMask(),
-        mProgram->getState().getMaxActiveAttribLocation(),
-        mVertexArray->getCurrentArrayBufferHandles(), mVertexArray->getCurrentArrayBufferOffsets());
+        mProgram->getState().getMaxActiveAttribLocation(), mVertexArray->getCurrentArrayBuffers(),
+        mVertexArray->getCurrentArrayBufferOffsets());
 
     const auto &arrayBufferResources = mVertexArray->getCurrentArrayBuffers();
 
@@ -432,10 +439,8 @@ angle::Result ContextVk::handleDirtyVertexBuffers(const gl::Context *context,
     for (size_t attribIndex : context->getStateCache().getActiveBufferedAttribsMask())
     {
         vk::BufferHelper *arrayBuffer = arrayBufferResources[attribIndex];
-        if (arrayBuffer)
-        {
-            arrayBuffer->onRead(framebuffer, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
-        }
+        ASSERT(arrayBuffer);
+        arrayBuffer->onRead(framebuffer, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
     }
 
     return angle::Result::Continue();
@@ -1298,10 +1303,9 @@ angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
     defaultBuffer.releaseRetainedBuffers(mRenderer);
 
     uint8_t *ptr;
-    VkBuffer bufferHandle = VK_NULL_HANDLE;
     VkDeviceSize offset   = 0;
-    ANGLE_TRY(
-        defaultBuffer.allocate(this, kDefaultValueSize, &ptr, &bufferHandle, &offset, nullptr));
+    ANGLE_TRY(defaultBuffer.allocate(this, kDefaultValueSize, &ptr, nullptr, &offset, nullptr));
+    vk::BufferHelper *buffer = defaultBuffer.getCurrentBuffer();
 
     const gl::State &glState = mState.getState();
     const gl::VertexAttribCurrentValueData &defaultValue =
@@ -1313,7 +1317,7 @@ angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
 
     ANGLE_TRY(defaultBuffer.flush(this));
 
-    mVertexArray->updateDefaultAttrib(mRenderer, attribIndex, bufferHandle,
+    mVertexArray->updateDefaultAttrib(mRenderer, attribIndex, buffer,
                                       static_cast<uint32_t>(offset));
     return angle::Result::Continue();
 }

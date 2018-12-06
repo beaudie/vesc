@@ -40,7 +40,7 @@ class VertexArrayVk : public VertexArrayImpl
 
     void updateDefaultAttrib(RendererVk *renderer,
                              size_t attribIndex,
-                             VkBuffer bufferHandle,
+                             vk::BufferHelper *buffer,
                              uint32_t offset);
 
     angle::Result updateClientAttribs(const gl::Context *context,
@@ -54,11 +54,6 @@ class VertexArrayVk : public VertexArrayImpl
                                  GLsizei vertexOrIndexCount,
                                  gl::DrawElementsType indexTypeOrInvalid,
                                  const void *indices);
-
-    const gl::AttribArray<VkBuffer> &getCurrentArrayBufferHandles() const
-    {
-        return mCurrentArrayBufferHandles;
-    }
 
     const gl::AttribArray<VkDeviceSize> &getCurrentArrayBufferOffsets() const
     {
@@ -114,7 +109,6 @@ class VertexArrayVk : public VertexArrayImpl
                                   const gl::VertexBinding &binding,
                                   size_t attribIndex);
 
-    gl::AttribArray<VkBuffer> mCurrentArrayBufferHandles;
     gl::AttribArray<VkDeviceSize> mCurrentArrayBufferOffsets;
     gl::AttribArray<vk::BufferHelper *> mCurrentArrayBuffers;
     gl::AttribArray<const vk::Format *> mCurrentArrayBufferFormats;
