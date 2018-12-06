@@ -58,7 +58,7 @@
   "GL entry points:scripts/gl_angle_ext.xml":
     "d33dd83178802f724641a6cbd49a78e9",
   "GL entry points:scripts/registry_xml.py":
-    "bd37cae3188e1d29e17f8dea15c5e3a1",
+    "9f791b2f0150e4833895b24730cb5546",
   "GL format map:src/libANGLE/es3_format_type_combinations.json":
     "a232823cd6430f14e28793ccabb968ee",
   "GL format map:src/libANGLE/format_map_data.json":
@@ -70,13 +70,15 @@
   "GL/EGL/WGL loader:scripts/egl_angle_ext.xml":
     "6c004ac485c274db54e54bb261d75581",
   "GL/EGL/WGL loader:scripts/generate_loader.py":
-    "2bbba57f81f28ee4a8b42c28546e2847",
+    "8d0ab11f01829238f72c9f69b439770f",
   "GL/EGL/WGL loader:scripts/gl.xml":
     "b470cb06b06cbbe7adb2c8129ec85708",
   "GL/EGL/WGL loader:scripts/gl_angle_ext.xml":
     "d33dd83178802f724641a6cbd49a78e9",
   "GL/EGL/WGL loader:scripts/registry_xml.py":
-    "bd37cae3188e1d29e17f8dea15c5e3a1",
+    "9f791b2f0150e4833895b24730cb5546",
+  "GL/EGL/WGL loader:scripts/wgl.xml":
+    "aa96419c582af2f6673430e2847693f4",
   "OpenGL dispatch table:scripts/gl.xml":
     "b470cb06b06cbbe7adb2c8129ec85708",
   "OpenGL dispatch table:src/libANGLE/renderer/gl/generate_gl_dispatch_table.py":
