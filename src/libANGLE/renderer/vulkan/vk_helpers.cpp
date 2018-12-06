@@ -104,6 +104,8 @@ void DynamicBuffer::init(size_t alignment, RendererVk *renderer)
         mMinSize = std::min<size_t>(mMinSize, 0x1000);
     }
 
+    fprintf(stderr, "DynamicBuffer alignment. Given: %zu, nonCoherentAtomSize: %llu\n", alignment,
+            (unsigned long long)renderer->getPhysicalDeviceProperties().limits.nonCoherentAtomSize);
     ASSERT(alignment > 0);
     mAlignment = std::max(
         alignment,
@@ -120,6 +122,9 @@ angle::Result DynamicBuffer::allocate(Context *context,
                                       bool *newBufferAllocatedOut)
 {
     size_t sizeToAllocate = roundUp(sizeInBytes, mAlignment);
+    fprintf(stderr,
+            "Allocating buffer of size %zu (requested.  Granted: %zu (alignment was: %zu))\n",
+            sizeInBytes, sizeToAllocate, mAlignment);
 
     angle::base::CheckedNumeric<size_t> checkedNextWriteOffset = mNextAllocationOffset;
     checkedNextWriteOffset += sizeToAllocate;

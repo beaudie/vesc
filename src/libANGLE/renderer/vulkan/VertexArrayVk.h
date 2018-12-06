@@ -107,6 +107,10 @@ class VertexArrayVk : public VertexArrayImpl
                                       BufferVk *srcBuffer,
                                       const gl::VertexBinding &binding,
                                       size_t attribIndex);
+    angle::Result convertVertexBufferCpu(ContextVk *contextVk,
+                                         BufferVk *srcBuffer,
+                                         const gl::VertexBinding &binding,
+                                         size_t attribIndex);
     void ensureConversionReleased(RendererVk *renderer, size_t attribIndex);
 
     angle::Result syncDirtyAttrib(ContextVk *contextVk,
