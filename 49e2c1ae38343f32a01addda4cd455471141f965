@@ -46,6 +46,30 @@
       "revId": "49e2c1ae38343f32a01addda4cd455471141f965",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8536d5cf_dc306666",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-06T23:04:57Z",
+      "side": 1,
+      "message": "An SSBO is just a buffer bound to an SSBO binding point. The same buffer could be bound to any number of different uses, such as PBO, array buffer, element array, UBO, etc.\n\nIf you look in Buffer11 you can see that a single opengl \"Buffer\" can be implemented as multiple ID3D11Buffers with different usage flags. The SSBO buffer is stored with a usage of BUFFER_USAGE_RAW_UAV. There\u0027s also a notion of a \u0027latest\u0027 buffer. I think you might have to dig into this a bit to understand how the code works and make a regression test along the lines of what I described above. I\u0027m pretty sure it would fail, but just going on a guess.",
+      "parentUuid": "f3d0bf8f_79b87cc6",
+      "range": {
+        "startLine": 703,
+        "startChar": 0,
+        "endLine": 706,
+        "endChar": 5
+      },
+      "revId": "49e2c1ae38343f32a01addda4cd455471141f965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
