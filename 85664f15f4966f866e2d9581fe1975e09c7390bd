@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "7be182bf_ebfb5863",
+        "filename": "src/feature_support_util/feature_support_util_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-07T17:32:48Z",
+      "side": 1,
+      "message": "Could use \"constexpr char[]\" for these two, too (in constructor as well).",
+      "revId": "85664f15f4966f866e2d9581fe1975e09c7390bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce3770af_a921604e",
         "filename": "src/feature_support_util/feature_support_util_unittest.cpp",
         "patchSetId": 1
@@ -87,6 +104,29 @@
         "startChar": 4,
         "endLine": 138,
         "endChar": 13
+      },
+      "revId": "85664f15f4966f866e2d9581fe1975e09c7390bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6b7c56d_0b0084d2",
+        "filename": "src/feature_support_util/feature_support_util_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-07T17:32:48Z",
+      "side": 1,
+      "message": "Side note: looking at this example, I think we need a way to specify driver version ranges in the rules, like \"1.2.3.[0-4]\". Or a way to say that the version should be at least \"1.2.3.5\".",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 60
       },
       "revId": "85664f15f4966f866e2d9581fe1975e09c7390bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
