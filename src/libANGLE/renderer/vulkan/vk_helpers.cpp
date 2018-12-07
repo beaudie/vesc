@@ -934,6 +934,8 @@ void BufferHelper::onRead(RecordableGraphResource *reader, VkAccessFlagBits read
 {
     addReadDependency(reader);
 
+    fprintf(stderr, "%p->onRead(%x): reader: %p, current R:%x, W:%x\n", this, readAccessType,
+            reader, mCurrentReadAccess, mCurrentWriteAccess);
     if (mCurrentWriteAccess != 0 && (mCurrentReadAccess & readAccessType) == 0)
     {
         reader->addGlobalMemoryBarrier(mCurrentWriteAccess, readAccessType);
@@ -943,6 +945,8 @@ void BufferHelper::onRead(RecordableGraphResource *reader, VkAccessFlagBits read
 
 void BufferHelper::onWrite(VkAccessFlagBits writeAccessType)
 {
+    fprintf(stderr, "%p->onWrite(%x): current R:%x, W:%x\n", this, writeAccessType,
+            mCurrentReadAccess, mCurrentWriteAccess);
     if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
     {
         addGlobalMemoryBarrier(mCurrentReadAccess | mCurrentWriteAccess, writeAccessType);
