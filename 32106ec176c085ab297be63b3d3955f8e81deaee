@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26a607d2_c9f0d162",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-07T12:30:47Z",
+      "side": 1,
+      "message": "Bug was introduced in 88fc6da3e28c9abb47b5329e4f241dc3cb8e84d7, where a loop over dirtyMask calling invalidateDefaultAttribute() (effectively doing or) was changed to this function.",
+      "revId": "32106ec176c085ab297be63b3d3955f8e81deaee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
