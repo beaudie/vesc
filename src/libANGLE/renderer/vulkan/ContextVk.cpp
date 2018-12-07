@@ -434,7 +434,7 @@ angle::Result ContextVk::handleDirtyVertexBuffers(const gl::Context *context,
         vk::BufferHelper *arrayBuffer = arrayBufferResources[attribIndex];
         if (arrayBuffer)
         {
-            arrayBuffer->onRead(framebuffer, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
+            arrayBuffer->onRead(framebuffer, (VkAccessFlagBits)0x1FFF);//VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
         }
     }
 

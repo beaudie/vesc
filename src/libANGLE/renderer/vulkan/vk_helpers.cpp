@@ -934,7 +934,7 @@ void BufferHelper::onRead(RecordableGraphResource *reader, VkAccessFlagBits read
 {
     addReadDependency(reader);
 
-    if (mCurrentWriteAccess != 0 && (mCurrentReadAccess & readAccessType) == 0)
+    if (mCurrentWriteAccess != 0 && (mCurrentReadAccess & readAccessType) != readAccessType)
     {
         reader->addGlobalMemoryBarrier(mCurrentWriteAccess, readAccessType);
         mCurrentReadAccess |= readAccessType;
