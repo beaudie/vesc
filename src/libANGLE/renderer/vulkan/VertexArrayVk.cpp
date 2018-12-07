@@ -186,6 +186,21 @@ angle::Result VertexArrayVk::streamIndexData(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+void printConvertedBuffer(float *data, size_t numComponents, std::vector<float> &out)
+{
+    fprintf(stderr, "data:\n0000:");
+    for (VkDeviceSize i = 0; i < 50 && i < numComponents; ++i)
+    {
+        fprintf(stderr, " %f", data[i]);
+        if (i % 16 == 15 && i + 1 != numComponents)
+            fprintf(stderr, "\n%04zu:", (size_t)(i + 1));
+    }
+    fprintf(stderr, "\n");
+
+    for (VkDeviceSize i = 0; i < numComponents; ++i)
+        out.push_back(data[i]);
+}
+
 // We assume the buffer is completely full of the same kind of data and convert
 // and/or align it as we copy it to a DynamicBuffer. The assumption could be wrong
 // but the alternative of copying it piecemeal on each draw would have a lot more
@@ -236,6 +251,52 @@ angle::Result VertexArrayVk::convertVertexBuffer(ContextVk *contextVk,
     mCurrentArrayBufferHandles[attribIndex] =
         mCurrentArrayBuffers[attribIndex]->getBuffer().getHandle();
     mCurrentArrayBufferConversionCanRelease[attribIndex] = true;
+
+#if 0
+    ANGLE_TRY(renderer->flush(contextVk));
+#elif 0
+    size_t numComponents = numVertices * destFormat.channelCount();
+
+    ANGLE_TRY(renderer->finish(contextVk));
+
+    std::vector<float> gpu;
+
+    uint8_t *data;
+    ANGLE_TRY(mCurrentArrayBuffers[attribIndex]->map(contextVk, &data));
+    size_t offset = mCurrentArrayBufferOffsets[attribIndex];
+
+    data += offset;
+
+    ANGLE_TRY(mCurrentArrayBuffers[attribIndex]->invalidate(contextVk, 0, 0x10000000));
+    printConvertedBuffer((float *)data, numComponents, gpu);
+    mCurrentArrayBuffers[attribIndex]->unmap(contextVk->getDevice());
+
+    // Convert the data on the CPU for comparison
+    float *data2 = new float[numComponents];
+
+    void *src;
+    ANGLE_TRY(srcBuffer->mapImpl(contextVk, &src));
+    const uint8_t *srcBytes = reinterpret_cast<const uint8_t *>(src);
+    srcBytes += binding.getOffset();
+
+    mCurrentArrayBufferFormats[attribIndex]->vertexLoadFunction(srcBytes, binding.getStride(),
+            numVertices, (uint8_t*)data2);
+
+    ANGLE_TRY(srcBuffer->unmapImpl(contextVk));
+
+    std::vector<float> cpu;
+    printConvertedBuffer(data2, numComponents, cpu);
+
+    delete[] data2;
+
+    for (size_t i = 0; i < gpu.size() && i < cpu.size(); ++i)
+        if (gpu[i] - cpu[i] > 1e-6 || gpu[i] - cpu[i] < -1e-6)
+        {
+            fprintf(stderr, "Diff starts at %zu\n", i);
+            ASSERT(false);
+            break;
+        }
+#endif
 
     return angle::Result::Continue;
 }
