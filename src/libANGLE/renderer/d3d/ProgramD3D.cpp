@@ -679,24 +679,24 @@ ProgramD3D::SamplerMapping ProgramD3D::updateSamplerMapping()
     return SamplerMapping::WasDirty;
 }
 
-GLint ProgramD3D::getImageMapping(gl::ShaderType type,
-                                  unsigned int imageIndex,
-                                  bool readonly,
-                                  const gl::Caps &caps) const
+GLint ProgramD3D::getImageUnitMapping(gl::ShaderType type,
+                                      unsigned int imageRegister,
+                                      bool readonly,
+                                      const gl::Caps &caps) const
 {
     GLint logicalImageUnit = -1;
-    ASSERT(imageIndex < caps.maxImageUnits);
+    ASSERT(imageRegister < caps.maxShaderImageUniforms[type]);
     switch (type)
     {
         case gl::ShaderType::Compute:
-            if (readonly && imageIndex < mReadonlyImagesCS.size() &&
-                mReadonlyImagesCS[imageIndex].active)
+            if (readonly && imageRegister < mReadonlyImagesCS.size() &&
+                mReadonlyImagesCS[imageRegister].active)
             {
-                logicalImageUnit = mReadonlyImagesCS[imageIndex].logicalImageUnit;
+                logicalImageUnit = mReadonlyImagesCS[imageRegister].logicalImageUnit;
             }
-            else if (imageIndex < mImagesCS.size() && mImagesCS[imageIndex].active)
+            else if (imageRegister < mImagesCS.size() && mImagesCS[imageRegister].active)
             {
-                logicalImageUnit = mImagesCS[imageIndex].logicalImageUnit;
+                logicalImageUnit = mImagesCS[imageRegister].logicalImageUnit;
             }
             break;
         // TODO(xinghua.cao@intel.com): add image mapping for vertex shader and pixel shader.
@@ -2565,43 +2565,30 @@ void ProgramD3D::assignImageRegisters(size_t uniformIndex)
 }
 
 // static
-void ProgramD3D::AssignImages(unsigned int startImageIndex,
+void ProgramD3D::AssignImages(unsigned int startRegister,
                               int startLogicalImageUnit,
                               unsigned int imageCount,
                               std::vector<Image> &outImages,
                               gl::RangeUI *outUsedRange)
 {
-    unsigned int imageIndex = startImageIndex;
+    unsigned int reg             = startRegister;
     unsigned int low        = outUsedRange->low();
     unsigned int high       = outUsedRange->high();
-
-    // If declare without a binding qualifier, any uniform image variable (include all elements of
-    // unbound image array) shoud be bound to unit zero.
-    if (startLogicalImageUnit == -1)
-    {
-        ASSERT(imageIndex < outImages.size());
-        Image *image            = &outImages[imageIndex];
-        image->active           = true;
-        image->logicalImageUnit = 0;
-        low                     = std::min(imageIndex, low);
-        high                    = std::max(imageIndex + 1, high);
-        ASSERT(low < high);
-        *outUsedRange = gl::RangeUI(low, high);
-        return;
-    }
-
     unsigned int logcalImageUnit = startLogicalImageUnit;
+
     do
     {
-        ASSERT(imageIndex < outImages.size());
-        Image *image            = &outImages[imageIndex];
+        ASSERT(reg < outImages.size());
+        Image *image            = &outImages[reg];
         image->active           = true;
-        image->logicalImageUnit = logcalImageUnit;
-        low                     = std::min(imageIndex, low);
-        high                    = std::max(imageIndex + 1, high);
-        imageIndex++;
+        // If declare without a binding qualifier, any uniform image variable (include all elements
+        // of unbound image array) shoud be bound to unit zero.
+        image->logicalImageUnit = startLogicalImageUnit == -1 ? 0 : logcalImageUnit;
+        low                     = std::min(reg, low);
+        high                    = std::max(reg + 1, high);
+        reg++;
         logcalImageUnit++;
-    } while (imageIndex < startImageIndex + imageCount);
+    } while (reg < startRegister + imageCount);
 
     ASSERT(low < high);
     *outUsedRange = gl::RangeUI(low, high);

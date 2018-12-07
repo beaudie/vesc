@@ -166,10 +166,10 @@ class ProgramD3D : public ProgramImpl
 
     SamplerMapping updateSamplerMapping();
 
-    GLint getImageMapping(gl::ShaderType type,
-                          unsigned int imageIndex,
-                          bool readonly,
-                          const gl::Caps &caps) const;
+    GLint getImageUnitMapping(gl::ShaderType type,
+                              unsigned int imageRegister,
+                              bool readonly,
+                              const gl::Caps &caps) const;
     gl::RangeUI getUsedImageRange(gl::ShaderType type, bool readonly) const;
 
     bool usesPointSize() const { return mUsesPointSize; }
@@ -429,7 +429,7 @@ class ProgramD3D : public ProgramImpl
 
     void assignAllImageRegisters();
     void assignImageRegisters(size_t uniformIndex);
-    static void AssignImages(unsigned int startImageIndex,
+    static void AssignImages(unsigned int startRegister,
                              int startLogicalImageUnit,
                              unsigned int imageCount,
                              std::vector<Image> &outImages,
