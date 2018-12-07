@@ -496,7 +496,10 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
                 primaryCommandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                                       VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 1,
                                                       &memoryBarrier, 0, nullptr, 0, nullptr);
+                fprintf(stderr, "  Memory Barrier: 0x%x to 0x%x\n", mGlobalMemoryBarrierSrcAccess, mGlobalMemoryBarrierDstAccess);
             }
+
+            fprintf(stderr, "  %s\n", GetResourceTypeName(getResourceTypeForDiagnostics(), getFunction()));
 
             if (mOutsideRenderPassCommands.valid())
             {
@@ -632,6 +635,7 @@ angle::Result CommandGraph::submitCommands(Context *context,
     // There is no point in submitting an empty command buffer, so make sure not to call this
     // function if there's nothing to do.
     ASSERT(!mNodes.empty());
+    fprintf(stderr, "submit\n");
 
     size_t previousBarrierIndex       = 0;
     CommandGraphNode *previousBarrier = getLastBarrierNode(&previousBarrierIndex);
