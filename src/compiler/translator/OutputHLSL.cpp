@@ -705,7 +705,7 @@ void OutputHLSL::header(TInfoSinkBase &out,
 
             if (mOutputType == SH_HLSL_4_1_OUTPUT)
             {
-                mResourcesHLSL->samplerMetadataUniforms(out, "c4");
+                mResourcesHLSL->samplerMetadataUniforms(out, 4);
             }
 
             out << "};\n";
@@ -817,7 +817,7 @@ void OutputHLSL::header(TInfoSinkBase &out,
 
             if (mOutputType == SH_HLSL_4_1_OUTPUT)
             {
-                mResourcesHLSL->samplerMetadataUniforms(out, "c4");
+                mResourcesHLSL->samplerMetadataUniforms(out, 4);
             }
 
             out << "};\n"
@@ -853,7 +853,9 @@ void OutputHLSL::header(TInfoSinkBase &out,
             out << "    uint3 gl_NumWorkGroups : packoffset(c0);\n";
         }
         ASSERT(mOutputType == SH_HLSL_4_1_OUTPUT);
-        mResourcesHLSL->samplerMetadataUniforms(out, "c1");
+        mResourcesHLSL->samplerMetadataUniforms(out, 1);
+        // Sampler metadata struct must be two 4-vec, 32 bytes.
+        mResourcesHLSL->imageMetadataUniforms(out, mResourcesHLSL->getSamplerCount() * 2 + 1);
         out << "};\n";
 
         std::ostringstream systemValueDeclaration;
