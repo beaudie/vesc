@@ -750,7 +750,7 @@ GLint ProgramD3D::getImageMapping(gl::ShaderType type,
                                   const gl::Caps &caps) const
 {
     GLint logicalImageUnit = -1;
-    ASSERT(imageIndex < caps.maxImageUnits);
+    ASSERT(imageIndex < caps.maxShaderImageUniforms[type]);
     switch (type)
     {
         case gl::ShaderType::Compute:
@@ -1730,8 +1730,8 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
     {
         mShaderSamplers[gl::ShaderType::Compute].resize(
             data.getCaps().maxShaderTextureImageUnits[gl::ShaderType::Compute]);
-        mImagesCS.resize(data.getCaps().maxImageUnits);
-        mReadonlyImagesCS.resize(data.getCaps().maxImageUnits);
+        mImagesCS.resize(data.getCaps().maxShaderImageUniforms[gl::ShaderType::Compute]);
+        mReadonlyImagesCS.resize(data.getCaps().maxShaderImageUniforms[gl::ShaderType::Compute]);
 
         mShaderUniformsDirty.set(gl::ShaderType::Compute);
         defineUniformsAndAssignRegisters();
@@ -2496,32 +2496,19 @@ void ProgramD3D::AssignImages(unsigned int startImageIndex,
                               std::vector<Image> &outImages,
                               gl::RangeUI *outUsedRange)
 {
-    unsigned int imageIndex = startImageIndex;
+    unsigned int imageIndex      = startImageIndex;
     unsigned int low        = outUsedRange->low();
     unsigned int high       = outUsedRange->high();
-
-    // If declare without a binding qualifier, any uniform image variable (include all elements of
-    // unbound image array) shoud be bound to unit zero.
-    if (startLogicalImageUnit == -1)
-    {
-        ASSERT(imageIndex < outImages.size());
-        Image *image            = &outImages[imageIndex];
-        image->active           = true;
-        image->logicalImageUnit = 0;
-        low                     = std::min(imageIndex, low);
-        high                    = std::max(imageIndex + 1, high);
-        ASSERT(low < high);
-        *outUsedRange = gl::RangeUI(low, high);
-        return;
-    }
-
     unsigned int logcalImageUnit = startLogicalImageUnit;
+
     do
     {
         ASSERT(imageIndex < outImages.size());
         Image *image            = &outImages[imageIndex];
         image->active           = true;
-        image->logicalImageUnit = logcalImageUnit;
+        // If declare without a binding qualifier, any uniform image variable (include all elements
+        // of unbound image array) shoud be bound to unit zero.
+        image->logicalImageUnit = startLogicalImageUnit == -1 ? 0 : logcalImageUnit;
         low                     = std::min(imageIndex, low);
         high                    = std::max(imageIndex + 1, high);
         imageIndex++;

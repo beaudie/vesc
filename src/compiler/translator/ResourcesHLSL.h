@@ -35,7 +35,8 @@ class ResourcesHLSL : angle::NonCopyable
                         TSymbolTable *symbolTable);
 
     // Must be called after uniformsHeader
-    void samplerMetadataUniforms(TInfoSinkBase &out, const char *reg);
+    void samplerMetadataUniforms(TInfoSinkBase &out, unsigned int regIndex);
+    void imageMetadataUniforms(TInfoSinkBase &out, unsigned int regIndex);
 
     TString uniformBlocksHeader(const ReferencedInterfaceBlocks &referencedInterfaceBlocks);
     TString shaderStorageBlocksHeader(const ReferencedInterfaceBlocks &referencedInterfaceBlocks);
@@ -43,6 +44,8 @@ class ResourcesHLSL : angle::NonCopyable
     // Used for direct index references
     static TString InterfaceBlockInstanceString(const ImmutableString &instanceName,
                                                 unsigned int arrayIndex);
+
+    unsigned int getSamplerCount() const { return mSamplerCount; }
 
     const std::map<std::string, unsigned int> &getShaderStorageBlockRegisterMap() const
     {
@@ -119,6 +122,7 @@ class ResourcesHLSL : angle::NonCopyable
     unsigned int mUniformBlockRegister;
     unsigned int mTextureRegister;
     unsigned int mUAVRegister;
+    unsigned int mImageCount;
     unsigned int mSamplerCount;
     StructureHLSL *mStructureHLSL;
     ShShaderOutput mOutputType;

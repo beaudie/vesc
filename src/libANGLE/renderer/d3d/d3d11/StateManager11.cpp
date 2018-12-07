@@ -262,6 +262,7 @@ void ShaderConstants11::init(const gl::Caps &caps)
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         mShaderSamplerMetadata[shaderType].resize(caps.maxShaderTextureImageUnits[shaderType]);
+        mShaderImageMetadata[shaderType].resize(caps.maxShaderImageUniforms[shaderType]);
     }
 }
 
@@ -398,6 +399,18 @@ bool ShaderConstants11::updateSamplerMetadata(SamplerMetadata *data,
     return dirty;
 }
 
+bool ShaderConstants11::updateImageMetadata(ImageMetadata *data, const gl::ImageUnit &imageUnit)
+{
+    bool dirty = false;
+    if (data->level != static_cast<int>(imageUnit.level))
+    {
+        data->level = static_cast<int>(imageUnit.level);
+        dirty       = true;
+    }
+
+    return dirty;
+}
+
 void ShaderConstants11::setComputeWorkGroups(GLuint numGroupsX,
                                              GLuint numGroupsY,
                                              GLuint numGroupsZ)
@@ -486,6 +499,17 @@ void ShaderConstants11::onSamplerChange(gl::ShaderType shaderType,
     }
 }
 
+void ShaderConstants11::onImageChange(gl::ShaderType shaderType,
+                                      unsigned int imageIndex,
+                                      const gl::ImageUnit &imageUnit)
+{
+    ASSERT(shaderType != gl::ShaderType::InvalidEnum);
+    if (updateImageMetadata(&mShaderImageMetadata[shaderType][imageIndex], imageUnit))
+    {
+        mNumActiveShaderImages[shaderType] = 0;
+    }
+}
+
 angle::Result ShaderConstants11::updateBuffer(const gl::Context *context,
                                               Renderer11 *renderer,
                                               gl::ShaderType shaderType,
@@ -496,13 +520,23 @@ angle::Result ShaderConstants11::updateBuffer(const gl::Context *context,
     // than we previously uploaded.
     const int numSamplers = programD3D.getUsedSamplerRange(shaderType).length();
 
-    const bool dirty =
-        mShaderConstantsDirty[shaderType] || (mNumActiveShaderSamplers[shaderType] < numSamplers);
+    const int numImages = programD3D.getUsedImageRange(shaderType, true).length() +
+                          programD3D.getUsedImageRange(shaderType, false).length();
+
+    const bool dirty = mShaderConstantsDirty[shaderType] ||
+                       (mNumActiveShaderSamplers[shaderType] < numSamplers) ||
+                       mNumActiveShaderImages[shaderType] < numImages;
 
     const size_t dataSize = GetShaderConstantsStructSize(shaderType);
+    const size_t samplerDataSize = sizeof(SamplerMetadata) * numSamplers;
+    const size_t imageDataSize   = sizeof(ImageMetadata) * numImages;
     const uint8_t *samplerData =
         reinterpret_cast<const uint8_t *>(mShaderSamplerMetadata[shaderType].data());
+    const uint8_t *imageData =
+        reinterpret_cast<const uint8_t *>(mShaderImageMetadata[shaderType].data());
+
     mNumActiveShaderSamplers[shaderType] = numSamplers;
+    mNumActiveShaderImages[shaderType]   = numImages;
     mShaderConstantsDirty.set(shaderType, false);
 
     const uint8_t *data = nullptr;
@@ -535,9 +569,9 @@ angle::Result ShaderConstants11::updateBuffer(const gl::Context *context,
                                     0, &mapping));
 
     memcpy(mapping.pData, data, dataSize);
-    memcpy(static_cast<uint8_t *>(mapping.pData) + dataSize, samplerData,
-           sizeof(SamplerMetadata) * numSamplers);
-
+    memcpy(static_cast<uint8_t *>(mapping.pData) + dataSize, samplerData, samplerDataSize);
+    memcpy(static_cast<uint8_t *>(mapping.pData) + dataSize + samplerDataSize, imageData,
+           imageDataSize);
     renderer->getDeviceContext()->Unmap(driverConstantBuffer.get(), 0);
 
     return angle::Result::Continue;
@@ -2537,6 +2571,19 @@ angle::Result StateManager11::setSamplerState(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result StateManager11::setImageState(const gl::Context *context,
+                                            gl::ShaderType type,
+                                            int index,
+                                            const gl::ImageUnit &imageUnit)
+{
+    ASSERT(static_cast<unsigned int>(index) <
+           mRenderer->getNativeCaps().maxShaderImageUniforms[type]);
+
+    mShaderConstants.onImageChange(type, index, imageUnit);
+
+    return angle::Result::Continue;
+}
+
 angle::Result StateManager11::setTextureForSampler(const gl::Context *context,
                                                    gl::ShaderType type,
                                                    int index,
@@ -2640,12 +2687,14 @@ angle::Result StateManager11::applyTexturesForSRVs(const gl::Context *context,
             mProgramD3D->getImageMapping(shaderType, readonlyImageIndex, true, caps);
         ASSERT(imageUnitIndex != -1);
         const gl::ImageUnit &imageUnit = glState.getImageUnit(imageUnitIndex);
+        ANGLE_TRY(setImageState(context, shaderType, readonlyImageIndex, imageUnit));
         ANGLE_TRY(setTextureForImage(context, shaderType, readonlyImageIndex, true, imageUnit));
     }
 
     size_t samplerCount = caps.maxShaderTextureImageUnits[shaderType];
-    size_t readonlyImageCount =
-        context->getClientVersion() >= gl::Version(3, 1) ? caps.maxImageUnits : 0;
+    size_t readonlyImageCount = context->getClientVersion() >= gl::Version(3, 1)
+                                    ? caps.maxShaderImageUniforms[shaderType]
+                                    : 0;
 
     // Samplers and readonly images share the SRVs here, their range is
     // [0, max(samplerRange.high(), readonlyImageRange.high()).
@@ -2668,10 +2717,11 @@ angle::Result StateManager11::applyTexturesForUAVs(const gl::Context *context,
         GLint imageUnitIndex = mProgramD3D->getImageMapping(shaderType, imageIndex, false, caps);
         ASSERT(imageUnitIndex != -1);
         const gl::ImageUnit &imageUnit = glState.getImageUnit(imageUnitIndex);
+        ANGLE_TRY(setImageState(context, shaderType, imageIndex, imageUnit));
         ANGLE_TRY(setTextureForImage(context, shaderType, imageIndex, false, imageUnit));
     }
 
-    size_t imageCount = caps.maxImageUnits;
+    size_t imageCount = caps.maxShaderImageUniforms[shaderType];
     ANGLE_TRY(clearUAVs(shaderType, imageRange.high(), imageCount));
 
     return angle::Result::Continue;

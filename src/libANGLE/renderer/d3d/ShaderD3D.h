@@ -53,7 +53,6 @@ class ShaderD3D : public ShaderImpl
     // Query regular uniforms with their name. Query sampler fields of structs with field selection
     // using dot (.) operator.
     unsigned int getUniformRegister(const std::string &uniformName) const;
-
     unsigned int getUniformBlockRegister(const std::string &blockName) const;
     unsigned int getShaderStorageBlockRegister(const std::string &blockName) const;
     void appendDebugInfo(const std::string &info) const { mDebugInfo += info; }

@@ -508,7 +508,8 @@ void ResourcesHLSL::uniformsHeader(TInfoSinkBase &out,
         // Atomic counters and RW texture share the same resources. Therefore, RW texture need to
         // start counting after the last atomic counter.
         unsigned int groupRWTextureRegisterIndex = mUAVRegister;
-        unsigned int imageUniformGroupIndex      = 0;
+        unsigned int readonlyImageUniformGroupIndex = 0;
+        unsigned int imageUniformGroupIndex         = 0;
         // TEXTURE_2D is special, index offset is assumed to be 0 and omitted in that case.
         ASSERT(HLSL_TEXTURE_MIN == HLSL_TEXTURE_2D);
         for (int groupId = HLSL_TEXTURE_MIN; groupId < HLSL_TEXTURE_MAX; ++groupId)
@@ -523,7 +524,7 @@ void ResourcesHLSL::uniformsHeader(TInfoSinkBase &out,
         {
             outputHLSLReadonlyImageUniformGroup(
                 out, HLSLTextureGroup(groupId), groupedReadonlyImageUniforms[groupId],
-                &groupTextureRegisterIndex, &imageUniformGroupIndex);
+                &groupTextureRegisterIndex, &readonlyImageUniformGroupIndex);
         }
 
         for (int groupId = HLSL_RWTEXTURE_MIN; groupId < HLSL_RWTEXTURE_MAX; ++groupId)
@@ -532,10 +533,11 @@ void ResourcesHLSL::uniformsHeader(TInfoSinkBase &out,
                                         groupedImageUniforms[groupId], &groupRWTextureRegisterIndex,
                                         &imageUniformGroupIndex);
         }
+        mImageCount = readonlyImageUniformGroupIndex + imageUniformGroupIndex;
     }
 }
 
-void ResourcesHLSL::samplerMetadataUniforms(TInfoSinkBase &out, const char *reg)
+void ResourcesHLSL::samplerMetadataUniforms(TInfoSinkBase &out, unsigned int regIndex)
 {
     // If mSamplerCount is 0 the shader doesn't use any textures for samplers.
     if (mSamplerCount > 0)
@@ -549,7 +551,21 @@ void ResourcesHLSL::samplerMetadataUniforms(TInfoSinkBase &out, const char *reg)
                "        int4 intBorderColor;\n"
                "    };\n"
                "    SamplerMetadata samplerMetadata["
-            << mSamplerCount << "] : packoffset(" << reg << ");\n";
+            << mSamplerCount << "] : packoffset(c" << regIndex << ");\n";
+    }
+}
+
+void ResourcesHLSL::imageMetadataUniforms(TInfoSinkBase &out, unsigned int regIndex)
+{
+    if (mImageCount > 0)
+    {
+        out << "    struct ImageMetadata\n"
+               "    {\n"
+               "        int level;\n"
+               "        int3 padding;\n"
+               "    };\n"
+               "    ImageMetadata imageMetadata["
+            << mImageCount << "] : packoffset(c" << regIndex << ");\n";
     }
 }
 
