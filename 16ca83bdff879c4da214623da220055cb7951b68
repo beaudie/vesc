@@ -22,6 +22,30 @@
       "revId": "16ca83bdff879c4da214623da220055cb7951b68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40e70dbf_8f7b850a",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-07T21:57:38Z",
+      "side": 1,
+      "message": "I\u0027m outputting color in the vertex shader, that gets interpolated between the corners. That means none of the values that are read back are going to be precisely known. I could probably work out the numbers and add a tolerance of 1.\n\nIn this test though, you can\u0027t \"accidentally\" be close to a color, so I don\u0027t think this would create false positives. On my laptop, the values were 2 and 253, so a tolerance of 2 (or 3) would make the bots pass too, but correctness-wise, 5 and 3 don\u0027t make a difference.",
+      "parentUuid": "87b3d67a_485c1082",
+      "range": {
+        "startLine": 379,
+        "startChar": 27,
+        "endLine": 379,
+        "endChar": 43
+      },
+      "revId": "16ca83bdff879c4da214623da220055cb7951b68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
