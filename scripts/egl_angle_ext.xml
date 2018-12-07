@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<registry>
+    <comment>
+    Copyright 2018 The ANGLE Project Authors. All rights reserved.
+    Use of this source code is governed by a BSD-style license that can be
+    found in the LICENSE file.
+
+    egl_angle_ext.xml
+        Includes data used to generate ANGLE EGL functions and classes.
+    </comment>
+    <!-- SECTION: GL command definitions. -->
+</registry>
