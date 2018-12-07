@@ -628,7 +628,6 @@ uniform usampler2D tex;
 layout(std140, binding = 0) buffer buf {
     uint outData[16][16];
 };
-
 void main()
 {
     uint x = gl_LocalInvocationID.x;
@@ -696,7 +695,6 @@ uniform usampler2D tex;
 layout(std140, binding = 0) buffer buf {
     uint outData[16][16];
 };
-
 void main()
 {
     uint x = gl_LocalInvocationID.x;
@@ -1502,7 +1500,6 @@ struct S {
     ivec3 a;
     ivec2 b;
 };
-
 layout(std140, binding=0) uniform blockName {
     S bd;
 } instanceName;
@@ -1613,7 +1610,6 @@ TEST_P(ComputeShaderTest, AtomicFunctionsNoReturnValue)
 layout (local_size_x = 8, local_size_y = 1, local_size_z = 1) in;
 layout (r32ui, binding = 0) readonly uniform highp uimage2D srcImage;
 layout (r32ui, binding = 1) writeonly uniform highp uimage2D dstImage;
-
 const uint kSumIndex = 0u;
 const uint kMinIndex = 1u;
 const uint kMaxIndex = 2u;
@@ -1622,9 +1618,7 @@ const uint kAndIndex = 4u;
 const uint kXorIndex = 5u;
 const uint kExchangeIndex = 6u;
 const uint kCompSwapIndex = 7u;
-
 shared highp uint results[8];
-
 void main()
 {
     if (gl_LocalInvocationID.x == kMinIndex || gl_LocalInvocationID.x == kAndIndex)
@@ -1641,7 +1635,6 @@ void main()
     }
     memoryBarrierShared();
     barrier();
-
     uint value = imageLoad(srcImage, ivec2(gl_LocalInvocationID.xy)).x;
     atomicAdd(results[kSumIndex], value);
     atomicMin(results[kMinIndex], value);
@@ -1653,7 +1646,6 @@ void main()
     atomicCompSwap(results[kCompSwapIndex], value, 256u);
     memoryBarrierShared();
     barrier();
-
     imageStore(dstImage, ivec2(gl_LocalInvocationID.xy),
                 uvec4(results[gl_LocalInvocationID.x]));
 })";
@@ -1671,23 +1663,18 @@ TEST_P(ComputeShaderTest, AtomicFunctionsInNonInitializerSingleAssignment)
 layout (local_size_x = 9, local_size_y = 1, local_size_z = 1) in;
 layout (r32i, binding = 0) readonly uniform highp iimage2D srcImage;
 layout (r32i, binding = 1) writeonly uniform highp iimage2D dstImage;
-
 shared highp int sharedVariable;
-
 shared highp int inputData[9];
 shared highp int outputData[9];
-
 void main()
 {
     int inputValue = imageLoad(srcImage, ivec2(gl_LocalInvocationID.xy)).x;
     inputData[gl_LocalInvocationID.x] = inputValue;
     memoryBarrierShared();
     barrier();
-
     if (gl_LocalInvocationID.x == 0u)
     {
         sharedVariable = 0;
-
         outputData[0] = atomicAdd(sharedVariable, inputData[0]);
         outputData[1] = atomicMin(sharedVariable, inputData[1]);
         outputData[2] = atomicMax(sharedVariable, inputData[2]);
@@ -1700,7 +1687,6 @@ void main()
     }
     memoryBarrierShared();
     barrier();
-
     imageStore(dstImage, ivec2(gl_LocalInvocationID.xy),
                 ivec4(outputData[gl_LocalInvocationID.x]));
 })";
@@ -1717,23 +1703,18 @@ TEST_P(ComputeShaderTest, AtomicFunctionsInitializerWithUnsigned)
 layout (local_size_x = 9, local_size_y = 1, local_size_z = 1) in;
 layout (r32ui, binding = 0) readonly uniform highp uimage2D srcImage;
 layout (r32ui, binding = 1) writeonly uniform highp uimage2D dstImage;
-
 shared highp uint sharedVariable;
-
 shared highp uint inputData[9];
 shared highp uint outputData[9];
-
 void main()
 {
     uint inputValue = imageLoad(srcImage, ivec2(gl_LocalInvocationID.xy)).x;
     inputData[gl_LocalInvocationID.x] = inputValue;
     memoryBarrierShared();
     barrier();
-
     if (gl_LocalInvocationID.x == 0u)
     {
         sharedVariable = 0u;
-
         uint addValue = atomicAdd(sharedVariable, inputData[0]);
         outputData[0] = addValue;
         uint minValue = atomicMin(sharedVariable, inputData[1]);
@@ -1752,11 +1733,9 @@ void main()
         outputData[7] = compSwapValue;
         uint sharedVariable = atomicAdd(sharedVariable, inputData[8]);
         outputData[8] = sharedVariable;
-
     }
     memoryBarrierShared();
     barrier();
-
     imageStore(dstImage, ivec2(gl_LocalInvocationID.xy),
                 uvec4(outputData[gl_LocalInvocationID.x]));
 })";
@@ -1774,23 +1753,18 @@ TEST_P(ComputeShaderTest, AtomicFunctionsReturnWithUnsigned)
 layout (local_size_x = 9, local_size_y = 1, local_size_z = 1) in;
 layout (r32ui, binding = 0) readonly uniform highp uimage2D srcImage;
 layout (r32ui, binding = 1) writeonly uniform highp uimage2D dstImage;
-
 shared highp uint sharedVariable;
-
 shared highp uint inputData[9];
 shared highp uint outputData[9];
-
 void main()
 {
     uint inputValue = imageLoad(srcImage, ivec2(gl_LocalInvocationID.xy)).x;
     inputData[gl_LocalInvocationID.x] = inputValue;
     memoryBarrierShared();
     barrier();
-
     if (gl_LocalInvocationID.x == 0u)
     {
         sharedVariable = 0u;
-
         outputData[0] = 1u + atomicAdd(sharedVariable, inputData[0]);
         outputData[1] = 1u + atomicMin(sharedVariable, inputData[1]);
         outputData[2] = 1u + atomicMax(sharedVariable, inputData[2]);
@@ -1803,7 +1777,6 @@ void main()
     }
     memoryBarrierShared();
     barrier();
-
     imageStore(dstImage, ivec2(gl_LocalInvocationID.xy),
                 uvec4(outputData[gl_LocalInvocationID.x]));
 })";
@@ -1821,34 +1794,27 @@ TEST_P(ComputeShaderTest, AtomicFunctionsReturnWithMultipleTypes)
 layout (local_size_x = 4, local_size_y = 1, local_size_z = 1) in;
 layout (r32ui, binding = 0) readonly uniform highp uimage2D srcImage;
 layout (r32ui, binding = 1) writeonly uniform highp uimage2D dstImage;
-
 shared highp uint sharedVariable;
 shared highp int  indexVariable;
-
 shared highp uint inputData[4];
 shared highp uint outputData[4];
-
 void main()
 {
     uint inputValue = imageLoad(srcImage, ivec2(gl_LocalInvocationID.xy)).x;
     inputData[gl_LocalInvocationID.x] = inputValue;
     memoryBarrierShared();
     barrier();
-
     if (gl_LocalInvocationID.x == 0u)
     {
         sharedVariable = 0u;
         indexVariable = 2;
-
         outputData[0] = 1u + atomicAdd(sharedVariable, inputData[atomicAdd(indexVariable, -1)]);
         outputData[1] = 1u + atomicAdd(sharedVariable, inputData[atomicAdd(indexVariable, -1)]);
         outputData[2] = 1u + atomicAdd(sharedVariable, inputData[atomicAdd(indexVariable, -1)]);
         outputData[3] = atomicAdd(sharedVariable, 0u);
-
     }
     memoryBarrierShared();
     barrier();
-
     imageStore(dstImage, ivec2(gl_LocalInvocationID.xy),
                 uvec4(outputData[gl_LocalInvocationID.x]));
 })";
@@ -2169,7 +2135,6 @@ layout(std140, binding = 0) buffer blockA {
     float data[8];
 } instanceA;
 layout(r32f, binding = 0) writeonly uniform highp image2D imageOut;
-
 void main()
 {
     float data = 1.0;
@@ -2192,7 +2157,6 @@ layout(std140, binding = 0) buffer blockA {
 layout(std140, binding = 0) buffer blockB {
     float v[];
 } instanceB[1];
-
 void main()
 {
     float data = instanceA.v[gl_LocalInvocationIndex];
@@ -2242,7 +2206,6 @@ layout(std140, binding = 0) buffer blockA {
 layout(std140, binding = 1) buffer blockB {
     float v[8];
 } instanceB[1];
-
 void main()
 {
     float data = v[gl_GlobalInvocationID.x];
@@ -2264,7 +2227,6 @@ layout(std140, binding = 0) buffer blockA {
 layout(std140, binding = 1) buffer blockB {
     float v;
 } instanceB[1];
-
 void main()
 {
     instanceB[0].v = v.x;
@@ -2297,7 +2259,6 @@ struct S {
     bool b;
     vec4 v[64];
 };
-
 shared S vars[16];
 void main()
 {
@@ -2310,7 +2271,6 @@ void main()
     {
         zeroS.v[i] = vec4(0.0f);
     }
-
     uint tid = gl_LocalInvocationID.x + gl_LocalInvocationID.y * 4u;
     uint value = (zeroS == vars[tid] ? 127u : 0u);
     imageStore(dstImage, ivec2(gl_LocalInvocationID.xy), uvec4(value));
@@ -2408,7 +2368,6 @@ uniform uint factor;
 layout(std140, binding = 0) buffer buf {
     uint outData[16][16];
 };
-
 void main()
 {
     uint x = gl_LocalInvocationID.x;
@@ -2477,6 +2436,191 @@ void main()
     {
         EXPECT_EQ(idx + 3, *(ptr2 + idx * kArrayStride / 4));
     }
+}
+
+// Test imageSize to access mipmap slice.
+TEST_P(ComputeShaderTest, ImageSizeMipmapSlice)
+{
+    // TODO(xinghua.cao@intel.com): Figure out why this fails on NVIDIA's driver
+    ANGLE_SKIP_TEST_IF(IsNVIDIA());
+
+    GLTexture texture[2];
+    GLFramebuffer framebuffer;
+    constexpr char kCS[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(r32ui, binding = 0) readonly uniform highp uimage2D uImage_1;
+layout(rgba32ui, binding = 1) writeonly uniform highp uimage2D uImage_2;
+void main()
+{
+    ivec2 size = imageSize(uImage_1);
+    imageStore(uImage_2, ivec2(gl_LocalInvocationID.xy), uvec4(size, 0, 0));
+})";
+
+    constexpr int kWidth1 = 8, kHeight1 = 4, kWidth2 = 1, kHeight2 = 1;
+    constexpr GLuint kInputValues[] = {0, 0, 0, 0};
+
+    glBindTexture(GL_TEXTURE_2D, texture[0]);
+    glTexStorage2D(GL_TEXTURE_2D, 2, GL_R32UI, kWidth1, kHeight1);
+    EXPECT_GL_NO_ERROR();
+
+    glBindTexture(GL_TEXTURE_2D, texture[1]);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA32UI, kWidth2, kHeight2);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kWidth2, kHeight2, GL_RGBA_INTEGER, GL_UNSIGNED_INT,
+                    kInputValues);
+    EXPECT_GL_NO_ERROR();
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+    glUseProgram(program.get());
+
+    glBindImageTexture(0, texture[0], 1, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
+    EXPECT_GL_NO_ERROR();
+
+    glBindImageTexture(1, texture[1], 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32UI);
+    EXPECT_GL_NO_ERROR();
+
+    glDispatchCompute(1, 1, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glMemoryBarrier(GL_ALL_BARRIER_BITS);
+    GLuint outputValues[kWidth1 * kHeight1 * 4];
+    constexpr GLuint expectedValue[] = {4, 2};
+    glUseProgram(0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture[1], 0);
+    EXPECT_GL_NO_ERROR();
+    glReadPixels(0, 0, kWidth2, kHeight2, GL_RGBA_INTEGER, GL_UNSIGNED_INT, outputValues);
+    EXPECT_GL_NO_ERROR();
+
+    for (int i = 0; i < kWidth2 * kHeight2; i++)
+    {
+        EXPECT_EQ(expectedValue[i], outputValues[i]);
+        EXPECT_EQ(expectedValue[i + 1], outputValues[i + 1]);
+    }
+}
+
+// Test imageLoad to access mipmap slice.
+TEST_P(ComputeShaderTest, ImageLoadMipmapSlice)
+{
+    // TODO(xinghua.cao@intel.com): Figure out why this fails on NVIDIA's driver
+    ANGLE_SKIP_TEST_IF(IsNVIDIA());
+
+    GLTexture texture[2];
+    GLFramebuffer framebuffer;
+    constexpr char kCS[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(r32ui, binding = 0) readonly uniform highp uimage2D uImage_1;
+layout(r32ui, binding = 1) writeonly uniform highp uimage2D uImage_2;
+void main()
+{
+    uvec4 value = imageLoad(uImage_1, ivec2(gl_LocalInvocationID.xy));
+    imageStore(uImage_2, ivec2(gl_LocalInvocationID.xy), value);
+})";
+
+    constexpr int kWidth1 = 2, kHeight1 = 2, kWidth2 = 1, kHeight2 = 1;
+    constexpr GLuint kInputValues11[] = {3, 3, 3, 3};
+    constexpr GLuint kInputValues12[] = {2};
+    constexpr GLuint kInputValues2[]  = {1};
+
+    glBindTexture(GL_TEXTURE_2D, texture[0]);
+    glTexStorage2D(GL_TEXTURE_2D, 2, GL_R32UI, kWidth1, kHeight1);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kWidth1, kHeight1, GL_RED_INTEGER, GL_UNSIGNED_INT,
+                    kInputValues11);
+    glTexSubImage2D(GL_TEXTURE_2D, 1, 0, 0, kWidth2, kHeight2, GL_RED_INTEGER, GL_UNSIGNED_INT,
+                    kInputValues12);
+    EXPECT_GL_NO_ERROR();
+
+    glBindTexture(GL_TEXTURE_2D, texture[1]);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_R32UI, kWidth2, kHeight2);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kWidth2, kHeight2, GL_RED_INTEGER, GL_UNSIGNED_INT,
+                    kInputValues2);
+    EXPECT_GL_NO_ERROR();
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+    glUseProgram(program.get());
+
+    glBindImageTexture(0, texture[0], 1, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
+    EXPECT_GL_NO_ERROR();
+
+    glBindImageTexture(1, texture[1], 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI);
+    EXPECT_GL_NO_ERROR();
+
+    glDispatchCompute(1, 1, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glMemoryBarrier(GL_ALL_BARRIER_BITS);
+    GLuint outputValues;
+    constexpr GLuint expectedValue = 2;
+    glUseProgram(0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture[1], 0);
+    EXPECT_GL_NO_ERROR();
+    glReadPixels(0, 0, kWidth2, kHeight2, GL_RED_INTEGER, GL_UNSIGNED_INT, &outputValues);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(expectedValue, outputValues);
+}
+
+// Test imageStore to access mipmap slice.
+TEST_P(ComputeShaderTest, ImageStoreMipmapSlice)
+{
+    // TODO(xinghua.cao@intel.com): Figure out why this fails on NVIDIA's driver
+    ANGLE_SKIP_TEST_IF(IsNVIDIA());
+
+    GLTexture texture[2];
+    GLFramebuffer framebuffer;
+    constexpr char kCS[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(r32ui, binding = 0) readonly uniform highp uimage2D uImage_1;
+layout(r32ui, binding = 1) writeonly uniform highp uimage2D uImage_2;
+void main()
+{
+    uvec4 value = imageLoad(uImage_1, ivec2(gl_LocalInvocationID.xy));
+    imageStore(uImage_2, ivec2(gl_LocalInvocationID.xy), value);
+})";
+
+    constexpr int kWidth1 = 1, kHeight1 = 1, kWidth2 = 2, kHeight2 = 2;
+    constexpr GLuint kInputValues1[]  = {3};
+    constexpr GLuint kInputValues21[] = {2, 2, 2, 2};
+    constexpr GLuint kInputValues22[] = {1};
+
+    glBindTexture(GL_TEXTURE_2D, texture[0]);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_R32UI, kWidth1, kHeight1);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kWidth1, kHeight1, GL_RED_INTEGER, GL_UNSIGNED_INT,
+                    kInputValues1);
+    EXPECT_GL_NO_ERROR();
+
+    glBindTexture(GL_TEXTURE_2D, texture[1]);
+    glTexStorage2D(GL_TEXTURE_2D, 2, GL_R32UI, kWidth2, kHeight2);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kWidth2, kHeight2, GL_RED_INTEGER, GL_UNSIGNED_INT,
+                    kInputValues21);
+    glTexSubImage2D(GL_TEXTURE_2D, 1, 0, 0, kWidth1, kHeight1, GL_RED_INTEGER, GL_UNSIGNED_INT,
+                    kInputValues22);
+    EXPECT_GL_NO_ERROR();
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+    glUseProgram(program.get());
+
+    glBindImageTexture(0, texture[0], 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
+    EXPECT_GL_NO_ERROR();
+
+    glBindImageTexture(1, texture[1], 1, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI);
+    EXPECT_GL_NO_ERROR();
+
+    glDispatchCompute(1, 1, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glMemoryBarrier(GL_ALL_BARRIER_BITS);
+    GLuint outputValues;
+    constexpr GLuint expectedValue = 3;
+    glUseProgram(0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture[1], 1);
+    EXPECT_GL_NO_ERROR();
+    glReadPixels(0, 0, kWidth1, kHeight1, GL_RED_INTEGER, GL_UNSIGNED_INT, &outputValues);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(expectedValue, outputValues);
 }
 
 ANGLE_INSTANTIATE_TEST(ComputeShaderTest, ES31_OPENGL(), ES31_OPENGLES(), ES31_D3D11());
