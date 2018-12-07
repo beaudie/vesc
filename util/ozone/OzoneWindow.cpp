@@ -6,7 +6,7 @@
 
 // OzoneWindow.cpp: Implementation of OSWindow for Ozone
 
-#include "ozone/OzoneWindow.h"
+#include "util/ozone/OzoneWindow.h"
 
 int OzoneWindow::sLastDepth = 0;
 
