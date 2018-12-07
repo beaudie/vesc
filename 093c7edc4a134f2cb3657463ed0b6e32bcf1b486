@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "482b14e1_aa5463f5",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5851,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-07T08:42:26Z",
+      "side": 1,
+      "message": "Done. Submit in https://chromium-review.googlesource.com/c/angle/angle/+/1367404. Thanks.",
+      "parentUuid": "c997a9ca_af88227d",
+      "revId": "093c7edc4a134f2cb3657463ed0b6e32bcf1b486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db9fbc9a_be2f6158",
         "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "093c7edc4a134f2cb3657463ed0b6e32bcf1b486",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fdca396_6737b7c5",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-07T08:42:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db9fbc9a_be2f6158",
+      "revId": "093c7edc4a134f2cb3657463ed0b6e32bcf1b486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -56,6 +92,30 @@
       "revId": "093c7edc4a134f2cb3657463ed0b6e32bcf1b486",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b700570_f95402da",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-07T08:42:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f8a675d_56a535c5",
+      "range": {
+        "startLine": 52,
+        "startChar": 23,
+        "endLine": 52,
+        "endChar": 31
+      },
+      "revId": "093c7edc4a134f2cb3657463ed0b6e32bcf1b486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

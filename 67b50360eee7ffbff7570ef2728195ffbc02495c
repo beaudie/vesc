@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e4506b3_eb764476",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-07T08:42:26Z",
+      "side": 1,
+      "message": "In last patch, I forget to divide the unsized array stride. So some related parts are changed in patch set 2.",
+      "range": {
+        "startLine": 198,
+        "startChar": 43,
+        "endLine": 198,
+        "endChar": 61
+      },
+      "revId": "67b50360eee7ffbff7570ef2728195ffbc02495c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
