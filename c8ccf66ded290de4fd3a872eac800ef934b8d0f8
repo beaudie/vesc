@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe21e137_1811c936",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-07T05:39:17Z",
+      "side": 1,
+      "message": "Could you try it out just to make sure it works as intended?\n\nAlso, how is this not an issue with gen_vk_format_table? Is clang format fixing that?",
+      "revId": "c8ccf66ded290de4fd3a872eac800ef934b8d0f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
