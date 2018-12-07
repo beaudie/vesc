@@ -405,6 +405,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                 if (bindingIsAligned)
                 {
                     ANGLE_TRY(convertVertexBuffer(contextVk, bufferVk, binding, attribIndex));
+                    ANGLE_TRY(renderer->finish(contextVk));
                 }
                 else
                 {
