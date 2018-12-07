@@ -333,7 +333,7 @@ angle::Result DispatchUtilsVk::convertVertexBuffer(vk::Context *context,
     // Tell src we are going to read from it.
     src->onRead(dest, VK_ACCESS_SHADER_READ_BIT);
     // Tell dest it's being written to.
-    dest->onWrite(VK_ACCESS_SHADER_WRITE_BIT);
+    dest->onWrite(VK_ACCESS_MEMORY_WRITE_BIT);//VK_ACCESS_SHADER_WRITE_BIT);
 
     bool srcIsInt   = params.srcFormat->componentType == GL_INT;
     bool srcIsUint  = params.srcFormat->componentType == GL_UNSIGNED_INT;
