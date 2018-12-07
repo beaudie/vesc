@@ -35,9 +35,15 @@ class ANGLE_EXPORT Library : angle::NonCopyable
   public:
     virtual ~Library() {}
     virtual void *getSymbol(const char *symbolName) = 0;
+
+    template <typename FuncT>
+    void getAs(const char *symbolName, FuncT *funcOut)
+    {
+        *funcOut = reinterpret_cast<FuncT>(getSymbol(symbolName));
+    }
 };
 
 ANGLE_EXPORT Library *OpenSharedLibrary(const char *libraryName);
-} // namespace angle
+}  // namespace angle
 
 #endif  // UTIL_SYSTEM_UTILS_H_

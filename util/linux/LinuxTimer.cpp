@@ -6,7 +6,7 @@
 
 // LinuxTimer.cpp: Implementation of a high precision timer class on Linux
 
-#include "linux/LinuxTimer.h"
+#include "util/linux/LinuxTimer.h"
 #include <iostream>
 
 LinuxTimer::LinuxTimer()

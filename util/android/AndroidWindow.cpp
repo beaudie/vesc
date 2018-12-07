@@ -6,12 +6,13 @@
 
 // AndroidWindow.cpp: Implementation of OSWindow for Android
 
-#include "android/AndroidWindow.h"
+#include "util/android/AndroidWindow.h"
 
 #include <pthread.h>
 
-#include "android/third_party/android_native_app_glue.h"
 #include "common/debug.h"
+#include "util/android/third_party/android_native_app_glue.h"
+#include "util/egl_loader_autogen.h"
 
 namespace
 {
