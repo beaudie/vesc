@@ -12,46 +12,20 @@
 #include <memory>
 #include <string>
 
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
-#include <GLES3/gl3.h>
 #include <export.h>
 
 #include "common/Optional.h"
 #include "common/angleutils.h"
+#include "util/EGLPlatformParameters.h"
+#include "util/egl_loader_autogen.h"
 
 class OSWindow;
 
 namespace angle
 {
+class Library;
 struct PlatformMethods;
-}
-
-struct ANGLE_EXPORT EGLPlatformParameters
-{
-    EGLint renderer;
-    EGLint majorVersion;
-    EGLint minorVersion;
-    EGLint deviceType;
-    EGLint presentPath;
-
-    EGLPlatformParameters();
-    explicit EGLPlatformParameters(EGLint renderer);
-    EGLPlatformParameters(EGLint renderer,
-                          EGLint majorVersion,
-                          EGLint minorVersion,
-                          EGLint deviceType);
-    EGLPlatformParameters(EGLint renderer,
-                          EGLint majorVersion,
-                          EGLint minorVersion,
-                          EGLint deviceType,
-                          EGLint presentPath);
-};
-
-ANGLE_EXPORT bool operator<(const EGLPlatformParameters &a, const EGLPlatformParameters &b);
-ANGLE_EXPORT bool operator==(const EGLPlatformParameters &a, const EGLPlatformParameters &b);
+}  // namespace angle
 
 class ANGLE_EXPORT EGLWindow : angle::NonCopyable
 {
@@ -117,10 +91,10 @@ class ANGLE_EXPORT EGLWindow : angle::NonCopyable
     const angle::PlatformMethods *getPlatformMethods() const { return mPlatformMethods; }
 
     // Internally initializes the Display, Surface and Context.
-    bool initializeGL(OSWindow *osWindow);
+    bool initializeGL(OSWindow *osWindow, angle::Library *eglLibrary);
 
     // Only initializes the Display and Surface.
-    bool initializeDisplayAndSurface(OSWindow *osWindow);
+    bool initializeDisplayAndSurface(OSWindow *osWindow, angle::Library *eglLibrary);
 
     // Create an EGL context with this window's configuration
     EGLContext createContext(EGLContext share) const;
