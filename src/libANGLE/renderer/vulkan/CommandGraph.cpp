@@ -496,7 +496,10 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
                 primaryCommandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                                       VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 1,
                                                       &memoryBarrier, 0, nullptr, 0, nullptr);
+                fprintf(stderr, "Memory Barrier: 0x%x to 0x%x\n", mGlobalMemoryBarrierSrcAccess, mGlobalMemoryBarrierDstAccess);
             }
+
+            fprintf(stderr, "%s\n", GetResourceTypeName(getResourceTypeForDiagnostics(), getFunction()));
 
             if (mOutsideRenderPassCommands.valid())
             {

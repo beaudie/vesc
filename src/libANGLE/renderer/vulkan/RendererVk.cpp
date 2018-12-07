@@ -269,7 +269,7 @@ void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
 }
 
 // Initially dumping the command graphs is disabled.
-constexpr bool kEnableCommandGraphDiagnostics = false;
+constexpr bool kEnableCommandGraphDiagnostics = true;
 }  // anonymous namespace
 
 // CommandBatch implementation.
