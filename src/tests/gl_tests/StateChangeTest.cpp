@@ -333,6 +333,55 @@ TEST_P(StateChangeTest, DisablingBufferedVertexAttribute)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Tests that setting value for a subset of default attributes doesn't affect others.
+TEST_P(StateChangeTest, SetCurrentAttribute)
+{
+    constexpr char kVS[] = R"(attribute vec4 position;
+attribute mat4 testAttrib;  // Note that this generates 4 attributes
+varying vec4 testVarying;
+void main (void)
+{
+	gl_Position = position;
+
+	testVarying = position.x < 0.0 ?
+                    position.y < 0.0 ? testAttrib[0] : testAttrib[1] :
+                    position.y < 0.0 ? testAttrib[2] : testAttrib[3];
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kSimpleAttributeFS);
+    glUseProgram(program);
+    GLint attribLoc   = glGetAttribLocation(program, "testAttrib");
+    GLint positionLoc = glGetAttribLocation(program, "position");
+    ASSERT_NE(-1, attribLoc);
+    ASSERT_NE(-1, positionLoc);
+
+    // Set the current value of two of the test attributes, while leaving the other two as default.
+    glVertexAttrib4f(attribLoc + 1, 0.0f, 1.0f, 0.0f, 1.0f);
+    glVertexAttrib4f(attribLoc + 2, 0.0f, 0.0f, 1.0f, 1.0f);
+
+    // Set up the position attribute.
+    setupQuadVertexBuffer(0.5f, 1.0f);
+    glEnableVertexAttribArray(positionLoc);
+    glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+    // Draw and verify the four section in the output:
+    //
+    //  +---------------+
+    //  | Black | Green |
+    //  +-------+-------+
+    //  | Blue  | Black |
+    //  +---------------+
+    //
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    int w = getWindowWidth();
+    int h = getWindowHeight();
+    EXPECT_PIXEL_COLOR_EQ(1 * w / 4, 1 * h / 4, GLColor::black);
+    EXPECT_PIXEL_COLOR_EQ(3 * w / 4, 1 * h / 4, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(1 * w / 4, 3 * h / 4, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(3 * w / 4, 3 * h / 4, GLColor::black);
+}
+
 // Ensure that CopyTexSubImage3D syncs framebuffer changes.
 TEST_P(StateChangeTestES3, CopyTexSubImage3DSync)
 {
