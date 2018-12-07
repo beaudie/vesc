@@ -6,7 +6,7 @@
 
 // WindowsTimer.cpp: Implementation of a high precision timer class on Windows
 
-#include "windows/WindowsTimer.h"
+#include "util/windows/WindowsTimer.h"
 
 WindowsTimer::WindowsTimer() : mRunning(false), mStartTime(0), mStopTime(0), mFrequency(0)
 {

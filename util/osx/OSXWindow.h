@@ -11,7 +11,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include "OSWindow.h"
+#include "util/OSWindow.h"
 
 class OSXWindow;
 
