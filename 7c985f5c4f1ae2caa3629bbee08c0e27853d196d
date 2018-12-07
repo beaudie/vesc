@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78c2c36b_dd4f75b1",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-07T13:11:11Z",
+      "side": 0,
+      "message": "The texel-buffer usages were prematurely added in a previous commit (similar to index buffer), but the solution for vertex buffers ended up being very different.",
+      "revId": "7c985f5c4f1ae2caa3629bbee08c0e27853d196d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

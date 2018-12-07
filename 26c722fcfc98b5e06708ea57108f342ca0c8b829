@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e526b5a5_55be4d14",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-07T13:11:11Z",
+      "side": 1,
+      "message": "(`git cl format` incoming)\n\nSee VertexArrayVk.cpp.",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5db9b311_8ced5afe",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-07T13:11:11Z",
+      "side": 1,
+      "message": "Tempted to turn off clang formatting to keep it like this:\n\n    flags |\u003d srcIsInt \u0026\u0026 destIsInt ? ConvertVertex_comp::kIntToInt\n           : srcIsUint \u0026\u0026 destIsUint ? ConvertVertex_comp::kUintToUint\n           : srcIsInt ? ConvertVertex_comp::kIntToFloat\n           : srcIsUint ? ConvertVertex_comp::kUintToFloat\n           : srcIsSnorm ? ConvertVertex_comp::kSnormToFloat\n           : srcIsUnorm ? ConvertVertex_comp::kUnormToFloat\n           : srcIsFixed ? ConvertVertex_comp::kFixedToFloat\n\t   : ConvertVertex_comp::kFloatToFloat;",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "984d047f_58cec29c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1051,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-07T13:11:11Z",
+      "side": 1,
+      "message": "To be honest, this assert is superficial at this point. We might as well remove it.\n\nAlternatively, why is InterleavedAttributeDataBenchmark doing a flush() after every draw?!",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b27f6a9_66f3e9b6",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-07T13:11:11Z",
+      "side": 1,
+      "message": "Nexus 5 builds revealed a few bugs with their lack of support for many formats and unusual limits. All those fixed however, I still see failure on a few tests.\n\n- I verified that converted array on GPU is equal to the one on CPU (I read back the results here, performed CPU conversion and asserted that they are within 1e-6 margin)\n- I verified that the graph edges are correct\n- I verified that the commands are executed in the right order with the right barrier\n- I forced skip \u003d 1 on initFallbackBuffer so all platforms (including deqp tests) would exercise the attribute conversion code (which revealed a few bugs too, and fixed), but they are all green at this point.\n- Setting both barrier source and destination access masks to 0x1FFF didn\u0027t help.\n- Setting barrier source stage to Compute (instead of All Commands, in case they forgot to include Compute in that) didn\u0027t help.\n- Only thing that seems to work is to issue a flush.\n\nI\u0027m fairly certain there is a driver issue involved.  Having a memory barrier with all stages and all accesses on both src and dest should have completely isolated the compute and graphic calls, but it looks like it doesn\u0027t.",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a39428af_e3c9a716",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-07T13:11:11Z",
+      "side": 1,
+      "message": "It\u0027s doable, at a cost of reading the source data through multiple reads and stitching the pieces together, but let\u0027s keep that for a future change.",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f40dce12_ad3a1869",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000001F.inc",
+        "patchSetId": 28
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-07T13:11:11Z",
+      "side": 1,
+      "message": "@yuly, if you are still concerned about angle binary size, it looks like the shader binaries are easily compressible (look at all them zeros!).",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52070db5_d3c36576",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertVertex.comp",
+        "patchSetId": 28
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-07T13:11:11Z",
+      "side": 1,
+      "message": "I have a change with a modification to use a uniform texel buffer here, which optimizes the shader a little bit, but that needs BufferHelper managing multiple views. I decided to leave that for another time.",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5c17e01_177ddcf6",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-07T13:11:11Z",
+      "side": 1,
+      "message": "Increases coverage of the conversion code.",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
