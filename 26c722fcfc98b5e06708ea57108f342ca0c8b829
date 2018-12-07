@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "e2b6360d_f97507a9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-07T13:21:54Z",
+      "side": 1,
+      "message": "@tobin, if you end up testing this CL on different phones, it would be interesting to know which of them are affected by this bug, which you can find by setting this to false and running your application (or better, angle_end2end_tests). FYI, these are the failing tests:\n\nangle_end2end_tests on Android device Nexus 5X (with patch) Run on OS: \u0027Android\u0027\nfailures:\nVertexAttributeTest.UsingDifferentFormatAndSameBuffer/ES2_VULKAN\nAttributeLayoutMemoryIndexed.Test/ES2_VULKAN\nSimpleStateChangeTest.UpdateBufferInUse/ES2_VULKAN\nStateChangeTest.VertexBufferUpdatedAfterDraw/ES2_VULKAN\nVertexAttributeTest.NegativeUsingDifferentFormatAndSameBuffer/ES2_VULKAN\nAttributeLayoutNonIndexed.Test/ES2_VULKAN\nAttributeLayoutBufferIndexed.Test/ES2_VULKAN\nVertexAttributeTest.MixedUsingBufferAndClientMemoryPointer/ES2_VULKAN",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "984d047f_58cec29c",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 28
