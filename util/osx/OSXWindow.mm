@@ -6,7 +6,7 @@
 
 // OSXWindow.mm: Implementation of OSWindow for OSX
 
-#include "osx/OSXWindow.h"
+#include "util/osx/OSXWindow.h"
 
 #include <set>
 // Include Carbon to use the keycode names in Carbon's Event.h

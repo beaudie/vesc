@@ -12,7 +12,7 @@
 #include <stdint.h>
 #include <time.h>
 
-#include "Timer.h"
+#include "util/Timer.h"
 
 class OSXTimer : public Timer
 {

@@ -16,7 +16,7 @@
 
 #include <export.h>
 
-#include "OSWindow.h"
+#include "util/OSWindow.h"
 
 class ANGLE_EXPORT X11Window : public OSWindow
 {
