@@ -13,9 +13,9 @@
 #include "ANGLEPerfTest.h"
 #include "common/vector_utils.h"
 #include "platform/WorkaroundsD3D.h"
-#include "shader_utils.h"
 #include "test_utils/gl_raii.h"
 #include "tests/test_utils/ANGLETest.h"
+#include "util/shader_utils.h"
 
 #include <string.h>
 

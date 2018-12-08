@@ -12,9 +12,9 @@
 #include <EGL/eglext.h>
 #include <X11/Xlib.h>
 
-#include "OSWindow.h"
 #include "test_utils/ANGLETest.h"
-#include "x11/X11Window.h"
+#include "util/OSWindow.h"
+#include "util/x11/X11Window.h"
 
 using namespace angle;
 

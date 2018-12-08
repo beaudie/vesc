@@ -11,10 +11,25 @@
 
 #include <vector>
 
-#include "OSWindow.h"
 #include "media/yuvtest.inl"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
+#include "util/EGLWindow.h"
+#include "util/OSWindow.h"
+
+// Make sure we don't define entry point prototypes.
+#if defined(EGL_EGLEXT_PROTOTYPES)
+#    undef EGL_EGLEXT_PROTOTYPES
+#endif  // defined(EGL_EGLEXT_PROTOTYPES)
+
+#include <EGL/eglext_angle.h>
+
+// Must be included before d3d11.h.
+#if defined(FAR)
+#    undef FAR
+#endif
+
+#include <d3d11.h>
 
 using namespace angle;
 
@@ -46,6 +61,22 @@ class EGLStreamTest : public ANGLETest
         setConfigAlphaBits(8);
         setConfigDepthBits(24);
     }
+
+    void SetUp() override
+    {
+        ANGLETest::SetUp();
+
+        eglCreateStreamProducerD3DTextureANGLE =
+            reinterpret_cast<PFNEGLCREATESTREAMPRODUCERD3DTEXTUREANGLEPROC>(
+                eglGetProcAddress("eglCreateStreamProducerD3DTextureANGLE"));
+        ASSERT_NE(nullptr, eglCreateStreamProducerD3DTextureANGLE);
+        eglStreamPostD3DTextureANGLE = reinterpret_cast<PFNEGLSTREAMPOSTD3DTEXTUREANGLEPROC>(
+            eglGetProcAddress("eglStreamPostD3DTextureANGLE"));
+        ASSERT_NE(nullptr, eglStreamPostD3DTextureANGLE);
+    }
+
+    PFNEGLCREATESTREAMPRODUCERD3DTEXTUREANGLEPROC eglCreateStreamProducerD3DTextureANGLE = nullptr;
+    PFNEGLSTREAMPOSTD3DTEXTUREANGLEPROC eglStreamPostD3DTextureANGLE                     = nullptr;
 };
 
 // Tests validation of the stream API
@@ -407,6 +438,14 @@ class D3D11TextureStreamSamplingTest : public ANGLETest
         EGLDeviceEXT eglDevice;
         eglQueryDisplayAttribEXT(mDisplay, EGL_DEVICE_EXT, (EGLAttrib *)&eglDevice);
         eglQueryDeviceAttribEXT(eglDevice, EGL_D3D11_DEVICE_ANGLE, (EGLAttrib *)&mD3D);
+
+        eglCreateStreamProducerD3DTextureANGLE =
+            reinterpret_cast<PFNEGLCREATESTREAMPRODUCERD3DTEXTUREANGLEPROC>(
+                eglGetProcAddress("eglCreateStreamProducerD3DTextureANGLE"));
+        ASSERT_NE(nullptr, eglCreateStreamProducerD3DTextureANGLE);
+        eglStreamPostD3DTextureANGLE = reinterpret_cast<PFNEGLSTREAMPOSTD3DTEXTUREANGLEPROC>(
+            eglGetProcAddress("eglStreamPostD3DTextureANGLE"));
+        ASSERT_NE(nullptr, eglStreamPostD3DTextureANGLE);
     }
 
     void TearDown() override
@@ -426,6 +465,9 @@ class D3D11TextureStreamSamplingTest : public ANGLETest
     GLuint mRB           = 0;
     GLuint mFB           = 0;
     ID3D11Device *mD3D;
+
+    PFNEGLCREATESTREAMPRODUCERD3DTEXTUREANGLEPROC eglCreateStreamProducerD3DTextureANGLE = nullptr;
+    PFNEGLSTREAMPOSTD3DTEXTUREANGLEPROC eglStreamPostD3DTextureANGLE                     = nullptr;
 };
 
 // Test RGBA texture sampling via EGLStreams
