@@ -6,6 +6,8 @@
 
 #include "test_utils/angle_test_configs.h"
 
+#include "util/util_gl.h"
+
 namespace angle
 {
 

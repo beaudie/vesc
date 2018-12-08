@@ -8,8 +8,8 @@
 // egl_loader_autogen.h:
 //   Simple EGL function loader.
 
-#ifndef UTIL_EGL_LOADER_AUTOGEN_H_
-#define UTIL_EGL_LOADER_AUTOGEN_H_
+#ifndef LIBEGL_EGL_LOADER_AUTOGEN_H_
+#define LIBEGL_EGL_LOADER_AUTOGEN_H_
 
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
@@ -106,4 +106,4 @@ using LoadProc    = GenericProc(KHRONOS_APIENTRY *)(const char *);
 void LoadEGL(LoadProc loadProc);
 }  // namespace angle
 
-#endif  // UTIL_EGL_LOADER_AUTOGEN_H_
+#endif  // LIBEGL_EGL_LOADER_AUTOGEN_H_
