@@ -81,4 +81,40 @@ bool StabilizeCPUForBenchmarking()
     return success;
 }
 
+class PosixLibrary : public Library
+{
+  public:
+    PosixLibrary(const char *libraryName)
+    {
+        char buffer[1000];
+        snprintf(buffer, 1000, "%s.%s", libraryName, GetSharedLibraryExtension());
+        mModule = dlopen(buffer, RTLD_NOW);
+    }
+
+    ~PosixLibrary() override
+    {
+        if (mModule)
+        {
+            dlclose(mModule);
+        }
+    }
+
+    void *getSymbol(const char *symbolName) override
+    {
+        if (!mModule)
+        {
+            return nullptr;
+        }
+
+        return dlsym(mModule, symbolName);
+    }
+
+  private:
+    void *mModule = nullptr;
+};
+
+Library *OpenSharedLibrary(const char *libraryName)
+{
+    return new PosixLibrary(libraryName);
+}
 } // namespace angle
