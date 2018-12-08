@@ -6,10 +6,16 @@
 
 #include "test_utils/ANGLETest.h"
 
+// Must be included before d3d11.h.
+#if defined(FAR)
+#    undef FAR
+#endif
+
 #include <d3d11.h>
 #include <cstdint>
-#include "OSWindow.h"
-#include "com_utils.h"
+
+#include "util/OSWindow.h"
+#include "util/com_utils.h"
 
 using namespace angle;
 
