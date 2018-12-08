@@ -2923,6 +2923,21 @@ bool ValidateDrawElementsBase(Context *context, PrimitiveMode mode, DrawElements
         return false;
     }
 
+    intptr_t drawElementsError = context->getStateCache().getBasicDrawElementsError(context);
+    if (drawElementsError)
+    {
+        // All errors from ValidateDrawElementsStates return INVALID_OPERATION.
+        const char *errorMessage = reinterpret_cast<const char *>(drawElementsError);
+        context->validationError(GL_INVALID_OPERATION, errorMessage);
+        return false;
+    }
+
+    // Note that we are missing overflow checks for active transform feedback buffers.
+    return true;
+}
+
+const char *ValidateDrawElementsStates(Context *context)
+{
     // TODO(jmadill): Cache all of these into fast checks. http://anglebug.com/2966
     const State &state = context->getGLState();
 
@@ -2937,12 +2952,8 @@ bool ValidateDrawElementsBase(Context *context, PrimitiveMode mode, DrawElements
             // It is an invalid operation to call DrawElements, DrawRangeElements or
             // DrawElementsInstanced while transform feedback is active, (3.0.2, section 2.14, pg
             // 86)
-            context->validationError(GL_INVALID_OPERATION,
-                                     kUnsupportedDrawModeForTransformFeedback);
-            return false;
+            return kUnsupportedDrawModeForTransformFeedback;
         }
-
-        // Note that we are missing overflow checks for the transform feedback buffers.
     }
 
     const VertexArray *vao     = state.getVertexArray();
@@ -2955,16 +2966,13 @@ bool ValidateDrawElementsBase(Context *context, PrimitiveMode mode, DrawElements
             // WebGL buffers cannot be mapped/unmapped because the MapBufferRange,
             // FlushMappedBufferRange, and UnmapBuffer entry points are removed from the
             // WebGL 2.0 API. https://www.khronos.org/registry/webgl/specs/latest/2.0/#5.14
-            context->validationError(GL_INVALID_OPERATION, kBufferMapped);
-            return false;
+            return kBufferMapped;
         }
 
         if (context->getExtensions().webglCompatibility &&
             elementArrayBuffer->isBoundForTransformFeedbackAndOtherUse())
         {
-            context->validationError(GL_INVALID_OPERATION,
-                                     kElementArrayBufferBoundForTransformFeedback);
-            return false;
+            return kElementArrayBufferBoundForTransformFeedback;
         }
     }
     else
@@ -2975,12 +2983,11 @@ bool ValidateDrawElementsBase(Context *context, PrimitiveMode mode, DrawElements
         if (!context->getGLState().areClientArraysEnabled() ||
             context->getExtensions().webglCompatibility)
         {
-            context->validationError(GL_INVALID_OPERATION, kMustHaveElementArrayBinding);
-            return false;
+            return kMustHaveElementArrayBinding;
         }
     }
 
-    return true;
+    return nullptr;
 }
 
 bool ValidateDrawElementsCommon(Context *context,
