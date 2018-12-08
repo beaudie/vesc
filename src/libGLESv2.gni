@@ -707,6 +707,8 @@ libangle_vulkan_sources = [
   "src/libANGLE/renderer/vulkan/DispatchUtilsVk.h",
   "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
   "src/libANGLE/renderer/vulkan/DisplayVk.h",
+  "src/libANGLE/renderer/vulkan/DrawUtilsVk.cpp",
+  "src/libANGLE/renderer/vulkan/DrawUtilsVk.h",
   "src/libANGLE/renderer/vulkan/FenceNVVk.cpp",
   "src/libANGLE/renderer/vulkan/FenceNVVk.h",
   "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
