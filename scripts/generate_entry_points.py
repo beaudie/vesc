@@ -8,34 +8,21 @@
 #   Generates the OpenGL bindings and entry point layers for ANGLE.
 
 import sys, os, pprint, json
-import xml.etree.ElementTree as etree
 from datetime import date
+import registry_xml
 
-# List of supported extensions. Add to this list to enable new extensions
-# available in gl.xml.
+# Handle inputs/outputs for run_code_generation.py's auto_script
+if len(sys.argv) == 2 and sys.argv[1] == 'inputs':
 
-angle_extensions = [
-    # ANGLE extensions
-    "GL_CHROMIUM_bind_uniform_location",
-    "GL_CHROMIUM_framebuffer_mixed_samples",
-    "GL_CHROMIUM_path_rendering",
-    "GL_CHROMIUM_copy_texture",
-    "GL_CHROMIUM_copy_compressed_texture",
-    "GL_ANGLE_request_extension",
-    "GL_ANGLE_robust_client_memory",
-    "GL_ANGLE_multiview",
-    "GL_ANGLE_copy_texture_3d",
-]
+    inputs = [
+        'entry_point_packed_gl_enums.json',
+        'gl.xml',
+        'gl_angle_ext.xml',
+        'registry_xml.py',
+    ]
 
-gles1_extensions = [
-    # ES1 (Possibly the min set of extensions needed by Android)
-    "GL_OES_draw_texture",
-    "GL_OES_framebuffer_object",
-    "GL_OES_matrix_palette",
-    "GL_OES_point_size_array",
-    "GL_OES_query_matrix",
-    "GL_OES_texture_cube_map",
-]
+    print(",".join(inputs))
+    sys.exit(0)
 
 # List of GLES1 extensions for which we don't need to add Context.h decls.
 gles1_no_context_decl_extensions = [
@@ -47,39 +34,6 @@ gles1_no_context_decl_extensions = [
 gles1_overloaded = [
     "glGetPointerv",
 ]
-
-supported_extensions = sorted(angle_extensions + gles1_extensions + [
-    # ES2+
-    "GL_ANGLE_framebuffer_blit",
-    "GL_ANGLE_framebuffer_multisample",
-    "GL_ANGLE_instanced_arrays",
-    "GL_ANGLE_texture_multisample",
-    "GL_ANGLE_translated_shader_source",
-    "GL_EXT_blend_func_extended",
-    "GL_EXT_debug_marker",
-    "GL_EXT_discard_framebuffer",
-    "GL_EXT_disjoint_timer_query",
-    "GL_EXT_draw_buffers",
-    "GL_EXT_geometry_shader",
-    "GL_EXT_map_buffer_range",
-    "GL_EXT_occlusion_query_boolean",
-    "GL_EXT_robustness",
-    "GL_EXT_texture_storage",
-    "GL_KHR_debug",
-    "GL_NV_fence",
-    "GL_OES_EGL_image",
-    "GL_OES_get_program_binary",
-    "GL_OES_mapbuffer",
-    "GL_OES_texture_border_clamp",
-    "GL_OES_texture_storage_multisample_2d_array",
-    "GL_OES_vertex_array_object",
-    "GL_KHR_parallel_shader_compile",
-    "GL_ANGLE_multi_draw",
-])
-
-# The EGL_ANGLE_explicit_context extension is generated differently from other extensions.
-# Toggle generation here.
-support_EGL_ANGLE_explicit_context = True
 
 # This is a list of exceptions for entry points which don't want to have
 # the EVENT macro. This is required for some debug marker entry points.
@@ -244,7 +198,7 @@ template_glext_explicit_context_inc = """// GENERATED FILE - DO NOT EDIT.
 #endif
 """
 
-template_glext_function_pointer = """typedef {return_type}(GL_APIENTRYP PFN{name_upper}{explicit_context_suffix_upper})({explicit_context_param}{explicit_context_comma}{params});"""
+template_glext_function_pointer = """typedef {return_type}(GL_APIENTRYP PFN{name_upper}{explicit_context_suffix_upper}PROC)({explicit_context_param}{explicit_context_comma}{params});"""
 template_glext_function_prototype = """{apicall} {return_type}GL_APIENTRY {name}{explicit_context_suffix}({explicit_context_param}{explicit_context_comma}{params});"""
 
 template_validation_header = """// GENERATED FILE - DO NOT EDIT.
@@ -325,10 +279,6 @@ template_validation_proto = "bool Validate%s(%s);"
 
 def script_relative(path):
     return os.path.join(os.path.dirname(sys.argv[0]), path)
-
-tree = etree.parse(script_relative('gl.xml'))
-root = tree.getroot()
-commands = root.find(".//commands[@namespace='GL']")
 
 with open(script_relative('entry_point_packed_gl_enums.json')) as f:
     cmd_packed_gl_enums = json.loads(f.read())
@@ -707,33 +657,6 @@ def append_angle_extensions(base_root):
         insertion_point.extend(extension)
     return base_root
 
-class GLCommandNames:
-    def __init__(self):
-        self.command_names = {}
-
-    def get_commands(self, version):
-        return self.command_names[version]
-
-    def get_all_commands(self):
-        cmd_names = []
-        # Combine all the version lists into a single list
-        for version, version_cmd_names in sorted(self.command_names.iteritems()):
-            cmd_names += version_cmd_names
-
-        return cmd_names
-
-    def add_commands(self, version, commands):
-        # Add key if it doesn't exist
-        if version not in self.command_names:
-            self.command_names[version] = []
-        # Add the commands that aren't duplicates
-        self.command_names[version] += commands
-
-root = append_angle_extensions(root)
-
-all_commands = root.findall('commands/command')
-all_cmd_names = GLCommandNames()
-
 gles1decls = {}
 
 gles1decls['core'] = []
@@ -743,6 +666,8 @@ libgles_ep_defs = []
 libgles_ep_exports = []
 
 ordinal_start = 1
+
+xml = registry_xml.RegistryXML('gl.xml', 'gl_angle_ext.xml')
 
 # First run through the main GLES entry points.  Since ES2+ is the primary use
 # case, we go through those first and then add ES1-only APIs at the end.
@@ -755,13 +680,12 @@ for major_version, minor_version in [[2, 0], [3, 0], [3, 1], [1, 0]]:
         name_prefix = "GL_VERSION_ES_CM_"
 
     comment = annotation.replace("_", ".")
-    gles_xpath = ".//feature[@name='{}{}']//command".format(name_prefix, annotation)
-    gles_commands = [cmd.attrib['name'] for cmd in root.findall(gles_xpath)]
+    feature_name = "{}{}".format(name_prefix, annotation)
 
-    # Remove commands that have already been processed
-    gles_commands = [cmd for cmd in gles_commands if cmd not in all_cmd_names.get_all_commands()]
+    xml.AddCommands(feature_name, annotation)
 
-    all_cmd_names.add_commands(annotation, gles_commands)
+    gles_commands = xml.commands[annotation]
+    all_commands = xml.all_commands
 
     decls, defs, libgles_defs, libgles_exports, validation_protos = get_entry_points(
         all_commands, gles_commands, ordinal_start, False)
@@ -804,62 +728,22 @@ for major_version, minor_version in [[2, 0], [3, 0], [3, 1], [1, 0]]:
 extension_defs = []
 extension_decls = []
 
-# Use a first step to run through the extensions so we can generate them
-# in sorted order.
-ext_data = {}
-
 # Accumulated validation prototypes.
 ext_validation_protos = []
 
-for gles1ext in gles1_extensions:
+for gles1ext in registry_xml.gles1_extensions:
     gles1decls['exts'][gles1ext] = []
 
-for extension in root.findall("extensions/extension"):
-    extension_name = extension.attrib['name']
-    if not extension_name in supported_extensions:
-        continue
+xml.AddExtensionCommands(registry_xml.supported_extensions, ['gles2', 'gles1'])
 
-    ext_cmd_names = []
-
-    # There's an extra step here to filter out 'api=gl' extensions. This
-    # is necessary for handling KHR extensions, which have separate entry
-    # point signatures (without the suffix) for desktop GL. Note that this
-    # extra step is necessary because of Etree's limited Xpath support.
-    for require in extension.findall('require'):
-        if 'api' in require.attrib and require.attrib['api'] != 'gles2' and require.attrib['api'] != 'gles1':
-            continue
-
-        # Another special case for EXT_texture_storage
-        filter_out_comment = "Supported only if GL_EXT_direct_state_access is supported"
-        if 'comment' in require.attrib and require.attrib['comment'] == filter_out_comment:
-            continue
-
-        extension_commands = require.findall('command')
-        ext_cmd_names += [command.attrib['name'] for command in extension_commands]
-
-    ext_data[extension_name] = sorted(ext_cmd_names)
-
-for extension_name, ext_cmd_names in sorted(ext_data.iteritems()):
+for extension_name, ext_cmd_names in sorted(xml.ext_data.iteritems()):
 
     # Detect and filter duplicate extensions.
-    dupes = []
-    for ext_cmd in ext_cmd_names:
-        if ext_cmd in all_cmd_names.get_all_commands():
-            dupes.append(ext_cmd)
-
-    for dupe in dupes:
-        ext_cmd_names.remove(dupe)
-
-    if extension_name in gles1_extensions:
-        all_cmd_names.add_commands("glext", ext_cmd_names)
-    else:
-        all_cmd_names.add_commands("gl2ext", ext_cmd_names)
-
     decls, defs, libgles_defs, libgles_exports, validation_protos = get_entry_points(
-        all_commands, ext_cmd_names, ordinal_start, False)
+        xml.all_commands, ext_cmd_names, ordinal_start, False)
 
     # Avoid writing out entry points defined by a prior extension.
-    for dupe in dupes:
+    for dupe in xml.ext_dupes[extension_name]:
         msg = "// {} is already defined.\n".format(dupe[2:])
         defs.append(msg)
 
@@ -881,12 +765,12 @@ for extension_name, ext_cmd_names in sorted(ext_data.iteritems()):
     libgles_ep_defs += libgles_defs
     libgles_ep_exports += libgles_exports
 
-    if extension_name in gles1_extensions:
+    if extension_name in registry_xml.gles1_extensions:
         if extension_name not in gles1_no_context_decl_extensions:
             gles1decls['exts'][extension_name] = get_gles1_decls(all_commands, ext_cmd_names)
 
 # Special handling for EGL_ANGLE_explicit_context extension
-if support_EGL_ANGLE_explicit_context:
+if registry_xml.support_EGL_ANGLE_explicit_context:
     comment = "\n// EGL_ANGLE_explicit_context"
     extension_defs.append(comment)
     extension_decls.append(comment)
@@ -895,7 +779,7 @@ if support_EGL_ANGLE_explicit_context:
 
     # Get the explicit context entry points
     decls, defs, libgles_defs, libgles_exports, validation_protos = get_entry_points(
-        all_commands, all_cmd_names.get_all_commands(), ordinal_start, True)
+        xml.all_commands, xml.all_cmd_names.get_all_commands(), ordinal_start, True)
 
     # Append the explicit context entry points
     extension_decls += decls
@@ -912,7 +796,7 @@ if support_EGL_ANGLE_explicit_context:
         version = "{}{}".format(major_if_not_one, minor_if_not_zero)
 
         glext_ptrs, glext_protos = get_glext_decls(all_commands,
-            all_cmd_names.get_commands(annotation), version, True)
+            xml.all_cmd_names.get_commands(annotation), version, True)
 
         glext_ext_ptrs = []
         glext_ext_protos = []
@@ -920,10 +804,10 @@ if support_EGL_ANGLE_explicit_context:
         # Append extensions for 1.0 and 2.0
         if(annotation == "1_0"):
             glext_ext_ptrs, glext_ext_protos = get_glext_decls(all_commands,
-                all_cmd_names.get_commands("glext"), version, True)
+                xml.all_cmd_names.get_commands("glext"), version, True)
         elif(annotation == "2_0"):
             glext_ext_ptrs, glext_ext_protos = get_glext_decls(all_commands,
-                all_cmd_names.get_commands("gl2ext"), version, True)
+                xml.all_cmd_names.get_commands("gl2ext"), version, True)
 
         glext_ptrs += glext_ext_ptrs
         glext_protos += glext_ext_protos
@@ -958,7 +842,7 @@ write_validation_header("EXT", "extension", ext_validation_protos)
 
 write_context_api_decls("1_0", context_gles_header, gles1decls)
 
-sorted_cmd_names = ["Invalid"] + [cmd[2:] for cmd in sorted(all_cmd_names.get_all_commands())]
+sorted_cmd_names = ["Invalid"] + [cmd[2:] for cmd in sorted(xml.all_cmd_names.get_all_commands())]
 
 entry_points_enum = template_entry_points_enum_header.format(
     script_name = os.path.basename(sys.argv[0]),
