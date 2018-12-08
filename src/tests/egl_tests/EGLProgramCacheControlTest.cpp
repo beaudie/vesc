@@ -9,6 +9,7 @@
 #include "common/angleutils.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
+#include "util/EGLWindow.h"
 
 using namespace angle;
 
@@ -38,8 +39,22 @@ class EGLProgramCacheControlTest : public ANGLETest
 
         ANGLETest::SetUp();
 
+        eglProgramCacheGetAttribANGLE = reinterpret_cast<PFNEGLPROGRAMCACHEGETATTRIBANGLEPROC>(
+            eglGetProcAddress("eglProgramCacheGetAttribANGLE"));
+        eglProgramCacheQueryANGLE = reinterpret_cast<PFNEGLPROGRAMCACHEQUERYANGLEPROC>(
+            eglGetProcAddress("eglProgramCacheQueryANGLE"));
+        eglProgramCachePopulateANGLE = reinterpret_cast<PFNEGPROGRAMCACHELPOPULATEANGLEPROC>(
+            eglGetProcAddress("eglProgramCachePopulateANGLE"));
+        eglProgramCacheResizeANGLE = reinterpret_cast<PFNEGLPROGRAMCACHERESIZEANGLEPROC>(
+            eglGetProcAddress("eglProgramCacheResizeANGLE"));
+
         if (extensionAvailable())
         {
+            ASSERT_NE(nullptr, eglProgramCacheGetAttribANGLE);
+            ASSERT_NE(nullptr, eglProgramCacheQueryANGLE);
+            ASSERT_NE(nullptr, eglProgramCachePopulateANGLE);
+            ASSERT_NE(nullptr, eglProgramCacheResizeANGLE);
+
             EGLDisplay display = getEGLWindow()->getDisplay();
             setContextProgramCacheEnabled(true);
             eglProgramCacheResizeANGLE(display, kEnabledCacheSize, EGL_PROGRAM_CACHE_RESIZE_ANGLE);
@@ -63,6 +78,11 @@ class EGLProgramCacheControlTest : public ANGLETest
 
     ProgramKeyType mCachedKey;
     std::vector<uint8_t> mCachedBinary;
+
+    PFNEGLPROGRAMCACHEGETATTRIBANGLEPROC eglProgramCacheGetAttribANGLE = nullptr;
+    PFNEGLPROGRAMCACHEQUERYANGLEPROC eglProgramCacheQueryANGLE         = nullptr;
+    PFNEGPROGRAMCACHELPOPULATEANGLEPROC eglProgramCachePopulateANGLE   = nullptr;
+    PFNEGLPROGRAMCACHERESIZEANGLEPROC eglProgramCacheResizeANGLE       = nullptr;
 };
 
 void TestCacheProgram(PlatformMethods *platform,
