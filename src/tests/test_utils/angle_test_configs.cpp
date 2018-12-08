@@ -6,6 +6,9 @@
 
 #include "test_utils/angle_test_configs.h"
 
+#include "util/egl_loader_autogen.h"
+#include "util/gles_loader_autogen.h"
+
 namespace angle
 {
 
