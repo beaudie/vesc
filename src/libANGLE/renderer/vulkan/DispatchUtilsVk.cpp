@@ -252,9 +252,7 @@ angle::Result DispatchUtilsVk::setupProgramCommon(vk::Context *context,
     return angle::Result::Continue;
 }
 
-template <angle::Result (vk::ShaderLibrary::*getShader)(vk::Context *,
-                                                        uint32_t,
-                                                        vk::RefCounted<vk::ShaderAndSerial> **),
+template <DispatchUtilsVk::GetShader getShader,
           DispatchUtilsVk::Function function,
           typename ShaderParams>
 angle::Result DispatchUtilsVk::setupProgram(vk::Context *context,
