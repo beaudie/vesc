@@ -20,10 +20,53 @@ if len(sys.argv) == 2 and sys.argv[1] == 'inputs':
         'gl.xml',
         'gl_angle_ext.xml',
         'registry_xml.py',
+        'wgl.xml',
     ]
 
     print(",".join(inputs))
     sys.exit(0)
+
+def write_header(all_cmds, api, preamble, path, prefix = ""):
+    file_name = "%s_loader_autogen.h" % api
+    header_path = registry_xml.path_to(path, file_name)
+    with open(header_path, "w") as out:
+        var_protos = ["extern PFN%sPROC %s%s;" % (cmd.upper(), prefix, cmd) for cmd in all_cmds]
+        loader_header = template_loader_h.format(
+            script_name = os.path.basename(sys.argv[0]),
+            data_source_name = "%s.xml and %s_angle_ext.xml" % (api, api),
+            year = date.today().year,
+            function_pointers = "\n".join(var_protos),
+            api_upper = api.upper(),
+            api_lower = api,
+            preamble = preamble)
+
+        out.write(loader_header)
+        out.close()
+
+def write_source(all_cmds, api, path, prefix = ""):
+    file_name = "%s_loader_autogen.cpp" % api
+    source_path = registry_xml.path_to(path, file_name)
+    with open(source_path, "w") as out:
+        var_defs = ["PFN%sPROC %s%s;" % (cmd.upper(), prefix, cmd) for cmd in all_cmds]
+
+        setter = "    %s%s = reinterpret_cast<PFN%sPROC>(loadProc(\"%s\"));"
+        setters = [setter % (prefix, cmd, cmd.upper(), cmd) for cmd in all_cmds]
+
+        clean_path = os.path.relpath(path, registry_xml.script_relative('..'))
+        clean_path = clean_path.replace("\\", "/")
+
+        loader_source = template_loader_cpp.format(
+            script_name = os.path.basename(sys.argv[0]),
+            data_source_name = "%s.xml and %s_angle_ext.xml" % (api, api),
+            year = date.today().year,
+            function_pointers = "\n".join(var_defs),
+            set_pointers = "\n".join(setters),
+            api_upper = api.upper(),
+            api_lower = api,
+            path = clean_path)
+
+        out.write(loader_source)
+        out.close()
 
 def gen_gl_loader():
     xml = registry_xml.RegistryXML("gl.xml", "gl_angle_ext.xml")
@@ -49,41 +92,9 @@ def gen_gl_loader():
     if registry_xml.support_EGL_ANGLE_explicit_context:
         all_cmds += [cmd + "ContextANGLE" for cmd in xml.all_cmd_names.get_all_commands()]
 
-    loader_header_path = registry_xml.path_to(os.path.join("..", "util"), "gles_loader_autogen.h")
-    with open(loader_header_path, "w") as out:
-
-        var_protos = ["extern PFN%sPROC %s;" % (cmd.upper(), cmd) for cmd in all_cmds]
-        loader_header = template_loader_h.format(
-            script_name = os.path.basename(sys.argv[0]),
-            data_source_name = "gl.xml and gl_angle_ext.xml",
-            year = date.today().year,
-            function_pointers = "\n".join(var_protos),
-            api_upper = "GLES",
-            api_lower = "gles",
-            preamble = gles_preamble)
-
-        out.write(loader_header)
-        out.close()
-
-    loader_source_path = registry_xml.path_to(os.path.join("..", "util"), "gles_loader_autogen.cpp")
-    with open(loader_source_path, "w") as out:
-
-        var_defs = ["PFN%sPROC %s;" % (cmd.upper(), cmd) for cmd in all_cmds]
-
-        setter = "    %s = reinterpret_cast<PFN%sPROC>(loadProc(\"%s\"));"
-        setters = [setter % (cmd, cmd.upper(), cmd) for cmd in all_cmds]
-
-        loader_source = template_loader_cpp.format(
-            script_name = os.path.basename(sys.argv[0]),
-            data_source_name = "gl.xml and gl_angle_ext.xml",
-            year = date.today().year,
-            function_pointers = "\n".join(var_defs),
-            set_pointers = "\n".join(setters),
-            api_upper = "GLES",
-            api_lower = "gles")
-
-        out.write(loader_source)
-        out.close()
+    path = os.path.join("..", "util")
+    write_header(all_cmds, "gles", gles_preamble, path)
+    write_source(all_cmds, "gles", path)
 
 def gen_egl_loader():
 
@@ -122,46 +133,43 @@ def gen_egl_loader():
 
     all_cmds = xml.all_cmd_names.get_all_commands()
 
-    loader_header_path = registry_xml.path_to(os.path.join("..", "util"), "egl_loader_autogen.h")
-    with open(loader_header_path, "w") as out:
+    path = os.path.join("..", "util")
+    write_header(all_cmds, "egl", egl_preamble, path)
+    write_source(all_cmds, "egl", path)
 
-        var_protos = ["extern PFN%sPROC %s;" % (cmd.upper(), cmd) for cmd in all_cmds]
-        loader_header = template_loader_h.format(
-            script_name = os.path.basename(sys.argv[0]),
-            data_source_name = "egl.xml and egl_angle_ext.xml",
-            year = date.today().year,
-            function_pointers = "\n".join(var_protos),
-            api_upper = "EGL",
-            api_lower = "egl",
-            preamble = egl_preamble)
+def gen_wgl_loader():
 
-        out.write(loader_header)
-        out.close()
+    supported_wgl_extensions = [
+        "WGL_ARB_create_context",
+        "WGL_ARB_extensions_string",
+        "WGL_EXT_swap_control",
+    ]
 
-    loader_source_path = registry_xml.path_to(os.path.join("..", "util"), "egl_loader_autogen.cpp")
-    with open(loader_source_path, "w") as out:
+    xml = registry_xml.RegistryXML("wgl.xml")
 
-        var_defs = ["PFN%sPROC %s;" % (cmd.upper(), cmd) for cmd in all_cmds]
+    # First run through the main GLES entry points.  Since ES2+ is the primary use
+    # case, we go through those first and then add ES1-only APIs at the end.
+    for major_version, minor_version in [[1, 0]]:
+        annotation = "{}_{}".format(major_version, minor_version)
+        name_prefix = "WGL_VERSION_"
 
-        setter = "    %s = reinterpret_cast<PFN%sPROC>(loadProc(\"%s\"));"
-        setters = [setter % (cmd, cmd.upper(), cmd) for cmd in all_cmds]
+        feature_name = "{}{}".format(name_prefix, annotation)
 
-        loader_source = template_loader_cpp.format(
-            script_name = os.path.basename(sys.argv[0]),
-            data_source_name = "egl.xml and egl_angle_ext.xml",
-            year = date.today().year,
-            function_pointers = "\n".join(var_defs),
-            set_pointers = "\n".join(setters),
-            api_upper = "EGL",
-            api_lower = "egl")
+        xml.AddCommands(feature_name, annotation)
 
-        out.write(loader_source)
-        out.close()
+    xml.AddExtensionCommands(supported_wgl_extensions, ['wgl'])
+
+    all_cmds = xml.all_cmd_names.get_all_commands()
+
+    path = os.path.join("..", "util", "windows")
+    write_header(all_cmds, "wgl", wgl_preamble, path, "_")
+    write_source(all_cmds, "wgl", path, "_")
 
 # Generate simple function loader for the tests.
 def main():
     gen_gl_loader()
     gen_egl_loader()
+    gen_wgl_loader()
 
 gles_preamble = """#if defined(GL_GLES_PROTOTYPES)
 #undef GL_GLES_PROTOTYPES
@@ -192,6 +200,11 @@ egl_preamble = """#if defined(EGL_EGL_PROTOTYPES)
 
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
+"""
+
+wgl_preamble = """
+#include <WGL/wgl.h>
+#include <GLES2/gl2.h>
 """
 
 template_loader_h = """// GENERATED FILE - DO NOT EDIT.
@@ -230,7 +243,7 @@ template_loader_cpp = """// GENERATED FILE - DO NOT EDIT.
 // {api_lower}_loader_autogen.cpp:
 //   Simple {api_upper} function loader.
 
-#include "util/{api_lower}_loader_autogen.h"
+#include "{path}/{api_lower}_loader_autogen.h"
 
 {function_pointers}
 
