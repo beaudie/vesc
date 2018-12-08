@@ -25,4 +25,9 @@ bool StabilizeCPUForBenchmarking()
     return true;
 }
 
+Library *OpenSharedLibrary(const char *libraryName)
+{
+    // WinRT cannot load code dynamically.
+    return nullptr;
+}
 }  // namespace angle
