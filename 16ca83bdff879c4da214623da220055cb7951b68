@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "8a35fdf3_a7906abf",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-08T00:17:45Z",
+      "side": 1,
+      "message": "nit: tabs to spaces",
+      "range": {
+        "startLine": 344,
+        "startChar": 0,
+        "endLine": 344,
+        "endChar": 1
+      },
+      "revId": "16ca83bdff879c4da214623da220055cb7951b68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aaa16ad9_8d221673",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-08T00:17:45Z",
+      "side": 1,
+      "message": "nit: tabs to spaces",
+      "range": {
+        "startLine": 346,
+        "startChar": 0,
+        "endLine": 346,
+        "endChar": 1
+      },
+      "revId": "16ca83bdff879c4da214623da220055cb7951b68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "87b3d67a_485c1082",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 3
@@ -46,6 +92,30 @@
       "revId": "16ca83bdff879c4da214623da220055cb7951b68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f952e117_639cae5c",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-08T00:17:45Z",
+      "side": 1,
+      "message": "I see. That\u0027s fine. There\u0027s probably a way to restructure this to not require a tolerance but not worth rewriting at this point. LGTM.",
+      "parentUuid": "40e70dbf_8f7b850a",
+      "range": {
+        "startLine": 379,
+        "startChar": 27,
+        "endLine": 379,
+        "endChar": 43
+      },
+      "revId": "16ca83bdff879c4da214623da220055cb7951b68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
