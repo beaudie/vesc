@@ -343,6 +343,13 @@
         "glGetTranslatedShaderSourceANGLE"
     ],
 
+    "GL_EXT_blend_func_extended": [
+        "glBindFragDataLocationIndexedEXT",
+        "glBindFragDataLocationEXT",
+        "glGetProgramResourceLocationIndexEXT",
+        "glGetFragDataIndexEXT"
+    ],
+
     "GL_EXT_texture_storage": [
         "glTexStorage2DEXT",
         "glTexStorage3DEXT"

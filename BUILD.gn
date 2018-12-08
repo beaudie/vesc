@@ -840,7 +840,7 @@ static_library("libEGL_static") {
 import("util/util.gni")
 
 config("angle_util_config") {
-  include_dirs = [ "util" ]
+  include_dirs = [ "." ]
   if (is_linux && use_x11) {
     libs = [ "X11" ]
   }
@@ -911,7 +911,7 @@ foreach(is_shared_library,
     configs += [
       ":debug_annotations_config",
       ":extra_warnings",
-      ":gl_prototypes",
+      ":no_gl_prototypes",
     ]
 
     public_configs = [
@@ -921,8 +921,6 @@ foreach(is_shared_library,
 
     deps = [
       ":angle_common",
-      ":libEGL${dep_suffix}",
-      ":libGLESv2${dep_suffix}",
     ]
 
     if (is_shared_library) {
@@ -935,6 +933,8 @@ foreach(is_shared_library,
         ]
         public_configs += [ ":shared_library_public_config" ]
       }
+    } else {
+      public_configs += [ ":angle_static" ]
     }
   }
 }

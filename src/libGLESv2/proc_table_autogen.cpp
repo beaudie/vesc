@@ -134,6 +134,11 @@ ProcEntry g_procTable[] = {
     {"glBindBufferContextANGLE", P(gl::BindBufferContextANGLE)},
     {"glBindBufferRange", P(gl::BindBufferRange)},
     {"glBindBufferRangeContextANGLE", P(gl::BindBufferRangeContextANGLE)},
+    {"glBindFragDataLocationEXT", P(gl::BindFragDataLocationEXT)},
+    {"glBindFragDataLocationEXTContextANGLE", P(gl::BindFragDataLocationEXTContextANGLE)},
+    {"glBindFragDataLocationIndexedEXT", P(gl::BindFragDataLocationIndexedEXT)},
+    {"glBindFragDataLocationIndexedEXTContextANGLE",
+     P(gl::BindFragDataLocationIndexedEXTContextANGLE)},
     {"glBindFramebuffer", P(gl::BindFramebuffer)},
     {"glBindFramebufferContextANGLE", P(gl::BindFramebufferContextANGLE)},
     {"glBindImageTexture", P(gl::BindImageTexture)},
@@ -504,6 +509,8 @@ ProcEntry g_procTable[] = {
     {"glGetFloatvContextANGLE", P(gl::GetFloatvContextANGLE)},
     {"glGetFloatvRobustANGLE", P(gl::GetFloatvRobustANGLE)},
     {"glGetFloatvRobustANGLEContextANGLE", P(gl::GetFloatvRobustANGLEContextANGLE)},
+    {"glGetFragDataIndexEXT", P(gl::GetFragDataIndexEXT)},
+    {"glGetFragDataIndexEXTContextANGLE", P(gl::GetFragDataIndexEXTContextANGLE)},
     {"glGetFragDataLocation", P(gl::GetFragDataLocation)},
     {"glGetFragDataLocationContextANGLE", P(gl::GetFragDataLocationContextANGLE)},
     {"glGetFramebufferAttachmentParameteriv", P(gl::GetFramebufferAttachmentParameteriv)},
@@ -585,6 +592,9 @@ ProcEntry g_procTable[] = {
     {"glGetProgramResourceIndexContextANGLE", P(gl::GetProgramResourceIndexContextANGLE)},
     {"glGetProgramResourceLocation", P(gl::GetProgramResourceLocation)},
     {"glGetProgramResourceLocationContextANGLE", P(gl::GetProgramResourceLocationContextANGLE)},
+    {"glGetProgramResourceLocationIndexEXT", P(gl::GetProgramResourceLocationIndexEXT)},
+    {"glGetProgramResourceLocationIndexEXTContextANGLE",
+     P(gl::GetProgramResourceLocationIndexEXTContextANGLE)},
     {"glGetProgramResourceName", P(gl::GetProgramResourceName)},
     {"glGetProgramResourceNameContextANGLE", P(gl::GetProgramResourceNameContextANGLE)},
     {"glGetProgramResourceiv", P(gl::GetProgramResourceiv)},
@@ -1286,5 +1296,5 @@ ProcEntry g_procTable[] = {
     {"glWeightPointerOES", P(gl::WeightPointerOES)},
     {"glWeightPointerOESContextANGLE", P(gl::WeightPointerOESContextANGLE)}};
 
-size_t g_numProcs = 1217;
+size_t g_numProcs = 1225;
 }  // namespace egl
