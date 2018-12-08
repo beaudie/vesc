@@ -162,10 +162,10 @@ if (is_win || is_linux || is_mac || is_android) {
     }
 
     configs += [
-      angle_root + ":gl_prototypes",
       angle_root + ":internal_config",
       angle_root + ":libANGLE_config",
       angle_root + ":library_name_config",
+      angle_root + ":no_gl_prototypes",
     ]
 
     if (is_linux && !is_component_build) {
@@ -175,13 +175,14 @@ if (is_win || is_linux || is_mac || is_android) {
 
     deps = googletest_deps + [
              angle_root + ":angle_image_util",
-             angle_root + ":angle_util",
-             angle_root + ":libEGL${angle_libs_suffix}",
-             angle_root + ":libGLESv1_CM${angle_libs_suffix}",
-             angle_root + ":libGLESv2${angle_libs_suffix}",
-             angle_root + ":preprocessor",
-             angle_root + ":translator",
+             angle_root + ":angle_util_static",
            ]
+
+    data_deps = [
+      angle_root + ":libEGL${angle_libs_suffix}",
+      angle_root + ":libGLESv1_CM${angle_libs_suffix}",
+      angle_root + ":libGLESv2${angle_libs_suffix}",
+    ]
   }
 
   import("angle_white_box_tests.gni")
@@ -213,9 +214,10 @@ if (is_win || is_linux || is_mac || is_android) {
     }
 
     configs += [
-      angle_root + ":gl_prototypes",
+      angle_root + ":no_gl_prototypes",
       angle_root + ":internal_config",
       angle_root + ":libANGLE_config",
+      angle_root + ":library_name_config",
     ]
 
     if (is_linux && !is_component_build) {
@@ -239,7 +241,10 @@ if (is_win || is_linux || is_android || is_mac) {
 
   # This test suite is for perf tests that use ANGLE's internals in some direct way.
   test("angle_white_box_perftests") {
-    include_dirs = [ "." ]
+    include_dirs = [
+      ".",
+      "../..",
+    ]
 
     sources = angle_white_box_perf_tests_sources
 
@@ -274,8 +279,9 @@ if (is_win || is_linux || is_android || is_mac) {
 
     configs += [
       angle_root + ":internal_config",
-      angle_root + ":gl_prototypes",
+      angle_root + ":no_gl_prototypes",
       angle_root + ":libANGLE_config",
+      angle_root + ":library_name_config",
     ]
 
     if (is_linux && !is_component_build) {
@@ -296,10 +302,13 @@ if (is_win || is_linux || is_android || is_mac) {
     deps = googletest_deps + [
              angle_root + ":angle_common",
              angle_root + ":angle_util_static",
-             angle_root + ":libEGL",
-             angle_root + ":libGLESv2",
              angle_root + "/third_party/jsoncpp:jsoncpp",
            ]
+
+    data_deps = [
+      angle_root + ":libEGL${angle_libs_suffix}",
+      angle_root + ":libGLESv2${angle_libs_suffix}",
+    ]
 
     if (is_android) {
       use_native_activity = true
@@ -314,8 +323,9 @@ if (is_win || is_linux || is_android || is_mac) {
 
     configs += [
       angle_root + ":internal_config",
-      angle_root + ":gl_prototypes",
+      angle_root + ":no_gl_prototypes",
       angle_root + ":libANGLE_config",
+      angle_root + ":library_name_config",
     ]
 
     if (is_linux && !is_component_build) {
@@ -347,7 +357,6 @@ if (build_angle_gles1_conform_tests) {
       "COMMON",
       "CONFORM_ALTERNATE_MAIN",
       "NULLWS",
-      "GL_GLEXT_PROTOTYPES",
     ]
 
     cflags = []
@@ -497,7 +506,7 @@ if (build_angle_gles1_conform_tests) {
     deps = googletest_deps + [
              ":angle_gles1_conformance_no_gtest",
              angle_root + ":angle_common",
-             angle_root + ":angle_util",
+             angle_root + ":angle_util_static",
              angle_root + ":libEGL${angle_libs_suffix}",
              angle_root + ":libGLESv1_CM${angle_libs_suffix}",
              angle_root + ":libGLESv2${angle_libs_suffix}",
@@ -521,6 +530,7 @@ if (build_angle_gles1_conform_tests) {
     configs += [
       angle_root + ":internal_config",
       angle_root + ":libANGLE_config",
+      angle_root + ":library_name_config",
     ]
 
     if (build_with_chromium) {
@@ -660,9 +670,8 @@ if (build_angle_deqp_tests) {
       "//third_party/libpng:libpng",
     ]
 
-    defines = [ "ANGLE_EGL_LIBRARY_NAME=\"libEGL${angle_libs_suffix}\"" ]
-
     configs -= deqp_undefine_configs
+    configs += [ angle_root + ":library_name_config" ]
     public_configs = [ ":angle_deqp_libtester_config" ]
     sources = deqp_libtester_sources
     if (is_win) {
