@@ -8,9 +8,11 @@
 
 #include <map>
 #include <vector>
+
 #include "common/angleutils.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
+#include "util/EGLWindow.h"
 
 using namespace angle;
 
@@ -89,6 +91,12 @@ class EGLBlobCacheTest : public ANGLETest
         {
             mHasProgramCache = true;
             setContextProgramCacheEnabled(true);
+
+            PFNEGLPROGRAMCACHERESIZEANGLEPROC eglProgramCacheResizeANGLE = nullptr;
+            eglProgramCacheResizeANGLE = reinterpret_cast<PFNEGLPROGRAMCACHERESIZEANGLEPROC>(
+                eglGetProcAddress("eglProgramCacheResizeANGLE"));
+            ASSERT_NE(nullptr, eglProgramCacheResizeANGLE);
+
             eglProgramCacheResizeANGLE(display, 0x10000, EGL_PROGRAM_CACHE_RESIZE_ANGLE);
         }
 
