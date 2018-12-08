@@ -33,9 +33,21 @@ constexpr VkBufferUsageFlags kIndexBufferUsageFlags = VK_BUFFER_USAGE_INDEX_BUFF
                                                       VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT |
                                                       VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
 
-bool BindingIsAligned(const gl::VertexBinding &binding, unsigned componentSize)
+ANGLE_INLINE bool BindingIsAligned(const gl::VertexBinding &binding,
+                                   const angle::Format &angleFormat,
+                                   unsigned int attribSize)
 {
-    return (binding.getOffset() % componentSize == 0) && (binding.getStride() % componentSize == 0);
+    GLuint mask = angleFormat.componentAlignmentMask;
+    if (mask != 0)
+    {
+        return ((binding.getOffset() & mask) == 0 && (binding.getStride() & mask) == 0);
+    }
+    else
+    {
+        unsigned int formatSize = angleFormat.pixelBytes;
+        return ((binding.getOffset() * attribSize) % formatSize == 0) &&
+               ((binding.getStride() * attribSize) % formatSize == 0);
+    }
 }
 
 angle::Result StreamVertexData(ContextVk *contextVk,
@@ -333,11 +345,11 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
         if (bufferGL)
         {
             BufferVk *bufferVk = vk::GetImpl(bufferGL);
-            unsigned componentSize =
-                mCurrentArrayBufferFormats[attribIndex]->angleFormat().pixelBytes / attrib.size;
+            const angle::Format &angleFormat =
+                mCurrentArrayBufferFormats[attribIndex]->angleFormat();
 
             if (mCurrentArrayBufferFormats[attribIndex]->vertexLoadRequiresConversion ||
-                !BindingIsAligned(binding, componentSize))
+                !BindingIsAligned(binding, angleFormat, attrib.size))
             {
                 mCurrentArrayBufferStrides[attribIndex] =
                     mCurrentArrayBufferFormats[attribIndex]->bufferFormat().pixelBytes;
@@ -383,18 +395,9 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-void VertexArrayVk::getPackedInputDescriptions(vk::GraphicsPipelineDesc *pipelineDesc)
-{
-    updatePackedInputDescriptions();
-    pipelineDesc->updateVertexInputInfo(mPackedInputBindings, mPackedInputAttributes);
-}
-
 void VertexArrayVk::updatePackedInputDescriptions()
 {
-    if (!mDirtyPackedInputs.any())
-    {
-        return;
-    }
+    ASSERT(mDirtyPackedInputs.any());
 
     const auto &attribs  = mState.getVertexAttributes();
     const auto &bindings = mState.getVertexBindings();
