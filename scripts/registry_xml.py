@@ -98,10 +98,11 @@ class GLCommandNames:
         self.command_names[version] += commands
 
 class RegistryXML:
-    def __init__(self, xml_file, ext_file):
+    def __init__(self, xml_file, ext_file = None):
         tree = etree.parse(script_relative(xml_file))
         self.root = tree.getroot()
-        self._AppendANGLEExts(ext_file)
+        if (ext_file):
+            self._AppendANGLEExts(ext_file)
         self.all_commands = self.root.findall('commands/command')
         self.all_cmd_names = GLCommandNames()
         self.commands = {}
@@ -136,6 +137,8 @@ class RegistryXML:
             return 'glext'
         elif 'egl' in supported:
             return 'eglext'
+        elif 'wgl' in supported:
+            return 'wglext'
         else:
             assert False
             return 'unknown'
