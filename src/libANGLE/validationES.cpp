@@ -2689,7 +2689,7 @@ const char *ValidateDrawStates(Context *context)
 
             const TransformFeedback *transformFeedbackObject = state.getCurrentTransformFeedback();
             if (transformFeedbackObject != nullptr && transformFeedbackObject->isActive() &&
-                framebufferNumViews > 1)
+                !transformFeedbackObject->isPaused() && framebufferNumViews > 1)
             {
                 return kMultiviewTransformFeedback;
             }
