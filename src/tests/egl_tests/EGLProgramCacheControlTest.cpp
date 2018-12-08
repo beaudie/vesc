@@ -9,6 +9,7 @@
 #include "common/angleutils.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
+#include "util/EGLWindow.h"
 
 using namespace angle;
 
@@ -40,6 +41,11 @@ class EGLProgramCacheControlTest : public ANGLETest
 
         if (extensionAvailable())
         {
+            ASSERT_NE(nullptr, eglProgramCacheGetAttribANGLE);
+            ASSERT_NE(nullptr, eglProgramCacheQueryANGLE);
+            ASSERT_NE(nullptr, eglProgramCachePopulateANGLE);
+            ASSERT_NE(nullptr, eglProgramCacheResizeANGLE);
+
             EGLDisplay display = getEGLWindow()->getDisplay();
             setContextProgramCacheEnabled(true);
             eglProgramCacheResizeANGLE(display, kEnabledCacheSize, EGL_PROGRAM_CACHE_RESIZE_ANGLE);

@@ -12,7 +12,8 @@
 #include <d3d11.h>
 #include <windows.h>
 
-#include "com_utils.h"
+#include "util/EGLWindow.h"
+#include "util/com_utils.h"
 
 namespace angle
 {
