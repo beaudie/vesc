@@ -2853,7 +2853,7 @@ bool ValidateDrawArraysCommon(Context *context,
 
     if (context->getStateCache().isTransformFeedbackActiveUnpaused())
     {
-        const State &state = context->getGLState();
+        const State &state                      = context->getGLState();
         TransformFeedback *curTransformFeedback = state.getCurrentTransformFeedback();
         if (!curTransformFeedback->checkBufferSpaceForDraw(count, primcount))
         {
