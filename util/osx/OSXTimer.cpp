@@ -12,11 +12,7 @@
 #include <mach/mach.h>
 #include <mach/mach_time.h>
 
-OSXTimer::OSXTimer()
-    : mRunning(false),
-    mSecondCoeff(0)
-{
-}
+OSXTimer::OSXTimer() : mRunning(false), mSecondCoeff(0) {}
 
 double OSXTimer::getSecondCoeff()
 {
@@ -43,7 +39,7 @@ void OSXTimer::start()
 void OSXTimer::stop()
 {
     mStopTime = mach_absolute_time();
-    mRunning = false;
+    mRunning  = false;
 }
 
 double OSXTimer::getElapsedTime() const

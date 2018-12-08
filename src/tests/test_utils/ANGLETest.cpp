@@ -20,6 +20,7 @@
 #    endif
 
 #    include <d3d11.h>
+#    include "util/windows/WGLWindow.h"
 #endif  // defined(ANGLE_PLATFORM_WINDOWS)
 
 namespace angle
@@ -291,6 +292,7 @@ std::array<GLushort, 6> ANGLETestBase::GetQuadIndices()
 
 ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
     : mEGLWindow(nullptr),
+      mWGLWindow(nullptr),
       mWidth(16),
       mHeight(16),
       mIgnoreD3D11SDKLayersWarnings(false),
@@ -300,26 +302,52 @@ ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
       m3DTexturedQuadProgram(0),
       mDeferContextInit(false)
 {
-    mEGLWindow = new EGLWindow(params.majorVersion, params.minorVersion, params.eglParameters);
-
-    // Default debug layers to enabled in tests.
-    mEGLWindow->setDebugLayersEnabled(true);
-
-    // Workaround for NVIDIA not being able to share OpenGL and Vulkan contexts.
-    EGLint renderer      = params.getRenderer();
-    bool needsWindowSwap = mLastRendererType.valid() &&
-                           ((renderer != EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE) !=
-                            (mLastRendererType.value() != EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE));
-
-    if (needsWindowSwap)
+    switch (params.driver)
     {
-        DestroyTestWindow();
-        if (!InitTestWindow())
+        case angle::GLESDriverType::ANGLE:
         {
-            std::cerr << "Failed to create ANGLE test window.";
+            mEGLWindow =
+                new EGLWindow(params.majorVersion, params.minorVersion, params.eglParameters);
+
+            // Default debug layers to enabled in tests.
+            mEGLWindow->setDebugLayersEnabled(true);
+
+            // Workaround for NVIDIA not being able to share OpenGL and Vulkan contexts.
+            EGLint renderer = params.getRenderer();
+            bool needsWindowSwap =
+                mLastRendererType.valid() &&
+                ((renderer != EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE) !=
+                 (mLastRendererType.value() != EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE));
+
+            if (needsWindowSwap)
+            {
+                DestroyTestWindow();
+                if (!InitTestWindow())
+                {
+                    std::cerr << "Failed to create ANGLE test window.";
+                }
+            }
+
+            mLastRendererType = renderer;
+            break;
+        }
+
+        case angle::GLESDriverType::Native:
+        {
+            std::cerr << "Unsupported driver." << std::endl;
+            break;
+        }
+
+        case angle::GLESDriverType::WGL:
+        {
+#if defined(ANGLE_PLATFORM_WINDOWS)
+            mWGLWindow = new WGLWindow(params.majorVersion, params.minorVersion);
+#else
+            std::cerr << "Unsupported driver." << std::endl;
+#endif  // defined(ANGLE_PLATFORM_WINDOWS)
+            break;
         }
     }
-    mLastRendererType = renderer;
 }
 
 ANGLETestBase::~ANGLETestBase()
@@ -360,27 +388,43 @@ void ANGLETestBase::ANGLETestSetUp()
         needSwap = true;
     }
 
-    mPlatformMethods.overrideWorkaroundsD3D = angle::TestPlatform_overrideWorkaroundsD3D;
-    mPlatformMethods.overrideFeaturesVk     = angle::TestPlatform_overrideFeaturesVk;
-    mPlatformMethods.logError               = angle::TestPlatform_logError;
-    mPlatformMethods.logWarning             = angle::TestPlatform_logWarning;
-    mPlatformMethods.logInfo                = angle::TestPlatform_logInfo;
-    mPlatformMethods.context                = &mPlatformContext;
-    mEGLWindow->setPlatformMethods(&mPlatformMethods);
-
-    mEntryPointsLib.reset(angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME));
-
-    if (!mEGLWindow->initializeDisplayAndSurface(mOSWindow, mEntryPointsLib.get()))
+    if (mWGLWindow)
     {
-        FAIL() << "egl display or surface init failed.";
-    }
+#if defined(ANGLE_PLATFORM_WINDOWS)
+        mEntryPointsLib.reset(angle::OpenSharedLibrary("opengl32"));
 
-    if (!mDeferContextInit && !mEGLWindow->initializeContext())
+        if (!mWGLWindow->initializeGL(mOSWindow, mEntryPointsLib.get()))
+        {
+            FAIL() << "WGL init failed.";
+        }
+#else
+        FAIL() << "Unsupported driver.";
+#endif  // defined(ANGLE_PLATFORM_WINDOWS)
+    }
+    else
     {
-        FAIL() << "GL Context init failed.";
-    }
+        ASSERT(mEGLWindow);
 
-    angle::LoadGLES(eglGetProcAddress);
+        mPlatformMethods.overrideWorkaroundsD3D = angle::TestPlatform_overrideWorkaroundsD3D;
+        mPlatformMethods.overrideFeaturesVk     = angle::TestPlatform_overrideFeaturesVk;
+        mPlatformMethods.logError               = angle::TestPlatform_logError;
+        mPlatformMethods.logWarning             = angle::TestPlatform_logWarning;
+        mPlatformMethods.logInfo                = angle::TestPlatform_logInfo;
+        mPlatformMethods.context                = &mPlatformContext;
+        mEGLWindow->setPlatformMethods(&mPlatformMethods);
+
+        mEntryPointsLib.reset(angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME));
+
+        if (!mEGLWindow->initializeDisplayAndSurface(mOSWindow, mEntryPointsLib.get()))
+        {
+            FAIL() << "egl display or surface init failed.";
+        }
+
+        if (!mDeferContextInit && !mEGLWindow->initializeContext())
+        {
+            FAIL() << "GL Context init failed.";
+        }
+    }
 
     if (needSwap)
     {
@@ -401,27 +445,21 @@ void ANGLETestBase::ANGLETestSetUp()
 
 void ANGLETestBase::ANGLETestTearDown()
 {
-    mEGLWindow->setPlatformMethods(nullptr);
-
-    mPlatformContext.currentTest = nullptr;
-    checkD3D11SDKLayersMessages();
+    if (mEGLWindow)
+    {
+        mEGLWindow->setPlatformMethods(nullptr);
+        mPlatformContext.currentTest = nullptr;
+        checkD3D11SDKLayersMessages();
+    }
 
     const auto &info = testing::UnitTest::GetInstance()->current_test_info();
     angle::WriteDebugMessage("Exiting %s.%s\n", info->test_case_name(), info->name());
 
     swapBuffers();
 
-    if (eglGetError() != EGL_SUCCESS)
-    {
-        FAIL() << "egl error during swap.";
-    }
-
     mOSWindow->messageLoop();
 
-    if (!destroyEGLContext())
-    {
-        FAIL() << "egl context destruction failed.";
-    }
+    getGLWindow()->destroyGL();
 
     // Check for quit message
     Event myEvent;
@@ -436,9 +474,14 @@ void ANGLETestBase::ANGLETestTearDown()
 
 void ANGLETestBase::swapBuffers()
 {
-    if (mEGLWindow->isGLInitialized())
+    if (getGLWindow()->isGLInitialized())
     {
-        mEGLWindow->swap();
+        getGLWindow()->swap();
+
+        if (mEGLWindow)
+        {
+            EXPECT_EGL_SUCCESS();
+        }
     }
 }
 
@@ -910,103 +953,122 @@ void ANGLETestBase::setWindowHeight(int height)
     mHeight = height;
 }
 
+GLWindowBase *ANGLETestBase::getGLWindow() const
+{
+    return mWGLWindow ? reinterpret_cast<GLWindowBase *>(mWGLWindow) : mEGLWindow;
+}
+
 void ANGLETestBase::setConfigRedBits(int bits)
 {
-    mEGLWindow->setConfigRedBits(bits);
+    getGLWindow()->setConfigRedBits(bits);
 }
 
 void ANGLETestBase::setConfigGreenBits(int bits)
 {
-    mEGLWindow->setConfigGreenBits(bits);
+    getGLWindow()->setConfigGreenBits(bits);
 }
 
 void ANGLETestBase::setConfigBlueBits(int bits)
 {
-    mEGLWindow->setConfigBlueBits(bits);
+    getGLWindow()->setConfigBlueBits(bits);
 }
 
 void ANGLETestBase::setConfigAlphaBits(int bits)
 {
-    mEGLWindow->setConfigAlphaBits(bits);
+    getGLWindow()->setConfigAlphaBits(bits);
 }
 
 void ANGLETestBase::setConfigDepthBits(int bits)
 {
-    mEGLWindow->setConfigDepthBits(bits);
+    getGLWindow()->setConfigDepthBits(bits);
 }
 
 void ANGLETestBase::setConfigStencilBits(int bits)
 {
-    mEGLWindow->setConfigStencilBits(bits);
+    getGLWindow()->setConfigStencilBits(bits);
 }
 
 void ANGLETestBase::setConfigComponentType(EGLenum componentType)
 {
+    ASSERT(mEGLWindow);
     mEGLWindow->setConfigComponentType(componentType);
 }
 
 void ANGLETestBase::setMultisampleEnabled(bool enabled)
 {
+    ASSERT(mEGLWindow);
     mEGLWindow->setMultisample(enabled);
 }
 
 void ANGLETestBase::setSamples(EGLint samples)
 {
+    ASSERT(mEGLWindow);
     mEGLWindow->setSamples(samples);
 }
 
 void ANGLETestBase::setDebugEnabled(bool enabled)
 {
+    ASSERT(mEGLWindow);
     mEGLWindow->setDebugEnabled(enabled);
 }
 
 void ANGLETestBase::setNoErrorEnabled(bool enabled)
 {
+    ASSERT(mEGLWindow);
     mEGLWindow->setNoErrorEnabled(enabled);
 }
 
 void ANGLETestBase::setWebGLCompatibilityEnabled(bool webglCompatibility)
 {
+    ASSERT(mEGLWindow);
     mEGLWindow->setWebGLCompatibilityEnabled(webglCompatibility);
 }
 
 void ANGLETestBase::setExtensionsEnabled(bool extensionsEnabled)
 {
+    ASSERT(mEGLWindow);
     mEGLWindow->setExtensionsEnabled(extensionsEnabled);
 }
 
 void ANGLETestBase::setRobustAccess(bool enabled)
 {
+    ASSERT(mEGLWindow);
     mEGLWindow->setRobustAccess(enabled);
 }
 
 void ANGLETestBase::setBindGeneratesResource(bool bindGeneratesResource)
 {
+    ASSERT(mEGLWindow);
     mEGLWindow->setBindGeneratesResource(bindGeneratesResource);
 }
 
 void ANGLETestBase::setDebugLayersEnabled(bool enabled)
 {
+    ASSERT(mEGLWindow);
     mEGLWindow->setDebugLayersEnabled(enabled);
 }
 
 void ANGLETestBase::setClientArraysEnabled(bool enabled)
 {
+    ASSERT(mEGLWindow);
     mEGLWindow->setClientArraysEnabled(enabled);
 }
 
 void ANGLETestBase::setRobustResourceInit(bool enabled)
 {
+    ASSERT(mEGLWindow);
     mEGLWindow->setRobustResourceInit(enabled);
 }
 
 void ANGLETestBase::setContextProgramCacheEnabled(bool enabled)
 {
+    ASSERT(mEGLWindow);
     mEGLWindow->setContextProgramCacheEnabled(enabled);
 }
 
 void ANGLETestBase::setContextVirtualization(bool enabled)
 {
+    ASSERT(mEGLWindow);
     mEGLWindow->setContextVirtualization(enabled);
 }
 
@@ -1017,16 +1079,17 @@ void ANGLETestBase::setDeferContextInit(bool enabled)
 
 int ANGLETestBase::getClientMajorVersion() const
 {
-    return mEGLWindow->getClientMajorVersion();
+    return getGLWindow()->getClientMajorVersion();
 }
 
 int ANGLETestBase::getClientMinorVersion() const
 {
-    return mEGLWindow->getClientMinorVersion();
+    return getGLWindow()->getClientMinorVersion();
 }
 
 EGLWindow *ANGLETestBase::getEGLWindow() const
 {
+    ASSERT(mEGLWindow);
     return mEGLWindow;
 }
 
@@ -1042,13 +1105,8 @@ int ANGLETestBase::getWindowHeight() const
 
 bool ANGLETestBase::isMultisampleEnabled() const
 {
+    ASSERT(mEGLWindow);
     return mEGLWindow->isMultisample();
-}
-
-bool ANGLETestBase::destroyEGLContext()
-{
-    mEGLWindow->destroyGL();
-    return true;
 }
 
 // static
