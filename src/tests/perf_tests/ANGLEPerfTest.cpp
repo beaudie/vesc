@@ -366,11 +366,16 @@ void ANGLERenderTest::SetUp()
         return;
     }
 
-    if (!mEGLWindow->initializeGL(mOSWindow))
+    // Load EGL library so we can initialize the display.
+    mEntryPointsLib.reset(angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME));
+
+    if (!mEGLWindow->initializeGL(mOSWindow, mEntryPointsLib.get()))
     {
         FAIL() << "Failed initializing EGLWindow";
         return;
     }
+
+    angle::LoadGLES(eglGetProcAddress);
 
     if (!areExtensionPrerequisitesFulfilled())
     {
