@@ -57,8 +57,14 @@ libangle_common_sources = [
   "src/common/vector_utils.h",
   "src/common/version.h",
 ]
-libangle_common_linux_sources = [ "src/common/system_utils_linux.cpp" ]
-libangle_common_mac_sources = [ "src/common/system_utils_mac.cpp" ]
+libangle_common_linux_sources = [
+  "src/common/system_utils_linux.cpp",
+  "src/common/system_utils_posix.cpp",
+]
+libangle_common_mac_sources = [
+  "src/common/system_utils_mac.cpp",
+  "src/common/system_utils_posix.cpp",
+]
 libangle_common_win_sources = [ "src/common/system_utils_win.cpp" ]
 libangle_image_util_sources = [
   "src/image_util/copyimage.cpp",
@@ -820,9 +826,7 @@ libglesv2_sources = [
   "src/common/angleutils.h",
   "src/common/debug.h",
   "src/libGLESv2/entry_points_egl.cpp",
-  "src/libGLESv2/entry_points_egl.h",
   "src/libGLESv2/entry_points_egl_ext.cpp",
-  "src/libGLESv2/entry_points_egl_ext.h",
   "src/libGLESv2/entry_points_enum_autogen.h",
   "src/libGLESv2/entry_points_gles_1_0_autogen.cpp",
   "src/libGLESv2/entry_points_gles_1_0_autogen.h",
