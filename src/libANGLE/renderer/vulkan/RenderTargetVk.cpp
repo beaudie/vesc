@@ -15,14 +15,23 @@
 
 namespace rx
 {
-RenderTargetVk::RenderTargetVk(vk::ImageHelper *image, vk::ImageView *imageView, size_t layerIndex)
-    : mImage(image), mImageView(imageView), mLayerIndex(layerIndex)
+RenderTargetVk::RenderTargetVk(vk::ImageHelper *image,
+                               vk::ImageView *drawImageView,
+                               vk::ImageView *readImageView,
+                               size_t layerIndex)
+    : mImage(image),
+      mDrawImageView(drawImageView),
+      mReadImageView(readImageView),
+      mLayerIndex(layerIndex)
 {}
 
 RenderTargetVk::~RenderTargetVk() {}
 
 RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
-    : mImage(other.mImage), mImageView(other.mImageView), mLayerIndex(other.mLayerIndex)
+    : mImage(other.mImage),
+      mDrawImageView(other.mDrawImageView),
+      mReadImageView(other.mReadImageView),
+      mLayerIndex(other.mLayerIndex)
 {}
 
 void RenderTargetVk::onColorDraw(vk::FramebufferHelper *framebufferVk,
@@ -67,16 +76,28 @@ void RenderTargetVk::onDepthStencilDraw(vk::FramebufferHelper *framebufferVk,
     mImage->addWriteDependency(framebufferVk);
 }
 
+vk::ImageHelper &RenderTargetVk::getImage()
+{
+    ASSERT(mImage && mImage->valid());
+    return *mImage;
+}
+
 const vk::ImageHelper &RenderTargetVk::getImage() const
 {
     ASSERT(mImage && mImage->valid());
     return *mImage;
 }
 
-vk::ImageView *RenderTargetVk::getImageView() const
+vk::ImageView *RenderTargetVk::getDrawImageView() const
 {
-    ASSERT(mImageView && mImageView->valid());
-    return mImageView;
+    ASSERT(mDrawImageView && mDrawImageView->valid());
+    return mDrawImageView;
+}
+
+vk::ImageView *RenderTargetVk::getReadImageView() const
+{
+    ASSERT(mReadImageView && mReadImageView->valid());
+    return mReadImageView;
 }
 
 const vk::Format &RenderTargetVk::getImageFormat() const
@@ -91,11 +112,15 @@ const gl::Extents &RenderTargetVk::getImageExtents() const
     return mImage->getExtents();
 }
 
-void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image, vk::ImageView *imageView)
+void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image,
+                                          vk::ImageView *drawImageView,
+                                          vk::ImageView *readImageView)
 {
-    ASSERT(image && image->valid() && imageView && imageView->valid());
+    ASSERT(image && image->valid() && drawImageView && drawImageView->valid() && readImageView &&
+           readImageView->valid());
     mImage     = image;
-    mImageView = imageView;
+    mDrawImageView = drawImageView;
+    mReadImageView = readImageView;
 }
 
 vk::ImageHelper *RenderTargetVk::getImageForRead(vk::RecordableGraphResource *readingResource,
