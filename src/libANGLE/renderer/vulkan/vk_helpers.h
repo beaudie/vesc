@@ -474,6 +474,7 @@ class ImageHelper final : public RecordableGraphResource
                                      VkImageAspectFlags aspectMask,
                                      const gl::SwizzleState &swizzleMap,
                                      ImageView *imageViewOut,
+                                     uint32_t baseLevel,
                                      uint32_t levelCount,
                                      uint32_t baseArrayLayer,
                                      uint32_t layerCount);
@@ -507,6 +508,7 @@ class ImageHelper final : public RecordableGraphResource
     const DeviceMemory &getDeviceMemory() const;
 
     const gl::Extents &getExtents() const;
+    uint32_t getLayerCount() const { return mLayerCount; }
     const Format &getFormat() const;
     GLint getSamples() const;
 

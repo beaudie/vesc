@@ -48,6 +48,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
                             vk::CommandBuffer *commandBuffer,
                             vk::RenderPassDesc *renderPassDesc);
 
+    vk::ImageHelper &getImage();
     const vk::ImageHelper &getImage() const;
 
     // getImageForRead will also transition the resource to the given layout.

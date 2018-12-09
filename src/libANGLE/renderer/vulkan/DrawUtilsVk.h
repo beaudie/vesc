@@ -40,11 +40,27 @@ class DrawUtilsVk : angle::NonCopyable
         const vk::RenderPassDesc *renderPassDesc;
     };
 
+    struct CopyImageParameters
+    {
+        int srcOffset[2];
+        int srcExtents[2];
+        int destOffset[2];
+        int srcMip;
+        bool flipY;
+    };
+
     // Note: this function takes a framebuffer instead of image, as that's the only user to avoid
     // recreating a framebuffer.  An overload taking ImageHelper can be added when necessary.
     angle::Result clearImage(ContextVk *context,
                              FramebufferVk *framebuffer,
                              const ClearImageParameters &params);
+
+    angle::Result copyImage(vk::Context *context,
+                            vk::ImageHelper *dest,
+                            vk::ImageView *destView,
+                            vk::ImageHelper *src,
+                            vk::ImageView *srcView,
+                            const CopyImageParameters &params);
 
   private:
     struct ImageClearShaderParams
@@ -53,13 +69,25 @@ class DrawUtilsVk : angle::NonCopyable
         VkClearColorValue clearValue = {};
     };
 
+    struct ImageCopyShaderParams
+    {
+        // Structure matching PushConstants in ImageCopy.frag
+        uint32_t flipY;
+        uint32_t destIsLuma;
+        uint32_t destIsAlpha;
+        int32_t srcMip;
+        int32_t srcOffset[2];
+        int32_t destOffset[2];
+    };
+
     // Functions implemented by the class:
     enum class Function
     {
         ImageClear = 0,
+        ImageCopy  = 1,
 
-        InvalidEnum = 1,
-        EnumCount   = 1,
+        InvalidEnum = 2,
+        EnumCount   = 2,
     };
 
     // Common function that creates the pipeline for the specified function, binds it and prepares
@@ -101,12 +129,22 @@ class DrawUtilsVk : angle::NonCopyable
     // Initializers corresponding to functions, calling into ensureResourcesInitialized with the
     // appropriate parameters.
     angle::Result ensureImageClearInitialized(vk::Context *context);
+    angle::Result ensureImageCopyInitialized(vk::Context *context);
+
+    angle::Result startRenderPass(vk::Context *context,
+                                  vk::ImageHelper *image,
+                                  vk::ImageView *imageView,
+                                  const vk::RenderPassDesc &renderPassDesc,
+                                  const gl::Rectangle &renderArea,
+                                  vk::CommandBuffer **commandBufferOut);
 
     angle::PackedEnumMap<Function, vk::DescriptorSetLayoutPointerArray> mDescriptorSetLayouts;
     angle::PackedEnumMap<Function, vk::BindingPointer<vk::PipelineLayout>> mPipelineLayouts;
     angle::PackedEnumMap<Function, vk::DynamicDescriptorPool> mDescriptorPools;
 
     vk::ShaderProgramHelper mImageClearPrograms[1];
+    vk::ShaderProgramHelper mImageCopyPrograms[vk::InternalShader::ImageCopy_frag::kSrcFormatMask |
+                                               vk::InternalShader::ImageCopy_frag::kDestFormatMask];
 };
 
 }  // namespace rx

@@ -205,6 +205,10 @@ class TextureVk : public TextureImpl
     }
 
     const vk::ImageView &getImageView() const;
+    angle::Result getSingleLayerLevelDrawImageView(vk::Context *context,
+                                                   size_t layer,
+                                                   size_t level,
+                                                   vk::ImageView **imageViewOut);
     const vk::Sampler &getSampler() const;
 
     angle::Result ensureImageInitialized(ContextVk *contextVk);
@@ -214,6 +218,11 @@ class TextureVk : public TextureImpl
                                 const gl::ImageIndex &index,
                                 const gl::InternalFormat &internalFormat,
                                 const gl::Extents &size);
+
+    angle::Result setStorageImpl(ContextVk *contextVk,
+                                 size_t levels,
+                                 const vk::Format &format,
+                                 const gl::Extents &size);
 
     angle::Result copyImageDataToBuffer(ContextVk *contextVk,
                                         size_t sourceLevel,
@@ -240,6 +249,12 @@ class TextureVk : public TextureImpl
                                    const gl::InternalFormat &internalFormat,
                                    gl::Framebuffer *source);
 
+    angle::Result copySubImageImplWithDraw(ContextVk *contextVk,
+                                           const gl::ImageIndex &index,
+                                           const gl::Offset &destOffset,
+                                           const gl::Rectangle &sourceArea,
+                                           FramebufferVk *source);
+
     angle::Result copySubTextureImpl(ContextVk *contextVk,
                                      const gl::ImageIndex &index,
                                      const gl::Offset &destOffset,
@@ -263,10 +278,10 @@ class TextureVk : public TextureImpl
     vk::ImageHelper mImage;
     vk::ImageView mBaseLevelImageView;
     vk::ImageView mMipmapImageView;
+    std::vector<std::vector<vk::ImageView>> mSingleLayerLevelDrawImageView;
     vk::Sampler mSampler;
 
     RenderTargetVk mRenderTarget;
-    std::vector<vk::ImageView> mCubeMapFaceImageViews;
     std::vector<RenderTargetVk> mCubeMapRenderTargets;
 
     PixelBuffer mPixelBuffer;
