@@ -520,7 +520,7 @@ angle::Result TextureVk::copyImage(const gl::Context *context,
         gl::GetInternalFormatInfo(internalFormat, GL_UNSIGNED_BYTE);
     ANGLE_TRY(redefineImage(context, index, internalFormatInfo, newImageSize));
     return copySubImageImpl(context, index, gl::Offset(0, 0, 0), sourceArea, internalFormatInfo,
-                            source);
+                            true, source);
 }
 
 angle::Result TextureVk::copySubImage(const gl::Context *context,
@@ -530,7 +530,7 @@ angle::Result TextureVk::copySubImage(const gl::Context *context,
                                       gl::Framebuffer *source)
 {
     const gl::InternalFormat &currentFormat = *mState.getBaseLevelDesc().format.info;
-    return copySubImageImpl(context, index, destOffset, sourceArea, currentFormat, source);
+    return copySubImageImpl(context, index, destOffset, sourceArea, currentFormat, false, source);
 }
 
 angle::Result TextureVk::copyTexture(const gl::Context *context,
@@ -580,6 +580,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
                                           const gl::Offset &destOffset,
                                           const gl::Rectangle &sourceArea,
                                           const gl::InternalFormat &internalFormat,
+                                          bool reallocateImage,
                                           gl::Framebuffer *source)
 {
     gl::Extents fbSize = source->getReadColorbuffer()->getSize();
@@ -590,24 +591,91 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    const gl::Offset modifiedDestOffset(destOffset.x + sourceArea.x - sourceArea.x,
-                                        destOffset.y + sourceArea.y - sourceArea.y, 0);
-
     ContextVk *contextVk         = vk::GetImpl(context);
     RendererVk *renderer         = contextVk->getRenderer();
     FramebufferVk *framebufferVk = vk::GetImpl(source);
 
-    // For now, favor conformance. We do a CPU readback that does the conversion, and then stage the
+    mImage.addWriteDependency(framebufferVk->getFramebuffer());
+
+    gl::Extents extents(clippedSourceArea.width, clippedSourceArea.height, 1);
+    const gl::Offset modifiedDestOffset(destOffset.x, destOffset.y, 0);
+
+    const vk::Format &srcFormat  = framebufferVk->getColorReadRenderTarget()->getImageFormat();
+    const vk::Format &destFormat = renderer->getFormat(internalFormat.sizedInternalFormat);
+    LoadImageFunctionInfo loadFunction = destFormat.textureLoadFunctions(internalFormat.type);
+
+    bool canBlit =
+        renderer->hasTextureFormatFeatureBits(srcFormat.vkTextureFormat, VK_FORMAT_FEATURE_BLIT_SRC_BIT) &&
+        renderer->hasTextureFormatFeatureBits(destFormat.vkTextureFormat, VK_FORMAT_FEATURE_BLIT_DST_BIT);
+
+    // If there is no conversion necessary and source and destination support blit, use that.
+    if (!loadFunction.requiresConversion && canBlit)
+    {
+        if (reallocateImage)
+        {
+            if (mImage.valid())
+            {
+                releaseImage(context, renderer);
+            }
+            ANGLE_TRY(setStorageImpl(contextVk, index.getLevelIndex(), destFormat, extents));
+        }
+        return copySubImageImplWithBlit(contextVk, index, modifiedDestOffset, clippedSourceArea, framebufferVk);
+    }
+
+    // TODO(syoussefi): if destination supports color attachment and source supports sampled image,
+    // do this with a draw call. http://anglebug.com/2958
+
+    // If all else fails, do a CPU readback that does the conversion, and then stage the
     // change to the pixel buffer.
-    // Eventually we can improve this easily by implementing vkCmdBlitImage to do the conversion
-    // when its supported.
     ANGLE_TRY(mPixelBuffer.stageSubresourceUpdateFromFramebuffer(
-        context, index, clippedSourceArea, modifiedDestOffset,
-        gl::Extents(clippedSourceArea.width, clippedSourceArea.height, 1), internalFormat,
-        framebufferVk));
+        context, index, clippedSourceArea, modifiedDestOffset, extents, internalFormat, framebufferVk));
 
     mImage.finishCurrentCommands(renderer);
-    framebufferVk->getFramebuffer()->addReadDependency(&mImage);
+    return angle::Result::Continue;
+}
+
+angle::Result TextureVk::copySubImageImplWithBlit(ContextVk *contextVk,
+                                   const gl::ImageIndex &index,
+                                   const gl::Offset &destOffset,
+                                   const gl::Rectangle &sourceArea,
+                                   FramebufferVk *source)
+{
+    vk::CommandBuffer *commandBuffer;
+    ANGLE_TRY(mImage.recordCommands(contextVk, &commandBuffer));
+
+    vk::ImageHelper *srcImage = source->getColorReadRenderTarget()->getImageForRead(&mImage,
+            VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, commandBuffer);
+
+    mImage.changeLayoutWithStages(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, commandBuffer);
+
+    gl::Rectangle readRect = sourceArea;
+
+    const gl::Extents readExtents = source->getReadImageExtents();
+    bool flip = contextVk->isViewportFlipEnabledForDrawFBO();
+    if (flip)
+    {
+        readRect.y = readExtents.height - readRect.y - readRect.height;
+    }
+
+    VkImageBlit blit               = {};
+    blit.srcOffsets[0]             = {readRect.x0(), flip ? readRect.y1() : readRect.y0(), 0};
+    blit.srcOffsets[1]             = {readRect.x1(), flip ? readRect.y0() : readRect.y1(), 1};
+    blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    blit.srcSubresource.mipLevel   = 0;
+    blit.srcSubresource.baseArrayLayer = 0;
+    blit.srcSubresource.layerCount     = 1;
+    blit.dstOffsets[0] = {destOffset.x, destOffset.y, 0};
+    blit.dstOffsets[1] = {destOffset.x + sourceArea.width, destOffset.y + sourceArea.height, 1};
+    blit.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    blit.dstSubresource.mipLevel   = index.getLevelIndex();
+    blit.dstSubresource.baseArrayLayer = index.hasLayer() ? index.getLayerIndex() : 0;
+    blit.dstSubresource.layerCount     = index.getLayerCount();
+
+    commandBuffer->blitImage(srcImage->getImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                             mImage.getImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit,
+                             VK_FILTER_NEAREST);
+
     return angle::Result::Continue;
 }
 
@@ -690,16 +758,13 @@ angle::Result TextureVk::setStorage(const gl::Context *context,
     ContextVk *contextVk             = GetAs<ContextVk>(context->getImplementation());
     RendererVk *renderer             = contextVk->getRenderer();
     const vk::Format &format         = renderer->getFormat(internalFormat);
-    vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(mImage.recordCommands(contextVk, &commandBuffer));
 
     if (mImage.valid())
     {
         releaseImage(context, renderer);
     }
 
-    ANGLE_TRY(initImage(contextVk, format, size, static_cast<uint32_t>(levels), commandBuffer));
-    return angle::Result::Continue;
+    return setStorageImpl(contextVk, levels, format, size);
 }
 
 angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
@@ -744,6 +809,20 @@ angle::Result TextureVk::redefineImage(const gl::Context *context,
         }
     }
 
+    return angle::Result::Continue;
+}
+
+angle::Result TextureVk::setStorageImpl(ContextVk *contextVk,
+        size_t levels,
+        const vk::Format &format,
+        const gl::Extents &size)
+{
+    vk::CommandBuffer *commandBuffer = nullptr;
+    ANGLE_TRY(mImage.recordCommands(contextVk, &commandBuffer));
+
+    ASSERT(!mImage.valid());
+
+    ANGLE_TRY(initImage(contextVk, format, size, static_cast<uint32_t>(levels), commandBuffer));
     return angle::Result::Continue;
 }
 

@@ -215,6 +215,11 @@ class TextureVk : public TextureImpl
                                 const gl::InternalFormat &internalFormat,
                                 const gl::Extents &size);
 
+    angle::Result setStorageImpl(ContextVk *contextVk,
+                             size_t levels,
+                             const vk::Format &format,
+                             const gl::Extents &size);
+
     angle::Result copyImageDataToBuffer(ContextVk *contextVk,
                                         size_t sourceLevel,
                                         uint32_t layerCount,
@@ -238,7 +243,14 @@ class TextureVk : public TextureImpl
                                    const gl::Offset &destOffset,
                                    const gl::Rectangle &sourceArea,
                                    const gl::InternalFormat &internalFormat,
+                                   bool reallocateImage,
                                    gl::Framebuffer *source);
+
+    angle::Result copySubImageImplWithBlit(ContextVk *contextVk,
+                                   const gl::ImageIndex &index,
+                                   const gl::Offset &destOffset,
+                                   const gl::Rectangle &sourceArea,
+                                   FramebufferVk *source);
 
     angle::Result copySubTextureImpl(ContextVk *contextVk,
                                      const gl::ImageIndex &index,
