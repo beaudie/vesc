@@ -924,6 +924,66 @@ TEST_P(ProgramInterfaceTestES31, GetShaderStorageBlockProperties)
     EXPECT_EQ("blockName1[0]", std::string(name));
 }
 
+// Tests querying the program resources of atomic counter buffers.
+TEST_P(ProgramInterfaceTestES31, GetAtomicCounterProperties)
+{
+    constexpr char kCSSource[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(binding = 0, offset = 8) uniform atomic_uint ac[3];
+layout(binding = 0) uniform atomic_uint ac2;
+
+void main()
+{
+    atomicCounter(ac[0]);
+    atomicCounter(ac2);
+    atomicCounter(ac[gl_LocalInvocationIndex + 1u]);
+})";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCSSource);
+
+    GLuint index = glGetProgramResourceIndex(program, GL_UNIFORM, "ac");
+    EXPECT_GL_NO_ERROR();
+    EXPECT_NE(GL_INVALID_INDEX, index);
+
+    GLenum props[]    = {GL_ATOMIC_COUNTER_BUFFER_INDEX};
+    GLsizei propCount = static_cast<GLsizei>(ArraySize(props));
+    GLint atomicIndex;
+    GLsizei length;
+
+    glGetProgramResourceiv(program, GL_UNIFORM, index, propCount, props, 1, &length, &atomicIndex);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(1, length);
+    EXPECT_LE(0, atomicIndex);
+
+    GLenum atomicProps[] = {GL_ACTIVE_VARIABLES,
+                            GL_BUFFER_BINDING,
+                            GL_NUM_ACTIVE_VARIABLES,
+                            GL_BUFFER_DATA_SIZE,
+                            GL_REFERENCED_BY_VERTEX_SHADER,
+                            GL_REFERENCED_BY_FRAGMENT_SHADER,
+                            GL_REFERENCED_BY_COMPUTE_SHADER};
+
+    GLsizei atomicPropsCount = static_cast<GLsizei>(ArraySize(atomicProps));
+    constexpr int kBufSize   = 256;
+    GLint params[kBufSize];
+    GLsizei length2;
+
+    glGetProgramResourceiv(program, GL_ATOMIC_COUNTER_BUFFER, atomicIndex, atomicPropsCount,
+                           atomicProps, kBufSize, &length2, params);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(8, length2);
+
+    EXPECT_LE(0, params[0]);   // active_variables ac[3]
+    EXPECT_LE(0, params[1]);   // active_variables ac2
+    EXPECT_EQ(0, params[2]);   // buffer_binding
+    EXPECT_EQ(2, params[3]);   // num_active_variables
+    EXPECT_EQ(24, params[4]);  // buffer_data_size
+
+    EXPECT_EQ(0, params[5]);  // referenced_by_vertex_shader
+    EXPECT_EQ(0, params[6]);  // referenced_by_fragment_shader
+    EXPECT_EQ(1, params[7]);  // referenced_by_compute_shader
+}
+
 // Tests transform feedback varying qeury works correctly.
 TEST_P(ProgramInterfaceTestES31, QueryTransformFeedbackVarying)
 {
