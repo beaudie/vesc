@@ -57,6 +57,7 @@ class DrawUtilsVk : angle::NonCopyable
     enum class Function
     {
         ImageClear = 0,
+        ImageCopy = 1,
 
         InvalidEnum = 1,
         EnumCount   = 1,
@@ -101,6 +102,7 @@ class DrawUtilsVk : angle::NonCopyable
     // Initializers corresponding to functions, calling into ensureResourcesInitialized with the
     // appropriate parameters.
     angle::Result ensureImageClearInitialized(vk::Context *context);
+    angle::Result ensureImageCopyInitialized(vk::Context *context);
 
     angle::PackedEnumMap<Function, vk::DescriptorSetLayoutPointerArray> mDescriptorSetLayouts;
     angle::PackedEnumMap<Function, vk::BindingPointer<vk::PipelineLayout>> mPipelineLayouts;
