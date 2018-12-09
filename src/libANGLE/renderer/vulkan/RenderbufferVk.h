@@ -46,7 +46,8 @@ class RenderbufferVk : public RenderbufferImpl
 
   private:
     vk::ImageHelper mImage;
-    vk::ImageView mImageView;
+    vk::ImageView mDrawImageView;
+    vk::ImageView mReadImageView;
     RenderTargetVk mRenderTarget;
 };
 
