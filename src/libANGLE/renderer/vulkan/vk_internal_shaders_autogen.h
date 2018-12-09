@@ -68,6 +68,24 @@ namespace FullScreenQuad_vert
 namespace ImageClear_frag
 {}  // namespace ImageClear_frag
 
+namespace ImageCopy_frag
+{
+enum SrcFormat
+{
+    kSrcIsFloat    = 0x00000000,
+    kSrcIsInt      = 0x00000001,
+    kSrcIsUint     = 0x00000002,
+    kSrcFormatMask = 0x00000003,
+};
+enum DestFormat
+{
+    kDestIsFloat    = 0x00000000,
+    kDestIsInt      = 0x00000004,
+    kDestIsUint     = 0x00000008,
+    kDestFormatMask = 0x0000000C,
+};
+}  // namespace ImageCopy_frag
+
 }  // namespace InternalShader
 
 class ShaderLibrary final : angle::NonCopyable
@@ -90,6 +108,9 @@ class ShaderLibrary final : angle::NonCopyable
     angle::Result getImageClear_frag(Context *context,
                                      uint32_t shaderFlags,
                                      RefCounted<ShaderAndSerial> **shaderOut);
+    angle::Result getImageCopy_frag(Context *context,
+                                    uint32_t shaderFlags,
+                                    RefCounted<ShaderAndSerial> **shaderOut);
 
   private:
     RefCounted<ShaderAndSerial>
@@ -101,6 +122,9 @@ class ShaderLibrary final : angle::NonCopyable
                                     InternalShader::ConvertVertex_comp::kConversionMask];
     RefCounted<ShaderAndSerial> mFullScreenQuad_vert_shaders[1];
     RefCounted<ShaderAndSerial> mImageClear_frag_shaders[1];
+    RefCounted<ShaderAndSerial>
+        mImageCopy_frag_shaders[InternalShader::ImageCopy_frag::kSrcFormatMask |
+                                InternalShader::ImageCopy_frag::kDestFormatMask];
 };
 }  // namespace vk
 }  // namespace rx
