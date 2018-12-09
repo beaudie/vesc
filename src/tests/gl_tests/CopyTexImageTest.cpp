@@ -108,12 +108,26 @@ class CopyTexImageTest : public ANGLETest
 
         drawQuad(mTextureProgram, "position", 0.5f);
 
+        fprintf(stderr, "Verifying [%dx%d, %dx%d)\n", xs, ys, xe, ye);
         // Expect that the rendered quad has the same color as the source texture
         EXPECT_PIXEL_NEAR(xs, ys, data[0], data[1], data[2], data[3], 1.0);
         EXPECT_PIXEL_NEAR(xs, ye - 1, data[0], data[1], data[2], data[3], 1.0);
         EXPECT_PIXEL_NEAR(xe - 1, ys, data[0], data[1], data[2], data[3], 1.0);
         EXPECT_PIXEL_NEAR(xe - 1, ye - 1, data[0], data[1], data[2], data[3], 1.0);
         EXPECT_PIXEL_NEAR((xs + xe) / 2, (ys + ye) / 2, data[0], data[1], data[2], data[3], 1.0);
+
+        fprintf(stderr, "R for whole image:\n");
+        for (int y = 0; y < fboSize; ++y)
+        {
+            for (int x = 0; x < fboSize; ++x)
+            {
+                GLubyte pixel[4];
+                glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
+
+                fprintf(stderr, " 0x%02x", pixel[0]);
+            }
+            fprintf(stderr, "\n");
+        }
     }
 
     void runCopyTexImageTest(GLenum format, GLubyte expected[3][4])
@@ -133,6 +147,7 @@ class CopyTexImageTest : public ANGLETest
         // - The third time, the fbo size is different, so a new texture is created.
         for (size_t i = 0; i < kFboCount; ++i)
         {
+            fprintf(stderr, "runCopyTexImageTest for fbo #%zu\n", i);
             glBindFramebuffer(GL_FRAMEBUFFER, mFbos[i]);
 
             glCopyTexImage2D(GL_TEXTURE_2D, 0, format, 0, 0, kFboSizes[i], kFboSizes[i], 0);
