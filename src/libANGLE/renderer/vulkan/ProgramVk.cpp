@@ -892,7 +892,7 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk)
             VkDescriptorImageInfo &imageInfo = descriptorImageInfo[writeCount];
 
             imageInfo.sampler     = textureVk->getSampler().getHandle();
-            imageInfo.imageView   = textureVk->getImageView().getHandle();
+            imageInfo.imageView   = textureVk->getReadImageView().getHandle();
             imageInfo.imageLayout = image.getCurrentLayout();
 
             VkWriteDescriptorSet &writeInfo = writeDescriptorInfo[writeCount];
