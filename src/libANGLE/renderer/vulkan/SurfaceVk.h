@@ -73,7 +73,8 @@ class OffscreenSurfaceVk : public SurfaceImpl
         void destroy(const egl::Display *display);
 
         vk::ImageHelper image;
-        vk::ImageView imageView;
+        vk::ImageView drawImageView;
+        vk::ImageView readImageView;
         RenderTargetVk renderTarget;
     };
 
@@ -160,7 +161,8 @@ class WindowSurfaceVk : public SurfaceImpl
         ~SwapchainImage();
 
         vk::ImageHelper image;
-        vk::ImageView imageView;
+        vk::ImageView drawImageView;
+        vk::ImageView readImageView;
         vk::Framebuffer framebuffer;
     };
 
