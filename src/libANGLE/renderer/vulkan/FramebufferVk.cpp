@@ -1025,11 +1025,12 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
     pipelineDesc.updateColorWriteMask(colorMaskFlags, getEmulatedAlphaAttachmentMask());
     pipelineDesc.updateRenderPassDesc(mRenderPassDesc);
 
-    vk::PipelineAndSerial *pipeline = nullptr;
+    const vk::GraphicsPipelineDesc *descPtr;
+    vk::PipelineHelper *pipeline = nullptr;
     ANGLE_TRY(fullScreenClear->getGraphicsPipeline(
         contextVk, &renderer->getRenderPassCache(), renderer->getPipelineCache(),
         renderer->getCurrentQueueSerial(), pipelineLayout.get(), pipelineDesc, gl::AttributesMask(),
-        &pipeline));
+        &descPtr, &pipeline));
     pipeline->updateSerial(renderer->getCurrentQueueSerial());
 
     vk::CommandBuffer *writeCommands = nullptr;
@@ -1052,7 +1053,7 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
 
     // TODO(jmadill): Masked combined color and depth/stencil clear. http://anglebug.com/2455
     // Any active queries submitted by the user should also be paused here.
-    drawCommands->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->get());
+    drawCommands->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->getPipeline());
 
     GLint renderAreaHeight = mState.getDimensions().height;
 
