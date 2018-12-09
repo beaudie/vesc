@@ -59,6 +59,8 @@ VkAccessFlags GetBasicLayoutAccessFlags(VkImageLayout layout)
             return VK_ACCESS_MEMORY_READ_BIT;
         case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
             return VK_ACCESS_TRANSFER_READ_BIT;
+        case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
+            return VK_ACCESS_SHADER_READ_BIT;
         case VK_IMAGE_LAYOUT_UNDEFINED:
         case VK_IMAGE_LAYOUT_GENERAL:
         case VK_IMAGE_LAYOUT_PREINITIALIZED:
@@ -1058,7 +1060,8 @@ ImageHelper::ImageHelper()
       mFormat(nullptr),
       mSamples(0),
       mCurrentLayout(VK_IMAGE_LAYOUT_UNDEFINED),
-      mLayerCount(0)
+      mLayerCount(0),
+      mLevelCount(0)
 {}
 
 ImageHelper::ImageHelper(ImageHelper &&other)
@@ -1069,10 +1072,12 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mFormat(other.mFormat),
       mSamples(other.mSamples),
       mCurrentLayout(other.mCurrentLayout),
-      mLayerCount(other.mLayerCount)
+      mLayerCount(other.mLayerCount),
+      mLevelCount(other.mLevelCount)
 {
     other.mCurrentLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     other.mLayerCount    = 0;
+    other.mLevelCount    = 0;
 }
 
 ImageHelper::~ImageHelper()
@@ -1094,6 +1099,7 @@ angle::Result ImageHelper::init(Context *context,
     mFormat     = &format;
     mSamples    = samples;
     mLayerCount = GetImageLayerCount(textureType);
+    mLevelCount = mipLevels;
 
     VkImageCreateInfo imageInfo     = {};
     imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -1146,7 +1152,7 @@ angle::Result ImageHelper::initImageView(Context *context,
                                          ImageView *imageViewOut,
                                          uint32_t levelCount)
 {
-    return initLayerImageView(context, textureType, aspectMask, swizzleMap, imageViewOut,
+    return initLayerImageView(context, textureType, aspectMask, swizzleMap, imageViewOut, 0,
                               levelCount, 0, mLayerCount);
 }
 
@@ -1155,6 +1161,7 @@ angle::Result ImageHelper::initLayerImageView(Context *context,
                                               VkImageAspectFlags aspectMask,
                                               const gl::SwizzleState &swizzleMap,
                                               ImageView *imageViewOut,
+                                              uint32_t baseMipLevel,
                                               uint32_t levelCount,
                                               uint32_t baseArrayLayer,
                                               uint32_t layerCount)
@@ -1180,7 +1187,7 @@ angle::Result ImageHelper::initLayerImageView(Context *context,
         viewInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
     }
     viewInfo.subresourceRange.aspectMask     = aspectMask;
-    viewInfo.subresourceRange.baseMipLevel   = 0;
+    viewInfo.subresourceRange.baseMipLevel   = baseMipLevel;
     viewInfo.subresourceRange.levelCount     = levelCount;
     viewInfo.subresourceRange.baseArrayLayer = baseArrayLayer;
     viewInfo.subresourceRange.layerCount     = layerCount;
@@ -1195,6 +1202,7 @@ void ImageHelper::destroy(VkDevice device)
     mDeviceMemory.destroy(device);
     mCurrentLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     mLayerCount    = 0;
+    mLevelCount    = 0;
 }
 
 void ImageHelper::init2DWeakReference(VkImage handle,
@@ -1208,6 +1216,7 @@ void ImageHelper::init2DWeakReference(VkImage handle,
     mFormat     = &format;
     mSamples    = samples;
     mLayerCount = 1;
+    mLevelCount = 1;
 
     mImage.setHandle(handle);
 }
@@ -1224,6 +1233,7 @@ angle::Result ImageHelper::init2DStaging(Context *context,
     mFormat     = &format;
     mSamples    = 1;
     mLayerCount = 1;
+    mLevelCount = 1;
 
     // Use Preinitialized for writable staging images - in these cases we want to map the memory
     // before we do a copy. For readback images, use an undefined layout.
@@ -1317,7 +1327,7 @@ void ImageHelper::changeLayoutWithStages(VkImageAspectFlags aspectMask,
     // TODO(jmadill): Is this needed for mipped/layer images?
     imageMemoryBarrier.subresourceRange.aspectMask     = aspectMask;
     imageMemoryBarrier.subresourceRange.baseMipLevel   = 0;
-    imageMemoryBarrier.subresourceRange.levelCount     = VK_REMAINING_MIP_LEVELS;
+    imageMemoryBarrier.subresourceRange.levelCount     = mLevelCount;
     imageMemoryBarrier.subresourceRange.baseArrayLayer = 0;
     imageMemoryBarrier.subresourceRange.layerCount     = mLayerCount;
 
@@ -1330,18 +1340,6 @@ void ImageHelper::changeLayoutWithStages(VkImageAspectFlags aspectMask,
     }
 
     imageMemoryBarrier.dstAccessMask = GetBasicLayoutAccessFlags(newLayout);
-
-    if (newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
-    {
-        imageMemoryBarrier.srcAccessMask |=
-            (VK_ACCESS_HOST_WRITE_BIT | VK_ACCESS_TRANSFER_WRITE_BIT);
-        imageMemoryBarrier.dstAccessMask |= VK_ACCESS_SHADER_READ_BIT;
-    }
-
-    if (newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL)
-    {
-        imageMemoryBarrier.dstAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-    }
 
     commandBuffer->pipelineBarrier(srcStageMask, dstStageMask, 0, 0, nullptr, 0, nullptr, 1,
                                    &imageMemoryBarrier);

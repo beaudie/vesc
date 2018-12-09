@@ -30,11 +30,14 @@ class RenderPassDesc;
 
 // This is a very light-weight class that does not own to the resources it points to.
 // It's meant only to copy across some information from a FramebufferAttachment to the
-// business rendering logic. It stores Images and ImageView by pointer for performance.
+// business rendering logic. It stores Images and ImageViews by pointer for performance.
 class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 {
   public:
-    RenderTargetVk(vk::ImageHelper *image, vk::ImageView *imageView, size_t layerIndex);
+    RenderTargetVk(vk::ImageHelper *image,
+                   vk::ImageView *drawImageView,
+                   vk::ImageView *readImageView,
+                   size_t layerIndex);
     ~RenderTargetVk();
 
     // Used in std::vector initialization.
@@ -48,6 +51,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
                             vk::CommandBuffer *commandBuffer,
                             vk::RenderPassDesc *renderPassDesc);
 
+    vk::ImageHelper &getImage();
     const vk::ImageHelper &getImage() const;
 
     // getImageForRead will also transition the resource to the given layout.
@@ -55,7 +59,8 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
                                      VkImageLayout layout,
                                      vk::CommandBuffer *commandBuffer);
     vk::ImageHelper *getImageForWrite(vk::RecordableGraphResource *writingResource) const;
-    vk::ImageView *getImageView() const;
+    vk::ImageView *getDrawImageView() const;
+    vk::ImageView *getReadImageView() const;
 
     const vk::Format &getImageFormat() const;
     const gl::Extents &getImageExtents() const;
@@ -63,11 +68,14 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     // Special mutator for Surface RenderTargets. Allows the Framebuffer to keep a single
     // RenderTargetVk pointer.
-    void updateSwapchainImage(vk::ImageHelper *image, vk::ImageView *imageView);
+    void updateSwapchainImage(vk::ImageHelper *image,
+                              vk::ImageView *drawImageView,
+                              vk::ImageView *readImageView);
 
   private:
     vk::ImageHelper *mImage;
-    vk::ImageView *mImageView;
+    vk::ImageView *mDrawImageView;
+    vk::ImageView *mReadImageView;
     size_t mLayerIndex;
 };
 
