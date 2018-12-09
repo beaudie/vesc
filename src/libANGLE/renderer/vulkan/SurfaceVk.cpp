@@ -68,13 +68,15 @@ VkPresentModeKHR GetDesiredPresentMode(const std::vector<VkPresentModeKHR> &pres
 constexpr VkImageUsageFlags kSurfaceVKImageUsageFlags =
     VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 constexpr VkImageUsageFlags kSurfaceVKColorImageUsageFlags =
-    kSurfaceVKImageUsageFlags | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    kSurfaceVKImageUsageFlags | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 constexpr VkImageUsageFlags kSurfaceVKDepthStencilImageUsageFlags =
     kSurfaceVKImageUsageFlags | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
 
 }  // namespace
 
-OffscreenSurfaceVk::AttachmentImage::AttachmentImage() : renderTarget(&image, &imageView, 0) {}
+OffscreenSurfaceVk::AttachmentImage::AttachmentImage()
+    : renderTarget(&image, &drawImageView, &readImageView, 0)
+{}
 
 OffscreenSurfaceVk::AttachmentImage::~AttachmentImage() = default;
 
@@ -99,7 +101,12 @@ angle::Result OffscreenSurfaceVk::AttachmentImage::initialize(DisplayVk *display
     VkImageAspectFlags aspect = vk::GetFormatAspectFlags(textureFormat);
 
     ANGLE_TRY(image.initImageView(displayVk, gl::TextureType::_2D, aspect, gl::SwizzleState(),
-                                  &imageView, 1));
+                                  &drawImageView, 1));
+
+    gl::SwizzleState readSwizzle;
+    MapSwizzleState(vkFormat, gl::SwizzleState(), &readSwizzle);
+    ANGLE_TRY(image.initImageView(displayVk, gl::TextureType::_2D, aspect, readSwizzle,
+                                  &readImageView, 1));
 
     return angle::Result::Continue;
 }
@@ -110,7 +117,8 @@ void OffscreenSurfaceVk::AttachmentImage::destroy(const egl::Display *display)
     RendererVk *renderer       = displayVk->getRenderer();
 
     image.release(renderer);
-    renderer->releaseObject(renderer->getCurrentQueueSerial(), &imageView);
+    renderer->releaseObject(renderer->getCurrentQueueSerial(), &drawImageView);
+    renderer->releaseObject(renderer->getCurrentQueueSerial(), &readImageView);
 }
 
 OffscreenSurfaceVk::OffscreenSurfaceVk(const egl::SurfaceState &surfaceState,
@@ -256,7 +264,8 @@ WindowSurfaceVk::SwapchainImage::~SwapchainImage() = default;
 
 WindowSurfaceVk::SwapchainImage::SwapchainImage(SwapchainImage &&other)
     : image(std::move(other.image)),
-      imageView(std::move(other.imageView)),
+      drawImageView(std::move(other.drawImageView)),
+      readImageView(std::move(other.readImageView)),
       framebuffer(std::move(other.framebuffer))
 {}
 
@@ -270,8 +279,8 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState,
       mInstance(VK_NULL_HANDLE),
       mSwapchain(VK_NULL_HANDLE),
       mSwapchainPresentMode(VK_PRESENT_MODE_FIFO_KHR),
-      mColorRenderTarget(nullptr, nullptr, 0),
-      mDepthStencilRenderTarget(&mDepthStencilImage, &mDepthStencilImageView, 0),
+      mColorRenderTarget(nullptr, nullptr, nullptr, 0),
+      mDepthStencilRenderTarget(&mDepthStencilImage, &mDepthStencilImageView, nullptr, 0),
       mCurrentSwapchainImageIndex(0),
       mCurrentSwapSerialIndex(0)
 {}
@@ -300,7 +309,8 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
         // Although we don't own the swapchain image handles, we need to keep our shutdown clean.
         swapchainImage.image.resetImageWeakReference();
         swapchainImage.image.destroy(device);
-        swapchainImage.imageView.destroy(device);
+        swapchainImage.drawImageView.destroy(device);
+        swapchainImage.readImageView.destroy(device);
         swapchainImage.framebuffer.destroy(device);
     }
 
@@ -489,7 +499,13 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
         member.image.init2DWeakReference(swapchainImages[imageIndex], extents, format, 1);
         ANGLE_TRY(member.image.initImageView(displayVk, gl::TextureType::_2D,
                                              VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(),
-                                             &member.imageView, 1));
+                                             &member.drawImageView, 1));
+
+        gl::SwizzleState readSwizzle;
+        MapSwizzleState(format, gl::SwizzleState(), &readSwizzle);
+        ANGLE_TRY(member.image.initImageView(displayVk, gl::TextureType::_2D,
+                                             VK_IMAGE_ASPECT_COLOR_BIT, readSwizzle,
+                                             &member.readImageView, 1));
 
         // Allocate a command buffer for clearing our images to black.
         vk::CommandBuffer *commandBuffer = nullptr;
@@ -627,7 +643,8 @@ angle::Result WindowSurfaceVk::nextSwapchainImage(DisplayVk *displayVk)
     SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
 
     // Update RenderTarget pointers.
-    mColorRenderTarget.updateSwapchainImage(&image.image, &image.imageView);
+    mColorRenderTarget.updateSwapchainImage(&image.image, &image.drawImageView,
+                                            &image.readImageView);
 
     return angle::Result::Continue;
 }
@@ -739,7 +756,7 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(vk::Context *context,
 
     for (SwapchainImage &swapchainImage : mSwapchainImages)
     {
-        imageViews[0] = swapchainImage.imageView.getHandle();
+        imageViews[0] = swapchainImage.drawImageView.getHandle();
         ANGLE_VK_TRY(context,
                      swapchainImage.framebuffer.init(context->getDevice(), framebufferInfo));
     }
