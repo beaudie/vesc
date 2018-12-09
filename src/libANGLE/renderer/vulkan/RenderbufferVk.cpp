@@ -24,7 +24,7 @@ constexpr VkClearColorValue kBlackClearColorValue                 = {{0}};
 }  // anonymous namespace
 
 RenderbufferVk::RenderbufferVk(const gl::RenderbufferState &state)
-    : RenderbufferImpl(state), mRenderTarget(&mImage, &mImageView, 0)
+    : RenderbufferImpl(state), mRenderTarget(&mImage, &mDrawImageView, &mReadImageView, 0)
 {}
 
 RenderbufferVk::~RenderbufferVk() {}
@@ -35,7 +35,8 @@ void RenderbufferVk::onDestroy(const gl::Context *context)
     RendererVk *renderer = contextVk->getRenderer();
 
     mImage.release(renderer);
-    renderer->releaseObject(renderer->getCurrentQueueSerial(), &mImageView);
+    renderer->releaseObject(renderer->getCurrentQueueSerial(), &mDrawImageView);
+    renderer->releaseObject(renderer->getCurrentQueueSerial(), &mReadImageView);
 }
 
 angle::Result RenderbufferVk::setStorage(const gl::Context *context,
@@ -55,7 +56,8 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
             static_cast<GLsizei>(height) != mState.getHeight())
         {
             mImage.release(renderer);
-            renderer->releaseObject(renderer->getCurrentQueueSerial(), &mImageView);
+            renderer->releaseObject(renderer->getCurrentQueueSerial(), &mDrawImageView);
+            renderer->releaseObject(renderer->getCurrentQueueSerial(), &mReadImageView);
         }
     }
 
@@ -78,7 +80,12 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
         VkImageAspectFlags aspect = vk::GetFormatAspectFlags(textureFormat);
 
         ANGLE_TRY(mImage.initImageView(contextVk, gl::TextureType::_2D, aspect, gl::SwizzleState(),
-                                       &mImageView, 1));
+                                       &mDrawImageView, 1));
+
+        gl::SwizzleState readSwizzle;
+        MapSwizzleState(vkFormat, gl::SwizzleState(), &readSwizzle);
+        ANGLE_TRY(mImage.initImageView(contextVk, gl::TextureType::_2D, aspect, readSwizzle,
+                                       &mReadImageView, 1));
 
         // TODO(jmadill): Fold this into the RenderPass load/store ops. http://anglebug.com/2361
         vk::CommandBuffer *commandBuffer = nullptr;

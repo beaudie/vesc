@@ -32,6 +32,7 @@ struct Format final : private angle::NonCopyable
                      GLuint greenBits,
                      GLuint blueBits,
                      GLuint alphaBits,
+                     GLuint luminanceBits,
                      GLuint depthBits,
                      GLuint stencilBits,
                      GLuint pixelBytes,
@@ -42,6 +43,7 @@ struct Format final : private angle::NonCopyable
     static FormatID InternalFormatToID(GLenum internalFormat);
 
     constexpr bool hasDepthOrStencilBits() const;
+    constexpr bool hasLuminanceAlphaBits() const;
     constexpr GLuint channelCount() const;
 
     bool operator==(const Format &other) const { return this->id == other.id; }
@@ -70,6 +72,7 @@ struct Format final : private angle::NonCopyable
     GLuint greenBits;
     GLuint blueBits;
     GLuint alphaBits;
+    GLuint luminanceBits;
     GLuint depthBits;
     GLuint stencilBits;
 
@@ -91,6 +94,7 @@ constexpr Format::Format(FormatID id,
                          GLuint greenBits,
                          GLuint blueBits,
                          GLuint alphaBits,
+                         GLuint luminanceBits,
                          GLuint depthBits,
                          GLuint stencilBits,
                          GLuint pixelBytes,
@@ -108,6 +112,7 @@ constexpr Format::Format(FormatID id,
       greenBits(greenBits),
       blueBits(blueBits),
       alphaBits(alphaBits),
+      luminanceBits(luminanceBits),
       depthBits(depthBits),
       stencilBits(stencilBits),
       pixelBytes(pixelBytes),
@@ -120,10 +125,15 @@ constexpr bool Format::hasDepthOrStencilBits() const
     return depthBits > 0 || stencilBits > 0;
 }
 
+constexpr bool Format::hasLuminanceAlphaBits() const
+{
+    return redBits == 0 && greenBits == 0 && blueBits == 0 && (luminanceBits > 0 || alphaBits > 0);
+}
+
 constexpr GLuint Format::channelCount() const
 {
-    return (redBits > 0) + (greenBits > 0) + (blueBits > 0) + (alphaBits > 0) + (depthBits > 0) +
-           (stencilBits > 0);
+    return (redBits > 0) + (greenBits > 0) + (blueBits > 0) + (alphaBits > 0) +
+           (luminanceBits > 0) + (depthBits > 0) + (stencilBits > 0);
 }
 }  // namespace angle
 
