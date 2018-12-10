@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "876b53e3_463c444c",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-10T03:16:28Z",
+      "side": 1,
+      "message": "In some deqp cases, it will have following warning:\nwarning X3556: integer divides may be much slower, try using uints if possible.\n\nSo, here I change it to use uint to divide.",
+      "range": {
+        "startLine": 198,
+        "startChar": 27,
+        "endLine": 198,
+        "endChar": 73
+      },
+      "revId": "9507da82069b2b2ea3e8b760a9aff49186b531ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

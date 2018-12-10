@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "27a0a7bd_42d3a821",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-10T03:16:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6fb47d3_64f15fae",
+      "range": {
+        "startLine": 343,
+        "startChar": 8,
+        "endLine": 343,
+        "endChar": 53
+      },
+      "revId": "67b50360eee7ffbff7570ef2728195ffbc02495c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "084183ae_0b84cfc4",
         "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
         "patchSetId": 2
@@ -59,6 +83,24 @@
       "writtenOn": "2018-12-07T12:22:02Z",
       "side": 1,
       "message": "Why was this added? It isn\u0027t used.",
+      "revId": "67b50360eee7ffbff7570ef2728195ffbc02495c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05da9cc5_ba162778",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-10T03:16:28Z",
+      "side": 1,
+      "message": "It\u0027s just like a padding so that I can reuse \u0027kElementCount\u0027 for both buffer. Anyway, I have removed it and did some related changes in the test.",
+      "parentUuid": "084183ae_0b84cfc4",
       "revId": "67b50360eee7ffbff7570ef2728195ffbc02495c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
