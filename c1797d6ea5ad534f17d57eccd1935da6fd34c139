@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f4c5527_4b6a697d",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-10T20:23:07Z",
+      "side": 1,
+      "message": "Is this a bug fix?",
+      "range": {
+        "startLine": 232,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 94
+      },
+      "revId": "c1797d6ea5ad534f17d57eccd1935da6fd34c139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0cfc3f4_a77e0414",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-10T20:23:07Z",
+      "side": 1,
+      "message": "Maybe move this to be before \"4 / shaderParams.Bs\"",
+      "range": {
+        "startLine": 373,
+        "startChar": 0,
+        "endLine": 376,
+        "endChar": 0
+      },
+      "revId": "c1797d6ea5ad534f17d57eccd1935da6fd34c139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ad5cb53_3011c5f6",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-10T20:23:07Z",
+      "side": 1,
+      "message": "Could you add some () here? I needed to look up operator precedence to find out that this means\n((shaderParams.outputCount % 64 \u003d\u003d 0) \u0026\u0026 (shaderParams.componentCount % shaderParams.Ed \u003d\u003d 0)) ? ConvertVertex_comp::kIsAligned : 0",
+      "range": {
+        "startLine": 379,
+        "startChar": 0,
+        "endLine": 382,
+        "endChar": 16
+      },
+      "revId": "c1797d6ea5ad534f17d57eccd1935da6fd34c139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2236ca98_5bb9b96a",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-10T20:23:07Z",
+      "side": 1,
+      "message": "You could simplify this a bit checking \"isBigEndian \u003d endiannessTest !\u003d 1\"?",
+      "range": {
+        "startLine": 386,
+        "startChar": 9,
+        "endLine": 386,
+        "endChar": 23
+      },
+      "revId": "c1797d6ea5ad534f17d57eccd1935da6fd34c139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89def8d1_c2ba94f8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-10T20:23:07Z",
+      "side": 1,
+      "message": "With a number this high, does it even make sense to have a limit?\nOr is such a number normal for Vulkan?",
+      "range": {
+        "startLine": 40,
+        "startChar": 60,
+        "endLine": 40,
+        "endChar": 67
+      },
+      "revId": "c1797d6ea5ad534f17d57eccd1935da6fd34c139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c4f934f_506230cb",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertVertex.comp",
+        "patchSetId": 30
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-10T20:23:07Z",
+      "side": 1,
+      "message": "Is it possible to simplify this and the following checks with something like \"if(DstType\u003d\u003dfloat)\"?",
+      "range": {
+        "startLine": 135,
+        "startChar": 4,
+        "endLine": 135,
+        "endChar": 93
+      },
+      "revId": "c1797d6ea5ad534f17d57eccd1935da6fd34c139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

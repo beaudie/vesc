@@ -95,6 +95,24 @@
     },
     {
       "key": {
+        "uuid": "0c689c95_eb836ea3",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-10T20:23:07Z",
+      "side": 1,
+      "message": "I want to suggest another approach - define constexpr src x dst matrix populating it with flags and lookup the flag in there. You can also have an invalid value in it and simplify the \"ASSERT(!destIsInt || srcIsInt)\" stuff above.",
+      "parentUuid": "326784b3_787205e8",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a30a052_ac26bfdf",
         "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.h",
         "patchSetId": 28
@@ -286,6 +304,24 @@
       "side": 1,
       "message": "Yeah, too bad. Can be a bit hard to \"prove\" there\u0027s no bug but sounds like a driver bug. You can try disabling the workaround and adding the Pixel 2 optional try bots to confirm it\u0027s only the 5x. If it is only the 5x we could look at narrowing the workaround using the machine name.\n\nI did some digging and there were some potential hits for finding the machine name using c++. That way we could get the workaround narrowed in standalone mode. Will need to confirm that though.",
       "parentUuid": "0b27f6a9_66f3e9b6",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "654fbcc4_a5e148be",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-10T20:23:07Z",
+      "side": 1,
+      "message": "Also worth trying to see if it maybe works fine without validation layers, as they can mess with buffer contents.",
+      "parentUuid": "352f4efd_7d51ce8f",
       "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
