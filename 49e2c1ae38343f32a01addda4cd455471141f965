@@ -70,6 +70,30 @@
       "revId": "49e2c1ae38343f32a01addda4cd455471141f965",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27a6a45c_f30844ce",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1166724
+      },
+      "writtenOn": "2018-12-10T19:58:27Z",
+      "side": 1,
+      "message": "Re-binding the SSBO buffer using another binding point isn\u0027t expected to fail. My comment was referring to the visibility of an SSBO write then using a PBO for read-back (this returns unexpected data) without an FBO. I\u0027ve added this \"PBO read-back\" test-case as described.",
+      "parentUuid": "8536d5cf_dc306666",
+      "range": {
+        "startLine": 703,
+        "startChar": 0,
+        "endLine": 706,
+        "endChar": 5
+      },
+      "revId": "49e2c1ae38343f32a01addda4cd455471141f965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
