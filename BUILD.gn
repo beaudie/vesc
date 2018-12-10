@@ -654,6 +654,10 @@ shared_library("libGLESv2${angle_libs_suffix}") {
                                       root_build_dir) ]
   }
 
+  if (is_android) {
+      ldflags = [ "-Wl,--compress-debug-sections=zlib" ]
+  }
+
   if (is_mac && !is_component_build) {
     ldflags = [
       "-install_name",
