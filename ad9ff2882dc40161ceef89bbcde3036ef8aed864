@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83680417_e973a5d9",
+        "filename": "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-10T04:21:45Z",
+      "side": 1,
+      "message": "Skip EOpArrayLength operator.",
+      "range": {
+        "startLine": 345,
+        "startChar": 8,
+        "endLine": 345,
+        "endChar": 39
+      },
+      "revId": "ad9ff2882dc40161ceef89bbcde3036ef8aed864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
