@@ -239,6 +239,24 @@
     },
     {
       "key": {
+        "uuid": "58c1a097_734fb9cb",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-11T17:21:56Z",
+      "side": 1,
+      "message": "Wouldn\u0027t that be just 18 entries? Or do you consider that big?",
+      "parentUuid": "b90588b5_ed63973f",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a30a052_ac26bfdf",
         "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.h",
         "patchSetId": 28
@@ -401,6 +419,24 @@
       "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2c229934_e29ad4a4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-11T17:21:56Z",
+      "side": 1,
+      "message": "- I\u0027ve just double checked and Pixel 2 bots run ES2_VULKAN end2end tests. Why do you think they are not?\n- We also have Pixel 1 XL, you can double check on it.\n- Getting rid of N5X is waiting for additional Pixel 2 phones deployment.",
+      "parentUuid": "2a167ecc_eac84e53",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
@@ -616,6 +652,24 @@
       "side": 1,
       "message": "@Jamie, I\u0027ll take a look to see what I can find.\n\n@Yuly, that\u0027s interesting, why would the validation layers change the buffer contents?",
       "parentUuid": "654fbcc4_a5e148be",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2eae6f21_ad6f2086",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-11T17:21:56Z",
+      "side": 1,
+      "message": "In my case they were emulating lack of host coherency. Since then I\u0027m suspicious regarding bugs in validation layers affecting memory contents.",
+      "parentUuid": "f0cd4e94_cb38e265",
       "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

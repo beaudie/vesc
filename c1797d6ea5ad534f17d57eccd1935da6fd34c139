@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "e3909981_df4f3d4e",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-11T17:21:56Z",
+      "side": 1,
+      "message": "?: having lower precedence than \u0026\u0026 is not a straightforward but an arbitrary choice to me, which I don\u0027t want to occupy my brain cells storage space with.\nMath operators are strongly backed by definitions of groups, rings and fields.\nHowever, I don\u0027t feel strongly about this, so up to you.",
+      "parentUuid": "b6a3fa26_035c5fce",
+      "range": {
+        "startLine": 379,
+        "startChar": 0,
+        "endLine": 382,
+        "endChar": 16
+      },
+      "revId": "c1797d6ea5ad534f17d57eccd1935da6fd34c139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2236ca98_5bb9b96a",
         "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
         "patchSetId": 30
