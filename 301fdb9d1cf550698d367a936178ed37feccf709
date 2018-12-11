@@ -16,6 +16,29 @@
       "revId": "301fdb9d1cf550698d367a936178ed37feccf709",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4cd125c_c738a3e6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-11T21:46:46Z",
+      "side": 1,
+      "message": "can you make this a new bug? I think we should probably integrate this into SystemInfo or something like that.",
+      "range": {
+        "startLine": 798,
+        "startChar": 7,
+        "endLine": 798,
+        "endChar": 31
+      },
+      "revId": "301fdb9d1cf550698d367a936178ed37feccf709",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
