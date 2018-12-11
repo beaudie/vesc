@@ -102,6 +102,30 @@
     },
     {
       "key": {
+        "uuid": "037b1284_a9efea40",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T04:05:00Z",
+      "side": 1,
+      "message": "It turns out that android configures ARM to run in little-endian, so ConvertVertex_comp::kIsBigEndian is never exercised. I changed this to an assert and removed the flag from the configuration file. I kept the big-endian support in the shader implementation, though so future support would be trivial if necessary.",
+      "parentUuid": "4cf87208_c0ae46c7",
+      "range": {
+        "startLine": 387,
+        "startChar": 0,
+        "endLine": 389,
+        "endChar": 72
+      },
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5db9b311_8ced5afe",
         "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
         "patchSetId": 28
