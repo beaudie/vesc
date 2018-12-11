@@ -91,6 +91,8 @@ config("internal_config") {
   if (angle_enable_trace) {
     defines += [ "ANGLE_ENABLE_DEBUG_TRACE=1" ]
   }
+
+  ldflags = [ "-Wl,--compress-debug-sections=zlib" ]
 }
 
 config("extra_warnings") {
