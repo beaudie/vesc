@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "956569bd_de26bb0a",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-12-11T12:27:09Z",
+      "side": 1,
+      "message": "Ah yes, thanks for the explanation!",
+      "parentUuid": "f8c5040e_4a88f1a2",
+      "range": {
+        "startLine": 113,
+        "startChar": 21,
+        "endLine": 113,
+        "endChar": 38
+      },
+      "revId": "79d28d5acef754810cb148e7ea4c7ec61477c618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2e4f45b1_0e50e0ab",
         "filename": "src/compiler/translator/OutputHLSL.cpp",
         "patchSetId": 1
@@ -118,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "bb2eb467_8ff7063a",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2434,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-12-11T12:27:09Z",
+      "side": 1,
+      "message": "I see, we should still do the processing for the non-first arguments of atomic operations.",
+      "parentUuid": "f93eda53_c43510fd",
+      "revId": "79d28d5acef754810cb148e7ea4c7ec61477c618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d16075a4_2b304602",
         "filename": "src/compiler/translator/OutputHLSL.cpp",
         "patchSetId": 1
@@ -167,6 +209,24 @@
       "revId": "79d28d5acef754810cb148e7ea4c7ec61477c618",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27ca0d16_f970b295",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2459,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-12-11T12:27:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "95d9e1a8_851497cc",
+      "revId": "79d28d5acef754810cb148e7ea4c7ec61477c618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
