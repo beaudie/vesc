@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "3b09894a_1b42c55d",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "643e458b_a9a4e70d",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a3505190_d3949c61",
         "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
         "patchSetId": 28
@@ -48,6 +66,30 @@
       "writtenOn": "2018-12-10T12:57:12Z",
       "side": 1,
       "message": "This is interesting. Usually graphics APIs are opinionated about endianness. Did you find this was necessary on ARM devices like the Android phones?",
+      "range": {
+        "startLine": 387,
+        "startChar": 0,
+        "endLine": 389,
+        "endChar": 72
+      },
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cf87208_c0ae46c7",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": "Since I\u0027m aliasing the memory, I think it\u0027s a necessity, but I haven\u0027t actually tried to see what fails if I remove this. I\u0027ll give it a shot in a test CL and let you know.",
+      "parentUuid": "a3505190_d3949c61",
       "range": {
         "startLine": 387,
         "startChar": 0,
@@ -113,6 +155,24 @@
     },
     {
       "key": {
+        "uuid": "106f7802_7866afbe",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": "That would be a big table Yuly, I went with `if`s, even though it\u0027s not as efficient as table or succinct as ?: in my opinion.",
+      "parentUuid": "0c689c95_eb836ea3",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a30a052_ac26bfdf",
         "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.h",
         "patchSetId": 28
@@ -124,6 +184,30 @@
       "writtenOn": "2018-12-10T12:57:12Z",
       "side": 1,
       "message": "can you make a type alias for this (using Blah \u003d angle::Result (...))",
+      "range": {
+        "startLine": 124,
+        "startChar": 14,
+        "endLine": 126,
+        "endChar": 99
+      },
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8b2fdf8_dd9d93ff",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": "Huh, I tried that originally and had compile errors, though it\u0027s too complicated for the compiler to match, but gave it another shot now and it works. Done.",
+      "parentUuid": "6a30a052_ac26bfdf",
       "range": {
         "startLine": 124,
         "startChar": 14,
@@ -159,6 +243,30 @@
     },
     {
       "key": {
+        "uuid": "fe1de2ce_b66cc656",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": "I did it so InterleavedAttributeDataBenchmark wouldn\u0027t complain. I\u0027ll remove the flush() from that test, and put this back to what it was.",
+      "parentUuid": "c6611ad0_53457992",
+      "range": {
+        "startLine": 40,
+        "startChar": 60,
+        "endLine": 40,
+        "endChar": 67
+      },
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e2b6360d_f97507a9",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 28
@@ -188,6 +296,24 @@
       "side": 1,
       "message": "You can test Pixel 2 on the bots with some specific testers Yuly added. Also, the work Ian did should at some point allow us to get the SystemInfo and machine name if we want to narrow this to 5x.\n\n(whoops, redundant comment. but left it here)",
       "parentUuid": "e2b6360d_f97507a9",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a167ecc_eac84e53",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": "I tried that in a test CL. All the pixel 2 bots pass (although only the deqp ones seem to be testing Vulkan).\n\nThe question is, how can we verify this on _all_ phones?",
+      "parentUuid": "4f0ff6d3_6b2772e9",
       "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -229,6 +355,24 @@
     },
     {
       "key": {
+        "uuid": "12eabeb9_9193248d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1051,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6487da8b_d183b722",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1cc01ae4_2204ca91",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 28
@@ -252,6 +396,30 @@
     },
     {
       "key": {
+        "uuid": "6594ee79_b39d1c43",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cc01ae4_2204ca91",
+      "range": {
+        "startLine": 193,
+        "startChar": 29,
+        "endLine": 193,
+        "endChar": 48
+      },
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c6b401ed_283aa25d",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 28
@@ -272,6 +440,30 @@
       "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bd3730e_b2b9bb32",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6b401ed_283aa25d",
+      "range": {
+        "startLine": 218,
+        "startChar": 70,
+        "endLine": 218,
+        "endChar": 94
+      },
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -322,6 +514,24 @@
       "side": 1,
       "message": "Also worth trying to see if it maybe works fine without validation layers, as they can mess with buffer contents.",
       "parentUuid": "352f4efd_7d51ce8f",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0cd4e94_cb38e265",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": "@Jamie, I\u0027ll take a look to see what I can find.\n\n@Yuly, that\u0027s interesting, why would the validation layers change the buffer contents?",
+      "parentUuid": "654fbcc4_a5e148be",
       "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -400,6 +610,30 @@
       "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f6ab385_05ae9c55",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertVertex.comp",
+        "patchSetId": 28
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": ":)",
+      "parentUuid": "76efd566_791e8ac4",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 22
+      },
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

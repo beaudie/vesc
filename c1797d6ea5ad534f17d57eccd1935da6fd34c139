@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c350040f_2b873be3",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "1f4c5527_4b6a697d",
+      "range": {
+        "startLine": 232,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 94
+      },
+      "revId": "c1797d6ea5ad534f17d57eccd1935da6fd34c139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d0cfc3f4_a77e0414",
         "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
         "patchSetId": 30
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "22a1e8c5_126c27fc",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0cfc3f4_a77e0414",
+      "range": {
+        "startLine": 373,
+        "startChar": 0,
+        "endLine": 376,
+        "endChar": 0
+      },
+      "revId": "c1797d6ea5ad534f17d57eccd1935da6fd34c139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ad5cb53_3011c5f6",
         "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
         "patchSetId": 30
@@ -59,6 +107,30 @@
       "writtenOn": "2018-12-10T20:23:07Z",
       "side": 1,
       "message": "Could you add some () here? I needed to look up operator precedence to find out that this means\n((shaderParams.outputCount % 64 \u003d\u003d 0) \u0026\u0026 (shaderParams.componentCount % shaderParams.Ed \u003d\u003d 0)) ? ConvertVertex_comp::kIsAligned : 0",
+      "range": {
+        "startLine": 379,
+        "startChar": 0,
+        "endLine": 382,
+        "endChar": 16
+      },
+      "revId": "c1797d6ea5ad534f17d57eccd1935da6fd34c139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18718cb0_c210b50e",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": "I\u0027d like to deny this if you don\u0027t feel too strongly about it, with the same argument why I wouldn\u0027t add parentheses to \"a + b * c\", or `a \u003d\u003d 0 \u0026\u0026 b \u003d\u003d 0`.\n\nC\u0027s operator precedence is misguided when it comes to \u0026, | and ^ (which are arithmetic operations, but whose precedence is near logical operations), but is otherwise pretty straightforward. I think with a bit of exposure, it becomes second nature (like \"a + b * c\" is).",
+      "parentUuid": "7ad5cb53_3011c5f6",
       "range": {
         "startLine": 379,
         "startChar": 0,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "cc9a3157_487af63d",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2236ca98_5bb9b96a",
+      "range": {
+        "startLine": 386,
+        "startChar": 9,
+        "endLine": 386,
+        "endChar": 23
+      },
+      "revId": "c1797d6ea5ad534f17d57eccd1935da6fd34c139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "89def8d1_c2ba94f8",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 30
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "3b51e167_0aafa3b6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": "I generally think any limit is wrong, but it does (or rather did) serve to catch our bugs.\n\nThis is not normal for Vulkan though, it only happens in a perf test that was flushing after every draw, which no self-respecting application would ever though.\n\nI ended up removing the glFlush from the perf test and putting this back to 100.",
+      "parentUuid": "89def8d1_c2ba94f8",
+      "range": {
+        "startLine": 40,
+        "startChar": 60,
+        "endLine": 40,
+        "endChar": 67
+      },
+      "revId": "c1797d6ea5ad534f17d57eccd1935da6fd34c139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c4f934f_506230cb",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertVertex.comp",
         "patchSetId": 30
@@ -128,6 +248,30 @@
       "writtenOn": "2018-12-10T20:23:07Z",
       "side": 1,
       "message": "Is it possible to simplify this and the following checks with something like \"if(DstType\u003d\u003dfloat)\"?",
+      "range": {
+        "startLine": 135,
+        "startChar": 4,
+        "endLine": 135,
+        "endChar": 93
+      },
+      "revId": "c1797d6ea5ad534f17d57eccd1935da6fd34c139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a7fe2f1_862a5d15",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertVertex.comp",
+        "patchSetId": 30
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T03:42:04Z",
+      "side": 1,
+      "message": "You mean `#if DstType \u003d\u003d float`? I don\u0027t think that would work, because `float` is not some value the preprocessor can test against.\n\nI could define an `IsDstFloat` next to where `DstType` is defined, though. Done.",
+      "parentUuid": "7c4f934f_506230cb",
       "range": {
         "startLine": 135,
         "startChar": 4,
