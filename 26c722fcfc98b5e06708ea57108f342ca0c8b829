@@ -458,6 +458,24 @@
     },
     {
       "key": {
+        "uuid": "ddcee666_fc574681",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T19:03:01Z",
+      "side": 1,
+      "message": "That was my bad, I searched for \"vulkan\" in the Build page and found none, so I thought they are not running against vulkan. Then I realized android_angle_vk64_rel_ng also doesn\u0027t have vulkan in the step names.",
+      "parentUuid": "2c229934_e29ad4a4",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "984d047f_58cec29c",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 28
