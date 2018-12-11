@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3b0ba13_69c33a61",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-12-11T09:27:23Z",
+      "side": 1,
+      "message": "Do you mean for atomic counter variables?",
+      "range": {
+        "startLine": 113,
+        "startChar": 21,
+        "endLine": 113,
+        "endChar": 38
+      },
+      "revId": "79d28d5acef754810cb148e7ea4c7ec61477c618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e4f45b1_0e50e0ab",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2426,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-12-11T09:27:23Z",
+      "side": 1,
+      "message": "Can we have a comment that shows the code produced?",
+      "revId": "79d28d5acef754810cb148e7ea4c7ec61477c618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29c5d38a_54557443",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2429,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-12-11T09:27:23Z",
+      "side": 1,
+      "message": "[1]",
+      "revId": "79d28d5acef754810cb148e7ea4c7ec61477c618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61169c55_a03e756b",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2434,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-12-11T09:27:23Z",
+      "side": 1,
+      "message": "I think this would have been handled by the previous transform pass to move SSBOs out of arguments?",
+      "revId": "79d28d5acef754810cb148e7ea4c7ec61477c618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d16075a4_2b304602",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2443,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-12-11T09:27:23Z",
+      "side": 1,
+      "message": "nit: outputting the comma can be done at the beginning of the loop and [1] removed.",
+      "revId": "79d28d5acef754810cb148e7ea4c7ec61477c618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "584f1cd0_143fba4a",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2459,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-12-11T09:27:23Z",
+      "side": 1,
+      "message": "else UNIMPLEMENTED?",
+      "revId": "79d28d5acef754810cb148e7ea4c7ec61477c618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8714ad89_bdc13abd",
+        "filename": "src/compiler/translator/TranslatorHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2018-12-11T09:27:23Z",
+      "side": 1,
+      "message": "As SSBOs can also ...\n\nWhat\u0027s the specific bad interaction that this prevents?",
+      "range": {
+        "startLine": 132,
+        "startChar": 11,
+        "endLine": 132,
+        "endChar": 31
+      },
+      "revId": "79d28d5acef754810cb148e7ea4c7ec61477c618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
