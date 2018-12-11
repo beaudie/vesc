@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "b6a3fa26_035c5fce",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-11T16:53:07Z",
+      "side": 1,
+      "message": "Maybe make into a small helper method?",
+      "parentUuid": "18718cb0_c210b50e",
+      "range": {
+        "startLine": 379,
+        "startChar": 0,
+        "endLine": 382,
+        "endChar": 16
+      },
+      "revId": "c1797d6ea5ad534f17d57eccd1935da6fd34c139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2236ca98_5bb9b96a",
         "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
         "patchSetId": 30

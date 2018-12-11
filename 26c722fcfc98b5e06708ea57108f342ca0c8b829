@@ -126,6 +126,30 @@
     },
     {
       "key": {
+        "uuid": "3c485e3b_df7a9036",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-11T16:53:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "037b1284_a9efea40",
+      "range": {
+        "startLine": 387,
+        "startChar": 0,
+        "endLine": 389,
+        "endChar": 72
+      },
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5db9b311_8ced5afe",
         "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
         "patchSetId": 28
@@ -194,6 +218,24 @@
       "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b90588b5_ed63973f",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-11T16:53:07Z",
+      "side": 1,
+      "message": "I\u0027m happy with your solution.",
+      "parentUuid": "106f7802_7866afbe",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -341,6 +383,24 @@
       "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fff90734_a950fe60",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-11T16:53:07Z",
+      "side": 1,
+      "message": "Well, the set of all Android phones is probably in the thousands. I\u0027d say if it fails on 5x and passes on Pixel 2 it\u0027s almost certainly a 5x bug. If it fails on 5x and passes on Pixel 2 and one other device, it\u0027s probably definitely a 5x bug. We\u0027ll add automated test coverage on more supported devices as time goes on.\n\nBTW There won\u0027t be any bug fixes incoming for the 5x. And likely we won\u0027t deploy ANGLE Vulkan on 5x at any point. And there are plenty of existing bugs. So it\u0027s safe to be quite generous when it comes to ignoring 5x issues.\n\nMaybe let\u0027s try to investigate how to get the device out of the system if it is possible, and leave your workaround enabled for all Android in the meantime. It\u0027s still a huge improvement over the current code.",
+      "parentUuid": "2a167ecc_eac84e53",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
