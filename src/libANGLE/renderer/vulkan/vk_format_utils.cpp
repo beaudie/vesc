@@ -141,7 +141,7 @@ void Format::initTextureFallback(RendererVk *renderer,
 
 void Format::initBufferFallback(RendererVk *renderer, const BufferFormatInitInfo *info, int numInfo)
 {
-    size_t skip = renderer->getFeatures().forceFallbackFormat ? 1 : 0;
+    size_t skip = 1;//renderer->getFeatures().forceFallbackFormat ? 1 : 0;
     int i = FindSupportedFormat(renderer, info + skip, numInfo - skip, HasFullBufferFormatSupport);
     i += skip;
 
