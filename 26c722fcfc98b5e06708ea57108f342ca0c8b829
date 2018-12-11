@@ -257,6 +257,24 @@
     },
     {
       "key": {
+        "uuid": "78c94fd0_fd556c83",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T18:00:02Z",
+      "side": 1,
+      "message": "@Yuly, I was thinking that to cover all assert cases, the table should have 2^6 x 2^3 entries (essentially to assert that exactly one of each srcIs* and destIs* is set), but on second thought that can be separately asserted. I\u0027ll look into turning it into a table.",
+      "parentUuid": "58c1a097_734fb9cb",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a30a052_ac26bfdf",
         "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.h",
         "patchSetId": 28
@@ -670,6 +688,24 @@
       "side": 1,
       "message": "In my case they were emulating lack of host coherency. Since then I\u0027m suspicious regarding bugs in validation layers affecting memory contents.",
       "parentUuid": "f0cd4e94_cb38e265",
+      "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03fcae3f_15c2c8a6",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T18:00:02Z",
+      "side": 1,
+      "message": "Ouch, that bug must have been very unpleasant.\n\nI\u0027ll try to keep that in mind, and continue with the investigation after the holidays if you don\u0027t mind (I\u0027ll be on vacation in two days).",
+      "parentUuid": "2eae6f21_ad6f2086",
       "revId": "26c722fcfc98b5e06708ea57108f342ca0c8b829",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

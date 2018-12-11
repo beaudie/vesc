@@ -191,6 +191,30 @@
     },
     {
       "key": {
+        "uuid": "60b3df97_926a42bf",
+        "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-11T18:00:02Z",
+      "side": 1,
+      "message": "Ok I\u0027ll turn the condition into a helper to avoid confusion.\n\nYou\u0027re right that ?: has an arbitrary relation with any other operator. ?: is the lowest precedence (after assignment), though, so I find it easy to remember.",
+      "parentUuid": "e3909981_df4f3d4e",
+      "range": {
+        "startLine": 379,
+        "startChar": 0,
+        "endLine": 382,
+        "endChar": 16
+      },
+      "revId": "c1797d6ea5ad534f17d57eccd1935da6fd34c139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2236ca98_5bb9b96a",
         "filename": "src/libANGLE/renderer/vulkan/DispatchUtilsVk.cpp",
         "patchSetId": 30
