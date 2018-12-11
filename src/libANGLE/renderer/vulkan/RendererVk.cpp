@@ -792,6 +792,8 @@ void RendererVk::initFeatures()
         mFeatures.clampPointSize = true;
     }
 
+    fprintf(stderr, "VendorID: 0x%04X, DeviceID: 0x%04X\n", mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID);
+
 #if defined(ANGLE_PLATFORM_ANDROID)
     // Work around ineffective compute-graphics barrier in android.
     // TODO(syoussefi): Figure out which vendors and driver versions are affected.
