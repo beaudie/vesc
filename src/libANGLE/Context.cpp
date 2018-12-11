@@ -285,9 +285,7 @@ enum SubjectIndexes : angle::SubjectIndex
 {
     kTexture0SubjectIndex       = 0,
     kTextureMaxSubjectIndex     = kTexture0SubjectIndex + IMPLEMENTATION_MAX_ACTIVE_TEXTURES,
-    kImage0SubjectIndex         = kTextureMaxSubjectIndex,
-    kImageMaxSubjectIndex       = kImage0SubjectIndex + IMPLEMENTATION_MAX_IMAGE_UNITS,
-    kUniformBuffer0SubjectIndex = kImageMaxSubjectIndex,
+    kUniformBuffer0SubjectIndex = kTextureMaxSubjectIndex,
     kUniformBufferMaxSubjectIndex =
         kUniformBuffer0SubjectIndex + IMPLEMENTATION_MAX_UNIFORM_BUFFER_BINDINGS,
     kSampler0SubjectIndex    = kUniformBufferMaxSubjectIndex,
@@ -358,12 +356,6 @@ Context::Context(rx::EGLImplFactory *implFactory,
          samplerIndex < kSamplerMaxSubjectIndex; ++samplerIndex)
     {
         mSamplerObserverBindings.emplace_back(this, samplerIndex);
-    }
-
-    for (angle::SubjectIndex imageIndex = kImage0SubjectIndex; imageIndex < kImageMaxSubjectIndex;
-         ++imageIndex)
-    {
-        mImageObserverBindings.emplace_back(this, imageIndex);
     }
 }
 
@@ -1156,7 +1148,6 @@ void Context::bindImageTexture(GLuint unit,
 {
     Texture *tex = mState.mTextures->getTexture(texture);
     mGLState.setImageUnit(this, unit, tex, level, layered, layer, access, format);
-    mImageObserverBindings[unit].bind(tex);
 }
 
 void Context::useProgram(GLuint program)
@@ -8111,10 +8102,6 @@ void Context::onSubjectStateChange(const Context *context,
             {
                 mGLState.onActiveTextureStateChange(this, index);
                 mStateCache.onActiveTextureChange(this);
-            }
-            else if (index < kImageMaxSubjectIndex)
-            {
-                mGLState.onImageStateChange(this, index - kImage0SubjectIndex);
             }
             else if (index < kUniformBufferMaxSubjectIndex)
             {
