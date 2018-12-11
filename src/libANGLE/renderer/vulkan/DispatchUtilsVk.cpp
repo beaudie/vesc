@@ -65,7 +65,8 @@ uint32_t GetConvertVertexFlags(const DispatchUtilsVk::ConvertVertexParameters &p
 
     uint32_t endiannessTest                       = 0;
     *reinterpret_cast<uint8_t *>(&endiannessTest) = 1;
-    bool isBigEndian                              = endiannessTest != 1;
+    // bool isBigEndian                           = endiannessTest != 1;
+    bool isBigEndian = false;
 
     uint32_t flags = isBigEndian ? ConvertVertex_comp::kIsBigEndian : 0;
 
