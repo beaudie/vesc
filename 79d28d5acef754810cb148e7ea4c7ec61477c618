@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f8c5040e_4a88f1a2",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-11T09:55:08Z",
+      "side": 1,
+      "message": "No. I mean shared variables which are modified by keyword \u0027shared\u0027.\nThe atomic functions mean atomic memory functions not atomic counter functions. They can be used to operate shared variable or ssbo buffer variable.\nThey have different implementation for each in d3d side.\nFor shared variable, you can use \u0027Interlocked*\u0027 to reflect the corresponding atomic memory functions. See previous patch https://chromium-review.googlesource.com/c/angle/angle/+/1121835.\nBut for ssbo, you must use RWByteAddressBuffer.Interlocked* to reflect the corresponding atomic memory functions. So the atomic memory functions for ssbo are more like the array length implementation for ssbo.",
+      "parentUuid": "f3b0ba13_69c33a61",
+      "range": {
+        "startLine": 113,
+        "startChar": 21,
+        "endLine": 113,
+        "endChar": 38
+      },
+      "revId": "79d28d5acef754810cb148e7ea4c7ec61477c618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2e4f45b1_0e50e0ab",
         "filename": "src/compiler/translator/OutputHLSL.cpp",
         "patchSetId": 1
@@ -76,6 +100,24 @@
     },
     {
       "key": {
+        "uuid": "f93eda53_c43510fd",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2434,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-11T09:55:08Z",
+      "side": 1,
+      "message": "No. We didn\u0027t process atomic memory functions for ssbo. So it\u0027s possible that ssbo as the non-first argument of atomic memory functions. Such as, atomicAdd(ssbo.i, ssbo,j);",
+      "parentUuid": "61169c55_a03e756b",
+      "revId": "79d28d5acef754810cb148e7ea4c7ec61477c618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d16075a4_2b304602",
         "filename": "src/compiler/translator/OutputHLSL.cpp",
         "patchSetId": 1
@@ -104,6 +146,24 @@
       "writtenOn": "2018-12-11T09:27:23Z",
       "side": 1,
       "message": "else UNIMPLEMENTED?",
+      "revId": "79d28d5acef754810cb148e7ea4c7ec61477c618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95d9e1a8_851497cc",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2459,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-11T09:55:08Z",
+      "side": 1,
+      "message": "It\u0027s not \u0027UNIMPLEMENTED\u0027. It should be \u0027UNREACHABLE()\u0027 to match the old logic. It\u0027s because these two cases are specially processed in RewriteAtomicFunctionExpressions. And it will be processed in https://cs.chromium.org/chromium/src/third_party/angle/src/compiler/translator/OutputHLSL.cpp?q\u003dOutputHLSL.cpp\u0026dr\u0026l\u003d1274. This is also why I adjust the sequence of RewriteExpressionsWithShaderStorageBlock and RewriteAtomicFunctionExpressions in https://chromium-review.googlesource.com/c/angle/angle/+/1370676/1/src/compiler/translator/TranslatorHLSL.cpp#134. Otherwise, these two cases will be caught which are not expected here.",
+      "parentUuid": "584f1cd0_143fba4a",
       "revId": "79d28d5acef754810cb148e7ea4c7ec61477c618",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
