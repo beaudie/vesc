@@ -1338,3 +1338,130 @@ EXPORTS
     glViewportContextANGLE
     glWaitSyncContextANGLE
     glWeightPointerOESContextANGLE
+
+    ; EGL 1.0
+    EGLChooseConfig
+    EGLCopyBuffers
+    EGLCreateContext
+    EGLCreatePbufferSurface
+    EGLCreatePixmapSurface
+    EGLCreateWindowSurface
+    EGLDestroyContext
+    EGLDestroySurface
+    EGLGetConfigAttrib
+    EGLGetConfigs
+    EGLGetCurrentDisplay
+    EGLGetCurrentSurface
+    EGLGetDisplay
+    EGLGetError
+    EGLGetProcAddress
+    EGLInitialize
+    EGLMakeCurrent
+    EGLQueryContext
+    EGLQueryString
+    EGLQuerySurface
+    EGLSwapBuffers
+    EGLTerminate
+    EGLWaitGL
+    EGLWaitNative
+
+    ; EGL 1.1
+    EGLBindTexImage
+    EGLReleaseTexImage
+    EGLSurfaceAttrib
+    EGLSwapInterval
+
+    ; EGL 1.2
+    EGLBindAPI
+    EGLCreatePbufferFromClientBuffer
+    EGLQueryAPI
+    EGLReleaseThread
+    EGLWaitClient
+
+    ; EGL 1.4
+    EGLGetCurrentContext
+
+    ; EGL 1.5
+    EGLClientWaitSync
+    EGLCreateImage
+    EGLCreatePlatformPixmapSurface
+    EGLCreatePlatformWindowSurface
+    EGLCreateSync
+    EGLDestroyImage
+    EGLDestroySync
+    EGLGetPlatformDisplay
+    EGLGetSyncAttrib
+    EGLWaitSync
+
+    ; EGL_ANDROID_blob_cache
+    EGLSetBlobCacheFuncsANDROID
+
+    ; EGL_ANDROID_get_frame_timestamps
+    EGLGetCompositorTimingANDROID
+    EGLGetCompositorTimingSupportedANDROID
+    EGLGetFrameTimestampSupportedANDROID
+    EGLGetFrameTimestampsANDROID
+    EGLGetNextFrameIdANDROID
+
+    ; EGL_ANDROID_presentation_time
+    EGLPresentationTimeANDROID
+
+    ; EGL_ANGLE_device_creation
+    EGLCreateDeviceANGLE
+    EGLReleaseDeviceANGLE
+
+    ; EGL_ANGLE_program_cache_control
+    EGLProgramCacheGetAttribANGLE
+    EGLProgramCachePopulateANGLE
+    EGLProgramCacheQueryANGLE
+    EGLProgramCacheResizeANGLE
+
+    ; EGL_ANGLE_query_surface_pointer
+    EGLQuerySurfacePointerANGLE
+
+    ; EGL_ANGLE_stream_producer_d3d_texture
+    EGLCreateStreamProducerD3DTextureANGLE
+    EGLStreamPostD3DTextureANGLE
+
+    ; EGL_CHROMIUM_get_sync_values
+    EGLGetSyncValuesCHROMIUM
+
+    ; EGL_EXT_device_query
+    EGLQueryDeviceAttribEXT
+    EGLQueryDeviceStringEXT
+    EGLQueryDisplayAttribEXT
+
+    ; EGL_EXT_platform_base
+    EGLCreatePlatformPixmapSurfaceEXT
+    EGLCreatePlatformWindowSurfaceEXT
+    EGLGetPlatformDisplayEXT
+
+    ; EGL_KHR_debug
+    EGLDebugMessageControlKHR
+    EGLLabelObjectKHR
+    EGLQueryDebugKHR
+
+    ; EGL_KHR_image
+    EGLCreateImageKHR
+    EGLDestroyImageKHR
+
+    ; EGL_KHR_stream
+    EGLCreateStreamKHR
+    EGLDestroyStreamKHR
+    EGLQueryStreamKHR
+    EGLQueryStreamu64KHR
+    EGLStreamAttribKHR
+
+    ; EGL_KHR_stream_consumer_gltexture
+    EGLStreamConsumerAcquireKHR
+    EGLStreamConsumerGLTextureExternalKHR
+    EGLStreamConsumerReleaseKHR
+
+    ; EGL_KHR_swap_buffers_with_damage
+    EGLSwapBuffersWithDamageKHR
+
+    ; EGL_NV_post_sub_buffer
+    EGLPostSubBufferNV
+
+    ; EGL_NV_stream_consumer_gltexture_yuv
+    EGLStreamConsumerGLTextureExternalAttribsNV
