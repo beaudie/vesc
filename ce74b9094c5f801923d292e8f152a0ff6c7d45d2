@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e331b592_287e47b9",
+        "filename": "src/libANGLE/renderer/vulkan/DrawUtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-12T20:34:28Z",
+      "side": 1,
+      "message": "This can be shared with DispatchUtilsVk, I think.",
+      "range": {
+        "startLine": 46,
+        "startChar": 27,
+        "endLine": 46,
+        "endChar": 53
+      },
+      "revId": "ce74b9094c5f801923d292e8f152a0ff6c7d45d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8e951a6_f714f1ce",
+        "filename": "src/libANGLE/renderer/vulkan/DrawUtilsVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-12T20:34:28Z",
+      "side": 1,
+      "message": "Could you update the corresponding comment in DispatchUtilsVk.h?",
+      "range": {
+        "startLine": 12,
+        "startChar": 8,
+        "endLine": 12,
+        "endChar": 25
+      },
+      "revId": "ce74b9094c5f801923d292e8f152a0ff6c7d45d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff53c1b3_b55efef5",
+        "filename": "src/libANGLE/renderer/vulkan/DrawUtilsVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-12T20:34:28Z",
+      "side": 1,
+      "message": "way?",
+      "range": {
+        "startLine": 43,
+        "startChar": 84,
+        "endLine": 43,
+        "endChar": 88
+      },
+      "revId": "ce74b9094c5f801923d292e8f152a0ff6c7d45d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e47dbe9_0543145e",
+        "filename": "src/libANGLE/renderer/vulkan/DrawUtilsVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-12T20:34:28Z",
+      "side": 1,
+      "message": "This comment belongs to setupProgram.\nCould you also update the one in DispatchUtilsVk.h?",
+      "range": {
+        "startLine": 66,
+        "startChar": 46,
+        "endLine": 66,
+        "endChar": 53
+      },
+      "revId": "ce74b9094c5f801923d292e8f152a0ff6c7d45d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
