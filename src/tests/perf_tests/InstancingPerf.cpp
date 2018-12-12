@@ -12,9 +12,9 @@
 #include <cmath>
 #include <sstream>
 
-#include "Matrix.h"
-#include "random_utils.h"
-#include "shader_utils.h"
+#include "util/Matrix.h"
+#include "util/random_utils.h"
+#include "util/shader_utils.h"
 
 using namespace angle;
 using namespace egl_platform;
