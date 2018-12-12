@@ -45,6 +45,11 @@ inline bool IsQualcomm(uint32_t vendor_id)
     return vendor_id == VENDOR_ID_QUALCOMM;
 }
 
+inline bool IsNexus5X(const std::string &glRendererString)
+{
+    return glRendererString.find("Adreno (TM) 418") != std::string::npos;
+}
+
 const char *GetVendorString(uint32_t vendorId);
 
 // Intel
