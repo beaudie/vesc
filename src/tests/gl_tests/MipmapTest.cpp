@@ -157,7 +157,7 @@ void main()
         glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureCube);
         TexImageCubeMapFaces(0, GL_RGB, getWindowWidth(), GL_RGB, GL_UNSIGNED_BYTE, nullptr);
         glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGB, getWindowWidth(), getWindowWidth(),
-                     0, GL_RGB, GL_UNSIGNED_BYTE, mLevelZeroBlueInitData);
+                     0, GL_RGB, GL_UNSIGNED_BYTE, mLevelZeroBlueInitData.get());
 
         // Complete the texture cube without mipmaps to start with.
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -174,23 +174,19 @@ void main()
         glDeleteTextures(1, &mTexture2D);
         glDeleteTextures(1, &mTextureCube);
 
-        SafeDeleteArray(mLevelZeroBlueInitData);
-        SafeDeleteArray(mLevelZeroWhiteInitData);
-        SafeDeleteArray(mLevelOneGreenInitData);
-        SafeDeleteArray(mLevelTwoRedInitData);
-
         ANGLETest::TearDown();
     }
 
-    GLubyte *createRGBInitData(GLint width, GLint height, GLint r, GLint g, GLint b)
+    std::unique_ptr<GLubyte> createRGBInitData(GLint width, GLint height, GLint r, GLint g, GLint b)
     {
-        GLubyte *data = new GLubyte[3 * width * height];
+        std::unique_ptr<GLubyte> data(new GLubyte[3 * width * height]);
 
+        GLubyte *tmp_data_ptr = data.get();
         for (int i = 0; i < width * height; i += 1)
         {
-            data[3 * i + 0] = static_cast<GLubyte>(r);
-            data[3 * i + 1] = static_cast<GLubyte>(g);
-            data[3 * i + 2] = static_cast<GLubyte>(b);
+            tmp_data_ptr[3 * i + 0] = static_cast<GLubyte>(r);
+            tmp_data_ptr[3 * i + 1] = static_cast<GLubyte>(g);
+            tmp_data_ptr[3 * i + 2] = static_cast<GLubyte>(b);
         }
 
         return data;
@@ -216,10 +212,10 @@ void main()
     GLuint mTexture2D;
     GLuint mTextureCube;
 
-    GLubyte *mLevelZeroBlueInitData;
-    GLubyte *mLevelZeroWhiteInitData;
-    GLubyte *mLevelOneGreenInitData;
-    GLubyte *mLevelTwoRedInitData;
+    std::unique_ptr<GLubyte> mLevelZeroBlueInitData;
+    std::unique_ptr<GLubyte> mLevelZeroWhiteInitData;
+    std::unique_ptr<GLubyte> mLevelOneGreenInitData;
+    std::unique_ptr<GLubyte> mLevelTwoRedInitData;
 
   private:
     GLuint mOffscreenFramebuffer;
@@ -412,7 +408,7 @@ TEST_P(MipmapTest, DISABLED_ThreeLevelsInitData)
     // Pass in level zero init data.
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, getWindowWidth(), getWindowHeight(), 0, GL_RGB,
-                 GL_UNSIGNED_BYTE, mLevelZeroBlueInitData);
+                 GL_UNSIGNED_BYTE, mLevelZeroBlueInitData.get());
     ASSERT_GL_NO_ERROR();
 
     // Disable mips.
@@ -442,7 +438,7 @@ TEST_P(MipmapTest, DISABLED_ThreeLevelsInitData)
 
     // Pass in level one init data.
     glTexImage2D(GL_TEXTURE_2D, 1, GL_RGB, getWindowWidth() / 2, getWindowHeight() / 2, 0, GL_RGB,
-                 GL_UNSIGNED_BYTE, mLevelOneGreenInitData);
+                 GL_UNSIGNED_BYTE, mLevelOneGreenInitData.get());
     ASSERT_GL_NO_ERROR();
 
     // Draw a full-sized quad, and check it's blue.
@@ -468,7 +464,7 @@ TEST_P(MipmapTest, DISABLED_ThreeLevelsInitData)
 
     // Pass in level two init data.
     glTexImage2D(GL_TEXTURE_2D, 2, GL_RGB, getWindowWidth() / 4, getWindowHeight() / 4, 0, GL_RGB,
-                 GL_UNSIGNED_BYTE, mLevelTwoRedInitData);
+                 GL_UNSIGNED_BYTE, mLevelTwoRedInitData.get());
     ASSERT_GL_NO_ERROR();
 
     // Draw a full-sized quad, and check it's blue.
@@ -496,7 +492,7 @@ TEST_P(MipmapTest, DISABLED_ThreeLevelsInitData)
     // Now reset level 0 to white, keeping mipmaps disabled. Then, render various sized quads. They
     // should be white.
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, getWindowWidth(), getWindowHeight(), 0, GL_RGB,
-                 GL_UNSIGNED_BYTE, mLevelZeroWhiteInitData);
+                 GL_UNSIGNED_BYTE, mLevelZeroWhiteInitData.get());
     ASSERT_GL_NO_ERROR();
 
     clearAndDrawQuad(m2DProgram, getWindowWidth(), getWindowHeight());
@@ -528,7 +524,7 @@ TEST_P(MipmapTest, GenerateMipmapFromInitDataThenRender)
     // Pass in initial data so the texture is blue.
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, getWindowWidth(), getWindowHeight(), 0, GL_RGB,
-                 GL_UNSIGNED_BYTE, mLevelZeroBlueInitData);
+                 GL_UNSIGNED_BYTE, mLevelZeroBlueInitData.get());
 
     // Then generate the mips.
     glGenerateMipmap(GL_TEXTURE_2D);
@@ -681,7 +677,8 @@ TEST_P(MipmapTest, DefineValidExtraLevelAndUseItLater)
 {
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
 
-    GLubyte *levels[] = {mLevelZeroBlueInitData, mLevelOneGreenInitData, mLevelTwoRedInitData};
+    GLubyte *levels[] = {mLevelZeroBlueInitData.get(), mLevelOneGreenInitData.get(),
+                         mLevelTwoRedInitData.get()};
 
     int maxLevel = 1 + floor(log2(std::max(getWindowWidth(), getWindowHeight())));
 
@@ -692,10 +689,10 @@ TEST_P(MipmapTest, DefineValidExtraLevelAndUseItLater)
     }
 
     // Define an extra level that won't be used for now
-    GLubyte *magentaExtraLevelData =
+    std::unique_ptr<GLubyte> magentaExtraLevelData =
         createRGBInitData(getWindowWidth() * 2, getWindowHeight() * 2, 255, 0, 255);
     glTexImage2D(GL_TEXTURE_2D, maxLevel, GL_RGB, 1, 1, 0, GL_RGB, GL_UNSIGNED_BYTE,
-                 magentaExtraLevelData);
+                 magentaExtraLevelData.get());
 
     ASSERT_GL_NO_ERROR();
 
@@ -719,11 +716,11 @@ TEST_P(MipmapTest, DefineValidExtraLevelAndUseItLater)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 
     // Now redefine everything above level 8 to be a mipcomplete chain again.
-    GLubyte *levelDoubleSizeYellowInitData =
+    std::unique_ptr<GLubyte> levelDoubleSizeYellowInitData =
         createRGBInitData(getWindowWidth() * 2, getWindowHeight() * 2, 255, 255, 0);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, getWindowWidth() * 2, getWindowHeight() * 2, 0, GL_RGB,
-                 GL_UNSIGNED_BYTE, levelDoubleSizeYellowInitData);  // 256
+                 GL_UNSIGNED_BYTE, levelDoubleSizeYellowInitData.get());  // 256
 
     for (int i = 0; i < maxLevel - 1; i++)
     {
