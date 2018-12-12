@@ -68,6 +68,11 @@ inline bool IsPixel2(uint32_t vendorId, uint32_t deviceId)
     return IsQualcomm(vendorId) && deviceId == ANDROID_DEVICE_ID_PIXEL2;
 }
 
+inline bool IsNexus5X(const std::string &glRendererString)
+{
+    return glRendererString.find("Adreno (TM) 418") != std::string::npos;
+}
+
 const char *GetVendorString(uint32_t vendorId);
 
 // Intel
