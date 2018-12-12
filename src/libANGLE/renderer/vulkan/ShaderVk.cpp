@@ -39,6 +39,11 @@ ShCompileOptions ShaderVk::prepareSourceAndReturnOptions(const gl::Context *cont
     return compileOptions;
 }
 
+void ShaderVk::compile(const std::string &source, bool isWorkerThread)
+{
+    // No work to do here.
+}
+
 bool ShaderVk::postTranslateCompile(gl::ShCompilerInstance *compiler, std::string *infoLog)
 {
     // No work to do here.

@@ -25,6 +25,7 @@ class ShaderNULL : public ShaderImpl
     ShCompileOptions prepareSourceAndReturnOptions(const gl::Context *context,
                                                    std::stringstream *sourceStream,
                                                    std::string *sourcePath) override;
+    void compile(const std::string &source, bool isWorkerThread) override;
     // Returns success for compiling on the driver. Returns success.
     bool postTranslateCompile(gl::ShCompilerInstance *compiler, std::string *infoLog) override;
 
