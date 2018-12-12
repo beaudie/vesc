@@ -10,13 +10,11 @@
 //   rendering works, otherwise it checks an error is generated one MakeCurrent.
 #include <gtest/gtest.h>
 
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
 #include <vector>
 
-#include "OSWindow.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/angle_test_configs.h"
+#include "util/OSWindow.h"
 
 using namespace angle;
 
@@ -33,9 +31,8 @@ class EGLContextCompatibilityTest : public ANGLETest
 
     void SetUp() override
     {
-        PFNEGLGETPLATFORMDISPLAYEXTPROC eglGetPlatformDisplayEXT =
-            reinterpret_cast<PFNEGLGETPLATFORMDISPLAYEXTPROC>(
-                eglGetProcAddress("eglGetPlatformDisplayEXT"));
+        ANGLETest::SetUp();
+
         ASSERT_TRUE(eglGetPlatformDisplayEXT != nullptr);
 
         EGLint dispattrs[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE, GetParam().getRenderer(), EGL_NONE};

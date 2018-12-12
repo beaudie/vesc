@@ -10,8 +10,8 @@
 
 #include <vector>
 
-#include "random_utils.h"
 #include "test_utils/gl_raii.h"
+#include "util/random_utils.h"
 
 using namespace angle;
 
