@@ -287,7 +287,8 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
 
     syncXCommands();
 
-    mRenderer.reset(new RendererGL(std::move(functionsGL), eglAttributes));
+    // TODO(jie.a.chen@intel.com): Implement WorkerContextFactory.  http://crbug.com/873724
+    mRenderer.reset(new RendererGL(std::move(functionsGL), eglAttributes, nullptr));
     const gl::Version &maxVersion = mRenderer->getMaxSupportedESVersion();
     if (maxVersion < gl::Version(2, 0))
     {
