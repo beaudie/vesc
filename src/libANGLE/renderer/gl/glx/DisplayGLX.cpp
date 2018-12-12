@@ -287,7 +287,7 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
 
     syncXCommands();
 
-    mRenderer.reset(new RendererGL(std::move(functionsGL), eglAttributes));
+    mRenderer.reset(new RendererGL(std::move(functionsGL), eglAttributes, nullptr));
     const gl::Version &maxVersion = mRenderer->getMaxSupportedESVersion();
     if (maxVersion < gl::Version(2, 0))
     {

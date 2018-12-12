@@ -42,6 +42,7 @@ class ShaderD3D : public ShaderImpl
     ShCompileOptions prepareSourceAndReturnOptions(const gl::Context *context,
                                                    std::stringstream *sourceStream,
                                                    std::string *sourcePath) override;
+    void compileInWorkerThread(const std::string &source) override;
     bool postTranslateCompile(gl::ShCompilerInstance *compiler, std::string *infoLog) override;
     std::string getDebugInfo() const override;
 

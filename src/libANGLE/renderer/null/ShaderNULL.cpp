@@ -26,6 +26,11 @@ ShCompileOptions ShaderNULL::prepareSourceAndReturnOptions(const gl::Context *co
     return 0;
 }
 
+void ShaderNULL::compileInWorkerThread(const std::string &source)
+{
+    // No work to do here.
+}
+
 bool ShaderNULL::postTranslateCompile(gl::ShCompilerInstance *compiler, std::string *infoLog)
 {
     return true;

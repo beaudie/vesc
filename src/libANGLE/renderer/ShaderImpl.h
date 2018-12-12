@@ -27,6 +27,9 @@ class ShaderImpl : angle::NonCopyable
     virtual ShCompileOptions prepareSourceAndReturnOptions(const gl::Context *context,
                                                            std::stringstream *sourceStream,
                                                            std::string *sourcePath) = 0;
+
+    virtual void compileInWorkerThread(const std::string &source) = 0;
+
     // Returns success for compiling on the driver. Returns success.
     virtual bool postTranslateCompile(gl::ShCompilerInstance *compiler, std::string *infoLog) = 0;
 
