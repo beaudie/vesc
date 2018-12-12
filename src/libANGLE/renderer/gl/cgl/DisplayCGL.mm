@@ -97,7 +97,8 @@ egl::Error DisplayCGL::initialize(egl::Display *display)
     std::unique_ptr<FunctionsGL> functionsGL(new FunctionsGLCGL(handle));
     functionsGL->initialize(display->getAttributeMap());
 
-    mRenderer.reset(new RendererGL(std::move(functionsGL), display->getAttributeMap()));
+    // TODO(jie.a.chen@intel.com): Implement WorkerContextFactory.  http://crbug.com/873724
+    mRenderer.reset(new RendererGL(std::move(functionsGL), display->getAttributeMap(), nullptr));
 
     const gl::Version &maxVersion = mRenderer->getMaxSupportedESVersion();
     if (maxVersion < gl::Version(2, 0))
