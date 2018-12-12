@@ -741,6 +741,7 @@ shared_library("libGLESv1_CM${angle_libs_suffix}") {
     ":commit_id_config",
     ":debug_annotations_config",
     ":extra_warnings",
+    ":gl_prototypes",
     ":internal_config",
   ]
 
@@ -861,11 +862,38 @@ static_library("libEGL_static") {
 
 import("util/util.gni")
 
+config("util_loader_config") {
+  defines = [ "ANGLE_USE_UTIL_LOADER" ]
+}
+
 config("angle_util_config") {
-  include_dirs = [ "util" ]
+  include_dirs = [ "." ]
   if (is_linux && use_x11) {
     libs = [ "X11" ]
   }
+}
+
+source_set("util_loader") {
+  defines = [ "LIBANGLE_UTIL_IMPLEMENTATION" ]
+
+  sources = [
+    "util/egl_loader_autogen.cpp",
+    "util/egl_loader_autogen.h",
+    "util/gles_loader_autogen.cpp",
+    "util/gles_loader_autogen.h",
+  ]
+
+  public_configs = [
+    ":angle_util_config",
+    ":extra_warnings",
+    ":no_gl_prototypes",
+    ":internal_config",
+    ":util_loader_config",
+  ]
+
+  deps = [
+    ":includes",
+  ]
 }
 
 foreach(is_shared_library,
@@ -933,7 +961,6 @@ foreach(is_shared_library,
     configs += [
       ":debug_annotations_config",
       ":extra_warnings",
-      ":gl_prototypes",
     ]
 
     public_configs = [
@@ -943,8 +970,6 @@ foreach(is_shared_library,
 
     deps = [
       ":angle_common",
-      ":libEGL${dep_suffix}",
-      ":libGLESv2${dep_suffix}",
     ]
 
     if (is_shared_library) {
@@ -957,6 +982,17 @@ foreach(is_shared_library,
         ]
         public_configs += [ ":shared_library_public_config" ]
       }
+
+      deps += [ ":util_loader" ]
+      public_configs += [
+        ":util_loader_config",
+        ":no_gl_prototypes",
+      ]
+    } else {
+      public_configs += [
+        ":angle_static",
+        ":gl_prototypes",
+      ]
     }
   }
 }

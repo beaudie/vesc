@@ -12,45 +12,16 @@
 #include <iostream>
 #include <map>
 
-#include "EGLWindow.h"
-#include "OSWindow.h"
+#include "angle_gl.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/InitializeGlobals.h"
 #include "test_utils/angle_test_configs.h"
+#include "util/EGLWindow.h"
+#include "util/OSWindow.h"
+#include "util/system_utils.h"
 
 namespace angle
 {
-
-bool IsPlatformAvailable(const CompilerParameters &param)
-{
-    switch (param.output)
-    {
-        case SH_HLSL_4_1_OUTPUT:
-        case SH_HLSL_4_0_FL9_3_OUTPUT:
-        case SH_HLSL_3_0_OUTPUT:
-        {
-            TPoolAllocator allocator;
-            InitializePoolIndex();
-            allocator.push();
-            SetGlobalPoolAllocator(&allocator);
-            ShHandle translator =
-                sh::ConstructCompiler(GL_FRAGMENT_SHADER, SH_WEBGL2_SPEC, param.output);
-            bool success = translator != nullptr;
-            SetGlobalPoolAllocator(nullptr);
-            allocator.pop();
-            FreePoolIndex();
-            if (!success)
-            {
-                return false;
-            }
-            break;
-        }
-        default:
-            break;
-    }
-    return true;
-}
-
 bool IsPlatformAvailable(const PlatformParameters &param)
 {
     switch (param.getRenderer())
@@ -111,9 +82,15 @@ bool IsPlatformAvailable(const PlatformParameters &param)
 
         if (result)
         {
+            std::unique_ptr<angle::Library> eglLibrary;
+
+#if defined(ANGLE_USE_UTIL_LOADER)
+            eglLibrary.reset(angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME));
+#endif  // defined(ANGLE_USE_UTIL_LOADER)
+
             EGLWindow *eglWindow =
                 new EGLWindow(param.majorVersion, param.minorVersion, param.eglParameters);
-            result = eglWindow->initializeGL(osWindow);
+            result = eglWindow->initializeGL(osWindow, eglLibrary.get());
 
             eglWindow->destroyGL();
             SafeDelete(eglWindow);
