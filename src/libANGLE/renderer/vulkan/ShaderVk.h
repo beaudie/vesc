@@ -25,6 +25,7 @@ class ShaderVk : public ShaderImpl
     ShCompileOptions prepareSourceAndReturnOptions(const gl::Context *context,
                                                    std::stringstream *sourceStream,
                                                    std::string *sourcePath) override;
+    bool compileInWorkerThread(const std::string &source) override;
     // Returns success for compiling on the driver. Returns success.
     bool postTranslateCompile(gl::ShCompilerInstance *compiler, std::string *infoLog) override;
 

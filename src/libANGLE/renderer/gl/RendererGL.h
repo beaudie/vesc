@@ -9,6 +9,10 @@
 #ifndef LIBANGLE_RENDERER_GL_RENDERERGL_H_
 #define LIBANGLE_RENDERER_GL_RENDERERGL_H_
 
+#include <list>
+#include <mutex>
+#include <thread>
+
 #include "libANGLE/Caps.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Version.h"
@@ -41,10 +45,31 @@ class ContextImpl;
 class FunctionsGL;
 class StateManagerGL;
 
+// WorkerContext wraps a shared GL context to the main renderer GL context. It is used to by the
+// worker threads for khr_parallel_shader_compile.
+class WorkerContext : angle::NonCopyable
+{
+  public:
+    virtual ~WorkerContext(){};
+
+    virtual bool makeCurrent(std::string *infoLog) = 0;
+    virtual void unmakeCurrent()                   = 0;
+
+    std::thread::id threadID;
+};
+
+class WorkerContextFactory : angle::NonCopyable
+{
+  public:
+    virtual WorkerContext *createWorkerContext(std::string *infoLog) = 0;
+};
+
 class RendererGL : angle::NonCopyable
 {
   public:
-    RendererGL(std::unique_ptr<FunctionsGL> functions, const egl::AttributeMap &attribMap);
+    RendererGL(std::unique_ptr<FunctionsGL> functions,
+               const egl::AttributeMap &attribMap,
+               WorkerContextFactory *factory);
     virtual ~RendererGL();
 
     angle::Result flush();
@@ -149,6 +174,9 @@ class RendererGL : angle::NonCopyable
     angle::Result memoryBarrier(GLbitfield barriers);
     angle::Result memoryBarrierByRegion(GLbitfield barriers);
 
+    bool bindWorkerContext(std::string *infoLog);
+    void unbindWorkerContext();
+
   private:
     void ensureCapsInitialized() const;
     void generateCaps(gl::Caps *outCaps,
@@ -174,6 +202,11 @@ class RendererGL : angle::NonCopyable
     mutable gl::Extensions mNativeExtensions;
     mutable gl::Limitations mNativeLimitations;
     mutable MultiviewImplementationTypeGL mMultiviewImplementationType;
+
+    WorkerContextFactory *mWorkerContextFactory;
+    std::unordered_map<std::thread::id, std::unique_ptr<WorkerContext>> mCurrentWorkerContexts;
+    std::list<std::unique_ptr<WorkerContext>> mWorkerContextPool;
+    std::mutex mMutex;
 };
 
 }  // namespace rx

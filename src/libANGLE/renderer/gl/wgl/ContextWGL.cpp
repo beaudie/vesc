@@ -8,14 +8,15 @@
 
 namespace rx
 {
-ContextWGL::ContextWGL(const gl::ContextState &state, const std::shared_ptr<RendererWGL> &renderer)
-    : ContextGL(state, renderer), mRenderer(renderer)
+ContextWGL::ContextWGL(const gl::ContextState &state, std::shared_ptr<RendererWGL> renderer)
+    : ContextGL(state, renderer)
 {}
 
 ContextWGL::~ContextWGL() {}
 
 HGLRC ContextWGL::getContext() const
 {
-    return mRenderer->getContext();
+    auto renderer = std::static_pointer_cast<RendererWGL>(mRenderer);
+    return renderer->getContext();
 }
 }  // namespace rx
