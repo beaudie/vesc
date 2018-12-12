@@ -32,7 +32,7 @@
 namespace rx
 {
 
-ContextGL::ContextGL(const gl::ContextState &state, const std::shared_ptr<RendererGL> &renderer)
+ContextGL::ContextGL(const gl::ContextState &state, std::shared_ptr<RendererGL> renderer)
     : ContextImpl(state), mRenderer(renderer)
 {}
 
@@ -53,7 +53,7 @@ ShaderImpl *ContextGL::createShader(const gl::ShaderState &data)
     const FunctionsGL *functions = getFunctions();
     GLuint shader                = functions->createShader(ToGLenum(data.getShaderType()));
 
-    return new ShaderGL(data, shader, mRenderer->getMultiviewImplementationType(), functions);
+    return new ShaderGL(data, shader, mRenderer->getMultiviewImplementationType(), mRenderer);
 }
 
 ProgramImpl *ContextGL::createProgram(const gl::ProgramState &data)
