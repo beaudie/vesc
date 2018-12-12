@@ -1127,10 +1127,15 @@ void GenerateCaps(const FunctionsGL *functions,
         functions->hasGLESExtension("GL_EXT_disjoint_timer_query"))
     {
         extensions->disjointTimerQuery = true;
-        extensions->queryCounterBitsTimeElapsed =
-            QueryQueryValue(functions, GL_TIME_ELAPSED, GL_QUERY_COUNTER_BITS);
-        extensions->queryCounterBitsTimestamp =
-            QueryQueryValue(functions, GL_TIMESTAMP, GL_QUERY_COUNTER_BITS);
+
+        // If we can't query the counter bits, leave them at 0.
+        if (!workarounds.queryCounterBitsGeneratesErrors)
+        {
+            extensions->queryCounterBitsTimeElapsed =
+                QueryQueryValue(functions, GL_TIME_ELAPSED, GL_QUERY_COUNTER_BITS);
+            extensions->queryCounterBitsTimestamp =
+                QueryQueryValue(functions, GL_TIMESTAMP, GL_QUERY_COUNTER_BITS);
+        }
     }
 
     // the EXT_multisample_compatibility is written against ES3.1 but can apply
@@ -1327,6 +1332,8 @@ void GenerateCaps(const FunctionsGL *functions,
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds)
 {
     VendorID vendor = GetVendorID(functions);
+    std::string rendererString(reinterpret_cast<const char *>(functions->getString(GL_RENDERER)));
+    ANGLE_UNUSED_VARIABLE(rendererString);
 
     workarounds->dontRemoveInvariantForFragmentInput =
         functions->standard == STANDARD_GL_DESKTOP && IsAMD(vendor);
@@ -1421,6 +1428,13 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
     if (IsQualcomm(vendor))
     {
         workarounds->unsizedsRGBReadPixelsDoesntTransform = true;
+    }
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+    if (IsQualcomm(vendor) && IsNexus5X(rendererString))
+    {
+        workarounds->queryCounterBitsGeneratesErrors = true;
     }
 #endif  // defined(ANGLE_PLATFORM_ANDROID)
 }
