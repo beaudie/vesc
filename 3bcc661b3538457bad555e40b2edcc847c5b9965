@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "050de1e2_7c042298",
+        "filename": "src/libANGLE/renderer/vulkan/DrawUtilsVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-12T21:54:14Z",
+      "side": 1,
+      "message": "You do save a couple ANGLE_TRYs with the template. But you also add some boilerplate. Additionally you would not have to pass fsFlags if you just passed in vertexShader and fragmentShader.",
+      "range": {
+        "startLine": 147,
+        "startChar": 3,
+        "endLine": 148,
+        "endChar": 66
+      },
+      "revId": "3bcc661b3538457bad555e40b2edcc847c5b9965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02f7abec_6a8d81d1",
+        "filename": "src/libANGLE/renderer/vulkan/DrawUtilsVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-12T21:54:14Z",
+      "side": 1,
+      "message": "nit: ensureImageClearResourcesInitialized.",
+      "range": {
+        "startLine": 163,
+        "startChar": 14,
+        "endLine": 163,
+        "endChar": 41
+      },
+      "revId": "3bcc661b3538457bad555e40b2edcc847c5b9965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e762712_78057c77",
+        "filename": "src/libANGLE/renderer/vulkan/DrawUtilsVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-12T21:54:14Z",
+      "side": 1,
+      "message": "maybe make this a constant",
+      "range": {
+        "startLine": 109,
+        "startChar": 48,
+        "endLine": 109,
+        "endChar": 49
+      },
+      "revId": "3bcc661b3538457bad555e40b2edcc847c5b9965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5d1845f_bd99287c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-12T21:54:14Z",
+      "side": 1,
+      "message": "const is good. but you might want to check the genereated assembly to see if this is an optimization or not. I\u0027m curious now. DrawBuffersMask should fit in 64-bits easily.",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 69
+      },
+      "revId": "3bcc661b3538457bad555e40b2edcc847c5b9965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
