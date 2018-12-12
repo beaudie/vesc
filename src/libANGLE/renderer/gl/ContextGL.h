@@ -30,7 +30,7 @@ struct WorkaroundsGL;
 class ContextGL : public ContextImpl
 {
   public:
-    ContextGL(const gl::ContextState &state, const std::shared_ptr<RendererGL> &renderer);
+    ContextGL(const gl::ContextState &state, std::shared_ptr<RendererGL> renderer);
     ~ContextGL() override;
 
     angle::Result initialize() override;
@@ -226,6 +226,7 @@ class ContextGL : public ContextImpl
 
     angle::Result setDrawIndirectState(const gl::Context *context);
 
+  protected:
     std::shared_ptr<RendererGL> mRenderer;
 };
 

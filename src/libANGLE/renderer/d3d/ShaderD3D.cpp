@@ -181,6 +181,11 @@ const std::map<std::string, unsigned int> &GetUniformRegisterMap(
     return *uniformRegisterMap;
 }
 
+bool ShaderD3D::compileInWorkerThread(const std::string &source)
+{
+    return true;
+}
+
 bool ShaderD3D::postTranslateCompile(gl::ShCompilerInstance *compiler, std::string *infoLog)
 {
     // TODO(jmadill): We shouldn't need to cache this.
