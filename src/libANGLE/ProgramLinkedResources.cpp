@@ -243,6 +243,161 @@ void LogUniformsExceedLimit(ShaderType shaderType,
             << GetUniformResourceLimitName(shaderType, uniformType) << "(" << limit << ")";
 }
 
+class UniformBlockEncodingVisitor : public sh::VariableNameVisitor
+{
+  public:
+    UniformBlockEncodingVisitor(const GetBlockMemberInfoFunc &getMemberInfo,
+                                const std::string &namePrefix,
+                                const std::string &mappedNamePrefix,
+                                std::vector<LinkedUniform> *uniformsOut,
+                                ShaderType shaderType,
+                                int blockIndex)
+        : sh::VariableNameVisitor(namePrefix, mappedNamePrefix),
+          mGetMemberInfo(getMemberInfo),
+          mUniformsOut(uniformsOut),
+          mShaderType(shaderType),
+          mBlockIndex(blockIndex)
+    {}
+
+    void visitNamedVariable(const sh::ShaderVariable &variable,
+                            unsigned int arrayNestingIndex,
+                            bool isRowMajor,
+                            const std::string &name,
+                            const std::string &mappedName) override
+    {
+        // If getBlockMemberInfo returns false, the variable is optimized out.
+        sh::BlockMemberInfo variableInfo;
+        if (!mGetMemberInfo(name, mappedName, &variableInfo))
+            return;
+
+        std::string nameWithArrayIndex       = name;
+        std::string mappedNameWithArrayIndex = mappedName;
+
+        std::vector<unsigned int> arraySize;
+
+        if (variable.isArray())
+        {
+            nameWithArrayIndex += "[0]";
+            mappedNameWithArrayIndex += "[0]";
+            arraySize.push_back(variable.getNestedArraySize(arrayNestingIndex));
+        }
+
+        if (mBlockIndex == -1)
+        {
+            SetActive(mUniformsOut, nameWithArrayIndex, mShaderType, variable.active);
+            return;
+        }
+
+        LinkedUniform newUniform(variable.type, variable.precision, nameWithArrayIndex, arraySize,
+                                 -1, -1, -1, mBlockIndex, variableInfo);
+        newUniform.mappedName = mappedNameWithArrayIndex;
+        newUniform.setActive(mShaderType, variable.active);
+
+        // Since block uniforms have no location, we don't need to store them in the uniform
+        // locations list.
+        mUniformsOut->push_back(newUniform);
+    }
+
+  private:
+    const GetBlockMemberInfoFunc &mGetMemberInfo;
+    std::vector<LinkedUniform> *mUniformsOut;
+    const ShaderType mShaderType;
+    const int mBlockIndex;
+};
+
+class ShaderStorageBlockVisitor : public sh::VariableNameVisitor
+{
+  public:
+    ShaderStorageBlockVisitor(const GetBlockMemberInfoFunc &getMemberInfo,
+                              const std::string &namePrefix,
+                              const std::string &mappedNamePrefix,
+                              std::vector<BufferVariable> *bufferVariablesOut,
+                              ShaderType shaderType,
+                              int blockIndex)
+        : sh::VariableNameVisitor(namePrefix, mappedNamePrefix),
+          mGetMemberInfo(getMemberInfo),
+          mBufferVariablesOut(bufferVariablesOut),
+          mShaderType(shaderType),
+          mBlockIndex(blockIndex)
+    {}
+
+    void enterArray(const sh::ShaderVariable &arrayVar, unsigned int arrayNestingIndex) override
+    {
+        if (mStructStackSize == 0 && arrayNestingIndex == 0)
+        {
+            mTopLevelArraySize = arrayVar.getOutermostArraySize();
+        }
+        sh::VariableNameVisitor::enterArray(arrayVar, arrayNestingIndex);
+    }
+
+    void exitArray(const sh::ShaderVariable &arrayVar, unsigned int arrayNestingIndex) override
+    {
+        if (mStructStackSize == 0 && arrayNestingIndex == 0)
+        {
+            mTopLevelArraySize = 1;
+        }
+        sh::VariableNameVisitor::exitArray(arrayVar, arrayNestingIndex);
+    }
+
+    void enterStructAccess(const sh::ShaderVariable &structVar) override
+    {
+        mStructStackSize++;
+        sh::VariableNameVisitor::enterStructAccess(structVar);
+    }
+
+    void exitStructAccess(const sh::ShaderVariable &structVar) override
+    {
+        mStructStackSize--;
+        sh::VariableNameVisitor::exitStructAccess(structVar);
+    }
+
+    void visitNamedVariable(const sh::ShaderVariable &variable,
+                            unsigned int arrayNestingIndex,
+                            bool isRowMajor,
+                            const std::string &name,
+                            const std::string &mappedName) override
+    {
+        // If getBlockMemberInfo returns false, the variable is optimized out.
+        sh::BlockMemberInfo variableInfo;
+        if (!mGetMemberInfo(name, mappedName, &variableInfo))
+            return;
+
+        std::string nameWithArrayIndex       = name;
+        std::string mappedNameWithArrayIndex = mappedName;
+
+        std::vector<unsigned int> arraySize;
+        if (variable.isArray())
+        {
+            nameWithArrayIndex += "[0]";
+            mappedNameWithArrayIndex += "[0]";
+            arraySize.push_back(variable.getNestedArraySize(arrayNestingIndex));
+        }
+
+        if (mBlockIndex == -1)
+        {
+            SetActive(mBufferVariablesOut, nameWithArrayIndex, mShaderType, variable.active);
+            return;
+        }
+
+        BufferVariable newBufferVariable(variable.type, variable.precision, nameWithArrayIndex,
+                                         arraySize, mBlockIndex, variableInfo);
+        newBufferVariable.mappedName = mappedNameWithArrayIndex;
+        newBufferVariable.setActive(mShaderType, variable.active);
+
+        newBufferVariable.topLevelArraySize = mTopLevelArraySize;
+
+        mBufferVariablesOut->push_back(newBufferVariable);
+    }
+
+  private:
+    const GetBlockMemberInfoFunc &mGetMemberInfo;
+    std::vector<BufferVariable> *mBufferVariablesOut;
+    const ShaderType mShaderType;
+    const int mBlockIndex;
+    unsigned int mStructStackSize = 0;
+    int mTopLevelArraySize        = 1;
+};
+
 }  // anonymous namespace
 
 UniformLinker::UniformLinker(const ProgramState &state) : mState(state) {}
@@ -901,8 +1056,8 @@ void InterfaceBlockLinker::addShaderBlocks(ShaderType shaderType,
     mShaderBlocks[shaderType] = blocks;
 }
 
-void InterfaceBlockLinker::linkBlocks(const GetBlockSize &getBlockSize,
-                                      const GetBlockMemberInfo &getMemberInfo) const
+void InterfaceBlockLinker::linkBlocks(const GetBlockSizeFunc &getBlockSize,
+                                      const GetBlockMemberInfoFunc &getMemberInfo) const
 {
     ASSERT(mBlocksOut->empty());
 
@@ -915,182 +1070,41 @@ void InterfaceBlockLinker::linkBlocks(const GetBlockSize &getBlockSize,
             continue;
         }
 
-        for (const auto &block : *mShaderBlocks[shaderType])
+        for (const sh::InterfaceBlock &block : *mShaderBlocks[shaderType])
         {
             if (!IsActiveInterfaceBlock(block))
                 continue;
 
-            if (visitedList.count(block.name) > 0)
-            {
-                if (block.active)
-                {
-                    for (InterfaceBlock &priorBlock : *mBlocksOut)
-                    {
-                        if (block.name == priorBlock.name)
-                        {
-                            priorBlock.setActive(shaderType, true);
-                            // Update the block members static use.
-                            defineBlockMembers(nullptr, block.fields, block.fieldPrefix(),
-                                               block.fieldMappedPrefix(), -1,
-                                               block.blockType == sh::BlockType::BLOCK_BUFFER, 1,
-                                               shaderType);
-                        }
-                    }
-                }
-            }
-            else
+            if (visitedList.count(block.name) == 0)
             {
                 defineInterfaceBlock(getBlockSize, getMemberInfo, block, shaderType);
                 visitedList.insert(block.name);
+                continue;
+            }
+
+            if (!block.active)
+                continue;
+
+            for (InterfaceBlock &priorBlock : *mBlocksOut)
+            {
+                if (block.name == priorBlock.name)
+                {
+                    priorBlock.setActive(shaderType, true);
+
+                    sh::ShaderVariableVisitor *visitor =
+                        getVisitor(getMemberInfo, block.fieldPrefix(), block.fieldMappedPrefix(),
+                                   shaderType, -1);
+
+                    sh::TraverseShaderVariables(block.fields.data(), block.fields.size(), false,
+                                                visitor);
+                }
             }
         }
     }
 }
 
-template <typename VarT>
-void InterfaceBlockLinker::defineArrayOfStructsBlockMembers(const GetBlockMemberInfo &getMemberInfo,
-                                                            const VarT &field,
-                                                            unsigned int arrayNestingIndex,
-                                                            const std::string &prefix,
-                                                            const std::string &mappedPrefix,
-                                                            int blockIndex,
-                                                            bool singleEntryForTopLevelArray,
-                                                            int topLevelArraySize,
-                                                            ShaderType shaderType) const
-{
-    // Nested arrays are processed starting from outermost (arrayNestingIndex 0u) and ending at the
-    // innermost.
-    unsigned int entryGenerationArraySize = field.getNestedArraySize(arrayNestingIndex);
-    if (singleEntryForTopLevelArray)
-    {
-        entryGenerationArraySize = 1;
-    }
-    for (unsigned int arrayElement = 0u; arrayElement < entryGenerationArraySize; ++arrayElement)
-    {
-        const std::string elementName       = prefix + ArrayString(arrayElement);
-        const std::string elementMappedName = mappedPrefix + ArrayString(arrayElement);
-        if (arrayNestingIndex + 1u < field.arraySizes.size())
-        {
-            defineArrayOfStructsBlockMembers(getMemberInfo, field, arrayNestingIndex + 1u,
-                                             elementName, elementMappedName, blockIndex, false,
-                                             topLevelArraySize, shaderType);
-        }
-        else
-        {
-            defineBlockMembers(getMemberInfo, field.fields, elementName, elementMappedName,
-                               blockIndex, false, topLevelArraySize, shaderType);
-        }
-    }
-}
-
-template <typename VarT>
-void InterfaceBlockLinker::defineBlockMembers(const GetBlockMemberInfo &getMemberInfo,
-                                              const std::vector<VarT> &fields,
-                                              const std::string &prefix,
-                                              const std::string &mappedPrefix,
-                                              int blockIndex,
-                                              bool singleEntryForTopLevelArray,
-                                              int topLevelArraySize,
-                                              ShaderType shaderType) const
-{
-    for (const VarT &field : fields)
-    {
-        std::string fullName = (prefix.empty() ? field.name : prefix + "." + field.name);
-        std::string fullMappedName =
-            (mappedPrefix.empty() ? field.mappedName : mappedPrefix + "." + field.mappedName);
-
-        defineBlockMember(getMemberInfo, field, fullName, fullMappedName, blockIndex,
-                          singleEntryForTopLevelArray, topLevelArraySize, shaderType);
-    }
-}
-
-template <typename VarT>
-void InterfaceBlockLinker::defineBlockMember(const GetBlockMemberInfo &getMemberInfo,
-                                             const VarT &field,
-                                             const std::string &fullName,
-                                             const std::string &fullMappedName,
-                                             int blockIndex,
-                                             bool singleEntryForTopLevelArray,
-                                             int topLevelArraySize,
-                                             ShaderType shaderType) const
-{
-    int nextArraySize = topLevelArraySize;
-    if (((field.isArray() && field.isStruct()) || field.isArrayOfArrays()) &&
-        singleEntryForTopLevelArray)
-    {
-        // In OpenGL ES 3.10 spec, session 7.3.1.1 'For an active shader storage block
-        // member declared as an array of an aggregate type, an entry will be generated only
-        // for the first array element, regardless of its type.'
-        nextArraySize = field.getOutermostArraySize();
-    }
-
-    if (field.isStruct())
-    {
-        if (field.isArray())
-        {
-            defineArrayOfStructsBlockMembers(getMemberInfo, field, 0u, fullName, fullMappedName,
-                                             blockIndex, singleEntryForTopLevelArray, nextArraySize,
-                                             shaderType);
-        }
-        else
-        {
-            ASSERT(nextArraySize == topLevelArraySize);
-            defineBlockMembers(getMemberInfo, field.fields, fullName, fullMappedName, blockIndex,
-                               false, nextArraySize, shaderType);
-        }
-        return;
-    }
-    if (field.isArrayOfArrays())
-    {
-        unsigned int entryGenerationArraySize = field.getOutermostArraySize();
-        if (singleEntryForTopLevelArray)
-        {
-            entryGenerationArraySize = 1u;
-        }
-        for (unsigned int arrayElement = 0u; arrayElement < entryGenerationArraySize;
-             ++arrayElement)
-        {
-            VarT fieldElement = field;
-            fieldElement.indexIntoArray(arrayElement);
-            const std::string elementName       = fullName + ArrayString(arrayElement);
-            const std::string elementMappedName = fullMappedName + ArrayString(arrayElement);
-
-            defineBlockMember(getMemberInfo, fieldElement, elementName, elementMappedName,
-                              blockIndex, false, nextArraySize, shaderType);
-        }
-        return;
-    }
-
-    std::string fullNameWithArrayIndex       = fullName;
-    std::string fullMappedNameWithArrayIndex = fullMappedName;
-
-    if (field.isArray())
-    {
-        fullNameWithArrayIndex += "[0]";
-        fullMappedNameWithArrayIndex += "[0]";
-    }
-
-    if (blockIndex == -1)
-    {
-        updateBlockMemberActiveImpl(fullNameWithArrayIndex, shaderType, field.active);
-    }
-    else
-    {
-        // If getBlockMemberInfo returns false, the variable is optimized out.
-        sh::BlockMemberInfo memberInfo;
-        if (!getMemberInfo(fullName, fullMappedName, &memberInfo))
-        {
-            return;
-        }
-
-        ASSERT(nextArraySize == topLevelArraySize);
-        defineBlockMemberImpl(field, fullNameWithArrayIndex, fullMappedNameWithArrayIndex,
-                              blockIndex, memberInfo, nextArraySize, shaderType);
-    }
-}
-
-void InterfaceBlockLinker::defineInterfaceBlock(const GetBlockSize &getBlockSize,
-                                                const GetBlockMemberInfo &getMemberInfo,
+void InterfaceBlockLinker::defineInterfaceBlock(const GetBlockSizeFunc &getBlockSize,
+                                                const GetBlockMemberInfoFunc &getMemberInfo,
                                                 const sh::InterfaceBlock &interfaceBlock,
                                                 ShaderType shaderType) const
 {
@@ -1101,9 +1115,13 @@ void InterfaceBlockLinker::defineInterfaceBlock(const GetBlockSize &getBlockSize
     // Track the first and last block member index to determine the range of active block members in
     // the block.
     size_t firstBlockMemberIndex = getCurrentBlockMemberIndex();
-    defineBlockMembers(getMemberInfo, interfaceBlock.fields, interfaceBlock.fieldPrefix(),
-                       interfaceBlock.fieldMappedPrefix(), blockIndex,
-                       interfaceBlock.blockType == sh::BlockType::BLOCK_BUFFER, 1, shaderType);
+
+    sh::ShaderVariableVisitor *visitor =
+        getVisitor(getMemberInfo, interfaceBlock.fieldPrefix(), interfaceBlock.fieldMappedPrefix(),
+                   shaderType, blockIndex);
+    sh::TraverseShaderVariables(interfaceBlock.fields.data(), interfaceBlock.fields.size(), false,
+                                visitor);
+
     size_t lastBlockMemberIndex = getCurrentBlockMemberIndex();
 
     for (size_t blockMemberIndex = firstBlockMemberIndex; blockMemberIndex < lastBlockMemberIndex;
@@ -1155,34 +1173,20 @@ UniformBlockLinker::UniformBlockLinker(std::vector<InterfaceBlock> *blocksOut,
 
 UniformBlockLinker::~UniformBlockLinker() {}
 
-void UniformBlockLinker::defineBlockMemberImpl(const sh::ShaderVariable &field,
-                                               const std::string &fullName,
-                                               const std::string &fullMappedName,
-                                               int blockIndex,
-                                               const sh::BlockMemberInfo &memberInfo,
-                                               int /*topLevelArraySize*/,
-                                               ShaderType shaderType) const
-{
-    LinkedUniform newUniform(field.type, field.precision, fullName, field.arraySizes, -1, -1, -1,
-                             blockIndex, memberInfo);
-    newUniform.mappedName = fullMappedName;
-    newUniform.setActive(shaderType, field.active);
-
-    // Since block uniforms have no location, we don't need to store them in the uniform locations
-    // list.
-    mUniformsOut->push_back(newUniform);
-}
-
 size_t UniformBlockLinker::getCurrentBlockMemberIndex() const
 {
     return mUniformsOut->size();
 }
 
-void UniformBlockLinker::updateBlockMemberActiveImpl(const std::string &fullName,
-                                                     ShaderType shaderType,
-                                                     bool active) const
+sh::ShaderVariableVisitor *UniformBlockLinker::getVisitor(
+    const GetBlockMemberInfoFunc &getMemberInfo,
+    const std::string &namePrefix,
+    const std::string &mappedNamePrefix,
+    ShaderType shaderType,
+    int blockIndex) const
 {
-    SetActive(mUniformsOut, fullName, shaderType, active);
+    return new UniformBlockEncodingVisitor(getMemberInfo, namePrefix, mappedNamePrefix,
+                                           mUniformsOut, shaderType, blockIndex);
 }
 
 // ShaderStorageBlockLinker implementation.
@@ -1193,34 +1197,20 @@ ShaderStorageBlockLinker::ShaderStorageBlockLinker(std::vector<InterfaceBlock> *
 
 ShaderStorageBlockLinker::~ShaderStorageBlockLinker() {}
 
-void ShaderStorageBlockLinker::defineBlockMemberImpl(const sh::ShaderVariable &field,
-                                                     const std::string &fullName,
-                                                     const std::string &fullMappedName,
-                                                     int blockIndex,
-                                                     const sh::BlockMemberInfo &memberInfo,
-                                                     int topLevelArraySize,
-                                                     ShaderType shaderType) const
-{
-    BufferVariable newBufferVariable(field.type, field.precision, fullName, field.arraySizes,
-                                     blockIndex, memberInfo);
-    newBufferVariable.mappedName = fullMappedName;
-    newBufferVariable.setActive(shaderType, field.active);
-
-    newBufferVariable.topLevelArraySize = topLevelArraySize;
-
-    mBufferVariablesOut->push_back(newBufferVariable);
-}
-
 size_t ShaderStorageBlockLinker::getCurrentBlockMemberIndex() const
 {
     return mBufferVariablesOut->size();
 }
 
-void ShaderStorageBlockLinker::updateBlockMemberActiveImpl(const std::string &fullName,
-                                                           ShaderType shaderType,
-                                                           bool active) const
+sh::ShaderVariableVisitor *ShaderStorageBlockLinker::getVisitor(
+    const GetBlockMemberInfoFunc &getMemberInfo,
+    const std::string &namePrefix,
+    const std::string &mappedNamePrefix,
+    ShaderType shaderType,
+    int blockIndex) const
 {
-    SetActive(mBufferVariablesOut, fullName, shaderType, active);
+    return new ShaderStorageBlockVisitor(getMemberInfo, namePrefix, mappedNamePrefix,
+                                         mBufferVariablesOut, shaderType, blockIndex);
 }
 
 // AtomicCounterBufferLinker implementation.
