@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3de7439_9d53dab7",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2018-12-13T17:09:55Z",
+      "side": 0,
+      "message": "SafeDeleteArray() looks reasonable; do we know why it wasn\u0027t good enough?   Is this TearDown() not being called as much as it should?\n\nAre the glDeleteProgram(), etc. being missed here also?",
+      "revId": "9b02506c852b7f8118ba1bdde18c08da6c060482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
