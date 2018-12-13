@@ -274,6 +274,13 @@ const ShCompileOptions SH_EMULATE_GL_DRAW_ID = UINT64_C(1) << 40;
 // another webpage/application.
 const ShCompileOptions SH_INIT_SHARED_VARIABLES = UINT64_C(1) << 41;
 
+// Forces the value returned from an atomic operations to be always be resolved. This is targeted to
+// workaround a bug in NVIDIA D3D driver where the return value from
+// RWByteAddressBuffer.InterlockedAdd does not get resolved when used in the .yzw components of a
+// RWByteAddressBuffer.Store operation. Only has an effect on HLSL translation.
+// http://anglebug.com/3246
+const ShCompileOptions SH_FORCE_ATOMIC_VALUE_RESOLUTION = UINT64_C(1) << 42;
+
 // Defines alternate strategies for implementing array index clamping.
 enum ShArrayIndexClampingStrategy
 {
