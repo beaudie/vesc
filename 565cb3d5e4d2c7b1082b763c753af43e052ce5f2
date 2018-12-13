@@ -22,6 +22,23 @@
       "revId": "565cb3d5e4d2c7b1082b763c753af43e052ce5f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3169355a_3215bc10",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-13T19:38:26Z",
+      "side": 1,
+      "message": "nit: extra newline.",
+      "revId": "565cb3d5e4d2c7b1082b763c753af43e052ce5f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
