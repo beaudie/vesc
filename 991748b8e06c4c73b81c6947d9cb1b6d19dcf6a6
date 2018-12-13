@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "639717c9_4a8e3565",
+        "filename": "src/libANGLE/renderer/Format.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-13T21:07:51Z",
+      "side": 1,
+      "message": "Maybe isLUMA would be a better name. Since I find it confusing that \"has luminance or alpha bits and no RGB bits\" is shortened to hasLuminanceAlphaBits.",
+      "range": {
+        "startLine": 128,
+        "startChar": 23,
+        "endLine": 128,
+        "endChar": 44
+      },
+      "revId": "991748b8e06c4c73b81c6947d9cb1b6d19dcf6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "834522a0_a18c0b83",
+        "filename": "src/libANGLE/renderer/vulkan/DrawUtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-13T21:07:51Z",
+      "side": 1,
+      "message": "I recall you also having these checks in another CL. Does it make sense to add functions like isInt() to angle::Format?",
+      "range": {
+        "startLine": 33,
+        "startChar": 21,
+        "endLine": 33,
+        "endChar": 59
+      },
+      "revId": "991748b8e06c4c73b81c6947d9cb1b6d19dcf6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1a24129_dcc0ea91",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-13T21:07:51Z",
+      "side": 1,
+      "message": "nit: could you reverse the order of if and else here? mImage.valid() -\u003e mImage.getExtents() looks clearer to me.",
+      "range": {
+        "startLine": 495,
+        "startChar": 0,
+        "endLine": 507,
+        "endChar": 5
+      },
+      "revId": "991748b8e06c4c73b81c6947d9cb1b6d19dcf6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f7eee60_6de1bc03",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-13T21:07:51Z",
+      "side": 1,
+      "message": "You\u0027d probably want to remove this before landing :)",
+      "range": {
+        "startLine": 629,
+        "startChar": 4,
+        "endLine": 629,
+        "endChar": 18
+      },
+      "revId": "991748b8e06c4c73b81c6947d9cb1b6d19dcf6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
