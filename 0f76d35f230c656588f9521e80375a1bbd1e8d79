@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5265abca_386f247e",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-13T19:07:24Z",
+      "side": 1,
+      "message": "Jamie\u0027s suggestion was actually GLColorRGB instead of GLubyte",
+      "range": {
+        "startLine": 182,
+        "startChar": 20,
+        "endLine": 182,
+        "endChar": 27
+      },
+      "revId": "0f76d35f230c656588f9521e80375a1bbd1e8d79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
