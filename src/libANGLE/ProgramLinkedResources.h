@@ -23,6 +23,7 @@ namespace sh
 struct BlockMemberInfo;
 struct InterfaceBlock;
 struct ShaderVariable;
+class ShaderVariableVisitor;
 struct Uniform;
 }  // namespace sh
 
@@ -172,6 +173,11 @@ class UniformLinker final : angle::NonCopyable
     std::vector<VariableLocation> mUniformLocations;
 };
 
+using GetBlockSizeFunc = std::function<
+    bool(const std::string &blockName, const std::string &blockMappedName, size_t *sizeOut)>;
+using GetBlockMemberInfoFunc = std::function<
+    bool(const std::string &name, const std::string &mappedName, sh::BlockMemberInfo *infoOut)>;
+
 // This class is intended to be used during the link step to store interface block information.
 // It is called by the Impl class during ProgramImpl::link so that it has access to the
 // real block size and layout.
@@ -180,72 +186,35 @@ class InterfaceBlockLinker : angle::NonCopyable
   public:
     virtual ~InterfaceBlockLinker();
 
-    using GetBlockSize = std::function<
-        bool(const std::string &blockName, const std::string &blockMappedName, size_t *sizeOut)>;
-    using GetBlockMemberInfo = std::function<
-        bool(const std::string &name, const std::string &mappedName, sh::BlockMemberInfo *infoOut)>;
-
     // This is called once per shader stage. It stores a pointer to the block vector, so it's
     // important that this class does not persist longer than the duration of Program::link.
     void addShaderBlocks(ShaderType shader, const std::vector<sh::InterfaceBlock> *blocks);
 
     // This is called once during a link operation, after all shader blocks are added.
-    void linkBlocks(const GetBlockSize &getBlockSize,
-                    const GetBlockMemberInfo &getMemberInfo) const;
+    void linkBlocks(const GetBlockSizeFunc &getBlockSize,
+                    const GetBlockMemberInfoFunc &getMemberInfo) const;
 
   protected:
     InterfaceBlockLinker(std::vector<InterfaceBlock> *blocksOut);
-    void defineInterfaceBlock(const GetBlockSize &getBlockSize,
-                              const GetBlockMemberInfo &getMemberInfo,
+    void defineInterfaceBlock(const GetBlockSizeFunc &getBlockSize,
+                              const GetBlockMemberInfoFunc &getMemberInfo,
                               const sh::InterfaceBlock &interfaceBlock,
                               ShaderType shaderType) const;
 
-    template <typename VarT>
-    void defineBlockMembers(const GetBlockMemberInfo &getMemberInfo,
-                            const std::vector<VarT> &fields,
-                            const std::string &prefix,
-                            const std::string &mappedPrefix,
-                            int blockIndex,
-                            bool singleEntryForTopLevelArray,
-                            int topLevelArraySize,
-                            ShaderType shaderType) const;
-    template <typename VarT>
-    void defineBlockMember(const GetBlockMemberInfo &getMemberInfo,
-                           const VarT &field,
-                           const std::string &fullName,
-                           const std::string &fullMappedName,
-                           int blockIndex,
-                           bool singleEntryForTopLevelArray,
-                           int topLevelArraySize,
-                           ShaderType shaderType) const;
-
-    virtual void defineBlockMemberImpl(const sh::ShaderVariable &field,
-                                       const std::string &fullName,
-                                       const std::string &fullMappedName,
-                                       int blockIndex,
-                                       const sh::BlockMemberInfo &memberInfo,
-                                       int topLevelArraySize,
-                                       ShaderType shaderType) const = 0;
-    virtual size_t getCurrentBlockMemberIndex() const               = 0;
-    virtual void updateBlockMemberActiveImpl(const std::string &fullName,
-                                             ShaderType shaderType,
-                                             bool active) const     = 0;
+    virtual size_t getCurrentBlockMemberIndex() const = 0;
 
     ShaderMap<const std::vector<sh::InterfaceBlock> *> mShaderBlocks;
 
     std::vector<InterfaceBlock> *mBlocksOut;
 
-  private:
-    template <typename VarT>
-    void defineArrayOfStructsBlockMembers(const GetBlockMemberInfo &getMemberInfo,
-                                          const VarT &field,
-                                          unsigned int arrayNestingIndex,
-                                          const std::string &prefix,
-                                          const std::string &mappedPrefix,
-                                          int blockIndex,
-                                          bool singleEntryForTopLevelArray,
-                                          int topLevelArraySize,
-                                          ShaderType shaderType) const;
+    virtual sh::ShaderVariableVisitor *getVisitor(const GetBlockMemberInfoFunc &getMemberInfo,
+                                                  const std::string &namePrefix,
+                                                  const std::string &mappedNamePrefix,
+                                                  ShaderType shaderType,
+                                                  int blockIndex) const
+    {
+        return nullptr;
+    }
 };
 
 class UniformBlockLinker final : public InterfaceBlockLinker
@@ -256,17 +225,14 @@ class UniformBlockLinker final : public InterfaceBlockLinker
     ~UniformBlockLinker() override;
 
   private:
-    void defineBlockMemberImpl(const sh::ShaderVariable &field,
-                               const std::string &fullName,
-                               const std::string &fullMappedName,
-                               int blockIndex,
-                               const sh::BlockMemberInfo &memberInfo,
-                               int topLevelArraySize,
-                               ShaderType shaderType) const override;
     size_t getCurrentBlockMemberIndex() const override;
-    void updateBlockMemberActiveImpl(const std::string &fullName,
-                                     ShaderType shaderType,
-                                     bool active) const override;
+
+    sh::ShaderVariableVisitor *getVisitor(const GetBlockMemberInfoFunc &getMemberInfo,
+                                          const std::string &namePrefix,
+                                          const std::string &mappedNamePrefix,
+                                          ShaderType shaderType,
+                                          int blockIndex) const override;
+
     std::vector<LinkedUniform> *mUniformsOut;
 };
 
@@ -278,17 +244,14 @@ class ShaderStorageBlockLinker final : public InterfaceBlockLinker
     ~ShaderStorageBlockLinker() override;
 
   private:
-    void defineBlockMemberImpl(const sh::ShaderVariable &field,
-                               const std::string &fullName,
-                               const std::string &fullMappedName,
-                               int blockIndex,
-                               const sh::BlockMemberInfo &memberInfo,
-                               int topLevelArraySize,
-                               ShaderType shaderType) const override;
     size_t getCurrentBlockMemberIndex() const override;
-    void updateBlockMemberActiveImpl(const std::string &fullName,
-                                     ShaderType shaderType,
-                                     bool active) const override;
+
+    sh::ShaderVariableVisitor *getVisitor(const GetBlockMemberInfoFunc &getMemberInfo,
+                                          const std::string &namePrefix,
+                                          const std::string &mappedNamePrefix,
+                                          ShaderType shaderType,
+                                          int blockIndex) const override;
+
     std::vector<BufferVariable> *mBufferVariablesOut;
 };
 
