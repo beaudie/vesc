@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7b3b82e_cc64e547",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-13T20:27:27Z",
+      "side": 1,
+      "message": "Is this the right bug? I don\u0027t see a relation.",
+      "range": {
+        "startLine": 12,
+        "startChar": 4,
+        "endLine": 12,
+        "endChar": 21
+      },
+      "revId": "3f3244884d40ed17d163887be50f49b522a60c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd9aa894_43cc314a",
+        "filename": "src/libANGLE/renderer/driver_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-13T20:27:27Z",
+      "side": 1,
+      "message": "Shahbaz added IsNexus5X in https://chromium-review.googlesource.com/c/1372445, though that one requires Vulkan and has two arguments. Would be nice to either merge them or differentiate between them somehow.",
+      "range": {
+        "startLine": 48,
+        "startChar": 12,
+        "endLine": 48,
+        "endChar": 21
+      },
+      "revId": "3f3244884d40ed17d163887be50f49b522a60c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe1bc18c_7384e86c",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1336,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-13T20:27:27Z",
+      "side": 1,
+      "message": "Why did you choose this and not having rendererString inside ANGLE_PLATFORM_ANDROID?",
+      "range": {
+        "startLine": 1336,
+        "startChar": 4,
+        "endLine": 1336,
+        "endChar": 25
+      },
+      "revId": "3f3244884d40ed17d163887be50f49b522a60c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee177d6a_a0713bc3",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1434,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-13T20:27:27Z",
+      "side": 1,
+      "message": "Maybe merge this with the one above? (Or even merge the three above)",
+      "range": {
+        "startLine": 1434,
+        "startChar": 4,
+        "endLine": 1434,
+        "endChar": 34
+      },
+      "revId": "3f3244884d40ed17d163887be50f49b522a60c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
