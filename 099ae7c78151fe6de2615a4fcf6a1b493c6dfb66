@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5909119f_9c5aacf4",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2448,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-13T20:02:27Z",
+      "side": 1,
+      "message": "Should we also return in the \u0027else\u0027 block?",
+      "range": {
+        "startLine": 2448,
+        "startChar": 16,
+        "endLine": 2448,
+        "endChar": 29
+      },
+      "revId": "099ae7c78151fe6de2615a4fcf6a1b493c6dfb66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f15d8cd_74ac17ba",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-13T20:02:27Z",
+      "side": 1,
+      "message": "nit: extra newline",
+      "revId": "099ae7c78151fe6de2615a4fcf6a1b493c6dfb66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
