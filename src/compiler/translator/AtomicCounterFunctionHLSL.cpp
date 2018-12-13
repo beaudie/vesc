@@ -69,15 +69,14 @@ void AtomicCounterFunctionHLSL::atomicCounterFunctionHeader(TInfoSinkBase &out)
         switch (atomicFunction.second)
         {
             case AtomicCounterFunction::INCREMENT:
+                out << "    uint ret;\n"
+                       "    counter.InterlockedAdd(address, 1u, ret);\n"
+                       "    return ret;\n";
+                break;
             case AtomicCounterFunction::DECREMENT:
                 out << "    uint ret;\n"
-                       "    counter.InterlockedAdd(address, ";
-                if (atomicFunction.second == AtomicCounterFunction::DECREMENT)
-                {
-                    out << "0u - ";
-                }
-                out << "1u, ret);\n"
-                    << "    return ret;\n";
+                       "    counter.InterlockedAdd(address, 0u - 1u, ret);\n"
+                       "    return ret - 1u;\n";  // atomicCounterDecrement is a post-decrement op
                 break;
             case AtomicCounterFunction::LOAD:
                 out << "    return counter.Load(address);\n";
