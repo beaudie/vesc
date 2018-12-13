@@ -17,91 +17,26 @@ namespace sh
 
 namespace
 {
-bool IsRowMajorLayout(const InterfaceBlockField &var)
+class BlockLayoutMapVisitor : public BlockEncoderVisitor
 {
-    return var.isRowMajorLayout;
-}
+  public:
+    BlockLayoutMapVisitor(BlockLayoutMap *blockInfoOut,
+                          const std::string &instanceName,
+                          BlockLayoutEncoder *encoder)
+        : BlockEncoderVisitor(instanceName, encoder), mInfoOut(blockInfoOut)
+    {}
 
-bool IsRowMajorLayout(const ShaderVariable &var)
-{
-    return false;
-}
-
-template <typename VarT>
-void GetInterfaceBlockInfo(const std::vector<VarT> &fields,
-                           const std::string &prefix,
-                           sh::BlockLayoutEncoder *encoder,
-                           bool inRowMajorLayout,
-                           BlockLayoutMap *blockInfoOut);
-
-template <typename VarT>
-void GetInterfaceBlockStructMemberInfo(const std::vector<VarT> &fields,
-                                       const std::string &fieldName,
-                                       sh::BlockLayoutEncoder *encoder,
-                                       bool inRowMajorLayout,
-                                       BlockLayoutMap *blockInfoOut)
-{
-    // TODO(jiajia.qin@intel.com):we need to set the right structure base alignment before
-    // enterAggregateType for std430 layout just like GetShaderStorageBlockFieldMemberInfo did in
-    // ShaderStorageBlockOutputHLSL.cpp. http://anglebug.com/1920
-    encoder->enterAggregateType();
-    GetInterfaceBlockInfo(fields, fieldName, encoder, inRowMajorLayout, blockInfoOut);
-    encoder->exitAggregateType();
-}
-
-template <typename VarT>
-void GetInterfaceBlockStructArrayMemberInfo(const VarT &field,
-                                            unsigned int arrayNestingIndex,
-                                            const std::string &arrayName,
-                                            sh::BlockLayoutEncoder *encoder,
-                                            bool inRowMajorLayout,
-                                            BlockLayoutMap *blockInfoOut)
-{
-    // Nested arrays are processed starting from outermost (arrayNestingIndex 0u) and ending at the
-    // innermost.
-    const unsigned int currentArraySize = field.getNestedArraySize(arrayNestingIndex);
-    for (unsigned int arrayElement = 0u; arrayElement < currentArraySize; ++arrayElement)
+    void encodeVariable(const ShaderVariable &variable,
+                        const BlockMemberInfo &variableInfo) override
     {
-        const std::string elementName = arrayName + ArrayString(arrayElement);
-        if (arrayNestingIndex + 1u < field.arraySizes.size())
-        {
-            GetInterfaceBlockStructArrayMemberInfo(field, arrayNestingIndex + 1u, elementName,
-                                                   encoder, inRowMajorLayout, blockInfoOut);
-        }
-        else
-        {
-            GetInterfaceBlockStructMemberInfo(field.fields, elementName, encoder, inRowMajorLayout,
-                                              blockInfoOut);
-        }
+        ASSERT(!gl::IsSamplerType(variable.type));
+        std::string name  = collapseNameStack(variable.name);
+        (*mInfoOut)[name] = variableInfo;
     }
-}
 
-template <typename VarT>
-void GetInterfaceBlockArrayOfArraysMemberInfo(const VarT &field,
-                                              unsigned int arrayNestingIndex,
-                                              const std::string &arrayName,
-                                              sh::BlockLayoutEncoder *encoder,
-                                              bool isRowMajorMatrix,
-                                              BlockLayoutMap *blockInfoOut)
-{
-    const unsigned int currentArraySize = field.getNestedArraySize(arrayNestingIndex);
-    for (unsigned int arrayElement = 0u; arrayElement < currentArraySize; ++arrayElement)
-    {
-        const std::string elementName = arrayName + ArrayString(arrayElement);
-        if (arrayNestingIndex + 2u < field.arraySizes.size())
-        {
-            GetInterfaceBlockArrayOfArraysMemberInfo(field, arrayNestingIndex + 1u, elementName,
-                                                     encoder, isRowMajorMatrix, blockInfoOut);
-        }
-        else
-        {
-            std::vector<unsigned int> innermostArraySize(
-                1u, field.getNestedArraySize(arrayNestingIndex + 1u));
-            (*blockInfoOut)[elementName] =
-                encoder->encodeType(field.type, innermostArraySize, isRowMajorMatrix);
-        }
-    }
-}
+  private:
+    BlockLayoutMap *mInfoOut;
+};
 
 template <typename VarT>
 void GetInterfaceBlockInfo(const std::vector<VarT> &fields,
@@ -110,46 +45,83 @@ void GetInterfaceBlockInfo(const std::vector<VarT> &fields,
                            bool inRowMajorLayout,
                            BlockLayoutMap *blockInfoOut)
 {
-    for (const VarT &field : fields)
+    BlockLayoutMapVisitor visitor(blockInfoOut, prefix, encoder);
+    TraverseShaderVariables(fields.data(), fields.size(), inRowMajorLayout, &visitor);
+}
+
+void TraverseStructVariable(const ShaderVariable &variable,
+                            bool isRowMajorLayout,
+                            ShaderVariableVisitor *visitor)
+{
+    const std::vector<ShaderVariable> &fields = variable.fields;
+
+    visitor->enterStructAccess(variable);
+    TraverseShaderVariables(fields.data(), fields.size(), isRowMajorLayout, visitor);
+    visitor->exitStructAccess(variable);
+}
+
+void TraverseStructArrayVariable(const ShaderVariable &variable,
+                                 unsigned int arrayNestingIndex,
+                                 bool inRowMajorLayout,
+                                 ShaderVariableVisitor *visitor)
+{
+    // Nested arrays are processed starting from outermost (arrayNestingIndex 0u) and ending at the
+    // innermost.
+    const unsigned int currentArraySize = variable.getNestedArraySize(arrayNestingIndex);
+    for (unsigned int arrayElement = 0u; arrayElement < currentArraySize; ++arrayElement)
     {
-        // Skip samplers. On Vulkan we use this for the default uniform block, so samplers may be
-        // included.
-        if (gl::IsSamplerType(field.type))
-        {
-            continue;
-        }
+        visitor->enterArrayElement(variable, arrayNestingIndex, arrayElement);
 
-        const std::string &fieldName = (prefix.empty() ? field.name : prefix + "." + field.name);
-
-        bool rowMajorLayout = (inRowMajorLayout || IsRowMajorLayout(field));
-
-        if (field.isStruct())
+        if (arrayNestingIndex + 1u < variable.arraySizes.size())
         {
-            if (field.isArray())
-            {
-                GetInterfaceBlockStructArrayMemberInfo(field, 0u, fieldName, encoder,
-                                                       rowMajorLayout, blockInfoOut);
-            }
-            else
-            {
-                GetInterfaceBlockStructMemberInfo(field.fields, fieldName, encoder, rowMajorLayout,
-                                                  blockInfoOut);
-            }
-        }
-        else if (field.isArrayOfArrays())
-        {
-            GetInterfaceBlockArrayOfArraysMemberInfo(field, 0u, fieldName, encoder,
-                                                     rowMajorLayout && gl::IsMatrixType(field.type),
-                                                     blockInfoOut);
+            TraverseStructArrayVariable(variable, arrayNestingIndex + 1u, inRowMajorLayout,
+                                        visitor);
         }
         else
         {
-            (*blockInfoOut)[fieldName] = encoder->encodeType(
-                field.type, field.arraySizes, rowMajorLayout && gl::IsMatrixType(field.type));
+            TraverseStructVariable(variable, inRowMajorLayout, visitor);
+        }
+
+        visitor->exitArrayElement(variable, arrayNestingIndex, arrayElement);
+    }
+}
+
+void TraverseArrayOfArraysVariable(const ShaderVariable &variable,
+                                   unsigned int arrayNestingIndex,
+                                   bool isRowMajorMatrix,
+                                   ShaderVariableVisitor *visitor)
+{
+    const unsigned int currentArraySize = variable.getNestedArraySize(arrayNestingIndex);
+    for (unsigned int arrayElement = 0u; arrayElement < currentArraySize; ++arrayElement)
+    {
+        if (arrayNestingIndex + 2u < variable.arraySizes.size())
+        {
+            TraverseArrayOfArraysVariable(variable, arrayNestingIndex + 1u, isRowMajorMatrix,
+                                          visitor);
+        }
+        else if (gl::IsSamplerType(variable.type))
+        {
+            visitor->visitSampler(variable);
+        }
+        else
+        {
+            std::vector<unsigned int> innermostArraySize(
+                1u, variable.getNestedArraySize(arrayNestingIndex + 1u));
+            visitor->visitVariable(variable, innermostArraySize, isRowMajorMatrix);
         }
     }
 }
 
+std::string CollapseNameStack(const std::vector<std::string> &nameStack, const std::string &top)
+{
+    std::stringstream strstr;
+    for (const std::string &part : nameStack)
+    {
+        strstr << part;
+    }
+    strstr << top;
+    return strstr.str();
+}
 }  // anonymous namespace
 
 BlockLayoutEncoder::BlockLayoutEncoder() : mCurrentOffset(0), mStructureBaseAlignment(0) {}
@@ -184,13 +156,13 @@ void BlockLayoutEncoder::setStructureBaseAlignment(size_t baseAlignment)
 }
 
 // static
-size_t BlockLayoutEncoder::getBlockRegister(const BlockMemberInfo &info)
+size_t BlockLayoutEncoder::GetBlockRegister(const BlockMemberInfo &info)
 {
     return (info.offset / BytesPerComponent) / ComponentsPerRegister;
 }
 
 // static
-size_t BlockLayoutEncoder::getBlockRegisterElement(const BlockMemberInfo &info)
+size_t BlockLayoutEncoder::GetBlockRegisterElement(const BlockMemberInfo &info)
 {
     return (info.offset / BytesPerComponent) % ComponentsPerRegister;
 }
@@ -342,4 +314,112 @@ void GetUniformBlockInfo(const std::vector<Uniform> &uniforms,
     GetInterfaceBlockInfo(uniforms, prefix, encoder, false, blockInfoOut);
 }
 
+// VariableNameVisitor implementation.
+VariableNameVisitor::VariableNameVisitor(const std::string &instanceName)
+{
+    if (!instanceName.empty())
+    {
+        mNameStack.push_back(instanceName + ".");
+        mMappedNameStack.push_back(instanceName + ".");
+    }
+}
+
+VariableNameVisitor::~VariableNameVisitor() = default;
+
+void VariableNameVisitor::enterArrayElement(const ShaderVariable &arrayVar,
+                                            unsigned int arrayNestingIndex,
+                                            unsigned int arrayElement)
+{
+    std::stringstream strstr;
+    strstr << "[" << arrayElement << "]";
+    std::string elementString = strstr.str();
+    mNameStack.push_back(elementString);
+    mMappedNameStack.push_back(elementString);
+}
+
+std::string VariableNameVisitor::collapseNameStack(const std::string &top) const
+{
+    return CollapseNameStack(mNameStack, top);
+}
+
+std::string VariableNameVisitor::collapseMappedNameStack(const std::string &top) const
+{
+    return CollapseNameStack(mMappedNameStack, top);
+}
+
+// BlockEncoderVisitor implementation.
+BlockEncoderVisitor::BlockEncoderVisitor(const std::string &instanceName,
+                                         BlockLayoutEncoder *encoder)
+    : VariableNameVisitor(instanceName), mEncoder(encoder)
+{}
+
+BlockEncoderVisitor::~BlockEncoderVisitor() = default;
+
+void BlockEncoderVisitor::enterStructAccess(const ShaderVariable &structVar)
+{
+    VariableNameVisitor::enterStructAccess(structVar);
+    mEncoder->enterAggregateType();
+}
+
+void BlockEncoderVisitor::exitStructAccess(const ShaderVariable &structVar)
+{
+    mEncoder->exitAggregateType();
+    VariableNameVisitor::exitStructAccess(structVar);
+}
+
+void BlockEncoderVisitor::visitVariable(const ShaderVariable &variable,
+                                        const std::vector<unsigned int> &nestedArraySize,
+                                        bool isRowMajor)
+{
+    BlockMemberInfo variableInfo = mEncoder->encodeType(variable.type, nestedArraySize, isRowMajor);
+    encodeVariable(variable, variableInfo);
+}
+
+void TravserseShaderVariable(const ShaderVariable &variable,
+                             bool isRowMajorLayout,
+                             ShaderVariableVisitor *visitor)
+{
+    bool rowMajorLayout = (isRowMajorLayout || variable.isRowMajorLayout);
+    bool isRowMajor     = rowMajorLayout && gl::IsMatrixType(variable.type);
+
+    if (variable.isStruct())
+    {
+        visitor->enterStruct(variable);
+
+        if (variable.isArray())
+        {
+            TraverseStructArrayVariable(variable, 0u, rowMajorLayout, visitor);
+        }
+        else
+        {
+            TraverseStructVariable(variable, rowMajorLayout, visitor);
+        }
+
+        visitor->exitStruct(variable);
+    }
+    else if (variable.isArrayOfArrays())
+    {
+        TraverseArrayOfArraysVariable(variable, 0u, isRowMajor, visitor);
+    }
+    else if (gl::IsSamplerType(variable.type))
+    {
+        visitor->visitSampler(variable);
+    }
+    else
+    {
+        visitor->visitVariable(variable, variable.arraySizes, isRowMajor);
+    }
+}
+
+void TraverseShaderVariables(const ShaderVariable *vars,
+                             size_t numVars,
+                             bool isRowMajorLayout,
+                             ShaderVariableVisitor *visitor)
+{
+    for (size_t variableIndex = 0; variableIndex < numVars; ++variableIndex)
+    {
+        const ShaderVariable &variable = vars[variableIndex];
+        TraverseShaderVariable(variable, isRowMajorLayout, visitor);
+    }
+}
 }  // namespace sh

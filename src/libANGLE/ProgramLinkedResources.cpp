@@ -243,6 +243,33 @@ void LogUniformsExceedLimit(ShaderType shaderType,
             << GetUniformResourceLimitName(shaderType, uniformType) << "(" << limit << ")";
 }
 
+// class ShaderStorageBlockLinker : public sh::VariableNameVisitor
+//{
+// public:
+//
+//    void visitVariable(const sh::ShaderVariable &variable,
+//        const sh::BlockMemberInfo &memberInfo) override
+//    {
+//        const std::string fullName = collapseNameStack(variable.name);
+//        const std::string fullMappedName = collapseMappedNameStack(variable.name);
+//
+//        BufferVariable newBufferVariable(variable.type, variable.precision, fullName,
+//        variable.arraySizes,
+//            mBlockIndex, memberInfo);
+//        newBufferVariable.mappedName = fullMappedName;
+//        newBufferVariable.setActive(mShaderType, variable.active);
+//
+//        newBufferVariable.topLevelArraySize = topLevelArraySize;
+//
+//        mBufferVariablesOut->push_back(newBufferVariable);
+//    }
+//
+// private:
+//    std::vector<BufferVariable> *mBufferVariablesOut;
+//    const int mBlockIndex;
+//    const ShaderType mShaderType;
+//};
+
 }  // anonymous namespace
 
 UniformLinker::UniformLinker(const ProgramState &state) : mState(state) {}
@@ -902,7 +929,7 @@ void InterfaceBlockLinker::addShaderBlocks(ShaderType shaderType,
 }
 
 void InterfaceBlockLinker::linkBlocks(const GetBlockSize &getBlockSize,
-                                      const GetBlockMemberInfo &getMemberInfo) const
+                                      const GetBlockMemberInfo &getMemberInfo)
 {
     ASSERT(mBlocksOut->empty());
 
@@ -929,6 +956,15 @@ void InterfaceBlockLinker::linkBlocks(const GetBlockSize &getBlockSize,
                         if (block.name == priorBlock.name)
                         {
                             priorBlock.setActive(shaderType, true);
+
+                            sh::ShaderVariableVisitor *visitor = getVisitor(shaderType, -1);
+
+                            if (visitor)
+                            {
+                                sh::TraverseShaderVariables(block.fields.data(),
+                                                            block.fields.size(), false, visitor);
+                            }
+
                             // Update the block members static use.
                             defineBlockMembers(nullptr, block.fields, block.fieldPrefix(),
                                                block.fieldMappedPrefix(), -1,
@@ -1147,6 +1183,39 @@ void InterfaceBlockLinker::defineInterfaceBlock(const GetBlockSize &getBlockSize
     }
 }
 
+// UniformBlockEncodingVisitor implementation.
+UniformBlockEncodingVisitor::UniformBlockEncodingVisitor(const std::string &instanceName,
+                                                         std::vector<LinkedUniform> *uniformsOut)
+    : sh::VariableNameVisitor(instanceName),
+      mUniformsOut(uniformsOut),
+      mBlockIndex(-1),
+      mShaderType(ShaderType::InvalidEnum)
+{}
+
+UniformBlockEncodingVisitor::~UniformBlockEncodingVisitor() = default;
+
+void UniformBlockEncodingVisitor::setBlockInfo(ShaderType shaderType, int blockIndex)
+{
+    mShaderType = shaderType;
+    mBlockIndex = blockIndex;
+}
+
+void UniformBlockEncodingVisitor::visitVariable(const sh::ShaderVariable &variable,
+                                                const sh::BlockMemberInfo &variableInfo)
+{
+    const std::string fullName       = collapseNameStack(variable.name);
+    const std::string fullMappedName = collapseMappedNameStack(variable.name);
+
+    LinkedUniform newUniform(variable.type, variable.precision, fullName, variable.arraySizes, -1,
+                             -1, -1, mBlockIndex, variableInfo);
+    newUniform.mappedName = fullMappedName;
+    newUniform.setActive(mShaderType, variable.active);
+
+    // Since block uniforms have no location, we don't need to store them in the uniform locations
+    // list.
+    mUniformsOut->push_back(newUniform);
+}
+
 // UniformBlockLinker implementation.
 UniformBlockLinker::UniformBlockLinker(std::vector<InterfaceBlock> *blocksOut,
                                        std::vector<LinkedUniform> *uniformsOut)
@@ -1183,6 +1252,12 @@ void UniformBlockLinker::updateBlockMemberActiveImpl(const std::string &fullName
                                                      bool active) const
 {
     SetActive(mUniformsOut, fullName, shaderType, active);
+}
+
+sh::ShaderVariableVisitor *UniformBlockLinker::getVisitor(ShaderType shaderType, int blockIndex)
+{
+    mVisitor.setBlockInfo(shaderType, blockIndex);
+    return &mVisitor;
 }
 
 // ShaderStorageBlockLinker implementation.

@@ -190,8 +190,7 @@ class InterfaceBlockLinker : angle::NonCopyable
     void addShaderBlocks(ShaderType shader, const std::vector<sh::InterfaceBlock> *blocks);
 
     // This is called once during a link operation, after all shader blocks are added.
-    void linkBlocks(const GetBlockSize &getBlockSize,
-                    const GetBlockMemberInfo &getMemberInfo) const;
+    void linkBlocks(const GetBlockSize &getBlockSize, const GetBlockMemberInfo &getMemberInfo);
 
   protected:
     InterfaceBlockLinker(std::vector<InterfaceBlock> *blocksOut);
@@ -235,6 +234,11 @@ class InterfaceBlockLinker : angle::NonCopyable
 
     std::vector<InterfaceBlock> *mBlocksOut;
 
+    virtual sh::BlockEncodingVisitor *getVisitor(ShaderType shaderType, int blockIndex)
+    {
+        return nullptr;
+    }
+
   private:
     template <typename VarT>
     void defineArrayOfStructsBlockMembers(const GetBlockMemberInfo &getMemberInfo,
@@ -246,6 +250,23 @@ class InterfaceBlockLinker : angle::NonCopyable
                                           bool singleEntryForTopLevelArray,
                                           int topLevelArraySize,
                                           ShaderType shaderType) const;
+};
+
+class UniformBlockEncodingVisitor : public sh::VariableNameVisitor
+{
+  public:
+    UniformBlockEncodingVisitor(const std::string &instanceName,
+                                std::vector<LinkedUniform> *uniformsOut);
+    ~UniformBlockEncodingVisitor();
+
+    void setBlockInfo(ShaderType shaderType, int blockIndex);
+
+    void visitVariable(const sh::ShaderVariable &variable, const sh::BlockMemberInfo &variableInfo);
+
+  private:
+    std::vector<LinkedUniform> *mUniformsOut;
+    int mBlockIndex;
+    ShaderType mShaderType;
 };
 
 class UniformBlockLinker final : public InterfaceBlockLinker
@@ -267,7 +288,11 @@ class UniformBlockLinker final : public InterfaceBlockLinker
     void updateBlockMemberActiveImpl(const std::string &fullName,
                                      ShaderType shaderType,
                                      bool active) const override;
+
+    sh::BlockEncodingVisitor *getVisitor(ShaderType shaderType, int blockIndex) override;
+
     std::vector<LinkedUniform> *mUniformsOut;
+    UniformBlockEncodingVisitor mVisitor;
 };
 
 class ShaderStorageBlockLinker final : public InterfaceBlockLinker
