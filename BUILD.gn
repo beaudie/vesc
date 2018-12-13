@@ -1028,8 +1028,6 @@ if (is_android) {
 
   group("angle_apks") {
     deps = [
-      ":compressed_symbols",
-      ":compressed_symbols($android_secondary_abi_toolchain)",
       ":aosp_apk",
       ":google_apk",
     ]

@@ -37,6 +37,8 @@ template("angle_apk") {
     android_manifest = manifest_path
     android_manifest_dep = ":$manifest_target_name"
     deps = [
+      ":compressed_symbols",
+      ":compressed_symbols($android_secondary_abi_toolchain)",
       ":${invoker.package_name}_assets",
       ":${invoker.package_name}_resources",
       "//base:base_java",
@@ -56,8 +58,12 @@ template("angle_apk") {
       ]
     }
 
+    loadable_modules = [
+      "$root_out_dir/lib.compressed/libEGL${angle_libs_suffix}",
+    ]
+
     shared_libraries = [
-      "//third_party/angle:libEGL${angle_libs_suffix}",
+      #"//third_party/angle:libEGL${angle_libs_suffix}",
       "//third_party/angle:libGLESv1_CM${angle_libs_suffix}",
       "//third_party/angle:libGLESv2${angle_libs_suffix}",
       "//third_party/angle:libfeature_support${angle_libs_suffix}",
