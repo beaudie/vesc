@@ -60,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "31fbca21_83a52fcb",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-12-13T18:53:30Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "590d6471_c5806560",
+      "range": {
+        "startLine": 695,
+        "startChar": 13,
+        "endLine": 695,
+        "endChar": 34
+      },
+      "revId": "9b02506c852b7f8118ba1bdde18c08da6c060482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9270c9c8_35aad064",
         "filename": "src/tests/gl_tests/MipmapTest.cpp",
         "patchSetId": 2
@@ -71,6 +95,30 @@
       "writtenOn": "2018-12-13T17:29:10Z",
       "side": 0,
       "message": "Tim: looks like these were leaked.",
+      "range": {
+        "startLine": 722,
+        "startChar": 13,
+        "endLine": 722,
+        "endChar": 42
+      },
+      "revId": "9b02506c852b7f8118ba1bdde18c08da6c060482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aad98fe_84cf85cf",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-12-13T18:53:30Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "9270c9c8_35aad064",
       "range": {
         "startLine": 722,
         "startChar": 13,

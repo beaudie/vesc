@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a2746263_b89bbee7",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-12-13T18:53:30Z",
+      "side": 1,
+      "message": "Yeah, I like that better. A bit simpler. DONE.",
+      "parentUuid": "727c85c5_199c1d71",
+      "range": {
+        "startLine": 180,
+        "startChar": 4,
+        "endLine": 180,
+        "endChar": 100
+      },
+      "revId": "4e0ce574003169bd960107d20793804eb45c47ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8c71925_7e54214d",
         "filename": "src/tests/gl_tests/MipmapTest.cpp",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "2d2d6074_392dd805",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-12-13T18:53:30Z",
+      "side": 1,
+      "message": "Switched to Jamie\u0027s std::vector suggestion.",
+      "parentUuid": "c8c71925_7e54214d",
+      "range": {
+        "startLine": 182,
+        "startChar": 0,
+        "endLine": 182,
+        "endChar": 71
+      },
+      "revId": "4e0ce574003169bd960107d20793804eb45c47ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "21dea5aa_35c7d2ee",
         "filename": "src/tests/gl_tests/MipmapTest.cpp",
         "patchSetId": 2
@@ -68,6 +116,30 @@
       "revId": "4e0ce574003169bd960107d20793804eb45c47ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "899d04d7_ac606dd8",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2018-12-13T18:53:30Z",
+      "side": 1,
+      "message": "Switched to Jamie\u0027s std::vector suggestion.",
+      "parentUuid": "21dea5aa_35c7d2ee",
+      "range": {
+        "startLine": 184,
+        "startChar": 36,
+        "endLine": 184,
+        "endChar": 42
+      },
+      "revId": "4e0ce574003169bd960107d20793804eb45c47ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
