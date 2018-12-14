@@ -42,6 +42,99 @@
     },
     {
       "key": {
+        "uuid": "c72224ac_c1c476df",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-14T18:54:28Z",
+      "side": 1,
+      "message": "I\u0027d also put it in the gni",
+      "parentUuid": "af81cafa_677a7c5f",
+      "range": {
+        "startLine": 754,
+        "startChar": 0,
+        "endLine": 754,
+        "endChar": 14
+      },
+      "revId": "55c37cff02d57abce394d1a4e13970eb78e9fe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "381fb4a9_1d17fecf",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-14T18:54:28Z",
+      "side": 1,
+      "message": "missing lib.unstripped",
+      "range": {
+        "startLine": 756,
+        "startChar": 5,
+        "endLine": 756,
+        "endChar": 21
+      },
+      "revId": "55c37cff02d57abce394d1a4e13970eb78e9fe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "219ac36e_7be9cdfa",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-14T18:54:28Z",
+      "side": 1,
+      "message": "Looks like you didn\u0027t upload this.\nbuild/toolchain doesn\u0027t seem to be a good place.\nHow about scripts or android or android/scripts",
+      "range": {
+        "startLine": 762,
+        "startChar": 12,
+        "endLine": 762,
+        "endChar": 47
+      },
+      "revId": "55c37cff02d57abce394d1a4e13970eb78e9fe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3740694_1f5e7499",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-14T18:54:28Z",
+      "side": 1,
+      "message": "Add this only \"if (build_apk_secondary_abi \u0026\u0026 android_64bit_target_cpu)\"\nAdd both only \"if (!is_debug \u0026\u0026 symbol_level !\u003d 0)\"\nDefine \"compresses_symbols\" only \"if (symbol_level !\u003d 0)\".",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 62
+      },
+      "revId": "55c37cff02d57abce394d1a4e13970eb78e9fe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dab84c7a_50d99bd2",
         "filename": "android/angle_apk.gni",
         "patchSetId": 2
