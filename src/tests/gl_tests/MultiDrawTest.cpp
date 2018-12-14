@@ -239,7 +239,7 @@ void main()
     {
         if (getClientMajorVersion() <= 2)
         {
-            ASSERT(extensionEnabled("GL_ANGLE_instanced_arrays"));
+            ASSERT_TRUE(extensionEnabled("GL_ANGLE_instanced_arrays"));
             glVertexAttribDivisorANGLE(location, divisor);
         }
         else
