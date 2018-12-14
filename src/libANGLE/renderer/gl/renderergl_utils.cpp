@@ -1347,23 +1347,17 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
     workarounds->doesSRGBClearsOnLinearFramebufferAttachments =
         functions->standard == STANDARD_GL_DESKTOP && (IsIntel(vendor) || IsAMD(vendor));
 
-#if defined(ANGLE_PLATFORM_LINUX)
     workarounds->emulateMaxVertexAttribStride =
-        functions->standard == STANDARD_GL_DESKTOP && IsAMD(vendor);
-    workarounds->useUnusedBlocksWithStandardOrSharedLayout = IsAMD(vendor);
-#endif
+        IsLinux() && functions->standard == STANDARD_GL_DESKTOP && IsAMD(vendor);
+    workarounds->useUnusedBlocksWithStandardOrSharedLayout = IsLinux() && IsAMD(vendor);
 
-#if defined(ANGLE_PLATFORM_APPLE)
-    workarounds->doWhileGLSLCausesGPUHang                  = true;
-    workarounds->useUnusedBlocksWithStandardOrSharedLayout = true;
-    workarounds->rewriteFloatUnaryMinusOperator            = IsIntel(vendor);
-#endif
+    workarounds->doWhileGLSLCausesGPUHang                  = IsApple();
+    workarounds->useUnusedBlocksWithStandardOrSharedLayout = IsApple();
+    workarounds->rewriteFloatUnaryMinusOperator            = IsApple() && IsIntel(vendor);
 
-#if defined(ANGLE_PLATFORM_ANDROID)
     // Triggers a bug on Marshmallow Adreno (4xx?) driver.
     // http://anglebug.com/2046
-    workarounds->dontInitializeUninitializedLocals = IsQualcomm(vendor);
-#endif
+    workarounds->dontInitializeUninitializedLocals = IsAndroid() && IsQualcomm(vendor);
 
     workarounds->finishDoesNotCauseQueriesToBeAvailable =
         functions->standard == STANDARD_GL_DESKTOP && IsNvidia(vendor);
@@ -1376,13 +1370,8 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
 
     workarounds->initializeCurrentVertexAttributes = IsNvidia(vendor);
 
-#if defined(ANGLE_PLATFORM_APPLE)
-    workarounds->unpackLastRowSeparatelyForPaddingInclusion = true;
-    workarounds->packLastRowSeparatelyForPaddingInclusion   = true;
-#else
-    workarounds->unpackLastRowSeparatelyForPaddingInclusion = IsNvidia(vendor);
-    workarounds->packLastRowSeparatelyForPaddingInclusion   = IsNvidia(vendor);
-#endif
+    workarounds->unpackLastRowSeparatelyForPaddingInclusion = IsApple() || IsNvidia(vendor);
+    workarounds->packLastRowSeparatelyForPaddingInclusion   = IsApple() || IsNvidia(vendor);
 
     workarounds->removeInvariantAndCentroidForESSL3 =
         functions->isAtMostGL(gl::Version(4, 1)) ||
@@ -1406,23 +1395,16 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
     // not affected.
     workarounds->rewriteRepeatedAssignToSwizzled = IsNvidia(vendor);
 
-#if defined(ANGLE_PLATFORM_ANDROID)
     // TODO(jmadill): Narrow workaround range for specific devices.
-    workarounds->reapplyUBOBindingsAfterUsingBinaryProgram = true;
+    workarounds->reapplyUBOBindingsAfterUsingBinaryProgram = IsAndroid();
 
-    workarounds->clampPointSize = true;
+    workarounds->clampPointSize = IsAndroid();
 
-    workarounds->dontUseLoopsToInitializeVariables = !IsNvidia(vendor);
-#endif
+    workarounds->dontUseLoopsToInitializeVariables = IsAndroid() && !IsNvidia(vendor);
 
     workarounds->disableBlendFuncExtended = IsAMD(vendor) || IsIntel(vendor);
 
-#if defined(ANGLE_PLATFORM_ANDROID)
-    if (IsQualcomm(vendor))
-    {
-        workarounds->unsizedsRGBReadPixelsDoesntTransform = true;
-    }
-#endif  // defined(ANGLE_PLATFORM_ANDROID)
+    workarounds->unsizedsRGBReadPixelsDoesntTransform = IsAndroid();
 }
 
 void ApplyWorkarounds(const FunctionsGL *functions, gl::Workarounds *workarounds)
