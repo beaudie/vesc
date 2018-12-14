@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49f406ac_1bcac05a",
+        "filename": "src/libGLESv2/entry_points_egl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-14T21:11:23Z",
+      "side": 1,
+      "message": "How painful is it to rename these something like EGL_ChooseConfig?  I fear eglChooseConfig and EGLChooseConfig will both show up when searching in an IDE.",
+      "range": {
+        "startLine": 18,
+        "startChar": 36,
+        "endLine": 18,
+        "endChar": 51
+      },
+      "revId": "f9d98abd6e5a8bba261af536efd7f68a5d9dd0a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

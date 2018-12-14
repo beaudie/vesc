@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41305fb9_f3f7ba03",
+        "filename": "include/EGL/README.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-14T21:11:23Z",
+      "side": 1,
+      "message": "extra newline?",
+      "revId": "1be7002a49cba2220a01d76cec9b587b12565aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "087a268e_0a9965b6",
+        "filename": "include/EGL/README.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-14T21:11:23Z",
+      "side": 1,
+      "message": "Should these be indented the same as the list above?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 113
+      },
+      "revId": "1be7002a49cba2220a01d76cec9b587b12565aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "386c0359_33bed1cc",
+        "filename": "include/EGL/egl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-14T21:11:23Z",
+      "side": 1,
+      "message": "Do we intend to format this file?",
+      "revId": "1be7002a49cba2220a01d76cec9b587b12565aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd791228_03394f48",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-14T21:11:23Z",
+      "side": 1,
+      "message": "Let\u0027s ASSERT that this returns \u003e0 and \u003c\u003d MAX_PATH",
+      "range": {
+        "startLine": 110,
+        "startChar": 8,
+        "endLine": 110,
+        "endChar": 86
+      },
+      "revId": "1be7002a49cba2220a01d76cec9b587b12565aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
