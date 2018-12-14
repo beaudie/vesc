@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "644bee29_95e78617",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2448,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-14T02:57:24Z",
+      "side": 1,
+      "message": "No. We can\u0027t return false in else block since it uses \u0027outputTriplet\u0027. Otherwise, it can\u0027t output the arguments in else block.",
+      "parentUuid": "5909119f_9c5aacf4",
+      "range": {
+        "startLine": 2448,
+        "startChar": 16,
+        "endLine": 2448,
+        "endChar": 29
+      },
+      "revId": "099ae7c78151fe6de2615a4fcf6a1b493c6dfb66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1f15d8cd_74ac17ba",
         "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
         "patchSetId": 2
@@ -39,6 +63,24 @@
       "revId": "099ae7c78151fe6de2615a4fcf6a1b493c6dfb66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85e3af82_a90e030b",
+        "filename": "src/compiler/translator/ShaderStorageBlockFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-14T02:57:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f15d8cd_74ac17ba",
+      "revId": "099ae7c78151fe6de2615a4fcf6a1b493c6dfb66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
