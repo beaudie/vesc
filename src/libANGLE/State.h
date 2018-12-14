@@ -564,6 +564,11 @@ class State : angle::NonCopyable
 
     using BufferBindingSetter = void (State::*)(const Context *, Buffer *);
 
+    ANGLE_INLINE bool validateSamplerFormats() const
+    {
+        return (mTexturesIncompatibleWithSamplers & mProgram->getActiveSamplersMask()).none();
+    }
+
   private:
     void unsetActiveTextures(ActiveTextureMask textureMask);
     void updateActiveTexture(const Context *context, size_t textureIndex, Texture *texture);
@@ -677,6 +682,8 @@ class State : angle::NonCopyable
     // Also stores a notification channel to the texture itself to handle texture change events.
     ActiveTexturePointerArray mActiveTexturesCache;
     std::vector<angle::ObserverBinding> mCompleteTextureBindings;
+
+    ActiveTextureMask mTexturesIncompatibleWithSamplers;
 
     SamplerBindingVector mSamplers;
 
