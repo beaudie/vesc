@@ -214,7 +214,7 @@ TString ShaderStorageBlockFunctionHLSL::registerShaderStorageBlockFunction(
     TIntermSwizzle *swizzleNode)
 {
     ShaderStorageBlockFunction ssboFunction;
-    ssboFunction.method     = method;
+    ssboFunction.method = method;
     switch (method)
     {
         case SSBOMethod::LOAD:
@@ -234,7 +234,7 @@ TString ShaderStorageBlockFunctionHLSL::registerShaderStorageBlockFunction(
 
     ssboFunction.typeString = TypeString(type);
     ssboFunction.functionName += ssboFunction.typeString;
-    ssboFunction.type       = type;
+    ssboFunction.type = type;
     if (swizzleNode != nullptr)
     {
         ssboFunction.swizzleOffsets   = swizzleNode->getSwizzleOffsets();
