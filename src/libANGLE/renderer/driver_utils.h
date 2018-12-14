@@ -9,6 +9,7 @@
 #ifndef LIBANGLE_RENDERER_DRIVER_UTILS_H_
 #define LIBANGLE_RENDERER_DRIVER_UTILS_H_
 
+#include "common/platform.h"
 #include "libANGLE/angletypes.h"
 
 namespace rx
@@ -29,8 +30,15 @@ enum AndroidDeviceID : uint32_t
 {
     ANDROID_DEVICE_ID_UNKNOWN  = 0x0,
     ANDROID_DEVICE_ID_NEXUS5X  = 0x4010800,
+    ANDROID_DEVICE_ID_NEXUS6P  = 0x4030001,
     ANDROID_DEVICE_ID_PIXEL1XL = 0x5040001,
     ANDROID_DEVICE_ID_PIXEL2   = 0x5030004,
+    ANDROID_DEVICE_ID_PIXEL3XL = 0x6030001,
+
+    // Unknown native device IDs
+    ANDROID_DEVICE_ID_NEXUS5,
+    ANDROID_DEVICE_ID_NEXUS6,
+    ANDROID_DEVICE_ID_NVIDIATEGRA,  // Nexus 9, Shield TV share the same renderer string
 };
 
 inline bool IsAMD(uint32_t vendorId)
@@ -93,6 +101,43 @@ bool IsCherryView(uint32_t DeviceId);
 bool IsSkylake(uint32_t DeviceId);
 bool IsBroxton(uint32_t DeviceId);
 bool IsKabylake(uint32_t DeviceId);
+
+// Platform helpers
+inline bool IsWindows()
+{
+#if defined(ANGLE_PLATFORM_WINDOWS)
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline bool IsLinux()
+{
+#if defined(ANGLE_PLATFORM_LINUX)
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline bool IsApple()
+{
+#if defined(ANGLE_PLATFORM_APPLE)
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline bool IsAndroid()
+{
+#if defined(ANGLE_PLATFORM_ANDROID)
+    return true;
+#else
+    return false;
+#endif
+}
 
 }  // namespace rx
 #endif  // LIBANGLE_RENDERER_DRIVER_UTILS_H_
