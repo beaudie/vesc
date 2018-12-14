@@ -22,6 +22,30 @@
       "revId": "f9d98abd6e5a8bba261af536efd7f68a5d9dd0a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dad95f55_f5150b6d",
+        "filename": "src/libGLESv2/entry_points_egl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-14T22:09:58Z",
+      "side": 1,
+      "message": "Done. It\u0027s not too bad.",
+      "parentUuid": "49f406ac_1bcac05a",
+      "range": {
+        "startLine": 18,
+        "startChar": 36,
+        "endLine": 18,
+        "endChar": 51
+      },
+      "revId": "f9d98abd6e5a8bba261af536efd7f68a5d9dd0a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
