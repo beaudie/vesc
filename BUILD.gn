@@ -886,6 +886,10 @@ source_set("angle_util_loader_headers") {
     "util/util_export.h",
   ]
 
+  if (is_win) {
+    sources += util_wgl_sources
+  }
+
   public_configs = [
     ":angle_util_config",
     ":angle_util_loader_config",

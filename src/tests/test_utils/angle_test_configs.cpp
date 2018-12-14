@@ -16,7 +16,16 @@ PlatformParameters::PlatformParameters() : PlatformParameters(2, 0, EGLPlatformP
 PlatformParameters::PlatformParameters(EGLint majorVersion,
                                        EGLint minorVersion,
                                        const EGLPlatformParameters &eglPlatformParameters)
-    : majorVersion(majorVersion), minorVersion(minorVersion), eglParameters(eglPlatformParameters)
+    : majorVersion(majorVersion),
+      minorVersion(minorVersion),
+      eglParameters(eglPlatformParameters),
+      driver(GLESDriverType::ANGLE)
+{}
+
+PlatformParameters::PlatformParameters(EGLint majorVersion,
+                                       EGLint minorVersion,
+                                       GLESDriverType driver)
+    : majorVersion(majorVersion), minorVersion(minorVersion), driver(driver)
 {}
 
 EGLint PlatformParameters::getRenderer() const
@@ -53,32 +62,39 @@ std::ostream &operator<<(std::ostream &stream, const PlatformParameters &pp)
         stream << pp.minorVersion << "_";
     }
 
-    switch (pp.eglParameters.renderer)
+    if (pp.driver == GLESDriverType::ANGLE)
     {
-        case EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE:
-            stream << "DEFAULT";
-            break;
-        case EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE:
-            stream << "D3D9";
-            break;
-        case EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE:
-            stream << "D3D11";
-            break;
-        case EGL_PLATFORM_ANGLE_TYPE_NULL_ANGLE:
-            stream << "NULL";
-            break;
-        case EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE:
-            stream << "OPENGL";
-            break;
-        case EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE:
-            stream << "OPENGLES";
-            break;
-        case EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE:
-            stream << "VULKAN";
-            break;
-        default:
-            stream << "UNDEFINED";
-            break;
+        switch (pp.eglParameters.renderer)
+        {
+            case EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE:
+                stream << "DEFAULT";
+                break;
+            case EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE:
+                stream << "D3D9";
+                break;
+            case EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE:
+                stream << "D3D11";
+                break;
+            case EGL_PLATFORM_ANGLE_TYPE_NULL_ANGLE:
+                stream << "NULL";
+                break;
+            case EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE:
+                stream << "OPENGL";
+                break;
+            case EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE:
+                stream << "OPENGLES";
+                break;
+            case EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE:
+                stream << "VULKAN";
+                break;
+            default:
+                stream << "UNDEFINED";
+                break;
+        }
+    }
+    else
+    {
+        stream << "WGL";
     }
 
     if (pp.eglParameters.majorVersion != EGL_DONT_CARE)
@@ -641,4 +657,13 @@ PlatformParameters ES3_VULKAN_NULL()
     return PlatformParameters(3, 0, egl_platform::VULKAN_NULL());
 }
 
+PlatformParameters ES2_WGL()
+{
+    return PlatformParameters(2, 0, GLESDriverType::WGL);
+}
+
+PlatformParameters ES3_WGL()
+{
+    return PlatformParameters(3, 0, GLESDriverType::WGL);
+}
 }  // namespace angle
