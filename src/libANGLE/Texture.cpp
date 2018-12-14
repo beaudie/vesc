@@ -239,6 +239,38 @@ GLenum TextureState::getGenerateMipmapHint() const
     return mGenerateMipmapHint;
 }
 
+bool TextureState::compatibleWithSamplerFormat(SamplerFormat format) const
+{
+    const ImageDesc &baseImageDesc = getImageDesc(getBaseImageTarget(), getEffectiveBaseLevel());
+    if ((baseImageDesc.format.info->format == GL_DEPTH_COMPONENT ||
+         baseImageDesc.format.info->format == GL_DEPTH_STENCIL) &&
+        mSamplerState.getCompareMode() != GL_NONE)
+    {
+        return format == SamplerFormat::Shadow;
+    }
+    else
+    {
+        switch (baseImageDesc.format.info->componentType)
+        {
+            case GL_UNSIGNED_NORMALIZED:
+            case GL_SIGNED_NORMALIZED:
+            case GL_FLOAT:
+                return format == SamplerFormat::Float;
+            case GL_INT:
+                return format == SamplerFormat::Signed;
+            case GL_UNSIGNED_INT:
+                return format == SamplerFormat::Unsigned;
+            case GL_NONE:
+                // Uninitialized textures are treated as incomplete and drawing
+                // with them should not produce INVALID_OPERATION.
+                return true;
+            default:
+                UNREACHABLE();
+        }
+    }
+    return false;
+}
+
 bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
                                               const ContextState &data) const
 {
