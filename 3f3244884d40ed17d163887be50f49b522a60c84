@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cbd20ea7_278a031b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-14T21:12:22Z",
+      "side": 1,
+      "message": "I filed a new, more specific bug.",
+      "parentUuid": "a7b3b82e_cc64e547",
+      "range": {
+        "startLine": 12,
+        "startChar": 4,
+        "endLine": 12,
+        "endChar": 21
+      },
+      "revId": "3f3244884d40ed17d163887be50f49b522a60c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dd9aa894_43cc314a",
         "filename": "src/libANGLE/renderer/driver_utils.h",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "3f3244884d40ed17d163887be50f49b522a60c84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e7eae5e_002e8f67",
+        "filename": "src/libANGLE/renderer/driver_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-14T21:12:22Z",
+      "side": 1,
+      "message": "I added a conversion step from renderer string to AndroidDeviceID so we can use the new utility functions.",
+      "parentUuid": "dd9aa894_43cc314a",
+      "range": {
+        "startLine": 48,
+        "startChar": 12,
+        "endLine": 48,
+        "endChar": 21
+      },
+      "revId": "3f3244884d40ed17d163887be50f49b522a60c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "60f1b0fc_d30d5240",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1336,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-14T21:12:22Z",
+      "side": 1,
+      "message": "Fixed in a previous patch.",
+      "parentUuid": "fe1bc18c_7384e86c",
+      "range": {
+        "startLine": 1336,
+        "startChar": 4,
+        "endLine": 1336,
+        "endChar": 25
+      },
+      "revId": "3f3244884d40ed17d163887be50f49b522a60c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ee177d6a_a0713bc3",
         "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "3f3244884d40ed17d163887be50f49b522a60c84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68e40017_93b6e651",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1434,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2018-12-14T21:12:22Z",
+      "side": 1,
+      "message": "Fixed in a previous patch.",
+      "parentUuid": "ee177d6a_a0713bc3",
+      "range": {
+        "startLine": 1434,
+        "startChar": 4,
+        "endLine": 1434,
+        "endChar": 34
+      },
+      "revId": "3f3244884d40ed17d163887be50f49b522a60c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
