@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "c1820c8b_8b45f1b6",
+        "filename": "include/EGL/README.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-14T22:18:26Z",
+      "side": 1,
+      "message": "I\u0027ve meant should egl.xml be updated at the same time as egl.h?",
+      "parentUuid": "ba86b865_0a878e27",
+      "revId": "7752293e29b2a61dd21df0830378d7b045df3984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a54111f_4acce6d8",
         "filename": "scripts/generate_loader.py",
         "patchSetId": 11
