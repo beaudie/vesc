@@ -80,6 +80,8 @@ class PosixLibrary : public Library
         return dlsym(mModule, symbolName);
     }
 
+    void *getNative() const override { return mModule; }
+
   private:
     void *mModule = nullptr;
 };
