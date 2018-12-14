@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "81668f1a_0b3dc18f",
+        "filename": "include/EGL/README.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-14T21:03:20Z",
+      "side": 1,
+      "message": "This isn\u0027t necessary in markdown. Using the same number makes it a bit easier to maintain and edit. They will render correctly.",
+      "parentUuid": "1bac70ce_25eee851",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 1
+      },
+      "revId": "7752293e29b2a61dd21df0830378d7b045df3984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "151500c3_d7018b9c",
         "filename": "include/EGL/README.md",
         "patchSetId": 11
@@ -39,6 +63,24 @@
       "revId": "7752293e29b2a61dd21df0830378d7b045df3984",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba86b865_0a878e27",
+        "filename": "include/EGL/README.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-14T21:03:20Z",
+      "side": 1,
+      "message": "Our copy is up-to-date.",
+      "parentUuid": "151500c3_d7018b9c",
+      "revId": "7752293e29b2a61dd21df0830378d7b045df3984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "4c8b2d13_e2017ee2",
+        "filename": "scripts/generate_loader.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-14T21:03:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a54111f_4acce6d8",
+      "range": {
+        "startLine": 3,
+        "startChar": 12,
+        "endLine": 3,
+        "endChar": 16
+      },
+      "revId": "7752293e29b2a61dd21df0830378d7b045df3984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c6b04944_2c4dbe4d",
         "filename": "scripts/generate_loader.py",
         "patchSetId": 11
@@ -85,6 +151,30 @@
       "revId": "7752293e29b2a61dd21df0830378d7b045df3984",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de52190f_ec1bddf9",
+        "filename": "scripts/generate_loader.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-14T21:03:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6b04944_2c4dbe4d",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 0
+      },
+      "revId": "7752293e29b2a61dd21df0830378d7b045df3984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "f119e76d_691b551d",
+        "filename": "scripts/generate_loader.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-14T21:03:20Z",
+      "side": 1,
+      "message": "Just took this out.",
+      "parentUuid": "47487bed_b1c6d910",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 0
+      },
+      "revId": "7752293e29b2a61dd21df0830378d7b045df3984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97b17a40_5e290347",
         "filename": "src/common/system_utils_posix.cpp",
         "patchSetId": 11
@@ -131,6 +245,30 @@
       "revId": "7752293e29b2a61dd21df0830378d7b045df3984",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "790233e2_ee628409",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-14T21:03:20Z",
+      "side": 1,
+      "message": "Can\u0027t call ASSERT from these files. But I changed it to fail gracefully on the overflow.",
+      "parentUuid": "97b17a40_5e290347",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 82
+      },
+      "revId": "7752293e29b2a61dd21df0830378d7b045df3984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
