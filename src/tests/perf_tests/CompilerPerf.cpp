@@ -16,6 +16,39 @@
 #include "compiler/translator/InitializeGlobals.h"
 #include "compiler/translator/PoolAlloc.h"
 
+namespace angle
+{
+bool IsPlatformAvailable(const CompilerParameters &param)
+{
+    switch (param.output)
+    {
+        case SH_HLSL_4_1_OUTPUT:
+        case SH_HLSL_4_0_FL9_3_OUTPUT:
+        case SH_HLSL_3_0_OUTPUT:
+        {
+            TPoolAllocator allocator;
+            InitializePoolIndex();
+            allocator.push();
+            SetGlobalPoolAllocator(&allocator);
+            ShHandle translator =
+                sh::ConstructCompiler(GL_FRAGMENT_SHADER, SH_WEBGL2_SPEC, param.output);
+            bool success = translator != nullptr;
+            SetGlobalPoolAllocator(nullptr);
+            allocator.pop();
+            FreePoolIndex();
+            if (!success)
+            {
+                return false;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    return true;
+}
+}  // namespace angle
+
 namespace
 {
 

@@ -346,7 +346,13 @@ void ANGLERenderTest::SetUp()
     angle::StabilizeCPUForBenchmarking();
 
     mOSWindow = CreateOSWindow();
-    ASSERT(mEGLWindow != nullptr);
+
+    if (!mEGLWindow)
+    {
+        abortTest();
+        return;
+    }
+
     mEGLWindow->setSwapInterval(0);
 
     mPlatformMethods.overrideWorkaroundsD3D      = OverrideWorkaroundsD3D;
@@ -366,11 +372,20 @@ void ANGLERenderTest::SetUp()
         return;
     }
 
-    if (!mEGLWindow->initializeGL(mOSWindow))
+    // Load EGL library so we can initialize the display.
+#if defined(ANGLE_USE_UTIL_LOADER)
+    mEntryPointsLib.reset(angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME));
+#endif  // defined(ANGLE_USE_UTIL_LOADER)
+
+    if (!mEGLWindow->initializeGL(mOSWindow, mEntryPointsLib.get()))
     {
         FAIL() << "Failed initializing EGLWindow";
         return;
     }
+
+#if defined(ANGLE_USE_UTIL_LOADER)
+    angle::LoadGLES(eglGetProcAddress);
+#endif  // defined(ANGLE_USE_UTIL_LOADER)
 
     if (!areExtensionPrerequisitesFulfilled())
     {
