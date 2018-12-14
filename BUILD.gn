@@ -882,6 +882,10 @@ source_set("util_loader") {
     "util/gles_loader_autogen.h",
   ]
 
+  if (is_win) {
+    sources += util_wgl_sources
+  }
+
   public_configs = [
     ":angle_util_config",
     ":extra_warnings",
