@@ -56,6 +56,7 @@ DisplayGLX::DisplayGLX(const egl::DisplayState &state)
     : DisplayGL(state),
       mRequestedVisual(-1),
       mContextConfig(nullptr),
+      mVisuals(nullptr),
       mContext(nullptr),
       mDummyPbuffer(0),
       mUsesNewXDisplay(false),
@@ -228,16 +229,14 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
         visualTemplate.visualid = getGLXFBConfigAttrib(mContextConfig, GLX_VISUAL_ID);
 
         int numVisuals = 0;
-        XVisualInfo *visuals =
-            XGetVisualInfo(mXDisplay, VisualIDMask, &visualTemplate, &numVisuals);
+        mVisuals       = XGetVisualInfo(mXDisplay, VisualIDMask, &visualTemplate, &numVisuals);
         if (numVisuals <= 0)
         {
             return egl::EglNotInitialized() << "Could not get the visual info from the fb config";
         }
         ASSERT(numVisuals == 1);
 
-        mContext = mGLX.createContext(&visuals[0], nullptr, true);
-        XFree(visuals);
+        mContext = mGLX.createContext(&mVisuals[0], nullptr, true);
 
         if (!mContext)
         {
@@ -287,8 +286,7 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
 
     syncXCommands();
 
-    // TODO(jie.a.chen@intel.com): Implement WorkerContextFactory.  http://crbug.com/873724
-    mRenderer.reset(new RendererGL(std::move(functionsGL), eglAttributes, nullptr));
+    mRenderer.reset(new RendererGL(std::move(functionsGL), eglAttributes, this));
     const gl::Version &maxVersion = mRenderer->getMaxSupportedESVersion();
     if (maxVersion < gl::Version(2, 0))
     {
@@ -301,6 +299,11 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
 void DisplayGLX::terminate()
 {
     DisplayGL::terminate();
+
+    if (mVisuals)
+    {
+        XFree(mVisuals);
+    }
 
     if (mDummyPbuffer)
     {
@@ -811,34 +814,34 @@ int DisplayGLX::getGLXFBConfigAttrib(glx::FBConfig config, int attrib) const
 egl::Error DisplayGLX::createContextAttribs(glx::FBConfig,
                                             const Optional<gl::Version> &version,
                                             int profileMask,
-                                            glx::Context *context) const
+                                            glx::Context *context)
 {
-    std::vector<int> attribs;
+    mAttribs.clear();
 
     if (mHasARBCreateContextRobustness)
     {
-        attribs.push_back(GLX_CONTEXT_FLAGS_ARB);
-        attribs.push_back(GLX_CONTEXT_ROBUST_ACCESS_BIT_ARB);
-        attribs.push_back(GLX_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB);
-        attribs.push_back(GLX_LOSE_CONTEXT_ON_RESET_ARB);
+        mAttribs.push_back(GLX_CONTEXT_FLAGS_ARB);
+        mAttribs.push_back(GLX_CONTEXT_ROBUST_ACCESS_BIT_ARB);
+        mAttribs.push_back(GLX_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB);
+        mAttribs.push_back(GLX_LOSE_CONTEXT_ON_RESET_ARB);
     }
 
     if (version.valid())
     {
-        attribs.push_back(GLX_CONTEXT_MAJOR_VERSION_ARB);
-        attribs.push_back(version.value().major);
+        mAttribs.push_back(GLX_CONTEXT_MAJOR_VERSION_ARB);
+        mAttribs.push_back(version.value().major);
 
-        attribs.push_back(GLX_CONTEXT_MINOR_VERSION_ARB);
-        attribs.push_back(version.value().minor);
+        mAttribs.push_back(GLX_CONTEXT_MINOR_VERSION_ARB);
+        mAttribs.push_back(version.value().minor);
     }
 
     if (profileMask != 0 && mHasARBCreateContextProfile)
     {
-        attribs.push_back(GLX_CONTEXT_PROFILE_MASK_ARB);
-        attribs.push_back(profileMask);
+        mAttribs.push_back(GLX_CONTEXT_PROFILE_MASK_ARB);
+        mAttribs.push_back(profileMask);
     }
 
-    attribs.push_back(None);
+    mAttribs.push_back(None);
 
     // When creating a context with glXCreateContextAttribsARB, a variety of X11 errors can
     // be generated. To prevent these errors from crashing our process, we simply ignore
@@ -847,7 +850,7 @@ egl::Error DisplayGLX::createContextAttribs(glx::FBConfig,
     // (the error handler is NOT per-display).
     XSync(mXDisplay, False);
     auto oldErrorHandler = XSetErrorHandler(IgnoreX11Errors);
-    *context = mGLX.createContextAttribsARB(mContextConfig, nullptr, True, attribs.data());
+    *context = mGLX.createContextAttribsARB(mContextConfig, nullptr, True, mAttribs.data());
     XSetErrorHandler(oldErrorHandler);
 
     if (!*context)
@@ -855,6 +858,82 @@ egl::Error DisplayGLX::createContextAttribs(glx::FBConfig,
         return egl::EglNotInitialized() << "Could not create GL context.";
     }
     return egl::NoError();
+}
+
+class WorkerContextGLX final : public WorkerContext
+{
+  public:
+    WorkerContextGLX(glx::Context context,
+                     FunctionsGLX *functions,
+                     Display *display,
+                     glx::Pbuffer buffer);
+    ~WorkerContextGLX();
+
+    bool makeCurrent(std::string *infoLog) override;
+    void unmakeCurrent() override;
+
+  private:
+    glx::Context mContext;
+    FunctionsGLX *mFunctions;
+    Display *mDisplay;
+    glx::Pbuffer mBuffer;
+};
+
+WorkerContextGLX::WorkerContextGLX(glx::Context context,
+                                   FunctionsGLX *functions,
+                                   Display *display,
+                                   glx::Pbuffer buffer)
+    : mContext(context), mFunctions(functions), mDisplay(display), mBuffer(buffer)
+{}
+
+WorkerContextGLX::~WorkerContextGLX()
+{
+    XLockDisplay(mDisplay);
+    mFunctions->destroyContext(mContext);
+    XUnlockDisplay(mDisplay);
+}
+
+bool WorkerContextGLX::makeCurrent(std::string *infoLog)
+{
+    XLockDisplay(mDisplay);
+    Bool result = mFunctions->makeCurrent(mBuffer, mContext);
+    XUnlockDisplay(mDisplay);
+    if (result != True)
+    {
+        *infoLog += "Unable to make the GLX context current.";
+        return false;
+    }
+    return true;
+}
+
+void WorkerContextGLX::unmakeCurrent()
+{
+    XLockDisplay(mDisplay);
+    mFunctions->makeCurrent(0, nullptr);
+    XUnlockDisplay(mDisplay);
+}
+
+WorkerContext *DisplayGLX::createWorkerContext(std::string *infoLog)
+{
+    XLockDisplay(mXDisplay);
+    glx::Context context = nullptr;
+    if (mHasARBCreateContext)
+    {
+        context = mGLX.createContextAttribsARB(mContextConfig, mContext, True, mAttribs.data());
+    }
+    else
+    {
+        context = mGLX.createContext(&mVisuals[0], mContext, True);
+    }
+    XUnlockDisplay(mXDisplay);
+
+    if (!context)
+    {
+        *infoLog += "Unable to create glx context.";
+        return nullptr;
+    }
+
+    return new WorkerContextGLX(context, &mGLX, mXDisplay, mDummyPbuffer);
 }
 
 }  // namespace rx
