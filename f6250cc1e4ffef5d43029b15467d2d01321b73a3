@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33027ff4_c7dace21",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1126674
+      },
+      "writtenOn": "2018-12-14T03:08:59Z",
+      "side": 1,
+      "message": "note: should change this to:\n\nif (is_android \u0026\u0026 current_toolchain \u003d\u003d default_toolchain) {\n\nSo that you don\u0027t define apks in the secondary toolchain",
+      "revId": "f6250cc1e4ffef5d43029b15467d2d01321b73a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
