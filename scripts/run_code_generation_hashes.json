@@ -74,9 +74,11 @@
   "GL/EGL/WGL loader:scripts/egl_angle_ext.xml":
     "745534010f31fbe8e1a1fcddce15ed2d",
   "GL/EGL/WGL loader:scripts/generate_loader.py":
-    "d68873f69d0ab0104460808c7b6a34ab",
+    "e90e25d77c6e2aa1988f90080d6b5a3c",
   "GL/EGL/WGL loader:scripts/registry_xml.py":
     "fcc6e75568f9c25b70f6692b9080a447",
+  "GL/EGL/WGL loader:scripts/wgl.xml":
+    "aa96419c582af2f6673430e2847693f4",
   "OpenGL dispatch table:scripts/gl.xml":
     "b470cb06b06cbbe7adb2c8129ec85708",
   "OpenGL dispatch table:src/libANGLE/renderer/gl/generate_gl_dispatch_table.py":
