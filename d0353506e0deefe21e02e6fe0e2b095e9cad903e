@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1a8ead80_8ae348ed",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-14T04:17:16Z",
+      "side": 1,
+      "message": "(Was actually only used for gl::ElementTypeSize in DrawElementsPerf.cpp)",
+      "parentUuid": "b2ca435d_319455d7",
+      "range": {
+        "startLine": 297,
+        "startChar": 0,
+        "endLine": 297,
+        "endChar": 42
+      },
+      "revId": "d0353506e0deefe21e02e6fe0e2b095e9cad903e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fd87c6c3_d65cfd9a",
         "filename": "src/tests/angle_perftests.gni",
         "patchSetId": 13
