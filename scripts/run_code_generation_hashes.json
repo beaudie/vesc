@@ -18,7 +18,7 @@
   "D3D11 format:src/libANGLE/renderer/d3d/d3d11/gen_texture_format_table.py":
     "15fb2a9b3f81e39a22090bce2f071185",
   "D3D11 format:src/libANGLE/renderer/d3d/d3d11/texture_format_data.json":
-    "70a1798cb4e6ebabe31be5bec40c6d6f",
+    "d7483ece817e819588f4ca157716dc7b",
   "D3D11 format:src/libANGLE/renderer/d3d/d3d11/texture_format_map.json":
     "805d30e2443935e3a3bd68839699e171",
   "DXGI format support:src/libANGLE/renderer/d3d/d3d11/dxgi_support_data.json":
@@ -118,5 +118,5 @@
   "proc table:src/libGLESv2/proc_table_data.json":
     "bcb5dbd7b57c0d56d5e8849c46d9c36e",
   "uniform type:src/common/gen_uniform_type_table.py":
-    "59cb4ffd0f584c4bd37f2f4ff59a2b93"
+    "32c45bb7c559a9faa820890fc9267f1b"
 }
