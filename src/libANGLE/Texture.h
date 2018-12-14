@@ -15,6 +15,7 @@
 #include "angle_gl.h"
 #include "common/Optional.h"
 #include "common/debug.h"
+#include "common/utilities.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Constants.h"
 #include "libANGLE/Debug.h"
@@ -108,6 +109,7 @@ struct TextureState final : private angle::NonCopyable
     bool setMaxLevel(GLuint maxLevel);
 
     bool isCubeComplete() const;
+    bool compatibleWithSamplerFormat(SamplerFormat format) const;
 
     const ImageDesc &getImageDesc(TextureTarget target, size_t level) const;
     const ImageDesc &getImageDesc(const ImageIndex &imageIndex) const;
