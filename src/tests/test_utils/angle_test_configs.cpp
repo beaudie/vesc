@@ -6,6 +6,8 @@
 
 #include "test_utils/angle_test_configs.h"
 
+#include "util/util_gl.h"
+
 namespace angle
 {
 
@@ -27,7 +29,6 @@ const char *CompilerParameters::str() const
         case SH_ESSL_OUTPUT:
             return "ESSL";
         default:
-            UNREACHABLE();
             return "unk";
     }
 }
@@ -138,7 +139,7 @@ std::ostream &operator<<(std::ostream &stream, const PlatformParameters &pp)
             break;
 
         default:
-            UNREACHABLE();
+            stream << "_ERR";
             break;
     }
 
@@ -157,7 +158,7 @@ std::ostream &operator<<(std::ostream &stream, const PlatformParameters &pp)
             break;
 
         default:
-            UNREACHABLE();
+            stream << "_ERR";
             break;
     }
 
