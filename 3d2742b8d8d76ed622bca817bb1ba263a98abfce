@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1de43e26_1beb6669",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1126674
+      },
+      "writtenOn": "2018-12-14T02:58:18Z",
+      "side": 1,
+      "message": "note: should do something like:\n\n_secondary_out_dir \u003d get_label_info(\":compressed_symbols($android_secondary_abi_toolchain)\", \"root_out_dir\")\n\n\"$_secondary_out_dir/lib.compressed/...\"",
+      "revId": "3d2742b8d8d76ed622bca817bb1ba263a98abfce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
