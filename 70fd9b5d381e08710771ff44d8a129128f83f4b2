@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d55319d_4b730813",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 11
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-14T20:45:49Z",
+      "side": 0,
+      "message": "Why remove these?\nAlso, can they be auto generated?",
+      "range": {
+        "startLine": 823,
+        "startChar": 0,
+        "endLine": 825,
+        "endChar": 41
+      },
+      "revId": "70fd9b5d381e08710771ff44d8a129128f83f4b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

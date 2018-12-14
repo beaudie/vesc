@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1bac70ce_25eee851",
+        "filename": "include/EGL/README.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-14T20:45:49Z",
+      "side": 1,
+      "message": "2, etc.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 1
+      },
+      "revId": "7752293e29b2a61dd21df0830378d7b045df3984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "151500c3_d7018b9c",
+        "filename": "include/EGL/README.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-14T20:45:49Z",
+      "side": 1,
+      "message": "Should we also update ANGLE\u0027s copy of egl.xml?",
+      "revId": "7752293e29b2a61dd21df0830378d7b045df3984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a54111f_4acce6d8",
+        "filename": "scripts/generate_loader.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-14T20:45:49Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 3,
+        "startChar": 12,
+        "endLine": 3,
+        "endChar": 16
+      },
+      "revId": "7752293e29b2a61dd21df0830378d7b045df3984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6b04944_2c4dbe4d",
+        "filename": "scripts/generate_loader.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-14T20:45:49Z",
+      "side": 1,
+      "message": "generate_loader.py\nThe comment probably needs an update, too.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 0
+      },
+      "revId": "7752293e29b2a61dd21df0830378d7b045df3984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47487bed_b1c6d910",
+        "filename": "scripts/generate_loader.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-14T20:45:49Z",
+      "side": 1,
+      "message": "GLES needs to be replaced with EGL, I think?",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 0
+      },
+      "revId": "7752293e29b2a61dd21df0830378d7b045df3984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97b17a40_5e290347",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-14T20:45:49Z",
+      "side": 1,
+      "message": "maybe ASSERT that it fits?",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 82
+      },
+      "revId": "7752293e29b2a61dd21df0830378d7b045df3984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
