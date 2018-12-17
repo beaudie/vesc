@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c260468c_81bb8496",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-17T06:58:01Z",
+      "side": 1,
+      "message": "nit: glUseProgram(program);",
+      "range": {
+        "startLine": 742,
+        "startChar": 4,
+        "endLine": 742,
+        "endChar": 31
+      },
+      "revId": "d822b91454f52d9141c6c1f982c50bc21c55953c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35ace50c_10aa0482",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2018-12-17T06:58:01Z",
+      "side": 1,
+      "message": "nit: These two lines can be removed.",
+      "range": {
+        "startLine": 760,
+        "startChar": 0,
+        "endLine": 761,
+        "endChar": 46
+      },
+      "revId": "d822b91454f52d9141c6c1f982c50bc21c55953c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
