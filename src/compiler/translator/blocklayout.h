@@ -12,6 +12,7 @@
 
 #include <cstddef>
 #include <map>
+#include <stack>
 #include <vector>
 
 #include <GLSLANG/ShaderLang.h>
@@ -78,25 +79,25 @@ class BlockLayoutEncoder
                                const std::vector<unsigned int> &arraySizes,
                                bool isRowMajorMatrix);
 
-    size_t getBlockSize() const { return mCurrentOffset * BytesPerComponent; }
-    size_t getStructureBaseAlignment() const { return mStructureBaseAlignment; }
-    void increaseCurrentOffset(size_t offsetInBytes);
-    void setStructureBaseAlignment(size_t baseAlignment);
+    size_t getBlockSize() const { return mCurrentOffset * kBytesPerComponent; }
 
-    virtual void enterAggregateType() = 0;
-    virtual void exitAggregateType()  = 0;
+    // Called when entering a new structure or array.
+    // Returns the offset of the aggregate type.
+    virtual void enterAggregateType(const ShaderVariable *fields, size_t fieldCount) = 0;
 
-    static const size_t BytesPerComponent           = 4u;
-    static const unsigned int ComponentsPerRegister = 4u;
+    virtual BlockMemberInfo exitAggregateType(bool isRowMajor) = 0;
+
+    static constexpr size_t kBytesPerComponent           = 4u;
+    static constexpr unsigned int kComponentsPerRegister = 4u;
 
     static size_t GetBlockRegister(const BlockMemberInfo &info);
     static size_t GetBlockRegisterElement(const BlockMemberInfo &info);
 
   protected:
     size_t mCurrentOffset;
-    size_t mStructureBaseAlignment;
+    std::stack<size_t> mAggregateOffsetStack;
 
-    virtual void nextRegister();
+    void nextRegister();
 
     virtual void getBlockLayoutInfo(GLenum type,
                                     const std::vector<unsigned int> &arraySizes,
@@ -116,8 +117,8 @@ class DummyBlockEncoder : public BlockLayoutEncoder
   public:
     DummyBlockEncoder() = default;
 
-    void enterAggregateType() override {}
-    void exitAggregateType() override {}
+    void enterAggregateType(const ShaderVariable *fields, size_t fieldCount) override {}
+    BlockMemberInfo exitAggregateType(bool isRowMajor) override { return kDefaultBlockMemberInfo; }
 
   protected:
     void getBlockLayoutInfo(GLenum type,
@@ -146,8 +147,8 @@ class Std140BlockEncoder : public BlockLayoutEncoder
   public:
     Std140BlockEncoder();
 
-    void enterAggregateType() override;
-    void exitAggregateType() override;
+    void enterAggregateType(const ShaderVariable *fields, size_t fieldCount) override;
+    BlockMemberInfo exitAggregateType(bool isRowMajor) override;
 
   protected:
     void getBlockLayoutInfo(GLenum type,
@@ -167,13 +168,7 @@ class Std430BlockEncoder : public Std140BlockEncoder
   public:
     Std430BlockEncoder();
 
-  protected:
-    void nextRegister() override;
-    void getBlockLayoutInfo(GLenum type,
-                            const std::vector<unsigned int> &arraySizes,
-                            bool isRowMajorMatrix,
-                            int *arrayStrideOut,
-                            int *matrixStrideOut) override;
+    void enterAggregateType(const ShaderVariable *fields, size_t fieldCount) override;
 };
 
 using BlockLayoutMap = std::map<std::string, BlockMemberInfo>;
