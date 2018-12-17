@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d205662_29749d50",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2018-12-17T23:14:14Z",
+      "side": 1,
+      "message": "Instead of mCurrentWorkerContexts[threadID] here and below, could we use (*it)?",
+      "range": {
+        "startLine": 626,
+        "startChar": 4,
+        "endLine": 626,
+        "endChar": 26
+      },
+      "revId": "5fe024ea9470e47be9f6a69a3ccf072159d2a4e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42cf81fe_8bb76959",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2018-12-17T23:14:14Z",
+      "side": 1,
+      "message": "Is there any TODO or bug ID we could reference in this comment?",
+      "revId": "5fe024ea9470e47be9f6a69a3ccf072159d2a4e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "679969ed_2e4baa8d",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2018-12-17T23:14:14Z",
+      "side": 1,
+      "message": "Could this be called \"mWorkerContextAttribs\" for clarity?",
+      "revId": "5fe024ea9470e47be9f6a69a3ccf072159d2a4e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
