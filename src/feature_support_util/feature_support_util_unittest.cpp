@@ -38,6 +38,8 @@ TEST_F(FeatureSupportUtilTest, APIVersion)
 {
     unsigned int versionToUse;
     unsigned int zero = 0;
+    unsigned int lowestMinueOne =
+        (kFeatureVersion_LowestSupported > 1) ? kFeatureVersion_LowestSupported - 1 : zero;
 
     versionToUse = kFeatureVersion_LowestSupported;
     EXPECT_TRUE(ANGLEGetFeatureSupportUtilAPIVersion(&versionToUse));
@@ -50,6 +52,10 @@ TEST_F(FeatureSupportUtilTest, APIVersion)
     versionToUse = zero;
     EXPECT_FALSE(ANGLEGetFeatureSupportUtilAPIVersion(&versionToUse));
     EXPECT_EQ(zero, versionToUse);
+
+    versionToUse = lowestMinueOne;
+    EXPECT_FALSE(ANGLEGetFeatureSupportUtilAPIVersion(&versionToUse));
+    EXPECT_EQ(lowestMinueOne, versionToUse);
 
     versionToUse = kFeatureVersion_HighestSupported + 1;
     EXPECT_TRUE(ANGLEGetFeatureSupportUtilAPIVersion(&versionToUse));
