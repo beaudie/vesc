@@ -63,7 +63,7 @@ class ANGLEPerfTest : public testing::Test, angle::NonCopyable
                   unsigned int iterationsPerStep);
     virtual ~ANGLEPerfTest();
 
-    virtual void step() = 0;
+    virtual void step();
 
     // Called right before timer is stopped to let the test wait for asynchronous operations.
     virtual void finishTest() {}

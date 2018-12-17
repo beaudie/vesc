@@ -180,6 +180,12 @@ ANGLEPerfTest::~ANGLEPerfTest()
     SafeDelete(mTimer);
 }
 
+// Define a base member to work around a particularity of the Nexus 5.
+void ANGLEPerfTest::step()
+{
+    FAIL() << "Please override ANGLEPerfTest::step!";
+}
+
 void ANGLEPerfTest::run()
 {
     if (mSkipTest)
