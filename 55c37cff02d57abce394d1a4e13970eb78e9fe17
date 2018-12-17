@@ -135,6 +135,29 @@
     },
     {
       "key": {
+        "uuid": "b3665502_213d09ac",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-17T15:46:41Z",
+      "side": 1,
+      "message": "I\u0027d change this as well.\nFirst, I\u0027d put the condition on the \"compressed symbols\" path instead.\nAt least this should be symbol_level !\u003d 0 and probably also !is_debug.\nAlso, we\u0027d might want to gate it on a new gn arg, something like compress_debug_info, which you would set to true when you build angle_apk, and default to false.",
+      "range": {
+        "startLine": 52,
+        "startChar": 10,
+        "endLine": 52,
+        "endChar": 18
+      },
+      "revId": "55c37cff02d57abce394d1a4e13970eb78e9fe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dab84c7a_50d99bd2",
         "filename": "android/angle_apk.gni",
         "patchSetId": 2
