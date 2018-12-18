@@ -175,7 +175,7 @@ class CopyTexture3DTest : public ANGLETest
                 renderType = GL_RGBA32F;
                 break;
             default:
-                UNREACHABLE();
+                ASSERT_TRUE(false);
         }
 
         glRenderbufferStorage(GL_RENDERBUFFER, renderType, 1, 1);
@@ -226,7 +226,7 @@ class CopyTexture3DTest : public ANGLETest
         }
         else
         {
-            UNREACHABLE();
+            ASSERT_TRUE(false);
         }
     }
 

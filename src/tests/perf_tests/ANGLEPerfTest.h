@@ -15,19 +15,17 @@
 #include <string>
 #include <vector>
 
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
-
-#include "EGLWindow.h"
-#include "OSWindow.h"
-#include "Timer.h"
-#include "common/angleutils.h"
-#include "common/debug.h"
 #include "platform/Platform.h"
 #include "test_utils/angle_test_configs.h"
 #include "test_utils/angle_test_instantiate.h"
+#include "util/EGLWindow.h"
+#include "util/OSWindow.h"
+#include "util/Timer.h"
+#include "util/util_gl.h"
 
 class Event;
+
+using GLuint = unsigned int;
 
 #if !defined(ASSERT_GL_NO_ERROR)
 #    define ASSERT_GL_NO_ERROR() ASSERT_EQ(static_cast<GLenum>(GL_NO_ERROR), glGetError())
@@ -108,6 +106,8 @@ class ANGLEPerfTest : public testing::Test, angle::NonCopyable
 
 struct RenderTestParams : public angle::PlatformParameters
 {
+    virtual ~RenderTestParams() {}
+
     virtual std::string suffix() const;
 
     EGLint windowWidth             = 64;
@@ -160,6 +160,9 @@ class ANGLERenderTest : public ANGLEPerfTest
 
     // Trace event record that can be output.
     std::vector<TraceEvent> mTraceEventBuffer;
+
+    // Handle to the entry point binding library.
+    std::unique_ptr<angle::Library> mEntryPointsLib;
 };
 
 #endif  // PERF_TESTS_ANGLE_PERF_TEST_H_
