@@ -364,6 +364,30 @@
       "revId": "55c37cff02d57abce394d1a4e13970eb78e9fe17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66f7472b_aba87bf5",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-18T17:08:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "149b3ea0_71e38b2f",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 61,
+        "endChar": 27
+      },
+      "revId": "55c37cff02d57abce394d1a4e13970eb78e9fe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
