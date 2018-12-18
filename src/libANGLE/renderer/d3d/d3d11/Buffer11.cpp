@@ -696,6 +696,7 @@ angle::Result Buffer11::getRawUAV(const gl::Context *context, d3d11::UnorderedAc
 {
     NativeStorage *nativeStorage = nullptr;
     ANGLE_TRY(getBufferStorage(context, BUFFER_USAGE_RAW_UAV, &nativeStorage));
+    onStorageUpdate(nativeStorage);
     return nativeStorage->getRawUAV(context, uavOut);
 }
 
