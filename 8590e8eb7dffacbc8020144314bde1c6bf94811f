@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2de25dc8_fad2812c",
+        "filename": "android/compress_symbols.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-18T18:38:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a268602_d1d5a60c",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 37
+      },
+      "revId": "8590e8eb7dffacbc8020144314bde1c6bf94811f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e5b8c32b_7ae1cca5",
         "filename": "android/compress_symbols.py",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "7e94a4ec_51528d54",
+        "filename": "android/compress_symbols.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-18T18:38:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5b8c32b_7ae1cca5",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 37
+      },
+      "revId": "8590e8eb7dffacbc8020144314bde1c6bf94811f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "863c41b6_02cc061a",
         "filename": "android/compress_symbols.py",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "8590e8eb7dffacbc8020144314bde1c6bf94811f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a81232e6_a608c2eb",
+        "filename": "android/compress_symbols.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-18T18:38:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "863c41b6_02cc061a",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 34
+      },
+      "revId": "8590e8eb7dffacbc8020144314bde1c6bf94811f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
