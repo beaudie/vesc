@@ -340,6 +340,30 @@
       "revId": "55c37cff02d57abce394d1a4e13970eb78e9fe17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "149b3ea0_71e38b2f",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1126674
+      },
+      "writtenOn": "2018-12-18T17:03:40Z",
+      "side": 1,
+      "message": "re: prefixing with _ - it\u0027s to make it clear that the variable is not a parameter to the target / template:\nhttps://chromium.googlesource.com/chromium/src/+/HEAD/build/docs/writing_gn_templates.md#variables",
+      "parentUuid": "9f1da2df_ec0416b1",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 61,
+        "endChar": 27
+      },
+      "revId": "55c37cff02d57abce394d1a4e13970eb78e9fe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
