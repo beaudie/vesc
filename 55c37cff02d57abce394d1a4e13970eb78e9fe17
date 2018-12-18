@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4eaf3833_b2e1d942",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-18T16:55:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b10864f_17ca39de",
+      "revId": "55c37cff02d57abce394d1a4e13970eb78e9fe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "af81cafa_677a7c5f",
         "filename": "BUILD.gn",
         "patchSetId": 2
@@ -66,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "817d80e1_aa10db90",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-18T16:55:20Z",
+      "side": 1,
+      "message": "Added if (is_android)\n\ngn won\u0027t let me put it in gni:\nERROR at //third_party/angle/android/angle_apk.gni:9:3: Not valid from an import.\n  action_foreach(\"compressed_symbols\") {\n  ^-------------------------------------\nImports are for defining defaults, variables, and rules. The\nappropriate place for this kind of thing is really in a normal\nBUILD file.",
+      "parentUuid": "c72224ac_c1c476df",
+      "range": {
+        "startLine": 754,
+        "startChar": 0,
+        "endLine": 754,
+        "endChar": 14
+      },
+      "revId": "55c37cff02d57abce394d1a4e13970eb78e9fe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "381fb4a9_1d17fecf",
         "filename": "BUILD.gn",
         "patchSetId": 2
@@ -89,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "a999ef33_b748f1cf",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-18T16:55:20Z",
+      "side": 1,
+      "message": "This works. I use both the stripped and unstripped libraries to construct the compressed version. The action_foreach loops over the source files so it makes things easier to leave out lib.unstripped in order to construct all the necessary filenames the script needs.",
+      "parentUuid": "381fb4a9_1d17fecf",
+      "range": {
+        "startLine": 756,
+        "startChar": 5,
+        "endLine": 756,
+        "endChar": 21
+      },
+      "revId": "55c37cff02d57abce394d1a4e13970eb78e9fe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "219ac36e_7be9cdfa",
         "filename": "BUILD.gn",
         "patchSetId": 2
@@ -100,6 +166,30 @@
       "writtenOn": "2018-12-14T18:54:28Z",
       "side": 1,
       "message": "Looks like you didn\u0027t upload this.\nbuild/toolchain doesn\u0027t seem to be a good place.\nHow about scripts or android or android/scripts",
+      "range": {
+        "startLine": 762,
+        "startChar": 12,
+        "endLine": 762,
+        "endChar": 47
+      },
+      "revId": "55c37cff02d57abce394d1a4e13970eb78e9fe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d37458c_b5b710c0",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-18T16:55:20Z",
+      "side": 1,
+      "message": "Put it in the android folder.",
+      "parentUuid": "219ac36e_7be9cdfa",
       "range": {
         "startLine": 762,
         "startChar": 12,
@@ -135,6 +225,30 @@
     },
     {
       "key": {
+        "uuid": "ca9a55ac_b7dbf17c",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-18T16:55:20Z",
+      "side": 1,
+      "message": "I\u0027ve put this behind (symbol_level !\u003d 0) checks.\nI dropped the test for is_debug because chromium always strips Android binaries regardless if debug is enabled or not. Instead we always package the binaries with compressed symbols.",
+      "parentUuid": "d3740694_1f5e7499",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 62
+      },
+      "revId": "55c37cff02d57abce394d1a4e13970eb78e9fe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b3665502_213d09ac",
         "filename": "android/angle_apk.gni",
         "patchSetId": 2
@@ -158,6 +272,30 @@
     },
     {
       "key": {
+        "uuid": "8988ffec_5ca8f90d",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-18T16:55:20Z",
+      "side": 1,
+      "message": "Same as above, will always package libraries with compressed symbols.",
+      "parentUuid": "b3665502_213d09ac",
+      "range": {
+        "startLine": 52,
+        "startChar": 10,
+        "endLine": 52,
+        "endChar": 18
+      },
+      "revId": "55c37cff02d57abce394d1a4e13970eb78e9fe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab84c7a_50d99bd2",
         "filename": "android/angle_apk.gni",
         "patchSetId": 2
@@ -169,6 +307,30 @@
       "writtenOn": "2018-12-14T17:57:19Z",
       "side": 1,
       "message": "where does this variable come from? seems a bit odd to the way the underscore is used.",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 61,
+        "endChar": 27
+      },
+      "revId": "55c37cff02d57abce394d1a4e13970eb78e9fe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f1da2df_ec0416b1",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-18T16:55:20Z",
+      "side": 1,
+      "message": "It\u0027s just a local variable. That was code suggested by agrieve. I think the intent was to not conflict with a potential global \u0027secondary_out_dir\u0027.",
+      "parentUuid": "dab84c7a_50d99bd2",
       "range": {
         "startLine": 61,
         "startChar": 8,
