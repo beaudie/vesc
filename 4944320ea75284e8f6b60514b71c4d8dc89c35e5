@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6259552_53fa94b4",
+        "filename": "src/common/gen_uniform_type_table.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-18T22:59:37Z",
+      "side": 1,
+      "message": "please run scripts/run_code_generation instead of running generators directly. This will update our code generation hashes dictionary.",
+      "revId": "4944320ea75284e8f6b60514b71c4d8dc89c35e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8feeace_389ad53c",
+        "filename": "src/libANGLE/ErrorStrings.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-18T22:59:37Z",
+      "side": 1,
+      "message": "nit: sort",
+      "range": {
+        "startLine": 425,
+        "startChar": 4,
+        "endLine": 425,
+        "endChar": 27
+      },
+      "revId": "4944320ea75284e8f6b60514b71c4d8dc89c35e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d59a12d_55d9861a",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-18T22:59:37Z",
+      "side": 1,
+      "message": "nit: can be inlined in the header for speed. with ANGLE_INLINE",
+      "range": {
+        "startLine": 485,
+        "startChar": 0,
+        "endLine": 489,
+        "endChar": 1
+      },
+      "revId": "4944320ea75284e8f6b60514b71c4d8dc89c35e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "612e790a_fe464d0e",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-18T22:59:37Z",
+      "side": 1,
+      "message": "could you cache this into an angle::PackedEnumMap\u003cbool\u003e? Then the check could be inlined in the header and just a lookup into the map.\n\nWe could even specialize PackedEnumMap\u003cbool\u003e into PackedEnumSet. Extra credit.",
+      "range": {
+        "startLine": 242,
+        "startChar": 0,
+        "endLine": 271,
+        "endChar": 17
+      },
+      "revId": "4944320ea75284e8f6b60514b71c4d8dc89c35e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
