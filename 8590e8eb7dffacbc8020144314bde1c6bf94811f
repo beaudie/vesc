@@ -164,6 +164,30 @@
       "revId": "8590e8eb7dffacbc8020144314bde1c6bf94811f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4471051e_b98ccec2",
+        "filename": "android/compress_symbols.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-18T18:59:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39a7335a_87abab08",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 34
+      },
+      "revId": "8590e8eb7dffacbc8020144314bde1c6bf94811f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
