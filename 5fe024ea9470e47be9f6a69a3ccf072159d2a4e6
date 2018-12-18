@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "20aef8bb_bccf3aa6",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-12-18T06:48:04Z",
+      "side": 1,
+      "message": "Can use (*it).second instead.",
+      "parentUuid": "3d205662_29749d50",
+      "range": {
+        "startLine": 626,
+        "startChar": 4,
+        "endLine": 626,
+        "endChar": 26
+      },
+      "revId": "5fe024ea9470e47be9f6a69a3ccf072159d2a4e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42cf81fe_8bb76959",
         "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
         "patchSetId": 12
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "deda416b_9bfded60",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-12-18T06:48:04Z",
+      "side": 1,
+      "message": "Bug filed.",
+      "parentUuid": "42cf81fe_8bb76959",
+      "revId": "5fe024ea9470e47be9f6a69a3ccf072159d2a4e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "679969ed_2e4baa8d",
         "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.h",
         "patchSetId": 12
@@ -56,6 +98,24 @@
       "revId": "5fe024ea9470e47be9f6a69a3ccf072159d2a4e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b8438ac_77d73d59",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2018-12-18T06:48:04Z",
+      "side": 1,
+      "message": "Nice naming.",
+      "parentUuid": "679969ed_2e4baa8d",
+      "revId": "5fe024ea9470e47be9f6a69a3ccf072159d2a4e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
