@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "b511c279_fd76a49d",
+        "filename": "include/GLSLANG/ShaderVars.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2018-12-18T03:20:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c2f66ab_02d1a2c8",
+      "range": {
+        "startLine": 178,
+        "startChar": 4,
+        "endLine": 178,
+        "endChar": 27
+      },
+      "revId": "d835d5e8b8fa5766ec85e6f0b4f97689aac895b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "35e41abf_424f9c3c",
         "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
         "patchSetId": 19

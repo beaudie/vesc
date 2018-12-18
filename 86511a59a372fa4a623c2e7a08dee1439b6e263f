@@ -22,6 +22,30 @@
       "revId": "86511a59a372fa4a623c2e7a08dee1439b6e263f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c23b299f_822d3d07",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2018-12-18T03:20:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93c2278a_fb470a5c",
+      "range": {
+        "startLine": 18,
+        "startChar": 6,
+        "endLine": 18,
+        "endChar": 25
+      },
+      "revId": "86511a59a372fa4a623c2e7a08dee1439b6e263f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
