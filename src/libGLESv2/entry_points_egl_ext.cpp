@@ -18,6 +18,7 @@
 #include "libANGLE/validationEGL.h"
 
 #include "common/debug.h"
+#include <android/log.h>
 
 namespace egl
 {
@@ -911,6 +912,7 @@ EGLBoolean EGLAPIENTRY SwapBuffersWithDamageKHR(EGLDisplay dpy,
                                                 EGLint n_rects)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
+__android_log_print(ANDROID_LOG_INFO, "A4A", "%s(): FUNCTION ENTRY", __FUNCTION__);
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSurface surface = 0x%016" PRIxPTR
           ", EGLint *rects = 0x%016" PRIxPTR
           ", EGLint "
@@ -922,6 +924,7 @@ EGLBoolean EGLAPIENTRY SwapBuffersWithDamageKHR(EGLDisplay dpy,
     Surface *eglSurface = static_cast<Surface *>(surface);
 
     Error error = ValidateSwapBuffersWithDamageKHR(display, eglSurface, rects, n_rects);
+__android_log_print(ANDROID_LOG_INFO, "A4A", "%s(): ValidateSwapBuffersWithDamageKHR() returned %s", __FUNCTION__, error.isError() ? "AN ERROR" : "no error");
     if (error.isError())
     {
         thread->setError(error, GetDebug(), "eglSwapBuffersWithDamageEXT",
@@ -929,7 +932,9 @@ EGLBoolean EGLAPIENTRY SwapBuffersWithDamageKHR(EGLDisplay dpy,
         return EGL_FALSE;
     }
 
+__android_log_print(ANDROID_LOG_INFO, "A4A", "%s(): Calling eglSurface->swapWithDamage()", __FUNCTION__);
     error = eglSurface->swapWithDamage(thread->getContext(), rects, n_rects);
+__android_log_print(ANDROID_LOG_INFO, "A4A", "%s(): eglSurface->swapWithDamage() returned %s", __FUNCTION__, error.isError() ? "AN ERROR" : "no error");
     if (error.isError())
     {
         thread->setError(error, GetDebug(), "eglSwapBuffersWithDamageEXT",

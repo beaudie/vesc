@@ -19,6 +19,7 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "third_party/trace_event/trace_event.h"
+#include <android/log.h>
 
 namespace rx
 {
@@ -539,24 +540,30 @@ FramebufferImpl *WindowSurfaceVk::createDefaultFramebuffer(const gl::Context *co
 }
 
 egl::Error WindowSurfaceVk::swapWithDamage(const gl::Context *context,
-                                           EGLint * /*rects*/,
-                                           EGLint /*n_rects*/)
+                                           EGLint *rects,
+                                           EGLint n_rects)
 {
     DisplayVk *displayVk = vk::GetImpl(context->getCurrentDisplay());
-    angle::Result result = swapImpl(displayVk);
+__android_log_print(ANDROID_LOG_INFO, "A4A", "%s(): FUNCTION ENTRY", __FUNCTION__);
+    angle::Result result = swapImpl(displayVk, rects, n_rects);
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 
 egl::Error WindowSurfaceVk::swap(const gl::Context *context)
 {
     DisplayVk *displayVk = vk::GetImpl(context->getCurrentDisplay());
-    angle::Result result = swapImpl(displayVk);
+__android_log_print(ANDROID_LOG_INFO, "A4A", "%s(): FUNCTION ENTRY", __FUNCTION__);
+    angle::Result result = swapImpl(displayVk, nullptr, 0);
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 
-angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk)
+angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk, EGLint *rects, EGLint n_rects)
 {
+__android_log_print(ANDROID_LOG_INFO, "A4A", "%s(n_rects=%d): FUNCTION ENTRY", __FUNCTION__,n_rects);
     RendererVk *renderer = displayVk->getRenderer();
+__android_log_print(ANDROID_LOG_INFO, "A4A", "%s():   VK_KHR_incremental_present is %s",
+                    __FUNCTION__,
+                    renderer->isIncrementalPresentSupported() ? "supported" : "not supported");
 
     // If the swapchain is not in mailbox mode, throttle the submissions.  NOTE(syoussefi): this can
     // be done in mailbox mode too, just currently unnecessary.
@@ -596,6 +603,36 @@ angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk)
     presentInfo.pSwapchains    = &mSwapchain;
     presentInfo.pImageIndices  = &mCurrentSwapchainImageIndex;
     presentInfo.pResults       = nullptr;
+
+    VkPresentRegionsKHR presentRegions = {};
+    if (renderer->isIncrementalPresentSupported() && (n_rects > 0))
+    {
+__android_log_print(ANDROID_LOG_INFO, "A4A", "%s(n_rects=%d):   Adding presentRegions to presentInfo->pNext chain", __FUNCTION__,n_rects);
+        VkPresentRegionKHR presentRegion = {};
+        std::vector<VkRectLayerKHR> vk_rects(n_rects);
+        presentRegion.rectangleCount = n_rects;
+        for (EGLint rect = 0 ; rect < n_rects ; rect++)
+        {
+            vk_rects[rect].offset.x      = *rects++;
+            vk_rects[rect].offset.y      = *rects++;
+            vk_rects[rect].extent.width  = *rects++;
+            vk_rects[rect].extent.height = *rects++;
+            vk_rects[rect].layer         = 0;
+        }
+        presentRegion.pRectangles = vk_rects.data();
+
+        presentRegions.sType = VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR;
+        presentRegions.pNext = nullptr;
+        presentRegions.swapchainCount = 1;
+        presentRegions.pRegions = &presentRegion;
+
+        presentInfo.pNext = &presentRegions;
+    }
+    else
+    {
+__android_log_print(ANDROID_LOG_INFO, "A4A", "%s(n_rects=%d):   Plain swap", __FUNCTION__,n_rects);
+        presentInfo.pNext = nullptr;
+    }
 
     ANGLE_VK_TRY(displayVk, vkQueuePresentKHR(renderer->getQueue(), &presentInfo));
 

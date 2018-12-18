@@ -30,6 +30,7 @@
 #include "platform/Platform.h"
 
 #include "third_party/trace_event/trace_event.h"
+#include <android/log.h>
 
 // Consts
 namespace
@@ -302,6 +303,7 @@ RendererVk::RendererVk()
       mInstance(VK_NULL_HANDLE),
       mEnableValidationLayers(false),
       mEnableMockICD(false),
+      mIncrementalPresentSupported(false),
       mDebugReportCallback(VK_NULL_HANDLE),
       mPhysicalDevice(VK_NULL_HANDLE),
       mQueue(VK_NULL_HANDLE),
@@ -592,7 +594,21 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     // Selectively enable KHR_MAINTENANCE1 to support viewport flipping.
     if (getFeatures().flipViewportY)
     {
+// TODO: Will this cause VerifyExtensionsPresent to return an error?
         enabledDeviceExtensions.push_back(VK_KHR_MAINTENANCE1_EXTENSION_NAME);
+    }
+
+    for (const auto &extensionProp : deviceExtensionProps)
+    {
+__android_log_print(ANDROID_LOG_INFO, "A4A", "%s(): Extension name: %s", __FUNCTION__,
+                    extensionProp.extensionName);
+        if (!strcmp(extensionProp.extensionName, VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME))
+        {
+            enabledDeviceExtensions.push_back(VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
+            mIncrementalPresentSupported = true;
+__android_log_print(ANDROID_LOG_INFO, "A4A", "%s(): FOUND A MATCH!!!", __FUNCTION__);
+            break;
+        }
     }
 
     ANGLE_VK_TRY(displayVk, VerifyExtensionsPresent(deviceExtensionProps, enabledDeviceExtensions));

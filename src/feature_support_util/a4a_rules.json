@@ -12,6 +12,9 @@
                "AppName":"com.android.angle"
             },
             {
+               "AppName":"com.example.native_activity"
+            },
+            {
                "AppName":"com.google.android.apps.internal.cubey"
             },
             {
