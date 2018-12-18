@@ -19,6 +19,7 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "third_party/trace_event/trace_event.h"
+#include <android/log.h>
 
 namespace rx
 {
@@ -543,6 +544,7 @@ egl::Error WindowSurfaceVk::swapWithDamage(const gl::Context *context,
                                            EGLint /*n_rects*/)
 {
     DisplayVk *displayVk = vk::GetImpl(context->getCurrentDisplay());
+__android_log_print(ANDROID_LOG_INFO, "A4A", "%s(): FUNCTION ENTRY", __FUNCTION__);
     angle::Result result = swapImpl(displayVk);
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
@@ -550,13 +552,17 @@ egl::Error WindowSurfaceVk::swapWithDamage(const gl::Context *context,
 egl::Error WindowSurfaceVk::swap(const gl::Context *context)
 {
     DisplayVk *displayVk = vk::GetImpl(context->getCurrentDisplay());
+__android_log_print(ANDROID_LOG_INFO, "A4A", "%s(): FUNCTION ENTRY", __FUNCTION__);
     angle::Result result = swapImpl(displayVk);
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 
 angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk)
 {
+__android_log_print(ANDROID_LOG_INFO, "A4A", "%s(): FUNCTION ENTRY", __FUNCTION__);
     RendererVk *renderer = displayVk->getRenderer();
+__android_log_print(ANDROID_LOG_INFO, "A4A", "%s(): VK_KHR_incremental_present is %s", __FUNCTION__,
+                    renderer->isIncrementalPresentSupported() ? "supported" : "not supported");
 
     // If the swapchain is not in mailbox mode, throttle the submissions.  NOTE(syoussefi): this can
     // be done in mailbox mode too, just currently unnecessary.

@@ -173,6 +173,7 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     // Vulkan implementation will use regular swap for swapBuffersWithDamage.
     outExtensions->swapBuffersWithDamage = true;
+//    outExtensions->swapBuffersWithDamage = false;
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const
