@@ -140,6 +140,30 @@
       "revId": "8590e8eb7dffacbc8020144314bde1c6bf94811f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "39a7335a_87abab08",
+        "filename": "android/compress_symbols.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-18T18:55:01Z",
+      "side": 1,
+      "message": "Sorry for changing my mind, thinking about this a bit more, if you keep those files, you\u0027ll also need to list them as outputs of the action_foreach() for gn to work properly, so I think it\u0027s better to just delete them here, since you delete them anyways in the beginning now.",
+      "parentUuid": "a81232e6_a608c2eb",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 34
+      },
+      "revId": "8590e8eb7dffacbc8020144314bde1c6bf94811f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
