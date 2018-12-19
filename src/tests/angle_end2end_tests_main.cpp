@@ -5,12 +5,12 @@
 //
 
 #include "gtest/gtest.h"
-#include "test_utils/ANGLETest.h"
+
+void ANGLEProcessTestArgs(int *argc, char *argv[]);
 
 int main(int argc, char **argv)
 {
     testing::InitGoogleTest(&argc, argv);
-    testing::AddGlobalTestEnvironment(new ANGLETestEnvironment());
     int rt = RUN_ALL_TESTS();
     return rt;
 }
