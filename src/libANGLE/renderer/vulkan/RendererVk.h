@@ -184,6 +184,8 @@ class RendererVk : angle::NonCopyable
 
     bool isMockICDEnabled() const { return mEnableMockICD; }
 
+    bool isIncrementalPresentSupported() const { return mIncrementalPresentSupported; }
+
     const vk::PipelineCache &getPipelineCache() const { return mPipelineCache; }
 
     // Query the format properties for select bits (linearTilingFeatures, optimalTilingFeatures and
@@ -239,6 +241,7 @@ class RendererVk : angle::NonCopyable
     VkInstance mInstance;
     bool mEnableValidationLayers;
     bool mEnableMockICD;
+    bool mIncrementalPresentSupported;
     VkDebugReportCallbackEXT mDebugReportCallback;
     VkPhysicalDevice mPhysicalDevice;
     VkPhysicalDeviceProperties mPhysicalDeviceProperties;
