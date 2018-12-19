@@ -14,12 +14,13 @@
 // want to use gtest.
 #include <gtest/gtest.h>
 
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
+#include <EGL/eglplatform.h>
 
-#include "EGLWindow.h"
 #include "GLSLANG/ShaderLang.h"
 #include "angle_test_instantiate.h"
+#include "util/EGLPlatformParameters.h"
+
+using EGLenum = unsigned int;
 
 namespace angle
 {
