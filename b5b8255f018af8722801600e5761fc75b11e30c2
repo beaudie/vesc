@@ -34,6 +34,24 @@
       "revId": "b5b8255f018af8722801600e5761fc75b11e30c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de539e56_0650b022",
+        "filename": "android/src/com/android/angle/common/Receiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-19T16:10:46Z",
+      "side": 1,
+      "message": "You can reuse the original bug, so save some effort there.\nYeah, understand the feeling. Maybe just a mention in the CL description of this additional change would be enough.",
+      "parentUuid": "6a8429f6_5278900f",
+      "revId": "b5b8255f018af8722801600e5761fc75b11e30c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
