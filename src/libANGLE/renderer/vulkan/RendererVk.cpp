@@ -299,6 +299,7 @@ void RendererVk::CommandBatch::destroy(VkDevice device)
 RendererVk::RendererVk()
     : mDisplay(nullptr),
       mCapsInitialized(false),
+      mFeaturesInitialized(false),
       mInstance(VK_NULL_HANDLE),
       mEnableValidationLayers(false),
       mEnableMockICD(false),
@@ -533,8 +534,6 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     ANGLE_VK_CHECK(displayVk, graphicsQueueFamilyCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
-    initFeatures();
-
     // If only one queue family, go ahead and initialize the device. If there is more than one
     // queue, we'll have to wait until we see a WindowSurface to know which supports present.
     if (graphicsQueueFamilyCount == 1)
@@ -588,6 +587,9 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 
     std::vector<const char *> enabledDeviceExtensions;
     enabledDeviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+
+    initFeatures(deviceExtensionCount, deviceExtensionProps, &enabledDeviceExtensions);
+    mFeaturesInitialized = true;
 
     // Selectively enable KHR_MAINTENANCE1 to support viewport flipping.
     if (getFeatures().flipViewportY)
@@ -766,7 +768,9 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
     return gl::Version(3, 0);
 }
 
-void RendererVk::initFeatures()
+void RendererVk::initFeatures(uint32_t deviceExtensionCount,
+                              const std::vector<VkExtensionProperties> &deviceExtensionProps,
+                              std::vector<const char *> *enabledDeviceExtensions)
 {
 // Use OpenGL line rasterization rules by default.
 // TODO(jmadill): Fix Android support. http://anglebug.com/2830
@@ -802,6 +806,16 @@ void RendererVk::initFeatures()
     mFeatures.flushAfterVertexConversion =
         IsNexus5X(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID);
 #endif
+
+    for (const auto &extensionProp : deviceExtensionProps)
+    {
+        if (!strcmp(extensionProp.extensionName, VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME))
+        {
+            enabledDeviceExtensions->push_back(VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
+            mFeatures.supportsIncrementalPresent = true;
+            break;
+        }
+    }
 }
 
 void RendererVk::initPipelineCacheVkKey()
