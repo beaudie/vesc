@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "47cf8467_8d8a37e5",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-19T20:35:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7bf88f11_beb36328",
+      "range": {
+        "startLine": 174,
+        "startChar": 7,
+        "endLine": 174,
+        "endChar": 14
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0d4b54be_d6eb6ebf",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2018-12-19T19:47:30Z",
       "side": 1,
       "message": "Yes. You can remove the TODO. We could also update this logic to disable the feature when the extension isn\u0027t enableable.",
+      "range": {
+        "startLine": 596,
+        "startChar": 8,
+        "endLine": 596,
+        "endChar": 76
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7aed4f7_f2f03cce",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-19T20:35:55Z",
+      "side": 1,
+      "message": "Would you like me to do that?  If so, should I do it in a different CL?",
+      "parentUuid": "0d4b54be_d6eb6ebf",
       "range": {
         "startLine": 596,
         "startChar": 8,
@@ -106,6 +154,30 @@
       "side": 1,
       "message": "Yeah, that was the suggestion I had earlier. I think the reason Ian didn\u0027t do this is because he didn\u0027t know how to access the device extension properties in initFeatures().\n\nWe should probably move the initFeatures() call to inside RendererVk::initializeDevice right after vkEnumerateDeviceExtensionProperties. And pass the extension properties to initFeatures().\n\nWe should also keep a bool mFeaturesInitialized flag and verify this is true when we call getFeatures since we\u0027re moving it around.",
       "parentUuid": "83a23f94_82922d2a",
+      "range": {
+        "startLine": 244,
+        "startChar": 9,
+        "endLine": 244,
+        "endChar": 37
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a777da63_a6a708a9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-19T20:35:55Z",
+      "side": 1,
+      "message": "I actually had a flag in FeaturesVk, but then never used it.  I had to add this bool here in order to set the flag in FeaturesVk.  Then, AFAICT, I\u0027d have to go through RendererVk in order to get to FeaturesVk, and by then I could just access this bool.  It just seemed redundant to keep the flag in FeaturesVk.  I can add it again if you want.\n\n\u003e We should probably move the initFeatures() call to inside RendererVk::initializeDevice right after vkEnumerateDeviceExtensionProperties. And pass the extension properties to initFeatures().\n\nDo you want me to do this restructuring then?\n\n\u003e We should also keep a bool mFeaturesInitialized flag and verify this is true when we call getFeatures since we\u0027re moving it around.\n\nSorry, but I don\u0027t quite understand what this is asking.",
+      "parentUuid": "9144d9a7_19a670f4",
       "range": {
         "startLine": 244,
         "startChar": 9,
