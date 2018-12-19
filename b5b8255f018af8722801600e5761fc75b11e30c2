@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17b2a579_29a5e46d",
+        "filename": "android/src/com/android/angle/common/Receiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-19T00:05:05Z",
+      "side": 1,
+      "message": "Independent change should be in it\u0027s own CL.",
+      "revId": "b5b8255f018af8722801600e5761fc75b11e30c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
