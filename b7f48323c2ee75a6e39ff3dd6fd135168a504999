@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "108443ed_66940f82",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-19T23:20:44Z",
+      "side": 1,
+      "message": "OK, that\u0027s fair. Didn\u0027t notice it was a struct. Can you instead make a helper function just to encapsulate the for loop checking if extensions are available? I think we\u0027ll probably re-use this.",
+      "parentUuid": "8b735536_09a06639",
+      "range": {
+        "startLine": 600,
+        "startChar": 0,
+        "endLine": 608,
+        "endChar": 5
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "83a23f94_82922d2a",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 5

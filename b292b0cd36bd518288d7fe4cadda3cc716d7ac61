@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d885b750_345f082e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-19T23:20:44Z",
+      "side": 1,
+      "message": "instead of passing the enabled extensions array here, can you just pass the device props? Then in initDevice, check if the feature is enabled, and if so, you could push back the extension. You also don\u0027t need to pass the count since we already have vectors.",
+      "range": {
+        "startLine": 771,
+        "startChar": 0,
+        "endLine": 773,
+        "endChar": 81
+      },
+      "revId": "b292b0cd36bd518288d7fe4cadda3cc716d7ac61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
