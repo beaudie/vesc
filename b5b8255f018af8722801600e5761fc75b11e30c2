@@ -70,6 +70,24 @@
       "revId": "b5b8255f018af8722801600e5761fc75b11e30c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7c9276f_41822bfd",
+        "filename": "android/src/com/android/angle/common/Receiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-19T18:13:49Z",
+      "side": 1,
+      "message": "Sounds good.",
+      "parentUuid": "6b24bfb2_a3807417",
+      "revId": "b5b8255f018af8722801600e5761fc75b11e30c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
