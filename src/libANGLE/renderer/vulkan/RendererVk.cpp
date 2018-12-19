@@ -302,6 +302,7 @@ RendererVk::RendererVk()
       mInstance(VK_NULL_HANDLE),
       mEnableValidationLayers(false),
       mEnableMockICD(false),
+      mIncrementalPresentSupported(false),
       mDebugReportCallback(VK_NULL_HANDLE),
       mPhysicalDevice(VK_NULL_HANDLE),
       mQueue(VK_NULL_HANDLE),
@@ -593,6 +594,16 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     if (getFeatures().flipViewportY)
     {
         enabledDeviceExtensions.push_back(VK_KHR_MAINTENANCE1_EXTENSION_NAME);
+    }
+
+    for (const auto &extensionProp : deviceExtensionProps)
+    {
+        if (!strcmp(extensionProp.extensionName, VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME))
+        {
+            enabledDeviceExtensions.push_back(VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
+            mIncrementalPresentSupported = true;
+            break;
+        }
     }
 
     ANGLE_VK_TRY(displayVk, VerifyExtensionsPresent(deviceExtensionProps, enabledDeviceExtensions));
