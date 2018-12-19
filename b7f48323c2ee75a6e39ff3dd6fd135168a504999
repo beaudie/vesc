@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "8b735536_09a06639",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-19T23:12:06Z",
+      "side": 1,
+      "message": "I don\u0027t have much experience with std::find, and the examples I see are using it with simple/scalar vectors, not with a vector of structs.  Can you show me how I would use it in this case?",
+      "parentUuid": "98224c43_4687dbb4",
+      "range": {
+        "startLine": 600,
+        "startChar": 0,
+        "endLine": 608,
+        "endChar": 5
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "83a23f94_82922d2a",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 5
@@ -238,6 +262,30 @@
     },
     {
       "key": {
+        "uuid": "04591df8_d2416d03",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-19T23:12:06Z",
+      "side": 1,
+      "message": "I tried to do what I think you want.  Please take a look, and resolve this if you\u0027re satisfied.  Thanks!",
+      "parentUuid": "b41133b0_827440a4",
+      "range": {
+        "startLine": 244,
+        "startChar": 9,
+        "endLine": 244,
+        "endChar": 37
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "112f062e_91a50ab4",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 5
@@ -258,6 +306,30 @@
       "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b173fae8_4cfcbeb8",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-19T23:12:06Z",
+      "side": 1,
+      "message": "No limits.  Yes, it can be 100+.",
+      "parentUuid": "112f062e_91a50ab4",
+      "range": {
+        "startLine": 601,
+        "startChar": 54,
+        "endLine": 601,
+        "endChar": 62
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -284,6 +356,30 @@
     },
     {
       "key": {
+        "uuid": "e238da5f_88ee2086",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-19T23:12:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70d06bf4_8ebba61e",
+      "range": {
+        "startLine": 608,
+        "startChar": 1,
+        "endLine": 611,
+        "endChar": 52
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "492e38c4_49a7fee8",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 5
@@ -304,6 +400,30 @@
       "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29b643d8_18c8f1a5",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-19T23:12:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "492e38c4_49a7fee8",
+      "range": {
+        "startLine": 623,
+        "startChar": 4,
+        "endLine": 626,
+        "endChar": 5
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
