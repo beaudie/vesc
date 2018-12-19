@@ -18,8 +18,50 @@
 #include "util/OSWindow.h"
 #include "util/system_utils.h"
 
+#if defined(ANGLE_PLATFORM_WINDOWS)
+#    include "util/windows/WGLWindow.h"
+#endif  // defined(ANGLE_PLATFORM_WINDOWS)
+
 namespace angle
 {
+namespace
+{
+bool IsANGLEConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
+{
+    std::unique_ptr<angle::Library> eglLibrary;
+
+#if defined(ANGLE_USE_UTIL_LOADER)
+    eglLibrary.reset(angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME));
+#endif
+
+    std::unique_ptr<EGLWindow> eglWindow(
+        new EGLWindow(param.majorVersion, param.minorVersion, param.eglParameters));
+    bool result = eglWindow->initializeGL(osWindow, eglLibrary.get());
+    eglWindow->destroyGL();
+    return result;
+}
+
+bool IsWGLConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
+{
+#if defined(ANGLE_PLATFORM_WINDOWS) && defined(ANGLE_USE_UTIL_LOADER)
+    std::unique_ptr<angle::Library> openglLibrary(angle::OpenSharedLibrary("opengl32"));
+
+    std::unique_ptr<WGLWindow> wglWindow(new WGLWindow(param.majorVersion, param.minorVersion));
+    bool result = wglWindow->initializeGL(osWindow, openglLibrary.get());
+    wglWindow->destroyGL();
+    return result;
+#else
+    return false;
+#endif  // defined(ANGLE_PLATFORM_WINDOWS) && defined(ANGLE_USE_UTIL_LOADER)
+}
+
+bool IsNativeConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
+{
+    // Not yet implemented.
+    return false;
+}
+}  // namespace
+
 bool IsPlatformAvailable(const PlatformParameters &param)
 {
     switch (param.getRenderer())
@@ -77,21 +119,20 @@ bool IsPlatformAvailable(const PlatformParameters &param)
     {
         OSWindow *osWindow = CreateOSWindow();
         bool result        = osWindow->initialize("CONFIG_TESTER", 1, 1);
-
         if (result)
         {
-            std::unique_ptr<angle::Library> eglLibrary;
-
-#if defined(ANGLE_USE_UTIL_LOADER)
-            eglLibrary.reset(angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME));
-#endif  // defined(ANGLE_USE_UTIL_LOADER)
-
-            EGLWindow *eglWindow =
-                new EGLWindow(param.majorVersion, param.minorVersion, param.eglParameters);
-            result = eglWindow->initializeGL(osWindow, eglLibrary.get());
-
-            eglWindow->destroyGL();
-            SafeDelete(eglWindow);
+            switch (param.driver)
+            {
+                case GLESDriverType::ANGLE:
+                    result = IsANGLEConfigSupported(param, osWindow);
+                    break;
+                case GLESDriverType::Native:
+                    result = IsNativeConfigSupported(param, osWindow);
+                    break;
+                case GLESDriverType::WGL:
+                    result = IsWGLConfigSupported(param, osWindow);
+                    break;
+            }
         }
 
         osWindow->destroy();
