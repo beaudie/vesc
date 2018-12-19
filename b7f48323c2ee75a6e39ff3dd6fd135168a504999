@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "7bf88f11_beb36328",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-19T19:47:30Z",
+      "side": 1,
+      "message": "nit: \u0027The\u0027 Vulkan implementation...",
+      "range": {
+        "startLine": 174,
+        "startChar": 7,
+        "endLine": 174,
+        "endChar": 14
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d4b54be_d6eb6ebf",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-19T19:47:30Z",
+      "side": 1,
+      "message": "Yes. You can remove the TODO. We could also update this logic to disable the feature when the extension isn\u0027t enableable.",
+      "range": {
+        "startLine": 596,
+        "startChar": 8,
+        "endLine": 596,
+        "endChar": 76
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98224c43_4687dbb4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-19T19:47:30Z",
+      "side": 1,
+      "message": "per earlier conversation, you can move this into initFeatures if you\u0027re passing the extensions list. Also you can use std::find here instead of a for loop.",
+      "range": {
+        "startLine": 600,
+        "startChar": 0,
+        "endLine": 608,
+        "endChar": 5
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "83a23f94_82922d2a",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 5
@@ -18,6 +87,99 @@
         "startChar": 9,
         "endLine": 244,
         "endChar": 37
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9144d9a7_19a670f4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-19T19:47:30Z",
+      "side": 1,
+      "message": "Yeah, that was the suggestion I had earlier. I think the reason Ian didn\u0027t do this is because he didn\u0027t know how to access the device extension properties in initFeatures().\n\nWe should probably move the initFeatures() call to inside RendererVk::initializeDevice right after vkEnumerateDeviceExtensionProperties. And pass the extension properties to initFeatures().\n\nWe should also keep a bool mFeaturesInitialized flag and verify this is true when we call getFeatures since we\u0027re moving it around.",
+      "parentUuid": "83a23f94_82922d2a",
+      "range": {
+        "startLine": 244,
+        "startChar": 9,
+        "endLine": 244,
+        "endChar": 37
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "112f062e_91a50ab4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-19T19:47:30Z",
+      "side": 1,
+      "message": "are there any limits on n_rects? Can it be 100+?",
+      "range": {
+        "startLine": 601,
+        "startChar": 54,
+        "endLine": 601,
+        "endChar": 62
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70d06bf4_8ebba61e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-19T19:47:30Z",
+      "side": 1,
+      "message": "Can you refactor this to not mutate \"rects\"? In my experience mutating input parameters can lead to some subtle errors down the road.",
+      "range": {
+        "startLine": 608,
+        "startChar": 1,
+        "endLine": 611,
+        "endChar": 52
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "492e38c4_49a7fee8",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-19T19:47:30Z",
+      "side": 1,
+      "message": "you can remove this. it\u0027s implicit in the {}.",
+      "range": {
+        "startLine": 623,
+        "startChar": 4,
+        "endLine": 626,
+        "endChar": 5
       },
       "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
