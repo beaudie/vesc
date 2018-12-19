@@ -215,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "1b0e4b8b_1723dcd2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-19T23:44:56Z",
+      "side": 1,
+      "message": "I just made it a local function.",
+      "parentUuid": "28190a4e_986e5ef0",
+      "range": {
+        "startLine": 600,
+        "startChar": 0,
+        "endLine": 608,
+        "endChar": 5
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83a23f94_82922d2a",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 5
