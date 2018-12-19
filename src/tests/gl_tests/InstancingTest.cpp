@@ -83,7 +83,6 @@ class InstancingTest : public ANGLETest
         // The instance data array selects all the slices in order.
         // 'lastDrawn' is the index (zero-based) of the last slice into which we draw.
         const unsigned lastDrawn = (numInstance - 1) / divisor;
-        ASSERT(lastDrawn < kMaxDrawn);
 
         const int instanceAttrib = attribZeroInstanced ? 0 : 1;
         const int positionAttrib = attribZeroInstanced ? 1 : 0;
@@ -305,7 +304,6 @@ TEST_P(InstancingTestES31, UpdateAttribBindingByVertexAttribDivisor)
     const unsigned numInstance = 4;
     const unsigned divisor     = 1;
     const unsigned lastDrawn   = (numInstance - 1) / divisor;
-    ASSERT(lastDrawn < kMaxDrawn);
 
     // Set the formats by VertexAttribFormat
     glVertexAttribFormat(positionLoc, 2, GL_FLOAT, GL_FALSE, 0);
