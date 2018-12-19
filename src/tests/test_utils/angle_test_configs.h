@@ -25,18 +25,27 @@ using EGLenum = unsigned int;
 namespace angle
 {
 
+enum class GLESDriverType
+{
+    ANGLE,
+    Native,
+    WGL,
+};
+
 struct PlatformParameters
 {
     PlatformParameters();
     PlatformParameters(EGLint majorVersion,
                        EGLint minorVersion,
                        const EGLPlatformParameters &eglPlatformParameters);
+    PlatformParameters(EGLint majorVersion, EGLint minorVersion, GLESDriverType driver);
 
     EGLint getRenderer() const;
 
     EGLint majorVersion;
     EGLint minorVersion;
     EGLPlatformParameters eglParameters;
+    GLESDriverType driver;
 };
 
 bool operator<(const PlatformParameters &a, const PlatformParameters &b);
@@ -163,6 +172,9 @@ PlatformParameters ES2_VULKAN();
 PlatformParameters ES2_VULKAN_NULL();
 PlatformParameters ES3_VULKAN();
 PlatformParameters ES3_VULKAN_NULL();
+
+PlatformParameters ES2_WGL();
+PlatformParameters ES3_WGL();
 
 }  // namespace angle
 
