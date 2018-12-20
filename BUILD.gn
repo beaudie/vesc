@@ -907,6 +907,10 @@ source_set("angle_util_loader") {
     "util/gles_loader_autogen.cpp",
   ]
 
+  if (is_win) {
+    sources += util_wgl_sources
+  }
+
   public_deps = [
     ":angle_util_loader_headers",
   ]
