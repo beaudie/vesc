@@ -256,7 +256,6 @@ if (is_win || is_linux || is_mac || is_android) {
     deps = [
       angle_root + ":angle_util_static",
       angle_root + ":libANGLE",
-      angle_root + ":libEGL_static",
       angle_root + ":libGLESv2_static",
       angle_root + ":preprocessor",
       angle_root + ":translator",
@@ -280,7 +279,6 @@ if (is_win || is_linux || is_android || is_mac) {
     deps = [
       angle_root + ":angle_util_static",
       angle_root + ":libANGLE",
-      angle_root + ":libEGL_static",
       angle_root + ":libGLESv2_static",
       angle_root + "/third_party/jsoncpp:jsoncpp",
       ":angle_perftests_main",
@@ -409,7 +407,6 @@ if (build_angle_gles1_conform_tests) {
     deps = [
       angle_root + ":angle_common",
       angle_root + ":angle_util_static",
-      angle_root + ":libEGL_static",
       angle_root + ":libGLESv1_CM_static",
       angle_root + ":libGLESv2_static",
       angle_root + ":preprocessor",
