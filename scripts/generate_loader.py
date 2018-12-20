@@ -24,15 +24,12 @@ if len(sys.argv) == 2 and sys.argv[1] == 'inputs':
     print(",".join(inputs))
     sys.exit(0)
 
-def write_header(data_source_name, all_cmds, api, preamble, path, lib, ns = "", prefix = None, export = ""):
+def write_header(data_source_name, all_cmds, api, preamble, path, lib, ns = "", export = ""):
     file_name = "%s_loader_autogen.h" % api
     header_path = registry_xml.path_to(path, file_name)
-    def pre(cmd):
-        if prefix == None:
-            return cmd
-        return prefix + cmd[len(api):]
+
     with open(header_path, "w") as out:
-        var_protos = ["%sextern PFN%sPROC %s%s;" % (export, cmd.upper(), ns, pre(cmd)) for cmd in all_cmds]
+        var_protos = ["%sextern PFN%sPROC %s%s;" % (export, cmd.upper(), ns, cmd) for cmd in all_cmds]
         loader_header = template_loader_h.format(
             script_name = os.path.basename(sys.argv[0]),
             data_source_name = data_source_name,
@@ -50,16 +47,12 @@ def write_header(data_source_name, all_cmds, api, preamble, path, lib, ns = "", 
 def write_source(data_source_name, all_cmds, api, path, ns = "", prefix = None, export = ""):
     file_name = "%s_loader_autogen.cpp" % api
     source_path = registry_xml.path_to(path, file_name)
-    def pre(cmd):
-        if prefix == None:
-            return cmd
-        return prefix + cmd[len(api):]
 
     with open(source_path, "w") as out:
-        var_defs = ["%sPFN%sPROC %s%s;" % (export, cmd.upper(), ns, pre(cmd)) for cmd in all_cmds]
+        var_defs = ["%sPFN%sPROC %s%s;" % (export, cmd.upper(), ns, cmd) for cmd in all_cmds]
 
         setter = "    %s%s = reinterpret_cast<PFN%sPROC>(loadProc(\"%s\"));"
-        setters = [setter % (ns, pre(cmd), cmd.upper(), pre(cmd)) for cmd in all_cmds]
+        setters = [setter % (ns, cmd, cmd.upper(), cmd) for cmd in all_cmds]
 
         loader_source = template_loader_cpp.format(
             script_name = os.path.basename(sys.argv[0]),
@@ -91,8 +84,8 @@ def gen_libegl_loader():
     all_cmds = xml.all_cmd_names.get_all_commands()
 
     path = os.path.join("..", "src", "libEGL")
-    write_header(data_source_name, all_cmds, "egl", libegl_preamble, path, "LIBEGL", "", "EGL_")
-    write_source(data_source_name, all_cmds, "egl", path, "", "EGL_")
+    write_header(data_source_name, all_cmds, "egl", libegl_preamble, path, "LIBEGL", "_")
+    write_source(data_source_name, all_cmds, "egl", path, "_")
 
 def gen_gl_loader():
 
