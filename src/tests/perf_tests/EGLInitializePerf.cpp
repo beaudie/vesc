@@ -125,7 +125,8 @@ void EGLInitializePerfTest::SetUp()
 
 EGLInitializePerfTest::~EGLInitializePerfTest()
 {
-    SafeDelete(mOSWindow);
+    FreeOSWindow(mOSWindow);
+    mOSWindow = nullptr;
 }
 
 void EGLInitializePerfTest::step()
