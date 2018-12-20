@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c903a470_a2ba585a",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-20T21:20:36Z",
+      "side": 1,
+      "message": "this is in an anonymous block. It really works?",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 9
+      },
+      "revId": "90d61ec30ea6d2fe01b3e69283bbd4bedee268bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
