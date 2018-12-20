@@ -39,6 +39,30 @@
       "revId": "d5cffb0bb5c04921ff5d7db84f61dadfbd78789b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee5ee221_625c9103",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2018-12-20T20:45:59Z",
+      "side": 1,
+      "message": "Also need a piece that enables the extension if we are going to use it. I have that in my CL.",
+      "parentUuid": "596cd565_e1973c7c",
+      "range": {
+        "startLine": 798,
+        "startChar": 5,
+        "endLine": 798,
+        "endChar": 81
+      },
+      "revId": "d5cffb0bb5c04921ff5d7db84f61dadfbd78789b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
