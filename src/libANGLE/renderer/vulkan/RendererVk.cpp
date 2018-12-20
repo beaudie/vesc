@@ -605,7 +605,8 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     mFeaturesInitialized = true;
 
     // Selectively enable KHR_MAINTENANCE1 to support viewport flipping.
-    if (getFeatures().flipViewportY)
+    if ((getFeatures().flipViewportY) &&
+        (mPhysicalDeviceProperties.apiVersion < VK_MAKE_VERSION(1, 1, 0)))
     {
         enabledDeviceExtensions.push_back(VK_KHR_MAINTENANCE1_EXTENSION_NAME);
     }
@@ -795,9 +796,13 @@ void RendererVk::initFeatures(const std::vector<VkExtensionProperties> &deviceEx
     mFeatures.basicGLLineRasterization = true;
 #endif  // defined(ANGLE_PLATFORM_ANDROID)
 
-    // TODO(lucferron): Currently disabled on Intel only since many tests are failing and need
-    // investigation. http://anglebug.com/2728
-    mFeatures.flipViewportY = !IsIntel(mPhysicalDeviceProperties.vendorID);
+    if ((mPhysicalDeviceProperties.apiVersion >= VK_MAKE_VERSION(1, 1, 0)) ||
+        ExtensionFound(VK_KHR_MAINTENANCE1_EXTENSION_NAME, deviceExtensionProps))
+    {
+        // TODO(lucferron): Currently disabled on Intel only since many tests are failing and need
+        // investigation. http://anglebug.com/2728
+        mFeatures.flipViewportY = !IsIntel(mPhysicalDeviceProperties.vendorID);
+    }
 
 #ifdef ANGLE_PLATFORM_WINDOWS
     // http://anglebug.com/2838
