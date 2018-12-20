@@ -80,7 +80,8 @@ class EGLRobustnessTest : public EGLTest,
         eglTerminate(mDisplay);
         EXPECT_EGL_SUCCESS();
 
-        SafeDelete(mOSWindow);
+        FreeOSWindow(mOSWindow);
+        mOSWindow = nullptr;
     }
 
     void createContext(EGLint resetStrategy)
