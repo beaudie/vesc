@@ -70,8 +70,13 @@ config("no_gl_prototypes") {
 config("gl_prototypes") {
   defines = [
     "GL_GLES_PROTOTYPES=1",
-    "EGL_EGL_PROTOTYPES=1",
     "GL_GLEXT_PROTOTYPES",
+  ]
+}
+
+config("egl_prototypes") {
+  defines = [
+    "EGL_EGL_PROTOTYPES=1",
     "EGL_EGLEXT_PROTOTYPES",
   ]
 }
@@ -701,6 +706,12 @@ shared_library("libGLESv2${angle_libs_suffix}") {
 
   defines = [ "LIBGLESV2_IMPLEMENTATION" ]
 
+  if (is_win) {
+    defines += [ "EGLAPI=" ]
+  } else {
+    defines += [ "EGLAPI=__attribute__((visibility(\"default\")))" ]
+  }
+
   deps = [
     ":includes",
     ":libANGLE",
@@ -854,25 +865,6 @@ shared_library("libEGL${angle_libs_suffix}") {
   ]
 }
 
-static_library("libEGL_static") {
-  sources = libegl_sources
-
-  configs -= angle_undefine_configs
-  configs += [
-    ":debug_annotations_config",
-    ":extra_warnings",
-    ":internal_config",
-    ":library_name_config",
-  ]
-
-  public_configs = [ ":angle_static" ]
-
-  deps = [
-    ":includes",
-    ":libGLESv2_static",
-  ]
-}
-
 import("util/util.gni")
 
 config("angle_util_loader_config") {
@@ -1015,6 +1007,7 @@ foreach(is_shared_library,
     } else {
       public_configs += [
         ":angle_static",
+        ":egl_prototypes",
         ":gl_prototypes",
       ]
     }
