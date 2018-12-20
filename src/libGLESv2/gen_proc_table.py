@@ -61,13 +61,9 @@ all_functions = {}
 
 for description, functions in json_data.iteritems():
     for function in functions:
-        if function.startswith("gl"):
-            all_functions[function] = "gl::" + function[2:]
-            # Special handling for EGL_ANGLE_explicit_context extension
-            if support_egl_ANGLE_explicit_context:
-                all_functions[function + "ContextANGLE"] = "gl::" + function[2:] + "ContextANGLE"
-        else:
-            all_functions[function] = function
+        all_functions[function] = function
+        if function.startswith("gl") and support_egl_ANGLE_explicit_context:
+            all_functions[function + "ContextANGLE"] = function + "ContextANGLE"
 
 proc_data = [('    {"%s", P(%s)}' % (func, angle_func)) for func, angle_func in sorted(all_functions.iteritems())]
 

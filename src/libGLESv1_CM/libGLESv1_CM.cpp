@@ -6,287 +6,374 @@
 
 // libGLESv1_CM.cpp: Implements the exported OpenGL ES 1.0 functions.
 
-#include "angle_gl.h"
+#include "common/system_utils.h"
 
-#include "libGLESv2/entry_points_gles_1_0_autogen.h"
-#include "libGLESv2/entry_points_gles_2_0_autogen.h"
-#include "libGLESv2/entry_points_gles_ext_autogen.h"
+#include <memory>
+
+#if !defined(ANGLE_USE_GLES1_CM_LOADER)
+#    error This file only works with dynamic loading.
+#endif  // !defined(ANGLE_USE_EGL_LOADER)
+
+#include "libGLESv1_CM/gles_loader_autogen.h"
+
+namespace
+{
+bool gLoaded = false;
+std::unique_ptr<angle::Library> gEntryPointsLib;
+
+angle::GenericProc KHRONOS_APIENTRY GlobalLoad(const char *symbol)
+{
+    return reinterpret_cast<angle::GenericProc>(gEntryPointsLib->getSymbol(symbol));
+}
+
+void EnsureLoaded()
+{
+    if (gLoaded)
+        return;
+
+    gEntryPointsLib.reset(angle::OpenSharedLibrary(ANGLE_GLESV2_LIBRARY_NAME));
+    angle::LoadGLES(GlobalLoad);
+    if (!_glGetString)
+    {
+        fprintf(stderr, "Error loading EGL entry points.\n");
+    }
+    else
+    {
+        gLoaded = true;
+    }
+}
+}  // anonymous namespace
 
 extern "C" {
 
 void GL_APIENTRY glAlphaFunc(GLenum func, GLfloat ref)
 {
-    return gl::AlphaFunc(func, ref);
+    EnsureLoaded();
+    return _glAlphaFunc(func, ref);
 }
 
 void GL_APIENTRY glClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
 {
-    return gl::ClearColor(red, green, blue, alpha);
+    EnsureLoaded();
+    return _glClearColor(red, green, blue, alpha);
 }
 
 void GL_APIENTRY glClearDepthf(GLfloat d)
 {
-    return gl::ClearDepthf(d);
+    EnsureLoaded();
+    return _glClearDepthf(d);
 }
 
 void GL_APIENTRY glClipPlanef(GLenum p, const GLfloat *eqn)
 {
-    return gl::ClipPlanef(p, eqn);
+    EnsureLoaded();
+    return _glClipPlanef(p, eqn);
 }
 
 void GL_APIENTRY glColor4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
 {
-    return gl::Color4f(red, green, blue, alpha);
+    EnsureLoaded();
+    return _glColor4f(red, green, blue, alpha);
 }
 
 void GL_APIENTRY glDepthRangef(GLfloat n, GLfloat f)
 {
-    return gl::DepthRangef(n, f);
+    EnsureLoaded();
+    return _glDepthRangef(n, f);
 }
 
 void GL_APIENTRY glFogf(GLenum pname, GLfloat param)
 {
-    return gl::Fogf(pname, param);
+    EnsureLoaded();
+    return _glFogf(pname, param);
 }
 
 void GL_APIENTRY glFogfv(GLenum pname, const GLfloat *params)
 {
-    return gl::Fogfv(pname, params);
+    EnsureLoaded();
+    return _glFogfv(pname, params);
 }
 
 void GL_APIENTRY glFrustumf(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f)
 {
-    return gl::Frustumf(l, r, b, t, n, f);
+    EnsureLoaded();
+    return _glFrustumf(l, r, b, t, n, f);
 }
 
 void GL_APIENTRY glGetClipPlanef(GLenum plane, GLfloat *equation)
 {
-    return gl::GetClipPlanef(plane, equation);
+    EnsureLoaded();
+    return _glGetClipPlanef(plane, equation);
 }
 
 void GL_APIENTRY glGetFloatv(GLenum pname, GLfloat *data)
 {
-    return gl::GetFloatv(pname, data);
+    EnsureLoaded();
+    return _glGetFloatv(pname, data);
 }
 
 void GL_APIENTRY glGetLightfv(GLenum light, GLenum pname, GLfloat *params)
 {
-    return gl::GetLightfv(light, pname, params);
+    EnsureLoaded();
+    return _glGetLightfv(light, pname, params);
 }
 
 void GL_APIENTRY glGetMaterialfv(GLenum face, GLenum pname, GLfloat *params)
 {
-    return gl::GetMaterialfv(face, pname, params);
+    EnsureLoaded();
+    return _glGetMaterialfv(face, pname, params);
 }
 
 void GL_APIENTRY glGetTexEnvfv(GLenum target, GLenum pname, GLfloat *params)
 {
-    return gl::GetTexEnvfv(target, pname, params);
+    EnsureLoaded();
+    return _glGetTexEnvfv(target, pname, params);
 }
 
 void GL_APIENTRY glGetTexParameterfv(GLenum target, GLenum pname, GLfloat *params)
 {
-    return gl::GetTexParameterfv(target, pname, params);
+    EnsureLoaded();
+    return _glGetTexParameterfv(target, pname, params);
 }
 
 void GL_APIENTRY glLightModelf(GLenum pname, GLfloat param)
 {
-    return gl::LightModelf(pname, param);
+    EnsureLoaded();
+    return _glLightModelf(pname, param);
 }
 
 void GL_APIENTRY glLightModelfv(GLenum pname, const GLfloat *params)
 {
-    return gl::LightModelfv(pname, params);
+    EnsureLoaded();
+    return _glLightModelfv(pname, params);
 }
 
 void GL_APIENTRY glLightf(GLenum light, GLenum pname, GLfloat param)
 {
-    return gl::Lightf(light, pname, param);
+    EnsureLoaded();
+    return _glLightf(light, pname, param);
 }
 
 void GL_APIENTRY glLightfv(GLenum light, GLenum pname, const GLfloat *params)
 {
-    return gl::Lightfv(light, pname, params);
+    EnsureLoaded();
+    return _glLightfv(light, pname, params);
 }
 
 void GL_APIENTRY glLineWidth(GLfloat width)
 {
-    return gl::LineWidth(width);
+    EnsureLoaded();
+    return _glLineWidth(width);
 }
 
 void GL_APIENTRY glLoadMatrixf(const GLfloat *m)
 {
-    return gl::LoadMatrixf(m);
+    EnsureLoaded();
+    return _glLoadMatrixf(m);
 }
 
 void GL_APIENTRY glMaterialf(GLenum face, GLenum pname, GLfloat param)
 {
-    return gl::Materialf(face, pname, param);
+    EnsureLoaded();
+    return _glMaterialf(face, pname, param);
 }
 
 void GL_APIENTRY glMaterialfv(GLenum face, GLenum pname, const GLfloat *params)
 {
-    return gl::Materialfv(face, pname, params);
+    EnsureLoaded();
+    return _glMaterialfv(face, pname, params);
 }
 
 void GL_APIENTRY glMultMatrixf(const GLfloat *m)
 {
-    return gl::MultMatrixf(m);
+    EnsureLoaded();
+    return _glMultMatrixf(m);
 }
 
 void GL_APIENTRY glMultiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q)
 {
-    return gl::MultiTexCoord4f(target, s, t, r, q);
+    EnsureLoaded();
+    return _glMultiTexCoord4f(target, s, t, r, q);
 }
 
 void GL_APIENTRY glNormal3f(GLfloat nx, GLfloat ny, GLfloat nz)
 {
-    return gl::Normal3f(nx, ny, nz);
+    EnsureLoaded();
+    return _glNormal3f(nx, ny, nz);
 }
 
 void GL_APIENTRY glOrthof(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f)
 {
-    return gl::Orthof(l, r, b, t, n, f);
+    EnsureLoaded();
+    return _glOrthof(l, r, b, t, n, f);
 }
 
 void GL_APIENTRY glPointParameterf(GLenum pname, GLfloat param)
 {
-    return gl::PointParameterf(pname, param);
+    EnsureLoaded();
+    return _glPointParameterf(pname, param);
 }
 
 void GL_APIENTRY glPointParameterfv(GLenum pname, const GLfloat *params)
 {
-    return gl::PointParameterfv(pname, params);
+    EnsureLoaded();
+    return _glPointParameterfv(pname, params);
 }
 
 void GL_APIENTRY glPointSize(GLfloat size)
 {
-    return gl::PointSize(size);
+    EnsureLoaded();
+    return _glPointSize(size);
 }
 
 void GL_APIENTRY glPolygonOffset(GLfloat factor, GLfloat units)
 {
-    return gl::PolygonOffset(factor, units);
+    EnsureLoaded();
+    return _glPolygonOffset(factor, units);
 }
 
 void GL_APIENTRY glRotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 {
-    return gl::Rotatef(angle, x, y, z);
+    EnsureLoaded();
+    return _glRotatef(angle, x, y, z);
 }
 
 void GL_APIENTRY glScalef(GLfloat x, GLfloat y, GLfloat z)
 {
-    return gl::Scalef(x, y, z);
+    EnsureLoaded();
+    return _glScalef(x, y, z);
 }
 
 void GL_APIENTRY glTexEnvf(GLenum target, GLenum pname, GLfloat param)
 {
-    return gl::TexEnvf(target, pname, param);
+    EnsureLoaded();
+    return _glTexEnvf(target, pname, param);
 }
 
 void GL_APIENTRY glTexEnvfv(GLenum target, GLenum pname, const GLfloat *params)
 {
-    return gl::TexEnvfv(target, pname, params);
+    EnsureLoaded();
+    return _glTexEnvfv(target, pname, params);
 }
 
 void GL_APIENTRY glTexParameterf(GLenum target, GLenum pname, GLfloat param)
 {
-    return gl::TexParameterf(target, pname, param);
+    EnsureLoaded();
+    return _glTexParameterf(target, pname, param);
 }
 
 void GL_APIENTRY glTexParameterfv(GLenum target, GLenum pname, const GLfloat *params)
 {
-    return gl::TexParameterfv(target, pname, params);
+    EnsureLoaded();
+    return _glTexParameterfv(target, pname, params);
 }
 
 void GL_APIENTRY glTranslatef(GLfloat x, GLfloat y, GLfloat z)
 {
-    return gl::Translatef(x, y, z);
+    EnsureLoaded();
+    return _glTranslatef(x, y, z);
 }
 
 void GL_APIENTRY glActiveTexture(GLenum texture)
 {
-    return gl::ActiveTexture(texture);
+    EnsureLoaded();
+    return _glActiveTexture(texture);
 }
 
 void GL_APIENTRY glAlphaFuncx(GLenum func, GLfixed ref)
 {
-    return gl::AlphaFuncx(func, ref);
+    EnsureLoaded();
+    return _glAlphaFuncx(func, ref);
 }
 
 void GL_APIENTRY glBindBuffer(GLenum target, GLuint buffer)
 {
-    return gl::BindBuffer(target, buffer);
+    EnsureLoaded();
+    return _glBindBuffer(target, buffer);
 }
 
 void GL_APIENTRY glBindTexture(GLenum target, GLuint texture)
 {
-    return gl::BindTexture(target, texture);
+    EnsureLoaded();
+    return _glBindTexture(target, texture);
 }
 
 void GL_APIENTRY glBlendFunc(GLenum sfactor, GLenum dfactor)
 {
-    return gl::BlendFunc(sfactor, dfactor);
+    EnsureLoaded();
+    return _glBlendFunc(sfactor, dfactor);
 }
 
 void GL_APIENTRY glBufferData(GLenum target, GLsizeiptr size, const void *data, GLenum usage)
 {
-    return gl::BufferData(target, size, data, usage);
+    EnsureLoaded();
+    return _glBufferData(target, size, data, usage);
 }
 
 void GL_APIENTRY glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void *data)
 {
-    return gl::BufferSubData(target, offset, size, data);
+    EnsureLoaded();
+    return _glBufferSubData(target, offset, size, data);
 }
 
 void GL_APIENTRY glClear(GLbitfield mask)
 {
-    return gl::Clear(mask);
+    EnsureLoaded();
+    return _glClear(mask);
 }
 
 void GL_APIENTRY glClearColorx(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)
 {
-    return gl::ClearColorx(red, green, blue, alpha);
+    EnsureLoaded();
+    return _glClearColorx(red, green, blue, alpha);
 }
 
 void GL_APIENTRY glClearDepthx(GLfixed depth)
 {
-    return gl::ClearDepthx(depth);
+    EnsureLoaded();
+    return _glClearDepthx(depth);
 }
 
 void GL_APIENTRY glClearStencil(GLint s)
 {
-    return gl::ClearStencil(s);
+    EnsureLoaded();
+    return _glClearStencil(s);
 }
 
 void GL_APIENTRY glClientActiveTexture(GLenum texture)
 {
-    return gl::ClientActiveTexture(texture);
+    EnsureLoaded();
+    return _glClientActiveTexture(texture);
 }
 
 void GL_APIENTRY glClipPlanex(GLenum plane, const GLfixed *equation)
 {
-    return gl::ClipPlanex(plane, equation);
+    EnsureLoaded();
+    return _glClipPlanex(plane, equation);
 }
 
 void GL_APIENTRY glColor4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha)
 {
-    return gl::Color4ub(red, green, blue, alpha);
+    EnsureLoaded();
+    return _glColor4ub(red, green, blue, alpha);
 }
 
 void GL_APIENTRY glColor4x(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)
 {
-    return gl::Color4x(red, green, blue, alpha);
+    EnsureLoaded();
+    return _glColor4x(red, green, blue, alpha);
 }
 
 void GL_APIENTRY glColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha)
 {
-    return gl::ColorMask(red, green, blue, alpha);
+    EnsureLoaded();
+    return _glColorMask(red, green, blue, alpha);
 }
 
 void GL_APIENTRY glColorPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
 {
-    return gl::ColorPointer(size, type, stride, pointer);
+    EnsureLoaded();
+    return _glColorPointer(size, type, stride, pointer);
 }
 
 void GL_APIENTRY glCompressedTexImage2D(GLenum target,
@@ -298,8 +385,9 @@ void GL_APIENTRY glCompressedTexImage2D(GLenum target,
                                         GLsizei imageSize,
                                         const void *data)
 {
-    return gl::CompressedTexImage2D(target, level, internalformat, width, height, border, imageSize,
-                                    data);
+    EnsureLoaded();
+    return _glCompressedTexImage2D(target, level, internalformat, width, height, border, imageSize,
+                                   data);
 }
 
 void GL_APIENTRY glCompressedTexSubImage2D(GLenum target,
@@ -312,8 +400,9 @@ void GL_APIENTRY glCompressedTexSubImage2D(GLenum target,
                                            GLsizei imageSize,
                                            const void *data)
 {
-    return gl::CompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format,
-                                       imageSize, data);
+    EnsureLoaded();
+    return _glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format,
+                                      imageSize, data);
 }
 
 void GL_APIENTRY glCopyTexImage2D(GLenum target,
@@ -325,7 +414,8 @@ void GL_APIENTRY glCopyTexImage2D(GLenum target,
                                   GLsizei height,
                                   GLint border)
 {
-    return gl::CopyTexImage2D(target, level, internalformat, x, y, width, height, border);
+    EnsureLoaded();
+    return _glCopyTexImage2D(target, level, internalformat, x, y, width, height, border);
 }
 
 void GL_APIENTRY glCopyTexSubImage2D(GLenum target,
@@ -337,312 +427,374 @@ void GL_APIENTRY glCopyTexSubImage2D(GLenum target,
                                      GLsizei width,
                                      GLsizei height)
 {
-    return gl::CopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
+    EnsureLoaded();
+    return _glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
 }
 
 void GL_APIENTRY glCullFace(GLenum mode)
 {
-    return gl::CullFace(mode);
+    EnsureLoaded();
+    return _glCullFace(mode);
 }
 
 void GL_APIENTRY glDeleteBuffers(GLsizei n, const GLuint *buffers)
 {
-    return gl::DeleteBuffers(n, buffers);
+    EnsureLoaded();
+    return _glDeleteBuffers(n, buffers);
 }
 
 void GL_APIENTRY glDeleteTextures(GLsizei n, const GLuint *textures)
 {
-    return gl::DeleteTextures(n, textures);
+    EnsureLoaded();
+    return _glDeleteTextures(n, textures);
 }
 
 void GL_APIENTRY glDepthFunc(GLenum func)
 {
-    return gl::DepthFunc(func);
+    EnsureLoaded();
+    return _glDepthFunc(func);
 }
 
 void GL_APIENTRY glDepthMask(GLboolean flag)
 {
-    return gl::DepthMask(flag);
+    EnsureLoaded();
+    return _glDepthMask(flag);
 }
 
 void GL_APIENTRY glDepthRangex(GLfixed n, GLfixed f)
 {
-    return gl::DepthRangex(n, f);
+    EnsureLoaded();
+    return _glDepthRangex(n, f);
 }
 
 void GL_APIENTRY glDisable(GLenum cap)
 {
-    return gl::Disable(cap);
+    EnsureLoaded();
+    return _glDisable(cap);
 }
 
 void GL_APIENTRY glDisableClientState(GLenum array)
 {
-    return gl::DisableClientState(array);
+    EnsureLoaded();
+    return _glDisableClientState(array);
 }
 
 void GL_APIENTRY glDrawArrays(GLenum mode, GLint first, GLsizei count)
 {
-    return gl::DrawArrays(mode, first, count);
+    EnsureLoaded();
+    return _glDrawArrays(mode, first, count);
 }
 
 void GL_APIENTRY glDrawElements(GLenum mode, GLsizei count, GLenum type, const void *indices)
 {
-    return gl::DrawElements(mode, count, type, indices);
+    EnsureLoaded();
+    return _glDrawElements(mode, count, type, indices);
 }
 
 void GL_APIENTRY glEnable(GLenum cap)
 {
-    return gl::Enable(cap);
+    EnsureLoaded();
+    return _glEnable(cap);
 }
 
 void GL_APIENTRY glEnableClientState(GLenum array)
 {
-    return gl::EnableClientState(array);
+    EnsureLoaded();
+    return _glEnableClientState(array);
 }
 
 void GL_APIENTRY glFinish(void)
 {
-    return gl::Finish();
+    EnsureLoaded();
+    return _glFinish();
 }
 
 void GL_APIENTRY glFlush(void)
 {
-    return gl::Flush();
+    EnsureLoaded();
+    return _glFlush();
 }
 
 void GL_APIENTRY glFogx(GLenum pname, GLfixed param)
 {
-    return gl::Fogx(pname, param);
+    EnsureLoaded();
+    return _glFogx(pname, param);
 }
 
 void GL_APIENTRY glFogxv(GLenum pname, const GLfixed *param)
 {
-    return gl::Fogxv(pname, param);
+    EnsureLoaded();
+    return _glFogxv(pname, param);
 }
 
 void GL_APIENTRY glFrontFace(GLenum mode)
 {
-    return gl::FrontFace(mode);
+    EnsureLoaded();
+    return _glFrontFace(mode);
 }
 
 void GL_APIENTRY glFrustumx(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f)
 {
-    return gl::Frustumx(l, r, b, t, n, f);
+    EnsureLoaded();
+    return _glFrustumx(l, r, b, t, n, f);
 }
 
 void GL_APIENTRY glGetBooleanv(GLenum pname, GLboolean *data)
 {
-    return gl::GetBooleanv(pname, data);
+    EnsureLoaded();
+    return _glGetBooleanv(pname, data);
 }
 
 void GL_APIENTRY glGetBufferParameteriv(GLenum target, GLenum pname, GLint *params)
 {
-    return gl::GetBufferParameteriv(target, pname, params);
+    EnsureLoaded();
+    return _glGetBufferParameteriv(target, pname, params);
 }
 
 void GL_APIENTRY glGetClipPlanex(GLenum plane, GLfixed *equation)
 {
-    return gl::GetClipPlanex(plane, equation);
+    EnsureLoaded();
+    return _glGetClipPlanex(plane, equation);
 }
 
 void GL_APIENTRY glGenBuffers(GLsizei n, GLuint *buffers)
 {
-    return gl::GenBuffers(n, buffers);
+    EnsureLoaded();
+    return _glGenBuffers(n, buffers);
 }
 
 void GL_APIENTRY glGenTextures(GLsizei n, GLuint *textures)
 {
-    return gl::GenTextures(n, textures);
+    EnsureLoaded();
+    return _glGenTextures(n, textures);
 }
 
 GLenum GL_APIENTRY glGetError(void)
 {
-    return gl::GetError();
+    EnsureLoaded();
+    return _glGetError();
 }
 
 void GL_APIENTRY glGetFixedv(GLenum pname, GLfixed *params)
 {
-    return gl::GetFixedv(pname, params);
+    EnsureLoaded();
+    return _glGetFixedv(pname, params);
 }
 
 void GL_APIENTRY glGetIntegerv(GLenum pname, GLint *data)
 {
-    return gl::GetIntegerv(pname, data);
+    EnsureLoaded();
+    return _glGetIntegerv(pname, data);
 }
 
 void GL_APIENTRY glGetLightxv(GLenum light, GLenum pname, GLfixed *params)
 {
-    return gl::GetLightxv(light, pname, params);
+    EnsureLoaded();
+    return _glGetLightxv(light, pname, params);
 }
 
 void GL_APIENTRY glGetMaterialxv(GLenum face, GLenum pname, GLfixed *params)
 {
-    return gl::GetMaterialxv(face, pname, params);
+    EnsureLoaded();
+    return _glGetMaterialxv(face, pname, params);
 }
 
 void GL_APIENTRY glGetPointerv(GLenum pname, void **params)
 {
-    return gl::GetPointerv(pname, params);
+    EnsureLoaded();
+    return _glGetPointerv(pname, params);
 }
 
 const GLubyte *GL_APIENTRY glGetString(GLenum name)
 {
-    return gl::GetString(name);
+    EnsureLoaded();
+    return _glGetString(name);
 }
 
 void GL_APIENTRY glGetTexEnviv(GLenum target, GLenum pname, GLint *params)
 {
-    return gl::GetTexEnviv(target, pname, params);
+    EnsureLoaded();
+    return _glGetTexEnviv(target, pname, params);
 }
 
 void GL_APIENTRY glGetTexEnvxv(GLenum target, GLenum pname, GLfixed *params)
 {
-    return gl::GetTexEnvxv(target, pname, params);
+    EnsureLoaded();
+    return _glGetTexEnvxv(target, pname, params);
 }
 
 void GL_APIENTRY glGetTexParameteriv(GLenum target, GLenum pname, GLint *params)
 {
-    return gl::GetTexParameteriv(target, pname, params);
+    EnsureLoaded();
+    return _glGetTexParameteriv(target, pname, params);
 }
 
 void GL_APIENTRY glGetTexParameterxv(GLenum target, GLenum pname, GLfixed *params)
 {
-    return gl::GetTexParameterxv(target, pname, params);
+    EnsureLoaded();
+    return _glGetTexParameterxv(target, pname, params);
 }
 
 void GL_APIENTRY glHint(GLenum target, GLenum mode)
 {
-    return gl::Hint(target, mode);
+    EnsureLoaded();
+    return _glHint(target, mode);
 }
 
 GLboolean GL_APIENTRY glIsBuffer(GLuint buffer)
 {
-    return gl::IsBuffer(buffer);
+    EnsureLoaded();
+    return _glIsBuffer(buffer);
 }
 
 GLboolean GL_APIENTRY glIsEnabled(GLenum cap)
 {
-    return gl::IsEnabled(cap);
+    EnsureLoaded();
+    return _glIsEnabled(cap);
 }
 
 GLboolean GL_APIENTRY glIsTexture(GLuint texture)
 {
-    return gl::IsTexture(texture);
+    EnsureLoaded();
+    return _glIsTexture(texture);
 }
 
 void GL_APIENTRY glLightModelx(GLenum pname, GLfixed param)
 {
-    return gl::LightModelx(pname, param);
+    EnsureLoaded();
+    return _glLightModelx(pname, param);
 }
 
 void GL_APIENTRY glLightModelxv(GLenum pname, const GLfixed *param)
 {
-    return gl::LightModelxv(pname, param);
+    EnsureLoaded();
+    return _glLightModelxv(pname, param);
 }
 
 void GL_APIENTRY glLightx(GLenum light, GLenum pname, GLfixed param)
 {
-    return gl::Lightx(light, pname, param);
+    EnsureLoaded();
+    return _glLightx(light, pname, param);
 }
 
 void GL_APIENTRY glLightxv(GLenum light, GLenum pname, const GLfixed *params)
 {
-    return gl::Lightxv(light, pname, params);
+    EnsureLoaded();
+    return _glLightxv(light, pname, params);
 }
 
 void GL_APIENTRY glLineWidthx(GLfixed width)
 {
-    return gl::LineWidthx(width);
+    EnsureLoaded();
+    return _glLineWidthx(width);
 }
 
 void GL_APIENTRY glLoadIdentity(void)
 {
-    return gl::LoadIdentity();
+    EnsureLoaded();
+    return _glLoadIdentity();
 }
 
 void GL_APIENTRY glLoadMatrixx(const GLfixed *m)
 {
-    return gl::LoadMatrixx(m);
+    EnsureLoaded();
+    return _glLoadMatrixx(m);
 }
 
 void GL_APIENTRY glLogicOp(GLenum opcode)
 {
-    return gl::LogicOp(opcode);
+    EnsureLoaded();
+    return _glLogicOp(opcode);
 }
 
 void GL_APIENTRY glMaterialx(GLenum face, GLenum pname, GLfixed param)
 {
-    return gl::Materialx(face, pname, param);
+    EnsureLoaded();
+    return _glMaterialx(face, pname, param);
 }
 
 void GL_APIENTRY glMaterialxv(GLenum face, GLenum pname, const GLfixed *param)
 {
-    return gl::Materialxv(face, pname, param);
+    EnsureLoaded();
+    return _glMaterialxv(face, pname, param);
 }
 
 void GL_APIENTRY glMatrixMode(GLenum mode)
 {
-    return gl::MatrixMode(mode);
+    EnsureLoaded();
+    return _glMatrixMode(mode);
 }
 
 void GL_APIENTRY glMultMatrixx(const GLfixed *m)
 {
-    return gl::MultMatrixx(m);
+    EnsureLoaded();
+    return _glMultMatrixx(m);
 }
 
 void GL_APIENTRY glMultiTexCoord4x(GLenum texture, GLfixed s, GLfixed t, GLfixed r, GLfixed q)
 {
-    return gl::MultiTexCoord4x(texture, s, t, r, q);
+    EnsureLoaded();
+    return _glMultiTexCoord4x(texture, s, t, r, q);
 }
 
 void GL_APIENTRY glNormal3x(GLfixed nx, GLfixed ny, GLfixed nz)
 {
-    return gl::Normal3x(nx, ny, nz);
+    EnsureLoaded();
+    return _glNormal3x(nx, ny, nz);
 }
 
 void GL_APIENTRY glNormalPointer(GLenum type, GLsizei stride, const void *pointer)
 {
-    return gl::NormalPointer(type, stride, pointer);
+    EnsureLoaded();
+    return _glNormalPointer(type, stride, pointer);
 }
 
 void GL_APIENTRY glOrthox(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f)
 {
-    return gl::Orthox(l, r, b, t, n, f);
+    EnsureLoaded();
+    return _glOrthox(l, r, b, t, n, f);
 }
 
 void GL_APIENTRY glPixelStorei(GLenum pname, GLint param)
 {
-    return gl::PixelStorei(pname, param);
+    EnsureLoaded();
+    return _glPixelStorei(pname, param);
 }
 
 void GL_APIENTRY glPointParameterx(GLenum pname, GLfixed param)
 {
-    return gl::PointParameterx(pname, param);
+    EnsureLoaded();
+    return _glPointParameterx(pname, param);
 }
 
 void GL_APIENTRY glPointParameterxv(GLenum pname, const GLfixed *params)
 {
-    return gl::PointParameterxv(pname, params);
+    EnsureLoaded();
+    return _glPointParameterxv(pname, params);
 }
 
 void GL_APIENTRY glPointSizex(GLfixed size)
 {
-    return gl::PointSizex(size);
+    EnsureLoaded();
+    return _glPointSizex(size);
 }
 
 void GL_APIENTRY glPolygonOffsetx(GLfixed factor, GLfixed units)
 {
-    return gl::PolygonOffsetx(factor, units);
+    EnsureLoaded();
+    return _glPolygonOffsetx(factor, units);
 }
 
 void GL_APIENTRY glPopMatrix(void)
 {
-    return gl::PopMatrix();
+    EnsureLoaded();
+    return _glPopMatrix();
 }
 
 void GL_APIENTRY glPushMatrix(void)
 {
-    return gl::PushMatrix();
+    EnsureLoaded();
+    return _glPushMatrix();
 }
 
 void GL_APIENTRY glReadPixels(GLint x,
@@ -653,77 +805,92 @@ void GL_APIENTRY glReadPixels(GLint x,
                               GLenum type,
                               void *pixels)
 {
-    return gl::ReadPixels(x, y, width, height, format, type, pixels);
+    EnsureLoaded();
+    return _glReadPixels(x, y, width, height, format, type, pixels);
 }
 
 void GL_APIENTRY glRotatex(GLfixed angle, GLfixed x, GLfixed y, GLfixed z)
 {
-    return gl::Rotatex(angle, x, y, z);
+    EnsureLoaded();
+    return _glRotatex(angle, x, y, z);
 }
 
 void GL_APIENTRY glSampleCoverage(GLfloat value, GLboolean invert)
 {
-    return gl::SampleCoverage(value, invert);
+    EnsureLoaded();
+    return _glSampleCoverage(value, invert);
 }
 
 void GL_APIENTRY glSampleCoveragex(GLclampx value, GLboolean invert)
 {
-    return gl::SampleCoveragex(value, invert);
+    EnsureLoaded();
+    return _glSampleCoveragex(value, invert);
 }
 
 void GL_APIENTRY glScalex(GLfixed x, GLfixed y, GLfixed z)
 {
-    return gl::Scalex(x, y, z);
+    EnsureLoaded();
+    return _glScalex(x, y, z);
 }
 
 void GL_APIENTRY glScissor(GLint x, GLint y, GLsizei width, GLsizei height)
 {
-    return gl::Scissor(x, y, width, height);
+    EnsureLoaded();
+    return _glScissor(x, y, width, height);
 }
 
 void GL_APIENTRY glShadeModel(GLenum mode)
 {
-    return gl::ShadeModel(mode);
+    EnsureLoaded();
+    return _glShadeModel(mode);
 }
 
 void GL_APIENTRY glStencilFunc(GLenum func, GLint ref, GLuint mask)
 {
-    return gl::StencilFunc(func, ref, mask);
+    EnsureLoaded();
+    return _glStencilFunc(func, ref, mask);
 }
 
 void GL_APIENTRY glStencilMask(GLuint mask)
 {
-    return gl::StencilMask(mask);
+    EnsureLoaded();
+    return _glStencilMask(mask);
 }
 
 void GL_APIENTRY glStencilOp(GLenum fail, GLenum zfail, GLenum zpass)
 {
-    return gl::StencilOp(fail, zfail, zpass);
+    EnsureLoaded();
+    return _glStencilOp(fail, zfail, zpass);
 }
 
 void GL_APIENTRY glTexCoordPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
 {
-    return gl::TexCoordPointer(size, type, stride, pointer);
+    EnsureLoaded();
+    return _glTexCoordPointer(size, type, stride, pointer);
 }
 
 void GL_APIENTRY glTexEnvi(GLenum target, GLenum pname, GLint param)
 {
-    return gl::TexEnvi(target, pname, param);
+    EnsureLoaded();
+    return _glTexEnvi(target, pname, param);
 }
 
 void GL_APIENTRY glTexEnvx(GLenum target, GLenum pname, GLfixed param)
 {
-    return gl::TexEnvx(target, pname, param);
+    EnsureLoaded();
+    return _glTexEnvx(target, pname, param);
 }
 
 void GL_APIENTRY glTexEnviv(GLenum target, GLenum pname, const GLint *params)
 {
-    return gl::TexEnviv(target, pname, params);
+    EnsureLoaded();
+    return _glTexEnviv(target, pname, params);
 }
 
 void GL_APIENTRY glTexEnvxv(GLenum target, GLenum pname, const GLfixed *params)
 {
-    return gl::TexEnvxv(target, pname, params);
+    EnsureLoaded();
+    return _glTexEnvxv(target, pname, params);
 }
 
 void GL_APIENTRY glTexImage2D(GLenum target,
@@ -736,28 +903,33 @@ void GL_APIENTRY glTexImage2D(GLenum target,
                               GLenum type,
                               const void *pixels)
 {
-    return gl::TexImage2D(target, level, internalformat, width, height, border, format, type,
-                          pixels);
+    EnsureLoaded();
+    return _glTexImage2D(target, level, internalformat, width, height, border, format, type,
+                         pixels);
 }
 
 void GL_APIENTRY glTexParameteri(GLenum target, GLenum pname, GLint param)
 {
-    return gl::TexParameteri(target, pname, param);
+    EnsureLoaded();
+    return _glTexParameteri(target, pname, param);
 }
 
 void GL_APIENTRY glTexParameterx(GLenum target, GLenum pname, GLfixed param)
 {
-    return gl::TexParameterx(target, pname, param);
+    EnsureLoaded();
+    return _glTexParameterx(target, pname, param);
 }
 
 void GL_APIENTRY glTexParameteriv(GLenum target, GLenum pname, const GLint *params)
 {
-    return gl::TexParameteriv(target, pname, params);
+    EnsureLoaded();
+    return _glTexParameteriv(target, pname, params);
 }
 
 void GL_APIENTRY glTexParameterxv(GLenum target, GLenum pname, const GLfixed *params)
 {
-    return gl::TexParameterxv(target, pname, params);
+    EnsureLoaded();
+    return _glTexParameterxv(target, pname, params);
 }
 
 void GL_APIENTRY glTexSubImage2D(GLenum target,
@@ -770,74 +942,88 @@ void GL_APIENTRY glTexSubImage2D(GLenum target,
                                  GLenum type,
                                  const void *pixels)
 {
-    return gl::TexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
+    EnsureLoaded();
+    return _glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 }
 
 void GL_APIENTRY glTranslatex(GLfixed x, GLfixed y, GLfixed z)
 {
-    return gl::Translatex(x, y, z);
+    EnsureLoaded();
+    return _glTranslatex(x, y, z);
 }
 
 void GL_APIENTRY glVertexPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
 {
-    return gl::VertexPointer(size, type, stride, pointer);
+    EnsureLoaded();
+    return _glVertexPointer(size, type, stride, pointer);
 }
 
 void GL_APIENTRY glViewport(GLint x, GLint y, GLsizei width, GLsizei height)
 {
-    return gl::Viewport(x, y, width, height);
+    EnsureLoaded();
+    return _glViewport(x, y, width, height);
 }
 
 // GL_OES_draw_texture
 void GL_APIENTRY glDrawTexfOES(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height)
 {
-    return gl::DrawTexfOES(x, y, z, width, height);
+    EnsureLoaded();
+    return _glDrawTexfOES(x, y, z, width, height);
 }
 
 void GL_APIENTRY glDrawTexfvOES(const GLfloat *coords)
 {
-    return gl::DrawTexfvOES(coords);
+    EnsureLoaded();
+    return _glDrawTexfvOES(coords);
 }
 
 void GL_APIENTRY glDrawTexiOES(GLint x, GLint y, GLint z, GLint width, GLint height)
 {
-    return gl::DrawTexiOES(x, y, z, width, height);
+    EnsureLoaded();
+    return _glDrawTexiOES(x, y, z, width, height);
 }
 
 void GL_APIENTRY glDrawTexivOES(const GLint *coords)
 {
-    return gl::DrawTexivOES(coords);
+    EnsureLoaded();
+    return _glDrawTexivOES(coords);
 }
 
 void GL_APIENTRY glDrawTexsOES(GLshort x, GLshort y, GLshort z, GLshort width, GLshort height)
 {
-    return gl::DrawTexsOES(x, y, z, width, height);
+    EnsureLoaded();
+    return _glDrawTexsOES(x, y, z, width, height);
 }
 
 void GL_APIENTRY glDrawTexsvOES(const GLshort *coords)
 {
-    return gl::DrawTexsvOES(coords);
+    EnsureLoaded();
+    return _glDrawTexsvOES(coords);
 }
 
 void GL_APIENTRY glDrawTexxOES(GLfixed x, GLfixed y, GLfixed z, GLfixed width, GLfixed height)
 {
-    return gl::DrawTexxOES(x, y, z, width, height);
+    EnsureLoaded();
+    return _glDrawTexxOES(x, y, z, width, height);
 }
 
 void GL_APIENTRY glDrawTexxvOES(const GLfixed *coords)
 {
-    return gl::DrawTexxvOES(coords);
+    EnsureLoaded();
+    return _glDrawTexxvOES(coords);
 }
 
 // GL_OES_matrix_palette
 void GL_APIENTRY glCurrentPaletteMatrixOES(GLuint matrixpaletteindex)
 {
-    return gl::CurrentPaletteMatrixOES(matrixpaletteindex);
+    EnsureLoaded();
+    return _glCurrentPaletteMatrixOES(matrixpaletteindex);
 }
 
 void GL_APIENTRY glLoadPaletteFromModelViewMatrixOES()
 {
-    return gl::LoadPaletteFromModelViewMatrixOES();
+    EnsureLoaded();
+    return _glLoadPaletteFromModelViewMatrixOES();
 }
 
 void GL_APIENTRY glMatrixIndexPointerOES(GLint size,
@@ -845,24 +1031,28 @@ void GL_APIENTRY glMatrixIndexPointerOES(GLint size,
                                          GLsizei stride,
                                          const void *pointer)
 {
-    return gl::MatrixIndexPointerOES(size, type, stride, pointer);
+    EnsureLoaded();
+    return _glMatrixIndexPointerOES(size, type, stride, pointer);
 }
 
 void GL_APIENTRY glWeightPointerOES(GLint size, GLenum type, GLsizei stride, const void *pointer)
 {
-    return gl::WeightPointerOES(size, type, stride, pointer);
+    EnsureLoaded();
+    return _glWeightPointerOES(size, type, stride, pointer);
 }
 
 // GL_OES_point_size_array
 void GL_APIENTRY glPointSizePointerOES(GLenum type, GLsizei stride, const void *pointer)
 {
-    return gl::PointSizePointerOES(type, stride, pointer);
+    EnsureLoaded();
+    return _glPointSizePointerOES(type, stride, pointer);
 }
 
 // GL_OES_query_matrix
 GLbitfield GL_APIENTRY glQueryMatrixxOES(GLfixed *mantissa, GLint *exponent)
 {
-    return gl::QueryMatrixxOES(mantissa, exponent);
+    EnsureLoaded();
+    return _glQueryMatrixxOES(mantissa, exponent);
 }
 
 }  // extern "C"
