@@ -661,6 +661,7 @@ config("library_name_config") {
   defines = [
     "ANGLE_EGL_LIBRARY_NAME=\"libEGL${angle_libs_suffix}\"",
     "ANGLE_GLESV2_LIBRARY_NAME=\"libGLESv2${angle_libs_suffix}\"",
+    "ANGLE_GLESV1_CM_LIBRARY_NAME=\"libGLESv1_CM${angle_libs_suffix}\"",
   ]
 }
 
@@ -700,8 +701,8 @@ shared_library("libGLESv2${angle_libs_suffix}") {
     ":angle_gl_visibility_config",
     ":debug_annotations_config",
     ":extra_warnings",
-    ":gl_prototypes",
     ":internal_config",
+    ":no_gl_prototypes",
   ]
 
   defines = [ "LIBGLESV2_IMPLEMENTATION" ]
@@ -730,6 +731,7 @@ static_library("libGLESv2_static") {
     ":debug_annotations_config",
     ":extra_warnings",
     ":internal_config",
+    ":no_gl_prototypes",
   ]
 
   public_configs = [ ":angle_static" ]
@@ -740,6 +742,28 @@ static_library("libGLESv2_static") {
 
   public_deps = [
     ":libANGLE",
+  ]
+}
+
+config("libGLESv1_CM_gles_loader_config") {
+  defines = [ "ANGLE_USE_GLES1_CM_LOADER" ]
+}
+
+source_set("libGLESv1_CM_gles_loader") {
+  sources = [
+    "src/libGLESv1_CM/gles_loader_autogen.cpp",
+    "src/libGLESv1_CM/gles_loader_autogen.h",
+  ]
+
+  public_configs = [
+    ":extra_warnings",
+    ":gl_prototypes",
+    ":internal_config",
+    ":libGLESv1_CM_gles_loader_config",
+  ]
+
+  deps = [
+    ":includes",
   ]
 }
 
@@ -764,33 +788,19 @@ shared_library("libGLESv1_CM${angle_libs_suffix}") {
     ":angle_gl_visibility_config",
     ":debug_annotations_config",
     ":extra_warnings",
-    ":gl_prototypes",
     ":internal_config",
+    ":library_name_config",
   ]
 
-  defines = []
-
   deps = [
+    ":angle_system_utils",
+    ":angle_version",
     ":includes",
+    ":libGLESv1_CM_gles_loader",
+  ]
+
+  data_deps = [
     ":libGLESv2${angle_libs_suffix}",
-  ]
-}
-
-static_library("libGLESv1_CM_static") {
-  sources = libglesv1_cm_sources
-
-  configs -= angle_undefine_configs
-  configs += [
-    ":debug_annotations_config",
-    ":extra_warnings",
-    ":internal_config",
-  ]
-
-  public_configs = [ ":angle_static" ]
-
-  deps = [
-    ":includes",
-    ":libGLESv2_static",
   ]
 }
 
