@@ -6,14 +6,20 @@
 
 #include "test_utils/ANGLETest.h"
 
+// Must be included before d3d11.h.
+#if defined(FAR)
+#    undef FAR
+#endif
+
 #include <d3d11.h>
 #include <cstdint>
-#include "OSWindow.h"
-#include "com_utils.h"
+
+#include "util/OSWindow.h"
+#include "util/com_utils.h"
 
 using namespace angle;
 
-class EGLPresentPathD3D11 : public testing::TestWithParam<PlatformParameters>
+class EGLPresentPathD3D11 : public EGLTest, public testing::WithParamInterface<PlatformParameters>
 {
   protected:
     EGLPresentPathD3D11()
@@ -28,6 +34,8 @@ class EGLPresentPathD3D11 : public testing::TestWithParam<PlatformParameters>
 
     void SetUp() override
     {
+        EGLTest::SetUp();
+
         mOSWindow    = CreateOSWindow();
         mWindowWidth = 64;
         mOSWindow->initialize("EGLPresentPathD3D11", mWindowWidth, mWindowWidth);
@@ -36,15 +44,6 @@ class EGLPresentPathD3D11 : public testing::TestWithParam<PlatformParameters>
     void initializeEGL(bool usePresentPathFast)
     {
         int clientVersion = GetParam().majorVersion;
-
-        const char *extensionString =
-            static_cast<const char *>(eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS));
-        ASSERT_NE(nullptr, strstr(extensionString, "EGL_ANGLE_experimental_present_path"));
-
-        PFNEGLGETPLATFORMDISPLAYEXTPROC eglGetPlatformDisplayEXT =
-            reinterpret_cast<PFNEGLGETPLATFORMDISPLAYEXTPROC>(
-                eglGetProcAddress("eglGetPlatformDisplayEXT"));
-        ASSERT_NE(nullptr, eglGetPlatformDisplayEXT);
 
         // Set up EGL Display
         EGLint displayAttribs[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE,
