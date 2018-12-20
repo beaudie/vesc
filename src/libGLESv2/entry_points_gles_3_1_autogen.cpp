@@ -15,9 +15,10 @@
 #include "libGLESv2/entry_points_utils.h"
 #include "libGLESv2/global_state.h"
 
-namespace gl
-{
-void GL_APIENTRY ActiveShaderProgram(GLuint pipeline, GLuint program)
+using namespace gl;
+
+extern "C" {
+void GL_APIENTRY glActiveShaderProgram(GLuint pipeline, GLuint program)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint pipeline = %u, GLuint program = %u)", pipeline, program);
@@ -32,13 +33,13 @@ void GL_APIENTRY ActiveShaderProgram(GLuint pipeline, GLuint program)
     }
 }
 
-void GL_APIENTRY BindImageTexture(GLuint unit,
-                                  GLuint texture,
-                                  GLint level,
-                                  GLboolean layered,
-                                  GLint layer,
-                                  GLenum access,
-                                  GLenum format)
+void GL_APIENTRY glBindImageTexture(GLuint unit,
+                                    GLuint texture,
+                                    GLint level,
+                                    GLboolean layered,
+                                    GLint layer,
+                                    GLenum access,
+                                    GLenum format)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -57,7 +58,7 @@ void GL_APIENTRY BindImageTexture(GLuint unit,
     }
 }
 
-void GL_APIENTRY BindProgramPipeline(GLuint pipeline)
+void GL_APIENTRY glBindProgramPipeline(GLuint pipeline)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint pipeline = %u)", pipeline);
@@ -72,10 +73,10 @@ void GL_APIENTRY BindProgramPipeline(GLuint pipeline)
     }
 }
 
-void GL_APIENTRY BindVertexBuffer(GLuint bindingindex,
-                                  GLuint buffer,
-                                  GLintptr offset,
-                                  GLsizei stride)
+void GL_APIENTRY glBindVertexBuffer(GLuint bindingindex,
+                                    GLuint buffer,
+                                    GLintptr offset,
+                                    GLsizei stride)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -94,7 +95,7 @@ void GL_APIENTRY BindVertexBuffer(GLuint bindingindex,
     }
 }
 
-GLuint GL_APIENTRY CreateShaderProgramv(GLenum type, GLsizei count, const GLchar *const *strings)
+GLuint GL_APIENTRY glCreateShaderProgramv(GLenum type, GLsizei count, const GLchar *const *strings)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLenum type = 0x%X, GLsizei count = %d, const GLchar *const*strings = 0x%016" PRIxPTR
@@ -115,7 +116,7 @@ GLuint GL_APIENTRY CreateShaderProgramv(GLenum type, GLsizei count, const GLchar
     return GetDefaultReturnValue<EntryPoint::CreateShaderProgramv, GLuint>();
 }
 
-void GL_APIENTRY DeleteProgramPipelines(GLsizei n, const GLuint *pipelines)
+void GL_APIENTRY glDeleteProgramPipelines(GLsizei n, const GLuint *pipelines)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLsizei n = %d, const GLuint *pipelines = 0x%016" PRIxPTR ")", n, (uintptr_t)pipelines);
@@ -130,7 +131,7 @@ void GL_APIENTRY DeleteProgramPipelines(GLsizei n, const GLuint *pipelines)
     }
 }
 
-void GL_APIENTRY DispatchCompute(GLuint num_groups_x, GLuint num_groups_y, GLuint num_groups_z)
+void GL_APIENTRY glDispatchCompute(GLuint num_groups_x, GLuint num_groups_y, GLuint num_groups_z)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint num_groups_x = %u, GLuint num_groups_y = %u, GLuint num_groups_z = %u)",
@@ -147,7 +148,7 @@ void GL_APIENTRY DispatchCompute(GLuint num_groups_x, GLuint num_groups_y, GLuin
     }
 }
 
-void GL_APIENTRY DispatchComputeIndirect(GLintptr indirect)
+void GL_APIENTRY glDispatchComputeIndirect(GLintptr indirect)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLintptr indirect = %llu)", static_cast<unsigned long long>(indirect));
@@ -162,7 +163,7 @@ void GL_APIENTRY DispatchComputeIndirect(GLintptr indirect)
     }
 }
 
-void GL_APIENTRY DrawArraysIndirect(GLenum mode, const void *indirect)
+void GL_APIENTRY glDrawArraysIndirect(GLenum mode, const void *indirect)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLenum mode = 0x%X, const void *indirect = 0x%016" PRIxPTR ")", mode,
@@ -179,7 +180,7 @@ void GL_APIENTRY DrawArraysIndirect(GLenum mode, const void *indirect)
     }
 }
 
-void GL_APIENTRY DrawElementsIndirect(GLenum mode, GLenum type, const void *indirect)
+void GL_APIENTRY glDrawElementsIndirect(GLenum mode, GLenum type, const void *indirect)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLenum mode = 0x%X, GLenum type = 0x%X, const void *indirect = 0x%016" PRIxPTR ")",
@@ -198,7 +199,7 @@ void GL_APIENTRY DrawElementsIndirect(GLenum mode, GLenum type, const void *indi
     }
 }
 
-void GL_APIENTRY FramebufferParameteri(GLenum target, GLenum pname, GLint param)
+void GL_APIENTRY glFramebufferParameteri(GLenum target, GLenum pname, GLint param)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint param = %d)", target, pname, param);
@@ -214,7 +215,7 @@ void GL_APIENTRY FramebufferParameteri(GLenum target, GLenum pname, GLint param)
     }
 }
 
-void GL_APIENTRY GenProgramPipelines(GLsizei n, GLuint *pipelines)
+void GL_APIENTRY glGenProgramPipelines(GLsizei n, GLuint *pipelines)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLsizei n = %d, GLuint *pipelines = 0x%016" PRIxPTR ")", n, (uintptr_t)pipelines);
@@ -229,7 +230,7 @@ void GL_APIENTRY GenProgramPipelines(GLsizei n, GLuint *pipelines)
     }
 }
 
-void GL_APIENTRY GetBooleani_v(GLenum target, GLuint index, GLboolean *data)
+void GL_APIENTRY glGetBooleani_v(GLenum target, GLuint index, GLboolean *data)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLenum target = 0x%X, GLuint index = %u, GLboolean *data = 0x%016" PRIxPTR ")", target,
@@ -245,7 +246,7 @@ void GL_APIENTRY GetBooleani_v(GLenum target, GLuint index, GLboolean *data)
     }
 }
 
-void GL_APIENTRY GetFramebufferParameteriv(GLenum target, GLenum pname, GLint *params)
+void GL_APIENTRY glGetFramebufferParameteriv(GLenum target, GLenum pname, GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", target,
@@ -262,7 +263,7 @@ void GL_APIENTRY GetFramebufferParameteriv(GLenum target, GLenum pname, GLint *p
     }
 }
 
-void GL_APIENTRY GetMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
+void GL_APIENTRY glGetMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLenum pname = 0x%X, GLuint index = %u, GLfloat *val = 0x%016" PRIxPTR ")", pname,
@@ -278,10 +279,10 @@ void GL_APIENTRY GetMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
     }
 }
 
-void GL_APIENTRY GetProgramInterfaceiv(GLuint program,
-                                       GLenum programInterface,
-                                       GLenum pname,
-                                       GLint *params)
+void GL_APIENTRY glGetProgramInterfaceiv(GLuint program,
+                                         GLenum programInterface,
+                                         GLenum pname,
+                                         GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -300,10 +301,10 @@ void GL_APIENTRY GetProgramInterfaceiv(GLuint program,
     }
 }
 
-void GL_APIENTRY GetProgramPipelineInfoLog(GLuint pipeline,
-                                           GLsizei bufSize,
-                                           GLsizei *length,
-                                           GLchar *infoLog)
+void GL_APIENTRY glGetProgramPipelineInfoLog(GLuint pipeline,
+                                             GLsizei bufSize,
+                                             GLsizei *length,
+                                             GLchar *infoLog)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint pipeline = %u, GLsizei bufSize = %d, GLsizei *length = 0x%016" PRIxPTR
@@ -321,7 +322,7 @@ void GL_APIENTRY GetProgramPipelineInfoLog(GLuint pipeline,
     }
 }
 
-void GL_APIENTRY GetProgramPipelineiv(GLuint pipeline, GLenum pname, GLint *params)
+void GL_APIENTRY glGetProgramPipelineiv(GLuint pipeline, GLenum pname, GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint pipeline = %u, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")",
@@ -338,9 +339,9 @@ void GL_APIENTRY GetProgramPipelineiv(GLuint pipeline, GLenum pname, GLint *para
     }
 }
 
-GLuint GL_APIENTRY GetProgramResourceIndex(GLuint program,
-                                           GLenum programInterface,
-                                           const GLchar *name)
+GLuint GL_APIENTRY glGetProgramResourceIndex(GLuint program,
+                                             GLenum programInterface,
+                                             const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -361,9 +362,9 @@ GLuint GL_APIENTRY GetProgramResourceIndex(GLuint program,
     return GetDefaultReturnValue<EntryPoint::GetProgramResourceIndex, GLuint>();
 }
 
-GLint GL_APIENTRY GetProgramResourceLocation(GLuint program,
-                                             GLenum programInterface,
-                                             const GLchar *name)
+GLint GL_APIENTRY glGetProgramResourceLocation(GLuint program,
+                                               GLenum programInterface,
+                                               const GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -384,12 +385,12 @@ GLint GL_APIENTRY GetProgramResourceLocation(GLuint program,
     return GetDefaultReturnValue<EntryPoint::GetProgramResourceLocation, GLint>();
 }
 
-void GL_APIENTRY GetProgramResourceName(GLuint program,
-                                        GLenum programInterface,
-                                        GLuint index,
-                                        GLsizei bufSize,
-                                        GLsizei *length,
-                                        GLchar *name)
+void GL_APIENTRY glGetProgramResourceName(GLuint program,
+                                          GLenum programInterface,
+                                          GLuint index,
+                                          GLsizei bufSize,
+                                          GLsizei *length,
+                                          GLchar *name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -410,14 +411,14 @@ void GL_APIENTRY GetProgramResourceName(GLuint program,
     }
 }
 
-void GL_APIENTRY GetProgramResourceiv(GLuint program,
-                                      GLenum programInterface,
-                                      GLuint index,
-                                      GLsizei propCount,
-                                      const GLenum *props,
-                                      GLsizei bufSize,
-                                      GLsizei *length,
-                                      GLint *params)
+void GL_APIENTRY glGetProgramResourceiv(GLuint program,
+                                        GLenum programInterface,
+                                        GLuint index,
+                                        GLsizei propCount,
+                                        const GLenum *props,
+                                        GLsizei bufSize,
+                                        GLsizei *length,
+                                        GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -441,7 +442,7 @@ void GL_APIENTRY GetProgramResourceiv(GLuint program,
     }
 }
 
-void GL_APIENTRY GetTexLevelParameterfv(GLenum target, GLint level, GLenum pname, GLfloat *params)
+void GL_APIENTRY glGetTexLevelParameterfv(GLenum target, GLint level, GLenum pname, GLfloat *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -461,7 +462,7 @@ void GL_APIENTRY GetTexLevelParameterfv(GLenum target, GLint level, GLenum pname
     }
 }
 
-void GL_APIENTRY GetTexLevelParameteriv(GLenum target, GLint level, GLenum pname, GLint *params)
+void GL_APIENTRY glGetTexLevelParameteriv(GLenum target, GLint level, GLenum pname, GLint *params)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -481,7 +482,7 @@ void GL_APIENTRY GetTexLevelParameteriv(GLenum target, GLint level, GLenum pname
     }
 }
 
-GLboolean GL_APIENTRY IsProgramPipeline(GLuint pipeline)
+GLboolean GL_APIENTRY glIsProgramPipeline(GLuint pipeline)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint pipeline = %u)", pipeline);
@@ -498,7 +499,7 @@ GLboolean GL_APIENTRY IsProgramPipeline(GLuint pipeline)
     return GetDefaultReturnValue<EntryPoint::IsProgramPipeline, GLboolean>();
 }
 
-void GL_APIENTRY MemoryBarrier(GLbitfield barriers)
+void GL_APIENTRY glMemoryBarrier(GLbitfield barriers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLbitfield barriers = 0x%X)", barriers);
@@ -513,7 +514,7 @@ void GL_APIENTRY MemoryBarrier(GLbitfield barriers)
     }
 }
 
-void GL_APIENTRY MemoryBarrierByRegion(GLbitfield barriers)
+void GL_APIENTRY glMemoryBarrierByRegion(GLbitfield barriers)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLbitfield barriers = 0x%X)", barriers);
@@ -528,7 +529,7 @@ void GL_APIENTRY MemoryBarrierByRegion(GLbitfield barriers)
     }
 }
 
-void GL_APIENTRY ProgramUniform1f(GLuint program, GLint location, GLfloat v0)
+void GL_APIENTRY glProgramUniform1f(GLuint program, GLint location, GLfloat v0)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint program = %u, GLint location = %d, GLfloat v0 = %f)", program, location, v0);
@@ -543,10 +544,10 @@ void GL_APIENTRY ProgramUniform1f(GLuint program, GLint location, GLfloat v0)
     }
 }
 
-void GL_APIENTRY ProgramUniform1fv(GLuint program,
-                                   GLint location,
-                                   GLsizei count,
-                                   const GLfloat *value)
+void GL_APIENTRY glProgramUniform1fv(GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -565,7 +566,7 @@ void GL_APIENTRY ProgramUniform1fv(GLuint program,
     }
 }
 
-void GL_APIENTRY ProgramUniform1i(GLuint program, GLint location, GLint v0)
+void GL_APIENTRY glProgramUniform1i(GLuint program, GLint location, GLint v0)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint program = %u, GLint location = %d, GLint v0 = %d)", program, location, v0);
@@ -580,10 +581,10 @@ void GL_APIENTRY ProgramUniform1i(GLuint program, GLint location, GLint v0)
     }
 }
 
-void GL_APIENTRY ProgramUniform1iv(GLuint program,
-                                   GLint location,
-                                   GLsizei count,
-                                   const GLint *value)
+void GL_APIENTRY glProgramUniform1iv(GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     const GLint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -602,7 +603,7 @@ void GL_APIENTRY ProgramUniform1iv(GLuint program,
     }
 }
 
-void GL_APIENTRY ProgramUniform1ui(GLuint program, GLint location, GLuint v0)
+void GL_APIENTRY glProgramUniform1ui(GLuint program, GLint location, GLuint v0)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint program = %u, GLint location = %d, GLuint v0 = %u)", program, location, v0);
@@ -617,10 +618,10 @@ void GL_APIENTRY ProgramUniform1ui(GLuint program, GLint location, GLuint v0)
     }
 }
 
-void GL_APIENTRY ProgramUniform1uiv(GLuint program,
-                                    GLint location,
-                                    GLsizei count,
-                                    const GLuint *value)
+void GL_APIENTRY glProgramUniform1uiv(GLuint program,
+                                      GLint location,
+                                      GLsizei count,
+                                      const GLuint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -639,7 +640,7 @@ void GL_APIENTRY ProgramUniform1uiv(GLuint program,
     }
 }
 
-void GL_APIENTRY ProgramUniform2f(GLuint program, GLint location, GLfloat v0, GLfloat v1)
+void GL_APIENTRY glProgramUniform2f(GLuint program, GLint location, GLfloat v0, GLfloat v1)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint program = %u, GLint location = %d, GLfloat v0 = %f, GLfloat v1 = %f)", program,
@@ -656,10 +657,10 @@ void GL_APIENTRY ProgramUniform2f(GLuint program, GLint location, GLfloat v0, GL
     }
 }
 
-void GL_APIENTRY ProgramUniform2fv(GLuint program,
-                                   GLint location,
-                                   GLsizei count,
-                                   const GLfloat *value)
+void GL_APIENTRY glProgramUniform2fv(GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -678,7 +679,7 @@ void GL_APIENTRY ProgramUniform2fv(GLuint program,
     }
 }
 
-void GL_APIENTRY ProgramUniform2i(GLuint program, GLint location, GLint v0, GLint v1)
+void GL_APIENTRY glProgramUniform2i(GLuint program, GLint location, GLint v0, GLint v1)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint program = %u, GLint location = %d, GLint v0 = %d, GLint v1 = %d)", program,
@@ -695,10 +696,10 @@ void GL_APIENTRY ProgramUniform2i(GLuint program, GLint location, GLint v0, GLin
     }
 }
 
-void GL_APIENTRY ProgramUniform2iv(GLuint program,
-                                   GLint location,
-                                   GLsizei count,
-                                   const GLint *value)
+void GL_APIENTRY glProgramUniform2iv(GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     const GLint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -717,7 +718,7 @@ void GL_APIENTRY ProgramUniform2iv(GLuint program,
     }
 }
 
-void GL_APIENTRY ProgramUniform2ui(GLuint program, GLint location, GLuint v0, GLuint v1)
+void GL_APIENTRY glProgramUniform2ui(GLuint program, GLint location, GLuint v0, GLuint v1)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint program = %u, GLint location = %d, GLuint v0 = %u, GLuint v1 = %u)", program,
@@ -734,10 +735,10 @@ void GL_APIENTRY ProgramUniform2ui(GLuint program, GLint location, GLuint v0, GL
     }
 }
 
-void GL_APIENTRY ProgramUniform2uiv(GLuint program,
-                                    GLint location,
-                                    GLsizei count,
-                                    const GLuint *value)
+void GL_APIENTRY glProgramUniform2uiv(GLuint program,
+                                      GLint location,
+                                      GLsizei count,
+                                      const GLuint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -757,7 +758,7 @@ void GL_APIENTRY ProgramUniform2uiv(GLuint program,
 }
 
 void GL_APIENTRY
-ProgramUniform3f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2)
+glProgramUniform3f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -776,10 +777,10 @@ ProgramUniform3f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat
     }
 }
 
-void GL_APIENTRY ProgramUniform3fv(GLuint program,
-                                   GLint location,
-                                   GLsizei count,
-                                   const GLfloat *value)
+void GL_APIENTRY glProgramUniform3fv(GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -798,7 +799,7 @@ void GL_APIENTRY ProgramUniform3fv(GLuint program,
     }
 }
 
-void GL_APIENTRY ProgramUniform3i(GLuint program, GLint location, GLint v0, GLint v1, GLint v2)
+void GL_APIENTRY glProgramUniform3i(GLuint program, GLint location, GLint v0, GLint v1, GLint v2)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint program = %u, GLint location = %d, GLint v0 = %d, GLint v1 = %d, GLint v2 = %d)",
@@ -815,10 +816,10 @@ void GL_APIENTRY ProgramUniform3i(GLuint program, GLint location, GLint v0, GLin
     }
 }
 
-void GL_APIENTRY ProgramUniform3iv(GLuint program,
-                                   GLint location,
-                                   GLsizei count,
-                                   const GLint *value)
+void GL_APIENTRY glProgramUniform3iv(GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     const GLint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -837,7 +838,8 @@ void GL_APIENTRY ProgramUniform3iv(GLuint program,
     }
 }
 
-void GL_APIENTRY ProgramUniform3ui(GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2)
+void GL_APIENTRY
+glProgramUniform3ui(GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -856,10 +858,10 @@ void GL_APIENTRY ProgramUniform3ui(GLuint program, GLint location, GLuint v0, GL
     }
 }
 
-void GL_APIENTRY ProgramUniform3uiv(GLuint program,
-                                    GLint location,
-                                    GLsizei count,
-                                    const GLuint *value)
+void GL_APIENTRY glProgramUniform3uiv(GLuint program,
+                                      GLint location,
+                                      GLsizei count,
+                                      const GLuint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -879,7 +881,7 @@ void GL_APIENTRY ProgramUniform3uiv(GLuint program,
 }
 
 void GL_APIENTRY
-ProgramUniform4f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
+glProgramUniform4f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -898,10 +900,10 @@ ProgramUniform4f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat
     }
 }
 
-void GL_APIENTRY ProgramUniform4fv(GLuint program,
-                                   GLint location,
-                                   GLsizei count,
-                                   const GLfloat *value)
+void GL_APIENTRY glProgramUniform4fv(GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -921,7 +923,7 @@ void GL_APIENTRY ProgramUniform4fv(GLuint program,
 }
 
 void GL_APIENTRY
-ProgramUniform4i(GLuint program, GLint location, GLint v0, GLint v1, GLint v2, GLint v3)
+glProgramUniform4i(GLuint program, GLint location, GLint v0, GLint v1, GLint v2, GLint v3)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -940,10 +942,10 @@ ProgramUniform4i(GLuint program, GLint location, GLint v0, GLint v1, GLint v2, G
     }
 }
 
-void GL_APIENTRY ProgramUniform4iv(GLuint program,
-                                   GLint location,
-                                   GLsizei count,
-                                   const GLint *value)
+void GL_APIENTRY glProgramUniform4iv(GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     const GLint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -963,7 +965,7 @@ void GL_APIENTRY ProgramUniform4iv(GLuint program,
 }
 
 void GL_APIENTRY
-ProgramUniform4ui(GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3)
+glProgramUniform4ui(GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -982,10 +984,10 @@ ProgramUniform4ui(GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v
     }
 }
 
-void GL_APIENTRY ProgramUniform4uiv(GLuint program,
-                                    GLint location,
-                                    GLsizei count,
-                                    const GLuint *value)
+void GL_APIENTRY glProgramUniform4uiv(GLuint program,
+                                      GLint location,
+                                      GLsizei count,
+                                      const GLuint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -1004,11 +1006,11 @@ void GL_APIENTRY ProgramUniform4uiv(GLuint program,
     }
 }
 
-void GL_APIENTRY ProgramUniformMatrix2fv(GLuint program,
-                                         GLint location,
-                                         GLsizei count,
-                                         GLboolean transpose,
-                                         const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix2fv(GLuint program,
+                                           GLint location,
+                                           GLsizei count,
+                                           GLboolean transpose,
+                                           const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -1027,11 +1029,11 @@ void GL_APIENTRY ProgramUniformMatrix2fv(GLuint program,
     }
 }
 
-void GL_APIENTRY ProgramUniformMatrix2x3fv(GLuint program,
-                                           GLint location,
-                                           GLsizei count,
-                                           GLboolean transpose,
-                                           const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix2x3fv(GLuint program,
+                                             GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -1050,11 +1052,11 @@ void GL_APIENTRY ProgramUniformMatrix2x3fv(GLuint program,
     }
 }
 
-void GL_APIENTRY ProgramUniformMatrix2x4fv(GLuint program,
-                                           GLint location,
-                                           GLsizei count,
-                                           GLboolean transpose,
-                                           const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix2x4fv(GLuint program,
+                                             GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -1073,11 +1075,11 @@ void GL_APIENTRY ProgramUniformMatrix2x4fv(GLuint program,
     }
 }
 
-void GL_APIENTRY ProgramUniformMatrix3fv(GLuint program,
-                                         GLint location,
-                                         GLsizei count,
-                                         GLboolean transpose,
-                                         const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix3fv(GLuint program,
+                                           GLint location,
+                                           GLsizei count,
+                                           GLboolean transpose,
+                                           const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -1096,11 +1098,11 @@ void GL_APIENTRY ProgramUniformMatrix3fv(GLuint program,
     }
 }
 
-void GL_APIENTRY ProgramUniformMatrix3x2fv(GLuint program,
-                                           GLint location,
-                                           GLsizei count,
-                                           GLboolean transpose,
-                                           const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix3x2fv(GLuint program,
+                                             GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -1119,11 +1121,11 @@ void GL_APIENTRY ProgramUniformMatrix3x2fv(GLuint program,
     }
 }
 
-void GL_APIENTRY ProgramUniformMatrix3x4fv(GLuint program,
-                                           GLint location,
-                                           GLsizei count,
-                                           GLboolean transpose,
-                                           const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix3x4fv(GLuint program,
+                                             GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -1142,11 +1144,11 @@ void GL_APIENTRY ProgramUniformMatrix3x4fv(GLuint program,
     }
 }
 
-void GL_APIENTRY ProgramUniformMatrix4fv(GLuint program,
-                                         GLint location,
-                                         GLsizei count,
-                                         GLboolean transpose,
-                                         const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix4fv(GLuint program,
+                                           GLint location,
+                                           GLsizei count,
+                                           GLboolean transpose,
+                                           const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -1165,11 +1167,11 @@ void GL_APIENTRY ProgramUniformMatrix4fv(GLuint program,
     }
 }
 
-void GL_APIENTRY ProgramUniformMatrix4x2fv(GLuint program,
-                                           GLint location,
-                                           GLsizei count,
-                                           GLboolean transpose,
-                                           const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix4x2fv(GLuint program,
+                                             GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -1188,11 +1190,11 @@ void GL_APIENTRY ProgramUniformMatrix4x2fv(GLuint program,
     }
 }
 
-void GL_APIENTRY ProgramUniformMatrix4x3fv(GLuint program,
-                                           GLint location,
-                                           GLsizei count,
-                                           GLboolean transpose,
-                                           const GLfloat *value)
+void GL_APIENTRY glProgramUniformMatrix4x3fv(GLuint program,
+                                             GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -1211,7 +1213,7 @@ void GL_APIENTRY ProgramUniformMatrix4x3fv(GLuint program,
     }
 }
 
-void GL_APIENTRY SampleMaski(GLuint maskNumber, GLbitfield mask)
+void GL_APIENTRY glSampleMaski(GLuint maskNumber, GLbitfield mask)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint maskNumber = %u, GLbitfield mask = 0x%X)", maskNumber, mask);
@@ -1226,12 +1228,12 @@ void GL_APIENTRY SampleMaski(GLuint maskNumber, GLbitfield mask)
     }
 }
 
-void GL_APIENTRY TexStorage2DMultisample(GLenum target,
-                                         GLsizei samples,
-                                         GLenum internalformat,
-                                         GLsizei width,
-                                         GLsizei height,
-                                         GLboolean fixedsamplelocations)
+void GL_APIENTRY glTexStorage2DMultisample(GLenum target,
+                                           GLsizei samples,
+                                           GLenum internalformat,
+                                           GLsizei width,
+                                           GLsizei height,
+                                           GLboolean fixedsamplelocations)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -1253,7 +1255,7 @@ void GL_APIENTRY TexStorage2DMultisample(GLenum target,
     }
 }
 
-void GL_APIENTRY UseProgramStages(GLuint pipeline, GLbitfield stages, GLuint program)
+void GL_APIENTRY glUseProgramStages(GLuint pipeline, GLbitfield stages, GLuint program)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint pipeline = %u, GLbitfield stages = 0x%X, GLuint program = %u)", pipeline, stages,
@@ -1270,7 +1272,7 @@ void GL_APIENTRY UseProgramStages(GLuint pipeline, GLbitfield stages, GLuint pro
     }
 }
 
-void GL_APIENTRY ValidateProgramPipeline(GLuint pipeline)
+void GL_APIENTRY glValidateProgramPipeline(GLuint pipeline)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint pipeline = %u)", pipeline);
@@ -1285,7 +1287,7 @@ void GL_APIENTRY ValidateProgramPipeline(GLuint pipeline)
     }
 }
 
-void GL_APIENTRY VertexAttribBinding(GLuint attribindex, GLuint bindingindex)
+void GL_APIENTRY glVertexAttribBinding(GLuint attribindex, GLuint bindingindex)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint attribindex = %u, GLuint bindingindex = %u)", attribindex, bindingindex);
@@ -1301,11 +1303,11 @@ void GL_APIENTRY VertexAttribBinding(GLuint attribindex, GLuint bindingindex)
     }
 }
 
-void GL_APIENTRY VertexAttribFormat(GLuint attribindex,
-                                    GLint size,
-                                    GLenum type,
-                                    GLboolean normalized,
-                                    GLuint relativeoffset)
+void GL_APIENTRY glVertexAttribFormat(GLuint attribindex,
+                                      GLint size,
+                                      GLenum type,
+                                      GLboolean normalized,
+                                      GLuint relativeoffset)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -1325,10 +1327,10 @@ void GL_APIENTRY VertexAttribFormat(GLuint attribindex,
     }
 }
 
-void GL_APIENTRY VertexAttribIFormat(GLuint attribindex,
-                                     GLint size,
-                                     GLenum type,
-                                     GLuint relativeoffset)
+void GL_APIENTRY glVertexAttribIFormat(GLuint attribindex,
+                                       GLint size,
+                                       GLenum type,
+                                       GLuint relativeoffset)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT(
@@ -1347,7 +1349,7 @@ void GL_APIENTRY VertexAttribIFormat(GLuint attribindex,
     }
 }
 
-void GL_APIENTRY VertexBindingDivisor(GLuint bindingindex, GLuint divisor)
+void GL_APIENTRY glVertexBindingDivisor(GLuint bindingindex, GLuint divisor)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(GLuint bindingindex = %u, GLuint divisor = %u)", bindingindex, divisor);
@@ -1362,4 +1364,4 @@ void GL_APIENTRY VertexBindingDivisor(GLuint bindingindex, GLuint divisor)
         }
     }
 }
-}  // namespace gl
+}  // extern "C"
