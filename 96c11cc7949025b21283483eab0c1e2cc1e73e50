@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00469882_5af8269b",
+        "filename": "src/common/matrix_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-20T18:13:27Z",
+      "side": 0,
+      "message": "this was bad.",
+      "range": {
+        "startLine": 135,
+        "startChar": 38,
+        "endLine": 136,
+        "endChar": 46
+      },
+      "revId": "96c11cc7949025b21283483eab0c1e2cc1e73e50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
