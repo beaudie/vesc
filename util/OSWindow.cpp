@@ -326,3 +326,8 @@ bool OSWindow::didTestEventFire()
 
     return false;
 }
+
+void FreeOSWindow(OSWindow *window)
+{
+    delete window;
+}
