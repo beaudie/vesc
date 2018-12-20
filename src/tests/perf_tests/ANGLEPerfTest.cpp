@@ -23,6 +23,21 @@
 
 namespace
 {
+// Workaround http://crbug.com/915429
+#if defined(ANGLE_PLATFORM_ANDROID)
+extern "C" {
+void __cxa_pure_virtual(void) {
+    ERR() << "Pure virtual function called!";
+    abort();
+}
+
+void __cxa_deleted_virtual(void) {
+    ERR() << "Deleted virtual function called!";
+    abort();
+}
+} // extern "C"
+#endif // defined(ANGLE_PLATFORM_ANDROID)
+
 constexpr size_t kInitialTraceEventBufferSize = 50000;
 constexpr double kMicroSecondsPerSecond       = 1e6;
 constexpr double kNanoSecondsPerSecond        = 1e9;
