@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f9160d72_b7e3ab4a",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5062,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-20T18:03:31Z",
+      "side": 1,
+      "message": "What is \"constant folding\"? Google says \"Constant folding is the process of recognizing and evaluating constant expressions at compile time rather than computing them at runtime\", but I don\u0027t see how it applies here.",
+      "range": {
+        "startLine": 5062,
+        "startChar": 9,
+        "endLine": 5062,
+        "endChar": 25
+      },
+      "revId": "1126da975550bcd3bbb34717a5aa07088b3c3978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

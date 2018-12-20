@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5bca86c_d6aedba0",
+        "filename": "src/common/matrix_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-20T18:03:31Z",
+      "side": 1,
+      "message": "I understand this part, but not why the other changes were needed.",
+      "range": {
+        "startLine": 140,
+        "startChar": 56,
+        "endLine": 140,
+        "endChar": 73
+      },
+      "revId": "63af1e218a78e30f233cc5b251610256a559014f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cac81b56_0b74e7d7",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5076,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-20T18:03:31Z",
+      "side": 1,
+      "message": "Wouldn\u0027t this be (4.0, 4.0)? Is that OK?",
+      "range": {
+        "startLine": 5076,
+        "startChar": 9,
+        "endLine": 5076,
+        "endChar": 16
+      },
+      "revId": "63af1e218a78e30f233cc5b251610256a559014f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
