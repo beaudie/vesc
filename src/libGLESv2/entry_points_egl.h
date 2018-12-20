@@ -9,9 +9,9 @@
 #ifndef LIBGLESV2_ENTRYPOINTS_EGL_H_
 #define LIBGLESV2_ENTRYPOINTS_EGL_H_
 
-#if defined(EGL_EGL_PROTOTYPES)
-#error EGL functions would be multiple defined.
-#endif  // defined(EGL_EGL_PROTOTYPES)
+#if defined(EGL_EGL_PROTOTYPES) && EGL_EGL_PROTOTYPES
+#    error EGL functions would be multiple defined.
+#endif  // defined(EGL_EGL_PROTOTYPES) && EGL_EGL_PROTOTYPES
 
 #include <EGL/egl.h>
 #include <export.h>
