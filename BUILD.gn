@@ -441,7 +441,6 @@ source_set("angle_version") {
   ]
 }
 
-
 config("libANGLE_config") {
   cflags = []
   defines = []
@@ -806,7 +805,7 @@ source_set("libEGL_egl_loader") {
   ]
 }
 
-if (is_android && symbol_level != 0) {
+if (!is_component_build && is_android && symbol_level != 0) {
   action_foreach("compressed_symbols") {
     sources = [
       "${root_out_dir}/libEGL${angle_libs_suffix}.so",
@@ -1077,7 +1076,8 @@ shared_library("libfeature_support${angle_libs_suffix}") {
   ]
 }
 
-if (is_android && current_toolchain == default_toolchain) {
+if (!is_component_build && is_android &&
+    current_toolchain == default_toolchain) {
   # Package ANGLE libraries for pre-installed system image
   angle_apk("aosp_apk") {
     package_name = "com.android.angle"
