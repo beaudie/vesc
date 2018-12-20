@@ -151,7 +151,7 @@ TEST_P(EGLX11VisualHintTest, ValidVisualIDAndClear)
     eglDestroyContext(display, context);
     ASSERT_EGL_SUCCESS();
 
-    SafeDelete(osWindow);
+    FreeOSWindow(osWindow);
 
     eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
     eglTerminate(display);
@@ -175,7 +175,7 @@ TEST_P(EGLX11VisualHintTest, InvalidWindowVisualID)
         ASSERT_NE(0, XGetWindowAttributes(mDisplay, xWindow, &windowAttributes));
         visualId = windowAttributes.visual->visualid;
 
-        SafeDelete(osWindow);
+        FreeOSWindow(osWindow);
     }
 
     auto attributes = getDisplayAttributes(visualId);
@@ -205,7 +205,7 @@ TEST_P(EGLX11VisualHintTest, InvalidWindowVisualID)
     ASSERT_EQ(EGL_NO_SURFACE, window);
     ASSERT_EGL_ERROR(EGL_BAD_MATCH);
 
-    SafeDelete(osWindow);
+    FreeOSWindow(osWindow);
 }
 
 ANGLE_INSTANTIATE_TEST(EGLX11VisualHintTest, ES2_OPENGL());
