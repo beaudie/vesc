@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad4961d6_3eca77c1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-20T20:37:32Z",
+      "side": 1,
+      "message": "can also tag Coutney\u0027s bug (2968) if you do the 1.1 check",
+      "revId": "d5cffb0bb5c04921ff5d7db84f61dadfbd78789b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "596cd565_e1973c7c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-20T20:37:32Z",
+      "side": 1,
+      "message": "probably we should make this || version \u003e\u003d VK_MAKE_VERSION(1, 1, 0)) and call it a day.",
+      "range": {
+        "startLine": 798,
+        "startChar": 5,
+        "endLine": 798,
+        "endChar": 81
+      },
+      "revId": "d5cffb0bb5c04921ff5d7db84f61dadfbd78789b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
