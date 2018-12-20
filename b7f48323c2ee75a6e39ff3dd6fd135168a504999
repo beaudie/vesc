@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "ca94d84f_11c0b677",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-20T15:24:18Z",
+      "side": 1,
+      "message": "I\u0027ll do this in a follow-on CL, right after this one.",
+      "parentUuid": "ff460f05_197c81fc",
+      "range": {
+        "startLine": 596,
+        "startChar": 8,
+        "endLine": 596,
+        "endChar": 76
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98224c43_4687dbb4",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
@@ -355,6 +379,30 @@
       "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "749b24ce_78a5b257",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-20T15:24:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04591df8_d2416d03",
+      "range": {
+        "startLine": 244,
+        "startChar": 9,
+        "endLine": 244,
+        "endChar": 37
+      },
+      "revId": "b7f48323c2ee75a6e39ff3dd6fd135168a504999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
