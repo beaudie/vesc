@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "589a0cb5_60f6acf5",
+        "filename": "src/common/uniform_type_info_autogen.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-21T18:13:30Z",
+      "side": 1,
+      "message": "Wanted to double-check, is this float?",
+      "range": {
+        "startLine": 110,
+        "startChar": 6,
+        "endLine": 110,
+        "endChar": 30
+      },
+      "revId": "613113655d8315a2990443ecf64a5e526bd91a85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "735fec49_28243a98",
+        "filename": "src/common/uniform_type_info_autogen.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-21T18:13:30Z",
+      "side": 1,
+      "message": "And this?",
+      "range": {
+        "startLine": 120,
+        "startChar": 6,
+        "endLine": 120,
+        "endChar": 29
+      },
+      "revId": "613113655d8315a2990443ecf64a5e526bd91a85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
