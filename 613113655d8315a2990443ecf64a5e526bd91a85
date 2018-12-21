@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "52e3ac06_c88fb412",
+        "filename": "src/common/uniform_type_info_autogen.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2018-12-21T20:05:44Z",
+      "side": 1,
+      "message": "Yes. There is also GL[_UNSIGNED]_INT_SAMPLER_2D_RECT in desktop GL but not ES.",
+      "parentUuid": "589a0cb5_60f6acf5",
+      "range": {
+        "startLine": 110,
+        "startChar": 6,
+        "endLine": 110,
+        "endChar": 30
+      },
+      "revId": "613113655d8315a2990443ecf64a5e526bd91a85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "735fec49_28243a98",
         "filename": "src/common/uniform_type_info_autogen.cpp",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2018-12-21T18:13:30Z",
       "side": 1,
       "message": "And this?",
+      "range": {
+        "startLine": 120,
+        "startChar": 6,
+        "endLine": 120,
+        "endChar": 29
+      },
+      "revId": "613113655d8315a2990443ecf64a5e526bd91a85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cd6d356_090573e2",
+        "filename": "src/common/uniform_type_info_autogen.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2018-12-21T20:05:44Z",
+      "side": 1,
+      "message": "Hmm, I believe it is a float sampler in the sense that it returns floats when you sample it in GLSL. That suggests to me that it should probably reject non-normalized integer formats. But I\u0027m not 100% sure how ANGLE decides what\u0027s valid for an external sampler.\n\nI just tried changing this to Signed instead of float and it passed the CQ that way too. Do we not have tests using external samplers?",
+      "parentUuid": "735fec49_28243a98",
       "range": {
         "startLine": 120,
         "startChar": 6,
