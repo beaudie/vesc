@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f56d7551_315a1e67",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-21T20:59:58Z",
+      "side": 1,
+      "message": "I\u0027m not aware of any other cases.  This is one where it\u0027s designed that an application that can work with Vulkan 1.0 must use vkGetInstanceProcAddr().",
+      "parentUuid": "444e017b_7e014190",
+      "range": {
+        "startLine": 474,
+        "startChar": 0,
+        "endLine": 480,
+        "endChar": 8
+      },
+      "revId": "5a3cdf9fa1e252a53a5ebb1d1a864c36acc45bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ffe0e27_054617e4",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -68,6 +92,54 @@
       "revId": "5a3cdf9fa1e252a53a5ebb1d1a864c36acc45bcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8353950_b6628cf9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-21T20:59:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ffe0e27_054617e4",
+      "range": {
+        "startLine": 485,
+        "startChar": 9,
+        "endLine": 487,
+        "endChar": 98
+      },
+      "revId": "5a3cdf9fa1e252a53a5ebb1d1a864c36acc45bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ce135e81_a7aa2231",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2018-12-21T20:59:58Z",
+      "side": 1,
+      "message": "I\u0027ll open a bug for it, and try to explain the complexities there.",
+      "parentUuid": "4b73c6cb_afc21bc2",
+      "range": {
+        "startLine": 486,
+        "startChar": 0,
+        "endLine": 487,
+        "endChar": 98
+      },
+      "revId": "5a3cdf9fa1e252a53a5ebb1d1a864c36acc45bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
