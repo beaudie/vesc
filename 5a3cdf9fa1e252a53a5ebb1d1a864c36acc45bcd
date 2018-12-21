@@ -45,6 +45,29 @@
       "revId": "5a3cdf9fa1e252a53a5ebb1d1a864c36acc45bcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b73c6cb_afc21bc2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-21T20:54:13Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be here, or it will be lost.\nWe should either resolve it during the code review or open a bug for it.\nMaybe we can just always use the latest, i.e. apiVersion?",
+      "range": {
+        "startLine": 486,
+        "startChar": 0,
+        "endLine": 487,
+        "endChar": 98
+      },
+      "revId": "5a3cdf9fa1e252a53a5ebb1d1a864c36acc45bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
