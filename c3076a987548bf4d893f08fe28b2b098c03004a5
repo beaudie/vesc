@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0156d352_63d17e39",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2940,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-21T16:17:56Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 2940,
+        "startChar": 4,
+        "endLine": 2940,
+        "endChar": 83
+      },
+      "revId": "c3076a987548bf4d893f08fe28b2b098c03004a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
