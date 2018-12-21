@@ -470,7 +470,28 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     applicationInfo.applicationVersion = 1;
     applicationInfo.pEngineName        = "ANGLE";
     applicationInfo.engineVersion      = 1;
-    applicationInfo.apiVersion         = VK_API_VERSION_1_0;
+
+    auto enumerateInstanceVersion = reinterpret_cast<PFN_vkEnumerateInstanceVersion>(
+        vkGetInstanceProcAddr(mInstance, "vkEnumerateInstanceVersion"));
+    if (!enumerateInstanceVersion)
+    {
+        applicationInfo.apiVersion = VK_API_VERSION_1_0;
+    }
+    else
+    {
+        uint32_t apiVersion = VK_API_VERSION_1_0;
+        ANGLE_VK_TRY(displayVk, enumerateInstanceVersion(&apiVersion));
+        if ((VK_VERSION_MAJOR(apiVersion) > 1) || (VK_VERSION_MINOR(apiVersion) >= 1))
+        {
+            // QUESTION: Should we make a constant (where?) that sets the maximum Vulkan version
+            // that ANGLE will use (this value effectively becomes a validation-layer FYI at 1.1)?
+            applicationInfo.apiVersion = VK_API_VERSION_1_1;
+        }
+        else
+        {
+            applicationInfo.apiVersion = VK_API_VERSION_1_0;
+        }
+    }
 
     VkInstanceCreateInfo instanceInfo = {};
     instanceInfo.sType                = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
