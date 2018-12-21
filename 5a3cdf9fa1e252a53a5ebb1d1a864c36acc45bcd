@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "444e017b_7e014190",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-21T20:43:06Z",
+      "side": 1,
+      "message": "Are there other Vulkan use cases that demand calling vkGetInstanceProcAddr? If we need to be calling vkGetInstanceProcAddr in several places, we might have to make our own Vulkan loader on top of libvulkan.",
+      "range": {
+        "startLine": 474,
+        "startChar": 0,
+        "endLine": 480,
+        "endChar": 8
+      },
+      "revId": "5a3cdf9fa1e252a53a5ebb1d1a864c36acc45bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ffe0e27_054617e4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-21T20:43:06Z",
+      "side": 1,
+      "message": "meta-note: probably better to make this a question in the Gerrit than a comment in the code. I think for now you can reword the comment to something like \"Note: will need to revisit this with Vulkan 1.2+.\"",
+      "range": {
+        "startLine": 485,
+        "startChar": 9,
+        "endLine": 487,
+        "endChar": 98
+      },
+      "revId": "5a3cdf9fa1e252a53a5ebb1d1a864c36acc45bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
