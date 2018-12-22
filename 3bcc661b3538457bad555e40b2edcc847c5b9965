@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9057b630_f24e4572",
+        "filename": "src/libANGLE/renderer/vulkan/DrawUtilsVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-22T05:44:52Z",
+      "side": 1,
+      "message": "You\u0027re right, there\u0027s little left in setupProgram to justify its existence.",
+      "parentUuid": "050de1e2_7c042298",
+      "range": {
+        "startLine": 147,
+        "startChar": 3,
+        "endLine": 148,
+        "endChar": 66
+      },
+      "revId": "3bcc661b3538457bad555e40b2edcc847c5b9965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "02f7abec_6a8d81d1",
         "filename": "src/libANGLE/renderer/vulkan/DrawUtilsVk.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "3bcc661b3538457bad555e40b2edcc847c5b9965",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "441a0ba4_eebc9019",
+        "filename": "src/libANGLE/renderer/vulkan/DrawUtilsVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-22T05:44:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02f7abec_6a8d81d1",
+      "range": {
+        "startLine": 163,
+        "startChar": 14,
+        "endLine": 163,
+        "endChar": 41
+      },
+      "revId": "3bcc661b3538457bad555e40b2edcc847c5b9965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "bd446ef3_73834dd9",
+        "filename": "src/libANGLE/renderer/vulkan/DrawUtilsVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-22T05:44:52Z",
+      "side": 1,
+      "message": "Made it not an array. It was unnecessary.",
+      "parentUuid": "5e762712_78057c77",
+      "range": {
+        "startLine": 109,
+        "startChar": 48,
+        "endLine": 109,
+        "endChar": 49
+      },
+      "revId": "3bcc661b3538457bad555e40b2edcc847c5b9965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a5d1845f_bd99287c",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
         "patchSetId": 4
@@ -82,6 +154,30 @@
       "writtenOn": "2018-12-12T21:54:14Z",
       "side": 1,
       "message": "const is good. but you might want to check the genereated assembly to see if this is an optimization or not. I\u0027m curious now. DrawBuffersMask should fit in 64-bits easily.",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 69
+      },
+      "revId": "3bcc661b3538457bad555e40b2edcc847c5b9965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0200fcc_530ffcb3",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-22T05:44:52Z",
+      "side": 1,
+      "message": "Interesting point. I had turned it to \u0026 IIRC because GraphicsPipelineDesc::updateColorWriteMask() took a reference anyway.\n\nThe difference I see in the FramebufferVk::clearWithDraw() path with or without \u0026 is (including removing \u0026 from GraphicsPipelineDesck::updateColorWriteMask()):\n\n+With \u0026\n-Without \u0026\n\n+rx::FramebufferVk::clearWithDraw+47\u003e       lea    0x178(%rdi),%rax\n-rx::FramebufferVk::clearWithDraw+47\u003e       mov    0x178(%rdi),%rax\n\n rx::UtilsVk::clearImage+223\u003e        mov    0x10(%rbx),%esi\n+rx::UtilsVk::clearImage+227\u003e        mov    0x18(%rbx),%rdx\n+rx::UtilsVk::clearImage+227\u003e        mov    0x18(%rbx),%rdx\n+rx::UtilsVk::clearImage+231\u003e        mov    %r14,%rdi\n+rx::UtilsVk::clearImage+234\u003e        callq  0x7ffff74d11b0 rx::vk::GraphicsPipelineDesc::updateColorWriteMask(unsigned int, angle::BitSetT\u003c8ul, unsigned long, unsigned long\u003e const\u0026)\n-rx::UtilsVk::clearImage+226\u003e        mov    0x18(%rbx),%rax\n-rx::UtilsVk::clearImage+230\u003e        mov    %rax,-0x150(%rbp)\n-rx::UtilsVk::clearImage+237\u003e        lea    -0x150(%rbp),%rdx\n-rx::UtilsVk::clearImage+244\u003e        mov    %r14,%rdi\n-rx::UtilsVk::clearImage+247\u003e        callq  0x7ffff74d11d0 rx::vk::GraphicsPipelineDesc::updateColorWriteMask(unsigned int, angle::BitSetT\u003c8ul, unsigned long, unsigned long\u003e)\n\nSo it looks like there is very little difference, with the version with \u0026 having two fewer instructions. I wonder though what the lea is doing in the version without \u0026. It\u0027s as if the version of GraphicsPipelineDesc::updateColorWriteMask() that doesn\u0027t take \u0026 is compiled to take \u0026 anyway (as the assembly inside the function is identical too). The function signatures in the above assembly are generated with c++filt to make sure there\u0027s no mistake.\n\nOdd.",
+      "parentUuid": "a5d1845f_bd99287c",
       "range": {
         "startLine": 106,
         "startChar": 4,
