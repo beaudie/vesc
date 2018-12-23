@@ -648,6 +648,46 @@ ANGLE_INLINE bool ValidateFramebufferComplete(Context *context, Framebuffer *fra
 }
 
 const char *ValidateDrawStates(Context *context);
+
+bool ValidateDrawAttribsImpl(Context *context);
+
+ANGLE_INLINE bool ValidateDrawAttribs(Context *context, int64_t maxVertex)
+{
+    if (maxVertex > context->getStateCache().getNonInstancedVertexElementLimit())
+    {
+        return ValidateDrawAttribsImpl(context);
+    }
+
+    return true;
+}
+
+ANGLE_INLINE bool ValidateDrawArraysAttribs(Context *context, GLint first, GLsizei count)
+{
+    // Check the computation of maxVertex doesn't overflow.
+    // - first < 0 has been checked as an error condition.
+    // - if count <= 0, skip validating no-op draw calls.
+    // From this we know maxVertex will be positive, and only need to check if it overflows GLint.
+    ASSERT(first >= 0);
+    ASSERT(count > 0);
+    int64_t maxVertex = static_cast<int64_t>(first) + static_cast<int64_t>(count) - 1;
+    if (maxVertex > static_cast<int64_t>(std::numeric_limits<GLint>::max()))
+    {
+        context->validationError(GL_INVALID_OPERATION, err::kIntegerOverflow);
+        return false;
+    }
+
+    return ValidateDrawAttribs(context, maxVertex);
+}
+
+ANGLE_INLINE bool ValidateDrawInstancedAttribs(Context *context, GLint primcount)
+{
+    if ((primcount - 1) > context->getStateCache().getInstancedVertexElementLimit())
+    {
+        return ValidateDrawAttribsImpl(context);
+    }
+
+    return true;
+}
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES_H_

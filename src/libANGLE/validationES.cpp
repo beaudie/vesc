@@ -85,40 +85,6 @@ bool DifferenceCanOverflow(GLint a, GLint b)
     return !checkedA.IsValid();
 }
 
-bool ValidateDrawAttribsImpl(Context *context, GLint primcount, GLint maxVertex)
-{
-    // If we're drawing zero vertices, we have enough data.
-    ASSERT(primcount > 0);
-
-    // An overflow can happen when adding the offset. Check against a special constant.
-    if (context->getStateCache().getNonInstancedVertexElementLimit() ==
-            VertexAttribute::kIntegerOverflow ||
-        context->getStateCache().getInstancedVertexElementLimit() ==
-            VertexAttribute::kIntegerOverflow)
-    {
-        context->validationError(GL_INVALID_OPERATION, kIntegerOverflow);
-        return false;
-    }
-
-    // [OpenGL ES 3.0.2] section 2.9.4 page 40:
-    // We can return INVALID_OPERATION if our buffer does not have enough backing data.
-    context->validationError(GL_INVALID_OPERATION, kInsufficientVertexBufferSize);
-    return false;
-}
-
-ANGLE_INLINE bool ValidateDrawAttribs(Context *context, GLint primcount, GLint maxVertex)
-{
-    if (maxVertex <= context->getStateCache().getNonInstancedVertexElementLimit() &&
-        (primcount - 1) <= context->getStateCache().getInstancedVertexElementLimit())
-    {
-        return true;
-    }
-    else
-    {
-        return ValidateDrawAttribsImpl(context, primcount, maxVertex);
-    }
-}
-
 bool ValidReadPixelsTypeEnum(Context *context, GLenum type)
 {
     switch (type)
@@ -648,6 +614,16 @@ bool ValidateDrawElementsInstancedBase(Context *context,
         return false;
     }
 
+    if (primcount == 0)
+    {
+        return true;
+    }
+
+    if (count > 0)
+    {
+        return ValidateDrawInstancedAttribs(context, primcount);
+    }
+
     return true;
 }
 
@@ -666,6 +642,16 @@ bool ValidateDrawArraysInstancedBase(Context *context,
     if (!ValidateDrawArraysCommon(context, mode, first, count, primcount))
     {
         return false;
+    }
+
+    if (primcount == 0)
+    {
+        return true;
+    }
+
+    if (count > 0)
+    {
+        return ValidateDrawInstancedAttribs(context, primcount);
     }
 
     return true;
@@ -2867,27 +2853,12 @@ bool ValidateDrawArraysCommon(Context *context,
         }
     }
 
-    // Check the computation of maxVertex doesn't overflow.
-    // - first < 0 has been checked as an error condition.
-    // - if count < 0, skip validating no-op draw calls.
-    // From this we know maxVertex will be positive, and only need to check if it overflows GLint.
-    ASSERT(first >= 0);
-    if (count > 0 && primcount > 0)
+    if (count == 0)
     {
-        int64_t maxVertex = static_cast<int64_t>(first) + static_cast<int64_t>(count) - 1;
-        if (maxVertex > static_cast<int64_t>(std::numeric_limits<GLint>::max()))
-        {
-            context->validationError(GL_INVALID_OPERATION, kIntegerOverflow);
-            return false;
-        }
-
-        if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(maxVertex)))
-        {
-            return false;
-        }
+        return true;
     }
 
-    return true;
+    return ValidateDrawArraysAttribs(context, first, count);
 }
 
 bool ValidateDrawArraysInstancedANGLE(Context *context,
@@ -3099,7 +3070,7 @@ bool ValidateDrawElementsCommon(Context *context,
             return false;
         }
 
-        if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(indexRange.end)))
+        if (!ValidateDrawAttribs(context, static_cast<GLint>(indexRange.end)))
         {
             return false;
         }
@@ -6651,5 +6622,23 @@ bool ValidateSampleMaskiBase(Context *context, GLuint maskNumber, GLbitfield mas
     }
 
     return true;
+}
+
+bool ValidateDrawAttribsImpl(Context *context)
+{
+    // An overflow can happen when adding the offset. Check against a special constant.
+    if (context->getStateCache().getNonInstancedVertexElementLimit() ==
+            VertexAttribute::kIntegerOverflow ||
+        context->getStateCache().getInstancedVertexElementLimit() ==
+            VertexAttribute::kIntegerOverflow)
+    {
+        context->validationError(GL_INVALID_OPERATION, kIntegerOverflow);
+        return false;
+    }
+
+    // [OpenGL ES 3.0.2] section 2.9.4 page 40:
+    // We can return INVALID_OPERATION if our buffer does not have enough backing data.
+    context->validationError(GL_INVALID_OPERATION, kInsufficientVertexBufferSize);
+    return false;
 }
 }  // namespace gl
