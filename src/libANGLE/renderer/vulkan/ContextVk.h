@@ -172,6 +172,18 @@ class ContextVk : public ContextImpl, public vk::Context
         mDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
     }
 
+    ANGLE_INLINE void onVertexAttributeChange(size_t attribIndex,
+                                              GLuint stride,
+                                              GLuint divisor,
+                                              VkFormat format,
+                                              GLuint relativeOffset)
+    {
+        invalidateVertexAndIndexBuffers();
+        mGraphicsPipelineDesc->updateVertexInput(&mGraphicsPipelineTransition,
+                                                 static_cast<uint32_t>(attribIndex), stride,
+                                                 divisor, format, relativeOffset);
+    }
+
     void invalidateDefaultAttribute(size_t attribIndex);
     void invalidateDefaultAttributes(const gl::AttributesMask &dirtyMask);
     void onFramebufferChange(const vk::RenderPassDesc &renderPassDesc);
@@ -259,7 +271,6 @@ class ContextVk : public ContextImpl, public vk::Context
         mDirtyBits.set(DIRTY_BIT_PIPELINE);
         mDirtyBits.set(DIRTY_BIT_VIEWPORT);
         mDirtyBits.set(DIRTY_BIT_SCISSOR);
-        mCurrentPipeline = nullptr;
     }
 
     void invalidateCurrentTextures();
@@ -280,12 +291,13 @@ class ContextVk : public ContextImpl, public vk::Context
     angle::Result handleDirtyViewport(const gl::Context *context, vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyScissor(const gl::Context *context, vk::CommandBuffer *commandBuffer);
 
-    vk::PipelineAndSerial *mCurrentPipeline;
+    vk::PipelineHelper *mCurrentPipeline;
     gl::PrimitiveMode mCurrentDrawMode;
 
     // Keep a cached pipeline description structure that can be used to query the pipeline cache.
     // Kept in a pointer so allocations can be aligned, and structs can be portably packed.
     std::unique_ptr<vk::GraphicsPipelineDesc> mGraphicsPipelineDesc;
+    vk::GraphicsPipelineTransitionBits mGraphicsPipelineTransition;
 
     // The descriptor pools are externally sychronized, so cannot be accessed from different
     // threads simultaneously. Hence, we keep them in the ContextVk instead of the RendererVk.
