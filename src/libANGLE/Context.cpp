@@ -8495,7 +8495,7 @@ void StateCache::updateValidDrawElementsTypes(Context *context)
 
 void StateCache::updateTransformFeedbackActiveUnpaused(Context *context)
 {
-    TransformFeedback *xfb = context->getGLState().getCurrentTransformFeedback();
+    TransformFeedback *xfb                 = context->getGLState().getCurrentTransformFeedback();
     mCachedTransformFeedbackActiveUnpaused = xfb && xfb->isActive() && !xfb->isPaused();
 }
 }  // namespace gl
