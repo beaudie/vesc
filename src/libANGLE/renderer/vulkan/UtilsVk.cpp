@@ -308,11 +308,13 @@ angle::Result UtilsVk::setupProgram(vk::Context *context,
 
     Serial serial = renderer->getCurrentQueueSerial();
 
-    vk::PipelineAndSerial *pipelineAndSerial;
     if (isCompute)
     {
+        vk::PipelineAndSerial *pipelineAndSerial;
         program->setShader(gl::ShaderType::Compute, fsCsShader);
         ANGLE_TRY(program->getComputePipeline(context, pipelineLayout.get(), &pipelineAndSerial));
+        pipelineAndSerial->updateSerial(serial);
+        commandBuffer->bindPipeline(bindPoint, pipelineAndSerial->get());
     }
     else
     {
@@ -320,13 +322,14 @@ angle::Result UtilsVk::setupProgram(vk::Context *context,
         program->setShader(gl::ShaderType::Fragment, fsCsShader);
 
         // This will have to be changed if the desc topology changes.
+        const vk::GraphicsPipelineDesc *descPtr;
+        vk::PipelineHelper *helper;
         ANGLE_TRY(program->getGraphicsPipeline(
             context, &renderer->getRenderPassCache(), renderer->getPipelineCache(), serial,
-            pipelineLayout.get(), *pipelineDesc, gl::AttributesMask(), &pipelineAndSerial));
+            pipelineLayout.get(), *pipelineDesc, gl::AttributesMask(), &descPtr, &helper));
+        helper->updateSerial(serial);
+        commandBuffer->bindPipeline(bindPoint, helper->getPipeline());
     }
-
-    commandBuffer->bindPipeline(bindPoint, pipelineAndSerial->get());
-    pipelineAndSerial->updateSerial(serial);
 
     if (descriptorSet != VK_NULL_HANDLE)
     {
@@ -602,9 +605,10 @@ angle::Result UtilsVk::clearImage(ContextVk *contextVk,
     shaderParams.clearValue = params.clearValue;
 
     vk::GraphicsPipelineDesc pipelineDesc;
+    vk::GraphicsPipelineTransitionBits transition;
     pipelineDesc.initDefaults();
-    pipelineDesc.updateColorWriteMask(params.colorMaskFlags, *params.alphaMask);
-    pipelineDesc.updateRenderPassDesc(*params.renderPassDesc);
+    pipelineDesc.updateColorWriteMask(&transition, params.colorMaskFlags, *params.alphaMask);
+    pipelineDesc.updateRenderPassDesc(&transition, *params.renderPassDesc);
 
     vk::ShaderLibrary &shaderLibrary                    = renderer->getShaderLibrary();
     vk::RefCounted<vk::ShaderAndSerial> *vertexShader   = nullptr;
@@ -677,9 +681,11 @@ angle::Result UtilsVk::copyImage(vk::Context *context,
     renderPassDesc.setSamples(dest->getSamples());
     renderPassDesc.packAttachment(destFormat);
 
+    vk::GraphicsPipelineTransitionBits transition;
+
     vk::GraphicsPipelineDesc pipelineDesc;
     pipelineDesc.initDefaults();
-    pipelineDesc.updateRenderPassDesc(renderPassDesc);
+    pipelineDesc.updateRenderPassDesc(&transition, renderPassDesc);
 
     gl::Rectangle renderArea;
     renderArea.x      = params.destOffset[0];
