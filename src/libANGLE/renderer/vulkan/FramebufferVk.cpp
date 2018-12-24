@@ -1027,6 +1027,17 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
                                       getEmulatedAlphaAttachmentMask());
     pipelineDesc.updateRenderPassDesc(&transition, mRenderPassDesc);
 
+    GLint renderAreaHeight = mState.getDimensions().height;
+
+    VkViewport viewport;
+    gl_vk::GetViewport(renderArea, 0.0f, 1.0f, invertViewport, renderAreaHeight, &viewport);
+    pipelineDesc.updateViewport(&transition, viewport);
+
+    VkRect2D scissor;
+    const gl::State &glState = contextVk->getGLState();
+    gl_vk::GetScissor(glState, invertViewport, renderArea, &scissor);
+    pipelineDesc.updateScissor(&transition, scissor);
+
     const vk::GraphicsPipelineDesc *descPtr;
     vk::PipelineHelper *pipeline = nullptr;
     ANGLE_TRY(fullScreenClear->getGraphicsPipeline(
@@ -1056,18 +1067,6 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
     // TODO(jmadill): Masked combined color and depth/stencil clear. http://anglebug.com/2455
     // Any active queries submitted by the user should also be paused here.
     drawCommands->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->getPipeline());
-
-    GLint renderAreaHeight = mState.getDimensions().height;
-
-    VkViewport viewport;
-    gl_vk::GetViewport(renderArea, 0.0f, 1.0f, invertViewport, renderAreaHeight, &viewport);
-    drawCommands->setViewport(0, 1, &viewport);
-
-    VkRect2D scissor;
-    const gl::State &glState = contextVk->getGLState();
-    gl_vk::GetScissor(glState, invertViewport, renderArea, &scissor);
-    drawCommands->setScissor(0, 1, &scissor);
-
     drawCommands->draw(6, 1, 0, 0);
 
     return angle::Result::Continue;
