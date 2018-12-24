@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "beeb904c_d1bf2e5c",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-24T18:30:33Z",
+      "side": 1,
+      "message": "can you change this TODO into a non-todo comment? I don\u0027t think we need to take any action here.",
+      "range": {
+        "startLine": 367,
+        "startChar": 8,
+        "endLine": 367,
+        "endChar": 35
+      },
+      "revId": "f2577c8cb4857fda4cb18ce50658168be153b2b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
