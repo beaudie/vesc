@@ -610,6 +610,18 @@ angle::Result UtilsVk::clearImage(ContextVk *contextVk,
     pipelineDesc.updateColorWriteMask(&transition, params.colorMaskFlags, *params.alphaMask);
     pipelineDesc.updateRenderPassDesc(&transition, *params.renderPassDesc);
 
+    const gl::Rectangle &renderArea = framebuffer->getFramebuffer()->getRenderPassRenderArea();
+    bool invertViewport             = contextVk->isViewportFlipEnabledForDrawFBO();
+
+    VkViewport viewport;
+    gl_vk::GetViewport(renderArea, 0.0f, 1.0f, invertViewport, params.renderAreaHeight, &viewport);
+    pipelineDesc.updateViewport(&transition, viewport);
+
+    VkRect2D scissor;
+    const gl::State &glState = contextVk->getState();
+    gl_vk::GetScissor(glState, invertViewport, renderArea, &scissor);
+    pipelineDesc.updateScissor(&transition, scissor);
+
     vk::ShaderLibrary &shaderLibrary                    = renderer->getShaderLibrary();
     vk::RefCounted<vk::ShaderAndSerial> *vertexShader   = nullptr;
     vk::RefCounted<vk::ShaderAndSerial> *fragmentShader = nullptr;
@@ -620,17 +632,6 @@ angle::Result UtilsVk::clearImage(ContextVk *contextVk,
                            &mImageClearProgram, &pipelineDesc, VK_NULL_HANDLE, &shaderParams,
                            sizeof(shaderParams), commandBuffer));
 
-    VkViewport viewport;
-    const gl::Rectangle &renderArea = framebuffer->getFramebuffer()->getRenderPassRenderArea();
-    bool invertViewport             = contextVk->isViewportFlipEnabledForDrawFBO();
-    gl_vk::GetViewport(renderArea, 0.0f, 1.0f, invertViewport, params.renderAreaHeight, &viewport);
-
-    VkRect2D scissor;
-    const gl::State &glState = contextVk->getState();
-    gl_vk::GetScissor(glState, invertViewport, renderArea, &scissor);
-
-    commandBuffer->setViewport(0, 1, &viewport);
-    commandBuffer->setScissor(0, 1, &scissor);
     commandBuffer->draw(6, 1, 0, 0);
 
     return angle::Result::Continue;
@@ -693,6 +694,13 @@ angle::Result UtilsVk::copyImage(vk::Context *context,
     renderArea.width  = params.srcExtents[0];
     renderArea.height = params.srcExtents[1];
 
+    VkViewport viewport;
+    gl_vk::GetViewport(renderArea, 0.0f, 1.0f, false, dest->getExtents().height, &viewport);
+    pipelineDesc.updateViewport(&transition, viewport);
+
+    VkRect2D scissor = gl_vk::GetRect(renderArea);
+    pipelineDesc.updateScissor(&transition, scissor);
+
     // Change source layout outside render pass
     vk::CommandBuffer *srcLayoutChange;
     ANGLE_TRY(src->recordCommands(context, &srcLayoutChange));
@@ -740,13 +748,6 @@ angle::Result UtilsVk::copyImage(vk::Context *context,
                            &mImageCopyPrograms[flags], &pipelineDesc, descriptorSet, &shaderParams,
                            sizeof(shaderParams), commandBuffer));
 
-    VkViewport viewport;
-    gl_vk::GetViewport(renderArea, 0.0f, 1.0f, false, dest->getExtents().height, &viewport);
-
-    VkRect2D scissor = gl_vk::GetRect(renderArea);
-
-    commandBuffer->setViewport(0, 1, &viewport);
-    commandBuffer->setScissor(0, 1, &scissor);
     commandBuffer->draw(6, 1, 0, 0);
 
     descriptorPoolBinding.reset();
