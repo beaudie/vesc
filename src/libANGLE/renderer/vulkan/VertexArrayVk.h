@@ -33,8 +33,8 @@ class VertexArrayVk : public VertexArrayImpl
 
     angle::Result syncState(const gl::Context *context,
                             const gl::VertexArray::DirtyBits &dirtyBits,
-                            const gl::VertexArray::DirtyAttribBitsArray &attribBits,
-                            const gl::VertexArray::DirtyBindingBitsArray &bindingBits) override;
+                            gl::VertexArray::DirtyAttribBitsArray *attribBits,
+                            gl::VertexArray::DirtyBindingBitsArray *bindingBits) override;
 
     void updateDefaultAttrib(ContextVk *contextVk,
                              size_t attribIndex,
