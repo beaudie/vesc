@@ -6628,9 +6628,9 @@ bool ValidateDrawAttribsImpl(Context *context)
 {
     // An overflow can happen when adding the offset. Check against a special constant.
     if (context->getStateCache().getNonInstancedVertexElementLimit() ==
-        VertexAttribute::kIntegerOverflow ||
+            VertexAttribute::kIntegerOverflow ||
         context->getStateCache().getInstancedVertexElementLimit() ==
-        VertexAttribute::kIntegerOverflow)
+            VertexAttribute::kIntegerOverflow)
     {
         context->validationError(GL_INVALID_OPERATION, kIntegerOverflow);
         return false;
