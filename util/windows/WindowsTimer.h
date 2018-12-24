@@ -11,7 +11,7 @@
 
 #include <windows.h>
 
-#include "Timer.h"
+#include "util/Timer.h"
 
 class WindowsTimer : public Timer
 {
