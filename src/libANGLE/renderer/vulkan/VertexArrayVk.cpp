@@ -95,7 +95,7 @@ size_t GetVertexCount(BufferVk *srcBuffer, const gl::VertexBinding &binding, uin
         kVertexBufferUsageFlags, 1024 * 8, true \
     }
 
-VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state, RendererVk *renderer)
+VertexArrayVk::VertexArrayVk(ContextVk *contextVk, const gl::VertexArrayState &state)
     : VertexArrayImpl(state),
       mCurrentArrayBufferHandles{},
       mCurrentArrayBufferOffsets{},
@@ -126,10 +126,18 @@ VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state, RendererVk *rend
       mDynamicVertexData(kVertexBufferUsageFlags, kDynamicVertexDataSize, true),
       mDynamicIndexData(kIndexBufferUsageFlags, kDynamicIndexDataSize, true),
       mTranslatedByteIndexData(kIndexBufferUsageFlags, kDynamicIndexDataSize, true),
-      mLineLoopHelper(renderer),
+      mLineLoopHelper(contextVk->getRenderer()),
       mDirtyLineLoopTranslation(true)
 {
-    mCurrentArrayBufferHandles.fill(VK_NULL_HANDLE);
+    RendererVk *renderer = contextVk->getRenderer();
+
+    VkBufferCreateInfo createInfo = {};
+    createInfo.sType              = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    createInfo.size               = 16;
+    createInfo.usage              = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+    (void)mTheNullBuffer.init(contextVk, createInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+    mCurrentArrayBufferHandles.fill(mTheNullBuffer.getBuffer().getHandle());
     mCurrentArrayBufferOffsets.fill(0);
     mCurrentArrayBuffers.fill(nullptr);
 
@@ -147,6 +155,8 @@ VertexArrayVk::~VertexArrayVk() {}
 void VertexArrayVk::destroy(const gl::Context *context)
 {
     RendererVk *renderer = vk::GetImpl(context)->getRenderer();
+
+    mTheNullBuffer.release(renderer);
 
     for (vk::DynamicBuffer &buffer : mCurrentArrayBufferConversion)
     {
@@ -451,7 +461,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
         else
         {
             mCurrentArrayBuffers[attribIndex]       = nullptr;
-            mCurrentArrayBufferHandles[attribIndex] = VK_NULL_HANDLE;
+            mCurrentArrayBufferHandles[attribIndex] = mTheNullBuffer.getBuffer().getHandle();
             mCurrentArrayBufferOffsets[attribIndex] = 0;
             mCurrentArrayBufferStrides[attribIndex] =
                 mCurrentArrayBufferFormats[attribIndex]->bufferFormat().pixelBytes;
@@ -466,7 +476,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
 
         // These will be filled out by the ContextVk.
         mCurrentArrayBuffers[attribIndex]       = nullptr;
-        mCurrentArrayBufferHandles[attribIndex] = VK_NULL_HANDLE;
+        mCurrentArrayBufferHandles[attribIndex] = mTheNullBuffer.getBuffer().getHandle();
         mCurrentArrayBufferOffsets[attribIndex] = 0;
         mCurrentArrayBufferStrides[attribIndex] = 0;
         mCurrentArrayBufferFormats[attribIndex] =
