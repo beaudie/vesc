@@ -286,7 +286,7 @@ angle::Result VertexArrayVk::convertVertexBufferCpu(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-void VertexArrayVk::ensureConversionReleased(RendererVk *renderer, size_t attribIndex)
+ANGLE_INLINE void VertexArrayVk::ensureConversionReleased(RendererVk *renderer, size_t attribIndex)
 {
     if (mCurrentArrayBufferConversionCanRelease[attribIndex])
     {
@@ -297,8 +297,8 @@ void VertexArrayVk::ensureConversionReleased(RendererVk *renderer, size_t attrib
 
 angle::Result VertexArrayVk::syncState(const gl::Context *context,
                                        const gl::VertexArray::DirtyBits &dirtyBits,
-                                       const gl::VertexArray::DirtyAttribBitsArray &attribBits,
-                                       const gl::VertexArray::DirtyBindingBitsArray &bindingBits)
+                                       gl::VertexArray::DirtyAttribBitsArray *attribBits,
+                                       gl::VertexArray::DirtyBindingBitsArray *bindingBits)
 {
     ASSERT(dirtyBits.any());
 
@@ -347,6 +347,7 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
         ANGLE_TRY(syncDirtyAttrib(contextVk, attribs[INDEX],                      \
                                   bindings[attribs[INDEX].bindingIndex], INDEX)); \
         invalidateContext = true;                                                 \
+        (*attribBits)[INDEX].reset();                                             \
         break;
 
                 ANGLE_VERTEX_INDEX_CASES(ANGLE_VERTEX_DIRTY_ATTRIB_FUNC);
@@ -356,6 +357,7 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
         ANGLE_TRY(syncDirtyAttrib(contextVk, attribs[INDEX],                      \
                                   bindings[attribs[INDEX].bindingIndex], INDEX)); \
         invalidateContext = true;                                                 \
+        (*bindingBits)[INDEX].reset();                                            \
         break;
 
                 ANGLE_VERTEX_INDEX_CASES(ANGLE_VERTEX_DIRTY_BINDING_FUNC);
@@ -404,7 +406,6 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                                              size_t attribIndex)
 {
     RendererVk *renderer               = contextVk->getRenderer();
-    bool releaseConversion             = true;
     bool anyVertexBufferConvertedOnGpu = false;
 
     if (attrib.enabled)
@@ -436,8 +437,6 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                     // http://anglebug.com/3009
                     ANGLE_TRY(convertVertexBufferCpu(contextVk, bufferVk, binding, attribIndex));
                 }
-
-                releaseConversion = false;
             }
             else
             {
@@ -446,6 +445,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                     bufferVk->getBuffer().getBuffer().getHandle();
                 mCurrentArrayBufferOffsets[attribIndex] = binding.getOffset();
                 mCurrentArrayBufferStrides[attribIndex] = binding.getStride();
+                ensureConversionReleased(renderer, attribIndex);
             }
         }
         else
@@ -455,6 +455,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
             mCurrentArrayBufferOffsets[attribIndex] = 0;
             mCurrentArrayBufferStrides[attribIndex] =
                 mCurrentArrayBufferFormats[attribIndex]->bufferFormat().pixelBytes;
+            ensureConversionReleased(renderer, attribIndex);
         }
 
         setPackedInputInfo(contextVk, attribIndex, attrib, binding);
@@ -472,15 +473,13 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
             &renderer->getFormat(angle::FormatID::R32G32B32A32_FLOAT);
 
         setDefaultPackedInput(contextVk, attribIndex);
+        ensureConversionReleased(renderer, attribIndex);
     }
 
     if (anyVertexBufferConvertedOnGpu && renderer->getFeatures().flushAfterVertexConversion)
     {
         ANGLE_TRY(renderer->flush(contextVk));
     }
-
-    if (releaseConversion)
-        ensureConversionReleased(renderer, attribIndex);
 
     return angle::Result::Continue;
 }
