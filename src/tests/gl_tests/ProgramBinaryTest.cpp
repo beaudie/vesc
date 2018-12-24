@@ -646,11 +646,11 @@ class ProgramBinariesAcrossPlatforms : public testing::TestWithParam<PlatformsWi
     EGLWindow *createAndInitEGLWindow(angle::PlatformParameters &param)
     {
         EGLWindow *eglWindow =
-            new EGLWindow(param.majorVersion, param.minorVersion, param.eglParameters);
+            EGLWindow::New(param.majorVersion, param.minorVersion, param.eglParameters);
         bool result = eglWindow->initializeGL(mOSWindow, mEntryPointsLib.get());
         if (result == false)
         {
-            SafeDelete(eglWindow);
+            GLWindowBase::Delete(eglWindow);
             eglWindow = nullptr;
         }
 
@@ -663,7 +663,7 @@ class ProgramBinariesAcrossPlatforms : public testing::TestWithParam<PlatformsWi
     {
         ASSERT_NE(nullptr, *eglWindow);
         (*eglWindow)->destroyGL();
-        SafeDelete(*eglWindow);
+        GLWindowBase::Delete(*eglWindow);
         *eglWindow = nullptr;
     }
 
@@ -706,7 +706,8 @@ class ProgramBinariesAcrossPlatforms : public testing::TestWithParam<PlatformsWi
     void TearDown() override
     {
         mOSWindow->destroy();
-        SafeDelete(mOSWindow);
+        FreeOSWindow(mOSWindow);
+        mOSWindow = nullptr;
     }
 
     OSWindow *mOSWindow = nullptr;
