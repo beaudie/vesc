@@ -99,29 +99,12 @@ bool CommandGraphResource::hasPendingWork(RendererVk *renderer) const
     return mStoredQueueSerial == renderer->getCurrentQueueSerial();
 }
 
-Serial CommandGraphResource::getStoredQueueSerial() const
-{
-    return mStoredQueueSerial;
-}
-
 // RecordableGraphResource implementation.
 RecordableGraphResource::RecordableGraphResource(CommandGraphResourceType resourceType)
     : CommandGraphResource(resourceType)
 {}
 
 RecordableGraphResource::~RecordableGraphResource() = default;
-
-void RecordableGraphResource::updateQueueSerial(Serial queueSerial)
-{
-    ASSERT(queueSerial >= mStoredQueueSerial);
-
-    if (queueSerial > mStoredQueueSerial)
-    {
-        mCurrentWritingNode = nullptr;
-        mCurrentReadingNodes.clear();
-        mStoredQueueSerial = queueSerial;
-    }
-}
 
 angle::Result RecordableGraphResource::recordCommands(Context *context,
                                                       CommandBuffer **commandBufferOut)
@@ -377,15 +360,6 @@ void CommandGraphNode::storeRenderPassInfo(const Framebuffer &framebuffer,
 }
 
 // static
-void CommandGraphNode::SetHappensBeforeDependency(CommandGraphNode *beforeNode,
-                                                  CommandGraphNode *afterNode)
-{
-    ASSERT(beforeNode != afterNode && !beforeNode->isChildOf(afterNode));
-    afterNode->mParents.emplace_back(beforeNode);
-    beforeNode->setHasChildren();
-}
-
-// static
 void CommandGraphNode::SetHappensBeforeDependencies(CommandGraphNode **beforeNodes,
                                                     size_t beforeNodesCount,
                                                     CommandGraphNode *afterNode)
@@ -424,17 +398,6 @@ void CommandGraphNode::setQueryPool(const QueryPool *queryPool, uint32_t queryIn
            mFunction == CommandGraphNodeFunction::WriteTimestamp);
     mQueryPool  = queryPool->getHandle();
     mQueryIndex = queryIndex;
-}
-
-void CommandGraphNode::addGlobalMemoryBarrier(VkFlags srcAccess, VkFlags dstAccess)
-{
-    mGlobalMemoryBarrierSrcAccess |= srcAccess;
-    mGlobalMemoryBarrierDstAccess |= dstAccess;
-}
-
-void CommandGraphNode::setHasChildren()
-{
-    mHasChildren = true;
 }
 
 // Do not call this in anything but testing code, since it's slow.
