@@ -26,7 +26,7 @@ class RecordableGraphResource;
 class VertexArrayVk : public VertexArrayImpl
 {
   public:
-    VertexArrayVk(const gl::VertexArrayState &state, RendererVk *renderer);
+    VertexArrayVk(ContextVk *contextVk, const gl::VertexArrayState &state);
     ~VertexArrayVk() override;
 
     void destroy(const gl::Context *context) override;
@@ -130,6 +130,9 @@ class VertexArrayVk : public VertexArrayImpl
     Optional<GLint> mLineLoopBufferFirstIndex;
     Optional<size_t> mLineLoopBufferLastIndex;
     bool mDirtyLineLoopTranslation;
+
+    // Vulkan does not allow binding a null vertex buffer. We use a dummy as a placeholder.
+    vk::BufferHelper mTheNullBuffer;
 };
 }  // namespace rx
 
