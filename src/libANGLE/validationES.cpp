@@ -2858,7 +2858,8 @@ bool ValidateDrawArraysCommon(Context *context,
         return true;
     }
 
-    return ValidateDrawArraysAttribs(context, first, count);
+    return !context->isBufferAccessValidationEnabled() ||
+           ValidateDrawArraysAttribs(context, first, count);
 }
 
 bool ValidateDrawArraysInstancedANGLE(Context *context,
@@ -3055,7 +3056,7 @@ bool ValidateDrawElementsCommon(Context *context,
         }
     }
 
-    if (!context->getExtensions().robustBufferAccessBehavior && primcount > 0)
+    if (context->isBufferAccessValidationEnabled() && primcount > 0)
     {
         // Use the parameter buffer to retrieve and cache the index range.
         IndexRange indexRange;
