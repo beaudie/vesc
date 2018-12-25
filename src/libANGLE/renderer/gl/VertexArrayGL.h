@@ -11,6 +11,10 @@
 
 #include "libANGLE/renderer/VertexArrayImpl.h"
 
+#include "common/mathutil.h"
+#include "libANGLE/Context.h"
+#include "libANGLE/renderer/gl/ContextGL.h"
+
 namespace rx
 {
 
@@ -131,6 +135,60 @@ class VertexArrayGL : public VertexArrayImpl
     mutable size_t mStreamingArrayBufferSize;
     mutable GLuint mStreamingArrayBuffer;
 };
+
+ANGLE_INLINE angle::Result VertexArrayGL::syncDrawState(
+    const gl::Context *context,
+    const gl::AttributesMask &activeAttributesMask,
+    GLint first,
+    GLsizei count,
+    gl::DrawElementsType type,
+    const void *indices,
+    GLsizei instanceCount,
+    bool primitiveRestartEnabled,
+    const void **outIndices) const
+{
+    // Check if any attributes need to be streamed, determines if the index range needs to be
+    // computed
+    const gl::AttributesMask &needsStreamingAttribs =
+        context->getStateCache().getActiveClientAttribsMask();
+
+    // Determine if an index buffer needs to be streamed and the range of vertices that need to be
+    // copied
+    gl::IndexRange indexRange;
+    if (type != gl::DrawElementsType::InvalidEnum)
+    {
+        ANGLE_TRY(syncIndexData(context, count, type, indices, primitiveRestartEnabled,
+                                needsStreamingAttribs.any(), &indexRange, outIndices));
+    }
+    else
+    {
+        // Not an indexed call, set the range to [first, first + count - 1]
+        indexRange.start = first;
+        indexRange.end   = first + count - 1;
+    }
+
+    if (needsStreamingAttribs.any())
+    {
+        ANGLE_TRY(streamAttributes(context, needsStreamingAttribs, instanceCount, indexRange));
+    }
+
+    return angle::Result::Continue;
+}
+
+ANGLE_INLINE angle::Result VertexArrayGL::syncDrawElementsState(
+    const gl::Context *context,
+    const gl::AttributesMask &activeAttributesMask,
+    GLsizei count,
+    gl::DrawElementsType type,
+    const void *indices,
+    GLsizei instanceCount,
+    bool primitiveRestartEnabled,
+    const void **outIndices) const
+{
+    return syncDrawState(context, activeAttributesMask, 0, count, type, indices, instanceCount,
+                         primitiveRestartEnabled, outIndices);
+}
+
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_GL_VERTEXARRAYGL_H_
