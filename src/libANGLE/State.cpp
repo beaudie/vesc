@@ -456,9 +456,9 @@ ANGLE_INLINE void State::updateActiveTextureState(const Context *context,
                                                   const Sampler *sampler,
                                                   Texture *texture)
 {
-    if (!texture->isSamplerComplete(context, sampler))
+    if (mActiveTexturesCache[textureIndex] == texture)
     {
-        mActiveTexturesCache[textureIndex] = nullptr;
+        return;
     }
     else
     {
@@ -2522,6 +2522,11 @@ angle::Result State::syncTextures(const Context *context)
     for (size_t textureIndex : mDirtyTextures)
     {
         Texture *texture = mActiveTexturesCache[textureIndex];
+        const Sampler *sampler = mSamplers[textureIndex].get();
+        if (!texture->isSamplerComplete(context, sampler))
+        {
+            continue;
+        }
         if (texture && texture->hasAnyDirtyBit())
         {
             ANGLE_TRY(texture->syncState(context));

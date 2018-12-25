@@ -8109,12 +8109,12 @@ void Context::onSubjectStateChange(const Context *context,
         default:
             if (index < kTextureMaxSubjectIndex)
             {
-                mGLState.onActiveTextureStateChange(this, index);
-                mStateCache.onActiveTextureChange(this);
+                //   mGLState.onActiveTextureStateChange(this, index);
+                //   mStateCache.onActiveTextureChange(this);
             }
             else if (index < kImageMaxSubjectIndex)
             {
-                mGLState.onImageStateChange(this, index - kImage0SubjectIndex);
+                //   mGLState.onImageStateChange(this, index - kImage0SubjectIndex);
             }
             else if (index < kUniformBufferMaxSubjectIndex)
             {
