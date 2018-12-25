@@ -30,6 +30,9 @@
 #include "libANGLE/Workarounds.h"
 #include "libANGLE/angletypes.h"
 
+#include "libANGLE/GLES1Renderer.h"
+#include "libANGLE/renderer/ContextImpl.h"
+
 namespace rx
 {
 class ContextImpl;
@@ -1912,6 +1915,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     std::shared_ptr<angle::WorkerThreadPool> mThreadPool;
 };
+
 }  // namespace gl
 
 #endif  // LIBANGLE_CONTEXT_H_
