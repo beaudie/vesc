@@ -30,6 +30,9 @@
 #include "libANGLE/Workarounds.h"
 #include "libANGLE/angletypes.h"
 
+#include "libANGLE/GLES1Renderer.h"
+#include "libANGLE/renderer/ContextImpl.h"
+
 namespace rx
 {
 class ContextImpl;
@@ -1912,6 +1915,61 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     std::shared_ptr<angle::WorkerThreadPool> mThreadPool;
 };
+
+#define ANGLE_HANDLE_ERR(X) \
+    (void)(X);              \
+    return;
+#define ANGLE_CONTEXT_TRY(EXPR) ANGLE_TRY_TEMPLATE(EXPR, ANGLE_HANDLE_ERR);
+
+ANGLE_INLINE angle::Result Context::syncDirtyBits()
+{
+    const State::DirtyBits &dirtyBits = mGLState.getDirtyBits();
+    ANGLE_TRY(mImplementation->syncState(this, dirtyBits, mAllDirtyBits));
+    mGLState.clearDirtyBits();
+    return angle::Result::Continue;
+}
+
+ANGLE_INLINE angle::Result Context::syncDirtyBits(const State::DirtyBits &bitMask)
+{
+    const State::DirtyBits &dirtyBits = (mGLState.getDirtyBits() & bitMask);
+    ANGLE_TRY(mImplementation->syncState(this, dirtyBits, bitMask));
+    mGLState.clearDirtyBits(dirtyBits);
+    return angle::Result::Continue;
+}
+
+ANGLE_INLINE angle::Result Context::syncDirtyObjects(const State::DirtyObjects &objectMask)
+{
+    return mGLState.syncDirtyObjects(this, objectMask);
+}
+
+ANGLE_INLINE angle::Result Context::prepareForDraw(PrimitiveMode mode)
+{
+    if (mGLES1Renderer)
+    {
+        ANGLE_TRY(mGLES1Renderer->prepareForDraw(mode, this, &mGLState));
+    }
+
+    ANGLE_TRY(syncDirtyObjects(mDrawDirtyObjects));
+    ASSERT(!isRobustResourceInitEnabled() ||
+           !mGLState.getDrawFramebuffer()->hasResourceThatNeedsInit());
+    return syncDirtyBits();
+}
+
+ANGLE_INLINE void Context::drawElements(PrimitiveMode mode,
+                                        GLsizei count,
+                                        DrawElementsType type,
+                                        const void *indices)
+{
+    // No-op if count draws no primitives for given mode
+    if (noopDraw(mode, count))
+    {
+        return;
+    }
+
+    ANGLE_CONTEXT_TRY(prepareForDraw(mode));
+    ANGLE_CONTEXT_TRY(mImplementation->drawElements(this, mode, count, type, indices));
+}
+
 }  // namespace gl
 
 #endif  // LIBANGLE_CONTEXT_H_
