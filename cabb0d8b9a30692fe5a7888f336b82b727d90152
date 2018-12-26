@@ -88,6 +88,30 @@
     },
     {
       "key": {
+        "uuid": "ad23117f_9fcee445",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1971,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-26T14:51:46Z",
+      "side": 1,
+      "message": "I\u0027ll move the inlined functions to a separate file - though I do not think that the inlining is that bad here with \u0027only\u0027 ~180 files to be recompiled for the angle_perftests.",
+      "parentUuid": "15b91538_85e97be6",
+      "range": {
+        "startLine": 1919,
+        "startChar": 0,
+        "endLine": 1971,
+        "endChar": 1
+      },
+      "revId": "cabb0d8b9a30692fe5a7888f336b82b727d90152",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3d5ffd00_da189551",
         "filename": "src/libANGLE/renderer/gl/VertexArrayGL.h",
         "patchSetId": 2
@@ -99,6 +123,30 @@
       "writtenOn": "2018-12-25T16:25:10Z",
       "side": 1,
       "message": "I think we can get even better perf to this inlining by doing an early skip check in ContextGL::setDrawElementsState. Modify ContextGL::setDrawElementsState to have this:\n\nif (context-\u003egetStateCache()-\u003ehasAnyActiveClientAttrib() || vao-\u003egetElementArrayBuffer() \u003d\u003d nullptr)\n{\n    const VertexArrayGL *vaoGL \u003d GetImplAs\u003cVertexArrayGL\u003e(vao);\n    vaoGL-\u003esyncDrawElementsState(...);\n}\n\nif (webgl....)\n\nI think we won\u0027t need the inlining and speed will likely be better since we won\u0027t be tinkering with an index range.",
+      "range": {
+        "startLine": 139,
+        "startChar": 1,
+        "endLine": 191,
+        "endChar": 0
+      },
+      "revId": "cabb0d8b9a30692fe5a7888f336b82b727d90152",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbf604b6_fdba7a7e",
+        "filename": "src/libANGLE/renderer/gl/VertexArrayGL.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-26T14:51:46Z",
+      "side": 1,
+      "message": "I\u0027ve added your proposal and it brings indeed a good performance boost. With a few more minor changes total the total performance gain is now 16%.\n\nI kept the forwarding function syncDrawElementsState -\u003e syncDrawState as inline function since it doesn\u0027t have any (complex) logic and the number of generated instruction for this delegation function is quite high due to the number of parameters.",
+      "parentUuid": "3d5ffd00_da189551",
       "range": {
         "startLine": 139,
         "startChar": 1,
