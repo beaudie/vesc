@@ -1349,14 +1349,14 @@ AttributeType GetAttributeType(GLenum enumValue)
     }
 }
 
-angle::FormatID GetVertexFormatID(GLenum type,
+angle::FormatID GetVertexFormatID(VertexAttribType type,
                                   GLboolean normalized,
                                   GLuint components,
                                   bool pureInteger)
 {
     switch (type)
     {
-        case GL_BYTE:
+        case VertexAttribType::Byte:
             switch (components)
             {
                 case 1:
@@ -1389,7 +1389,7 @@ angle::FormatID GetVertexFormatID(GLenum type,
                     return angle::FormatID::NONE;
 #endif
             }
-        case GL_UNSIGNED_BYTE:
+        case VertexAttribType::UnsignedByte:
             switch (components)
             {
                 case 1:
@@ -1422,7 +1422,7 @@ angle::FormatID GetVertexFormatID(GLenum type,
                     return angle::FormatID::NONE;
 #endif
             }
-        case GL_SHORT:
+        case VertexAttribType::Short:
             switch (components)
             {
                 case 1:
@@ -1455,7 +1455,7 @@ angle::FormatID GetVertexFormatID(GLenum type,
                     return angle::FormatID::NONE;
 #endif
             }
-        case GL_UNSIGNED_SHORT:
+        case VertexAttribType::UnsignedShort:
             switch (components)
             {
                 case 1:
@@ -1488,7 +1488,7 @@ angle::FormatID GetVertexFormatID(GLenum type,
                     return angle::FormatID::NONE;
 #endif
             }
-        case GL_INT:
+        case VertexAttribType::Int:
             switch (components)
             {
                 case 1:
@@ -1521,7 +1521,7 @@ angle::FormatID GetVertexFormatID(GLenum type,
                     return angle::FormatID::NONE;
 #endif
             }
-        case GL_UNSIGNED_INT:
+        case VertexAttribType::UnsignedInt:
             switch (components)
             {
                 case 1:
@@ -1554,7 +1554,7 @@ angle::FormatID GetVertexFormatID(GLenum type,
                     return angle::FormatID::NONE;
 #endif
             }
-        case GL_FLOAT:
+        case VertexAttribType::Float:
             switch (components)
             {
                 case 1:
@@ -1571,7 +1571,7 @@ angle::FormatID GetVertexFormatID(GLenum type,
                     return angle::FormatID::NONE;
 #endif
             }
-        case GL_HALF_FLOAT:
+        case VertexAttribType::HalfFloat:
             switch (components)
             {
                 case 1:
@@ -1588,7 +1588,7 @@ angle::FormatID GetVertexFormatID(GLenum type,
                     return angle::FormatID::NONE;
 #endif
             }
-        case GL_FIXED:
+        case VertexAttribType::Fixed:
             switch (components)
             {
                 case 1:
@@ -1605,13 +1605,13 @@ angle::FormatID GetVertexFormatID(GLenum type,
                     return angle::FormatID::NONE;
 #endif
             }
-        case GL_INT_2_10_10_10_REV:
+        case VertexAttribType::Int2101010:
             if (pureInteger)
                 return angle::FormatID::R10G10B10A2_SINT;
             if (normalized)
                 return angle::FormatID::R10G10B10A2_SNORM;
             return angle::FormatID::R10G10B10A2_SSCALED;
-        case GL_UNSIGNED_INT_2_10_10_10_REV:
+        case VertexAttribType::UnsignedInt2101010:
             if (pureInteger)
                 return angle::FormatID::R10G10B10A2_UINT;
             if (normalized)
@@ -1625,11 +1625,12 @@ angle::FormatID GetVertexFormatID(GLenum type,
     }
 }
 
-angle::FormatID GetVertexFormatID(const VertexAttribute &attrib, GLenum currentValueType)
+angle::FormatID GetVertexFormatID(const VertexAttribute &attrib, VertexAttribType currentValueType)
 {
     if (!attrib.enabled)
     {
-        return GetVertexFormatID(currentValueType, GL_FALSE, 4, (currentValueType != GL_FLOAT));
+        return GetVertexFormatID(currentValueType, GL_FALSE, 4,
+                                 (currentValueType != VertexAttribType::Float));
     }
     return GetVertexFormatID(attrib);
 }
