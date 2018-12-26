@@ -982,7 +982,7 @@ bool ValidQueryType(const Context *context, QueryType queryType)
 }
 
 bool ValidateWebGLVertexAttribPointer(Context *context,
-                                      GLenum type,
+                                      VertexAttribType type,
                                       GLboolean normalized,
                                       GLsizei stride,
                                       const void *ptr,
@@ -4798,7 +4798,7 @@ bool ValidateGetInternalformativRobustANGLE(Context *context,
 bool ValidateVertexFormatBase(Context *context,
                               GLuint attribIndex,
                               GLint size,
-                              GLenum type,
+                              VertexAttribType type,
                               GLboolean pureInteger)
 {
     const Caps &caps = context->getCaps();
@@ -4814,16 +4814,17 @@ bool ValidateVertexFormatBase(Context *context,
         return false;
     }
 
+    // This validation could be improved using a table and better encapsulation.
     switch (type)
     {
-        case GL_BYTE:
-        case GL_UNSIGNED_BYTE:
-        case GL_SHORT:
-        case GL_UNSIGNED_SHORT:
+        case VertexAttribType::Byte:
+        case VertexAttribType::UnsignedByte:
+        case VertexAttribType::Short:
+        case VertexAttribType::UnsignedShort:
             break;
 
-        case GL_INT:
-        case GL_UNSIGNED_INT:
+        case VertexAttribType::Int:
+        case VertexAttribType::UnsignedInt:
             if (context->getClientMajorVersion() < 3)
             {
                 context->validationError(GL_INVALID_ENUM, kEnumRequiresGLES30);
@@ -4831,8 +4832,8 @@ bool ValidateVertexFormatBase(Context *context,
             }
             break;
 
-        case GL_FIXED:
-        case GL_FLOAT:
+        case VertexAttribType::Fixed:
+        case VertexAttribType::Float:
             if (pureInteger)
             {
                 context->validationError(GL_INVALID_ENUM, kInvalidTypePureInt);
@@ -4840,7 +4841,7 @@ bool ValidateVertexFormatBase(Context *context,
             }
             break;
 
-        case GL_HALF_FLOAT:
+        case VertexAttribType::HalfFloat:
             if (context->getClientMajorVersion() < 3)
             {
                 context->validationError(GL_INVALID_ENUM, kEnumRequiresGLES30);
@@ -4853,8 +4854,8 @@ bool ValidateVertexFormatBase(Context *context,
             }
             break;
 
-        case GL_INT_2_10_10_10_REV:
-        case GL_UNSIGNED_INT_2_10_10_10_REV:
+        case VertexAttribType::Int2101010:
+        case VertexAttribType::UnsignedInt2101010:
             if (context->getClientMajorVersion() < 3)
             {
                 context->validationError(GL_INVALID_ENUM, kEnumRequiresGLES30);
