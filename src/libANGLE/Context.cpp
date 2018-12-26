@@ -4793,7 +4793,7 @@ void Context::vertexAttribPointer(GLuint index,
                                   const void *ptr)
 {
     mState.setVertexAttribPointer(this, index, mState.getTargetBuffer(BufferBinding::Array), size,
-                                  type, ConvertToBool(normalized), false, stride, ptr);
+                                  type, ConvertToBool(normalized), stride, ptr);
     mStateCache.onVertexArrayStateChange(this);
 }
 
@@ -4840,8 +4840,8 @@ void Context::vertexAttribIPointer(GLuint index,
                                    GLsizei stride,
                                    const void *pointer)
 {
-    mState.setVertexAttribPointer(this, index, mState.getTargetBuffer(BufferBinding::Array), size,
-                                  type, false, true, stride, pointer);
+    mState.setVertexAttribIPointer(this, index, mState.getTargetBuffer(BufferBinding::Array), size,
+                                   type, stride, pointer);
     mStateCache.onVertexArrayStateChange(this);
 }
 
