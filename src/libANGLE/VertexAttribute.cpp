@@ -145,25 +145,6 @@ void VertexAttribute::updateCachedElementLimit(const VertexBinding &binding)
     mCachedElementLimit = elementLimit.ValueOrDefault(kIntegerOverflow);
 }
 
-constexpr angle::PackedEnumMap<VertexAttribType, size_t> kVertexAttribSize = {{
-    {VertexAttribType::Byte, sizeof(GLbyte)},
-    {VertexAttribType::UnsignedByte, sizeof(GLubyte)},
-    {VertexAttribType::Short, sizeof(GLshort)},
-    {VertexAttribType::UnsignedShort, sizeof(GLushort)},
-    {VertexAttribType::Int, sizeof(GLint)},
-    {VertexAttribType::UnsignedInt, sizeof(GLuint)},
-    {VertexAttribType::Float, sizeof(GLfloat)},
-    {VertexAttribType::HalfFloat, sizeof(GLhalf)},
-    {VertexAttribType::Fixed, sizeof(GLfixed)},
-    {VertexAttribType::Int2101010, 4},
-    {VertexAttribType::UnsignedInt2101010, 4},
-}};
-
-size_t ComputeVertexAttributeTypeSize(const VertexAttribute &attrib)
-{
-    return kVertexAttribSize[attrib.type] * attrib.size;
-}
-
 size_t ComputeVertexAttributeStride(const VertexAttribute &attrib, const VertexBinding &binding)
 {
     // In ES 3.1, VertexAttribPointer will store the type size in the binding stride.
