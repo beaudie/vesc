@@ -104,7 +104,24 @@ struct VertexAttribute final : private angle::NonCopyable
     GLint64 mCachedElementLimit;
 };
 
-size_t ComputeVertexAttributeTypeSize(const VertexAttribute &attrib);
+constexpr angle::PackedEnumMap<VertexAttribType, size_t> kVertexAttribSize = {{
+    {VertexAttribType::Byte, sizeof(GLbyte)},
+    {VertexAttribType::UnsignedByte, sizeof(GLubyte)},
+    {VertexAttribType::Short, sizeof(GLshort)},
+    {VertexAttribType::UnsignedShort, sizeof(GLushort)},
+    {VertexAttribType::Int, sizeof(GLint)},
+    {VertexAttribType::UnsignedInt, sizeof(GLuint)},
+    {VertexAttribType::Float, sizeof(GLfloat)},
+    {VertexAttribType::HalfFloat, sizeof(GLhalf)},
+    {VertexAttribType::Fixed, sizeof(GLfixed)},
+    {VertexAttribType::Int2101010, 4},
+    {VertexAttribType::UnsignedInt2101010, 4},
+}};
+
+ANGLE_INLINE size_t ComputeVertexAttributeTypeSize(const VertexAttribute &attrib)
+{
+    return kVertexAttribSize[attrib.type] * attrib.size;
+}
 
 // Warning: you should ensure binding really matches attrib.bindingIndex before using this function.
 size_t ComputeVertexAttributeStride(const VertexAttribute &attrib, const VertexBinding &binding);
