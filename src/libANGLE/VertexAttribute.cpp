@@ -48,7 +48,7 @@ void VertexBinding::onContainerBindingChanged(const Context *context, int incr) 
 
 VertexAttribute::VertexAttribute(GLuint bindingIndex)
     : enabled(false),
-      type(GL_FLOAT),
+      type(VertexAttribType::Float),
       size(4u),
       normalized(false),
       pureInteger(false),
@@ -145,37 +145,23 @@ void VertexAttribute::updateCachedElementLimit(const VertexBinding &binding)
     mCachedElementLimit = elementLimit.ValueOrDefault(kIntegerOverflow);
 }
 
+constexpr angle::PackedEnumMap<VertexAttribType, size_t> kVertexAttribSize = {{
+    {VertexAttribType::Byte, sizeof(GLbyte)},
+    {VertexAttribType::UnsignedByte, sizeof(GLubyte)},
+    {VertexAttribType::Short, sizeof(GLshort)},
+    {VertexAttribType::UnsignedShort, sizeof(GLushort)},
+    {VertexAttribType::Int, sizeof(GLint)},
+    {VertexAttribType::UnsignedInt, sizeof(GLuint)},
+    {VertexAttribType::Float, sizeof(GLfloat)},
+    {VertexAttribType::HalfFloat, sizeof(GLhalf)},
+    {VertexAttribType::Fixed, sizeof(GLfixed)},
+    {VertexAttribType::Int2101010, 4},
+    {VertexAttribType::UnsignedInt2101010, 4},
+}};
+
 size_t ComputeVertexAttributeTypeSize(const VertexAttribute &attrib)
 {
-    GLuint size = attrib.size;
-    switch (attrib.type)
-    {
-        case GL_BYTE:
-            return size * sizeof(GLbyte);
-        case GL_UNSIGNED_BYTE:
-            return size * sizeof(GLubyte);
-        case GL_SHORT:
-            return size * sizeof(GLshort);
-        case GL_UNSIGNED_SHORT:
-            return size * sizeof(GLushort);
-        case GL_INT:
-            return size * sizeof(GLint);
-        case GL_UNSIGNED_INT:
-            return size * sizeof(GLuint);
-        case GL_INT_2_10_10_10_REV:
-            return 4;
-        case GL_UNSIGNED_INT_2_10_10_10_REV:
-            return 4;
-        case GL_FIXED:
-            return size * sizeof(GLfixed);
-        case GL_HALF_FLOAT:
-            return size * sizeof(GLhalf);
-        case GL_FLOAT:
-            return size * sizeof(GLfloat);
-        default:
-            UNREACHABLE();
-            return size * sizeof(GLfloat);
-    }
+    return kVertexAttribSize[attrib.type] * attrib.size;
 }
 
 size_t ComputeVertexAttributeStride(const VertexAttribute &attrib, const VertexBinding &binding)
@@ -207,33 +193,6 @@ size_t ComputeVertexBindingElementCount(GLuint divisor, size_t drawCount, size_t
     }
 
     return drawCount;
-}
-
-GLenum GetVertexAttributeBaseType(const VertexAttribute &attrib)
-{
-    if (attrib.pureInteger)
-    {
-        switch (attrib.type)
-        {
-            case GL_BYTE:
-            case GL_SHORT:
-            case GL_INT:
-                return GL_INT;
-
-            case GL_UNSIGNED_BYTE:
-            case GL_UNSIGNED_SHORT:
-            case GL_UNSIGNED_INT:
-                return GL_UNSIGNED_INT;
-
-            default:
-                UNREACHABLE();
-                return GL_NONE;
-        }
-    }
-    else
-    {
-        return GL_FLOAT;
-    }
 }
 
 }  // namespace gl
