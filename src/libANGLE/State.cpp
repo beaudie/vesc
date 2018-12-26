@@ -1364,7 +1364,7 @@ void State::setVertexAttribBinding(const Context *context, GLuint attribIndex, G
 
 void State::setVertexAttribFormat(GLuint attribIndex,
                                   GLint size,
-                                  GLenum type,
+                                  VertexAttribType type,
                                   bool normalized,
                                   bool pureInteger,
                                   GLuint relativeOffset)
