@@ -1548,17 +1548,6 @@ const OffsetBindingPointer<Buffer> &State::getIndexedShaderStorageBuffer(size_t 
     return mShaderStorageBuffers[index];
 }
 
-Buffer *State::getTargetBuffer(BufferBinding target) const
-{
-    switch (target)
-    {
-        case BufferBinding::ElementArray:
-            return getVertexArray()->getElementArrayBuffer();
-        default:
-            return mBoundBuffers[target].get();
-    }
-}
-
 angle::Result State::detachBuffer(const Context *context, const Buffer *buffer)
 {
     if (!buffer->isBound())
