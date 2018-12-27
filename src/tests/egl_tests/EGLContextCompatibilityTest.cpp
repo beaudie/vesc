@@ -144,7 +144,7 @@ class EGLContextCompatibilityTest : public EGLTest,
         eglDestroyContext(mDisplay, context);
         ASSERT_EGL_SUCCESS();
 
-        SafeDelete(osWindow);
+        FreeOSWindow(osWindow);
     }
 
     void testPbufferCompatibility(EGLConfig pbufferConfig,
