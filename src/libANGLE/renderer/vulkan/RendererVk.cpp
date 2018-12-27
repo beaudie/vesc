@@ -16,10 +16,12 @@
 
 #include "common/debug.h"
 #include "common/system_utils.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/CompilerVk.h"
+#include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/GlslangWrapper.h"
@@ -392,8 +394,7 @@ void RendererVk::notifyDeviceLost()
     mDeviceLost = true;
 
     mCommandGraph.clear();
-    mLastSubmittedQueueSerial = mCurrentQueueSerial;
-    mCurrentQueueSerial       = mQueueSerialFactory.generate();
+    nextSerial();
     freeAllInFlightResources();
 
     mDisplay->notifyDeviceLost();
@@ -1105,10 +1106,7 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     // InterleavedAttributeDataBenchmark perf test for example issues a large number of flushes.
     ASSERT(mInFlightCommands.size() <= kInFlightCommandsLimit);
 
-    // Increment the queue serial. If this fails, we should restart ANGLE.
-    // TODO(jmadill): Overflow check.
-    mLastSubmittedQueueSerial = mCurrentQueueSerial;
-    mCurrentQueueSerial       = mQueueSerialFactory.generate();
+    nextSerial();
 
     ANGLE_TRY(checkCompletedCommands(context));
 
@@ -1129,6 +1127,20 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
 
     ANGLE_VK_TRY(context, mCommandPool.init(mDevice, poolInfo));
     return angle::Result::Continue;
+}
+
+void RendererVk::nextSerial()
+{
+    // Increment the queue serial. If this fails, we should restart ANGLE.
+    mLastSubmittedQueueSerial = mCurrentQueueSerial;
+    mCurrentQueueSerial       = mQueueSerialFactory.generate();
+
+    // Notify the Contexts that they should be starting new command buffers.
+    for (gl::Context *context : mDisplay->getContextSet())
+    {
+        ContextVk *contextVk = vk::GetImpl(context);
+        contextVk->onCommandBufferFinished();
+    }
 }
 
 bool RendererVk::isSerialInUse(Serial serial) const
