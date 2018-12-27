@@ -886,7 +886,6 @@ libglesv2_sources = [
   "src/libGLESv2/entry_points_utils.h",
   "src/libGLESv2/global_state.cpp",
   "src/libGLESv2/global_state.h",
-  "src/libGLESv2/libGLESv2_autogen.cpp",
   "src/libGLESv2/libGLESv2.rc",
   "src/libGLESv2/proc_table.h",
   "src/libGLESv2/proc_table_autogen.cpp",

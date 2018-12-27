@@ -63,10 +63,10 @@ template_entry_point_header = """// GENERATED FILE - DO NOT EDIT.
 
 {includes}
 
-namespace gl
+extern "C"
 {{
 {entry_points}
-}}  // namespace gl
+}}  // extern "C"
 
 #endif  // LIBGLESV2_ENTRY_POINTS_GLES_{annotation_upper}_AUTOGEN_H_
 """
@@ -83,9 +83,11 @@ template_entry_point_source = """// GENERATED FILE - DO NOT EDIT.
 
 {includes}
 
-namespace gl
+using namespace gl;
+
+extern "C"
 {{
-{entry_points}}}  // namespace gl
+{entry_points}}}  // extern "C"
 """
 
 template_entry_points_enum_header = """// GENERATED FILE - DO NOT EDIT.
@@ -128,7 +130,7 @@ extern "C" {{
 
 template_entry_point_decl = """ANGLE_EXPORT {return_type}GL_APIENTRY {name}{explicit_context_suffix}({explicit_context_param}{explicit_context_comma}{params});"""
 
-template_entry_point_def = """{return_type}GL_APIENTRY {name}{explicit_context_suffix}({explicit_context_param}{explicit_context_comma}{params})
+template_entry_point_def = """{return_type}GL_APIENTRY gl{name}{explicit_context_suffix}({explicit_context_param}{explicit_context_comma}{params})
 {{
     ANGLE_SCOPED_GLOBAL_LOCK();
     {event_comment}EVENT("({format_params})"{comma_if_needed}{pass_params});
@@ -166,7 +168,7 @@ context_gles_decl = """    {return_type} {name_lower_no_suffix}({internal_params
 
 libgles_entry_point_def = """{return_type}GL_APIENTRY gl{name}{explicit_context_suffix}({explicit_context_param}{explicit_context_comma}{params})
 {{
-    return gl::{name}{explicit_context_suffix}({explicit_context_internal_param}{explicit_context_comma}{internal_params});
+    return gl{name}{explicit_context_suffix}({explicit_context_internal_param}{explicit_context_comma}{internal_params});
 }}
 """
 
@@ -248,7 +250,17 @@ format_dict = {
     "GLeglImageOES": "0x%016\" PRIxPTR \"",
 }
 
-template_header_includes = """#include <GLES{major}/gl{major}{minor}.h>
+template_header_includes = """
+
+#if defined(GL_GLES_PROTOTYPES) && GL_GLES_PROTOTYPES
+#    error Function prototypes multiple defined.
+#endif  // defined(GL_GLES_PROTOTYPES) && GL_GLES_PROTOTYPES
+
+#if defined(GL_GLEXT_PROTOTYPES)
+#    error Function prototypes multiple defined.
+#endif  // defined(GL_GLEXT_PROTOTYPES)
+
+#include <GLES{major}/gl{major}{minor}.h>
 #include <export.h>"""
 
 template_sources_includes = """#include "libGLESv2/entry_points_gles_{}_autogen.h"
@@ -285,7 +297,7 @@ with open(script_relative('entry_point_packed_gl_enums.json')) as f:
 def format_entry_point_decl(cmd_name, proto, params, is_explicit_context):
     comma_if_needed = ", " if len(params) > 0 else ""
     return template_entry_point_decl.format(
-        name = cmd_name[2:],
+        name = cmd_name,
         return_type = proto[:-len(cmd_name)],
         params = ", ".join(params),
         comma_if_needed = comma_if_needed,
@@ -542,20 +554,6 @@ def write_file(annotation, comment, template, entry_points, suffix, includes, fi
 
     path = path_to("libGLESv2", "entry_points_gles_{}_autogen.{}".format(
         annotation.lower(), suffix))
-
-    with open(path, "w") as out:
-        out.write(content)
-        out.close()
-
-def write_export_files(entry_points, includes):
-    content = template_libgles_entry_point_source.format(
-        script_name = os.path.basename(sys.argv[0]),
-        data_source_name = "gl.xml and gl_angle_ext.xml",
-        year = date.today().year,
-        includes = includes,
-        entry_points = entry_points)
-
-    path = path_to("libGLESv2", "libGLESv2_autogen.cpp")
 
     with open(path, "w") as out:
         out.write(content)
@@ -865,20 +863,6 @@ entry_points_enum_header_path = path_to("libGLESv2", "entry_points_enum_autogen.
 with open(entry_points_enum_header_path, "w") as out:
     out.write(entry_points_enum)
     out.close()
-
-source_includes = """
-#include "angle_gl.h"
-
-#include "libGLESv2/entry_points_gles_1_0_autogen.h"
-#include "libGLESv2/entry_points_gles_2_0_autogen.h"
-#include "libGLESv2/entry_points_gles_3_0_autogen.h"
-#include "libGLESv2/entry_points_gles_3_1_autogen.h"
-#include "libGLESv2/entry_points_gles_ext_autogen.h"
-
-#include "common/event_tracer.h"
-"""
-
-write_export_files("\n".join([item for item in libgles_ep_defs]), source_includes)
 
 libgles_ep_exports += get_egl_exports()
 
