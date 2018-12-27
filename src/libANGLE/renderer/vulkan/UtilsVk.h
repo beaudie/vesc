@@ -97,7 +97,7 @@ class UtilsVk : angle::NonCopyable
                              FramebufferVk *framebuffer,
                              const ClearImageParameters &params);
 
-    angle::Result copyImage(vk::Context *context,
+    angle::Result copyImage(ContextVk *contextVk,
                             vk::ImageHelper *dest,
                             vk::ImageView *destView,
                             vk::ImageHelper *src,
@@ -201,7 +201,7 @@ class UtilsVk : angle::NonCopyable
     angle::Result ensureImageClearResourcesInitialized(vk::Context *context);
     angle::Result ensureImageCopyResourcesInitialized(vk::Context *context);
 
-    angle::Result startRenderPass(vk::Context *context,
+    angle::Result startRenderPass(ContextVk *contextVk,
                                   vk::ImageHelper *image,
                                   vk::ImageView *imageView,
                                   const vk::RenderPassDesc &renderPassDesc,
