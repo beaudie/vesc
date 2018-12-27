@@ -174,7 +174,8 @@ class EGLPresentPathD3D11 : public EGLTest, public testing::WithParamInterface<P
         }
 
         mOSWindow->destroy();
-        SafeDelete(mOSWindow);
+        FreeOSWindow(mOSWindow);
+        mOSWindow = nullptr;
     }
 
     void drawQuadUsingGL()

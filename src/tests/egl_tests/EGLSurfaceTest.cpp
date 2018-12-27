@@ -82,7 +82,8 @@ class EGLSurfaceTest : public EGLTest
         }
 
         mOSWindow->destroy();
-        SafeDelete(mOSWindow);
+        FreeOSWindow(mOSWindow);
+        mOSWindow = nullptr;
 
         ASSERT_TRUE(mWindowSurface == EGL_NO_SURFACE && mContext == EGL_NO_CONTEXT);
     }
