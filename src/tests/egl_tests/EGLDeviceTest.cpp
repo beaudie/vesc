@@ -14,13 +14,15 @@
 
 #include <d3d11.h>
 
-#include "OSWindow.h"
-#include "com_utils.h"
 #include "test_utils/ANGLETest.h"
+#include "util/EGLWindow.h"
+#include "util/OSWindow.h"
+#include "util/com_utils.h"
+#include "util/gles_loader_autogen.h"
 
 using namespace angle;
 
-class EGLDeviceCreationTest : public testing::Test
+class EGLDeviceCreationTest : public EGLTest
 {
   protected:
     EGLDeviceCreationTest()
@@ -39,6 +41,8 @@ class EGLDeviceCreationTest : public testing::Test
 
     void SetUp() override
     {
+        EGLTest::SetUp();
+
         mD3D11Module = LoadLibrary(TEXT("d3d11.dll"));
         if (mD3D11Module == nullptr)
         {
@@ -65,6 +69,13 @@ class EGLDeviceCreationTest : public testing::Test
                 mDeviceCreationD3D11ExtAvailable = true;
             }
         }
+
+        eglCreateDeviceANGLE = reinterpret_cast<PFNEGLCREATEDEVICEANGLEPROC>(
+            eglGetProcAddress("eglCreateDeviceANGLE"));
+        ASSERT_NE(nullptr, eglCreateDeviceANGLE);
+        eglReleaseDeviceANGLE = reinterpret_cast<PFNEGLRELEASEDEVICEANGLEPROC>(
+            eglGetProcAddress("eglReleaseDeviceANGLE"));
+        ASSERT_NE(nullptr, eglReleaseDeviceANGLE);
     }
 
     void TearDown() override
@@ -188,6 +199,9 @@ class EGLDeviceCreationTest : public testing::Test
     EGLSurface mSurface;
     EGLContext mContext;
     EGLConfig mConfig;
+
+    PFNEGLCREATEDEVICEANGLEPROC eglCreateDeviceANGLE   = nullptr;
+    PFNEGLRELEASEDEVICEANGLEPROC eglReleaseDeviceANGLE = nullptr;
 };
 
 // Test that creating a EGLDeviceEXT from D3D11 device works, and it can be queried to retrieve
