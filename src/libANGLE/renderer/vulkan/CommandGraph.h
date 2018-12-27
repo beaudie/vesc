@@ -42,6 +42,14 @@ enum class CommandGraphNodeFunction
     WriteTimestamp,
 };
 
+// Receives notifications when a command buffer is no longer able to record.
+class CommandBufferNotificationReceiver
+{
+  public:
+    virtual ~CommandBufferNotificationReceiver() {}
+    virtual void onCommandBufferFinished() = 0;
+};
+
 // Only used internally in the command graph. Kept in the header for better inlining performance.
 class CommandGraphNode final : angle::NonCopyable
 {
@@ -119,8 +127,17 @@ class CommandGraphNode final : angle::NonCopyable
         mGlobalMemoryBarrierDstAccess |= dstAccess;
     }
 
+    void setNotifier(CommandBufferNotificationReceiver *notifier) { mNotifier = notifier; }
+
   private:
-    void setHasChildren() { mHasChildren = true; }
+    ANGLE_INLINE void setHasChildren()
+    {
+        mHasChildren = true;
+        if (mNotifier)
+        {
+            mNotifier->onCommandBufferFinished();
+        }
+    }
 
     // Used for testing only.
     bool isChildOf(CommandGraphNode *parent);
@@ -158,6 +175,9 @@ class CommandGraphNode final : angle::NonCopyable
     // For global memory barriers.
     VkFlags mGlobalMemoryBarrierSrcAccess;
     VkFlags mGlobalMemoryBarrierDstAccess;
+
+    // Command buffer notifications.
+    CommandBufferNotificationReceiver *mNotifier;
 };
 
 // This is a helper class for back-end objects used in Vk command buffers. It records a serial
@@ -227,7 +247,7 @@ class RecordableGraphResource : public CommandGraphResource
 
     // Begins a command buffer on the current graph node for in-RenderPass rendering.
     // Called from FramebufferVk::startNewRenderPass and UtilsVk functions.
-    angle::Result beginRenderPass(Context *context,
+    angle::Result beginRenderPass(ContextVk *contextVk,
                                   const Framebuffer &framebuffer,
                                   const gl::Rectangle &renderArea,
                                   const RenderPassDesc &renderPassDesc,
