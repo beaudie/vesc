@@ -1,0 +1,602 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b39ff1b1_3d582572",
+        "filename": "BUILD.gn",
+        "patchSetId": 49
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "It\u0027s confusing that for EXT you need to use #ifdef but non-EXT #if. Could you make this similar?",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 1
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9f7fb5a_a7f8f245",
+        "filename": "include/GLES/gl.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "// GL_GLES_PROTOTYPES",
+      "range": {
+        "startLine": 697,
+        "startChar": 1,
+        "endLine": 697,
+        "endChar": 6
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5d34dee_cda34d7e",
+        "filename": "include/GLES/gl.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "// GL_GLES_PROTOTYPES",
+      "range": {
+        "startLine": 724,
+        "startChar": 1,
+        "endLine": 724,
+        "endChar": 6
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1685c05_af8de18d",
+        "filename": "include/GLES3/gl3.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "3?",
+      "range": {
+        "startLine": 1,
+        "startChar": 14,
+        "endLine": 1,
+        "endChar": 15
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c01b9442_7579ba7a",
+        "filename": "include/GLES3/gl3.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "// GL_GLES_PROTOTYPES",
+      "range": {
+        "startLine": 45,
+        "startChar": 1,
+        "endLine": 45,
+        "endChar": 6
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd01145e_4b41c584",
+        "filename": "include/GLES3/gl3.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "// GL_GLES_PROTOTYPES",
+      "range": {
+        "startLine": 668,
+        "startChar": 1,
+        "endLine": 668,
+        "endChar": 6
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94b0319e_7940f90b",
+        "filename": "include/GLES3/gl3.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 1204,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "// GL_GLES_PROTOTYPES",
+      "range": {
+        "startLine": 1204,
+        "startChar": 1,
+        "endLine": 1204,
+        "endChar": 6
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c7d808a_f509842d",
+        "filename": "include/GLES3/gl31.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "3?",
+      "range": {
+        "startLine": 1,
+        "startChar": 14,
+        "endLine": 1,
+        "endChar": 15
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "853e7df6_73f4535e",
+        "filename": "include/GLES3/gl31.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "This looks formatted differently from the other headers, probably shouldn\u0027t be.",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 11
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "143d9f1f_56c556aa",
+        "filename": "include/GLES3/gl31.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "Is it possible to just include gl2.h instead of repeating this?",
+      "range": {
+        "startLine": 59,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 25
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d1b4151_729b49d6",
+        "filename": "include/GLES3/gl31.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "// GL_GLES_PROTOTYPES",
+      "range": {
+        "startLine": 959,
+        "startChar": 5,
+        "endLine": 959,
+        "endChar": 10
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be4329b8_77d316ae",
+        "filename": "include/GLES3/gl31.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 1848,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "// GL_GLES_PROTOTYPES",
+      "range": {
+        "startLine": 1848,
+        "startChar": 5,
+        "endLine": 1848,
+        "endChar": 10
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d22315ab_87e58a13",
+        "filename": "include/GLES3/gl31.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 2469,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "// GL_GLES_PROTOTYPES",
+      "range": {
+        "startLine": 2469,
+        "startChar": 5,
+        "endLine": 2469,
+        "endChar": 10
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de92b3cb_d7bcf2e5",
+        "filename": "include/GLES3/gl32.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "isn\u0027t prefixed with gles, like the other ones",
+      "range": {
+        "startLine": 1,
+        "startChar": 8,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30212b5f_14ba06c3",
+        "filename": "include/GLES3/gl32.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "// GL_GLES_PROTOTYPES",
+      "range": {
+        "startLine": 1206,
+        "startChar": 1,
+        "endLine": 1206,
+        "endChar": 6
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cca1932_56ec19a4",
+        "filename": "include/GLES3/gl32.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "// GL_GLES_PROTOTYPES",
+      "range": {
+        "startLine": 1521,
+        "startChar": 1,
+        "endLine": 1521,
+        "endChar": 6
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82378107_55974058",
+        "filename": "include/GLES3/gl32.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 1822,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "// GL_GLES_PROTOTYPES",
+      "range": {
+        "startLine": 1822,
+        "startChar": 1,
+        "endLine": 1822,
+        "endChar": 6
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edd4a0e0_ce063da4",
+        "filename": "scripts/generate_loader.py",
+        "patchSetId": 49
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "Missing 3.2?",
+      "range": {
+        "startLine": 103,
+        "startChar": 41,
+        "endLine": 103,
+        "endChar": 71
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5560aaff_c1dd818a",
+        "filename": "scripts/generate_loader.py",
+        "patchSetId": 49
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "EGL",
+      "range": {
+        "startLine": 132,
+        "startChar": 33,
+        "endLine": 132,
+        "endChar": 37
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c58b2284_9a481e80",
+        "filename": "src/tests/egl_tests/EGLDebugTest.cpp",
+        "patchSetId": 49
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "Looks like some egl_tests are ANGLETest and some EGLTest, is that normal?",
+      "range": {
+        "startLine": 17,
+        "startChar": 28,
+        "endLine": 17,
+        "endChar": 37
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52295793_9da4a952",
+        "filename": "src/tests/gl_tests/D3DTextureTest.cpp",
+        "patchSetId": 49
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "Why is this one ASSERT, but the previous one EXPECT?\nAlso, shouldn\u0027t it be (mD3D11Device !\u003d nullptr)?",
+      "range": {
+        "startLine": 703,
+        "startChar": 4,
+        "endLine": 703,
+        "endChar": 15
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13cf8415_04c4c54f",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 49
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "It\u0027s confusing that EGLWindow will not use eglLibrary if ANGLE_USE_UTIL_LOADER is not defined, so it is safe to pass nullptr in that case.\nI\u0027d prefer if you had 2 versions of initializeGL, one that gets eglLibrary parameter and another that doesn\u0027t.",
+      "range": {
+        "startLine": 91,
+        "startChar": 55,
+        "endLine": 91,
+        "endChar": 71
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e380bb3_3e92fc86",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 49
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "While this works for ANGLE, there is no guarantee it works for every EGL implementation.\nThat\u0027s why FunctionsEGLDL::getProcAddress falls back to dlsym.",
+      "range": {
+        "startLine": 172,
+        "startChar": 19,
+        "endLine": 172,
+        "endChar": 33
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37fd125c_b1bae0f6",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 49
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "Could you add this to the if above and return true here?",
+      "range": {
+        "startLine": 309,
+        "startChar": 12,
+        "endLine": 309,
+        "endChar": 38
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "825ef3b1_6a74a8c2",
+        "filename": "util/gles_loader_autogen.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "Why do you need extern here but not in EGL?",
+      "range": {
+        "startLine": 21,
+        "startChar": 18,
+        "endLine": 21,
+        "endChar": 24
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ab9ba05_05fdfc3a",
+        "filename": "util/util_export.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2018-12-27T19:30:29Z",
+      "side": 1,
+      "message": "Maybe we should replace all ANGLE_EXPORT in \"util\" with this and then remove LIBANGLE_UTIL_IMPLEMENTATION from include/export.h?",
+      "range": {
+        "startLine": 11,
+        "startChar": 13,
+        "endLine": 11,
+        "endChar": 30
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
