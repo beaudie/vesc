@@ -59,7 +59,7 @@ ShaderImpl *ContextGL::createShader(const gl::ShaderState &data)
 ProgramImpl *ContextGL::createProgram(const gl::ProgramState &data)
 {
     return new ProgramGL(data, getFunctions(), getWorkaroundsGL(), getStateManager(),
-                         getExtensions().pathRendering);
+                         getExtensions().pathRendering, mRenderer);
 }
 
 FramebufferImpl *ContextGL::createFramebuffer(const gl::FramebufferState &data)
