@@ -235,9 +235,11 @@ GLColor32F ReadColor32F(GLint x, GLint y);
 #define EXPECT_PIXEL_COLOR32F_NEAR(x, y, angleColor, abs_error) \
     EXPECT_PIXEL32F_NEAR(x, y, angleColor.R, angleColor.G, angleColor.B, angleColor.A, abs_error)
 
-class EGLWindow;
-class OSWindow;
 class ANGLETestBase;
+class EGLWindow;
+class GLWindowBase;
+class OSWindow;
+class WGLWindow;
 
 struct TestPlatformContext final : private angle::NonCopyable
 {
@@ -385,8 +387,6 @@ class ANGLETestBase
     };
 
   private:
-    bool destroyEGLContext();
-
     void checkD3D11SDKLayersMessages();
 
     void drawQuad(GLuint program,
@@ -397,7 +397,10 @@ class ANGLETestBase
                   bool useInstancedDrawCalls,
                   GLuint numInstances);
 
+    GLWindowBase *getGLWindow() const;
+
     EGLWindow *mEGLWindow;
+    WGLWindow *mWGLWindow;
     int mWidth;
     int mHeight;
 
@@ -437,11 +440,13 @@ class ANGLETestEnvironment : public testing::Environment
     void SetUp() override;
     void TearDown() override;
 
-    static angle::Library *GetEntryPointsLib() { return gEntryPointsLib.get(); }
+    static angle::Library *GetEGLLibrary();
+    static angle::Library *GetWGLLibrary();
 
   private:
     // For loading entry points.
-    static std::unique_ptr<angle::Library> gEntryPointsLib;
+    static std::unique_ptr<angle::Library> gEGLLibrary;
+    static std::unique_ptr<angle::Library> gWGLLibrary;
 };
 
 // This base fixture loads the EGL entry points.
