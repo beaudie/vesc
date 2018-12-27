@@ -2976,7 +2976,7 @@ bool ValidateVertexAttribIPointer(Context *context,
         return false;
     }
 
-    if (!ValidateVertexFormatBase(context, index, size, type, true))
+    if (!ValidateIntegerVertexFormatBase(context, index, size, type))
     {
         return false;
     }
