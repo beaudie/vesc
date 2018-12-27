@@ -320,7 +320,17 @@ class State : angle::NonCopyable
         (this->*(kBufferSetters[target]))(context, buffer);
     }
 
-    Buffer *getTargetBuffer(BufferBinding target) const;
+    ANGLE_INLINE Buffer *getTargetBuffer(BufferBinding target) const
+    {
+        switch (target)
+        {
+            case BufferBinding::ElementArray:
+                return getVertexArray()->getElementArrayBuffer();
+            default:
+                return mBoundBuffers[target].get();
+        }
+    }
+
     angle::Result setIndexedBufferBinding(const Context *context,
                                           BufferBinding target,
                                           GLuint index,
