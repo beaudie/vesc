@@ -91,6 +91,29 @@
       "revId": "bf08925ef2d603d3538709985314418cd1257b03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "982e3fd7_9cc338eb",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-27T23:48:55Z",
+      "side": 1,
+      "message": "found the problem. This function needs to assign to outIndices even if the if statement below is false. I added \"else { *outIndices \u003d indices; } and it fixed the test failures. Hopefully the optimizer is smart enough to optimize this away.",
+      "range": {
+        "startLine": 210,
+        "startChar": 59,
+        "endLine": 210,
+        "endChar": 82
+      },
+      "revId": "bf08925ef2d603d3538709985314418cd1257b03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
