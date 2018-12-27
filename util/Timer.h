@@ -7,9 +7,9 @@
 #ifndef SAMPLE_UTIL_TIMER_H
 #define SAMPLE_UTIL_TIMER_H
 
-#include <export.h>
+#include "util/util_export.h"
 
-class ANGLE_EXPORT Timer
+class ANGLE_UTIL_EXPORT Timer
 {
   public:
     virtual ~Timer() {}
@@ -26,6 +26,6 @@ class ANGLE_EXPORT Timer
     virtual double getAbsoluteTime() = 0;
 };
 
-ANGLE_EXPORT Timer *CreateTimer();
+ANGLE_UTIL_EXPORT Timer *CreateTimer();
 
 #endif // SAMPLE_UTIL_TIMER_H
