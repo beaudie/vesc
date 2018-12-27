@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed993e2c_7bda2961",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-27T23:41:46Z",
+      "side": 1,
+      "message": "can you run scripts/run_code_generation.py? This will update some saved hashes and run git cl format.",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 33
+      },
+      "revId": "bf08925ef2d603d3538709985314418cd1257b03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35f862d3_e103cf06",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-27T23:41:46Z",
+      "side": 1,
+      "message": "can you move these into your new inl header? Another benefit of encapsulation.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 42
+      },
+      "revId": "bf08925ef2d603d3538709985314418cd1257b03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f403f79c_09ca78b9",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-27T23:41:46Z",
+      "side": 1,
+      "message": "nit: just 2018",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 26
+      },
+      "revId": "bf08925ef2d603d3538709985314418cd1257b03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22780162_9359a60f",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-27T23:41:46Z",
+      "side": 1,
+      "message": "nit: update",
+      "range": {
+        "startLine": 72,
+        "startChar": 11,
+        "endLine": 72,
+        "endChar": 30
+      },
+      "revId": "bf08925ef2d603d3538709985314418cd1257b03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
