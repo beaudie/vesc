@@ -87,6 +87,31 @@ def gen_libegl_loader():
     write_header(data_source_name, all_cmds, "egl", libegl_preamble, path, "LIBEGL", "_")
     write_source(data_source_name, all_cmds, "egl", path, "_")
 
+def gen_libglesv1_cm_loader():
+
+    data_source_name = "gl.xml and gl_angle_ext.xml"
+    xml = registry_xml.RegistryXML("gl.xml", "gl_angle_ext.xml")
+
+    for major_version, minor_version in [[1, 0]]:
+        annotation = "{}_{}".format(major_version, minor_version)
+        name_prefix = "GL_ES_VERSION_"
+
+        is_gles1 = major_version == 1
+        if is_gles1:
+            name_prefix = "GL_VERSION_ES_CM_"
+
+        feature_name = "{}{}".format(name_prefix, annotation)
+
+        xml.AddCommands(feature_name, annotation)
+
+    xml.AddExtensionCommands(registry_xml.gles1_extensions, ['gles1'])
+
+    all_cmds = xml.all_cmd_names.get_all_commands()
+
+    path = os.path.join("..", "src", "libGLESv1_CM")
+    write_header(data_source_name, all_cmds, "gles", libglesv1_cm_preamble, path, "LIBGLESV1_CM", "_")
+    write_source(data_source_name, all_cmds, "gles", path, "_")
+
 def gen_gl_loader():
 
     data_source_name = "gl.xml and gl_angle_ext.xml"
@@ -169,6 +194,7 @@ def gen_wgl_loader():
 
 def main():
     gen_libegl_loader()
+    gen_libglesv1_cm_loader()
     gen_gl_loader()
     gen_egl_loader()
     gen_wgl_loader()
@@ -176,6 +202,10 @@ def main():
 
 libegl_preamble = """#include <EGL/egl.h>
 #include <EGL/eglext.h>
+"""
+
+libglesv1_cm_preamble = """#include <GLES/gl.h>
+#include <GLES/glext.h>
 """
 
 util_gles_preamble = """#if defined(GL_GLES_PROTOTYPES) && GL_GLES_PROTOTYPES
