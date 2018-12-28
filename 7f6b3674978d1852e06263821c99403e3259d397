@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ebdb3b2c_612069b1",
+        "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-28T18:28:44Z",
+      "side": 0,
+      "message": "Why do some tests add specific loads of a function, and some remove them?",
+      "revId": "7f6b3674978d1852e06263821c99403e3259d397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8de25a7_b5d381cf",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-28T18:28:44Z",
+      "side": 0,
+      "message": "I presume this is removed because of a warning that categoryIndex is unused (on release)? You can keep it by moving the calculation inside the assert:\n\nASSERT(category \u003e\u003d gTraceCategories \u0026\u0026 static_cast\u003csize_t\u003e(category - gTraceCategories) \u003c ArraySize(gTraceCategories));",
+      "revId": "7f6b3674978d1852e06263821c99403e3259d397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8eb02683_5d88fa60",
+        "filename": "src/tests/egl_tests/EGLBlobCacheTest.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-28T18:28:44Z",
+      "side": 1,
+      "message": "It\u0027s not very clear to me why this was not previously needed but now is.",
+      "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d798ffa_15b7e559",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-28T18:28:44Z",
+      "side": 1,
+      "message": "Does it need to be conditioned to ANGLE_USE_UTIL_LOADER?",
+      "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "099174fe_b7d6b5a2",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-28T18:28:44Z",
+      "side": 1,
+      "message": "Does it need to be conditioned to ANGLE_USE_UTIL_LOADER?",
+      "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dc940d8_d0ac66ba",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-28T18:28:44Z",
+      "side": 1,
+      "message": "I\u0027m seeing this in more than one place, could we put it in some (possibly new) header so this special handling wouldn\u0027t need to be repeated?",
+      "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb36b0bd_a8b3d058",
+        "filename": "src/tests/test_utils/ANGLETest.h",
+        "patchSetId": 52
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-28T18:28:44Z",
+      "side": 1,
+      "message": "Quite a random declaration. Is it because we use GLuint in places where gl headers are not included?",
+      "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1a5ab53_433581f4",
+        "filename": "util/egl_loader_autogen.h",
+        "patchSetId": 52
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-28T18:28:44Z",
+      "side": 1,
+      "message": "Can you add a space between GenericProc and (, it was not immediately clear at first that that\u0027s a return value (and looked like an impossible function call).",
+      "range": {
+        "startLine": 111,
+        "startChar": 20,
+        "endLine": 111,
+        "endChar": 32
+      },
+      "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c841e9a3_985abe0b",
+        "filename": "util/util_export.h",
+        "patchSetId": 52
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-28T18:28:44Z",
+      "side": 1,
+      "message": "Should this define to `__attribute__((visibility(\"hidden\")))`?",
+      "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
