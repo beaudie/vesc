@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4f1e8c8_b3a1191d",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2400,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T14:48:10Z",
+      "side": 1,
+      "message": "can you add a TODO here? With a link to the angle bug where you plan to fix it?",
+      "range": {
+        "startLine": 2400,
+        "startChar": 4,
+        "endLine": 2400,
+        "endChar": 22
+      },
+      "revId": "3a5ea71279d102c03b13c34514ab9c40cbe6eab9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
