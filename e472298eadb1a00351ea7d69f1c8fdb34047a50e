@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "25ef17a6_88a52b32",
+        "filename": "BUILD.gn",
+        "patchSetId": 49
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Yeah it\u0027s a bit weird. It\u0027s how the Khronos headers are designed. I\u0027m reluctant to change it because it would be non-standard.",
+      "parentUuid": "b39ff1b1_3d582572",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 1
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f9f7fb5a_a7f8f245",
         "filename": "include/GLES/gl.h",
         "patchSetId": 49
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "5242cc15_be802a08",
+        "filename": "include/GLES/gl.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "This is all from the Khronos header repos. I think we should probably leave it to keep the differences from the official versions \u0026 our copies minimal.",
+      "parentUuid": "f9f7fb5a_a7f8f245",
+      "range": {
+        "startLine": 697,
+        "startChar": 1,
+        "endLine": 697,
+        "endChar": 6
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5d34dee_cda34d7e",
         "filename": "include/GLES/gl.h",
         "patchSetId": 49
@@ -68,6 +116,30 @@
       "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "641d98ae_5bf19adc",
+        "filename": "include/GLES/gl.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f5d34dee_cda34d7e",
+      "range": {
+        "startLine": 724,
+        "startChar": 1,
+        "endLine": 724,
+        "endChar": 6
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -186,6 +258,30 @@
     },
     {
       "key": {
+        "uuid": "43a56240_fcbe8931",
+        "filename": "include/GLES3/gl31.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c7d808a_f509842d",
+      "range": {
+        "startLine": 1,
+        "startChar": 14,
+        "endLine": 1,
+        "endChar": 15
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "853e7df6_73f4535e",
         "filename": "include/GLES3/gl31.h",
         "patchSetId": 49
@@ -206,6 +302,30 @@
       "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f55677ad_748c6a68",
+        "filename": "include/GLES3/gl31.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Thanks for catching that. Fixed the others but this one had slipped through. This file should be a lot more consistent now.",
+      "parentUuid": "853e7df6_73f4535e",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 11
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -232,6 +352,30 @@
     },
     {
       "key": {
+        "uuid": "923aa58d_53b3c63a",
+        "filename": "include/GLES3/gl31.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "These are auto-generated headers, as mentioned before. The version we have here is an official header. Should probably leave it to be consistent.",
+      "parentUuid": "143d9f1f_56c556aa",
+      "range": {
+        "startLine": 59,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 25
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0d1b4151_729b49d6",
         "filename": "include/GLES3/gl31.h",
         "patchSetId": 49
@@ -252,6 +396,30 @@
       "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ae935d5_4a03cb55",
+        "filename": "include/GLES3/gl31.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0d1b4151_729b49d6",
+      "range": {
+        "startLine": 959,
+        "startChar": 5,
+        "endLine": 959,
+        "endChar": 10
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -278,6 +446,30 @@
     },
     {
       "key": {
+        "uuid": "adf7ccaf_b4ac34fa",
+        "filename": "include/GLES3/gl31.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 1848,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "be4329b8_77d316ae",
+      "range": {
+        "startLine": 1848,
+        "startChar": 5,
+        "endLine": 1848,
+        "endChar": 10
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d22315ab_87e58a13",
         "filename": "include/GLES3/gl31.h",
         "patchSetId": 49
@@ -298,6 +490,30 @@
       "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63af9be5_6d99944c",
+        "filename": "include/GLES3/gl31.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 2469,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d22315ab_87e58a13",
+      "range": {
+        "startLine": 2469,
+        "startChar": 5,
+        "endLine": 2469,
+        "endChar": 10
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -324,6 +540,30 @@
     },
     {
       "key": {
+        "uuid": "afd1521e_2e8247c1",
+        "filename": "include/GLES3/gl32.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "This is correct, should not have the gles prefix.",
+      "parentUuid": "de92b3cb_d7bcf2e5",
+      "range": {
+        "startLine": 1,
+        "startChar": 8,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "30212b5f_14ba06c3",
         "filename": "include/GLES3/gl32.h",
         "patchSetId": 49
@@ -344,6 +584,30 @@
       "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a7ed05b_8ea60a89",
+        "filename": "include/GLES3/gl32.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "30212b5f_14ba06c3",
+      "range": {
+        "startLine": 1206,
+        "startChar": 1,
+        "endLine": 1206,
+        "endChar": 6
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -370,6 +634,30 @@
     },
     {
       "key": {
+        "uuid": "8749c5a2_6ac6cfde",
+        "filename": "include/GLES3/gl32.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2cca1932_56ec19a4",
+      "range": {
+        "startLine": 1521,
+        "startChar": 1,
+        "endLine": 1521,
+        "endChar": 6
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82378107_55974058",
         "filename": "include/GLES3/gl32.h",
         "patchSetId": 49
@@ -390,6 +678,30 @@
       "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "911e156c_fbb37d98",
+        "filename": "include/GLES3/gl32.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 1822,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "82378107_55974058",
+      "range": {
+        "startLine": 1822,
+        "startChar": 1,
+        "endLine": 1822,
+        "endChar": 6
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -416,6 +728,30 @@
     },
     {
       "key": {
+        "uuid": "964bff66_dc6b96e7",
+        "filename": "scripts/generate_loader.py",
+        "patchSetId": 49
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Intentional. We don\u0027t support 3.2 entry points yet. Will be sometime in the future.",
+      "parentUuid": "edd4a0e0_ce063da4",
+      "range": {
+        "startLine": 103,
+        "startChar": 41,
+        "endLine": 103,
+        "endChar": 71
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5560aaff_c1dd818a",
         "filename": "scripts/generate_loader.py",
         "patchSetId": 49
@@ -436,6 +772,30 @@
       "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2219729_c2a906ef",
+        "filename": "scripts/generate_loader.py",
+        "patchSetId": 49
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5560aaff_c1dd818a",
+      "range": {
+        "startLine": 132,
+        "startChar": 33,
+        "endLine": 132,
+        "endChar": 37
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -462,6 +822,30 @@
     },
     {
       "key": {
+        "uuid": "9bed9202_c46ad894",
+        "filename": "src/tests/egl_tests/EGLDebugTest.cpp",
+        "patchSetId": 49
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Yeah, it\u0027s necessary for now. ANGLETest initializes an EGLWindow. This test uses the EGLWindow. If we were to integrate an EGLWindow into EGLTest, then maybe we could make all the EGL*Test fixtures inherit from EGLTest. But I didn\u0027t do this because it would be a bit more work to rewrite the tests.",
+      "parentUuid": "c58b2284_9a481e80",
+      "range": {
+        "startLine": 17,
+        "startChar": 28,
+        "endLine": 17,
+        "endChar": 37
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "52295793_9da4a952",
         "filename": "src/tests/gl_tests/D3DTextureTest.cpp",
         "patchSetId": 49
@@ -485,6 +869,30 @@
     },
     {
       "key": {
+        "uuid": "99179f04_dd1c8d38",
+        "filename": "src/tests/gl_tests/D3DTextureTest.cpp",
+        "patchSetId": 49
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Yeah, this is deliberate. The former function returns and EGLSurface so we can\u0027t use the ASSERT_* macros. I updated to use the !\u003d nullptr.",
+      "parentUuid": "52295793_9da4a952",
+      "range": {
+        "startLine": 703,
+        "startChar": 4,
+        "endLine": 703,
+        "endChar": 15
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "13cf8415_04c4c54f",
         "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
         "patchSetId": 49
@@ -496,6 +904,30 @@
       "writtenOn": "2018-12-27T19:30:29Z",
       "side": 1,
       "message": "It\u0027s confusing that EGLWindow will not use eglLibrary if ANGLE_USE_UTIL_LOADER is not defined, so it is safe to pass nullptr in that case.\nI\u0027d prefer if you had 2 versions of initializeGL, one that gets eglLibrary parameter and another that doesn\u0027t.",
+      "range": {
+        "startLine": 91,
+        "startChar": 55,
+        "endLine": 91,
+        "endChar": 71
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d921168_06bff162",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 49
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Understood that it\u0027s a bit odd but your way makes more code live in ifdefs. I\u0027d like to defer action on this if you are okay with that.",
+      "parentUuid": "13cf8415_04c4c54f",
       "range": {
         "startLine": 91,
         "startChar": 55,
@@ -531,6 +963,30 @@
     },
     {
       "key": {
+        "uuid": "08f871a7_678214c0",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 49
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "OK, thanks for the heads up. I added a comment here - can implement this when we load non-ANGLE EGL implementations. I did have to do something like what you propose when loading WGL in a later CL.",
+      "parentUuid": "0e380bb3_3e92fc86",
+      "range": {
+        "startLine": 172,
+        "startChar": 19,
+        "endLine": 172,
+        "endChar": 33
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "37fd125c_b1bae0f6",
         "filename": "util/EGLWindow.cpp",
         "patchSetId": 49
@@ -551,6 +1007,30 @@
       "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bdca718_ec07ed31",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 49
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37fd125c_b1bae0f6",
+      "range": {
+        "startLine": 309,
+        "startChar": 12,
+        "endLine": 309,
+        "endChar": 38
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -577,6 +1057,30 @@
     },
     {
       "key": {
+        "uuid": "4c3e1cd1_c736804b",
+        "filename": "util/gles_loader_autogen.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "I think we need them in EGL. These are variables rather than function prototypes. Variables have default static storage rather than extern. Functions have default extern.",
+      "parentUuid": "825ef3b1_6a74a8c2",
+      "range": {
+        "startLine": 21,
+        "startChar": 18,
+        "endLine": 21,
+        "endChar": 24
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ab9ba05_05fdfc3a",
         "filename": "util/util_export.h",
         "patchSetId": 49
@@ -597,6 +1101,30 @@
       "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8a4ab95_388d8d86",
+        "filename": "util/util_export.h",
+        "patchSetId": 49
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 1,
+      "message": "Good suggestion, done. Eventually we should probably make a separate export header for each shared library.",
+      "parentUuid": "0ab9ba05_05fdfc3a",
+      "range": {
+        "startLine": 11,
+        "startChar": 13,
+        "endLine": 11,
+        "endChar": 30
+      },
+      "revId": "e472298eadb1a00351ea7d69f1c8fdb34047a50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

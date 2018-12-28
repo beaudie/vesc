@@ -22,6 +22,30 @@
       "revId": "8441286093152097eda821869d2743a85759ff7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1510b3d7_ef0a7e08",
+        "filename": "src/tests/gl_tests/FramebufferMultiviewTest.cpp",
+        "patchSetId": 49
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-28T00:18:20Z",
+      "side": 0,
+      "message": "I put these back as GTest asserts. We can\u0027t use the ANGLE ASSERT macro because we don\u0027t use angle_common. I was a bit inconsistent because I didn\u0027t think it was that important to have internal validation checks. But it was a bit messy.",
+      "parentUuid": "43f2447b_ca57f2b4",
+      "range": {
+        "startLine": 76,
+        "startChar": 8,
+        "endLine": 76,
+        "endChar": 14
+      },
+      "revId": "8441286093152097eda821869d2743a85759ff7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
