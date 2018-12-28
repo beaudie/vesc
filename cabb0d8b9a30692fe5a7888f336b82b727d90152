@@ -112,6 +112,30 @@
     },
     {
       "key": {
+        "uuid": "5bcadbfa_56900a8d",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1971,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-28T13:00:43Z",
+      "side": 1,
+      "message": "I\u0027ve added a Context.inl.h header file which contains the functions from the Context class which have to be inlined for optimal performance. This file has to be included by Context.cpp and the entry_points files which is why I decided not to use the name Context_gles_2_0.h.",
+      "parentUuid": "ad23117f_9fcee445",
+      "range": {
+        "startLine": 1919,
+        "startChar": 0,
+        "endLine": 1971,
+        "endChar": 1
+      },
+      "revId": "cabb0d8b9a30692fe5a7888f336b82b727d90152",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3d5ffd00_da189551",
         "filename": "src/libANGLE/renderer/gl/VertexArrayGL.h",
         "patchSetId": 2

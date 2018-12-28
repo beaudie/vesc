@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e38dc5da_d985c5a6",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-28T13:00:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed993e2c_7bda2961",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 33
+      },
+      "revId": "bf08925ef2d603d3538709985314418cd1257b03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "35f862d3_e103cf06",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "bf08925ef2d603d3538709985314418cd1257b03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6a2d8e1_d9525294",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-28T13:00:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35f862d3_e103cf06",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 42
+      },
+      "revId": "bf08925ef2d603d3538709985314418cd1257b03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c48c399e_1f392bf1",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-28T13:00:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f403f79c_09ca78b9",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 26
+      },
+      "revId": "bf08925ef2d603d3538709985314418cd1257b03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "22780162_9359a60f",
         "filename": "src/libANGLE/Context.inl.h",
         "patchSetId": 6
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "e736397c_f3362da3",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-28T13:00:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22780162_9359a60f",
+      "range": {
+        "startLine": 72,
+        "startChar": 11,
+        "endLine": 72,
+        "endChar": 30
+      },
+      "revId": "bf08925ef2d603d3538709985314418cd1257b03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "982e3fd7_9cc338eb",
         "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
         "patchSetId": 6
@@ -105,6 +201,30 @@
       "writtenOn": "2018-12-27T23:48:55Z",
       "side": 1,
       "message": "found the problem. This function needs to assign to outIndices even if the if statement below is false. I added \"else { *outIndices \u003d indices; } and it fixed the test failures. Hopefully the optimizer is smart enough to optimize this away.",
+      "range": {
+        "startLine": 210,
+        "startChar": 59,
+        "endLine": 210,
+        "endChar": 82
+      },
+      "revId": "bf08925ef2d603d3538709985314418cd1257b03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ba00845_79e34dde",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-28T13:00:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "982e3fd7_9cc338eb",
       "range": {
         "startLine": 210,
         "startChar": 59,
