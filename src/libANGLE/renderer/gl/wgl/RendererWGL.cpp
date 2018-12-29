@@ -14,12 +14,24 @@ namespace rx
 RendererWGL::RendererWGL(std::unique_ptr<FunctionsGL> functionsGL,
                          const egl::AttributeMap &attribMap,
                          DisplayWGL *display,
-                         HGLRC context)
-    : RendererGL(std::move(functionsGL), attribMap), mDisplay(display), mContext(context)
+                         HGLRC context,
+                         HGLRC sharedContext,
+                         bool useARBShare,
+                         const std::vector<int> workerContextAttribs)
+    : RendererGL(std::move(functionsGL), attribMap),
+      mDisplay(display),
+      mContext(context),
+      mSharedContext(sharedContext),
+      mUseARBShare(useARBShare),
+      mWorkerContextAttribs(workerContextAttribs)
 {}
 
 RendererWGL::~RendererWGL()
 {
+    if (mSharedContext != nullptr)
+    {
+        mDisplay->destroyNativeContext(mSharedContext);
+    }
     mDisplay->destroyNativeContext(mContext);
     mContext = nullptr;
 }
@@ -27,6 +39,17 @@ RendererWGL::~RendererWGL()
 HGLRC RendererWGL::getContext() const
 {
     return mContext;
+}
+
+bool RendererWGL::supportWorkerContext()
+{
+    return mDisplay->hasWorkerContexts();
+}
+
+WorkerContext *RendererWGL::createWorkerContext(std::string *infoLog)
+{
+    return mDisplay->createWorkerContext(infoLog, mSharedContext, mUseARBShare,
+                                         mWorkerContextAttribs);
 }
 
 }  // namespace rx
