@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "a7c96072_40a2b3a2",
+        "filename": "src/tests/egl_tests/EGLBlobCacheTest.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-29T05:25:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3cd063d9_514cab25",
+      "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7d798ffa_15b7e559",
         "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
         "patchSetId": 52
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "No, the end2end_tests always use the util_loader now. Just ANGLETEst.cpp/h and a few other test_utils files are shared between black box and white box tests.",
       "parentUuid": "7d798ffa_15b7e559",
+      "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4773fef5_1062e9c1",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-29T05:25:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d3e3b5fb_2858df16",
       "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -107,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "0fdb3951_52bb0c1d",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-29T05:25:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "69d7ddaa_3c14d534",
+      "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1dc940d8_d0ac66ba",
         "filename": "src/tests/test_utils/ANGLETest.cpp",
         "patchSetId": 52
@@ -142,6 +196,24 @@
     },
     {
       "key": {
+        "uuid": "f4e4b79b_59c86dd4",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-29T05:25:49Z",
+      "side": 1,
+      "message": "Ok. I saw this in like 4 or 5 other files which you can hunt down.",
+      "parentUuid": "789636c9_12364803",
+      "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fb36b0bd_a8b3d058",
         "filename": "src/tests/test_utils/ANGLETest.h",
         "patchSetId": 52
@@ -171,6 +243,24 @@
       "side": 1,
       "message": "Removed. Again this was an artifact of a prior design using GLAD that was difficult to work with. Thanks for catching it before it landed.",
       "parentUuid": "fb36b0bd_a8b3d058",
+      "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eb882f12_ef351438",
+        "filename": "src/tests/test_utils/ANGLETest.h",
+        "patchSetId": 52
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-29T05:25:49Z",
+      "side": 1,
+      "message": "Ok, this was in another file too, but I forgot which.",
+      "parentUuid": "2da2e00e_0f34804b",
       "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -224,6 +314,30 @@
     },
     {
       "key": {
+        "uuid": "12b668da_c4f15e9d",
+        "filename": "util/egl_loader_autogen.h",
+        "patchSetId": 52
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-29T05:25:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fc197390_875ecb5f",
+      "range": {
+        "startLine": 111,
+        "startChar": 20,
+        "endLine": 111,
+        "endChar": 32
+      },
+      "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c841e9a3_985abe0b",
         "filename": "util/util_export.h",
         "patchSetId": 52
@@ -253,6 +367,24 @@
       "side": 1,
       "message": "I think the default visibility is hidden so that would be redundant. I was just copying the \"export.h\" file and it seems to work. Didn\u0027t change this.",
       "parentUuid": "c841e9a3_985abe0b",
+      "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b8634de7_5ddc0868",
+        "filename": "util/util_export.h",
+        "patchSetId": 52
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-29T05:25:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e3b52cf7_b8c73934",
       "revId": "3c9ab682b0bc9b807055743c02bc4d4afddabe22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
