@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a32518d_68b108fd",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-29T02:50:40Z",
+      "side": 1,
+      "message": "Try removing this line and you will reproduce the error I\u0027m trying to get at.\n\nFirst off, your fix is 100% an improvement. But it doesn\u0027t go quite far enough. Let me try to explain.\n\nStateManager11::syncShaderStorageBuffers is the only place we ever bind SSBOs for compute. We don\u0027t seem to track the current SSBOs. We only call syncShaderStorageBuffers when DIRTY_BIT_PROGRAM_SHADER_STORAGE_BUFFERS is set, which is turn is only set via invalidateProgramShaderStorageBuffers. We currently only call this on init, a program change, and when DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING changes. So the line above would trigger the chain of events that would force calling syncShaderStorageBuffers, and we\u0027d call through to getRawUAV and get the current latest buffer.\n\nThe problem arises when we remove the call to glBindBuffer. Now, we never call getRawUAV. The glReadPixels still will read from the Staging storage even though the dispatch call is writing to the RawUAV storage. If we add the BindBuffer back, the additional call to syncShaderStorageBuffers ensures that the Staging storage is up-to-date.\n\nSo, the problem here is that the \"dispatch\" call itself can trigger buffer changes. This is very similar to how in ES 3.0 transform feedback can trigger buffer changes. In Context.cpp you will see calls to MarkTransformFeedbackBufferUsage. This calls TransformFeedback::onVerticesDrawn that invalidates some buffer state. Similarly we have Renderer11::markTransformFeedbackUsage that calls Buffer11::markTransformFeedbackUsage. In Buffer11::markTransformFeedbackUsage we force a storage to be considered updated. We will need dispatch to do the same for currently bound SSBOs.\n\nThis is a bit tricky and not necessary to fix right away. But could we ensure the bug is recorded in the issue tracker and you modify the test to cover this situation?",
+      "range": {
+        "startLine": 345,
+        "startChar": 4,
+        "endLine": 345,
+        "endChar": 64
+      },
+      "revId": "8d1b4b6e484f56ebeda9c6c23ac6fe6b6d89be2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
