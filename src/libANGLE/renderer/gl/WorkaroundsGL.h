@@ -163,6 +163,11 @@ struct WorkaroundsGL
     // glReadPixels on unsized sRGB texture formats. http://crbug.com/550292 and
     // http://crbug.com/565179
     bool unsizedsRGBReadPixelsDoesntTransform = false;
+
+    // Re-linking a program in parallel is buggy on some Intel Windows OpenGL drivers and Android
+    // platforms.
+    // http://anglebug.com/3045
+    bool dontRelinkProgramsInParallel = false;
 };
 
 inline WorkaroundsGL::WorkaroundsGL() = default;
