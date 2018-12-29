@@ -71,6 +71,7 @@ class Buffer11 : public BufferD3D
                          DXGI_FORMAT srvFormat,
                          const d3d11::ShaderResourceView **srvOut);
     angle::Result getRawUAV(const gl::Context *context, d3d11::UnorderedAccessView **uavOut);
+    angle::Result markRawBufferUsage(const gl::Context *context);
     bool isMapped() const { return mMappedStorage != nullptr; }
     angle::Result packPixels(const gl::Context *context,
                              const gl::FramebufferAttachment &readAttachment,

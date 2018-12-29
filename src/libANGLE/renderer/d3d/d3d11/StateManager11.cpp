@@ -736,6 +736,36 @@ void StateManager11::checkPresentPath(const gl::Context *context)
     }
 }
 
+angle::Result StateManager11::markRawBufferUsage(const gl::Context *context)
+{
+    const gl::State &glState   = context->getState();
+    const gl::Program *program = glState.getProgram();
+    for (size_t blockIndex = 0; blockIndex < program->getActiveShaderStorageBlockCount();
+         blockIndex++)
+    {
+        GLuint binding = program->getShaderStorageBlockBinding(static_cast<GLuint>(blockIndex));
+        const auto &shaderStorageBuffer = glState.getIndexedShaderStorageBuffer(binding);
+        if (shaderStorageBuffer.get() != nullptr)
+        {
+            Buffer11 *bufferStorage = GetImplAs<Buffer11>(shaderStorageBuffer.get());
+            ANGLE_TRY(bufferStorage->markRawBufferUsage(context));
+        }
+    }
+
+    for (const auto &atomicCounterBuffer : program->getState().getAtomicCounterBuffers())
+    {
+        GLuint binding     = atomicCounterBuffer.binding;
+        const auto &buffer = glState.getIndexedAtomicCounterBuffer(binding);
+
+        if (buffer.get() != nullptr)
+        {
+            Buffer11 *bufferStorage = GetImplAs<Buffer11>(buffer.get());
+            ANGLE_TRY(bufferStorage->markRawBufferUsage(context));
+        }
+    }
+    return angle::Result::Continue;
+}
+
 angle::Result StateManager11::updateStateForCompute(const gl::Context *context,
                                                     GLuint numGroupsX,
                                                     GLuint numGroupsY,
@@ -757,6 +787,14 @@ angle::Result StateManager11::updateStateForCompute(const gl::Context *context,
     if (mProgramD3D->anyShaderUniformsDirty())
     {
         mInternalDirtyBits.set(DIRTY_BIT_PROGRAM_UNIFORMS);
+    }
+
+    const gl::State &glState   = context->getState();
+    const gl::Program *program = glState.getProgram();
+    if (program->getActiveShaderStorageBlockCount() > 0 ||
+        program->getActiveAtomicCounterBufferCount() > 0)
+    {
+        ANGLE_TRY(markRawBufferUsage(context));
     }
 
     auto dirtyBitsCopy = mInternalDirtyBits & mComputeDirtyBitsMask;
