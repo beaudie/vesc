@@ -9,7 +9,6 @@
 #include "libANGLE/renderer/gl/egl/DisplayEGL.h"
 
 #include "libANGLE/renderer/gl/egl/ImageEGL.h"
-#include "libANGLE/renderer/gl/egl/egl_utils.h"
 
 namespace rx
 {
@@ -39,7 +38,8 @@ std::string DisplayEGL::getVendorString() const
 
 egl::Error DisplayEGL::initializeContext(EGLContext shareContext,
                                          const egl::AttributeMap &eglAttributes,
-                                         EGLContext *outContext) const
+                                         EGLContext *outContext,
+                                         native_egl::AttributeVector *outAttribs) const
 {
     gl::Version eglVersion(mEGL->majorVersion, mEGL->minorVersion);
 
@@ -97,6 +97,7 @@ egl::Error DisplayEGL::initializeContext(EGLContext shareContext,
         if (context != EGL_NO_CONTEXT)
         {
             *outContext = context;
+            *outAttribs = attribList;
             return egl::NoError();
         }
     }
@@ -146,6 +147,14 @@ void DisplayEGL::setBlobCacheFuncs(EGLSetBlobFuncANDROID set, EGLGetBlobFuncANDR
     {
         mEGL->setBlobCacheFuncsANDROID(set, get);
     }
+}
+
+WorkerContext *DisplayEGL::createWorkerContext(std::string *infoLog,
+                                               EGLContext sharedContext,
+                                               native_egl::AttributeVector workerAttribs)
+{
+    *infoLog += "WorkerContext unimplemented.";
+    return nullptr;
 }
 
 }  // namespace rx
