@@ -64,7 +64,8 @@ class EGLSyncControlTest : public testing::Test
         SafeRelease(mDevice);
         SafeRelease(mDeviceContext);
 
-        SafeDelete(mOSWindow);
+        FreeOSWindow(mOSWindow);
+        mOSWindow = nullptr;
 
         if (mSurface != EGL_NO_SURFACE)
         {
