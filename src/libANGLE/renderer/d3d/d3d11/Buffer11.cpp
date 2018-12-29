@@ -692,18 +692,27 @@ angle::Result Buffer11::getConstantBufferRange(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result Buffer11::markRawBufferUsage(const gl::Context *context)
+{
+    NativeStorage *rawBuffer = nullptr;
+    ANGLE_TRY(getBufferStorage(context, BUFFER_USAGE_RAW_UAV, &rawBuffer));
+    ASSERT(rawBuffer);
+    BufferStorage *latestBuffer = nullptr;
+    ANGLE_TRY(getLatestBufferStorage(context, &latestBuffer));
+    // As UAVs could have been updated by the shader, they hold the latest version of the data.
+    if (latestBuffer != rawBuffer)
+    {
+        onStorageUpdate(rawBuffer);
+    }
+
+    invalidateStaticData(context);
+    return angle::Result::Continue;
+}
+
 angle::Result Buffer11::getRawUAV(const gl::Context *context, d3d11::UnorderedAccessView **uavOut)
 {
     NativeStorage *nativeStorage = nullptr;
     ANGLE_TRY(getBufferStorage(context, BUFFER_USAGE_RAW_UAV, &nativeStorage));
-
-    BufferStorage *latestBuffer = nullptr;
-    ANGLE_TRY(getLatestBufferStorage(context, &latestBuffer));
-    // As UAVs could have been updated by the shader, they hold the latest version of the data.
-    if (latestBuffer != nativeStorage)
-    {
-        onStorageUpdate(nativeStorage);
-    }
 
     return nativeStorage->getRawUAV(context, uavOut);
 }

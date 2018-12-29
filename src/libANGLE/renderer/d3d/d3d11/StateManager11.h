@@ -388,6 +388,9 @@ class StateManager11 final : angle::NonCopyable
                                    gl::DrawElementsType indexType,
                                    const void *indices);
 
+    // Make sure that the raw buffer is the latest buffer.
+    angle::Result markRawBufferUsage(const gl::Context *context);
+
     enum DirtyBitType
     {
         DIRTY_BIT_RENDER_TARGET,
