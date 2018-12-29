@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cbe58d1e_676fe494",
+        "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-29T00:51:56Z",
+      "side": 0,
+      "message": "Here\u0027s the full story:\n\nInitially I tried to use GLAD for the loader. This didn\u0027t have all the ANGLE extensions so I had to write custom loading code for the non-standard extensions. Extensions like GL_ANGLE_instanced_arrays above are official so I could remove the custom loading code. I did that in a few places because it looked nice but didn\u0027t do it everywhere. \n\nEventually I had to go back and write a totally custom loader. We needed this to call libGLESv2 from libEGL and generally it was easier than trying to use GLAD. Now we can remove all the custom loading code. But I\u0027d recommend doing this as a low-priority follow up. All the newly added loading should be removed though.",
+      "parentUuid": "ebdb3b2c_612069b1",
+      "revId": "7f6b3674978d1852e06263821c99403e3259d397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b8de25a7_b5d381cf",
         "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
         "patchSetId": 52
@@ -33,6 +51,24 @@
       "revId": "7f6b3674978d1852e06263821c99403e3259d397",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d0e2402_18acdff1",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-29T00:51:56Z",
+      "side": 0,
+      "message": "No, I had to remove all instances of ASSERT in tests because we don\u0027t have access to angle_common.",
+      "parentUuid": "b8de25a7_b5d381cf",
+      "revId": "7f6b3674978d1852e06263821c99403e3259d397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
