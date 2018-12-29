@@ -10,14 +10,18 @@
 #define LIBANGLE_RENDERER_GL_CGL_DISPLAYCGL_H_
 
 #include "libANGLE/renderer/gl/DisplayGL.h"
+#include "libANGLE/renderer/gl/RendererGL.h"
 
 struct _CGLContextObject;
 typedef _CGLContextObject *CGLContextObj;
 
+struct _CGLPixelFormatObject;
+typedef _CGLPixelFormatObject *CGLPixelFormatObj;
+
 namespace rx
 {
 
-class DisplayCGL : public DisplayGL
+class DisplayCGL : public DisplayGL, public WorkerContextFactory
 {
   public:
     DisplayCGL(const egl::DisplayState &state);
@@ -67,6 +71,8 @@ class DisplayCGL : public DisplayGL
 
     CGLContextObj getCGLContext() const;
 
+    WorkerContext *createWorkerContext(std::string *infoLog) override;
+
   private:
     egl::Error makeCurrentSurfaceless(gl::Context *context) override;
 
@@ -77,6 +83,7 @@ class DisplayCGL : public DisplayGL
 
     egl::Display *mEGLDisplay;
     CGLContextObj mContext;
+    CGLPixelFormatObj mPixelFormat;
 };
 
 }  // namespace rx
