@@ -14,6 +14,7 @@
 
 #include "common/Optional.h"
 #include "libANGLE/renderer/gl/DisplayGL.h"
+#include "libANGLE/renderer/gl/RendererGL.h"
 #include "libANGLE/renderer/gl/glx/FunctionsGLX.h"
 
 namespace rx
@@ -35,7 +36,7 @@ struct SwapControlData
     int currentSwapInterval;
 };
 
-class DisplayGLX : public DisplayGL
+class DisplayGLX : public DisplayGL, public WorkerContextFactory
 {
   public:
     DisplayGLX(const egl::DisplayState &state);
@@ -97,6 +98,8 @@ class DisplayGLX : public DisplayGL
 
     bool isValidWindowVisualId(unsigned long visualId) const;
 
+    WorkerContext *createWorkerContext(std::string *infoLog) override;
+
   private:
     egl::Error initializeContext(glx::FBConfig config,
                                  const egl::AttributeMap &eglAttributes,
@@ -111,7 +114,7 @@ class DisplayGLX : public DisplayGL
     egl::Error createContextAttribs(glx::FBConfig,
                                     const Optional<gl::Version> &version,
                                     int profileMask,
-                                    glx::Context *context) const;
+                                    glx::Context *context);
 
     std::shared_ptr<RendererGL> mRenderer;
 
@@ -119,9 +122,14 @@ class DisplayGLX : public DisplayGL
 
     EGLint mRequestedVisual;
     glx::FBConfig mContextConfig;
+    std::vector<int> mAttribs;
+    XVisualInfo *mVisuals;
     glx::Context mContext;
+    glx::Context mSharedContext;
     // A pbuffer the context is current on during ANGLE initialization
     glx::Pbuffer mDummyPbuffer;
+
+    std::vector<glx::Pbuffer> mWorkerPbufferPool;
 
     bool mUsesNewXDisplay;
     bool mIsMesa;
