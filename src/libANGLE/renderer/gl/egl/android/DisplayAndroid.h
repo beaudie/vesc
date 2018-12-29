@@ -78,6 +78,10 @@ class DisplayAndroid : public DisplayEGL
 
     void destroyNativeContext(EGLContext context) override;
 
+    WorkerContext *createWorkerContext(std::string *infoLog,
+                                       EGLContext sharedContext,
+                                       native_egl::AttributeVector workerAttribs) override;
+
   private:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
 

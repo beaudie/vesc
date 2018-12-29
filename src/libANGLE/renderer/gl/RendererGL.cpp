@@ -167,7 +167,9 @@ static void INTERNAL_GL_APIENTRY LogGLDebugMessage(GLenum source,
 namespace rx
 {
 
-RendererGL::RendererGL(std::unique_ptr<FunctionsGL> functions, const egl::AttributeMap &attribMap)
+RendererGL::RendererGL(std::unique_ptr<FunctionsGL> functions,
+                       const egl::AttributeMap &attribMap,
+                       WorkerContextFactory *factory)
     : mMaxSupportedESVersion(0, 0),
       mFunctions(std::move(functions)),
       mStateManager(nullptr),
@@ -175,7 +177,8 @@ RendererGL::RendererGL(std::unique_ptr<FunctionsGL> functions, const egl::Attrib
       mMultiviewClearer(nullptr),
       mUseDebugOutput(false),
       mCapsInitialized(false),
-      mMultiviewImplementationType(MultiviewImplementationTypeGL::UNSPECIFIED)
+      mMultiviewImplementationType(MultiviewImplementationTypeGL::UNSPECIFIED),
+      mWorkerContextFactory(factory)
 {
     ASSERT(mFunctions);
     nativegl_gl::GenerateWorkarounds(mFunctions.get(), &mWorkarounds);
@@ -222,6 +225,11 @@ RendererGL::~RendererGL()
     SafeDelete(mBlitter);
     SafeDelete(mMultiviewClearer);
     SafeDelete(mStateManager);
+
+    std::lock_guard<std::mutex> lock(mMutex);
+
+    ASSERT(mCurrentWorkerContexts.empty());
+    mWorkerContextPool.clear();
 }
 
 angle::Result RendererGL::flush()
@@ -557,6 +565,69 @@ angle::Result RendererGL::memoryBarrierByRegion(GLbitfield barriers)
 {
     mFunctions->memoryBarrierByRegion(barriers);
     return angle::Result::Continue;
+}
+
+bool RendererGL::supportWorkerContext()
+{
+    return mWorkerContextFactory && mWorkerContextFactory->hasWorkerContexts();
+}
+
+bool RendererGL::bindWorkerContext(std::string *infoLog)
+{
+    std::thread::id threadID = std::this_thread::get_id();
+    std::lock_guard<std::mutex> lock(mMutex);
+    std::unique_ptr<WorkerContext> workerContext;
+    if (!mWorkerContextPool.empty())
+    {
+        // Pick a worker context based on thread affinity.
+        auto it = std::find_if(mWorkerContextPool.begin(), mWorkerContextPool.end(),
+                               [threadID](const std::unique_ptr<WorkerContext> &context) {
+                                   return context->threadID == threadID;
+                               });
+        // Choose the first one if not found.
+        if (it == mWorkerContextPool.end())
+        {
+            it = mWorkerContextPool.begin();
+        }
+        workerContext = std::move(*it);
+        mWorkerContextPool.erase(it);
+    }
+    else
+    {
+        if (!supportWorkerContext())
+        {
+            *infoLog += "WorkerContextFactory is not supported.";
+            return false;
+        }
+
+        WorkerContext *newContext = mWorkerContextFactory->createWorkerContext(infoLog);
+        if (newContext == nullptr)
+        {
+            return false;
+        }
+        workerContext.reset(newContext);
+    }
+
+    if (!workerContext->makeCurrent(infoLog))
+    {
+        mWorkerContextPool.push_back(std::move(workerContext));
+        return false;
+    }
+    workerContext->threadID          = threadID;
+    mCurrentWorkerContexts[threadID] = std::move(workerContext);
+    return true;
+}
+
+void RendererGL::unbindWorkerContext()
+{
+    std::thread::id threadID = std::this_thread::get_id();
+    std::lock_guard<std::mutex> lock(mMutex);
+
+    auto it = mCurrentWorkerContexts.find(threadID);
+    ASSERT(it != mCurrentWorkerContexts.end());
+    (*it).second->unmakeCurrent();
+    mWorkerContextPool.push_back(std::move((*it).second));
+    mCurrentWorkerContexts.erase(it);
 }
 
 }  // namespace rx

@@ -34,6 +34,33 @@
 namespace rx
 {
 
+namespace
+{
+
+std::string GetErrorMessage()
+{
+    DWORD errorCode     = GetLastError();
+    LPSTR messageBuffer = nullptr;
+    size_t size         = FormatMessageA(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
+    std::string message(messageBuffer, size);
+    if (size == 0)
+    {
+        std::ostringstream stream;
+        stream << "Failed to get the error message for '" << errorCode << "' due to the error '"
+               << GetLastError() << "'";
+        message = stream.str();
+    }
+    if (messageBuffer != nullptr)
+    {
+        LocalFree(messageBuffer);
+    }
+    return message;
+}
+
+}  // anonymous namespace
+
 class FunctionsGLWindows : public FunctionsGL
 {
   public:
@@ -78,7 +105,10 @@ DisplayWGL::DisplayWGL(const egl::DisplayState &state)
       mDxgiModule(nullptr),
       mD3d11Module(nullptr),
       mD3D11DeviceHandle(nullptr),
-      mD3D11Device(nullptr)
+      mD3D11Device(nullptr),
+      mSharedContext(nullptr),
+      mARBShare(true),
+      mHasWorkerContexts(true)
 {}
 
 DisplayWGL::~DisplayWGL() {}
@@ -264,6 +294,13 @@ egl::Error DisplayWGL::initializeImpl(egl::Display *display)
         return egl::EglNotInitialized() << "Intel OpenGL ES drivers are not supported.";
     }
 
+    // Using worker contexts is not currently supported due to bugs in the driver.
+    // http://anglebug.com/3031
+    if (IsAMD(vendor))
+    {
+        mHasWorkerContexts = false;
+    }
+
     // Create DXGI swap chains for windows that come from other processes.  Windows is unable to
     // SetPixelFormat on windows from other processes when a sandbox is enabled.
     HDC nativeDisplay = display->getNativeDisplayId();
@@ -321,6 +358,16 @@ void DisplayWGL::destroy()
 
     if (mFunctionsWGL)
     {
+        if (mSharedContext)
+        {
+            mFunctionsWGL->deleteContext(mSharedContext);
+            mSharedContext = nullptr;
+        }
+        // Release the unused worker windows.
+        for (auto &workerWindow : mWorkerWindowPool)
+        {
+            DestroyWindow(workerWindow);
+        }
         if (mDeviceContext)
         {
             mFunctionsWGL->makeCurrent(mDeviceContext, nullptr);
@@ -753,7 +800,7 @@ void DisplayWGL::destroyNativeContext(HGLRC context)
     mFunctionsWGL->deleteContext(context);
 }
 
-HGLRC DisplayWGL::initializeContextAttribs(const egl::AttributeMap &eglAttributes) const
+HGLRC DisplayWGL::initializeContextAttribs(const egl::AttributeMap &eglAttributes)
 {
     EGLint requestedDisplayType = static_cast<EGLint>(
         eglAttributes.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE));
@@ -799,7 +846,7 @@ HGLRC DisplayWGL::initializeContextAttribs(const egl::AttributeMap &eglAttribute
     return nullptr;
 }
 
-HGLRC DisplayWGL::createContextAttribs(const gl::Version &version, int profileMask) const
+HGLRC DisplayWGL::createContextAttribs(const gl::Version &version, int profileMask)
 {
     std::vector<int> attribs;
 
@@ -825,8 +872,14 @@ HGLRC DisplayWGL::createContextAttribs(const gl::Version &version, int profileMa
 
     attribs.push_back(0);
     attribs.push_back(0);
+    HGLRC context = mFunctionsWGL->createContextAttribsARB(mDeviceContext, nullptr, &attribs[0]);
 
-    return mFunctionsWGL->createContextAttribsARB(mDeviceContext, nullptr, &attribs[0]);
+    // This shared context is never made current. It is safer than the main context to be used as
+    // a seed to create worker contexts from.
+    mSharedContext = mFunctionsWGL->createContextAttribsARB(mDeviceContext, context, &attribs[0]);
+    mWorkerContextAttribs = attribs;
+    mARBShare             = true;
+    return context;
 }
 
 egl::Error DisplayWGL::createRenderer(std::shared_ptr<RendererWGL> *outRenderer)
@@ -847,7 +900,35 @@ egl::Error DisplayWGL::createRenderer(std::shared_ptr<RendererWGL> *outRenderer)
     if (!context)
     {
         return egl::EglNotInitialized()
-               << "Failed to create a WGL context for the intermediate OpenGL window.";
+               << "Failed to create a WGL context for the intermediate OpenGL window."
+               << GetErrorMessage();
+    }
+
+    if (!mSharedContext)
+    {
+        mSharedContext = mFunctionsWGL->createContext(mDeviceContext);
+        if (!mFunctionsWGL->shareLists(context, mSharedContext))
+        {
+            mFunctionsWGL->deleteContext(mSharedContext);
+            mSharedContext = nullptr;
+        }
+        mARBShare = false;
+    }
+
+    if (mSharedContext)
+    {
+        // A window can only created and destroyed from same thread. We have to create the worker
+        // windows in advance here.
+        for (unsigned int i = 0; i < kMaxWorkerContexts; ++i)
+        {
+            HWND workerWindow = CreateWindowExA(0, reinterpret_cast<const char *>(mWindowClass),
+                                                "ANGLE Worker Window", WS_OVERLAPPEDWINDOW, 0, 0, 1,
+                                                1, nullptr, nullptr, nullptr, nullptr);
+            if (workerWindow)
+            {
+                mWorkerWindowPool.push_back(workerWindow);
+            }
+        }
     }
 
     if (!mFunctionsWGL->makeCurrent(mDeviceContext, context))
@@ -866,4 +947,130 @@ egl::Error DisplayWGL::createRenderer(std::shared_ptr<RendererWGL> *outRenderer)
 
     return egl::NoError();
 }
+
+class WorkerContextWGL final : public WorkerContext
+{
+  public:
+    WorkerContextWGL(FunctionsWGL *functions, HWND window, HDC deviceContext, HGLRC context);
+    ~WorkerContextWGL();
+
+    bool makeCurrent(std::string *infoLog) override;
+    void unmakeCurrent() override;
+
+  private:
+    FunctionsWGL *mFunctionsWGL;
+    HWND mWindow;
+    HDC mDeviceContext;
+    HGLRC mContext;
+};
+
+WorkerContextWGL::WorkerContextWGL(FunctionsWGL *functions,
+                                   HWND window,
+                                   HDC deviceContext,
+                                   HGLRC context)
+    : mFunctionsWGL(functions), mWindow(window), mDeviceContext(deviceContext), mContext(context)
+{}
+
+WorkerContextWGL::~WorkerContextWGL()
+{
+    mFunctionsWGL->makeCurrent(mDeviceContext, nullptr);
+    mFunctionsWGL->deleteContext(mContext);
+    ReleaseDC(mWindow, mDeviceContext);
+    DestroyWindow(mWindow);
+}
+
+bool WorkerContextWGL::makeCurrent(std::string *infoLog)
+{
+    bool result = mFunctionsWGL->makeCurrent(mDeviceContext, mContext);
+    if (!result)
+    {
+        *infoLog += GetErrorMessage();
+    }
+    return result;
+}
+
+void WorkerContextWGL::unmakeCurrent()
+{
+    mFunctionsWGL->makeCurrent(mDeviceContext, nullptr);
+}
+
+bool DisplayWGL::hasWorkerContexts()
+{
+    return mHasWorkerContexts;
+}
+
+WorkerContext *DisplayWGL::createWorkerContext(std::string *infoLog)
+{
+    if (!mSharedContext)
+    {
+        *infoLog += "Unable to create the shared context.";
+        return nullptr;
+    }
+
+    HDC workerDeviceContext = nullptr;
+    HGLRC workerContext     = nullptr;
+
+#define CLEANUP_ON_ERROR()                            \
+    if (workerContext)                                \
+    {                                                 \
+        mFunctionsWGL->deleteContext(workerContext);  \
+    }                                                 \
+    if (workerDeviceContext)                          \
+    {                                                 \
+        ReleaseDC(workerWindow, workerDeviceContext); \
+    }
+
+    if (mWorkerWindowPool.empty())
+    {
+        *infoLog += "Unable to create the worker windows.";
+        return nullptr;
+    }
+    // Acquire a free worker window.
+    HWND workerWindow = mWorkerWindowPool.back();
+    mWorkerWindowPool.pop_back();
+
+    workerDeviceContext = GetDC(workerWindow);
+    if (!workerDeviceContext)
+    {
+        *infoLog += GetErrorMessage();
+        CLEANUP_ON_ERROR();
+        return nullptr;
+    }
+
+    // Shared device contexts must have same pixel format.
+    PIXELFORMATDESCRIPTOR pixelFormatDescriptor;
+    if (!SetPixelFormat(workerDeviceContext, mPixelFormat, &pixelFormatDescriptor))
+    {
+        *infoLog += GetErrorMessage();
+        CLEANUP_ON_ERROR();
+        return nullptr;
+    }
+
+    if (mARBShare)
+    {
+        workerContext = mFunctionsWGL->createContextAttribsARB(mDeviceContext, mSharedContext,
+                                                               &mWorkerContextAttribs[0]);
+    }
+    else
+    {
+        workerContext = mFunctionsWGL->createContext(workerDeviceContext);
+    }
+    if (!workerContext)
+    {
+        GetErrorMessage();
+        CLEANUP_ON_ERROR();
+        return nullptr;
+    }
+
+    if (!mARBShare && !mFunctionsWGL->shareLists(mSharedContext, workerContext))
+    {
+        GetErrorMessage();
+        CLEANUP_ON_ERROR();
+        return nullptr;
+    }
+#undef CLEANUP_ON_ERROR
+
+    return new WorkerContextWGL(mFunctionsWGL, workerWindow, workerDeviceContext, workerContext);
+}
+
 }  // namespace rx
