@@ -516,6 +516,15 @@ angle::Result Buffer11::mapRange(const gl::Context *context,
     }
     else
     {
+        if (latestStorage && (latestStorage->getUsage() == BUFFER_USAGE_RAW_UAV))
+        {
+            // Once fall back to using the staging buffer, the latest buffer will point to staging
+            // buffer from raw buffer. Due to the shader may update the raw buffer content
+            // implicitly, we should make sure that latest buffer can point back to raw buffer in
+            // the next dispatch call.
+            mRenderer->getStateManager()->invalidateProgramShaderStorageBuffers();
+        }
+
         // Fall back to using the staging buffer if the latest storage does not exist or is not
         // CPU-accessible.
         ANGLE_TRY(getStagingStorage(context, &mMappedStorage));

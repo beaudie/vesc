@@ -197,6 +197,9 @@ class StateManager11 final : angle::NonCopyable
     // Called by VertexArray11 element array buffer sync.
     void invalidateIndexBuffer();
 
+    // Called by Buffer11. Also called internally.
+    void invalidateProgramShaderStorageBuffers();
+
     void setRenderTarget(ID3D11RenderTargetView *rtv, ID3D11DepthStencilView *dsv);
     void setRenderTargets(ID3D11RenderTargetView **rtvs, UINT numRtvs, ID3D11DepthStencilView *dsv);
 
@@ -355,7 +358,6 @@ class StateManager11 final : angle::NonCopyable
     void invalidateProgramUniforms();
     void invalidateConstantBuffer(unsigned int slot);
     void invalidateProgramAtomicCounterBuffers();
-    void invalidateProgramShaderStorageBuffers();
 
     // Called by the Framebuffer11 directly.
     void processFramebufferInvalidation(const gl::Context *context);
