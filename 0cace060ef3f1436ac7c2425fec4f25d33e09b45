@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a62be20_33928ef5",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-29T00:14:19Z",
+      "side": 1,
+      "message": "nit: contextVk for consistency and to differentiate between gl::Context and vk::Context",
+      "range": {
+        "startLine": 507,
+        "startChar": 45,
+        "endLine": 507,
+        "endChar": 52
+      },
+      "revId": "0cace060ef3f1436ac7c2425fec4f25d33e09b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a18ba26d_7cbd67ad",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-29T00:14:19Z",
+      "side": 1,
+      "message": "maybe we can come up with a better name as a follow up. Fine with this for now. But something like \"MemoryCopyUtils?\" Anyway can do it later.",
+      "range": {
+        "startLine": 30,
+        "startChar": 6,
+        "endLine": 30,
+        "endChar": 14
+      },
+      "revId": "0cace060ef3f1436ac7c2425fec4f25d33e09b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
