@@ -9,6 +9,10 @@
 #ifndef LIBANGLE_RENDERER_GL_RENDERERGL_H_
 #define LIBANGLE_RENDERER_GL_RENDERERGL_H_
 
+#include <list>
+#include <mutex>
+#include <thread>
+
 #include "libANGLE/Caps.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Version.h"
@@ -41,10 +45,35 @@ class ContextImpl;
 class FunctionsGL;
 class StateManagerGL;
 
+// WorkerContext wraps a native GL context shared from the main context. It is used by the workers
+// for khr_parallel_shader_compile.
+class WorkerContext : angle::NonCopyable
+{
+  public:
+    virtual ~WorkerContext(){};
+
+    virtual bool makeCurrent(std::string *infoLog) = 0;
+    virtual void unmakeCurrent()                   = 0;
+
+    // Records the last thread ID.
+    std::thread::id threadID;
+};
+
+class WorkerContextFactory : angle::NonCopyable
+{
+  public:
+    virtual ~WorkerContextFactory(){};
+
+    virtual bool hasWorkerContexts() { return true; };
+    virtual WorkerContext *createWorkerContext(std::string *infoLog) = 0;
+};
+
 class RendererGL : angle::NonCopyable
 {
   public:
-    RendererGL(std::unique_ptr<FunctionsGL> functions, const egl::AttributeMap &attribMap);
+    RendererGL(std::unique_ptr<FunctionsGL> functions,
+               const egl::AttributeMap &attribMap,
+               WorkerContextFactory *factory);
     virtual ~RendererGL();
 
     angle::Result flush();
@@ -149,6 +178,10 @@ class RendererGL : angle::NonCopyable
     angle::Result memoryBarrier(GLbitfield barriers);
     angle::Result memoryBarrierByRegion(GLbitfield barriers);
 
+    bool supportWorkerContext();
+    bool bindWorkerContext(std::string *infoLog);
+    void unbindWorkerContext();
+
   private:
     void ensureCapsInitialized() const;
     void generateCaps(gl::Caps *outCaps,
@@ -174,6 +207,14 @@ class RendererGL : angle::NonCopyable
     mutable gl::Extensions mNativeExtensions;
     mutable gl::Limitations mNativeLimitations;
     mutable MultiviewImplementationTypeGL mMultiviewImplementationType;
+
+    WorkerContextFactory *mWorkerContextFactory;
+    // The thread-to-context mapping for the currently active worker threads.
+    std::unordered_map<std::thread::id, std::unique_ptr<WorkerContext>> mCurrentWorkerContexts;
+    // The worker contexts available to use.
+    std::list<std::unique_ptr<WorkerContext>> mWorkerContextPool;
+    // Protect the concurrent accesses to worker contexts.
+    std::mutex mMutex;
 };
 
 }  // namespace rx

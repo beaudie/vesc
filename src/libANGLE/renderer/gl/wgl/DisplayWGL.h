@@ -9,12 +9,13 @@
 #ifndef LIBANGLE_RENDERER_GL_WGL_DISPLAYWGL_H_
 #define LIBANGLE_RENDERER_GL_WGL_DISPLAYWGL_H_
 
-#include "libANGLE/renderer/gl/DisplayGL.h"
-
-#include <GL/wglext.h>
-
 #include <thread>
 #include <unordered_map>
+
+#include "libANGLE/renderer/gl/DisplayGL.h"
+#include "libANGLE/renderer/gl/RendererGL.h"
+
+#include <GL/wglext.h>
 
 namespace rx
 {
@@ -22,7 +23,7 @@ namespace rx
 class FunctionsWGL;
 class RendererWGL;
 
-class DisplayWGL : public DisplayGL
+class DisplayWGL : public DisplayGL, public WorkerContextFactory
 {
   public:
     DisplayWGL(const egl::DisplayState &state);
@@ -80,6 +81,9 @@ class DisplayWGL : public DisplayGL
 
     void destroyNativeContext(HGLRC context);
 
+    bool hasWorkerContexts() override;
+    WorkerContext *createWorkerContext(std::string *infoLog) override;
+
   private:
     egl::Error initializeImpl(egl::Display *display);
     void destroy();
@@ -91,8 +95,8 @@ class DisplayWGL : public DisplayGL
 
     egl::Error makeCurrentSurfaceless(gl::Context *context) override;
 
-    HGLRC initializeContextAttribs(const egl::AttributeMap &eglAttributes) const;
-    HGLRC createContextAttribs(const gl::Version &version, int profileMask) const;
+    HGLRC initializeContextAttribs(const egl::AttributeMap &eglAttributes);
+    HGLRC createContextAttribs(const gl::Version &version, int profileMask);
 
     egl::Error createRenderer(std::shared_ptr<RendererWGL> *outRenderer);
 
@@ -132,6 +136,15 @@ class DisplayWGL : public DisplayGL
         size_t refCount;
     };
     std::map<IUnknown *, D3DObjectHandle> mRegisteredD3DDevices;
+
+    // The seed context used to create worker contexts.
+    HGLRC mSharedContext;
+    // Use createContextAttribsARB or shareLists to share contexts.
+    bool mARBShare;
+    bool mHasWorkerContexts;
+
+    std::vector<HWND> mWorkerWindowPool;
+    std::vector<int> mWorkerContextAttribs;
 };
 
 }  // namespace rx
