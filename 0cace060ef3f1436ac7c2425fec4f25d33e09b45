@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a3ad2351_f7b38a95",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-29T05:19:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a62be20_33928ef5",
+      "range": {
+        "startLine": 507,
+        "startChar": 45,
+        "endLine": 507,
+        "endChar": 52
+      },
+      "revId": "0cace060ef3f1436ac7c2425fec4f25d33e09b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a18ba26d_7cbd67ad",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2018-12-29T00:14:19Z",
       "side": 1,
       "message": "maybe we can come up with a better name as a follow up. Fine with this for now. But something like \"MemoryCopyUtils?\" Anyway can do it later.",
+      "range": {
+        "startLine": 30,
+        "startChar": 6,
+        "endLine": 30,
+        "endChar": 14
+      },
+      "revId": "0cace060ef3f1436ac7c2425fec4f25d33e09b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c06a626_592ab56b",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2018-12-29T05:19:14Z",
+      "side": 1,
+      "message": "I have (low priority) plans to extend this with some other stuff that aren\u0027t necessarily copy (and there\u0027s already clear). I myself was trying to avoid UtilsVk (given there\u0027s also vk_utils.h), but couldn\u0027t find something succinct that would say \"AlgorithmsThatUseBuiltinShadersVk\". BuiltinUtilsVk would be tempting, but it\u0027s also rather redundant.\n\nLet\u0027s keep the rename for when we have a better idea.",
+      "parentUuid": "a18ba26d_7cbd67ad",
       "range": {
         "startLine": 30,
         "startChar": 6,
