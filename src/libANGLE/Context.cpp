@@ -5487,7 +5487,7 @@ void Context::deleteTextures(GLsizei n, const GLuint *textures)
 
 void Context::detachShader(GLuint program, GLuint shader)
 {
-    Program *programObject = getProgramNoResolveLink(program);
+    Program *programObject = getProgramResolveLink(program);
     ASSERT(programObject);
 
     Shader *shaderObject = getShader(shader);
@@ -5878,7 +5878,7 @@ GLboolean Context::isTexture(GLuint texture)
 
 void Context::linkProgram(GLuint program)
 {
-    Program *programObject = getProgramNoResolveLink(program);
+    Program *programObject = getProgramResolveLink(program);
     ASSERT(programObject);
     ANGLE_CONTEXT_TRY(programObject->link(this));
 
