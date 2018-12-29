@@ -47,7 +47,7 @@ class EGLDirectCompositionTest : public ANGLETest
         }
 
         // Create an OS Window
-        mOSWindow = std::unique_ptr<OSWindow>(CreateOSWindow());
+        mOSWindow = CreateOSWindow();
 
         mOSWindow->initialize("EGLDirectCompositionTest", WINDOWWIDTH, WINDOWHEIGHT);
         auto nativeWindow = mOSWindow->getNativeWindow();
@@ -198,9 +198,12 @@ class EGLDirectCompositionTest : public ANGLETest
             return;
         }
         ASSERT_EGL_TRUE(eglTerminate(mEglDisplay));
+
+        FreeOSWindow(mOSWindow);
+        mOSWindow = nullptr;
     }
 
-    std::unique_ptr<OSWindow> mOSWindow;
+    OSWindow *mOSWindow;
     ComPtr<ICompositor> mCompositor;
     ComPtr<IDispatcherQueueController> mDispatcherController;
     ComPtr<ICompositionColorBrush> mColorBrush;

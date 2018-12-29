@@ -76,7 +76,8 @@ class EGLDeviceCreationTest : public EGLTest
         SafeRelease(mDevice);
         SafeRelease(mDeviceContext);
 
-        SafeDelete(mOSWindow);
+        FreeOSWindow(mOSWindow);
+        mOSWindow = nullptr;
 
         if (mSurface != EGL_NO_SURFACE)
         {
