@@ -187,6 +187,30 @@
       "revId": "3bcc661b3538457bad555e40b2edcc847c5b9965",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fb87d58_fa1d0c0b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2018-12-29T00:15:55Z",
+      "side": 1,
+      "message": "OK thanks for looking into it. Sometimes pointer instructions are bad. It looks like maybe if we turn DrawBufferMask (or any bitset type) into a POD type instead of a class type with destructor and private data we can get some speedup. like we did for angle::Result. But this is a different task than in this CL so we should check that out another time.",
+      "parentUuid": "a0200fcc_530ffcb3",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 69
+      },
+      "revId": "3bcc661b3538457bad555e40b2edcc847c5b9965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
