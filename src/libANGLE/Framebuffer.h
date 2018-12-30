@@ -39,7 +39,7 @@ class Surface;
 namespace gl
 {
 class Context;
-class ContextState;
+class State;
 class Framebuffer;
 class ImageIndex;
 class Renderbuffer;

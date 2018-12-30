@@ -605,7 +605,7 @@ using UniqueObjectPointer = UniqueObjectPointerBase<ObjT, DestroyThenDelete<ObjT
 
 namespace gl
 {
-class ContextState;
+class State;
 
 }  // namespace gl
 

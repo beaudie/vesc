@@ -22,7 +22,7 @@
 
 namespace gl
 {
-class ContextState;
+class State;
 }
 
 namespace rx

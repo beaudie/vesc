@@ -20,7 +20,7 @@
 namespace gl
 {
 struct Caps;
-class ContextState;
+class State;
 class State;
 class FramebufferState;
 }  // namespace gl

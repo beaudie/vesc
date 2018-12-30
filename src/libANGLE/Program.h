@@ -44,7 +44,7 @@ struct UnusedUniform;
 struct Caps;
 struct Extensions;
 class Context;
-class ContextState;
+class State;
 class Shader;
 class ShaderProgramManager;
 class State;

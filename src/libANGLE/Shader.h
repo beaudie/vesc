@@ -41,7 +41,7 @@ class WorkerThreadPool;
 
 namespace gl
 {
-class ContextState;
+class State;
 struct Limitations;
 class ShaderProgramManager;
 class Context;
