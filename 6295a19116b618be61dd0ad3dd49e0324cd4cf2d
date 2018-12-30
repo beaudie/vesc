@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1adf799_fad151a2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-30T04:35:58Z",
+      "side": 1,
+      "message": "nit: Inline Context::DrawArrays and Context::BindBuffer",
+      "revId": "6295a19116b618be61dd0ad3dd49e0324cd4cf2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
