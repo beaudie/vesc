@@ -69,6 +69,13 @@ ANGLE_INLINE GLuint GetDrawElementsTypeSize(DrawElementsType type)
     return (1 << static_cast<GLuint>(type));
 }
 
+// Determine number of bits to shift 1 to the left to determine the number
+// of bytes for one element.
+ANGLE_INLINE GLuint GetDrawElementsTypeBytesShift(DrawElementsType type)
+{
+    return static_cast<GLuint>(type);
+}
+
 ANGLE_INLINE GLuint GetDrawElementsTypeShift(DrawElementsType type)
 {
     return static_cast<GLuint>(type);
