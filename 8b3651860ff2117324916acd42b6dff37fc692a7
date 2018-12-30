@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24f3f2a2_28212277",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3012,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-30T14:46:30Z",
+      "side": 1,
+      "message": "This is a big hotspot due to a double indirection context-\u003eextension-\u003ewebglCompatibility. getExtensions() returns a reference to an extensions struct. It\u0027d be great if we have the Extension struct as copy inside the context instead of having a reference. A first quick try replacing the reference by an instance failed and I haven\u0027t investigated why.\n\nAlso, there are \u003e64 extension booleans which results in \u003e64 bytes of storage which is more than one cache line. If we\u0027d use a bitfield instead all booleans would fit into a single cache line.\n\nUsing booleans requires some more changes since there\u0027s a class passing pointers to the boolean member variables to a map. The code would have to be rewritten to an bit-index instead.",
+      "revId": "8b3651860ff2117324916acd42b6dff37fc692a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11f56990_e33beec3",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3074,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-30T14:46:30Z",
+      "side": 1,
+      "message": "This should do the same overflow check, but can reuse the addition used to compute elementDataSizeWithOffset. If there\u0027s an 64-bit overflow elementDataSizeWithOffset will be smaller than the previous value elementDataSizeNoOffset.",
+      "revId": "8b3651860ff2117324916acd42b6dff37fc692a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01fd8c14_57e86a16",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3090,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-30T14:46:30Z",
+      "side": 1,
+      "message": "IndexRange initializes all member variables to zero by default. This is not necessary in this case because vao-\u003egetIndexRange will for sure set the values.",
+      "revId": "8b3651860ff2117324916acd42b6dff37fc692a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
