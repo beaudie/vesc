@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "b8219b67_73387d74",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-31T14:08:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71a34710_4cdb8368",
+      "range": {
+        "startLine": 286,
+        "startChar": 0,
+        "endLine": 289,
+        "endChar": 26
+      },
+      "revId": "8b3651860ff2117324916acd42b6dff37fc692a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef1238e3_fbf0bd6e",
         "filename": "src/common/PackedEnums.h",
         "patchSetId": 1
@@ -68,6 +92,30 @@
       "revId": "8b3651860ff2117324916acd42b6dff37fc692a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecc2859a_c5451ed3",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-31T14:08:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef1238e3_fbf0bd6e",
+      "range": {
+        "startLine": 298,
+        "startChar": 3,
+        "endLine": 298,
+        "endChar": 18
+      },
+      "revId": "8b3651860ff2117324916acd42b6dff37fc692a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "40fd86b9_9bb9d6eb",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-31T14:08:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3600f04b_52892ed1",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 9
+      },
+      "revId": "8b3651860ff2117324916acd42b6dff37fc692a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8bcabb41_660e6e57",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 1
@@ -117,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "aa20106c_a59cf68e",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-31T14:08:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8bcabb41_660e6e57",
+      "range": {
+        "startLine": 252,
+        "startChar": 4,
+        "endLine": 252,
+        "endChar": 19
+      },
+      "revId": "8b3651860ff2117324916acd42b6dff37fc692a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f2aaec0e_ce3cfe7b",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 1
@@ -128,6 +224,30 @@
       "writtenOn": "2018-12-30T19:22:01Z",
       "side": 1,
       "message": "you can probably omit this for now. I\u0027ll handle fixing the indirection in a follow-up.",
+      "range": {
+        "startLine": 1710,
+        "startChar": 0,
+        "endLine": 1710,
+        "endChar": 82
+      },
+      "revId": "8b3651860ff2117324916acd42b6dff37fc692a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b2a5c79_9e231d82",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1710,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-31T14:08:56Z",
+      "side": 1,
+      "message": "It doesn\u0027t hurt and makes it easier to spot further hotspots, so I\u0027d prefer to keep it given that there are other functions which already do use mGLState too.",
+      "parentUuid": "f2aaec0e_ce3cfe7b",
       "range": {
         "startLine": 1710,
         "startChar": 0,
@@ -163,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "d9fe06c8_53ce7a8a",
+        "filename": "src/libANGLE/formatutils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-31T14:08:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4299024d_843a5018",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 0
+      },
+      "revId": "8b3651860ff2117324916acd42b6dff37fc692a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24f3f2a2_28212277",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 1
@@ -192,6 +336,24 @@
       "side": 1,
       "message": "OK, let me try handling this. Merging gl::ContextState and g::State was something we planned but never had a motivation to do.\n\nWe could use a bitset to handle the extensions array if you think that would improve things too. That can be done as a separate change. Agree with what you propose about the bit index. Would you like me to look at that too?",
       "parentUuid": "24f3f2a2_28212277",
+      "revId": "8b3651860ff2117324916acd42b6dff37fc692a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ae1aa14_df0bc355",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3012,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-31T14:08:56Z",
+      "side": 1,
+      "message": "There is no guarantee that using the bitset will improve things. Let\u0027s first remove the double-indirection to the extensions and take a look the profiling output afterwards.",
+      "parentUuid": "e07fdc3a_51185b0d",
       "revId": "8b3651860ff2117324916acd42b6dff37fc692a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -233,6 +395,24 @@
     },
     {
       "key": {
+        "uuid": "248648a7_6c7af515",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3074,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-31T14:08:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cec29a8d_f0e0dd2c",
+      "revId": "8b3651860ff2117324916acd42b6dff37fc692a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "01fd8c14_57e86a16",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 1
@@ -262,6 +442,24 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "01fd8c14_57e86a16",
+      "revId": "8b3651860ff2117324916acd42b6dff37fc692a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e9ed5324_d841a38e",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3090,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2018-12-31T14:08:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44c1f295_80552812",
       "revId": "8b3651860ff2117324916acd42b6dff37fc692a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
