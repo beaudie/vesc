@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "0c8487fe_e798bbdf",
+        "filename": "src/libANGLE/renderer/vulkan/DrawUtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-01T21:21:30Z",
+      "side": 1,
+      "message": "Interesting. Thanks for explaining.",
+      "parentUuid": "31771419_d9ce4d64",
+      "range": {
+        "startLine": 374,
+        "startChar": 14,
+        "endLine": 374,
+        "endChar": 15
+      },
+      "revId": "991748b8e06c4c73b81c6947d9cb1b6d19dcf6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "51b4ebdb_c9da6186",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 7
@@ -178,6 +202,30 @@
       "side": 1,
       "message": "Done.\n\nDoes that mean on d3d we don\u0027t go through the fast path if `canCreateRenderTargetForImage` returns false? I\u0027m hoping to be able to get the fast path either way. I think by queuing the change and doing them in `flushUpdatesToImage()` this can be achieved. The unknowns at the moment are whether that function is definitely called before the next submission and what happens with interleaved cpu and gpu updates.\n\nWe\u0027ll see about that in a follow up change then, though I\u0027ll focus on getting the copy[Sub]Texture functions to use the fast path (when mImage.isValid() already) first.",
       "parentUuid": "51b4ebdb_c9da6186",
+      "range": {
+        "startLine": 497,
+        "startChar": 8,
+        "endLine": 502,
+        "endChar": 40
+      },
+      "revId": "991748b8e06c4c73b81c6947d9cb1b6d19dcf6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "844924a1_0f7396b5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-01T21:21:30Z",
+      "side": 1,
+      "message": "Yeah, on D3D some formats aren\u0027t renderable at all. So we can\u0027t create RenderTargetViews. For instance compressed Texture formats. flushUpatesToImage should always be called before a draw call that uses the texture and it\u0027s VkImage. Changes to a texture\u0027s data will trigger dirty bits to update the texture state in ContextVk::setupDraw.\n\nSounds good about doing this as a follow up. I expect there\u0027ll be some harder formats like compressed, etc, that we can handle later on.",
+      "parentUuid": "9e217916_0c0f7581",
       "range": {
         "startLine": 497,
         "startChar": 8,

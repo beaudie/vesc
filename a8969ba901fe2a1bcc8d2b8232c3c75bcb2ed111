@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa8155dd_ab96f12c",
+        "filename": "src/libANGLE/renderer/Format.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-01T21:21:30Z",
+      "side": 1,
+      "message": "nit: I think we probably only need to check redBits \u003d\u003d 0. We could ASSERT to validate this but I don\u0027t think it works in constexpr.",
+      "range": {
+        "startLine": 136,
+        "startChar": 11,
+        "endLine": 136,
+        "endChar": 58
+      },
+      "revId": "a8969ba901fe2a1bcc8d2b8232c3c75bcb2ed111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c39b70a5_8f79ad70",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-01T21:21:30Z",
+      "side": 1,
+      "message": "nice that you merged this, Also would be good if we could optimize this loop. It uses the state\u0027s sampler bindings which has a double indirection. the ContextVk method used the flatter \u0027active textures\u0027 array. Can be done later.",
+      "range": {
+        "startLine": 892,
+        "startChar": 0,
+        "endLine": 907,
+        "endChar": 0
+      },
+      "revId": "a8969ba901fe2a1bcc8d2b8232c3c75bcb2ed111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "558aa75c_edf0f34a",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-01T21:21:30Z",
+      "side": 1,
+      "message": "can we actually make luma renderbuffers? seems harmless but not directly related to this CL.",
+      "range": {
+        "startLine": 86,
+        "startChar": 8,
+        "endLine": 86,
+        "endChar": 23
+      },
+      "revId": "a8969ba901fe2a1bcc8d2b8232c3c75bcb2ed111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8dc380d_3222faac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-01T21:21:30Z",
+      "side": 1,
+      "message": "any need to change this? Seems like the prior value would be correct as well.",
+      "range": {
+        "startLine": 1330,
+        "startChar": 57,
+        "endLine": 1330,
+        "endChar": 68
+      },
+      "revId": "a8969ba901fe2a1bcc8d2b8232c3c75bcb2ed111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bdc870ca_2145fde9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-01T21:21:30Z",
+      "side": 0,
+      "message": "what\u0027s up with this? Maybe this should be a split change?",
+      "range": {
+        "startLine": 1334,
+        "startChar": 0,
+        "endLine": 1344,
+        "endChar": 5
+      },
+      "revId": "60a50cfcb8769ca2f903f8fac3c8d4e7ab5ffdc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
