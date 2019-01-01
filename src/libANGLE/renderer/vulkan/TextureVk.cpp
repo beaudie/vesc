@@ -611,37 +611,33 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
                                                   FramebufferVk *source)
 {
     UtilsVk::CopyImageParameters params;
-    params.srcOffset[0]  = srcOffset.x;
-    params.srcOffset[1]  = srcOffset.y;
-    params.srcExtents[0] = extents.width;
-    params.srcExtents[1] = extents.height;
-    params.destOffset[0] = destOffset.x;
-    params.destOffset[1] = destOffset.y;
-    params.srcMip        = 0;
-    params.srcHeight     = source->getReadImageExtents().height;
-    params.flipY         = contextVk->isViewportFlipEnabledForDrawFBO();
+    params.srcOffset[0]        = srcOffset.x;
+    params.srcOffset[1]        = srcOffset.y;
+    params.srcExtents[0]       = extents.width;
+    params.srcExtents[1]       = extents.height;
+    params.destOffset[0]       = destOffset.x;
+    params.destOffset[1]       = destOffset.y;
+    params.srcMip              = 0;
+    params.srcLayer            = 0;
+    params.srcHeight           = source->getReadImageExtents().height;
+    params.srcPremultiplyAlpha = false;
+    params.srcUnmultiplyAlpha  = false;
+    params.srcFlipY            = contextVk->isViewportFlipEnabledForDrawFBO();
+    params.destFlipY           = false;
 
-    uint32_t level      = index.getLevelIndex();
-    uint32_t baseLayer  = index.hasLayer() ? index.getLayerIndex() : 0;
-    uint32_t layerCount = index.getLayerCount();
+    uint32_t level = index.getLevelIndex();
+    uint32_t layer = index.hasLayer() ? index.getLayerIndex() : 0;
 
-    // TODO(syoussefi): currently this is only called from copy[Sub]Image,
-    // where layer count can only be 1, and source's level and layer are both 0.
-    // Once this code is expanded to cover copy[Sub]Texture, it should be
-    // adapted to get single-layer/level image views of the source as well.
-    // http://anglebug.com/2958
-    ASSERT(layerCount == 1);
+    // This is called from copy[Sub]Image, where layer count can only be 1.
+    ASSERT(index.getLayerCount() == 1);
     vk::ImageHelper *srcImage = &source->getColorReadRenderTarget()->getImage();
     vk::ImageView *srcView    = source->getColorReadRenderTarget()->getReadImageView();
 
-    for (uint32_t i = 0; i < layerCount; ++i)
-    {
-        vk::ImageView *destView;
-        ANGLE_TRY(getLayerLevelDrawImageView(contextVk, baseLayer + i, level, &destView));
+    vk::ImageView *destView;
+    ANGLE_TRY(getLayerLevelDrawImageView(contextVk, layer, level, &destView));
 
-        ANGLE_TRY(contextVk->getRenderer()->getUtils().copyImage(contextVk, &mImage, destView,
-                                                                 srcImage, srcView, params));
-    }
+    ANGLE_TRY(contextVk->getRenderer()->getUtils().copyImage(contextVk, &mImage, destView, srcImage,
+                                                             srcView, params));
 
     source->getFramebuffer()->addReadDependency(&mImage);
 
@@ -661,6 +657,28 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
 {
     RendererVk *renderer = contextVk->getRenderer();
 
+    ANGLE_TRY(source->ensureImageInitialized(contextVk));
+
+    const vk::Format &sourceVkFormat = source->getImage().getFormat();
+    const vk::Format &destVkFormat   = renderer->getFormat(destFormat.sizedInternalFormat);
+
+    // TODO(syoussefi): Support draw path for when !mImage.valid().  http://anglebug.com/2958
+    bool canDraw = mImage.valid() &&
+                   renderer->hasTextureFormatFeatureBits(sourceVkFormat.vkTextureFormat,
+                                                         VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) &&
+                   renderer->hasTextureFormatFeatureBits(destVkFormat.vkTextureFormat,
+                                                         VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT);
+
+    // If it's possible to perform the copy with a draw call, do that.
+    if (canDraw)
+    {
+        ANGLE_TRY(ensureImageInitialized(contextVk));
+
+        return copySubTextureImplWithDraw(contextVk, index, destOffset, destFormat, sourceLevel,
+                                          sourceArea, unpackFlipY, unpackPremultiplyAlpha,
+                                          unpackUnmultiplyAlpha, source);
+    }
+
     if (sourceLevel != 0)
     {
         WARN() << "glCopyTextureCHROMIUM with sourceLevel != 0 not implemented.";
@@ -670,9 +688,6 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
     // Read back the requested region of the source texture
     uint8_t *sourceData = nullptr;
     ANGLE_TRY(source->copyImageDataToBuffer(contextVk, sourceLevel, 1, sourceArea, &sourceData));
-
-    const vk::Format &sourceVkFormat = source->getImage().getFormat();
-    const vk::Format &destVkFormat   = renderer->getFormat(destFormat.sizedInternalFormat);
 
     const angle::Format &sourceTextureFormat = sourceVkFormat.textureFormat();
     const angle::Format &destTextureFormat   = destVkFormat.textureFormat();
@@ -712,6 +727,54 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
 
     // Create a new graph node to store image initialization commands.
     mImage.finishCurrentCommands(contextVk->getRenderer());
+
+    return angle::Result::Continue;
+}
+
+angle::Result TextureVk::copySubTextureImplWithDraw(ContextVk *contextVk,
+                                                    const gl::ImageIndex &index,
+                                                    const gl::Offset &destOffset,
+                                                    const gl::InternalFormat &destFormat,
+                                                    size_t sourceLevel,
+                                                    const gl::Rectangle &sourceArea,
+                                                    bool unpackFlipY,
+                                                    bool unpackPremultiplyAlpha,
+                                                    bool unpackUnmultiplyAlpha,
+                                                    TextureVk *source)
+{
+    UtilsVk::CopyImageParameters params;
+    params.srcOffset[0]        = sourceArea.x;
+    params.srcOffset[1]        = sourceArea.y;
+    params.srcExtents[0]       = sourceArea.width;
+    params.srcExtents[1]       = sourceArea.height;
+    params.destOffset[0]       = destOffset.x;
+    params.destOffset[1]       = destOffset.y;
+    params.srcMip              = sourceLevel;
+    params.srcHeight           = source->getImage().getExtents().height;
+    params.srcPremultiplyAlpha = unpackPremultiplyAlpha && !unpackUnmultiplyAlpha;
+    params.srcUnmultiplyAlpha  = unpackUnmultiplyAlpha && !unpackPremultiplyAlpha;
+    params.srcFlipY            = false;
+    params.destFlipY           = unpackFlipY;
+
+    uint32_t level      = index.getLevelIndex();
+    uint32_t baseLayer  = index.hasLayer() ? index.getLayerIndex() : 0;
+    uint32_t layerCount = index.getLayerCount();
+
+    vk::ImageHelper *srcImage    = &source->getImage();
+    const vk::ImageView *srcView = &source->getReadImageView();
+
+    for (uint32_t i = 0; i < layerCount; ++i)
+    {
+        params.srcLayer = i;
+
+        vk::ImageView *destView;
+        ANGLE_TRY(getLayerLevelDrawImageView(contextVk, baseLayer + i, level, &destView));
+
+        ANGLE_TRY(contextVk->getRenderer()->getUtils().copyImage(contextVk, &mImage, destView,
+                                                                 srcImage, srcView, params));
+    }
+
+    source->getImage().addReadDependency(&mImage);
 
     return angle::Result::Continue;
 }

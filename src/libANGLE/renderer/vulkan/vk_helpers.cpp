@@ -385,11 +385,6 @@ angle::Result DynamicDescriptorPool::allocateSets(Context *context,
 {
     if (!bindingOut->valid() || !bindingOut->get().hasCapacity(descriptorSetCount))
     {
-        if (!mDescriptorPools[mCurrentPoolIndex]->get().hasCapacity(descriptorSetCount))
-        {
-            ANGLE_TRY(allocateNewPool(context));
-        }
-
         // Make sure the old binding knows the descriptor sets can still be in-use. We only need
         // to update the serial when we move to a new pool. This is because we only check serials
         // when we move to a new pool.
@@ -397,6 +392,11 @@ angle::Result DynamicDescriptorPool::allocateSets(Context *context,
         {
             Serial currentSerial = context->getRenderer()->getCurrentQueueSerial();
             bindingOut->get().updateSerial(currentSerial);
+        }
+
+        if (!mDescriptorPools[mCurrentPoolIndex]->get().hasCapacity(descriptorSetCount))
+        {
+            ANGLE_TRY(allocateNewPool(context));
         }
 
         bindingOut->set(mDescriptorPools[mCurrentPoolIndex]);
@@ -417,8 +417,6 @@ angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
         if (!mDescriptorPools[poolIndex]->isReferenced() &&
             !renderer->isSerialInUse(mDescriptorPools[poolIndex]->get().getSerial()))
         {
-            // The newly allocated pool must be a different index from the current pool.
-            ASSERT(poolIndex != mCurrentPoolIndex);
             mCurrentPoolIndex = poolIndex;
             found             = true;
             break;
