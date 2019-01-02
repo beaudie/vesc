@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fedf879e_cb0b568c",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-02T20:04:22Z",
+      "side": 1,
+      "message": "I\u0027ve missed this in the previous CL.\nSeems a bit mismatched.\nI\u0027d expect it to be either called destIsLuminance or to call isLUMA() instead of checking luminanceBits.",
+      "range": {
+        "startLine": 648,
+        "startChar": 0,
+        "endLine": 648,
+        "endChar": 79
+      },
+      "revId": "31f4654e366f8364df389d107e7dffeded6a0dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed463301_9aa6c717",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-02T20:04:22Z",
+      "side": 1,
+      "message": "Why change the order here?",
+      "range": {
+        "startLine": 391,
+        "startChar": 0,
+        "endLine": 400,
+        "endChar": 9
+      },
+      "revId": "31f4654e366f8364df389d107e7dffeded6a0dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
