@@ -293,7 +293,7 @@ ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
       m3DTexturedQuadProgram(0),
       mDeferContextInit(false)
 {
-    mEGLWindow = new EGLWindow(params.majorVersion, params.minorVersion, params.eglParameters);
+    mEGLWindow = EGLWindow::New(params.majorVersion, params.minorVersion, params.eglParameters);
 
     // Default debug layers to enabled in tests.
     mEGLWindow->setDebugLayersEnabled(true);
@@ -333,7 +333,8 @@ ANGLETestBase::~ANGLETestBase()
     {
         glDeleteProgram(m3DTexturedQuadProgram);
     }
-    SafeDelete(mEGLWindow);
+    GLWindowBase::Delete(mEGLWindow);
+    mEGLWindow = nullptr;
 }
 
 void ANGLETestBase::ANGLETestSetUp()
@@ -395,27 +396,21 @@ void ANGLETestBase::ANGLETestSetUp()
 
 void ANGLETestBase::ANGLETestTearDown()
 {
-    mEGLWindow->setPlatformMethods(nullptr);
-
-    mPlatformContext.currentTest = nullptr;
-    checkD3D11SDKLayersMessages();
+    if (mEGLWindow)
+    {
+        mEGLWindow->setPlatformMethods(nullptr);
+        mPlatformContext.currentTest = nullptr;
+        checkD3D11SDKLayersMessages();
+    }
 
     const auto &info = testing::UnitTest::GetInstance()->current_test_info();
     angle::WriteDebugMessage("Exiting %s.%s\n", info->test_case_name(), info->name());
 
     swapBuffers();
 
-    if (eglGetError() != EGL_SUCCESS)
-    {
-        FAIL() << "egl error during swap.";
-    }
-
     mOSWindow->messageLoop();
 
-    if (!destroyEGLContext())
-    {
-        FAIL() << "egl context destruction failed.";
-    }
+    getGLWindow()->destroyGL();
 
     // Check for quit message
     Event myEvent;
@@ -430,9 +425,14 @@ void ANGLETestBase::ANGLETestTearDown()
 
 void ANGLETestBase::swapBuffers()
 {
-    if (mEGLWindow->isGLInitialized())
+    if (getGLWindow()->isGLInitialized())
     {
-        mEGLWindow->swap();
+        getGLWindow()->swap();
+
+        if (mEGLWindow)
+        {
+            EXPECT_EGL_SUCCESS();
+        }
     }
 }
 
@@ -904,34 +904,39 @@ void ANGLETestBase::setWindowHeight(int height)
     mHeight = height;
 }
 
+GLWindowBase *ANGLETestBase::getGLWindow() const
+{
+    return mEGLWindow;
+}
+
 void ANGLETestBase::setConfigRedBits(int bits)
 {
-    mEGLWindow->setConfigRedBits(bits);
+    getGLWindow()->setConfigRedBits(bits);
 }
 
 void ANGLETestBase::setConfigGreenBits(int bits)
 {
-    mEGLWindow->setConfigGreenBits(bits);
+    getGLWindow()->setConfigGreenBits(bits);
 }
 
 void ANGLETestBase::setConfigBlueBits(int bits)
 {
-    mEGLWindow->setConfigBlueBits(bits);
+    getGLWindow()->setConfigBlueBits(bits);
 }
 
 void ANGLETestBase::setConfigAlphaBits(int bits)
 {
-    mEGLWindow->setConfigAlphaBits(bits);
+    getGLWindow()->setConfigAlphaBits(bits);
 }
 
 void ANGLETestBase::setConfigDepthBits(int bits)
 {
-    mEGLWindow->setConfigDepthBits(bits);
+    getGLWindow()->setConfigDepthBits(bits);
 }
 
 void ANGLETestBase::setConfigStencilBits(int bits)
 {
-    mEGLWindow->setConfigStencilBits(bits);
+    getGLWindow()->setConfigStencilBits(bits);
 }
 
 void ANGLETestBase::setConfigComponentType(EGLenum componentType)
@@ -1039,12 +1044,6 @@ bool ANGLETestBase::isMultisampleEnabled() const
     return mEGLWindow->isMultisample();
 }
 
-bool ANGLETestBase::destroyEGLContext()
-{
-    mEGLWindow->destroyGL();
-    return true;
-}
-
 // static
 bool ANGLETestBase::InitTestWindow()
 {
@@ -1065,7 +1064,7 @@ bool ANGLETestBase::DestroyTestWindow()
     if (mOSWindow)
     {
         mOSWindow->destroy();
-        delete mOSWindow;
+        FreeOSWindow(mOSWindow);
         mOSWindow = nullptr;
     }
 
