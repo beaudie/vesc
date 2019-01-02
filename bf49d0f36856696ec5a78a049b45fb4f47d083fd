@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad3bd693_c9429afa",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-02T21:53:29Z",
+      "side": 1,
+      "message": "can you add asserts to these that the pixel buffer is empty and the image is valid?",
+      "range": {
+        "startLine": 606,
+        "startChar": 25,
+        "endLine": 606,
+        "endChar": 49
+      },
+      "revId": "bf49d0f36856696ec5a78a049b45fb4f47d083fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b56f9c3f_2e631659",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-02T21:53:29Z",
+      "side": 1,
+      "message": "need a helper for \n\nif (image valid \u0026\u0026 has feature bits)\n{\n   flush updates;\n   return true;\n}\n\nreturn false;\n\nProbably using a bool as an out parameter. Think you have the same pattern in copysubimage.",
+      "range": {
+        "startLine": 666,
+        "startChar": 0,
+        "endLine": 680,
+        "endChar": 5
+      },
+      "revId": "bf49d0f36856696ec5a78a049b45fb4f47d083fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "913735dd_29d3cf39",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-02T21:53:29Z",
+      "side": 1,
+      "message": "same asserts",
+      "range": {
+        "startLine": 734,
+        "startChar": 25,
+        "endLine": 734,
+        "endChar": 51
+      },
+      "revId": "bf49d0f36856696ec5a78a049b45fb4f47d083fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3b93ff3_9821b89b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-02T21:53:29Z",
+      "side": 1,
+      "message": "micro-nit: layerIndex for a more descriptive name",
+      "range": {
+        "startLine": 766,
+        "startChar": 18,
+        "endLine": 766,
+        "endChar": 19
+      },
+      "revId": "bf49d0f36856696ec5a78a049b45fb4f47d083fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25995249_bd343406",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-02T21:53:29Z",
+      "side": 1,
+      "message": "nit: extract out of loop for a minor cleanup",
+      "range": {
+        "startLine": 773,
+        "startChar": 18,
+        "endLine": 773,
+        "endChar": 54
+      },
+      "revId": "bf49d0f36856696ec5a78a049b45fb4f47d083fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
