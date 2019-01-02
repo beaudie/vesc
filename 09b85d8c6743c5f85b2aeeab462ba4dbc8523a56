@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "189f0266_f6ee6765",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-02T21:09:43Z",
+      "side": 1,
+      "message": "Recipe for disaster",
+      "range": {
+        "startLine": 10,
+        "startChar": 47,
+        "endLine": 12,
+        "endChar": 29
+      },
+      "revId": "09b85d8c6743c5f85b2aeeab462ba4dbc8523a56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac2353cc_36697125",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-02T21:09:43Z",
+      "side": 1,
+      "message": "Was this missing from the other CL and is an unrelated fix?",
+      "revId": "09b85d8c6743c5f85b2aeeab462ba4dbc8523a56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4ddba70_f273de59",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-02T21:09:43Z",
+      "side": 1,
+      "message": "Is the goal to extend this with other implementations than EGL (for the sake of native tests)?",
+      "revId": "09b85d8c6743c5f85b2aeeab462ba4dbc8523a56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
