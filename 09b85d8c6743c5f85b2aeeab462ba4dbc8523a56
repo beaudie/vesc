@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "c18e132b_1aebf875",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-02T23:23:35Z",
+      "side": 1,
+      "message": "No, it was moved from ANGLETest.cpp and I forgot to delete it here. Fixed. Was a result of splitting the patch in two.",
+      "parentUuid": "ac2353cc_36697125",
+      "revId": "09b85d8c6743c5f85b2aeeab462ba4dbc8523a56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4ddba70_f273de59",
         "filename": "util/EGLWindow.h",
         "patchSetId": 1
@@ -56,6 +74,24 @@
       "revId": "09b85d8c6743c5f85b2aeeab462ba4dbc8523a56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "114a0aad_140c6061",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-02T23:23:35Z",
+      "side": 1,
+      "message": "Yep, WGL would be the main other GL Window type. We could also theoretically do a GLXWindow on Linux, and a different variation on ChromeOS. Still very interesting to do comparative perf with WGL and the driver vs ANGLE and the driver.",
+      "parentUuid": "b4ddba70_f273de59",
+      "revId": "09b85d8c6743c5f85b2aeeab462ba4dbc8523a56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
