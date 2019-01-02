@@ -45,6 +45,30 @@
       "revId": "190f31fa1568ce62ed8c29923d9642ffac24f5ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "859e1fb8_115d32ee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-02T20:43:20Z",
+      "side": 1,
+      "message": "No that\u0027s not a short term solution at all. It would be a while before we even get GLES 3.1 on the Vulkan backend, so optimizing this is certainly not urgent.",
+      "parentUuid": "cf3edeed_0096a038",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 95
+      },
+      "revId": "190f31fa1568ce62ed8c29923d9642ffac24f5ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
