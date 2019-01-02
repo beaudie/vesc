@@ -286,6 +286,30 @@
     },
     {
       "key": {
+        "uuid": "7bf72797_ff2cde9e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-02T21:43:19Z",
+      "side": 1,
+      "message": "OK yes. One note. I would investigate using a GPU pack buffer instead of a staging storage. copyImage shouldn\u0027t support stretching or scaling. And we\u0027ll need GPU pack/unpack buffers anyway for ES 3.0 and 2.0 extensions. It probably would tie in more nicely with the existing \"PixelBuffer\" logic in the TextureVk class as well. This would be a more compute-shadery-ey approach. And would avoid the resource allocation issues with using temporary images. But I think your current solution uses draw shaders so maybe you can tell me in person some time what the drawbacks were with compute shaders.\n\nRegarding compressed formats, you\u0027re probably right. copyImage would not support compressed. But copyTexture might. Not as familiar with what formats copyTexture supports.",
+      "parentUuid": "7cfdb57c_fee8e8b4",
+      "range": {
+        "startLine": 497,
+        "startChar": 8,
+        "endLine": 502,
+        "endChar": 40
+      },
+      "revId": "991748b8e06c4c73b81c6947d9cb1b6d19dcf6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f1a24129_dcc0ea91",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 7
