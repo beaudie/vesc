@@ -61,8 +61,10 @@ void PixelBuffer::removeStagedUpdates(const gl::ImageIndex &index)
     uint32_t levelIndex    = static_cast<uint32_t>(index.getLevelIndex());
     uint32_t layerIndex    = static_cast<uint32_t>(index.getLayerIndex());
     auto removeIfStatement = [levelIndex, layerIndex](SubresourceUpdate &update) {
-        return update.copyRegion.imageSubresource.mipLevel == levelIndex &&
-               update.copyRegion.imageSubresource.baseArrayLayer == layerIndex;
+        const VkImageSubresourceLayers &srcSubresource =
+            update.fromBuffer ? update.bufferCopyRegion.imageSubresource
+                              : update.imageCopyRegion.srcSubresource;
+        return srcSubresource.mipLevel == levelIndex && srcSubresource.baseArrayLayer == layerIndex;
     };
     mSubresourceUpdates.erase(
         std::remove_if(mSubresourceUpdates.begin(), mSubresourceUpdates.end(), removeIfStatement),
@@ -232,6 +234,14 @@ angle::Result PixelBuffer::stageSubresourceUpdateFromFramebuffer(
     return angle::Result::Continue;
 }
 
+void PixelBuffer::stageSubresourceUpdateFromImage(vk::ImageHelper *image,
+                                                  const VkImageCopy &copyRegion)
+{
+    // TODO: possibly get gl::ImageIndex, gl::Offset etc and build the copy region, if that's
+    // easier.
+    mSubresourceUpdates.emplace_back(image, copyRegion);
+}
+
 angle::Result PixelBuffer::allocate(ContextVk *contextVk,
                                     size_t sizeInBytes,
                                     uint8_t **ptrOut,
@@ -253,6 +263,8 @@ angle::Result PixelBuffer::flushUpdatesToImage(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
+    RendererVk *renderer = contextVk->getRenderer();
+
     ANGLE_TRY(mStagingBuffer.flush(contextVk));
 
     std::vector<SubresourceUpdate> updatesToKeep;
@@ -261,7 +273,9 @@ angle::Result PixelBuffer::flushUpdatesToImage(ContextVk *contextVk,
     {
         ASSERT(update.bufferHandle != VK_NULL_HANDLE);
 
-        const uint32_t updateMipLevel = update.copyRegion.imageSubresource.mipLevel;
+        const uint32_t updateMipLevel = update.fromBuffer
+                                            ? update.bufferCopyRegion.imageSubresource.mipLevel
+                                            : update.imageCopyRegion.srcSubresource.mipLevel;
         // It's possible we've accumulated updates that are no longer applicable if the image has
         // never been flushed but the image description has changed. Check if this level exist for
         // this image.
@@ -273,14 +287,27 @@ angle::Result PixelBuffer::flushUpdatesToImage(ContextVk *contextVk,
 
         // Conservatively flush all writes to the image. We could use a more restricted barrier.
         // Do not move this above the for loop, otherwise multiple updates can have race conditions
-        // and not be applied correctly as seen i:
+        // and not be applied correctly as seen in:
         // dEQP-gles2.functional_texture_specification_texsubimage2d_align_2d* tests on Windows AMD
         image->changeLayoutWithStages(
             VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
             VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
 
-        commandBuffer->copyBufferToImage(update.bufferHandle, image->getImage(),
-                                         image->getCurrentLayout(), 1, &update.copyRegion);
+        if (update.fromBuffer)
+        {
+            commandBuffer->copyBufferToImage(update.bufferHandle, image->getImage(),
+                                             image->getCurrentLayout(), 1,
+                                             &update.bufferCopyRegion);
+        }
+        else
+        {
+            commandBuffer->copyImage(update.image->getImage(), update.image->getCurrentLayout(),
+                                     image->getImage(), image->getCurrentLayout(), 1,
+                                     &update.imageCopyRegion);
+
+            update.image->updateQueueSerial(renderer->getCurrentQueueSerial());
+            update.image->release(renderer);
+        }
     }
 
     // Only remove the updates that were actually applied to the image.
@@ -292,7 +319,7 @@ angle::Result PixelBuffer::flushUpdatesToImage(ContextVk *contextVk,
     }
     else
     {
-        WARN() << "Internal Vulkan bufffer could not be released. This is likely due to having "
+        WARN() << "Internal Vulkan buffer could not be released. This is likely due to having "
                   "extra images defined in the Texture.";
     }
 
@@ -381,11 +408,17 @@ angle::Result TextureVk::generateMipmapLevelsWithCPU(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-PixelBuffer::SubresourceUpdate::SubresourceUpdate() : bufferHandle(VK_NULL_HANDLE) {}
+PixelBuffer::SubresourceUpdate::SubresourceUpdate() : fromBuffer(true), bufferHandle(VK_NULL_HANDLE)
+{}
 
 PixelBuffer::SubresourceUpdate::SubresourceUpdate(VkBuffer bufferHandleIn,
                                                   const VkBufferImageCopy &copyRegionIn)
-    : bufferHandle(bufferHandleIn), copyRegion(copyRegionIn)
+    : fromBuffer(true), bufferHandle(bufferHandleIn), bufferCopyRegion(copyRegionIn)
+{}
+
+PixelBuffer::SubresourceUpdate::SubresourceUpdate(vk::ImageHelper *imageIn,
+                                                  const VkImageCopy &copyRegionIn)
+    : fromBuffer(false), image(imageIn), imageCopyRegion(copyRegionIn)
 {}
 
 PixelBuffer::SubresourceUpdate::SubresourceUpdate(const SubresourceUpdate &other) = default;

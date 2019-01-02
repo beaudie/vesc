@@ -52,6 +52,8 @@ class PixelBuffer final : angle::NonCopyable
                                                         const gl::InternalFormat &formatInfo,
                                                         FramebufferVk *framebufferVk);
 
+    void stageSubresourceUpdateFromImage(vk::ImageHelper *image, const VkImageCopy &copyRegion);
+
     // This will use the underlying dynamic buffer to allocate some memory to be used as a src or
     // dst.
     angle::Result allocate(ContextVk *contextVk,
@@ -73,10 +75,26 @@ class PixelBuffer final : angle::NonCopyable
     {
         SubresourceUpdate();
         SubresourceUpdate(VkBuffer bufferHandle, const VkBufferImageCopy &copyRegion);
+        SubresourceUpdate(vk::ImageHelper *image, const VkImageCopy &copyRegion);
         SubresourceUpdate(const SubresourceUpdate &other);
 
-        VkBuffer bufferHandle;
-        VkBufferImageCopy copyRegion;
+        // If true, the copy is from buffer to image.  Otherwise, it's from image to image.
+        bool fromBuffer;
+        union
+        {
+            // If fromBuffer
+            struct
+            {
+                VkBuffer bufferHandle;
+                VkBufferImageCopy bufferCopyRegion;
+            };
+            // If !fromBuffer
+            struct
+            {
+                vk::ImageHelper *image;
+                VkImageCopy imageCopyRegion;
+            };
+        };
     };
 
     vk::DynamicBuffer mStagingBuffer;
