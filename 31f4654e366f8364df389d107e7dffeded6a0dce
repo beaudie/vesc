@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "92d4bb5b_226d07be",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-02T20:19:09Z",
+      "side": 1,
+      "message": "This is expected to cover L and LA (so isLUMA doesn\u0027t work), while destIsAlpha covers only A.\n\nI should probably rename it to destHasLuminance.",
+      "parentUuid": "fedf879e_cb0b568c",
+      "range": {
+        "startLine": 648,
+        "startChar": 0,
+        "endLine": 648,
+        "endChar": 79
+      },
+      "revId": "31f4654e366f8364df389d107e7dffeded6a0dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed463301_9aa6c717",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2019-01-02T20:04:22Z",
       "side": 1,
       "message": "Why change the order here?",
+      "range": {
+        "startLine": 391,
+        "startChar": 0,
+        "endLine": 400,
+        "endChar": 9
+      },
+      "revId": "31f4654e366f8364df389d107e7dffeded6a0dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34d3f5e5_716fc38c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-02T20:19:09Z",
+      "side": 1,
+      "message": "Originally, I did that so that `allocateNewPool` wouldn\u0027t allocate the same pool as `bindingOut` (because it\u0027s serial is too new).\n\nHowever, now that I think about it more, that\u0027s unnecessary as the first part of the `if` (line 417) is already false (bindingOut still references the set). I\u0027ll put it back.",
+      "parentUuid": "ed463301_9aa6c717",
       "range": {
         "startLine": 391,
         "startChar": 0,

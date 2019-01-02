@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9b2154f_a7ab4208",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-02T20:19:09Z",
+      "side": 0,
+      "message": "This worked for the previous use cases, as each binding was kept until just before it was reallocated.  In `UtilsVk`, the sets are immediately freed, so the binding is `!isReferenced()`. So, it\u0027s very much a possibility that the same set as before is no longer in use and can be reused. I didn\u0027t notice any issues with reusing the same pool.",
+      "revId": "a8969ba901fe2a1bcc8d2b8232c3c75bcb2ed111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
