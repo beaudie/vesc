@@ -465,7 +465,8 @@ class ImageHelper final : public RecordableGraphResource
                        const Format &format,
                        GLint samples,
                        VkImageUsageFlags usage,
-                       uint32_t mipLevels);
+                       uint32_t mipLevels,
+                       uint32_t layerCount);
     angle::Result initMemory(Context *context,
                              const MemoryProperties &memoryProperties,
                              VkMemoryPropertyFlags flags);
