@@ -22,6 +22,30 @@
       "revId": "60a50cfcb8769ca2f903f8fac3c8d4e7ab5ffdc5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adcfc015_39619fb3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-02T19:10:33Z",
+      "side": 0,
+      "message": "The part setting `dstAccessMask` is redundant. `GetBasicLayoutAccessFlags` already sets the same access masks being added.\n\nThe part setting `srcAccessMask` is either redundant or unnecessary. HOST_WRITE_BIT is set already if `mCurrentLayout` is PREINITIALIZED, and is unnecessary if image is in any other layout. TRANSFER_WRITE_BIT should also be unnecessary as either `mCurrentLayout` is TRANSFER_DST_OPTIMAL (meaning `GetBaskicLayoutAccessFlags` already sets this bit) or if not, there\u0027s no need for this bit.\n\nNote also that `newLayout \u003d\u003d VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL` was never exercised since `GetBasicLayoutAccessFlags` would have hit `UNREACHABLE()`.\n\nI\u0027ll split it.",
+      "parentUuid": "bdc870ca_2145fde9",
+      "range": {
+        "startLine": 1334,
+        "startChar": 0,
+        "endLine": 1344,
+        "endChar": 5
+      },
+      "revId": "60a50cfcb8769ca2f903f8fac3c8d4e7ab5ffdc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

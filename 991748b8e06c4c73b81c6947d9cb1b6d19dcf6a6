@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "dc286e3d_03754b42",
+        "filename": "src/libANGLE/renderer/vulkan/DrawUtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-02T19:10:33Z",
+      "side": 1,
+      "message": "Ack. If the issue ever pops up in the future, changing `ANGLE_TRY` to get `...` and use `__VA_ARGS__` would work around the problem.",
+      "parentUuid": "0c8487fe_e798bbdf",
+      "range": {
+        "startLine": 374,
+        "startChar": 14,
+        "endLine": 374,
+        "endChar": 15
+      },
+      "revId": "991748b8e06c4c73b81c6947d9cb1b6d19dcf6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "51b4ebdb_c9da6186",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 7
@@ -226,6 +250,30 @@
       "side": 1,
       "message": "Yeah, on D3D some formats aren\u0027t renderable at all. So we can\u0027t create RenderTargetViews. For instance compressed Texture formats. flushUpatesToImage should always be called before a draw call that uses the texture and it\u0027s VkImage. Changes to a texture\u0027s data will trigger dirty bits to update the texture state in ContextVk::setupDraw.\n\nSounds good about doing this as a follow up. I expect there\u0027ll be some harder formats like compressed, etc, that we can handle later on.",
       "parentUuid": "9e217916_0c0f7581",
+      "range": {
+        "startLine": 497,
+        "startChar": 8,
+        "endLine": 502,
+        "endChar": 40
+      },
+      "revId": "991748b8e06c4c73b81c6947d9cb1b6d19dcf6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7cfdb57c_fee8e8b4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-02T19:10:33Z",
+      "side": 1,
+      "message": "Does copy of the compressed formats (as destination) even allowed? I mean, we don\u0027t actually have a CPU implementation of image compression, do we? So those cases are not possible now either.\n\nMy comment was mostly about this though:\n\n\u003e This checks that the current configuration of the texture is mip-complete and is renderable, If so then we initialize the storage.\n\nIf you can call glTexImage2D (with a different size) on a non-zero mip first, then you can\u0027t allocate storage yet, so the D3D backend would do a cpu readback if I understand correctly.\n\nWhat I plan to do instead is something similar to what we have now on the CPU readback side, but instead of:\n\n- finish\n- allocate buffer\n- copy image to buffer\n- convert on cpu\n- ...\n- copy buffer to image\n- delete buffer\n\nI would do:\n\n- allocate temp image (same size as mip being copied)\n- convert on gpu (destination being the temp image above)\n- ...\n- copy temp image to image\n- delete image\n\nThe cpu and gpu updates can also be nicely interleaved (if necessary) by making the update queue a mix of buffer-to-image and image-to-image updates.",
+      "parentUuid": "844924a1_0f7396b5",
       "range": {
         "startLine": 497,
         "startChar": 8,

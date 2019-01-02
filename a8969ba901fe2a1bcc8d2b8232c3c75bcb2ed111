@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fe87d3b4_2bc8824c",
+        "filename": "src/libANGLE/renderer/Format.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-02T19:10:33Z",
+      "side": 1,
+      "message": "Done. We don\u0027t have any `constexpr angle::Format`s, so these `constexpr`s here are likely ineffective. Nevertheless, the `ASSERT()` is removed in release, so no problem having both.",
+      "parentUuid": "fa8155dd_ab96f12c",
+      "range": {
+        "startLine": 136,
+        "startChar": 11,
+        "endLine": 136,
+        "endChar": 58
+      },
+      "revId": "a8969ba901fe2a1bcc8d2b8232c3c75bcb2ed111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c39b70a5_8f79ad70",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 14
@@ -36,6 +60,30 @@
       "writtenOn": "2019-01-01T21:21:30Z",
       "side": 1,
       "message": "nice that you merged this, Also would be good if we could optimize this loop. It uses the state\u0027s sampler bindings which has a double indirection. the ContextVk method used the flatter \u0027active textures\u0027 array. Can be done later.",
+      "range": {
+        "startLine": 892,
+        "startChar": 0,
+        "endLine": 907,
+        "endChar": 0
+      },
+      "revId": "a8969ba901fe2a1bcc8d2b8232c3c75bcb2ed111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ac090631_a59e9aee",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-02T19:10:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c39b70a5_8f79ad70",
       "range": {
         "startLine": 892,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c9c9d9e4_aeddff7c",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-02T19:10:33Z",
+      "side": 1,
+      "message": "You\u0027re right, we can\u0027t. I\u0027ll remove the extra view.",
+      "parentUuid": "558aa75c_edf0f34a",
+      "range": {
+        "startLine": 86,
+        "startChar": 8,
+        "endLine": 86,
+        "endChar": 23
+      },
+      "revId": "a8969ba901fe2a1bcc8d2b8232c3c75bcb2ed111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a8dc380d_3222faac",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 14
@@ -82,6 +154,30 @@
       "writtenOn": "2019-01-01T21:21:30Z",
       "side": 1,
       "message": "any need to change this? Seems like the prior value would be correct as well.",
+      "range": {
+        "startLine": 1330,
+        "startChar": 57,
+        "endLine": 1330,
+        "endChar": 68
+      },
+      "revId": "a8969ba901fe2a1bcc8d2b8232c3c75bcb2ed111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a600ef02_ca338199",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-02T19:10:33Z",
+      "side": 1,
+      "message": "No real need (other than possibly catching bugs where `mLevelCount` is incorrect).\n\nI did it for consistency with `layerCount` right below. I would either use `mLevelCount` and `mLayerCount` or `VK_REMAINING_MIP_LEVELS` and `VK_REMAINING_ARRAY_LAYERS`. My preference is the former to fail faster if we have bad accounting.",
+      "parentUuid": "a8dc380d_3222faac",
       "range": {
         "startLine": 1330,
         "startChar": 57,
