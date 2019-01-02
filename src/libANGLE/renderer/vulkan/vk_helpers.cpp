@@ -1130,14 +1130,21 @@ angle::Result ImageHelper::init(Context *context,
                                 const Format &format,
                                 GLint samples,
                                 VkImageUsageFlags usage,
-                                uint32_t mipLevels)
+                                uint32_t mipLevels,
+                                uint32_t layerCount)
 {
     ASSERT(!valid());
+
+    // Validate that the input layerCount is compatible with the texture type
+    ASSERT(textureType != gl::TextureType::_3D || layerCount == 1);
+    ASSERT(textureType != gl::TextureType::External || layerCount == 1);
+    ASSERT(textureType != gl::TextureType::Rectangle || layerCount == 1);
+    ASSERT(textureType != gl::TextureType::CubeMap || layerCount == gl::kCubeFaceCount);
 
     mExtents    = extents;
     mFormat     = &format;
     mSamples    = samples;
-    mLayerCount = GetImageLayerCount(textureType);
+    mLayerCount = layerCount;
     mLevelCount = mipLevels;
 
     VkImageCreateInfo imageInfo     = {};
