@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84666078_22aa1f46",
+        "filename": "src/compiler/translator/blocklayout.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-01-03T06:00:33Z",
+      "side": 1,
+      "message": "exiting?",
+      "range": {
+        "startLine": 88,
+        "startChar": 28,
+        "endLine": 88,
+        "endChar": 36
+      },
+      "revId": "8ac0ecc4c110a90b5c8ba39b92859dd7a8cda2f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b02414c_63ed7d80",
+        "filename": "src/compiler/translator/blocklayout.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-01-03T06:00:33Z",
+      "side": 1,
+      "message": "Add \u0027#include \u003cstack\u003e\u0027 at the beginning.",
+      "range": {
+        "startLine": 113,
+        "startChar": 4,
+        "endLine": 113,
+        "endChar": 14
+      },
+      "revId": "8ac0ecc4c110a90b5c8ba39b92859dd7a8cda2f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

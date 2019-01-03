@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a86ecfe5_0579a452",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-01-03T06:00:33Z",
+      "side": 0,
+      "message": "In the old method, we can directly increase the offset instead of revisiting each structure array member. So the time complexity can be O(members of the struct) instead of O(number of elements in the array * members of the struct). See Corentin\u0027s previous comment in https://chromium-review.googlesource.com/c/angle/angle/+/1278097/2/src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp#79. However, in the refactor code, we are at the cost of time to reuse \u0027TraverseShaderVariables\u0027. For example, in BlockInfoVisitor::enterStructAccess, we will have a childVisitor to get the structure member offset. But we still need to revisit the nested structure in the parent visitor so that the parent visitor\u0027s encoder offset is correctly updated. Is this expected?",
+      "range": {
+        "startLine": 213,
+        "startChar": 16,
+        "endLine": 213,
+        "endChar": 52
+      },
+      "revId": "904bb9185767d72a63eb4d1445c94c678b767b56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
