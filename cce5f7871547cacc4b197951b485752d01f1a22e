@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7b107318_04e431c7",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T16:40:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d997768b_8c3ce153",
+      "revId": "cce5f7871547cacc4b197951b485752d01f1a22e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e9dc6829_7f10f834",
         "filename": "src/tests/test_utils/ANGLETest.cpp",
         "patchSetId": 46
@@ -39,6 +57,30 @@
       "revId": "cce5f7871547cacc4b197951b485752d01f1a22e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f614c47_312b9ae8",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T16:40:50Z",
+      "side": 1,
+      "message": "static_cast (or no cast) is fine if the header is included. But that would require the #if defined guards. This way works even on Linux/etc which can\u0027t include the WGLWindow headers.",
+      "parentUuid": "e9dc6829_7f10f834",
+      "range": {
+        "startLine": 970,
+        "startChar": 24,
+        "endLine": 970,
+        "endChar": 40
+      },
+      "revId": "cce5f7871547cacc4b197951b485752d01f1a22e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "7a3e39d5_a438c1a1",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 1348,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T16:40:50Z",
+      "side": 1,
+      "message": "32 is stuck in the name. In fact the whole name is stuck. The ANGLE enums are special because the ANGLE libs can have different names. I didn\u0027t use a macro here for this reason.",
+      "parentUuid": "901e9286_3e07415a",
+      "range": {
+        "startLine": 1348,
+        "startChar": 52,
+        "endLine": 1348,
+        "endChar": 60
+      },
+      "revId": "cce5f7871547cacc4b197951b485752d01f1a22e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a5e8884_76fbc8f3",
         "filename": "src/tests/test_utils/angle_test_configs.h",
         "patchSetId": 46
@@ -79,6 +145,24 @@
       "revId": "cce5f7871547cacc4b197951b485752d01f1a22e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f827077_4511b330",
+        "filename": "src/tests/test_utils/angle_test_configs.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T16:40:50Z",
+      "side": 1,
+      "message": "Done. Native is the system EGL libraries. Renamed to SystemEGL.",
+      "parentUuid": "2a5e8884_76fbc8f3",
+      "revId": "cce5f7871547cacc4b197951b485752d01f1a22e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

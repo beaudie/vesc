@@ -16,6 +16,24 @@
       "revId": "cbc168c7ceffada7e28d449383801c87ec6c868c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "427e5931_fc58b814",
+        "filename": "src/tests/gl_tests/SimpleOperationTest.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T16:40:50Z",
+      "side": 0,
+      "message": "Done. Used a base method on GLWindow.",
+      "parentUuid": "82e3a072_0b6e6a91",
+      "revId": "cbc168c7ceffada7e28d449383801c87ec6c868c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
