@@ -597,7 +597,7 @@ angle::Result UtilsVk::clearImage(ContextVk *contextVk,
     ANGLE_TRY(ensureImageClearResourcesInitialized(contextVk));
 
     vk::CommandBuffer *commandBuffer;
-    if (!framebuffer->appendToStartedRenderPass(contextVk->getRenderer(), &commandBuffer))
+    if (!framebuffer->appendToStartedRenderPass(renderer->getCurrentQueueSerial(), &commandBuffer))
     {
         ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, &commandBuffer))
     }
