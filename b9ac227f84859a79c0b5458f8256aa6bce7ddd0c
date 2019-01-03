@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a7af2ba_c02110a7",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2019-01-03T07:23:05Z",
+      "side": 1,
+      "message": "Just a thought: I assume primCount will be \u003e 0 in all relevant cases and we want to have the most likely case efficient. How about rewriting the code as this:\n\nif (primCount \u003c\u003d 0) {\n  if (primCount \u003c 0)...\n  if (primCount \u003d\u003d 0) ...\n}\n\nif (!ValidateDrawElementsCommon) ...",
+      "revId": "b9ac227f84859a79c0b5458f8256aa6bce7ddd0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f7e653f_0a043145",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2019-01-03T07:23:05Z",
+      "side": 1,
+      "message": "Another random thought:\n\nCombine with if primcount \u003d\u003d 0 and maybe remove one comparison:\n\nif ((count | primcount) \u003d\u003d 0)\n  return true;\n\nThis does not work with the proposal from above and might be the better of the two choices. The earlier we\u0027re doing the check the less registers have to be kept alive.",
+      "revId": "b9ac227f84859a79c0b5458f8256aa6bce7ddd0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e56d2b2_059618e8",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 6442,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2019-01-03T07:23:05Z",
+      "side": 1,
+      "message": "The name of the function is confusing. This one does not validate the DrawAttribs, but handles only the different error cases.",
+      "revId": "b9ac227f84859a79c0b5458f8256aa6bce7ddd0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a4a8517_d8feaf29",
+        "filename": "src/libANGLE/validationES.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1309155
+      },
+      "writtenOn": "2019-01-03T07:23:05Z",
+      "side": 1,
+      "message": "To avoid a merge conflict, can you revert the \u0027clever\u0027 overflow check I\u0027ve added here?\n\nUnfortunately the overflow we\u0027re using here is undefined in C++ by default. We could add a compiler flag to make it defined - but I don\u0027t feel good relying on non-standard C++ here.",
+      "revId": "b9ac227f84859a79c0b5458f8256aa6bce7ddd0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
