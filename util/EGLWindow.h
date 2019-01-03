@@ -65,6 +65,7 @@ class ANGLE_UTIL_EXPORT GLWindowBase : angle::NonCopyable
     virtual void swap()                                                      = 0;
     virtual void destroyGL()                                                 = 0;
     virtual void makeCurrent()                                               = 0;
+    virtual bool hasError() const                                            = 0;
 
   protected:
     GLWindowBase(EGLint glesMajorVersion, EGLint glesMinorVersion);
@@ -136,6 +137,7 @@ class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase
     void destroyGL() override;
     bool isGLInitialized() const override;
     void makeCurrent() override;
+    bool hasError() const override;
 
     static bool ClientExtensionEnabled(const std::string &extName);
 
