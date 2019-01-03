@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "398abe54_1321f198",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T16:22:24Z",
+      "side": 1,
+      "message": "OK, yeah. For some formats it looks like storage images aren\u0027t as well supported. It would be nicer since it would simplify the code and remove some checks. We don\u0027t necessarily need to support a fast path right now for conversion for every single format. But long term we might end up doing pretty much everything - it depends on what apps use. SGTM if you can clean up these repeated code either here or in a follow-up.\n\nYour assert should ensure that the destination image is valid in any case. Still would like the asserts that the pixel buffer is empty and destination image is valid if not already added.",
+      "parentUuid": "6d6d2995_72359252",
+      "range": {
+        "startLine": 666,
+        "startChar": 0,
+        "endLine": 680,
+        "endChar": 5
+      },
+      "revId": "bf49d0f36856696ec5a78a049b45fb4f47d083fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "913735dd_29d3cf39",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 4
