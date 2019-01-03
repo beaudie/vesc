@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5fe02f58_510a71a0",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T13:46:09Z",
+      "side": 1,
+      "message": "Chose the below solution.",
+      "parentUuid": "1a7af2ba_c02110a7",
+      "revId": "b9ac227f84859a79c0b5458f8256aa6bce7ddd0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f7e653f_0a043145",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 10
@@ -33,6 +51,24 @@
       "revId": "b9ac227f84859a79c0b5458f8256aa6bce7ddd0c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "feb616e6_41f0f70b",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T13:46:09Z",
+      "side": 1,
+      "message": "I like this solution. It is a bit better because we still need to call ValidateDrawArraysCommon if primcount or count is zero.",
+      "parentUuid": "9f7e653f_0a043145",
+      "revId": "b9ac227f84859a79c0b5458f8256aa6bce7ddd0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "3324d7fb_7a644a9d",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 6442,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T13:46:09Z",
+      "side": 1,
+      "message": "Agree. Renamed to RecordDrawAttribsError. Did the same for ValidateDrawMode.",
+      "parentUuid": "9e56d2b2_059618e8",
+      "revId": "b9ac227f84859a79c0b5458f8256aa6bce7ddd0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a4a8517_d8feaf29",
         "filename": "src/libANGLE/validationES.h",
         "patchSetId": 10
@@ -67,6 +121,24 @@
       "revId": "b9ac227f84859a79c0b5458f8256aa6bce7ddd0c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f4aa563_861b623b",
+        "filename": "src/libANGLE/validationES.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T13:46:09Z",
+      "side": 1,
+      "message": "I think this is defined in cpp:\n\nhttps://en.cppreference.com/w/cpp/language/operator_arithmetic\n\nUnsigned integer arithmetic is always performed modulo 2n\n where n is the number of bits in that particular integer. E.g. for unsigned int, adding one to UINT_MAX gives ​0​, and subtracting one from ​0​ gives UINT_MAX.\n\nThe same is not true for signed values. But I think since these are unsigned we\u0027re fine.",
+      "parentUuid": "9a4a8517_d8feaf29",
+      "revId": "b9ac227f84859a79c0b5458f8256aa6bce7ddd0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
