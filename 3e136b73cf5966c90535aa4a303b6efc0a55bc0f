@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8fb3196_b0a47323",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 48
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-03T18:01:14Z",
+      "side": 1,
+      "message": "!\u003d",
+      "revId": "3e136b73cf5966c90535aa4a303b6efc0a55bc0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
