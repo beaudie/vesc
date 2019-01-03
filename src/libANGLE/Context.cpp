@@ -2188,7 +2188,7 @@ void Context::drawArraysInstanced(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     ANGLE_CONTEXT_TRY(
         mImplementation->drawArraysInstanced(this, mode, first, count, instanceCount));
-    MarkTransformFeedbackBufferUsage(this, count, instanceCount);
+ //   MarkTransformFeedbackBufferUsage(this, count, instanceCount);
 }
 
 void Context::drawElementsInstanced(PrimitiveMode mode,
