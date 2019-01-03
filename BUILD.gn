@@ -813,6 +813,15 @@ if (!is_component_build && is_android && symbol_level != 0) {
       "${root_out_dir}/libGLESv2${angle_libs_suffix}.so",
       "${root_out_dir}/libfeature_support${angle_libs_suffix}.so",
     ]
+    if (angle_enable_vulkan_validation_layers) {
+      sources += [
+        "${root_out_dir}/libVkLayer_core_validation.so",
+        "${root_out_dir}/libVkLayer_object_tracker.so",
+        "${root_out_dir}/libVkLayer_parameter_validation.so",
+        "${root_out_dir}/libVkLayer_threading.so",
+        "${root_out_dir}/libVkLayer_unique_objects.so",
+      ]
+    }
 
     script = rebase_path("${root_build_dir}/android/compress_symbols.py",
                          root_build_dir)
@@ -823,6 +832,16 @@ if (!is_component_build && is_android && symbol_level != 0) {
       "//third_party/angle:libGLESv2${angle_libs_suffix}",
       "//third_party/angle:libfeature_support${angle_libs_suffix}",
     ]
+
+    if (angle_enable_vulkan_validation_layers) {
+      deps += [
+        "//third_party/angle/third_party/vulkan-validation-layers:VkLayer_core_validation",
+        "//third_party/angle/third_party/vulkan-validation-layers:VkLayer_object_tracker",
+        "//third_party/angle/third_party/vulkan-validation-layers:VkLayer_parameter_validation",
+        "//third_party/angle/third_party/vulkan-validation-layers:VkLayer_threading",
+        "//third_party/angle/third_party/vulkan-validation-layers:VkLayer_unique_objects",
+      ]
+    }
 
     outputs = [
       "$root_out_dir/lib.compressed/{{source_file_part}}",
