@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "c292e791_c9f9261c",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T14:21:32Z",
+      "side": 1,
+      "message": "Turns out this was the better solution. The check (a | b) \u003d\u003d 0 is not the same as (a \u003d\u003d 0 || b \u003d\u003d 0). I also applied the optimization to the \"count\" check for DrawArrays and DrawElements. Should save at least one comparison per draw call.",
+      "parentUuid": "5fe02f58_510a71a0",
+      "revId": "b9ac227f84859a79c0b5458f8256aa6bce7ddd0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f7e653f_0a043145",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 10
