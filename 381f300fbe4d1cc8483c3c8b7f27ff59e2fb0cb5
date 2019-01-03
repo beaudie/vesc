@@ -22,6 +22,30 @@
       "revId": "381f300fbe4d1cc8483c3c8b7f27ff59e2fb0cb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12d72f2a_ff7519b7",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T18:55:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53952b13_d2b1abb3",
+      "range": {
+        "startLine": 158,
+        "startChar": 48,
+        "endLine": 158,
+        "endChar": 62
+      },
+      "revId": "381f300fbe4d1cc8483c3c8b7f27ff59e2fb0cb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
