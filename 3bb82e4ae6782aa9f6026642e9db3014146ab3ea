@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "eac93476_32180242",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 50
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:05:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c5afcc2_5c5d8b1e",
+      "range": {
+        "startLine": 10,
+        "startChar": 41,
+        "endLine": 10,
+        "endChar": 50
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1d8fc1a_466250ab",
         "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
         "patchSetId": 50
@@ -36,6 +60,30 @@
       "writtenOn": "2019-01-03T19:27:26Z",
       "side": 1,
       "message": "Don\u0027t we need it for other failures?",
+      "range": {
+        "startLine": 358,
+        "startChar": 12,
+        "endLine": 358,
+        "endChar": 29
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a24e195_ac78bcf5",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 50
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:05:22Z",
+      "side": 1,
+      "message": "I don\u0027t know what you mean. Could you elaborate?",
+      "parentUuid": "c1d8fc1a_466250ab",
       "range": {
         "startLine": 358,
         "startChar": 12,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "96341018_2f53edda",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 50
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:05:22Z",
+      "side": 1,
+      "message": "FAIL() returns. I can\u0027t ASSERT this but added a comment.",
+      "parentUuid": "f719c379_595ccad6",
+      "range": {
+        "startLine": 417,
+        "startChar": 7,
+        "endLine": 417,
+        "endChar": 8
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ded6d990_07d156d0",
         "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
         "patchSetId": 50
@@ -91,6 +163,30 @@
       "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc698afc_438e8996",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 50
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:05:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ded6d990_07d156d0",
+      "range": {
+        "startLine": 423,
+        "startChar": 7,
+        "endLine": 423,
+        "endChar": 8
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "4129ca25_783b823a",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 50
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:05:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3021a19_c29840db",
+      "range": {
+        "startLine": 400,
+        "startChar": 38,
+        "endLine": 400,
+        "endChar": 44
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4642c530_c6172a46",
         "filename": "util/windows/WGLWindow.cpp",
         "patchSetId": 50
@@ -137,6 +257,30 @@
       "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c537f67_cfccb780",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 50
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:05:22Z",
+      "side": 1,
+      "message": "Still a problem because we can\u0027t set the right EGL attributes. See comment in prior patch.",
+      "parentUuid": "4642c530_c6172a46",
+      "range": {
+        "startLine": 140,
+        "startChar": 8,
+        "endLine": 140,
+        "endChar": 66
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "a0be2720_e42789a5",
+        "filename": "util/windows/WGLWindow.h",
+        "patchSetId": 50
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:05:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7437516_d168640e",
+      "range": {
+        "startLine": 10,
+        "startChar": 8,
+        "endLine": 10,
+        "endChar": 13
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "550e8fc5_1d2b7ee5",
         "filename": "util/windows/WGLWindow.h",
         "patchSetId": 50
@@ -174,6 +342,30 @@
       "writtenOn": "2019-01-03T19:27:26Z",
       "side": 1,
       "message": "Hmmm... Maybe extract GLWindowBase out of it?",
+      "range": {
+        "startLine": 15,
+        "startChar": 15,
+        "endLine": 15,
+        "endChar": 24
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "658d2075_8bcfdb62",
+        "filename": "util/windows/WGLWindow.h",
+        "patchSetId": 50
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:05:22Z",
+      "side": 1,
+      "message": "I left this one. Unless you feel strongly about it.",
+      "parentUuid": "550e8fc5_1d2b7ee5",
       "range": {
         "startLine": 15,
         "startChar": 15,
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "7d2571a2_d42a9273",
+        "filename": "util/windows/wgl_loader_autogen.h",
+        "patchSetId": 50
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:05:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37ba698b_b08aead6",
+      "range": {
+        "startLine": 11,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 16
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f94746cd_fdc8c4fc",
         "filename": "util/windows/wgl_loader_autogen.h",
         "patchSetId": 50
@@ -232,6 +448,30 @@
     },
     {
       "key": {
+        "uuid": "67bd2436_5ba33c84",
+        "filename": "util/windows/wgl_loader_autogen.h",
+        "patchSetId": 50
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:05:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f94746cd_fdc8c4fc",
+      "range": {
+        "startLine": 18,
+        "startChar": 3,
+        "endLine": 18,
+        "endChar": 6
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eb73ad41_fc8ecd05",
         "filename": "util/windows/wgl_loader_autogen.h",
         "patchSetId": 50
@@ -252,6 +492,30 @@
       "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69ceffea_90dfdf4f",
+        "filename": "util/windows/wgl_loader_autogen.h",
+        "patchSetId": 50
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:05:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb73ad41_fc8ecd05",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 18
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
