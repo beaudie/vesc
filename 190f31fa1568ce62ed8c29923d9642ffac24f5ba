@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "76ac86ae_28f9829a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-03T16:23:58Z",
+      "side": 1,
+      "message": "Yes, though I would simplify your wording:\n\n\u003e This is setting write bits for source here to guard against RAW hazard from when this source was previously written.",
+      "parentUuid": "aed4ca6d_827f0474",
+      "revId": "190f31fa1568ce62ed8c29923d9642ffac24f5ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "188f42cf_4dac1fac",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
