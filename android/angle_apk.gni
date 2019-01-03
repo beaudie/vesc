@@ -5,6 +5,14 @@
 import("//build/config/android/rules.gni")
 import("//third_party/angle/gni/angle.gni")
 
+vulkan_validation_layers = [
+  "VkLayer_core_validation",
+  "VkLayer_object_tracker",
+  "VkLayer_parameter_validation",
+  "VkLayer_threading",
+  "VkLayer_unique_objects",
+]
+
 template("angle_apk") {
   manifest_target_name = "${target_name}__manifest"
   manifest_path = "${target_gen_dir}/${target_name}/android/AndroidManifest.xml"
@@ -61,6 +69,13 @@ template("angle_apk") {
           "//third_party/angle:libfeature_support${angle_libs_suffix}" +
               "($android_secondary_abi_toolchain)",
         ]
+        if (angle_enable_vulkan_validation_layers) {
+          foreach (_layer, vulkan_validation_layers) {
+            secondary_abi_shared_libraries +=
+                [ "//third_party/angle/third_party/vulkan-validation-layers:$_layer" +
+                  "($android_secondary_abi_toolchain)" ]
+          }
+        }
       } else {
         _secondary_out_dir = get_label_info(
                 ":compressed_symbols($android_secondary_abi_toolchain)",
@@ -71,6 +86,12 @@ template("angle_apk") {
           "$_secondary_out_dir/lib.compressed/libGLESv2${angle_libs_suffix}.so",
           "$_secondary_out_dir/lib.compressed/libfeature_support${angle_libs_suffix}.so",
         ]
+        if (angle_enable_vulkan_validation_layers) {
+          foreach(_layer, vulkan_validation_layers) {
+            secondary_abi_loadable_modules +=
+                [ "$_secondary_out_dir/lib.compressed/lib${_layer}.so" ]
+          }
+        }
       }
     }
 
@@ -81,6 +102,12 @@ template("angle_apk") {
         "//third_party/angle:libGLESv2${angle_libs_suffix}",
         "//third_party/angle:libfeature_support${angle_libs_suffix}",
       ]
+      if (angle_enable_vulkan_validation_layers) {
+        foreach(_layer, vulkan_validation_layers) {
+          shared_libraries +=
+              [ "$angle_root/third_party/vulkan-validation-layers:$_layer" ]
+        }
+      }
     } else {
       loadable_modules = [
         "$root_out_dir/lib.compressed/libEGL${angle_libs_suffix}.so",
@@ -88,6 +115,12 @@ template("angle_apk") {
         "$root_out_dir/lib.compressed/libGLESv2${angle_libs_suffix}.so",
         "$root_out_dir/lib.compressed/libfeature_support${angle_libs_suffix}.so",
       ]
+      if (angle_enable_vulkan_validation_layers) {
+        foreach(_layer, vulkan_validation_layers) {
+          loadable_modules +=
+              [ "${root_out_dir}/lib.compressed/lib${_layer}.so" ]
+        }
+      }
     }
 
     # Common files required by all builds
