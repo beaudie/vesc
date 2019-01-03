@@ -46876,7 +46876,7 @@ typedef unsigned int GLhandleARB;
                 <command name="glIsPointInFillPathNV"/>
                 <command name="glIsPointInStrokePathNV"/>
                 <command name="glGetPathLengthNV"/>
-		<command name="glPointAlongPathNV"/>
+        <command name="glPointAlongPathNV"/>
             </require>
             <require comment="API revision 1.2">
                 <enum name="GL_ROUNDED_RECT_NV"/>

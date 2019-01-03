@@ -2752,7 +2752,7 @@ angle::Result StateManager11::syncProgram(const gl::Context *context, gl::Primit
 
     // Binaries must be compiled before the sync.
     ASSERT(mProgramD3D->hasVertexExecutableForCachedInputLayout());
-    ASSERT(mProgramD3D->hasGeometryExecutableForPrimitiveType(drawMode));
+    ASSERT(mProgramD3D->hasGeometryExecutableForPrimitiveType(glState, drawMode));
     ASSERT(mProgramD3D->hasPixelExecutableForCachedOutputLayout());
 
     ShaderExecutableD3D *vertexExe = nullptr;
@@ -2762,8 +2762,8 @@ angle::Result StateManager11::syncProgram(const gl::Context *context, gl::Primit
     ANGLE_TRY(mProgramD3D->getPixelExecutableForCachedOutputLayout(context11, &pixelExe, nullptr));
 
     ShaderExecutableD3D *geometryExe = nullptr;
-    ANGLE_TRY(mProgramD3D->getGeometryExecutableForPrimitiveType(context11, context11->getCaps(),
-                                                                 drawMode, &geometryExe, nullptr));
+    ANGLE_TRY(mProgramD3D->getGeometryExecutableForPrimitiveType(context11, glState, drawMode,
+                                                                 &geometryExe, nullptr));
 
     const d3d11::VertexShader *vertexShader =
         (vertexExe ? &GetAs<ShaderExecutable11>(vertexExe)->getVertexShader() : nullptr);

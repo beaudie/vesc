@@ -613,6 +613,13 @@ class State : angle::NonCopyable
         return (mTexturesIncompatibleWithSamplers & mProgram->getActiveSamplersMask()).none();
     }
 
+    auto getProvokingVertex() const { return mProvokingVertex; }
+    void setProvokingVertex(const GLenum val)
+    {
+        mDirtyBits.set(State::DIRTY_BIT_PROGRAM_EXECUTABLE);
+        mProvokingVertex = val;
+    }
+
   private:
     friend class Context;
 
@@ -716,6 +723,9 @@ class State : angle::NonCopyable
     BindingPointer<Renderbuffer> mRenderbuffer;
     Program *mProgram;
     BindingPointer<ProgramPipeline> mProgramPipeline;
+
+    // GL_ANGLE_provoking_vertex
+    GLenum mProvokingVertex = GL_LAST_VERTEX_CONVENTION;
 
     using VertexAttribVector = std::vector<VertexAttribCurrentValueData>;
     VertexAttribVector mVertexAttribCurrentValues;  // From glVertexAttrib

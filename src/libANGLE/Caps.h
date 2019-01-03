@@ -466,6 +466,9 @@ struct Extensions
 
     // GL_ANGLE_multi_draw
     bool multiDraw;
+
+    // GL_ANGLE_provoking_vertex
+    bool provokingVertex = false;
 };
 
 struct ExtensionInfo
