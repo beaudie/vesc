@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "6734c347_908e05b0",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 50
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T20:25:04Z",
+      "side": 1,
+      "message": "Where you print to std::cerr (lines 350, 362), don\u0027t you want to also set mSkipTest \u003d true, so it won\u0027t continue on a path that might fail?",
+      "parentUuid": "8a24e195_ac78bcf5",
+      "range": {
+        "startLine": 358,
+        "startChar": 12,
+        "endLine": 358,
+        "endChar": 29
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f719c379_595ccad6",
         "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
         "patchSetId": 50
@@ -131,6 +155,30 @@
       "side": 1,
       "message": "FAIL() returns. I can\u0027t ASSERT this but added a comment.",
       "parentUuid": "f719c379_595ccad6",
+      "range": {
+        "startLine": 417,
+        "startChar": 7,
+        "endLine": 417,
+        "endChar": 8
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e556122d_c901ea5a",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 50
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T20:25:04Z",
+      "side": 1,
+      "message": "Ah, if FAIL() returns, that\u0027s fine.",
+      "parentUuid": "96341018_2f53edda",
       "range": {
         "startLine": 417,
         "startChar": 7,
