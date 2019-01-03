@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01542618_8ff57124",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T16:40:29Z",
+      "side": 1,
+      "message": "missed nullptr assignment here (though maybe not very important).\nMaybe the free/delete functions should accept ** and then also do the assignment?",
+      "range": {
+        "startLine": 333,
+        "startChar": 25,
+        "endLine": 333,
+        "endChar": 34
+      },
+      "revId": "cbc168c7ceffada7e28d449383801c87ec6c868c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a436746_badadd37",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T16:40:29Z",
+      "side": 1,
+      "message": "Maybe do this regardless of mEGLWindow?",
+      "range": {
+        "startLine": 398,
+        "startChar": 8,
+        "endLine": 398,
+        "endChar": 47
+      },
+      "revId": "cbc168c7ceffada7e28d449383801c87ec6c868c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92f86aab_b3f17860",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T16:40:29Z",
+      "side": 1,
+      "message": "Shouldn\u0027t you also check mWebGLCompatibility.value()?\nI think (!mWebGLCompatibility.value() \u0026\u0026 !hasWebGLCompatibility) should be fine?",
+      "range": {
+        "startLine": 337,
+        "startChar": 8,
+        "endLine": 337,
+        "endChar": 35
+      },
+      "revId": "cbc168c7ceffada7e28d449383801c87ec6c868c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cd97536_2fd44f9b",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T16:40:29Z",
+      "side": 1,
+      "message": "If you agree to the comment above, then you\u0027d also need to check hasWebGLCompatibility.\nOtherwise, could you ASSERT(hasWebGLCompatibility) here?",
+      "range": {
+        "startLine": 402,
+        "startChar": 12,
+        "endLine": 402,
+        "endChar": 39
+      },
+      "revId": "cbc168c7ceffada7e28d449383801c87ec6c868c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2f31a9b_c519db95",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T16:40:29Z",
+      "side": 1,
+      "message": "This name confuses me. Wikipedia defines EGL as:\nEGL is an interface between Khronos rendering APIs (such as OpenGL, OpenGL ES or OpenVG) and the underlying native platform windowing system.\nHow about glWindowingLibrary?",
+      "range": {
+        "startLine": 63,
+        "startChar": 66,
+        "endLine": 63,
+        "endChar": 75
+      },
+      "revId": "cbc168c7ceffada7e28d449383801c87ec6c868c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
