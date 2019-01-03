@@ -750,13 +750,13 @@ void Extensions::setTextureExtensionSupport(const TextureCapsMap &textureCaps)
     textureHalfFloat      = DetermineHalfFloatTextureSupport(textureCaps);
     textureHalfFloatLinear =
         textureHalfFloat && DetermineHalfFloatTextureFilteringSupport(textureCaps);
-    textureFloat       = DetermineFloatTextureSupport(textureCaps);
-    textureFloatLinear = textureFloat && DetermineFloatTextureFilteringSupport(textureCaps);
-    textureRG          = DetermineRGTextureSupport(textureCaps, textureHalfFloat, textureFloat);
-    colorBufferHalfFloat = textureHalfFloat && DetermineColorBufferHalfFloatSupport(textureCaps);
-    textureCompressionDXT1     = DetermineDXT1TextureSupport(textureCaps);
-    textureCompressionDXT3     = DetermineDXT3TextureSupport(textureCaps);
-    textureCompressionDXT5     = DetermineDXT5TextureSupport(textureCaps);
+    textureFloat           = DetermineFloatTextureSupport(textureCaps);
+    textureFloatLinear     = textureFloat && DetermineFloatTextureFilteringSupport(textureCaps);
+    textureRG              = DetermineRGTextureSupport(textureCaps, textureHalfFloat, textureFloat);
+    colorBufferHalfFloat   = textureHalfFloat && DetermineColorBufferHalfFloatSupport(textureCaps);
+    textureCompressionDXT1 = DetermineDXT1TextureSupport(textureCaps);
+    textureCompressionDXT3 = DetermineDXT3TextureSupport(textureCaps);
+    textureCompressionDXT5 = DetermineDXT5TextureSupport(textureCaps);
     textureCompressionS3TCsRGB = DetermineS3TCsRGBTextureSupport(textureCaps);
     textureCompressionASTCHDR  = DetermineASTCTextureSupport(textureCaps);
     textureCompressionASTCLDR  = textureCompressionASTCHDR;
@@ -905,6 +905,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_EXT_blend_func_extended"] = enableableExtension(&Extensions::blendFuncExtended);
         map["GL_ANGLE_texture_multisample"] = enableableExtension(&Extensions::textureMultisample);
         map["GL_ANGLE_multi_draw"] = enableableExtension(&Extensions::multiDraw);
+        map["GL_ARB_provoking_vertex"] = esOnlyExtension(&Extensions::provokingVertex);
         // GLES1 extensinos
         map["GL_OES_point_size_array"] = enableableExtension(&Extensions::pointSizeArray);
         map["GL_OES_texture_cube_map"] = enableableExtension(&Extensions::textureCubeMap);

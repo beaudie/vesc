@@ -1338,6 +1338,13 @@ void Context::getBooleanvImpl(GLenum pname, GLboolean *params)
         case GL_CONTEXT_ROBUST_ACCESS_EXT:
             *params = mRobustAccess ? GL_TRUE : GL_FALSE;
             break;
+
+        // GL_ARB_provoking_vertex
+        case GL_QUADS_FOLLOW_PROVOKING_VERTEX_CONVENTION:
+            // GLES doesn't have quads, so...false?
+            *params = GL_FALSE;
+            break;
+
         default:
             mState.getBooleanv(pname, params);
             break;
@@ -5428,6 +5435,12 @@ void Context::multiDrawElementsInstanced(PrimitiveMode mode,
                 this, mode, counts[drawID], type, indices[drawID], instanceCounts[drawID]));
         }
     }
+}
+
+void Context::provokingVertex(GLenum provokeMode)
+{
+    mState.mProvokingVertex = provokeMode;
+    mState.mDirtyBits.set(State::DIRTY_BIT_PROGRAM_EXECUTABLE);
 }
 
 GLenum Context::checkFramebufferStatus(GLenum target)

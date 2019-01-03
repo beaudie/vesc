@@ -717,6 +717,11 @@ class State : angle::NonCopyable
     Program *mProgram;
     BindingPointer<ProgramPipeline> mProgramPipeline;
 
+  public:
+    // GL_ARB_provoking_vertex
+    GLenum mProvokingVertex = GL_LAST_VERTEX_CONVENTION;
+
+  private:
     using VertexAttribVector = std::vector<VertexAttribCurrentValueData>;
     VertexAttribVector mVertexAttribCurrentValues;  // From glVertexAttrib
     VertexArray *mVertexArray;

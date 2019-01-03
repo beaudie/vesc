@@ -32,6 +32,18 @@ GL_APICALL void GL_APIENTRY glRequestExtensionANGLE (const GLchar *name);
 #define GL_ROBUST_RESOURCE_INITIALIZATION_ANGLE 0x93AB
 #endif /* GL_ANGLE_robust_resource_initialization */
 
+#ifndef GL_ARB_provoking_vertex
+#define GL_ARB_provoking_vertex 1
+#define GL_QUADS_FOLLOW_PROVOKING_VERTEX_CONVENTION  0x8E4C
+#define GL_FIRST_VERTEX_CONVENTION                   0x8E4D
+#define GL_LAST_VERTEX_CONVENTION                    0x8E4E
+#define GL_PROVOKING_VERTEX                          0x8E4F
+typedef void (GL_APIENTRYP PFNGLPROVOKINGVERTEXPROC) (GLenum);
+#ifdef GL_GLEXT_PROTOTYPES
+GL_APICALL void GL_APIENTRY glProvokingVertex(GLenum mode);
+#endif
+#endif /* GL_ARB_provoking_vertex */
+
 #ifndef GL_CHROMIUM_framebuffer_mixed_samples
 #define GL_CHROMIUM_frambuffer_mixed_samples 1
 #define GL_COVERAGE_MODULATION_CHROMIUM 0x9332

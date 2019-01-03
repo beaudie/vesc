@@ -1865,6 +1865,7 @@ void State::getBooleanv(GLenum pname, GLboolean *params)
         case GL_LIGHT_MODEL_TWO_SIDE:
             *params = IsLightModelTwoSided(&mGLES1State);
             break;
+
         default:
             UNREACHABLE();
             break;
@@ -2390,6 +2391,12 @@ angle::Result State::getIntegerv(const Context *context, GLenum pname, GLint *pa
         case GL_FOG_HINT:
             *params = mGLES1State.getHint(pname);
             break;
+
+        // GL_ARB_provoking_vertex
+        case GL_PROVOKING_VERTEX:
+            *params = mProvokingVertex;
+            break;
+
         default:
             UNREACHABLE();
             break;

@@ -40745,7 +40745,7 @@ typedef unsigned int GLhandleARB;
                 <command name="glGetProgramResourceLocationIndex"/>
             </require>
         </extension>
-        <extension name="GL_ARB_provoking_vertex" supported="gl|glcore">
+        <extension name="GL_ARB_provoking_vertex" supported="gl|glcore|gles2">
             <require>
                 <enum name="GL_QUADS_FOLLOW_PROVOKING_VERTEX_CONVENTION"/>
                 <enum name="GL_FIRST_VERTEX_CONVENTION"/>
@@ -46876,7 +46876,7 @@ typedef unsigned int GLhandleARB;
                 <command name="glIsPointInFillPathNV"/>
                 <command name="glIsPointInStrokePathNV"/>
                 <command name="glGetPathLengthNV"/>
-		<command name="glPointAlongPathNV"/>
+        <command name="glPointAlongPathNV"/>
             </require>
             <require comment="API revision 1.2">
                 <enum name="GL_ROUNDED_RECT_NV"/>

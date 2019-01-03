@@ -786,6 +786,10 @@
       "glSampleMaskiANGLE"
     ],
 
+    "GL_ARB_provoking_vertex": [
+      "glProvokingVertex"
+    ],
+
     "EGL 1.0": [
         "eglChooseConfig",
         "eglCopyBuffers",
