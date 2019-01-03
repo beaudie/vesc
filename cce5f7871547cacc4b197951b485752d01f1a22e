@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d997768b_8c3ce153",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-03T02:55:04Z",
+      "side": 1,
+      "message": "Please document here that this is an NVidia driver workaround.",
+      "revId": "cce5f7871547cacc4b197951b485752d01f1a22e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9dc6829_7f10f834",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-03T02:55:04Z",
+      "side": 1,
+      "message": "`static_cast` should be fine. I presume the cast is there so `?:` doesn\u0027t get confused regarding the type?",
+      "range": {
+        "startLine": 970,
+        "startChar": 24,
+        "endLine": 970,
+        "endChar": 40
+      },
+      "revId": "cce5f7871547cacc4b197951b485752d01f1a22e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "901e9286_3e07415a",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 1348,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-03T02:55:04Z",
+      "side": 1,
+      "message": "There\u0027s no 64-bit version? Or the 32 is stuck in the name?\n\nAlso, you can turn the library name into a constant as it\u0027s used in more than one place, for example a la ANGLE_EGL_LIBRARY_NAME",
+      "range": {
+        "startLine": 1348,
+        "startChar": 52,
+        "endLine": 1348,
+        "endChar": 60
+      },
+      "revId": "cce5f7871547cacc4b197951b485752d01f1a22e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a5e8884_76fbc8f3",
+        "filename": "src/tests/test_utils/angle_test_configs.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-03T02:55:04Z",
+      "side": 1,
+      "message": "What\u0027s Native expected to be? A comment could be useful.",
+      "revId": "cce5f7871547cacc4b197951b485752d01f1a22e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82e3a072_0b6e6a91",
+        "filename": "src/tests/gl_tests/SimpleOperationTest.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-03T02:55:04Z",
+      "side": 0,
+      "message": "Could we have this macro instead check EGL or WGL automatically, instead of removing the test?",
+      "revId": "cbc168c7ceffada7e28d449383801c87ec6c868c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
