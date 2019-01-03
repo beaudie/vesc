@@ -21,7 +21,6 @@ class ANGLE_UTIL_EXPORT OSWindow
 {
   public:
     OSWindow();
-    virtual ~OSWindow();
 
     virtual bool initialize(const std::string &name, size_t width, size_t height) = 0;
     virtual void destroy()                                                        = 0;
@@ -56,6 +55,9 @@ class ANGLE_UTIL_EXPORT OSWindow
     bool didTestEventFire();
 
   protected:
+    virtual ~OSWindow();
+    friend ANGLE_UTIL_EXPORT void FreeOSWindow(OSWindow *window);
+
     int mX;
     int mY;
     int mWidth;
@@ -65,5 +67,6 @@ class ANGLE_UTIL_EXPORT OSWindow
 };
 
 ANGLE_UTIL_EXPORT OSWindow *CreateOSWindow();
+ANGLE_UTIL_EXPORT void FreeOSWindow(OSWindow *window);
 
 #endif  // SAMPLE_UTIL_WINDOW_H

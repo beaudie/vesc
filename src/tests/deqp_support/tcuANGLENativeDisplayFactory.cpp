@@ -305,7 +305,8 @@ void NativeWindow::setVisibility(eglu::WindowParams::Visibility visibility)
 
 NativeWindow::~NativeWindow()
 {
-    delete mWindow;
+    FreeOSWindow(mWindow);
+    mWindow = nullptr;
 }
 
 eglw::EGLNativeWindowType NativeWindow::getLegacyNative()
