@@ -16,6 +16,10 @@
 #include "util/OSWindow.h"
 #include "util/system_utils.h"
 
+#if defined(ANGLE_USE_UTIL_LOADER)
+#    include "util/gles_loader_autogen.h"
+#endif  // defined(ANGLE_USE_UTIL_LOADER)
+
 EGLPlatformParameters::EGLPlatformParameters()
     : renderer(EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE),
       majorVersion(EGL_DONT_CARE),
@@ -548,6 +552,11 @@ EGLBoolean EGLWindow::FindEGLConfig(EGLDisplay dpy, const EGLint *attrib_list, E
 void EGLWindow::makeCurrent()
 {
     eglMakeCurrent(mDisplay, mSurface, mSurface, mContext);
+}
+
+bool EGLWindow::hasError() const
+{
+    return eglGetError() == EGL_SUCCESS;
 }
 
 // static
