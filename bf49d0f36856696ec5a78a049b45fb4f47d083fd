@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "49dea1a5_7d774c16",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-03T17:44:22Z",
+      "side": 1,
+      "message": "Ok. Will move the ensureImageInitialized() call inside the function to be clear.",
+      "parentUuid": "398abe54_1321f198",
+      "range": {
+        "startLine": 666,
+        "startChar": 0,
+        "endLine": 680,
+        "endChar": 5
+      },
+      "revId": "bf49d0f36856696ec5a78a049b45fb4f47d083fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "913735dd_29d3cf39",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 4

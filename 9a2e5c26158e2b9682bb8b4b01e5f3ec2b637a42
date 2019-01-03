@@ -70,6 +70,30 @@
       "revId": "9a2e5c26158e2b9682bb8b4b01e5f3ec2b637a42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a040239b_e846e245",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-03T17:44:22Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "7f6f0c38_5bd5d6e4",
+      "range": {
+        "startLine": 461,
+        "startChar": 0,
+        "endLine": 462,
+        "endChar": 51
+      },
+      "revId": "9a2e5c26158e2b9682bb8b4b01e5f3ec2b637a42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
