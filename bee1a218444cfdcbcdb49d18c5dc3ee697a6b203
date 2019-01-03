@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2935f188_482ee972",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:00:55Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 817,
+        "startChar": 5,
+        "endLine": 819,
+        "endChar": 12
+      },
+      "revId": "bee1a218444cfdcbcdb49d18c5dc3ee697a6b203",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4906f11f_36da8b58",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:00:55Z",
+      "side": 1,
+      "message": "same. i think you could do the same for the non-vulkan libs too.",
+      "range": {
+        "startLine": 837,
+        "startChar": 5,
+        "endLine": 839,
+        "endChar": 12
+      },
+      "revId": "bee1a218444cfdcbcdb49d18c5dc3ee697a6b203",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d116baf0_cbe9b605",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:00:55Z",
+      "side": 1,
+      "message": "can you replace all of these repeated libs with foreaches?",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 9
+      },
+      "revId": "bee1a218444cfdcbcdb49d18c5dc3ee697a6b203",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "914a56a8_52456b2e",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:00:55Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 89,
+        "startChar": 7,
+        "endLine": 91,
+        "endChar": 18
+      },
+      "revId": "bee1a218444cfdcbcdb49d18c5dc3ee697a6b203",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcd9ab36_a3ede392",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:00:55Z",
+      "side": 1,
+      "message": "same.",
+      "range": {
+        "startLine": 108,
+        "startChar": 6,
+        "endLine": 110,
+        "endChar": 10
+      },
+      "revId": "bee1a218444cfdcbcdb49d18c5dc3ee697a6b203",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fdb827a_d6ae43ae",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-03T20:00:55Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 124,
+        "startChar": 9,
+        "endLine": 126,
+        "endChar": 14
+      },
+      "revId": "bee1a218444cfdcbcdb49d18c5dc3ee697a6b203",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
