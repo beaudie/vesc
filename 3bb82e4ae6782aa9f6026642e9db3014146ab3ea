@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c5afcc2_5c5d8b1e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 50
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T19:27:26Z",
+      "side": 1,
+      "message": "supports",
+      "range": {
+        "startLine": 10,
+        "startChar": 41,
+        "endLine": 10,
+        "endChar": 50
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1d8fc1a_466250ab",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 50
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T19:27:26Z",
+      "side": 1,
+      "message": "Don\u0027t we need it for other failures?",
+      "range": {
+        "startLine": 358,
+        "startChar": 12,
+        "endLine": 358,
+        "endChar": 29
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f719c379_595ccad6",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 50
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T19:27:26Z",
+      "side": 1,
+      "message": "Maybe \"(!mSkipTest \u0026\u0026\", or keep the return.\nOtherwise, I think something unexpected might happen in initializeGL",
+      "range": {
+        "startLine": 417,
+        "startChar": 7,
+        "endLine": 417,
+        "endChar": 8
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ded6d990_07d156d0",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 50
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T19:27:26Z",
+      "side": 1,
+      "message": "Maybe (!mSkipTest \u0026\u0026",
+      "range": {
+        "startLine": 423,
+        "startChar": 7,
+        "endLine": 423,
+        "endChar": 8
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3021a19_c29840db",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 50
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T19:27:26Z",
+      "side": 1,
+      "message": "allow",
+      "range": {
+        "startLine": 400,
+        "startChar": 38,
+        "endLine": 400,
+        "endChar": 44
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4642c530_c6172a46",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 50
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T19:27:26Z",
+      "side": 1,
+      "message": "What if those are valid but false?",
+      "range": {
+        "startLine": 140,
+        "startChar": 8,
+        "endLine": 140,
+        "endChar": 66
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7437516_d168640e",
+        "filename": "util/windows/WGLWindow.h",
+        "patchSetId": 50
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T19:27:26Z",
+      "side": 1,
+      "message": "UTIL_WINDOWS_",
+      "range": {
+        "startLine": 10,
+        "startChar": 8,
+        "endLine": 10,
+        "endChar": 13
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "550e8fc5_1d2b7ee5",
+        "filename": "util/windows/WGLWindow.h",
+        "patchSetId": 50
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T19:27:26Z",
+      "side": 1,
+      "message": "Hmmm... Maybe extract GLWindowBase out of it?",
+      "range": {
+        "startLine": 15,
+        "startChar": 15,
+        "endLine": 15,
+        "endChar": 24
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37ba698b_b08aead6",
+        "filename": "util/windows/wgl_loader_autogen.h",
+        "patchSetId": 50
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T19:27:26Z",
+      "side": 1,
+      "message": "UTIL_WINDOWS_WGL",
+      "range": {
+        "startLine": 11,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 16
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f94746cd_fdc8c4fc",
+        "filename": "util/windows/wgl_loader_autogen.h",
+        "patchSetId": 50
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T19:27:26Z",
+      "side": 1,
+      "message": "and",
+      "range": {
+        "startLine": 18,
+        "startChar": 3,
+        "endLine": 18,
+        "endChar": 6
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb73ad41_fc8ecd05",
+        "filename": "util/windows/wgl_loader_autogen.h",
+        "patchSetId": 50
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T19:27:26Z",
+      "side": 1,
+      "message": "functions",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 18
+      },
+      "revId": "3bb82e4ae6782aa9f6026642e9db3014146ab3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
