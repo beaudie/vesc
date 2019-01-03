@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53952b13_d2b1abb3",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-03T17:28:59Z",
+      "side": 1,
+      "message": "You could also pass \"pos\" to find() above",
+      "range": {
+        "startLine": 158,
+        "startChar": 48,
+        "endLine": 158,
+        "endChar": 62
+      },
+      "revId": "381f300fbe4d1cc8483c3c8b7f27ff59e2fb0cb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
