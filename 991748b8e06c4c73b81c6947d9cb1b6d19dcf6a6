@@ -310,6 +310,30 @@
     },
     {
       "key": {
+        "uuid": "6385220f_78c80cd5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-03T02:04:40Z",
+      "side": 1,
+      "message": "Ok, we\u0027ll talk more about it tomorrow. I have to read about pack buffers before I can say anything there, but in the current uses, the drawback with compute shaders is that more formats support COLOR_ATTACHMENT than they do STORAGE_IMAGE (and the former seems to be a superset of the latter in practice), so with draw calls we can get more coverage.\n\nRegarding copy texture using compressed formats, I suspect only same-format copies would be allowed, with restrictions on offset and extent alignments (since GPUs don\u0027t include texture compression hardware). That said, those cases are likely satisfied with a simple vkCmdCopyImage. I\u0027ll look into that in time.",
+      "parentUuid": "7bf72797_ff2cde9e",
+      "range": {
+        "startLine": 497,
+        "startChar": 8,
+        "endLine": 502,
+        "endChar": 40
+      },
+      "revId": "991748b8e06c4c73b81c6947d9cb1b6d19dcf6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f1a24129_dcc0ea91",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 7
