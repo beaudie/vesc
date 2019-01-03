@@ -279,6 +279,15 @@ angle::Result PixelBuffer::flushUpdatesToImage(ContextVk *contextVk,
             VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
             VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
 
+        fprintf(stderr, "Flushing copy from %p o:%d,l:%d,h:%d into %p %dx%d+%dx%d [mip:%d, layers:%d+%d]\n",
+                (void *)update.bufferHandle, (int)update.copyRegion.bufferOffset, update.copyRegion.bufferRowLength,
+                update.copyRegion.bufferImageHeight, (void *)image->getImage().getHandle(),
+                update.copyRegion.imageOffset.x, update.copyRegion.imageOffset.y,
+                update.copyRegion.imageExtent.width, update.copyRegion.imageExtent.height,
+                update.copyRegion.imageSubresource.mipLevel,
+                update.copyRegion.imageSubresource.baseArrayLayer,
+                update.copyRegion.imageSubresource.layerCount);
+
         commandBuffer->copyBufferToImage(update.bufferHandle, image->getImage(),
                                          image->getCurrentLayout(), 1, &update.copyRegion);
     }
@@ -419,6 +428,8 @@ angle::Result TextureVk::setImage(const gl::Context *context,
                                   const gl::PixelUnpackState &unpack,
                                   const uint8_t *pixels)
 {
+    fprintf(stderr, "Setting image through setImage: %dx%d into mip %d, layer %d+%d\n", size.width, size.height,
+            index.getLevelIndex(), index.hasLayer() ? index.getLayerIndex() : 0, index.getLayerCount());
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -455,6 +466,9 @@ angle::Result TextureVk::setSubImage(const gl::Context *context,
                                      gl::Buffer *unpackBuffer,
                                      const uint8_t *pixels)
 {
+    fprintf(stderr, "Setting image through setSubImage: %dx%d+%dx%d into mip %d, layer %d+%d\n", area.x, area.y,
+            area.width, area.height,
+            index.getLevelIndex(), index.hasLayer() ? index.getLayerIndex() : 0, index.getLayerCount());
     ContextVk *contextVk                 = vk::GetImpl(context);
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(format, type);
     ANGLE_TRY(mPixelBuffer.stageSubresourceUpdate(
@@ -497,6 +511,9 @@ angle::Result TextureVk::copyImage(const gl::Context *context,
                                    GLenum internalFormat,
                                    gl::Framebuffer *source)
 {
+    fprintf(stderr, "copyImage: from %dx%d+%dx%d into mip %d, layer %d+%d\n", sourceArea.x, sourceArea.y,
+            sourceArea.width, sourceArea.height,
+            index.getLevelIndex(), index.hasLayer() ? index.getLayerIndex() : 0, index.getLayerCount());
     gl::Extents newImageSize(sourceArea.width, sourceArea.height, 1);
     const gl::InternalFormat &internalFormatInfo =
         gl::GetInternalFormatInfo(internalFormat, GL_UNSIGNED_BYTE);
@@ -511,6 +528,9 @@ angle::Result TextureVk::copySubImage(const gl::Context *context,
                                       const gl::Rectangle &sourceArea,
                                       gl::Framebuffer *source)
 {
+    fprintf(stderr, "copySubImage: from %dx%d+%dx%d into %dx%d mip %d, layer %d+%d\n", sourceArea.x, sourceArea.y,
+            sourceArea.width, sourceArea.height, destOffset.x, destOffset.y,
+            index.getLevelIndex(), index.hasLayer() ? index.getLayerIndex() : 0, index.getLayerCount());
     const gl::InternalFormat &currentFormat = *mState.getBaseLevelDesc().format.info;
     return copySubImageImpl(context, index, destOffset, sourceArea, currentFormat, source);
 }
@@ -564,6 +584,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
                                           const gl::InternalFormat &internalFormat,
                                           gl::Framebuffer *source)
 {
+    fprintf(stderr, "ACTUALLY GOT HERE\n");
     gl::Extents fbSize = source->getReadColorbuffer()->getSize();
     gl::Rectangle clippedSourceArea;
     if (!ClipRectangle(sourceArea, gl::Rectangle(0, 0, fbSize.width, fbSize.height),
@@ -626,6 +647,7 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
                                             bool unpackUnmultiplyAlpha,
                                             TextureVk *source)
 {
+    fprintf(stderr, "********* SHOULDN'T HAVE REACHED HERE **************\n");
     RendererVk *renderer = contextVk->getRenderer();
 
     ANGLE_TRY(source->ensureImageInitialized(contextVk));
