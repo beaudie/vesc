@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "33b0866e_8f309c48",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-03T04:05:33Z",
+      "side": 1,
+      "message": "See response in line 680",
+      "parentUuid": "ad3bd693_c9429afa",
+      "range": {
+        "startLine": 606,
+        "startChar": 25,
+        "endLine": 606,
+        "endChar": 49
+      },
+      "revId": "bf49d0f36856696ec5a78a049b45fb4f47d083fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b56f9c3f_2e631659",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2019-01-02T21:53:29Z",
       "side": 1,
       "message": "need a helper for \n\nif (image valid \u0026\u0026 has feature bits)\n{\n   flush updates;\n   return true;\n}\n\nreturn false;\n\nProbably using a bool as an out parameter. Think you have the same pattern in copysubimage.",
+      "range": {
+        "startLine": 666,
+        "startChar": 0,
+        "endLine": 680,
+        "endChar": 5
+      },
+      "revId": "bf49d0f36856696ec5a78a049b45fb4f47d083fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d6d2995_72359252",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-03T04:05:33Z",
+      "side": 1,
+      "message": "In a followup commit, I\u0027d be doing:\n\nif (has feature bits)\n   if (image valid)\n       flush updates\n       draw\n   else\n       create temp\n       draw\n       stage\n\nSo the same draw function can be used to perform the copy, but could be given the texture\u0027s image or a temp image, in which case asserting mImage.valid() inside the draw function is invalid.\n\nI\u0027ll make a helper just for checking the feature bits. Once the second path is added, the whole thing can be turned into a helper.",
+      "parentUuid": "b56f9c3f_2e631659",
       "range": {
         "startLine": 666,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "d1838890_a1205a36",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-03T04:05:33Z",
+      "side": 1,
+      "message": "See other comment.",
+      "parentUuid": "913735dd_29d3cf39",
+      "range": {
+        "startLine": 734,
+        "startChar": 25,
+        "endLine": 734,
+        "endChar": 51
+      },
+      "revId": "bf49d0f36856696ec5a78a049b45fb4f47d083fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f3b93ff3_9821b89b",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 4
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "9163a84e_c060985f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-03T04:05:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3b93ff3_9821b89b",
+      "range": {
+        "startLine": 766,
+        "startChar": 18,
+        "endLine": 766,
+        "endChar": 19
+      },
+      "revId": "bf49d0f36856696ec5a78a049b45fb4f47d083fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "25995249_bd343406",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 4
@@ -114,6 +210,30 @@
       "revId": "bf49d0f36856696ec5a78a049b45fb4f47d083fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aae76b76_8967d89f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-03T04:05:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25995249_bd343406",
+      "range": {
+        "startLine": 773,
+        "startChar": 18,
+        "endLine": 773,
+        "endChar": 54
+      },
+      "revId": "bf49d0f36856696ec5a78a049b45fb4f47d083fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

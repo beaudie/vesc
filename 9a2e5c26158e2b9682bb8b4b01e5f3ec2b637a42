@@ -22,6 +22,30 @@
       "revId": "9a2e5c26158e2b9682bb8b4b01e5f3ec2b637a42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19810c57_7308e00f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-03T04:05:33Z",
+      "side": 0,
+      "message": "Gerrit should really try to show comments from previous PSes...\n\nSee here: https://chromium-review.googlesource.com/c/angle/angle/+/1392394/2/src/libANGLE/renderer/vulkan/vk_helpers.cpp#b421\n\nI agree that prior to UtilsVk, this was an impossible situation (which isn\u0027t now), but I don\u0027t see any actual errors from it.",
+      "parentUuid": "e7c2b26f_8ee9fc49",
+      "range": {
+        "startLine": 461,
+        "startChar": 0,
+        "endLine": 462,
+        "endChar": 51
+      },
+      "revId": "9a2e5c26158e2b9682bb8b4b01e5f3ec2b637a42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
