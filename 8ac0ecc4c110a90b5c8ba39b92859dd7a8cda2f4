@@ -2,6 +2,80 @@
   "comments": [
     {
       "key": {
+        "uuid": "6ded4e72_9eaeff08",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2019-01-03T12:17:57Z",
+      "side": 1,
+      "message": "nit: seems like a word is missing here.",
+      "range": {
+        "startLine": 17,
+        "startChar": 40,
+        "endLine": 17,
+        "endChar": 48
+      },
+      "revId": "8ac0ecc4c110a90b5c8ba39b92859dd7a8cda2f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aee6458a_f5fc3003",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2019-01-03T12:17:57Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this erase until the next \u0027]\u0027? Right now it only works with single-digit indices.\n\nAlso don\u0027t we have a helper function for this somewhere?",
+      "revId": "8ac0ecc4c110a90b5c8ba39b92859dd7a8cda2f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0575565a_c3c2dda8",
+        "filename": "src/compiler/translator/blocklayout.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2019-01-03T12:17:57Z",
+      "side": 1,
+      "message": "nit: this is missing an override qualifier",
+      "revId": "8ac0ecc4c110a90b5c8ba39b92859dd7a8cda2f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39b9220b_7d9bc192",
+        "filename": "src/compiler/translator/blocklayout.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2019-01-03T12:17:57Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "8ac0ecc4c110a90b5c8ba39b92859dd7a8cda2f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "84666078_22aa1f46",
         "filename": "src/compiler/translator/blocklayout.h",
         "patchSetId": 9
@@ -42,6 +116,23 @@
         "endLine": 113,
         "endChar": 14
       },
+      "revId": "8ac0ecc4c110a90b5c8ba39b92859dd7a8cda2f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c40d52b_49fc56c7",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2019-01-03T12:17:57Z",
+      "side": 1,
+      "message": "Double checking: I didn\u0027t see a functional change here, was it just to help with debugging?",
       "revId": "8ac0ecc4c110a90b5c8ba39b92859dd7a8cda2f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

@@ -22,6 +22,30 @@
       "revId": "904bb9185767d72a63eb4d1445c94c678b767b56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66dbf812_3921081f",
+        "filename": "src/compiler/translator/ShaderStorageBlockOutputHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2019-01-03T12:17:57Z",
+      "side": 0,
+      "message": "I think it is ok, the complexity is the same.",
+      "parentUuid": "a86ecfe5_0579a452",
+      "range": {
+        "startLine": 213,
+        "startChar": 16,
+        "endLine": 213,
+        "endChar": 52
+      },
+      "revId": "904bb9185767d72a63eb4d1445c94c678b767b56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
