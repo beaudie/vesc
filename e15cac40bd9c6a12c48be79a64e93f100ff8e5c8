@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "89d90676_7e5de805",
+        "filename": "src/common/utilities.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-04T21:46:39Z",
+      "side": 1,
+      "message": "Yeah, perhaps we could do a deep dive on this at some point. But definitely the code is a lot smaller with the packed map. Despite the memory indirection.",
+      "parentUuid": "06c95670_fc6fb45f",
+      "range": {
+        "startLine": 595,
+        "startChar": 0,
+        "endLine": 598,
+        "endChar": 36
+      },
+      "revId": "e15cac40bd9c6a12c48be79a64e93f100ff8e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "adbedd38_21b3ddd6",
         "filename": "src/common/utilities.h",
         "patchSetId": 12
@@ -63,6 +87,24 @@
       "revId": "e15cac40bd9c6a12c48be79a64e93f100ff8e5c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "442d8a04_54243699",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-04T21:46:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "adbedd38_21b3ddd6",
+      "revId": "e15cac40bd9c6a12c48be79a64e93f100ff8e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -89,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "08f1251e_a9d2078a",
+        "filename": "src/libANGLE/renderer/gen_angle_format_table.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-04T21:46:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84416a42_3aad15c0",
+      "range": {
+        "startLine": 215,
+        "startChar": 25,
+        "endLine": 215,
+        "endChar": 31
+      },
+      "revId": "e15cac40bd9c6a12c48be79a64e93f100ff8e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a8014d55_c0945f86",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 12
@@ -106,6 +172,24 @@
     },
     {
       "key": {
+        "uuid": "c2242002_7a50a169",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-04T21:46:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8014d55_c0945f86",
+      "revId": "e15cac40bd9c6a12c48be79a64e93f100ff8e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b6a0fa5_aeacd3d0",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 12
@@ -120,6 +204,24 @@
       "revId": "e15cac40bd9c6a12c48be79a64e93f100ff8e5c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a94b9df_304b66fd",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-04T21:46:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b6a0fa5_aeacd3d0",
+      "revId": "e15cac40bd9c6a12c48be79a64e93f100ff8e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -143,6 +245,30 @@
       "revId": "e15cac40bd9c6a12c48be79a64e93f100ff8e5c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b12f3a2_3f46117e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-04T21:46:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b70d107_9135c2e2",
+      "range": {
+        "startLine": 630,
+        "startChar": 4,
+        "endLine": 630,
+        "endChar": 37
+      },
+      "revId": "e15cac40bd9c6a12c48be79a64e93f100ff8e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
