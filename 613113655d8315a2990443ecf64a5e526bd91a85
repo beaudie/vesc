@@ -117,6 +117,30 @@
       "revId": "613113655d8315a2990443ecf64a5e526bd91a85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9e0c42f_5bad88d0",
+        "filename": "src/common/uniform_type_info_autogen.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-01-04T01:09:06Z",
+      "side": 1,
+      "message": "Ah, you\u0027re right, ImageTest and EGLStreamTest didn\u0027t fail because these checks are only enabled for WebGL. By temporarily enabling the checks for non-WebGL contexts, I get the failure behavior I expected. Based on my testing the textures that we expect to be used with external samplers  (e.g. YUV textures) have the component type GL_UNSIGNED_NORMALIZED which is compatible with float samplers, and external samplers definitely return float values, so I think it is correct to treat external samplers as float format samplers.",
+      "parentUuid": "193f29c7_ca4b40e5",
+      "range": {
+        "startLine": 120,
+        "startChar": 6,
+        "endLine": 120,
+        "endChar": 29
+      },
+      "revId": "613113655d8315a2990443ecf64a5e526bd91a85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
