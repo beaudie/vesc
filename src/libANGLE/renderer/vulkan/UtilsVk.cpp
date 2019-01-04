@@ -643,6 +643,8 @@ angle::Result UtilsVk::copyImage(vk::Context *context,
 
     ImageCopyShaderParams shaderParams;
     shaderParams.flipY            = params.flipY;
+    shaderParams.premultiplyAlpha = 0;
+    shaderParams.unmultiplyAlpha  = 0;
     shaderParams.destHasLuminance = destFormat.angleFormat().luminanceBits > 0;
     shaderParams.destIsAlpha =
         destFormat.angleFormat().isLUMA() && destFormat.angleFormat().alphaBits > 0;
@@ -660,6 +662,7 @@ angle::Result UtilsVk::copyImage(vk::Context *context,
     }
 
     uint32_t flags = GetImageCopyFlags(srcFormat, destFormat);
+    flags |= src->getLayerCount() > 1 ? ImageCopy_frag::kSrcIsArray : 0;
 
     VkDescriptorSet descriptorSet;
     vk::SharedDescriptorPoolBinding descriptorPoolBinding;
