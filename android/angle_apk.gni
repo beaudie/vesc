@@ -97,7 +97,7 @@ template("angle_apk") {
               [ "$angle_root/third_party/vulkan-validation-layers:${_layer}" ]
         }
       }
-    } else {
+    } else if (symbol_level == 1) {
       loadable_modules = []
       foreach(_library, angle_libraries) {
         loadable_modules += [
@@ -107,6 +107,20 @@ template("angle_apk") {
       if (angle_enable_vulkan_validation_layers) {
         foreach(_layer, vulkan_validation_layers) {
           loadable_modules += [ "$root_out_dir/lib.compressed/lib${_layer}.so" ]
+        }
+      }
+    } else {
+      loadable_modules = []
+      foreach(_library, angle_libraries) {
+        loadable_modules += [
+          "$root_out_dir/lib.unstripped/${_library}${angle_libs_suffix}.so",
+        ]
+        deps += [ "//third_party/angle:${_library}${angle_libs_suffix}" ]
+      }
+      if (angle_enable_vulkan_validation_layers) {
+        foreach(_layer, vulkan_validation_layers) {
+          loadable_modules += [ "${root_out_dir}/lib.unstripped/${_layer}.so" ]
+          deps += [ "//third_party/angle/third_party/vulkan-validation-layers:${_layer}" ]
         }
       }
     }
