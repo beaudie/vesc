@@ -247,8 +247,7 @@ class TextureVk : public TextureImpl
     angle::Result copySubImageImplWithDraw(ContextVk *contextVk,
                                            const gl::ImageIndex &index,
                                            const gl::Offset &destOffset,
-                                           const gl::Offset &srcOffset,
-                                           const gl::Extents &extents,
+                                           const gl::Rectangle &sourceArea,
                                            FramebufferVk *source);
 
     angle::Result copySubTextureImpl(ContextVk *contextVk,
