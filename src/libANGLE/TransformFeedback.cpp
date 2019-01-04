@@ -194,14 +194,6 @@ void TransformFeedback::onVerticesDrawn(const Context *context, GLsizei count, G
     mState.mVerticesDrawn =
         (mState.mVerticesDrawn + GetVerticesNeededForDraw(mState.mPrimitiveMode, count, primcount))
             .ValueOrDie();
-
-    for (auto &buffer : mState.mIndexedBuffers)
-    {
-        if (buffer.get() != nullptr)
-        {
-            buffer->onTransformFeedback(context);
-        }
-    }
 }
 
 void TransformFeedback::bindProgram(const Context *context, Program *program)

@@ -210,14 +210,6 @@ angle::Result Buffer::unmap(const Context *context, GLboolean *result)
     return angle::Result::Continue;
 }
 
-void Buffer::onTransformFeedback(const Context *context)
-{
-    mIndexRangeCache.clear();
-
-    // Notify when data changes.
-    onStateChange(context, angle::SubjectMessage::CONTENTS_CHANGED);
-}
-
 void Buffer::onPixelPack(const Context *context)
 {
     mIndexRangeCache.clear();
