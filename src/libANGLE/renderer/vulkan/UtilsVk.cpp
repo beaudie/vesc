@@ -543,7 +543,7 @@ angle::Result UtilsVk::convertVertexBuffer(vk::Context *context,
 
 angle::Result UtilsVk::startRenderPass(vk::Context *context,
                                        vk::ImageHelper *image,
-                                       vk::ImageView *imageView,
+                                       const vk::ImageView *imageView,
                                        const vk::RenderPassDesc &renderPassDesc,
                                        const gl::Rectangle &renderArea,
                                        vk::CommandBuffer **commandBufferOut)
@@ -629,9 +629,9 @@ angle::Result UtilsVk::clearImage(ContextVk *contextVk,
 
 angle::Result UtilsVk::copyImage(vk::Context *context,
                                  vk::ImageHelper *dest,
-                                 vk::ImageView *destView,
+                                 const vk::ImageView *destView,
                                  vk::ImageHelper *src,
-                                 vk::ImageView *srcView,
+                                 const vk::ImageView *srcView,
                                  const CopyImageParameters &params)
 {
     RendererVk *renderer = context->getRenderer();
@@ -642,24 +642,35 @@ angle::Result UtilsVk::copyImage(vk::Context *context,
     const vk::Format &destFormat = dest->getFormat();
 
     ImageCopyShaderParams shaderParams;
-    shaderParams.flipY            = params.flipY;
+    shaderParams.flipY            = params.srcFlipY || params.destFlipY;
+    shaderParams.premultiplyAlpha = params.srcPremultiplyAlpha;
+    shaderParams.unmultiplyAlpha  = params.srcUnmultiplyAlpha;
     shaderParams.destHasLuminance = destFormat.angleFormat().luminanceBits > 0;
     shaderParams.destIsAlpha =
         destFormat.angleFormat().isLUMA() && destFormat.angleFormat().alphaBits > 0;
     shaderParams.srcMip        = params.srcMip;
+    shaderParams.srcLayer      = params.srcLayer;
     shaderParams.srcOffset[0]  = params.srcOffset[0];
     shaderParams.srcOffset[1]  = params.srcOffset[1];
     shaderParams.destOffset[0] = params.destOffset[0];
     shaderParams.destOffset[1] = params.destOffset[1];
 
-    if (params.flipY)
+    ASSERT(!(params.srcFlipY && params.destFlipY));
+    if (params.srcFlipY)
     {
         // If viewport is flipped, the shader expects srcOffset[1] to have the
         // last row's index instead of the first's.
-        shaderParams.srcOffset[1] = params.srcHeight - shaderParams.srcOffset[1] - 1;
+        shaderParams.srcOffset[1] = params.srcHeight - params.srcOffset[1] - 1;
+    }
+    else if (params.destFlipY)
+    {
+        // If image is flipped during copy, the shader uses the same code path as above,
+        // with srcOffset being set to the last row's index instead of the first's.
+        shaderParams.srcOffset[1] = params.srcOffset[1] + params.srcExtents[1] - 1;
     }
 
     uint32_t flags = GetImageCopyFlags(srcFormat, destFormat);
+    flags |= src->getLayerCount() > 1 ? ImageCopy_frag::kSrcIsArray : 0;
 
     VkDescriptorSet descriptorSet;
     vk::SharedDescriptorPoolBinding descriptorPoolBinding;
@@ -698,6 +709,42 @@ angle::Result UtilsVk::copyImage(vk::Context *context,
                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
                                  VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                  VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, destLayoutChange);
+
+VkMemoryBarrier memoryBarrier = {}
+memoryBarrier.sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+memoryBarrier.srcAccessMask = VK_ACCESS_INDIRECT_COMMAND_READ_BIT |
+                   VK_ACCESS_INDEX_READ_BIT |
+                   VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT |
+                   VK_ACCESS_UNIFORM_READ_BIT |
+                   VK_ACCESS_INPUT_ATTACHMENT_READ_BIT |
+                   VK_ACCESS_SHADER_READ_BIT |
+                   VK_ACCESS_SHADER_WRITE_BIT |
+                   VK_ACCESS_COLOR_ATTACHMENT_READ_BIT |
+                   VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+                   VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT |
+                   VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+                   VK_ACCESS_TRANSFER_READ_BIT |
+                   VK_ACCESS_TRANSFER_WRITE_BIT |
+                   VK_ACCESS_HOST_READ_BIT |
+                   VK_ACCESS_HOST_WRITE_BIT;
+memoryBarrier.dstAccessMask = VK_ACCESS_INDIRECT_COMMAND_READ_BIT |
+                   VK_ACCESS_INDEX_READ_BIT |
+                   VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT |
+                   VK_ACCESS_UNIFORM_READ_BIT |
+                   VK_ACCESS_INPUT_ATTACHMENT_READ_BIT |
+                   VK_ACCESS_SHADER_READ_BIT |
+                   VK_ACCESS_SHADER_WRITE_BIT |
+                   VK_ACCESS_COLOR_ATTACHMENT_READ_BIT |
+                   VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+                   VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT |
+                   VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+                   VK_ACCESS_TRANSFER_READ_BIT |
+                   VK_ACCESS_TRANSFER_WRITE_BIT |
+                   VK_ACCESS_HOST_READ_BIT |
+                   VK_ACCESS_HOST_WRITE_BIT;
+destLayoutChange->pipelineBarrier(VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+        0, 1, &memoryBarrier, 0, nullptr, 0, nullptr);
 
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(startRenderPass(context, dest, destView, renderPassDesc, renderArea, &commandBuffer));
