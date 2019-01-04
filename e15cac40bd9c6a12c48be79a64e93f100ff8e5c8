@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3bd976e6_ccfabefb",
+        "filename": "src/common/utilities.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-04T18:40:48Z",
+      "side": 1,
+      "message": "It surprises me this is faster than a switch.\nAccessing the underlying array should require pointer arithmetic, while switch can be optimized by branch prediction.",
+      "range": {
+        "startLine": 595,
+        "startChar": 0,
+        "endLine": 598,
+        "endChar": 36
+      },
+      "revId": "e15cac40bd9c6a12c48be79a64e93f100ff8e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b70d107_9135c2e2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-04T18:40:48Z",
+      "side": 1,
+      "message": "Did you want ANGLE_INLINE here, too?",
+      "range": {
+        "startLine": 630,
+        "startChar": 4,
+        "endLine": 630,
+        "endChar": 37
+      },
+      "revId": "e15cac40bd9c6a12c48be79a64e93f100ff8e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
