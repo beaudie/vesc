@@ -25,6 +25,104 @@
     },
     {
       "key": {
+        "uuid": "06c95670_fc6fb45f",
+        "filename": "src/common/utilities.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-04T21:31:11Z",
+      "side": 1,
+      "message": "The pointer arithmetic is just a mul+add. The switch is multiple tests and jumps.\n\nProbably what\u0027s helping even more here is that the whole table above fits in a cache line, so regardless of what the mode is, the memory is preloaded earlier by the cpu.\n\nWith switch, the best the compiler can do would be to turn it into a jump table, which is exactly this, except instead of reading from the table, it reads, jumps and sets a constant.",
+      "parentUuid": "3bd976e6_ccfabefb",
+      "range": {
+        "startLine": 595,
+        "startChar": 0,
+        "endLine": 598,
+        "endChar": 36
+      },
+      "revId": "e15cac40bd9c6a12c48be79a64e93f100ff8e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adbedd38_21b3ddd6",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-04T21:31:11Z",
+      "side": 1,
+      "message": "Could we put these global arrays (that only serve the inline functions in the same file) in some `internal` namespace?",
+      "revId": "e15cac40bd9c6a12c48be79a64e93f100ff8e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84416a42_3aad15c0",
+        "filename": "src/libANGLE/renderer/gen_angle_format_table.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-04T21:31:11Z",
+      "side": 1,
+      "message": "4-bit?",
+      "range": {
+        "startLine": 215,
+        "startChar": 25,
+        "endLine": 215,
+        "endChar": 31
+      },
+      "revId": "e15cac40bd9c6a12c48be79a64e93f100ff8e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8014d55_c0945f86",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-04T21:31:11Z",
+      "side": 1,
+      "message": "Jamie: The comment can be taken out.",
+      "revId": "e15cac40bd9c6a12c48be79a64e93f100ff8e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b6a0fa5_aeacd3d0",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-04T21:31:11Z",
+      "side": 1,
+      "message": "Please make `mask` for 8-bit components return 0 (instead of MAX_UINT) and turn MAX_UINT the sentinel for this `if`. As it is right now, you are returning `false` for every 8-bit-component type.",
+      "revId": "e15cac40bd9c6a12c48be79a64e93f100ff8e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4b70d107_9135c2e2",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 12
