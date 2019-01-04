@@ -77,9 +77,7 @@ template("angle_apk") {
         }
         if (angle_enable_vulkan_validation_layers) {
           foreach(_layer, vulkan_validation_layers) {
-            secondary_abi_shared_libraries +=
-                [ "//third_party/angle/third_party/vulkan-validation-layers:$_layer" +
-                  "($android_secondary_abi_toolchain)" ]
+            secondary_abi_shared_libraries += [ "//third_party/angle/third_party/vulkan-validation-layers:$_layer" + "($android_secondary_abi_toolchain)" ]
           }
         }
       } else {
@@ -88,8 +86,7 @@ template("angle_apk") {
                 "root_out_dir")
         secondary_abi_loadable_modules = []
         foreach(_library, angle_libraries) {
-          secondary_abi_loadable_modules +=
-            [ "$_secondary_out_dir/lib.compressed/lib${_library}${angle_libs_suffix}.so" ]
+          secondary_abi_loadable_modules += [ "$_secondary_out_dir/lib.compressed/lib${_library}${angle_libs_suffix}.so" ]
         }
         if (angle_enable_vulkan_validation_layers) {
           foreach(_layer, vulkan_validation_layers) {
@@ -112,7 +109,7 @@ template("angle_apk") {
               [ "$angle_root/third_party/vulkan-validation-layers:$_layer" ]
         }
       }
-    } else {
+    } else if (symbol_level == 1) {
       loadable_modules = []
       foreach(_library, angle_libraries) {
         loadable_modules += [
@@ -123,6 +120,21 @@ template("angle_apk") {
         foreach(_layer, vulkan_validation_layers) {
           loadable_modules +=
               [ "${root_out_dir}/lib.compressed/lib${_layer}.so" ]
+        }
+      }
+    } else {
+      loadable_modules = []
+      foreach(_library, angle_libraries) {
+        loadable_modules += [
+          "$root_out_dir/lib.unstripped/lib${_library}${angle_libs_suffix}.so",
+        ]
+        deps += [ "//third_party/angle:lib${_library}${angle_libs_suffix}" ]
+      }
+      if (angle_enable_vulkan_validation_layers) {
+        foreach(_layer, vulkan_validation_layers) {
+          loadable_modules +=
+              [ "${root_out_dir}/lib.unstripped/lib${_layer}.so" ]
+          deps += [ "//third_party/angle/third_party/vulkan-validation-layers:${_layer}" ]
         }
       }
     }
