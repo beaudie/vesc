@@ -27,6 +27,16 @@ constexpr size_t kStagingBufferSize = 1024 * 16;
 
 constexpr VkFormatFeatureFlags kBlitFeatureFlags =
     VK_FORMAT_FEATURE_BLIT_SRC_BIT | VK_FORMAT_FEATURE_BLIT_DST_BIT;
+
+bool CanCopyWithDraw(RendererVk *renderer,
+                     const vk::Format &srcFormat,
+                     const vk::Format &destFormat)
+{
+    return renderer->hasTextureFormatFeatureBits(srcFormat.vkTextureFormat,
+                                                 VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) &&
+           renderer->hasTextureFormatFeatureBits(destFormat.vkTextureFormat,
+                                                 VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT);
+}
 }  // anonymous namespace
 
 // StagingStorage implementation.
@@ -575,11 +585,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
     const vk::Format &destFormat = renderer->getFormat(internalFormat.sizedInternalFormat);
 
     // TODO(syoussefi): Support draw path for when !mImage.valid().  http://anglebug.com/2958
-    bool canDraw = mImage.valid() &&
-                   renderer->hasTextureFormatFeatureBits(srcFormat.vkTextureFormat,
-                                                         VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) &&
-                   renderer->hasTextureFormatFeatureBits(destFormat.vkTextureFormat,
-                                                         VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT);
+    bool canDraw = mImage.valid() && CanCopyWithDraw(renderer, srcFormat, destFormat);
 
     // If it's possible to perform the copy with a draw call, do that.
     if (canDraw)
@@ -618,8 +624,12 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
     params.destOffset[0] = destOffset.x;
     params.destOffset[1] = destOffset.y;
     params.srcMip        = 0;
+    params.srcLayer = 0;
     params.srcHeight     = source->getReadImageExtents().height;
-    params.flipY         = contextVk->isViewportFlipEnabledForDrawFBO();
+    params.srcPremultiplyAlpha = false;
+    params.srcUnmultiplyAlpha  = false;
+    params.srcFlipY            = contextVk->isViewportFlipEnabledForDrawFBO();
+    params.destFlipY           = false;
 
     uint32_t level      = index.getLevelIndex();
     uint32_t baseLayer  = index.hasLayer() ? index.getLayerIndex() : 0;
