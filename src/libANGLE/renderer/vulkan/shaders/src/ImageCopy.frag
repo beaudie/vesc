@@ -36,15 +36,19 @@ layout(set = 0, binding = 0) uniform SRC_RESOURCE(texture2D) src;
 layout(location = 0) out DestType dest;
 
 layout(push_constant) uniform PushConstants {
+    // Translation from source to destination coordinates.
+    ivec2 srcOffset;
+    ivec2 destOffset;
+    int srcMip;
+    int srcLayer;
     // Whether y needs to be flipped
     bool flipY;
+    // Premultiplied alpha conversions
+    bool premultiplyAlpha;
+    bool unmultiplyAlpha;
     // Whether destination is emulated luminance/alpha.
     bool destHasLuminance;
     bool destIsAlpha;
-    // Translation from source to destination coordinates.
-    int srcMip;
-    ivec2 srcOffset;
-    ivec2 destOffset;
 } params;
 
 void main()

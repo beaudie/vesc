@@ -141,12 +141,15 @@ class UtilsVk : angle::NonCopyable
     struct ImageCopyShaderParams
     {
         // Structure matching PushConstants in ImageCopy.frag
-        uint32_t flipY            = 0;
-        uint32_t destHasLuminance = 0;
-        uint32_t destIsAlpha      = 0;
-        int32_t srcMip            = 0;
         int32_t srcOffset[2]      = {};
         int32_t destOffset[2]     = {};
+        int32_t srcMip            = 0;
+        int32_t srcLayer          = 0;
+        uint32_t flipY            = 0;
+        uint32_t premultiplyAlpha = 0;
+        uint32_t unmultiplyAlpha  = 0;
+        uint32_t destHasLuminance = 0;
+        uint32_t destIsAlpha      = 0;
     };
 
     // Functions implemented by the class:

@@ -643,6 +643,8 @@ angle::Result UtilsVk::copyImage(vk::Context *context,
 
     ImageCopyShaderParams shaderParams;
     shaderParams.flipY            = params.flipY;
+    shaderParams.premultiplyAlpha = 0;
+    shaderParams.unmultiplyAlpha  = 0;
     shaderParams.destHasLuminance = destFormat.angleFormat().luminanceBits > 0;
     shaderParams.destIsAlpha =
         destFormat.angleFormat().isLUMA() && destFormat.angleFormat().alphaBits > 0;
