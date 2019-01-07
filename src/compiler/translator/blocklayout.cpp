@@ -26,6 +26,42 @@ class BlockLayoutMapVisitor : public BlockEncoderVisitor
         : BlockEncoderVisitor(instanceName, instanceName, encoder), mInfoOut(blockInfoOut)
     {}
 
+    void enterStructAccess(const ShaderVariable &structVar, bool isRowMajor) override
+    {
+        BlockEncoderVisitor::enterStructAccess(structVar, isRowMajor);
+        if (!hasFinalTopLevelArrayStride)
+        {
+            size_t structSize = 0;
+            getEncoder()->getShaderVariableSize(structVar, isRowMajor, &structSize);
+            mTopLevelArrayStride *= structSize;
+            hasFinalTopLevelArrayStride = true;
+        }
+    }
+
+    void visitNamedVariable(const ShaderVariable &variable,
+                            bool isRowMajor,
+                            const std::string &name,
+                            const std::string &mappedName) override
+    {
+        std::vector<unsigned int> innermostArraySize;
+
+        if (variable.isArray())
+        {
+            innermostArraySize.push_back(variable.getNestedArraySize(0));
+        }
+        BlockMemberInfo variableInfo =
+            getEncoder()->encodeType(variable.type, innermostArraySize, isRowMajor);
+        if (!hasFinalTopLevelArrayStride)
+        {
+            ASSERT(variableInfo.arrayStride);
+            ASSERT(mTopLevelArrayStride);
+            mTopLevelArrayStride *= variableInfo.arrayStride;
+            hasFinalTopLevelArrayStride = true;
+        }
+        variableInfo.topLevelArrayStride = mTopLevelArrayStride;
+        encodeVariable(variable, variableInfo, name, mappedName);
+    }
+
     void encodeVariable(const ShaderVariable &variable,
                         const BlockMemberInfo &variableInfo,
                         const std::string &name,
@@ -42,7 +78,7 @@ class BlockLayoutMapVisitor : public BlockEncoderVisitor
 template <typename VarT>
 void GetInterfaceBlockInfo(const std::vector<VarT> &fields,
                            const std::string &prefix,
-                           sh::BlockLayoutEncoder *encoder,
+                           BlockLayoutEncoder *encoder,
                            bool inRowMajorLayout,
                            BlockLayoutMap *blockInfoOut)
 {
@@ -74,7 +110,6 @@ void TraverseStructArrayVariable(const ShaderVariable &variable,
     for (unsigned int arrayElement = 0u; arrayElement < count; ++arrayElement)
     {
         visitor->enterArrayElement(variable, arrayElement);
-
         ShaderVariable elementVar = variable;
         elementVar.indexIntoArray(arrayElement);
 
@@ -186,6 +221,20 @@ BlockMemberInfo BlockLayoutEncoder::encodeType(GLenum type,
     advanceOffset(type, arraySizes, isRowMajorMatrix, arrayStride, matrixStride);
 
     return memberInfo;
+}
+
+void BlockLayoutEncoder::getShaderVariableSize(const ShaderVariable &structVar,
+                                               bool isRowMajor,
+                                               size_t *sizeOut)
+{
+    size_t currentOffset = mCurrentOffset;
+    mCurrentOffset       = 0;
+    BlockEncoderVisitor visitor("", "", this);
+    enterAggregateType(structVar);
+    TraverseShaderVariables(structVar.fields, isRowMajor, &visitor);
+    exitAggregateType(structVar);
+    *sizeOut       = getCurrentOffset();
+    mCurrentOffset = currentOffset;
 }
 
 // static
@@ -302,7 +351,7 @@ size_t Std430BlockEncoder::getTypeBaseAlignment(GLenum type, bool isRowMajorMatr
 
 void GetInterfaceBlockInfo(const std::vector<InterfaceBlockField> &fields,
                            const std::string &prefix,
-                           sh::BlockLayoutEncoder *encoder,
+                           BlockLayoutEncoder *encoder,
                            BlockLayoutMap *blockInfoOut)
 {
     // Matrix packing is always recorded in individual fields, so they'll set the row major layout
@@ -312,7 +361,7 @@ void GetInterfaceBlockInfo(const std::vector<InterfaceBlockField> &fields,
 
 void GetUniformBlockInfo(const std::vector<Uniform> &uniforms,
                          const std::string &prefix,
-                         sh::BlockLayoutEncoder *encoder,
+                         BlockLayoutEncoder *encoder,
                          BlockLayoutMap *blockInfoOut)
 {
     // Matrix packing is always recorded in individual fields, so they'll set the row major layout
@@ -351,12 +400,14 @@ void VariableNameVisitor::exitStruct(const ShaderVariable &structVar)
 
 void VariableNameVisitor::enterStructAccess(const ShaderVariable &structVar, bool isRowMajor)
 {
+    mStructStackSize++;
     mNameStack.push_back(".");
     mMappedNameStack.push_back(".");
 }
 
 void VariableNameVisitor::exitStructAccess(const ShaderVariable &structVar, bool isRowMajor)
 {
+    mStructStackSize--;
     mNameStack.pop_back();
     mMappedNameStack.pop_back();
 }
@@ -382,6 +433,25 @@ void VariableNameVisitor::exitArray(const ShaderVariable &arrayVar)
 void VariableNameVisitor::enterArrayElement(const ShaderVariable &arrayVar,
                                             unsigned int arrayElement)
 {
+    if (mStructStackSize == 0 && !arrayVar.hasParentArrayIndex())
+    {
+        // From the ES 3.1 spec "7.3.1.1 Naming Active Resources":
+        // For an active shader storage block member declared as an array of an aggregate type,
+        // an entry will be generated only for the first array element, regardless of its type.
+        // Such block members are referred to as top-level arrays. If the block member is an
+        // aggregate type, the enumeration rules are then applied recursively.
+        if (arrayElement == 0)
+        {
+            mTopLevelArraySize          = arrayVar.getOutermostArraySize();
+            mTopLevelArrayStride        = arrayVar.getTopLevelArrayStride();
+            hasFinalTopLevelArrayStride = false;
+        }
+        else
+        {
+            mSkipEnabled = true;
+        }
+    }
+
     std::stringstream strstr;
     strstr << "[" << arrayElement << "]";
     std::string elementString = strstr.str();
