@@ -319,49 +319,6 @@ class ShaderStorageBlockVisitor : public sh::VariableNameVisitor
           mBlockIndex(blockIndex)
     {}
 
-    void enterArrayElement(const sh::ShaderVariable &arrayVar, unsigned int arrayElement) override
-    {
-        if (mStructStackSize == 0 && !arrayVar.hasParentArrayIndex())
-        {
-            // From the ES 3.1 spec "7.3.1.1 Naming Active Resources":
-            // For an active shader storage block member declared as an array of an aggregate type,
-            // an entry will be generated only for the first array element, regardless of its type.
-            // Such block members are referred to as top-level arrays. If the block member is an
-            // aggregate type, the enumeration rules are then applied recursively.
-            if (arrayElement == 0)
-            {
-                mTopLevelArraySize = arrayVar.getOutermostArraySize();
-            }
-            else
-            {
-                mSkipEnabled = true;
-            }
-        }
-        sh::VariableNameVisitor::enterArrayElement(arrayVar, arrayElement);
-    }
-
-    void exitArrayElement(const sh::ShaderVariable &arrayVar, unsigned int arrayElement) override
-    {
-        if (mStructStackSize == 0 && !arrayVar.hasParentArrayIndex())
-        {
-            mTopLevelArraySize = 1;
-            mSkipEnabled       = false;
-        }
-        sh::VariableNameVisitor::exitArrayElement(arrayVar, arrayElement);
-    }
-
-    void enterStructAccess(const sh::ShaderVariable &structVar, bool isRowMajor) override
-    {
-        mStructStackSize++;
-        sh::VariableNameVisitor::enterStructAccess(structVar, isRowMajor);
-    }
-
-    void exitStructAccess(const sh::ShaderVariable &structVar, bool isRowMajor) override
-    {
-        mStructStackSize--;
-        sh::VariableNameVisitor::exitStructAccess(structVar, isRowMajor);
-    }
-
     void visitNamedVariable(const sh::ShaderVariable &variable,
                             bool isRowMajor,
                             const std::string &name,
@@ -405,9 +362,6 @@ class ShaderStorageBlockVisitor : public sh::VariableNameVisitor
     std::vector<BufferVariable> *mBufferVariablesOut;
     const ShaderType mShaderType;
     const int mBlockIndex;
-    unsigned int mStructStackSize = 0;
-    int mTopLevelArraySize        = 1;
-    bool mSkipEnabled             = false;
 };
 
 struct ShaderUniformCount
