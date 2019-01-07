@@ -34,6 +34,24 @@
       "revId": "fb8aa06fa1b9e29145b4581e9c5deaca47a3eaf7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c4764d4e_2e1cd719",
+        "filename": "src/libANGLE/renderer/d3d/HLSLCompiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2019-01-07T21:56:06Z",
+      "side": 1,
+      "message": "My point is that GetLastError() will be called too late. GetLastError() needs to be called immediately after LoadLibrary or else it may end up being the wrong last error.\n\nI hit this years ago when for a while the VC++ alloc functions would clear last error (https://codereview.chromium.org/1320673016 to fix that). Most functions don\u0027t clear last error on success, but some do.\n\nThis pattern is guaranteed to work, but I don\u0027t think the streams variant is:\n    LogError(CreateError::INITIALIZE_ACL_FAILURE, GetLastError());",
+      "parentUuid": "4247bcc9_3bfb4397",
+      "revId": "fb8aa06fa1b9e29145b4581e9c5deaca47a3eaf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
