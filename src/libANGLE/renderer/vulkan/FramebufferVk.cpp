@@ -1110,6 +1110,8 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
 {
     RendererVk *renderer = contextVk->getRenderer();
 
+    ANGLE_TRY(renderTarget->ensureImageInitialized(contextVk));
+
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &commandBuffer));
 
