@@ -385,7 +385,9 @@ TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
     : TextureImpl(state),
       mRenderTarget(&mImage, &mDrawBaseLevelImageView, 0),
       mPixelBuffer(renderer)
-{}
+{
+    mRenderTarget.setOwner(this);
+}
 
 TextureVk::~TextureVk() = default;
 
@@ -997,6 +999,7 @@ angle::Result TextureVk::initCubeMapRenderTargets(ContextVk *contextVk)
         vk::ImageView *imageView;
         ANGLE_TRY(getLayerLevelDrawImageView(contextVk, cubeMapFaceIndex, 0, &imageView));
         mCubeMapRenderTargets.emplace_back(&mImage, imageView, cubeMapFaceIndex);
+        mCubeMapRenderTargets.back().setOwner(this);
     }
     return angle::Result::Continue;
 }
