@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56b133f1_67856071",
+        "filename": "src/libANGLE/renderer/d3d/HLSLCompiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2019-01-07T18:59:19Z",
+      "side": 1,
+      "message": "This isn\u0027t guaranteed to behave the way we want it to. The compiler may (and probably will, I think) decide to postpone the GetLastError() call until after the calls to Err() and operator\u003c\u003c, thus possibly losing the error code. The code needs to be:\n  DWORD last_error \u003d GetLastError();\n  ERR() \u003c\u003c \"LoadLibrary(\" \u003c\u003c D3DCOMPILER_DLL_A \u003c\u003c \") failed: \" \u003c\u003c last_error;",
+      "revId": "fb8aa06fa1b9e29145b4581e9c5deaca47a3eaf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
