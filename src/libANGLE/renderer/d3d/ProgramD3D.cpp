@@ -213,7 +213,7 @@ size_t InterfaceBlockInfo::getBlockInfo(const sh::InterfaceBlock &interfaceBlock
     }
 
     sh::GetInterfaceBlockInfo(interfaceBlock.fields, interfaceBlock.fieldPrefix(), encoder,
-                              &mBlockLayout);
+                              interfaceBlock.layout, &mBlockLayout);
 
     return encoder->getCurrentOffset();
 }
@@ -278,7 +278,7 @@ class UniformEncodingVisitorD3D : public sh::BlockEncoderVisitor
     }
 
     void encodeVariable(const sh::ShaderVariable &variable,
-                        const sh::BlockMemberInfo &variableInfo,
+                        sh::BlockMemberInfo &variableInfo,
                         const std::string &name,
                         const std::string &mappedName) override
     {

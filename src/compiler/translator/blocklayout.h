@@ -189,12 +189,14 @@ using BlockLayoutMap = std::map<std::string, BlockMemberInfo>;
 void GetInterfaceBlockInfo(const std::vector<InterfaceBlockField> &fields,
                            const std::string &prefix,
                            BlockLayoutEncoder *encoder,
+                           BlockLayoutType layoutType,
                            BlockLayoutMap *blockInfoOut);
 
 // Used for laying out the default uniform block on the Vulkan backend.
 void GetUniformBlockInfo(const std::vector<Uniform> &uniforms,
                          const std::string &prefix,
                          BlockLayoutEncoder *encoder,
+                         BlockLayoutType layoutType,
                          BlockLayoutMap *blockInfoOut);
 
 class ShaderVariableVisitor
@@ -279,7 +281,7 @@ class BlockEncoderVisitor : public VariableNameVisitor
                             const std::string &mappedName) override;
 
     virtual void encodeVariable(const ShaderVariable &variable,
-                                const BlockMemberInfo &variableInfo,
+                                BlockMemberInfo &variableInfo,
                                 const std::string &name,
                                 const std::string &mappedName) = 0;
 

@@ -11,6 +11,7 @@
 
 #include "common/mathutil.h"
 #include "common/utilities.h"
+#include "compiler/translator/blocklayoutHLSL.h"
 
 namespace sh
 {
@@ -22,31 +23,120 @@ class BlockLayoutMapVisitor : public BlockEncoderVisitor
   public:
     BlockLayoutMapVisitor(BlockLayoutMap *blockInfoOut,
                           const std::string &instanceName,
-                          BlockLayoutEncoder *encoder)
-        : BlockEncoderVisitor(instanceName, instanceName, encoder), mInfoOut(blockInfoOut)
+                          BlockLayoutEncoder *encoder,
+                          BlockLayoutType layoutType)
+        : BlockEncoderVisitor(instanceName, instanceName, encoder),
+          mInfoOut(blockInfoOut),
+          mLayoutType(layoutType)
     {}
 
+    void enterArrayElement(const sh::ShaderVariable &arrayVar, unsigned int arrayElement) override
+    {
+        if (mStructStackSize == 0 && !arrayVar.hasParentArrayIndex())
+        {
+            if (arrayElement == 0)
+            {
+                mTopLevelArrayStride        = arrayVar.getTopLevelArrayStride();
+                hasFinalTopLevelArrayStride = false;
+            }
+            else
+            {
+                mSkipEnabled = true;
+            }
+        }
+        sh::VariableNameVisitor::enterArrayElement(arrayVar, arrayElement);
+    }
+
+    void exitArrayElement(const sh::ShaderVariable &arrayVar, unsigned int arrayElement) override
+    {
+        if (mStructStackSize == 0 && !arrayVar.hasParentArrayIndex())
+        {
+            mTopLevelArrayStride        = 0;
+            hasFinalTopLevelArrayStride = true;
+            mSkipEnabled                = false;
+        }
+        sh::VariableNameVisitor::exitArrayElement(arrayVar, arrayElement);
+    }
+
+    void enterStructAccess(const ShaderVariable &structVar, bool isRowMajor) override
+    {
+        mStructStackSize++;
+        BlockEncoderVisitor::enterStructAccess(structVar, isRowMajor);
+        if (!hasFinalTopLevelArrayStride)
+        {
+            sh::Std140BlockEncoder std140Encoder;
+            sh::Std430BlockEncoder std430Encoder;
+            sh::HLSLBlockEncoder hlslEncoder(sh::HLSLBlockEncoder::ENCODE_PACKED, false);
+            sh::BlockLayoutEncoder *childEncoder = nullptr;
+
+            switch (mLayoutType)
+            {
+                case sh::BLOCKLAYOUT_STD140:
+                    childEncoder = &std140Encoder;
+                    break;
+                case sh::BLOCKLAYOUT_STD430:
+                    childEncoder = &std430Encoder;
+                    break;
+                default:
+                    childEncoder = &hlslEncoder;
+                    break;
+            }
+
+            BlockLayoutMap blockLayoutMap;
+            BlockLayoutMapVisitor childVisitor(&blockLayoutMap, "", childEncoder, mLayoutType);
+            childEncoder->enterAggregateType(structVar);
+            TraverseShaderVariables(structVar.fields, isRowMajor, &childVisitor);
+            childEncoder->exitAggregateType(structVar);
+
+            mTopLevelArrayStride *= childEncoder->getCurrentOffset();
+            hasFinalTopLevelArrayStride = true;
+        }
+    }
+
+    void exitStructAccess(const ShaderVariable &structVar, bool isRowMajor) override
+    {
+        mStructStackSize--;
+        sh::BlockEncoderVisitor::exitStructAccess(structVar, isRowMajor);
+    }
+
     void encodeVariable(const ShaderVariable &variable,
-                        const BlockMemberInfo &variableInfo,
+                        BlockMemberInfo &variableInfo,
                         const std::string &name,
                         const std::string &mappedName) override
     {
+        if (mSkipEnabled)
+            return;
+
         ASSERT(!gl::IsSamplerType(variable.type));
+        if (!hasFinalTopLevelArrayStride)
+        {
+            ASSERT(variableInfo.arrayStride);
+            ASSERT(mTopLevelArrayStride);
+            mTopLevelArrayStride *= variableInfo.arrayStride;
+            hasFinalTopLevelArrayStride = true;
+        }
+        variableInfo.topLevelArrayStride = mTopLevelArrayStride;
         (*mInfoOut)[name] = variableInfo;
     }
 
   private:
     BlockLayoutMap *mInfoOut;
+    BlockLayoutType mLayoutType;
+    unsigned int mStructStackSize    = 0;
+    int mTopLevelArrayStride         = 0;
+    bool hasFinalTopLevelArrayStride = true;
+    bool mSkipEnabled                = false;
 };
 
 template <typename VarT>
 void GetInterfaceBlockInfo(const std::vector<VarT> &fields,
                            const std::string &prefix,
-                           sh::BlockLayoutEncoder *encoder,
+                           BlockLayoutEncoder *encoder,
+                           BlockLayoutType layoutType,
                            bool inRowMajorLayout,
                            BlockLayoutMap *blockInfoOut)
 {
-    BlockLayoutMapVisitor visitor(blockInfoOut, prefix, encoder);
+    BlockLayoutMapVisitor visitor(blockInfoOut, prefix, encoder, layoutType);
     TraverseShaderVariables(fields, inRowMajorLayout, &visitor);
 }
 
@@ -74,7 +164,6 @@ void TraverseStructArrayVariable(const ShaderVariable &variable,
     for (unsigned int arrayElement = 0u; arrayElement < count; ++arrayElement)
     {
         visitor->enterArrayElement(variable, arrayElement);
-
         ShaderVariable elementVar = variable;
         elementVar.indexIntoArray(arrayElement);
 
@@ -302,22 +391,24 @@ size_t Std430BlockEncoder::getTypeBaseAlignment(GLenum type, bool isRowMajorMatr
 
 void GetInterfaceBlockInfo(const std::vector<InterfaceBlockField> &fields,
                            const std::string &prefix,
-                           sh::BlockLayoutEncoder *encoder,
+                           BlockLayoutEncoder *encoder,
+                           BlockLayoutType layoutType,
                            BlockLayoutMap *blockInfoOut)
 {
     // Matrix packing is always recorded in individual fields, so they'll set the row major layout
     // flag to true if needed.
-    GetInterfaceBlockInfo(fields, prefix, encoder, false, blockInfoOut);
+    GetInterfaceBlockInfo(fields, prefix, encoder, layoutType, false, blockInfoOut);
 }
 
 void GetUniformBlockInfo(const std::vector<Uniform> &uniforms,
                          const std::string &prefix,
-                         sh::BlockLayoutEncoder *encoder,
+                         BlockLayoutEncoder *encoder,
+                         BlockLayoutType layoutType,
                          BlockLayoutMap *blockInfoOut)
 {
     // Matrix packing is always recorded in individual fields, so they'll set the row major layout
     // flag to true if needed.
-    GetInterfaceBlockInfo(uniforms, prefix, encoder, false, blockInfoOut);
+    GetInterfaceBlockInfo(uniforms, prefix, encoder, layoutType, false, blockInfoOut);
 }
 
 // VariableNameVisitor implementation.

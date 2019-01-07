@@ -71,6 +71,7 @@ struct ShaderVariable
     bool isArrayOfArrays() const { return arraySizes.size() >= 2u; }
     bool isArray() const { return !arraySizes.empty(); }
     unsigned int getArraySizeProduct() const;
+    unsigned int getTopLevelArrayStride() const;
 
     // Array size 0 means not an array when passed to or returned from these functions.
     // Note that setArraySize() is deprecated and should not be used inside ANGLE.

@@ -243,7 +243,7 @@ class BlockInfoVisitor final : public BlockEncoderVisitor
     }
 
     void encodeVariable(const ShaderVariable &variable,
-                        const BlockMemberInfo &variableInfo,
+                        BlockMemberInfo &variableInfo,
                         const std::string &name,
                         const std::string &mappedName) override
     {
