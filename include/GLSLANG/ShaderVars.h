@@ -71,6 +71,12 @@ struct ShaderVariable
     bool isArrayOfArrays() const { return arraySizes.size() >= 2u; }
     bool isArray() const { return !arraySizes.empty(); }
     unsigned int getArraySizeProduct() const;
+    // Return the stride between array elements of the top-level member.
+    // For example, if there's a variable declared as size 3 array of size 4 array of size 5 array
+    // of int:
+    //   int a[3][4][5];
+    // then the topLevelArrayStride of a would be 4*5.
+    unsigned int getTopLevelArrayStride() const;
 
     // Array size 0 means not an array when passed to or returned from these functions.
     // Note that setArraySize() is deprecated and should not be used inside ANGLE.

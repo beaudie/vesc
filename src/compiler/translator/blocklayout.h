@@ -189,12 +189,14 @@ using BlockLayoutMap = std::map<std::string, BlockMemberInfo>;
 void GetInterfaceBlockInfo(const std::vector<InterfaceBlockField> &fields,
                            const std::string &prefix,
                            BlockLayoutEncoder *encoder,
+                           BlockLayoutType layoutType,
                            BlockLayoutMap *blockInfoOut);
 
 // Used for laying out the default uniform block on the Vulkan backend.
 void GetUniformBlockInfo(const std::vector<Uniform> &uniforms,
                          const std::string &prefix,
                          BlockLayoutEncoder *encoder,
+                         BlockLayoutType layoutType,
                          BlockLayoutMap *blockInfoOut);
 
 class ShaderVariableVisitor
@@ -237,6 +239,14 @@ class VariableNameVisitor : public ShaderVariableVisitor
     void enterArrayElement(const ShaderVariable &arrayVar, unsigned int arrayElement) override;
     void exitArrayElement(const ShaderVariable &arrayVar, unsigned int arrayElement) override
     {
+        if (mStructStackSize == 0 && !arrayVar.hasParentArrayIndex())
+        {
+            mTopLevelArraySize          = 1;
+            mTopLevelArrayStride        = 0;
+            hasFinalTopLevelArrayStride = true;
+            mSkipEnabled                = false;
+        }
+
         mNameStack.pop_back();
         mMappedNameStack.pop_back();
     }
@@ -254,12 +264,19 @@ class VariableNameVisitor : public ShaderVariableVisitor
     std::string collapseNameStack() const;
     std::string collapseMappedNameStack() const;
 
+    int mTopLevelArraySize           = 1;
+    int mTopLevelArrayStride         = 0;
+    bool hasFinalTopLevelArrayStride = true;
+    bool mSkipEnabled                = false;
+
   private:
     void visitSampler(const sh::ShaderVariable &sampler) final;
     void visitVariable(const ShaderVariable &variable, bool isRowMajor) final;
 
     std::vector<std::string> mNameStack;
     std::vector<std::string> mMappedNameStack;
+
+    unsigned int mStructStackSize = 0;
 };
 
 class BlockEncoderVisitor : public VariableNameVisitor
@@ -269,7 +286,7 @@ class BlockEncoderVisitor : public VariableNameVisitor
                         const std::string &mappedNamePrefix,
                         BlockLayoutEncoder *encoder);
     ~BlockEncoderVisitor();
-
+    BlockLayoutEncoder *getEncoder() const { return mEncoder; }
     void enterStructAccess(const ShaderVariable &structVar, bool isRowMajor) override;
     void exitStructAccess(const ShaderVariable &structVar, bool isRowMajor) override;
 
