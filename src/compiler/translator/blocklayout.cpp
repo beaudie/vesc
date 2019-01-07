@@ -188,6 +188,20 @@ BlockMemberInfo BlockLayoutEncoder::encodeType(GLenum type,
     return memberInfo;
 }
 
+void BlockLayoutEncoder::getShaderVariableSize(const ShaderVariable &structVar,
+                                               bool isRowMajor,
+                                               size_t *sizeOut)
+{
+    size_t currentOffset = mCurrentOffset;
+    mCurrentOffset       = 0;
+    BlockEncoderVisitor visitor("", "", this);
+    enterAggregateType(structVar);
+    TraverseShaderVariables(structVar.fields, isRowMajor, &visitor);
+    exitAggregateType(structVar);
+    *sizeOut       = getCurrentOffset();
+    mCurrentOffset = currentOffset;
+}
+
 // static
 size_t BlockLayoutEncoder::GetBlockRegister(const BlockMemberInfo &info)
 {

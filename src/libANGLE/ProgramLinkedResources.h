@@ -121,6 +121,7 @@ class InterfaceBlockLinker : angle::NonCopyable
     virtual sh::ShaderVariableVisitor *getVisitor(const GetBlockMemberInfoFunc &getMemberInfo,
                                                   const std::string &namePrefix,
                                                   const std::string &mappedNamePrefix,
+                                                  sh::BlockLayoutType layoutType,
                                                   ShaderType shaderType,
                                                   int blockIndex) const = 0;
 };
@@ -138,6 +139,7 @@ class UniformBlockLinker final : public InterfaceBlockLinker
     sh::ShaderVariableVisitor *getVisitor(const GetBlockMemberInfoFunc &getMemberInfo,
                                           const std::string &namePrefix,
                                           const std::string &mappedNamePrefix,
+                                          sh::BlockLayoutType layoutType,
                                           ShaderType shaderType,
                                           int blockIndex) const override;
 
@@ -157,6 +159,7 @@ class ShaderStorageBlockLinker final : public InterfaceBlockLinker
     sh::ShaderVariableVisitor *getVisitor(const GetBlockMemberInfoFunc &getMemberInfo,
                                           const std::string &namePrefix,
                                           const std::string &mappedNamePrefix,
+                                          sh::BlockLayoutType layoutType,
                                           ShaderType shaderType,
                                           int blockIndex) const override;
 

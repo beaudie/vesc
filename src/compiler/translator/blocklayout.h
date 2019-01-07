@@ -84,6 +84,7 @@ class BlockLayoutEncoder
                                bool isRowMajorMatrix);
 
     size_t getCurrentOffset() const { return mCurrentOffset * kBytesPerComponent; }
+    void getShaderVariableSize(const ShaderVariable &structVar, bool isRowMajor, size_t *sizeOut);
 
     // Called when entering/exiting a structure variable.
     virtual void enterAggregateType(const ShaderVariable &structVar) = 0;
@@ -281,7 +282,8 @@ class BlockEncoderVisitor : public VariableNameVisitor
     virtual void encodeVariable(const ShaderVariable &variable,
                                 const BlockMemberInfo &variableInfo,
                                 const std::string &name,
-                                const std::string &mappedName) = 0;
+                                const std::string &mappedName)
+    {}
 
   private:
     BlockLayoutEncoder *mEncoder;

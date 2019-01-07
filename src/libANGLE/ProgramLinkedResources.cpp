@@ -12,6 +12,8 @@
 
 #include "common/string_utils.h"
 #include "common/utilities.h"
+#include "compiler/translator/blocklayout.h"
+#include "compiler/translator/blocklayoutHLSL.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Shader.h"
@@ -310,14 +312,30 @@ class ShaderStorageBlockVisitor : public sh::VariableNameVisitor
                               const std::string &namePrefix,
                               const std::string &mappedNamePrefix,
                               std::vector<BufferVariable> *bufferVariablesOut,
+                              sh::BlockLayoutType layoutType,
                               ShaderType shaderType,
                               int blockIndex)
         : sh::VariableNameVisitor(namePrefix, mappedNamePrefix),
           mGetMemberInfo(getMemberInfo),
           mBufferVariablesOut(bufferVariablesOut),
           mShaderType(shaderType),
-          mBlockIndex(blockIndex)
+          mBlockIndex(blockIndex),
+          mLayoutType(layoutType),
+          mHLSLEncoder(sh::HLSLBlockEncoder::ENCODE_PACKED, false)
     {}
+
+    sh::BlockLayoutEncoder *getEncoder()
+    {
+        switch (mLayoutType)
+        {
+            case sh::BLOCKLAYOUT_STD140:
+                return &mStd140Encoder;
+            case sh::BLOCKLAYOUT_STD430:
+                return &mStd430Encoder;
+            default:
+                return &mHLSLEncoder;
+        }
+    }
 
     void enterArrayElement(const sh::ShaderVariable &arrayVar, unsigned int arrayElement) override
     {
@@ -330,7 +348,9 @@ class ShaderStorageBlockVisitor : public sh::VariableNameVisitor
             // aggregate type, the enumeration rules are then applied recursively.
             if (arrayElement == 0)
             {
-                mTopLevelArraySize = arrayVar.getOutermostArraySize();
+                mTopLevelArraySize          = arrayVar.getOutermostArraySize();
+                mTopLevelArrayStride        = arrayVar.getTopLevelArrayStride();
+                hasFinalTopLevelArrayStride = false;
             }
             else
             {
@@ -344,8 +364,10 @@ class ShaderStorageBlockVisitor : public sh::VariableNameVisitor
     {
         if (mStructStackSize == 0 && !arrayVar.hasParentArrayIndex())
         {
-            mTopLevelArraySize = 1;
-            mSkipEnabled       = false;
+            mTopLevelArraySize          = 1;
+            mTopLevelArrayStride        = 0;
+            hasFinalTopLevelArrayStride = true;
+            mSkipEnabled                = false;
         }
         sh::VariableNameVisitor::exitArrayElement(arrayVar, arrayElement);
     }
@@ -354,6 +376,14 @@ class ShaderStorageBlockVisitor : public sh::VariableNameVisitor
     {
         mStructStackSize++;
         sh::VariableNameVisitor::enterStructAccess(structVar, isRowMajor);
+
+        if (!hasFinalTopLevelArrayStride)
+        {
+            size_t structSize = 0;
+            getEncoder()->getShaderVariableSize(structVar, isRowMajor, &structSize);
+            mTopLevelArrayStride *= structSize;
+            hasFinalTopLevelArrayStride = true;
+        }
     }
 
     void exitStructAccess(const sh::ShaderVariable &structVar, bool isRowMajor) override
@@ -390,6 +420,14 @@ class ShaderStorageBlockVisitor : public sh::VariableNameVisitor
             return;
         }
 
+        if (!hasFinalTopLevelArrayStride)
+        {
+            ASSERT(variableInfo.arrayStride);
+            ASSERT(mTopLevelArrayStride);
+            mTopLevelArrayStride *= variableInfo.arrayStride;
+            hasFinalTopLevelArrayStride = true;
+        }
+        variableInfo.topLevelArrayStride = mTopLevelArrayStride;
         BufferVariable newBufferVariable(variable.type, variable.precision, nameWithArrayIndex,
                                          variable.arraySizes, mBlockIndex, variableInfo);
         newBufferVariable.mappedName = mappedNameWithArrayIndex;
@@ -405,8 +443,14 @@ class ShaderStorageBlockVisitor : public sh::VariableNameVisitor
     std::vector<BufferVariable> *mBufferVariablesOut;
     const ShaderType mShaderType;
     const int mBlockIndex;
+    sh::BlockLayoutType mLayoutType;
+    sh::Std140BlockEncoder mStd140Encoder;
+    sh::Std430BlockEncoder mStd430Encoder;
+    sh::HLSLBlockEncoder mHLSLEncoder;
     unsigned int mStructStackSize = 0;
     int mTopLevelArraySize        = 1;
+    int mTopLevelArrayStride         = 0;
+    bool hasFinalTopLevelArrayStride = true;
     bool mSkipEnabled             = false;
 };
 
@@ -1028,7 +1072,7 @@ void InterfaceBlockLinker::linkBlocks(const GetBlockSizeFunc &getBlockSize,
 
                     std::unique_ptr<sh::ShaderVariableVisitor> visitor(
                         getVisitor(getMemberInfo, block.fieldPrefix(), block.fieldMappedPrefix(),
-                                   shaderType, -1));
+                                   block.layout, shaderType, -1));
 
                     sh::TraverseShaderVariables(block.fields, false, visitor.get());
                 }
@@ -1052,7 +1096,7 @@ void InterfaceBlockLinker::defineInterfaceBlock(const GetBlockSizeFunc &getBlock
 
     std::unique_ptr<sh::ShaderVariableVisitor> visitor(
         getVisitor(getMemberInfo, interfaceBlock.fieldPrefix(), interfaceBlock.fieldMappedPrefix(),
-                   shaderType, blockIndex));
+                   interfaceBlock.layout, shaderType, blockIndex));
     sh::TraverseShaderVariables(interfaceBlock.fields, false, visitor.get());
 
     size_t lastBlockMemberIndex = getCurrentBlockMemberIndex();
@@ -1115,6 +1159,7 @@ sh::ShaderVariableVisitor *UniformBlockLinker::getVisitor(
     const GetBlockMemberInfoFunc &getMemberInfo,
     const std::string &namePrefix,
     const std::string &mappedNamePrefix,
+    sh::BlockLayoutType layoutType,
     ShaderType shaderType,
     int blockIndex) const
 {
@@ -1139,11 +1184,12 @@ sh::ShaderVariableVisitor *ShaderStorageBlockLinker::getVisitor(
     const GetBlockMemberInfoFunc &getMemberInfo,
     const std::string &namePrefix,
     const std::string &mappedNamePrefix,
+    sh::BlockLayoutType layoutType,
     ShaderType shaderType,
     int blockIndex) const
 {
     return new ShaderStorageBlockVisitor(getMemberInfo, namePrefix, mappedNamePrefix,
-                                         mBufferVariablesOut, shaderType, blockIndex);
+                                         mBufferVariablesOut, layoutType, shaderType, blockIndex);
 }
 
 // AtomicCounterBufferLinker implementation.
