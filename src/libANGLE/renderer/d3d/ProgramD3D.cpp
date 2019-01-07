@@ -213,7 +213,7 @@ size_t InterfaceBlockInfo::getBlockInfo(const sh::InterfaceBlock &interfaceBlock
     }
 
     sh::GetInterfaceBlockInfo(interfaceBlock.fields, interfaceBlock.fieldPrefix(), encoder,
-                              &mBlockLayout);
+                              interfaceBlock.layout, &mBlockLayout);
 
     return encoder->getCurrentOffset();
 }

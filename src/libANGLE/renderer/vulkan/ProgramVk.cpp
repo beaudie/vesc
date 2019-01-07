@@ -37,7 +37,7 @@ void InitDefaultUniformBlock(const std::vector<sh::Uniform> &uniforms,
     }
 
     sh::Std140BlockEncoder blockEncoder;
-    sh::GetUniformBlockInfo(uniforms, "", &blockEncoder, blockLayoutMapOut);
+    sh::GetUniformBlockInfo(uniforms, "", &blockEncoder, sh::BLOCKLAYOUT_STD140, blockLayoutMapOut);
 
     size_t blockSize = blockEncoder.getCurrentOffset();
 
