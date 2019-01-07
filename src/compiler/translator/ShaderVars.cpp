@@ -107,6 +107,19 @@ void ShaderVariable::setArraySize(unsigned int size)
     }
 }
 
+unsigned int ShaderVariable::getTopLevelArrayStride() const
+{
+    unsigned int topLevelArrayStride = 1u;
+    if (arraySizes.size() > 1)
+    {
+        for (size_t i = 0; i < (arraySizes.size() - 1); i++)
+        {
+            topLevelArrayStride *= arraySizes[i];
+        }
+    }
+    return topLevelArrayStride;
+}
+
 unsigned int ShaderVariable::getArraySizeProduct() const
 {
     return gl::ArraySizeProduct(arraySizes);
