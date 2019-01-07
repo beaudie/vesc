@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecf325c5_31956e50",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-01-07T23:44:31Z",
+      "side": 1,
+      "message": "Please say at least \"bindWorkerContext failed\" or similar in this warning message.",
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77a1e8d4_18eacfea",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-01-07T23:44:31Z",
+      "side": 1,
+      "message": "Would it be very difficult to support these worker contexts on Android? If not, would you mind hooking this up? If it\u0027s too hard then please leave a:\n  TODO(crbug.com/873724): implement worker contexts on Android.\ncomment here. Thanks.",
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b3d85cd_596fb765",
+        "filename": "src/libANGLE/renderer/gl/glx/DisplayGLX.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-01-07T23:44:31Z",
+      "side": 1,
+      "message": "Is it possible to impose a limit here on the number of pbuffers we allocate? It seems to me that on a highly multi-core machine, the C++ standard library might return a large number, which would result in allocating a lot of pbuffers.\n\nThe AsyncWorkerPool can enforce a maximum number of threads. Is it possible to limit the number of pbuffers allocated to that maximum? Or is this difficult because the maximum can change at run time?\n\nIf it\u0027s complicated, then is that because we\u0027re using the std::async primitives to implement this thread pool? After reading through this code, it seems to me that there is a mismatch between how std::async works and how OpenGL works. std::async / future picks a random thread to run the task on, while OpenGL needs contexts assigned per-thread. I wonder whether changing AsyncWorkerPool so that it has guaranteed dedicated threads would help. But that can be a future discussion.",
+      "range": {
+        "startLine": 292,
+        "startChar": 37,
+        "endLine": 292,
+        "endChar": 70
+      },
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab2a3adf_7ed37f3d",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-01-07T23:44:31Z",
+      "side": 1,
+      "message": "Need to handle errors here, like ERROR_MORE_DATA.\n\nNeed to LocalFree messageBuffer after creating the std::string from it.",
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf20e54a_b1f425a3",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-01-07T23:44:31Z",
+      "side": 1,
+      "message": "Same comment here as in the GLX implementation.",
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2af8907f_6b302ff1",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 1917,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-01-07T23:44:31Z",
+      "side": 1,
+      "message": "That\u0027s a very strange bug. Do you think there might actually be a memory corruption bug somewhere in this code which is causing it? Of course, I can also believe that it might be a bug in macOS\u0027 OpenGL driver.",
+      "range": {
+        "startLine": 1917,
+        "startChar": 23,
+        "endLine": 1917,
+        "endChar": 33
+      },
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
