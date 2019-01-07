@@ -84,6 +84,7 @@ class BlockLayoutEncoder
                                bool isRowMajorMatrix);
 
     size_t getCurrentOffset() const { return mCurrentOffset * kBytesPerComponent; }
+    void getShaderVariableSize(const ShaderVariable &structVar, bool isRowMajor, size_t *sizeOut);
 
     // Called when entering/exiting a structure variable.
     virtual void enterAggregateType(const ShaderVariable &structVar) = 0;
@@ -269,9 +270,11 @@ class BlockEncoderVisitor : public VariableNameVisitor
                         const std::string &mappedNamePrefix,
                         BlockLayoutEncoder *encoder);
     ~BlockEncoderVisitor();
-
+    BlockLayoutEncoder *getEncoder() const { return mEncoder; }
     void enterStructAccess(const ShaderVariable &structVar, bool isRowMajor) override;
     void exitStructAccess(const ShaderVariable &structVar, bool isRowMajor) override;
+    void enterArrayElement(const ShaderVariable &arrayVar, unsigned int arrayElement) override;
+    void exitArrayElement(const ShaderVariable &arrayVar, unsigned int arrayElement) override;
 
     void visitNamedVariable(const ShaderVariable &variable,
                             bool isRowMajor,
@@ -281,10 +284,18 @@ class BlockEncoderVisitor : public VariableNameVisitor
     virtual void encodeVariable(const ShaderVariable &variable,
                                 const BlockMemberInfo &variableInfo,
                                 const std::string &name,
-                                const std::string &mappedName) = 0;
+                                const std::string &mappedName)
+    {}
+
+  protected:
+    int mTopLevelArraySize          = 1;
+    int mTopLevelArrayStride        = 0;
+    bool isTopLevelArrayStrideReady = true;
+    bool mSkipEnabled               = false;
 
   private:
     BlockLayoutEncoder *mEncoder;
+    unsigned int mStructStackSize = 0;
 };
 
 void TraverseShaderVariable(const ShaderVariable &variable,
