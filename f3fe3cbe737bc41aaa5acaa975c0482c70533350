@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c970f2b_f8040513",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-07T21:54:58Z",
+      "side": 1,
+      "message": "of",
+      "range": {
+        "startLine": 32,
+        "startChar": 64,
+        "endLine": 32,
+        "endChar": 66
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "059c2352_23831d2e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-07T21:54:58Z",
+      "side": 1,
+      "message": "Wouldn\u0027t `uint64_t` comparisons be faster?",
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f14eb72d_36d8f486",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-07T21:54:58Z",
+      "side": 1,
+      "message": "Doesn\u0027t need to be in the header",
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5a7a643_e24f3600",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-07T21:54:58Z",
+      "side": 1,
+      "message": "This doesn\u0027t need to be in the header.",
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
