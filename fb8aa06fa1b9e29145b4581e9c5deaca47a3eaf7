@@ -52,6 +52,24 @@
       "revId": "fb8aa06fa1b9e29145b4581e9c5deaca47a3eaf7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "00f06572_6adb3505",
+        "filename": "src/libANGLE/renderer/d3d/HLSLCompiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-07T22:04:19Z",
+      "side": 1,
+      "message": "OK, that\u0027s fair. Updated.",
+      "parentUuid": "c4764d4e_2e1cd719",
+      "revId": "fb8aa06fa1b9e29145b4581e9c5deaca47a3eaf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
