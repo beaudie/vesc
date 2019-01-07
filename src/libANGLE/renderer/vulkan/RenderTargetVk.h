@@ -28,6 +28,9 @@ class RecordableGraphResource;
 class RenderPassDesc;
 }  // namespace vk
 
+class ContextVk;
+class TextureVk;
+
 // This is a very light-weight class that does not own to the resources it points to.
 // It's meant only to copy across some information from a FramebufferAttachment to the
 // business rendering logic. It stores Images and ImageViews by pointer for performance.
@@ -68,12 +71,19 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     // RenderTargetVk pointer.
     void updateSwapchainImage(vk::ImageHelper *image, vk::ImageView *imageView);
 
+    void setOwner(TextureVk *owner) { mOwner = owner; }
+    angle::Result ensureImageInitialized(ContextVk *contextVk);
+
   private:
     vk::ImageHelper *mImage;
     // Note that the draw and read image views are the same, given the requirements of a render
     // target.
     vk::ImageView *mImageView;
     size_t mLayerIndex;
+
+    // If owned by the texture, this will be non-nullptr, and is used to ensure texture changes
+    // are flushed.
+    TextureVk *mOwner;
 };
 
 }  // namespace rx

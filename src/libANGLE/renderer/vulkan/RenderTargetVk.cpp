@@ -10,13 +10,14 @@
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
 
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
+#include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 namespace rx
 {
 RenderTargetVk::RenderTargetVk(vk::ImageHelper *image, vk::ImageView *imageView, size_t layerIndex)
-    : mImage(image), mImageView(imageView), mLayerIndex(layerIndex)
+    : mImage(image), mImageView(imageView), mLayerIndex(layerIndex), mOwner(nullptr)
 {}
 
 RenderTargetVk::~RenderTargetVk() {}
@@ -131,6 +132,15 @@ vk::ImageHelper *RenderTargetVk::getImageForWrite(
     ASSERT(mImage && mImage->valid());
     mImage->addWriteDependency(writingResource);
     return mImage;
+}
+
+angle::Result RenderTargetVk::ensureImageInitialized(ContextVk *contextVk)
+{
+    if (mOwner)
+    {
+        return mOwner->ensureImageInitialized(contextVk);
+    }
+    return angle::Result::Continue;
 }
 
 }  // namespace rx
