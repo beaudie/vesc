@@ -16,6 +16,24 @@
       "revId": "fb8aa06fa1b9e29145b4581e9c5deaca47a3eaf7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4247bcc9_3bfb4397",
+        "filename": "src/libANGLE/renderer/d3d/HLSLCompiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-07T21:02:54Z",
+      "side": 1,
+      "message": "ERR() generates a stream class that logs the message on its destructor. It\u0027s a bit non-obvious. I just tried it and it logged correctly on Clang.\n\nSee common/debug.h+cpp for reference.\n\nhttps://cs.chromium.org/chromium/src/third_party/angle/src/common/debug.cpp?sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d141",
+      "parentUuid": "56b133f1_67856071",
+      "revId": "fb8aa06fa1b9e29145b4581e9c5deaca47a3eaf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
