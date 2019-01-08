@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "30159363_28216f05",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-08T07:49:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecf325c5_31956e50",
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "77a1e8d4_18eacfea",
         "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
         "patchSetId": 27
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "4157ac5a_3a70402b",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-08T07:49:44Z",
+      "side": 1,
+      "message": "This is just the stub implementation of a virtual function. The subclasses, DisplayAndroid and DisplayOzone override it respectively. That\u0027s to say worker contexts are already available on  both Android and Ozone.",
+      "parentUuid": "77a1e8d4_18eacfea",
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b3d85cd_596fb765",
         "filename": "src/libANGLE/renderer/gl/glx/DisplayGLX.cpp",
         "patchSetId": 27
@@ -47,6 +83,30 @@
       "writtenOn": "2019-01-07T23:44:31Z",
       "side": 1,
       "message": "Is it possible to impose a limit here on the number of pbuffers we allocate? It seems to me that on a highly multi-core machine, the C++ standard library might return a large number, which would result in allocating a lot of pbuffers.\n\nThe AsyncWorkerPool can enforce a maximum number of threads. Is it possible to limit the number of pbuffers allocated to that maximum? Or is this difficult because the maximum can change at run time?\n\nIf it\u0027s complicated, then is that because we\u0027re using the std::async primitives to implement this thread pool? After reading through this code, it seems to me that there is a mismatch between how std::async works and how OpenGL works. std::async / future picks a random thread to run the task on, while OpenGL needs contexts assigned per-thread. I wonder whether changing AsyncWorkerPool so that it has guaranteed dedicated threads would help. But that can be a future discussion.",
+      "range": {
+        "startLine": 292,
+        "startChar": 37,
+        "endLine": 292,
+        "endChar": 70
+      },
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75468567_2c1873a3",
+        "filename": "src/libANGLE/renderer/gl/glx/DisplayGLX.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-08T07:49:44Z",
+      "side": 1,
+      "message": "AsyncWorkerPool by default sets its maximum to std::thread::hardware_concurrency(). To match it, I simply went same way here. As you mentioned, this maximum can change at run time. Moreover different contexts may have different maximums. It\u0027s a bit hard to exactly match them at run time. Current implementation of AsyncWorkerPool uses std::async. The drawback is that we have no chance to control the lifetime of threads, and the assignment to tasks. Your suggestion is a good direction for optimizing it in future. For now, I simply add another limitation, 16 pbuffers at most. I think it\u0027s enough for most cases.",
+      "parentUuid": "9b3d85cd_596fb765",
       "range": {
         "startLine": 292,
         "startChar": 37,
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "e780a92d_1a1f30c5",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-08T07:49:44Z",
+      "side": 1,
+      "message": "Thanks for catching this.",
+      "parentUuid": "ab2a3adf_7ed37f3d",
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cf20e54a_b1f425a3",
         "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
         "patchSetId": 27
@@ -90,6 +168,24 @@
       "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f79b630e_3acb8a7f",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-08T07:49:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf20e54a_b1f425a3",
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -113,6 +209,30 @@
       "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13ebc36a_c358c3e0",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 1917,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-08T07:49:44Z",
+      "side": 1,
+      "message": "For Macos, most changes in this CL, except those in DisplayCGL, have been verified by other GL platforms. Having examined DisplayCGL carefully, I failed to find anything that can link to this bug.",
+      "parentUuid": "2af8907f_6b302ff1",
+      "range": {
+        "startLine": 1917,
+        "startChar": 23,
+        "endLine": 1917,
+        "endChar": 33
+      },
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
