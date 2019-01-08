@@ -859,6 +859,15 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk,
             ANGLE_TRY(textureVk->ensureImageInitialized(contextVk));
             vk::ImageHelper &image = textureVk->getImage();
 
+            // TODO: bug: Missing layout transition doesn't cause validation error. Another
+            // repro can be to keep this code enabled, but transition to a completely nonesense
+            // layout, like transfer dest.
+            if (image.getCurrentLayout() != VK_IMAGE_LAYOUT_GENERAL &&
+                image.getCurrentLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+            {
+                fprintf(stderr, "Image is in the wrong layout %d\n", image.getCurrentLayout());
+            }
+#if 0
             // Ensure the image is in read-only layout
             if (image.getCurrentLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
             {
@@ -870,6 +879,7 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk,
                     VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
                     srcLayoutChange);
             }
+#endif
 
             image.addReadDependency(framebuffer);
 
