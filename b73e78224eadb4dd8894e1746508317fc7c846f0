@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "8d4d8a16_a89172c8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-08T19:06:50Z",
+      "side": 1,
+      "message": "Looks like we\u0027re good :)",
+      "parentUuid": "f8ae49af_f8cb1f40",
+      "range": {
+        "startLine": 389,
+        "startChar": 4,
+        "endLine": 389,
+        "endChar": 33
+      },
+      "revId": "b73e78224eadb4dd8894e1746508317fc7c846f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ebb9118b_24cc8349",
         "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
         "patchSetId": 5
@@ -179,6 +203,30 @@
       "side": 1,
       "message": "Sure. :testing::Combine is supposed to do this. But we might have to have a different way of representing test parameters, not sure.\n\nhttps://github.com/google/googletest/blob/master/googletest/docs/advanced.md#how-to-write-value-parameterized-tests",
       "parentUuid": "291ed697_02d531f7",
+      "range": {
+        "startLine": 747,
+        "startChar": 0,
+        "endLine": 752,
+        "endChar": 31
+      },
+      "revId": "b73e78224eadb4dd8894e1746508317fc7c846f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a465d5a_f81e04ea",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-08T19:06:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "945a541e_cf09f3ee",
       "range": {
         "startLine": 747,
         "startChar": 0,
