@@ -410,6 +410,30 @@
     },
     {
       "key": {
+        "uuid": "21a35aca_298c7f78",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-08T17:24:45Z",
+      "side": 1,
+      "message": "If dynamic allocations and virtual calls are a concern, perhaps C++ was a wrong choice of language for this project.",
+      "parentUuid": "5201d5e1_d4a0d138",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 10
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cf3de030_6c8ff3b0",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 6
