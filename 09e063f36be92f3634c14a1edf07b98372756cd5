@@ -434,6 +434,30 @@
     },
     {
       "key": {
+        "uuid": "2a1db218_40bc307f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T17:51:23Z",
+      "side": 1,
+      "message": "Didn\u0027t mean to imply the dynamic allocation and virtual calls are a problem in general. This function is on the hot path of TexSubImage updates and ideally we would not do any dynamic allocation. A virtual call might not be a big deal but you can\u0027t do virtual without dynamic allocation here AFAIK.",
+      "parentUuid": "21a35aca_298c7f78",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 10
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cf3de030_6c8ff3b0",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 6
