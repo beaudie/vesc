@@ -740,6 +740,30 @@
     },
     {
       "key": {
+        "uuid": "9838d92f_a4c8a55c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-08T18:09:58Z",
+      "side": 1,
+      "message": "I don\u0027t love \"fromBuffer\". I like it when these things are hidden in vtable.\nMaking it possible to change the value of \"fromBuffer\" without making the corresponding change in the union contents is a design flaw in my view.\n\nSo, if you mean that std::vector underlying storage grows with some (x2) algorithm, merging together several allocations, the drawback is that you have to copy the contents of this storage. Until performance of the two approaches is compared with a benchmark, I\u0027m not convinced that it is faster than copying pointers and allocating / deleting the objects.\nIf a benchmark does show that dynamic allocation is a performance issue, this can be mitigated via a pool of these objects.\nThat\u0027s my personal approach to software engineering. If you think that benchmark and pool is too much of a hassle, feel free to keep your solution, I don\u0027t really mind.",
+      "parentUuid": "673e99b9_6493553b",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 10
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cf3de030_6c8ff3b0",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 6
