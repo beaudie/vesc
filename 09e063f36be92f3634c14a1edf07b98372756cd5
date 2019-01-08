@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0cc8f9b4_c80e69c2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T01:19:20Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "c08e0c3e_a5efec24",
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "371f7841_a904eecb",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
@@ -59,6 +77,237 @@
         "startChar": 0,
         "endLine": 49,
         "endChar": 0
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30b58fc4_2d05f495",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T01:19:20Z",
+      "side": 1,
+      "message": "nit: can you convert this into if (thing) return? The ?: pattern is a bit terse. I don\u0027t think the code gen will be any different.",
+      "parentUuid": "58fa05fe_c38a978d",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 0
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99c21d11_9839748c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T01:19:20Z",
+      "side": 1,
+      "message": "10 points to Gryffindor if you kill this lambda.",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 87,
+        "endChar": 22
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d971189_ecf291a5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T01:19:20Z",
+      "side": 1,
+      "message": "nit: redundant with {}",
+      "range": {
+        "startLine": 264,
+        "startChar": 0,
+        "endLine": 265,
+        "endChar": 50
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03881e88_2ac704cf",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T01:19:20Z",
+      "side": 1,
+      "message": "nit: same",
+      "range": {
+        "startLine": 271,
+        "startChar": 0,
+        "endLine": 271,
+        "endChar": 68
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9f7498e_f046e282",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T01:19:20Z",
+      "side": 1,
+      "message": "this looks fishy. You already have a command buffer, you probably only want to be using a single command buffer here. even if you want to record the layout change in \"update.image\", I think you\u0027re better off recording it in \"commandbuffer\". As long as \"image\" is only used once you don\u0027t need to add it to the graph.",
+      "range": {
+        "startLine": 341,
+        "startChar": 11,
+        "endLine": 341,
+        "endChar": 81
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3833998_8f3f4ee2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T01:19:20Z",
+      "side": 1,
+      "message": "nit: SafeDelete",
+      "range": {
+        "startLine": 488,
+        "startChar": 8,
+        "endLine": 489,
+        "endChar": 24
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8142c444_71cce93a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T01:19:20Z",
+      "side": 1,
+      "message": "UNREACHABLE() might do the same thing fyi (would have to test). Also it would be useful to know if the available set of compute formats break on the set of GLES 2.0 formats. Maybe your enhanced test will be good enough to check. (Could add an ASSERT into the if above for testing.)",
+      "range": {
+        "startLine": 702,
+        "startChar": 4,
+        "endLine": 702,
+        "endChar": 18
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0067df1_d9b5d786",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T01:19:20Z",
+      "side": 1,
+      "message": "minor thing, but you\u0027re calling if (stageCopy) four times here. It might be more efficient to do the check one time, and use inlined helpers to manage code repetition. but we can optimize this later as copySubImage might not be a common call. maybe leave a note/comment?",
+      "range": {
+        "startLine": 821,
+        "startChar": 4,
+        "endLine": 821,
+        "endChar": 18
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba0461e5_1d21227d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T01:19:20Z",
+      "side": 1,
+      "message": "I actually have a function ImageHelper::init2DStaging. Can we make that work?",
+      "range": {
+        "startLine": 826,
+        "startChar": 32,
+        "endLine": 826,
+        "endChar": 36
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "241261f8_81814995",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T01:19:20Z",
+      "side": 1,
+      "message": "const",
+      "range": {
+        "startLine": 86,
+        "startChar": 40,
+        "endLine": 86,
+        "endChar": 54
       },
       "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -134,6 +383,99 @@
       "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5201d5e1_d4a0d138",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T01:19:20Z",
+      "side": 1,
+      "message": "Definitely not inheritance because of dynamic allocations and virtual calls. I can see that unions might save some memory storage. I didn\u0027t see anything in the Google or Chromium style guides that prohibit unions. But it is a bit ugly. If we don\u0027t like the union I would just store all the data instead of unioning it. Maybe let\u0027s start with that design and optimize it later when we\u0027re analyzing a perf test?",
+      "parentUuid": "aa9dfe2f_52b15869",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 10
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf3de030_6c8ff3b0",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T01:19:20Z",
+      "side": 1,
+      "message": "this looks fishy to me. You might need a barrier even if the current layout is correct. But I\u0027m not sure.",
+      "range": {
+        "startLine": 697,
+        "startChar": 0,
+        "endLine": 706,
+        "endChar": 5
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c540011_ad2d9c3c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T01:19:20Z",
+      "side": 1,
+      "message": "can you remove this new parameter if you use init2DStaging?",
+      "range": {
+        "startLine": 468,
+        "startChar": 40,
+        "endLine": 469,
+        "endChar": 42
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9457993a_4b5326c3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T01:19:20Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 488,
+        "startChar": 18,
+        "endLine": 488,
+        "endChar": 31
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
