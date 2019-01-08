@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd9675c3_f99c7093",
+        "filename": "src/libANGLE/renderer/gl/wgl/ContextWGL.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-08T16:15:01Z",
+      "side": 0,
+      "message": "Is this necessary? It adds casts to save one member.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 43
+      },
+      "revId": "0c6672158c77d0db02fa63955366a4b2807a0e74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

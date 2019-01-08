@@ -1,0 +1,251 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec8d820d_63fff776",
+        "filename": "src/libANGLE/renderer/ShaderImpl.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-08T16:15:01Z",
+      "side": 1,
+      "message": "A comment explaining what this function is used for is needed.",
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "deca695b_9d551511",
+        "filename": "src/libANGLE/renderer/ShaderImpl.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-08T16:15:01Z",
+      "side": 1,
+      "message": "I think compileAsync would be better.",
+      "range": {
+        "startLine": 31,
+        "startChar": 17,
+        "endLine": 31,
+        "endChar": 24
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "847d0945_d9b6caec",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-08T16:15:01Z",
+      "side": 1,
+      "message": "Make this a member of RendererGL, calling hardware_concurrency() to initialize a static is probably not thread safe and will be called at an unknown time during startup.",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 98
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2302f13f_7a61c32c",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-08T16:15:01Z",
+      "side": 1,
+      "message": "I don\u0027t think we need to pass this info log string around.  Just print errors to ERR(), they will end up in Chrome\u0027s about:gpu console.",
+      "range": {
+        "startLine": 58,
+        "startChar": 29,
+        "endLine": 58,
+        "endChar": 49
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8560fe64_5e56dbc7",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-08T16:15:01Z",
+      "side": 1,
+      "message": "I would like to flip the architecture you have a bit.  Instead of the DisplayGL types inheriting from WorkerContextFactory, add the pure virtual createWorkerContext method to RendererGL.\n\nForcing createWorkerContext to be generic doesn\u0027t allow for passing parameters to the display for the creation of the worker context.\n\nFor example: RendererWGL already has a DisplayWGL pointer and HGLRC, to create a worker context, it just has to ask its DisplayWGL to create a new context that shares with its HGLRC, it can also store the attributes needed.",
+      "range": {
+        "startLine": 65,
+        "startChar": 6,
+        "endLine": 65,
+        "endChar": 27
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f50d6a3c_14ff310a",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-08T16:15:01Z",
+      "side": 1,
+      "message": "Let\u0027s wrap this in an RAII object to bind and unbind, something like:\n\n    class ScopedWorkerContextGL\n    {\n        public:\n            ScopedWorkerContextGL(RendererGL* renderer)\n                : mRenderer(renderer)\n            {\n                mValid \u003d mRenderer-\u003ebindWorkerContext();\n            }\n\n            ~ScopedWorkerContextGL()\n            {\n                if (mValid)\n                {\n                    mRenderer-\u003eunbindWorkerContext();\n                }\n            }\n\n            operator bool() const\n            {\n                return mValid;\n            }\n\n        private:\n            RendererGL* mRenderer \u003d nullptr;\n            bool mValid \u003d false;\n    };",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 31
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3765ecb_5aeadeb4",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-08T16:15:01Z",
+      "side": 1,
+      "message": "nit: mWorkerContextMutex",
+      "range": {
+        "startLine": 220,
+        "startChar": 15,
+        "endLine": 220,
+        "endChar": 21
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18cd2ac8_e086ad80",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-08T16:15:01Z",
+      "side": 1,
+      "message": "Could you explain why?  Can\u0027t we create a new context that shares with the renderer\u0027s one when needed?",
+      "range": {
+        "startLine": 877,
+        "startChar": 50,
+        "endLine": 878,
+        "endChar": 45
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "018d9b86_5e723f80",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-08T16:15:01Z",
+      "side": 1,
+      "message": "With pbuffers this shouldn\u0027t be needed.",
+      "range": {
+        "startLine": 920,
+        "startChar": 0,
+        "endLine": 921,
+        "endChar": 35
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34d17a95_d1664e2d",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-08T16:15:01Z",
+      "side": 1,
+      "message": "Add a \"HGLRC shareContext\" parameter to these functions, they can stay const.",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 99,
+        "endChar": 76
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3df52f1b_cbf3d697",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-08T16:15:01Z",
+      "side": 1,
+      "message": "I think pbuffers would be preferred, all drivers should support them.",
+      "range": {
+        "startLine": 146,
+        "startChar": 16,
+        "endLine": 146,
+        "endChar": 20
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
