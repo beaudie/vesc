@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad7c7be_3d3a9354",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T18:46:20Z",
+      "side": 1,
+      "message": "maybe make this a helper? I guess this more applies to the prior patch.",
+      "range": {
+        "startLine": 702,
+        "startChar": 4,
+        "endLine": 703,
+        "endChar": 89
+      },
+      "revId": "e34da7a378a4733b78b3d824f7721ef7e50dcf9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

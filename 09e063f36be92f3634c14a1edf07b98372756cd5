@@ -197,6 +197,30 @@
     },
     {
       "key": {
+        "uuid": "e885ba17_2a6886f9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T18:46:20Z",
+      "side": 1,
+      "message": "Just seems a bit messy. I\u0027m more thinking of the fact you\u0027re calling if(remove) inside a removeIf lambda. I\u0027d rather just make it a loop. But don\u0027t want to block the review on it.\n\nMy experience has been perf is always slightly worse with lambadas but I haven\u0027t fully investigated or proved that assertion.",
+      "parentUuid": "307aa6b2_53011335",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 87,
+        "endChar": 22
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d971189_ecf291a5",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
@@ -241,6 +265,30 @@
       "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a5a5ca1_b5d95f28",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T18:46:20Z",
+      "side": 1,
+      "message": "Nope! I forgot. Either way it\u0027s not big deal really. :)",
+      "parentUuid": "f4597123_ead43383",
+      "range": {
+        "startLine": 264,
+        "startChar": 0,
+        "endLine": 265,
+        "endChar": 50
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -338,6 +386,30 @@
     },
     {
       "key": {
+        "uuid": "e9d355b8_fa012bac",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T18:46:20Z",
+      "side": 1,
+      "message": "True about the graph.",
+      "parentUuid": "99a88cd3_d93e10b7",
+      "range": {
+        "startLine": 341,
+        "startChar": 11,
+        "endLine": 341,
+        "endChar": 81
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c3833998_8f3f4ee2",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
@@ -429,6 +501,30 @@
       "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00ee9d60_4f54640e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T18:46:20Z",
+      "side": 1,
+      "message": "Sure.",
+      "parentUuid": "ee017d17_2b642798",
+      "range": {
+        "startLine": 702,
+        "startChar": 4,
+        "endLine": 702,
+        "endChar": 18
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -764,6 +860,30 @@
     },
     {
       "key": {
+        "uuid": "11020995_f056c96c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T18:46:20Z",
+      "side": 1,
+      "message": "We can investigate with the TexSubImage benchmark. We haven\u0027t tried to optimize this at all. I\u0027m not sure how sensitive it is right now. But dynamic allocation is slow. You don\u0027t have to take my word for that. We\u0027ve had to fix perf regression where we accidentally allocated heap memory.\n\nMaybe give the nameless union a type and name and call it a day?\n\nFYI that benchmark is on the road map after we get state changes + draws fast. Along with buffer updates.",
+      "parentUuid": "9838d92f_a4c8a55c",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 10
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cf3de030_6c8ff3b0",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 6
@@ -811,6 +931,30 @@
     },
     {
       "key": {
+        "uuid": "9ac2e4d4_4efdc98f",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T18:46:20Z",
+      "side": 1,
+      "message": "Okay. I guess if it is a read-only format we know *AR hazards aren\u0027t as scary as *AW hazards. Looking forward to the future barrier improvements. Hopefully we have perf tests that can show benefits by then.",
+      "parentUuid": "70a24e88_ccdbf00e",
+      "range": {
+        "startLine": 697,
+        "startChar": 0,
+        "endLine": 706,
+        "endChar": 5
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c540011_ad2d9c3c",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 6
@@ -846,6 +990,30 @@
       "side": 1,
       "message": "`init2DStaging` is customized for CPU-interaction. That\u0027s apparent from the linear tiling, host-visible memory etc. My use-case needs a device-local image in optimal tiling.\n\nAlso, wouldn\u0027t we need this for GLES3 anyway?",
       "parentUuid": "0c540011_ad2d9c3c",
+      "range": {
+        "startLine": 468,
+        "startChar": 40,
+        "endLine": 469,
+        "endChar": 42
+      },
+      "revId": "09e063f36be92f3634c14a1edf07b98372756cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a16ae943_c6f88b9a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-08T18:46:20Z",
+      "side": 1,
+      "message": "We don\u0027t use init2DStaging for anything else right now. I\u0027d say repurpose init2DStaging to what you need. We can generalize it later for ES 3.0 and linear tiling/host-visible (if we even ever need those).",
+      "parentUuid": "fe4b8da7_535cd977",
       "range": {
         "startLine": 468,
         "startChar": 40,
