@@ -645,9 +645,7 @@ angle::Result DynamicQueryPool::allocateNewPool(Context *context)
 }
 
 // QueryHelper implementation
-QueryHelper::QueryHelper()
-    : QueryGraphResource(), mDynamicQueryPool(nullptr), mQueryPoolIndex(0), mQuery(0)
-{}
+QueryHelper::QueryHelper() : mDynamicQueryPool(nullptr), mQueryPoolIndex(0), mQuery(0) {}
 
 QueryHelper::~QueryHelper() {}
 
@@ -665,6 +663,34 @@ void QueryHelper::deinit()
     mDynamicQueryPool = nullptr;
     mQueryPoolIndex   = 0;
     mQuery            = 0;
+}
+
+void QueryHelper::beginQuery(vk::Context *context)
+{
+    RendererVk *renderer = context->getRenderer();
+    renderer->getCommandGraph()->beginQuery(getQueryPool(), getQuery());
+    mMostRecentSerial = renderer->getCurrentQueueSerial();
+}
+
+void QueryHelper::endQuery(vk::Context *context)
+{
+    RendererVk *renderer = context->getRenderer();
+    renderer->getCommandGraph()->endQuery(getQueryPool(), getQuery());
+    mMostRecentSerial = renderer->getCurrentQueueSerial();
+}
+
+void QueryHelper::writeTimestamp(vk::Context *context)
+{
+    RendererVk *renderer = context->getRenderer();
+    renderer->getCommandGraph()->writeTimestamp(getQueryPool(), getQuery());
+    mMostRecentSerial = renderer->getCurrentQueueSerial();
+}
+
+bool QueryHelper::hasPendingWork(RendererVk *renderer)
+{
+    // If the renderer has a queue serial higher than the stored one, the command buffers that
+    // recorded this query have already been submitted, so there is no pending work.
+    return mMostRecentSerial == renderer->getCurrentQueueSerial();
 }
 
 // DynamicSemaphorePool implementation
