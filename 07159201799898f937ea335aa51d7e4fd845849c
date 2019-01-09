@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ea7dd23_5d686e6c",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-09T16:22:18Z",
+      "side": 1,
+      "message": "I would put this OnUpload. There\u0027s no point in complaining about formatting if the commit is temporary or an intermediate step.\n\nIn fact, I personally prefer to see all the complaints only OnUpload, but I could live with the other two being here.\n\nBy the way, does this complain and fail after you type the commit message or before? If it\u0027s after, what happens to the commit message? It would be a shame if you lost all the description you typed because you forgot to put the Bug line.",
+      "range": {
+        "startLine": 93,
+        "startChar": 4,
+        "endLine": 94,
+        "endChar": 73
+      },
+      "revId": "07159201799898f937ea335aa51d7e4fd845849c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
