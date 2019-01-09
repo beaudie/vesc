@@ -22,6 +22,30 @@
       "revId": "07159201799898f937ea335aa51d7e4fd845849c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a174e66_e77e0b00",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T16:47:25Z",
+      "side": 1,
+      "message": "These checks don\u0027t actually fire on \u0027git commit\u0027. There\u0027s a special command \u0027git cl commit\u0027 that makes them fire. But the reason I put them here is because \u0027git cl presubmit\u0027 only runs the commit checks. And that one is useful for testing presubmit warnings locally. So this block shouldn\u0027t affect your usual workflow.\n\nIf it fails it will generate a warning but I don\u0027t think it prevents you from doing anything.",
+      "parentUuid": "0ea7dd23_5d686e6c",
+      "range": {
+        "startLine": 93,
+        "startChar": 4,
+        "endLine": 94,
+        "endChar": 73
+      },
+      "revId": "07159201799898f937ea335aa51d7e4fd845849c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
