@@ -856,6 +856,23 @@ class BindingPointer final : angle::NonCopyable
   private:
     RefCounted<T> *mRefCounted;
 };
+
+// List of function pointers for used extensions.
+class ExtensionDispatchTable
+{
+  public:
+    // VK_EXT_debug_utils
+    PFN_vkCreateDebugUtilsMessengerEXT createDebugUtilsMessengerEXT   = nullptr;
+    PFN_vkDestroyDebugUtilsMessengerEXT destroyDebugUtilsMessengerEXT = nullptr;
+
+    // VK_EXT_debug_report
+    PFN_vkCreateDebugReportCallbackEXT createDebugReportCallbackEXT   = nullptr;
+    PFN_vkDestroyDebugReportCallbackEXT destroyDebugReportCallbackEXT = nullptr;
+
+    // Lazily load entry points for each extension as necessary.
+    void initDebugUtils(VkInstance instance);
+    void initDebugReport(VkInstance instance);
+};
 }  // namespace vk
 
 namespace gl_vk
