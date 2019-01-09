@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "b37cacd4_bcd1fd31",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T21:04:32Z",
+      "side": 1,
+      "message": "redundant, this is the \"else\" condition",
+      "range": {
+        "startLine": 379,
+        "startChar": 8,
+        "endLine": 379,
+        "endChar": 32
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70adbd45_11c153f9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T21:04:32Z",
+      "side": 1,
+      "message": "Looks like this is the only place that uses descPtr output of getGraphicsPipeline()/getPipeline(). Wouldn\u0027t it be better to pass oldPipeline to getGraphicsPipeline() instead, and get it updated internally?",
+      "range": {
+        "startLine": 392,
+        "startChar": 68,
+        "endLine": 392,
+        "endChar": 75
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4c970f2b_f8040513",
         "filename": "src/libANGLE/renderer/vulkan/README.md",
         "patchSetId": 23
@@ -25,6 +71,259 @@
     },
     {
       "key": {
+        "uuid": "8e64136c_0f96eeae",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T21:04:32Z",
+      "side": 1,
+      "message": "Oh, we are keeping both PipelineAndSerial and PipelineHelper ...\nAny plans for PipelineHelper to handle compute?",
+      "range": {
+        "startLine": 313,
+        "startChar": 12,
+        "endLine": 313,
+        "endChar": 29
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d04dab1_e5673934",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T21:04:32Z",
+      "side": 1,
+      "message": "Is this the same as kGraphicsPipelineDirtyBitBytes? Can you have kGraphicsPipelineDirtyBitBytesShift \u003d 2 and use \u003e\u003e in the header?",
+      "range": {
+        "startLine": 286,
+        "startChar": 17,
+        "endLine": 286,
+        "endChar": 41
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33b9e1bc_32482842",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T21:04:32Z",
+      "side": 1,
+      "message": "kGraphicsPipelineDirtyBitBytesShift + 3",
+      "range": {
+        "startLine": 289,
+        "startChar": 39,
+        "endLine": 289,
+        "endChar": 40
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7bdaf88_4ca5dd3d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T21:04:32Z",
+      "side": 1,
+      "message": "Looks like you only use it in Transition-\u003eset, so maybe just name this ANGLE_SET_TRANSITION_BIT and call Transition-\u003eset inside, so it will be similar to ANGLE_SET_INDEXED_TRANSITION_BIT?",
+      "range": {
+        "startLine": 295,
+        "startChar": 8,
+        "endLine": 295,
+        "endChar": 32
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "517ab20c_73bcac79",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T21:04:32Z",
+      "side": 1,
+      "message": "Would it be possible to compute this with something like sizeof(GraphicsPipelineDesc.Member.Field[0])?",
+      "range": {
+        "startLine": 301,
+        "startChar": 75,
+        "endLine": 301,
+        "endChar": 83
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eab3504b_814baf87",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T21:04:32Z",
+      "side": 1,
+      "message": "uint8_t?",
+      "range": {
+        "startLine": 717,
+        "startChar": 41,
+        "endLine": 717,
+        "endChar": 49
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38d2054a_67bf83bb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T21:04:32Z",
+      "side": 1,
+      "message": "uint16_t?",
+      "range": {
+        "startLine": 733,
+        "startChar": 20,
+        "endLine": 733,
+        "endChar": 28
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2ad100e_f32241a1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T21:04:32Z",
+      "side": 1,
+      "message": "So, since \"primitive\" is 16 bits and, as I understand, 1 bit in transition bits represents 4 bytes, i.e. 32 bits, does this mean this bit is shared by \"primitive\" and something else?",
+      "range": {
+        "startLine": 735,
+        "startChar": 20,
+        "endLine": 735,
+        "endChar": 93
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bad968a_79ba69eb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T21:04:32Z",
+      "side": 1,
+      "message": "Could you comment why you don\u0027t update transition here (and in setRenderPassDesc)?",
+      "range": {
+        "startLine": 827,
+        "startChar": 27,
+        "endLine": 827,
+        "endChar": 44
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb0df14c_cb5bde42",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T21:04:32Z",
+      "side": 1,
+      "message": "Does it make sense to call setColorWriteMask from here to avoid code duplication?\nYou\u0027d have to iterate twice over colorIndex, but maybe it\u0027s not a big deal?\nOr you could just update transition if it\u0027s not null and then you don\u0027t need setColorWriteMask?",
+      "range": {
+        "startLine": 840,
+        "startChar": 27,
+        "endLine": 840,
+        "endChar": 47
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6418e4d_b3cb5ab7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T21:04:32Z",
+      "side": 1,
+      "message": "setRenderPassDesc?",
+      "range": {
+        "startLine": 988,
+        "startChar": 4,
+        "endLine": 988,
+        "endChar": 36
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "059c2352_23831d2e",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 23
@@ -36,6 +335,29 @@
       "writtenOn": "2019-01-07T21:54:58Z",
       "side": 1,
       "message": "Wouldn\u0027t `uint64_t` comparisons be faster?",
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39747090_fdeaf992",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T21:04:32Z",
+      "side": 1,
+      "message": "kGraphicsPipelineDirtyBitBytes?",
+      "range": {
+        "startLine": 286,
+        "startChar": 42,
+        "endLine": 286,
+        "endChar": 56
+      },
       "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
