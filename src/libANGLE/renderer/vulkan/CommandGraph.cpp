@@ -73,11 +73,45 @@ const char *GetResourceTypeName(CommandGraphResourceType resourceType,
                     UNREACHABLE();
                     return "Query";
             }
+        case CommandGraphResourceType::DebugMarker:
+            switch (function)
+            {
+                case CommandGraphNodeFunction::InsertDebugMarker:
+                    return "InsertDebugMarker";
+                case CommandGraphNodeFunction::PushDebugMarker:
+                    return "PushDebugMarker";
+                case CommandGraphNodeFunction::PopDebugMarker:
+                    return "PopDebugMarker";
+                default:
+                    UNREACHABLE();
+                    return "DebugMarker";
+            }
         default:
             UNREACHABLE();
             return "";
     }
 }
+
+void MakeDebugUtilsLabel(GLenum source, const char *marker, VkDebugUtilsLabelEXT *label)
+{
+    static constexpr float kLabelColors[6][4] = {
+        {1.0f, 0.5f, 0.5f, 1.0f},  // DEBUG_SOURCE_API
+        {0.5f, 1.0f, 0.5f, 1.0f},  // DEBUG_SOURCE_WINDOW_SYSTEM
+        {0.5f, 0.5f, 1.0f, 1.0f},  // DEBUG_SOURCE_SHADER_COMPILER
+        {0.7f, 0.7f, 0.7f, 1.0f},  // DEBUG_SOURCE_THIRD_PARTY
+        {0.5f, 0.8f, 0.9f, 1.0f},  // DEBUG_SOURCE_APPLICATION
+        {0.9f, 0.8f, 0.5f, 1.0f},  // DEBUG_SOURCE_OTHER
+    };
+
+    int colorIndex = source - GL_DEBUG_SOURCE_API;
+    ASSERT(colorIndex >= 0 && colorIndex < (int)ArraySize(kLabelColors));
+
+    label->sType      = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
+    label->pNext      = nullptr;
+    label->pLabelName = marker;
+    memcpy(label->color, kLabelColors[colorIndex], sizeof(label->color));
+}
+
 }  // anonymous namespace
 
 // CommandGraphResource implementation.
@@ -90,13 +124,6 @@ CommandGraphResource::~CommandGraphResource() = default;
 bool CommandGraphResource::isResourceInUse(RendererVk *renderer) const
 {
     return renderer->isSerialInUse(mStoredQueueSerial);
-}
-
-bool CommandGraphResource::hasPendingWork(RendererVk *renderer) const
-{
-    // If the renderer has a queue serial higher than the stored one, the command buffers recorded
-    // by this resource have already been submitted, so there is no pending work.
-    return mStoredQueueSerial == renderer->getCurrentQueueSerial();
 }
 
 Serial CommandGraphResource::getStoredQueueSerial() const
@@ -248,44 +275,6 @@ void RecordableGraphResource::onWriteImpl(CommandGraphNode *writingNode, Serial 
     mCurrentWritingNode = writingNode;
 }
 
-// QueryGraphResource implementation.
-QueryGraphResource::QueryGraphResource() : CommandGraphResource(CommandGraphResourceType::Query) {}
-
-QueryGraphResource::~QueryGraphResource() = default;
-
-void QueryGraphResource::beginQuery(Context *context,
-                                    const QueryPool *queryPool,
-                                    uint32_t queryIndex)
-{
-    startNewCommands(context->getRenderer(), CommandGraphNodeFunction::BeginQuery);
-    mCurrentWritingNode->setQueryPool(queryPool, queryIndex);
-}
-
-void QueryGraphResource::endQuery(Context *context, const QueryPool *queryPool, uint32_t queryIndex)
-{
-    startNewCommands(context->getRenderer(), CommandGraphNodeFunction::EndQuery);
-    mCurrentWritingNode->setQueryPool(queryPool, queryIndex);
-}
-
-void QueryGraphResource::writeTimestamp(Context *context,
-                                        const QueryPool *queryPool,
-                                        uint32_t queryIndex)
-{
-    startNewCommands(context->getRenderer(), CommandGraphNodeFunction::WriteTimestamp);
-    mCurrentWritingNode->setQueryPool(queryPool, queryIndex);
-}
-
-void QueryGraphResource::startNewCommands(RendererVk *renderer, CommandGraphNodeFunction function)
-{
-    CommandGraph *commandGraph = renderer->getCommandGraph();
-    CommandGraphNode *newNode  = commandGraph->allocateNode(function);
-    newNode->setDiagnosticInfo(mResourceType, reinterpret_cast<uintptr_t>(this));
-    commandGraph->setNewBarrier(newNode);
-
-    mStoredQueueSerial  = renderer->getCurrentQueueSerial();
-    mCurrentWritingNode = newNode;
-}
-
 // CommandGraphNode implementation.
 CommandGraphNode::CommandGraphNode(CommandGraphNodeFunction function)
     : mRenderPassClearValues{},
@@ -426,6 +415,14 @@ void CommandGraphNode::setQueryPool(const QueryPool *queryPool, uint32_t queryIn
     mQueryIndex = queryIndex;
 }
 
+void CommandGraphNode::setDebugMarker(GLenum source, std::string &&marker)
+{
+    ASSERT(mFunction == CommandGraphNodeFunction::InsertDebugMarker ||
+           mFunction == CommandGraphNodeFunction::PushDebugMarker);
+    mDebugMarkerSource = source;
+    mDebugMarker       = std::move(marker);
+}
+
 void CommandGraphNode::addGlobalMemoryBarrier(VkFlags srcAccess, VkFlags dstAccess)
 {
     mGlobalMemoryBarrierSrcAccess |= srcAccess;
@@ -478,6 +475,8 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
                                                 RenderPassCache *renderPassCache,
                                                 CommandBuffer *primaryCommandBuffer)
 {
+    const RendererVk::OptionalFunctions &optionalFunctions =
+        context->getRenderer()->getOptionalFunctions();
     switch (mFunction)
     {
         case CommandGraphNodeFunction::Generic:
@@ -561,6 +560,41 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
 
             break;
 
+        case CommandGraphNodeFunction::InsertDebugMarker:
+            ASSERT(!mOutsideRenderPassCommands.valid() && !mInsideRenderPassCommands.valid());
+
+            if (optionalFunctions.cmdInsertDebugUtilsLabel)
+            {
+                VkDebugUtilsLabelEXT label;
+                MakeDebugUtilsLabel(mDebugMarkerSource, mDebugMarker.c_str(), &label);
+
+                optionalFunctions.cmdInsertDebugUtilsLabel(primaryCommandBuffer->getHandle(),
+                                                           &label);
+            }
+            break;
+
+        case CommandGraphNodeFunction::PushDebugMarker:
+            ASSERT(!mOutsideRenderPassCommands.valid() && !mInsideRenderPassCommands.valid());
+
+            if (optionalFunctions.cmdBeginDebugUtilsLabel)
+            {
+                VkDebugUtilsLabelEXT label;
+                MakeDebugUtilsLabel(mDebugMarkerSource, mDebugMarker.c_str(), &label);
+
+                optionalFunctions.cmdBeginDebugUtilsLabel(primaryCommandBuffer->getHandle(),
+                                                          &label);
+            }
+            break;
+
+        case CommandGraphNodeFunction::PopDebugMarker:
+            ASSERT(!mOutsideRenderPassCommands.valid() && !mInsideRenderPassCommands.valid());
+
+            if (optionalFunctions.cmdEndDebugUtilsLabel)
+            {
+                optionalFunctions.cmdEndDebugUtilsLabel(primaryCommandBuffer->getHandle());
+            }
+            break;
+
         default:
             UNREACHABLE();
     }
@@ -602,6 +636,16 @@ CommandGraphNode *CommandGraph::allocateNode(CommandGraphNodeFunction function)
     CommandGraphNode *newCommands = new CommandGraphNode(function);
     mNodes.emplace_back(newCommands);
     return newCommands;
+}
+
+CommandGraphNode *CommandGraph::allocateBarrierNode(CommandGraphResourceType resourceType,
+                                                    CommandGraphNodeFunction function)
+{
+    CommandGraphNode *newNode = allocateNode(function);
+    newNode->setDiagnosticInfo(resourceType, 0);
+    setNewBarrier(newNode);
+
+    return newNode;
 }
 
 void CommandGraph::setNewBarrier(CommandGraphNode *newBarrier)
@@ -729,6 +773,47 @@ void CommandGraph::clear()
     mNodes.clear();
 }
 
+void CommandGraph::beginQuery(const QueryPool *queryPool, uint32_t queryIndex)
+{
+    CommandGraphNode *newNode =
+        allocateBarrierNode(CommandGraphResourceType::Query, CommandGraphNodeFunction::BeginQuery);
+    newNode->setQueryPool(queryPool, queryIndex);
+}
+
+void CommandGraph::endQuery(const QueryPool *queryPool, uint32_t queryIndex)
+{
+    CommandGraphNode *newNode =
+        allocateBarrierNode(CommandGraphResourceType::Query, CommandGraphNodeFunction::EndQuery);
+    newNode->setQueryPool(queryPool, queryIndex);
+}
+
+void CommandGraph::writeTimestamp(const QueryPool *queryPool, uint32_t queryIndex)
+{
+    CommandGraphNode *newNode = allocateBarrierNode(CommandGraphResourceType::Query,
+                                                    CommandGraphNodeFunction::WriteTimestamp);
+    newNode->setQueryPool(queryPool, queryIndex);
+}
+
+void CommandGraph::insertDebugMarker(GLenum source, std::string &&marker)
+{
+    CommandGraphNode *newNode = allocateBarrierNode(CommandGraphResourceType::DebugMarker,
+                                                    CommandGraphNodeFunction::InsertDebugMarker);
+    newNode->setDebugMarker(source, std::move(marker));
+}
+
+void CommandGraph::pushDebugMarker(GLenum source, std::string &&marker)
+{
+    CommandGraphNode *newNode = allocateBarrierNode(CommandGraphResourceType::DebugMarker,
+                                                    CommandGraphNodeFunction::PushDebugMarker);
+    newNode->setDebugMarker(source, std::move(marker));
+}
+
+void CommandGraph::popDebugMarker()
+{
+    allocateBarrierNode(CommandGraphResourceType::DebugMarker,
+                        CommandGraphNodeFunction::PopDebugMarker);
+}
+
 // Dumps the command graph into a dot file that works with graphviz.
 void CommandGraph::dumpGraphDotFile(std::ostream &out) const
 {
@@ -756,38 +841,53 @@ void CommandGraph::dumpGraphDotFile(std::ostream &out) const
 
         std::stringstream strstr;
         strstr << GetResourceTypeName(node->getResourceTypeForDiagnostics(), node->getFunction());
-        strstr << " ";
 
-        auto it = objectIDMap.find(node->getResourceIDForDiagnostics());
-        if (it != objectIDMap.end())
+        if (node->getResourceTypeForDiagnostics() == CommandGraphResourceType::DebugMarker)
         {
-            strstr << it->second;
+            // For debug markers, use the string from the debug marker itself.
+            if (node->getFunction() != CommandGraphNodeFunction::PopDebugMarker)
+            {
+                strstr << " " << node->getDebugMarker();
+            }
         }
         else
         {
-            int id = 0;
+            strstr << " ";
 
-            switch (node->getResourceTypeForDiagnostics())
+            // Otherwise assign each object an ID, so all the nodes of the same object have the same
+            // label.
+            ASSERT(node->getResourceIDForDiagnostics() != 0);
+            auto it = objectIDMap.find(node->getResourceIDForDiagnostics());
+            if (it != objectIDMap.end())
             {
-                case CommandGraphResourceType::Buffer:
-                    id = bufferIDCounter++;
-                    break;
-                case CommandGraphResourceType::Framebuffer:
-                    id = framebufferIDCounter++;
-                    break;
-                case CommandGraphResourceType::Image:
-                    id = imageIDCounter++;
-                    break;
-                case CommandGraphResourceType::Query:
-                    id = queryIDCounter++;
-                    break;
-                default:
-                    UNREACHABLE();
-                    break;
+                strstr << it->second;
             }
+            else
+            {
+                int id = 0;
 
-            objectIDMap[node->getResourceIDForDiagnostics()] = id;
-            strstr << id;
+                switch (node->getResourceTypeForDiagnostics())
+                {
+                    case CommandGraphResourceType::Buffer:
+                        id = bufferIDCounter++;
+                        break;
+                    case CommandGraphResourceType::Framebuffer:
+                        id = framebufferIDCounter++;
+                        break;
+                    case CommandGraphResourceType::Image:
+                        id = imageIDCounter++;
+                        break;
+                    case CommandGraphResourceType::Query:
+                        id = queryIDCounter++;
+                        break;
+                    default:
+                        UNREACHABLE();
+                        break;
+                }
+
+                objectIDMap[node->getResourceIDForDiagnostics()] = id;
+                strstr << id;
+            }
         }
 
         const std::string &label = strstr.str();

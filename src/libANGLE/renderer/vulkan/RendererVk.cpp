@@ -758,6 +758,19 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
         ANGLE_VK_TRY(displayVk, createDebugUtilsMessenger(mInstance, &messengerInfo, nullptr,
                                                           &mDebugUtilsMessenger));
+
+        // Get functions used to set debug markers.
+        mOptionalFunctions.cmdBeginDebugUtilsLabel =
+            reinterpret_cast<PFN_vkCmdBeginDebugUtilsLabelEXT>(
+                vkGetInstanceProcAddr(mInstance, "vkCmdBeginDebugUtilsLabelEXT"));
+        mOptionalFunctions.cmdEndDebugUtilsLabel = reinterpret_cast<PFN_vkCmdEndDebugUtilsLabelEXT>(
+            vkGetInstanceProcAddr(mInstance, "vkCmdEndDebugUtilsLabelEXT"));
+        mOptionalFunctions.cmdInsertDebugUtilsLabel =
+            reinterpret_cast<PFN_vkCmdInsertDebugUtilsLabelEXT>(
+                vkGetInstanceProcAddr(mInstance, "vkCmdInsertDebugUtilsLabelEXT"));
+        ASSERT(mOptionalFunctions.cmdBeginDebugUtilsLabel != nullptr &&
+               mOptionalFunctions.cmdEndDebugUtilsLabel != nullptr &&
+               mOptionalFunctions.cmdInsertDebugUtilsLabel != nullptr);
     }
     else if (enableDebugReport)
     {
@@ -1686,6 +1699,21 @@ bool RendererVk::hasTextureFormatFeatureBits(VkFormat format,
 bool RendererVk::hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits)
 {
     return hasFormatFeatureBits<&VkFormatProperties::bufferFeatures>(format, featureBits);
+}
+
+void RendererVk::insertDebugMarker(GLenum source, GLuint id, std::string &&marker)
+{
+    mCommandGraph.insertDebugMarker(source, std::move(marker));
+}
+
+void RendererVk::pushDebugMarker(GLenum source, GLuint id, std::string &&marker)
+{
+    mCommandGraph.pushDebugMarker(source, std::move(marker));
+}
+
+void RendererVk::popDebugMarker()
+{
+    mCommandGraph.popDebugMarker();
 }
 
 angle::Result RendererVk::synchronizeCpuGpuTime(vk::Context *context)
