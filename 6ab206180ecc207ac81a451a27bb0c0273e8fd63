@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10759f13_9bcc5ab9",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T20:07:09Z",
+      "side": 1,
+      "message": "nit: ${_layer}",
+      "range": {
+        "startLine": 1120,
+        "startChar": 68,
+        "endLine": 1120,
+        "endChar": 75
+      },
+      "revId": "6ab206180ecc207ac81a451a27bb0c0273e8fd63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e35e3275_9d4a4dad",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T20:07:09Z",
+      "side": 1,
+      "message": "Would it work to use ${angle_root} here?",
+      "range": {
+        "startLine": 1120,
+        "startChar": 11,
+        "endLine": 1120,
+        "endChar": 30
+      },
+      "revId": "6ab206180ecc207ac81a451a27bb0c0273e8fd63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6454284b_abf6c8e2",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T20:07:09Z",
+      "side": 1,
+      "message": "_library",
+      "range": {
+        "startLine": 75,
+        "startChar": 43,
+        "endLine": 75,
+        "endChar": 49
+      },
+      "revId": "6ab206180ecc207ac81a451a27bb0c0273e8fd63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69d012b1_8b9592e6",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T20:07:09Z",
+      "side": 1,
+      "message": "Would it work to use ${angle_root} here?",
+      "range": {
+        "startLine": 81,
+        "startChar": 19,
+        "endLine": 81,
+        "endChar": 38
+      },
+      "revId": "6ab206180ecc207ac81a451a27bb0c0273e8fd63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b25d5baa_6433865d",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T20:07:09Z",
+      "side": 1,
+      "message": "nit: ${_layer}",
+      "range": {
+        "startLine": 81,
+        "startChar": 76,
+        "endLine": 81,
+        "endChar": 83
+      },
+      "revId": "6ab206180ecc207ac81a451a27bb0c0273e8fd63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6191fd4_72f751bf",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T20:07:09Z",
+      "side": 1,
+      "message": "nit: ${_secondary_out_dir}",
+      "range": {
+        "startLine": 92,
+        "startChar": 15,
+        "endLine": 92,
+        "endChar": 34
+      },
+      "revId": "6ab206180ecc207ac81a451a27bb0c0273e8fd63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a591cd8_7dd9318f",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T20:07:09Z",
+      "side": 1,
+      "message": "nit: ${_secondary_out_dir}",
+      "range": {
+        "startLine": 97,
+        "startChar": 19,
+        "endLine": 97,
+        "endChar": 38
+      },
+      "revId": "6ab206180ecc207ac81a451a27bb0c0273e8fd63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22ce25ff_50d84f06",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T20:07:09Z",
+      "side": 1,
+      "message": "nit: ${angle_root}",
+      "range": {
+        "startLine": 112,
+        "startChar": 17,
+        "endLine": 112,
+        "endChar": 28
+      },
+      "revId": "6ab206180ecc207ac81a451a27bb0c0273e8fd63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f4a9b7b_3c9bb67d",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T20:07:09Z",
+      "side": 1,
+      "message": "nit: ${_layer}",
+      "range": {
+        "startLine": 112,
+        "startChar": 66,
+        "endLine": 112,
+        "endChar": 73
+      },
+      "revId": "6ab206180ecc207ac81a451a27bb0c0273e8fd63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae52e583_56e9567e",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-09T20:07:09Z",
+      "side": 1,
+      "message": "nit: ${root_out_dir}",
+      "range": {
+        "startLine": 119,
+        "startChar": 11,
+        "endLine": 119,
+        "endChar": 24
+      },
+      "revId": "6ab206180ecc207ac81a451a27bb0c0273e8fd63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
