@@ -134,13 +134,29 @@ angle::Result HLSLCompiler::ensureInitialized(d3d::Context *context)
 
         if (!mD3DCompilerModule)
         {
-            DWORD lastError = GetLastError();
-            ERR() << "LoadLibrary(" << D3DCOMPILER_DLL_A << ") failed. GetLastError=" << lastError;
-            ANGLE_TRY_HR(context, E_OUTOFMEMORY, "LoadLibrary failed to load D3D Compiler DLL.");
+            WARN() << "Failed to load HLSL compiler library. Attempting fallback..";
+
+            // Attempt to fall back to a secondary DLL.
+            const char *pathSep = strrchr(D3DCOMPILER_DLL_A, '.');
+
+            if (pathSep != nullptr)
+            {
+                char libraryName[MAX_PATH] = {0};
+                memcpy(libraryName, D3DCOMPILER_DLL_A, pathSep - D3DCOMPILER_DLL_A);
+
+                constexpr char kFallback[] = "_fallback.dll";
+                strcat(libraryName, kFallback);
+                mD3DCompilerModule = LoadLibraryA(libraryName);
+            }
         }
     }
 
-    ASSERT(mD3DCompilerModule);
+    if (!mD3DCompilerModule)
+    {
+        DWORD lastError = GetLastError();
+        ERR() << "LoadLibrary(" << D3DCOMPILER_DLL_A << ") failed. GetLastError=" << lastError;
+        ANGLE_TRY_HR(context, E_OUTOFMEMORY, "LoadLibrary failed to load D3D Compiler DLL.");
+    }
 
     mD3DCompileFunc =
         reinterpret_cast<pD3DCompile>(GetProcAddress(mD3DCompilerModule, "D3DCompile"));
