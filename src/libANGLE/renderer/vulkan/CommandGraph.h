@@ -30,6 +30,7 @@ enum class CommandGraphResourceType
     Framebuffer,
     Image,
     Query,
+    DebugMarker,
 };
 
 // Certain functionality cannot be put in secondary command buffers, so they are special-cased in
@@ -40,6 +41,9 @@ enum class CommandGraphNodeFunction
     BeginQuery,
     EndQuery,
     WriteTimestamp,
+    InsertDebugMarker,
+    PushDebugMarker,
+    PopDebugMarker,
 };
 
 // Only used internally in the command graph. Kept in the header for better inlining performance.
@@ -106,6 +110,8 @@ class CommandGraphNode final : angle::NonCopyable
     CommandGraphNodeFunction getFunction() const { return mFunction; }
 
     void setQueryPool(const QueryPool *queryPool, uint32_t queryIndex);
+    void setDebugMarker(GLenum source, std::string &&marker);
+    const std::string &getDebugMarker() const { return mDebugMarker; }
 
     void addGlobalMemoryBarrier(VkFlags srcAccess, VkFlags dstAccess);
 
@@ -129,8 +135,12 @@ class CommandGraphNode final : angle::NonCopyable
     CommandBuffer mInsideRenderPassCommands;
 
     // Special-function additional data:
+    // Queries:
     VkQueryPool mQueryPool;
     uint32_t mQueryIndex;
+    // Debug markers:
+    GLenum mDebugMarkerSource;
+    std::string mDebugMarker;
 
     // Parents are commands that must be submitted before 'this' CommandNode can be submitted.
     std::vector<CommandGraphNode *> mParents;
@@ -164,9 +174,6 @@ class CommandGraphResource : angle::NonCopyable
     // Returns true if the resource is in use by the renderer.
     bool isResourceInUse(RendererVk *renderer) const;
 
-    // Returns true if the resource has unsubmitted work pending.
-    bool hasPendingWork(RendererVk *renderer) const;
-
     // Get the current queue serial for this resource. Used to release resources, and for
     // queries, to know if the queue they are submitted on has finished execution.
     Serial getStoredQueueSerial() const;
@@ -184,7 +191,6 @@ class CommandGraphResource : angle::NonCopyable
 };
 
 // Subclass of graph resources that can record command buffers. Images/Buffers/Framebuffers.
-// Does not include Query graph resources.
 class RecordableGraphResource : public CommandGraphResource
 {
   public:
@@ -262,23 +268,6 @@ class RecordableGraphResource : public CommandGraphResource
     std::vector<CommandGraphNode *> mCurrentReadingNodes;
 };
 
-// Specialized command graph node for queries. Not for use with any exposed command buffers.
-class QueryGraphResource : public CommandGraphResource
-{
-  public:
-    ~QueryGraphResource() override;
-
-    void beginQuery(Context *context, const QueryPool *queryPool, uint32_t queryIndex);
-    void endQuery(Context *context, const QueryPool *queryPool, uint32_t queryIndex);
-    void writeTimestamp(Context *context, const QueryPool *queryPool, uint32_t queryIndex);
-
-  protected:
-    QueryGraphResource();
-
-  private:
-    void startNewCommands(RendererVk *renderer, CommandGraphNodeFunction function);
-};
-
 // Translating OpenGL commands into Vulkan and submitting them immediately loses out on some
 // of the powerful flexiblity Vulkan offers in RenderPasses. Load/Store ops can automatically
 // clear RenderPass attachments, or preserve the contents. RenderPass automatic layout transitions
@@ -320,14 +309,24 @@ class CommandGraph final : angle::NonCopyable
     bool empty() const;
     void clear();
 
-    CommandGraphNode *getLastBarrierNode(size_t *indexOut);
-
-    void setNewBarrier(CommandGraphNode *newBarrier);
+    // The following create special-function nodes that don't require a graph resource.
+    // Queries:
+    void beginQuery(const QueryPool *queryPool, uint32_t queryIndex);
+    void endQuery(const QueryPool *queryPool, uint32_t queryIndex);
+    void writeTimestamp(const QueryPool *queryPool, uint32_t queryIndex);
+    // Debug markers:
+    void insertDebugMarker(GLenum source, std::string &&marker);
+    void pushDebugMarker(GLenum source, std::string &&marker);
+    void popDebugMarker();
 
   private:
-    void dumpGraphDotFile(std::ostream &out) const;
-
+    CommandGraphNode *allocateBarrierNode(CommandGraphResourceType resourceType,
+                                          CommandGraphNodeFunction function);
+    void setNewBarrier(CommandGraphNode *newBarrier);
+    CommandGraphNode *getLastBarrierNode(size_t *indexOut);
     void addDependenciesToNextBarrier(size_t begin, size_t end, CommandGraphNode *nextBarrier);
+
+    void dumpGraphDotFile(std::ostream &out) const;
 
     std::vector<CommandGraphNode *> mNodes;
     bool mEnableGraphDiagnostics;
