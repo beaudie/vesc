@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64982e82_c3fd0d0d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T15:04:45Z",
+      "side": 1,
+      "message": "can\u0027t you just go:\n\n    for (size_t index \u003d 0; index \u003c mSubresourceUpdates.size(); )\n    {\n        auto out \u003d mSubresourceUpdates.begin() + index;\n        if (out-\u003eisUpdateToLayerLevel(layerIndex, levelIndex))\n        {\n            out-\u003erelease(renderer);\n            mSubresourceUpdates.erase(out);\n        }\n        else\n        {\n            index++;\n        }\n    }\n\n\nNote that positives are a pretty rare occurrence so it\u0027s okay if we\u0027re a bit slower. Also a result of bad app code.",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 1
+      },
+      "revId": "dcea67f3767424297a989e986667017fa2c27344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
