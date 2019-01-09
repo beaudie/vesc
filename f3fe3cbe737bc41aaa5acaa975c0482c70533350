@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a3831507_05659d8e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b37cacd4_bcd1fd31",
+      "range": {
+        "startLine": 379,
+        "startChar": 8,
+        "endLine": 379,
+        "endChar": 32
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70adbd45_11c153f9",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 23
@@ -36,6 +60,30 @@
       "writtenOn": "2019-01-09T21:04:32Z",
       "side": 1,
       "message": "Looks like this is the only place that uses descPtr output of getGraphicsPipeline()/getPipeline(). Wouldn\u0027t it be better to pass oldPipeline to getGraphicsPipeline() instead, and get it updated internally?",
+      "range": {
+        "startLine": 392,
+        "startChar": 68,
+        "endLine": 392,
+        "endChar": 75
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "082f028b_0fbc38c8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "I\u0027d have to pass mGraphicsPipelineTransition as well. So I\u0027d be passing two new arguments. WDYT? I agree it\u0027s a bit annoying to have the descPtr return value. But I think it\u0027s nice to have the transition stuff encapsulated in ContextVk. The other thing I was considering is duplicating the desc inside the transition. But that would use an extra 248 bytes per transition.",
+      "parentUuid": "70adbd45_11c153f9",
       "range": {
         "startLine": 392,
         "startChar": 68,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "35e2568c_451c5329",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c970f2b_f8040513",
+      "range": {
+        "startLine": 32,
+        "startChar": 64,
+        "endLine": 32,
+        "endChar": 66
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e64136c_0f96eeae",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 23
@@ -91,6 +163,30 @@
       "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc13b07e_24b47b33",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "Yeah we could refactor the code to use PipelineHelper for compute. Only the cost of one additional empty vector. I left comment in vk_helpers.h.",
+      "parentUuid": "8e64136c_0f96eeae",
+      "range": {
+        "startLine": 313,
+        "startChar": 12,
+        "endLine": 313,
+        "endChar": 29
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "5b66762b_0cbce3ff",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "Updated. I don\u0027t see where we divide in the header.",
+      "parentUuid": "1d04dab1_e5673934",
+      "range": {
+        "startLine": 286,
+        "startChar": 17,
+        "endLine": 286,
+        "endChar": 41
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33b9e1bc_32482842",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 23
@@ -137,6 +257,30 @@
       "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f596b5b1_119a33b8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "Updated.",
+      "parentUuid": "33b9e1bc_32482842",
+      "range": {
+        "startLine": 289,
+        "startChar": 39,
+        "endLine": 289,
+        "endChar": 40
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "f832f4eb_db5a3887",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "Did the opposite and made SET_INDEXED into GET_INDEXED. I used to have both SETS but I like making as little code in macros as possible.",
+      "parentUuid": "b7bdaf88_4ca5dd3d",
+      "range": {
+        "startLine": 295,
+        "startChar": 8,
+        "endLine": 295,
+        "endChar": 32
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "517ab20c_73bcac79",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 23
@@ -183,6 +351,30 @@
       "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5afca100_25e68a5e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "No. Some fields are 4 bits wide.",
+      "parentUuid": "517ab20c_73bcac79",
+      "range": {
+        "startLine": 301,
+        "startChar": 75,
+        "endLine": 301,
+        "endChar": 83
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "f0b4f492_7dee7aeb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "Used SetBitField. Probably should use that everywhere.",
+      "parentUuid": "eab3504b_814baf87",
+      "range": {
+        "startLine": 717,
+        "startChar": 41,
+        "endLine": 717,
+        "endChar": 49
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "38d2054a_67bf83bb",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 23
@@ -229,6 +445,30 @@
       "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59d5a149_2cdd1e0b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38d2054a_67bf83bb",
+      "range": {
+        "startLine": 733,
+        "startChar": 20,
+        "endLine": 733,
+        "endChar": 28
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -255,6 +495,30 @@
     },
     {
       "key": {
+        "uuid": "4cabeafd_67f5613f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "Yes indeed. Probably the blendEnableMask and LogicOpState.",
+      "parentUuid": "e2ad100e_f32241a1",
+      "range": {
+        "startLine": 735,
+        "startChar": 20,
+        "endLine": 735,
+        "endChar": 93
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0bad968a_79ba69eb",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 23
@@ -266,6 +530,30 @@
       "writtenOn": "2019-01-09T21:04:32Z",
       "side": 1,
       "message": "Could you comment why you don\u0027t update transition here (and in setRenderPassDesc)?",
+      "range": {
+        "startLine": 827,
+        "startChar": 27,
+        "endLine": 827,
+        "endChar": 44
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ee7d160_180b2aee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "I\u0027d rather not put a comment on every set method. There\u0027s already a comment in GraphicsPipelineDesc. I was thinking of calling them update....NoTransition but that seemed too verbose. WDYT?",
+      "parentUuid": "0bad968a_79ba69eb",
       "range": {
         "startLine": 827,
         "startChar": 27,
@@ -301,6 +589,30 @@
     },
     {
       "key": {
+        "uuid": "77accec1_ecf0aa7f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "I\u0027d prefer to keep them split as a general design for performance. I\u0027m okay with a bit of code duplication here for now. WDYT?",
+      "parentUuid": "fb0df14c_cb5bde42",
+      "range": {
+        "startLine": 840,
+        "startChar": 27,
+        "endLine": 840,
+        "endChar": 47
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f6418e4d_b3cb5ab7",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 23
@@ -324,6 +636,30 @@
     },
     {
       "key": {
+        "uuid": "3e211186_99867c6c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f6418e4d_b3cb5ab7",
+      "range": {
+        "startLine": 988,
+        "startChar": 4,
+        "endLine": 988,
+        "endChar": 36
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "059c2352_23831d2e",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 23
@@ -338,6 +674,24 @@
       "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8204786_61186725",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "This is something I was thinking about. I went with uint32_t because it gives a finer grained array of dirty bits. There will be fewer dirty bit overlaps with 4 bytes per dirty bit than with 8 bytes. But it\u0027s something we can tune as we get better perf testing with more complicated apps.\n\nSo yes, this code would be faster, but potentially there would be costs in other parts of the code. I left a comment summarizing that.",
+      "parentUuid": "059c2352_23831d2e",
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -364,6 +718,30 @@
     },
     {
       "key": {
+        "uuid": "9646b5dc_ac8249fe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39747090_fdeaf992",
+      "range": {
+        "startLine": 286,
+        "startChar": 42,
+        "endLine": 286,
+        "endChar": 56
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f14eb72d_36d8f486",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 23
@@ -375,6 +753,24 @@
       "writtenOn": "2019-01-07T21:54:58Z",
       "side": 1,
       "message": "Doesn\u0027t need to be in the header",
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c58d24c_c15cc011",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "True, but I wanted it to be inlined for sure. Also it\u0027s a template function. So it\u0027s safer to keep in the header. Didn\u0027t change this unless you feel strongly about it.",
+      "parentUuid": "f14eb72d_36d8f486",
       "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -395,6 +791,24 @@
       "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bc9d586_ff9d5524",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T22:37:10Z",
+      "side": 1,
+      "message": "Done (thought we might inline this at some point.)",
+      "parentUuid": "f5a7a643_e24f3600",
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
