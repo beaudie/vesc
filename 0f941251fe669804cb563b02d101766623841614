@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "8e399f79_878746fa",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T13:15:05Z",
+      "side": 1,
+      "message": "nit: don\u0027t need (c). Also should be ANGLE authors. You can find the template in other files. Or here:\n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#comments",
+      "range": {
+        "startLine": 1,
+        "startChar": 12,
+        "endLine": 1,
+        "endChar": 15
+      },
+      "revId": "0f941251fe669804cb563b02d101766623841614",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3d849605_2e73fa24",
         "filename": "PRESUBMIT.py",
         "patchSetId": 2
@@ -19,6 +42,52 @@
     },
     {
       "key": {
+        "uuid": "d632178b_21a13016",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T13:15:05Z",
+      "side": 1,
+      "message": "nit: line too long",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 108
+      },
+      "revId": "0f941251fe669804cb563b02d101766623841614",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8932668_0d79af8b",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T13:15:05Z",
+      "side": 1,
+      "message": "it looks like the chromium presubmit.py just always prepends the python executable. let\u0027s do the same.\n\nhttps://cs.chromium.org/chromium/src/PRESUBMIT.py?q\u003dpresubmit.py\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d1317",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 50
+      },
+      "revId": "0f941251fe669804cb563b02d101766623841614",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c5866eb9_f89d0fcf",
         "filename": "PRESUBMIT.py",
         "patchSetId": 2
@@ -30,6 +99,24 @@
       "writtenOn": "2019-01-09T03:33:59Z",
       "side": 1,
       "message": "Also borrowed from the same link. Convenient!",
+      "revId": "0f941251fe669804cb563b02d101766623841614",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff88e17a_afac0ae5",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-09T13:15:05Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "c5866eb9_f89d0fcf",
       "revId": "0f941251fe669804cb563b02d101766623841614",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
