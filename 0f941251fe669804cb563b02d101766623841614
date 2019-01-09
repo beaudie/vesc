@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d849605_2e73fa24",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-09T03:33:59Z",
+      "side": 1,
+      "message": "Borrowed from http://dev.chromium.org/developers/how-tos/depottools/presubmit-scripts.",
+      "revId": "0f941251fe669804cb563b02d101766623841614",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5866eb9_f89d0fcf",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-09T03:33:59Z",
+      "side": 1,
+      "message": "Also borrowed from the same link. Convenient!",
+      "revId": "0f941251fe669804cb563b02d101766623841614",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
