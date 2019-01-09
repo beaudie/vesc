@@ -251,7 +251,7 @@ class DynamicQueryPool final : public DynamicallyGrowingPool<QueryPool>
 // of a fixed size as needed and allocates indices within those pools.
 //
 // The QueryHelper class below keeps the pool and index pair together.
-class QueryHelper final : public QueryGraphResource
+class QueryHelper final
 {
   public:
     QueryHelper();
@@ -271,10 +271,18 @@ class QueryHelper final : public QueryGraphResource
     // Used only by DynamicQueryPool.
     size_t getQueryPoolIndex() const { return mQueryPoolIndex; }
 
+    void beginQuery(vk::Context *context);
+    void endQuery(vk::Context *context);
+    void writeTimestamp(vk::Context *context);
+
+    Serial getStoredQueueSerial() { return mMostRecentSerial; }
+    bool hasPendingWork(RendererVk *renderer);
+
   private:
     const DynamicQueryPool *mDynamicQueryPool;
     size_t mQueryPoolIndex;
     uint32_t mQuery;
+    Serial mMostRecentSerial;
 };
 
 // DynamicSemaphorePool allocates semaphores as needed.  It uses a std::vector

@@ -1637,6 +1637,21 @@ bool RendererVk::hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatu
     return hasFormatFeatureBits<&VkFormatProperties::bufferFeatures>(format, featureBits);
 }
 
+void RendererVk::insertDebugMarker(GLenum source, GLuint id, std::string &&marker)
+{
+    mCommandGraph.insertDebugMarker(source, std::move(marker));
+}
+
+void RendererVk::pushDebugMarker(GLenum source, GLuint id, std::string &&marker)
+{
+    mCommandGraph.pushDebugMarker(source, std::move(marker));
+}
+
+void RendererVk::popDebugMarker()
+{
+    mCommandGraph.popDebugMarker();
+}
+
 angle::Result RendererVk::synchronizeCpuGpuTime(vk::Context *context)
 {
     ASSERT(mGpuEventsEnabled);
