@@ -196,6 +196,17 @@ class RendererVk : angle::NonCopyable
     bool hasTextureFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits);
     bool hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits);
 
+    void insertDebugMarker(GLenum source, GLuint id, const char *marker)
+    { /* TODO: add a node to command graph that's a barrier, like queries.  Add equivalent functions
+         where the command graph gives the command buffer to actually record the marker. */
+    }
+    void pushDebugMarker(GLenum source, GLuint id, const char *marker)
+    { /* TODO */
+    }
+    void popDebugMarker()
+    { /* TODO */
+    }
+
   private:
     // Number of semaphores for external entities to renderer to issue a wait, such as surface's
     // image acquire.
@@ -243,6 +254,7 @@ class RendererVk : angle::NonCopyable
     VkInstance mInstance;
     bool mEnableValidationLayers;
     bool mEnableMockICD;
+    VkDebugUtilsMessengerEXT mDebugUtilsMessenger;
     VkDebugReportCallbackEXT mDebugReportCallback;
     VkPhysicalDevice mPhysicalDevice;
     VkPhysicalDeviceProperties mPhysicalDeviceProperties;
@@ -257,6 +269,10 @@ class RendererVk : angle::NonCopyable
     Serial mLastCompletedQueueSerial;
     Serial mLastSubmittedQueueSerial;
     Serial mCurrentQueueSerial;
+
+    PFN_vkCmdBeginDebugUtilsLabelEXT mCmdBeginDebugUtilsLabel;
+    PFN_vkCmdEndDebugUtilsLabelEXT mCmdEndDebugUtilsLabel;
+    PFN_vkCmdInsertDebugUtilsLabelEXT mCmdInsertDebugUtilsLabel;
 
     bool mDeviceLost;
 

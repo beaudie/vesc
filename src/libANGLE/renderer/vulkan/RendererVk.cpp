@@ -108,6 +108,39 @@ bool IsIgnoredDebugMessage(const char *message)
     return false;
 }
 
+VKAPI_ATTR VkBool32 VKAPI_CALL
+DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+                    VkDebugUtilsMessageTypeFlagsEXT messageTypes,
+                    const VkDebugUtilsMessengerCallbackDataEXT *callbackData,
+                    void *userData)
+{
+    if (IsIgnoredDebugMessage(callbackData->pMessage))
+    {
+        return VK_FALSE;
+    }
+    if ((messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) != 0)
+    {
+        ERR() << callbackData->pMessageIdName;
+        ERR() << callbackData->pMessage;
+#if !defined(NDEBUG)
+        // Abort the call in Debug builds.
+        return VK_TRUE;
+#endif
+    }
+    if ((messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) != 0)
+    {
+        WARN() << callbackData->pMessageIdName;
+        WARN() << callbackData->pMessage;
+    }
+    else
+    {
+        // Uncomment this if you want Vulkan spam.
+        // WARN() << callbackData->pMessage;
+    }
+
+    return VK_FALSE;
+}
+
 VKAPI_ATTR VkBool32 VKAPI_CALL DebugReportCallback(VkDebugReportFlagsEXT flags,
                                                    VkDebugReportObjectTypeEXT objectType,
                                                    uint64_t object,
@@ -316,6 +349,7 @@ RendererVk::RendererVk()
       mInstance(VK_NULL_HANDLE),
       mEnableValidationLayers(false),
       mEnableMockICD(false),
+      mDebugUtilsMessenger(VK_NULL_HANDLE),
       mDebugReportCallback(VK_NULL_HANDLE),
       mPhysicalDevice(VK_NULL_HANDLE),
       mQueue(VK_NULL_HANDLE),
@@ -323,6 +357,9 @@ RendererVk::RendererVk()
       mDevice(VK_NULL_HANDLE),
       mLastCompletedQueueSerial(mQueueSerialFactory.generate()),
       mCurrentQueueSerial(mQueueSerialFactory.generate()),
+      mCmdBeginDebugUtilsLabel(nullptr),
+      mCmdEndDebugUtilsLabel(nullptr),
+      mCmdInsertDebugUtilsLabel(nullptr),
       mDeviceLost(false),
       mPipelineCacheVkUpdateTimeout(kPipelineCacheVkUpdatePeriod),
       mCommandGraph(kEnableCommandGraphDiagnostics),
@@ -368,7 +405,17 @@ void RendererVk::onDestroy(vk::Context *context)
         mDevice = VK_NULL_HANDLE;
     }
 
-    if (mDebugReportCallback)
+    if (mDebugUtilsMessenger)
+    {
+        ASSERT(mInstance);
+        auto destroyDebugUtilsMessenger = reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(
+            vkGetInstanceProcAddr(mInstance, "vkDestroyDebugUtilsMessengerEXT"));
+        ASSERT(destroyDebugReportCallback);
+        destroyDebugReportCallback(mInstance, mDebugUtilsMessenger, nullptr);
+
+        ASSERT(mDebugReportCallback == VK_NULL_HANDLE);
+    }
+    else if (mDebugReportCallback)
     {
         ASSERT(mInstance);
         auto destroyDebugReportCallback = reinterpret_cast<PFN_vkDestroyDebugReportCallbackEXT>(
@@ -506,20 +553,57 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     if (mEnableValidationLayers)
     {
-        VkDebugReportCallbackCreateInfoEXT debugReportInfo = {};
+        // Try to use the newer EXT_debug_utils if it exists.
+        auto createDebugUtilsMessenger = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(
+            vkGetInstanceProcAddr(mInstance, "vkCreateDebugUtilsMessengerEXT"));
 
-        debugReportInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
-        debugReportInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT |
-                                VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT |
-                                VK_DEBUG_REPORT_INFORMATION_BIT_EXT | VK_DEBUG_REPORT_DEBUG_BIT_EXT;
-        debugReportInfo.pfnCallback = &DebugReportCallback;
-        debugReportInfo.pUserData   = this;
+        if (createDebugUtilsMessenger)
+        {
+            // Create the messenger callback.
+            VkDebugUtilsMessengeCreateInfoEXT messengerInfo = {};
 
-        auto createDebugReportCallback = reinterpret_cast<PFN_vkCreateDebugReportCallbackEXT>(
-            vkGetInstanceProcAddr(mInstance, "vkCreateDebugReportCallbackEXT"));
-        ASSERT(createDebugReportCallback);
-        ANGLE_VK_TRY(displayVk, createDebugReportCallback(mInstance, &debugReportInfo, nullptr,
-                                                          &mDebugReportCallback));
+            messengerInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+            messengerInfo.flags = VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT |
+                                  VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+                                  VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT;
+            messengerInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
+                                        VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+                                        VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+            messengerInfo.pfnUserCallback = &DebugUtilsMessenger;
+            messengerInfo.pUserData       = this;
+
+            ANGLE_VK_TRY(displayVk, createDebugUtilsMessenger(mInstance, &messengerInfo, nullptr,
+                                                              &mDebugUtilsMessenger));
+
+            // Get functions used to set debug markers.
+            mCmdBeginDebugUtilsLabel = reinterpret_cast<PFN_vkCmdBeginDebugUtilsLabelEXT>(
+                vkGetInstanceProcAddr(mInstance, "vkCmdBeginDebugUtilsLabelEXT"));
+            mCmdEndDebugUtilsLabel = reinterpret_cast<PFN_vkCmdEndDebugUtilsLabelEXT>(
+                vkGetInstanceProcAddr(mInstance, "vkCmdEndDebugUtilsLabelEXT"));
+            mCmdInsertDebugUtilsLabel = reinterpret_cast<PFN_vkCmdInsertDebugUtilsLabelEXT>(
+                vkGetInstanceProcAddr(mInstance, "vkCmdInsertDebugUtilsLabelEXT"));
+            ASSERT(mCmdBeginDebugUtilsLabel != nullptr && mCmdEndDebugUtilsLabel != nullptr &&
+                   mCmdInsertDebugUtilsLabel != nullptr);
+        }
+        else
+        {
+            // Fallback to EXT_debug_report.
+            VkDebugReportCallbackCreateInfoEXT debugReportInfo = {};
+
+            debugReportInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
+            debugReportInfo.flags =
+                VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT |
+                VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT | VK_DEBUG_REPORT_INFORMATION_BIT_EXT |
+                VK_DEBUG_REPORT_DEBUG_BIT_EXT;
+            debugReportInfo.pfnCallback = &DebugReportCallback;
+            debugReportInfo.pUserData   = this;
+
+            auto createDebugReportCallback = reinterpret_cast<PFN_vkCreateDebugReportCallbackEXT>(
+                vkGetInstanceProcAddr(mInstance, "vkCreateDebugReportCallbackEXT"));
+            ASSERT(createDebugReportCallback);
+            ANGLE_VK_TRY(displayVk, createDebugReportCallback(mInstance, &debugReportInfo, nullptr,
+                                                              &mDebugReportCallback));
+        }
     }
 
     uint32_t physicalDeviceCount = 0;

@@ -586,27 +586,29 @@ std::string ContextVk::getRendererDescription() const
 
 void ContextVk::insertEventMarker(GLsizei length, const char *marker)
 {
-    // TODO: Forward this to a Vulkan debug marker.  http://anglebug.com/2853
+    mRenderer->insertDebugMarker(GL_DEBUG_SOURCE_APPLICATION, static_cast<GLuint>(-1), marker);
 }
 
 void ContextVk::pushGroupMarker(GLsizei length, const char *marker)
 {
-    // TODO: Forward this to a Vulkan debug marker.  http://anglebug.com/2853
+    // Fall through to the KHR_debug function.
+    pushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, static_cast<GLuint>(-1), length, marker);
 }
 
 void ContextVk::popGroupMarker()
 {
-    // TODO: Forward this to a Vulkan debug marker.  http://anglebug.com/2853
+    // Fall through to the KHR_debug function.
+    popDebugGroup();
 }
 
 void ContextVk::pushDebugGroup(GLenum source, GLuint id, GLsizei length, const char *message)
 {
-    // TODO: Forward this to a Vulkan debug marker.  http://anglebug.com/2853
+    mRenderer->pushDebugMarker(source, id, message);
 }
 
 void ContextVk::popDebugGroup()
 {
-    // TODO: Forward this to a Vulkan debug marker.  http://anglebug.com/2853
+    mRenderer->popDebugMarker();
 }
 
 bool ContextVk::isViewportFlipEnabledForDrawFBO() const
