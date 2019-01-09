@@ -196,6 +196,21 @@ class RendererVk : angle::NonCopyable
     bool hasTextureFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits);
     bool hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits);
 
+    void insertDebugMarker(GLenum source, GLuint id, const char *marker);
+    void pushDebugMarker(GLenum source, GLuint id, const char *marker);
+    void popDebugMarker();
+
+    // This struct holds additional function pointers to optional layer functions that may or may
+    // not exist.
+    struct OptionalFunctions
+    {
+        PFN_vkCmdBeginDebugUtilsLabelEXT cmdBeginDebugUtilsLabel   = nullptr;
+        PFN_vkCmdEndDebugUtilsLabelEXT cmdEndDebugUtilsLabel       = nullptr;
+        PFN_vkCmdInsertDebugUtilsLabelEXT cmdInsertDebugUtilsLabel = nullptr;
+    };
+
+    const OptionalFunctions &getOptionalFunctions() { return mOptionalFunctions; }
+
   private:
     // Number of semaphores for external entities to renderer to issue a wait, such as surface's
     // image acquire.
@@ -258,6 +273,8 @@ class RendererVk : angle::NonCopyable
     Serial mLastCompletedQueueSerial;
     Serial mLastSubmittedQueueSerial;
     Serial mCurrentQueueSerial;
+
+    OptionalFunctions mOptionalFunctions;
 
     bool mDeviceLost;
 

@@ -4996,8 +4996,9 @@ GLuint Context::getDebugMessageLog(GLuint count,
 void Context::pushDebugGroup(GLenum source, GLuint id, GLsizei length, const GLchar *message)
 {
     std::string msg(message, (length > 0) ? static_cast<size_t>(length) : strlen(message));
+    // Always send a NUL-terminated string to the back-ends, so they can choose to ignore length.
+    mImplementation->pushDebugGroup(source, id, length, msg.c_str());
     mState.getDebug().pushGroup(source, id, std::move(msg));
-    mImplementation->pushDebugGroup(source, id, length, message);
 }
 
 void Context::popDebugGroup()
