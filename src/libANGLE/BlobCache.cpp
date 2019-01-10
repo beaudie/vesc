@@ -96,7 +96,7 @@ bool BlobCache::get(angle::ScratchBuffer *scratchBuffer,
 
         // Make sure the key/value pair still exists/is unchanged after the second call
         // (modifications to the application cache by another thread are a possibility)
-        if (static_cast<size_t>(valueSize) != scratchMemory->size())
+        if (static_cast<size_t>(valueSize) > scratchMemory->size())
         {
             // This warning serves to find issues with the application cache, none of which are
             // currently known to be thread-safe.  If such a use ever arises, this WARN can be
