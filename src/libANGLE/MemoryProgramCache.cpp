@@ -729,6 +729,12 @@ void MemoryProgramCache::putProgram(const egl::BlobCache::Key &programHash,
                                     const Context *context,
                                     const Program *program)
 {
+    // If caching is effectively disabled, don't bother serializing the program.
+    if (mBlobCache.maxSize() == 0 && !mBlobCache.areBlobCacheFuncsSet())
+    {
+        return;
+    }
+
     angle::MemoryBuffer serializedProgram;
     Serialize(context, program, &serializedProgram);
 
