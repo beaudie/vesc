@@ -1425,7 +1425,7 @@ void Program::resolveLinkImpl(const Context *context)
 
     // Save to the program cache.
     auto *cache = linkingState->context->getMemoryProgramCache();
-    if (cache &&
+    if (cache && cache->maxSize() > 0 &&
         (mState.mLinkedTransformFeedbackVaryings.empty() ||
          !linkingState->context->getWorkarounds().disableProgramCachingForTransformFeedback))
     {
