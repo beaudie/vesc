@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "a86cd782_36aa6a27",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T18:03:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "07ea74c6_edd29d28",
+      "range": {
+        "startLine": 392,
+        "startChar": 68,
+        "endLine": 392,
+        "endChar": 75
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4c970f2b_f8040513",
         "filename": "src/libANGLE/renderer/vulkan/README.md",
         "patchSetId": 23
@@ -614,6 +638,30 @@
     },
     {
       "key": {
+        "uuid": "78ffced9_d0d01839",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T18:03:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "262aec8a_af5458fb",
+      "range": {
+        "startLine": 827,
+        "startChar": 27,
+        "endLine": 827,
+        "endChar": 44
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fb0df14c_cb5bde42",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 23
@@ -682,6 +730,30 @@
       "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1e023ed_312178a4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T18:03:38Z",
+      "side": 1,
+      "message": "Changed to what you requested. It\u0027s not yet on the hot path.",
+      "parentUuid": "66744b39_e12c9010",
+      "range": {
+        "startLine": 840,
+        "startChar": 27,
+        "endLine": 840,
+        "endChar": 47
+      },
+      "revId": "f3fe3cbe737bc41aaa5acaa975c0482c70533350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
