@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "314e0e34_f15f1c0b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-10T04:23:03Z",
+      "side": 0,
+      "message": "This class turned out eventually to be unnecessary. As each function creates a new node, there\u0027s really no point in keeping any of the states `CommandGraphResource` is keeping (other than Serial, which is just added to the QueryHelper).\n\nI can merge RecordableGraphResource back to CommandGraphResource at this point, but the separation is not harming anyone either. I\u0027m not sure there would ever be other children to CommandGraphResource...",
+      "revId": "157c390bfa74e1599ea4a38278f2039879600929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
