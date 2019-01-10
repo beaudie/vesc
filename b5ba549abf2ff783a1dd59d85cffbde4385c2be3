@@ -22,6 +22,30 @@
       "revId": "b5ba549abf2ff783a1dd59d85cffbde4385c2be3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2609951f_ade24f29",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-10T22:08:49Z",
+      "side": 0,
+      "message": "Ah missed this. Done. Kept this one, but moved it up next to `VerifyExtensionsPresent`.",
+      "parentUuid": "ea3102f1_f6b47a9e",
+      "range": {
+        "startLine": 274,
+        "startChar": 5,
+        "endLine": 274,
+        "endChar": 19
+      },
+      "revId": "b5ba549abf2ff783a1dd59d85cffbde4385c2be3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
