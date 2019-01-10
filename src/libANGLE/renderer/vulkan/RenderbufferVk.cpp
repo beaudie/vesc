@@ -34,7 +34,7 @@ void RenderbufferVk::onDestroy(const gl::Context *context)
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
-    mImage.release(renderer);
+    mImage.release(renderer, true);
     renderer->releaseObject(renderer->getCurrentQueueSerial(), &mImageView);
 }
 
@@ -54,7 +54,7 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
             static_cast<GLsizei>(width) != mState.getWidth() ||
             static_cast<GLsizei>(height) != mState.getHeight())
         {
-            mImage.release(renderer);
+            mImage.release(renderer, false);
             renderer->releaseObject(renderer->getCurrentQueueSerial(), &mImageView);
         }
     }
