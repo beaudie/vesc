@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a73925b_0a2a1996",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-10T20:19:59Z",
+      "side": 1,
+      "message": "I think our tests can\u0027t build if we don\u0027t remove \"hide_all_but_jni\" config.\nCould you please explain how hiding all but jni causes libc++abi from the test shared library to be exported?",
+      "range": {
+        "startLine": 293,
+        "startChar": 0,
+        "endLine": 293,
+        "endChar": 64
+      },
+      "revId": "49581148ca4c2d7d55972660eac7ac673c4aeb6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
