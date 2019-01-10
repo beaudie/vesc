@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b119986_f891b1c7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T15:40:12Z",
+      "side": 1,
+      "message": "can you add a sentence or two that mentions what debug markers are for?",
+      "range": {
+        "startLine": 9,
+        "startChar": 29,
+        "endLine": 9,
+        "endChar": 48
+      },
+      "revId": "ac3a322dc3a439ca81ff0f0e2bc9c4b23928d81d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0950c4b2_71e82263",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4999,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T15:40:12Z",
+      "side": 1,
+      "message": "nit NULL",
+      "range": {
+        "startLine": 4999,
+        "startChar": 21,
+        "endLine": 4999,
+        "endChar": 24
+      },
+      "revId": "ac3a322dc3a439ca81ff0f0e2bc9c4b23928d81d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2401a67_388e9436",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T15:40:12Z",
+      "side": 1,
+      "message": "is it possible to use angle::ColorF here? You can make some methods/constructors constexpr. just a thought.",
+      "revId": "ac3a322dc3a439ca81ff0f0e2bc9c4b23928d81d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27696530_58375c85",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T15:40:12Z",
+      "side": 1,
+      "message": "nit: style guide says to use c++ casts.",
+      "range": {
+        "startLine": 107,
+        "startChar": 43,
+        "endLine": 107,
+        "endChar": 48
+      },
+      "revId": "ac3a322dc3a439ca81ff0f0e2bc9c4b23928d81d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ee28056_9e28467b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T15:40:12Z",
+      "side": 1,
+      "message": "nit: NULL (or just null)",
+      "range": {
+        "startLine": 608,
+        "startChar": 50,
+        "endLine": 608,
+        "endChar": 53
+      },
+      "revId": "ac3a322dc3a439ca81ff0f0e2bc9c4b23928d81d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a088a4ad_45191f73",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T15:40:12Z",
+      "side": 1,
+      "message": "I don\u0027t think you need these. The loader should handle loading these if they\u0027re available.",
+      "range": {
+        "startLine": 203,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 6
+      },
+      "revId": "ac3a322dc3a439ca81ff0f0e2bc9c4b23928d81d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
