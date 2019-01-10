@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec312184_f23fb885",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T19:11:19Z",
+      "side": 1,
+      "message": "nit: the",
+      "range": {
+        "startLine": 13,
+        "startChar": 25,
+        "endLine": 13,
+        "endChar": 30
+      },
+      "revId": "9420fd74f8d14517ca26a11a9719ad818956e023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d81c94f1_e1d980b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T19:11:19Z",
+      "side": 1,
+      "message": "nit: Did a presubmit warning fire? Supposed to be checking the formatting now. But this should be\n\n\"Bug:\u003cspace\u003eangleproject:3063\"",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 14
+      },
+      "revId": "9420fd74f8d14517ca26a11a9719ad818956e023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8b0cca3_6a81e21b",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T19:11:19Z",
+      "side": 1,
+      "message": "nit: You can remove the old code without the #ifdef. We can use git history to find the old code.\n\nPlease do keep the TODO. Can you directly link to http://anglebug.com/3036 so when the anglebug.com domain works again you can click the link and be taken to the bug?",
+      "range": {
+        "startLine": 848,
+        "startChar": 0,
+        "endLine": 867,
+        "endChar": 18
+      },
+      "revId": "9420fd74f8d14517ca26a11a9719ad818956e023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
