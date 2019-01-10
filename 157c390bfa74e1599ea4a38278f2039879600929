@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8a337ff7_6a8bae1c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T15:00:26Z",
+      "side": 1,
+      "message": "How about we just use \"strstr\" to check for the kSkippedMessages as a substring in the message?",
+      "parentUuid": "e44c6832_d09a603a",
+      "revId": "157c390bfa74e1599ea4a38278f2039879600929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "84a07b69_ca8de3fb",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -42,6 +60,75 @@
     },
     {
       "key": {
+        "uuid": "99fc7819_ec6c8037",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T15:00:26Z",
+      "side": 1,
+      "message": "do the validation layers respect VK_TRUE? I know they did for the other callback.",
+      "range": {
+        "startLine": 313,
+        "startChar": 7,
+        "endLine": 313,
+        "endChar": 51
+      },
+      "revId": "157c390bfa74e1599ea4a38278f2039879600929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1836d58_7251f3a4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T15:00:26Z",
+      "side": 1,
+      "message": "I don\u0027t think we need to load these manually. you should be able to use the vulkan loader normally and just call the functions. Can you change the call sites for the debug report callback? The only special case is for determining the maximum API version of Vulkan.",
+      "range": {
+        "startLine": 585,
+        "startChar": 7,
+        "endLine": 589,
+        "endChar": 0
+      },
+      "revId": "157c390bfa74e1599ea4a38278f2039879600929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf9de8b7_1912f112",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T15:00:26Z",
+      "side": 1,
+      "message": "same comment here.",
+      "range": {
+        "startLine": 740,
+        "startChar": 0,
+        "endLine": 742,
+        "endChar": 80
+      },
+      "revId": "157c390bfa74e1599ea4a38278f2039879600929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "52378b9d_c1862037",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -53,6 +140,24 @@
       "writtenOn": "2019-01-10T02:57:12Z",
       "side": 1,
       "message": "Not sure if there\u0027s a need to keep the fallback.",
+      "revId": "157c390bfa74e1599ea4a38278f2039879600929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13639ce9_e72f8ebf",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 764,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T15:00:26Z",
+      "side": 1,
+      "message": "For now yes, since some of our bots are likely on pretty old drivers. Sometime in the future we can maybe remove the other extension.",
+      "parentUuid": "52378b9d_c1862037",
       "revId": "157c390bfa74e1599ea4a38278f2039879600929",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

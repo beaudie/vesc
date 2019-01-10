@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea3102f1_f6b47a9e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-10T15:00:26Z",
+      "side": 0,
+      "message": "can you merge your new function TestExtensionPresent with this one? I\u0027m fine with keeping either.",
+      "range": {
+        "startLine": 274,
+        "startChar": 5,
+        "endLine": 274,
+        "endChar": 19
+      },
+      "revId": "b5ba549abf2ff783a1dd59d85cffbde4385c2be3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
