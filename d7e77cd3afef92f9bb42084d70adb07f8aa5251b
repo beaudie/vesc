@@ -65,6 +65,30 @@
     },
     {
       "key": {
+        "uuid": "2c57def9_6517d4e1",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-01-10T23:43:47Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "847d0945_d9b6caec",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 98
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2302f13f_7a61c32c",
         "filename": "src/libANGLE/renderer/gl/RendererGL.h",
         "patchSetId": 28
@@ -122,6 +146,30 @@
       "writtenOn": "2019-01-08T16:15:01Z",
       "side": 1,
       "message": "Let\u0027s wrap this in an RAII object to bind and unbind, something like:\n\n    class ScopedWorkerContextGL\n    {\n        public:\n            ScopedWorkerContextGL(RendererGL* renderer)\n                : mRenderer(renderer)\n            {\n                mValid \u003d mRenderer-\u003ebindWorkerContext();\n            }\n\n            ~ScopedWorkerContextGL()\n            {\n                if (mValid)\n                {\n                    mRenderer-\u003eunbindWorkerContext();\n                }\n            }\n\n            operator bool() const\n            {\n                return mValid;\n            }\n\n        private:\n            RendererGL* mRenderer \u003d nullptr;\n            bool mValid \u003d false;\n    };",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 31
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "420dd927_b1417d74",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-01-10T23:43:47Z",
+      "side": 1,
+      "message": "Is this practical? See the uses in ShaderGL::compile below. The RAII object would have to be conditionally allocated. ccameron@ went through some contortions to make this work for some Mac-specific RAII classes recently and it was painful.",
+      "parentUuid": "f50d6a3c_14ff310a",
       "range": {
         "startLine": 185,
         "startChar": 0,
