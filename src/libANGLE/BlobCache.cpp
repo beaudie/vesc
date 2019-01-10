@@ -64,11 +64,7 @@ void BlobCache::populate(const BlobCache::Key &key, angle::MemoryBuffer &&value,
     newEntry.second = source;
 
     // Cache it inside blob cache only if caching inside the application is not possible.
-    const CacheEntry *result = mBlobCache.put(key, std::move(newEntry), newEntry.first.size());
-    if (!result)
-    {
-        ERR() << "Failed to store binary blob in memory cache, blob is too large.";
-    }
+    mBlobCache.put(key, std::move(newEntry), newEntry.first.size());
 }
 
 bool BlobCache::get(angle::ScratchBuffer *scratchBuffer,
@@ -96,7 +92,7 @@ bool BlobCache::get(angle::ScratchBuffer *scratchBuffer,
 
         // Make sure the key/value pair still exists/is unchanged after the second call
         // (modifications to the application cache by another thread are a possibility)
-        if (static_cast<size_t>(valueSize) != scratchMemory->size())
+        if (static_cast<size_t>(valueSize) > scratchMemory->size())
         {
             // This warning serves to find issues with the application cache, none of which are
             // currently known to be thread-safe.  If such a use ever arises, this WARN can be
