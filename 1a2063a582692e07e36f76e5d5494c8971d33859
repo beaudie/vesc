@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "530f0366_b6a05d91",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-10T14:42:55Z",
+      "side": 1,
+      "message": "Can you ASSERT before this that `divisor \u003c 256`?",
+      "revId": "1a2063a582692e07e36f76e5d5494c8971d33859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c803c83d_dcae2931",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-10T14:42:55Z",
+      "side": 1,
+      "message": "48? If that\u0027s `kPackedAttribDescSize * 8`, could you please specify it as such?",
+      "revId": "1a2063a582692e07e36f76e5d5494c8971d33859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ec2d97b_ca214c67",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-10T14:42:55Z",
+      "side": 1,
+      "message": "s",
+      "range": {
+        "startLine": 748,
+        "startChar": 35,
+        "endLine": 748,
+        "endChar": 36
+      },
+      "revId": "1a2063a582692e07e36f76e5d5494c8971d33859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
