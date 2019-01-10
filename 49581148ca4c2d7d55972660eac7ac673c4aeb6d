@@ -46,6 +46,30 @@
       "revId": "49581148ca4c2d7d55972660eac7ac673c4aeb6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7b638510_05931e30",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-10T21:10:30Z",
+      "side": 1,
+      "message": "Thanks, I added a comment here about this.",
+      "parentUuid": "2a9b09bc_d5ef2017",
+      "range": {
+        "startLine": 293,
+        "startChar": 0,
+        "endLine": 293,
+        "endChar": 64
+      },
+      "revId": "49581148ca4c2d7d55972660eac7ac673c4aeb6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
