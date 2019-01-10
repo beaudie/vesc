@@ -1120,6 +1120,10 @@ angle::Result Program::link(const Context *context)
     {
         angle::Result result = cache->getProgram(context, this, &mState, &programHash);
         mLinked              = (result == angle::Result::Continue);
+        fprintf(stderr, "Attempted to load from cache, resulted in %s\n",
+                result == angle::Result::Continue
+                    ? "Continue"
+                    : result == angle::Result::Incomplete ? "Incomplete" : "Stop");
         ANGLE_TRY(result);
     }
 
