@@ -133,6 +133,7 @@ class TextureStorage11 : public TextureStorage
                               int mipLevel,
                               bool blitSRV,
                               const d3d11::SharedSRV **outSRV);
+    DXGI_FORMAT getTypelessFormat(DXGI_FORMAT format);
 
     // Get a version of a depth texture with only depth information, not stencil.
     enum DropStencil

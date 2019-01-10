@@ -345,6 +345,32 @@ angle::Result TextureStorage11::getSRVLevel(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+DXGI_FORMAT TextureStorage11::getTypelessFormat(DXGI_FORMAT format)
+{
+    switch (format)
+    {
+        case DXGI_FORMAT_R32G32B32A32_FLOAT:
+        case DXGI_FORMAT_R32G32B32A32_UINT:
+        case DXGI_FORMAT_R32G32B32A32_SINT:
+            return DXGI_FORMAT_R32G32B32A32_TYPELESS;
+        case DXGI_FORMAT_R16G16B16A16_FLOAT:
+        case DXGI_FORMAT_R16G16B16A16_UINT:
+        case DXGI_FORMAT_R16G16B16A16_SINT:
+            return DXGI_FORMAT_R16G16B16A16_TYPELESS;
+        case DXGI_FORMAT_R32_FLOAT:
+        case DXGI_FORMAT_R32_UINT:
+        case DXGI_FORMAT_R32_SINT:
+            return DXGI_FORMAT_R32_TYPELESS;
+        case DXGI_FORMAT_R8G8B8A8_UINT:
+        case DXGI_FORMAT_R8G8B8A8_SINT:
+        case DXGI_FORMAT_R8G8B8A8_UNORM:
+        case DXGI_FORMAT_R8G8B8A8_SNORM:
+            return DXGI_FORMAT_R8G8B8A8_TYPELESS;
+        default:
+            return DXGI_FORMAT_UNKNOWN;
+    }
+}
+
 angle::Result TextureStorage11::getSRVLevels(const gl::Context *context,
                                              GLint baseLevel,
                                              GLint maxLevel,
@@ -1108,13 +1134,17 @@ angle::Result TextureStorage11_2D::ensureTextureExists(const gl::Context *contex
     if (!outputTexture->valid() && mTextureWidth > 0 && mTextureHeight > 0)
     {
         ASSERT(mipLevels > 0);
+        DXGI_FORMAT typelessFormat = getTypelessFormat(mFormatInfo.texFormat);
+        bool useTypelessFormat =
+            mRenderer->getRenderer11DeviceCaps().featureLevel >= D3D_FEATURE_LEVEL_11_0 &&
+            typelessFormat != DXGI_FORMAT_UNKNOWN;
 
         D3D11_TEXTURE2D_DESC desc;
         desc.Width              = mTextureWidth;  // Compressed texture size constraints?
         desc.Height             = mTextureHeight;
         desc.MipLevels          = mipLevels;
         desc.ArraySize          = 1;
-        desc.Format             = mFormatInfo.texFormat;
+        desc.Format             = useTypelessFormat ? typelessFormat : mFormatInfo.texFormat;
         desc.SampleDesc.Count   = 1;
         desc.SampleDesc.Quality = 0;
         desc.Usage              = D3D11_USAGE_DEFAULT;
@@ -2129,13 +2159,17 @@ angle::Result TextureStorage11_Cube::ensureTextureExists(const gl::Context *cont
     if (!outputTexture->valid() && mTextureWidth > 0 && mTextureHeight > 0)
     {
         ASSERT(mMipLevels > 0);
+        DXGI_FORMAT typelessFormat = getTypelessFormat(mFormatInfo.texFormat);
+        bool useTypelessFormat =
+            mRenderer->getRenderer11DeviceCaps().featureLevel >= D3D_FEATURE_LEVEL_11_0 &&
+            typelessFormat != DXGI_FORMAT_UNKNOWN;
 
         D3D11_TEXTURE2D_DESC desc;
         desc.Width              = mTextureWidth;
         desc.Height             = mTextureHeight;
         desc.MipLevels          = mipLevels;
         desc.ArraySize          = gl::kCubeFaceCount;
-        desc.Format             = mFormatInfo.texFormat;
+        desc.Format             = useTypelessFormat ? typelessFormat : mFormatInfo.texFormat;
         desc.SampleDesc.Count   = 1;
         desc.SampleDesc.Quality = 0;
         desc.Usage              = D3D11_USAGE_DEFAULT;
@@ -2600,13 +2634,17 @@ angle::Result TextureStorage11_3D::getResource(const gl::Context *context,
     if (!mTexture.valid() && mTextureWidth > 0 && mTextureHeight > 0 && mTextureDepth > 0)
     {
         ASSERT(mMipLevels > 0);
+        DXGI_FORMAT typelessFormat = getTypelessFormat(mFormatInfo.texFormat);
+        bool useTypelessFormat =
+            mRenderer->getRenderer11DeviceCaps().featureLevel >= D3D_FEATURE_LEVEL_11_0 &&
+            typelessFormat != DXGI_FORMAT_UNKNOWN;
 
         D3D11_TEXTURE3D_DESC desc;
         desc.Width          = mTextureWidth;
         desc.Height         = mTextureHeight;
         desc.Depth          = mTextureDepth;
         desc.MipLevels      = mMipLevels;
-        desc.Format         = mFormatInfo.texFormat;
+        desc.Format         = useTypelessFormat ? typelessFormat : mFormatInfo.texFormat;
         desc.Usage          = D3D11_USAGE_DEFAULT;
         desc.BindFlags      = getBindFlags();
         desc.CPUAccessFlags = 0;
@@ -2946,13 +2984,17 @@ angle::Result TextureStorage11_2DArray::getResource(const gl::Context *context,
     if (!mTexture.valid() && mTextureWidth > 0 && mTextureHeight > 0 && mTextureDepth > 0)
     {
         ASSERT(mMipLevels > 0);
+        DXGI_FORMAT typelessFormat = getTypelessFormat(mFormatInfo.texFormat);
+        bool useTypelessFormat =
+            mRenderer->getRenderer11DeviceCaps().featureLevel >= D3D_FEATURE_LEVEL_11_0 &&
+            typelessFormat != DXGI_FORMAT_UNKNOWN;
 
         D3D11_TEXTURE2D_DESC desc;
         desc.Width              = mTextureWidth;
         desc.Height             = mTextureHeight;
         desc.MipLevels          = mMipLevels;
         desc.ArraySize          = mTextureDepth;
-        desc.Format             = mFormatInfo.texFormat;
+        desc.Format             = useTypelessFormat ? typelessFormat : mFormatInfo.texFormat;
         desc.SampleDesc.Count   = 1;
         desc.SampleDesc.Quality = 0;
         desc.Usage              = D3D11_USAGE_DEFAULT;

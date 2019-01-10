@@ -242,6 +242,23 @@ HRESULT CreateResource(ID3D11Device *device,
     return device->CreateVertexShader(desc->get(), desc->size(), nullptr, resourceOut);
 }
 
+DXGI_FORMAT GetTypedColorFormat(DXGI_FORMAT dxgiFormat)
+{
+    switch (dxgiFormat)
+    {
+        case DXGI_FORMAT_R32G32B32A32_TYPELESS:
+            return DXGI_FORMAT_R32G32B32A32_FLOAT;
+        case DXGI_FORMAT_R16G16B16A16_TYPELESS:
+            return DXGI_FORMAT_R16G16B16A16_FLOAT;
+        case DXGI_FORMAT_R32_TYPELESS:
+            return DXGI_FORMAT_R32_FLOAT;
+        case DXGI_FORMAT_R8G8B8A8_TYPELESS:
+            return DXGI_FORMAT_R8G8B8A8_UNORM;
+        default:
+            return dxgiFormat;
+    }
+}
+
 DXGI_FORMAT GetTypedDepthStencilFormat(DXGI_FORMAT dxgiFormat)
 {
     switch (dxgiFormat)
@@ -310,8 +327,19 @@ angle::Result ClearResource(d3d::Context *context,
     else
     {
         ASSERT((desc->BindFlags & D3D11_BIND_RENDER_TARGET) != 0);
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtvDesc.Format = GetTypedColorFormat(desc->Format);
+        if (desc->SampleDesc.Count == 0)
+        {
+            rtvDesc.Texture2D.MipSlice = 0;
+            rtvDesc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
+        }
+        else
+        {
+            rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
+        }
         d3d11::RenderTargetView rtv;
-        ANGLE_TRY(renderer->allocateResourceNoDesc(context, texture, &rtv));
+        ANGLE_TRY(renderer->allocateResource(context, rtvDesc, texture, &rtv));
 
         deviceContext->ClearRenderTargetView(rtv.get(), kDebugColorInitClearValue);
     }
@@ -330,8 +358,14 @@ angle::Result ClearResource(d3d::Context *context,
     ASSERT((desc->BindFlags & D3D11_BIND_DEPTH_STENCIL) == 0);
     ASSERT((desc->BindFlags & D3D11_BIND_RENDER_TARGET) != 0);
 
+    D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+    rtvDesc.Format                = GetTypedColorFormat(desc->Format);
+    rtvDesc.Texture3D.MipSlice    = 0;
+    rtvDesc.Texture3D.FirstWSlice = 0;
+    rtvDesc.Texture3D.WSize       = desc->Depth;
+    rtvDesc.ViewDimension         = D3D11_RTV_DIMENSION_TEXTURE3D;
     d3d11::RenderTargetView rtv;
-    ANGLE_TRY(renderer->allocateResourceNoDesc(context, texture, &rtv));
+    ANGLE_TRY(renderer->allocateResource(context, rtvDesc, texture, &rtv));
 
     deviceContext->ClearRenderTargetView(rtv.get(), kDebugColorInitClearValue);
     return angle::Result::Continue;
