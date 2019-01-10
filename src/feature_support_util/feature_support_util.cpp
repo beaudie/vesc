@@ -845,6 +845,7 @@ ANGLE_EXPORT bool ANGLEGetSystemInfo(SystemInfoHandle *systemInfoHandle)
         return false;
     }
 
+#ifdef OLD_CODE // TODO (anglebug: 3063): Remove the temporary code
     angle::SystemInfo *systemInfo = new angle::SystemInfo;
     if (GetSystemInfo(systemInfo))
     {
@@ -852,6 +853,18 @@ ANGLE_EXPORT bool ANGLEGetSystemInfo(SystemInfoHandle *systemInfoHandle)
         return true;
     }
     return false;
+#else  // OLD_CODE
+    angle::SystemInfo *systemInfo = new angle::SystemInfo;
+    systemInfo->gpus.resize(1);
+    GPUDeviceInfo &gpu = systemInfo->gpus[0];
+    gpu.vendorId = 0xFEFEFEFE;
+    gpu.deviceId = 0xFEEEFEEE;
+    gpu.driverVendor = "Foo";
+    gpu.driverVersion = "1.2.3.4";
+
+    *systemInfoHandle = systemInfo;
+    return true;
+#endif // OLD_CODE
 }
 
 // This function is part of the version-2 API:
