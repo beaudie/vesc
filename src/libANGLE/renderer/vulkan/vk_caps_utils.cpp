@@ -50,6 +50,8 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
     outExtensions->textureBorderClamp     = false;  // not implemented yet
     outExtensions->translatedShaderSource = true;
 
+    outExtensions->robustBufferAccessBehavior = true;
+
     // We use secondary command buffers almost everywhere and they require a feature to be
     // able to execute in the presence of queries.  As a result, we won't support queries
     // unless that feature is available.
