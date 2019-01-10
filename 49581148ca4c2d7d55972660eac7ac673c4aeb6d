@@ -22,6 +22,30 @@
       "revId": "49581148ca4c2d7d55972660eac7ac673c4aeb6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a9b09bc_d5ef2017",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1166470
+      },
+      "writtenOn": "2019-01-10T20:23:41Z",
+      "side": 1,
+      "message": "The Chromium CL only adds hide_all_but_jni when export_libcxxabi_from_executables\u003d\u003dtrue, so it\u0027s already removed in this case and trying to remove it again here would cause an error in gn.",
+      "parentUuid": "7a73925b_0a2a1996",
+      "range": {
+        "startLine": 293,
+        "startChar": 0,
+        "endLine": 293,
+        "endChar": 64
+      },
+      "revId": "49581148ca4c2d7d55972660eac7ac673c4aeb6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
