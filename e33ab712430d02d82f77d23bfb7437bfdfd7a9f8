@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "115011ea_2fcae445",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 20
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-11T17:51:08Z",
+      "side": 1,
+      "message": "Doesn\u0027t look like we\u0027re storing the divisor anywhere. Is inputRate a placeholder to store the divisor when it\u0027s implemented?",
+      "range": {
+        "startLine": 9,
+        "startChar": 54,
+        "endLine": 10,
+        "endChar": 22
+      },
+      "revId": "e33ab712430d02d82f77d23bfb7437bfdfd7a9f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afc15263_10277d61",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-11T17:51:08Z",
+      "side": 1,
+      "message": "Does this mean you need only 1 bit for inputRate?",
+      "range": {
+        "startLine": 737,
+        "startChar": 16,
+        "endLine": 738,
+        "endChar": 89
+      },
+      "revId": "e33ab712430d02d82f77d23bfb7437bfdfd7a9f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ae8543f_76468e81",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-11T17:51:08Z",
+      "side": 1,
+      "message": "Maybe move the static_assert here from the header?",
+      "range": {
+        "startLine": 752,
+        "startChar": 48,
+        "endLine": 752,
+        "endChar": 81
+      },
+      "revId": "e33ab712430d02d82f77d23bfb7437bfdfd7a9f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
