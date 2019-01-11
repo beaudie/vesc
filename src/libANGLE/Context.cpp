@@ -8190,33 +8190,49 @@ intptr_t StateCache::getBasicDrawElementsErrorImpl(Context *context) const
 void StateCache::onVertexArrayBindingChange(Context *context)
 {
     updateActiveAttribsMask(context);
-    updateVertexElementLimits(context);
     updateBasicDrawStatesError();
+
+    if (context->isBufferAccessValidationEnabled())
+    {
+        updateVertexElementLimits(context);
+    }
 }
 
 void StateCache::onProgramExecutableChange(Context *context)
 {
     updateActiveAttribsMask(context);
-    updateVertexElementLimits(context);
     updateBasicDrawStatesError();
     updateValidDrawModes(context);
+    if (context->isBufferAccessValidationEnabled())
+    {
+        updateVertexElementLimits(context);
+    }
 }
 
 void StateCache::onVertexArrayFormatChange(Context *context)
 {
-    updateVertexElementLimits(context);
+    if (context->isBufferAccessValidationEnabled())
+    {
+        updateVertexElementLimits(context);
+    }
 }
 
 void StateCache::onVertexArrayBufferContentsChange(Context *context)
 {
-    updateVertexElementLimits(context);
+    if (context->isBufferAccessValidationEnabled())
+    {
+        updateVertexElementLimits(context);
+    }
     updateBasicDrawStatesError();
 }
 
 void StateCache::onVertexArrayStateChange(Context *context)
 {
     updateActiveAttribsMask(context);
-    updateVertexElementLimits(context);
+    if (context->isBufferAccessValidationEnabled())
+    {
+        updateVertexElementLimits(context);
+    }
     updateBasicDrawStatesError();
 }
 
