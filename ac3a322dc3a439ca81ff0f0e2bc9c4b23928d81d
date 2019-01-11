@@ -155,6 +155,30 @@
     },
     {
       "key": {
+        "uuid": "768e41c3_3044b233",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4999,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-11T19:59:21Z",
+      "side": 1,
+      "message": "Looks like they are generally used interchangeably: https://en.wikipedia.org/wiki/Null_character\n\n\u003e The null character (also null terminator or null byte), abbreviated NUL or NULL, is a control character with the value zero\n\nI always used NUL as that\u0027s what shows in the ASCII table.\n\nAnyway, funnily enough, there\u0027s a unicode \"symbol for NULL\" showing \"NUL\": https://unicode.org/charts/PDF/U2400.pdf",
+      "parentUuid": "96fae3f8_be573a73",
+      "range": {
+        "startLine": 4999,
+        "startChar": 21,
+        "endLine": 4999,
+        "endChar": 24
+      },
+      "revId": "ac3a322dc3a439ca81ff0f0e2bc9c4b23928d81d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d2401a67_388e9436",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
         "patchSetId": 3
