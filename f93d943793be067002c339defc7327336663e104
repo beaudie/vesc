@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66a56a8d_fb3be163",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-11T18:47:15Z",
+      "side": 0,
+      "message": "Can we assert that both of these bitsets are now reset?",
+      "range": {
+        "startLine": 377,
+        "startChar": 0,
+        "endLine": 378,
+        "endChar": 65
+      },
+      "revId": "f93d943793be067002c339defc7327336663e104",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

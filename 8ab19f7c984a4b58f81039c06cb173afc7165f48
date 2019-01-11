@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "026d8c1f_950d25cf",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-11T18:47:15Z",
+      "side": 1,
+      "message": "Did these have to move?",
+      "range": {
+        "startLine": 188,
+        "startChar": 0,
+        "endLine": 217,
+        "endChar": 1
+      },
+      "revId": "8ab19f7c984a4b58f81039c06cb173afc7165f48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79d8bec0_b43faf23",
         "filename": "src/libANGLE/renderer/VertexArrayImpl.h",
         "patchSetId": 22
