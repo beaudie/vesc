@@ -212,6 +212,14 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mGraphicsPipelineDesc->updateTopology(&mGraphicsPipelineTransition, mCurrentDrawMode);
     }
 
+    // Must be called before the command buffer is started. Can call finish.
+    if (context->getStateCache().hasAnyActiveClientAttrib())
+    {
+        ANGLE_TRY(mVertexArray->updateClientAttribs(context, firstVertex, vertexOrIndexCount,
+                                                    indexTypeOrNone, indices));
+        mDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
+    }
+
     if (!mCommandBuffer)
     {
         if (!mDrawFramebuffer->appendToStartedRenderPass(mRenderer->getCurrentQueueSerial(),
@@ -220,13 +228,6 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
             ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, &mCommandBuffer));
             mDirtyBits |= mNewCommandBufferDirtyBits;
         }
-    }
-
-    if (context->getStateCache().hasAnyActiveClientAttrib())
-    {
-        ANGLE_TRY(mVertexArray->updateClientAttribs(context, firstVertex, vertexOrIndexCount,
-                                                    indexTypeOrNone, indices));
-        mDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
     }
 
     if (mProgram->dirtyUniforms())
