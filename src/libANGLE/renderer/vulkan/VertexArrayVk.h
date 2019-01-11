@@ -89,7 +89,8 @@ class VertexArrayVk : public VertexArrayImpl
     void setPackedInputInfo(ContextVk *contextVk,
                             size_t attribIndex,
                             const gl::VertexAttribute &attrib,
-                            const gl::VertexBinding &binding);
+                            const gl::VertexBinding &binding,
+                            const vk::Format &vertexFormat);
     void setDefaultPackedInput(ContextVk *contextVk, size_t attribIndex);
 
     angle::Result streamIndexData(ContextVk *contextVk,
@@ -100,11 +101,13 @@ class VertexArrayVk : public VertexArrayImpl
     angle::Result convertVertexBufferGpu(ContextVk *contextVk,
                                          BufferVk *srcBuffer,
                                          const gl::VertexBinding &binding,
-                                         size_t attribIndex);
+                                         size_t attribIndex,
+                                         const vk::Format &vertexFormat);
     angle::Result convertVertexBufferCpu(ContextVk *contextVk,
                                          BufferVk *srcBuffer,
                                          const gl::VertexBinding &binding,
-                                         size_t attribIndex);
+                                         size_t attribIndex,
+                                         const vk::Format &vertexFormat);
     void ensureConversionReleased(RendererVk *renderer, size_t attribIndex);
 
     angle::Result syncDirtyAttrib(ContextVk *contextVk,
@@ -115,7 +118,6 @@ class VertexArrayVk : public VertexArrayImpl
     gl::AttribArray<VkBuffer> mCurrentArrayBufferHandles;
     gl::AttribArray<VkDeviceSize> mCurrentArrayBufferOffsets;
     gl::AttribArray<vk::BufferHelper *> mCurrentArrayBuffers;
-    gl::AttribArray<const vk::Format *> mCurrentArrayBufferFormats;
     gl::AttribArray<GLuint> mCurrentArrayBufferStrides;
     gl::AttribArray<vk::DynamicBuffer> mCurrentArrayBufferConversion;
     gl::AttribArray<bool> mCurrentArrayBufferConversionCanRelease;
