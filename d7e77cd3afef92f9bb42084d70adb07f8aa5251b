@@ -182,6 +182,30 @@
     },
     {
       "key": {
+        "uuid": "023aa2f7_886fa13f",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-11T15:37:45Z",
+      "side": 1,
+      "message": "That\u0027s fair, maybe it makes more sense to change ShaderGL::compile to something like ShaderGL::compileAsync and only call it if it\u0027s being done in a worker thread.  There is already a fallback to non-async compile so this function will be simplified and can use an RAII object for the worker.\n\nI\u0027m concerned that if there is an edge case that doesn\u0027t call unbindWorkerContext, the context will be leaked and we won\u0027t notice.",
+      "parentUuid": "420dd927_b1417d74",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 31
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b3765ecb_5aeadeb4",
         "filename": "src/libANGLE/renderer/gl/RendererGL.h",
         "patchSetId": 28
