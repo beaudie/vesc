@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a3e3562_42f6426b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-11T19:44:26Z",
+      "side": 1,
+      "message": "Yes, I had written this hastily and forgot to update. What this really meant is that `EXT_debug_utils` is an extension that replaces both `EXT_debug_report` and `EXT_debug_marker`, which is general statement not describing the commit itself.\n\nUpdated.",
+      "parentUuid": "88e98fb2_de68a55e",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 0
+      },
+      "revId": "1016551d6e6a89ea4e41f77097d3126c94c8c0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d2427884_6e45cd62",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "547a46ab_72fcacfa",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-11T19:44:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2427884_6e45cd62",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 50
+      },
+      "revId": "1016551d6e6a89ea4e41f77097d3126c94c8c0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b2bd4f9c_ac9f6464",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "1016551d6e6a89ea4e41f77097d3126c94c8c0cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9dc6245_f461cd91",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-11T19:44:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2bd4f9c_ac9f6464",
+      "range": {
+        "startLine": 708,
+        "startChar": 40,
+        "endLine": 708,
+        "endChar": 84
+      },
+      "revId": "1016551d6e6a89ea4e41f77097d3126c94c8c0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
