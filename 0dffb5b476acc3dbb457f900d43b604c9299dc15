@@ -1,0 +1,245 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "085b53db_9b5c30f8",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-11T18:28:16Z",
+      "side": 1,
+      "message": "nit: counters",
+      "range": {
+        "startLine": 632,
+        "startChar": 29,
+        "endLine": 632,
+        "endChar": 37
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "478f08d4_c849ce8d",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-11T18:28:16Z",
+      "side": 1,
+      "message": "nit: GetReadonlyImage2DRegisterIndex and GetImage2DRegisterIndex return the first index into a range of reserved registers for image2D/iimage2D/uimage2D variables.",
+      "range": {
+        "startLine": 633,
+        "startChar": 0,
+        "endLine": 634,
+        "endChar": 9
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "decea23a_57a77fd4",
+        "filename": "src/compiler/translator/BaseTypes.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-11T18:28:16Z",
+      "side": 1,
+      "message": "you can remove this with the below",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 21
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72d16db4_9cb56704",
+        "filename": "src/compiler/translator/BaseTypes.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-11T18:28:16Z",
+      "side": 1,
+      "message": "this should go in util.h/cpp not in this file.",
+      "range": {
+        "startLine": 1024,
+        "startChar": 0,
+        "endLine": 1057,
+        "endChar": 1
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3795fc5b_4f1deebd",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-11T18:28:16Z",
+      "side": 1,
+      "message": "nit: make this constexpr char [] and use kConstantName style",
+      "range": {
+        "startLine": 38,
+        "startChar": 22,
+        "endLine": 38,
+        "endChar": 58
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11fc020f_2039f9cf",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-11T18:28:16Z",
+      "side": 1,
+      "message": "no (c) just 2019. please refer to the style guide.",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4dddb772_b3593500",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-11T18:28:16Z",
+      "side": 1,
+      "message": "Where is this generated in the translator again? Is it possible to make this connection safer or to share code between the translator and API?",
+      "range": {
+        "startLine": 272,
+        "startChar": 12,
+        "endLine": 272,
+        "endChar": 40
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99ac06fb_adbb1d1d",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-11T18:28:16Z",
+      "side": 1,
+      "message": "please follow the style guide and make static functions caps.",
+      "range": {
+        "startLine": 688,
+        "startChar": 5,
+        "endLine": 688,
+        "endChar": 34
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ef43482_df08687e",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-11T18:28:16Z",
+      "side": 1,
+      "message": "is this the only place you use getD3DUniformByName? I don\u0027t see that you\u0027re ever using the return value except to check for nullptr. Maybe add a function \"hasNamedUniform\" instead of making getD3DUniformByName public.",
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f7209a0_8dbbb287",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-11T18:28:16Z",
+      "side": 1,
+      "message": "same comment about copyright.",
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88da9738_0dc28830",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 1834,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-11T18:28:16Z",
+      "side": 1,
+      "message": "don\u0027t use auto for simple types. same for other locations in the CL",
+      "range": {
+        "startLine": 1834,
+        "startChar": 19,
+        "endLine": 1834,
+        "endChar": 24
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
