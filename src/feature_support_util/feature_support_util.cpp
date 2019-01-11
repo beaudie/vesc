@@ -803,6 +803,7 @@ using namespace angle;
 // This function is part of the version-2 API:
 ANGLE_EXPORT bool ANGLEGetFeatureSupportUtilAPIVersion(unsigned int *versionToUse)
 {
+INFO("%s(): GOT TO HERE 1", __FUNCTION__);
     if (!versionToUse || (*versionToUse < kFeatureVersion_LowestSupported))
     {
         // The versionToUse is either nullptr or is less than the lowest version supported, which
@@ -823,6 +824,7 @@ ANGLE_EXPORT bool ANGLEAndroidParseRulesString(const char *rulesString,
                                                RulesHandle *rulesHandle,
                                                int *rulesVersion)
 {
+INFO("%s(): GOT TO HERE 2", __FUNCTION__);
     if (!rulesString || !rulesHandle || !rulesVersion)
     {
         return false;
@@ -840,6 +842,7 @@ ANGLE_EXPORT bool ANGLEAndroidParseRulesString(const char *rulesString,
 // This function is part of the version-2 API:
 ANGLE_EXPORT bool ANGLEGetSystemInfo(SystemInfoHandle *systemInfoHandle)
 {
+INFO("%s(): GOT TO HERE 3", __FUNCTION__);
     if (!systemInfoHandle)
     {
         return false;
@@ -863,6 +866,7 @@ ANGLE_EXPORT bool ANGLEAddDeviceInfoToSystemInfo(const char *deviceMfr,
                                                  const char *deviceModel,
                                                  SystemInfoHandle systemInfoHandle)
 {
+INFO("%s(): GOT TO HERE 4", __FUNCTION__);
     angle::SystemInfo *systemInfo = static_cast<angle::SystemInfo *>(systemInfoHandle);
     if (!deviceMfr || !deviceModel || !systemInfo)
     {
@@ -880,6 +884,7 @@ ANGLE_EXPORT bool ANGLEShouldBeUsedForApplication(const RulesHandle rulesHandle,
                                                   const SystemInfoHandle systemInfoHandle,
                                                   const char *appName)
 {
+INFO("%s(): GOT TO HERE 5", __FUNCTION__);
     RuleList *rules               = static_cast<RuleList *>(rulesHandle);
     angle::SystemInfo *systemInfo = static_cast<angle::SystemInfo *>(systemInfoHandle);
     if (!rules || !systemInfo || !appName || (systemInfo->gpus.size() != 1))
@@ -906,6 +911,7 @@ ANGLE_EXPORT bool ANGLEShouldBeUsedForApplication(const RulesHandle rulesHandle,
 // This function is part of the version-2 API:
 ANGLE_EXPORT void ANGLEFreeRulesHandle(const RulesHandle rulesHandle)
 {
+INFO("%s(): GOT TO HERE 6", __FUNCTION__);
     RuleList *rules = static_cast<RuleList *>(rulesHandle);
     if (rules)
     {
@@ -916,6 +922,7 @@ ANGLE_EXPORT void ANGLEFreeRulesHandle(const RulesHandle rulesHandle)
 // This function is part of the version-2 API:
 ANGLE_EXPORT void ANGLEFreeSystemInfoHandle(const SystemInfoHandle systemInfoHandle)
 {
+INFO("%s(): GOT TO HERE 7", __FUNCTION__);
     angle::SystemInfo *systemInfo = static_cast<angle::SystemInfo *>(systemInfoHandle);
     if (systemInfo)
     {
