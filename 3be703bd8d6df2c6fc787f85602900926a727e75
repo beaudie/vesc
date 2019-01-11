@@ -22,6 +22,30 @@
       "revId": "3be703bd8d6df2c6fc787f85602900926a727e75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74b9e4f0_a71265b2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-11T04:00:52Z",
+      "side": 1,
+      "message": "Good idea. Done.",
+      "parentUuid": "6fe39560_50d23f62",
+      "range": {
+        "startLine": 860,
+        "startChar": 0,
+        "endLine": 875,
+        "endChar": 2
+      },
+      "revId": "3be703bd8d6df2c6fc787f85602900926a727e75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
