@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "217e058e_8e2f9dec",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-11T21:06:55Z",
+      "side": 1,
+      "message": "I think so. I wanted to move them to make sure that if a function was marked ANGLE_INLINE it was defined before the function that uses it. To avoid confusing the compiler.",
+      "parentUuid": "026d8c1f_950d25cf",
+      "range": {
+        "startLine": 188,
+        "startChar": 0,
+        "endLine": 217,
+        "endChar": 1
+      },
+      "revId": "8ab19f7c984a4b58f81039c06cb173afc7165f48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "79d8bec0_b43faf23",
         "filename": "src/libANGLE/renderer/VertexArrayImpl.h",
         "patchSetId": 22
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "c4ee4655_7e8593f3",
+        "filename": "src/libANGLE/renderer/VertexArrayImpl.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-11T21:06:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79d8bec0_b43faf23",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 98
+      },
+      "revId": "8ab19f7c984a4b58f81039c06cb173afc7165f48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a475a2f7_de00e4aa",
         "filename": "src/libANGLE/renderer/d3d/d3d9/VertexArray9.h",
         "patchSetId": 22
@@ -62,6 +110,24 @@
       "revId": "8ab19f7c984a4b58f81039c06cb173afc7165f48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c2f74da_0a293307",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/VertexArray9.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-11T21:06:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a475a2f7_de00e4aa",
+      "revId": "8ab19f7c984a4b58f81039c06cb173afc7165f48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
