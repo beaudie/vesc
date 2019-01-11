@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88e98fb2_de68a55e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-11T17:25:25Z",
+      "side": 1,
+      "message": "I think this should say something like:\nUse EXT_debug_utils and prefer it to EXT_debug_report for debug callback.\nAnd we\u0027re not using EXT_debug_marker, I think.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 0
+      },
+      "revId": "1016551d6e6a89ea4e41f77097d3126c94c8c0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2427884_6e45cd62",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-11T17:25:25Z",
+      "side": 1,
+      "message": "You can check this in the beginning and early exit.\nWill save string comparison and reduce indent here.",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 50
+      },
+      "revId": "1016551d6e6a89ea4e41f77097d3126c94c8c0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2bd4f9c_ac9f6464",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-11T17:25:25Z",
+      "side": 1,
+      "message": "Maybe we shouldn\u0027t request Info if we\u0027re not printing it (in debug report, too)?\nMight speed up our tests a bit, I think.",
+      "range": {
+        "startLine": 708,
+        "startChar": 40,
+        "endLine": 708,
+        "endChar": 84
+      },
+      "revId": "1016551d6e6a89ea4e41f77097d3126c94c8c0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
