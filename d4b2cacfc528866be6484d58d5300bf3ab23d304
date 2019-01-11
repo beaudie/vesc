@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "618f59cb_da4b6bdd",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-11T18:04:39Z",
+      "side": 1,
+      "message": "nit: markRawUsage to mirror markTransformFeedbackUsage",
+      "range": {
+        "startLine": 695,
+        "startChar": 24,
+        "endLine": 695,
+        "endChar": 42
+      },
+      "revId": "d4b2cacfc528866be6484d58d5300bf3ab23d304",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38a80c3f_d61fe461",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-11T18:04:39Z",
+      "side": 1,
+      "message": "can you move this to Renderer11 to mirror markTransformFeedbackUsage?",
+      "revId": "d4b2cacfc528866be6484d58d5300bf3ab23d304",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
