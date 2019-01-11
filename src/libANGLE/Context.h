@@ -1803,6 +1803,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     void onSamplerUniformChange(size_t textureUnitIndex);
 
+    bool isBufferAccessValidationEnabled() const { return mBufferAccessValidationEnabled; }
+
   private:
     void initialize();
 
@@ -1911,6 +1913,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     egl::Surface *mCurrentSurface;
     egl::Display *mCurrentDisplay;
     const bool mWebGLContext;
+    const bool mBufferAccessValidationEnabled;
     const bool mExtensionsEnabled;
     MemoryProgramCache *mMemoryProgramCache;
 
