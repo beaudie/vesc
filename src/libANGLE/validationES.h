@@ -488,12 +488,79 @@ bool ValidateGetVertexAttribBase(Context *context,
                                  bool pointer,
                                  bool pureIntegerEntryPoint);
 
-bool ValidateVertexFormatBase(Context *context,
-                              GLuint attribIndex,
-                              GLint size,
-                              VertexAttribType type,
-                              GLboolean pureInteger);
+ANGLE_INLINE bool ValidateVertexFormatBase(Context *context,
+                                           GLuint index,
+                                           GLint size,
+                                           VertexAttribType type)
+{
+    const Caps &caps = context->getCaps();
+    if (index >= caps.maxVertexAttributes)
+    {
+        context->validationError(GL_INVALID_VALUE, err::kIndexExceedsMaxVertexAttribute);
+        return false;
+    }
 
+    switch (context->getStateCache().getVertexAttribTypeValidation(type))
+    {
+        case VertexAttribTypeCase::Invalid:
+            context->validationError(GL_INVALID_ENUM, err::kInvalidType);
+            return false;
+        case VertexAttribTypeCase::Valid:
+            if (size < 1 || size > 4)
+            {
+                context->validationError(GL_INVALID_VALUE, err::kInvalidVertexAttrSize);
+                return false;
+            }
+            break;
+        case VertexAttribTypeCase::ValidSize4Only:
+            if (size != 4)
+            {
+                context->validationError(GL_INVALID_OPERATION,
+                                         err::kInvalidVertexAttribSize2101010);
+                return false;
+            }
+            break;
+    }
+
+    return true;
+}
+
+ANGLE_INLINE bool ValidateIntegerVertexFormatBase(Context *context,
+                                                  GLuint index,
+                                                  GLint size,
+                                                  VertexAttribType type)
+{
+    const Caps &caps = context->getCaps();
+    if (index >= caps.maxVertexAttributes)
+    {
+        context->validationError(GL_INVALID_VALUE, err::kIndexExceedsMaxVertexAttribute);
+        return false;
+    }
+
+    switch (context->getStateCache().getIntegerVertexAttribTypeValidation(type))
+    {
+        case VertexAttribTypeCase::Invalid:
+            context->validationError(GL_INVALID_ENUM, err::kInvalidType);
+            return false;
+        case VertexAttribTypeCase::Valid:
+            if (size < 1 || size > 4)
+            {
+                context->validationError(GL_INVALID_VALUE, err::kInvalidVertexAttrSize);
+                return false;
+            }
+            break;
+        case VertexAttribTypeCase::ValidSize4Only:
+            if (size != 4)
+            {
+                context->validationError(GL_INVALID_OPERATION,
+                                         err::kInvalidVertexAttribSize2101010);
+                return false;
+            }
+            break;
+    }
+
+    return true;
+}
 bool ValidateWebGLFramebufferAttachmentClearType(Context *context,
                                                  GLint drawbuffer,
                                                  const GLenum *validComponentTypes,
