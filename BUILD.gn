@@ -152,11 +152,15 @@ if (is_win && target_cpu != "arm64") {
   }
 }
 
-angle_undefine_configs = [ "//build/config/compiler:default_include_dirs" ]
+angle_undefine_configs = [
+  "//build/config/compiler:default_include_dirs",
+  "//build/config/clang:find_bad_constructs",
+]
 
 # Holds the shared includes so we only need to list them once.
 source_set("includes") {
   sources = libangle_includes
+  configs -= angle_undefine_configs
 }
 
 static_library("preprocessor") {
@@ -392,6 +396,8 @@ source_set("translator_fuzzer") {
   deps = [
     ":translator",
   ]
+
+  configs -= angle_undefine_configs
 }
 
 config("commit_id_config") {
@@ -624,6 +630,7 @@ static_library("libANGLE") {
   }
 
   configs -= angle_undefine_configs
+  configs += [ "//build/config/clang:find_bad_constructs" ]
 
   configs += [
     ":debug_annotations_config",
@@ -996,6 +1003,8 @@ foreach(is_shared_library,
       ":extra_warnings",
     ]
 
+    configs -= angle_undefine_configs
+
     public_configs = [
       ":angle_util_config",
       ":internal_config",
@@ -1046,6 +1055,8 @@ executable("angle_shader_translator") {
   deps = [
     ":translator",
   ]
+
+  configs -= angle_undefine_configs
 }
 
 config("angle_feature_support_config") {
@@ -1116,9 +1127,8 @@ if (!is_component_build && is_android && symbol_level != 0) {
 
     if (angle_enable_vulkan_validation_layers) {
       foreach(_layer, vulkan_validation_layers) {
-        deps += [
-          "${angle_root}/third_party/vulkan-validation-layers:${_layer}",
-        ]
+        deps +=
+            [ "${angle_root}/third_party/vulkan-validation-layers:${_layer}" ]
       }
     }
 
