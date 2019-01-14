@@ -120,7 +120,7 @@
   "proc table:src/libGLESv2/gen_proc_table.py":
     "ee265eada3dd238646010dd03874d242",
   "proc table:src/libGLESv2/proc_table_data.json":
-    "68772eb4798f438df2eb997394999855",
+    "affbed46a69fd34fba3084b41c2571f7",
   "uniform type:src/common/gen_uniform_type_table.py":
     "e185802e66950dfc5fc7a8fc19751206"
 }
