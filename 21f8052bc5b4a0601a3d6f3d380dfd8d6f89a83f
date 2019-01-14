@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e2f628f_e10d669e",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-14T15:01:40Z",
+      "side": 1,
+      "message": "While you\u0027re here, feel free to remove this comment as we talked about. I don\u0027t know when I would be touching this file.",
+      "revId": "21f8052bc5b4a0601a3d6f3d380dfd8d6f89a83f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
