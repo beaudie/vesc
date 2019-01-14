@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "198fb9d3_600ad8a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-14T17:56:05Z",
+      "side": 1,
+      "message": "Could you also add \", angleproject:2716\" here?\nI don\u0027t think we need 3068, you can duplicate it into 2716.",
+      "range": {
+        "startLine": 19,
+        "startChar": 5,
+        "endLine": 19,
+        "endChar": 22
+      },
+      "revId": "95acf9c5aa242594670a448b7bd4dcbefe28b036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bde0013_a163b204",
+        "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-14T17:56:05Z",
+      "side": 1,
+      "message": "The failure on Nexus 5X is on GLES backend.\nCould you please keep the old 2716 bug and move this expectation to \"ANDROID GLES\" group above?",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 66
+      },
+      "revId": "95acf9c5aa242594670a448b7bd4dcbefe28b036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fb168f7_ee027c50",
+        "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-14T17:56:05Z",
+      "side": 1,
+      "message": "Since these tests pass on the bots, no reason to disable them.\nAnyway, it should  be done in a separate CL, since this one is unrelated.",
+      "range": {
+        "startLine": 273,
+        "startChar": 0,
+        "endLine": 278,
+        "endChar": 74
+      },
+      "revId": "95acf9c5aa242594670a448b7bd4dcbefe28b036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
