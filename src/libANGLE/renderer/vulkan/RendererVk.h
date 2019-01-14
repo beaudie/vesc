@@ -252,6 +252,8 @@ class RendererVk : angle::NonCopyable
     uint32_t mCurrentQueueFamilyIndex;
     VkDevice mDevice;
     vk::CommandPool mCommandPool;
+    angle::PoolAllocator mPoolAllocator;
+    VkAllocationCallbacks mAllocationCallbacks;
     SerialFactory mQueueSerialFactory;
     SerialFactory mShaderSerialFactory;
     Serial mLastCompletedQueueSerial;
@@ -267,7 +269,7 @@ class RendererVk : angle::NonCopyable
         CommandBatch(CommandBatch &&other);
         CommandBatch &operator=(CommandBatch &&other);
 
-        void destroy(VkDevice device);
+        void destroy(VkDevice device, const VkAllocationCallbacks *pAllocationCallbacks);
 
         vk::CommandPool commandPool;
         vk::Fence fence;

@@ -1,0 +1,334 @@
+//
+// Copyright 2019 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+
+#include "common/PoolAlloc.h"
+
+#include <assert.h>
+#include <stdint.h>
+#include <stdio.h>
+
+#include "common/angleutils.h"
+#include "common/debug.h"
+#include "common/platform.h"
+#include "common/tls.h"
+
+namespace angle
+{
+
+//
+// Implement the functionality of the PoolAllocator class, which
+// is documented in PoolAlloc.h.
+//
+PoolAllocator::PoolAllocator(int growthIncrement, int allocationAlignment)
+    : alignment(allocationAlignment),
+#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+      pageSize(growthIncrement),
+      freeList(0),
+      inUseList(0),
+      numCalls(0),
+      totalBytes(0),
+#endif
+      mLocked(false)
+{
+    //
+    // Adjust alignment to be at least pointer aligned and
+    // power of 2.
+    //
+    size_t minAlign = sizeof(void *);
+    alignment &= ~(minAlign - 1);
+    if (alignment < minAlign)
+        alignment = minAlign;
+    size_t a = 1;
+    while (a < alignment)
+        a <<= 1;
+    alignment     = a;
+    alignmentMask = a - 1;
+
+#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+    //
+    // Don't allow page sizes we know are smaller than all common
+    // OS page sizes.
+    //
+    if (pageSize < 4 * 1024)
+        pageSize = 4 * 1024;
+
+    //
+    // A large currentPageOffset indicates a new page needs to
+    // be obtained to allocate memory.
+    //
+    currentPageOffset = pageSize;
+
+    //
+    // Align header skip
+    //
+    headerSkip = minAlign;
+    if (headerSkip < sizeof(tHeader))
+    {
+        headerSkip = (sizeof(tHeader) + alignmentMask) & ~alignmentMask;
+    }
+#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+    mStack.push_back({});
+#endif
+}
+
+PoolAllocator::~PoolAllocator()
+{
+#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+    while (inUseList)
+    {
+        tHeader *next = inUseList->nextPage;
+        inUseList->~tHeader();
+        delete[] reinterpret_cast<char *>(inUseList);
+        inUseList = next;
+    }
+
+    // We should not check the guard blocks
+    // here, because we did it already when the block was
+    // placed into the free list.
+    //
+    while (freeList)
+    {
+        tHeader *next = freeList->nextPage;
+        delete[] reinterpret_cast<char *>(freeList);
+        freeList = next;
+    }
+#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+    for (auto &allocs : mStack)
+    {
+        for (auto alloc : allocs)
+        {
+            free(alloc);
+        }
+    }
+    mStack.clear();
+#endif
+}
+
+// Support MSVC++ 6.0
+const unsigned char CPAllocation::guardBlockBeginVal = 0xfb;
+const unsigned char CPAllocation::guardBlockEndVal   = 0xfe;
+const unsigned char CPAllocation::userDataFill       = 0xcd;
+
+#ifdef GUARD_BLOCKS
+const size_t CPAllocation::guardBlockSize = 16;
+#else
+const size_t CPAllocation::guardBlockSize = 0;
+#endif
+
+//
+// Check a single guard block for damage
+//
+void CPAllocation::checkGuardBlock(unsigned char *blockMem,
+                                   unsigned char val,
+                                   const char *locText) const
+{
+#ifdef GUARD_BLOCKS
+    for (size_t x = 0; x < guardBlockSize; x++)
+    {
+        if (blockMem[x] != val)
+        {
+            char assertMsg[80];
+
+// We don't print the assert message.  It's here just to be helpful.
+#    if defined(_MSC_VER)
+            snprintf(assertMsg, sizeof(assertMsg),
+                     "PoolAlloc: Damage %s %Iu byte allocation at 0x%p\n", locText, size, data());
+#    else
+            snprintf(assertMsg, sizeof(assertMsg),
+                     "PoolAlloc: Damage %s %zu byte allocation at 0x%p\n", locText, size, data());
+#    endif
+            assert(0 && "PoolAlloc: Damage in guard block");
+        }
+    }
+#endif
+}
+
+void PoolAllocator::push()
+{
+#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+    tAllocState state = {currentPageOffset, inUseList};
+
+    mStack.push_back(state);
+
+    //
+    // Indicate there is no current page to allocate from.
+    //
+    currentPageOffset = pageSize;
+#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+    mStack.push_back({});
+#endif
+}
+
+//
+// Do a mass-deallocation of all the individual allocations
+// that have occurred since the last push(), or since the
+// last pop(), or since the object's creation.
+//
+// The deallocated pages are saved for future allocations.
+//
+void PoolAllocator::pop()
+{
+    if (mStack.size() < 1)
+        return;
+
+#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+    tHeader *page     = mStack.back().page;
+    currentPageOffset = mStack.back().offset;
+
+    while (inUseList != page)
+    {
+        // invoke destructor to free allocation list
+        inUseList->~tHeader();
+
+        tHeader *nextInUse = inUseList->nextPage;
+        if (inUseList->pageCount > 1)
+            delete[] reinterpret_cast<char *>(inUseList);
+        else
+        {
+            inUseList->nextPage = freeList;
+            freeList            = inUseList;
+        }
+        inUseList = nextInUse;
+    }
+
+    mStack.pop_back();
+#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+    for (auto &alloc : mStack.back())
+    {
+        free(alloc);
+    }
+    mStack.pop_back();
+#endif
+}
+
+//
+// Do a mass-deallocation of all the individual allocations
+// that have occurred.
+//
+void PoolAllocator::popAll()
+{
+    while (mStack.size() > 0)
+        pop();
+}
+
+void *PoolAllocator::allocate(size_t numBytes)
+{
+    ASSERT(!mLocked);
+
+#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+    //
+    // Just keep some interesting statistics.
+    //
+    ++numCalls;
+    totalBytes += numBytes;
+
+    // If we are using guard blocks, all allocations are bracketed by
+    // them: [guardblock][allocation][guardblock].  numBytes is how
+    // much memory the caller asked for.  allocationSize is the total
+    // size including guard blocks.  In release build,
+    // guardBlockSize=0 and this all gets optimized away.
+    size_t allocationSize = CPAllocation::allocationSize(numBytes);
+    // Detect integer overflow.
+    if (allocationSize < numBytes)
+        return 0;
+
+    //
+    // Do the allocation, most likely case first, for efficiency.
+    // This step could be moved to be inline sometime.
+    //
+    if (allocationSize <= pageSize - currentPageOffset)
+    {
+        //
+        // Safe to allocate from currentPageOffset.
+        //
+        unsigned char *memory = reinterpret_cast<unsigned char *>(inUseList) + currentPageOffset;
+        currentPageOffset += allocationSize;
+        currentPageOffset = (currentPageOffset + alignmentMask) & ~alignmentMask;
+
+        return initializeAllocation(inUseList, memory, numBytes);
+    }
+
+    if (allocationSize > pageSize - headerSkip)
+    {
+        //
+        // Do a multi-page allocation.  Don't mix these with the others.
+        // The OS is efficient and allocating and free-ing multiple pages.
+        //
+        size_t numBytesToAlloc = allocationSize + headerSkip;
+        // Detect integer overflow.
+        if (numBytesToAlloc < allocationSize)
+            return 0;
+
+        tHeader *memory = reinterpret_cast<tHeader *>(::new char[numBytesToAlloc]);
+        if (memory == 0)
+            return 0;
+
+        // Use placement-new to initialize header
+        new (memory) tHeader(inUseList, (numBytesToAlloc + pageSize - 1) / pageSize);
+        inUseList = memory;
+
+        currentPageOffset = pageSize;  // make next allocation come from a new page
+
+        // No guard blocks for multi-page allocations (yet)
+        return reinterpret_cast<void *>(reinterpret_cast<uintptr_t>(memory) + headerSkip);
+    }
+
+    //
+    // Need a simple page to allocate from.
+    //
+    tHeader *memory;
+    if (freeList)
+    {
+        memory   = freeList;
+        freeList = freeList->nextPage;
+    }
+    else
+    {
+        memory = reinterpret_cast<tHeader *>(::new char[pageSize]);
+        if (memory == 0)
+            return 0;
+    }
+
+    // Use placement-new to initialize header
+    new (memory) tHeader(inUseList, 1);
+    inUseList = memory;
+
+    unsigned char *ret = reinterpret_cast<unsigned char *>(inUseList) + headerSkip;
+    currentPageOffset  = (headerSkip + allocationSize + alignmentMask) & ~alignmentMask;
+
+    return initializeAllocation(inUseList, ret, numBytes);
+#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+    void *alloc = malloc(numBytes + alignmentMask);
+    mStack.back().push_back(alloc);
+
+    intptr_t intAlloc = reinterpret_cast<intptr_t>(alloc);
+    intAlloc = (intAlloc + alignmentMask) & ~alignmentMask;
+    return reinterpret_cast<void *>(intAlloc);
+#endif
+}
+
+void PoolAllocator::lock()
+{
+    ASSERT(!mLocked);
+    mLocked = true;
+}
+
+void PoolAllocator::unlock()
+{
+    ASSERT(mLocked);
+    mLocked = false;
+}
+
+//
+// Check all allocations in a list for damage by calling check on each.
+//
+void CPAllocation::checkAllocList() const
+{
+    for (const CPAllocation *alloc = this; alloc != 0; alloc = alloc->prevAlloc)
+        alloc->check();
+}
+
+}  // namespace angle
