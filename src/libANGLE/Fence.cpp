@@ -4,14 +4,16 @@
 // found in the LICENSE file.
 //
 
-// Fence.cpp: Implements the gl::FenceNV and gl::Sync classes, which support the GL_NV_fence
-// extension and GLES3 sync objects.
+// Fence.cpp: Implements the gl::FenceNV, gl::Sync and egl::Sync classes, which support the
+// GL_NV_fence extension, GLES3 sync objects and EGL1.5 sync objects.
 
 #include "libANGLE/Fence.h"
 
 #include "angle_gl.h"
 
 #include "common/utilities.h"
+#include "libANGLE/renderer/EGLImplFactory.h"
+#include "libANGLE/renderer/EGLSyncImpl.h"
 #include "libANGLE/renderer/FenceNVImpl.h"
 #include "libANGLE/renderer/SyncImpl.h"
 
@@ -112,3 +114,69 @@ angle::Result Sync::getStatus(const Context *context, GLint *outResult) const
 }
 
 }  // namespace gl
+
+namespace egl
+{
+
+Sync::Sync(rx::EGLImplFactory *factory, const AttributeMap &attribs)
+    : mFence(factory->createSync(attribs)), mType(EGL_SYNC_TYPE)
+{}
+
+void Sync::onDestroy(const Display *display) {}
+
+Sync::~Sync()
+{
+    SafeDelete(mFence);
+}
+
+Error Sync::set(const Display *display, EGLenum type)
+{
+    ANGLE_TRY(mFence->set(display, type));
+
+    mType = type;
+    return NoError();
+}
+
+Error Sync::clientWait(const Display *display, EGLint flags, EGLTime timeout, EGLint *outResult)
+{
+    return mFence->clientWait(display, flags, timeout, outResult);
+}
+
+Error Sync::serverWait(const Display *display, EGLint flags)
+{
+    return mFence->serverWait(display, flags);
+}
+
+Error Sync::getSyncAttrib(const Display *display, EGLint attribute, EGLint *value) const
+{
+    // Only Fence Syncs are currently supported anywhere in angle.  This function directly returns
+    // attributes that are fixed for such sync objects.
+    ASSERT(mType == EGL_SYNC_FENCE);
+
+    switch (attribute)
+    {
+        case EGL_SYNC_TYPE:
+            *value = EGL_SYNC_FENCE;
+            return NoError();
+
+        case EGL_SYNC_STATUS:
+            return mFence->getStatus(display, value);
+
+        case EGL_SYNC_CONDITION:
+            *value = EGL_SYNC_PRIOR_COMMANDS_COMPLETE;
+            return NoError();
+
+        default:
+            break;
+    }
+
+    UNREACHABLE();
+    return NoError();
+}
+
+void Sync::destroySync(const Display *display)
+{
+    mFence->destroySync(display);
+}
+
+}  // namespace egl
