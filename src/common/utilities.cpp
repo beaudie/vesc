@@ -785,7 +785,7 @@ unsigned int ArraySizeProduct(const std::vector<unsigned int> &arraySizes)
     {
         arraySizeProduct *= arraySize;
     }
-    return arraySizeProduct;
+    return std::max(arraySizeProduct, 1u);
 }
 
 unsigned int ParseArrayIndex(const std::string &name, size_t *nameLengthWithoutArrayIndexOut)
