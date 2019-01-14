@@ -268,21 +268,69 @@ VkDevice Context::getDevice() const
 }
 
 // CommandPool implementation.
+// Custom allocation functions
+
+static VKAPI_ATTR void *AllocationFunction(void *pUserData,
+                                           size_t size,
+                                           size_t alignment,
+                                           VkSystemAllocationScope allocationScope)
+{
+    angle::PoolAllocator *pPoolAllocator = static_cast<angle::PoolAllocator *>(pUserData);
+    ASSERT(0 == (16 % alignment));
+    return pPoolAllocator->allocate(size);
+}
+
+static VKAPI_ATTR void *ReallocationFunction(void *pUserData,
+                                             void *pOriginal,
+                                             size_t size,
+                                             size_t alignment,
+                                             VkSystemAllocationScope allocationScope)
+{
+    return AllocationFunction(pUserData, size, alignment, allocationScope);
+}
+
+static VKAPI_ATTR void FreeFunction(void *pUserData, void *pMemory) {}
+
+static VKAPI_ATTR void InternalAllocationNotification(void *pUserData,
+                                                      size_t size,
+                                                      VkInternalAllocationType allocationType,
+                                                      VkSystemAllocationScope allocationScope)
+{}
+
+static VKAPI_ATTR void InternalFreeNotification(void *pUserData,
+                                                size_t size,
+                                                VkInternalAllocationType allocationType,
+                                                VkSystemAllocationScope allocationScope)
+{}
+
+void InitPoolAllocationCallbacks(angle::PoolAllocator *poolAllocator,
+                                 VkAllocationCallbacks *allocationCallbacks)
+{
+    allocationCallbacks->pUserData             = (void *)poolAllocator;
+    allocationCallbacks->pfnAllocation         = &AllocationFunction;
+    allocationCallbacks->pfnReallocation       = &ReallocationFunction;
+    allocationCallbacks->pfnFree               = &FreeFunction;
+    allocationCallbacks->pfnInternalAllocation = &InternalAllocationNotification;
+    allocationCallbacks->pfnInternalFree       = &InternalFreeNotification;
+}
+
 CommandPool::CommandPool() {}
 
-void CommandPool::destroy(VkDevice device)
+void CommandPool::destroy(VkDevice device, const VkAllocationCallbacks *pAllocationCallbacks)
 {
     if (valid())
     {
-        vkDestroyCommandPool(device, mHandle, nullptr);
+        vkDestroyCommandPool(device, mHandle, pAllocationCallbacks);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
-VkResult CommandPool::init(VkDevice device, const VkCommandPoolCreateInfo &createInfo)
+VkResult CommandPool::init(VkDevice device,
+                           const VkCommandPoolCreateInfo &createInfo,
+                           const VkAllocationCallbacks *pAllocationCallbacks)
 {
     ASSERT(!valid());
-    return vkCreateCommandPool(device, &createInfo, nullptr, &mHandle);
+    return vkCreateCommandPool(device, &createInfo, pAllocationCallbacks, &mHandle);
 }
 
 // CommandBuffer implementation.
