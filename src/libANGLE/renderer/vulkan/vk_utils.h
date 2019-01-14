@@ -16,6 +16,7 @@
 
 #include "common/Optional.h"
 #include "common/PackedEnums.h"
+#include "common/PoolAlloc.h"
 #include "common/debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Observer.h"
@@ -283,14 +284,49 @@ class MemoryProperties final : angle::NonCopyable
     VkPhysicalDeviceMemoryProperties mMemoryProperties;
 };
 
+// class CommandPoolAllocator
+//{
+//  public:
+//    CommandPoolAllocator();
+//    void *allocationFunction(void *pUserData,
+//                             /*size_t*/ unsigned long size,
+//                             /*size_t*/ unsigned long alignment,
+//                             VkSystemAllocationScope allocationScope);
+//    void *reallocationFunction(void *pUserData,
+//                               void *pOriginal,
+//                               size_t size,
+//                               size_t alignment,
+//                               VkSystemAllocationScope allocationScope);
+//    void freeFunction(void *pUserData, void *pMemory);
+//    void internalAllocationNotification(void *pUserData,
+//                                        size_t size,
+//                                        VkInternalAllocationType allocationType,
+//                                        VkSystemAllocationScope allocationScope);
+//    void internalFreeNotification(void *pUserData,
+//                                  size_t size,
+//                                  VkInternalAllocationType allocationType,
+//                                  VkSystemAllocationScope allocationScope);
+//    // VkAllocationCallbacks allocationCallbacks;
+//  private:
+//    PoolAllocator mPoolAllocator;
+//};
+
+void InitPoolAllocationCallbacks(angle::PoolAllocator *poolAllocator,
+                                 VkAllocationCallbacks *allocationCallbacks);
+
 class CommandPool final : public WrappedObject<CommandPool, VkCommandPool>
 {
   public:
     CommandPool();
 
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, const VkAllocationCallbacks *pAllocationCallbacks);
 
-    VkResult init(VkDevice device, const VkCommandPoolCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkCommandPoolCreateInfo &createInfo,
+                  const VkAllocationCallbacks *pAllocationCallbacks);
+    //  private:
+    //    //    CommandPoolAllocator mCommandPoolAllocator;
+    //    VkAllocationCallbacks mCommandPoolAllocationCallbacks;
 };
 
 // Helper class that wraps a Vulkan command buffer.
@@ -301,7 +337,7 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
 
     VkCommandBuffer releaseHandle();
 
-    // This is used for normal pool allocated command buffers. It reset the handle.
+    // This is used for normal pool allocated command buffers. It resets the handle.
     void destroy(VkDevice device);
 
     // This is used in conjunction with VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT.
@@ -776,6 +812,28 @@ class Scoped final : angle::NonCopyable
 
   private:
     VkDevice mDevice;
+    T mVar;
+};
+
+// Helper class to handle RAII patterns for initialization. Requires that T have a destroy method
+// that takes a VkDevice & VkAllocationCallbacks ptr and returns void.
+template <typename T>
+class ScopedCustomAllocation final : angle::NonCopyable
+{
+  public:
+    ScopedCustomAllocation(VkDevice device, VkAllocationCallbacks allocationCBs)
+        : mDevice(device), mAllocationCallbacks(allocationCBs)
+    {}
+    ~ScopedCustomAllocation() { mVar.destroy(mDevice, &mAllocationCallbacks); }
+
+    const T &get() const { return mVar; }
+    T &get() { return mVar; }
+
+    T &&release() { return std::move(mVar); }
+
+  private:
+    VkDevice mDevice;
+    VkAllocationCallbacks mAllocationCallbacks;
     T mVar;
 };
 
