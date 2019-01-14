@@ -455,6 +455,52 @@ void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
 // Initially dumping the command graphs is disabled.
 constexpr bool kEnableCommandGraphDiagnostics = false;
 
+// Custom allocation functions
+VKAPI_ATTR void *PoolAllocationFunction(void *pUserData,
+                                        size_t size,
+                                        size_t alignment,
+                                        VkSystemAllocationScope allocationScope)
+{
+    angle::PoolAllocator *poolAllocator = static_cast<angle::PoolAllocator *>(pUserData);
+
+    ASSERT((angle::PoolAllocator::kDefaultAlignment % alignment) == 0);
+    return poolAllocator->allocate(size);
+}
+
+VKAPI_ATTR void *PoolReallocationFunction(void *pUserData,
+                                          void *pOriginal,
+                                          size_t size,
+                                          size_t alignment,
+                                          VkSystemAllocationScope allocationScope)
+{
+    return PoolAllocationFunction(pUserData, size, alignment, allocationScope);
+}
+
+VKAPI_ATTR void PoolFreeFunction(void *pUserData, void *pMemory) {}
+
+VKAPI_ATTR void PoolInternalAllocationNotification(void *pUserData,
+                                                   size_t size,
+                                                   VkInternalAllocationType allocationType,
+                                                   VkSystemAllocationScope allocationScope)
+{}
+
+VKAPI_ATTR void PoolInternalFreeNotification(void *pUserData,
+                                             size_t size,
+                                             VkInternalAllocationType allocationType,
+                                             VkSystemAllocationScope allocationScope)
+{}
+
+void InitPoolAllocationCallbacks(angle::PoolAllocator *poolAllocator,
+                                 VkAllocationCallbacks *allocationCallbacks)
+{
+    allocationCallbacks->pUserData             = static_cast<void *>(poolAllocator);
+    allocationCallbacks->pfnAllocation         = &PoolAllocationFunction;
+    allocationCallbacks->pfnReallocation       = &PoolReallocationFunction;
+    allocationCallbacks->pfnFree               = &PoolFreeFunction;
+    allocationCallbacks->pfnInternalAllocation = &PoolInternalAllocationNotification;
+    allocationCallbacks->pfnInternalFree       = &PoolInternalFreeNotification;
+}
+
 }  // anonymous namespace
 
 // CommandBatch implementation.
@@ -474,9 +520,10 @@ RendererVk::CommandBatch &RendererVk::CommandBatch::operator=(CommandBatch &&oth
     return *this;
 }
 
-void RendererVk::CommandBatch::destroy(VkDevice device)
+void RendererVk::CommandBatch::destroy(VkDevice device,
+                                       const VkAllocationCallbacks *allocationCallbacks)
 {
-    commandPool.destroy(device);
+    commandPool.destroy(device, allocationCallbacks);
     fence.destroy(device);
 }
 
@@ -532,7 +579,7 @@ void RendererVk::onDestroy(vk::Context *context)
 
     if (mCommandPool.valid())
     {
-        mCommandPool.destroy(mDevice);
+        mCommandPool.destroy(mDevice, &mAllocationCallbacks);
     }
 
     if (mDevice)
@@ -875,13 +922,14 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 
     vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, 0, &mQueue);
 
+    InitPoolAllocationCallbacks(&mPoolAllocator, &mAllocationCallbacks);
     // Initialize the command pool now that we know the queue family index.
     VkCommandPoolCreateInfo commandPoolInfo = {};
     commandPoolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     commandPoolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
     commandPoolInfo.queueFamilyIndex        = mCurrentQueueFamilyIndex;
 
-    ANGLE_VK_TRY(displayVk, mCommandPool.init(mDevice, commandPoolInfo));
+    ANGLE_VK_TRY(displayVk, mCommandPool.init(mDevice, commandPoolInfo, &mAllocationCallbacks));
 
     // Initialize the vulkan pipeline cache.
     ANGLE_TRY(initPipelineCache(displayVk));
@@ -1232,7 +1280,7 @@ void RendererVk::freeAllInFlightResources()
             ASSERT(status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST);
         }
         batch.fence.destroy(mDevice);
-        batch.commandPool.destroy(mDevice);
+        batch.commandPool.destroy(mDevice, &mAllocationCallbacks);
     }
     mInFlightCommands.clear();
 
@@ -1262,7 +1310,7 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
         mLastCompletedQueueSerial = batch.serial;
 
         batch.fence.destroy(mDevice);
-        batch.commandPool.destroy(mDevice);
+        batch.commandPool.destroy(mDevice, &mAllocationCallbacks);
         ++finishedCount;
     }
 
@@ -1293,7 +1341,7 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     fenceInfo.sType             = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceInfo.flags             = 0;
 
-    vk::Scoped<CommandBatch> scopedBatch(mDevice);
+    vk::ScopedCustomAllocation<CommandBatch> scopedBatch(mDevice, &mAllocationCallbacks);
     CommandBatch &batch = scopedBatch.get();
     ANGLE_VK_TRY(context, batch.fence.init(mDevice, fenceInfo));
 
@@ -1333,7 +1381,7 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     poolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
     poolInfo.queueFamilyIndex        = mCurrentQueueFamilyIndex;
 
-    ANGLE_VK_TRY(context, mCommandPool.init(mDevice, poolInfo));
+    ANGLE_VK_TRY(context, mCommandPool.init(mDevice, poolInfo, &mAllocationCallbacks));
     return angle::Result::Continue;
 }
 
@@ -1657,7 +1705,7 @@ angle::Result RendererVk::synchronizeCpuGpuTime(vk::Context *context)
     //
     //     Post-submission work             Begin execution
     //
-    //            ????                    Write timstamp Tgpu
+    //            ????                    Write timestamp Tgpu
     //
     //            ????                       End execution
     //
