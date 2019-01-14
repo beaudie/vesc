@@ -18,6 +18,8 @@
 
 namespace rx
 {
+class EGLImplFactory;
+class EGLSyncImpl;
 class FenceNVImpl;
 class SyncImpl;
 }  // namespace rx
@@ -80,5 +82,35 @@ class Sync final : public RefCountObject, public LabeledObject
 };
 
 }  // namespace gl
+
+namespace egl
+{
+class Sync final : public angle::RefCountObject<Display, angle::Result>
+{
+  public:
+    Sync(rx::EGLImplFactory *factory, const AttributeMap &attribs);
+    ~Sync() override;
+
+    void onDestroy(const Display *display) override;
+
+    egl::Error set(const Display *display, EGLenum type);
+    egl::Error clientWait(const Display *display, EGLint flags, EGLTime timeout, EGLint *outResult);
+    egl::Error serverWait(const Display *display, EGLint flags);
+    egl::Error getSyncAttrib(const Display *display, EGLint attribute, EGLAttrib *value) const;
+
+    // Used to notify that eglDestroySync is called, which causes an implicit signal on the fence.
+    // Note that the actual Sync object can still be referenced, so this does not have the same
+    // semantics as onDestroy().
+    void destroySync(const Display *display);
+
+    EGLenum getType() const { return mType; }
+
+  private:
+    rx::EGLSyncImpl *mFence;
+
+    EGLenum mType;
+};
+
+}  // namespace egl
 
 #endif  // LIBANGLE_FENCE_H_

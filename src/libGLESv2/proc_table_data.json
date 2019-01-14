@@ -898,6 +898,15 @@
         "eglStreamPostD3DTextureANGLE"
     ],
 
+    "EGL_KHR_fence_sync": [
+        "eglCreateSyncKHR",
+        "eglDestroySyncKHR",
+        "eglClientWaitSyncKHR",
+        "eglGetSyncAttribKHR",
+        "eglWaitSync"
+    ],
+    "EGL_KHR_wait_sync": [
+    ],
     "EGL_CHROMIUM_get_sync_values": [
         "eglGetSyncValuesCHROMIUM"
     ],

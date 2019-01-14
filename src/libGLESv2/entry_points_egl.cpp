@@ -18,6 +18,7 @@
 #include "libANGLE/Thread.h"
 #include "libANGLE/queryutils.h"
 #include "libANGLE/validationEGL.h"
+#include "libGLESv2/entry_points_egl_ext.h"
 #include "libGLESv2/global_state.h"
 #include "libGLESv2/proc_table.h"
 
@@ -817,48 +818,20 @@ EGLContext EGLAPIENTRY EGL_GetCurrentContext(void)
 // EGL 1.5
 EGLSync EGLAPIENTRY EGL_CreateSync(EGLDisplay dpy, EGLenum type, const EGLAttrib *attrib_list)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR
-          ", EGLenum type = 0x%X, const EGLint* attrib_list = 0x%016" PRIxPTR ")",
-          (uintptr_t)dpy, type, (uintptr_t)attrib_list);
-    Thread *thread        = egl::GetCurrentThread();
-    egl::Display *display = static_cast<egl::Display *>(dpy);
-
-    UNIMPLEMENTED();
-    // TODO(geofflang): Implement sync objects. http://anglebug.com/2466
-    thread->setError(EglBadDisplay() << "eglCreateSync unimplemented.", GetDebug(), "eglCreateSync",
-                     GetDisplayIfValid(display));
-    return EGL_NO_SYNC;
+    // Identical behavior as the extension.
+    return EGL_CreateSyncKHR(dpy, type, attrib_list);
 }
 
 EGLBoolean EGLAPIENTRY EGL_DestroySync(EGLDisplay dpy, EGLSync sync)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSync sync = 0x%016" PRIxPTR ")", (uintptr_t)dpy,
-          (uintptr_t)sync);
-    Thread *thread = egl::GetCurrentThread();
-
-    UNIMPLEMENTED();
-    // TODO(geofflang): Pass the EGL sync object to the setError function. http://anglebug.com/2466
-    thread->setError(EglBadDisplay() << "eglDestroySync unimplemented.", GetDebug(),
-                     "eglDestroySync", nullptr);
-    return EGL_FALSE;
+    // Identical behavior as the extension.
+    return EGL_DestroySyncKHR(dpy, sync);
 }
 
 EGLint EGLAPIENTRY EGL_ClientWaitSync(EGLDisplay dpy, EGLSync sync, EGLint flags, EGLTime timeout)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSync sync = 0x%016" PRIxPTR
-          ", EGLint flags = 0x%X, EGLTime timeout = "
-          "%llu)",
-          (uintptr_t)dpy, (uintptr_t)sync, flags, static_cast<unsigned long long>(timeout));
-    Thread *thread = egl::GetCurrentThread();
-
-    UNIMPLEMENTED();
-    // TODO(geofflang): Pass the EGL sync object to the setError function. http://anglebug.com/2466
-    thread->setError(EglBadDisplay() << "eglClientWaitSync unimplemented.", GetDebug(),
-                     "eglClientWaitSync", nullptr);
-    return 0;
+    // Identical behavior as the extension.
+    return EGL_ClientWaitSyncKHR(dpy, sync, flags, timeout);
 }
 
 EGLBoolean EGLAPIENTRY EGL_GetSyncAttrib(EGLDisplay dpy,
@@ -866,18 +839,8 @@ EGLBoolean EGLAPIENTRY EGL_GetSyncAttrib(EGLDisplay dpy,
                                          EGLint attribute,
                                          EGLAttrib *value)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSync sync = 0x%016" PRIxPTR
-          ", EGLint attribute = 0x%X, EGLAttrib "
-          "*value = 0x%016" PRIxPTR ")",
-          (uintptr_t)dpy, (uintptr_t)sync, attribute, (uintptr_t)value);
-    Thread *thread = egl::GetCurrentThread();
-
-    UNIMPLEMENTED();
-    // TODO(geofflang): Pass the EGL sync object to the setError function. http://anglebug.com/2466
-    thread->setError(EglBadDisplay() << "eglSyncAttrib unimplemented.", GetDebug(),
-                     "eglGetSyncAttrib", nullptr);
-    return EGL_FALSE;
+    // Identical behavior as the extension.
+    return EGL_GetSyncAttribKHR(dpy, sync, attribute, value);
 }
 
 EGLImage EGLAPIENTRY EGL_CreateImage(EGLDisplay dpy,
@@ -990,17 +953,8 @@ EGLSurface EGLAPIENTRY EGL_CreatePlatformPixmapSurface(EGLDisplay dpy,
 
 EGLBoolean EGLAPIENTRY EGL_WaitSync(EGLDisplay dpy, EGLSync sync, EGLint flags)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
-    EVENT("(EGLDisplay dpy =0x%016" PRIxPTR "p, EGLSync sync = 0x%016" PRIxPTR
-          ", EGLint flags = 0x%X)",
-          (uintptr_t)dpy, (uintptr_t)sync, flags);
-    Thread *thread        = egl::GetCurrentThread();
-    egl::Display *display = static_cast<egl::Display *>(dpy);
-
-    UNIMPLEMENTED();
-    thread->setError(EglBadDisplay() << "eglWaitSync unimplemented.", GetDebug(), "eglWaitSync",
-                     GetDisplayIfValid(display));
-    return EGL_FALSE;
+    // Identical behavior as the extension.
+    return EGL_WaitSyncKHR(dpy, sync, flags);
 }
 
 __eglMustCastToProperFunctionPointerType EGLAPIENTRY EGL_GetProcAddress(const char *procname)
