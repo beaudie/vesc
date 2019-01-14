@@ -302,9 +302,10 @@ RendererVk::CommandBatch &RendererVk::CommandBatch::operator=(CommandBatch &&oth
     return *this;
 }
 
-void RendererVk::CommandBatch::destroy(VkDevice device)
+void RendererVk::CommandBatch::destroy(VkDevice device,
+                                       const VkAllocationCallbacks *pAllocationCallbacks)
 {
-    commandPool.destroy(device);
+    commandPool.destroy(device, pAllocationCallbacks);
     fence.destroy(device);
 }
 
@@ -321,6 +322,7 @@ RendererVk::RendererVk()
       mQueue(VK_NULL_HANDLE),
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
       mDevice(VK_NULL_HANDLE),
+      mPoolAllocator(),
       mLastCompletedQueueSerial(mQueueSerialFactory.generate()),
       mCurrentQueueSerial(mQueueSerialFactory.generate()),
       mDeviceLost(false),
@@ -359,7 +361,7 @@ void RendererVk::onDestroy(vk::Context *context)
 
     if (mCommandPool.valid())
     {
-        mCommandPool.destroy(mDevice);
+        mCommandPool.destroy(mDevice, &mAllocationCallbacks);
     }
 
     if (mDevice)
@@ -669,13 +671,14 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 
     vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, 0, &mQueue);
 
+    vk::InitPoolAllocationCallbacks(&mPoolAllocator, &mAllocationCallbacks);
     // Initialize the command pool now that we know the queue family index.
     VkCommandPoolCreateInfo commandPoolInfo = {};
     commandPoolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     commandPoolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
     commandPoolInfo.queueFamilyIndex        = mCurrentQueueFamilyIndex;
 
-    ANGLE_VK_TRY(displayVk, mCommandPool.init(mDevice, commandPoolInfo));
+    ANGLE_VK_TRY(displayVk, mCommandPool.init(mDevice, commandPoolInfo, &mAllocationCallbacks));
 
     // Initialize the vulkan pipeline cache.
     ANGLE_TRY(initPipelineCache(displayVk));
@@ -1026,7 +1029,7 @@ void RendererVk::freeAllInFlightResources()
             ASSERT(status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST);
         }
         batch.fence.destroy(mDevice);
-        batch.commandPool.destroy(mDevice);
+        batch.commandPool.destroy(mDevice, &mAllocationCallbacks);
     }
     mInFlightCommands.clear();
 
@@ -1056,7 +1059,7 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
         mLastCompletedQueueSerial = batch.serial;
 
         batch.fence.destroy(mDevice);
-        batch.commandPool.destroy(mDevice);
+        batch.commandPool.destroy(mDevice, &mAllocationCallbacks);
         ++finishedCount;
     }
 
@@ -1127,7 +1130,7 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     poolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
     poolInfo.queueFamilyIndex        = mCurrentQueueFamilyIndex;
 
-    ANGLE_VK_TRY(context, mCommandPool.init(mDevice, poolInfo));
+    ANGLE_VK_TRY(context, mCommandPool.init(mDevice, poolInfo, &mAllocationCallbacks));
     return angle::Result::Continue;
 }
 
@@ -1451,7 +1454,7 @@ angle::Result RendererVk::synchronizeCpuGpuTime(vk::Context *context)
     //
     //     Post-submission work             Begin execution
     //
-    //            ????                    Write timstamp Tgpu
+    //            ????                    Write timestamp Tgpu
     //
     //            ????                       End execution
     //

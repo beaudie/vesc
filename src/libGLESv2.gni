@@ -32,6 +32,8 @@ libangle_common_sources = [
   "src/common/platform.h",
   "src/common/string_utils.cpp",
   "src/common/string_utils.h",
+  "src/common/PoolAlloc.h",
+  "src/common/PoolAlloc.cpp",
   "src/common/third_party/base/anglebase/base_export.h",
   "src/common/third_party/base/anglebase/containers/mru_cache.h",
   "src/common/third_party/base/anglebase/logging.h",
