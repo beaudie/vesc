@@ -252,6 +252,8 @@ class RendererVk : angle::NonCopyable
     uint32_t mCurrentQueueFamilyIndex;
     VkDevice mDevice;
     vk::CommandPool mCommandPool;
+    angle::PoolAllocator mPoolAllocator;
+    VkAllocationCallbacks mAllocationCallbacks;
     SerialFactory mQueueSerialFactory;
     SerialFactory mShaderSerialFactory;
     Serial mLastCompletedQueueSerial;
