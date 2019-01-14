@@ -12,6 +12,8 @@ executable("shader_translator") {
   deps = [
     "../:translator",
   ]
+
+  configs -= [ "//build/config/clang:find_bad_constructs" ]
 }
 
 config("sample_util_config") {
@@ -38,6 +40,7 @@ static_library("sample_util") {
     "../:angle_util_loader_headers",
   ]
   configs += [ "../:library_name_config" ]
+  configs -= [ "//build/config/clang:find_bad_constructs" ]
   public_configs = [
     ":sample_util_config",
     "../:internal_config",
@@ -63,6 +66,7 @@ template("angle_sample") {
       deps += [ ":${target_name}_data" ]
     }
     sources = invoker.sources
+    configs -= [ "//build/config/clang:find_bad_constructs" ]
   }
 }
 
