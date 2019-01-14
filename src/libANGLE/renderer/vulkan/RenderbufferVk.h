@@ -45,7 +45,7 @@ class RenderbufferVk : public RenderbufferImpl
                                      const gl::ImageIndex &imageIndex) override;
 
   private:
-    vk::ImageHelper mImage;
+    std::unique_ptr<vk::ImageHelper> mImage;
     vk::ImageView mImageView;
     RenderTargetVk mRenderTarget;
 };
