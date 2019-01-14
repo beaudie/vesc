@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "41447196_0a595138",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-01-14T09:34:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "085b53db_9b5c30f8",
+      "range": {
+        "startLine": 632,
+        "startChar": 29,
+        "endLine": 632,
+        "endChar": 37
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "478f08d4_c849ce8d",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 29
@@ -45,6 +69,30 @@
       "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b306331_81698b55",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-01-14T09:34:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "478f08d4_c849ce8d",
+      "range": {
+        "startLine": 633,
+        "startChar": 0,
+        "endLine": 634,
+        "endChar": 9
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a8d5c2a1_a9edf2c1",
+        "filename": "src/compiler/translator/BaseTypes.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-01-14T09:34:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "decea23a_57a77fd4",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 21
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "72d16db4_9cb56704",
         "filename": "src/compiler/translator/BaseTypes.h",
         "patchSetId": 29
@@ -91,6 +163,30 @@
       "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5afdeb29_ccc9b238",
+        "filename": "src/compiler/translator/BaseTypes.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-01-14T09:34:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72d16db4_9cb56704",
+      "range": {
+        "startLine": 1024,
+        "startChar": 0,
+        "endLine": 1057,
+        "endChar": 1
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "62afb367_3815e871",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-01-14T09:34:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3795fc5b_4f1deebd",
+      "range": {
+        "startLine": 38,
+        "startChar": 22,
+        "endLine": 38,
+        "endChar": 58
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "11fc020f_2039f9cf",
         "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
         "patchSetId": 29
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "3c117b14_b9e0ff5c",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-01-14T09:34:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11fc020f_2039f9cf",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4dddb772_b3593500",
         "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
         "patchSetId": 29
@@ -151,6 +295,30 @@
       "writtenOn": "2019-01-11T18:28:16Z",
       "side": 1,
       "message": "Where is this generated in the translator again? Is it possible to make this connection safer or to share code between the translator and API?",
+      "range": {
+        "startLine": 272,
+        "startChar": 12,
+        "endLine": 272,
+        "endChar": 40
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d262a92b_d56fd431",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-01-14T09:34:04Z",
+      "side": 1,
+      "message": "The related code in translator is at ImageFunctionHLSL::ImageFunction::name(). I had considered whether it is possible to merge these code with the translator. But nearly move most code in the file to translator, it would seems to be confused. Should merge Image2DHLSLGroup enum type to HLSLTextureGroup, and merge most functions in this file into ImageFunctionHLSL file.\nIf you consider it is better to merge them, I would try it.",
+      "parentUuid": "4dddb772_b3593500",
       "range": {
         "startLine": 272,
         "startChar": 12,
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "8d640446_e8da2670",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-01-14T09:34:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99ac06fb_adbb1d1d",
+      "range": {
+        "startLine": 688,
+        "startChar": 5,
+        "endLine": 688,
+        "endChar": 34
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ef43482_df08687e",
         "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
         "patchSetId": 29
@@ -203,6 +395,24 @@
     },
     {
       "key": {
+        "uuid": "0f0b718f_ca77aa83",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-01-14T09:34:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ef43482_df08687e",
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7209a0_8dbbb287",
         "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.h",
         "patchSetId": 29
@@ -217,6 +427,24 @@
       "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91622bae_273500e0",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-01-14T09:34:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f7209a0_8dbbb287",
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -240,6 +468,30 @@
       "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5ca1094_0a46a5ea",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 1834,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-01-14T09:34:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88da9738_0dc28830",
+      "range": {
+        "startLine": 1834,
+        "startChar": 19,
+        "endLine": 1834,
+        "endChar": 24
+      },
+      "revId": "0dffb5b476acc3dbb457f900d43b604c9299dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
