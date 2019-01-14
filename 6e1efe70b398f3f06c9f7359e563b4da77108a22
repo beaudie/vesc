@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ae360ff1_a36817f0",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-14T06:06:37Z",
+      "side": 1,
+      "message": "ContextGL already has a reference to RendererGL here. My intention was to reuse it in their sub-classes, so that ContextWGL needs not to hold a redundant reference to RendererWGL.",
+      "parentUuid": "83679145_eb3664a7",
+      "range": {
+        "startLine": 231,
+        "startChar": 2,
+        "endLine": 231,
+        "endChar": 12
+      },
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ecf325c5_31956e50",
         "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
         "patchSetId": 27
@@ -80,6 +104,30 @@
       "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54522d15_c6df05aa",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-14T06:06:37Z",
+      "side": 1,
+      "message": "threadID is not necessary here. I had planed to bind the context to a worker permanently, so that we can minimize the switching of driver contexts. But this probably requires a redesign of  WorkerThreadPool before we can do that.",
+      "parentUuid": "4b610253_34ac66f5",
+      "range": {
+        "startLine": 582,
+        "startChar": 8,
+        "endLine": 582,
+        "endChar": 58
+      },
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -141,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "b3666ce6_14020741",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-14T06:06:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91225005_08210558",
+      "range": {
+        "startLine": 38,
+        "startChar": 27,
+        "endLine": 38,
+        "endChar": 46
+      },
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1db85043_b842ef07",
         "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.h",
         "patchSetId": 27
@@ -164,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "ddc30700_32aefeec",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-14T06:06:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1db85043_b842ef07",
+      "range": {
+        "startLine": 40,
+        "startChar": 47,
+        "endLine": 40,
+        "endChar": 74
+      },
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a2f1c69f_c0e778e6",
         "filename": "src/libANGLE/renderer/gl/egl/RendererEGL.h",
         "patchSetId": 27
@@ -184,6 +280,30 @@
       "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b689d8f9_f5d4bc21",
+        "filename": "src/libANGLE/renderer/gl/egl/RendererEGL.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-14T06:06:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2f1c69f_c0e778e6",
+      "range": {
+        "startLine": 26,
+        "startChar": 17,
+        "endLine": 26,
+        "endChar": 43
+      },
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

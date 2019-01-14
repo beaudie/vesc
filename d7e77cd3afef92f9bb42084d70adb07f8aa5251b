@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c8c06dab_91f45b47",
+        "filename": "src/libANGLE/renderer/ShaderImpl.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-14T06:06:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec8d820d_63fff776",
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "deca695b_9d551511",
         "filename": "src/libANGLE/renderer/ShaderImpl.h",
         "patchSetId": 28
@@ -39,6 +57,30 @@
       "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9aee6376_f0023d92",
+        "filename": "src/libANGLE/renderer/ShaderImpl.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-14T06:06:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "deca695b_9d551511",
+      "range": {
+        "startLine": 31,
+        "startChar": 17,
+        "endLine": 31,
+        "endChar": 24
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -89,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "acbae97b_d8523a21",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-14T06:06:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c57def9_6517d4e1",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 98
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2302f13f_7a61c32c",
         "filename": "src/libANGLE/renderer/gl/RendererGL.h",
         "patchSetId": 28
@@ -112,6 +178,30 @@
     },
     {
       "key": {
+        "uuid": "1a6beafd_95f021e2",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-14T06:06:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2302f13f_7a61c32c",
+      "range": {
+        "startLine": 58,
+        "startChar": 29,
+        "endLine": 58,
+        "endChar": 49
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8560fe64_5e56dbc7",
         "filename": "src/libANGLE/renderer/gl/RendererGL.h",
         "patchSetId": 28
@@ -132,6 +222,30 @@
       "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72c8859d_f1fdfaf3",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-14T06:06:37Z",
+      "side": 1,
+      "message": "Good idea, thanks!",
+      "parentUuid": "8560fe64_5e56dbc7",
+      "range": {
+        "startLine": 65,
+        "startChar": 6,
+        "endLine": 65,
+        "endChar": 27
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -206,6 +320,30 @@
     },
     {
       "key": {
+        "uuid": "df2938ab_20d52792",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-14T06:06:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "023aa2f7_886fa13f",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 31
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b3765ecb_5aeadeb4",
         "filename": "src/libANGLE/renderer/gl/RendererGL.h",
         "patchSetId": 28
@@ -252,6 +390,30 @@
     },
     {
       "key": {
+        "uuid": "d8b7ca39_72d8a37e",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-14T06:06:37Z",
+      "side": 1,
+      "message": "It seems a WGL restriction not mentioned in MSDN, but some posts revealed it.\n\nhttps://www.opengl.org/discussion_boards/showthread.php/152648-wglShareLists-failing\nhttps://github.com/glfw/glfw/issues/402",
+      "parentUuid": "18cd2ac8_e086ad80",
+      "range": {
+        "startLine": 877,
+        "startChar": 50,
+        "endLine": 878,
+        "endChar": 45
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "018d9b86_5e723f80",
         "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
         "patchSetId": 28
@@ -272,6 +434,30 @@
       "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8812537_ff815fd6",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-14T06:06:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "018d9b86_5e723f80",
+      "range": {
+        "startLine": 920,
+        "startChar": 0,
+        "endLine": 921,
+        "endChar": 35
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -298,6 +484,30 @@
     },
     {
       "key": {
+        "uuid": "a8ce9673_a87e551c",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-14T06:06:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34d17a95_d1664e2d",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 99,
+        "endChar": 76
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3df52f1b_cbf3d697",
         "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.h",
         "patchSetId": 28
@@ -318,6 +528,30 @@
       "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a210cc27_894b660e",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-14T06:06:37Z",
+      "side": 1,
+      "message": "Thanks for the suggestion. This makes things simplified.",
+      "parentUuid": "3df52f1b_cbf3d697",
+      "range": {
+        "startLine": 146,
+        "startChar": 16,
+        "endLine": 146,
+        "endChar": 20
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
