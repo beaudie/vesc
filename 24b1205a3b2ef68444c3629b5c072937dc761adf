@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5a6394e_1fa86b1e",
+        "filename": "src/compiler/translator/util.h",
+        "patchSetId": 33
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-14T12:44:45Z",
+      "side": 1,
+      "message": "nit: Capitalize",
+      "range": {
+        "startLine": 69,
+        "startChar": 7,
+        "endLine": 69,
+        "endChar": 33
+      },
+      "revId": "24b1205a3b2ef68444c3629b5c072937dc761adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
