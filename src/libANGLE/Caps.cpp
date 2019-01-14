@@ -206,6 +206,7 @@ Extensions::Extensions()
       eglImage(false),
       eglImageExternal(false),
       eglImageExternalEssl3(false),
+      eglSync(false),
       eglStreamConsumerExternal(false),
       unpackSubimage(false),
       packSubimage(false),
@@ -866,6 +867,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_OES_EGL_image"] = enableableExtension(&Extensions::eglImage);
         map["GL_OES_EGL_image_external"] = enableableExtension(&Extensions::eglImageExternal);
         map["GL_OES_EGL_image_external_essl3"] = enableableExtension(&Extensions::eglImageExternalEssl3);
+        map["GL_OES_EGL_sync"] = enableableExtension(&Extensions::eglSync);
         map["GL_NV_EGL_stream_consumer_external"] = enableableExtension(&Extensions::eglStreamConsumerExternal);
         map["GL_EXT_unpack_subimage"] = enableableExtension(&Extensions::unpackSubimage);
         map["GL_NV_pack_subimage"] = enableableExtension(&Extensions::packSubimage);
@@ -1457,6 +1459,8 @@ ClientExtensions::ClientExtensions()
       experimentalPresentPath(false),
       clientGetAllProcAddresses(false),
       debug(false),
+      fenceSync(false),
+      waitSync(false),
       explicitContext(false)
 {}
 
@@ -1483,6 +1487,8 @@ std::vector<std::string> ClientExtensions::getStrings() const
     InsertExtensionString("EGL_ANGLE_experimental_present_path",             experimentalPresentPath,            &extensionStrings);
     InsertExtensionString("EGL_KHR_client_get_all_proc_addresses",           clientGetAllProcAddresses,          &extensionStrings);
     InsertExtensionString("EGL_KHR_debug",                                   debug,                              &extensionStrings);
+    InsertExtensionString("EGL_KHR_fence_sync",           fenceSync,          &extensionStrings);
+    InsertExtensionString("EGL_KHR_wait_sync",           waitSync,          &extensionStrings);
     InsertExtensionString("EGL_ANGLE_explicit_context",                      explicitContext,                    &extensionStrings);
     // clang-format on
 

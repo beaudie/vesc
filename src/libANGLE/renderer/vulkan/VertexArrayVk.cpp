@@ -443,8 +443,6 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                 }
                 else
                 {
-                    // TODO(syoussefi): Implement unaligned vertex buffer conversions in compute.
-                    // http://anglebug.com/3009
                     ANGLE_TRY(convertVertexBufferCpu(contextVk, bufferVk, binding, attribIndex));
                 }
             }
