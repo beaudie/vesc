@@ -4,64 +4,61 @@
 // found in the LICENSE file.
 //
 
-#if USE_COMMON_POOL_ALLOC
-#else
+#include "common/CommonPoolAlloc.h"
 
-#    include "compiler/translator/PoolAlloc.h"
+#include <assert.h>
+#include <stdint.h>
+#include <stdio.h>
 
-#    include <assert.h>
-#    include <stdint.h>
-#    include <stdio.h>
+#include "common/angleutils.h"
+#include "common/debug.h"
+#include "common/platform.h"
+#include "common/tls.h"
+//#include "compiler/translator/InitializeGlobals.h"
 
-#    include "common/angleutils.h"
-#    include "common/debug.h"
-#    include "common/platform.h"
-#    include "common/tls.h"
-#    include "compiler/translator/InitializeGlobals.h"
+// TLSIndex PoolIndex = TLS_INVALID_INDEX;
+//
+// bool InitializePoolIndex()
+//{
+//    assert(PoolIndex == TLS_INVALID_INDEX);
+//
+//    PoolIndex = CreateTLSIndex();
+//    return PoolIndex != TLS_INVALID_INDEX;
+//}
+//
+// void FreePoolIndex()
+//{
+//    assert(PoolIndex != TLS_INVALID_INDEX);
+//
+//    DestroyTLSIndex(PoolIndex);
+//    PoolIndex = TLS_INVALID_INDEX;
+//}
 
-TLSIndex PoolIndex = TLS_INVALID_INDEX;
-
-bool InitializePoolIndex()
-{
-    assert(PoolIndex == TLS_INVALID_INDEX);
-
-    PoolIndex = CreateTLSIndex();
-    return PoolIndex != TLS_INVALID_INDEX;
-}
-
-void FreePoolIndex()
-{
-    assert(PoolIndex != TLS_INVALID_INDEX);
-
-    DestroyTLSIndex(PoolIndex);
-    PoolIndex = TLS_INVALID_INDEX;
-}
-
-TPoolAllocator *GetGlobalPoolAllocator()
-{
-    assert(PoolIndex != TLS_INVALID_INDEX);
-    return static_cast<TPoolAllocator *>(GetTLSValue(PoolIndex));
-}
-
-void SetGlobalPoolAllocator(TPoolAllocator *poolAllocator)
-{
-    assert(PoolIndex != TLS_INVALID_INDEX);
-    SetTLSValue(PoolIndex, poolAllocator);
-}
+// CommonPoolAllocator *GetGlobalPoolAllocator()
+//{
+//    assert(PoolIndex != TLS_INVALID_INDEX);
+//    return static_cast<CommonPoolAllocator *>(GetTLSValue(PoolIndex));
+//}
+//
+// void SetGlobalPoolAllocator(CommonPoolAllocator *poolAllocator)
+//{
+//    assert(PoolIndex != TLS_INVALID_INDEX);
+//    SetTLSValue(PoolIndex, poolAllocator);
+//}
 
 //
-// Implement the functionality of the TPoolAllocator class, which
+// Implement the functionality of the CommonPoolAllocator class, which
 // is documented in PoolAlloc.h.
 //
-TPoolAllocator::TPoolAllocator(int growthIncrement, int allocationAlignment)
+CommonPoolAllocator::CommonPoolAllocator(int growthIncrement, int allocationAlignment)
     : alignment(allocationAlignment),
-#    if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
       pageSize(growthIncrement),
       freeList(0),
       inUseList(0),
       numCalls(0),
       totalBytes(0),
-#    endif
+#endif
       mLocked(false)
 {
     //
@@ -78,7 +75,7 @@ TPoolAllocator::TPoolAllocator(int growthIncrement, int allocationAlignment)
     alignment     = a;
     alignmentMask = a - 1;
 
-#    if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
     //
     // Don't allow page sizes we know are smaller than all common
     // OS page sizes.
@@ -100,14 +97,14 @@ TPoolAllocator::TPoolAllocator(int growthIncrement, int allocationAlignment)
     {
         headerSkip = (sizeof(tHeader) + alignmentMask) & ~alignmentMask;
     }
-#    else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
     mStack.push_back({});
-#    endif
+#endif
 }
 
-TPoolAllocator::~TPoolAllocator()
+CommonPoolAllocator::~CommonPoolAllocator()
 {
-#    if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
     while (inUseList)
     {
         tHeader *next = inUseList->nextPage;
@@ -126,7 +123,7 @@ TPoolAllocator::~TPoolAllocator()
         delete[] reinterpret_cast<char *>(freeList);
         freeList = next;
     }
-#    else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
     for (auto &allocs : mStack)
     {
         for (auto alloc : allocs)
@@ -135,28 +132,28 @@ TPoolAllocator::~TPoolAllocator()
         }
     }
     mStack.clear();
-#    endif
+#endif
 }
 
 // Support MSVC++ 6.0
-const unsigned char TAllocation::guardBlockBeginVal = 0xfb;
-const unsigned char TAllocation::guardBlockEndVal   = 0xfe;
-const unsigned char TAllocation::userDataFill       = 0xcd;
+const unsigned char CPAllocation::guardBlockBeginVal = 0xfb;
+const unsigned char CPAllocation::guardBlockEndVal   = 0xfe;
+const unsigned char CPAllocation::userDataFill       = 0xcd;
 
-#    ifdef GUARD_BLOCKS
-const size_t TAllocation::guardBlockSize = 16;
-#    else
-const size_t TAllocation::guardBlockSize = 0;
-#    endif
+#ifdef GUARD_BLOCKS
+const size_t CPAllocation::guardBlockSize = 16;
+#else
+const size_t CPAllocation::guardBlockSize = 0;
+#endif
 
 //
 // Check a single guard block for damage
 //
-void TAllocation::checkGuardBlock(unsigned char *blockMem,
-                                  unsigned char val,
-                                  const char *locText) const
+void CPAllocation::checkGuardBlock(unsigned char *blockMem,
+                                   unsigned char val,
+                                   const char *locText) const
 {
-#    ifdef GUARD_BLOCKS
+#ifdef GUARD_BLOCKS
     for (size_t x = 0; x < guardBlockSize; x++)
     {
         if (blockMem[x] != val)
@@ -164,22 +161,22 @@ void TAllocation::checkGuardBlock(unsigned char *blockMem,
             char assertMsg[80];
 
 // We don't print the assert message.  It's here just to be helpful.
-#        if defined(_MSC_VER)
+#    if defined(_MSC_VER)
             snprintf(assertMsg, sizeof(assertMsg),
                      "PoolAlloc: Damage %s %Iu byte allocation at 0x%p\n", locText, size, data());
-#        else
+#    else
             snprintf(assertMsg, sizeof(assertMsg),
                      "PoolAlloc: Damage %s %zu byte allocation at 0x%p\n", locText, size, data());
-#        endif
+#    endif
             assert(0 && "PoolAlloc: Damage in guard block");
         }
     }
-#    endif
+#endif
 }
 
-void TPoolAllocator::push()
+void CommonPoolAllocator::push()
 {
-#    if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
     tAllocState state = {currentPageOffset, inUseList};
 
     mStack.push_back(state);
@@ -188,9 +185,9 @@ void TPoolAllocator::push()
     // Indicate there is no current page to allocate from.
     //
     currentPageOffset = pageSize;
-#    else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
     mStack.push_back({});
-#    endif
+#endif
 }
 
 //
@@ -200,12 +197,12 @@ void TPoolAllocator::push()
 //
 // The deallocated pages are saved for future allocations.
 //
-void TPoolAllocator::pop()
+void CommonPoolAllocator::pop()
 {
     if (mStack.size() < 1)
         return;
 
-#    if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
     tHeader *page     = mStack.back().page;
     currentPageOffset = mStack.back().offset;
 
@@ -226,30 +223,30 @@ void TPoolAllocator::pop()
     }
 
     mStack.pop_back();
-#    else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
     for (auto &alloc : mStack.back())
     {
         free(alloc);
     }
     mStack.pop_back();
-#    endif
+#endif
 }
 
 //
 // Do a mass-deallocation of all the individual allocations
 // that have occurred.
 //
-void TPoolAllocator::popAll()
+void CommonPoolAllocator::popAll()
 {
     while (mStack.size() > 0)
         pop();
 }
 
-void *TPoolAllocator::allocate(size_t numBytes)
+void *CommonPoolAllocator::allocate(size_t numBytes)
 {
     ASSERT(!mLocked);
 
-#    if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
     //
     // Just keep some interesting statistics.
     //
@@ -261,7 +258,7 @@ void *TPoolAllocator::allocate(size_t numBytes)
     // much memory the caller asked for.  allocationSize is the total
     // size including guard blocks.  In release build,
     // guardBlockSize=0 and this all gets optimized away.
-    size_t allocationSize = TAllocation::allocationSize(numBytes);
+    size_t allocationSize = CPAllocation::allocationSize(numBytes);
     // Detect integer overflow.
     if (allocationSize < numBytes)
         return 0;
@@ -331,23 +328,23 @@ void *TPoolAllocator::allocate(size_t numBytes)
     currentPageOffset  = (headerSkip + allocationSize + alignmentMask) & ~alignmentMask;
 
     return initializeAllocation(inUseList, ret, numBytes);
-#    else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
     void *alloc = malloc(numBytes + alignmentMask);
     mStack.back().push_back(alloc);
 
     intptr_t intAlloc = reinterpret_cast<intptr_t>(alloc);
     intAlloc = (intAlloc + alignmentMask) & ~alignmentMask;
     return reinterpret_cast<void *>(intAlloc);
-#    endif
+#endif
 }
 
-void TPoolAllocator::lock()
+void CommonPoolAllocator::lock()
 {
     ASSERT(!mLocked);
     mLocked = true;
 }
 
-void TPoolAllocator::unlock()
+void CommonPoolAllocator::unlock()
 {
     ASSERT(mLocked);
     mLocked = false;
@@ -356,9 +353,8 @@ void TPoolAllocator::unlock()
 //
 // Check all allocations in a list for damage by calling check on each.
 //
-void TAllocation::checkAllocList() const
+void CPAllocation::checkAllocList() const
 {
-    for (const TAllocation *alloc = this; alloc != 0; alloc = alloc->prevAlloc)
+    for (const CPAllocation *alloc = this; alloc != 0; alloc = alloc->prevAlloc)
         alloc->check();
 }
-#endif

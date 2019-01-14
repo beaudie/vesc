@@ -4,8 +4,8 @@
 // found in the LICENSE file.
 //
 
-#ifndef COMPILER_TRANSLATOR_POOLALLOC_H_
-#define COMPILER_TRANSLATOR_POOLALLOC_H_
+#ifndef COMMON_POOLALLOC_H_
+#define COMMON_POOLALLOC_H_
 
 #ifdef _DEBUG
 #    define GUARD_BLOCKS  // define to enable guard block sanity checking
@@ -35,101 +35,15 @@
 #include <string.h>
 #include <vector>
 
-// TODO: Currently letting duplicate pool allocator live on. Need to enable this
-#define USE_COMMON_POOL_ALLOC 0
-
-#if USE_COMMON_POOL_ALLOC
-#    include "common/CommonPoolAlloc.h"
-
-//
-// There could potentially be many pools with pops happening at
-// different times.  But a simple use is to have a global pop
-// with everyone using the same global allocator.
-//
-extern CommonPoolAllocator *GetGlobalPoolAllocator();
-extern void SetGlobalPoolAllocator(CommonPoolAllocator *poolAllocator);
-
-//
-// This STL compatible allocator is intended to be used as the allocator
-// parameter to templatized STL containers, like vector and map.
-//
-// It will use the pools for allocation, and not
-// do any deallocation, but will still do destruction.
-//
-template <class T>
-class pool_allocator
-{
-  public:
-    typedef size_t size_type;
-    typedef ptrdiff_t difference_type;
-    typedef T *pointer;
-    typedef const T *const_pointer;
-    typedef T &reference;
-    typedef const T &const_reference;
-    typedef T value_type;
-
-    template <class Other>
-    struct rebind
-    {
-        typedef pool_allocator<Other> other;
-    };
-    pointer address(reference x) const { return &x; }
-    const_pointer address(const_reference x) const { return &x; }
-
-    pool_allocator() {}
-
-    template <class Other>
-    pool_allocator(const pool_allocator<Other> &p)
-    {}
-
-    template <class Other>
-    pool_allocator<T> &operator=(const pool_allocator<Other> &p)
-    {
-        return *this;
-    }
-
-#    if defined(__SUNPRO_CC) && !defined(_RWSTD_ALLOCATOR)
-    // libCStd on some platforms have a different allocate/deallocate interface.
-    // Caller pre-bakes sizeof(T) into 'n' which is the number of bytes to be
-    // allocated, not the number of elements.
-    void *allocate(size_type n) { return getAllocator().allocate(n); }
-    void *allocate(size_type n, const void *) { return getAllocator().allocate(n); }
-    void deallocate(void *, size_type) {}
-#    else
-    pointer allocate(size_type n)
-    {
-        return static_cast<pointer>(getAllocator().allocate(n * sizeof(T)));
-    }
-    pointer allocate(size_type n, const void *)
-    {
-        return static_cast<pointer>(getAllocator().allocate(n * sizeof(T)));
-    }
-    void deallocate(pointer, size_type) {}
-#    endif  // _RWSTD_ALLOCATOR
-
-    void construct(pointer p, const T &val) { new ((void *)p) T(val); }
-    void destroy(pointer p) { p->T::~T(); }
-
-    bool operator==(const pool_allocator &rhs) const { return true; }
-    bool operator!=(const pool_allocator &rhs) const { return false; }
-
-    size_type max_size() const { return static_cast<size_type>(-1) / sizeof(T); }
-    size_type max_size(int size) const { return static_cast<size_type>(-1) / size; }
-
-    CommonPoolAllocator &getAllocator() const { return *GetGlobalPoolAllocator(); }
-};
-
-#else
-
 // If we are using guard blocks, we must track each individual
 // allocation.  If we aren't using guard blocks, these
 // never get instantiated, so won't have any impact.
 //
 
-class TAllocation
+class CPAllocation
 {
   public:
-    TAllocation(size_t size, unsigned char *mem, TAllocation *prev = 0)
+    CPAllocation(size_t size, unsigned char *mem, CPAllocation *prev = 0)
         : size(size), mem(mem), prevAlloc(prev)
     {
 // Allocations are bracketed:
@@ -137,11 +51,11 @@ class TAllocation
 // This would be cleaner with if (guardBlockSize)..., but that
 // makes the compiler print warnings about 0 length memsets,
 // even with the if() protecting them.
-#    ifdef GUARD_BLOCKS
+#ifdef GUARD_BLOCKS
         memset(preGuard(), guardBlockBeginVal, guardBlockSize);
         memset(data(), userDataFill, size);
         memset(postGuard(), guardBlockEndVal, guardBlockSize);
-#    endif
+#endif
     }
 
     void check() const
@@ -173,9 +87,9 @@ class TAllocation
     unsigned char *data() const { return preGuard() + guardBlockSize; }
     unsigned char *postGuard() const { return data() + size; }
 
-    size_t size;             // size of the user data area
-    unsigned char *mem;      // beginning of our allocation (pts to header)
-    TAllocation *prevAlloc;  // prior allocation in the chain
+    size_t size;              // size of the user data area
+    unsigned char *mem;       // beginning of our allocation (pts to header)
+    CPAllocation *prevAlloc;  // prior allocation in the chain
 
     // Support MSVC++ 6.0
     const static unsigned char guardBlockBeginVal;
@@ -183,11 +97,11 @@ class TAllocation
     const static unsigned char userDataFill;
 
     const static size_t guardBlockSize;
-#    ifdef GUARD_BLOCKS
-    inline static size_t headerSize() { return sizeof(TAllocation); }
-#    else
+#ifdef GUARD_BLOCKS
+    inline static size_t headerSize() { return sizeof(CPAllocation); }
+#else
     inline static size_t headerSize() { return 0; }
-#    endif
+#endif
 };
 
 //
@@ -204,15 +118,15 @@ class TAllocation
 // page size.  But, having it be about that size or equal to a set of
 // pages is likely most optimal.
 //
-class TPoolAllocator
+class CommonPoolAllocator
 {
   public:
-    TPoolAllocator(int growthIncrement = 8 * 1024, int allocationAlignment = 16);
+    CommonPoolAllocator(int growthIncrement = 8 * 1024, int allocationAlignment = 16);
 
     //
     // Don't call the destructor just to free up the memory, call pop()
     //
-    ~TPoolAllocator();
+    ~CommonPoolAllocator();
 
     //
     // Call push() to establish a new place to pop memory too.  Does not
@@ -254,7 +168,7 @@ class TPoolAllocator
                        // this granularity, which will be a power of 2
     size_t alignmentMask;
 
-#    if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
     friend struct tHeader;
 
     struct tHeader
@@ -262,25 +176,25 @@ class TPoolAllocator
         tHeader(tHeader *nextPage, size_t pageCount)
             : nextPage(nextPage),
               pageCount(pageCount)
-#        ifdef GUARD_BLOCKS
+#    ifdef GUARD_BLOCKS
               ,
               lastAllocation(0)
-#        endif
+#    endif
         {}
 
         ~tHeader()
         {
-#        ifdef GUARD_BLOCKS
+#    ifdef GUARD_BLOCKS
             if (lastAllocation)
                 lastAllocation->checkAllocList();
-#        endif
+#    endif
         }
 
         tHeader *nextPage;
         size_t pageCount;
-#        ifdef GUARD_BLOCKS
-        TAllocation *lastAllocation;
-#        endif
+#    ifdef GUARD_BLOCKS
+        CPAllocation *lastAllocation;
+#    endif
     };
 
     struct tAllocState
@@ -293,12 +207,12 @@ class TPoolAllocator
     // Track allocations if and only if we're using guard blocks
     void *initializeAllocation(tHeader *block, unsigned char *memory, size_t numBytes)
     {
-#        ifdef GUARD_BLOCKS
-        new (memory) TAllocation(numBytes, memory, block->lastAllocation);
-        block->lastAllocation = reinterpret_cast<TAllocation *>(memory);
-#        endif
+#    ifdef GUARD_BLOCKS
+        new (memory) CPAllocation(numBytes, memory, block->lastAllocation);
+        block->lastAllocation = reinterpret_cast<CPAllocation *>(memory);
+#    endif
         // This is optimized entirely away if GUARD_BLOCKS is not defined.
-        return TAllocation::offsetAllocation(memory);
+        return CPAllocation::offsetAllocation(memory);
     }
 
     size_t pageSize;           // granularity of allocation from the OS
@@ -313,12 +227,12 @@ class TPoolAllocator
     int numCalls;       // just an interesting statistic
     size_t totalBytes;  // just an interesting statistic
 
-#    else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
     std::vector<std::vector<void *>> mStack;
-#    endif
+#endif
 
-    TPoolAllocator &operator=(const TPoolAllocator &);  // dont allow assignment operator
-    TPoolAllocator(const TPoolAllocator &);             // dont allow default copy constructor
+    CommonPoolAllocator &operator=(const CommonPoolAllocator &);  // dont allow assignment operator
+    CommonPoolAllocator(const CommonPoolAllocator &);  // dont allow default copy constructor
     bool mLocked;
 };
 
@@ -327,8 +241,8 @@ class TPoolAllocator
 // different times.  But a simple use is to have a global pop
 // with everyone using the same global allocator.
 //
-extern TPoolAllocator *GetGlobalPoolAllocator();
-extern void SetGlobalPoolAllocator(TPoolAllocator *poolAllocator);
+extern CommonPoolAllocator *GetGlobalPoolAllocator();
+extern void SetGlobalPoolAllocator(CommonPoolAllocator *poolAllocator);
 
 //
 // This STL compatible allocator is intended to be used as the allocator
@@ -337,69 +251,67 @@ extern void SetGlobalPoolAllocator(TPoolAllocator *poolAllocator);
 // It will use the pools for allocation, and not
 // do any deallocation, but will still do destruction.
 //
-template <class T>
-class pool_allocator
-{
-  public:
-    typedef size_t size_type;
-    typedef ptrdiff_t difference_type;
-    typedef T *pointer;
-    typedef const T *const_pointer;
-    typedef T &reference;
-    typedef const T &const_reference;
-    typedef T value_type;
+// template <class T>
+// class pool_allocator
+//{
+//  public:
+//    typedef size_t size_type;
+//    typedef ptrdiff_t difference_type;
+//    typedef T *pointer;
+//    typedef const T *const_pointer;
+//    typedef T &reference;
+//    typedef const T &const_reference;
+//    typedef T value_type;
+//
+//    template <class Other>
+//    struct rebind
+//    {
+//        typedef pool_allocator<Other> other;
+//    };
+//    pointer address(reference x) const { return &x; }
+//    const_pointer address(const_reference x) const { return &x; }
+//
+//    pool_allocator() {}
+//
+//    template <class Other>
+//    pool_allocator(const pool_allocator<Other> &p)
+//    {}
+//
+//    template <class Other>
+//    pool_allocator<T> &operator=(const pool_allocator<Other> &p)
+//    {
+//        return *this;
+//    }
+//
+//#if defined(__SUNPRO_CC) && !defined(_RWSTD_ALLOCATOR)
+//    // libCStd on some platforms have a different allocate/deallocate interface.
+//    // Caller pre-bakes sizeof(T) into 'n' which is the number of bytes to be
+//    // allocated, not the number of elements.
+//    void *allocate(size_type n) { return getAllocator().allocate(n); }
+//    void *allocate(size_type n, const void *) { return getAllocator().allocate(n); }
+//    void deallocate(void *, size_type) {}
+//#else
+//    pointer allocate(size_type n)
+//    {
+//        return static_cast<pointer>(getAllocator().allocate(n * sizeof(T)));
+//    }
+//    pointer allocate(size_type n, const void *)
+//    {
+//        return static_cast<pointer>(getAllocator().allocate(n * sizeof(T)));
+//    }
+//    void deallocate(pointer, size_type) {}
+//#endif  // _RWSTD_ALLOCATOR
+//
+//    void construct(pointer p, const T &val) { new ((void *)p) T(val); }
+//    void destroy(pointer p) { p->T::~T(); }
+//
+//    bool operator==(const pool_allocator &rhs) const { return true; }
+//    bool operator!=(const pool_allocator &rhs) const { return false; }
+//
+//    size_type max_size() const { return static_cast<size_type>(-1) / sizeof(T); }
+//    size_type max_size(int size) const { return static_cast<size_type>(-1) / size; }
+//
+//    CommonPoolAllocator &getAllocator() const { return *GetGlobalPoolAllocator(); }
+//};
 
-    template <class Other>
-    struct rebind
-    {
-        typedef pool_allocator<Other> other;
-    };
-    pointer address(reference x) const { return &x; }
-    const_pointer address(const_reference x) const { return &x; }
-
-    pool_allocator() {}
-
-    template <class Other>
-    pool_allocator(const pool_allocator<Other> &p)
-    {}
-
-    template <class Other>
-    pool_allocator<T> &operator=(const pool_allocator<Other> &p)
-    {
-        return *this;
-    }
-
-#    if defined(__SUNPRO_CC) && !defined(_RWSTD_ALLOCATOR)
-    // libCStd on some platforms have a different allocate/deallocate interface.
-    // Caller pre-bakes sizeof(T) into 'n' which is the number of bytes to be
-    // allocated, not the number of elements.
-    void *allocate(size_type n) { return getAllocator().allocate(n); }
-    void *allocate(size_type n, const void *) { return getAllocator().allocate(n); }
-    void deallocate(void *, size_type) {}
-#    else
-    pointer allocate(size_type n)
-    {
-        return static_cast<pointer>(getAllocator().allocate(n * sizeof(T)));
-    }
-    pointer allocate(size_type n, const void *)
-    {
-        return static_cast<pointer>(getAllocator().allocate(n * sizeof(T)));
-    }
-    void deallocate(pointer, size_type) {}
-#    endif  // _RWSTD_ALLOCATOR
-
-    void construct(pointer p, const T &val) { new ((void *)p) T(val); }
-    void destroy(pointer p) { p->T::~T(); }
-
-    bool operator==(const pool_allocator &rhs) const { return true; }
-    bool operator!=(const pool_allocator &rhs) const { return false; }
-
-    size_type max_size() const { return static_cast<size_type>(-1) / sizeof(T); }
-    size_type max_size(int size) const { return static_cast<size_type>(-1) / size; }
-
-    TPoolAllocator &getAllocator() const { return *GetGlobalPoolAllocator(); }
-};
-
-#endif
-
-#endif  // COMPILER_TRANSLATOR_POOLALLOC_H_
+#endif  // COMMON_POOLALLOC_H_

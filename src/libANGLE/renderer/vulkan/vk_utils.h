@@ -14,6 +14,7 @@
 
 #include <vulkan/vulkan.h>
 
+#include "common/CommonPoolAlloc.h"
 #include "common/Optional.h"
 #include "common/PackedEnums.h"
 #include "common/debug.h"
@@ -283,6 +284,33 @@ class MemoryProperties final : angle::NonCopyable
     VkPhysicalDeviceMemoryProperties mMemoryProperties;
 };
 
+class CommandPoolAllocator
+{
+  public:
+    CommandPoolAllocator();
+    void *allocationFunction(void *pUserData,
+                             /*size_t*/ unsigned long size,
+                             /*size_t*/ unsigned long alignment,
+                             VkSystemAllocationScope allocationScope);
+    void *reallocationFunction(void *pUserData,
+                               void *pOriginal,
+                               size_t size,
+                               size_t alignment,
+                               VkSystemAllocationScope allocationScope);
+    void freeFunction(void *pUserData, void *pMemory);
+    void internalAllocationNotification(void *pUserData,
+                                        size_t size,
+                                        VkInternalAllocationType allocationType,
+                                        VkSystemAllocationScope allocationScope);
+    void internalFreeNotification(void *pUserData,
+                                  size_t size,
+                                  VkInternalAllocationType allocationType,
+                                  VkSystemAllocationScope allocationScope);
+    // VkAllocationCallbacks allocationCallbacks;
+  private:
+    CommonPoolAllocator mPoolAllocator;
+};
+
 class CommandPool final : public WrappedObject<CommandPool, VkCommandPool>
 {
   public:
@@ -291,6 +319,9 @@ class CommandPool final : public WrappedObject<CommandPool, VkCommandPool>
     void destroy(VkDevice device);
 
     VkResult init(VkDevice device, const VkCommandPoolCreateInfo &createInfo);
+    //  private:
+    //    CommandPoolAllocator mCommandPoolAllocator;
+    //    VkAllocationCallbacks mCommandPoolAllocationCallbacks;
 };
 
 // Helper class that wraps a Vulkan command buffer.
@@ -301,7 +332,7 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
 
     VkCommandBuffer releaseHandle();
 
-    // This is used for normal pool allocated command buffers. It reset the handle.
+    // This is used for normal pool allocated command buffers. It resets the handle.
     void destroy(VkDevice device);
 
     // This is used in conjunction with VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT.
