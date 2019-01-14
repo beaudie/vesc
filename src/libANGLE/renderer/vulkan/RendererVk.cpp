@@ -1007,7 +1007,7 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
         return gl::Version(2, 0);
     }
 
-    return gl::Version(3, 0);
+    return gl::Version(2, 0);
 }
 
 void RendererVk::initFeatures(const std::vector<VkExtensionProperties> &deviceExtensionProps)
