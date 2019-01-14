@@ -180,6 +180,30 @@
     },
     {
       "key": {
+        "uuid": "5b01e041_add68293",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-14T21:29:50Z",
+      "side": 1,
+      "message": ".. follow up ..\n\nWould make the angle::PoolAllocator owned by RendererVk and would pass it to this new static method (InitPoolAllocationCallbacks(const angle::PoolAllocator) \u0026?)",
+      "parentUuid": "584d77ae_1671eac2",
+      "range": {
+        "startLine": 287,
+        "startChar": 0,
+        "endLine": 312,
+        "endChar": 2
+      },
+      "revId": "86e09692da236a38c61b462706f7931629bd44f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8c51ba67_7bbcdcfa",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 1
