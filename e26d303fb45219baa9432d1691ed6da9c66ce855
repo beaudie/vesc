@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6492d846_80e76b8a",
+        "filename": "src/tests/gl_tests/CopyTexture3DTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-14T19:36:39Z",
+      "side": 1,
+      "message": "could you try removing these memory clears again? I think that was the original driver bug. if they still fail then we can restore this patch set and land it.",
+      "range": {
+        "startLine": 1188,
+        "startChar": 0,
+        "endLine": 1189,
+        "endChar": 43
+      },
+      "revId": "e26d303fb45219baa9432d1691ed6da9c66ce855",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
