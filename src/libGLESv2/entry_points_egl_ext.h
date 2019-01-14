@@ -13,6 +13,26 @@
 #include <EGL/eglext.h>
 #include <export.h>
 
+namespace egl
+{
+class AttributeMap;
+}  // namespace egl
+
+// This namespace contains helper functions that do the actual work where the same functionality
+// is exposed both in an extension and a future core.
+namespace ext
+{
+// EGL_KHR_fence_sync
+EGLSync EGLCreateSyncKHR(EGLDisplay dpy, EGLenum type, const egl::AttributeMap &attributes);
+EGLBoolean EGLDestroySyncKHR(EGLDisplay dpy, EGLSync sync);
+EGLint EGLClientWaitSyncKHR(EGLDisplay dpy, EGLSync sync, EGLint flags, EGLTime timeout);
+EGLBoolean EGLGetSyncAttribKHR(EGLDisplay dpy, EGLSync sync, EGLint attribute, EGLint *value);
+
+// EGL_KHR_wait_sync
+EGLBoolean EGLWaitSyncKHR(EGLDisplay dpy, EGLSync sync, EGLint flags);
+
+}  // namespace ext
+
 extern "C" {
 
 // EGL_ANGLE_query_surface_pointer
@@ -103,6 +123,23 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_StreamPostD3DTextureANGLE(EGLDisplay dpy
                                                                   EGLStreamKHR stream,
                                                                   void *texture,
                                                                   const EGLAttrib *attrib_list);
+
+// EGL_KHR_fence_sync
+ANGLE_EXPORT EGLSync EGLAPIENTRY EGL_CreateSyncKHR(EGLDisplay dpy,
+                                                   EGLenum type,
+                                                   const EGLint *attrib_list);
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_DestroySyncKHR(EGLDisplay dpy, EGLSync sync);
+ANGLE_EXPORT EGLint EGLAPIENTRY EGL_ClientWaitSyncKHR(EGLDisplay dpy,
+                                                      EGLSync sync,
+                                                      EGLint flags,
+                                                      EGLTime timeout);
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_GetSyncAttribKHR(EGLDisplay dpy,
+                                                         EGLSync sync,
+                                                         EGLint attribute,
+                                                         EGLint *value);
+
+// EGL_KHR_wait_sync
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_WaitSyncKHR(EGLDisplay dpy, EGLSync sync, EGLint flags);
 
 // EGL_CHROMIUM_get_sync_values
 ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_GetSyncValuesCHROMIUM(EGLDisplay dpy,
