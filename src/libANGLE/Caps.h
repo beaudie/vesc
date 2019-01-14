@@ -325,6 +325,9 @@ struct Extensions
     // GL_OES_EGL_image_external_essl3
     bool eglImageExternalEssl3;
 
+    // GL_OES_EGL_sync
+    bool eglSync;
+
     // NV_EGL_stream_consumer_external
     bool eglStreamConsumerExternal;
 
@@ -895,6 +898,12 @@ struct ClientExtensions
 
     // EGL_KHR_debug
     bool debug;
+
+    // EGL_KHR_fence_sync
+    bool fenceSync;
+
+    // EGL_KHR_wait_sync
+    bool waitSync;
 
     // EGL_ANGLE_explicit_context
     bool explicitContext;
