@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3c0a14a_ba9f2602",
+        "filename": "src/common/utilities.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-14T20:43:45Z",
+      "side": 1,
+      "message": "From our conversation in person: It\u0027s probably better to solve this by working around zero-array check that was removed in https://chromium-review.googlesource.com/c/angle/angle/+/684742/40/src/compiler/translator/blocklayoutHLSL.cpp#b89",
+      "range": {
+        "startLine": 788,
+        "startChar": 11,
+        "endLine": 788,
+        "endChar": 42
+      },
+      "revId": "355cbd1f4f298fba2f7c5d0e00bd22bb848c6fea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
