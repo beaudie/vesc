@@ -120,6 +120,9 @@ class SurfaceImpl : public FramebufferAttachmentObjectImpl
         return egl::EglBadDisplay();
     }
 
+    // EGL_ANDROID_recordable
+    virtual void setRecordableEnabled(bool enabled) { UNREACHABLE(); }
+
   protected:
     const egl::SurfaceState &mState;
 };

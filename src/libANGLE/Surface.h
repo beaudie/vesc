@@ -54,6 +54,8 @@ struct SurfaceState final : private angle::NonCopyable
     bool timestampsEnabled;
     SupportedCompositorTiming supportedCompositorTimings;
     SupportedTimestamps supportedTimestamps;
+
+    bool recordableEnabled;
 };
 
 class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
@@ -162,6 +164,10 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
                              EGLint numTimestamps,
                              const EGLint *timestamps,
                              EGLnsecsANDROID *values) const;
+
+    // EGL_ANDROID_recordable entry points
+    void setRecordableEnabled(bool enabled);
+    bool isRecordableEnabled() const;
 
   protected:
     Surface(EGLint surfaceType,

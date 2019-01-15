@@ -26,7 +26,11 @@ namespace egl
 {
 
 SurfaceState::SurfaceState(const egl::Config *configIn, const AttributeMap &attributesIn)
-    : label(nullptr), config(configIn), attributes(attributesIn), timestampsEnabled(false)
+    : label(nullptr),
+      config(configIn),
+      attributes(attributesIn),
+      timestampsEnabled(false),
+      recordableEnabled(false)
 {}
 
 Surface::Surface(EGLint surfaceType,
@@ -488,6 +492,17 @@ void Surface::setTimestampsEnabled(bool enabled)
 bool Surface::isTimestampsEnabled() const
 {
     return mState.timestampsEnabled;
+}
+
+void Surface::setRecordableEnabled(bool enabled)
+{
+    mImplementation->setRecordableEnabled(enabled);
+    mState.recordableEnabled = enabled;
+}
+
+bool Surface::isRecordableEnabled() const
+{
+    return mState.recordableEnabled;
 }
 
 const SupportedCompositorTiming &Surface::getSupportedCompositorTimings() const
