@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "94e5d257_74750157",
+        "filename": "gni/angle.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-15T20:18:34Z",
+      "side": 1,
+      "message": "Sounds like webrtc did this because of how forward_variables_from works, unsure if it\u0027s a bug in forward_variables_from or intended behavior. Maybe add a comment that this weirdness is needed because \"visibility\" is global variable and not local.",
+      "parentUuid": "aafaaf6b_04a5ac0c",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 53
+      },
+      "revId": "f00ac07727afa96111f870dc5e22ce0f02205481",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "76efcfba_c4ef7d6d",
         "filename": "gni/angle.gni",
         "patchSetId": 9
