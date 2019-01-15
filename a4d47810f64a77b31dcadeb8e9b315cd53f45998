@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c163f140_1e06c097",
+        "filename": "src/compiler/translator/blocklayout.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-15T18:54:53Z",
+      "side": 1,
+      "message": "Does it make any sense to make this (and the next one) inline?\nI don\u0027t think compiler can inline it, since it needs to check what\u0027s the real object corresponding to the pointer?\nKind of defeats the purpose of the clang warning...",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 50
+      },
+      "revId": "a4d47810f64a77b31dcadeb8e9b315cd53f45998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33bb1b61_e94714a8",
+        "filename": "src/libANGLE/renderer/BufferImpl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-15T18:54:53Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 40
+      },
+      "revId": "a4d47810f64a77b31dcadeb8e9b315cd53f45998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef92af0e_ec1512b7",
+        "filename": "src/libANGLE/renderer/EGLImplFactory.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-15T18:54:53Z",
+      "side": 1,
+      "message": "This one can be inlined in the call inside DisplayAndroid::createExternalImageSibling.\nNot sure if this warrants to define it as \"inline\", as I don\u0027t think it would be inlined in other places, so it would be confusing.",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 6
+      },
+      "revId": "a4d47810f64a77b31dcadeb8e9b315cd53f45998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5782628a_cb1eafde",
+        "filename": "src/libANGLE/renderer/ProgramImpl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-15T18:54:53Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 1
+      },
+      "revId": "a4d47810f64a77b31dcadeb8e9b315cd53f45998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd77d93f_d220305a",
+        "filename": "src/libANGLE/renderer/RenderbufferImpl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-15T18:54:53Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 6
+      },
+      "revId": "a4d47810f64a77b31dcadeb8e9b315cd53f45998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00c4d0bc_f1e6c913",
+        "filename": "src/libANGLE/renderer/VertexArrayImpl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-15T18:54:53Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 6
+      },
+      "revId": "a4d47810f64a77b31dcadeb8e9b315cd53f45998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
