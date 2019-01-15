@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb0dd24e_35d37287",
+        "filename": "BUILD.gn",
+        "patchSetId": 9
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-15T17:52:17Z",
+      "side": 0,
+      "message": "I think you can add this as well to angle_shared_library and angle_test.",
+      "range": {
+        "startLine": 679,
+        "startChar": 19,
+        "endLine": 679,
+        "endChar": 34
+      },
+      "revId": "f3179a6a1763d8925b840701cdf6da6d8459bcae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df0011da_5a1cb428",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 9
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-15T17:52:17Z",
+      "side": 0,
+      "message": "Do you know if this flag does anything?\nSeems to be working without it, so looks OK to remove it.",
+      "range": {
+        "startLine": 549,
+        "startChar": 4,
+        "endLine": 549,
+        "endChar": 19
+      },
+      "revId": "f3179a6a1763d8925b840701cdf6da6d8459bcae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
