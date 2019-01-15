@@ -104,7 +104,41 @@ struct VertexAttribute final : private angle::NonCopyable
     GLint64 mCachedElementLimit;
 };
 
-size_t ComputeVertexAttributeTypeSize(const VertexAttribute &attrib);
+namespace priv
+{
+constexpr angle::PackedEnumMap<VertexAttribType, size_t> kVertexAttribTypeComponentSize = {{
+    {VertexAttribType::Byte, sizeof(GLbyte)},
+    {VertexAttribType::UnsignedByte, sizeof(GLubyte)},
+    {VertexAttribType::Short, sizeof(GLshort)},
+    {VertexAttribType::UnsignedShort, sizeof(GLushort)},
+    {VertexAttribType::Int, sizeof(GLint)},
+    {VertexAttribType::UnsignedInt, sizeof(GLuint)},
+    {VertexAttribType::Float, sizeof(GLfloat)},
+    {VertexAttribType::HalfFloat, sizeof(GLhalf)},
+    {VertexAttribType::Fixed, sizeof(GLfixed)},
+    {VertexAttribType::Int2101010, 4},
+    {VertexAttribType::UnsignedInt2101010, 4},
+}};
+
+// Packed attribute types like Int2101010 don't scale by their component size.
+constexpr angle::PackedEnumMap<VertexAttribType, size_t> kVertexAttribTypeSizeScale = {{
+    {VertexAttribType::Byte, 1},
+    {VertexAttribType::UnsignedByte, 1},
+    {VertexAttribType::Short, 1},
+    {VertexAttribType::UnsignedShort, 1},
+    {VertexAttribType::Int, 1},
+    {VertexAttribType::UnsignedInt, 1},
+    {VertexAttribType::Float, 1},
+    {VertexAttribType::HalfFloat, 1},
+    {VertexAttribType::Fixed, 1},
+}};
+}  // namespace priv
+
+ANGLE_INLINE size_t ComputeVertexAttributeTypeSize(const VertexAttribute &attrib)
+{
+    return priv::kVertexAttribTypeComponentSize[attrib.type] *
+           priv::kVertexAttribTypeSizeScale[attrib.type] * attrib.size;
+}
 
 // Warning: you should ensure binding really matches attrib.bindingIndex before using this function.
 size_t ComputeVertexAttributeStride(const VertexAttribute &attrib, const VertexBinding &binding);
