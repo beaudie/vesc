@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d4d73940_f2a8d0c6",
+        "filename": "BUILD.gn",
+        "patchSetId": 9
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T18:59:17Z",
+      "side": 0,
+      "message": "Good idea. Done.",
+      "parentUuid": "fb0dd24e_35d37287",
+      "range": {
+        "startLine": 679,
+        "startChar": 19,
+        "endLine": 679,
+        "endChar": 34
+      },
+      "revId": "f3179a6a1763d8925b840701cdf6da6d8459bcae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df0011da_5a1cb428",
         "filename": "src/tests/BUILD.gn",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "f3179a6a1763d8925b840701cdf6da6d8459bcae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0dc4c40_53558690",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 9
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T18:59:17Z",
+      "side": 0,
+      "message": "Yeah it verifies that \"testonly\" targets are only called by \"test\" targets. In this case since angle_gles1_conformance_tests is a \"test\" target setting \"testonly\" is redundant.",
+      "parentUuid": "df0011da_5a1cb428",
+      "range": {
+        "startLine": 549,
+        "startChar": 4,
+        "endLine": 549,
+        "endChar": 19
+      },
+      "revId": "f3179a6a1763d8925b840701cdf6da6d8459bcae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

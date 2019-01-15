@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "aafaaf6b_04a5ac0c",
+        "filename": "gni/angle.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T18:59:17Z",
+      "side": 1,
+      "message": "I copied the code from here:\n\nhttps://webrtc.googlesource.com/src/+/138d4ac54d9eebbdbe0469f301ec64cbf6731af3\n\nI can remove it if you prefer.",
+      "parentUuid": "ed2adca4_780c7b09",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 53
+      },
+      "revId": "f00ac07727afa96111f870dc5e22ce0f02205481",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "76efcfba_c4ef7d6d",
         "filename": "gni/angle.gni",
         "patchSetId": 9
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "8f694b48_11261d99",
+        "filename": "gni/angle.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T18:59:17Z",
+      "side": 1,
+      "message": "WebRTC did this so it could define its own public configs first. I changed this.",
+      "parentUuid": "76efcfba_c4ef7d6d",
+      "range": {
+        "startLine": 163,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 0
+      },
+      "revId": "f00ac07727afa96111f870dc5e22ce0f02205481",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e1ef44bf_67fc1d94",
         "filename": "gni/angle.gni",
         "patchSetId": 9
@@ -68,6 +116,30 @@
       "revId": "f00ac07727afa96111f870dc5e22ce0f02205481",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c0111e3_964fac96",
+        "filename": "gni/angle.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T18:59:17Z",
+      "side": 1,
+      "message": "Done. Thanks.",
+      "parentUuid": "e1ef44bf_67fc1d94",
+      "range": {
+        "startLine": 170,
+        "startChar": 15,
+        "endLine": 170,
+        "endChar": 17
+      },
+      "revId": "f00ac07727afa96111f870dc5e22ce0f02205481",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
