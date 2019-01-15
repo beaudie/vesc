@@ -149,7 +149,9 @@ class TextureVk : public TextureImpl
     angle::Result ensureImageInitialized(ContextVk *contextVk);
 
   private:
+    void releaseNonOwnedImage(const gl::Context *context, RendererVk *renderer);
     angle::Result ensureImageAllocated(RendererVk *renderer);
+    void setImageHelper(RendererVk *renderer, vk::ImageHelper *imageHelper, bool selfOwned);
 
     angle::Result redefineImage(const gl::Context *context,
                                 const gl::ImageIndex &index,
@@ -219,6 +221,7 @@ class TextureVk : public TextureImpl
                                              uint32_t levelCount,
                                              const vk::Format &format);
 
+    bool mOwnsImage;
     vk::ImageHelper *mImage;
     vk::ImageView mDrawBaseLevelImageView;
     vk::ImageView mReadBaseLevelImageView;
