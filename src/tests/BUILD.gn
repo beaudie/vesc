@@ -33,7 +33,7 @@ if (build_with_chromium) {
     ]
   }
 
-  static_library("angle_internal_gtest") {
+  angle_static_library("angle_internal_gtest") {
     sources = [
       "//third_party/googletest/src/googletest/src/gtest-all.cc",
     ]
@@ -53,7 +53,7 @@ if (build_with_chromium) {
     }
   }
 
-  static_library("angle_internal_gmock") {
+  angle_static_library("angle_internal_gmock") {
     sources = [
       "//third_party/googletest/src/googlemock/src/gmock-all.cc",
     ]
@@ -87,51 +87,42 @@ if (build_with_chromium) {
   }
 }
 
-source_set("angle_unittests_main") {
-  testonly = true
-  public_deps = googletest_deps + [ angle_root + ":includes" ]
-  public_configs = [ angle_root + ":internal_config" ]
+# Helper template for including "main" files in Chromium.
+template("angle_tests_main") {
+  source_set(target_name) {
+    testonly = true
+    public_deps = googletest_deps
+    deps = [
+      angle_root + ":includes",
+    ]
+    configs += [ angle_root + ":internal_config" ]
 
-  if (build_with_chromium) {
-    sources = [
-      "//gpu/angle_unittest_main.cc",
-    ]
-  } else {
-    sources = [
-      "angle_unittests_main.cpp",
-    ]
+    main = invoker.main
+
+    if (build_with_chromium) {
+      include_dirs = [ "../.." ]
+      sources = [
+        "//gpu/$main.cc",
+      ]
+    } else {
+      sources = [
+        "$main.cpp",
+      ]
+    }
   }
 }
 
-# Ideally we would rename this. But not be worth the hassle.
-source_set("angle_end2end_tests_main") {
-  testonly = true
-  public_deps = googletest_deps
-
-  if (build_with_chromium) {
-    sources = [
-      "//gpu/angle_end2end_tests_main.cc",
-    ]
-  } else {
-    sources = [
-      "angle_end2end_tests_main.cpp",
-    ]
-  }
+# Should fix the naming here once we migrate away from Chromium "main" files.
+angle_tests_main("angle_unittests_main") {
+  main = "angle_unittest_main"
 }
 
-source_set("angle_perftests_main") {
-  testonly = true
-  public_deps = googletest_deps
+angle_tests_main("angle_end2end_tests_main") {
+  main = "angle_end2end_tests_main"
+}
 
-  if (build_with_chromium) {
-    sources = [
-      "//gpu/angle_perftests_main.cc",
-    ]
-  } else {
-    sources = [
-      "angle_perftests_main.cpp",
-    ]
-  }
+angle_tests_main("angle_perftests_main") {
+  main = "angle_perftests_main"
 }
 
 # This config adds build-ids to the associated library.
@@ -145,19 +136,12 @@ config("build_id_config") {
   }
 }
 
-test("angle_unittests") {
-  include_dirs = [ "$angle_root/src" ]
-
+angle_test("angle_unittests") {
   sources = angle_unittests_sources
 
   if (angle_enable_hlsl) {
     sources += angle_unittests_hlsl_sources
     defines = [ "ANGLE_ENABLE_HLSL" ]
-  }
-
-  if (is_linux && !is_component_build) {
-    # Set rpath to find shared libs in a non-component build.
-    configs += [ "//build/config/gcc:rpath_for_built_shared_libraries" ]
   }
 
   deps = googletest_deps + [
@@ -172,11 +156,10 @@ test("angle_unittests") {
 if (is_win || is_linux || is_mac || is_android) {
   import("angle_end2end_tests.gni")
 
-  test("angle_end2end_tests") {
-    include_dirs = [ "../../src/tests" ]
+  angle_test("angle_end2end_tests") {
+    include_dirs = [ "." ]
 
     if (is_android) {
-      use_native_activity = true
       configs += [ ":build_id_config" ]
     }
 
@@ -198,15 +181,9 @@ if (is_win || is_linux || is_mac || is_android) {
     }
 
     configs += [
-      angle_root + ":internal_config",
       angle_root + ":libANGLE_config",
       angle_root + ":library_name_config",
     ]
-
-    if (is_linux && !is_component_build) {
-      # Set rpath to find libEGL.so and libGLESv2.so even in a non-component build.
-      configs += [ "//build/config/gcc:rpath_for_built_shared_libraries" ]
-    }
 
     deps = [
       angle_root + ":angle_image_util",
@@ -224,13 +201,8 @@ if (is_win || is_linux || is_mac || is_android) {
 
   import("angle_white_box_tests.gni")
 
-  test("angle_white_box_tests") {
+  angle_test("angle_white_box_tests") {
     include_dirs = [ "." ]
-
-    if (is_android) {
-      use_native_activity = true
-    }
-
     sources = angle_white_box_tests_sources
 
     if (is_win) {
@@ -243,15 +215,9 @@ if (is_win || is_linux || is_mac || is_android) {
     }
 
     configs += [
-      angle_root + ":internal_config",
       angle_root + ":libANGLE_config",
       angle_root + ":library_name_config",
     ]
-
-    if (is_linux && !is_component_build) {
-      # Set rpath to find libEGL.so and libGLESv2.so even in a non-component build.
-      configs += [ "//build/config/gcc:rpath_for_built_shared_libraries" ]
-    }
 
     deps = [
       angle_root + ":angle_util_static",
@@ -269,12 +235,8 @@ if (is_win || is_linux || is_android || is_mac) {
   import("angle_perftests.gni")
 
   # This test suite is for perf tests that use ANGLE's internals in some direct way.
-  test("angle_white_box_perftests") {
-    include_dirs = [
-      ".",
-      "../..",
-    ]
-
+  angle_test("angle_white_box_perftests") {
+    include_dirs = [ "." ]
     sources = angle_white_box_perf_tests_sources
 
     deps = [
@@ -285,11 +247,6 @@ if (is_win || is_linux || is_android || is_mac) {
       angle_root + "/third_party/jsoncpp:jsoncpp",
       ":angle_perftests_main",
     ]
-
-    if (is_android) {
-      use_native_activity = true
-      configs -= [ "//build/config/android:hide_all_but_jni" ]
-    }
 
     if (is_win) {
       sources += angle_white_box_perf_tests_win_sources
@@ -302,24 +259,14 @@ if (is_win || is_linux || is_android || is_mac) {
     }
 
     configs += [
-      angle_root + ":internal_config",
       angle_root + ":libANGLE_config",
       angle_root + ":library_name_config",
     ]
-
-    if (is_linux && !is_component_build) {
-      # Set rpath to find *.so files even in a non-component build.
-      configs += [ "//build/config/gcc:rpath_for_built_shared_libraries" ]
-    }
   }
 
   # This test suite is designed to run against a generic GL implementation.
-  test("angle_perftests") {
-    include_dirs = [
-      ".",
-      "../..",
-    ]
-
+  angle_test("angle_perftests") {
+    include_dirs = [ "." ]
     sources = angle_perf_tests_sources
 
     deps = [
@@ -336,21 +283,10 @@ if (is_win || is_linux || is_android || is_mac) {
       angle_root + ":libGLESv2${angle_libs_suffix}",
     ]
 
-    if (is_android) {
-      use_native_activity = true
-      configs -= [ "//build/config/android:hide_all_but_jni" ]
-    }
-
     configs += [
-      angle_root + ":internal_config",
       angle_root + ":libANGLE_config",
       angle_root + ":library_name_config",
     ]
-
-    if (is_linux && !is_component_build) {
-      # Set rpath to find *.so files even in a non-component build.
-      configs += [ "//build/config/gcc:rpath_for_built_shared_libraries" ]
-    }
   }
 }
 
@@ -395,6 +331,7 @@ if (build_angle_gles1_conform_tests) {
     }
   }
 
+  # This source set is a bit special so we don't use angle_source_set.
   source_set("angle_gles1_conformance_no_gtest") {
     configs += [
       ":angle_gles1_conform_support",
@@ -545,18 +482,13 @@ if (build_angle_gles1_conform_tests) {
     ]
   }
 
-  test("angle_gles1_conformance_tests") {
-    testonly = true
-
+  angle_test("angle_gles1_conformance_tests") {
     deps = [
       ":angle_end2end_tests_main",
       ":angle_gles1_conformance_no_gtest",
     ]
 
-    include_dirs = [
-      "../../src/tests",
-      angle_root,
-    ]
+    include_dirs = [ "." ]
 
     sources = [
       "gles1_conformance_tests/ConformanceTests.cpp",
@@ -570,7 +502,6 @@ if (build_angle_gles1_conform_tests) {
     ]
 
     configs += [
-      angle_root + ":internal_config",
       angle_root + ":libANGLE_config",
       angle_root + ":library_name_config",
     ]
@@ -584,19 +515,8 @@ if (build_angle_gles1_conform_tests) {
 if (build_angle_deqp_tests) {
   import("deqp.gni")
 
-  source_set("angle_deqp_tests_main") {
-    testonly = true
-    public_deps = googletest_deps
-
-    if (build_with_chromium) {
-      sources = [
-        "//gpu/angle_deqp_tests_main.cc",
-      ]
-    } else {
-      sources = [
-        "deqp_support/angle_deqp_gtest_main.cpp",
-      ]
-    }
+  angle_tests_main("angle_deqp_tests_main") {
+    main = "angle_deqp_tests_main"
   }
 
   config("angle_deqp_support") {
@@ -666,6 +586,7 @@ if (build_angle_deqp_tests) {
     "//build/config/compiler:chromium_code",
     "//build/config/compiler:no_exceptions",
     "//build/config/compiler:no_rtti",
+    angle_root + ":extra_warnings",
   ]
 
   if (is_win) {
@@ -676,13 +597,12 @@ if (build_angle_deqp_tests) {
     ]
   }
 
-  static_library("angle_deqp_decpp") {
-    configs -= deqp_undefine_configs
+  angle_static_library("angle_deqp_decpp") {
+    suppressed_configs += deqp_undefine_configs
     public_configs = [
       ":angle_deqp_support",
       "//build/config/compiler:exceptions",
       "//build/config/compiler:no_chromium_code",
-      angle_root + ":internal_config",
     ]
     if (is_clang) {
       cflags_cc = [
@@ -711,7 +631,7 @@ if (build_angle_deqp_tests) {
     }
   }
 
-  static_library("angle_deqp_libtester") {
+  angle_static_library("angle_deqp_libtester") {
     public_deps = [
       ":angle_deqp_decpp",
       angle_root + ":angle_common",
@@ -721,7 +641,7 @@ if (build_angle_deqp_tests) {
       "//third_party/libpng:libpng",
     ]
 
-    configs -= deqp_undefine_configs
+    suppressed_configs += deqp_undefine_configs
     configs += [ angle_root + ":library_name_config" ]
     public_configs = [ ":angle_deqp_libtester_config" ]
     sources = deqp_libtester_sources
@@ -741,7 +661,7 @@ if (build_angle_deqp_tests) {
     include_dirs = [ "third_party/gpu_test_expectations" ]
   }
 
-  source_set("angle_deqp_gtest_support") {
+  angle_source_set("angle_deqp_gtest_support") {
     testonly = true
 
     public_deps = [
@@ -796,16 +716,17 @@ if (build_angle_deqp_tests) {
     }
 
     shared_library_name = "angle_deqp_lib${api_name}"
-    shared_library(shared_library_name) {
+    angle_shared_library(shared_library_name) {
       deps = [
         ":angle_deqp_libtester",
 
         angle_root + ":angle_util",
       ]
 
-      configs -= deqp_undefine_configs
+      suppressed_configs += deqp_undefine_configs
       if (is_android) {
-        configs -= [ "//build/config/android:hide_all_but_jni_onload" ]
+        suppressed_configs +=
+            [ "//build/config/android:hide_all_but_jni_onload" ]
       }
       public_configs = [ ":${config_name}" ]
 
@@ -818,7 +739,7 @@ if (build_angle_deqp_tests) {
     }
 
     if (!build_with_chromium) {
-      executable("angle_deqp_${api_name}_no_gtest") {
+      angle_executable("angle_deqp_${api_name}_no_gtest") {
         sources = [
           "deqp_support/angle_deqp_tests_main.cpp",
         ]
@@ -829,7 +750,7 @@ if (build_angle_deqp_tests) {
     }
 
     test_name = "angle_deqp_${api_name}_tests"
-    test(test_name) {
+    angle_test(test_name) {
       deps = [
         ":${shared_library_name}",
         ":angle_deqp_gtest_support",
@@ -845,15 +766,6 @@ if (build_angle_deqp_tests) {
         "$angle_root/third_party/deqp/src/android/cts/master/${api_name}-master.txt",
         "$angle_root/third_party/deqp/src/data/",
       ]
-
-      if (is_linux && !is_component_build) {
-        # Set rpath to find *.so files even in a non-component build.
-        configs += [ "//build/config/gcc:rpath_for_built_shared_libraries" ]
-      }
-
-      if (is_android) {
-        use_native_activity = true
-      }
     }
   }
 }
