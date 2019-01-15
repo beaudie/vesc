@@ -434,6 +434,30 @@
       "revId": "86e09692da236a38c61b462706f7931629bd44f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1938a757_4b730c4f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T23:27:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "06c16f3e_266a57a1",
+      "range": {
+        "startLine": 321,
+        "startChar": 4,
+        "endLine": 321,
+        "endChar": 78
+      },
+      "revId": "86e09692da236a38c61b462706f7931629bd44f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
