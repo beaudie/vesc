@@ -149,7 +149,10 @@ class TextureVk : public TextureImpl
     angle::Result ensureImageInitialized(ContextVk *contextVk);
 
   private:
+    void destroyImage(const gl::Context *context, RendererVk *renderer);
+    void releaseNonOwnedImage(const gl::Context *context, RendererVk *renderer);
     angle::Result ensureImageAllocated(RendererVk *renderer);
+    void setImageHelper(RendererVk *renderer, vk::ImageHelper *imageHelper, bool selfOwned);
 
     angle::Result redefineImage(const gl::Context *context,
                                 const gl::ImageIndex &index,
@@ -212,6 +215,9 @@ class TextureVk : public TextureImpl
                             vk::CommandBuffer *commandBuffer);
     void releaseImage(const gl::Context *context, RendererVk *renderer, bool releaseStagingBuffer);
     uint32_t getLevelCount() const;
+    angle::Result initImageViews(ContextVk *contextVk,
+                                 const vk::Format &format,
+                                 uint32_t levelCount);
     angle::Result initCubeMapRenderTargets(ContextVk *contextVk);
 
     angle::Result ensureImageInitializedImpl(ContextVk *contextVk,
@@ -219,6 +225,7 @@ class TextureVk : public TextureImpl
                                              uint32_t levelCount,
                                              const vk::Format &format);
 
+    bool mOwnsImage;
     vk::ImageHelper *mImage;
     vk::ImageView mDrawBaseLevelImageView;
     vk::ImageView mReadBaseLevelImageView;
