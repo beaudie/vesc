@@ -95,29 +95,33 @@ angle_common_configs = [
 
 angle_remove_configs = [ "//build/config/compiler:default_include_dirs" ]
 
+if (is_clang) {
+  angle_remove_configs += [ "//build/config/clang:find_bad_constructs" ]
+}
+
 set_defaults("angle_executable") {
   configs = angle_common_configs
-  suppressed_configs = []
+  suppressed_configs = angle_remove_configs
 }
 
 set_defaults("angle_shared_library") {
   configs = angle_common_configs
-  suppressed_configs = []
+  suppressed_configs = angle_remove_configs
 }
 
 set_defaults("angle_source_set") {
   configs = angle_common_configs
-  suppressed_configs = []
+  suppressed_configs = angle_remove_configs
 }
 
 set_defaults("angle_static_library") {
   configs = angle_common_configs
-  suppressed_configs = []
+  suppressed_configs = angle_remove_configs
 }
 
 set_defaults("angle_test") {
   configs = angle_common_configs
-  suppressed_configs = []
+  suppressed_configs = angle_remove_configs
 }
 
 template("angle_executable") {
@@ -133,7 +137,6 @@ template("angle_executable") {
     forward_variables_from(invoker, [ "visibility" ])
 
     configs += invoker.configs
-    configs -= angle_remove_configs
     configs -= invoker.suppressed_configs
 
     if (defined(invoker.public_configs)) {
@@ -155,7 +158,6 @@ template("angle_shared_library") {
     forward_variables_from(invoker, [ "visibility" ])
 
     configs += invoker.configs
-    configs -= angle_remove_configs
     configs -= invoker.suppressed_configs
 
     public_configs = [ angle_root + ":shared_library_public_config" ]
@@ -190,7 +192,6 @@ template("angle_source_set") {
     forward_variables_from(invoker, [ "visibility" ])
 
     configs += invoker.configs
-    configs -= angle_remove_configs
     configs -= invoker.suppressed_configs
 
     if (defined(invoker.public_configs)) {
@@ -212,7 +213,6 @@ template("angle_static_library") {
     forward_variables_from(invoker, [ "visibility" ])
 
     configs += invoker.configs
-    configs -= angle_remove_configs
     configs -= invoker.suppressed_configs
 
     if (defined(invoker.public_configs)) {
@@ -234,7 +234,6 @@ template("angle_test") {
     forward_variables_from(invoker, [ "visibility" ])
 
     configs += invoker.configs
-    configs -= angle_remove_configs
     configs -= invoker.suppressed_configs
 
     if (is_linux && !is_component_build) {
