@@ -1,0 +1,251 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a13fbb2_0be4897a",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T18:19:32Z",
+      "side": 1,
+      "message": "nit: can you add a top-level description?",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 2
+      },
+      "revId": "67ccc734e56c6420dab3a790b93d1976e3e2f0d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "faad285a_042a497b",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T18:19:32Z",
+      "side": 1,
+      "message": "probably safe to remove the comments now too",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 27,
+        "endChar": 3
+      },
+      "revId": "67ccc734e56c6420dab3a790b93d1976e3e2f0d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e642583_62ce92ac",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T18:19:32Z",
+      "side": 1,
+      "message": "can you add a top-level comment description? See other libANGLE sources for examples.",
+      "revId": "67ccc734e56c6420dab3a790b93d1976e3e2f0d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65e6031f_55ceb509",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T18:19:32Z",
+      "side": 1,
+      "message": "nit: can call this PoolAllocation",
+      "range": {
+        "startLine": 45,
+        "startChar": 6,
+        "endLine": 45,
+        "endChar": 18
+      },
+      "revId": "67ccc734e56c6420dab3a790b93d1976e3e2f0d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94bd88dd_4c2fd539",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T18:19:32Z",
+      "side": 1,
+      "message": "nit: probably safe to remove this now",
+      "range": {
+        "startLine": 242,
+        "startChar": 0,
+        "endLine": 319,
+        "endChar": 4
+      },
+      "revId": "67ccc734e56c6420dab3a790b93d1976e3e2f0d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3d6c5fc_ab42dca3",
+        "filename": "src/compiler/translator/PoolAlloc.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T18:19:32Z",
+      "side": 1,
+      "message": "same nit about removing the comments now",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 80
+      },
+      "revId": "67ccc734e56c6420dab3a790b93d1976e3e2f0d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58dc359d_a12dd59b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T18:19:32Z",
+      "side": 1,
+      "message": "Why don\u0027t we just store these in RendererVk in the anonymous block? Then we won\u0027t need to expose anything in a header.\n\nAlso as we discussed in the call, can use the user data pointer to get the pointer to the PoolAllocator.",
+      "range": {
+        "startLine": 319,
+        "startChar": 0,
+        "endLine": 326,
+        "endChar": 2
+      },
+      "revId": "67ccc734e56c6420dab3a790b93d1976e3e2f0d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4a17ce3_96eab44d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T18:19:32Z",
+      "side": 1,
+      "message": "nit: can you pass these by const \u0026?",
+      "range": {
+        "startLine": 330,
+        "startChar": 43,
+        "endLine": 330,
+        "endChar": 65
+      },
+      "revId": "67ccc734e56c6420dab3a790b93d1976e3e2f0d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5bd870b_7b3607e7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T18:19:32Z",
+      "side": 1,
+      "message": "same comment here.",
+      "range": {
+        "startLine": 342,
+        "startChar": 27,
+        "endLine": 342,
+        "endChar": 49
+      },
+      "revId": "67ccc734e56c6420dab3a790b93d1976e3e2f0d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e43f741_a755531e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T18:19:32Z",
+      "side": 1,
+      "message": "nit: can remove this after the following change",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 29
+      },
+      "revId": "67ccc734e56c6420dab3a790b93d1976e3e2f0d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f38f0992_855c34ae",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-15T18:19:32Z",
+      "side": 1,
+      "message": "micro-nit: sorting (caps are separated and h/cpp)",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 29
+      },
+      "revId": "67ccc734e56c6420dab3a790b93d1976e3e2f0d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
