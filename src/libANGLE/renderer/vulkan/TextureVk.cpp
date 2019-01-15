@@ -15,6 +15,7 @@
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+#include "libANGLE/renderer/vulkan/SurfaceVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
 namespace rx
@@ -119,7 +120,7 @@ angle::Result TextureVk::generateMipmapLevelsWithCPU(ContextVk *contextVk,
 
 // TextureVk implementation.
 TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
-    : TextureImpl(state), mImage(nullptr)
+    : TextureImpl(state), mOwnsImage(false), mImage(nullptr)
 {}
 
 TextureVk::~TextureVk() = default;
@@ -132,7 +133,11 @@ void TextureVk::onDestroy(const gl::Context *context)
     releaseImage(context, renderer, true);
     renderer->releaseObject(renderer->getCurrentQueueSerial(), &mSampler);
 
-    SafeDelete(mImage);
+    if (mOwnsImage)
+    {
+        delete mImage;
+    }
+    mImage = nullptr;
 }
 
 angle::Result TextureVk::setImage(const gl::Context *context,
@@ -526,6 +531,7 @@ angle::Result TextureVk::setStorage(const gl::Context *context,
     ContextVk *contextVk             = GetAs<ContextVk>(context->getImplementation());
     RendererVk *renderer             = contextVk->getRenderer();
 
+    releaseNonOwnedImage(context, renderer);
     ANGLE_TRY(ensureImageAllocated(renderer));
 
     const vk::Format &format         = renderer->getFormat(internalFormat);
@@ -558,20 +564,36 @@ angle::Result TextureVk::setImageExternal(const gl::Context *context,
     return angle::Result::Stop;
 }
 
+void TextureVk::releaseNonOwnedImage(const gl::Context *context, RendererVk *renderer)
+{
+    if (mImage && !mOwnsImage)
+    {
+        releaseImage(context, renderer, false);
+    }
+}
+
 angle::Result TextureVk::ensureImageAllocated(RendererVk *renderer)
 {
     if (mImage == nullptr)
     {
-        mImage = new vk::ImageHelper();
-        mImage->initStagingBuffer(renderer);
-
-        mRenderTarget.init(mImage, &mDrawBaseLevelImageView, 0, this);
-
-        // Force re-creation of cube map render targets next time they are needed
-        mCubeMapRenderTargets.clear();
+        setImageHelper(renderer, new vk::ImageHelper(), true);
     }
 
     return angle::Result::Continue;
+}
+
+void TextureVk::setImageHelper(RendererVk *renderer, vk::ImageHelper *imageHelper, bool selfOwned)
+{
+    ASSERT(mImage == nullptr);
+
+    mOwnsImage = selfOwned;
+    mImage     = imageHelper;
+    mImage->initStagingBuffer(renderer);
+
+    mRenderTarget.init(mImage, &mDrawBaseLevelImageView, 0, this);
+
+    // Force re-creation of cube map render targets next time they are needed
+    mCubeMapRenderTargets.clear();
 }
 
 angle::Result TextureVk::redefineImage(const gl::Context *context,
@@ -581,6 +603,10 @@ angle::Result TextureVk::redefineImage(const gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
+
+    // If this TextureVk does not own its image, release the image reference. Redefining another
+    // object's image is never what we want to do.
+    releaseNonOwnedImage(context, renderer);
 
     if (!size.empty())
     {
@@ -745,14 +771,26 @@ angle::Result TextureVk::setBaseLevel(const gl::Context *context, GLuint baseLev
 
 angle::Result TextureVk::bindTexImage(const gl::Context *context, egl::Surface *surface)
 {
-    ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+
+    releaseImage(context, renderer, false);
+
+    // eglBindTexImage can only be called with pbuffer (offscreen) surfaces
+    OffscreenSurfaceVk *offscreenSurface = GetImplAs<OffscreenSurfaceVk>(surface);
+    setImageHelper(renderer, offscreenSurface->getColorBufferImage(), false);
+
     return angle::Result::Stop;
 }
 
 angle::Result TextureVk::releaseTexImage(const gl::Context *context)
 {
-    ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
-    return angle::Result::Stop;
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+
+    releaseImage(context, renderer, false);
+
+    return angle::Result::Continue;
 }
 
 angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
@@ -986,7 +1024,14 @@ void TextureVk::releaseImage(const gl::Context *context,
 {
     if (mImage)
     {
-        mImage->release(renderer, releaseStagingBuffer);
+        if (mOwnsImage)
+        {
+            mImage->release(renderer, releaseStagingBuffer);
+        }
+        else
+        {
+            mImage = nullptr;
+        }
     }
 
     Serial currentSerial = renderer->getCurrentQueueSerial();
