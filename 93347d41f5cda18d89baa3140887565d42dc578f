@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "578d9ba6_934dbfa9",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-15T20:50:11Z",
+      "side": 1,
+      "message": "I would probably put this first. It\u0027s more likely that the application is using the basic types, so it would be more efficient if it were satisfied by the first if.",
+      "range": {
+        "startLine": 344,
+        "startChar": 0,
+        "endLine": 345,
+        "endChar": 53
+      },
+      "revId": "93347d41f5cda18d89baa3140887565d42dc578f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "651c6fb2_15ba2448",
+        "filename": "src/libANGLE/VertexAttribute.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-15T20:50:11Z",
+      "side": 1,
+      "message": "The part with the basic types could be improved with a table.",
+      "revId": "93347d41f5cda18d89baa3140887565d42dc578f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
