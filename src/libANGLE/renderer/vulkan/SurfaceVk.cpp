@@ -255,6 +255,11 @@ angle::Result OffscreenSurfaceVk::initializeContents(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+vk::ImageHelper *OffscreenSurfaceVk::getColorBufferImage()
+{
+    return &mColorAttachment.image;
+}
+
 WindowSurfaceVk::SwapchainImage::SwapchainImage()  = default;
 WindowSurfaceVk::SwapchainImage::~SwapchainImage() = default;
 
