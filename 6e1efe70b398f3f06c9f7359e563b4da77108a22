@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "97f706c1_cfe4ab25",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-15T22:23:16Z",
+      "side": 1,
+      "message": "Understood, I have a slight preference for leaving it the way it was instead of downcasting where possible.",
+      "parentUuid": "ae360ff1_a36817f0",
+      "range": {
+        "startLine": 231,
+        "startChar": 2,
+        "endLine": 231,
+        "endChar": 12
+      },
+      "revId": "6e1efe70b398f3f06c9f7359e563b4da77108a22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ecf325c5_31956e50",
         "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
         "patchSetId": 27

@@ -414,6 +414,30 @@
     },
     {
       "key": {
+        "uuid": "d6885b49_406cded4",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-15T22:23:16Z",
+      "side": 1,
+      "message": "Just read through those bugs and I think we don\u0027t need to worry about that issue.  When we try to make a worker context, the context we want to share with is already current on this thread so we should be able to call wglMakeCurrent(null), wglShareLists(curContext, newContext), wglMakeCurrent(curContext).  This is preferable to creating two WGL contexts every time.",
+      "parentUuid": "d8b7ca39_72d8a37e",
+      "range": {
+        "startLine": 877,
+        "startChar": 50,
+        "endLine": 878,
+        "endChar": 45
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "018d9b86_5e723f80",
         "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
         "patchSetId": 28

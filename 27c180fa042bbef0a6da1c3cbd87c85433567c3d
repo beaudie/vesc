@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b3db85f_5568e60f",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-15T22:23:16Z",
+      "side": 1,
+      "message": "Could you only call this function if isWorkerThread  is true?  ShaderGL::mFallbackToMainThread can be set to true in ShaderGL::prepareSourceAndReturnOptions",
+      "revId": "27c180fa042bbef0a6da1c3cbd87c85433567c3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34737b0f_5c213e53",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-15T22:23:16Z",
+      "side": 1,
+      "message": "I still think we can remove this had have the default implementation of createWorkerContext return null instead of being pure virtual.",
+      "range": {
+        "startLine": 181,
+        "startChar": 4,
+        "endLine": 181,
+        "endChar": 40
+      },
+      "revId": "27c180fa042bbef0a6da1c3cbd87c85433567c3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afd22aa4_59319e78",
+        "filename": "src/libANGLE/renderer/gl/wgl/RendererWGL.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-15T22:23:16Z",
+      "side": 1,
+      "message": "const ref",
+      "revId": "27c180fa042bbef0a6da1c3cbd87c85433567c3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72daf2cc_3bf9ab95",
+        "filename": "src/libANGLE/renderer/gl/wgl/RendererWGL.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-15T22:23:16Z",
+      "side": 1,
+      "message": "Can you store this in DisplayWGL instead?",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 22
+      },
+      "revId": "27c180fa042bbef0a6da1c3cbd87c85433567c3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
