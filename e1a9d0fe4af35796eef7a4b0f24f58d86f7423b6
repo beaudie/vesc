@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9dbce365_785f3470",
+        "filename": "scripts/gl.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 40748,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-15T15:29:37Z",
+      "side": 1,
+      "message": "I think we should create an GL_ANGLE_provoking_vertex with the GL_QUADS_FOLLOW_PROVOKING_VERTEX_CONVENTION query removed.  I don\u0027t mind if you skip the extension spec for now, either you or I can follow up later and do some edits to the ARB_provoking_vertex spec.\n\nWe should also avoid making changes to the gl.xml file, we want to be able to pull in updates easily.  See gl_angle_ext.xml for our own extensions to this file.",
+      "range": {
+        "startLine": 40748,
+        "startChar": 25,
+        "endLine": 40748,
+        "endChar": 48
+      },
+      "revId": "e1a9d0fe4af35796eef7a4b0f24f58d86f7423b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6f574cf_04a357dd",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-15T15:29:37Z",
+      "side": 1,
+      "message": "nit: make it an enableableExtension.  This turns it off by default for WebGL compatibility contexts and disallows the query.",
+      "range": {
+        "startLine": 908,
+        "startChar": 41,
+        "endLine": 908,
+        "endChar": 56
+      },
+      "revId": "e1a9d0fe4af35796eef7a4b0f24f58d86f7423b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bb1c38a_a38999df",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-15T15:29:37Z",
+      "side": 1,
+      "message": "Please add a dirty bit for this state.",
+      "range": {
+        "startLine": 455,
+        "startChar": 9,
+        "endLine": 455,
+        "endChar": 21
+      },
+      "revId": "e1a9d0fe4af35796eef7a4b0f24f58d86f7423b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df83bd62_e133d698",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-15T15:29:37Z",
+      "side": 1,
+      "message": "private with a getter and setter that sets the dirty bit.",
+      "range": {
+        "startLine": 720,
+        "startChar": 0,
+        "endLine": 722,
+        "endChar": 56
+      },
+      "revId": "e1a9d0fe4af35796eef7a4b0f24f58d86f7423b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be69ec03_439114f0",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2744,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-15T15:29:37Z",
+      "side": 1,
+      "message": "This won\u0027t be called on every draw call, you have to add a case for the provoking vertex dirty bit in StateManager11::syncState and call StateManager11::invalidateShaders.",
+      "range": {
+        "startLine": 2744,
+        "startChar": 30,
+        "endLine": 2744,
+        "endChar": 41
+      },
+      "revId": "e1a9d0fe4af35796eef7a4b0f24f58d86f7423b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
