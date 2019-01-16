@@ -78,6 +78,12 @@ class GlobalSettings
                 showAngleInUseDialog ? 1 : 0);
     }
 
+    static void updateAngleWhitelist(Context context, String packageNames)
+    {
+        ContentResolver contentResolver = context.getContentResolver();
+        Settings.Global.putString(contentResolver, "angle_whitelist", packageNames);
+    }
+
     void updatePkg(String pkgName, String driver)
     {
         int pkgIndex = getGlobalSettingsPkgIndex(pkgName);
