@@ -1,0 +1,147 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "966cb71c_d5281093",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-16T20:39:22Z",
+      "side": 1,
+      "message": "You can remove the MSVC specialization here. cl.exe supports %zu now.",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 10
+      },
+      "revId": "0f8665e91494ac0f07ab5255e0e366859a46a37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20380f8a_838a48e2",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-16T20:39:22Z",
+      "side": 1,
+      "message": "in?",
+      "range": {
+        "startLine": 261,
+        "startChar": 31,
+        "endLine": 261,
+        "endChar": 34
+      },
+      "revId": "0f8665e91494ac0f07ab5255e0e366859a46a37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "097b1008_20cb2000",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-16T20:39:22Z",
+      "side": 1,
+      "message": "It might be helpful if the destructor would clear the memory with yet another value before deleting (if `GUARD_BLOCKS`), which would make use-after-free debugging simpler.",
+      "revId": "0f8665e91494ac0f07ab5255e0e366859a46a37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bf16f7b_3183473d",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-16T20:39:22Z",
+      "side": 1,
+      "message": "Was this code written pre-C++98 or something?\n\nThe comment can be removed (also from the cpp file)",
+      "range": {
+        "startLine": 97,
+        "startChar": 7,
+        "endLine": 97,
+        "endChar": 25
+      },
+      "revId": "0f8665e91494ac0f07ab5255e0e366859a46a37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b63bdee5_2bb11f9e",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-16T20:39:22Z",
+      "side": 1,
+      "message": "to?",
+      "range": {
+        "startLine": 136,
+        "startChar": 58,
+        "endLine": 136,
+        "endChar": 61
+      },
+      "revId": "0f8665e91494ac0f07ab5255e0e366859a46a37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "377831be_6c9c0367",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-16T20:39:22Z",
+      "side": 1,
+      "message": "The prefix of these constants can turn to `ANGLE_` instead of `ANGLE_TRANSLATOR_`.",
+      "revId": "0f8665e91494ac0f07ab5255e0e366859a46a37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d36390a2_6ca08c07",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-16T20:39:22Z",
+      "side": 1,
+      "message": "The realloc function should preserve the contents of the old memory up-to `min(oldSize, newSize)`. This is a major issue if this code is ever hit.\n\nSince we don\u0027t have information on the old size here, I suggest adding a `reallocate` call to the pool allocator that would do the following:\n\n1. If newSize \u003c\u003d oldSize, reduce the size of the allocation (and move the post-guard ahead, if guarding)\n2. If the allocation being resized is at the end of the pool, just increase its size (and push the post-guard back, if guarding)\n3. Otherwise make a new allocation and copy the old contents over.\n\n... except it looks like the size of the allocation is not stored in the allocation blocks if not adding guards.\n\nUnless you want to rework the pool allocator with the necessary changes, I would very much rather see this implementation here instead:\n\n    // Relloc not supported by the pool allocator\n    UNIMPLEMENTED();\n    return nullptr;",
+      "revId": "0f8665e91494ac0f07ab5255e0e366859a46a37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
