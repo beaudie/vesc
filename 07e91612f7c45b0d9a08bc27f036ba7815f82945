@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f90c5fb1_3fee1bb8",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3585,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T14:45:59Z",
+      "side": 1,
+      "message": "std::set is going to be very expensive because of the tree implementation with lots of heap allocations. I\u0027d recommend using angle::FixedVector here and just scanning the list from the start to avoid any heap allocations.",
+      "range": {
+        "startLine": 3585,
+        "startChar": 9,
+        "endLine": 3585,
+        "endChar": 12
+      },
+      "revId": "07e91612f7c45b0d9a08bc27f036ba7815f82945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
