@@ -11,6 +11,7 @@
 #define LIBANGLE_RENDERER_VULKAN_IMAGEVK_H_
 
 #include "libANGLE/renderer/ImageImpl.h"
+#include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 namespace rx
 {
@@ -20,9 +21,17 @@ class ImageVk : public ImageImpl
   public:
     ImageVk(const egl::ImageState &state);
     ~ImageVk() override;
+    void onDestroy(const egl::Display *display) override;
+
     egl::Error initialize(const egl::Display *display) override;
 
     angle::Result orphan(const gl::Context *context, egl::ImageSibling *sibling) override;
+
+    vk::ImageHelper *getImage() const;
+
+  private:
+    bool mOwnsImage;
+    vk::ImageHelper *mImage;
 };
 
 }  // namespace rx
