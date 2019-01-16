@@ -830,6 +830,9 @@ struct DisplayExtensions
 
     // EGL_ANDROID_get_frame_timestamps
     bool getFrameTimestamps;
+
+    // EGL_ANDROID_recordable
+    bool recordable;
 };
 
 struct DeviceExtensions

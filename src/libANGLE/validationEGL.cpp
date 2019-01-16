@@ -210,6 +210,13 @@ Error ValidateConfigAttribute(const Display *display, EGLAttrib attribute)
             }
             break;
 
+        case EGL_RECORDABLE_ANDROID:
+            if (!display->getExtensions().recordable)
+            {
+                return EglBadAttribute() << "EGL_ANDROID_recordable is not enabled.";
+            }
+            break;
+
         default:
             return EglBadAttribute() << "Unknown attribute.";
     }

@@ -176,6 +176,10 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
     // When the Vulkan driver supports VK_KHR_incremental_present, it will use it.  Otherwise, it
     // will ignore the hint and do a regular swap.
     outExtensions->swapBuffersWithDamage = true;
+
+    // The Vulkan implementation will always say that EGL_ANDROID_recordable extension is supported.
+    // The initial Vulkan implementation will always say that ANativeWindow is not recordable.
+    outExtensions->recordable = true;
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const
