@@ -42,6 +42,21 @@ enum class CommandGraphNodeFunction
     WriteTimestamp,
 };
 
+// Receives notifications when a command buffer is no longer able to record. Can be used with
+// inheritance. Faster than using an interface class since it has inlined methods. Could be used
+// with composition by adding a getCommandBuffer method.
+class CommandBufferOwner
+{
+  public:
+    CommandBufferOwner() = default;
+    virtual ~CommandBufferOwner() {}
+
+    ANGLE_INLINE void onCommandBufferFinished() { mCommandBuffer = nullptr; }
+
+  protected:
+    vk::CommandBuffer *mCommandBuffer = nullptr;
+};
+
 // Only used internally in the command graph. Kept in the header for better inlining performance.
 class CommandGraphNode final : angle::NonCopyable
 {
@@ -119,8 +134,17 @@ class CommandGraphNode final : angle::NonCopyable
         mGlobalMemoryBarrierDstAccess |= dstAccess;
     }
 
+    void setCommandBufferOwner(CommandBufferOwner *owner) { mCommandBufferOwner = owner; }
+
   private:
-    void setHasChildren() { mHasChildren = true; }
+    ANGLE_INLINE void setHasChildren()
+    {
+        mHasChildren = true;
+        if (mCommandBufferOwner)
+        {
+            mCommandBufferOwner->onCommandBufferFinished();
+        }
+    }
 
     // Used for testing only.
     bool isChildOf(CommandGraphNode *parent);
@@ -158,6 +182,9 @@ class CommandGraphNode final : angle::NonCopyable
     // For global memory barriers.
     VkFlags mGlobalMemoryBarrierSrcAccess;
     VkFlags mGlobalMemoryBarrierDstAccess;
+
+    // Command buffer notifications.
+    CommandBufferOwner *mCommandBufferOwner;
 };
 
 // This is a helper class for back-end objects used in Vk command buffers. It records a serial
@@ -227,7 +254,7 @@ class RecordableGraphResource : public CommandGraphResource
 
     // Begins a command buffer on the current graph node for in-RenderPass rendering.
     // Called from FramebufferVk::startNewRenderPass and UtilsVk functions.
-    angle::Result beginRenderPass(Context *context,
+    angle::Result beginRenderPass(ContextVk *contextVk,
                                   const Framebuffer &framebuffer,
                                   const gl::Rectangle &renderArea,
                                   const RenderPassDesc &renderPassDesc,
