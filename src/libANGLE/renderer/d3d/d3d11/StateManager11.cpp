@@ -411,6 +411,12 @@ bool ShaderConstants11::updateImageMetadata(ImageMetadata *data, const gl::Image
         dirty       = true;
     }
 
+    if (data->level != static_cast<int>(imageUnit.level))
+    {
+        data->level = static_cast<int>(imageUnit.level);
+        dirty       = true;
+    }
+
     return dirty;
 }
 

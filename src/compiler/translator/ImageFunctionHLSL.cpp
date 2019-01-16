@@ -114,13 +114,33 @@ void ImageFunctionHLSL::OutputImageSizeFunctionBody(
         IsImageCube(imageFunction.image))
     {
         // "depth" stores either the number of layers in an array texture or 3D depth
-        out << "    uint width; uint height; uint depth;\n"
-            << "    " << imageReference << ".GetDimensions(width, height, depth);\n";
+        out << "    uint width, height, depth;\n";
+        if (imageFunction.readonly)
+        {
+            out << "    uint mipLevel = readonlyImageMetadata[imageIndex].level;\n";
+            out << "    uint numberOfLevels;\n";
+            out << "    " << imageReference
+                << ".GetDimensions(mipLevel, width, height, depth, numberOfLevels);\n";
+        }
+        else
+        {
+            out << "    " << imageReference << ".GetDimensions(width, height, depth);\n";
+        }
     }
     else if (IsImage2D(imageFunction.image))
     {
-        out << "    uint width; uint height;\n"
-            << "    " << imageReference << ".GetDimensions(width, height);\n";
+        out << "    uint width, height;\n";
+        if (imageFunction.readonly)
+        {
+            out << "    uint mipLevel = readonlyImageMetadata[imageIndex].level;\n";
+            out << "    uint numberOfLevels;\n";
+            out << "    " << imageReference
+                << ".GetDimensions(mipLevel, width, height, numberOfLevels);\n";
+        }
+        else
+        {
+            out << "    " << imageReference << ".GetDimensions(width, height);\n";
+        }
     }
     else
         UNREACHABLE();
