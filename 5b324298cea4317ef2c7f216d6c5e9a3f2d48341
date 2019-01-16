@@ -1,0 +1,141 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "277dc15e_58b4e95d",
+        "filename": "android/src/com/android/angle/common/GlobalSettings.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-01-16T23:37:31Z",
+      "side": 1,
+      "message": "This should be declared in res/values/global_settings.xml.",
+      "range": {
+        "startLine": 84,
+        "startChar": 51,
+        "endLine": 84,
+        "endChar": 68
+      },
+      "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56379fcf_e62f9192",
+        "filename": "android/src/com/android/angle/common/Receiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-01-16T23:37:31Z",
+      "side": 1,
+      "message": "I think this check should be removed so we can push a rules file that doesn\u0027t whitelist any apps.",
+      "range": {
+        "startLine": 39,
+        "startChar": 39,
+        "endLine": 39,
+        "endChar": 62
+      },
+      "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42cabb9a_c0c3d22a",
+        "filename": "android/src/com/android/angle/common/Receiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-01-16T23:37:31Z",
+      "side": 1,
+      "message": "Log ANGLE_RULES_FILE here, since that\u0027s what we are attempting to load and could change in the future (and would help us catch these kinds of typos).",
+      "range": {
+        "startLine": 60,
+        "startChar": 39,
+        "endLine": 60,
+        "endChar": 52
+      },
+      "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33ca53d3_588db4b3",
+        "filename": "android/src/com/android/angle/common/Receiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-01-16T23:37:31Z",
+      "side": 1,
+      "message": "I think this is better as:\n\nString packageNames \u003d \"\";\n\nThis way it\u0027s clear we are starting with an empty string, which (with the change above) could lead to us disabling ANGLE for all apps by default by having an empty setting value.\n\nAlso, looking around a bit it seems it\u0027s more Java-y to declare literals directly rather than a new String object.\n\nhttps://stackoverflow.com/a/334548",
+      "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98b1d764_ac508a73",
+        "filename": "android/src/com/android/angle/common/Receiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-01-16T23:37:31Z",
+      "side": 1,
+      "message": "Is optJSONObject() the right call here?   We know something must be in this array entry, since \u0027j\u0027 is still less than apps.length(), so it\u0027s probably safe to just do a getJSONObject() here and skip the null checking.",
+      "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc2d6d4b_f134485f",
+        "filename": "android/src/com/android/angle/common/Receiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-01-16T23:37:31Z",
+      "side": 1,
+      "message": "If you want to keep the optJSONObject() above, then this log message isn\u0027t exactly accurate.   You\u0027re skipping this object because it doesn\u0027t exist; you aren\u0027t looking for \"AppName\" yet (that happens below).",
+      "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9a4be23_09ff2dba",
+        "filename": "android/src/com/android/angle/common/Receiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-01-16T23:37:31Z",
+      "side": 1,
+      "message": "If you want to use optString() here, I think it would be better to follow the same pattern above and log the malformed JSON value.\n\nString packageName \u003d app.optString(\"AppName\");\nif ((packageName \u003d\u003d null) || (packageName.isEmpty())) {\n    Log.e(TAG, \"Invalid package name: \u0027\" + packageName + \"\u0027\");\n    continue;\n}\n[[[... add packageName to packageNames ...]]]\n\nOr you could just assume that \"AppName\" exists and use getString().   It\u0027s probably safer to keep the optString() with the extra checking/logging though.",
+      "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
