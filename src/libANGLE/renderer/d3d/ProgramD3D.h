@@ -204,9 +204,9 @@ class ProgramD3D : public ProgramImpl
     angle::Result getComputeExecutableForImage2DBindLayout(d3d::Context *context,
                                                            ShaderExecutableD3D **outExecutable,
                                                            gl::InfoLog *infoLog);
-    std::unique_ptr<LinkEvent> link(const gl::Context *context,
-                                    const gl::ProgramLinkedResources &resources,
-                                    gl::InfoLog &infoLog) override;
+    std::unique_ptr<gl::LinkEvent> link(const gl::Context *context,
+                                        const gl::ProgramLinkedResources &resources,
+                                        gl::InfoLog &infoLog) override;
     GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) override;
 
     void setPathFragmentInputGen(const std::string &inputName,
@@ -463,8 +463,8 @@ class ProgramD3D : public ProgramImpl
                                     GLboolean transpose,
                                     const GLfloat *value);
 
-    std::unique_ptr<LinkEvent> compileProgramExecutables(const gl::Context *context,
-                                                         gl::InfoLog &infoLog);
+    std::unique_ptr<gl::LinkEvent> compileProgramExecutables(const gl::Context *context,
+                                                             gl::InfoLog &infoLog);
     angle::Result compileComputeExecutable(d3d::Context *context, gl::InfoLog &infoLog);
 
     void gatherTransformFeedbackVaryings(const gl::VaryingPacking &varyings,
