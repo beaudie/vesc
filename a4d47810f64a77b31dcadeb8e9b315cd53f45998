@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "6b759c30_6a97c0e7",
+        "filename": "src/libANGLE/renderer/BufferImpl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T01:37:18Z",
+      "side": 1,
+      "message": "Tried removing inline. Works on clang but fails on MSVC. Guess we\u0027ll have to go with this. Hope you\u0027re ok if I proceed with landing.",
+      "parentUuid": "1b63dc63_f3a50d78",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 40
+      },
+      "revId": "a4d47810f64a77b31dcadeb8e9b315cd53f45998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef92af0e_ec1512b7",
         "filename": "src/libANGLE/renderer/EGLImplFactory.h",
         "patchSetId": 10
