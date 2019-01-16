@@ -22,6 +22,29 @@
       "revId": "9693ee1b009ccfe3b74c30b601bc7770725dccb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8670ea1d_127bc27e",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-16T13:49:09Z",
+      "side": 1,
+      "message": "Do you need to validate the value is true/false/dont_care here?",
+      "range": {
+        "startLine": 227,
+        "startChar": 6,
+        "endLine": 227,
+        "endChar": 34
+      },
+      "revId": "9693ee1b009ccfe3b74c30b601bc7770725dccb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
