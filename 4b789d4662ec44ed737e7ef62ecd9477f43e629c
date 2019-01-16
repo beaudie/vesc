@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef6eff1e_bb185020",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-01-16T18:00:40Z",
+      "side": 1,
+      "message": "I think your alignment should at least match this size so that guard blocks don\u0027t span cache lines.   Ideally the alignment should land at the start of a cache line (64B aligned?) so the CPU can do the full check in a single cache line and have some of the real data available immediately while prefetching the next line.\n\nChecking these will already slow things down, but that may help it a little.",
+      "revId": "4b789d4662ec44ed737e7ef62ecd9477f43e629c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "795e51d6_72bbe8d8",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-01-16T18:00:40Z",
+      "side": 1,
+      "message": "Is there a reason to use \u0027unsigned char\u0027 over \u0027uint8_t\u0027 for these types of pointers?   If nothing else it\u0027s way less typing, but personally I think it makes it a bit clearer that these are pointers to raw bytes.",
+      "range": {
+        "startLine": 49,
+        "startChar": 28,
+        "endLine": 49,
+        "endChar": 41
+      },
+      "revId": "4b789d4662ec44ed737e7ef62ecd9477f43e629c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9587782a_1692fc67",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-01-16T18:00:40Z",
+      "side": 1,
+      "message": "How is this GUARD_BLOCKS defined/undefined?   Is this something in gn args or related to one of those values?",
+      "range": {
+        "startLine": 57,
+        "startChar": 7,
+        "endLine": 57,
+        "endChar": 19
+      },
+      "revId": "4b789d4662ec44ed737e7ef62ecd9477f43e629c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
