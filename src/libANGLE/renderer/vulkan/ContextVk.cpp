@@ -201,8 +201,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
                                    GLsizei vertexOrIndexCount,
                                    gl::DrawElementsType indexTypeOrNone,
                                    const void *indices,
-                                   DirtyBits dirtyBitMask,
-                                   vk::CommandBuffer **commandBufferOut)
+                                   DirtyBits dirtyBitMask)
 {
     // Set any dirty bits that depend on draw call parameters or other objects.
     if (mode != mCurrentDrawMode)
@@ -212,11 +211,14 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mGraphicsPipelineDesc->updateTopology(&mGraphicsPipelineTransition, mCurrentDrawMode);
     }
 
-    if (!mDrawFramebuffer->appendToStartedRenderPass(mRenderer->getCurrentQueueSerial(),
-                                                     commandBufferOut))
+    if (!mCommandBuffer)
     {
-        ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, commandBufferOut));
-        mDirtyBits |= mNewCommandBufferDirtyBits;
+        if (!mDrawFramebuffer->appendToStartedRenderPass(mRenderer->getCurrentQueueSerial(),
+                                                         &mCommandBuffer))
+        {
+            ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, &mCommandBuffer));
+            mDirtyBits |= mNewCommandBufferDirtyBits;
+        }
     }
 
     if (context->getStateCache().hasAnyActiveClientAttrib())
@@ -240,7 +242,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     // Flush any relevant dirty bits.
     for (size_t dirtyBit : dirtyBits)
     {
-        ANGLE_TRY((this->*mDirtyBitHandlers[dirtyBit])(context, *commandBufferOut));
+        ANGLE_TRY((this->*mDirtyBitHandlers[dirtyBit])(context, mCommandBuffer));
     }
 
     mDirtyBits &= ~dirtyBitMask;
@@ -252,8 +254,7 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
                                           gl::PrimitiveMode mode,
                                           GLsizei indexCount,
                                           gl::DrawElementsType indexType,
-                                          const void *indices,
-                                          vk::CommandBuffer **commandBufferOut)
+                                          const void *indices)
 {
     if (indexType != mCurrentDrawElementsType)
     {
@@ -282,8 +283,7 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
         }
     }
 
-    return setupDraw(context, mode, 0, indexCount, indexType, indices, mIndexedDirtyBitsMask,
-                     commandBufferOut);
+    return setupDraw(context, mode, 0, indexCount, indexType, indices, mIndexedDirtyBitsMask);
 }
 
 angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
@@ -291,8 +291,7 @@ angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
                                            GLint firstVertex,
                                            GLsizei vertexOrIndexCount,
                                            gl::DrawElementsType indexTypeOrInvalid,
-                                           const void *indices,
-                                           vk::CommandBuffer **commandBufferOut)
+                                           const void *indices)
 {
     ANGLE_TRY(mVertexArray->handleLineLoop(this, firstVertex, vertexOrIndexCount,
                                            indexTypeOrInvalid, indices));
@@ -301,7 +300,7 @@ angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
                                    ? indexTypeOrInvalid
                                    : gl::DrawElementsType::UnsignedInt;
     return setupDraw(context, mode, firstVertex, vertexOrIndexCount, indexTypeOrInvalid, indices,
-                     mIndexedDirtyBitsMask, commandBufferOut);
+                     mIndexedDirtyBitsMask);
 }
 
 angle::Result ContextVk::handleDirtyDefaultAttribs(const gl::Context *context,
@@ -429,20 +428,19 @@ angle::Result ContextVk::drawArrays(const gl::Context *context,
                                     GLint first,
                                     GLsizei count)
 {
-    vk::CommandBuffer *commandBuffer = nullptr;
-    uint32_t clampedVertexCount      = gl::GetClampedVertexCount<uint32_t>(count);
+    uint32_t clampedVertexCount = gl::GetClampedVertexCount<uint32_t>(count);
 
     if (mode == gl::PrimitiveMode::LineLoop)
     {
         ANGLE_TRY(setupLineLoopDraw(context, mode, first, count, gl::DrawElementsType::InvalidEnum,
-                                    nullptr, &commandBuffer));
-        vk::LineLoopHelper::Draw(clampedVertexCount, commandBuffer);
+                                    nullptr));
+        vk::LineLoopHelper::Draw(clampedVertexCount, mCommandBuffer);
     }
     else
     {
         ANGLE_TRY(setupDraw(context, mode, first, count, gl::DrawElementsType::InvalidEnum, nullptr,
-                            mNonIndexedDirtyBitsMask, &commandBuffer));
-        commandBuffer->draw(clampedVertexCount, 1, first, 0);
+                            mNonIndexedDirtyBitsMask));
+        mCommandBuffer->draw(clampedVertexCount, 1, first, 0);
     }
 
     return angle::Result::Continue;
@@ -464,16 +462,15 @@ angle::Result ContextVk::drawElements(const gl::Context *context,
                                       gl::DrawElementsType type,
                                       const void *indices)
 {
-    vk::CommandBuffer *commandBuffer = nullptr;
     if (mode == gl::PrimitiveMode::LineLoop)
     {
-        ANGLE_TRY(setupLineLoopDraw(context, mode, 0, count, type, indices, &commandBuffer));
-        vk::LineLoopHelper::Draw(count, commandBuffer);
+        ANGLE_TRY(setupLineLoopDraw(context, mode, 0, count, type, indices));
+        vk::LineLoopHelper::Draw(count, mCommandBuffer);
     }
     else
     {
-        ANGLE_TRY(setupIndexedDraw(context, mode, count, type, indices, &commandBuffer));
-        commandBuffer->drawIndexed(count, 1, 0, 0, 0);
+        ANGLE_TRY(setupIndexedDraw(context, mode, count, type, indices));
+        mCommandBuffer->drawIndexed(count, 1, 0, 0, 0);
     }
 
     return angle::Result::Continue;

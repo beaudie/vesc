@@ -26,7 +26,7 @@ namespace rx
 {
 class RendererVk;
 
-class ContextVk : public ContextImpl, public vk::Context
+class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBufferOwner
 {
   public:
     ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer);
@@ -234,21 +234,18 @@ class ContextVk : public ContextImpl, public vk::Context
                             GLsizei vertexOrIndexCount,
                             gl::DrawElementsType indexTypeOrInvalid,
                             const void *indices,
-                            DirtyBits dirtyBitMask,
-                            vk::CommandBuffer **commandBufferOut);
+                            DirtyBits dirtyBitMask);
     angle::Result setupIndexedDraw(const gl::Context *context,
                                    gl::PrimitiveMode mode,
                                    GLsizei indexCount,
                                    gl::DrawElementsType indexType,
-                                   const void *indices,
-                                   vk::CommandBuffer **commandBufferOut);
+                                   const void *indices);
     angle::Result setupLineLoopDraw(const gl::Context *context,
                                     gl::PrimitiveMode mode,
                                     GLint firstVertex,
                                     GLsizei vertexOrIndexCount,
                                     gl::DrawElementsType indexTypeOrInvalid,
-                                    const void *indices,
-                                    vk::CommandBuffer **commandBufferOut);
+                                    const void *indices);
 
     void updateViewport(FramebufferVk *framebufferVk,
                         const gl::Rectangle &viewport,
