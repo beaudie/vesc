@@ -36,18 +36,14 @@ std::string GetExecutableDirectoryImpl()
 
 }  // anonymous namespace
 
-const char *GetExecutablePath()
+std::string GetExecutablePath()
 {
-    // TODO(jmadill): Make global static string thread-safe.
-    const static std::string &exePath = GetExecutablePathImpl();
-    return exePath.c_str();
+    return GetExecutablePathImpl();
 }
 
-const char *GetExecutableDirectory()
+std::string GetExecutableDirectory()
 {
-    // TODO(jmadill): Make global static string thread-safe.
-    const static std::string &exeDir = GetExecutableDirectoryImpl();
-    return exeDir.c_str();
+    return GetExecutableDirectoryImpl();
 }
 
 const char *GetSharedLibraryExtension()
