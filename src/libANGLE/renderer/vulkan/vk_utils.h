@@ -34,6 +34,7 @@
 namespace egl
 {
 class Display;
+class Image;
 }
 
 namespace gl
@@ -56,6 +57,7 @@ namespace rx
 {
 class CommandGraphResource;
 class DisplayVk;
+class ImageVk;
 class RenderTargetVk;
 class RendererVk;
 class RenderPassCache;
@@ -132,6 +134,12 @@ template <>
 struct ImplTypeHelper<egl::Display>
 {
     using ImplType = DisplayVk;
+};
+
+template <>
+struct ImplTypeHelper<egl::Image>
+{
+    using ImplType = ImageVk;
 };
 
 template <typename T>
