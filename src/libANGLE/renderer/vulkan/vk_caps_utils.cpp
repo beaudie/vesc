@@ -50,6 +50,10 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
     outExtensions->textureBorderClamp     = false;  // not implemented yet
     outExtensions->translatedShaderSource = true;
 
+    outExtensions->eglImage              = true;
+    outExtensions->eglImageExternal      = false;  // TODO
+    outExtensions->eglImageExternalEssl3 = false;  // TODO: support ES3
+
     // Only expose robust buffer access if the physical device supports it.
     outExtensions->robustBufferAccessBehavior = physicalDeviceFeatures.robustBufferAccess;
 

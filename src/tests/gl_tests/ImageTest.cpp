@@ -513,6 +513,16 @@ TEST_P(ImageTest, ANGLEExtensionAvailability)
             EXPECT_FALSE(hasExternalESSL3Ext());
         }
     }
+    else if (IsVulkan())
+    {
+        EXPECT_TRUE(hasOESExt());
+        EXPECT_FALSE(hasExternalExt());
+        EXPECT_TRUE(hasBaseExt());
+        EXPECT_TRUE(has2DTextureExt());
+        EXPECT_FALSE(hasCubemapExt());
+        EXPECT_TRUE(hasRenderbufferExt());
+        EXPECT_FALSE(hasExternalESSL3Ext());
+    }
     else
     {
         EXPECT_FALSE(hasOESExt());

@@ -13,6 +13,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/ImageVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
 
@@ -136,8 +137,7 @@ ImageImpl *DisplayVk::createImage(const egl::ImageState &state,
                                   EGLenum target,
                                   const egl::AttributeMap &attribs)
 {
-    UNIMPLEMENTED();
-    return static_cast<ImageImpl *>(0);
+    return new ImageVk(state);
 }
 
 rx::ContextImpl *DisplayVk::createContext(const gl::State &state,
@@ -176,6 +176,14 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
     // When the Vulkan driver supports VK_KHR_incremental_present, it will use it.  Otherwise, it
     // will ignore the hint and do a regular swap.
     outExtensions->swapBuffersWithDamage = true;
+
+    outExtensions->image                 = true;
+    outExtensions->imageBase             = true;
+    outExtensions->imagePixmap           = false;
+    outExtensions->glTexture2DImage      = true;
+    outExtensions->glTextureCubemapImage = false;  // TODO
+    outExtensions->glTexture3DImage      = false;  // TODO: support OES_texture_3d or ES3
+    outExtensions->glRenderbufferImage   = true;
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const
