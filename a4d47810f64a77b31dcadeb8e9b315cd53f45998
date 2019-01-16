@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5b3bd1a7_0444b2b5",
+        "filename": "src/compiler/translator/blocklayout.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T00:13:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c163f140_1e06c097",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 50
+      },
+      "revId": "a4d47810f64a77b31dcadeb8e9b315cd53f45998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33bb1b61_e94714a8",
         "filename": "src/libANGLE/renderer/BufferImpl.h",
         "patchSetId": 10
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "6ff5183e_c39111bb",
+        "filename": "src/libANGLE/renderer/BufferImpl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T00:13:11Z",
+      "side": 1,
+      "message": "There\u0027s no cpp for this one and I\u0027d prefer not to add it just for this method.",
+      "parentUuid": "33bb1b61_e94714a8",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 40
+      },
+      "revId": "a4d47810f64a77b31dcadeb8e9b315cd53f45998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef92af0e_ec1512b7",
         "filename": "src/libANGLE/renderer/EGLImplFactory.h",
         "patchSetId": 10
@@ -59,6 +107,30 @@
       "writtenOn": "2019-01-15T18:54:53Z",
       "side": 1,
       "message": "This one can be inlined in the call inside DisplayAndroid::createExternalImageSibling.\nNot sure if this warrants to define it as \"inline\", as I don\u0027t think it would be inlined in other places, so it would be confusing.",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 6
+      },
+      "revId": "a4d47810f64a77b31dcadeb8e9b315cd53f45998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d340e543_4bd00cf5",
+        "filename": "src/libANGLE/renderer/EGLImplFactory.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T00:13:11Z",
+      "side": 1,
+      "message": "Not sure what you mean. I just put it here because there was no cpp for this method. Can you clarify?",
+      "parentUuid": "ef92af0e_ec1512b7",
       "range": {
         "startLine": 78,
         "startChar": 0,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "1fa394fc_45f66759",
+        "filename": "src/libANGLE/renderer/ProgramImpl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T00:13:11Z",
+      "side": 1,
+      "message": "Same deal, no cpp.",
+      "parentUuid": "5782628a_cb1eafde",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 1
+      },
+      "revId": "a4d47810f64a77b31dcadeb8e9b315cd53f45998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd77d93f_d220305a",
         "filename": "src/libANGLE/renderer/RenderbufferImpl.h",
         "patchSetId": 10
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "b39c6a06_7ad6ec7d",
+        "filename": "src/libANGLE/renderer/RenderbufferImpl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T00:13:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cd77d93f_d220305a",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 6
+      },
+      "revId": "a4d47810f64a77b31dcadeb8e9b315cd53f45998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00c4d0bc_f1e6c913",
         "filename": "src/libANGLE/renderer/VertexArrayImpl.h",
         "patchSetId": 10
@@ -137,6 +257,30 @@
       "revId": "a4d47810f64a77b31dcadeb8e9b315cd53f45998",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0050cd92_fdb4dd59",
+        "filename": "src/libANGLE/renderer/VertexArrayImpl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T00:13:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "00c4d0bc_f1e6c913",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 6
+      },
+      "revId": "a4d47810f64a77b31dcadeb8e9b315cd53f45998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
