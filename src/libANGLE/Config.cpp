@@ -59,7 +59,8 @@ Config::Config()
       transparentGreenValue(0),
       transparentBlueValue(0),
       optimalOrientation(0),
-      colorComponentType(EGL_COLOR_COMPONENT_TYPE_FIXED_EXT)
+      colorComponentType(EGL_COLOR_COMPONENT_TYPE_FIXED_EXT),
+      recordable(EGL_FALSE)
 {}
 
 Config::~Config() {}
@@ -345,6 +346,9 @@ std::vector<const Config *> ConfigSet::filter(const AttributeMap &attributeMap) 
                     break;
                 case EGL_COLOR_COMPONENT_TYPE_EXT:
                     match = config.colorComponentType == static_cast<EGLenum>(attributeValue);
+                    break;
+                case EGL_RECORDABLE_ANDROID:
+                    match = config.recordable == (EGLBoolean)attributeValue;
                     break;
                 default:
                     UNREACHABLE();
