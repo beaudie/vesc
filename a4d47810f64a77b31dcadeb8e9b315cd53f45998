@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "1b63dc63_f3a50d78",
+        "filename": "src/libANGLE/renderer/BufferImpl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-16T00:52:07Z",
+      "side": 1,
+      "message": "Still, doesn\u0027t make sense to make it \"inline\" even if it is in the header.\nThis would be confusing, at the first glance someone might think that this is inlined and expect better performance than a virtual call.",
+      "parentUuid": "6ff5183e_c39111bb",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 40
+      },
+      "revId": "a4d47810f64a77b31dcadeb8e9b315cd53f45998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef92af0e_ec1512b7",
         "filename": "src/libANGLE/renderer/EGLImplFactory.h",
         "patchSetId": 10
