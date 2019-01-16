@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a66ab79e_11934bd8",
+        "filename": "scripts/gl.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 40748,
+      "author": {
+        "id": 1184734
+      },
+      "writtenOn": "2019-01-16T01:25:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9dbce365_785f3470",
+      "range": {
+        "startLine": 40748,
+        "startChar": 25,
+        "endLine": 40748,
+        "endChar": 48
+      },
+      "revId": "e1a9d0fe4af35796eef7a4b0f24f58d86f7423b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6f574cf_04a357dd",
         "filename": "src/libANGLE/Caps.cpp",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "a0ea7ff2_fbd07c76",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1184734
+      },
+      "writtenOn": "2019-01-16T01:25:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6f574cf_04a357dd",
+      "range": {
+        "startLine": 908,
+        "startChar": 41,
+        "endLine": 908,
+        "endChar": 56
+      },
+      "revId": "e1a9d0fe4af35796eef7a4b0f24f58d86f7423b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3bb1c38a_a38999df",
         "filename": "src/libANGLE/State.h",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2019-01-15T15:29:37Z",
       "side": 1,
       "message": "Please add a dirty bit for this state.",
+      "range": {
+        "startLine": 455,
+        "startChar": 9,
+        "endLine": 455,
+        "endChar": 21
+      },
+      "revId": "e1a9d0fe4af35796eef7a4b0f24f58d86f7423b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b631a37_b3048738",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1184734
+      },
+      "writtenOn": "2019-01-16T01:25:47Z",
+      "side": 1,
+      "message": "There\u0027s no more room for new dirty bits. Can I turn the patch over to you to handle this part?",
+      "parentUuid": "3bb1c38a_a38999df",
       "range": {
         "startLine": 455,
         "startChar": 9,
@@ -91,6 +163,30 @@
       "revId": "e1a9d0fe4af35796eef7a4b0f24f58d86f7423b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f299e861_0cbf30de",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1184734
+      },
+      "writtenOn": "2019-01-16T01:25:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df83bd62_e133d698",
+      "range": {
+        "startLine": 720,
+        "startChar": 0,
+        "endLine": 722,
+        "endChar": 56
+      },
+      "revId": "e1a9d0fe4af35796eef7a4b0f24f58d86f7423b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
