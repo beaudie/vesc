@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3541d081_6db04f06",
+        "filename": "scripts/gl.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 46879,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T15:15:13Z",
+      "side": 1,
+      "message": "can undo this but it\u0027s also fine to leave it.",
+      "range": {
+        "startLine": 46879,
+        "startChar": 0,
+        "endLine": 46879,
+        "endChar": 8
+      },
+      "revId": "0e45f436f5bf2b8e9dd45e995d332d45be90cac2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee651ae8_1e554fb8",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T15:15:13Z",
+      "side": 1,
+      "message": "nit: don\u0027t need auto here",
+      "range": {
+        "startLine": 1490,
+        "startChar": 10,
+        "endLine": 1490,
+        "endChar": 15
+      },
+      "revId": "0e45f436f5bf2b8e9dd45e995d332d45be90cac2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd43af47_b20600a3",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T15:15:13Z",
+      "side": 1,
+      "message": "I think this is all we need. I don\u0027t think we need to dirty other bits. But might want to double check that none of the above invalidate calls are dependent on the specific D3D11 shader objects.",
+      "range": {
+        "startLine": 1161,
+        "startChar": 16,
+        "endLine": 1161,
+        "endChar": 33
+      },
+      "revId": "0e45f436f5bf2b8e9dd45e995d332d45be90cac2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
