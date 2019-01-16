@@ -47,6 +47,7 @@ class Context;
 struct Extensions;
 class Framebuffer;
 class InfoLog;
+class LoadBinaryLinkEvent;
 class Shader;
 class ShaderProgramManager;
 class State;
@@ -78,6 +79,22 @@ enum class LinkMismatchError
     // Interface block specific
     LAYOUT_QUALIFIER_MISMATCH,
     MATRIX_PACKING_MISMATCH
+};
+
+// Provides a mechanism to access the result of asynchronous linking.
+class LinkEvent : angle::NonCopyable
+{
+  public:
+    virtual ~LinkEvent(){};
+
+    // Please be aware that these methods may be called under a gl::Context other
+    // than the one where the LinkEvent was created.
+    //
+    // Waits until the linking is actually done. Returns true if the linking
+    // succeeded, false otherwise.
+    virtual angle::Result wait(const gl::Context *context) = 0;
+    // Peeks whether the linking is still ongoing.
+    virtual bool isLinking() = 0;
 };
 
 class InfoLog : angle::NonCopyable
@@ -501,6 +518,8 @@ using ProgramMergedVaryings = std::map<std::string, ProgramVaryingRef>;
 
 class Program final : angle::NonCopyable, public LabeledObject
 {
+    friend class LoadBinaryLinkEvent;
+
   public:
     Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, GLuint handle);
     void onDestroy(const Context *context);
