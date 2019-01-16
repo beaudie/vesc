@@ -135,8 +135,9 @@ class ShaderConstants11 : angle::NonCopyable
     {
         ImageMetadata() : layer(0), padding{0} {}
 
+        int level;
         int layer;
-        int padding[3];  // This just pads the struct to 16 bytes
+        int padding[2];  // This just pads the struct to 16 bytes
     };
     static_assert(sizeof(ImageMetadata) == 16u,
                   "Image metadata struct must be one 4-vec --> 16 bytes.");

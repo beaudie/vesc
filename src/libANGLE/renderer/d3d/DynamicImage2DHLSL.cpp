@@ -291,7 +291,7 @@ std::string Image2DHLSLGroupFunctionName(Image2DHLSLGroup group, Image2DMethod m
     return name;
 }
 
-std::string getImage2DGroupReturnType(Image2DHLSLGroup group, Image2DMethod method)
+std::string GetImage2DGroupReturnType(Image2DHLSLGroup group, Image2DMethod method)
 {
     switch (method)
     {
@@ -325,7 +325,7 @@ std::string getImage2DGroupReturnType(Image2DHLSLGroup group, Image2DMethod meth
     }
 }
 
-std::string getImageMetadataLayer(Image2DHLSLGroup group)
+std::string GetImageMetadataLayer(Image2DHLSLGroup group)
 {
     switch (group)
     {
@@ -345,6 +345,60 @@ std::string getImageMetadataLayer(Image2DHLSLGroup group)
             UNREACHABLE();
             return "unknown image method";
     }
+}
+
+std::string GetImage2DLevelDimensions(Image2DHLSLGroup textureGroup,
+                                      const std::string &declarationStr,
+                                      const std::string &typeStr,
+                                      const std::string &indentStr,
+                                      bool needDepth)
+{
+    std::ostringstream dimensions;
+    switch (textureGroup)
+    {
+        case IMAGE2D_R_FLOAT4:
+        case IMAGE2D_R_UNORM:
+        case IMAGE2D_R_SNORM:
+        case IMAGE2D_R_UINT4:
+        case IMAGE2D_R_INT4:
+        {
+            dimensions << indentStr << "uint mipLevel = readonlyImageMetadata[imageIndex].level;\n";
+            dimensions << indentStr << "uint numberOfLevels;\n";
+            dimensions << indentStr << declarationStr << typeStr << "[index].GetDimensions\n";
+            if (needDepth)
+            {
+                dimensions << indentStr << "    "
+                           << "(mipLevel, width, height, depth, numberOfLevels);\n";
+            }
+            else
+            {
+                dimensions << indentStr << "    "
+                           << "(mipLevel, width, height, numberOfLevels);\n";
+            }
+            break;
+        }
+        case IMAGE2D_W_FLOAT4:
+        case IMAGE2D_W_UNORM:
+        case IMAGE2D_W_SNORM:
+        case IMAGE2D_W_UINT4:
+        case IMAGE2D_W_INT4:
+        {
+            dimensions << indentStr << declarationStr << typeStr << "[index].GetDimensions";
+            if (needDepth)
+            {
+                dimensions << "(width, height, depth);\n";
+            }
+            else
+            {
+                dimensions << "(width, height);\n";
+            }
+            break;
+        }
+        default:
+            UNREACHABLE();
+    }
+
+    return dimensions.str();
 }
 
 void OutputImage2DFunctionArgumentList(std::ostringstream &out,
@@ -392,7 +446,7 @@ void OutputImage2DSizeFunction(std::ostringstream &out,
                                const std::string &offsetStr,
                                const std::string &declarationStr)
 {
-    out << getImage2DGroupReturnType(textureGroup, IMAGE2DSIZE) << " "
+    out << GetImage2DGroupReturnType(textureGroup, IMAGE2DSIZE) << " "
         << Image2DHLSLGroupFunctionName(textureGroup, IMAGE2DSIZE) << "(";
     OutputImage2DFunctionArgumentList(out, textureGroup, IMAGE2DSIZE);
     out << ")\n"
@@ -404,7 +458,8 @@ void OutputImage2DSizeFunction(std::ostringstream &out,
         if (texture2DCount == totalCount)
         {
             out << "    const uint index = imageIndex -  " << offsetStr << "2D;\n";
-            out << "    " << declarationStr << "2D[index].GetDimensions(width, height);\n";
+            std::string indentStr = "    ";
+            out << GetImage2DLevelDimensions(textureGroup, declarationStr, "2D", indentStr, false);
         }
         else
         {
@@ -412,7 +467,8 @@ void OutputImage2DSizeFunction(std::ostringstream &out,
                 << "2D + " << texture2DCount << ")\n";
             out << "    {\n";
             out << "        const uint index = imageIndex -  " << offsetStr << "2D;\n";
-            out << "        " << declarationStr << "2D[index].GetDimensions(width, height);\n";
+            std::string indentStr = "        ";
+            out << GetImage2DLevelDimensions(textureGroup, declarationStr, "2D", indentStr, false);
             out << "    }\n";
         }
     }
@@ -423,7 +479,8 @@ void OutputImage2DSizeFunction(std::ostringstream &out,
         {
             out << "    const uint index = imageIndex -  " << offsetStr << "3D;\n";
             out << "    uint depth;\n";
-            out << "    " << declarationStr << "3D[index].GetDimensions(width, height, depth);\n";
+            std::string indentStr = "    ";
+            out << GetImage2DLevelDimensions(textureGroup, declarationStr, "3D", indentStr, true);
         }
         else
         {
@@ -447,8 +504,8 @@ void OutputImage2DSizeFunction(std::ostringstream &out,
             out << "    {\n";
             out << "        const uint index = imageIndex -  " << offsetStr << "3D;\n";
             out << "        uint depth;\n";
-            out << "        " << declarationStr
-                << "3D[index].GetDimensions(width, height, depth);\n";
+            std::string indentStr = "        ";
+            out << GetImage2DLevelDimensions(textureGroup, declarationStr, "3D", indentStr, true);
             out << "    }\n";
         }
     }
@@ -459,8 +516,9 @@ void OutputImage2DSizeFunction(std::ostringstream &out,
         {
             out << "    const uint index = imageIndex -  " << offsetStr << "2DArray;\n";
             out << "    uint depth;\n";
-            out << "    " << declarationStr
-                << "2DArray[index].GetDimensions(width, height, depth);\n";
+            std::string indentStr = "    ";
+            out << GetImage2DLevelDimensions(textureGroup, declarationStr, "2DArray", indentStr,
+                                             true);
         }
         else
         {
@@ -468,8 +526,9 @@ void OutputImage2DSizeFunction(std::ostringstream &out,
             out << "    {\n";
             out << "        const uint index = imageIndex -  " << offsetStr << "2DArray;\n";
             out << "        uint depth;\n";
-            out << "        " << declarationStr
-                << "2DArray[index].GetDimensions(width, height, depth);\n";
+            std::string indentStr = "        ";
+            out << GetImage2DLevelDimensions(textureGroup, declarationStr, "2DArray", indentStr,
+                                             true);
             out << "    }\n";
         }
     }
@@ -487,13 +546,13 @@ void OutputImage2DLoadFunction(std::ostringstream &out,
                                const std::string &offsetStr,
                                const std::string &declarationStr)
 {
-    out << getImage2DGroupReturnType(textureGroup, IMAGE2DLOAD) << " "
+    out << GetImage2DGroupReturnType(textureGroup, IMAGE2DLOAD) << " "
         << Image2DHLSLGroupFunctionName(textureGroup, IMAGE2DLOAD) << "(";
     OutputImage2DFunctionArgumentList(out, textureGroup, IMAGE2DLOAD);
     out << ")\n"
            "{\n";
 
-    out << "    " << getImage2DGroupReturnType(textureGroup, IMAGE2DLOAD) << " result;\n";
+    out << "    " << GetImage2DGroupReturnType(textureGroup, IMAGE2DLOAD) << " result;\n";
 
     if (texture2DCount > 0)
     {
@@ -519,7 +578,7 @@ void OutputImage2DLoadFunction(std::ostringstream &out,
         {
             out << "    const uint index = imageIndex -  " << offsetStr << "3D;\n";
             out << "    result = " << declarationStr << "3D[index][uint3(p.x, p.y, "
-                << getImageMetadataLayer(textureGroup) << ")];\n";
+                << GetImageMetadataLayer(textureGroup) << ")];\n";
         }
         else
         {
@@ -543,7 +602,7 @@ void OutputImage2DLoadFunction(std::ostringstream &out,
             out << "    {\n";
             out << "        const uint index = imageIndex -  " << offsetStr << "3D;\n";
             out << "        result = " << declarationStr << "3D[index][uint3(p.x, p.y, "
-                << getImageMetadataLayer(textureGroup) << ")];\n";
+                << GetImageMetadataLayer(textureGroup) << ")];\n";
             out << "    }\n";
         }
     }
@@ -554,7 +613,7 @@ void OutputImage2DLoadFunction(std::ostringstream &out,
         {
             out << "    const uint index = imageIndex -  " << offsetStr << "2DArray;\n";
             out << "    result = " << declarationStr << "2DArray[index][uint3(p.x, p.y, "
-                << getImageMetadataLayer(textureGroup) << ")];\n";
+                << GetImageMetadataLayer(textureGroup) << ")];\n";
         }
         else
         {
@@ -562,7 +621,7 @@ void OutputImage2DLoadFunction(std::ostringstream &out,
             out << "    {\n";
             out << "        const uint index = imageIndex -  " << offsetStr << "2DArray;\n";
             out << "        result = " << declarationStr << "2DArray[index][uint3(p.x, p.y, "
-                << getImageMetadataLayer(textureGroup) << ")];\n";
+                << GetImageMetadataLayer(textureGroup) << ")];\n";
             out << "    }\n";
         }
     }
@@ -580,7 +639,7 @@ void OutputImage2DStoreFunction(std::ostringstream &out,
                                 const std::string &offsetStr,
                                 const std::string &declarationStr)
 {
-    out << getImage2DGroupReturnType(textureGroup, IMAGE2DSTORE) << " "
+    out << GetImage2DGroupReturnType(textureGroup, IMAGE2DSTORE) << " "
         << Image2DHLSLGroupFunctionName(textureGroup, IMAGE2DSTORE) << "(";
     OutputImage2DFunctionArgumentList(out, textureGroup, IMAGE2DSTORE);
     out << ")\n"
@@ -610,7 +669,7 @@ void OutputImage2DStoreFunction(std::ostringstream &out,
         {
             out << "    const uint index = imageIndex -  " << offsetStr << "3D;\n";
             out << "    " << declarationStr << "3D[index][uint3(p.x, p.y, "
-                << getImageMetadataLayer(textureGroup) << ")] = data;\n";
+                << GetImageMetadataLayer(textureGroup) << ")] = data;\n";
         }
         else
         {
@@ -634,7 +693,7 @@ void OutputImage2DStoreFunction(std::ostringstream &out,
             out << "    {\n";
             out << "        const uint index = imageIndex -  " << offsetStr << "3D;\n";
             out << "        " << declarationStr << "3D[index][uint3(p.x, p.y, "
-                << getImageMetadataLayer(textureGroup) << ")] = data;\n";
+                << GetImageMetadataLayer(textureGroup) << ")] = data;\n";
             out << "    }\n";
         }
     }
@@ -645,7 +704,7 @@ void OutputImage2DStoreFunction(std::ostringstream &out,
         {
             out << "    const uint index = imageIndex -  " << offsetStr << "2DArray;\n";
             out << "    " << declarationStr << "2DArray[index][uint3(p.x, p.y, "
-                << getImageMetadataLayer(textureGroup) << ")] = data;\n";
+                << GetImageMetadataLayer(textureGroup) << ")] = data;\n";
         }
         else
         {
@@ -653,7 +712,7 @@ void OutputImage2DStoreFunction(std::ostringstream &out,
             out << "    {\n";
             out << "        const uint index = imageIndex -  " << offsetStr << "2DArray;\n";
             out << "        " << declarationStr << "2DArray[index][uint3(p.x, p.y, "
-                << getImageMetadataLayer(textureGroup) << ")] = data;\n";
+                << GetImageMetadataLayer(textureGroup) << ")] = data;\n";
             out << "    }\n";
         }
     }
