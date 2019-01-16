@@ -63,10 +63,16 @@
 #if defined(ANGLE_ENABLE_VULKAN)
 #    if defined(ANGLE_PLATFORM_WINDOWS)
 #        include "libANGLE/renderer/vulkan/win32/DisplayVkWin32.h"
+#        define ANGLE_VULKAN_DISPLAY DisplayVkWin32
 #    elif defined(ANGLE_PLATFORM_LINUX)
 #        include "libANGLE/renderer/vulkan/xcb/DisplayVkXcb.h"
+#        define ANGLE_VULKAN_DISPLAY DisplayVkXcb
 #    elif defined(ANGLE_PLATFORM_ANDROID)
 #        include "libANGLE/renderer/vulkan/android/DisplayVkAndroid.h"
+#        define ANGLE_VULKAN_DISPLAY DisplayVkAndroid
+#    elif defined(ANGLE_PLATFORM_APPLE)
+#        include "libANGLE/renderer/vulkan/mvk/DisplayVkMvk.h"
+#        define ANGLE_VULKAN_DISPLAY DisplayVkMvk
 #    else
 #        error Unsupported Vulkan platform.
 #    endif
@@ -213,15 +219,10 @@ rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap, const D
 
         case EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE:
 #if defined(ANGLE_ENABLE_VULKAN)
-#    if defined(ANGLE_PLATFORM_WINDOWS)
-            impl = new rx::DisplayVkWin32(state);
-#    elif defined(ANGLE_PLATFORM_LINUX)
-            impl = new rx::DisplayVkXcb(state);
-#    elif defined(ANGLE_PLATFORM_ANDROID)
-            impl = new rx::DisplayVkAndroid(state);
-#    else
+#    if !defined(ANGLE_VULKAN_DISPLAY)
 #        error Unsupported Vulkan platform.
 #    endif
+            impl = new rx::ANGLE_VULKAN_DISPLAY(state);
 #else
             // No display available
             UNREACHABLE();

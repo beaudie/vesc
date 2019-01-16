@@ -826,6 +826,13 @@ libangle_vulkan_xcb_sources = [
   "src/libANGLE/renderer/vulkan/xcb/WindowSurfaceVkXcb.h",
 ]
 
+libangle_vulkan_mvk_sources = [
+  "src/libANGLE/renderer/vulkan/mvk/DisplayVkMvk.cpp",
+  "src/libANGLE/renderer/vulkan/mvk/DisplayVkMvk.h",
+  "src/libANGLE/renderer/vulkan/mvk/WindowSurfaceVkMvk.cpp",
+  "src/libANGLE/renderer/vulkan/mvk/WindowSurfaceVkMvk.h",
+]
+
 libangle_null_sources = [
   "src/libANGLE/renderer/null/BufferNULL.cpp",
   "src/libANGLE/renderer/null/BufferNULL.h",

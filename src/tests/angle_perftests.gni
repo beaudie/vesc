@@ -56,9 +56,13 @@ angle_white_box_perf_tests_sources = [
 angle_white_box_perf_tests_win_sources =
     [ "perf_tests/IndexDataManagerTest.cpp" ]
 
-angle_white_box_perf_tests_vulkan_sources = [
-  "perf_tests/VulkanCommandBufferPerf.cpp",
-  "perf_tests/VulkanPipelineCachePerf.cpp",
-  "test_utils/third_party/vulkan_command_buffer_utils.cpp",
-  "test_utils/third_party/vulkan_command_buffer_utils.h",
-]
+angle_white_box_perf_tests_vulkan_sources =
+    [ "perf_tests/VulkanPipelineCachePerf.cpp" ]
+
+if (!is_mac) {
+  angle_white_box_perf_tests_vulkan_sources += [
+    "perf_tests/VulkanCommandBufferPerf.cpp",
+    "test_utils/third_party/vulkan_command_buffer_utils.cpp",
+    "test_utils/third_party/vulkan_command_buffer_utils.h",
+  ]
+}

@@ -571,6 +571,9 @@ angle_static_library("libANGLE") {
       sources += libangle_vulkan_android_sources
       libs += [ "vulkan" ]
     }
+    if (is_mac) {
+      sources += libangle_vulkan_mvk_sources
+    }
     deps += [
       ":angle_vulkan",
       "$angle_root/third_party/glslang/src:glslang_default_resource_limits_sources",
