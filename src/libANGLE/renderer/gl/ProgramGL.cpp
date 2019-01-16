@@ -174,9 +174,9 @@ class ProgramGL::LinkEventGL final : public LinkEvent
     PostLinkImplFunctor mPostLinkImplFunctor;
 };
 
-std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
-                                           const gl::ProgramLinkedResources &resources,
-                                           gl::InfoLog &infoLog)
+std::unique_ptr<gl::LinkEvent> ProgramGL::link(const gl::Context *context,
+                                               const gl::ProgramLinkedResources &resources,
+                                               gl::InfoLog &infoLog)
 {
     preLink();
 

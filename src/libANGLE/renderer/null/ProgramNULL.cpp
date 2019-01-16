@@ -31,9 +31,9 @@ void ProgramNULL::setBinaryRetrievableHint(bool retrievable) {}
 
 void ProgramNULL::setSeparable(bool separable) {}
 
-std::unique_ptr<LinkEvent> ProgramNULL::link(const gl::Context *contextImpl,
-                                             const gl::ProgramLinkedResources &resources,
-                                             gl::InfoLog &infoLog)
+std::unique_ptr<gl::LinkEvent> ProgramNULL::link(const gl::Context *contextImpl,
+                                                 const gl::ProgramLinkedResources &resources,
+                                                 gl::InfoLog &infoLog)
 {
     return std::make_unique<LinkEventDone>(angle::Result::Continue);
 }

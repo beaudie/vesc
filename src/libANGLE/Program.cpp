@@ -601,7 +601,7 @@ struct Program::LinkingState
     const Context *context;
     std::unique_ptr<ProgramLinkedResources> resources;
     egl::BlobCache::Key programHash;
-    std::unique_ptr<rx::LinkEvent> linkEvent;
+    std::unique_ptr<LinkEvent> linkEvent;
 };
 
 const char *const g_fakepath = "C:\\fakepath";
@@ -1437,6 +1437,70 @@ void Program::unlink()
     mInfoLog.reset();
 }
 
+class LoadBinaryLinkEvent final : public LinkEvent
+{
+    class AsyncTask final : public angle::Closure
+    {
+      public:
+        explicit AsyncTask(LoadBinaryLinkEvent &event) : mEvent(event) {}
+
+        void operator()() override { mEvent.runAsync(); }
+
+      private:
+        LoadBinaryLinkEvent &mEvent;
+    };
+
+  public:
+    LoadBinaryLinkEvent(const gl::Context &context,
+                        gl::Program &program,
+                        std::vector<uint8_t> &&bytes)
+        : mContext(context), mProgram(program), mBytes(std::move(bytes))
+    {
+        const auto &workerPool = mContext.getWorkerThreadPool();
+        const auto task        = std::make_shared<AsyncTask>(*this);
+        mWaitable              = workerPool->postWorkerTask(task);
+    }
+
+  private:
+    angle::Result link() const
+    {
+        auto result =
+            MemoryProgramCache::Deserialize(&mContext, &mProgram, &mProgram.mState, mBytes.data(),
+                                            mBytes.size(), mProgram.mInfoLog);
+        ANGLE_TRY(result);
+
+        // Currently we require the full shader text to compute the program hash.
+        // We could also store the binary in the internal program cache.
+
+        for (size_t i = 0; i < mProgram.mState.getUniformBlocks().size(); ++i)
+        {
+            mProgram.mDirtyBits.set(i);
+        }
+
+        return angle::Result::Continue;
+    }
+
+  public:
+    void runAsync() { mResult = link(); }
+
+    angle::Result wait(const gl::Context *context) override
+    {
+        mWaitable->wait();
+        mWaitable = nullptr;
+        return mResult;
+    }
+
+    bool isLinking() override { return bool(mWaitable); }
+
+    const gl::Context &mContext;
+    gl::Program &mProgram;
+    const std::vector<uint8_t> mBytes;
+
+  private:
+    std::shared_ptr<angle::WaitableEvent> mWaitable;
+    angle::Result mResult;
+};
+
 angle::Result Program::loadBinary(const Context *context,
                                   GLenum binaryFormat,
                                   const void *binary,
@@ -1456,19 +1520,13 @@ angle::Result Program::loadBinary(const Context *context,
     }
 
     const uint8_t *bytes = reinterpret_cast<const uint8_t *>(binary);
-    angle::Result result =
-        MemoryProgramCache::Deserialize(context, this, &mState, bytes, length, mInfoLog);
-    mLinked = result == angle::Result::Continue;
-    ANGLE_TRY(result);
+    std::vector<uint8_t> bytesCopy(bytes, bytes + length);
 
-    // Currently we require the full shader text to compute the program hash.
-    // We could also store the binary in the internal program cache.
-
-    for (size_t uniformBlockIndex = 0; uniformBlockIndex < mState.mUniformBlocks.size();
-         ++uniformBlockIndex)
-    {
-        mDirtyBits.set(uniformBlockIndex);
-    }
+    mLinkingState.reset(new LinkingState());
+    mLinkingState->context = context;
+    mLinkingState->linkEvent =
+        std::make_unique<LoadBinaryLinkEvent>(*context, *this, std::move(bytesCopy));
+    mLinkResolved = false;
 
     return angle::Result::Continue;
 #endif  // #if ANGLE_PROGRAM_BINARY_LOAD == ANGLE_ENABLED
