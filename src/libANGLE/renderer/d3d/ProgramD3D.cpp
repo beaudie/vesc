@@ -805,7 +805,7 @@ GLint ProgramD3D::getImageMapping(gl::ShaderType type,
                                   const gl::Caps &caps) const
 {
     GLint logicalImageUnit = -1;
-    ASSERT(imageIndex < caps.maxImageUnits);
+    // ASSERT(imageIndex < caps.maxShaderImageUniforms[type]);
     switch (type)
     {
         case gl::ShaderType::Compute:
@@ -1847,8 +1847,8 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
     {
         mShaderSamplers[gl::ShaderType::Compute].resize(
             data.getCaps().maxShaderTextureImageUnits[gl::ShaderType::Compute]);
-        mImagesCS.resize(data.getCaps().maxImageUnits);
-        mReadonlyImagesCS.resize(data.getCaps().maxImageUnits);
+        mImagesCS.resize(data.getCaps().maxShaderImageUniforms[gl::ShaderType::Compute]);
+        mReadonlyImagesCS.resize(data.getCaps().maxShaderImageUniforms[gl::ShaderType::Compute]);
 
         mShaderUniformsDirty.set(gl::ShaderType::Compute);
 
