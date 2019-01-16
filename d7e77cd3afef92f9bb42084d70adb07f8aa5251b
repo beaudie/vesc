@@ -462,6 +462,30 @@
     },
     {
       "key": {
+        "uuid": "f0700a4b_c64bc5c3",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-16T15:15:27Z",
+      "side": 1,
+      "message": "Ok, I see.  I had the ordering of thread creation and worker context creation wrong.",
+      "parentUuid": "d6a7a7f4_7fcfc7fb",
+      "range": {
+        "startLine": 877,
+        "startChar": 50,
+        "endLine": 878,
+        "endChar": 45
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "018d9b86_5e723f80",
         "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
         "patchSetId": 28
