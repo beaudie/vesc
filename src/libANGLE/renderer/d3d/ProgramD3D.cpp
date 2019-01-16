@@ -1641,7 +1641,7 @@ class ProgramD3D::GetGeometryExecutableTask : public ProgramD3D::GetExecutableTa
 };
 
 // The LinkEvent implementation for linking a rendering(VS, FS, GS) program.
-class ProgramD3D::GraphicsProgramLinkEvent final : public LinkEvent
+class ProgramD3D::GraphicsProgramLinkEvent final : public gl::LinkEvent
 {
   public:
     GraphicsProgramLinkEvent(gl::InfoLog &infoLog,
@@ -1755,8 +1755,8 @@ class ProgramD3D::GraphicsProgramLinkEvent final : public LinkEvent
     const ShaderD3D *mFragmentShader;
 };
 
-std::unique_ptr<LinkEvent> ProgramD3D::compileProgramExecutables(const gl::Context *context,
-                                                                 gl::InfoLog &infoLog)
+std::unique_ptr<gl::LinkEvent> ProgramD3D::compileProgramExecutables(const gl::Context *context,
+                                                                     gl::InfoLog &infoLog)
 {
     // Ensure the compiler is initialized to avoid race conditions.
     angle::Result result = mRenderer->ensureHLSLCompilerInitialized(GetImplAs<ContextD3D>(context));
@@ -1834,9 +1834,9 @@ angle::Result ProgramD3D::compileComputeExecutable(d3d::Context *context, gl::In
     return computeExecutable ? angle::Result::Continue : angle::Result::Incomplete;
 }
 
-std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
-                                            const gl::ProgramLinkedResources &resources,
-                                            gl::InfoLog &infoLog)
+std::unique_ptr<gl::LinkEvent> ProgramD3D::link(const gl::Context *context,
+                                                const gl::ProgramLinkedResources &resources,
+                                                gl::InfoLog &infoLog)
 {
     const auto &data = context->getState();
 
