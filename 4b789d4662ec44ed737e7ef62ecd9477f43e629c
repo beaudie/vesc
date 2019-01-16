@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ce8a8c3f_dec29f56",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T18:16:09Z",
+      "side": 1,
+      "message": "Guard blocks probably are broken with alignment. I\u0027m not actually sure if they\u0027ve been tested in a long time. Did you want to look at enabling them in some testing configuration?",
+      "parentUuid": "ef6eff1e_bb185020",
+      "revId": "4b789d4662ec44ed737e7ef62ecd9477f43e629c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "795e51d6_72bbe8d8",
         "filename": "src/common/PoolAlloc.h",
         "patchSetId": 11
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "913ae619_5e01558f",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T18:16:09Z",
+      "side": 1,
+      "message": "uint8_t is preferable according to the style guide:\n\nhttps://google.github.io/styleguide/cppguide.html#Integer_Types\n\nThe reason it\u0027s not uint8_t right now is that this is old legacy code. But worth fixing.",
+      "parentUuid": "795e51d6_72bbe8d8",
+      "range": {
+        "startLine": 49,
+        "startChar": 28,
+        "endLine": 49,
+        "endChar": 41
+      },
+      "revId": "4b789d4662ec44ed737e7ef62ecd9477f43e629c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9587782a_1692fc67",
         "filename": "src/common/PoolAlloc.h",
         "patchSetId": 11
@@ -53,6 +95,30 @@
       "writtenOn": "2019-01-16T18:00:40Z",
       "side": 1,
       "message": "How is this GUARD_BLOCKS defined/undefined?   Is this something in gn args or related to one of those values?",
+      "range": {
+        "startLine": 57,
+        "startChar": 7,
+        "endLine": 57,
+        "endChar": 19
+      },
+      "revId": "4b789d4662ec44ed737e7ef62ecd9477f43e629c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f201879c_e9e2ab71",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T18:16:09Z",
+      "side": 1,
+      "message": "This guard block stuff is ancient and inherited from the original authors. We could add a GN argument for it. But I\u0027d want to check that it works as intended.",
+      "parentUuid": "9587782a_1692fc67",
       "range": {
         "startLine": 57,
         "startChar": 7,
