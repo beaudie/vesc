@@ -10,7 +10,9 @@
 #include "libANGLE/renderer/vulkan/RenderbufferVk.h"
 
 #include "libANGLE/Context.h"
+#include "libANGLE/Image.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/ImageVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
 namespace rx
@@ -24,7 +26,7 @@ constexpr VkClearColorValue kBlackClearColorValue                 = {{0}};
 }  // anonymous namespace
 
 RenderbufferVk::RenderbufferVk(const gl::RenderbufferState &state)
-    : RenderbufferImpl(state), mImage(nullptr)
+    : RenderbufferImpl(state), mOwnsImage(false), mImage(nullptr)
 {}
 
 RenderbufferVk::~RenderbufferVk() {}
@@ -34,11 +36,15 @@ void RenderbufferVk::onDestroy(const gl::Context *context)
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
-    if (mImage)
+    if (mImage && mOwnsImage)
     {
         mImage->releaseImage(renderer);
         mImage->releaseStagingBuffer(renderer);
         SafeDelete(mImage);
+    }
+    else
+    {
+        mImage = nullptr;
     }
 
     renderer->releaseObject(renderer->getCurrentQueueSerial(), &mImageView);
@@ -53,15 +59,26 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
     RendererVk *renderer       = contextVk->getRenderer();
     const vk::Format &vkFormat = renderer->getFormat(internalformat);
 
-    if (mImage != nullptr && mImage->valid())
+    if (mImage != nullptr)
     {
-        // Check against the state if we need to recreate the storage.
-        if (internalformat != mState.getFormat().info->internalFormat ||
-            static_cast<GLsizei>(width) != mState.getWidth() ||
-            static_cast<GLsizei>(height) != mState.getHeight())
+        if (!mOwnsImage)
         {
-            mImage->releaseImage(renderer);
-            renderer->releaseObject(renderer->getCurrentQueueSerial(), &mImageView);
+            // Being redefined when this RenderbufferVk doesn't own its image. Release the reference
+            // to the old one
+            mImage = nullptr;
+        }
+        else if (mImage->valid())
+        {
+            ASSERT(mOwnsImage);
+
+            // Check against the state if we need to recreate the storage.
+            if (internalformat != mState.getFormat().info->internalFormat ||
+                static_cast<GLsizei>(width) != mState.getWidth() ||
+                static_cast<GLsizei>(height) != mState.getHeight())
+            {
+                mImage->releaseImage(renderer);
+                renderer->releaseObject(renderer->getCurrentQueueSerial(), &mImageView);
+            }
         }
     }
 
@@ -69,7 +86,8 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
     {
         if (mImage == nullptr)
         {
-            mImage = new vk::ImageHelper();
+            mImage     = new vk::ImageHelper();
+            mOwnsImage = true;
         }
 
         const angle::Format &textureFormat = vkFormat.textureFormat();
@@ -126,8 +144,36 @@ angle::Result RenderbufferVk::setStorageMultisample(const gl::Context *context,
 angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *context,
                                                        egl::Image *image)
 {
-    ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
-    return angle::Result::Stop;
+
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+
+    if (mImage != nullptr)
+    {
+        if (mOwnsImage)
+        {
+            mImage->releaseImage(renderer);
+            mImage->releaseStagingBuffer(renderer);
+            delete mImage;
+        }
+        mImage = nullptr;
+    }
+
+    ImageVk *imageVk = vk::GetImpl(image);
+    mImage           = imageVk->getImage();
+    mOwnsImage       = false;
+
+    const vk::Format &vkFormat = renderer->getFormat(image->getFormat().info->sizedInternalFormat);
+    const angle::Format &textureFormat = vkFormat.textureFormat();
+
+    VkImageAspectFlags aspect = vk::GetFormatAspectFlags(textureFormat);
+
+    ANGLE_TRY(mImage->initImageView(contextVk, gl::TextureType::_2D, aspect, gl::SwizzleState(),
+                                    &mImageView, 1));
+
+    mRenderTarget.init(mImage, &mImageView, 0, nullptr);
+
+    return angle::Result::Continue;
 }
 
 angle::Result RenderbufferVk::getAttachmentRenderTarget(const gl::Context *context,
@@ -145,6 +191,18 @@ angle::Result RenderbufferVk::initializeContents(const gl::Context *context,
 {
     UNIMPLEMENTED();
     return angle::Result::Continue;
+}
+
+vk::ImageHelper *RenderbufferVk::getImage() const
+{
+    return mImage;
+}
+
+void RenderbufferVk::releaseOwnershipOfImage()
+{
+    // No need to change the mImage pointer, this renderbuffer is about to be redefined
+    ASSERT(mOwnsImage == true);
+    mOwnsImage = false;
 }
 
 }  // namespace rx

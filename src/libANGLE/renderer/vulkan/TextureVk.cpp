@@ -13,9 +13,11 @@
 #include "image_util/generatemip.inl"
 #include "libANGLE/Config.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/Image.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
+#include "libANGLE/renderer/vulkan/ImageVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
@@ -548,8 +550,18 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
                                            gl::TextureType type,
                                            egl::Image *image)
 {
-    ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
-    return angle::Result::Stop;
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+
+    releaseAndDeleteImage(context, renderer);
+
+    ImageVk *imageVk = vk::GetImpl(image);
+    setImageHelper(renderer, imageVk->getImage(), false);
+
+    const vk::Format &format = renderer->getFormat(image->getFormat().info->sizedInternalFormat);
+    ANGLE_TRY(initImageViews(contextVk, format, 1));
+
+    return angle::Result::Continue;
 }
 
 angle::Result TextureVk::setImageExternal(const gl::Context *context,
@@ -827,19 +839,19 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk)
+angle::Result TextureVk::ensureImageInitialized(vk::Context *context)
 {
     const gl::ImageDesc &baseLevelDesc  = mState.getBaseLevelDesc();
     const gl::Extents &baseLevelExtents = baseLevelDesc.size;
     const uint32_t levelCount           = getLevelCount();
 
     const vk::Format &format =
-        contextVk->getRenderer()->getFormat(baseLevelDesc.format.info->sizedInternalFormat);
+        context->getRenderer()->getFormat(baseLevelDesc.format.info->sizedInternalFormat);
 
-    return ensureImageInitializedImpl(contextVk, baseLevelExtents, levelCount, format);
+    return ensureImageInitializedImpl(context, baseLevelExtents, levelCount, format);
 }
 
-angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
+angle::Result TextureVk::ensureImageInitializedImpl(vk::Context *context,
                                                     const gl::Extents &baseLevelExtents,
                                                     uint32_t levelCount,
                                                     const vk::Format &format)
@@ -849,14 +861,14 @@ angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
         return angle::Result::Continue;
     }
     vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
+    ANGLE_TRY(mImage->recordCommands(context, &commandBuffer));
 
     if (!mImage->valid())
     {
-        ANGLE_TRY(initImage(contextVk, format, baseLevelExtents, levelCount, commandBuffer));
+        ANGLE_TRY(initImage(context, format, baseLevelExtents, levelCount, commandBuffer));
     }
 
-    return mImage->flushStagedUpdates(contextVk, levelCount, commandBuffer);
+    return mImage->flushStagedUpdates(context, levelCount, commandBuffer);
 }
 
 angle::Result TextureVk::initCubeMapRenderTargets(ContextVk *contextVk)
@@ -938,6 +950,13 @@ angle::Result TextureVk::initializeContents(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+void TextureVk::releaseOwnershipOfImage()
+{
+    // No need to change the mImage pointer, this texture is about to be redefined
+    ASSERT(mOwnsImage == true);
+    mOwnsImage = false;
+}
+
 const vk::ImageView &TextureVk::getReadImageView() const
 {
     ASSERT(mImage->valid());
@@ -990,26 +1009,26 @@ const vk::Sampler &TextureVk::getSampler() const
     return mSampler;
 }
 
-angle::Result TextureVk::initImage(ContextVk *contextVk,
+angle::Result TextureVk::initImage(vk::Context *context,
                                    const vk::Format &format,
                                    const gl::Extents &extents,
                                    const uint32_t levelCount,
                                    vk::CommandBuffer *commandBuffer)
 {
-    const RendererVk *renderer = contextVk->getRenderer();
+    const RendererVk *renderer = context->getRenderer();
 
     const VkImageUsageFlags usage =
         (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
          VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
 
-    ANGLE_TRY(mImage->init(contextVk, mState.getType(), extents, format, 1, usage, levelCount,
+    ANGLE_TRY(mImage->init(context, mState.getType(), extents, format, 1, usage, levelCount,
                            mState.getType() == gl::TextureType::CubeMap ? gl::kCubeFaceCount : 1));
 
     const VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 
-    ANGLE_TRY(mImage->initMemory(contextVk, renderer->getMemoryProperties(), flags));
+    ANGLE_TRY(mImage->initMemory(context, renderer->getMemoryProperties(), flags));
 
-    ANGLE_TRY(initImageViews(contextVk, format, levelCount));
+    ANGLE_TRY(initImageViews(context, format, levelCount));
 
     // TODO(jmadill): Fold this into the RenderPass load/store ops. http://anglebug.com/2361
     VkClearColorValue black = {{0, 0, 0, 1.0f}};
@@ -1017,7 +1036,7 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-angle::Result TextureVk::initImageViews(ContextVk *contextVk,
+angle::Result TextureVk::initImageViews(vk::Context *context,
                                         const vk::Format &format,
                                         uint32_t levelCount)
 {
@@ -1026,11 +1045,11 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk,
     gl::SwizzleState mappedSwizzle;
     MapSwizzleState(format, mState.getSwizzleState(), &mappedSwizzle);
 
-    ANGLE_TRY(mImage->initImageView(contextVk, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
+    ANGLE_TRY(mImage->initImageView(context, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
                                     mappedSwizzle, &mReadMipmapImageView, levelCount));
-    ANGLE_TRY(mImage->initImageView(contextVk, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
+    ANGLE_TRY(mImage->initImageView(context, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
                                     mappedSwizzle, &mReadBaseLevelImageView, 1));
-    ANGLE_TRY(mImage->initImageView(contextVk, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
+    ANGLE_TRY(mImage->initImageView(context, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
                                     gl::SwizzleState(), &mDrawBaseLevelImageView, 1));
 
     return angle::Result::Continue;
