@@ -225,6 +225,30 @@
     },
     {
       "key": {
+        "uuid": "7b5691a7_ea4274e8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T17:51:02Z",
+      "side": 1,
+      "message": "Good to know, thanks. I guess that means you can implement a cost from A * to B * using a void * and two static_casts instead of a reinterpret_cast.",
+      "parentUuid": "1e5dfc26_af9b5668",
+      "range": {
+        "startLine": 278,
+        "startChar": 43,
+        "endLine": 278,
+        "endChar": 54
+      },
+      "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "651a59c8_cc0cf9cb",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
         "patchSetId": 9

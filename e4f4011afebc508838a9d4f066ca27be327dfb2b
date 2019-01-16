@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "861ff272_33d6b853",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T17:51:02Z",
+      "side": 1,
+      "message": "nit: you can omit static on these methods",
+      "revId": "e4f4011afebc508838a9d4f066ca27be327dfb2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
