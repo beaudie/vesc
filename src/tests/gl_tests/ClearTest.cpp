@@ -361,6 +361,61 @@ TEST_P(ClearTest, DepthRangefIsClamped)
     EXPECT_EQ(0.0f, depth_range[1]);
 }
 
+// Test scissored clears on Depth16
+TEST_P(ClearTest, Depth16Scissored)
+{
+    GLRenderbuffer renderbuffer;
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    constexpr int kRenderbufferSize = 64;
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, kRenderbufferSize,
+                          kRenderbufferSize);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer);
+
+    glClearDepthf(0.0f);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    glEnable(GL_SCISSOR_TEST);
+    constexpr int kNumSteps = 13;
+    for (int ndx = 1; ndx < kNumSteps; ndx++)
+    {
+        float perc = static_cast<float>(ndx) / static_cast<float>(kNumSteps);
+        glScissor(0, 0, static_cast<int>(kRenderbufferSize * perc),
+                  static_cast<int>(kRenderbufferSize * perc));
+        glClearDepthf(perc);
+        glClear(GL_DEPTH_BUFFER_BIT);
+    }
+}
+
+// Test scissored clears on Stencil8
+TEST_P(ClearTest, Stencil8Scissored)
+{
+    GLRenderbuffer renderbuffer;
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    constexpr int kRenderbufferSize = 64;
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, kRenderbufferSize, kRenderbufferSize);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderbuffer);
+
+    glClearDepthf(0.0f);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    glEnable(GL_SCISSOR_TEST);
+    constexpr int kNumSteps = 13;
+    for (int ndx = 1; ndx < kNumSteps; ndx++)
+    {
+        float perc = static_cast<float>(ndx) / static_cast<float>(kNumSteps);
+        glScissor(0, 0, static_cast<int>(kRenderbufferSize * perc),
+                  static_cast<int>(kRenderbufferSize * perc));
+        glClearDepthf(perc);
+        glClear(GL_DEPTH_BUFFER_BIT);
+    }
+}
+
 // Requires ES3
 // This tests a bug where in a masked clear when calling "ClearBuffer", we would
 // mistakenly clear every channel (including the masked-out ones)
