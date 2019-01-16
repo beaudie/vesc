@@ -44,7 +44,11 @@ class RenderbufferVk : public RenderbufferImpl
     angle::Result initializeContents(const gl::Context *context,
                                      const gl::ImageIndex &imageIndex) override;
 
+    vk::ImageHelper *getImage() const;
+    void releaseOwnershipOfImage();
+
   private:
+    bool mOwnsImage;
     vk::ImageHelper *mImage;
     vk::ImageView mImageView;
     RenderTargetVk mRenderTarget;
