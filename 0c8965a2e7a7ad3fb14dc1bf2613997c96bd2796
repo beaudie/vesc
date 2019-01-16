@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc411e2c_5ef836b1",
+        "filename": "src/libANGLE/validationES2.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-16T20:55:25Z",
+      "side": 1,
+      "message": "Quite a big function to be inlined. Though I don\u0027t mind it (only used in two places), is inlining this (in particular) actually affecting performance?",
+      "revId": "0c8965a2e7a7ad3fb14dc1bf2613997c96bd2796",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
