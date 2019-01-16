@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6c258186_f994a7b9",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T15:03:21Z",
+      "side": 1,
+      "message": "Good idea. Done.",
+      "parentUuid": "578d9ba6_934dbfa9",
+      "range": {
+        "startLine": 344,
+        "startChar": 0,
+        "endLine": 345,
+        "endChar": 53
+      },
+      "revId": "93347d41f5cda18d89baa3140887565d42dc578f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "651c6fb2_15ba2448",
         "filename": "src/libANGLE/VertexAttribute.cpp",
         "patchSetId": 24
@@ -36,6 +60,24 @@
       "writtenOn": "2019-01-15T20:50:11Z",
       "side": 1,
       "message": "The part with the basic types could be improved with a table.",
+      "revId": "93347d41f5cda18d89baa3140887565d42dc578f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3b1afbf_71276ff9",
+        "filename": "src/libANGLE/VertexAttribute.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T15:03:21Z",
+      "side": 1,
+      "message": "Potentially yes but it would involve adding an if. Can be revisited later if that\u0027s okay. It would take at least a bit of experimentation to find how much improvement it gives.",
+      "parentUuid": "651c6fb2_15ba2448",
       "revId": "93347d41f5cda18d89baa3140887565d42dc578f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
