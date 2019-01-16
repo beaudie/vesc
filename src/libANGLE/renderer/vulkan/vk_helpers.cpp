@@ -1838,7 +1838,7 @@ angle::Result ImageHelper::allocateStagingMemory(ContextVk *contextVk,
                                    newBufferAllocatedOut);
 }
 
-angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
+angle::Result ImageHelper::flushStagedUpdates(Context *context,
                                               uint32_t levelCount,
                                               vk::CommandBuffer *commandBuffer)
 {
@@ -1847,9 +1847,9 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
-    RendererVk *renderer = contextVk->getRenderer();
+    RendererVk *renderer = context->getRenderer();
 
-    ANGLE_TRY(mStagingBuffer.flush(contextVk));
+    ANGLE_TRY(mStagingBuffer.flush(context));
 
     std::vector<SubresourceUpdate> updatesToKeep;
 
@@ -1909,7 +1909,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
     if (mSubresourceUpdates.empty())
     {
-        mStagingBuffer.releaseRetainedBuffers(contextVk->getRenderer());
+        mStagingBuffer.releaseRetainedBuffers(context->getRenderer());
     }
     else
     {
