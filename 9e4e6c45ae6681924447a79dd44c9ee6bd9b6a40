@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b7cdfb6d_fbdb893e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-16T17:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6269ffa_d49de2f7",
+      "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa767f59_8c7fe912",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 9
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "b197111a_58c70603",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-16T17:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa767f59_8c7fe912",
+      "range": {
+        "startLine": 325,
+        "startChar": 6,
+        "endLine": 325,
+        "endChar": 23
+      },
+      "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24c2834c_117c952c",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 9
@@ -62,6 +104,30 @@
       "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67adf624_be87d998",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-16T17:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24c2834c_117c952c",
+      "range": {
+        "startLine": 272,
+        "startChar": 67,
+        "endLine": 272,
+        "endChar": 87
+      },
+      "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +177,54 @@
     },
     {
       "key": {
+        "uuid": "21ce7f76_bdafa28b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-16T17:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26ebd7f8_cc351206",
+      "range": {
+        "startLine": 278,
+        "startChar": 26,
+        "endLine": 278,
+        "endChar": 41
+      },
+      "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1e5dfc26_af9b5668",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-16T17:42:04Z",
+      "side": 1,
+      "message": "static_cast works\n\nKey quotes from [1]: But in the particular case of casting from void* to T* the mapping is completely well-defined by the standard; namely, to assign a type to a typeless pointer without changing its address.\n\nand [2]: \nTo get some more \"formal information\" on the subject, I turned to \"The C++ programming language, 3rd edition\" by Stroustrup. Section 5.6 is named Pointers to Void and there Stroustrup writes:\n\nA pointer to any type of object can be assigned to a variable of type void*, a void* can be assigned to another void*, void* can be compared for equality and inequality, and a void* can be explicitly converted to another type. Other operations would be unsafe because the compiler cannot know what kind of object is really pointed to. Consequently, other operations result in compile-time errors.\nCouldn\u0027t have said it any clearer. The idiomatic way of casting the returned void* in C++ is:\n\nint* p \u003d static_cast\u003cint*\u003e(malloc(sizeof(*p)));\n\nRefs:\n[1] https://stackoverflow.com/questions/310451/should-i-use-static-cast-or-reinterpret-cast-when-casting-a-void-to-whatever\n[2] https://eli.thegreenplace.net/2009/11/16/void-and-casts-in-c-and-c",
+      "parentUuid": "cd5cb25a_449df5d8",
+      "range": {
+        "startLine": 278,
+        "startChar": 43,
+        "endLine": 278,
+        "endChar": 54
+      },
+      "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "651a59c8_cc0cf9cb",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
         "patchSetId": 9
@@ -131,6 +245,30 @@
       "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e0973f1_4b83c3b1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-16T17:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "651a59c8_cc0cf9cb",
+      "range": {
+        "startLine": 279,
+        "startChar": 4,
+        "endLine": 279,
+        "endChar": 34
+      },
+      "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -157,6 +295,30 @@
     },
     {
       "key": {
+        "uuid": "8a5ec267_23a781c2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-16T17:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e2c2dc5_cc250132",
+      "range": {
+        "startLine": 283,
+        "startChar": 24,
+        "endLine": 283,
+        "endChar": 44
+      },
+      "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c45efe3f_d4783cce",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
         "patchSetId": 9
@@ -177,6 +339,30 @@
       "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f192a747_12056619",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-16T17:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c45efe3f_d4783cce",
+      "range": {
+        "startLine": 309,
+        "startChar": 49,
+        "endLine": 309,
+        "endChar": 57
+      },
+      "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -203,6 +389,30 @@
     },
     {
       "key": {
+        "uuid": "76a27ef5_cf3c4f57",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-16T17:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7da353f_e15b5a2c",
+      "range": {
+        "startLine": 273,
+        "startChar": 0,
+        "endLine": 315,
+        "endChar": 1
+      },
+      "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31c25e39_664c8c63",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
         "patchSetId": 9
@@ -223,6 +433,30 @@
       "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c43ff539_9f81f88b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-16T17:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31c25e39_664c8c63",
+      "range": {
+        "startLine": 330,
+        "startChar": 56,
+        "endLine": 330,
+        "endChar": 76
+      },
+      "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -249,6 +483,30 @@
     },
     {
       "key": {
+        "uuid": "ef74b76b_843987b5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-16T17:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1073527a_a9c06217",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 29
+      },
+      "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f176c8c_e21027ae",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 9
@@ -272,6 +530,30 @@
     },
     {
       "key": {
+        "uuid": "1a03cd5c_2591508e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-16T17:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f176c8c_e21027ae",
+      "range": {
+        "startLine": 295,
+        "startChar": 63,
+        "endLine": 295,
+        "endChar": 83
+      },
+      "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7400faae_4e6b9ead",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 9
@@ -286,6 +568,24 @@
       "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0144f2df_29139224",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-16T17:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7400faae_4e6b9ead",
+      "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -309,6 +609,30 @@
       "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0d2a35f_2b1c6afb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-16T17:42:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6311f7c7_c028c4f3",
+      "range": {
+        "startLine": 794,
+        "startChar": 44,
+        "endLine": 794,
+        "endChar": 79
+      },
+      "revId": "9e4e6c45ae6681924447a79dd44c9ee6bd9b6a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
