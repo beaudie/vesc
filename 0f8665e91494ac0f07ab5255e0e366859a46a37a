@@ -88,6 +88,30 @@
     },
     {
       "key": {
+        "uuid": "388babba_1f93dc59",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T20:50:56Z",
+      "side": 1,
+      "message": "This code is ancient. It was written probably in the early 2002s by 3dfx.",
+      "parentUuid": "1bf16f7b_3183473d",
+      "range": {
+        "startLine": 97,
+        "startChar": 7,
+        "endLine": 97,
+        "endChar": 25
+      },
+      "revId": "0f8665e91494ac0f07ab5255e0e366859a46a37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b63bdee5_2bb11f9e",
         "filename": "src/common/PoolAlloc.h",
         "patchSetId": 12
@@ -139,6 +163,24 @@
       "writtenOn": "2019-01-16T20:39:22Z",
       "side": 1,
       "message": "The realloc function should preserve the contents of the old memory up-to `min(oldSize, newSize)`. This is a major issue if this code is ever hit.\n\nSince we don\u0027t have information on the old size here, I suggest adding a `reallocate` call to the pool allocator that would do the following:\n\n1. If newSize \u003c\u003d oldSize, reduce the size of the allocation (and move the post-guard ahead, if guarding)\n2. If the allocation being resized is at the end of the pool, just increase its size (and push the post-guard back, if guarding)\n3. Otherwise make a new allocation and copy the old contents over.\n\n... except it looks like the size of the allocation is not stored in the allocation blocks if not adding guards.\n\nUnless you want to rework the pool allocator with the necessary changes, I would very much rather see this implementation here instead:\n\n    // Relloc not supported by the pool allocator\n    UNIMPLEMENTED();\n    return nullptr;",
+      "revId": "0f8665e91494ac0f07ab5255e0e366859a46a37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "900d957d_94fdc174",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-16T20:50:56Z",
+      "side": 1,
+      "message": "+1 to using the UNIMPLEMENTED. Totally missed this. But probably not necessary for the pool allocator.",
+      "parentUuid": "d36390a2_6ca08c07",
       "revId": "0f8665e91494ac0f07ab5255e0e366859a46a37a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
