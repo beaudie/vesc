@@ -438,6 +438,30 @@
     },
     {
       "key": {
+        "uuid": "d6a7a7f4_7fcfc7fb",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-16T07:49:52Z",
+      "side": 1,
+      "message": "Not quite clear about the comment. In this CL, we only create worker contexts from worker threads, where there hasn\u0027t been any context current.\nYour suggestion may work if we create worker contexts from the main thread. But my worry is that the performance of main thread may be hurt, and we may hit new driver bugs due to such context suspending.",
+      "parentUuid": "d6885b49_406cded4",
+      "range": {
+        "startLine": 877,
+        "startChar": 50,
+        "endLine": 878,
+        "endChar": 45
+      },
+      "revId": "d7e77cd3afef92f9bb42084d70adb07f8aa5251b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "018d9b86_5e723f80",
         "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
         "patchSetId": 28

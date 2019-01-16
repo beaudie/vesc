@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "451b88ee_eecd52ff",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-16T07:49:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b3db85f_5568e60f",
+      "revId": "27c180fa042bbef0a6da1c3cbd87c85433567c3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "34737b0f_5c213e53",
         "filename": "src/libANGLE/renderer/gl/RendererGL.h",
         "patchSetId": 36
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "f14436f3_2ac903ad",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-16T07:49:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34737b0f_5c213e53",
+      "range": {
+        "startLine": 181,
+        "startChar": 4,
+        "endLine": 181,
+        "endChar": 40
+      },
+      "revId": "27c180fa042bbef0a6da1c3cbd87c85433567c3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afd22aa4_59319e78",
         "filename": "src/libANGLE/renderer/gl/wgl/RendererWGL.h",
         "patchSetId": 36
@@ -53,6 +95,24 @@
       "writtenOn": "2019-01-15T22:23:16Z",
       "side": 1,
       "message": "const ref",
+      "revId": "27c180fa042bbef0a6da1c3cbd87c85433567c3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38198b3d_cbcff6e6",
+        "filename": "src/libANGLE/renderer/gl/wgl/RendererWGL.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-16T07:49:52Z",
+      "side": 1,
+      "message": "As the variable, I pass into workerContextAttribs, is a local variable, pass-by-reference is not legal here.",
+      "parentUuid": "afd22aa4_59319e78",
       "revId": "27c180fa042bbef0a6da1c3cbd87c85433567c3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -79,6 +139,30 @@
       "revId": "27c180fa042bbef0a6da1c3cbd87c85433567c3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61395e20_a954715f",
+        "filename": "src/libANGLE/renderer/gl/wgl/RendererWGL.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-01-16T07:49:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72daf2cc_3bf9ab95",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 22
+      },
+      "revId": "27c180fa042bbef0a6da1c3cbd87c85433567c3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
