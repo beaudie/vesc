@@ -327,7 +327,9 @@ class ProgramD3D : public ProgramImpl
     class GetVertexExecutableTask;
     class GetPixelExecutableTask;
     class GetGeometryExecutableTask;
+    class GetComputeExecutableTask;
     class GraphicsProgramLinkEvent;
+    class ComputeProgramLinkEvent;
 
     class VertexExecutable
     {
@@ -465,7 +467,8 @@ class ProgramD3D : public ProgramImpl
 
     std::unique_ptr<LinkEvent> compileProgramExecutables(const gl::Context *context,
                                                          gl::InfoLog &infoLog);
-    angle::Result compileComputeExecutable(d3d::Context *context, gl::InfoLog &infoLog);
+    std::unique_ptr<LinkEvent> compileComputeExecutable(const gl::Context *context,
+                                                        gl::InfoLog &infoLog);
 
     void gatherTransformFeedbackVaryings(const gl::VaryingPacking &varyings,
                                          const BuiltinInfo &builtins);
