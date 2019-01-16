@@ -185,6 +185,11 @@ bool GetWebGLContext(const egl::AttributeMap &attribs)
     return (attribs.get(EGL_CONTEXT_WEBGL_COMPATIBILITY_ANGLE, EGL_FALSE) == EGL_TRUE);
 }
 
+bool GetBufferAccessValidation(const egl::AttributeMap &attribs)
+{
+    return GetWebGLContext(attribs) && !GetRobustAccess(attribs);
+}
+
 bool GetExtensionsEnabled(const egl::AttributeMap &attribs, bool webGLContext)
 {
     // If the context is WebGL, extensions are disabled by default
@@ -306,6 +311,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mCurrentSurface(static_cast<egl::Surface *>(EGL_NO_SURFACE)),
       mCurrentDisplay(static_cast<egl::Display *>(EGL_NO_DISPLAY)),
       mWebGLContext(GetWebGLContext(attribs)),
+      mBufferAccessValidationEnabled(GetBufferAccessValidation(attribs)),
       mExtensionsEnabled(GetExtensionsEnabled(attribs, mWebGLContext)),
       mMemoryProgramCache(memoryProgramCache),
       mVertexArrayObserverBinding(this, kVertexArraySubjectIndex),
@@ -8085,6 +8091,14 @@ StateCache::StateCache()
 
 StateCache::~StateCache() = default;
 
+ANGLE_INLINE void StateCache::updateVertexElementLimits(Context *context)
+{
+    if (context->isBufferAccessValidationEnabled())
+    {
+        updateVertexElementLimitsImpl(context);
+    }
+}
+
 void StateCache::initialize(Context *context)
 {
     updateValidDrawModes(context);
@@ -8124,8 +8138,10 @@ void StateCache::updateActiveAttribsMask(Context *context)
     mCachedHasAnyEnabledClientAttrib = (clientAttribs & enabledAttribs).any();
 }
 
-void StateCache::updateVertexElementLimits(Context *context)
+void StateCache::updateVertexElementLimitsImpl(Context *context)
 {
+    ASSERT(context->isBufferAccessValidationEnabled());
+
     const VertexArray *vao = context->getState().getVertexArray();
 
     mCachedNonInstancedVertexElementLimit = std::numeric_limits<GLint64>::max();
