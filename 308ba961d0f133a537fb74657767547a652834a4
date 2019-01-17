@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "791da378_d5d743a7",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T17:36:24Z",
+      "side": 1,
+      "message": "you should keep a default init of the current values if you use *this \u003d std::move(rhs). Or keep the std::exchange pattern.",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 3
+      },
+      "revId": "308ba961d0f133a537fb74657767547a652834a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eba47623_77464b91",
         "filename": "src/common/PoolAlloc.cpp",
         "patchSetId": 14
