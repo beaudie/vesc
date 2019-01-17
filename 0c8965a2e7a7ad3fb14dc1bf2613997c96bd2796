@@ -16,6 +16,24 @@
       "revId": "0c8965a2e7a7ad3fb14dc1bf2613997c96bd2796",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48bbb162_b56b5b1d",
+        "filename": "src/libANGLE/validationES2.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T21:00:04Z",
+      "side": 1,
+      "message": "Yeah. There is a fixed cost to most function calls. We need to save the stack before a all, make room for a new stack inside a call, then restore the stack after the call. This can add up in terms of memory operations.\n\nSome calls can be \"tail optimized\" if the compiler knows the functions are the same and the function does nothing but forward to another function with the same call stack. But most times this isn\u0027t the case.\n\nIt might be interesting to compile some of these insights into a doc somewhere. Inlining everything is one of the biggest easy wins you can do in micro-optimizing.",
+      "parentUuid": "cc411e2c_5ef836b1",
+      "revId": "0c8965a2e7a7ad3fb14dc1bf2613997c96bd2796",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
