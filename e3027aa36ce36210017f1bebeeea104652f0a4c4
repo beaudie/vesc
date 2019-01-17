@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "f3b8ed23_b9905b2c",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-17T14:38:41Z",
+      "side": 1,
+      "message": "Can you move it to `ScissoredClearTest`? Like `TEST_P(ScissoredClearTest, Depth16)`.",
+      "revId": "e3027aa36ce36210017f1bebeeea104652f0a4c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "024d3705_ba70e0b0",
         "filename": "src/tests/gl_tests/ClearTest.cpp",
         "patchSetId": 4
@@ -46,6 +63,40 @@
       "revId": "e3027aa36ce36210017f1bebeeea104652f0a4c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a3e0ee14_c729e584",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-17T14:38:41Z",
+      "side": 1,
+      "message": "You might as well add a check to make sure the buffer is indeed cleared too. You can copy a simplified version from `MaskedScissoredColorDepthStencilClear`.",
+      "revId": "e3027aa36ce36210017f1bebeeea104652f0a4c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37e8687b_d98433dc",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-17T14:38:41Z",
+      "side": 1,
+      "message": "Same comments on this function.",
+      "revId": "e3027aa36ce36210017f1bebeeea104652f0a4c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
