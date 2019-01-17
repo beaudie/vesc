@@ -192,8 +192,8 @@ angle_static_library("preprocessor") {
   ]
 }
 
-config("translator_disable_pool_alloc") {
-  defines = [ "ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC" ]
+config("angle_disable_pool_alloc") {
+  defines = [ "ANGLE_DISABLE_POOL_ALLOC" ]
 }
 
 config("debug_annotations_config") {
@@ -367,7 +367,7 @@ angle_static_library("translator") {
 
   public_configs += [ ":external_config" ]
   if (use_fuzzing_engine) {
-    all_dependent_configs = [ ":translator_disable_pool_alloc" ]
+    all_dependent_configs = [ ":angle_disable_pool_alloc" ]
   }
 
   deps = [
