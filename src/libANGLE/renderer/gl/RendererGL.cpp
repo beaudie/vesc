@@ -468,11 +468,13 @@ const gl::Version &RendererGL::getMaxSupportedESVersion() const
 void RendererGL::generateCaps(gl::Caps *outCaps,
                               gl::TextureCapsMap *outTextureCaps,
                               gl::Extensions *outExtensions,
-                              gl::Limitations * /* outLimitations */) const
+                              gl::Limitations *outLimitations) const
 {
     nativegl_gl::GenerateCaps(mFunctions.get(), mWorkarounds, outCaps, outTextureCaps,
                               outExtensions, &mMaxSupportedESVersion,
                               &mMultiviewImplementationType);
+
+    outLimitations->noParallelProgramBinary = true;
 }
 
 GLint RendererGL::getGPUDisjoint()
