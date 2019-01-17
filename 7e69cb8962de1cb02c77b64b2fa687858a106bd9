@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d9afecb_b5cc6bde",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-17T17:56:23Z",
+      "side": 1,
+      "message": "Would be hard without any public methods to set mCommandBuffer",
+      "range": {
+        "startLine": 46,
+        "startChar": 18,
+        "endLine": 46,
+        "endChar": 29
+      },
+      "revId": "7e69cb8962de1cb02c77b64b2fa687858a106bd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e54bb8be_99245350",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-17T17:56:23Z",
+      "side": 1,
+      "message": "1. Looks like you could just use commandBufferOut and there is no need for commandBuffer.\n2. Could you elaborate why if mCommandBuffer becomes null, it is still OK to return the old value in commandBufferOut and use it in mDirtyBitHandlers call below. What guarantees that that command buffer is valid in that case?",
+      "range": {
+        "startLine": 238,
+        "startChar": 46,
+        "endLine": 238,
+        "endChar": 93
+      },
+      "revId": "7e69cb8962de1cb02c77b64b2fa687858a106bd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
