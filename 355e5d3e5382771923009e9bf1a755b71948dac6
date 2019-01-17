@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18938aae_4c7477ab",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-17T21:28:50Z",
+      "side": 1,
+      "message": "Could the FramebufferVk or other code that does the finishing of the command buffer call this on the context instead of assuming it happens in this call?",
+      "revId": "355e5d3e5382771923009e9bf1a755b71948dac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0efe446c_734423e3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 1350,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-17T21:28:50Z",
+      "side": 1,
+      "message": "Is this new logic/bug fix?",
+      "range": {
+        "startLine": 1345,
+        "startChar": 0,
+        "endLine": 1350,
+        "endChar": 5
+      },
+      "revId": "355e5d3e5382771923009e9bf1a755b71948dac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
