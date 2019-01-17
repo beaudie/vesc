@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3de4b41_a29b1af3",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-17T14:45:46Z",
+      "side": 1,
+      "message": "You missed the `.com`!",
+      "revId": "ef2a0d70a539590bd47d39883af496b778c33e90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
