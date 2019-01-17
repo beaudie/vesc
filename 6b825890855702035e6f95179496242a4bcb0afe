@@ -155,6 +155,47 @@
       "revId": "6b825890855702035e6f95179496242a4bcb0afe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "519cece9_e96e3cb9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1325,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-17T17:20:45Z",
+      "side": 1,
+      "message": "This is not triggering ~TPoolAllocator.",
+      "parentUuid": "b08f099e_096e7e15",
+      "range": {
+        "startLine": 1325,
+        "startChar": 4,
+        "endLine": 1325,
+        "endChar": 98
+      },
+      "revId": "6b825890855702035e6f95179496242a4bcb0afe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8973fad5_99586d8c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1388,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-17T17:20:45Z",
+      "side": 1,
+      "message": "This is attempting to use the earlier instance of the class which had been moved into the CommandBatch.",
+      "revId": "6b825890855702035e6f95179496242a4bcb0afe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
