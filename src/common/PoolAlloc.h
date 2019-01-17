@@ -94,7 +94,6 @@ class Allocation
     unsigned char *mem;     // beginning of our allocation (pts to header)
     Allocation *prevAlloc;  // prior allocation in the chain
 
-    // Support MSVC++ 6.0
     const static unsigned char guardBlockBeginVal;
     const static unsigned char guardBlockEndVal;
     const static unsigned char userDataFill;
@@ -126,6 +125,8 @@ class PoolAllocator
   public:
     static const int kDefaultAlignment = 16;
     PoolAllocator(int growthIncrement = 8 * 1024, int allocationAlignment = kDefaultAlignment);
+    PoolAllocator(PoolAllocator &&rhs) noexcept;
+    PoolAllocator &operator=(const PoolAllocator &) = default;
 
     //
     // Don't call the destructor just to free up the memory, call pop()
@@ -133,7 +134,7 @@ class PoolAllocator
     ~PoolAllocator();
 
     //
-    // Call push() to establish a new place to pop memory too.  Does not
+    // Call push() to establish a new place to pop memory to.  Does not
     // have to be called to get things started.
     //
     void push();
@@ -172,7 +173,7 @@ class PoolAllocator
                        // this granularity, which will be a power of 2
     size_t alignmentMask;
 
-#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#if !defined(ANGLE_DISABLE_POOL_ALLOC)
     friend struct tHeader;
 
     struct tHeader
@@ -231,12 +232,11 @@ class PoolAllocator
     int numCalls;       // just an interesting statistic
     size_t totalBytes;  // just an interesting statistic
 
-#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#else  // !defined(ANGLE_DISABLE_POOL_ALLOC)
     std::vector<std::vector<void *>> mStack;
 #endif
 
-    PoolAllocator &operator=(const PoolAllocator &);  // dont allow assignment operator
-    PoolAllocator(const PoolAllocator &);             // dont allow default copy constructor
+    PoolAllocator(const PoolAllocator &);  // don't allow default copy constructor
     bool mLocked;
 };
 

@@ -274,6 +274,7 @@ class RendererVk : angle::NonCopyable
         void destroy(VkDevice device, const VkAllocationCallbacks *allocationCallbacks);
 
         vk::CommandPool commandPool;
+        angle::PoolAllocator poolAllocator;
         vk::Fence fence;
         Serial serial;
     };

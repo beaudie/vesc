@@ -473,7 +473,9 @@ VKAPI_ATTR void *PoolReallocationFunction(void *pUserData,
                                           size_t alignment,
                                           VkSystemAllocationScope allocationScope)
 {
-    return PoolAllocationFunction(pUserData, size, alignment, allocationScope);
+    // Realloc not supported by the pool allocator
+    UNIMPLEMENTED();
+    return nullptr;
 }
 
 VKAPI_ATTR void PoolFreeFunction(void *pUserData, void *pMemory) {}
@@ -509,12 +511,16 @@ RendererVk::CommandBatch::CommandBatch() = default;
 RendererVk::CommandBatch::~CommandBatch() = default;
 
 RendererVk::CommandBatch::CommandBatch(CommandBatch &&other)
-    : commandPool(std::move(other.commandPool)), fence(std::move(other.fence)), serial(other.serial)
+    : commandPool(std::move(other.commandPool)),
+      poolAllocator(std::move(other.poolAllocator)),
+      fence(std::move(other.fence)),
+      serial(other.serial)
 {}
 
 RendererVk::CommandBatch &RendererVk::CommandBatch::operator=(CommandBatch &&other)
 {
     std::swap(commandPool, other.commandPool);
+    std::swap(poolAllocator, other.poolAllocator);
     std::swap(fence, other.fence);
     std::swap(serial, other.serial);
     return *this;
@@ -1311,6 +1317,8 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
 
         batch.fence.destroy(mDevice);
         batch.commandPool.destroy(mDevice, &mAllocationCallbacks);
+        // TODO: Free PoolAllocator
+        // batch.poolAllocator
         ++finishedCount;
     }
 
@@ -1349,6 +1357,7 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
 
     // Store this command buffer in the in-flight list.
     batch.commandPool = std::move(mCommandPool);
+    batch.poolAllocator = std::move(mPoolAllocator);
     batch.serial      = mCurrentQueueSerial;
 
     mInFlightCommands.emplace_back(scopedBatch.release());
@@ -1376,6 +1385,7 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
 
     // Reallocate the command pool for next frame.
     // TODO(jmadill): Consider reusing command pools.
+    InitPoolAllocationCallbacks(&mPoolAllocator, &mAllocationCallbacks);
     VkCommandPoolCreateInfo poolInfo = {};
     poolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     poolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;

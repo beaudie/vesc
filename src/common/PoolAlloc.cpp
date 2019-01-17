@@ -27,7 +27,7 @@ namespace angle
 //
 PoolAllocator::PoolAllocator(int growthIncrement, int allocationAlignment)
     : alignment(allocationAlignment),
-#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#if !defined(ANGLE_DISABLE_POOL_ALLOC)
       pageSize(growthIncrement),
       freeList(0),
       inUseList(0),
@@ -50,7 +50,7 @@ PoolAllocator::PoolAllocator(int growthIncrement, int allocationAlignment)
     alignment     = a;
     alignmentMask = a - 1;
 
-#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#if !defined(ANGLE_DISABLE_POOL_ALLOC)
     //
     // Don't allow page sizes we know are smaller than all common
     // OS page sizes.
@@ -72,14 +72,32 @@ PoolAllocator::PoolAllocator(int growthIncrement, int allocationAlignment)
     {
         headerSkip = (sizeof(tHeader) + alignmentMask) & ~alignmentMask;
     }
-#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#else  // !defined(ANGLE_DISABLE_POOL_ALLOC)
     mStack.push_back({});
 #endif
 }
 
+PoolAllocator::PoolAllocator(PoolAllocator &&rhs) noexcept
+    : alignment(std::exchange(rhs.alignment, 0)),
+      alignmentMask(std::exchange(rhs.alignmentMask, 0)),
+#if !defined(ANGLE_DISABLE_POOL_ALLOC)
+      pageSize(std::exchange(rhs.pageSize, 0)),
+      headerSkip(std::exchange(rhs.headerSkip, 0)),
+      currentPageOffset(std::exchange(rhs.currentPageOffset, 0)),
+      freeList(std::exchange(rhs.freeList, nullptr)),
+      inUseList(std::exchange(rhs.inUseList, nullptr)),
+      mStack(std::move(rhs.mStack)),
+      numCalls(std::exchange(rhs.numCalls, 0)),
+      totalBytes(std::exchange(rhs.totalBytes, 0)),
+#else
+      mStack(std::move(rhs.mStack)),
+#endif
+      mLocked(std::exchange(rhs.mLocked, false))
+{}
+
 PoolAllocator::~PoolAllocator()
 {
-#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#if !defined(ANGLE_DISABLE_POOL_ALLOC)
     while (inUseList)
     {
         tHeader *next = inUseList->nextPage;
@@ -98,7 +116,7 @@ PoolAllocator::~PoolAllocator()
         delete[] reinterpret_cast<char *>(freeList);
         freeList = next;
     }
-#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#else  // !defined(ANGLE_DISABLE_POOL_ALLOC)
     for (auto &allocs : mStack)
     {
         for (auto alloc : allocs)
@@ -110,7 +128,6 @@ PoolAllocator::~PoolAllocator()
 #endif
 }
 
-// Support MSVC++ 6.0
 const unsigned char Allocation::guardBlockBeginVal = 0xfb;
 const unsigned char Allocation::guardBlockEndVal   = 0xfe;
 const unsigned char Allocation::userDataFill       = 0xcd;
@@ -134,15 +151,10 @@ void Allocation::checkGuardBlock(unsigned char *blockMem,
         if (blockMem[x] != val)
         {
             char assertMsg[80];
-
-// We don't print the assert message.  It's here just to be helpful.
-#    if defined(_MSC_VER)
-            snprintf(assertMsg, sizeof(assertMsg),
-                     "PoolAlloc: Damage %s %Iu byte allocation at 0x%p\n", locText, size, data());
-#    else
+            // We don't print the assert message.  It's here just to be helpful.
             snprintf(assertMsg, sizeof(assertMsg),
                      "PoolAlloc: Damage %s %zu byte allocation at 0x%p\n", locText, size, data());
-#    endif
+
             assert(0 && "PoolAlloc: Damage in guard block");
         }
     }
@@ -151,7 +163,7 @@ void Allocation::checkGuardBlock(unsigned char *blockMem,
 
 void PoolAllocator::push()
 {
-#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#if !defined(ANGLE_DISABLE_POOL_ALLOC)
     tAllocState state = {currentPageOffset, inUseList};
 
     mStack.push_back(state);
@@ -160,7 +172,7 @@ void PoolAllocator::push()
     // Indicate there is no current page to allocate from.
     //
     currentPageOffset = pageSize;
-#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#else  // !defined(ANGLE_DISABLE_POOL_ALLOC)
     mStack.push_back({});
 #endif
 }
@@ -177,7 +189,7 @@ void PoolAllocator::pop()
     if (mStack.size() < 1)
         return;
 
-#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#if !defined(ANGLE_DISABLE_POOL_ALLOC)
     tHeader *page     = mStack.back().page;
     currentPageOffset = mStack.back().offset;
 
@@ -198,7 +210,7 @@ void PoolAllocator::pop()
     }
 
     mStack.pop_back();
-#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#else  // !defined(ANGLE_DISABLE_POOL_ALLOC)
     for (auto &alloc : mStack.back())
     {
         free(alloc);
@@ -221,7 +233,7 @@ void *PoolAllocator::allocate(size_t numBytes)
 {
     ASSERT(!mLocked);
 
-#if !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#if !defined(ANGLE_DISABLE_POOL_ALLOC)
     //
     // Just keep some interesting statistics.
     //
@@ -258,7 +270,7 @@ void *PoolAllocator::allocate(size_t numBytes)
     {
         //
         // Do a multi-page allocation.  Don't mix these with the others.
-        // The OS is efficient and allocating and free-ing multiple pages.
+        // The OS is efficient in allocating and freeing multiple pages.
         //
         size_t numBytesToAlloc = allocationSize + headerSkip;
         // Detect integer overflow.
@@ -303,7 +315,7 @@ void *PoolAllocator::allocate(size_t numBytes)
     currentPageOffset  = (headerSkip + allocationSize + alignmentMask) & ~alignmentMask;
 
     return initializeAllocation(inUseList, ret, numBytes);
-#else  // !defined(ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC)
+#else  // !defined(ANGLE_DISABLE_POOL_ALLOC)
     void *alloc = malloc(numBytes + alignmentMask);
     mStack.back().push_back(alloc);
 
