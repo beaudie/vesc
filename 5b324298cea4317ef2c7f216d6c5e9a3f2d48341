@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6179cd91_8a723258",
+        "filename": "android/src/com/android/angle/common/GlobalSettings.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-01-17T23:09:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "277dc15e_58b4e95d",
+      "range": {
+        "startLine": 84,
+        "startChar": 51,
+        "endLine": 84,
+        "endChar": 68
+      },
+      "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "56379fcf_e62f9192",
         "filename": "android/src/com/android/angle/common/Receiver.java",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de8bb316_47f0bf4f",
+        "filename": "android/src/com/android/angle/common/Receiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-01-17T23:09:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56379fcf_e62f9192",
+      "range": {
+        "startLine": 39,
+        "startChar": 39,
+        "endLine": 39,
+        "endChar": 62
+      },
+      "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3698a102_2edce09d",
+        "filename": "android/src/com/android/angle/common/Receiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-01-17T23:09:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42cabb9a_c0c3d22a",
+      "range": {
+        "startLine": 60,
+        "startChar": 39,
+        "endLine": 60,
+        "endChar": 52
+      },
+      "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33ca53d3_588db4b3",
         "filename": "android/src/com/android/angle/common/Receiver.java",
         "patchSetId": 1
@@ -88,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "88c1e839_7d5b5b46",
+        "filename": "android/src/com/android/angle/common/Receiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-01-17T23:09:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33ca53d3_588db4b3",
+      "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98b1d764_ac508a73",
         "filename": "android/src/com/android/angle/common/Receiver.java",
         "patchSetId": 1
@@ -99,6 +189,24 @@
       "writtenOn": "2019-01-16T23:37:31Z",
       "side": 1,
       "message": "Is optJSONObject() the right call here?   We know something must be in this array entry, since \u0027j\u0027 is still less than apps.length(), so it\u0027s probably safe to just do a getJSONObject() here and skip the null checking.",
+      "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c196f389_f7489780",
+        "filename": "android/src/com/android/angle/common/Receiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-01-17T23:09:38Z",
+      "side": 1,
+      "message": "Yeah, was rushing out the door when I sent this out.  I cleaned it up, thanks!",
+      "parentUuid": "98b1d764_ac508a73",
       "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -122,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "04b453ab_9bcf6890",
+        "filename": "android/src/com/android/angle/common/Receiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-01-17T23:09:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cc2d6d4b_f134485f",
+      "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9a4be23_09ff2dba",
         "filename": "android/src/com/android/angle/common/Receiver.java",
         "patchSetId": 1
@@ -136,6 +262,24 @@
       "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d33ee23a_1b8f3675",
+        "filename": "android/src/com/android/angle/common/Receiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-01-17T23:09:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b9a4be23_09ff2dba",
+      "revId": "5b324298cea4317ef2c7f216d6c5e9a3f2d48341",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
