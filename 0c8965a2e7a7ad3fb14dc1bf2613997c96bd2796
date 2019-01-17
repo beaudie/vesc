@@ -34,6 +34,24 @@
       "revId": "0c8965a2e7a7ad3fb14dc1bf2613997c96bd2796",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e26eb1de_b5de728a",
+        "filename": "src/libANGLE/validationES2.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-17T21:17:40Z",
+      "side": 1,
+      "message": "I would be a bit careful though. Inlining saves on register save/restore, sure. An even bigger win is that it helps with register allocation by the compiler. This is all very good, but on the other hand it can be detrimental to the instruction cache when it ends up increasing the code size (as with inlining large functions like this).\n\nLike I said, I don\u0027t mind this particular case. Just saying in general (that `inline` doesn\u0027t always mean faster).",
+      "parentUuid": "48bbb162_b56b5b1d",
+      "revId": "0c8965a2e7a7ad3fb14dc1bf2613997c96bd2796",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
