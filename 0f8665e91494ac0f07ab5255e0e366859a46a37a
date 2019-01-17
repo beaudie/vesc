@@ -152,6 +152,24 @@
     },
     {
       "key": {
+        "uuid": "024d7220_4c3f7eb7",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T01:58:42Z",
+      "side": 1,
+      "message": "You also need to update this usage in BUILD.gn.\n\nLooks like we use this define in the fuzzer to try and find invalid memory usage patterns.",
+      "parentUuid": "377831be_6c9c0367",
+      "revId": "0f8665e91494ac0f07ab5255e0e366859a46a37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d36390a2_6ca08c07",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 12

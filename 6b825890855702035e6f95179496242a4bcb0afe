@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fbd3d378_8f6291ce",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T01:58:42Z",
+      "side": 1,
+      "message": "similar thing will be needed for the move assignment op. you can maybe do *this \u003d std::move(rhs) as an implementation here.",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 96,
+        "endChar": 2
+      },
+      "revId": "6b825890855702035e6f95179496242a4bcb0afe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d10487c9_4c3e1944",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T01:58:42Z",
+      "side": 1,
+      "message": "you can make these static constexpr in the header if you want and fix the naming (kGuarBlockGeginVal, etc). Or you can just ignore this comment. :)",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 58
+      },
+      "revId": "6b825890855702035e6f95179496242a4bcb0afe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4dde887_1a7bdb51",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T01:58:42Z",
+      "side": 1,
+      "message": "can you inherit from angle::NonCopyable?",
+      "range": {
+        "startLine": 123,
+        "startChar": 6,
+        "endLine": 123,
+        "endChar": 19
+      },
+      "revId": "6b825890855702035e6f95179496242a4bcb0afe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f2a6df8_465289a9",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T01:58:42Z",
+      "side": 1,
+      "message": "this should be a move assignment operator as well, and define in the cpp",
+      "range": {
+        "startLine": 129,
+        "startChar": 4,
+        "endLine": 129,
+        "endChar": 62
+      },
+      "revId": "6b825890855702035e6f95179496242a4bcb0afe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "856772db_1f3b0196",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T01:58:42Z",
+      "side": 1,
+      "message": "you can remove this if you inherit from noncopyable",
+      "revId": "6b825890855702035e6f95179496242a4bcb0afe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b08f099e_096e7e15",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1325,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T01:58:42Z",
+      "side": 1,
+      "message": "theoretically this line should trigger ~TPoolAllocator. You can verify with printfs or a debugger",
+      "range": {
+        "startLine": 1325,
+        "startChar": 4,
+        "endLine": 1325,
+        "endChar": 98
+      },
+      "revId": "6b825890855702035e6f95179496242a4bcb0afe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
