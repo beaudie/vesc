@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eba47623_77464b91",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T17:35:13Z",
+      "side": 1,
+      "message": "I\u0027m not sure this implementation is correct. I\u0027d have to look at the spec for std::move. But it will leak memory. You need to use std::swap here instead of std::exchange. Did you base this on another template?\n\nI think std::exchange might be okay for the constructor. But not the assignment op.",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 61
+      },
+      "revId": "308ba961d0f133a537fb74657767547a652834a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
