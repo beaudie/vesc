@@ -34,7 +34,7 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
                   const gl::TextureCapsMap &textureCaps,
                   gl::Caps *outCaps,
                   gl::Extensions *outExtensions,
-                  gl::Limitations * /* outLimitations */)
+                  gl::Limitations *outLimitations)
 {
     outExtensions->setTextureExtensionSupport(textureCaps);
 
@@ -176,6 +176,8 @@ void GenerateCaps(const VkPhysicalDeviceProperties &physicalDeviceProperties,
     outCaps->maxVaryingVectors =
         (physicalDeviceProperties.limits.maxVertexOutputComponents / 4) - kReservedVaryingCount;
     outCaps->maxVertexOutputComponents = outCaps->maxVaryingVectors * 4;
+
+    outLimitations->noParallelProgramBinary = true;
 }
 }  // namespace vk
 

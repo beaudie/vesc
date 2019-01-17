@@ -1455,6 +1455,12 @@ class LoadBinaryLinkEvent final : public LinkEvent
                         std::vector<uint8_t> &&bytes)
         : mContext(context), mProgram(program), mBytes(std::move(bytes))
     {
+        if (mContext.getLimitations().noParallelProgramBinary)
+        {
+            runAsync();
+            return;
+        }
+
         const auto &workerPool = mContext.getWorkerThreadPool();
         const auto task        = std::make_shared<AsyncTask>(*this);
         mWaitable              = workerPool->postWorkerTask(task);
@@ -1484,8 +1490,11 @@ class LoadBinaryLinkEvent final : public LinkEvent
 
     angle::Result wait(const gl::Context *context) override
     {
-        mWaitable->wait();
-        mWaitable = nullptr;
+        if (mWaitable)
+        {
+            mWaitable->wait();
+            mWaitable = nullptr;
+        }
         return mResult;
     }
 
