@@ -94,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "2dd96b87_f3aec198",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-17T15:01:27Z",
+      "side": 1,
+      "message": "I agree this must be the reason the CL doesn\u0027t work. `\u003d default` is doing a shallow copy here which is eventually going to lead to a double free (or use after free). We\u0027d want a move assignment anyway, though.",
+      "parentUuid": "5f2a6df8_465289a9",
+      "range": {
+        "startLine": 129,
+        "startChar": 4,
+        "endLine": 129,
+        "endChar": 62
+      },
+      "revId": "6b825890855702035e6f95179496242a4bcb0afe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "856772db_1f3b0196",
         "filename": "src/common/PoolAlloc.h",
         "patchSetId": 13
