@@ -22,6 +22,30 @@
       "revId": "c7b21523b50b5d7c867b013c0870336db4cab5c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc6f7df5_dd41ad1d",
+        "filename": "src/libANGLE/validationES.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-17T19:48:44Z",
+      "side": 1,
+      "message": "Also, I think you forgot to delete the old code from cpp.\nAnd, could you delete unused messages, like kInvalidTypePureInt?",
+      "parentUuid": "9d48c092_8128acdf",
+      "range": {
+        "startLine": 496,
+        "startChar": 4,
+        "endLine": 562,
+        "endChar": 16
+      },
+      "revId": "c7b21523b50b5d7c867b013c0870336db4cab5c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
