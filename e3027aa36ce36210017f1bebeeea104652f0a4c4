@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "024d3705_ba70e0b0",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T01:59:48Z",
+      "side": 1,
+      "message": "you can just use anglebug.com, we\u0027ll fix the domain soon",
+      "range": {
+        "startLine": 368,
+        "startChar": 14,
+        "endLine": 368,
+        "endChar": 41
+      },
+      "revId": "e3027aa36ce36210017f1bebeeea104652f0a4c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fd05c49_cd8f6967",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T01:59:48Z",
+      "side": 1,
+      "message": "dit",
+      "range": {
+        "startLine": 400,
+        "startChar": 7,
+        "endLine": 400,
+        "endChar": 41
+      },
+      "revId": "e3027aa36ce36210017f1bebeeea104652f0a4c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
