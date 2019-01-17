@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9182c17b_86f3490d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T22:12:05Z",
+      "side": 1,
+      "message": "Yeah, FramebufferVk does this notification already. This change necessary for when the application rebinds a different Framebuffer which has no dirty Framebuffer bits. FramebufferVk::syncState will never get called. But we do get a notification here. I reworded the comment to clarify this.",
+      "parentUuid": "18938aae_4c7477ab",
+      "revId": "355e5d3e5382771923009e9bf1a755b71948dac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0efe446c_734423e3",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 27
@@ -30,6 +48,30 @@
       "writtenOn": "2019-01-17T21:28:50Z",
       "side": 1,
       "message": "Is this new logic/bug fix?",
+      "range": {
+        "startLine": 1345,
+        "startChar": 0,
+        "endLine": 1350,
+        "endChar": 5
+      },
+      "revId": "355e5d3e5382771923009e9bf1a755b71948dac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c895732e_acaf4204",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 1350,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T22:12:05Z",
+      "side": 1,
+      "message": "This is a new check to replace the check we\u0027re skipping in ContextVk. appendToStartedRenderPass would check the previous serial ID and start a new command buffer if the serial has changed. Moving to a more dirty-bit approach means we need to notify the entire set of ContextVk using this VkQueue that the queue serial is changed. Then they only need to check mCommandBuffer \u003d\u003d nullptr. I updated the comment here with more information.",
+      "parentUuid": "0efe446c_734423e3",
       "range": {
         "startLine": 1345,
         "startChar": 0,
