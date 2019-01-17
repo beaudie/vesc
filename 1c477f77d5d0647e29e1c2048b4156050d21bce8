@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b5692d7_c9639bd2",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T19:30:12Z",
+      "side": 1,
+      "message": "can probably move mStack out of the !defined case and remove the else.\n\nAlso mLocked should probably also be std::swap.",
+      "range": {
+        "startLine": 108,
+        "startChar": 1,
+        "endLine": 116,
+        "endChar": 52
+      },
+      "revId": "1c477f77d5d0647e29e1c2048b4156050d21bce8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7489bde_381d5d7b",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T19:30:12Z",
+      "side": 1,
+      "message": "do you think we could do a follow-up CL to fix the style in this file? e.g. add mMemberVariable names",
+      "range": {
+        "startLine": 229,
+        "startChar": 11,
+        "endLine": 229,
+        "endChar": 28
+      },
+      "revId": "1c477f77d5d0647e29e1c2048b4156050d21bce8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "364ac56b_b0c82871",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-17T19:30:12Z",
+      "side": 1,
+      "message": "I think these should be VKAPI_CALL to fix the Windows x86 build.",
+      "range": {
+        "startLine": 459,
+        "startChar": 0,
+        "endLine": 459,
+        "endChar": 10
+      },
+      "revId": "1c477f77d5d0647e29e1c2048b4156050d21bce8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
