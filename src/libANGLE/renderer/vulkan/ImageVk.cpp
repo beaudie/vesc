@@ -59,7 +59,9 @@ egl::Error ImageVk::initialize(const egl::Display *display)
 
         mOwnsImage = false;
 
-        mBaseMipLevel = mState.imageIndex.getLevelIndex();
+        mBaseTextureType = mState.imageIndex.getType();
+        mBaseMipLevel    = mState.imageIndex.getLevelIndex();
+        mBaseLayer       = mState.imageIndex.hasLayer() ? mState.imageIndex.getLayerIndex() : 0;
     }
     else if (egl::IsRenderbufferTarget(mState.target))
     {
@@ -72,7 +74,9 @@ egl::Error ImageVk::initialize(const egl::Display *display)
 
         mOwnsImage = false;
 
-        mBaseMipLevel = 0;
+        mBaseTextureType = gl::TextureType::_2D;
+        mBaseMipLevel    = 0;
+        mBaseLayer       = 0;
     }
     else
     {
@@ -112,9 +116,19 @@ angle::Result ImageVk::orphan(const gl::Context *context, egl::ImageSibling *sib
     return angle::Result::Continue;
 }
 
+gl::TextureType ImageVk::getImageTextureType() const
+{
+    return mBaseTextureType;
+}
+
 uint32_t ImageVk::getImageBaseMipLevel() const
 {
     return mBaseMipLevel;
+}
+
+uint32_t ImageVk::getImageBaseLayer() const
+{
+    return mBaseLayer;
 }
 
 vk::ImageHelper *ImageVk::getImage() const
