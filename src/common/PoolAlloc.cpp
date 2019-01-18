@@ -250,8 +250,13 @@ void PoolAllocator::popAll()
         pop();
 }
 
+//
+// Do a reallocation, resizing the the given originalAllocation to numBytes while
+// preserving the contents of originalAllocation.
+//
 void *PoolAllocator::reallocate(void *originalAllocation, size_t numBytes)
 {
+    WARN() << "In PoolAllocator::reallocate()";
     /*
  * Since we don't have information on the old size here, I suggest adding a `reallocate` call to the
 pool allocator that would do the following:
@@ -267,28 +272,38 @@ adding guards.
  */
     if (originalAllocation == nullptr)
     {
+        WARN() << "  allocate() case";
         return allocate(numBytes);
     }
     else if (numBytes == 0)
     {
+        WARN() << "  numBytes == 0 case";
         // this is a no-op given the current way we use new pool allocators. Memory will be freed
         // when allocator is destroyed.
     }
     else
     {
+        WARN() << "  Actual re-allocation case";
         // Grab size of original Allocation & compare to requested size
-        //        void *origHeader = originalAllocation - (sizeof(uintptr_t) * 2);
-        //        size_t *origSize = static_cast<size_t *>(origHeader);
-        //        if (*origSize > numBytes)
-        //        {
-        //            // For growing allocation, create new allocation and copy over original
-        //            contents void *newAlloc = allocate(numBytes); memcpy(newAlloc,
-        //            originalAllocation, *origSize); return newAlloc;
-        //        }
-        //        else
-        //        {
-        //            // For shrinking allocation, do nothing
-        //        }
+        char *origAllocAddress = static_cast<char *>(originalAllocation);
+        Allocation *origHeader =
+            reinterpret_cast<Allocation *>(origAllocAddress - sizeof(Allocation));
+        size_t origSize = origHeader->getSize();
+        WARN() << "  Original Header Address:" << origHeader
+               << ", vs. origAddr:" << originalAllocation;
+        WARN() << "  Original alloc size:" << origSize;
+        if (origSize > numBytes)
+        {
+            // For growing allocation, create new allocation and copy over original contents
+            void *newAlloc = allocate(numBytes);
+            memcpy(newAlloc, originalAllocation, origSize);
+            return newAlloc;
+        }
+        else
+        {
+            // For shrinking allocation, just give them back original alloc ptr
+            return originalAllocation;
+        }
         // TODO: Temp hack just allocating and not copying original data
         return allocate(numBytes);
     }
