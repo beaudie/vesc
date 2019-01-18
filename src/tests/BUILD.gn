@@ -247,8 +247,7 @@ if (is_win || is_linux || is_android || is_mac) {
 
     if (angle_enable_vulkan) {
       sources += angle_white_box_perf_tests_vulkan_sources
-      deps += [ "$angle_root/third_party/glslang:glslang" ]
-      public_configs += [ "$angle_root/third_party/glslang:glslang_config" ]
+      deps += [ "$angle_root/third_party/glslang/src:glslang_sources" ]
     }
 
     configs += [
