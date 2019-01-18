@@ -22,6 +22,30 @@
       "revId": "22b1b62dc804032ad95afd9acafe3c98bdbeabb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0822ab5_a9cfccc2",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-18T21:58:17Z",
+      "side": 1,
+      "message": "Nice catch. Done.",
+      "parentUuid": "36f4ca70_2d80b809",
+      "range": {
+        "startLine": 527,
+        "startChar": 0,
+        "endLine": 528,
+        "endChar": 75
+      },
+      "revId": "22b1b62dc804032ad95afd9acafe3c98bdbeabb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
