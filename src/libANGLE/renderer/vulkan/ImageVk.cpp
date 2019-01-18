@@ -22,7 +22,7 @@ namespace rx
 {
 
 ImageVk::ImageVk(const egl::ImageState &state, const gl::Context *context)
-    : ImageImpl(state), mOwnsImage(false), mImage(nullptr), mContext(context)
+    : ImageImpl(state), mBaseMipLevel(0), mOwnsImage(false), mImage(nullptr), mContext(context)
 {}
 
 ImageVk::~ImageVk() {}
@@ -59,7 +59,7 @@ egl::Error ImageVk::initialize(const egl::Display *display)
 
         mOwnsImage = false;
 
-        ASSERT(mState.imageIndex.getLevelIndex() == 0);
+        mBaseMipLevel = mState.imageIndex.getLevelIndex();
     }
     else if (egl::IsRenderbufferTarget(mState.target))
     {
@@ -74,6 +74,8 @@ egl::Error ImageVk::initialize(const egl::Display *display)
         mImage->initStagingBuffer(renderer);
 
         mOwnsImage = false;
+
+        mBaseMipLevel = 0;
     }
     else
     {
