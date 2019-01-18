@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ae98aaa7_177619ed",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6011,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2019-01-18T15:23:31Z",
+      "side": 1,
+      "message": "I don\u0027t think it has to be, but it means making all the kDirtyObjectHandler function types non const as well.",
+      "parentUuid": "8919a77e_0621a74c",
+      "range": {
+        "startLine": 6011,
+        "startChar": 42,
+        "endLine": 6011,
+        "endChar": 47
+      },
+      "revId": "4424085096d62d311363f8d1d59616126067a87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a446cad3_cdcea1d0",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2019-01-18T14:45:54Z",
       "side": 1,
       "message": "Could this be stored in the GLES1Renderer instead?",
+      "range": {
+        "startLine": 1878,
+        "startChar": 4,
+        "endLine": 1878,
+        "endChar": 33
+      },
+      "revId": "4424085096d62d311363f8d1d59616126067a87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06505e9b_e5089f4c",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1878,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2019-01-18T15:23:31Z",
+      "side": 1,
+      "message": "Yeah I\u0027m not sure the best solution here; since we wanted to avoid de-referencing mGLES1Renderer when unnecessary, putting mPrimitiveMode it in the GLES1Renderer would mean dereferencing it every draw, or making more changes to the kDirtyObjectHandler interface to allow arguments to be passed depending on the context of the dirty object handling and the type of dirty object.",
+      "parentUuid": "a446cad3_cdcea1d0",
       "range": {
         "startLine": 1878,
         "startChar": 4,
