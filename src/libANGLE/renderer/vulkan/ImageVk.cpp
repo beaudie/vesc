@@ -22,7 +22,7 @@ namespace rx
 {
 
 ImageVk::ImageVk(const egl::ImageState &state)
-    : ImageImpl(state), mOwnsImage(false), mImage(nullptr)
+    : ImageImpl(state), mBaseMipLevel(0), mOwnsImage(false), mImage(nullptr)
 {}
 
 ImageVk::~ImageVk() {}
@@ -58,6 +58,8 @@ egl::Error ImageVk::initialize(const egl::Display *display)
         // The staging buffer for a texture source should already be initialized
 
         mOwnsImage = false;
+
+        mBaseMipLevel = mState.imageIndex.getLevelIndex();
     }
     else if (egl::IsRenderbufferTarget(mState.target))
     {
@@ -69,6 +71,8 @@ egl::Error ImageVk::initialize(const egl::Display *display)
         mImage->initStagingBuffer(renderer);
 
         mOwnsImage = false;
+
+        mBaseMipLevel = 0;
     }
     else
     {
@@ -106,6 +110,11 @@ angle::Result ImageVk::orphan(const gl::Context *context, egl::ImageSibling *sib
     }
 
     return angle::Result::Continue;
+}
+
+uint32_t ImageVk::getImageBaseMipLevel() const
+{
+    return mBaseMipLevel;
 }
 
 vk::ImageHelper *ImageVk::getImage() const
