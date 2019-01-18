@@ -1489,6 +1489,7 @@ VkImageType GetImageType(gl::TextureType textureType)
         case gl::TextureType::_2DMultisample:
         case gl::TextureType::_2DMultisampleArray:
         case gl::TextureType::CubeMap:
+        case gl::TextureType::External:
             return VK_IMAGE_TYPE_2D;
         case gl::TextureType::_3D:
             return VK_IMAGE_TYPE_3D;
@@ -1505,6 +1506,7 @@ VkImageViewType GetImageViewType(gl::TextureType textureType)
     {
         case gl::TextureType::_2D:
         case gl::TextureType::_2DMultisample:
+        case gl::TextureType::External:
             return VK_IMAGE_VIEW_TYPE_2D;
         case gl::TextureType::_2DArray:
         case gl::TextureType::_2DMultisampleArray:
