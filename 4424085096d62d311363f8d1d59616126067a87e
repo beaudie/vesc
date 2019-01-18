@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "7730ecae_e253df6c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6011,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-18T15:30:37Z",
+      "side": 1,
+      "message": "I may be missing it but I only see this called in State::syncGles1PrepareDraw which is not const.",
+      "parentUuid": "ae98aaa7_177619ed",
+      "range": {
+        "startLine": 6011,
+        "startChar": 42,
+        "endLine": 6011,
+        "endChar": 47
+      },
+      "revId": "4424085096d62d311363f8d1d59616126067a87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a446cad3_cdcea1d0",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 5
