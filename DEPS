@@ -12,13 +12,13 @@ vars = {
   'deqp_revision': 'f5637d67a00a1081a13008bb8dc93b2616c935e2',
 
   # Current revision of glslang, the Khronos SPIRV compiler.
-  'glslang_revision': 'f9edfdab0e872c674e0a80e083239aa9637871ba',
+  'glslang_revision': 'ed31c48404efc96a5bba67b68e65507032649e42',
 
   # Current revision fo the SPIRV-Headers Vulkan support library.
-  'spirv_headers_revision': 'd5b2e1255f706ce1f88812217e9a554f299848af',
+  'spirv_headers_revision': '79b6681aadcb53c27d1052e5f8a0e82a981dbf2f',
 
   # Current revision of SPIRV-Tools for Vulkan.
-  'spirv_tools_revision': 'd73b9d8dfbf7761e3fde323af00ec18ebfc0020c',
+  'spirv_tools_revision': 'd14db341b834cfb3c574a258c331b3a6b1c2cbc5',
 
   # Current revision of Khronos Vulkan-Headers.
   'vulkan_headers_revision': 'b65941cc4b2b43b74de00534d110b581c52c394b',
@@ -61,7 +61,7 @@ deps = {
   },
 
   '{angle_root}/third_party/glslang/src': {
-    'url': '{chromium_git}/external/github.com/KhronosGroup/glslang@{glslang_revision}',
+    'url': 'https://github.com/null77/glslang.git@{glslang_revision}',
   },
 
   '{angle_root}/third_party/googletest/src': {
@@ -83,12 +83,12 @@ deps = {
   },
 
   '{angle_root}/third_party/spirv-headers/src': {
-    'url': '{android_git}/platform/external/shaderc/spirv-headers@{spirv_headers_revision}',
+    'url': '{chromium_git}/external/github.com/KhronosGroup/SPIRV-Headers@{spirv_headers_revision}',
     'condition': 'not build_with_chromium',
   },
 
   '{angle_root}/third_party/spirv-tools/src': {
-    'url': '{android_git}/platform/external/shaderc/spirv-tools@{spirv_tools_revision}',
+    'url': '{chromium_git}/external/github.com/KhronosGroup/SPIRV-Tools@{spirv_tools_revision}',
     'condition': 'not build_with_chromium',
   },
 
