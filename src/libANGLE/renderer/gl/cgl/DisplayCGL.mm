@@ -116,6 +116,12 @@ void DisplayCGL::terminate()
         CGLReleaseContext(mContext);
         mContext = nullptr;
     }
+
+    if (mPixelFormat != nullptr)
+    {
+        CGLDestroyPixelFormat(mPixelFormat);
+        mPixelFormat = nullptr;
+    }
 }
 
 SurfaceImpl *DisplayCGL::createWindowSurface(const egl::SurfaceState &state,
