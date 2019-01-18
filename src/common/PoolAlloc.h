@@ -84,6 +84,9 @@ class Allocation
         return m + guardBlockSize + headerSize();
     }
 
+    // Return size of allocation.
+    inline size_t getSize() const { return size; }
+
   private:
     void checkGuardBlock(unsigned char *blockMem, unsigned char val, const char *locText) const;
 
@@ -206,9 +209,9 @@ class PoolAllocator : angle::NonCopyable
 
         tHeader *nextPage;
         size_t pageCount;
-#    ifdef GUARD_BLOCKS
+        //#    ifdef GUARD_BLOCKS
         Allocation *lastAllocation;
-#    endif
+        //#    endif
     };
 
     struct tAllocState
@@ -221,11 +224,11 @@ class PoolAllocator : angle::NonCopyable
     // Track allocations if and only if we're using guard blocks
     void *initializeAllocation(tHeader *block, unsigned char *memory, size_t numBytes)
     {
-#    ifdef GUARD_BLOCKS
-        // TODO: Do we need to add this allocation Header by default for reallocation support?
+        //#    ifdef GUARD_BLOCKS
+        // Init Allocation by default for reallocation support.
         new (memory) Allocation(numBytes, memory, block->lastAllocation);
         block->lastAllocation = reinterpret_cast<Allocation *>(memory);
-#    endif
+        //#    endif
         // This is optimized entirely away if GUARD_BLOCKS is not defined.
         return Allocation::offsetAllocation(memory);
     }
