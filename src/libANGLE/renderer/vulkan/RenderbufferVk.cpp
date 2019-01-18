@@ -105,7 +105,7 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
         // Note that LUMA textures are not color-renderable, so a read-view with swizzle is not
         // needed.
         ANGLE_TRY(mImage->initImageView(contextVk, gl::TextureType::_2D, aspect, gl::SwizzleState(),
-                                        &mImageView, 1));
+                                        &mImageView, 0, 1));
 
         // TODO(jmadill): Fold this into the RenderPass load/store ops. http://anglebug.com/2361
         vk::CommandBuffer *commandBuffer = nullptr;
@@ -121,7 +121,7 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
             mImage->clearColor(kBlackClearColorValue, 0, 1, commandBuffer);
         }
 
-        mRenderTarget.init(mImage, &mImageView, 0, nullptr);
+        mRenderTarget.init(mImage, &mImageView, 0, 0, nullptr);
     }
 
     return angle::Result::Continue;
@@ -164,9 +164,9 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
     VkImageAspectFlags aspect = vk::GetFormatAspectFlags(textureFormat);
 
     ANGLE_TRY(mImage->initImageView(contextVk, gl::TextureType::_2D, aspect, gl::SwizzleState(),
-                                    &mImageView, 1));
+                                    &mImageView, imageVk->getImageBaseMipLevel(), 1));
 
-    mRenderTarget.init(mImage, &mImageView, 0, nullptr);
+    mRenderTarget.init(mImage, &mImageView, imageVk->getImageBaseMipLevel(), 0, nullptr);
 
     return angle::Result::Continue;
 }
