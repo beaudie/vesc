@@ -559,7 +559,8 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
     destroyImage(context, renderer);
 
     ImageVk *imageVk = vk::GetImpl(image);
-    setImageHelper(renderer, imageVk->getImage(), imageVk->getImageBaseMipLevel(), false);
+    setImageHelper(renderer, imageVk->getImage(), imageVk->getImageTextureType(),
+                   imageVk->getImageBaseMipLevel(), imageVk->getImageBaseLayer(), false);
 
     const vk::Format &format = renderer->getFormat(image->getFormat().info->sizedInternalFormat);
     ANGLE_TRY(initImageViews(contextVk, format, 1))
@@ -578,14 +579,32 @@ angle::Result TextureVk::setImageExternal(const gl::Context *context,
 
 gl::ImageIndex TextureVk::getNativeImageIndex(const gl::ImageIndex &inputImageIndex) const
 {
-    gl::ImageIndex result(inputImageIndex);
-    result.setLevelIndex(getNativeImageMipLevel(inputImageIndex.getLevelIndex()));
-    return result;
+    // The input index can be a specific layer (for cube maps, 2d arrays, etc) or mImageLayerOffset
+    // can be non-zero but both of these cannot be true at the same time.  EGL images can source
+    // from a cube map or 3D texture but can only be a 2D destination.
+    ASSERT(!(inputImageIndex.hasLayer() && mImageLayerOffset > 0));
+
+    // handle the special-case where image index can represent a whole level of a texture
+    GLint resultImageLayer = inputImageIndex.getLayerIndex();
+    if (inputImageIndex.getType() != mImageNativeType)
+    {
+        ASSERT(!inputImageIndex.hasLayer());
+        resultImageLayer = mImageLayerOffset;
+    }
+
+    return gl::ImageIndex::MakeFromType(mImageNativeType,
+                                        getNativeImageMipLevel(inputImageIndex.getLevelIndex()),
+                                        resultImageLayer, inputImageIndex.getLayerCount());
 }
 
 uint32_t TextureVk::getNativeImageMipLevel(uint32_t frontendMip) const
 {
     return mImageMipOffset + frontendMip;
+}
+
+uint32_t TextureVk::getNativeImageLayer(uint32_t frontendLayer) const
+{
+    return mImageLayerOffset + frontendLayer;
 }
 
 void TextureVk::destroyImage(const gl::Context *context, RendererVk *renderer)
@@ -609,7 +628,7 @@ angle::Result TextureVk::ensureImageAllocated(RendererVk *renderer)
 {
     if (mImage == nullptr)
     {
-        setImageHelper(renderer, new vk::ImageHelper(), 0, true);
+        setImageHelper(renderer, new vk::ImageHelper(), mState.getType(), 0, 0, true);
     }
 
     return angle::Result::Continue;
@@ -617,17 +636,22 @@ angle::Result TextureVk::ensureImageAllocated(RendererVk *renderer)
 
 void TextureVk::setImageHelper(RendererVk *renderer,
                                vk::ImageHelper *imageHelper,
+                               gl::TextureType imageType,
                                uint32_t imageMipOffset,
+                               uint32_t imageLayerOffset,
                                bool selfOwned)
 {
     ASSERT(mImage == nullptr);
 
-    mOwnsImage      = selfOwned;
-    mImageMipOffset = imageMipOffset;
-    mImage          = imageHelper;
+    mOwnsImage        = selfOwned;
+    mImageNativeType  = imageType;
+    mImageMipOffset   = imageMipOffset;
+    mImageLayerOffset = imageLayerOffset;
+    mImage            = imageHelper;
     mImage->initStagingBuffer(renderer);
 
-    mRenderTarget.init(mImage, &mDrawBaseLevelImageView, getNativeImageMipLevel(0), 0, this);
+    mRenderTarget.init(mImage, &mDrawBaseLevelImageView, getNativeImageMipLevel(0),
+                       getNativeImageLayer(0), this);
 
     // Force re-creation of cube map render targets next time they are needed
     mCubeMapRenderTargets.clear();
@@ -816,8 +840,8 @@ angle::Result TextureVk::bindTexImage(const gl::Context *context, egl::Surface *
 
     // eglBindTexImage can only be called with pbuffer (offscreen) surfaces
     OffscreenSurfaceVk *offscreenSurface = GetImplAs<OffscreenSurfaceVk>(surface);
-    setImageHelper(renderer, offscreenSurface->getColorBufferImage(), surface->getMipmapLevel(),
-                   false);
+    setImageHelper(renderer, offscreenSurface->getColorBufferImage(), mState.getType(),
+                   surface->getMipmapLevel(), 0, false);
 
     const vk::Format &format = renderer->getFormat(surface->getConfig()->renderTargetFormat);
     ANGLE_TRY(initImageViews(contextVk, format, 1))
@@ -907,7 +931,7 @@ angle::Result TextureVk::initCubeMapRenderTargets(ContextVk *contextVk)
         vk::ImageView *imageView;
         ANGLE_TRY(getLayerLevelDrawImageView(contextVk, cubeMapFaceIndex, 0, &imageView));
         mCubeMapRenderTargets[cubeMapFaceIndex].init(mImage, imageView, getNativeImageMipLevel(0),
-                                                     cubeMapFaceIndex, this);
+                                                     getNativeImageLayer(cubeMapFaceIndex), this);
     }
     return angle::Result::Continue;
 }
@@ -1024,9 +1048,9 @@ angle::Result TextureVk::getLayerLevelDrawImageView(vk::Context *context,
     // Lazily allocate the image view itself.
     // Note that these views are specifically made to be used as color attachments, and therefore
     // don't have swizzle.
-    return mImage->initLayerImageView(context, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
-                                      gl::SwizzleState(), *imageViewOut,
-                                      getNativeImageMipLevel(level), 1, layer, 1);
+    return mImage->initLayerImageView(
+        context, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(), *imageViewOut,
+        getNativeImageMipLevel(level), 1, getNativeImageLayer(layer), 1);
 }
 
 const vk::Sampler &TextureVk::getSampler() const
@@ -1075,13 +1099,17 @@ angle::Result TextureVk::initImageViews(vk::Context *context,
 
     // TODO: Support non-zero base level for ES 3.0 by adding it to mImageMipOffset
     uint32_t baseLevel = getNativeImageMipLevel(0);
+    uint32_t baseLayer = getNativeImageLayer(0);
 
-    ANGLE_TRY(mImage->initImageView(context, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
-                                    mappedSwizzle, &mReadMipmapImageView, baseLevel, levelCount));
-    ANGLE_TRY(mImage->initImageView(context, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
-                                    mappedSwizzle, &mReadBaseLevelImageView, baseLevel, 1));
-    ANGLE_TRY(mImage->initImageView(context, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
-                                    gl::SwizzleState(), &mDrawBaseLevelImageView, baseLevel, 1));
+    ANGLE_TRY(mImage->initLayerImageView(context, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
+                                         mappedSwizzle, &mReadMipmapImageView, baseLevel,
+                                         levelCount, baseLayer, 1));
+    ANGLE_TRY(mImage->initLayerImageView(context, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
+                                         mappedSwizzle, &mReadBaseLevelImageView, baseLevel, 1,
+                                         baseLayer, 1));
+    ANGLE_TRY(mImage->initLayerImageView(context, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
+                                         gl::SwizzleState(), &mDrawBaseLevelImageView, baseLevel, 1,
+                                         baseLayer, 1));
 
     return angle::Result::Continue;
 }
