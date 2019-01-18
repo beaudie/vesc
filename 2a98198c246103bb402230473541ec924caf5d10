@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45815c21_5783aa2c",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-18T14:56:09Z",
+      "side": 1,
+      "message": "This wasn\u0027t called in `deserialize`, not sure if it should.",
+      "revId": "2a98198c246103bb402230473541ec924caf5d10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "905d3183_e5fb98b2",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4678,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-18T14:56:09Z",
+      "side": 1,
+      "message": "`resolveLinkImpl` doesn\u0027t call this. I guess it doesn\u0027t need it, but not sure.",
+      "revId": "2a98198c246103bb402230473541ec924caf5d10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
