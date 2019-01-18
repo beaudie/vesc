@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "48e3b6a6_263bee45",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-18T19:18:02Z",
+      "side": 1,
+      "message": "Yeah, it\u0027s low priority. We don\u0027t expose ES 3.1 functionality to anyone right now. This would be for \"WebGL 2 Compute\". So if you file a bug we can ask Intel to help solve it.",
+      "parentUuid": "803a52a2_662217a0",
+      "revId": "2a98198c246103bb402230473541ec924caf5d10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "905d3183_e5fb98b2",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 3
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "Not sure I understand what you mean by consolidating it?\n\nThe context should be https://crrev.com/c/965627 I think.",
       "parentUuid": "80dddf66_4cbcb7c5",
+      "revId": "2a98198c246103bb402230473541ec924caf5d10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6665321e_9ffec925",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4678,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-18T19:18:02Z",
+      "side": 1,
+      "message": "Yes. That\u0027s right CL. Accidentally pasted the same link twice. You can try deleting the two calls and putting one in post link. Probably will work just fine.",
+      "parentUuid": "af84e7d6_7c3f124b",
       "revId": "2a98198c246103bb402230473541ec924caf5d10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
