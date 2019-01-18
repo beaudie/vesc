@@ -52,6 +52,24 @@
       "revId": "0c8965a2e7a7ad3fb14dc1bf2613997c96bd2796",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e7463d3e_28db8362",
+        "filename": "src/libANGLE/validationES2.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-18T13:00:53Z",
+      "side": 1,
+      "message": "Understood and agreed. Thanks.",
+      "parentUuid": "e26eb1de_b5de728a",
+      "revId": "0c8965a2e7a7ad3fb14dc1bf2613997c96bd2796",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
