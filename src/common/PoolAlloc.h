@@ -84,6 +84,9 @@ class Allocation
         return m + guardBlockSize + headerSize();
     }
 
+    // Return size of allocation.
+    inline size_t getSize() const { return size; }
+
   private:
     void checkGuardBlock(unsigned char *blockMem, unsigned char val, const char *locText) const;
 
