@@ -59,7 +59,9 @@ egl::Error ImageVk::initialize(const egl::Display *display)
 
         mOwnsImage = false;
 
-        mBaseMipLevel = mState.imageIndex.getLevelIndex();
+        mBaseTextureType = mState.imageIndex.getType();
+        mBaseMipLevel    = mState.imageIndex.getLevelIndex();
+        mBaseLayer       = mState.imageIndex.hasLayer() ? mState.imageIndex.getLayerIndex() : 0;
     }
     else if (egl::IsRenderbufferTarget(mState.target))
     {
@@ -75,7 +77,9 @@ egl::Error ImageVk::initialize(const egl::Display *display)
 
         mOwnsImage = false;
 
-        mBaseMipLevel = 0;
+        mBaseTextureType = gl::TextureType::_2D;
+        mBaseMipLevel    = 0;
+        mBaseLayer       = 0;
     }
     else
     {

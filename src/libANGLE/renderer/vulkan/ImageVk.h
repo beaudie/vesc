@@ -28,10 +28,14 @@ class ImageVk : public ImageImpl
     angle::Result orphan(const gl::Context *context, egl::ImageSibling *sibling) override;
 
     vk::ImageHelper *getImage() const { return mImage; }
+    gl::TextureType getImageTextureType() const { return mBaseTextureType; }
     uint32_t getImageBaseMipLevel() const { return mBaseMipLevel; }
+    uint32_t getImageBaseLayer() const { return mBaseLayer; }
 
   private:
+    gl::TextureType mBaseTextureType;
     uint32_t mBaseMipLevel;
+    uint32_t mBaseLayer;
 
     bool mOwnsImage;
     vk::ImageHelper *mImage;

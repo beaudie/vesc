@@ -155,12 +155,15 @@ class TextureVk : public TextureImpl
     // ImageHelper, taking into account mipmap or cube face offsets
     gl::ImageIndex getNativeImageIndex(const gl::ImageIndex &inputImageIndex) const;
     uint32_t getNativeImageMipLevel(uint32_t frontendMip) const;
+    uint32_t getNativeImageLayer(uint32_t frontendLayer) const;
 
     void releaseAndDeleteImage(const gl::Context *context, RendererVk *renderer);
     angle::Result ensureImageAllocated(RendererVk *renderer);
     void setImageHelper(RendererVk *renderer,
                         vk::ImageHelper *imageHelper,
+                        gl::TextureType imageType,
                         uint32_t imageMipOffset,
+                        uint32_t imageLayerOffset,
                         bool selfOwned);
 
     angle::Result redefineImage(const gl::Context *context,
@@ -236,7 +239,9 @@ class TextureVk : public TextureImpl
                                              const vk::Format &format);
 
     bool mOwnsImage;
+    gl::TextureType mImageNativeType;
     uint32_t mImageMipOffset;
+    uint32_t mImageLayerOffset;
     vk::ImageHelper *mImage;
 
     vk::ImageView mDrawBaseLevelImageView;

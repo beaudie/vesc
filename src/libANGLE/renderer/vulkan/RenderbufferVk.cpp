@@ -135,10 +135,12 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
 
     VkImageAspectFlags aspect = vk::GetFormatAspectFlags(textureFormat);
 
-    ANGLE_TRY(mImage->initImageView(contextVk, gl::TextureType::_2D, aspect, gl::SwizzleState(),
-                                    &mImageView, imageVk->getImageBaseMipLevel(), 1));
+    ANGLE_TRY(mImage->initLayerImageView(
+        contextVk, imageVk->getImageTextureType(), aspect, gl::SwizzleState(), &mImageView,
+        imageVk->getImageBaseMipLevel(), 1, imageVk->getImageBaseLayer(), 1));
 
-    mRenderTarget.init(mImage, &mImageView, imageVk->getImageBaseMipLevel(), 0, nullptr);
+    mRenderTarget.init(mImage, &mImageView, imageVk->getImageBaseMipLevel(),
+                       imageVk->getImageBaseLayer(), nullptr);
 
     return angle::Result::Continue;
 }
