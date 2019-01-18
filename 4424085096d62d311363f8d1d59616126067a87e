@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "cdf4a0af_ec153166",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-18T15:46:40Z",
+      "side": 1,
+      "message": "This might be finicky. I see you had some test failures on some configs. I wonder if this might be the reason.",
+      "range": {
+        "startLine": 492,
+        "startChar": 0,
+        "endLine": 499,
+        "endChar": 5
+      },
+      "revId": "4424085096d62d311363f8d1d59616126067a87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8919a77e_0621a74c",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 5
@@ -73,6 +96,53 @@
     },
     {
       "key": {
+        "uuid": "c4ca03cd_7fbd13ee",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6011,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-18T15:46:40Z",
+      "side": 1,
+      "message": "We can make the Context passed to syncDirtyObjects non-const. See other comment.",
+      "parentUuid": "7730ecae_e253df6c",
+      "range": {
+        "startLine": 6011,
+        "startChar": 42,
+        "endLine": 6011,
+        "endChar": 47
+      },
+      "revId": "4424085096d62d311363f8d1d59616126067a87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ad23008_b65a3c3c",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-18T15:46:40Z",
+      "side": 1,
+      "message": "maybe would update the naming here. see other comments.",
+      "range": {
+        "startLine": 1781,
+        "startChar": 18,
+        "endLine": 1781,
+        "endChar": 34
+      },
+      "revId": "4424085096d62d311363f8d1d59616126067a87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a446cad3_cdcea1d0",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 5
@@ -113,6 +183,168 @@
         "startChar": 4,
         "endLine": 1878,
         "endChar": 33
+      },
+      "revId": "4424085096d62d311363f8d1d59616126067a87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9a6025f_fdb4f7de",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1878,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-18T15:46:40Z",
+      "side": 1,
+      "message": "I looked into the uses of the Primitive Mode. Looks like you need it to tell the GLES 1 shader if we\u0027re using point rendering or not. This saves a bunch of instructions in the shader.\n\nHow about for now we just always compute those extra instructions in calcPointSize ? It\u0027s some extra work on the GPU. But hopefully we don\u0027t have to have peak GLES 1 shader performance. If it becomes a bottleneck we can leave a comment to revisit this later.\n\nWith the change to the shader we could forgo using the primitive mode in GLES1Renderer::prepareForDraw entirely. WDYT?",
+      "parentUuid": "06505e9b_e5089f4c",
+      "range": {
+        "startLine": 1878,
+        "startChar": 4,
+        "endLine": 1878,
+        "endChar": 33
+      },
+      "revId": "4424085096d62d311363f8d1d59616126067a87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c639c08_bc59d42b",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-18T15:46:40Z",
+      "side": 1,
+      "message": "let\u0027s shoot for removing these four lines.",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 5
+      },
+      "revId": "4424085096d62d311363f8d1d59616126067a87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87464325_761072f3",
+        "filename": "src/libANGLE/GLES1State.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-18T15:46:40Z",
+      "side": 1,
+      "message": "nit: you can omit this",
+      "range": {
+        "startLine": 56,
+        "startChar": 6,
+        "endLine": 56,
+        "endChar": 19
+      },
+      "revId": "4424085096d62d311363f8d1d59616126067a87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5727f6d_5eb840ef",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-18T15:46:40Z",
+      "side": 1,
+      "message": "nit: maybe could add a comment here that this could be scoped to GLES 1 enums. not necessary to change it though.",
+      "range": {
+        "startLine": 947,
+        "startChar": 4,
+        "endLine": 947,
+        "endChar": 55
+      },
+      "revId": "4424085096d62d311363f8d1d59616126067a87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9b1f980_f3f195d5",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2658,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-18T15:46:40Z",
+      "side": 1,
+      "message": "you can change these methods to take mutable Contexts (non-const) as you and Geoff were discussing. This is all front-end so it should be fine.",
+      "range": {
+        "startLine": 2658,
+        "startChar": 42,
+        "endLine": 2658,
+        "endChar": 48
+      },
+      "revId": "4424085096d62d311363f8d1d59616126067a87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1da05637_ddef0092",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-18T15:46:40Z",
+      "side": 1,
+      "message": "nit: how about DIRTY_OBJECT_GLES1_UNIFORMS or DIRTY_OBJECT_GLES1_RENDERER ?",
+      "range": {
+        "startLine": 553,
+        "startChar": 8,
+        "endLine": 553,
+        "endChar": 39
+      },
+      "revId": "4424085096d62d311363f8d1d59616126067a87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a569bcc8_f76956f6",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-18T15:46:40Z",
+      "side": 1,
+      "message": "nit: how about syncGLES1Uniforms or syncGLES1Renderer ?",
+      "range": {
+        "startLine": 664,
+        "startChar": 16,
+        "endLine": 664,
+        "endChar": 36
       },
       "revId": "4424085096d62d311363f8d1d59616126067a87e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
