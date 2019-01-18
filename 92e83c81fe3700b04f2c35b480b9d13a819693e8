@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e20d772e_9c4e0c35",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-18T23:42:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "df61e3f3_1574f360",
+      "range": {
+        "startLine": 263,
+        "startChar": 4,
+        "endLine": 263,
+        "endChar": 9
+      },
+      "revId": "92e83c81fe3700b04f2c35b480b9d13a819693e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "129fdddc_2c9974e5",
         "filename": "src/common/PoolAlloc.cpp",
         "patchSetId": 20
@@ -45,6 +69,30 @@
       "revId": "92e83c81fe3700b04f2c35b480b9d13a819693e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cdd4422_96f4251d",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-18T23:42:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "129fdddc_2c9974e5",
+      "range": {
+        "startLine": 271,
+        "startChar": 8,
+        "endLine": 271,
+        "endChar": 13
+      },
+      "revId": "92e83c81fe3700b04f2c35b480b9d13a819693e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "e2881f1c_4a73c8b4",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-18T23:42:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a35234ee_98546c42",
+      "range": {
+        "startLine": 271,
+        "startChar": 0,
+        "endLine": 274,
+        "endChar": 48
+      },
+      "revId": "92e83c81fe3700b04f2c35b480b9d13a819693e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b1cf4692_1cfb4174",
         "filename": "src/common/PoolAlloc.cpp",
         "patchSetId": 20
@@ -91,6 +163,30 @@
       "revId": "92e83c81fe3700b04f2c35b480b9d13a819693e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76fba1d9_ab669da8",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-18T23:42:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b1cf4692_1cfb4174",
+      "range": {
+        "startLine": 282,
+        "startChar": 7,
+        "endLine": 283,
+        "endChar": 9
+      },
+      "revId": "92e83c81fe3700b04f2c35b480b9d13a819693e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "953d6a51_f50b310d",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-18T23:42:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d95393e7_be2fc1e8",
+      "range": {
+        "startLine": 88,
+        "startChar": 4,
+        "endLine": 88,
+        "endChar": 11
+      },
+      "revId": "92e83c81fe3700b04f2c35b480b9d13a819693e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f58e7d46_22646c65",
         "filename": "src/common/PoolAlloc.h",
         "patchSetId": 20
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "a43f73c5_b5d47b25",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-18T23:42:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f58e7d46_22646c65",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 12
+      },
+      "revId": "92e83c81fe3700b04f2c35b480b9d13a819693e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2923f018_7644a343",
         "filename": "src/common/PoolAlloc.h",
         "patchSetId": 20
@@ -151,6 +295,30 @@
       "writtenOn": "2019-01-18T19:42:55Z",
       "side": 1,
       "message": "I think you can revert this for now? Not used for realloc I think.",
+      "range": {
+        "startLine": 212,
+        "startChar": 0,
+        "endLine": 214,
+        "endChar": 20
+      },
+      "revId": "92e83c81fe3700b04f2c35b480b9d13a819693e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab0d6535_427f4bd0",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-18T23:42:41Z",
+      "side": 1,
+      "message": "See comment for initAllocation() below. Had to include this so that initAllocation() works correctly.",
+      "parentUuid": "2923f018_7644a343",
       "range": {
         "startLine": 212,
         "startChar": 0,
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "e261b1c3_27c8c71d",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-18T23:42:41Z",
+      "side": 1,
+      "message": "This writes the data into the Allocation block of the header, which includes writing numBytes into size value. Without this the size of the allocation is not saved.",
+      "parentUuid": "5a4f6ef9_aff430e9",
+      "range": {
+        "startLine": 227,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 20
+      },
+      "revId": "92e83c81fe3700b04f2c35b480b9d13a819693e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3aa23cd9_a3009607",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 20
@@ -200,6 +392,24 @@
       "revId": "92e83c81fe3700b04f2c35b480b9d13a819693e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea7ee3aa_b553f1e0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-18T23:42:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3aa23cd9_a3009607",
+      "revId": "92e83c81fe3700b04f2c35b480b9d13a819693e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
