@@ -151,10 +151,17 @@ class TextureVk : public TextureImpl
     angle::Result ensureImageInitialized(vk::Context *context);
 
   private:
+    // Transform an image index from the frontend into one that can be used on the backing
+    // ImageHelper, taking into account mipmap or cube face offsets
+    gl::ImageIndex getNativeImageIndex(const gl::ImageIndex &inputImageIndex) const;
+
     void destroyImage(const gl::Context *context, RendererVk *renderer);
     void releaseNonOwnedImage(const gl::Context *context, RendererVk *renderer);
     angle::Result ensureImageAllocated(RendererVk *renderer);
-    void setImageHelper(RendererVk *renderer, vk::ImageHelper *imageHelper, bool selfOwned);
+    void setImageHelper(RendererVk *renderer,
+                        vk::ImageHelper *imageHelper,
+                        uint32_t imageMipOffset,
+                        bool selfOwned);
 
     angle::Result redefineImage(const gl::Context *context,
                                 const gl::ImageIndex &index,
@@ -228,7 +235,9 @@ class TextureVk : public TextureImpl
                                              const vk::Format &format);
 
     bool mOwnsImage;
+    uint32_t mImageMipOffset;
     vk::ImageHelper *mImage;
+
     vk::ImageView mDrawBaseLevelImageView;
     vk::ImageView mReadBaseLevelImageView;
     vk::ImageView mReadMipmapImageView;
