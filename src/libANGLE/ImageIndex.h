@@ -28,9 +28,7 @@ class ImageIndex
 
     TextureType getType() const { return mType; }
 
-    void setLevelIndex(GLint levelIndex) { mLevelIndex = levelIndex; }
     GLint getLevelIndex() const { return mLevelIndex; }
-
     GLint getLayerIndex() const { return mLayerIndex; }
     GLint getLayerCount() const { return mLayerCount; }
 
