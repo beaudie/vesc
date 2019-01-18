@@ -1338,10 +1338,11 @@ angle::Result ImageHelper::initImageView(Context *context,
                                          VkImageAspectFlags aspectMask,
                                          const gl::SwizzleState &swizzleMap,
                                          ImageView *imageViewOut,
+                                         uint32_t baseMipLevel,
                                          uint32_t levelCount)
 {
-    return initLayerImageView(context, textureType, aspectMask, swizzleMap, imageViewOut, 0,
-                              levelCount, 0, mLayerCount);
+    return initLayerImageView(context, textureType, aspectMask, swizzleMap, imageViewOut,
+                              baseMipLevel, levelCount, 0, mLayerCount);
 }
 
 angle::Result ImageHelper::initLayerImageView(Context *context,
@@ -1958,6 +1959,7 @@ angle::Result ImageHelper::allocateStagingMemory(ContextVk *contextVk,
 }
 
 angle::Result ImageHelper::flushStagedUpdates(Context *context,
+                                              uint32_t baseLevel,
                                               uint32_t levelCount,
                                               vk::CommandBuffer *commandBuffer)
 {
@@ -1984,7 +1986,7 @@ angle::Result ImageHelper::flushStagedUpdates(Context *context,
         // It's possible we've accumulated updates that are no longer applicable if the image has
         // never been flushed but the image description has changed. Check if this level exist for
         // this image.
-        if (updateMipLevel >= levelCount)
+        if (updateMipLevel < baseLevel || updateMipLevel >= baseLevel + levelCount)
         {
             updatesToKeep.emplace_back(update);
             continue;

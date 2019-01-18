@@ -18,7 +18,7 @@
 namespace rx
 {
 RenderTargetVk::RenderTargetVk()
-    : mImage(nullptr), mImageView(nullptr), mLayerIndex(0), mOwner(nullptr)
+    : mImage(nullptr), mImageView(nullptr), mMipIndex(0), mLayerIndex(0), mOwner(nullptr)
 {}
 
 RenderTargetVk::~RenderTargetVk() {}
@@ -26,17 +26,20 @@ RenderTargetVk::~RenderTargetVk() {}
 RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
     : mImage(other.mImage),
       mImageView(other.mImageView),
+      mMipIndex(other.mMipIndex),
       mLayerIndex(other.mLayerIndex),
       mOwner(other.mOwner)
 {}
 
 void RenderTargetVk::init(vk::ImageHelper *image,
                           vk::ImageView *imageView,
+                          size_t mipIndex,
                           size_t layerIndex,
                           TextureVk *owner)
 {
     mImage      = image;
     mImageView  = imageView;
+    mMipIndex   = mipIndex;
     mLayerIndex = layerIndex;
     mOwner      = owner;
 }
@@ -45,6 +48,7 @@ void RenderTargetVk::reset()
 {
     mImage      = nullptr;
     mImageView  = nullptr;
+    mMipIndex   = 0;
     mLayerIndex = 0;
     mOwner      = nullptr;
 }
