@@ -168,13 +168,8 @@ void main()
 
         // Avoid calculating point size stuff
         // if we are not rendering points.
-        if (point_rasterization)
         {
             gl_PointSize = calcPointSize(ndcPos);
-        }
-        else
-        {
-            gl_PointSize = pointsize;
         }
 
         texcoord0_varying = texture_matrix[0] * texcoord0;
@@ -1073,7 +1068,7 @@ void main()
     {
         vec4 textureColor;
 
-        if (point_rasterization && point_sprite_enabled &&
+        if (point_sprite_enabled &&
             point_sprite_coord_replace[i]) {
             textureColor = getPointSpriteTextureColor(i);
         } else {
