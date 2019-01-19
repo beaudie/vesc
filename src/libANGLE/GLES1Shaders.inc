@@ -168,13 +168,8 @@ void main()
 
         // Avoid calculating point size stuff
         // if we are not rendering points.
-        if (point_rasterization)
         {
             gl_PointSize = calcPointSize(ndcPos);
-        }
-        else
-        {
-            gl_PointSize = pointsize;
         }
 
         texcoord0_varying = texture_matrix[0] * texcoord0;
