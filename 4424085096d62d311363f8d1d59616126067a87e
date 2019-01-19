@@ -238,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "d6b4a9e1_dac50a66",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1878,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-19T23:59:47Z",
+      "side": 1,
+      "message": "Can you look at https://crrev.com/c/1422493 and come up with a counterexample test? I tested locally but none of our GLES1 tests seemed to fail with this change. My understanding of GLES 1.0 is a bit loose.",
+      "parentUuid": "34a6b792_596b6f7e",
+      "range": {
+        "startLine": 1878,
+        "startChar": 4,
+        "endLine": 1878,
+        "endChar": 33
+      },
+      "revId": "4424085096d62d311363f8d1d59616126067a87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4c639c08_bc59d42b",
         "filename": "src/libANGLE/Context.inl.h",
         "patchSetId": 5
