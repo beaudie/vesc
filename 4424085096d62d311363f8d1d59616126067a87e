@@ -214,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "34a6b792_596b6f7e",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1878,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2019-01-19T23:44:53Z",
+      "side": 1,
+      "message": "Thanks for the suggestion; unfortunately, that\u0027s a no-go as in the fragment shader, if we\u0027re not actually using point rendering but point sprites are enabled and point coord replace is enabled, the drawing will be wrong.",
+      "parentUuid": "c9a6025f_fdb4f7de",
+      "range": {
+        "startLine": 1878,
+        "startChar": 4,
+        "endLine": 1878,
+        "endChar": 33
+      },
+      "revId": "4424085096d62d311363f8d1d59616126067a87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4c639c08_bc59d42b",
         "filename": "src/libANGLE/Context.inl.h",
         "patchSetId": 5
