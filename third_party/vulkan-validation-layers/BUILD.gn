@@ -140,8 +140,7 @@ foreach(script_and_dep, helper_script_and_deps) {
   }
 }
 
-raw_spirv_tools_dir =
-    rebase_path("$angle_root/third_party/spirv-tools/src", root_build_dir)
+raw_spirv_tools_dir = rebase_path("${angle_spirv_tools_dir}", root_build_dir)
 
 spirv_git_is_present = exec_script("$angle_root/src/commit_id.py",
                                    [
