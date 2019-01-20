@@ -34,6 +34,24 @@
       "revId": "c3abb7f1a250abb03a169947395cf319c7324227",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "358bd085_69c58a35",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2019-01-20T00:36:33Z",
+      "side": 0,
+      "message": "That seems like a false negative that requires a new test; when drawing triangles, we shouldn\u0027t use gl_PointCoord even when point sprits are enabled.",
+      "parentUuid": "e36bffd5_d843db91",
+      "revId": "c3abb7f1a250abb03a169947395cf319c7324227",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
