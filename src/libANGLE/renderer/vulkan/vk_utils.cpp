@@ -483,6 +483,11 @@ PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReportCallbackEXT = nullptr;
 // VK_KHR_get_physical_device_properties2
 PFN_vkGetPhysicalDeviceProperties2KHR vkGetPhysicalDeviceProperties2KHR = nullptr;
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+// VK_FUCHSIA_imagepipe_surface
+PFN_vkCreateImagePipeSurfaceFUCHSIA vkCreateImagePipeSurfaceFUCHSIA = nullptr;
+#endif
+
 #define GET_FUNC(vkName)                                                                   \
     do                                                                                     \
     {                                                                                      \
@@ -506,6 +511,13 @@ void InitGetPhysicalDeviceProperties2KHRFunctions(VkInstance instance)
 {
     GET_FUNC(vkGetPhysicalDeviceProperties2KHR);
 }
+
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+void InitImagePipeSurfaceFUCHSIAFunctions(VkInstance instance)
+{
+    GET_FUNC(vkCreateImagePipeSurfaceFUCHSIA);
+}
+#endif
 
 #undef GET_FUNC
 
