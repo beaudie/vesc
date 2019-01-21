@@ -24,7 +24,7 @@
 #    endif
 typedef DWORD TLSIndex;
 #    define TLS_INVALID_INDEX (TLS_OUT_OF_INDEXES)
-#elif defined(ANGLE_PLATFORM_POSIX)
+#elif defined(ANGLE_PLATFORM_POSIX) || defined(ANGLE_PLATFORM_FUCHSIA)
 #    include <errno.h>
 #    include <pthread.h>
 #    include <semaphore.h>
