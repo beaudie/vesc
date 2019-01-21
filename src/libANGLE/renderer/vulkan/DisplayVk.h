@@ -98,6 +98,7 @@ class DisplayVk : public DisplayImpl, public vk::Context
                                                EGLint width,
                                                EGLint height) = 0;
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
+    virtual void generateExtensionsVk(egl::DisplayExtensions *outExtensions) const = 0;
     void generateCaps(egl::Caps *outCaps) const override;
 
     mutable angle::ScratchBuffer mScratchBuffer;

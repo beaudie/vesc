@@ -39,6 +39,12 @@ if (build_with_chromium) {
     ]
     public_configs += [ ":angle_internal_gtest_config" ]
     configs -= [ "${angle_root}:extra_warnings" ]
+    if (is_fuchsia) {
+      public_deps = [
+        "//third_party/fuchsia-sdk/sdk:fdio",
+        "//third_party/fuchsia-sdk/sdk:zx",
+      ]
+    }
   }
 
   config("angle_internal_gmock_config") {
@@ -143,7 +149,7 @@ angle_test("angle_unittests") {
          ]
 }
 
-if (is_win || is_linux || is_mac || is_android) {
+if (is_win || is_linux || is_mac || is_android || is_fuchsia) {
   import("angle_end2end_tests.gni")
 
   angle_test("angle_end2end_tests") {
@@ -226,7 +232,7 @@ if (is_win || is_linux || is_mac || is_android) {
   }
 }
 
-if (is_win || is_linux || is_android || is_mac) {
+if (is_win || is_linux || is_android || is_mac || is_fuchsia) {
   import("angle_perftests.gni")
 
   # This test suite is for perf tests that use ANGLE's internals in some direct way.
