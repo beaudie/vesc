@@ -65,6 +65,26 @@ util_x11_sources = [
   "util/x11/X11Window.h",
 ]
 
+util_fuchsia_sources = [
+  "util/fuchsia/FuchsiaTimer.cpp",
+  "util/fuchsia/FuchsiaTimer.h",
+  "util/fuchsia/Fuchsia_system_utils.cpp",
+  "util/fuchsia/ScenicWindow.cpp",
+  "util/fuchsia/ScenicWindow.h",
+]
+
+util_fuchsia_deps = [
+  "//third_party/fuchsia-egl",
+  "//third_party/fuchsia-sdk/sdk:async_loop_cpp",
+  "//third_party/fuchsia-sdk/sdk:ui_policy",
+  "//third_party/fuchsia-sdk/sdk:fdio",
+  "//third_party/fuchsia-sdk/sdk:images",
+  "//third_party/fuchsia-sdk/sdk:scenic_cpp",
+  "//third_party/fuchsia-sdk/sdk:ui_gfx",
+  "//third_party/fuchsia-sdk/sdk:ui_scenic",
+  "//third_party/fuchsia-sdk/sdk:ui_viewsv1",
+]
+
 util_ozone_sources = [
   "util/ozone/OzonePixmap.cpp",
   "util/ozone/OzoneWindow.cpp",
