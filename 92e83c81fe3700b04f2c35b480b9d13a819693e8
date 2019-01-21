@@ -190,6 +190,23 @@
     },
     {
       "key": {
+        "uuid": "3253f42e_fe47230f",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-21T16:24:50Z",
+      "side": 1,
+      "message": "1. If there are guards, you need to push the post-guard back.\n2. You need to update origHead-\u003esize to contain the new size.",
+      "revId": "92e83c81fe3700b04f2c35b480b9d13a819693e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d95393e7_be2fc1e8",
         "filename": "src/common/PoolAlloc.h",
         "patchSetId": 20
@@ -234,6 +251,29 @@
       "revId": "92e83c81fe3700b04f2c35b480b9d13a819693e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "01994ddb_69d440f2",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-21T16:24:50Z",
+      "side": 1,
+      "message": "These two are unnecessary for realloc, so you can put them under `#ifdef GUARD_BLOCKS`.",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 60
+      },
+      "revId": "92e83c81fe3700b04f2c35b480b9d13a819693e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
