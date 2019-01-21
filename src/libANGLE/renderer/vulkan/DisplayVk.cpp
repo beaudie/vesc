@@ -183,6 +183,8 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     outExtensions->fenceSync = true;
     outExtensions->waitSync  = true;
+
+    generateExtensionsVk(outExtensions);
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const

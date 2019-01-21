@@ -115,4 +115,6 @@ const char *DisplayVkXcb::getWSIExtension() const
     return VK_KHR_XCB_SURFACE_EXTENSION_NAME;
 }
 
+void DisplayVkXcb::generateExtensionsVk(egl::DisplayExtensions *outExtensions) const {}
+
 }  // namespace rx

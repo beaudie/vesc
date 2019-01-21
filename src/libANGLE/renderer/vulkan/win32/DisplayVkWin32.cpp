@@ -52,4 +52,6 @@ const char *DisplayVkWin32::getWSIExtension() const
     return VK_KHR_WIN32_SURFACE_EXTENSION_NAME;
 }
 
+void DisplayVkWin32::generateExtensionsVk(egl::DisplayExtensions *outExtensions) const {}
+
 }  // namespace rx
