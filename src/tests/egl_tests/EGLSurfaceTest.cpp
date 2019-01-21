@@ -139,8 +139,18 @@ class EGLSurfaceTest : public EGLTest
         mConfig = config;
 
         std::vector<EGLint> surfaceAttributes;
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+        surfaceAttributes.push_back(EGL_FIXED_SIZE_ANGLE);
+        surfaceAttributes.push_back(EGL_TRUE);
+        surfaceAttributes.push_back(EGL_WIDTH);
+        surfaceAttributes.push_back(mOSWindow->getWidth());
+        surfaceAttributes.push_back(EGL_HEIGHT);
+        surfaceAttributes.push_back(mOSWindow->getHeight());
+#endif
         surfaceAttributes.push_back(EGL_NONE);
         surfaceAttributes.push_back(EGL_NONE);
+
+        mOSWindow->resetNativeWindow();
 
         // Create first window surface
         mWindowSurface = eglCreateWindowSurface(mDisplay, mConfig, mOSWindow->getNativeWindow(),
