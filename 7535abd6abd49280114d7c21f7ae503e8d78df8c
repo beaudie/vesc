@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "783a48c3_22256eaa",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-21T16:21:09Z",
+      "side": 1,
+      "message": "1. If there are guards, you need to push the post-guard back.\n2. You need to update origHead-\u003esize to contain the new size.",
+      "revId": "7535abd6abd49280114d7c21f7ae503e8d78df8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d98f6c00_6aa13036",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-21T16:21:09Z",
+      "side": 1,
+      "message": "These two are unnecessary for realloc, so you can put them under `#ifdef GUARD_BLOCKS`.",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 60
+      },
+      "revId": "7535abd6abd49280114d7c21f7ae503e8d78df8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
