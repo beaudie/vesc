@@ -204,18 +204,16 @@ const char *VulkanResultString(VkResult result)
 
 bool GetAvailableValidationLayers(const std::vector<VkLayerProperties> &layerProps,
                                   bool mustHaveLayers,
-                                  const char *const **enabledLayerNames,
-                                  uint32_t *enabledLayerCount)
+                                  std::vector<const char *> *enabledLayerNames)
 {
     if (HasStandardValidationLayer(layerProps))
     {
-        *enabledLayerNames = &g_VkStdValidationLayerName;
-        *enabledLayerCount = 1;
+        enabledLayerNames->push_back(g_VkStdValidationLayerName);
     }
     else if (HasValidationLayers(layerProps))
     {
-        *enabledLayerNames = g_VkValidationLayerNames;
-        *enabledLayerCount = g_VkNumValidationLayerNames;
+        enabledLayerNames->insert(enabledLayerNames->end(), g_VkValidationLayerNames,
+                                  g_VkValidationLayerNames + g_VkNumValidationLayerNames);
     }
     else
     {
@@ -229,8 +227,6 @@ bool GetAvailableValidationLayers(const std::vector<VkLayerProperties> &layerPro
             WARN() << "Vulkan validation layers are missing.";
         }
 
-        *enabledLayerNames = nullptr;
-        *enabledLayerCount = 0;
         return false;
     }
 

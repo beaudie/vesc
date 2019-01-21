@@ -1,29 +1,21 @@
 //
-// Copyright 2016 The ANGLE Project Authors. All rights reserved.
+// Copyright 2019 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// DisplayVkXcb.h:
-//    Defines the class interface for DisplayVkXcb, implementing DisplayVk for X via XCB.
-//
 
-#ifndef LIBANGLE_RENDERER_VULKAN_XCB_DISPLAYVKXCB_H_
-#define LIBANGLE_RENDERER_VULKAN_XCB_DISPLAYVKXCB_H_
+#ifndef LIBANGLE_RENDERER_VULKAN_FUCHSIA_DISPLAYVKFUCHSIA_H_
+#define LIBANGLE_RENDERER_VULKAN_FUCHSIA_DISPLAYVKFUCHSIA_H_
 
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
-
-struct xcb_connection_t;
 
 namespace rx
 {
 
-class DisplayVkXcb : public DisplayVk
+class DisplayVkFuchsia : public DisplayVk
 {
   public:
-    DisplayVkXcb(const egl::DisplayState &state);
-
-    egl::Error initialize(egl::Display *display) override;
-    void terminate() override;
+    DisplayVkFuchsia(const egl::DisplayState &state);
 
     bool isValidNativeWindow(EGLNativeWindowType window) const override;
 
@@ -36,11 +28,9 @@ class DisplayVkXcb : public DisplayVk
     bool checkConfigSupport(egl::Config *config) override;
 
     const char *getWSIExtension() const override;
-
-  private:
-    xcb_connection_t *mXcbConnection;
+    const char *getWSILayer() const override;
 };
 
 }  // namespace rx
 
-#endif  // LIBANGLE_RENDERER_VULKAN_XCB_DISPLAYVKXCB_H_
+#endif  // LIBANGLE_RENDERER_VULKAN_FUCHSIA_DISPLAYVKFUCHSIA_H_

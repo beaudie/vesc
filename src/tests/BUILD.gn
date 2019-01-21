@@ -38,6 +38,12 @@ if (build_with_chromium) {
       "${angle_googletest_dir}/googletest/src/gtest-all.cc",
     ]
     public_configs += [ ":angle_internal_gtest_config" ]
+    if (is_fuchsia) {
+      public_deps = [
+        "//third_party/fuchsia-sdk/sdk:fdio",
+        "//third_party/fuchsia-sdk/sdk:zx",
+      ]
+    }
   }
 
   config("angle_internal_gmock_config") {
@@ -64,11 +70,15 @@ if (build_with_chromium) {
     testonly = true
     deps = [
       "//src/tests:angle_end2end_tests",
-      "//src/tests:angle_perftests",
       "//src/tests:angle_unittests",
-      "//src/tests:angle_white_box_perftests",
       "//src/tests:angle_white_box_tests",
     ]
+    if (!is_fuchsia) {
+      deps += [
+        "//src/tests:angle_perftests",
+        "//src/tests:angle_white_box_perftests",
+      ]
+    }
     if (build_angle_deqp_tests) {
       deps += [
         "//src/tests:angle_deqp_egl_no_gtest",
@@ -142,7 +152,7 @@ angle_test("angle_unittests") {
          ]
 }
 
-if (is_win || is_linux || is_mac || is_android) {
+if (is_win || is_linux || is_mac || is_android || is_fuchsia) {
   import("angle_end2end_tests.gni")
 
   angle_test("angle_end2end_tests") {

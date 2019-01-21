@@ -110,6 +110,24 @@ typedef void*                           EGLNativeDisplayType;
 typedef struct egl_native_pixmap_t*     EGLNativePixmapType;
 typedef struct ANativeWindow*           EGLNativeWindowType;
 
+#elif defined(__Fuchsia__)
+
+#include <zircon/types.h>
+
+#define FUCHSIA_EGL_WINDOW_MAGIC 0x80738870  // "FXIP"
+
+struct FuchsiaEGLWindow {
+  uint32_t magic;  // = FUCHSIA_EGL_WINDOW_MAGIC
+  uint32_t size;   // = sizeof(FuchsiaEGLWindow)
+  zx_handle_t imagePipeHandle;
+  uint32_t width;
+  uint32_t height;
+};
+
+typedef int   EGLNativeDisplayType;
+typedef void *EGLNativePixmapType;
+typedef void *EGLNativeWindowType;
+
 #elif defined(USE_OZONE)
 
 typedef intptr_t EGLNativeDisplayType;
@@ -139,12 +157,6 @@ typedef void *EGLNativeWindowType;
 typedef void              *EGLNativeDisplayType;
 typedef khronos_uintptr_t  EGLNativePixmapType;
 typedef khronos_uintptr_t  EGLNativeWindowType;
-
-#elif defined(__Fuchsia__)
-
-typedef int   EGLNativeDisplayType;
-typedef void *EGLNativePixmapType;
-typedef void *EGLNativeWindowType
 
 #else
 #error "Platform not recognized"
