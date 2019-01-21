@@ -181,6 +181,10 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     outExtensions->fenceSync = true;
     outExtensions->waitSync  = true;
+
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+    outExtensions->windowFixedSize = true;
+#endif
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const

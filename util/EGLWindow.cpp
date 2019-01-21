@@ -303,7 +303,25 @@ bool EGLWindow::initializeDisplayAndSurface(OSWindow *osWindow, angle::Library *
         surfaceAttributes.push_back(mRobustResourceInit.value() ? EGL_TRUE : EGL_FALSE);
     }
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+    fprintf(stderr, "display exts: %s\n", displayExtensions);
+    bool hasAngleWindowFixedSize =
+        strstr(displayExtensions, "EGL_ANGLE_window_fixed_size") != nullptr;
+    if (hasAngleWindowFixedSize)
+    {
+        fprintf(stderr, "fixed size: %d %d \n", osWindow->getWidth(), osWindow->getHeight());
+        surfaceAttributes.push_back(EGL_FIXED_SIZE_ANGLE);
+        surfaceAttributes.push_back(EGL_TRUE);
+        surfaceAttributes.push_back(EGL_WIDTH);
+        surfaceAttributes.push_back(osWindow->getWidth());
+        surfaceAttributes.push_back(EGL_HEIGHT);
+        surfaceAttributes.push_back(osWindow->getHeight());
+    }
+#endif
+
     surfaceAttributes.push_back(EGL_NONE);
+
+    osWindow->resetNativeWindow();
 
     mSurface = eglCreateWindowSurface(mDisplay, mConfig, osWindow->getNativeWindow(),
                                       &surfaceAttributes[0]);
