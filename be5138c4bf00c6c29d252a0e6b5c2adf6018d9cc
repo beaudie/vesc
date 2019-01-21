@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f41a26f2_689e337b",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-21T21:43:20Z",
+      "side": 0,
+      "message": "Randomly noticed this. `eglWaitClient` says it behaves as `glFinish`.",
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
