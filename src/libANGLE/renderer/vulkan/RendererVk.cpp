@@ -81,6 +81,16 @@ VkResult VerifyExtensionsPresent(const std::vector<VkExtensionProperties> &exten
 
     for (const char *extensionName : enabledExtensionNames)
     {
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+        if (strcmp(extensionName, VK_KHR_SURFACE_EXTENSION_NAME) == 0 ||
+            strcmp(extensionName, VK_KHR_SWAPCHAIN_EXTENSION_NAME) == 0 ||
+            strcmp(extensionName, VK_FUCHSIA_IMAGEPIPE_SURFACE_EXTENSION_NAME) == 0)
+        {
+            // VK_LAYER_FUCHSIA_imagepipe_swapchain provides these extensions,
+            // preventing them from being enumerated.
+            continue;
+        }
+#endif
         if (extensionNames.count(extensionName) == 0)
         {
             return VK_ERROR_EXTENSION_NOT_PRESENT;
@@ -352,7 +362,7 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
 // Changing CWD and setting environment variables makes no sense on Android,
 // since this code is a part of Java application there.
 // Android Vulkan loader doesn't need this either.
-#if !defined(ANGLE_PLATFORM_ANDROID)
+#if !defined(ANGLE_PLATFORM_ANDROID) && !defined(ANGLE_PLATFORM_FUCHSIA)
         if (enableMockICD)
         {
             // Override environment variable to use built Mock ICD
@@ -741,6 +751,10 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         ANGLE_VK_TRY(displayVk, vkCreateDebugReportCallbackEXT(mInstance, &debugReportInfo, nullptr,
                                                                &mDebugReportCallback));
     }
+
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+    InitFuchsiaImagePipeSurfaceFunctions(mInstance);
+#endif
 
     uint32_t physicalDeviceCount = 0;
     ANGLE_VK_TRY(displayVk, vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount, nullptr));

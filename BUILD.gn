@@ -459,15 +459,20 @@ config("libANGLE_config") {
 }
 
 if (angle_enable_vulkan) {
+  if (is_fuchsia) {
+    config("fuchsia_vulkan_config") {
+      defines = [ "VK_USE_PLATFORM_FUCHSIA" ]
+    }
+  }
+
   # Use this target to include everything ANGLE needs for Vulkan.
   group("angle_vulkan") {
     public_deps = [
       "$angle_root/third_party/vulkan-headers:vulkan_headers",
     ]
-    public_configs =
-        [ "$angle_root/third_party/vulkan-validation-layers:vulkan_config" ]
+    public_configs = []
     data_deps = []
-    if (!is_android) {
+    if (!is_android && !is_fuchsia) {
       deps = [
         "$angle_root/third_party/vulkan-loader:libvulkan",
       ]
@@ -475,11 +480,25 @@ if (angle_enable_vulkan) {
       public_configs +=
           [ "$angle_root/third_party/vulkan-loader:vulkan_loader_config" ]
     }
+    if (is_fuchsia) {
+      public_deps += [
+        "//third_party/fuchsia-sdk:vulkan_base",
+        "//third_party/fuchsia-sdk/sdk:vulkan",
+      ]
+      public_configs += [ ":fuchsia_vulkan_config" ]
+    } else {
+      public_configs +=
+          [ "$angle_root/third_party/vulkan-validation-layers:vulkan_config" ]
+    }
 
     if (angle_enable_vulkan_validation_layers) {
-      data_deps += [ "$angle_root/third_party/vulkan-validation-layers:vulkan_validation_layers" ]
-      if (!is_android) {
-        data_deps += [ "$angle_root/third_party/vulkan-validation-layers:vulkan_gen_json_files" ]
+      if (is_fuchsia) {
+        deps = [ "//third_party/fuchsia-sdk:vulkan_validation" ]
+      } else {
+        data_deps += [ "$angle_root/third_party/vulkan-validation-layers:vulkan_validation_layers" ]
+        if (!is_android) {
+          data_deps += [ "$angle_root/third_party/vulkan-validation-layers:vulkan_gen_json_files" ]
+        }
       }
     }
   }
@@ -581,6 +600,9 @@ angle_static_library("libANGLE") {
     }
     if (is_linux) {
       sources += libangle_vulkan_xcb_sources
+    }
+    if (is_fuchsia) {
+      sources += libangle_vulkan_fuchsia_sources
     }
     if (is_android) {
       sources += libangle_vulkan_android_sources
@@ -888,10 +910,6 @@ foreach(is_shared_library,
       ]
     }
 
-    if (use_ozone) {
-      sources += util_ozone_sources
-    }
-
     configs += [ ":debug_annotations_config" ]
 
     public_configs += [ ":angle_util_config" ]
@@ -901,6 +919,14 @@ foreach(is_shared_library,
       ":angle_util_loader_headers",
     ]
 
+    public_deps = []
+    if (is_fuchsia) {
+      sources += util_fuchsia_sources
+      public_deps += util_fuchsia_deps
+    } else if (use_ozone) {
+      sources += util_ozone_sources
+    }
+
     if (is_shared_library) {
       defines = [ "LIBANGLE_UTIL_IMPLEMENTATION" ]
 
@@ -908,9 +934,7 @@ foreach(is_shared_library,
         sources += util_win_shared_sources
       }
 
-      public_deps = [
-        ":angle_util_loader",
-      ]
+      public_deps += [ ":angle_util_loader" ]
 
       if (is_mac && !is_component_build) {
         ldflags = [
