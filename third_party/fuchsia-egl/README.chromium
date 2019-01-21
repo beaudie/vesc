@@ -1,0 +1,9 @@
+Name: Fuchsia EGL
+URL: https://chromium.googlesource.com/angle/angle/+/master/third_party/fuchsia-egl/
+Version: 0
+Security Critical: yes
+License: BSD
+License File: LICENSE
+
+Description:
+This directory contains an EGL platform binding for Fuchsia.
