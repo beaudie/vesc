@@ -352,24 +352,22 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 
     // TODO(jmadill): Support devices which don't support copy. We use this for ReadPixels.
     ANGLE_VK_CHECK(displayVk,
-                   (surfaceCaps.supportedUsageFlags & VK_IMAGE_USAGE_TRANSFER_SRC_BIT) != 0,
+                   (surfaceCaps.supportedUsageFlags & kSurfaceVKColorImageUsageFlags) ==
+                       kSurfaceVKColorImageUsageFlags,
                    VK_ERROR_INITIALIZATION_FAILED);
 
     EGLAttrib attribWidth  = mState.attributes.get(EGL_WIDTH, 0);
     EGLAttrib attribHeight = mState.attributes.get(EGL_HEIGHT, 0);
 
+    fprintf(stderr, "attribWidth: %ld\n", attribWidth);
+    fprintf(stderr, "attribHeight: %ld\n", attribHeight);
+
     if (surfaceCaps.currentExtent.width == 0xFFFFFFFFu)
     {
         ASSERT(surfaceCaps.currentExtent.height == 0xFFFFFFFFu);
 
-        if (attribWidth == 0)
-        {
-            width = windowSize.width;
-        }
-        if (attribHeight == 0)
-        {
-            height = windowSize.height;
-        }
+        width  = (attribWidth != 0) ? attribWidth : windowSize.width;
+        height = (attribHeight != 0) ? attribHeight : windowSize.height;
     }
 
     gl::Extents extents(static_cast<int>(width), static_cast<int>(height), 1);
