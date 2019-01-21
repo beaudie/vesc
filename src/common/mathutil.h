@@ -982,7 +982,7 @@ inline int BitCount(uint64_t bits)
 #    endif  // defined(_M_X64)
 #endif      // defined(_M_IX86) || defined(_M_X64)
 
-#if defined(ANGLE_PLATFORM_POSIX)
+#if defined(ANGLE_PLATFORM_POSIX) || defined(ANGLE_PLATFORM_FUCHSIA)
 #    define ANGLE_HAS_BITCOUNT_32
 inline int BitCount(uint32_t bits)
 {
@@ -1050,7 +1050,7 @@ inline unsigned long ScanForward(uint64_t bits)
 #    endif  // defined(ANGLE_IS_64_BIT_CPU)
 #endif      // defined(ANGLE_PLATFORM_WINDOWS)
 
-#if defined(ANGLE_PLATFORM_POSIX)
+#if defined(ANGLE_PLATFORM_POSIX) || defined(ANGLE_PLATFORM_FUCHSIA)
 inline unsigned long ScanForward(uint32_t bits)
 {
     ASSERT(bits != 0u);
@@ -1086,7 +1086,7 @@ inline unsigned long ScanReverse(unsigned long bits)
     unsigned char ret          = _BitScanReverse(&lastBitIndex, bits);
     ASSERT(ret != 0u);
     return lastBitIndex;
-#elif defined(ANGLE_PLATFORM_POSIX)
+#elif defined(ANGLE_PLATFORM_POSIX) || defined(ANGLE_PLATFORM_FUCHSIA)
     return static_cast<unsigned long>(sizeof(unsigned long) * CHAR_BIT - 1 - __builtin_clzl(bits));
 #else
 #    error Please implement bit-scan-reverse for your platform!

@@ -74,8 +74,7 @@ const char *VulkanResultString(VkResult result);
 // Verify that validation layers are available.
 bool GetAvailableValidationLayers(const std::vector<VkLayerProperties> &layerProps,
                                   bool mustHaveLayers,
-                                  const char *const **enabledLayerNames,
-                                  uint32_t *enabledLayerCount);
+                                  std::vector<const char *> *enabledLayerNames);
 
 extern const char *g_VkLoaderLayersPathEnv;
 extern const char *g_VkICDPathEnv;
