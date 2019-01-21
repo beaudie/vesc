@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2242a4e_7cd72865",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-21T16:20:09Z",
+      "side": 1,
+      "message": "want to be a bit careful this these as this calls malloc. if it\u0027s used inside a normal binary this would be slower than just passing pointers.",
+      "range": {
+        "startLine": 568,
+        "startChar": 4,
+        "endLine": 568,
+        "endChar": 73
+      },
+      "revId": "a11dbca564419abdd5b26870900b989d83463642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
