@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c08674ec_1e771710",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1355,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-21T21:39:45Z",
+      "side": 1,
+      "message": "If multi-threaded, eventually we should add addRef/release calls around these, though our ref-count class is not thread-safe to begin with.",
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2c41f97_f9766527",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2147,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-21T21:39:45Z",
+      "side": 1,
+      "message": "This is the only difference between the ext and EGL 1.5 core.",
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f82b305_ebe82d64",
+        "filename": "src/libGLESv2/entry_points_egl_ext.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-21T21:39:45Z",
+      "side": 1,
+      "message": "Not sure what our strategy is for implementing extensions that are later core. I opted for sharing the implementation and adding this `isExt` flag to support the slight difference between ext and core.\n\nI see for example EGLImageKHR extension implemented here as ext and left as TODO in entry_points_egl.cpp, which also likely needs to share implementation.",
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcb1579f_4093abb5",
+        "filename": "src/tests/egl_tests/EGLSyncTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-21T21:39:45Z",
+      "side": 1,
+      "message": "\"Inspired\" by the corresponding GL test.",
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
