@@ -66,7 +66,22 @@ class EGLRobustnessTest : public EGLTest,
         ASSERT_TRUE(eglGetConfigs(mDisplay, &mConfig, 1, &nReturnedConfigs) == EGL_TRUE);
         ASSERT_EQ(1, nReturnedConfigs);
 
-        mWindow = eglCreateWindowSurface(mDisplay, mConfig, mOSWindow->getNativeWindow(), nullptr);
+        std::vector<EGLint> surfaceAttributes;
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+        surfaceAttributes.push_back(EGL_FIXED_SIZE_ANGLE);
+        surfaceAttributes.push_back(EGL_TRUE);
+        surfaceAttributes.push_back(EGL_WIDTH);
+        surfaceAttributes.push_back(mOSWindow->getWidth());
+        surfaceAttributes.push_back(EGL_HEIGHT);
+        surfaceAttributes.push_back(mOSWindow->getHeight());
+#endif
+        surfaceAttributes.push_back(EGL_NONE);
+        surfaceAttributes.push_back(EGL_NONE);
+
+        mOSWindow->resetNativeWindow();
+
+        mWindow = eglCreateWindowSurface(mDisplay, mConfig, mOSWindow->getNativeWindow(),
+                                         surfaceAttributes.data());
         ASSERT_EGL_SUCCESS();
 
         mInitialized = true;

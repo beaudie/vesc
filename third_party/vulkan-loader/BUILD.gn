@@ -9,6 +9,8 @@
 import("../../gni/angle.gni")
 import("$angle_root/third_party/vulkan-headers/vulkan_headers_script_deps.gni")
 
+assert(!is_fuchsia)
+
 if (!is_android) {
   vulkan_undefine_configs = []
 }

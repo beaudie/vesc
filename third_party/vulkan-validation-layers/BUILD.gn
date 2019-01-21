@@ -8,6 +8,8 @@
 
 import("../../gni/angle.gni")
 
+assert(!is_fuchsia)
+
 import("$angle_root/third_party/vulkan-headers/vulkan_headers_script_deps.gni")
 
 vulkan_undefine_configs = []
