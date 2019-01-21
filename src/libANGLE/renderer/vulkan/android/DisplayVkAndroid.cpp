@@ -63,4 +63,6 @@ const char *DisplayVkAndroid::getWSIExtension() const
     return VK_KHR_ANDROID_SURFACE_EXTENSION_NAME;
 }
 
+void DisplayVkAndroid::generateExtensionsVk(egl::DisplayExtensions *outExtensions) const {}
+
 }  // namespace rx
