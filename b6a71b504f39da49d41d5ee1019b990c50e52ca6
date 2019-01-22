@@ -22,6 +22,30 @@
       "revId": "b6a71b504f39da49d41d5ee1019b990c50e52ca6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8975ef57_3cf5e2dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T18:36:09Z",
+      "side": 1,
+      "message": "VkSemaphore GPU wait is paired with a submission, which is expensive and undesirable. There\u0027s no CPU wait on semaphores.\n\nIt\u0027s kind of weird that Vulkan has three synchronization semaphores that are really the same thing. Like CPU can wait on Fence, but not event. And semaphores are events that can cross queues. From what I hear, generalizing events to cross queues is too big an implementation hassle (not on the GPU, just the OS glue), so here we are.",
+      "parentUuid": "320693dd_0fc0006a",
+      "range": {
+        "startLine": 36,
+        "startChar": 48,
+        "endLine": 42,
+        "endChar": 27
+      },
+      "revId": "b6a71b504f39da49d41d5ee1019b990c50e52ca6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
