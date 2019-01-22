@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d22abb13_f13556da",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-22T01:23:11Z",
+      "side": 1,
+      "message": "you should be able to use a unique_ptr pattern here. but if there\u0027s an ondestroy method I made this deleter pattern if you feel like using it. See SurfaceDeleter and UniqueObjectPointerBase\n\njust a tiny style cleanup as you won\u0027t need the isError pattern.",
+      "range": {
+        "startLine": 831,
+        "startChar": 0,
+        "endLine": 840,
+        "endChar": 5
+      },
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c08674ec_1e771710",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 15
@@ -13,6 +36,132 @@
       "writtenOn": "2019-01-21T21:39:45Z",
       "side": 1,
       "message": "If multi-threaded, eventually we should add addRef/release calls around these, though our ref-count class is not thread-safe to begin with.",
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d1da061_eaa5d1e9",
+        "filename": "src/libANGLE/Fence.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-22T01:23:11Z",
+      "side": 1,
+      "message": "would you mind making new files for these?",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 2
+      },
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23ba256c_8e30fc91",
+        "filename": "src/libANGLE/renderer/EGLSyncImpl.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-22T01:23:11Z",
+      "side": 1,
+      "message": "nit: you can use 2019 in the new files now",
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ce50cfd_d07316e8",
+        "filename": "src/libANGLE/renderer/gl/egl/SyncEGL.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-22T01:23:11Z",
+      "side": 1,
+      "message": "dit",
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6a16848_b9a7d5e7",
+        "filename": "src/libANGLE/renderer/gl/egl/SyncEGL.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-22T01:23:11Z",
+      "side": 1,
+      "message": "looks like this might not be called if your initializer fails.",
+      "range": {
+        "startLine": 27,
+        "startChar": 14,
+        "endLine": 27,
+        "endChar": 23
+      },
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ead0c671_087fd952",
+        "filename": "src/libANGLE/renderer/gl/egl/SyncEGL.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-22T01:23:11Z",
+      "side": 1,
+      "message": "dit",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 18
+      },
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aed9677a_0696d0f9",
+        "filename": "src/libANGLE/renderer/gl/egl/SyncEGL.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-22T01:23:11Z",
+      "side": 1,
+      "message": "nit: maybe don\u0027t need to store this. can infer it from the egl::Display",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 29
+      },
       "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -36,6 +185,29 @@
     },
     {
       "key": {
+        "uuid": "60891496_748c641e",
+        "filename": "src/libANGLE/validationEGL.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-22T01:23:11Z",
+      "side": 1,
+      "message": "Can we consider refactoring this for the auto-generation path?\n\nCan make ValidateCreateSync, ValidateCreateSyncKHR and ValidateCreateSyncBase (that takes the isExt param). The other two just call ValidateCreateSyncBase. Then auto-gen can work smoothly.",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 37
+      },
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8f82b305_ebe82d64",
         "filename": "src/libGLESv2/entry_points_egl_ext.h",
         "patchSetId": 15
@@ -47,6 +219,24 @@
       "writtenOn": "2019-01-21T21:39:45Z",
       "side": 1,
       "message": "Not sure what our strategy is for implementing extensions that are later core. I opted for sharing the implementation and adding this `isExt` flag to support the slight difference between ext and core.\n\nI see for example EGLImageKHR extension implemented here as ext and left as TODO in entry_points_egl.cpp, which also likely needs to share implementation.",
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d454438_00207a38",
+        "filename": "src/libGLESv2/entry_points_egl_ext.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-22T01:23:11Z",
+      "side": 1,
+      "message": "Some questoins/observations about auto-generation here. See http://anglebug.com/2621 . My suggestion is to make these calls follow the pattern currently in this file. The EPs will need to replicate some boilerplate unfortunately.\n\nWe for sure don\u0027t need to implement auto-gen right away. Just to keep the refactoring low when we do.",
+      "parentUuid": "8f82b305_ebe82d64",
       "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
