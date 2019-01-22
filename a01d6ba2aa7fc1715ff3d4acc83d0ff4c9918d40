@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf5c5c71_a0011469",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-22T16:07:36Z",
+      "side": 1,
+      "message": "nit: can be a const function I think.",
+      "range": {
+        "startLine": 247,
+        "startChar": 27,
+        "endLine": 247,
+        "endChar": 46
+      },
+      "revId": "a01d6ba2aa7fc1715ff3d4acc83d0ff4c9918d40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
