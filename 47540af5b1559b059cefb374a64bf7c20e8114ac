@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a281970b_34092c71",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T17:36:01Z",
+      "side": 1,
+      "message": "I would eventually like to see these two go away when not using GUARD_BLOCKS, but I\u0027ll be ok with leaving it as a TODO for another time. That TODO could be to clean up the class, optimize for compiler (where realloc is not needed), write unittest etc.",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 60
+      },
+      "revId": "47540af5b1559b059cefb374a64bf7c20e8114ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
