@@ -66,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "57089983_c7cbec12",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1355,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-22T18:32:53Z",
+      "side": 1,
+      "message": "We might end up locking around the majority of EGL calls at some point. But good to know this is one of the points that would be an issue.",
+      "parentUuid": "c08674ec_1e771710",
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0d1da061_eaa5d1e9",
         "filename": "src/libANGLE/Fence.h",
         "patchSetId": 15
@@ -230,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "1fe342b6_a610a233",
+        "filename": "src/libANGLE/renderer/gl/egl/SyncEGL.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-22T18:32:53Z",
+      "side": 1,
+      "message": "Was talking about Display.cpp. Yep, should be fixed now. Thanks.",
+      "parentUuid": "866a775a_0112ee8a",
+      "range": {
+        "startLine": 27,
+        "startChar": 14,
+        "endLine": 27,
+        "endChar": 23
+      },
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ead0c671_087fd952",
         "filename": "src/libANGLE/renderer/gl/egl/SyncEGL.h",
         "patchSetId": 15
@@ -321,6 +363,30 @@
       "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6dfc6141_369cd408",
+        "filename": "src/libANGLE/renderer/gl/egl/SyncEGL.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-22T18:32:53Z",
+      "side": 1,
+      "message": "Yeah, better to be consistent for now.",
+      "parentUuid": "957eff4e_b00eb8a3",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 29
+      },
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
