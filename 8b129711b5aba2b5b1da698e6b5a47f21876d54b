@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "affbc232_ba553459",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T19:56:13Z",
+      "side": 1,
+      "message": "I see! Done.",
+      "parentUuid": "e6647b80_e69766b1",
+      "range": {
+        "startLine": 870,
+        "startChar": 33,
+        "endLine": 870,
+        "endChar": 52
+      },
+      "revId": "8b129711b5aba2b5b1da698e6b5a47f21876d54b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d9d502e_57809701",
         "filename": "src/libANGLE/EGLSync.cpp",
         "patchSetId": 17
@@ -93,6 +117,30 @@
       "revId": "8b129711b5aba2b5b1da698e6b5a47f21876d54b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2535b94b_3829f8d6",
+        "filename": "src/libANGLE/EGLSync.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T19:56:13Z",
+      "side": 1,
+      "message": "Done, though it looks kind of out of place. Like the other functions there don\u0027t return error and don\u0027t generally need the owner Context/Display (this does, for the Vulkan backend).",
+      "parentUuid": "5d9d502e_57809701",
+      "range": {
+        "startLine": 53,
+        "startChar": 12,
+        "endLine": 53,
+        "endChar": 25
+      },
+      "revId": "8b129711b5aba2b5b1da698e6b5a47f21876d54b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -119,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "acad756c_df01ca5c",
+        "filename": "src/libANGLE/EGLSync.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T19:56:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7485cd1_426516fe",
+      "range": {
+        "startLine": 62,
+        "startChar": 21,
+        "endLine": 62,
+        "endChar": 39
+      },
+      "revId": "8b129711b5aba2b5b1da698e6b5a47f21876d54b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1cd2ebdb_befdce6f",
         "filename": "src/libANGLE/EGLSync.cpp",
         "patchSetId": 17
@@ -139,6 +211,30 @@
       "revId": "8b129711b5aba2b5b1da698e6b5a47f21876d54b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "511dd5a1_029649f2",
+        "filename": "src/libANGLE/EGLSync.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T19:56:13Z",
+      "side": 1,
+      "message": "I opted for returning `mFence-\u003egetCondition()` where `egl::Sync::getCondition()` returns a `static constexpr` member that\u0027s fixed to this value. Both fence sync and reusable sync use this value, and this way the fixed-ness is contained to the class that\u0027s expected to handle it. If other values are allowed in the future, it would be clear what needs changing.\n\nIf I made it a member, I would have had to initialize it to a fixed value anyway, as none of the functions set a condition.",
+      "parentUuid": "1cd2ebdb_befdce6f",
+      "range": {
+        "startLine": 69,
+        "startChar": 21,
+        "endLine": 69,
+        "endChar": 57
+      },
+      "revId": "8b129711b5aba2b5b1da698e6b5a47f21876d54b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -211,6 +307,78 @@
     },
     {
       "key": {
+        "uuid": "7395a26f_dbc71294",
+        "filename": "src/libANGLE/EGLSync.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T19:56:13Z",
+      "side": 1,
+      "message": "I hadn\u0027t considered reusable syncs (since it wasn\u0027t turned core either, I thought it\u0027s a dead extension). They have a different type, but no the type cannot change either way.\n\nThe constructor doesn\u0027t really do anything, since it can\u0027t return an error. This function is the one that really initializes things, and they are always paired together. I guess following gl::Sync I should have put attribs in this function too.\n\nBut no matter, I moved type to the constructor as it really doesn\u0027t make a difference.",
+      "parentUuid": "7d291450_6581771c",
+      "range": {
+        "startLine": 35,
+        "startChar": 43,
+        "endLine": 35,
+        "endChar": 55
+      },
+      "revId": "8b129711b5aba2b5b1da698e6b5a47f21876d54b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a24bf3ca_4f40c240",
+        "filename": "src/libANGLE/EGLSync.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T19:56:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddb7c91c_42b2cbbd",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 9
+      },
+      "revId": "8b129711b5aba2b5b1da698e6b5a47f21876d54b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e1f3face_1a00f4a0",
+        "filename": "src/libANGLE/EGLSync.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T19:56:13Z",
+      "side": 1,
+      "message": "Yes, that\u0027s a better name. gl::Sync was taken as the base implementation, which had this naming.\n\nDone.",
+      "parentUuid": "cedc4d2d_ba96fc7a",
+      "range": {
+        "startLine": 35,
+        "startChar": 15,
+        "endLine": 35,
+        "endChar": 18
+      },
+      "revId": "8b129711b5aba2b5b1da698e6b5a47f21876d54b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f785938_4bb444ec",
         "filename": "src/libANGLE/EGLSync.h",
         "patchSetId": 17
@@ -231,6 +399,30 @@
       "revId": "8b129711b5aba2b5b1da698e6b5a47f21876d54b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5656da79_8341f066",
+        "filename": "src/libANGLE/EGLSync.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T19:56:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f785938_4bb444ec",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 21
+      },
+      "revId": "8b129711b5aba2b5b1da698e6b5a47f21876d54b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
