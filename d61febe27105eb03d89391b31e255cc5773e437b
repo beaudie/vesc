@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0f25e2b7_631f6a6c",
+        "filename": "src/tests/perf_tests/DrawCallPerf.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-22T18:41:33Z",
+      "side": 1,
+      "message": "nit: I think we need to call glBindAttribLocation to be 100% safe here.",
+      "revId": "d61febe27105eb03d89391b31e255cc5773e437b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
