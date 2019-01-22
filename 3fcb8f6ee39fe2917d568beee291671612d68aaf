@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe93019e_f923d473",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-01-22T16:00:45Z",
+      "side": 1,
+      "message": "exposes",
+      "range": {
+        "startLine": 10,
+        "startChar": 22,
+        "endLine": 10,
+        "endChar": 29
+      },
+      "revId": "3fcb8f6ee39fe2917d568beee291671612d68aaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "455afe99_1fb10c0a",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2584,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-01-22T16:00:45Z",
+      "side": 1,
+      "message": "levels",
+      "range": {
+        "startLine": 2584,
+        "startChar": 23,
+        "endLine": 2584,
+        "endChar": 29
+      },
+      "revId": "3fcb8f6ee39fe2917d568beee291671612d68aaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "712edd32_dba2ec6e",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2584,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-01-22T16:00:45Z",
+      "side": 1,
+      "message": "Do you mean Intel mesa driver will crash on glDispatchCompute() if we specify the image level \u003e\u003d 1? It would be a serious bug if your investigation is correct.",
+      "range": {
+        "startLine": 2582,
+        "startChar": 5,
+        "endLine": 2584,
+        "endChar": 30
+      },
+      "revId": "3fcb8f6ee39fe2917d568beee291671612d68aaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a55b377b_e8e35400",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2644,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-01-22T16:00:45Z",
+      "side": 1,
+      "message": "levels",
+      "range": {
+        "startLine": 2644,
+        "startChar": 23,
+        "endLine": 2644,
+        "endChar": 29
+      },
+      "revId": "3fcb8f6ee39fe2917d568beee291671612d68aaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70208212_52a897cf",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2705,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-01-22T16:00:45Z",
+      "side": 1,
+      "message": "levels",
+      "range": {
+        "startLine": 2705,
+        "startChar": 23,
+        "endLine": 2705,
+        "endChar": 29
+      },
+      "revId": "3fcb8f6ee39fe2917d568beee291671612d68aaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
