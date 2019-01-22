@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "b378ef8b_20b644c8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1406,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T21:57:35Z",
+      "side": 1,
+      "message": "Oops",
+      "parentUuid": "11a71612_ab742ed3",
+      "range": {
+        "startLine": 1399,
+        "startChar": 0,
+        "endLine": 1406,
+        "endChar": 0
+      },
+      "revId": "b6a71b504f39da49d41d5ee1019b990c50e52ca6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d38b1371_4ab8f8c2",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 5
@@ -83,6 +107,30 @@
       "writtenOn": "2019-01-22T20:40:01Z",
       "side": 1,
       "message": "From the description of eglClientWaitSyncKHR, sounds like waiting forever is the correct behavior in that case. Otherwise, flushCommands is unused.",
+      "range": {
+        "startLine": 80,
+        "startChar": 46,
+        "endLine": 81,
+        "endChar": 25
+      },
+      "revId": "b6a71b504f39da49d41d5ee1019b990c50e52ca6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e46f6a01_f5a45117",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T21:57:35Z",
+      "side": 1,
+      "message": "The spec says:\n\n\u003e If the sync object being blocked upon will not be signaled in finite time ..., then eglClientWaitSync may wait forever.\n\nIt says \"may\". Would I be right to assume that means the driver may also find a way so this doesn\u0027t happen?\n\n---\n\nAlso, see next comment.",
+      "parentUuid": "d38b1371_4ab8f8c2",
       "range": {
         "startLine": 80,
         "startChar": 46,
@@ -118,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "c1d7dde2_fdbfea4d",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T21:57:35Z",
+      "side": 1,
+      "message": "The only option to satisfy these, that I can think of, is what I had written in a comment above:\n\n\u003e We could test the event in a loop with a sleep, ...\n\nThis means we could **potentially** return earlier than when the fence is signaled (and can also implement the wait-forever behavior). However, I\u0027m not exactly sure that\u0027s a good approach either. We obviously don\u0027t want to busy wait, and sleep has wildly different precision on different platforms. So far, angle has avoided creating a cross-platform sleep, I\u0027m guessing for that reason.\n\nI also don\u0027t know if any application would really need to have the CPU wakeup while the GPU is in the middle of the submission work vs the end. I\u0027d be interested to know what would be the use case there.\n\nAll that said, I\u0027m open to suggestions.",
+      "parentUuid": "96550f3d_d1da65e3",
+      "range": {
+        "startLine": 87,
+        "startChar": 19,
+        "endLine": 87,
+        "endChar": 82
+      },
+      "revId": "b6a71b504f39da49d41d5ee1019b990c50e52ca6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e384b3e_c5aebd79",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 5
@@ -129,6 +201,30 @@
       "writtenOn": "2019-01-22T20:40:01Z",
       "side": 1,
       "message": "reverse order",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 77
+      },
+      "revId": "b6a71b504f39da49d41d5ee1019b990c50e52ca6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ff02af7_8f6a7068",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T21:57:35Z",
+      "side": 1,
+      "message": "`ANGLE_TRY` only checks for `angle::Result::Stop`, and lets both `Continue` and `Incomplete` through.",
+      "parentUuid": "6e384b3e_c5aebd79",
       "range": {
         "startLine": 89,
         "startChar": 0,
@@ -164,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "a47d207a_19ae6933",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T21:57:35Z",
+      "side": 1,
+      "message": "Apparently that work for egl::Error has not yet started.",
+      "parentUuid": "d262a039_7766aeb0",
+      "range": {
+        "startLine": 193,
+        "startChar": 0,
+        "endLine": 193,
+        "endChar": 10
+      },
+      "revId": "b6a71b504f39da49d41d5ee1019b990c50e52ca6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "132d1b2b_1ec325fd",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
         "patchSetId": 5
@@ -175,6 +295,30 @@
       "writtenOn": "2019-01-22T20:40:01Z",
       "side": 1,
       "message": "I think in ANGLE we usually use containment and not inheritance for Impl functions.",
+      "range": {
+        "startLine": 53,
+        "startChar": 38,
+        "endLine": 53,
+        "endChar": 56
+      },
+      "revId": "b6a71b504f39da49d41d5ee1019b990c50e52ca6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c6f4c01_0049005e",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T21:57:35Z",
+      "side": 1,
+      "message": "I could do that. Any arguments fore or against either implementation, Jamie?",
+      "parentUuid": "132d1b2b_1ec325fd",
       "range": {
         "startLine": 53,
         "startChar": 38,
