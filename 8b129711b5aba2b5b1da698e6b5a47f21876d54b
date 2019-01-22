@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "cb1ae1c8_99efdef1",
+        "filename": "src/libANGLE/EGLSync.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-22T20:13:34Z",
+      "side": 1,
+      "message": "Thanks, looks like the QuerySynciv function in there is already dealing with this issue (returning an angle::Result).\n\nAs a loose preference, I like to keep switches on these enums in that file so these objects can have nice getters/setters.",
+      "parentUuid": "2535b94b_3829f8d6",
+      "range": {
+        "startLine": 53,
+        "startChar": 12,
+        "endLine": 53,
+        "endChar": 25
+      },
+      "revId": "8b129711b5aba2b5b1da698e6b5a47f21876d54b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c7485cd1_426516fe",
         "filename": "src/libANGLE/EGLSync.cpp",
         "patchSetId": 17
