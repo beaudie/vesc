@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1065d266_7ee251a9",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T17:05:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d22abb13_f13556da",
+      "range": {
+        "startLine": 831,
+        "startChar": 0,
+        "endLine": 840,
+        "endChar": 5
+      },
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c08674ec_1e771710",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 15
@@ -65,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "4c19bea4_f788e8cd",
+        "filename": "src/libANGLE/Fence.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T17:05:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d1da061_eaa5d1e9",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 2
+      },
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23ba256c_8e30fc91",
         "filename": "src/libANGLE/renderer/EGLSyncImpl.h",
         "patchSetId": 15
@@ -76,6 +124,24 @@
       "writtenOn": "2019-01-22T01:23:11Z",
       "side": 1,
       "message": "nit: you can use 2019 in the new files now",
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc392052_25e8647f",
+        "filename": "src/libANGLE/renderer/EGLSyncImpl.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T17:05:54Z",
+      "side": 1,
+      "message": "Copy-paste error! Fixed.",
+      "parentUuid": "23ba256c_8e30fc91",
       "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -99,6 +165,24 @@
     },
     {
       "key": {
+        "uuid": "a1937d9f_c4962897",
+        "filename": "src/libANGLE/renderer/gl/egl/SyncEGL.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T17:05:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ce50cfd_d07316e8",
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b6a16848_b9a7d5e7",
         "filename": "src/libANGLE/renderer/gl/egl/SyncEGL.cpp",
         "patchSetId": 15
@@ -110,6 +194,30 @@
       "writtenOn": "2019-01-22T01:23:11Z",
       "side": 1,
       "message": "looks like this might not be called if your initializer fails.",
+      "range": {
+        "startLine": 27,
+        "startChar": 14,
+        "endLine": 27,
+        "endChar": 23
+      },
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "866a775a_0112ee8a",
+        "filename": "src/libANGLE/renderer/gl/egl/SyncEGL.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T17:05:54Z",
+      "side": 1,
+      "message": "Are you talking about the code in Display.cpp? The `onDestroy()` call was missing, but that\u0027s resolved with `angle::UniqueObjectPointer`. `set()` below doesn\u0027t need a call to `onDestroy()`.",
+      "parentUuid": "b6a16848_b9a7d5e7",
       "range": {
         "startLine": 27,
         "startChar": 14,
@@ -145,6 +253,30 @@
     },
     {
       "key": {
+        "uuid": "fbbad91c_224aaf3a",
+        "filename": "src/libANGLE/renderer/gl/egl/SyncEGL.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T17:05:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ead0c671_087fd952",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 18
+      },
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aed9677a_0696d0f9",
         "filename": "src/libANGLE/renderer/gl/egl/SyncEGL.h",
         "patchSetId": 15
@@ -156,6 +288,30 @@
       "writtenOn": "2019-01-22T01:23:11Z",
       "side": 1,
       "message": "nit: maybe don\u0027t need to store this. can infer it from the egl::Display",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 29
+      },
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "957eff4e_b00eb8a3",
+        "filename": "src/libANGLE/renderer/gl/egl/SyncEGL.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T17:05:54Z",
+      "side": 1,
+      "message": "That seems to be the pattern in this backend. There are no instances where egl::Display is cast to DisplayEGL and all classes keep the FunctionsEGL pointer.",
+      "parentUuid": "aed9677a_0696d0f9",
       "range": {
         "startLine": 41,
         "startChar": 4,
@@ -208,6 +364,30 @@
     },
     {
       "key": {
+        "uuid": "a109baf0_5983fd9b",
+        "filename": "src/libANGLE/validationEGL.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T17:05:54Z",
+      "side": 1,
+      "message": "Sure, done.",
+      "parentUuid": "60891496_748c641e",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 37
+      },
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8f82b305_ebe82d64",
         "filename": "src/libGLESv2/entry_points_egl_ext.h",
         "patchSetId": 15
@@ -240,6 +420,24 @@
       "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8bb99d0_eb619897",
+        "filename": "src/libGLESv2/entry_points_egl_ext.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T17:05:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d454438_00207a38",
+      "revId": "be5138c4bf00c6c29d252a0e6b5c2adf6018d9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
