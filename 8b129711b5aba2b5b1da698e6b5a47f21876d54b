@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cffc8f9e_e0f2fe95",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-22T18:48:19Z",
+      "side": 1,
+      "message": "To clarify, do you want me to make this always true, or as the reply comment says, make it only true when the EGL extension exists?",
+      "parentUuid": "73da7ae1_9cf60a1e",
+      "range": {
+        "startLine": 870,
+        "startChar": 33,
+        "endLine": 870,
+        "endChar": 52
+      },
+      "revId": "8b129711b5aba2b5b1da698e6b5a47f21876d54b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5d9d502e_57809701",
         "filename": "src/libANGLE/EGLSync.cpp",
         "patchSetId": 17
