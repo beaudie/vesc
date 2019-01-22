@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "320693dd_0fc0006a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-22T17:53:07Z",
+      "side": 1,
+      "message": "Can\u0027t VkSemaphore be used for both ways as well?",
+      "range": {
+        "startLine": 36,
+        "startChar": 48,
+        "endLine": 42,
+        "endChar": 27
+      },
+      "revId": "b6a71b504f39da49d41d5ee1019b990c50e52ca6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
