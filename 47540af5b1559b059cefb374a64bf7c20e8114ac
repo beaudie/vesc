@@ -22,6 +22,30 @@
       "revId": "47540af5b1559b059cefb374a64bf7c20e8114ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "949bf50e_2987dd82",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-01-22T19:10:41Z",
+      "side": 1,
+      "message": "Yes, tried to take these out but non-guard-blocks code is currently depending on them. Planning to land this now but made notes in issue 2951 to account for some cleanup and improvements.",
+      "parentUuid": "a281970b_34092c71",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 60
+      },
+      "revId": "47540af5b1559b059cefb374a64bf7c20e8114ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
