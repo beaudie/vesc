@@ -20,6 +20,10 @@
 #    include <android/log.h>
 #endif
 
+#if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+#    include <mutex>
+#endif
+
 #include "common/Optional.h"
 #include "common/angleutils.h"
 
@@ -30,6 +34,10 @@ namespace
 {
 
 DebugAnnotator *g_debugAnnotator = nullptr;
+
+#if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+std::mutex g_debugMutex;
+#endif
 
 constexpr std::array<const char *, LOG_NUM_SEVERITIES> g_logSeverityNames = {
     {"EVENT", "WARN", "ERR"}};
@@ -140,6 +148,10 @@ LogMessage::LogMessage(const char *function, int line, LogSeverity severity)
 
 LogMessage::~LogMessage()
 {
+#if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+    std::lock_guard<std::mutex> lock(g_debugMutex);
+#endif
+
     if (DebugAnnotationsInitialized() && (mSeverity == LOG_ERR || mSeverity == LOG_WARN))
     {
         g_debugAnnotator->logMessage(*this);
