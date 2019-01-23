@@ -18,6 +18,10 @@
 #include <sstream>
 #include <string>
 
+#if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+#    include <mutex>
+#endif
+
 #include "common/angleutils.h"
 #include "common/platform.h"
 
@@ -97,6 +101,11 @@ void InitializeDebugAnnotations(DebugAnnotator *debugAnnotator);
 void UninitializeDebugAnnotations();
 bool DebugAnnotationsActive();
 bool DebugAnnotationsInitialized();
+
+#if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+void InitializeDebugMutex(std::mutex *debugMutex);
+void UninitializeDebugMutex();
+#endif
 
 namespace priv
 {

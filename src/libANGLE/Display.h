@@ -217,6 +217,9 @@ class Display final : public LabeledObject, angle::NonCopyable
     Device *mDevice;
     EGLenum mPlatform;
     angle::LoggingAnnotator mAnnotator;
+#if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+    std::mutex mDebugMutex;
+#endif
 
     gl::TextureManager *mTextureManager;
     BlobCache mBlobCache;

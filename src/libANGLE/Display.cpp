@@ -463,6 +463,10 @@ Error Display::initialize()
 
     gl::InitializeDebugAnnotations(&mAnnotator);
 
+#if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+    gl::InitializeDebugMutex(&mDebugMutex);
+#endif
+
     SCOPED_ANGLE_HISTOGRAM_TIMER("GPU.ANGLE.DisplayInitializeMS");
     TRACE_EVENT0("gpu.angle", "egl::Display::initialize");
 
@@ -585,6 +589,10 @@ Error Display::terminate(const Thread *thread)
     mDeviceLost = false;
 
     mInitialized = false;
+
+#if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+    gl::UninitializeDebugMutex();
+#endif
 
     gl::UninitializeDebugAnnotations();
 

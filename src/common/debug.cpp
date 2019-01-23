@@ -31,6 +31,10 @@ namespace
 
 DebugAnnotator *g_debugAnnotator = nullptr;
 
+#if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+std::mutex *g_debugMutex = nullptr;
+#endif
+
 constexpr std::array<const char *, LOG_NUM_SEVERITIES> g_logSeverityNames = {
     {"EVENT", "WARN", "ERR"}};
 
@@ -96,6 +100,20 @@ void UninitializeDebugAnnotations()
     g_debugAnnotator = nullptr;
 }
 
+#if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+void InitializeDebugMutex(std::mutex *debugMutex)
+{
+    UninitializeDebugMutex();
+    g_debugMutex = debugMutex;
+}
+
+void UninitializeDebugMutex()
+{
+    // Pointer is not managed.
+    g_debugMutex = nullptr;
+}
+#endif
+
 ScopedPerfEventHelper::ScopedPerfEventHelper(const char *format, ...) : mFunctionName(nullptr)
 {
     bool dbgTrace = DebugAnnotationsActive();
@@ -140,6 +158,11 @@ LogMessage::LogMessage(const char *function, int line, LogSeverity severity)
 
 LogMessage::~LogMessage()
 {
+#if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+    ASSERT(g_debugMutex);
+    std::lock_guard<std::mutex> lock(*g_debugMutex);
+#endif
+
     if (DebugAnnotationsInitialized() && (mSeverity == LOG_ERR || mSeverity == LOG_WARN))
     {
         g_debugAnnotator->logMessage(*this);
