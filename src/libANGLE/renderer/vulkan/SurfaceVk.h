@@ -141,12 +141,25 @@ class WindowSurfaceVk : public SurfaceImpl
 
   private:
     virtual angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut) = 0;
+    virtual angle::Result getCurrentWindowSize(gl::Extents *extentsOut)                  = 0;
+
     angle::Result initializeImpl(DisplayVk *displayVk);
+    // TODO: implement recreateSwapchain.  TODO: use it inside initializeImpl too.  The code
+    // would be largely taken out of that function, with the exception that some stuff, like
+    // views and depth/stencil buffer need to be released before creating new ones.  Maybe
+    // need to refactor some of the relevant destroy functions too, so both this and destroy()
+    // would call that too.
+    angle::Result recreateSwapchain(DisplayVk *displayVk, gl::Extents extents);
+    void releaseSwapchainImages(RendererVk *renderer);
     angle::Result nextSwapchainImage(DisplayVk *displayVk);
     angle::Result swapImpl(DisplayVk *displayVk, EGLint *rects, EGLint n_rects);
 
     VkSwapchainKHR mSwapchain;
+    // Cached information used to recreate swapchains.
     VkPresentModeKHR mSwapchainPresentMode;
+    uint32_t mMinImageCount;
+    VkSurfaceTransformFlagBitsKHR mPreTransform;
+    VkCompositeAlphaFlagBitsKHR mCompositeAlpha;
 
     RenderTargetVk mColorRenderTarget;
     RenderTargetVk mDepthStencilRenderTarget;

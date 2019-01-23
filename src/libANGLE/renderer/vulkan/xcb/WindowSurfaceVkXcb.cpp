@@ -33,6 +33,11 @@ angle::Result WindowSurfaceVkXcb::createSurfaceVk(vk::Context *context, gl::Exte
     ANGLE_VK_TRY(context, vkCreateXcbSurfaceKHR(context->getRenderer()->getInstance(), &createInfo,
                                                 nullptr, &mSurface));
 
+    return getCurrentWindowSize(extentsOut);
+}
+
+angle::Result WindowSurfaceVkXcb::getCurrentWindowSize(gl::Extents *extentsOut)
+{
     xcb_get_geometry_cookie_t cookie = xcb_get_geometry(mXcbConnection, mNativeWindowType);
     xcb_get_geometry_reply_t *reply  = xcb_get_geometry_reply(mXcbConnection, cookie, nullptr);
     ASSERT(reply);
