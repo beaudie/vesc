@@ -31,6 +31,8 @@ namespace
 
 DebugAnnotator *g_debugAnnotator = nullptr;
 
+std::mutex *g_debugMutex = nullptr;
+
 constexpr std::array<const char *, LOG_NUM_SEVERITIES> g_logSeverityNames = {
     {"EVENT", "WARN", "ERR"}};
 
@@ -96,6 +98,19 @@ void UninitializeDebugAnnotations()
     g_debugAnnotator = nullptr;
 }
 
+void InitializeDebugMutex(std::mutex *debugMutex)
+{
+    g_debugMutex = debugMutex;
+}
+
+void UninitializeDebugMutex()
+{
+    ASSERT(g_debugMutex);
+
+    // Pointer is not managed.
+    g_debugMutex = nullptr;
+}
+
 ScopedPerfEventHelper::ScopedPerfEventHelper(const char *format, ...) : mFunctionName(nullptr)
 {
     bool dbgTrace = DebugAnnotationsActive();
@@ -140,6 +155,11 @@ LogMessage::LogMessage(const char *function, int line, LogSeverity severity)
 
 LogMessage::~LogMessage()
 {
+    if (g_debugMutex != nullptr)
+    {
+        std::lock_guard<std::mutex> lock(*g_debugMutex);
+    }
+
     if (DebugAnnotationsInitialized() && (mSeverity == LOG_ERR || mSeverity == LOG_WARN))
     {
         g_debugAnnotator->logMessage(*this);
