@@ -1260,6 +1260,7 @@ void ImageHelper::init2DWeakReference(VkImage handle,
     mExtents    = extents;
     mFormat     = &format;
     mSamples    = samples;
+    mCurrentLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     mLayerCount = 1;
     mLevelCount = 1;
 
