@@ -141,12 +141,20 @@ class WindowSurfaceVk : public SurfaceImpl
 
   private:
     virtual angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut) = 0;
+    virtual angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) = 0;
+
     angle::Result initializeImpl(DisplayVk *displayVk);
+    angle::Result recreateSwapchain(DisplayVk *displayVk, const gl::Extents &extents);
+    void releaseSwapchainImages(RendererVk *renderer);
     angle::Result nextSwapchainImage(DisplayVk *displayVk);
     angle::Result swapImpl(DisplayVk *displayVk, EGLint *rects, EGLint n_rects);
 
     VkSwapchainKHR mSwapchain;
+    // Cached information used to recreate swapchains.
     VkPresentModeKHR mSwapchainPresentMode;
+    uint32_t mMinImageCount;
+    VkSurfaceTransformFlagBitsKHR mPreTransform;
+    VkCompositeAlphaFlagBitsKHR mCompositeAlpha;
 
     RenderTargetVk mColorRenderTarget;
     RenderTargetVk mDepthStencilRenderTarget;
