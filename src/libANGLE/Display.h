@@ -217,6 +217,7 @@ class Display final : public LabeledObject, angle::NonCopyable
     Device *mDevice;
     EGLenum mPlatform;
     angle::LoggingAnnotator mAnnotator;
+    std::mutex mDebugMutex;
 
     gl::TextureManager *mTextureManager;
     BlobCache mBlobCache;
