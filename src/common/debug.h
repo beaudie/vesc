@@ -15,6 +15,7 @@
 
 #include <iomanip>
 #include <ios>
+#include <mutex>
 #include <sstream>
 #include <string>
 
@@ -97,6 +98,8 @@ void InitializeDebugAnnotations(DebugAnnotator *debugAnnotator);
 void UninitializeDebugAnnotations();
 bool DebugAnnotationsActive();
 bool DebugAnnotationsInitialized();
+
+void InitializeDebugMutexIfNeeded();
 
 namespace priv
 {
