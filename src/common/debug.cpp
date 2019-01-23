@@ -13,6 +13,7 @@
 #include <array>
 #include <cstdio>
 #include <fstream>
+#include <mutex>
 #include <ostream>
 #include <vector>
 
@@ -30,6 +31,8 @@ namespace
 {
 
 DebugAnnotator *g_debugAnnotator = nullptr;
+
+std::mutex *g_debugMutex = nullptr;
 
 constexpr std::array<const char *, LOG_NUM_SEVERITIES> g_logSeverityNames = {
     {"EVENT", "WARN", "ERR"}};
@@ -96,6 +99,14 @@ void UninitializeDebugAnnotations()
     g_debugAnnotator = nullptr;
 }
 
+void InitializeDebugMutexIfNeeded()
+{
+    if (g_debugMutex == nullptr)
+    {
+        g_debugMutex = new std::mutex();
+    }
+}
+
 ScopedPerfEventHelper::ScopedPerfEventHelper(const char *format, ...) : mFunctionName(nullptr)
 {
     bool dbgTrace = DebugAnnotationsActive();
@@ -140,6 +151,13 @@ LogMessage::LogMessage(const char *function, int line, LogSeverity severity)
 
 LogMessage::~LogMessage()
 {
+    bool mutexInitialized = (g_debugMutex != nullptr);
+
+    if (mutexInitialized)
+    {
+        g_debugMutex->lock();
+    }
+
     if (DebugAnnotationsInitialized() && (mSeverity == LOG_ERR || mSeverity == LOG_WARN))
     {
         g_debugAnnotator->logMessage(*this);
@@ -147,6 +165,11 @@ LogMessage::~LogMessage()
     else
     {
         Trace(getSeverity(), getMessage().c_str());
+    }
+
+    if (mutexInitialized)
+    {
+        g_debugMutex->unlock();
     }
 }
 
