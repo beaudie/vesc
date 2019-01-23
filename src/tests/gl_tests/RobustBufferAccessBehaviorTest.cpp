@@ -327,6 +327,72 @@ TEST_P(RobustBufferAccessBehaviorTest, NoBufferData)
     ASSERT_GL_NO_ERROR();
 }
 
+constexpr char kWebGLVS[] = R"(attribute vec3 aOne;
+attribute vec2 aTwo;
+void main() {
+    gl_Position = vec4(aOne, 1.0) + vec4(aTwo, 0.0, 1.0);
+})";
+
+constexpr char kWebGLFS[] = R"(void main() {
+gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+})";
+
+// Test buffer with interleaved (3+2) float vectors. Adapted from WebGL test
+// conformance/rendering/draw-arrays-out-of-bounds.html
+TEST_P(RobustBufferAccessBehaviorTest, InterleavedAttributes)
+{
+    ANGLE_GL_PROGRAM(program, kWebGLVS, kWebGLFS);
+    glUseProgram(program);
+
+    ASSERT_EQ(0, glGetAttribLocation(program, "aOne"));
+    ASSERT_EQ(1, glGetAttribLocation(program, "aTwo"));
+
+    constexpr float zeroFloats[1000] = {};
+
+    GLBuffer vbo;
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+    // enough for 9 vertices, so 3 triangles
+    glBufferData(GL_ARRAY_BUFFER, 9 * 5 * sizeof(GLfloat), zeroFloats, GL_STATIC_DRAW);
+
+    // bind first 3 elements, with a stride of 5 float elements
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * 4, 0);
+    // bind 2 elements, starting after the first 3; same stride of 5 float elements
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * 4, reinterpret_cast<const GLvoid *>(3 * 4));
+
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+
+    // Draw out of bounds.
+    glDrawArrays(GL_TRIANGLES, 0, 10000);
+    glDrawArrays(GL_TRIANGLES, 0x7fffffff, 1);
+}
+
+// Tests redefining an empty buffer. Adapted from WebGL test
+// conformance/rendering/draw-arrays-out-of-bounds.html
+TEST_P(RobustBufferAccessBehaviorTest, EmptyBuffer)
+{
+    ANGLE_GL_PROGRAM(program, kWebGLVS, kWebGLFS);
+    glUseProgram(program);
+
+    ASSERT_EQ(0, glGetAttribLocation(program, "aOne"));
+
+    // Define empty buffer.
+    GLBuffer buffer;
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(0);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    ASSERT_GL_NO_ERROR();
+
+    // Redefine buffer with 3 float vectors.
+    constexpr GLfloat kFloats[] = {0, 0.5, 0, -0.5, -0.5, 0, 0.5, -0.5, 0};
+    glBufferData(GL_ARRAY_BUFFER, sizeof(kFloats), kFloats, GL_STATIC_DRAW);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    ASSERT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST(RobustBufferAccessBehaviorTest,
                        ES2_D3D9(),
                        ES2_D3D11_FL9_3(),
