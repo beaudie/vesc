@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0424e567_ff3fc779",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2577,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-23T19:54:46Z",
+      "side": 1,
+      "message": "could you file a new angle bug for this issue and leave an http://anglebug.com/ link here?",
+      "revId": "a8b992ac250512acdcce4498df94b8ca08981266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "735cb9dc_d160640b",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2582,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-23T19:54:46Z",
+      "side": 1,
+      "message": "could you file a new angle bug for this issue and leave an http://anglebug.com/ link here? Just one new bug for all the Intel failures would be best.",
+      "range": {
+        "startLine": 2582,
+        "startChar": 7,
+        "endLine": 2582,
+        "endChar": 35
+      },
+      "revId": "a8b992ac250512acdcce4498df94b8ca08981266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb1ecfdb_62496353",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2645,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-23T19:54:46Z",
+      "side": 1,
+      "message": "could you file a new angle bug for this issue and leave an http://anglebug.com/ link here? Just one new bug for all the Intel failures would be best.",
+      "range": {
+        "startLine": 2645,
+        "startChar": 3,
+        "endLine": 2645,
+        "endChar": 47
+      },
+      "revId": "a8b992ac250512acdcce4498df94b8ca08981266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74cc4b32_6a9da9aa",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2706,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-23T19:54:46Z",
+      "side": 1,
+      "message": "could you file a new angle bug for this issue and leave an http://anglebug.com/ link here? Just one new bug for all the Intel failures would be best.",
+      "range": {
+        "startLine": 2706,
+        "startChar": 4,
+        "endLine": 2706,
+        "endChar": 47
+      },
+      "revId": "a8b992ac250512acdcce4498df94b8ca08981266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
