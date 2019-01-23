@@ -463,6 +463,8 @@ Error Display::initialize()
 
     gl::InitializeDebugAnnotations(&mAnnotator);
 
+    gl::InitializeDebugMutex(&mDebugMutex);
+
     SCOPED_ANGLE_HISTOGRAM_TIMER("GPU.ANGLE.DisplayInitializeMS");
     TRACE_EVENT0("gpu.angle", "egl::Display::initialize");
 
@@ -585,6 +587,8 @@ Error Display::terminate(const Thread *thread)
     mDeviceLost = false;
 
     mInitialized = false;
+
+    gl::UninitializeDebugMutex(&mDebugMutex);
 
     gl::UninitializeDebugAnnotations();
 
