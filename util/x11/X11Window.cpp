@@ -478,6 +478,10 @@ void X11Window::signalTestEvent()
 
     // Hijack StructureNotifyMask as we know we will be listening for it.
     XSendEvent(mDisplay, mWindow, False, StructureNotifyMask, &event);
+
+    // For test events, the tests want to check that it really did arrive, and they don't wait
+    // long.  XSync here makes sure the event is sent by the time the messageLoop() is called.
+    XSync(mDisplay, false);
 }
 
 void X11Window::processEvent(const XEvent &xEvent)
