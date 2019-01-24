@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7040bda6_ae89f42b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-24T19:58:03Z",
+      "side": 1,
+      "message": "Sounds like it\u0027s needed locally as well",
+      "range": {
+        "startLine": 7,
+        "startChar": 36,
+        "endLine": 7,
+        "endChar": 48
+      },
+      "revId": "b2bed050d58d35d69dc1cf0eaf9452e5726495f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6fe8d49_4b7a6d10",
+        "filename": "third_party/vulkan-validation-layers/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-24T19:58:03Z",
+      "side": 1,
+      "message": "Could you copy the comment from the above action here, or generalize it to apply to both actions?",
+      "range": {
+        "startLine": 413,
+        "startChar": 0,
+        "endLine": 413,
+        "endChar": 43
+      },
+      "revId": "b2bed050d58d35d69dc1cf0eaf9452e5726495f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
