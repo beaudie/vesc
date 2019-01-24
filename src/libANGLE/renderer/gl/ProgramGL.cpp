@@ -376,6 +376,14 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
         GLint linkStatus = GL_FALSE;
         mFunctions->getProgramiv(mProgramID, GL_LINK_STATUS, &linkStatus);
 
+        if (linkStatus == GL_FALSE)
+        {
+            GLint infoLogLength = 0;
+            mFunctions->getProgramiv(mProgramID, GL_INFO_LOG_LENGTH, &infoLogLength);
+            // To try again in the main context if the log is empty.
+            return infoLogLength == 0;
+        }
+
         return false;
     });
 

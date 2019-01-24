@@ -145,7 +145,7 @@ ShCompileOptions ShaderGL::prepareSourceAndReturnOptions(const gl::Context *cont
     return options;
 }
 
-void ShaderGL::compileAndCheckShader(const char *source)
+bool ShaderGL::compileAndCheckShader(const char *source)
 {
     const FunctionsGL *functions = mRenderer->getFunctions();
     functions->shaderSource(mShaderID, 1, &source, nullptr);
@@ -173,8 +173,11 @@ void ShaderGL::compileAndCheckShader(const char *source)
         else
         {
             WARN() << std::endl << "Shader compilation failed with no info log.";
+            // To try again in the main context.
+            return true;
         }
     }
+    return false;
 }
 
 void ShaderGL::compileAsync(const std::string &source)
@@ -183,8 +186,7 @@ void ShaderGL::compileAsync(const std::string &source)
     ScopedWorkerContextGL worker(mRenderer.get(), &infoLog);
     if (worker())
     {
-        compileAndCheckShader(source.c_str());
-        mFallbackToMainThread = false;
+        mFallbackToMainThread = compileAndCheckShader(source.c_str());
     }
     else
     {

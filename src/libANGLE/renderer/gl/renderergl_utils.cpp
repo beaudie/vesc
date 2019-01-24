@@ -1448,7 +1448,7 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
 
     workarounds->dontRelinkProgramsInParallel = IsAndroid() || (IsWindows() && IsIntel(vendor));
 
-    workarounds->disableWorkerContexts = !IsApple();
+    workarounds->disableWorkerContexts = !IsApple() && !IsWindows();
 }
 
 void ApplyWorkarounds(const FunctionsGL *functions, gl::Workarounds *workarounds)

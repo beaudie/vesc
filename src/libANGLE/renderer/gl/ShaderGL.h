@@ -39,7 +39,7 @@ class ShaderGL : public ShaderImpl
     GLuint getShaderID() const;
 
   private:
-    void compileAndCheckShader(const char *source);
+    bool compileAndCheckShader(const char *source);
 
     GLuint mShaderID;
     MultiviewImplementationTypeGL mMultiviewImplementationType;
