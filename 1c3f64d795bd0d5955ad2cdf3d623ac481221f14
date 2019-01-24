@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9dc7cb71_061646f5",
+        "filename": "src/common/debug.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-24T18:21:09Z",
+      "side": 1,
+      "message": "We shouldn\u0027t make this a global static with an exit-time destructor. You will need to initialize and free it somehow within a non-global scope. You could jump into InitializeDebugAnnotations even though it\u0027s not the right named function.\n\nLong-term it would be better if ERR() and WARN() didn\u0027t use global variables. Instead they could use a context that works even if multi-threaded. But this is quite difficult so I\u0027m okay with using an easy solution like this.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 24
+      },
+      "revId": "1c3f64d795bd0d5955ad2cdf3d623ac481221f14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
