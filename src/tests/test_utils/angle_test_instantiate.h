@@ -17,6 +17,13 @@ namespace angle
 
 struct PlatformParameters;
 
+// Operating systems
+bool IsAndroid();
+bool IsLinux();
+bool IsOSX();
+bool IsOzone();
+bool IsWindows();
+
 bool IsPlatformAvailable(const PlatformParameters &param);
 
 // This functions is used to filter which tests should be registered,
