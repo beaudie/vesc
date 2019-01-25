@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0d1f992c_d512f392",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-25T20:41:25Z",
+      "side": 1,
+      "message": "Yes of course. I was worried I might trip up whatever tool is reading the result.",
+      "parentUuid": "46f54528_3990f395",
+      "range": {
+        "startLine": 273,
+        "startChar": 3,
+        "endLine": 275,
+        "endChar": 72
+      },
+      "revId": "2206f26822bb5dc9055605e66891a0ace7c107a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d747d5a9_a8e1006c",
         "filename": "src/tests/perf_tests/ANGLEPerfTest.h",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2019-01-25T20:01:08Z",
       "side": 1,
       "message": "tiny nit: you can capsify mGPUTimeNS",
+      "range": {
+        "startLine": 96,
+        "startChar": 13,
+        "endLine": 96,
+        "endChar": 23
+      },
+      "revId": "2206f26822bb5dc9055605e66891a0ace7c107a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9ed0329_6e30c8ff",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-25T20:41:25Z",
+      "side": 1,
+      "message": "If you don\u0027t mind, I\u0027d prefer not to keep abbreviations capsed.\n\nThat seems to be inline with developer preferences too: https://stackoverflow.com/q/15526107/912144\n\nAnd Google\u0027s definition of CamelCase (though for JS): https://google.github.io/styleguide/jsguide.html#naming-camel-case-defined",
+      "parentUuid": "d747d5a9_a8e1006c",
       "range": {
         "startLine": 96,
         "startChar": 13,
