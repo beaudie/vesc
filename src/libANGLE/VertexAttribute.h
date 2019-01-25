@@ -39,16 +39,10 @@ class VertexBinding final : angle::NonCopyable
     void setOffset(GLintptr offsetIn) { mOffset = offsetIn; }
 
     const BindingPointer<Buffer> &getBuffer() const { return mBuffer; }
+    BindingPointer<Buffer> &getBuffer() { return mBuffer; }
 
-    ANGLE_INLINE void setBuffer(const gl::Context *context, Buffer *bufferIn, bool containerIsBound)
+    ANGLE_INLINE void setBuffer(const gl::Context *context, Buffer *bufferIn)
     {
-        if (containerIsBound)
-        {
-            if (mBuffer.get())
-                mBuffer->onNonTFBindingChanged(-1);
-            if (bufferIn)
-                bufferIn->onNonTFBindingChanged(1);
-        }
         mBuffer.set(context, bufferIn);
     }
 
