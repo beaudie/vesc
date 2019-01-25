@@ -43,5 +43,7 @@ TEST_F(EGLThreadTest, ThreadInitCrash)
     eglGetCurrentSurface(EGL_DRAW);
     eglGetCurrentContext();
 
+    eglReleaseThread();
+    ASSERT_EGL_SUCCESS();
     eglTerminate(mDisplay);
 }

@@ -286,14 +286,21 @@ angle::Result FramebufferGL::clear(const gl::Context *context, GLbitfield mask)
     syncClearState(context, mask);
     stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
 
-    if (!RequiresMultiviewClear(mState, context->getState().isScissorTestEnabled()))
+    const gl::Rectangle scissor = context->getState().getScissor();
+    bool scissorOn              = context->getState().isScissorTestEnabled();
+    if (scissorOn && scissor.width == 0 && scissor.height == 0)
+    {
+        return angle::Result::Continue;
+    }
+
+    if (!RequiresMultiviewClear(mState, scissorOn))
     {
         functions->clear(mask);
     }
     else
     {
         ClearMultiviewGL *multiviewClearer = GetMultiviewClearer(context);
-        multiviewClearer->clearMultiviewFBO(mState, context->getState().getScissor(),
+        multiviewClearer->clearMultiviewFBO(mState, scissor,
                                             ClearMultiviewGL::ClearCommandType::Clear, mask,
                                             GL_NONE, 0, nullptr, 0.0f, 0);
     }

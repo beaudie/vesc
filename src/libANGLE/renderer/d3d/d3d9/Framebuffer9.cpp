@@ -69,7 +69,13 @@ angle::Result Framebuffer9::clearImpl(const gl::Context *context,
     mRenderer->setViewport(glState.getViewport(), nearZ, farZ, gl::PrimitiveMode::Triangles,
                            glState.getRasterizerState().frontFace, true);
 
-    mRenderer->setScissorRectangle(glState.getScissor(), glState.isScissorTestEnabled());
+    const gl::Rectangle scissor = glState.getScissor();
+    const bool scissorOn        = glState.isScissorTestEnabled();
+    if (scissorOn && scissor.width == 0 && scissor.height == 0)
+    {
+        return angle::Result::Continue;
+    }
+    mRenderer->setScissorRectangle(scissor, scissorOn);
 
     mRenderer->clear(clearParams, mRenderTargetCache.getColors()[0],
                      mRenderTargetCache.getDepthStencil());
