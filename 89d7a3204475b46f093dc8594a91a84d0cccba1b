@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8336af20_35096b4a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 47
+      },
+      "lineNbr": 3443,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-25T20:06:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce57ede6_47d2ea02",
+      "revId": "89d7a3204475b46f093dc8594a91a84d0cccba1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c71f8ec_fdc3f93e",
         "filename": "src/libANGLE/renderer/d3d/d3d9/Buffer9.cpp",
         "patchSetId": 47
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "9a1cd879_07961a5b",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Buffer9.cpp",
+        "patchSetId": 47
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-25T20:06:19Z",
+      "side": 1,
+      "message": "Removed this.",
+      "parentUuid": "0c71f8ec_fdc3f93e",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 5
+      },
+      "revId": "89d7a3204475b46f093dc8594a91a84d0cccba1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1736eb66_72095d1c",
         "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
         "patchSetId": 47
@@ -56,6 +98,24 @@
       "revId": "89d7a3204475b46f093dc8594a91a84d0cccba1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d1a4034_c1036921",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 47
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-25T20:06:19Z",
+      "side": 1,
+      "message": "Haha, yeah. Me too.",
+      "parentUuid": "1736eb66_72095d1c",
+      "revId": "89d7a3204475b46f093dc8594a91a84d0cccba1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
