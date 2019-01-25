@@ -22,6 +22,30 @@
       "revId": "5ed9141ea7b13d2fe941ca10c6b7d3958e628a18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f53fe97f_0f2357c5",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1679,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-01-25T22:44:56Z",
+      "side": 1,
+      "message": "Removed, went with Geoff\u0027s recommendation.",
+      "parentUuid": "3cd8c206_ffd41e8a",
+      "range": {
+        "startLine": 1673,
+        "startChar": 0,
+        "endLine": 1679,
+        "endChar": 5
+      },
+      "revId": "5ed9141ea7b13d2fe941ca10c6b7d3958e628a18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
