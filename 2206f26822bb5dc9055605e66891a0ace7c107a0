@@ -93,6 +93,30 @@
       "revId": "2206f26822bb5dc9055605e66891a0ace7c107a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f54036ee_bd7c2066",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-25T20:47:37Z",
+      "side": 1,
+      "message": "I\u0027d prefer just to keep the status quo. Defining a new rule and not refactoring the old code base would be a worse outcome. A good part of the code uses caps abbreviations for five+ years of ANGLE dev. Going back and refactoring all the old code seems like a waste of time even if it\u0027s slightly more correct. If you want I can request using caps for acronyms in our style guide.\n\nAnyway not a big deal so you don\u0027t have to change it. I just don\u0027t like arbitrarily defining a semi-supported new rule and having to refactor our entire code base.",
+      "parentUuid": "c9ed0329_6e30c8ff",
+      "range": {
+        "startLine": 96,
+        "startChar": 13,
+        "endLine": 96,
+        "endChar": 23
+      },
+      "revId": "2206f26822bb5dc9055605e66891a0ace7c107a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
