@@ -16,6 +16,24 @@
       "revId": "fc30bfbedbe38d0ee1ef9971852a2beef96fcd62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa4cc9fc_cbe96646",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-01-25T21:39:26Z",
+      "side": 1,
+      "message": "We use the renderpass to figure out renderArea.\nWhat I think I want is: mState.getDimensions().width, mState.getDimensions().height\nbut I don\u0027t have access to mState here.\nSuggestions?",
+      "parentUuid": "fd23fcf4_63541625",
+      "revId": "fc30bfbedbe38d0ee1ef9971852a2beef96fcd62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
