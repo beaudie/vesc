@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3cd8c206_ffd41e8a",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1679,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-25T19:03:25Z",
+      "side": 1,
+      "message": "I think you should add a comment here that this is a non-standard vendor extension used to maintain compatibility on Android. A pointer to the spec text would be good.",
+      "range": {
+        "startLine": 1673,
+        "startChar": 0,
+        "endLine": 1679,
+        "endChar": 5
+      },
+      "revId": "5ed9141ea7b13d2fe941ca10c6b7d3958e628a18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
