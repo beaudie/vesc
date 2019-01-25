@@ -1670,6 +1670,14 @@ Error ValidateMakeCurrent(Display *display, Surface *draw, Surface *read, gl::Co
                << "read and draw must both be valid surfaces, or both be EGL_NO_SURFACE";
     }
 
+    // Setting all parameters to null is how we release the current context
+    // This is the only case where we can pass invalid display to makeCurrent
+    if (display == EGL_NO_DISPLAY && context == EGL_NO_CONTEXT && draw == EGL_NO_SURFACE &&
+        read == EGL_NO_SURFACE)
+    {
+        return NoError();
+    }
+
     if (display == EGL_NO_DISPLAY || !Display::isValidDisplay(display))
     {
         return EglBadDisplay() << "'dpy' not a valid EGLDisplay handle";
