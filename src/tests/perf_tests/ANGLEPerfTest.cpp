@@ -170,6 +170,7 @@ ANGLEPerfTest::ANGLEPerfTest(const std::string &name,
     : mName(name),
       mSuffix(suffix),
       mTimer(CreateTimer()),
+      mGpuTimeNs(0),
       mSkipTest(false),
       mStepsToRun(std::numeric_limits<unsigned int>::max()),
       mNumStepsPerformed(0),
@@ -225,6 +226,7 @@ void ANGLEPerfTest::doRunLoop(double maxRunTime)
     mNumStepsPerformed = 0;
     mRunning           = true;
     mTimer->start();
+    startTest();
 
     while (mRunning)
     {
@@ -268,7 +270,10 @@ void ANGLEPerfTest::TearDown() {}
 
 void ANGLEPerfTest::printResults()
 {
-    double elapsedTimeSeconds = mTimer->getElapsedTime();
+    // If measured gpu time is non-zero, print that instead of CPU time.
+    bool printGpuTime         = mGpuTimeNs > 0;
+    const char *clockName     = printGpuTime ? "gpu_time" : "wall_time";
+    double elapsedTimeSeconds = printGpuTime ? mGpuTimeNs * 1e-9 : mTimer->getElapsedTime();
 
     double secondsPerStep      = elapsedTimeSeconds / static_cast<double>(mNumStepsPerformed);
     double secondsPerIteration = secondsPerStep / static_cast<double>(mIterationsPerStep);
@@ -277,12 +282,12 @@ void ANGLEPerfTest::printResults()
     if (secondsPerIteration > 1e-3)
     {
         double microSecondsPerIteration = secondsPerIteration * kMicroSecondsPerSecond;
-        printResult("wall_time", microSecondsPerIteration, "us", true);
+        printResult(clockName, microSecondsPerIteration, "us", true);
     }
     else
     {
         double nanoSecPerIteration = secondsPerIteration * kNanoSecondsPerSecond;
-        printResult("wall_time", nanoSecPerIteration, "ns", true);
+        printResult(clockName, nanoSecPerIteration, "ns", true);
     }
 }
 
@@ -505,8 +510,23 @@ void ANGLERenderTest::step()
     }
 }
 
+void ANGLERenderTest::startTest()
+{
+    if (mTestParams.trackGpuTime)
+    {
+        glGenQueriesEXT(1, &mTimestampQuery);
+        glBeginQueryEXT(GL_TIME_ELAPSED_EXT, mTimestampQuery);
+    }
+}
+
 void ANGLERenderTest::finishTest()
 {
+    if (mTestParams.trackGpuTime)
+    {
+        glEndQueryEXT(GL_TIME_ELAPSED_EXT);
+        glGetQueryObjectui64vEXT(mTimestampQuery, GL_QUERY_RESULT_EXT, &mGpuTimeNs);
+        glDeleteQueriesEXT(1, &mTimestampQuery);
+    }
     if (mTestParams.eglParameters.deviceType != EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE)
     {
         glFinish();
