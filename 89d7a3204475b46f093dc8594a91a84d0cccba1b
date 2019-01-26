@@ -133,6 +133,24 @@
       "revId": "89d7a3204475b46f093dc8594a91a84d0cccba1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da417445_489a4fcc",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 47
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-26T00:01:24Z",
+      "side": 1,
+      "message": "Requesting the robust buffer access extension should be sufficient. WebGL implicitly includes the robust extension. But these tests are specific to robust access.",
+      "parentUuid": "5c694c41_8f516314",
+      "revId": "89d7a3204475b46f093dc8594a91a84d0cccba1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
