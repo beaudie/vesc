@@ -34,6 +34,24 @@
       "revId": "fc30bfbedbe38d0ee1ef9971852a2beef96fcd62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17968f35_6a5b5cc1",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-28T14:58:09Z",
+      "side": 1,
+      "message": "It\u0027s fine to leave it as is for now.",
+      "parentUuid": "fa4cc9fc_cbe96646",
+      "revId": "fc30bfbedbe38d0ee1ef9971852a2beef96fcd62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
