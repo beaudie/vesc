@@ -86,6 +86,22 @@ enum HLSLRWTextureGroup
     HLSL_RWTEXTURE_2D_ARRAY_INT4,
     HLSL_RWTEXTURE_3D_INT4,
 
+    HLSL_RWTEXTURE_2D_FLOAT4_COHERENT,
+    HLSL_RWTEXTURE_2D_ARRAY_FLOAT4_COHERENT,
+    HLSL_RWTEXTURE_3D_FLOAT4_COHERENT,
+    HLSL_RWTEXTURE_2D_UNORM_COHERENT,
+    HLSL_RWTEXTURE_2D_ARRAY_UNORN_COHERENT,
+    HLSL_RWTEXTURE_3D_UNORM_COHERENT,
+    HLSL_RWTEXTURE_2D_SNORM_COHERENT,
+    HLSL_RWTEXTURE_2D_ARRAY_SNORM_COHERENT,
+    HLSL_RWTEXTURE_3D_SNORM_COHERENT,
+    HLSL_RWTEXTURE_2D_UINT4_COHERENT,
+    HLSL_RWTEXTURE_2D_ARRAY_UINT4_COHERENT,
+    HLSL_RWTEXTURE_3D_UINT4_COHERENT,
+    HLSL_RWTEXTURE_2D_INT4_COHERENT,
+    HLSL_RWTEXTURE_2D_ARRAY_INT4_COHERENT,
+    HLSL_RWTEXTURE_3D_INT4_COHERENT,
+
     HLSL_RWTEXTURE_UNKNOWN,
     HLSL_RWTEXTURE_MAX = HLSL_RWTEXTURE_UNKNOWN
 };
@@ -101,14 +117,19 @@ const char *TextureGroupSuffix(const TBasicType type,
 const char *TextureTypeSuffix(const TBasicType type,
                               TLayoutImageInternalFormat imageInternalFormat = EiifUnspecified);
 HLSLRWTextureGroup RWTextureGroup(const TBasicType type,
-                                  TLayoutImageInternalFormat imageInternalFormat);
+                                  TLayoutImageInternalFormat imageInternalFormat,
+                                  bool globallyCoherent);
 const char *RWTextureString(const HLSLRWTextureGroup textureGroup);
-const char *RWTextureString(const TBasicType type, TLayoutImageInternalFormat imageInternalFormat);
+const char *RWTextureString(const TBasicType type,
+                            TLayoutImageInternalFormat imageInternalFormat,
+                            bool globallyCoherent);
 const char *RWTextureGroupSuffix(const HLSLRWTextureGroup type);
 const char *RWTextureGroupSuffix(const TBasicType type,
-                                 TLayoutImageInternalFormat imageInternalFormat);
+                                 TLayoutImageInternalFormat imageInternalFormat,
+                                 bool globallyCoherent);
 const char *RWTextureTypeSuffix(const TBasicType type,
-                                TLayoutImageInternalFormat imageInternalFormat);
+                                TLayoutImageInternalFormat imageInternalFormat,
+                                bool globallyCoherent);
 
 const char *SamplerString(const TBasicType type);
 const char *SamplerString(HLSLTextureGroup type);

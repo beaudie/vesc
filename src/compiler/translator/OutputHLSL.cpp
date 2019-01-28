@@ -2228,7 +2228,9 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                 TType type                               = (*arguments)[0]->getAsTyped()->getType();
                 const ImmutableString &imageFunctionName = mImageFunctionHLSL->useImageFunction(
                     name, type.getBasicType(), type.getLayoutQualifier().imageInternalFormat,
-                    type.getMemoryQualifier().readonly);
+                    type.getMemoryQualifier().readonly,
+                    type.getMemoryQualifier().coherent ||
+                        type.getMemoryQualifier().volatileQualifier);
                 out << imageFunctionName << "(";
             }
             else if (node->getFunction()->isAtomicCounterFunction())

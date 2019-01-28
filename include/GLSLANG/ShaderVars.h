@@ -191,6 +191,8 @@ struct Uniform : public VariableWithLocation
     int offset;
     bool readonly;
     bool writeonly;
+    bool coherent;
+    bool volatileQualifier;
 
     // Decide whether two uniforms are the same at shader link time,
     // assuming one from vertex shader and the other from fragment shader.

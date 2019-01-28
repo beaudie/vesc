@@ -2571,6 +2571,325 @@ void main()
     }
 }
 
+// Test image variable with coherent qualifier to access Texture2D, verify that
+// reads and writes are coherent.
+TEST_P(ComputeShaderTest, ImageCoherentAccessTexture2D)
+{
+    GLTexture texture;
+    GLFramebuffer framebuffer;
+    constexpr char kCS[] = R"(#version 310 es
+layout (local_size_x = 4, local_size_y = 4, local_size_z = 1) in;
+layout (r32f, binding=0) coherent uniform highp image2D u_image;
+void main (void)
+{
+    int gx = int(gl_GlobalInvocationID.x);
+    int gy = int(gl_GlobalInvocationID.y);
+    imageStore(u_image, ivec2(gx, gy), vec4(gx^gy));
+
+    memoryBarrier();
+    barrier();
+
+    float sum = float(0.0);
+    int groupBaseX = gx/4*4;
+    int groupBaseY = gy/4*4;
+    int xOffsets[] = int[]( 1, 3, 5, 7 );
+    int yOffsets[] = int[]( 2, 4, 6, 8 );
+    for (int i = 0; i < 4; i++)
+    {
+        int readX = groupBaseX + (gx + xOffsets[i]) % 4;
+        int readY = groupBaseY + (gy + yOffsets[i]) % 4;
+        sum += imageLoad(u_image, ivec2(readX, readY)).x;
+    }
+    memoryBarrier();
+    barrier();
+
+    imageStore(u_image, ivec2(gx, gy), vec4(sum));
+})";
+
+    constexpr int kWidth = 128, kHeight = 128;
+    constexpr GLfloat kInputValues[kWidth * kHeight] = {0.0f};
+
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_R32F, kWidth, kHeight);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kWidth, kHeight, GL_RED, GL_FLOAT, kInputValues);
+    EXPECT_GL_NO_ERROR();
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+    glUseProgram(program);
+
+    glBindImageTexture(0, texture, 0, GL_TRUE, 0, GL_READ_WRITE, GL_R32F);
+    glDispatchCompute(32, 32, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    GLfloat outputValues[kWidth * kHeight] = {0.0f};
+    glUseProgram(0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    EXPECT_GL_NO_ERROR();
+    glReadPixels(0, 0, kWidth, kHeight, GL_RED, GL_FLOAT, outputValues);
+    EXPECT_GL_NO_ERROR();
+
+    GLfloat expectedValues[kWidth * kHeight] = {0.0f};
+    GLfloat base[kWidth * kHeight]           = {0.0f};
+    GLint offsetsX[]                         = {1, 3, 5, 7};
+    GLint offsetsY[]                         = {2, 4, 6, 8};
+    for (int y = 0; y < kHeight; y++)
+    {
+        for (int x = 0; x < kWidth; x++)
+        {
+            base[y * kWidth + x] = (x ^ y) / 1.0f;
+        }
+    }
+
+    for (int y = 0; y < kHeight; y++)
+    {
+        for (int x = 0; x < kWidth; x++)
+        {
+            const int groupBaseX = x / 4 * 4;
+            const int groupBaseY = y / 4 * 4;
+            GLfloat sum          = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                int readX = groupBaseX + (x + offsetsX[i]) % 4;
+                int readY = groupBaseY + (y + offsetsY[i]) % 4;
+                sum += base[readY * kWidth + readX];
+            }
+
+            expectedValues[y * kWidth + x] = sum;
+        }
+    }
+
+    for (int i = 0; i < kWidth * kHeight; i++)
+    {
+        EXPECT_EQ(expectedValues[i], outputValues[i]);
+    }
+
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test image variable with coherent qualifier to access Texture3D, verify that
+// reads and writes are coherent.
+TEST_P(ComputeShaderTest, ImageCoherentAccessTexture3D)
+{
+    GLTexture texture;
+    GLFramebuffer framebuffer;
+    constexpr char kCS[] = R"(#version 310 es
+layout (local_size_x = 4, local_size_y = 4, local_size_z = 4) in;
+layout (r32f, binding=0) coherent uniform highp image3D u_image;
+void main (void)
+{
+    int gx = int(gl_GlobalInvocationID.x);
+    int gy = int(gl_GlobalInvocationID.y);
+    int gz = int(gl_GlobalInvocationID.z);
+    imageStore(u_image, ivec3(gx, gy, gz), vec4(gx^gy^gz));
+
+    memoryBarrier();
+    barrier();
+
+    float sum = float(0);
+    int groupBaseX = gx/4*4;
+    int groupBaseY = gy/4*4;
+    int groupBaseZ = gz/4*4;
+    int xOffsets[] = int[]( 1, 4, 7, 10 );
+    int yOffsets[] = int[]( 2, 5, 8, 11 );
+    int zOffsets[] = int[]( 3, 6, 9, 12 );
+    for (int i = 0; i < 4; i++)
+    {
+        int readX = groupBaseX + (gx + xOffsets[i]) % 4;
+        int readY = groupBaseY + (gy + yOffsets[i]) % 4;
+        int readZ = groupBaseZ + (gz + zOffsets[i]) % 4;
+        sum += imageLoad(u_image, ivec3(readX, readY, readZ)).x;
+    }
+
+    memoryBarrier();
+    barrier();
+
+    imageStore(u_image, ivec3(gx, gy, gz), vec4(sum));
+})";
+
+    constexpr int kWidth = 64, kHeight = 64, kDepth = 8;
+    constexpr GLfloat kInputValues[kWidth][kHeight][kDepth] = {{{0.0f}}, {{0.0f}}, {{0.0f}}};
+
+    glBindTexture(GL_TEXTURE_3D, texture);
+    glTexStorage3D(GL_TEXTURE_3D, 1, GL_R32F, kWidth, kHeight, kDepth);
+    glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, kWidth, kHeight, kDepth, GL_RED, GL_FLOAT,
+                    kInputValues);
+    EXPECT_GL_NO_ERROR();
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+    glUseProgram(program);
+
+    glBindImageTexture(0, texture, 0, GL_TRUE, 0, GL_READ_WRITE, GL_R32F);
+    glDispatchCompute(16, 16, 2);
+    EXPECT_GL_NO_ERROR();
+
+    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    GLfloat expectedValues[kWidth][kHeight][kDepth] = {{{0.0f}}, {{0.0f}}, {{0.0f}}};
+    GLfloat base[kWidth][kHeight][kDepth]           = {{{0.0f}}, {{0.0f}}, {{0.0f}}};
+    for (int z = 0; z < kDepth; z++)
+        for (int y = 0; y < kHeight; y++)
+            for (int x = 0; x < kWidth; x++)
+                base[x][y][z] = (x ^ y ^ z) / 1.0f;
+
+    GLint offsetsX[] = {1, 4, 7, 10};
+    GLint offsetsY[] = {2, 5, 8, 11};
+    GLint offsetsZ[] = {3, 6, 9, 12};
+
+    for (int z = 0; z < kDepth; z++)
+        for (int y = 0; y < kHeight; y++)
+        {
+            for (int x = 0; x < kWidth; x++)
+            {
+                const int groupBaseX = x / 4 * 4;
+                const int groupBaseY = y / 4 * 4;
+                const int groupBaseZ = z / 4 * 4;
+                GLfloat sum          = 0;
+                for (int i = 0; i < 4; i++)
+                {
+                    int readX = groupBaseX + (x + offsetsX[i]) % 4;
+                    int readY = groupBaseY + (y + offsetsY[i]) % 4;
+                    int readZ = groupBaseZ + (z + offsetsZ[i]) % 4;
+                    sum += base[readX][readY][readZ];
+                }
+
+                expectedValues[x][y][z] = sum;
+            }
+        }
+
+    glUseProgram(0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+
+    for (int i = 0; i < kDepth; i++)
+    {
+        GLfloat outputValues[kWidth][kHeight] = {{0.0f}, {0.0f}};
+        glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture, 0, i);
+        glReadBuffer(GL_COLOR_ATTACHMENT0);
+        EXPECT_GL_NO_ERROR();
+        glReadPixels(0, 0, kWidth, kHeight, GL_RED, GL_FLOAT, outputValues);
+        EXPECT_GL_NO_ERROR();
+
+        for (int j = 0; j < kHeight; j++)
+            for (int k = 0; k < kWidth; k++)
+            {
+                EXPECT_EQ(expectedValues[k][j][i], outputValues[k][j]);
+            }
+
+        EXPECT_GL_NO_ERROR();
+    }
+}
+
+// Test image variable with volatile qualifier to access Texture3D.
+TEST_P(ComputeShaderTest, ImageVolatileAccessTexture3D)
+{
+    GLTexture texture;
+    GLFramebuffer framebuffer;
+    constexpr char kCS[] = R"(#version 310 es 
+layout (local_size_x = 4, local_size_y = 4, local_size_z = 4) in;
+layout (r32f, binding=0) volatile uniform highp image3D u_image;
+void main (void)
+{
+    int gx = int(gl_GlobalInvocationID.x);
+    int gy = int(gl_GlobalInvocationID.y);
+    int gz = int(gl_GlobalInvocationID.z);
+    imageStore(u_image, ivec3(gx, gy, gz), vec4(gx^gy^gz));
+
+    memoryBarrier();
+    barrier();
+
+    float sum = float(0);
+    int groupBaseX = gx/4*4;
+    int groupBaseY = gy/4*4;
+    int groupBaseZ = gz/4*4;
+    int xOffsets[] = int[]( 1, 4, 7, 10 );
+    int yOffsets[] = int[]( 2, 5, 8, 11 );
+    int zOffsets[] = int[]( 3, 6, 9, 12 );
+    for (int i = 0; i < 4; i++)
+    {
+        int readX = groupBaseX + (gx + xOffsets[i]) % 4;
+        int readY = groupBaseY + (gy + yOffsets[i]) % 4;
+        int readZ = groupBaseZ + (gz + zOffsets[i]) % 4;
+        sum += imageLoad(u_image, ivec3(readX, readY, readZ)).x;
+    }
+
+    memoryBarrier();
+    barrier();
+
+    imageStore(u_image, ivec3(gx, gy, gz), vec4(sum));
+})";
+
+    constexpr int kWidth = 64, kHeight = 64, kDepth = 8;
+    constexpr GLfloat kInputValues[kWidth][kHeight][kDepth] = {{{0.0f}}, {{0.0f}}, {{0.0f}}};
+
+    glBindTexture(GL_TEXTURE_3D, texture);
+    glTexStorage3D(GL_TEXTURE_3D, 1, GL_R32F, kWidth, kHeight, kDepth);
+    glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, kWidth, kHeight, kDepth, GL_RED, GL_FLOAT,
+                    kInputValues);
+    EXPECT_GL_NO_ERROR();
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+    glUseProgram(program);
+
+    glBindImageTexture(0, texture, 0, GL_TRUE, 0, GL_READ_WRITE, GL_R32F);
+    glDispatchCompute(16, 16, 2);
+    EXPECT_GL_NO_ERROR();
+
+    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    GLfloat expectedValues[kWidth][kHeight][kDepth] = {{{0.0f}}, {{0.0f}}, {{0.0f}}};
+    GLfloat base[kWidth][kHeight][kDepth]           = {{{0.0f}}, {{0.0f}}, {{0.0f}}};
+    for (int z = 0; z < kDepth; z++)
+        for (int y = 0; y < kHeight; y++)
+            for (int x = 0; x < kWidth; x++)
+                base[x][y][z] = (x ^ y ^ z) / 1.0f;
+
+    GLint offsetsX[] = {1, 4, 7, 10};
+    GLint offsetsY[] = {2, 5, 8, 11};
+    GLint offsetsZ[] = {3, 6, 9, 12};
+
+    for (int z = 0; z < kDepth; z++)
+        for (int y = 0; y < kHeight; y++)
+        {
+            for (int x = 0; x < kWidth; x++)
+            {
+                const int groupBaseX = x / 4 * 4;
+                const int groupBaseY = y / 4 * 4;
+                const int groupBaseZ = z / 4 * 4;
+                GLfloat sum          = 0;
+                for (int i = 0; i < 4; i++)
+                {
+                    int readX = groupBaseX + (x + offsetsX[i]) % 4;
+                    int readY = groupBaseY + (y + offsetsY[i]) % 4;
+                    int readZ = groupBaseZ + (z + offsetsZ[i]) % 4;
+                    sum += base[readX][readY][readZ];
+                }
+
+                expectedValues[x][y][z] = sum;
+            }
+        }
+
+    glUseProgram(0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+
+    for (int i = 0; i < kDepth; i++)
+    {
+        GLfloat outputValues[kWidth][kHeight] = {{0.0f}, {0.0f}};
+        glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture, 0, i);
+        glReadBuffer(GL_COLOR_ATTACHMENT0);
+        EXPECT_GL_NO_ERROR();
+        glReadPixels(0, 0, kWidth, kHeight, GL_RED, GL_FLOAT, outputValues);
+        EXPECT_GL_NO_ERROR();
+
+        for (int j = 0; j < kHeight; j++)
+            for (int k = 0; k < kWidth; k++)
+            {
+                EXPECT_EQ(expectedValues[k][j][i], outputValues[k][j]);
+            }
+
+        EXPECT_GL_NO_ERROR();
+    }
+}
+
 ANGLE_INSTANTIATE_TEST(ComputeShaderTest, ES31_OPENGL(), ES31_OPENGLES(), ES31_D3D11());
 ANGLE_INSTANTIATE_TEST(ComputeShaderTestES3, ES3_OPENGL(), ES3_OPENGLES());
 ANGLE_INSTANTIATE_TEST(WebGL2ComputeTest, ES31_D3D11());

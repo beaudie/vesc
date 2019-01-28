@@ -28,7 +28,8 @@ class ImageFunctionHLSL final : angle::NonCopyable
     ImmutableString useImageFunction(const ImmutableString &name,
                                      const TBasicType &type,
                                      TLayoutImageInternalFormat imageInternalFormat,
-                                     bool readonly);
+                                     bool readonly,
+                                     bool globallyCoherent);
 
     void imageFunctionHeader(TInfoSinkBase &out);
     const std::set<std::string> &getUsedImage2DFunctionNames() const
@@ -68,6 +69,7 @@ class ImageFunctionHLSL final : angle::NonCopyable
         TBasicType image;
         TLayoutImageInternalFormat imageInternalFormat;
         bool readonly;
+        bool globallyCoherent;
         Method method;
         DataType type;
     };

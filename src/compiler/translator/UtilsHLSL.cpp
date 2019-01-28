@@ -493,7 +493,8 @@ const char *TextureTypeSuffix(const TBasicType type, TLayoutImageInternalFormat 
 }
 
 HLSLRWTextureGroup RWTextureGroup(const TBasicType type,
-                                  TLayoutImageInternalFormat imageInternalFormat)
+                                  TLayoutImageInternalFormat imageInternalFormat,
+                                  bool globallyCoherent)
 
 {
     switch (type)
@@ -505,11 +506,14 @@ HLSLRWTextureGroup RWTextureGroup(const TBasicType type,
                 case EiifRGBA32F:
                 case EiifRGBA16F:
                 case EiifR32F:
-                    return HLSL_RWTEXTURE_2D_FLOAT4;
+                    return globallyCoherent ? HLSL_RWTEXTURE_2D_FLOAT4_COHERENT
+                                            : HLSL_RWTEXTURE_2D_FLOAT4;
                 case EiifRGBA8:
-                    return HLSL_RWTEXTURE_2D_UNORM;
+                    return globallyCoherent ? HLSL_RWTEXTURE_2D_UNORM_COHERENT
+                                            : HLSL_RWTEXTURE_2D_UNORM;
                 case EiifRGBA8_SNORM:
-                    return HLSL_RWTEXTURE_2D_SNORM;
+                    return globallyCoherent ? HLSL_RWTEXTURE_2D_SNORM_COHERENT
+                                            : HLSL_RWTEXTURE_2D_SNORM;
                 default:
                     UNREACHABLE();
             }
@@ -525,7 +529,8 @@ HLSLRWTextureGroup RWTextureGroup(const TBasicType type,
                 case EiifRGBA16I:
                 case EiifRGBA8I:
                 case EiifR32I:
-                    return HLSL_RWTEXTURE_2D_INT4;
+                    return globallyCoherent ? HLSL_RWTEXTURE_2D_INT4_COHERENT
+                                            : HLSL_RWTEXTURE_2D_INT4;
                 default:
                     UNREACHABLE();
             }
@@ -542,7 +547,8 @@ HLSLRWTextureGroup RWTextureGroup(const TBasicType type,
                 case EiifRGBA16UI:
                 case EiifRGBA8UI:
                 case EiifR32UI:
-                    return HLSL_RWTEXTURE_2D_UINT4;
+                    return globallyCoherent ? HLSL_RWTEXTURE_2D_UINT4_COHERENT
+                                            : HLSL_RWTEXTURE_2D_UINT4;
                 default:
                     UNREACHABLE();
             }
@@ -557,11 +563,14 @@ HLSLRWTextureGroup RWTextureGroup(const TBasicType type,
                 case EiifRGBA32F:
                 case EiifRGBA16F:
                 case EiifR32F:
-                    return HLSL_RWTEXTURE_3D_FLOAT4;
+                    return globallyCoherent ? HLSL_RWTEXTURE_3D_FLOAT4_COHERENT
+                                            : HLSL_RWTEXTURE_3D_FLOAT4;
                 case EiifRGBA8:
-                    return HLSL_RWTEXTURE_3D_UNORM;
+                    return globallyCoherent ? HLSL_RWTEXTURE_3D_UNORM_COHERENT
+                                            : HLSL_RWTEXTURE_3D_UNORM;
                 case EiifRGBA8_SNORM:
-                    return HLSL_RWTEXTURE_3D_SNORM;
+                    return globallyCoherent ? HLSL_RWTEXTURE_3D_SNORM_COHERENT
+                                            : HLSL_RWTEXTURE_3D_SNORM;
                 default:
                     UNREACHABLE();
             }
@@ -577,7 +586,8 @@ HLSLRWTextureGroup RWTextureGroup(const TBasicType type,
                 case EiifRGBA16I:
                 case EiifRGBA8I:
                 case EiifR32I:
-                    return HLSL_RWTEXTURE_3D_INT4;
+                    return globallyCoherent ? HLSL_RWTEXTURE_3D_INT4_COHERENT
+                                            : HLSL_RWTEXTURE_3D_INT4;
                 default:
                     UNREACHABLE();
             }
@@ -593,7 +603,8 @@ HLSLRWTextureGroup RWTextureGroup(const TBasicType type,
                 case EiifRGBA16UI:
                 case EiifRGBA8UI:
                 case EiifR32UI:
-                    return HLSL_RWTEXTURE_3D_UINT4;
+                    return globallyCoherent ? HLSL_RWTEXTURE_3D_UINT4_COHERENT
+                                            : HLSL_RWTEXTURE_3D_UINT4;
                 default:
                     UNREACHABLE();
             }
@@ -609,11 +620,14 @@ HLSLRWTextureGroup RWTextureGroup(const TBasicType type,
                 case EiifRGBA32F:
                 case EiifRGBA16F:
                 case EiifR32F:
-                    return HLSL_RWTEXTURE_2D_ARRAY_FLOAT4;
+                    return globallyCoherent ? HLSL_RWTEXTURE_2D_ARRAY_FLOAT4_COHERENT
+                                            : HLSL_RWTEXTURE_2D_ARRAY_FLOAT4;
                 case EiifRGBA8:
-                    return HLSL_RWTEXTURE_2D_ARRAY_UNORN;
+                    return globallyCoherent ? HLSL_RWTEXTURE_2D_ARRAY_UNORN_COHERENT
+                                            : HLSL_RWTEXTURE_2D_ARRAY_UNORN;
                 case EiifRGBA8_SNORM:
-                    return HLSL_RWTEXTURE_2D_ARRAY_SNORM;
+                    return globallyCoherent ? HLSL_RWTEXTURE_2D_ARRAY_SNORM_COHERENT
+                                            : HLSL_RWTEXTURE_2D_ARRAY_SNORM;
                 default:
                     UNREACHABLE();
             }
@@ -630,7 +644,8 @@ HLSLRWTextureGroup RWTextureGroup(const TBasicType type,
                 case EiifRGBA16I:
                 case EiifRGBA8I:
                 case EiifR32I:
-                    return HLSL_RWTEXTURE_2D_ARRAY_INT4;
+                    return globallyCoherent ? HLSL_RWTEXTURE_2D_ARRAY_INT4_COHERENT
+                                            : HLSL_RWTEXTURE_2D_ARRAY_INT4;
                 default:
                     UNREACHABLE();
             }
@@ -647,7 +662,8 @@ HLSLRWTextureGroup RWTextureGroup(const TBasicType type,
                 case EiifRGBA16UI:
                 case EiifRGBA8UI:
                 case EiifR32UI:
-                    return HLSL_RWTEXTURE_2D_ARRAY_UINT4;
+                    return globallyCoherent ? HLSL_RWTEXTURE_2D_ARRAY_UINT4_COHERENT
+                                            : HLSL_RWTEXTURE_2D_ARRAY_UINT4;
                 default:
                     UNREACHABLE();
             }
@@ -695,6 +711,36 @@ const char *RWTextureString(const HLSLRWTextureGroup RWTextureGroup)
             return "RWTexture2DArray<int4>";
         case HLSL_RWTEXTURE_3D_INT4:
             return "RWTexture3D<int4>";
+        case HLSL_RWTEXTURE_2D_FLOAT4_COHERENT:
+            return "globallycoherent RWTexture2D<float4>";
+        case HLSL_RWTEXTURE_2D_ARRAY_FLOAT4_COHERENT:
+            return "globallycoherent RWTexture2DArray<float4>";
+        case HLSL_RWTEXTURE_3D_FLOAT4_COHERENT:
+            return "globallycoherent RWTexture3D<float4>";
+        case HLSL_RWTEXTURE_2D_UNORM_COHERENT:
+            return "globallycoherent RWTexture2D<unorm float4>";
+        case HLSL_RWTEXTURE_2D_ARRAY_UNORN_COHERENT:
+            return "globallycoherent RWTexture2DArray<unorm float4>";
+        case HLSL_RWTEXTURE_3D_UNORM_COHERENT:
+            return "globallycoherent RWTexture3D<unorm float4>";
+        case HLSL_RWTEXTURE_2D_SNORM_COHERENT:
+            return "globallycoherent RWTexture2D<snorm float4>";
+        case HLSL_RWTEXTURE_2D_ARRAY_SNORM_COHERENT:
+            return "globallycoherent RWTexture2DArray<snorm float4>";
+        case HLSL_RWTEXTURE_3D_SNORM_COHERENT:
+            return "globallycoherent RWTexture3D<snorm float4>";
+        case HLSL_RWTEXTURE_2D_UINT4_COHERENT:
+            return "globallycoherent RWTexture2D<uint4>";
+        case HLSL_RWTEXTURE_2D_ARRAY_UINT4_COHERENT:
+            return "globallycoherent RWTexture2DArray<uint4>";
+        case HLSL_RWTEXTURE_3D_UINT4_COHERENT:
+            return "globallycoherent RWTexture3D<uint4>";
+        case HLSL_RWTEXTURE_2D_INT4_COHERENT:
+            return "globallycoherent RWTexture2D<int4>";
+        case HLSL_RWTEXTURE_2D_ARRAY_INT4_COHERENT:
+            return "globallycoherent RWTexture2DArray<int4>";
+        case HLSL_RWTEXTURE_3D_INT4_COHERENT:
+            return "globallycoherent RWTexture3D<int4>";
         default:
             UNREACHABLE();
     }
@@ -702,9 +748,11 @@ const char *RWTextureString(const HLSLRWTextureGroup RWTextureGroup)
     return "<unknown read and write texture type>";
 }
 
-const char *RWTextureString(const TBasicType type, TLayoutImageInternalFormat imageInternalFormat)
+const char *RWTextureString(const TBasicType type,
+                            TLayoutImageInternalFormat imageInternalFormat,
+                            bool globallyCoherent)
 {
-    return RWTextureString(RWTextureGroup(type, imageInternalFormat));
+    return RWTextureString(RWTextureGroup(type, imageInternalFormat, globallyCoherent));
 }
 
 const char *RWTextureGroupSuffix(const HLSLRWTextureGroup type)
@@ -741,6 +789,36 @@ const char *RWTextureGroupSuffix(const HLSLRWTextureGroup type)
             return "RW2DArray_int4_";
         case HLSL_RWTEXTURE_3D_INT4:
             return "RW3D_int4_";
+        case HLSL_RWTEXTURE_2D_FLOAT4_COHERENT:
+            return "RW2D_float4_coherent_";
+        case HLSL_RWTEXTURE_2D_ARRAY_FLOAT4_COHERENT:
+            return "RW2DArray_float4_coherent_";
+        case HLSL_RWTEXTURE_3D_FLOAT4_COHERENT:
+            return "RW3D_float4_coherent_";
+        case HLSL_RWTEXTURE_2D_UNORM_COHERENT:
+            return "RW2D_unorm_float4_coherent_";
+        case HLSL_RWTEXTURE_2D_ARRAY_UNORN_COHERENT:
+            return "RW2DArray_unorm_float4_coherent_";
+        case HLSL_RWTEXTURE_3D_UNORM_COHERENT:
+            return "RW3D_unorm_float4_coherent_";
+        case HLSL_RWTEXTURE_2D_SNORM_COHERENT:
+            return "RW2D_snorm_float4_coherent_";
+        case HLSL_RWTEXTURE_2D_ARRAY_SNORM_COHERENT:
+            return "RW2DArray_snorm_float4_coherent_";
+        case HLSL_RWTEXTURE_3D_SNORM_COHERENT:
+            return "RW3D_snorm_float4_coherent_";
+        case HLSL_RWTEXTURE_2D_UINT4_COHERENT:
+            return "RW2D_uint4_coherent_";
+        case HLSL_RWTEXTURE_2D_ARRAY_UINT4_COHERENT:
+            return "RW2DArray_uint4_coherent_";
+        case HLSL_RWTEXTURE_3D_UINT4_COHERENT:
+            return "RW3D_uint4_coherent_";
+        case HLSL_RWTEXTURE_2D_INT4_COHERENT:
+            return "RW2D_int4_coherent_";
+        case HLSL_RWTEXTURE_2D_ARRAY_INT4_COHERENT:
+            return "RW2DArray_int4_coherent_";
+        case HLSL_RWTEXTURE_3D_INT4_COHERENT:
+            return "RW3D_int4_coherent_";
         default:
             UNREACHABLE();
     }
@@ -749,13 +827,15 @@ const char *RWTextureGroupSuffix(const HLSLRWTextureGroup type)
 }
 
 const char *RWTextureGroupSuffix(const TBasicType type,
-                                 TLayoutImageInternalFormat imageInternalFormat)
+                                 TLayoutImageInternalFormat imageInternalFormat,
+                                 bool globallyCoherent)
 {
-    return RWTextureGroupSuffix(RWTextureGroup(type, imageInternalFormat));
+    return RWTextureGroupSuffix(RWTextureGroup(type, imageInternalFormat, globallyCoherent));
 }
 
 const char *RWTextureTypeSuffix(const TBasicType type,
-                                TLayoutImageInternalFormat imageInternalFormat)
+                                TLayoutImageInternalFormat imageInternalFormat,
+                                bool globallyCoherent)
 {
     switch (type)
     {
@@ -766,11 +846,13 @@ const char *RWTextureTypeSuffix(const TBasicType type,
                 case EiifRGBA32F:
                 case EiifRGBA16F:
                 case EiifR32F:
-                    return "RWCube_float4_";
+                    return globallyCoherent ? "RWCube_float4_coherent_" : "RWCube_float4_";
                 case EiifRGBA8:
-                    return "RWCube_unorm_float4_";
+                    return globallyCoherent ? "RWCube_unorm_float4_coherent_"
+                                            : "RWCube_unorm_float4_";
                 case EiifRGBA8_SNORM:
-                    return "RWCube_unorm_float4_";
+                    return globallyCoherent ? "RWCube_unorm_float4_coherent_"
+                                            : "RWCube_unorm_float4_";
                 default:
                     UNREACHABLE();
             }
@@ -786,7 +868,7 @@ const char *RWTextureTypeSuffix(const TBasicType type,
                 case EiifRGBA16I:
                 case EiifRGBA8I:
                 case EiifR32I:
-                    return "RWCube_int4_";
+                    return globallyCoherent ? "RWCube_int4_coherent_" : "RWCube_int4_";
                 default:
                     UNREACHABLE();
             }
@@ -802,7 +884,7 @@ const char *RWTextureTypeSuffix(const TBasicType type,
                 case EiifRGBA16UI:
                 case EiifRGBA8UI:
                 case EiifR32UI:
-                    return "RWCube_uint4_";
+                    return globallyCoherent ? "RWCube_uint4_coherent_" : "RWCube_uint4_";
                 default:
                     UNREACHABLE();
             }
@@ -812,7 +894,7 @@ const char *RWTextureTypeSuffix(const TBasicType type,
         }
         default:
             // All other types are identified by their group suffix
-            return RWTextureGroupSuffix(type, imageInternalFormat);
+            return RWTextureGroupSuffix(type, imageInternalFormat, globallyCoherent);
     }
 #if !UNREACHABLE_IS_NORETURN
     UNREACHABLE();

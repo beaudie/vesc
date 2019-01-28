@@ -264,7 +264,13 @@ bool ShaderVariable::isSameVariableAtLinkTime(const ShaderVariable &other,
 }
 
 Uniform::Uniform()
-    : binding(-1), imageUnitFormat(GL_NONE), offset(-1), readonly(false), writeonly(false)
+    : binding(-1),
+      imageUnitFormat(GL_NONE),
+      offset(-1),
+      readonly(false),
+      writeonly(false),
+      coherent(false),
+      volatileQualifier(false)
 {}
 
 Uniform::~Uniform() {}
@@ -275,7 +281,9 @@ Uniform::Uniform(const Uniform &other)
       imageUnitFormat(other.imageUnitFormat),
       offset(other.offset),
       readonly(other.readonly),
-      writeonly(other.writeonly)
+      writeonly(other.writeonly),
+      coherent(other.coherent),
+      volatileQualifier(other.volatileQualifier)
 {}
 
 Uniform &Uniform::operator=(const Uniform &other)
@@ -286,6 +294,8 @@ Uniform &Uniform::operator=(const Uniform &other)
     offset                        = other.offset;
     readonly                      = other.readonly;
     writeonly                     = other.writeonly;
+    coherent                      = other.coherent;
+    volatileQualifier             = other.volatileQualifier;
     return *this;
 }
 
@@ -293,7 +303,8 @@ bool Uniform::operator==(const Uniform &other) const
 {
     return VariableWithLocation::operator==(other) && binding == other.binding &&
            imageUnitFormat == other.imageUnitFormat && offset == other.offset &&
-           readonly == other.readonly && writeonly == other.writeonly;
+           readonly == other.readonly && writeonly == other.writeonly &&
+           coherent == other.coherent && volatileQualifier == other.volatileQualifier;
 }
 
 bool Uniform::isSameUniformAtLinkTime(const Uniform &other) const
@@ -316,10 +327,12 @@ bool Uniform::isSameUniformAtLinkTime(const Uniform &other) const
     {
         return false;
     }
-    if (readonly != other.readonly || writeonly != other.writeonly)
+    if (readonly != other.readonly || writeonly != other.writeonly || coherent != other.coherent ||
+        volatileQualifier != other.volatileQualifier)
     {
         return false;
     }
+
     return VariableWithLocation::isSameVariableAtLinkTime(other, true, true);
 }
 
