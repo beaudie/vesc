@@ -33,6 +33,11 @@ enum Image2DHLSLGroup
     IMAGE2D_W_SNORM,
     IMAGE2D_W_UINT4,
     IMAGE2D_W_INT4,
+    IMAGE2D_W_FLOAT4_COHERENT,
+    IMAGE2D_W_UNORM_COHERENT,
+    IMAGE2D_W_SNORM_COHERENT,
+    IMAGE2D_W_UINT4_COHERENT,
+    IMAGE2D_W_INT4_COHERENT,
     IMAGE2D_UNKNOWN,
     IMAGE2D_MAX = IMAGE2D_UNKNOWN
 };
@@ -48,6 +53,8 @@ Image2DHLSLGroup image2DHLSLGroup(const sh::Uniform &uniform)
 {
     GLenum format = uniform.imageUnitFormat;
     bool readonly = uniform.readonly;
+    bool globallyCoherent = uniform.coherent || uniform.volatileQualifier;
+
     switch (uniform.type)
     {
         case GL_IMAGE_2D:
@@ -57,11 +64,17 @@ Image2DHLSLGroup image2DHLSLGroup(const sh::Uniform &uniform)
                 case GL_RGBA32F:
                 case GL_RGBA16F:
                 case GL_R32F:
-                    return readonly ? IMAGE2D_R_FLOAT4 : IMAGE2D_W_FLOAT4;
+                    return readonly
+                               ? IMAGE2D_R_FLOAT4
+                               : (globallyCoherent ? IMAGE2D_W_FLOAT4_COHERENT : IMAGE2D_W_FLOAT4);
                 case GL_RGBA8:
-                    return readonly ? IMAGE2D_R_UNORM : IMAGE2D_W_UNORM;
+                    return readonly
+                               ? IMAGE2D_R_UNORM
+                               : (globallyCoherent ? IMAGE2D_W_UNORM : IMAGE2D_W_UNORM_COHERENT);
                 case GL_RGBA8_SNORM:
-                    return readonly ? IMAGE2D_R_SNORM : IMAGE2D_W_SNORM;
+                    return readonly
+                               ? IMAGE2D_R_SNORM
+                               : (globallyCoherent ? IMAGE2D_W_SNORM : IMAGE2D_W_SNORM_COHERENT);
                 default:
                     UNREACHABLE();
                     return IMAGE2D_UNKNOWN;
@@ -75,7 +88,8 @@ Image2DHLSLGroup image2DHLSLGroup(const sh::Uniform &uniform)
                 case GL_RGBA16I:
                 case GL_RGBA8I:
                 case GL_R32I:
-                    return readonly ? IMAGE2D_R_INT4 : IMAGE2D_W_INT4;
+                    return readonly ? IMAGE2D_R_INT4
+                                    : (globallyCoherent ? IMAGE2D_W_INT4 : IMAGE2D_W_INT4_COHERENT);
                 default:
                     UNREACHABLE();
                     return IMAGE2D_UNKNOWN;
@@ -89,7 +103,9 @@ Image2DHLSLGroup image2DHLSLGroup(const sh::Uniform &uniform)
                 case GL_RGBA16UI:
                 case GL_RGBA8UI:
                 case GL_R32UI:
-                    return readonly ? IMAGE2D_R_UINT4 : IMAGE2D_W_UINT4;
+                    return readonly
+                               ? IMAGE2D_R_UINT4
+                               : (globallyCoherent ? IMAGE2D_W_UINT4 : IMAGE2D_W_UINT4_COHERENT);
                 default:
                     UNREACHABLE();
                     return IMAGE2D_UNKNOWN;
@@ -125,6 +141,16 @@ std::string Image2DHLSLGroupSuffix(Image2DHLSLGroup group)
             return "RW2D_uint4_";
         case IMAGE2D_W_INT4:
             return "RW2D_int4_";
+        case IMAGE2D_W_FLOAT4_COHERENT:
+            return "RW2D_float4_coherent_";
+        case IMAGE2D_W_UNORM_COHERENT:
+            return "RW2D_unorm_float4_coherent_";
+        case IMAGE2D_W_SNORM_COHERENT:
+            return "RW2D_snorm_float4_coherent_";
+        case IMAGE2D_W_UINT4_COHERENT:
+            return "RW2D_uint4_coherent_";
+        case IMAGE2D_W_INT4_COHERENT:
+            return "RW2D_int4_coherent_";
         default:
             UNREACHABLE();
     }
@@ -148,6 +174,14 @@ std::string Image2DHLSLTextureString(Image2DHLSLGroup group, gl::TextureType typ
         case IMAGE2D_W_SNORM:
         case IMAGE2D_W_UINT4:
         case IMAGE2D_W_INT4:
+            textureString += "RW";
+            break;
+        case IMAGE2D_W_FLOAT4_COHERENT:
+        case IMAGE2D_W_UNORM_COHERENT:
+        case IMAGE2D_W_SNORM_COHERENT:
+        case IMAGE2D_W_UINT4_COHERENT:
+        case IMAGE2D_W_INT4_COHERENT:
+            // textureString += "globallycoherent RW";
             textureString += "RW";
             break;
         default:
@@ -175,22 +209,27 @@ std::string Image2DHLSLTextureString(Image2DHLSLGroup group, gl::TextureType typ
     {
         case IMAGE2D_R_FLOAT4:
         case IMAGE2D_W_FLOAT4:
+        case IMAGE2D_W_FLOAT4_COHERENT:
             textureString += "<float4>";
             break;
         case IMAGE2D_R_UNORM:
         case IMAGE2D_W_UNORM:
+        case IMAGE2D_W_UNORM_COHERENT:
             textureString += "<unorm float4>";
             break;
         case IMAGE2D_R_SNORM:
         case IMAGE2D_W_SNORM:
+        case IMAGE2D_W_SNORM_COHERENT:
             textureString += "<snorm float4>";
             break;
         case IMAGE2D_R_UINT4:
         case IMAGE2D_W_UINT4:
+        case IMAGE2D_W_UINT4_COHERENT:
             textureString += "<uint4>";
             break;
         case IMAGE2D_R_INT4:
         case IMAGE2D_W_INT4:
+        case IMAGE2D_W_INT4_COHERENT:
             textureString += "<int4>";
             break;
         default:
@@ -215,6 +254,11 @@ std::string Image2DHLSLGroupOffsetPrefix(Image2DHLSLGroup group)
         case IMAGE2D_W_SNORM:
         case IMAGE2D_W_UINT4:
         case IMAGE2D_W_INT4:
+        case IMAGE2D_W_FLOAT4_COHERENT:
+        case IMAGE2D_W_UNORM_COHERENT:
+        case IMAGE2D_W_SNORM_COHERENT:
+        case IMAGE2D_W_UINT4_COHERENT:
+        case IMAGE2D_W_INT4_COHERENT:
             return "imageIndexOffset";
         default:
             UNREACHABLE();
@@ -238,6 +282,11 @@ std::string Image2DHLSLGroupDeclarationPrefix(Image2DHLSLGroup group)
         case IMAGE2D_W_SNORM:
         case IMAGE2D_W_UINT4:
         case IMAGE2D_W_INT4:
+        case IMAGE2D_W_FLOAT4_COHERENT:
+        case IMAGE2D_W_UNORM_COHERENT:
+        case IMAGE2D_W_SNORM_COHERENT:
+        case IMAGE2D_W_UINT4_COHERENT:
+        case IMAGE2D_W_INT4_COHERENT:
             return "images";
         default:
             UNREACHABLE();
@@ -261,6 +310,11 @@ std::string Image2DHLSLGroupRegisterSuffix(Image2DHLSLGroup group)
         case IMAGE2D_W_SNORM:
         case IMAGE2D_W_UINT4:
         case IMAGE2D_W_INT4:
+        case IMAGE2D_W_FLOAT4_COHERENT:
+        case IMAGE2D_W_UNORM_COHERENT:
+        case IMAGE2D_W_SNORM_COHERENT:
+        case IMAGE2D_W_UINT4_COHERENT:
+        case IMAGE2D_W_INT4_COHERENT:
             return "u";
         default:
             UNREACHABLE();
@@ -306,12 +360,17 @@ std::string getImage2DGroupReturnType(Image2DHLSLGroup group, Image2DMethod meth
                 case IMAGE2D_W_FLOAT4:
                 case IMAGE2D_W_UNORM:
                 case IMAGE2D_W_SNORM:
+                case IMAGE2D_W_FLOAT4_COHERENT:
+                case IMAGE2D_W_UNORM_COHERENT:
+                case IMAGE2D_W_SNORM_COHERENT:
                     return "float4";
                 case IMAGE2D_R_UINT4:
                 case IMAGE2D_W_UINT4:
+                case IMAGE2D_W_UINT4_COHERENT:
                     return "uint4";
                 case IMAGE2D_R_INT4:
                 case IMAGE2D_W_INT4:
+                case IMAGE2D_W_INT4_COHERENT:
                     return "int4";
                 default:
                     UNREACHABLE();
@@ -340,6 +399,11 @@ std::string getImageMetadataLayer(Image2DHLSLGroup group)
         case IMAGE2D_W_SNORM:
         case IMAGE2D_W_UINT4:
         case IMAGE2D_W_INT4:
+        case IMAGE2D_W_FLOAT4_COHERENT:
+        case IMAGE2D_W_UNORM_COHERENT:
+        case IMAGE2D_W_SNORM_COHERENT:
+        case IMAGE2D_W_UINT4_COHERENT:
+        case IMAGE2D_W_INT4_COHERENT:
             return "imageMetadata[imageIndex - imageIndexStart].layer";
         default:
             UNREACHABLE();
@@ -366,14 +430,19 @@ void OutputImage2DFunctionArgumentList(std::ostringstream &out,
                 case IMAGE2D_W_FLOAT4:
                 case IMAGE2D_W_UNORM:
                 case IMAGE2D_W_SNORM:
+                case IMAGE2D_W_FLOAT4_COHERENT:
+                case IMAGE2D_W_UNORM_COHERENT:
+                case IMAGE2D_W_SNORM_COHERENT:
                     out << ", float4 data";
                     break;
                 case IMAGE2D_R_UINT4:
                 case IMAGE2D_W_UINT4:
+                case IMAGE2D_W_UINT4_COHERENT:
                     out << ", uint4 data";
                     break;
                 case IMAGE2D_R_INT4:
                 case IMAGE2D_W_INT4:
+                case IMAGE2D_W_INT4_COHERENT:
                     out << ", int4 data";
                     break;
                 default:
@@ -678,6 +747,11 @@ unsigned int *GetImage2DRegisterIndex(Image2DHLSLGroup textureGroup,
         case IMAGE2D_W_SNORM:
         case IMAGE2D_W_UINT4:
         case IMAGE2D_W_INT4:
+        case IMAGE2D_W_FLOAT4_COHERENT:
+        case IMAGE2D_W_UNORM_COHERENT:
+        case IMAGE2D_W_SNORM_COHERENT:
+        case IMAGE2D_W_UINT4_COHERENT:
+        case IMAGE2D_W_INT4_COHERENT:
             return groupRWTextureRegisterIndex;
         default:
             UNREACHABLE();

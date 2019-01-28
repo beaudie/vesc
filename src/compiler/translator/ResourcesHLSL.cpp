@@ -448,8 +448,11 @@ void ResourcesHLSL::uniformsHeader(TInfoSinkBase &out,
             }
             else
             {
-                HLSLRWTextureGroup group = RWTextureGroup(
-                    type.getBasicType(), type.getLayoutQualifier().imageInternalFormat);
+                bool globallyCoherent = type.getMemoryQualifier().coherent ||
+                                        type.getMemoryQualifier().volatileQualifier;
+                HLSLRWTextureGroup group =
+                    RWTextureGroup(type.getBasicType(),
+                                   type.getLayoutQualifier().imageInternalFormat, globallyCoherent);
                 groupedImageUniforms[group].push_back(&variable);
             }
         }

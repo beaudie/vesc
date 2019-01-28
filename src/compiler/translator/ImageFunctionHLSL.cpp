@@ -34,8 +34,9 @@ ImmutableString ImageFunctionHLSL::GetImageReference(
     else
     {
         static const ImmutableString kImagesStr("images");
-        ImmutableString suffix(
-            RWTextureGroupSuffix(imageFunction.image, imageFunction.imageInternalFormat));
+        ImmutableString suffix(RWTextureGroupSuffix(imageFunction.image,
+                                                    imageFunction.imageInternalFormat,
+                                                    imageFunction.globallyCoherent));
         out << "    const uint index = imageIndex - imageIndexOffset" << suffix.data() << ";\n";
         ImmutableStringBuilder imageRefBuilder(kImagesStr.length() + suffix.length() +
                                                kImageIndexStr.length());
@@ -180,7 +181,7 @@ ImmutableString ImageFunctionHLSL::ImageFunction::name() const
     }
     else
     {
-        suffix = ImmutableString(RWTextureTypeSuffix(image, imageInternalFormat));
+        suffix = ImmutableString(RWTextureTypeSuffix(image, imageInternalFormat, globallyCoherent));
     }
 
     ImmutableStringBuilder name(kGlImageName.length() + suffix.length() + 5u);
@@ -295,20 +296,22 @@ const char *ImageFunctionHLSL::ImageFunction::getReturnType() const
 
 bool ImageFunctionHLSL::ImageFunction::operator<(const ImageFunction &rhs) const
 {
-    return std::tie(image, type, method, readonly) <
-           std::tie(rhs.image, rhs.type, rhs.method, rhs.readonly);
+    return std::tie(image, type, method, readonly, globallyCoherent) <
+           std::tie(rhs.image, rhs.type, rhs.method, rhs.readonly, rhs.globallyCoherent);
 }
 
 ImmutableString ImageFunctionHLSL::useImageFunction(const ImmutableString &name,
                                                     const TBasicType &type,
                                                     TLayoutImageInternalFormat imageInternalFormat,
-                                                    bool readonly)
+                                                    bool readonly,
+                                                    bool globallyCoherent)
 {
     ASSERT(IsImage(type));
     ImageFunction imageFunction;
     imageFunction.image               = type;
     imageFunction.imageInternalFormat = imageInternalFormat;
     imageFunction.readonly            = readonly;
+    imageFunction.globallyCoherent    = globallyCoherent;
     imageFunction.type                = imageFunction.getDataType(imageInternalFormat);
 
     if (name == "imageSize")
