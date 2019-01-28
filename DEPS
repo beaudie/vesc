@@ -9,7 +9,7 @@ vars = {
   'build_with_chromium': False,
 
   # Current revision of dEQP.
-  'deqp_revision': 'f5637d67a00a1081a13008bb8dc93b2616c935e2',
+  'deqp_revision': 'f6a9e8871ee5256e4cb39982ba1b76d6ad7f4b50',
 
   # Current revision of glslang, the Khronos SPIRV compiler.
   'glslang_revision': 'f9edfdab0e872c674e0a80e083239aa9637871ba',
@@ -57,7 +57,7 @@ deps = {
   },
 
   '{angle_root}/third_party/deqp/src': {
-    'url': '{android_git}/platform/external/deqp@{deqp_revision}',
+    'url': '{chromium_git}/external/deqp@{deqp_revision}',
   },
 
   '{angle_root}/third_party/glslang/src': {
