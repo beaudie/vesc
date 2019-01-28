@@ -14,6 +14,7 @@
 
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/renderer/renderer_utils.h"
+#include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 namespace rx
 {
@@ -59,7 +60,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     // getImageForRead will also transition the resource to the given layout.
     vk::ImageHelper *getImageForRead(vk::CommandGraphResource *readingResource,
-                                     VkImageLayout layout,
+                                     vk::ImageHelper::Layout layout,
                                      vk::CommandBuffer *commandBuffer);
     vk::ImageHelper *getImageForWrite(vk::CommandGraphResource *writingResource) const;
 
