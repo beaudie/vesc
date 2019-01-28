@@ -346,9 +346,8 @@ angle::Result PixelBuffer::flushUpdatesToImage(ContextVk *contextVk,
         // Do not move this above the for loop, otherwise multiple updates can have race conditions
         // and not be applied correctly as seen in:
         // dEQP-gles2.functional_texture_specification_texsubimage2d_align_2d* tests on Windows AMD
-        image->changeLayoutWithStages(
-            VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
+        image->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageHelper::Layout::TransferDst,
+                            commandBuffer);
 
         if (update.updateSource == SubresourceUpdate::UpdateSource::Buffer)
         {
@@ -361,10 +360,8 @@ angle::Result PixelBuffer::flushUpdatesToImage(ContextVk *contextVk,
             // Note: currently, the staging images are only made through color attachment writes. If
             // they were written to otherwise in the future, the src stage of this transition should
             // be adjusted appropriately.
-            update.image.image->changeLayoutWithStages(
-                VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-                commandBuffer);
+            update.image.image->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT,
+                                             vk::ImageHelper::Layout::TransferSrc, commandBuffer);
 
             update.image.image->addReadDependency(image);
 
@@ -1002,9 +999,8 @@ angle::Result TextureVk::copyImageDataToBuffer(ContextVk *contextVk,
     ANGLE_TRY(mImage.recordCommands(contextVk, &commandBuffer));
 
     // Requirement of the copyImageToBuffer, the source image must be in SRC_OPTIMAL layout.
-    mImage.changeLayoutWithStages(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                                  VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-                                  VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, commandBuffer);
+    mImage.changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageHelper::Layout::TransferSrc,
+                        commandBuffer);
 
     // Allocate enough memory to copy the sourceArea region of the source texture into its pixel
     // buffer.

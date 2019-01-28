@@ -537,13 +537,7 @@ class ImageHelper final : public CommandGraphResource
     const Format &getFormat() const;
     GLint getSamples() const;
 
-    VkImageLayout getCurrentLayout() const { return mCurrentLayout; }
-
-    void changeLayoutWithStages(VkImageAspectFlags aspectMask,
-                                VkImageLayout newLayout,
-                                VkPipelineStageFlags srcStageMask,
-                                VkPipelineStageFlags dstStageMask,
-                                CommandBuffer *commandBuffer);
+    VkImageLayout getCurrentLayout() const { return mCurrentVkLayout; }
 
     void clearColor(const VkClearColorValue &color,
                     uint32_t baseMipLevel,
@@ -573,6 +567,36 @@ class ImageHelper final : public CommandGraphResource
 
     angle::Result generateMipmapsWithBlit(ContextVk *contextVk, GLuint maxLevel);
 
+    // An image transitions into a layout and eventually transitions out of it.  When transitioning
+    // in, the layout is paired with dstStageMask, and dstAccessMask.  When transitioning out, it's
+    // paired with srcStageMask and srcAccessMask.  dstStageMask for the in-transition and
+    // srcStageMask for the out-transition are generally the same, though occasionally they may be
+    // Bottom/Top. This means that we need to hold five pieces of information to optimally create
+    // barriers.  This enum creates a list of layout/stage/dstAccess/srcAccess combinations that are
+    // used within ANGLE.
+    enum class Layout
+    {
+        Undefined              = 0,
+        PreInitialized         = 1,
+        TransferSrc            = 2,
+        TransferDst            = 3,
+        ComputeShaderReadOnly  = 4,
+        ComputeShaderWrite     = 5,
+        FragmentShaderReadOnly = 6,
+        ColorAttachment        = 7,
+        DepthStencilAttachment = 8,
+        Present                = 9,
+
+        InvalidEnum = 10,
+        EnumCount   = 10,
+    };
+
+    bool isLayoutChangeNecessary(Layout newLayout);
+
+    void changeLayout(VkImageAspectFlags aspectMask,
+                      Layout newLayout,
+                      CommandBuffer *commandBuffer);
+
   private:
     // Vulkan objects.
     Image mImage;
@@ -584,9 +608,10 @@ class ImageHelper final : public CommandGraphResource
     GLint mSamples;
 
     // Current state.
-    VkImageLayout mCurrentLayout;
+    Layout mCurrentLayout;
 
     // Cached properties.
+    VkImageLayout mCurrentVkLayout;
     uint32_t mLayerCount;
     uint32_t mLevelCount;
 };

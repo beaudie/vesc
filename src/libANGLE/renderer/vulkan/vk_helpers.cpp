@@ -28,74 +28,166 @@ constexpr int kLineLoopDynamicBufferMinSize = 1024 * 1024;
 // This is an arbitrary max. We can change this later if necessary.
 constexpr uint32_t kDefaultDescriptorPoolMaxSets = 2048;
 
-// Gets access flags based on layout.
-VkAccessFlags GetSrcLayoutAccessFlags(VkImageLayout layout)
+struct ImageMemoryBarrierData
 {
-    switch (layout)
-    {
-        case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
-            return VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-        case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
-            return VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-        case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
-            return VK_ACCESS_TRANSFER_WRITE_BIT;
-        case VK_IMAGE_LAYOUT_PREINITIALIZED:
-            return VK_ACCESS_HOST_WRITE_BIT;
-        case VK_IMAGE_LAYOUT_GENERAL:
-            return VK_ACCESS_MEMORY_WRITE_BIT;
-        case VK_IMAGE_LAYOUT_UNDEFINED:
-        // Note: source access mask never needs a READ bit, as WAR hazards
-        // don't need memory barriers (just execution barriers).
-        case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
-        case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
-        case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
-            return 0;
-        default:
-            // TODO(jmadill): Investigate other flags.
-            UNREACHABLE();
-            return 0;
-    }
-}
+    // The Vk layout corresponding to the ImageHelper::Layout key.
+    VkImageLayout layout;
+    // The stage in which the image is used (or Bottom/Top if not using any specific stage).  Unless
+    // Bottom/Top (Bottom used for transition in and Top used for transition out), the two values
+    // should match.
+    VkPipelineStageFlags dstStageMask;
+    VkPipelineStageFlags srcStageMask;
+    // Access mask when transitioning into this layout.
+    VkAccessFlags dstAccessMask;
+    // Access mask when transitioning out of this layout.  Note that source access mask never needs
+    // a READ bit, as WAR hazards don't need memory barriers (just execution barriers).
+    VkAccessFlags srcAccessMask;
 
-VkAccessFlags GetDstLayoutAccessFlags(VkImageLayout layout)
-{
-    switch (layout)
+    // If access is read-only, the execution barrier can be skipped altogether if retransitioning to
+    // the same layout. This is because read-after-read does not need an execution or memory
+    // barrier.
+    bool isReadOnlyAccess;
+};
+
+// clang-format off
+constexpr angle::PackedEnumMap<ImageHelper::Layout, ImageMemoryBarrierData> kImageMemoryBarrierData = {
     {
-        case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
-            return VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-        case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
-            return VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT |
-                   VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-        case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
-            return VK_ACCESS_TRANSFER_READ_BIT;
-        case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
-            return VK_ACCESS_TRANSFER_WRITE_BIT;
-        case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
+        ImageHelper::Layout::Undefined,
+        {
+            VK_IMAGE_LAYOUT_UNDEFINED,
+            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+            // Transition in: we don't expect to transition into Undefined.
+            0,
+            // Transition out: there's no data in the image to care about.
+            0,
+            true,
+        },
+    },
+    {
+        ImageHelper::Layout::PreInitialized,
+        {
+            VK_IMAGE_LAYOUT_PREINITIALIZED,
+            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+            // Transition in: we don't expect to transition into PreInitialized.
+            0,
+            // Transition out: all writes must finish before barrier.
+            VK_ACCESS_HOST_WRITE_BIT,
+            false,
+        },
+    },
+    {
+        ImageHelper::Layout::TransferSrc,
+        {
+            VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+            VK_PIPELINE_STAGE_TRANSFER_BIT,
+            VK_PIPELINE_STAGE_TRANSFER_BIT,
+            // Transition in: all reads must happen after barrier.
+            VK_ACCESS_TRANSFER_READ_BIT,
+            // Transition out: RAR and WAR don't need memory barrier.
+            0,
+            true,
+        },
+    },
+    {
+        ImageHelper::Layout::TransferDst,
+        {
+            VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+            VK_PIPELINE_STAGE_TRANSFER_BIT,
+            VK_PIPELINE_STAGE_TRANSFER_BIT,
+            // Transition in: all writes must happen after barrier.
+            VK_ACCESS_TRANSFER_WRITE_BIT,
+            // Transition out: all writes must finish before barrier.
+            VK_ACCESS_TRANSFER_WRITE_BIT,
+            false,
+        },
+    },
+    {
+        ImageHelper::Layout::ComputeShaderReadOnly,
+        {
+            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+            // Transition in: all reads must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT,
+            // Transition out: RAR and WAR don't need memory barrier.
+            0,
+            true,
+        },
+    },
+    {
+        ImageHelper::Layout::ComputeShaderWrite,
+        {
+            VK_IMAGE_LAYOUT_GENERAL,
+            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+            // Transition in: all reads and writes must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+            // Transition out: all writes must finish before barrier.
+            VK_ACCESS_SHADER_WRITE_BIT,
+            false,
+        },
+    },
+    {
+        ImageHelper::Layout::FragmentShaderReadOnly,
+        {
+            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            // Transition in: all reads must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT,
+            // Transition out: RAR and WAR don't need memory barrier.
+            0,
+            true,
+        },
+    },
+    {
+        ImageHelper::Layout::ColorAttachment,
+        {
+            VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+            // Transition in: all reads and writes must happen after barrier.
+            VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            // Transition out: all writes must finish before barrier.
+            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            false,
+        },
+    },
+    {
+        ImageHelper::Layout::DepthStencilAttachment,
+        {
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+            VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+            VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+            // Transition in: all reads and writes must happen after barrier.
+            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            // Transition out: all writes must finish before barrier.
+            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            false,
+        },
+    },
+    {
+        ImageHelper::Layout::Present,
+        {
+            VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
             // vkQueuePresentKHR automatically performs the appropriate memory barriers:
             //
             // > Any writes to memory backing the images referenced by the pImageIndices and
             // > pSwapchains members of pPresentInfo, that are available before vkQueuePresentKHR
             // > is executed, are automatically made visible to the read access performed by the
             // > presentation engine.
-            return 0;
-        case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
-            return VK_ACCESS_SHADER_READ_BIT;
-        case VK_IMAGE_LAYOUT_GENERAL:
-            // NOTE(syoussefi): compute writes to images require them to be in GENERAL layout,
-            // and in those cases VK_ACCESS_SHADER_READ/WRITE_BIT are sufficient.  However, the
-            // GENERAL layout covers so many cases that we can't narrow the access flags here.
-            // The possible solutions are either adding VK_IMAGE_LAYOUT_SHADER_WRITE_OPTIMAL to
-            // Vulkan, or tracking the necessary access mask alongside the old layout.
-            return VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
-        case VK_IMAGE_LAYOUT_PREINITIALIZED:
-        case VK_IMAGE_LAYOUT_UNDEFINED:
-            return 0;
-        default:
-            // TODO(jmadill): Investigate other flags.
-            UNREACHABLE();
-            return 0;
-    }
-}
+            0,
+            // Transition out: RAR and WAR don't need memory barrier.
+            0,
+            true,
+        },
+    },
+};
+// clang-format on
 
 VkImageCreateFlags GetImageCreateFlags(gl::TextureType textureType)
 {
@@ -1097,7 +1189,8 @@ ImageHelper::ImageHelper()
     : CommandGraphResource(CommandGraphResourceType::Image),
       mFormat(nullptr),
       mSamples(0),
-      mCurrentLayout(VK_IMAGE_LAYOUT_UNDEFINED),
+      mCurrentLayout(Layout::Undefined),
+      mCurrentVkLayout(VK_IMAGE_LAYOUT_UNDEFINED),
       mLayerCount(0),
       mLevelCount(0)
 {}
@@ -1110,10 +1203,12 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mFormat(other.mFormat),
       mSamples(other.mSamples),
       mCurrentLayout(other.mCurrentLayout),
+      mCurrentVkLayout(other.mCurrentVkLayout),
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount)
 {
-    other.mCurrentLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    other.mCurrentLayout   = Layout::Undefined;
+    other.mCurrentVkLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     other.mLayerCount    = 0;
     other.mLevelCount    = 0;
 }
@@ -1164,7 +1259,8 @@ angle::Result ImageHelper::init(Context *context,
     imageInfo.pQueueFamilyIndices   = nullptr;
     imageInfo.initialLayout         = VK_IMAGE_LAYOUT_UNDEFINED;
 
-    mCurrentLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    mCurrentLayout   = Layout::Undefined;
+    mCurrentVkLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
     ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
     return angle::Result::Continue;
@@ -1245,7 +1341,8 @@ void ImageHelper::destroy(VkDevice device)
 {
     mImage.destroy(device);
     mDeviceMemory.destroy(device);
-    mCurrentLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    mCurrentLayout   = Layout::Undefined;
+    mCurrentVkLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     mLayerCount    = 0;
     mLevelCount    = 0;
 }
@@ -1281,7 +1378,8 @@ angle::Result ImageHelper::init2DStaging(Context *context,
     mLayerCount = layerCount;
     mLevelCount = 1;
 
-    mCurrentLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    mCurrentLayout   = Layout::Undefined;
+    mCurrentVkLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
     VkImageCreateInfo imageInfo     = {};
     imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -1299,7 +1397,7 @@ angle::Result ImageHelper::init2DStaging(Context *context,
     imageInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
     imageInfo.queueFamilyIndexCount = 0;
     imageInfo.pQueueFamilyIndices   = nullptr;
-    imageInfo.initialLayout         = mCurrentLayout;
+    imageInfo.initialLayout         = mCurrentVkLayout;
 
     ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
 
@@ -1346,18 +1444,34 @@ GLint ImageHelper::getSamples() const
     return mSamples;
 }
 
-void ImageHelper::changeLayoutWithStages(VkImageAspectFlags aspectMask,
-                                         VkImageLayout newLayout,
-                                         VkPipelineStageFlags srcStageMask,
-                                         VkPipelineStageFlags dstStageMask,
-                                         CommandBuffer *commandBuffer)
+bool ImageHelper::isLayoutChangeNecessary(Layout newLayout)
 {
+    const ImageMemoryBarrierData &layoutData = kImageMemoryBarrierData[mCurrentLayout];
+
+    // If transitioning to the same read-only layout (RAR), don't generate a barrier.
+    bool sameLayoutReadAfterRead = mCurrentLayout == newLayout && layoutData.isReadOnlyAccess;
+
+    return !sameLayoutReadAfterRead;
+}
+
+void ImageHelper::changeLayout(VkImageAspectFlags aspectMask,
+                               Layout newLayout,
+                               CommandBuffer *commandBuffer)
+{
+    if (!isLayoutChangeNecessary(newLayout))
+    {
+        return;
+    }
+
+    const ImageMemoryBarrierData &transitionOut = kImageMemoryBarrierData[mCurrentLayout];
+    const ImageMemoryBarrierData &transitionIn  = kImageMemoryBarrierData[newLayout];
+
     VkImageMemoryBarrier imageMemoryBarrier = {};
     imageMemoryBarrier.sType                = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-    imageMemoryBarrier.srcAccessMask        = 0;
-    imageMemoryBarrier.dstAccessMask        = 0;
-    imageMemoryBarrier.oldLayout            = mCurrentLayout;
-    imageMemoryBarrier.newLayout            = newLayout;
+    imageMemoryBarrier.srcAccessMask        = transitionOut.srcAccessMask;
+    imageMemoryBarrier.dstAccessMask        = transitionIn.dstAccessMask;
+    imageMemoryBarrier.oldLayout            = transitionOut.layout;
+    imageMemoryBarrier.newLayout            = transitionIn.layout;
     imageMemoryBarrier.srcQueueFamilyIndex  = VK_QUEUE_FAMILY_IGNORED;
     imageMemoryBarrier.dstQueueFamilyIndex  = VK_QUEUE_FAMILY_IGNORED;
     imageMemoryBarrier.image                = mImage.getHandle();
@@ -1369,15 +1483,11 @@ void ImageHelper::changeLayoutWithStages(VkImageAspectFlags aspectMask,
     imageMemoryBarrier.subresourceRange.baseArrayLayer = 0;
     imageMemoryBarrier.subresourceRange.layerCount     = mLayerCount;
 
-    // TODO(jmadill): Test all the permutations of the access flags.
-    imageMemoryBarrier.srcAccessMask = GetSrcLayoutAccessFlags(mCurrentLayout);
-
-    imageMemoryBarrier.dstAccessMask = GetDstLayoutAccessFlags(newLayout);
-
-    commandBuffer->pipelineBarrier(srcStageMask, dstStageMask, 0, 0, nullptr, 0, nullptr, 1,
-                                   &imageMemoryBarrier);
+    commandBuffer->pipelineBarrier(transitionOut.srcStageMask, transitionIn.dstStageMask, 0, 0,
+                                   nullptr, 0, nullptr, 1, &imageMemoryBarrier);
 
     mCurrentLayout = newLayout;
+    mCurrentVkLayout = transitionIn.layout;
 }
 
 void ImageHelper::clearColor(const VkClearColorValue &color,
@@ -1398,9 +1508,7 @@ void ImageHelper::clearColorLayer(const VkClearColorValue &color,
 {
     ASSERT(valid());
 
-    changeLayoutWithStages(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                           VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-                           commandBuffer);
+    changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, Layout::TransferDst, commandBuffer);
 
     VkImageSubresourceRange range = {};
     range.aspectMask              = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -1409,7 +1517,7 @@ void ImageHelper::clearColorLayer(const VkClearColorValue &color,
     range.baseArrayLayer          = baseArrayLayer;
     range.layerCount              = layerCount;
 
-    commandBuffer->clearColorImage(mImage, mCurrentLayout, color, 1, &range);
+    commandBuffer->clearColorImage(mImage, mCurrentVkLayout, color, 1, &range);
 }
 
 void ImageHelper::clearDepthStencil(VkImageAspectFlags imageAspectFlags,
@@ -1419,9 +1527,7 @@ void ImageHelper::clearDepthStencil(VkImageAspectFlags imageAspectFlags,
 {
     ASSERT(valid());
 
-    changeLayoutWithStages(imageAspectFlags, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                           VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-                           commandBuffer);
+    changeLayout(imageAspectFlags, Layout::TransferDst, commandBuffer);
 
     VkImageSubresourceRange clearRange = {
         /*aspectMask*/ clearAspectFlags,
@@ -1431,7 +1537,7 @@ void ImageHelper::clearDepthStencil(VkImageAspectFlags imageAspectFlags,
         /*layerCount*/ 1,
     };
 
-    commandBuffer->clearDepthStencilImage(mImage, mCurrentLayout, depthStencil, 1, &clearRange);
+    commandBuffer->clearDepthStencilImage(mImage, mCurrentVkLayout, depthStencil, 1, &clearRange);
 }
 
 gl::Extents ImageHelper::getSize(const gl::ImageIndex &index) const
@@ -1455,21 +1561,8 @@ void ImageHelper::Copy(ImageHelper *srcImage,
 {
     ASSERT(commandBuffer->valid() && srcImage->valid() && dstImage->valid());
 
-    if (srcImage->getCurrentLayout() != VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL &&
-        srcImage->getCurrentLayout() != VK_IMAGE_LAYOUT_GENERAL)
-    {
-        srcImage->changeLayoutWithStages(
-            srcImage->getAspectFlags(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
-    }
-
-    if (dstImage->getCurrentLayout() != VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL &&
-        dstImage->getCurrentLayout() != VK_IMAGE_LAYOUT_GENERAL)
-    {
-        dstImage->changeLayoutWithStages(
-            dstImage->getAspectFlags(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, commandBuffer);
-    }
+    srcImage->changeLayout(srcImage->getAspectFlags(), Layout::TransferSrc, commandBuffer);
+    dstImage->changeLayout(dstImage->getAspectFlags(), Layout::TransferDst, commandBuffer);
 
     VkImageCopy region                   = {};
     region.srcSubresource.aspectMask     = aspectMask;
@@ -1499,9 +1592,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
 
-    changeLayoutWithStages(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                           VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-                           commandBuffer);
+    changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, Layout::TransferDst, commandBuffer);
 
     // We are able to use blitImage since the image format we are using supports it. This
     // is a faster way we can generate the mips.
@@ -1526,7 +1617,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
         int32_t nextMipHeight = std::max<int32_t>(1, mipHeight >> 1);
 
         barrier.subresourceRange.baseMipLevel = mipLevel - 1;
-        barrier.oldLayout                     = mCurrentLayout;
+        barrier.oldLayout                     = mCurrentVkLayout;
         barrier.newLayout                     = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
         barrier.srcAccessMask                 = VK_ACCESS_TRANSFER_WRITE_BIT;
         barrier.dstAccessMask                 = VK_ACCESS_TRANSFER_READ_BIT;
@@ -1568,8 +1659,9 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
                                    0, 0, nullptr, 0, nullptr, 1, &barrier);
 
     // This is just changing the internal state of the image helper so that the next call
-    // to changeLayoutWithStages will use this layout as the "oldLayout" argument.
-    mCurrentLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+    // to changeLayout will use this layout as the "oldLayout" argument.
+    mCurrentLayout   = Layout::TransferSrc;
+    mCurrentVkLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
 
     return angle::Result::Continue;
 }
