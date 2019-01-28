@@ -773,6 +773,8 @@ Uniform CollectVariablesTraverser::recordUniform(const TIntermSymbol &variable) 
     uniform.offset    = variable.getType().getLayoutQualifier().offset;
     uniform.readonly  = variable.getType().getMemoryQualifier().readonly;
     uniform.writeonly = variable.getType().getMemoryQualifier().writeonly;
+    uniform.coherent          = variable.getType().getMemoryQualifier().coherent;
+    uniform.volatileQualifier = variable.getType().getMemoryQualifier().volatileQualifier;
     return uniform;
 }
 
