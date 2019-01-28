@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b65f0a32_237ea1e4",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-28T17:47:49Z",
+      "side": 1,
+      "message": "Does this refer to README.md?",
+      "range": {
+        "startLine": 8,
+        "startChar": 40,
+        "endLine": 8,
+        "endChar": 58
+      },
+      "revId": "0bb633a12890f4d0e9de02b804f98afdaa4a235c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48e271e4_1a8f1845",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-28T17:47:49Z",
+      "side": 1,
+      "message": "Link to https://groups.google.com/forum/#!forum/angleproject?",
+      "range": {
+        "startLine": 10,
+        "startChar": 69,
+        "endLine": 10,
+        "endChar": 95
+      },
+      "revId": "0bb633a12890f4d0e9de02b804f98afdaa4a235c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21b4cce8_f3899432",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-28T17:47:49Z",
+      "side": 1,
+      "message": "Maybe change this to g.co/anglebug?",
+      "range": {
+        "startLine": 21,
+        "startChar": 27,
+        "endLine": 21,
+        "endChar": 39
+      },
+      "revId": "0bb633a12890f4d0e9de02b804f98afdaa4a235c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebc40070_14854f59",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-28T17:47:49Z",
+      "side": 1,
+      "message": "I preferred the go/bug-a-trooper link. It has some instructions on how to fill the bug fields and a query to infra bug queue to see if someone already reported the infra issue.",
+      "range": {
+        "startLine": 29,
+        "startChar": 77,
+        "endLine": 29,
+        "endChar": 89
+      },
+      "revId": "0bb633a12890f4d0e9de02b804f98afdaa4a235c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4aea292_71a23e7e",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-28T17:47:49Z",
+      "side": 1,
+      "message": "This used to have a link to \"Chromium Buildbot Monitor\" extension. I\u0027ve never used it myself, but was it useful for others? \nI do use https://sheriff-o-matic.appspot.com/chromium.gpu.fyi, maybe worth mentioning it here?",
+      "revId": "0bb633a12890f4d0e9de02b804f98afdaa4a235c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaa2b45b_411d6bb0",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-28T17:47:49Z",
+      "side": 1,
+      "message": "Maybe StandaloneInfra.md is a better name.",
+      "range": {
+        "startLine": 73,
+        "startChar": 59,
+        "endLine": 73,
+        "endChar": 68
+      },
+      "revId": "0bb633a12890f4d0e9de02b804f98afdaa4a235c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1d153c6_5c3326d5",
+        "filename": "infra/README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-28T17:47:49Z",
+      "side": 1,
+      "message": "link",
+      "range": {
+        "startLine": 6,
+        "startChar": 45,
+        "endLine": 6,
+        "endChar": 60
+      },
+      "revId": "0bb633a12890f4d0e9de02b804f98afdaa4a235c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "796d61a3_8a50d172",
+        "filename": "infra/README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-28T17:47:49Z",
+      "side": 1,
+      "message": "For some reason, this renders as \"1\" instead of \"2\". I think not enough spaces before the star above, which also renders differently than the stars below.",
+      "range": {
+        "startLine": 27,
+        "startChar": 1,
+        "endLine": 27,
+        "endChar": 2
+      },
+      "revId": "0bb633a12890f4d0e9de02b804f98afdaa4a235c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca347294_57590870",
+        "filename": "infra/README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-01-28T17:47:49Z",
+      "side": 1,
+      "message": "I think this is not needed now. Could you add a \"Maybe\" here?\nIn https://chromium.googlesource.com/chromium/src/+/lkgr/docs/gpu/gpu_testing_bot_details.md it says:\nIt used to be necessary to retrain recipe expectations (scripts/slave/recipes.py --use-bootstrap test train). This doesn‘t appear to be necessary any more, but it’s something to watch out for if your CL fails presubmit for some reason.",
+      "range": {
+        "startLine": 31,
+        "startChar": 6,
+        "endLine": 31,
+        "endChar": 83
+      },
+      "revId": "0bb633a12890f4d0e9de02b804f98afdaa4a235c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
