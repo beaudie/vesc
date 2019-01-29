@@ -27,7 +27,9 @@ class MultithreadingTest : public ANGLETest
         setConfigGreenBits(8);
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
+#if defined(ANGLE_ENABLE_OPENGL)
         setContextVirtualization(false);
+#endif
     }
 
     bool platformSupportsMultithreading() const { return (IsOpenGLES() && IsAndroid()); }
