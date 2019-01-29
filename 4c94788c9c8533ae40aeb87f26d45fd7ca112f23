@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b4db280_7d7ef34c",
+        "filename": "src/libANGLE/VertexAttribute.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-29T15:13:46Z",
+      "side": 0,
+      "message": "From what I can make out, this change was something the compiler should already be doing. It looks like you moved this out of this function and removed the `if`s that are unknown to be false.",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 9
+      },
+      "revId": "4c94788c9c8533ae40aeb87f26d45fd7ca112f23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
