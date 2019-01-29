@@ -1271,6 +1271,15 @@ bool IsWindows()
 #endif
 }
 
+bool IsFuchsia()
+{
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+    return true;
+#else
+    return false;
+#endif
+}
+
 bool IsDebug()
 {
 #if !defined(NDEBUG)
