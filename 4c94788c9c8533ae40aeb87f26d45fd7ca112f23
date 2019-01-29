@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2322a4db_d3fe7982",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-29T14:59:34Z",
+      "side": 0,
+      "message": "This is what I\u0027m not sure if it\u0027s correct. If we can do early depth test, this would need to reflect that.",
+      "range": {
+        "startLine": 71,
+        "startChar": 35,
+        "endLine": 71,
+        "endChar": 76
+      },
+      "revId": "4c94788c9c8533ae40aeb87f26d45fd7ca112f23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
