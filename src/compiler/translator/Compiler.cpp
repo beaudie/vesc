@@ -1156,7 +1156,7 @@ void TCompiler::useAllMembersInUnusedStandardAndSharedBlocks(TIntermBlock *root)
 {
     sh::InterfaceBlockList list;
 
-    for (auto block : mUniformBlocks)
+    for (const auto &block : mUniformBlocks)
     {
         if (!block.staticUse &&
             (block.layout == sh::BLOCKLAYOUT_STD140 || block.layout == sh::BLOCKLAYOUT_SHARED))
@@ -1173,7 +1173,7 @@ void TCompiler::initializeOutputVariables(TIntermBlock *root)
     InitVariableList list;
     if (mShaderType == GL_VERTEX_SHADER || mShaderType == GL_GEOMETRY_SHADER_EXT)
     {
-        for (auto var : mOutputVaryings)
+        for (const auto &var : mOutputVaryings)
         {
             list.push_back(var);
             if (var.name == "gl_Position")
@@ -1186,7 +1186,7 @@ void TCompiler::initializeOutputVariables(TIntermBlock *root)
     else
     {
         ASSERT(mShaderType == GL_FRAGMENT_SHADER);
-        for (auto var : mOutputVariables)
+        for (const auto &var : mOutputVariables)
         {
             list.push_back(var);
         }
