@@ -61,7 +61,7 @@ class CubeMapTextureTest : public ANGLETest
 TEST_P(CubeMapTextureTest, RenderToFacesConsecutively)
 {
     // TODO: Diagnose and fix. http://anglebug.com/2954
-    ANGLE_SKIP_TEST_IF(IsVulkan() && IsIntel() && IsWindows());
+    ANGLE_SKIP_TEST_IF(IsVulkan() && IsIntel() && (IsWindows() || IsFuchsia()));
 
     const GLfloat faceColors[] = {
         1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
