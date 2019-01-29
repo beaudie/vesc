@@ -473,6 +473,7 @@ bool IsD3D9();
 // Is D3D9 or SM9_3 renderer.
 bool IsD3DSM3();
 bool IsDesktopOpenGL();
+bool IsFuchsia();
 bool IsOpenGLES();
 bool IsOpenGL();
 bool IsOzone();
