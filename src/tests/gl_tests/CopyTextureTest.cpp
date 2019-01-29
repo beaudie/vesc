@@ -2715,6 +2715,8 @@ TEST_P(CopyTextureTest, CubeMapTarget)
     // http://anglebug.com/1932
     ANGLE_SKIP_TEST_IF(IsOSX() && IsIntel() && IsDesktopOpenGL());
 
+    ANGLE_SKIP_TEST_IF(IsFuchsia() && IsIntel() && IsVulkan());
+
     GLColor pixels[7] = {
         GLColor(10u, 13u, 16u, 19u), GLColor(20u, 23u, 26u, 29u), GLColor(30u, 33u, 36u, 39u),
         GLColor(40u, 43u, 46u, 49u), GLColor(50u, 53u, 56u, 59u), GLColor(60u, 63u, 66u, 69u),
@@ -2776,6 +2778,8 @@ TEST_P(CopyTextureTest, CubeMapTargetBGRA)
         return;
     }
 
+    ANGLE_SKIP_TEST_IF(IsFuchsia() && IsIntel() && IsVulkan());
+
     GLColor pixels[7] = {
         GLColor(10u, 13u, 16u, 19u), GLColor(20u, 23u, 26u, 29u), GLColor(30u, 33u, 36u, 39u),
         GLColor(40u, 43u, 46u, 49u), GLColor(50u, 53u, 56u, 59u), GLColor(60u, 63u, 66u, 69u),
@@ -2836,6 +2840,8 @@ TEST_P(CopyTextureTest, CubeMapTargetRGB)
 
     // http://anglebug.com/1932
     ANGLE_SKIP_TEST_IF(IsOSX() && IsIntel() && IsDesktopOpenGL());
+
+    ANGLE_SKIP_TEST_IF(IsFuchsia() && IsIntel() && IsVulkan());
 
     constexpr uint8_t pixels[16 * 7] = {
         0u,   3u,   6u,   10u,  13u,  16u,  0, 0, 20u,  23u,  26u,  30u,  33u,  36u,  0, 0,  // 2x2

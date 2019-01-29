@@ -93,6 +93,8 @@ TEST_P(OcclusionQueriesTest, IsNotOccluded)
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3 &&
                        !extensionEnabled("GL_EXT_occlusion_query_boolean"));
 
+    ANGLE_SKIP_TEST_IF(IsIntel() && IsFuchsia() && IsVulkan());
+
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
