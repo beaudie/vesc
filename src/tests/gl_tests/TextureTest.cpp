@@ -1349,6 +1349,8 @@ TEST_P(Texture2DTestWithDrawScale, MipmapsTwice)
 // https://code.google.com/p/angleproject/issues/detail?id=849
 TEST_P(TextureCubeTest, CubeMapFBO)
 {
+    ANGLE_SKIP_TEST_IF(IsFuchsia() && IsIntel() && IsVulkan());
+
     GLFramebuffer fbo;
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
@@ -1390,6 +1392,8 @@ TEST_P(TextureCubeTest, CubeMapFBOScissoredClear)
 {
     // TODO(jie.a.chen): Diagnose and fix. http://anglebug.com/2822
     ANGLE_SKIP_TEST_IF(IsVulkan() && IsIntel() && IsWindows());
+
+    ANGLE_SKIP_TEST_IF(IsFuchsia() && IsIntel() && IsVulkan());
 
     constexpr size_t kSize = 16;
 
