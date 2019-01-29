@@ -91,6 +91,8 @@ TEST_P(TimerQueriesTest, TimeElapsed)
 {
     ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_disjoint_timer_query"));
 
+    ANGLE_SKIP_TEST_IF(IsFuchsia() && IsIntel() && IsVulkan());
+
     GLint queryTimeElapsedBits = 0;
     glGetQueryivEXT(GL_TIME_ELAPSED_EXT, GL_QUERY_COUNTER_BITS_EXT, &queryTimeElapsedBits);
     ASSERT_GL_NO_ERROR();
@@ -416,6 +418,8 @@ TEST_P(TimerQueriesTest, TimeElapsedMulticontextTest)
 TEST_P(TimerQueriesTest, Timestamp)
 {
     ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_disjoint_timer_query"));
+
+    ANGLE_SKIP_TEST_IF(IsFuchsia() && IsIntel() && IsVulkan());
 
     GLint queryTimestampBits = 0;
     glGetQueryivEXT(GL_TIMESTAMP_EXT, GL_QUERY_COUNTER_BITS_EXT, &queryTimestampBits);
