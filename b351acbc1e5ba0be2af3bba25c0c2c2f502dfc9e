@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "09bc7c47_8d00082c",
+        "filename": "src/tests/perf_tests/VulkanBarriersPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-29T22:21:10Z",
+      "side": 1,
+      "message": "can omit this if not used.",
+      "range": {
+        "startLine": 129,
+        "startChar": 5,
+        "endLine": 129,
+        "endChar": 58
+      },
+      "revId": "b351acbc1e5ba0be2af3bba25c0c2c2f502dfc9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
