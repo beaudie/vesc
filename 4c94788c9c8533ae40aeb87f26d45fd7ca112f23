@@ -22,6 +22,30 @@
       "revId": "4c94788c9c8533ae40aeb87f26d45fd7ca112f23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b7950f0_737af363",
+        "filename": "src/libANGLE/VertexAttribute.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-29T16:41:30Z",
+      "side": 0,
+      "message": "Yeah. Mostly just combined all the if (nullptr) checks into a single place. That had a decent speed improvement on the microbench. Added a comment.",
+      "parentUuid": "9b4db280_7d7ef34c",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 9
+      },
+      "revId": "4c94788c9c8533ae40aeb87f26d45fd7ca112f23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
