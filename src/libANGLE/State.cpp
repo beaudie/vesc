@@ -2536,19 +2536,19 @@ void State::getBooleani_v(GLenum target, GLuint index, GLboolean *data)
     }
 }
 
-angle::Result State::syncReadFramebuffer(const Context *context)
+angle::Result State::syncReadFramebuffer(const Context *context, PrimitiveMode mode)
 {
     ASSERT(mReadFramebuffer);
     return mReadFramebuffer->syncState(context);
 }
 
-angle::Result State::syncDrawFramebuffer(const Context *context)
+angle::Result State::syncDrawFramebuffer(const Context *context, PrimitiveMode mode)
 {
     ASSERT(mDrawFramebuffer);
     return mDrawFramebuffer->syncState(context);
 }
 
-angle::Result State::syncDrawAttachments(const Context *context)
+angle::Result State::syncDrawAttachments(const Context *context, PrimitiveMode mode)
 {
     ASSERT(mDrawFramebuffer);
     ASSERT(!mDrawFramebuffer->hasAnyDirtyBit());
@@ -2556,7 +2556,7 @@ angle::Result State::syncDrawAttachments(const Context *context)
     return mDrawFramebuffer->ensureDrawAttachmentsInitialized(context);
 }
 
-angle::Result State::syncTextures(const Context *context)
+angle::Result State::syncTextures(const Context *context, PrimitiveMode mode)
 {
     if (mDirtyTextures.none())
         return angle::Result::Continue;
@@ -2574,7 +2574,7 @@ angle::Result State::syncTextures(const Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result State::syncSamplers(const Context *context)
+angle::Result State::syncSamplers(const Context *context, PrimitiveMode mode)
 {
     if (mDirtySamplers.none())
         return angle::Result::Continue;
@@ -2593,18 +2593,18 @@ angle::Result State::syncSamplers(const Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result State::syncVertexArray(const Context *context)
+angle::Result State::syncVertexArray(const Context *context, PrimitiveMode mode)
 {
     ASSERT(mVertexArray);
     return mVertexArray->syncState(context);
 }
 
-angle::Result State::syncProgram(const Context *context)
+angle::Result State::syncProgram(const Context *context, PrimitiveMode mode)
 {
     return mProgram->syncState(context);
 }
 
-angle::Result State::syncTexturesInit(const Context *context)
+angle::Result State::syncTexturesInit(const Context *context, PrimitiveMode mode)
 {
     ASSERT(mRobustResourceInit);
 
@@ -2622,7 +2622,7 @@ angle::Result State::syncTexturesInit(const Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result State::syncImagesInit(const Context *context)
+angle::Result State::syncImagesInit(const Context *context, PrimitiveMode mode)
 {
     ASSERT(mRobustResourceInit);
     ASSERT(mProgram);
@@ -2667,7 +2667,7 @@ angle::Result State::syncDirtyObject(const Context *context, GLenum target)
             break;
     }
 
-    return syncDirtyObjects(context, localSet);
+    return syncDirtyObjects(context, PrimitiveMode::InvalidEnum, localSet);
 }
 
 void State::setObjectDirty(GLenum target)

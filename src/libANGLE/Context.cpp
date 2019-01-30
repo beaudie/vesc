@@ -3470,7 +3470,7 @@ bool Context::noopDrawInstanced(PrimitiveMode mode, GLsizei count, GLsizei insta
 
 angle::Result Context::prepareForClear(GLbitfield mask)
 {
-    ANGLE_TRY(syncDirtyObjects(mClearDirtyObjects));
+    ANGLE_TRY(syncDirtyObjects(PrimitiveMode::InvalidEnum, mClearDirtyObjects));
     ANGLE_TRY(mState.getDrawFramebuffer()->ensureClearAttachmentsInitialized(this, mask));
     ANGLE_TRY(syncDirtyBits(mClearDirtyBits));
     return angle::Result::Continue;
@@ -3478,7 +3478,7 @@ angle::Result Context::prepareForClear(GLbitfield mask)
 
 angle::Result Context::prepareForClearBuffer(GLenum buffer, GLint drawbuffer)
 {
-    ANGLE_TRY(syncDirtyObjects(mClearDirtyObjects));
+    ANGLE_TRY(syncDirtyObjects(PrimitiveMode::InvalidEnum, mClearDirtyObjects));
     ANGLE_TRY(mState.getDrawFramebuffer()->ensureClearBufferAttachmentsInitialized(this, buffer,
                                                                                    drawbuffer));
     ANGLE_TRY(syncDirtyBits(mClearDirtyBits));
@@ -3487,14 +3487,14 @@ angle::Result Context::prepareForClearBuffer(GLenum buffer, GLint drawbuffer)
 
 ANGLE_INLINE angle::Result Context::prepareForDispatch()
 {
-    ANGLE_TRY(syncDirtyObjects(mComputeDirtyObjects));
+    ANGLE_TRY(syncDirtyObjects(PrimitiveMode::InvalidEnum, mComputeDirtyObjects));
     return syncDirtyBits(mComputeDirtyBits);
 }
 
 angle::Result Context::syncState(const State::DirtyBits &bitMask,
                                  const State::DirtyObjects &objectMask)
 {
-    ANGLE_TRY(syncDirtyObjects(objectMask));
+    ANGLE_TRY(syncDirtyObjects(PrimitiveMode::InvalidEnum, objectMask));
     ANGLE_TRY(syncDirtyBits(bitMask));
     return angle::Result::Continue;
 }
@@ -4472,7 +4472,7 @@ angle::Result Context::syncStateForBlit()
 
 angle::Result Context::syncStateForPathOperation()
 {
-    ANGLE_TRY(syncDirtyObjects(mPathOperationDirtyObjects));
+    ANGLE_TRY(syncDirtyObjects(PrimitiveMode::InvalidEnum, mPathOperationDirtyObjects));
 
     // TODO(svaisanen@nvidia.com): maybe sync only state required for path rendering?
     ANGLE_TRY(syncDirtyBits());
