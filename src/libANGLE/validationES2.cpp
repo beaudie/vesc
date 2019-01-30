@@ -3073,36 +3073,6 @@ bool ValidateFlushMappedBufferRangeEXT(Context *context,
     return ValidateFlushMappedBufferRangeBase(context, target, offset, length);
 }
 
-bool ValidateBindTexture(Context *context, TextureType target, GLuint texture)
-{
-    if (!context->getStateCache().isValidBindTextureType(target))
-    {
-        RecordBindTextureTypeError(context, target);
-        return false;
-    }
-
-    if (texture == 0)
-    {
-        return true;
-    }
-
-    Texture *textureObject = context->getTexture(texture);
-    if (textureObject && textureObject->getType() != target)
-    {
-        context->validationError(GL_INVALID_OPERATION, kTypeMismatch);
-        return false;
-    }
-
-    if (!context->getState().isBindGeneratesResourceEnabled() &&
-        !context->isTextureGenerated(texture))
-    {
-        context->validationError(GL_INVALID_OPERATION, kObjectNotGenerated);
-        return false;
-    }
-
-    return true;
-}
-
 bool ValidateBindUniformLocationCHROMIUM(Context *context,
                                          GLuint program,
                                          GLint location,
