@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0999ec53_6fd9701a",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2019-01-30T19:35:08Z",
+      "side": 0,
+      "message": "here, we might end up loading State\u0027s cache line one more time than in the RHS. I think the dirty object handlers are all indirect calls and access Context so they all miss a lot",
+      "revId": "a7429204afcd957fef29facf44acf06d05cf284e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
