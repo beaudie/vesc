@@ -43,12 +43,14 @@ const char *gTraceFile = "ANGLETrace.json";
 struct TraceCategory
 {
     unsigned char enabled;
+    ANGLERenderTest::ANGLEThread thread;
     const char *name;
 };
 
-constexpr TraceCategory gTraceCategories[2] = {
-    {1, "gpu.angle"},
-    {1, "gpu.angle.gpu"},
+constexpr TraceCategory gTraceCategories[3] = {
+    {1, ANGLERenderTest::ANGLEThread::Main, "gpu.angle"},
+    {1, ANGLERenderTest::ANGLEThread::Flush, "gpu.angle.flush"},
+    {1, ANGLERenderTest::ANGLEThread::GPU, "gpu.angle.gpu"},
 };
 
 void EmptyPlatformMethod(angle::PlatformMethods *, const char *) {}
@@ -81,7 +83,7 @@ angle::TraceEventHandle AddTraceEvent(angle::PlatformMethods *platform,
     const TraceCategory *category = reinterpret_cast<const TraceCategory *>(categoryEnabledFlag);
 
     ANGLERenderTest *renderTest     = static_cast<ANGLERenderTest *>(platform->context);
-    std::vector<TraceEvent> &buffer = renderTest->getTraceEventBuffer();
+    std::vector<TraceEvent> &buffer = renderTest->getTraceEventBuffer(category->thread);
     buffer.emplace_back(phase, category->name, name, timestamp);
     return buffer.size();
 }
@@ -121,29 +123,32 @@ double MonotonicallyIncreasingTime(angle::PlatformMethods *platform)
     return renderTest->getTimer()->getAbsoluteTime() - origin;
 }
 
-void DumpTraceEventsToJSONFile(const std::vector<TraceEvent> &traceEvents,
+void DumpTraceEventsToJSONFile(const ANGLERenderTest::TraceEventBuffers &traceEventBuffers,
                                const char *outputFileName)
 {
     Json::Value eventsValue(Json::arrayValue);
 
-    for (const TraceEvent &traceEvent : traceEvents)
+    for (const std::vector<TraceEvent> &traceEvents : traceEventBuffers)
     {
-        Json::Value value(Json::objectValue);
+        for (const TraceEvent &traceEvent : traceEvents)
+        {
+            Json::Value value(Json::objectValue);
 
-        std::stringstream phaseName;
-        phaseName << traceEvent.phase;
+            std::stringstream phaseName;
+            phaseName << traceEvent.phase;
 
-        unsigned long long microseconds =
-            static_cast<unsigned long long>(traceEvent.timestamp * 1000.0 * 1000.0);
+            unsigned long long microseconds =
+                static_cast<unsigned long long>(traceEvent.timestamp * 1000.0 * 1000.0);
 
-        value["name"] = traceEvent.name;
-        value["cat"]  = traceEvent.categoryName;
-        value["ph"]   = phaseName.str();
-        value["ts"]   = microseconds;
-        value["pid"]  = "ANGLE";
-        value["tid"]  = strcmp(traceEvent.categoryName, "gpu.angle.gpu") == 0 ? "GPU" : "CPU";
+            value["name"] = traceEvent.name;
+            value["cat"]  = traceEvent.categoryName;
+            value["ph"]   = phaseName.str();
+            value["ts"]   = microseconds;
+            value["pid"]  = "ANGLE";
+            value["tid"]  = traceEvent.categoryName;
 
-        eventsValue.append(value);
+            eventsValue.append(value);
+        }
     }
 
     Json::Value root(Json::objectValue);
@@ -355,7 +360,10 @@ ANGLERenderTest::ANGLERenderTest(const std::string &name, const RenderTestParams
     }
 
     // Try to ensure we don't trigger allocation during execution.
-    mTraceEventBuffer.reserve(kInitialTraceEventBufferSize);
+    for (std::vector<TraceEvent> &buffer : mTraceEventBuffers)
+    {
+        buffer.reserve(kInitialTraceEventBufferSize);
+    }
 
     switch (testParams.driver)
     {
@@ -483,7 +491,7 @@ void ANGLERenderTest::TearDown()
     // Dump trace events to json file.
     if (gEnableTrace)
     {
-        DumpTraceEventsToJSONFile(mTraceEventBuffer, gTraceFile);
+        DumpTraceEventsToJSONFile(mTraceEventBuffers, gTraceFile);
     }
 
     ANGLEPerfTest::TearDown();
@@ -596,9 +604,9 @@ void ANGLERenderTest::setRobustResourceInit(bool enabled)
     mGLWindow->setRobustResourceInit(enabled);
 }
 
-std::vector<TraceEvent> &ANGLERenderTest::getTraceEventBuffer()
+std::vector<TraceEvent> &ANGLERenderTest::getTraceEventBuffer(ANGLEThread thread)
 {
-    return mTraceEventBuffer;
+    return mTraceEventBuffers[thread];
 }
 
 // static

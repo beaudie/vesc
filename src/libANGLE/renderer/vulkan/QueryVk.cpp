@@ -111,9 +111,6 @@ angle::Result QueryVk::getResult(const gl::Context *context, bool wait)
     if (mQueryHelper.hasPendingWork(renderer))
     {
         ANGLE_TRY(renderer->flush(contextVk));
-
-        ASSERT(!mQueryHelperTimeElapsedBegin.hasPendingWork(renderer));
-        ASSERT(!mQueryHelper.hasPendingWork(renderer));
     }
 
     // If the command buffer this query is being written to is still in flight, its reset command

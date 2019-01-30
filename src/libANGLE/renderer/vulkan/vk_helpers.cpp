@@ -672,9 +672,7 @@ void QueryHelper::writeTimestamp(vk::Context *context)
 
 bool QueryHelper::hasPendingWork(RendererVk *renderer)
 {
-    // If the renderer has a queue serial higher than the stored one, the command buffers that
-    // recorded this query have already been submitted, so there is no pending work.
-    return mMostRecentSerial == renderer->getCurrentQueueSerial();
+    return renderer->hasPendingWork(mMostRecentSerial);
 }
 
 // DynamicSemaphorePool implementation

@@ -112,7 +112,7 @@ angle::Result FenceSyncVk::getStatus(vk::Context *context, bool *signaled)
 
 bool FenceSyncVk::hasPendingWork(RendererVk *renderer)
 {
-    return mSignalSerial == renderer->getCurrentQueueSerial();
+    return renderer->hasPendingWork(mSignalSerial);
 }
 
 SyncVk::SyncVk() : SyncImpl() {}
