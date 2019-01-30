@@ -699,8 +699,10 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     bool initializeLocalsAndGlobals =
         (compileOptions & SH_INITIALIZE_UNINITIALIZED_LOCALS) && !IsOutputHLSL(getOutputType());
     bool canUseLoopsToInitialize = !(compileOptions & SH_DONT_USE_LOOPS_TO_INITIALIZE_VARIABLES);
+    bool canUseAssignmentToInitialize =
+        initializeLocalsAndGlobals && (mShaderVersion > 100 || getOutputType() != SH_ESSL_OUTPUT);
     DeferGlobalInitializers(root, initializeLocalsAndGlobals, canUseLoopsToInitialize,
-                            highPrecisionSupported, &mSymbolTable);
+                            canUseAssignmentToInitialize, highPrecisionSupported, &mSymbolTable);
 
     if (initializeLocalsAndGlobals)
     {
