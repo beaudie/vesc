@@ -23,6 +23,7 @@
 #include "compiler/translator/tree_ops/InitializeVariables.h"
 #include "compiler/translator/tree_util/FindMain.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
+#include "compiler/translator/tree_util/IntermTraverse.h"
 #include "compiler/translator/tree_util/ReplaceVariable.h"
 
 namespace sh
@@ -33,13 +34,14 @@ namespace
 
 constexpr const ImmutableString kInitGlobalsString("initGlobals");
 
-void GetDeferredInitializers(TIntermDeclaration *declaration,
-                             bool initializeUninitializedGlobals,
-                             bool canUseLoopsToInitialize,
-                             bool highPrecisionSupported,
-                             TIntermSequence *deferredInitializersOut,
-                             std::vector<const TVariable *> *variablesToReplaceOut,
-                             TSymbolTable *symbolTable)
+void RewriteInitializers(TIntermDeclaration *declaration,
+                         bool initializeUninitializedGlobals,
+                         bool canUseLoopsToInitialize,
+                         bool canUseAssignmentToInitialize,
+                         bool highPrecisionSupported,
+                         TIntermSequence *deferredInitializersOut,
+                         std::vector<const TVariable *> *variablesToReplaceOut,
+                         TSymbolTable *symbolTable)
 {
     // SeparateDeclarations should have already been run.
     ASSERT(declaration->getSequence()->size() == 1);
@@ -90,10 +92,19 @@ void GetDeferredInitializers(TIntermDeclaration *declaration,
 
         if (symbolNode->getQualifier() == EvqGlobal)
         {
-            TIntermSequence *initCode = CreateInitCode(symbolNode, canUseLoopsToInitialize,
-                                                       highPrecisionSupported, symbolTable);
-            deferredInitializersOut->insert(deferredInitializersOut->end(), initCode->begin(),
-                                            initCode->end());
+            if (canUseAssignmentToInitialize)
+            {
+                TIntermBinary *init = new TIntermBinary(EOpInitialize, symbolNode,
+                                                        CreateZeroNode(symbolNode->getType()));
+                declaration->replaceChildNode(declarator, init);
+            }
+            else
+            {
+                TIntermSequence *initCode = CreateInitCode(symbolNode, canUseLoopsToInitialize,
+                                                           highPrecisionSupported, symbolTable);
+                deferredInitializersOut->insert(deferredInitializersOut->end(), initCode->begin(),
+                                                initCode->end());
+            }
         }
     }
 }
@@ -128,6 +139,7 @@ void InsertInitCallToMain(TIntermBlock *root,
 void DeferGlobalInitializers(TIntermBlock *root,
                              bool initializeUninitializedGlobals,
                              bool canUseLoopsToInitialize,
+                             bool canUseAssignmentToInitialize,
                              bool highPrecisionSupported,
                              TSymbolTable *symbolTable)
 {
@@ -141,9 +153,10 @@ void DeferGlobalInitializers(TIntermBlock *root,
         TIntermDeclaration *declaration = statement->getAsDeclarationNode();
         if (declaration)
         {
-            GetDeferredInitializers(declaration, initializeUninitializedGlobals,
-                                    canUseLoopsToInitialize, highPrecisionSupported,
-                                    deferredInitializers, &variablesToReplace, symbolTable);
+            RewriteInitializers(declaration, initializeUninitializedGlobals,
+                                canUseLoopsToInitialize, canUseAssignmentToInitialize,
+                                highPrecisionSupported, deferredInitializers, &variablesToReplace,
+                                symbolTable);
         }
     }
 
