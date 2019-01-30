@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d05c9c38_e076ba00",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-30T18:08:07Z",
+      "side": 1,
+      "message": "Do we need to check this? I don\u0027t think we ever request a 3.2 frontend.",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 5
+      },
+      "revId": "0be6fd8dcdd2e892bf40d6b8e37b59e5e3fb63f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b727f845_ea82ae07",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-30T18:08:07Z",
+      "side": 1,
+      "message": "Will this disable us from testing on top of a native GLES 3.2 context on all platforms?",
+      "range": {
+        "startLine": 149,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 9
+      },
+      "revId": "0be6fd8dcdd2e892bf40d6b8e37b59e5e3fb63f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
