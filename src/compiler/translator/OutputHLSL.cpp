@@ -2113,8 +2113,17 @@ bool OutputHLSL::visitDeclaration(Visit visit, TIntermDeclaration *node)
                 {
                     symbol->traverse(this);
                     out << ArrayString(symbol->getType());
-                    if (declarator->getQualifier() != EvqShared ||
-                        mCompileOptions & SH_INIT_SHARED_VARIABLES)
+                    bool useZeroInitializer = true;
+                    if (declarator->getQualifier() == EvqShared)
+                    {
+                        useZeroInitializer = mCompileOptions & SH_INIT_SHARED_VARIABLES;
+                    }
+                    else if (!mInsideFunction)
+                    {
+                        // "static" declaration takes care of the zero initialization.
+                        useZeroInitializer = false;
+                    }
+                    if (useZeroInitializer)
                     {
                         out << " = " + zeroInitializer(symbol->getType());
                     }
