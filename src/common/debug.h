@@ -346,4 +346,13 @@ std::ostream &FmtHex(std::ostream &os, T value)
 #    define ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 #endif
 
+#if defined(__clang__)
+#    define ANGLE_DISABLE_EXTRA_SEMI_WARNING \
+        _Pragma("clang diagnostic push") _Pragma("clang diagnostic ignored \"-Wextra-semi\"")
+#    define ANGLE_REENABLE_EXTRA_SEMI_WARNING _Pragma("clang diagnostic pop")
+#else
+#    define ANGLE_DISABLE_EXTRA_SEMI_WARNING
+#    define ANGLE_REENABLE_EXTRA_SEMI_WARNING
+#endif
+
 #endif  // COMMON_DEBUG_H_
