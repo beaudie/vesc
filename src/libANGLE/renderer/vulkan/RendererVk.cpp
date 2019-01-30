@@ -520,6 +520,8 @@ void RendererVk::onDestroy(vk::Context *context)
         (void)finish(context);
     }
 
+    mFlushThread.onDestroy(context);
+
     mUtils.destroy(mDevice);
 
     mPipelineLayoutCache.destroy(mDevice);
@@ -527,7 +529,6 @@ void RendererVk::onDestroy(vk::Context *context)
 
     mRenderPassCache.destroy(mDevice);
     mPipelineCache.destroy(mDevice);
-    mSubmitSemaphorePool.destroy(mDevice);
     mShaderLibrary.destroy(mDevice);
     mGpuEventQueryPool.destroy(mDevice);
 
@@ -888,8 +889,8 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     // Initialize the vulkan pipeline cache.
     ANGLE_TRY(initPipelineCache(displayVk));
 
-    // Initialize the submission semaphore pool.
-    ANGLE_TRY(mSubmitSemaphorePool.init(displayVk, vk::kDefaultSemaphorePoolSize));
+    // Initialize the submission thread.
+    ANGLE_TRY(mFlushThread.initialize(displayVk));
 
 #if ANGLE_ENABLE_VULKAN_GPU_TRACE_EVENTS
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
@@ -1114,31 +1115,6 @@ void RendererVk::ensureCapsInitialized() const
     }
 }
 
-void RendererVk::getSubmitWaitSemaphores(
-    vk::Context *context,
-    angle::FixedVector<VkSemaphore, kMaxWaitSemaphores> *waitSemaphores,
-    angle::FixedVector<VkPipelineStageFlags, kMaxWaitSemaphores> *waitStageMasks)
-{
-    if (mSubmitLastSignaledSemaphore.getSemaphore())
-    {
-        waitSemaphores->push_back(mSubmitLastSignaledSemaphore.getSemaphore()->getHandle());
-        waitStageMasks->push_back(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT);
-
-        // Return the semaphore to the pool (which will remain valid and unused until the
-        // queue it's about to be waited on has finished execution).
-        mSubmitSemaphorePool.freeSemaphore(context, &mSubmitLastSignaledSemaphore);
-    }
-
-    for (vk::SemaphoreHelper &semaphore : mSubmitWaitSemaphores)
-    {
-        waitSemaphores->push_back(semaphore.getSemaphore()->getHandle());
-        waitStageMasks->push_back(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT);
-
-        mSubmitSemaphorePool.freeSemaphore(context, &semaphore);
-    }
-    mSubmitWaitSemaphores.clear();
-}
-
 const gl::Caps &RendererVk::getNativeCaps() const
 {
     ensureCapsInitialized();
@@ -1177,31 +1153,12 @@ const vk::CommandPool &RendererVk::getCommandPool() const
 
 angle::Result RendererVk::finish(vk::Context *context)
 {
-    if (!mCommandGraph.empty())
-    {
-        TRACE_EVENT0("gpu.angle", "RendererVk::finish");
+    TRACE_EVENT0("gpu.angle", "RendererVk::finish");
 
-        vk::Scoped<vk::CommandBuffer> commandBatch(mDevice);
-        ANGLE_TRY(flushCommandGraph(context, &commandBatch.get()));
+    ANGLE_TRY(flush(context));
+    ANGLE_VK_TRY(context, mFlushThread.waitForPreviousOperation());
 
-        angle::FixedVector<VkSemaphore, kMaxWaitSemaphores> waitSemaphores;
-        angle::FixedVector<VkPipelineStageFlags, kMaxWaitSemaphores> waitStageMasks;
-        getSubmitWaitSemaphores(context, &waitSemaphores, &waitStageMasks);
-
-        VkSubmitInfo submitInfo         = {};
-        submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        submitInfo.waitSemaphoreCount   = static_cast<uint32_t>(waitSemaphores.size());
-        submitInfo.pWaitSemaphores      = waitSemaphores.data();
-        submitInfo.pWaitDstStageMask    = waitStageMasks.data();
-        submitInfo.commandBufferCount   = 1;
-        submitInfo.pCommandBuffers      = commandBatch.get().ptr();
-        submitInfo.signalSemaphoreCount = 0;
-        submitInfo.pSignalSemaphores    = nullptr;
-
-        ANGLE_TRY(submitFrame(context, submitInfo, std::move(commandBatch.get())));
-    }
-
-    ASSERT(mQueue != VK_NULL_HANDLE);
+    // Wait for queue to become idle.
     ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueue));
     freeAllInFlightResources();
 
@@ -1288,11 +1245,8 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result RendererVk::submitFrame(vk::Context *context,
-                                      const VkSubmitInfo &submitInfo,
-                                      vk::CommandBuffer &&commandBuffer)
+angle::Result RendererVk::createCommandBatch(vk::Context *context, CommandBatch *commandBatchOut)
 {
-    TRACE_EVENT0("gpu.angle", "RendererVk::submitFrame");
     VkFenceCreateInfo fenceInfo = {};
     fenceInfo.sType             = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceInfo.flags             = 0;
@@ -1301,23 +1255,32 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     CommandBatch &batch = scopedBatch.get();
     ANGLE_VK_TRY(context, batch.fence.init(mDevice, fenceInfo));
 
-    ANGLE_VK_TRY(context, vkQueueSubmit(mQueue, 1, &submitInfo, batch.fence.getHandle()));
-
     // Store this command buffer in the in-flight list.
     batch.commandPool = std::move(mCommandPool);
     batch.serial      = mCurrentQueueSerial;
 
-    mInFlightCommands.emplace_back(scopedBatch.release());
+    *commandBatchOut = std::move(scopedBatch.release());
+
+    return angle::Result::Continue;
+}
+
+angle::Result RendererVk::nextFrame(vk::Context *context,
+                                    CommandBatch &&commandBatch,
+                                    vk::CommandBuffer &&commandBuffer)
+{
+    TRACE_EVENT0("gpu.angle", "RendererVk::nextFrame");
+
+    nextSerial();
+
+    ANGLE_TRY(checkCompletedCommands(context));
+
+    mInFlightCommands.emplace_back(std::move(commandBatch));
 
     // CPU should be throttled to avoid mInFlightCommands from growing too fast.  That is done on
     // swap() though, and there could be multiple submissions in between (through glFlush() calls),
     // so the limit is larger than the expected number of images.  The
     // InterleavedAttributeDataBenchmark perf test for example issues a large number of flushes.
     ASSERT(mInFlightCommands.size() <= kInFlightCommandsLimit);
-
-    nextSerial();
-
-    ANGLE_TRY(checkCompletedCommands(context));
 
     if (mGpuEventsEnabled)
     {
@@ -1453,30 +1416,41 @@ angle::Result RendererVk::flush(vk::Context *context)
 
     TRACE_EVENT0("gpu.angle", "RendererVk::flush");
 
-    vk::Scoped<vk::CommandBuffer> commandBatch(mDevice);
-    ANGLE_TRY(flushCommandGraph(context, &commandBatch.get()));
+    vk::Scoped<vk::CommandBuffer> commandBuffer(mDevice);
+    ANGLE_TRY(flushCommandGraph(context, &commandBuffer.get()));
 
-    angle::FixedVector<VkSemaphore, kMaxWaitSemaphores> waitSemaphores;
-    angle::FixedVector<VkPipelineStageFlags, kMaxWaitSemaphores> waitStageMasks;
-    getSubmitWaitSemaphores(context, &waitSemaphores, &waitStageMasks);
+    vk::Scoped<CommandBatch> commandBatch(mDevice);
+    ANGLE_TRY(createCommandBatch(context, &commandBatch.get()));
 
-    // On every flush, create a semaphore to be signaled.  On the next submission, this semaphore
-    // will be waited on.
-    ANGLE_TRY(mSubmitSemaphorePool.allocateSemaphore(context, &mSubmitLastSignaledSemaphore));
+    ANGLE_TRY(mFlushThread.flush(context, commandBuffer.get(), commandBatch.get().fence));
 
-    VkSubmitInfo submitInfo         = {};
-    submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.waitSemaphoreCount   = static_cast<uint32_t>(waitSemaphores.size());
-    submitInfo.pWaitSemaphores      = waitSemaphores.data();
-    submitInfo.pWaitDstStageMask    = waitStageMasks.data();
-    submitInfo.commandBufferCount   = 1;
-    submitInfo.pCommandBuffers      = commandBatch.get().ptr();
-    submitInfo.signalSemaphoreCount = 1;
-    submitInfo.pSignalSemaphores    = mSubmitLastSignaledSemaphore.getSemaphore()->ptr();
+    return nextFrame(context, std::move(commandBatch.release()),
+                     std::move(commandBuffer.release()));
+}
 
-    ANGLE_TRY(submitFrame(context, submitInfo, commandBatch.release()));
+angle::Result RendererVk::flushAndPresent(vk::Context *context,
+                                          const VkPresentInfoKHR &presentInfo,
+                                          std::vector<VkRectLayerKHR> &&rects,
+                                          uint32_t swapchainImageIndex)
+{
+    if (mCommandGraph.empty())
+    {
+        return angle::Result::Continue;
+    }
 
-    return angle::Result::Continue;
+    TRACE_EVENT0("gpu.angle", "RendererVk::flushAndPresent");
+
+    vk::Scoped<vk::CommandBuffer> commandBuffer(mDevice);
+    ANGLE_TRY(flushCommandGraph(context, &commandBuffer.get()));
+
+    vk::Scoped<CommandBatch> commandBatch(mDevice);
+    ANGLE_TRY(createCommandBatch(context, &commandBatch.get()));
+
+    ANGLE_TRY(mFlushThread.flushAndPresent(context, commandBuffer.get(), commandBatch.get().fence,
+                                           presentInfo, std::move(rects), swapchainImageIndex));
+
+    return nextFrame(context, std::move(commandBatch.release()),
+                     std::move(commandBuffer.release()));
 }
 
 Serial RendererVk::issueShaderSerial()
@@ -1545,32 +1519,6 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk)
     displayVk->getBlobCache()->putApplication(mPipelineCacheVkBlobKey, *pipelineCacheData);
 
     return angle::Result::Continue;
-}
-
-angle::Result RendererVk::allocateSubmitWaitSemaphore(vk::Context *context,
-                                                      const vk::Semaphore **outSemaphore)
-{
-    ASSERT(mSubmitWaitSemaphores.size() < mSubmitWaitSemaphores.max_size());
-
-    vk::SemaphoreHelper semaphore;
-    ANGLE_TRY(mSubmitSemaphorePool.allocateSemaphore(context, &semaphore));
-
-    mSubmitWaitSemaphores.push_back(std::move(semaphore));
-    *outSemaphore = mSubmitWaitSemaphores.back().getSemaphore();
-
-    return angle::Result::Continue;
-}
-
-const vk::Semaphore *RendererVk::getSubmitLastSignaledSemaphore(vk::Context *context)
-{
-    const vk::Semaphore *semaphore = mSubmitLastSignaledSemaphore.getSemaphore();
-
-    // Return the semaphore to the pool (which will remain valid and unused until the
-    // queue it's about to be waited on has finished execution).  The caller is about
-    // to wait on it.
-    mSubmitSemaphorePool.freeSemaphore(context, &mSubmitLastSignaledSemaphore);
-
-    return semaphore;
 }
 
 angle::Result RendererVk::getTimestamp(vk::Context *context, uint64_t *timestampOut)
@@ -1648,6 +1596,8 @@ angle::Result RendererVk::getTimestamp(vk::Context *context, uint64_t *timestamp
     submitInfo.signalSemaphoreCount = 0;
     submitInfo.pSignalSemaphores    = nullptr;
 
+    // TODO(syoussefi): this needs to move to the flush thread, or else would need synchronization
+    // on queue. Damn.
     ANGLE_VK_TRY(context, vkQueueSubmit(mQueue, 1, &submitInfo, fence.get().getHandle()));
 
     // Wait for the submission to finish.  Given no semaphores, there is hope that it would execute
@@ -1794,8 +1744,8 @@ angle::Result RendererVk::synchronizeCpuGpuTime(vk::Context *context)
         ANGLE_VK_TRY(context, gpuDone.get().reset(mDevice));
 
         // Record the command buffer
-        vk::Scoped<vk::CommandBuffer> commandBatch(mDevice);
-        vk::CommandBuffer &commandBuffer = commandBatch.get();
+        vk::Scoped<vk::CommandBuffer> scopedCommandBuffer(mDevice);
+        vk::CommandBuffer &commandBuffer = scopedCommandBuffer.get();
 
         VkCommandBufferAllocateInfo commandBufferInfo = {};
         commandBufferInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -1828,21 +1778,12 @@ angle::Result RendererVk::synchronizeCpuGpuTime(vk::Context *context)
         ANGLE_VK_TRY(context, commandBuffer.end());
 
         // Submit the command buffer
-        angle::FixedVector<VkSemaphore, kMaxWaitSemaphores> waitSemaphores;
-        angle::FixedVector<VkPipelineStageFlags, kMaxWaitSemaphores> waitStageMasks;
-        getSubmitWaitSemaphores(context, &waitSemaphores, &waitStageMasks);
+        vk::Scoped<CommandBatch> commandBatch(mDevice);
+        ANGLE_TRY(createCommandBatch(context, &commandBatch.get()));
 
-        VkSubmitInfo submitInfo         = {};
-        submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        submitInfo.waitSemaphoreCount   = static_cast<uint32_t>(waitSemaphores.size());
-        submitInfo.pWaitSemaphores      = waitSemaphores.data();
-        submitInfo.pWaitDstStageMask    = waitStageMasks.data();
-        submitInfo.commandBufferCount   = 1;
-        submitInfo.pCommandBuffers      = commandBuffer.ptr();
-        submitInfo.signalSemaphoreCount = 0;
-        submitInfo.pSignalSemaphores    = nullptr;
+        ANGLE_TRY(mFlushThread.flush(context, commandBuffer, commandBatch.get().fence));
 
-        ANGLE_TRY(submitFrame(context, submitInfo, std::move(commandBuffer)));
+        ANGLE_TRY(nextFrame(context, std::move(commandBatch.release()), std::move(commandBuffer)));
 
         // Wait for GPU to be ready.  This is a short busy wait.
         VkResult result = VK_EVENT_RESET;

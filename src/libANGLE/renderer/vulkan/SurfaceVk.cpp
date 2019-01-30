@@ -579,34 +579,20 @@ angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk, EGLint *rects, EGL
                                        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                        VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, swapCommands);
 
-    ANGLE_TRY(renderer->flush(displayVk));
-
-    // Remember the serial of the last submission.
-    mSwapSerials[mCurrentSwapSerialIndex++] = renderer->getLastSubmittedQueueSerial();
-    mCurrentSwapSerialIndex =
-        mCurrentSwapSerialIndex == mSwapSerials.size() ? 0 : mCurrentSwapSerialIndex;
-
-    // Ask the renderer what semaphore it signaled in the last flush.
-    const vk::Semaphore *commandsCompleteSemaphore =
-        renderer->getSubmitLastSignaledSemaphore(displayVk);
-
     VkPresentInfoKHR presentInfo   = {};
     presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-    presentInfo.waitSemaphoreCount = commandsCompleteSemaphore ? 1 : 0;
-    presentInfo.pWaitSemaphores =
-        commandsCompleteSemaphore ? commandsCompleteSemaphore->ptr() : nullptr;
+    presentInfo.waitSemaphoreCount = 0;
+    presentInfo.pWaitSemaphores    = nullptr;
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains    = &mSwapchain;
-    presentInfo.pImageIndices  = &mCurrentSwapchainImageIndex;
+    presentInfo.pImageIndices      = nullptr;  // to be filled by the submission thread
     presentInfo.pResults       = nullptr;
 
-    VkPresentRegionsKHR presentRegions = {};
+    std::vector<VkRectLayerKHR> vk_rects;
     if (renderer->getFeatures().supportsIncrementalPresent && (n_rects > 0))
     {
-        VkPresentRegionKHR presentRegion = {};
-        std::vector<VkRectLayerKHR> vk_rects(n_rects);
+        vk_rects.resize(n_rects);
         EGLint *egl_rects = rects;
-        presentRegion.rectangleCount = n_rects;
         for (EGLint rect = 0; rect < n_rects; rect++)
         {
             vk_rects[rect].offset.x      = *egl_rects++;
@@ -615,17 +601,15 @@ angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk, EGLint *rects, EGL
             vk_rects[rect].extent.height = *egl_rects++;
             vk_rects[rect].layer         = 0;
         }
-        presentRegion.pRectangles = vk_rects.data();
-
-        presentRegions.sType          = VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR;
-        presentRegions.pNext          = nullptr;
-        presentRegions.swapchainCount = 1;
-        presentRegions.pRegions       = &presentRegion;
-
-        presentInfo.pNext = &presentRegions;
     }
 
-    ANGLE_VK_TRY(displayVk, vkQueuePresentKHR(renderer->getQueue(), &presentInfo));
+    ANGLE_TRY(renderer->flushAndPresent(displayVk, presentInfo, std::move(vk_rects),
+                                        mCurrentSwapchainImageIndex));
+
+    // Remember the serial of the last submission.
+    mSwapSerials[mCurrentSwapSerialIndex++] = renderer->getLastSubmittedQueueSerial();
+    mCurrentSwapSerialIndex =
+        mCurrentSwapSerialIndex == mSwapSerials.size() ? 0 : mCurrentSwapSerialIndex;
 
     {
         // Note: TRACE_EVENT0 is put here instead of inside the function to workaround this issue:
@@ -648,9 +632,37 @@ angle::Result WindowSurfaceVk::nextSwapchainImage(DisplayVk *displayVk)
     const vk::Semaphore *acquireNextImageSemaphore = nullptr;
     ANGLE_TRY(renderer->allocateSubmitWaitSemaphore(displayVk, &acquireNextImageSemaphore));
 
-    ANGLE_VK_TRY(displayVk, vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX,
-                                                  acquireNextImageSemaphore->getHandle(),
-                                                  VK_NULL_HANDLE, &mCurrentSwapchainImageIndex));
+    std::mutex *swapchainMutex = displayVk->getRenderer()->getSwapchainMutex();
+    if (swapchainMutex)
+    {
+        // Loop and try to acquire a new image.  This needs to be synchronized with the submission
+        // thread due to simultaneous access to the swapchain.
+        VkResult result = VK_TIMEOUT;
+        while (result != VK_SUCCESS)
+        {
+            // Unlock the mutex every millisecond to ensure there is no deadlock with the submission
+            // thread waiting to submit.
+            constexpr uint64_t kTimeout = 1'000'000;
+
+            swapchainMutex->lock();
+            result = vkAcquireNextImageKHR(device, mSwapchain, kTimeout,
+                                           acquireNextImageSemaphore->getHandle(), VK_NULL_HANDLE,
+                                           &mCurrentSwapchainImageIndex);
+            swapchainMutex->unlock();
+
+            if (result != VK_SUCCESS && result != VK_TIMEOUT)
+            {
+                ANGLE_VK_TRY(displayVk, result);
+            }
+        }
+    }
+    else
+    {
+        ANGLE_VK_TRY(displayVk,
+                     vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX,
+                                           acquireNextImageSemaphore->getHandle(), VK_NULL_HANDLE,
+                                           &mCurrentSwapchainImageIndex));
+    }
 
     SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
 
