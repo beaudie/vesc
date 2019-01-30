@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6acbe4c_7f47580a",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-30T15:04:32Z",
+      "side": 1,
+      "message": "didn\u0027t look closely, but why the restriction on no ESSL output?",
+      "range": {
+        "startLine": 703,
+        "startChar": 63,
+        "endLine": 703,
+        "endChar": 96
+      },
+      "revId": "fe62f36eb64c7894516d741195c14bb813e9b8e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3686f3c7_82b9f5d6",
+        "filename": "src/compiler/translator/tree_ops/DeferGlobalInitializers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-30T15:04:32Z",
+      "side": 1,
+      "message": "does this need to be duplicated? (deepCopy)",
+      "range": {
+        "startLine": 97,
+        "startChar": 71,
+        "endLine": 97,
+        "endChar": 81
+      },
+      "revId": "fe62f36eb64c7894516d741195c14bb813e9b8e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
