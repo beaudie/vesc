@@ -25,6 +25,7 @@ class TSymbolTable;
 void DeferGlobalInitializers(TIntermBlock *root,
                              bool initializeUninitializedGlobals,
                              bool canUseLoopsToInitialize,
+                             bool canUseAssignmentToInitialize,
                              bool highPrecisionSupported,
                              TSymbolTable *symbolTable);
 
