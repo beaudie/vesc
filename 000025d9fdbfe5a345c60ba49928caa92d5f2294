@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "adaa813d_a6bdf559",
+        "filename": "src/compiler/translator/SymbolTable_autogen.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7350,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2019-01-30T16:46:34Z",
+      "side": 1,
+      "message": "Is this change intentional?",
+      "revId": "000025d9fdbfe5a345c60ba49928caa92d5f2294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a69c727_941cc69e",
+        "filename": "src/compiler/translator/SymbolTable_autogen.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 9627,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2019-01-30T16:46:34Z",
+      "side": 1,
+      "message": "likewise",
+      "revId": "000025d9fdbfe5a345c60ba49928caa92d5f2294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
