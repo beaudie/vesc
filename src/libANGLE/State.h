@@ -579,7 +579,9 @@ class State : angle::NonCopyable
     using DirtyObjects = angle::BitSet<DIRTY_OBJECT_MAX>;
     void clearDirtyObjects() { mDirtyObjects.reset(); }
     void setAllDirtyObjects() { mDirtyObjects.set(); }
-    angle::Result syncDirtyObjects(const Context *context, const DirtyObjects &bitset);
+    angle::Result syncDirtyObjects(const Context *context,
+                                   PrimitiveMode mode,
+                                   const DirtyObjects &bitset);
     angle::Result syncDirtyObject(const Context *context, GLenum target);
     void setObjectDirty(GLenum target);
     void setTextureDirty(size_t textureUnitIndex);
@@ -660,17 +662,17 @@ class State : angle::NonCopyable
                                   Texture *texture);
 
     // Functions to synchronize dirty states
-    angle::Result syncReadFramebuffer(const Context *context);
-    angle::Result syncDrawFramebuffer(const Context *context);
-    angle::Result syncDrawAttachments(const Context *context);
-    angle::Result syncVertexArray(const Context *context);
-    angle::Result syncTextures(const Context *context);
-    angle::Result syncSamplers(const Context *context);
-    angle::Result syncProgram(const Context *context);
-    angle::Result syncTexturesInit(const Context *context);
-    angle::Result syncImagesInit(const Context *context);
+    angle::Result syncReadFramebuffer(const Context *context, PrimitiveMode mode);
+    angle::Result syncDrawFramebuffer(const Context *context, PrimitiveMode mode);
+    angle::Result syncDrawAttachments(const Context *context, PrimitiveMode mode);
+    angle::Result syncVertexArray(const Context *context, PrimitiveMode mode);
+    angle::Result syncTextures(const Context *context, PrimitiveMode mode);
+    angle::Result syncSamplers(const Context *context, PrimitiveMode mode);
+    angle::Result syncProgram(const Context *context, PrimitiveMode mode);
+    angle::Result syncTexturesInit(const Context *context, PrimitiveMode mode);
+    angle::Result syncImagesInit(const Context *context, PrimitiveMode mode);
 
-    using DirtyObjectHandler = angle::Result (State::*)(const Context *context);
+    using DirtyObjectHandler = angle::Result (State::*)(const Context *context, PrimitiveMode mode);
     static constexpr DirtyObjectHandler kDirtyObjectHandlers[DIRTY_OBJECT_MAX] = {
         &State::syncReadFramebuffer, &State::syncDrawFramebuffer, &State::syncDrawAttachments,
         &State::syncVertexArray,     &State::syncTextures,        &State::syncSamplers,
@@ -851,16 +853,17 @@ class State : angle::NonCopyable
 };
 
 ANGLE_INLINE angle::Result State::syncDirtyObjects(const Context *context,
+                                                   PrimitiveMode mode,
                                                    const DirtyObjects &bitset)
 {
     const DirtyObjects &dirtyObjects = mDirtyObjects & bitset;
+    mDirtyObjects &= ~dirtyObjects;
 
     for (size_t dirtyObject : dirtyObjects)
     {
-        ANGLE_TRY((this->*kDirtyObjectHandlers[dirtyObject])(context));
+        ANGLE_TRY((this->*kDirtyObjectHandlers[dirtyObject])(context, mode));
     }
 
-    mDirtyObjects &= ~dirtyObjects;
     return angle::Result::Continue;
 }
 

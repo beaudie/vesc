@@ -1820,7 +1820,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     angle::Result syncState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);
     angle::Result syncDirtyBits();
     angle::Result syncDirtyBits(const State::DirtyBits &bitMask);
-    angle::Result syncDirtyObjects(const State::DirtyObjects &objectMask);
+    angle::Result syncDirtyObjects(PrimitiveMode mode, const State::DirtyObjects &objectMask);
     angle::Result syncStateForReadPixels();
     angle::Result syncStateForTexImage();
     angle::Result syncStateForBlit();
