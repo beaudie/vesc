@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 
+#include "common/PackedEnums.h"
 #include "platform/Platform.h"
 #include "test_utils/angle_test_configs.h"
 #include "test_utils/angle_test_instantiate.h"
@@ -134,7 +135,18 @@ class ANGLERenderTest : public ANGLEPerfTest
 
     OSWindow *getWindow();
 
-    std::vector<TraceEvent> &getTraceEventBuffer();
+    enum class ANGLEThread : size_t
+    {
+        Main  = 0,
+        Flush = 1,
+        GPU   = 2,
+
+        EnumCount   = 3,
+        InvalidEnum = 3,
+    };
+
+    using TraceEventBuffers = angle::PackedEnumMap<ANGLEThread, std::vector<TraceEvent>>;
+    std::vector<TraceEvent> &getTraceEventBuffer(ANGLEThread thread);
 
     virtual void overrideWorkaroundsD3D(angle::WorkaroundsD3D *workaroundsD3D) {}
 
@@ -167,7 +179,7 @@ class ANGLERenderTest : public ANGLEPerfTest
     GLuint mTimestampQuery;
 
     // Trace event record that can be output.
-    std::vector<TraceEvent> mTraceEventBuffer;
+    TraceEventBuffers mTraceEventBuffers;
 
     // Handle to the entry point binding library.
     std::unique_ptr<angle::Library> mEntryPointsLib;
