@@ -156,15 +156,20 @@ bool MatchOutputCodeTest::compileWithSettings(ShShaderOutput output,
                              compileOptions, translatedCode, infoLog);
 }
 
-bool MatchOutputCodeTest::foundInCode(ShShaderOutput output, const char *stringToFind) const
+testing::AssertionResult MatchOutputCodeTest::foundInCode(ShShaderOutput output,
+                                                          const char *stringToFind) const
 {
     const auto code = mOutputCode.find(output);
     EXPECT_NE(mOutputCode.end(), code);
     if (code == mOutputCode.end())
     {
-        return std::string::npos;
+        return testing::AssertionFailure() << "output version not found: 0x" << std::hex << output;
     }
-    return code->second.find(stringToFind) != std::string::npos;
+    if (code->second.find(stringToFind) == std::string::npos)
+        return testing::AssertionFailure()
+               << "String not found: '" << stringToFind << "'. From code: " << std::endl
+               << code->second;
+    return testing::AssertionSuccess();
 }
 
 bool MatchOutputCodeTest::foundInCodeInOrder(ShShaderOutput output,
@@ -256,16 +261,41 @@ bool MatchOutputCodeTest::foundInCodeInOrder(std::vector<const char *> stringsTo
     return true;
 }
 
-bool MatchOutputCodeTest::notFoundInCode(const char *stringToFind) const
+testing::AssertionResult MatchOutputCodeTest::notFoundInCode(ShShaderOutput output,
+                                                             const char *stringToFind) const
+{
+    const auto code = mOutputCode.find(output);
+    EXPECT_NE(mOutputCode.end(), code);
+    if (code == mOutputCode.end())
+    {
+        return testing::AssertionFailure()
+               << "Expected code output not found:" << std::hex << output;
+    }
+    if (foundInCode(code->first, stringToFind))
+    {
+        return testing::AssertionFailure() << "Expected to not find string: '" << stringToFind
+                                           << "'."
+                                              " Found from output:"
+                                           << std::endl
+                                           << code->second;
+    }
+    return testing::AssertionSuccess();
+}
+
+testing::AssertionResult MatchOutputCodeTest::notFoundInCode(const char *stringToFind) const
 {
     for (auto &code : mOutputCode)
     {
         if (foundInCode(code.first, stringToFind))
         {
-            return false;
+            return testing::AssertionFailure() << "Expected to not find string: '" << stringToFind
+                                               << "'."
+                                                  " Found from output:"
+                                               << std::endl
+                                               << code.second;
         }
     }
-    return true;
+    return testing::AssertionSuccess();
 }
 
 const TIntermAggregate *FindFunctionCallNode(TIntermNode *root, const TString &functionMangledName)
