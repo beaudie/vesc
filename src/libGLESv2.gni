@@ -760,6 +760,8 @@ libangle_vulkan_sources = [
   "src/libANGLE/renderer/vulkan/DisplayVk.h",
   "src/libANGLE/renderer/vulkan/FenceNVVk.cpp",
   "src/libANGLE/renderer/vulkan/FenceNVVk.h",
+  "src/libANGLE/renderer/vulkan/FlushThreadVk.cpp",
+  "src/libANGLE/renderer/vulkan/FlushThreadVk.h",
   "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
   "src/libANGLE/renderer/vulkan/FramebufferVk.h",
   "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",

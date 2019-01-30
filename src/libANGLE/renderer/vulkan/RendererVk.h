@@ -17,6 +17,7 @@
 #include "libANGLE/BlobCache.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
+#include "libANGLE/renderer/vulkan/FlushThreadVk.h"
 #include "libANGLE/renderer/vulkan/QueryVk.h"
 #include "libANGLE/renderer/vulkan/UtilsVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
@@ -75,6 +76,10 @@ class RendererVk : angle::NonCopyable
 
     angle::Result finish(vk::Context *context);
     angle::Result flush(vk::Context *context);
+    angle::Result flushAndPresent(vk::Context *context,
+                                  const VkPresentInfoKHR &presentInfo,
+                                  std::vector<VkRectLayerKHR> &&rects,
+                                  uint32_t swapchainImageIndex);
 
     const vk::CommandPool &getCommandPool() const;
 
@@ -150,15 +155,14 @@ class RendererVk : angle::NonCopyable
 
     angle::Result syncPipelineCacheVk(DisplayVk *displayVk);
 
-    vk::DynamicSemaphorePool *getDynamicSemaphorePool() { return &mSubmitSemaphorePool; }
-
     // Request a semaphore, that is expected to be signaled externally.  The next submission will
     // wait on it.
     angle::Result allocateSubmitWaitSemaphore(vk::Context *context,
-                                              const vk::Semaphore **outSemaphore);
-    // Get the last signaled semaphore to wait on externally.  The semaphore will not be waited on
-    // by next submission.
-    const vk::Semaphore *getSubmitLastSignaledSemaphore(vk::Context *context);
+                                              const vk::Semaphore **outSemaphore)
+    {
+        return mFlushThread.allocateSubmitWaitSemaphore(context, outSemaphore);
+    }
+    std::mutex *getSwapchainMutex() { return mFlushThread.getSwapchainMutex(); }
 
     // This should only be called from ResourceVk.
     // TODO(jmadill): Keep in ContextVk to enable threaded rendering.
@@ -203,22 +207,26 @@ class RendererVk : angle::NonCopyable
     bool hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits);
 
   private:
-    // Number of semaphores for external entities to renderer to issue a wait, such as surface's
-    // image acquire.
-    static constexpr size_t kMaxExternalSemaphores = 64;
-    // Total possible number of semaphores a submission can wait on.  +1 is for the semaphore
-    // signaled in the last submission.
-    static constexpr size_t kMaxWaitSemaphores = kMaxExternalSemaphores + 1;
+    struct CommandBatch final : angle::NonCopyable
+    {
+        CommandBatch();
+        ~CommandBatch();
+        CommandBatch(CommandBatch &&other);
+        CommandBatch &operator=(CommandBatch &&other);
+
+        void destroy(VkDevice device);
+
+        vk::CommandPool commandPool;
+        vk::Fence fence;
+        Serial serial;
+    };
 
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
-    void getSubmitWaitSemaphores(
-        vk::Context *context,
-        angle::FixedVector<VkSemaphore, kMaxWaitSemaphores> *waitSemaphores,
-        angle::FixedVector<VkPipelineStageFlags, kMaxWaitSemaphores> *waitStageMasks);
-    angle::Result submitFrame(vk::Context *context,
-                              const VkSubmitInfo &submitInfo,
-                              vk::CommandBuffer &&commandBuffer);
+    angle::Result createCommandBatch(vk::Context *context, CommandBatch *commandBatchOut);
+    angle::Result nextFrame(vk::Context *context,
+                            CommandBatch &&commandBatch,
+                            vk::CommandBuffer &&commandBuffer);
     void freeAllInFlightResources();
     angle::Result flushCommandGraph(vk::Context *context, vk::CommandBuffer *commandBatch);
     void initFeatures(const std::vector<VkExtensionProperties> &deviceExtensionProps);
@@ -269,20 +277,6 @@ class RendererVk : angle::NonCopyable
 
     bool mDeviceLost;
 
-    struct CommandBatch final : angle::NonCopyable
-    {
-        CommandBatch();
-        ~CommandBatch();
-        CommandBatch(CommandBatch &&other);
-        CommandBatch &operator=(CommandBatch &&other);
-
-        void destroy(VkDevice device);
-
-        vk::CommandPool commandPool;
-        vk::Fence fence;
-        Serial serial;
-    };
-
     std::vector<CommandBatch> mInFlightCommands;
     std::vector<vk::GarbageObject> mGarbage;
     vk::MemoryProperties mMemoryProperties;
@@ -297,26 +291,6 @@ class RendererVk : angle::NonCopyable
     // A cache of VkFormatProperties as queried from the device over time.
     std::array<VkFormatProperties, vk::kNumVkFormats> mFormatProperties;
 
-    // mSubmitWaitSemaphores is a list of specifically requested semaphores to be waited on before a
-    // command buffer submission, for example, semaphores signaled by vkAcquireNextImageKHR.
-    // After first use, the list is automatically cleared.  This is a vector to support concurrent
-    // rendering to multiple surfaces.
-    //
-    // Note that with multiple contexts present, this may result in a context waiting on image
-    // acquisition even if it doesn't render to that surface.  If CommandGraphs are separated by
-    // context or share group for example, this could be moved to the one that actually uses the
-    // image.
-    angle::FixedVector<vk::SemaphoreHelper, kMaxExternalSemaphores> mSubmitWaitSemaphores;
-    // mSubmitLastSignaledSemaphore shows which semaphore was last signaled by submission.  This can
-    // be set to nullptr if retrieved to be waited on outside RendererVk, such
-    // as by the surface before presentation.  Each submission waits on the
-    // previously signaled semaphore (as well as any in mSubmitWaitSemaphores)
-    // and allocates a new semaphore to signal.
-    vk::SemaphoreHelper mSubmitLastSignaledSemaphore;
-
-    // A pool of semaphores used to support the aforementioned mid-frame submissions.
-    vk::DynamicSemaphorePool mSubmitSemaphorePool;
-
     // See CommandGraph.h for a desription of the Command Graph.
     vk::CommandGraph mCommandGraph;
 
@@ -329,6 +303,11 @@ class RendererVk : angle::NonCopyable
     // Internal shader library.
     vk::ShaderLibrary mShaderLibrary;
     UtilsVk mUtils;
+
+    // The command buffer submission (and the often subsequent swapchain image presentation) are
+    // done on a separate thread to allow for processing of the next frame while the submission is
+    // in progress.
+    FlushThreadVk mFlushThread;
 
     // The GpuEventQuery struct holds together a timestamp query and enough data to create a
     // trace event based on that. Use traceGpuEvent to insert such queries.  They will be readback
