@@ -15,6 +15,8 @@
 #include "libANGLE/renderer/vulkan/ImageVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
+#include <android/log.h>
+
 namespace rx
 {
 
@@ -99,7 +101,8 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
             (isDepthOrStencilFormat ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT : 0);
 
         gl::Extents extents(static_cast<int>(width), static_cast<int>(height), 1);
-        ANGLE_TRY(mImage->init(contextVk, gl::TextureType::_2D, extents, vkFormat, 1, usage, 1, 1));
+        ANGLE_TRY(mImage->init(contextVk, gl::TextureType::_2D, extents, vkFormat, 1, usage,
+                               vk::ImageLayout::Undefined, 1, 1));
 
         VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
         ANGLE_TRY(mImage->initMemory(contextVk, renderer->getMemoryProperties(), flags));
@@ -166,7 +169,12 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
     const vk::Format &vkFormat = renderer->getFormat(image->getFormat().info->sizedInternalFormat);
     const angle::Format &textureFormat = vkFormat.textureFormat();
 
+    __android_log_print(ANDROID_LOG_ERROR, "ANGLE", "RenderbufferVk: vk texture format: 0x%X",
+                        textureFormat.glInternalFormat);
+
     VkImageAspectFlags aspect = vk::GetFormatAspectFlags(textureFormat);
+
+    __android_log_print(ANDROID_LOG_ERROR, "ANGLE", "RenderbufferVk: aspect mask: 0x%X", aspect);
 
     ANGLE_TRY(mImage->initLayerImageView(
         contextVk, imageVk->getImageTextureType(), aspect, gl::SwizzleState(), &mImageView,

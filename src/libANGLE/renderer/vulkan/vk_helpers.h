@@ -533,11 +533,17 @@ class ImageHelper final : public CommandGraphResource
                        const Format &format,
                        GLint samples,
                        VkImageUsageFlags usage,
+                       ImageLayout initialLayout,
                        uint32_t mipLevels,
                        uint32_t layerCount);
     angle::Result initMemory(Context *context,
                              const MemoryProperties &memoryProperties,
                              VkMemoryPropertyFlags flags);
+    angle::Result initExternalMemory(Context *context,
+                                     const MemoryProperties &memoryProperties,
+                                     const void *extraAllocationInfo,
+                                     uint32_t currentQueueFamilyIndex,
+                                     VkMemoryPropertyFlags flags);
     angle::Result initLayerImageView(Context *context,
                                      gl::TextureType textureType,
                                      VkImageAspectFlags aspectMask,
@@ -728,6 +734,11 @@ class ImageHelper final : public CommandGraphResource
 
     // Current state.
     ImageLayout mCurrentLayout;
+    uint32_t mCurrentQueueFamilyIndex;
+
+    // The renderer's queue family index. Instead of storing it here, we could pass a dest queue
+    // family index into the isLayoutChangeNecessary and changeLayout functions to be more generic.
+    uint32_t mRendererQueueFamilyIndex;
 
     // Cached properties.
     uint32_t mLayerCount;
