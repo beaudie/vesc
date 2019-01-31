@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6797b751_7aa371ad",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-31T18:33:49Z",
+      "side": 1,
+      "message": "This would normally go in vulkan_config in the layers BUILD.gn. To match the other platforms. Is there a reason it needs to be here?",
+      "range": {
+        "startLine": 449,
+        "startChar": 19,
+        "endLine": 449,
+        "endChar": 42
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "689f2350_68633305",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-31T18:33:49Z",
+      "side": 1,
+      "message": "my layer understanding is a bit weak. But maybe you should remove this from the list of enabled extensions if the fuchsia layer provides them. Instead of adding the special case in this function. i.e. , the intent of this function is just to do \"dumb\" list matching.",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 6
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4b4c584_876db099",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-31T18:33:49Z",
+      "side": 1,
+      "message": "maybe you can use angle::FixedVector here to save the one allocation. Maybe have a fixed limit of 20 layers or something. A tiny thing but wouldn\u0027t hurt.",
+      "range": {
+        "startLine": 639,
+        "startChar": 4,
+        "endLine": 639,
+        "endChar": 48
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9943bd66_ab77586e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-31T18:33:49Z",
+      "side": 1,
+      "message": "same comment.",
+      "range": {
+        "startLine": 841,
+        "startChar": 4,
+        "endLine": 841,
+        "endChar": 48
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff1e5c15_2a21dc1b",
+        "filename": "src/libANGLE/renderer/vulkan/fuchsia/WindowSurfaceVkFuchsia.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-31T18:33:49Z",
+      "side": 1,
+      "message": "request: can you make \n\nextern PFN_vkCreateImagePipeSurfaceFUCHSIA vkCreateImagePipeSurfaceFUCHSIA;\n\nin vk_utils.h? And add a helper InitFuchsia\u003c...\u003eFunctions next to the InitDebugUtilsEXTFunctions? Look for PFN_vkCreateDebugUtilsMessengerEXT in vk_utils.h",
+      "range": {
+        "startLine": 45,
+        "startChar": 9,
+        "endLine": 45,
+        "endChar": 41
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab681175_faacbedb",
+        "filename": "util/OSWindow.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-31T18:33:49Z",
+      "side": 1,
+      "message": "Can you mention this is necessary because the ANGLE tests try to re-use the same Window with different EGL resources?",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 67
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

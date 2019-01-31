@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a5e2e45_16f3baba",
+        "filename": "include/EGL/eglplatform.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-31T18:33:49Z",
+      "side": 1,
+      "message": "could you work this into a PR at https://github.com/KhronosGroup/EGL-Registry ?",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 34
+      },
+      "revId": "dc2c17ec0300197d0e220c23789c45c6c399d840",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "082eb9d5_096b381a",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-31T18:33:49Z",
+      "side": 1,
+      "message": "Could you split this into an unrelated refactor CL? Would make the changes more atomic. Could also include the other changes to use FixedVector/vector and use the wsi layer if specified.\n\nIf you\u0027d strongly prefer not to than you can skip this. Just a minor clean up.",
+      "range": {
+        "startLine": 34,
+        "startChar": 16,
+        "endLine": 34,
+        "endChar": 31
+      },
+      "revId": "dc2c17ec0300197d0e220c23789c45c6c399d840",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6f9c98d_641f1835",
+        "filename": "src/libANGLE/renderer/vulkan/fuchsia/DisplayVkFuchsia.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-01-31T18:33:49Z",
+      "side": 1,
+      "message": "can you add top-level comments for the new files you\u0027ve added?",
+      "revId": "dc2c17ec0300197d0e220c23789c45c6c399d840",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
