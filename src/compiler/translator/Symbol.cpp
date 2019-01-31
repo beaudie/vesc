@@ -12,6 +12,7 @@
 
 #include "compiler/translator/Symbol.h"
 
+#include "common/utilities.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/SymbolTable.h"
 
@@ -115,7 +116,7 @@ void TStructure::createSamplerSymbols(const char *namePrefix,
         const TType *fieldType = field->type();
         if (IsSampler(fieldType->getBasicType()) || fieldType->isStructureContainingSamplers())
         {
-            std::stringstream fieldName;
+            std::stringstream fieldName = sh::InitializeStream<std::stringstream>();
             fieldName << namePrefix << "_" << field->name();
             TString fieldApiName = apiNamePrefix + ".";
             fieldApiName += field->name().data();

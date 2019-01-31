@@ -10,6 +10,7 @@
 
 #include "compiler/translator/CallDAG.h"
 
+#include "common/utilities.h"
 #include "compiler/translator/Diagnostics.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
@@ -171,7 +172,7 @@ class CallDAG::CallDAGCreator : public TIntermTraverser
 
         InitResult result = INITDAG_SUCCESS;
 
-        std::stringstream errorStream;
+        std::stringstream errorStream = sh::InitializeStream<std::stringstream>();
 
         while (!functionsToProcess.empty())
         {

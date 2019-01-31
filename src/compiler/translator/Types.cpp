@@ -9,6 +9,7 @@
 #endif
 
 #include "compiler/translator/Types.h"
+#include "common/utilities.h"
 #include "compiler/translator/ImmutableString.h"
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/IntermNode.h"
@@ -756,7 +757,7 @@ void TType::createSamplerSymbols(const ImmutableString &namePrefix,
             elementType.toArrayElementType();
             for (unsigned int arrayIndex = 0u; arrayIndex < getOutermostArraySize(); ++arrayIndex)
             {
-                std::stringstream elementName;
+                std::stringstream elementName = sh::InitializeStream<std::stringstream>();
                 elementName << namePrefix << "_" << arrayIndex;
                 TStringStream elementApiName;
                 elementApiName << apiNamePrefix << "[" << arrayIndex << "]";

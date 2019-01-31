@@ -9,6 +9,7 @@
 
 #include "ValidateVaryingLocations.h"
 
+#include "common/utilities.h"
 #include "compiler/translator/Diagnostics.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
@@ -83,7 +84,7 @@ void ValidateShaderInterface(TDiagnostics *diagnostics,
             const int offsetLocation = location + elementIndex;
             if (locationMap.find(offsetLocation) != locationMap.end())
             {
-                std::stringstream strstr;
+                std::stringstream strstr = sh::InitializeStream<std::stringstream>();
                 strstr << "'" << varying->getName()
                        << "' conflicting location with previously defined '"
                        << locationMap[offsetLocation]->getName() << "'";

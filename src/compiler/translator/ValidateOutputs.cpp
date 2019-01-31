@@ -11,6 +11,7 @@
 
 #include <set>
 
+#include "common/utilities.h"
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/ParseContext.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
@@ -119,7 +120,7 @@ void ValidateOutputsTraverser::validate(TDiagnostics *diagnostics) const
                 const size_t offsetLocation = location + elementIndex;
                 if ((*validOutputsToUse)[offsetLocation])
                 {
-                    std::stringstream strstr;
+                    std::stringstream strstr = sh::InitializeStream<std::stringstream>();
                     strstr << "conflicting output locations with previously defined output '"
                            << (*validOutputsToUse)[offsetLocation]->getName() << "'";
                     error(*symbol, strstr.str().c_str(), diagnostics);
