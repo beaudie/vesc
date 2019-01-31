@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1193c998_68c729ea",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-01-31T22:53:28Z",
+      "side": 1,
+      "message": "Could this be a method on the binding instead? A setBufferNoRef-kinda thing?",
+      "range": {
+        "startLine": 299,
+        "startChar": 13,
+        "endLine": 299,
+        "endChar": 31
+      },
+      "revId": "65345ca51007209daeb60202024df0db0df26f3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
