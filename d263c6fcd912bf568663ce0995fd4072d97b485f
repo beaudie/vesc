@@ -70,6 +70,24 @@
       "revId": "d263c6fcd912bf568663ce0995fd4072d97b485f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "460375c3_a9788153",
+        "filename": "src/tests/gl_tests/gles1/PointSpriteTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2019-01-31T05:29:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c8cacea_a00400b5",
+      "revId": "d263c6fcd912bf568663ce0995fd4072d97b485f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
