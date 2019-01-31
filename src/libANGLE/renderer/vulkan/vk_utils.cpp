@@ -484,6 +484,10 @@ PFN_vkDestroyDebugUtilsMessengerEXT vkDestroyDebugUtilsMessengerEXT = nullptr;
 PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReportCallbackEXT   = nullptr;
 PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReportCallbackEXT = nullptr;
 
+PFN_vkGetAndroidHardwareBufferPropertiesANDROID vkGetAndroidHardwareBufferPropertiesANDROID =
+    nullptr;
+PFN_vkGetMemoryAndroidHardwareBufferANDROID vkGetMemoryAndroidHardwareBufferANDROID = nullptr;
+
 #define GET_FUNC(vkName)                                                                   \
     do                                                                                     \
     {                                                                                      \
@@ -501,6 +505,12 @@ void InitDebugReportEXTFunctions(VkInstance instance)
 {
     GET_FUNC(vkCreateDebugReportCallbackEXT);
     GET_FUNC(vkDestroyDebugReportCallbackEXT);
+}
+
+void InitExternalMemoryHardwareBufferANDROIDFunctions(VkInstance instance)
+{
+    GET_FUNC(vkGetAndroidHardwareBufferPropertiesANDROID);
+    GET_FUNC(vkGetMemoryAndroidHardwareBufferANDROID);
 }
 
 #undef GET_FUNC

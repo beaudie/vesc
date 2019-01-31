@@ -6,13 +6,57 @@
 
 // android_util.cpp: Utilities for the using the Android platform
 
-#include "libANGLE/renderer/gl/egl/android/android_util.h"
+#include "common/android_util.h"
 
-namespace rx
+namespace angle
 {
 
 namespace
 {
+
+// Taken from cutils/native_handle.h:
+// https://android.googlesource.com/platform/system/core/+/master/libcutils/include/cutils/native_handle.h
+typedef struct native_handle
+{
+    int version; /* sizeof(native_handle_t) */
+    int numFds;  /* number of file-descriptors at &data[0] */
+    int numInts; /* number of ints at &data[numFds] */
+    int data[0]; /* numFds + numInts ints */
+} native_handle_t;
+
+// Taken from nativebase/nativebase.h
+// https://android.googlesource.com/platform/frameworks/native/+/master/libs/nativebase/include/nativebase/nativebase.h
+typedef const native_handle_t *buffer_handle_t;
+
+typedef struct android_native_base_t
+{
+    /* a magic value defined by the actual EGL native type */
+    int magic;
+    /* the sizeof() of the actual EGL native type */
+    int version;
+    void *reserved[4];
+    /* reference-counting interface */
+    void (*incRef)(struct android_native_base_t *base);
+    void (*decRef)(struct android_native_base_t *base);
+} android_native_base_t;
+
+typedef struct ANativeWindowBuffer
+{
+    struct android_native_base_t common;
+    int width;
+    int height;
+    int stride;
+    int format;
+    int usage_deprecated;
+    uintptr_t layerCount;
+    void *reserved[1];
+    const native_handle_t *handle;
+    uint64_t usage;
+    // we needed extra space for storing the 64-bits usage flags
+    // the number of slots to use from reserved_proc depends on the
+    // architecture.
+    void *reserved_proc[8 - (sizeof(uint64_t) / sizeof(void *))];
+} ANativeWindowBuffer_t;
 
 // Taken from android/hardware_buffer.h
 // https://android.googlesource.com/platform/frameworks/native/+/master/libs/nativewindow/include/android/hardware_buffer.h
@@ -114,6 +158,21 @@ enum {
 
 namespace android
 {
+
+void GetANativeWindowBufferProperties(void *buffer,
+                                      int *width,
+                                      int *height,
+                                      int *depth,
+                                      int *pixelFormat)
+{
+    struct ANativeWindowBuffer *nativeWindowBuffer =
+        static_cast<struct ANativeWindowBuffer *>(buffer);
+    *width  = nativeWindowBuffer->width;
+    *height = nativeWindowBuffer->height;
+    *depth  = static_cast<int>(nativeWindowBuffer->layerCount);
+    *height = nativeWindowBuffer->height;
+}
+
 GLenum NativePixelFormatToGLInternalFormat(int pixelFormat)
 {
     switch (pixelFormat)
@@ -155,4 +214,4 @@ GLenum NativePixelFormatToGLInternalFormat(int pixelFormat)
     }
 }
 }  // namespace android
-}  // namespace rx
+}  // namespace angle
