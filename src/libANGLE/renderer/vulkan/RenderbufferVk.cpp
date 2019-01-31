@@ -15,6 +15,8 @@
 #include "libANGLE/renderer/vulkan/ImageVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
+#include <android/log.h>
+
 namespace rx
 {
 
@@ -137,7 +139,12 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
     const vk::Format &vkFormat = renderer->getFormat(image->getFormat().info->sizedInternalFormat);
     const angle::Format &textureFormat = vkFormat.textureFormat();
 
+    __android_log_print(ANDROID_LOG_ERROR, "ANGLE", "RenderbufferVk: vk texture format: 0x%X",
+                        textureFormat.glInternalFormat);
+
     VkImageAspectFlags aspect = vk::GetFormatAspectFlags(textureFormat);
+
+    __android_log_print(ANDROID_LOG_ERROR, "ANGLE", "RenderbufferVk: aspect mask: 0x%X", aspect);
 
     ANGLE_TRY(mImage->initLayerImageView(
         contextVk, imageVk->getImageTextureType(), aspect, gl::SwizzleState(), &mImageView,

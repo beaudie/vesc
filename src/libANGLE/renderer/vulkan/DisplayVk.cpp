@@ -19,6 +19,8 @@
 #include "libANGLE/renderer/vulkan/SyncVk.h"
 #include "third_party/trace_event/trace_event.h"
 
+#include <android/log.h>
+
 namespace rx
 {
 
@@ -191,6 +193,10 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->glTextureCubemapImage = true;
     outExtensions->glTexture3DImage      = false;
     outExtensions->glRenderbufferImage   = true;
+    outExtensions->imageNativeBuffer = getRenderer()->getFeatures().supportsAndroidHardwareBuffer;
+
+    __android_log_print(ANDROID_LOG_ERROR, "ANGLE", "outExtensions->imageNativeBuffer = %d",
+                        outExtensions->imageNativeBuffer);
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const

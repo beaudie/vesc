@@ -9,6 +9,7 @@
 
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
+#include <android/log.h>
 // Placing this first seems to solve an intellisense bug.
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
@@ -463,7 +464,7 @@ void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
 }
 
 // Initially dumping the command graphs is disabled.
-constexpr bool kEnableCommandGraphDiagnostics = false;
+constexpr bool kEnableCommandGraphDiagnostics = true;
 
 }  // anonymous namespace
 
@@ -850,6 +851,13 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     {
         enabledDeviceExtensions.push_back(VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
     }
+    if (getFeatures().supportsAndroidHardwareBuffer)
+    {
+        enabledDeviceExtensions.push_back(VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME);
+        enabledDeviceExtensions.push_back(
+            VK_ANDROID_EXTERNAL_MEMORY_ANDROID_HARDWARE_BUFFER_EXTENSION_NAME);
+        InitExternalMemoryHardwareBufferANDROIDFunctions(mInstance);
+    }
 
     ANGLE_VK_TRY(displayVk, VerifyExtensionsPresent(deviceExtensionProps, enabledDeviceExtensions));
 
@@ -1027,6 +1035,11 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
 
 void RendererVk::initFeatures(const std::vector<VkExtensionProperties> &deviceExtensionProps)
 {
+    for (const auto &ext : deviceExtensionProps)
+    {
+        __android_log_print(ANDROID_LOG_ERROR, "ANGLE", "Extension: %s", ext.extensionName);
+    }
+
 // Use OpenGL line rasterization rules by default.
 // TODO(jmadill): Fix Android support. http://anglebug.com/2830
 #if defined(ANGLE_PLATFORM_ANDROID)
@@ -1080,6 +1093,11 @@ void RendererVk::initFeatures(const std::vector<VkExtensionProperties> &deviceEx
     {
         mFeatures.supportsIncrementalPresent = true;
     }
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+    mFeatures.supportsAndroidHardwareBuffer = ExtensionFound(
+        VK_ANDROID_EXTERNAL_MEMORY_ANDROID_HARDWARE_BUFFER_EXTENSION_NAME, deviceExtensionProps);
+#endif
 }
 
 void RendererVk::initPipelineCacheVkKey()
