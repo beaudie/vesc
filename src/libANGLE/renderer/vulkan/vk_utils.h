@@ -259,13 +259,21 @@ class ObjectAndSerial final : angle::NonCopyable
 angle::Result AllocateBufferMemory(vk::Context *context,
                                    VkMemoryPropertyFlags requestedMemoryPropertyFlags,
                                    VkMemoryPropertyFlags *memoryPropertyFlagsOut,
+                                   const void *extraAllocationInfo,
                                    Buffer *buffer,
                                    DeviceMemory *deviceMemoryOut);
 
 angle::Result AllocateImageMemory(vk::Context *context,
                                   VkMemoryPropertyFlags memoryPropertyFlags,
+                                  const void *extraAllocationInfo,
                                   Image *image,
                                   DeviceMemory *deviceMemoryOut);
+angle::Result AllocateImageMemoryWithRequirements(vk::Context *context,
+                                                  VkMemoryPropertyFlags memoryPropertyFlags,
+                                                  const VkMemoryRequirements &memoryRequirements,
+                                                  const void *extraAllocationInfo,
+                                                  Image *image,
+                                                  DeviceMemory *deviceMemoryOut);
 
 using ShaderAndSerial = ObjectAndSerial<ShaderModule>;
 
@@ -387,9 +395,19 @@ extern PFN_vkDestroyDebugUtilsMessengerEXT vkDestroyDebugUtilsMessengerEXT;
 extern PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReportCallbackEXT;
 extern PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReportCallbackEXT;
 
+#ifdef VK_ANDROID_external_memory_android_hardware_buffer
+// VK_ANDROID_external_memory_android_hardware_buffer
+extern PFN_vkGetAndroidHardwareBufferPropertiesANDROID vkGetAndroidHardwareBufferPropertiesANDROID;
+extern PFN_vkGetMemoryAndroidHardwareBufferANDROID vkGetMemoryAndroidHardwareBufferANDROID;
+#endif
+
 // Lazily load entry points for each extension as necessary.
 void InitDebugUtilsEXTFunctions(VkInstance instance);
 void InitDebugReportEXTFunctions(VkInstance instance);
+
+#ifdef VK_ANDROID_external_memory_android_hardware_buffer
+void InitExternalMemoryHardwareBufferANDROIDFunctions(VkInstance instance);
+#endif
 
 namespace gl_vk
 {
