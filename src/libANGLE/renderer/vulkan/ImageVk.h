@@ -16,6 +16,15 @@
 namespace rx
 {
 
+class ExternalImageSiblingVk : public ExternalImageSiblingImpl
+{
+  public:
+    ExternalImageSiblingVk() {}
+    virtual ~ExternalImageSiblingVk() {}
+
+    virtual vk::ImageHelper *getImage() const = 0;
+};
+
 class ImageVk : public ImageImpl
 {
   public:
