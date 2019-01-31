@@ -1072,7 +1072,8 @@ angle::Result TextureVk::initImage(vk::Context *context,
         (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
          VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
 
-    ANGLE_TRY(mImage->init(context, mState.getType(), extents, format, 1, usage, levelCount,
+    ANGLE_TRY(mImage->init(context, mState.getType(), extents, format, 1, usage,
+                           vk::ImageLayout::Undefined, levelCount,
                            mState.getType() == gl::TextureType::CubeMap ? gl::kCubeFaceCount : 1));
 
     const VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;

@@ -72,7 +72,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         {
             VK_IMAGE_LAYOUT_PREINITIALIZED,
             VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+            VK_PIPELINE_STAGE_HOST_BIT,
             // Transition to: we don't expect to transition into PreInitialized.
             0,
             // Transition from: all writes must finish before barrier.
@@ -1068,8 +1068,8 @@ angle::Result BufferHelper::init(Context *context,
 {
     mSize = createInfo.size;
     ANGLE_VK_TRY(context, mBuffer.init(context->getDevice(), createInfo));
-    return vk::AllocateBufferMemory(context, memoryPropertyFlags, &mMemoryPropertyFlags, &mBuffer,
-                                    &mDeviceMemory);
+    return vk::AllocateBufferMemory(context, memoryPropertyFlags, &mMemoryPropertyFlags, nullptr,
+                                    &mBuffer, &mDeviceMemory);
 }
 
 void BufferHelper::destroy(VkDevice device)
@@ -1219,6 +1219,8 @@ ImageHelper::ImageHelper()
       mFormat(nullptr),
       mSamples(0),
       mCurrentLayout(ImageLayout::Undefined),
+      mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
+      mRendererQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
       mLayerCount(0),
       mLevelCount(0),
       mStagingBuffer(kStagingBufferFlags, kStagingBufferSize, true)
@@ -1232,6 +1234,8 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mFormat(other.mFormat),
       mSamples(other.mSamples),
       mCurrentLayout(other.mCurrentLayout),
+      mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
+      mRendererQueueFamilyIndex(other.mRendererQueueFamilyIndex),
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount),
       mStagingBuffer(std::move(other.mStagingBuffer)),
@@ -1260,6 +1264,7 @@ angle::Result ImageHelper::init(Context *context,
                                 const Format &format,
                                 GLint samples,
                                 VkImageUsageFlags usage,
+                                ImageLayout initialLayout,
                                 uint32_t mipLevels,
                                 uint32_t layerCount)
 {
@@ -1293,9 +1298,9 @@ angle::Result ImageHelper::init(Context *context,
     imageInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
     imageInfo.queueFamilyIndexCount = 0;
     imageInfo.pQueueFamilyIndices   = nullptr;
-    imageInfo.initialLayout         = VK_IMAGE_LAYOUT_UNDEFINED;
+    imageInfo.initialLayout         = kImageMemoryBarrierData[initialLayout].layout;
 
-    mCurrentLayout = ImageLayout::Undefined;
+    mCurrentLayout = initialLayout;
 
     ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
 
@@ -1329,7 +1334,23 @@ angle::Result ImageHelper::initMemory(Context *context,
                                       VkMemoryPropertyFlags flags)
 {
     // TODO(jmadill): Memory sub-allocation. http://anglebug.com/2162
-    ANGLE_TRY(AllocateImageMemory(context, flags, &mImage, &mDeviceMemory));
+    ANGLE_TRY(AllocateImageMemory(context, flags, nullptr, &mImage, &mDeviceMemory));
+    mRendererQueueFamilyIndex = context->getRenderer()->getQueueFamilyIndex();
+    mCurrentQueueFamilyIndex  = mRendererQueueFamilyIndex;
+    return angle::Result::Continue;
+}
+
+angle::Result ImageHelper::initExternalMemory(Context *context,
+                                              const MemoryProperties &memoryProperties,
+                                              const void *extraAllocationInfo,
+                                              uint32_t currentQueueFamilyIndex,
+
+                                              VkMemoryPropertyFlags flags)
+{
+    // TODO(jmadill): Memory sub-allocation. http://anglebug.com/2162
+    ANGLE_TRY(AllocateImageMemory(context, flags, extraAllocationInfo, &mImage, &mDeviceMemory));
+    mRendererQueueFamilyIndex = context->getRenderer()->getQueueFamilyIndex();
+    mCurrentQueueFamilyIndex  = currentQueueFamilyIndex;
     return angle::Result::Continue;
 }
 
@@ -1502,7 +1523,10 @@ bool ImageHelper::isLayoutChangeNecessary(ImageLayout newLayout)
     // If transitioning to the same read-only layout (RAR), don't generate a barrier.
     bool sameLayoutReadAfterRead = mCurrentLayout == newLayout && layoutData.isReadOnlyAccess;
 
-    return !sameLayoutReadAfterRead;
+    // Check if a queue transfer is required
+    bool sameQueue = mCurrentQueueFamilyIndex == mRendererQueueFamilyIndex;
+
+    return !sameLayoutReadAfterRead || !sameQueue;
 }
 
 void ImageHelper::changeLayout(VkImageAspectFlags aspectMask,
@@ -1523,8 +1547,8 @@ void ImageHelper::changeLayout(VkImageAspectFlags aspectMask,
     imageMemoryBarrier.dstAccessMask        = transitionTo.dstAccessMask;
     imageMemoryBarrier.oldLayout            = transitionFrom.layout;
     imageMemoryBarrier.newLayout            = transitionTo.layout;
-    imageMemoryBarrier.srcQueueFamilyIndex  = VK_QUEUE_FAMILY_IGNORED;
-    imageMemoryBarrier.dstQueueFamilyIndex  = VK_QUEUE_FAMILY_IGNORED;
+    imageMemoryBarrier.srcQueueFamilyIndex  = mCurrentQueueFamilyIndex;
+    imageMemoryBarrier.dstQueueFamilyIndex  = mRendererQueueFamilyIndex;
     imageMemoryBarrier.image                = mImage.getHandle();
 
     // TODO(jmadill): Is this needed for mipped/layer images?
@@ -1538,6 +1562,7 @@ void ImageHelper::changeLayout(VkImageAspectFlags aspectMask,
                                    nullptr, 0, nullptr, 1, &imageMemoryBarrier);
 
     mCurrentLayout = newLayout;
+    mCurrentQueueFamilyIndex = mRendererQueueFamilyIndex;
 }
 
 void ImageHelper::clearColor(const VkClearColorValue &color,
