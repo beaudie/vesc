@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2e136f6b_401ed7ac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-31T20:26:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d49babe5_15e47283",
+      "revId": "cc5c6ba4a990321cc92ce83a05b8c082be02cc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7bd9263c_a63b10e8",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -30,6 +48,30 @@
       "writtenOn": "2019-01-29T21:41:38Z",
       "side": 1,
       "message": "I don\u0027t see where you wait for the old swapchain to be complete. The spec says we must be externally synchronized here.",
+      "range": {
+        "startLine": 469,
+        "startChar": 29,
+        "endLine": 469,
+        "endChar": 41
+      },
+      "revId": "cc5c6ba4a990321cc92ce83a05b8c082be02cc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ff18804_ce085e5d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-31T20:26:41Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to wait for the old swapchain to complete presentation. VkSwapchainCreateInfoKHR::oldSwapchain is there to allow a new swapchain to be created while the previous one is still presenting (and avoid losing a few frames in waiting). _externally synchronized_ is for multi-threading access to the same object, which doesn\u0027t apply here.",
+      "parentUuid": "7bd9263c_a63b10e8",
       "range": {
         "startLine": 469,
         "startChar": 29,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "1cd95101_7ae54ce4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-31T20:26:41Z",
+      "side": 1,
+      "message": "An image was just presented to the old swapchain, and that will go through even though the swapchain is being recreated (part of the reason VkSwapchainCreateInfoKHR::oldSwapchain exists).\n\nIf the presentation engine is able to stretch/shrink the image to the new window size, there should be no flickering.\n\nIf it\u0027s not able to do that and decides not to present the old image, there\u0027s nothing we can do about it.\n\nI\u0027m not sure how preserving the old data would help though, are you thinking the application might read back the swapchain image (and use it) and find nothing were it expected a previous frame to be? I\u0027m not sure if that\u0027s even an issue, since the order of swapchain image acquisition is not defined, the application can\u0027t really rely on swapchain image readback anyway.",
+      "parentUuid": "2956dd0d_7a9cdf8f",
+      "range": {
+        "startLine": 498,
+        "startChar": 45,
+        "endLine": 498,
+        "endChar": 57
+      },
+      "revId": "cc5c6ba4a990321cc92ce83a05b8c082be02cc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1537edb8_893fd2d3",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -76,6 +142,30 @@
       "writtenOn": "2019-01-29T21:41:38Z",
       "side": 1,
       "message": "from my understanding vkAcquireNextImage can also return VK_ERROR_OUT_OF_DATE_KHR. And we\u0027d need to recreate in this event. Can maybe move the implementation above into a helper function and call it from nextSwapchainImage in some cases.",
+      "range": {
+        "startLine": 730,
+        "startChar": 18,
+        "endLine": 730,
+        "endChar": 36
+      },
+      "revId": "cc5c6ba4a990321cc92ce83a05b8c082be02cc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65f24b7c_b34f43f2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-31T20:26:41Z",
+      "side": 1,
+      "message": "Per our offline discussion, let\u0027s see if we actually find a vendor that would do this (not return out of date on present, but on acquire). I do check for window resize right before this call as well, regardless of the return values being out of data/submoptimal.\n\nThat said, we might have to manually try window resizing on as many platforms as possible to understand if it would be possible for the swapchain to become suboptimal between the `getCurrentWindowSize()` above and the `vkAcquireNextImage()` below.",
+      "parentUuid": "1537edb8_893fd2d3",
       "range": {
         "startLine": 730,
         "startChar": 18,
@@ -105,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "367e35ba_061d843a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-31T20:26:41Z",
+      "side": 1,
+      "message": "Out of date comment, fixed.",
+      "parentUuid": "0693ee97_b1025516",
+      "revId": "cc5c6ba4a990321cc92ce83a05b8c082be02cc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b59105e1_46301504",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 4
@@ -125,6 +233,30 @@
       "revId": "cc5c6ba4a990321cc92ce83a05b8c082be02cc57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5838bc4e_c568b6f1",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-01-31T20:26:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b59105e1_46301504",
+      "range": {
+        "startLine": 152,
+        "startChar": 58,
+        "endLine": 152,
+        "endChar": 69
+      },
+      "revId": "cc5c6ba4a990321cc92ce83a05b8c082be02cc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
