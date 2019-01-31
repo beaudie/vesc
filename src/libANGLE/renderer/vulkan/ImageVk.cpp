@@ -80,6 +80,24 @@ egl::Error ImageVk::initialize(const egl::Display *display)
         mImageLevel       = 0;
         mImageLayer       = 0;
     }
+    else if (egl::IsExternalImageTarget(mState.target))
+    {
+        const ExternalImageSiblingVk *externalImageSibling =
+            GetImplAs<ExternalImageSiblingVk>(GetAs<egl::ExternalImageSibling>(mState.source));
+        mImage = externalImageSibling->getImage();
+
+        // Make sure a staging buffer is ready to use to upload data
+        ASSERT(mContext == nullptr);
+        DisplayVk *displayVk = vk::GetImpl(display);
+        RendererVk *renderer = displayVk->getRenderer();
+        mImage->initStagingBuffer(renderer);
+
+        mOwnsImage = false;
+
+        mImageTextureType = gl::TextureType::_2D;
+        mImageLevel       = 0;
+        mImageLayer       = 0;
+    }
     else
     {
         UNREACHABLE();
