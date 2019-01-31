@@ -139,6 +139,16 @@ ExternalImageSibling::ExternalImageSibling(rx::EGLImplFactory *factory,
 
 ExternalImageSibling::~ExternalImageSibling() = default;
 
+void ExternalImageSibling::onDestroy(const egl::Display *display)
+{
+    mImplementation->onDestroy(display);
+}
+
+Error ExternalImageSibling::initialize(const egl::Display *display)
+{
+    return mImplementation->initialize(display);
+}
+
 gl::Extents ExternalImageSibling::getAttachmentSize(const gl::ImageIndex &imageIndex) const
 {
     return mImplementation->getSize();
@@ -238,7 +248,9 @@ void Image::onDestroy(const Display *display)
         // If the source is an external object, delete it
         if (IsExternalImageTarget(mState.sourceType))
         {
-            delete mState.source;
+            ExternalImageSibling *externalSibling = rx::GetAs<ExternalImageSibling>(mState.source);
+            externalSibling->onDestroy(display);
+            delete externalSibling;
         }
 
         mState.source = nullptr;
@@ -363,6 +375,11 @@ rx::ImageImpl *Image::getImplementation() const
 
 Error Image::initialize(const Display *display)
 {
+    if (IsExternalImageTarget(mState.sourceType))
+    {
+        ANGLE_TRY(rx::GetAs<ExternalImageSibling>(mState.source)->initialize(display));
+    }
+
     return mImplementation->initialize(display);
 }
 
