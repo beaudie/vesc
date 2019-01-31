@@ -504,7 +504,7 @@ class BufferHelper final : public CommandGraphResource
 enum class ImageLayout
 {
     Undefined              = 0,
-    PreInitialized         = 1,
+    ExternalPreInitialized = 1,
     TransferSrc            = 2,
     TransferDst            = 3,
     ComputeShaderReadOnly  = 4,
@@ -535,9 +535,25 @@ class ImageHelper final : public CommandGraphResource
                        VkImageUsageFlags usage,
                        uint32_t mipLevels,
                        uint32_t layerCount);
+    angle::Result initExternal(Context *context,
+                               gl::TextureType textureType,
+                               const gl::Extents &extents,
+                               const Format &format,
+                               GLint samples,
+                               VkImageUsageFlags usage,
+                               ImageLayout initialLayout,
+                               const void *externalImageCreateInfo,
+                               uint32_t mipLevels,
+                               uint32_t layerCount);
     angle::Result initMemory(Context *context,
                              const MemoryProperties &memoryProperties,
                              VkMemoryPropertyFlags flags);
+    angle::Result initExternalMemory(Context *context,
+                                     const MemoryProperties &memoryProperties,
+                                     const VkMemoryRequirements &memoryRequirements,
+                                     const void *extraAllocationInfo,
+                                     uint32_t currentQueueFamilyIndex,
+                                     VkMemoryPropertyFlags flags);
     angle::Result initLayerImageView(Context *context,
                                      gl::TextureType textureType,
                                      VkImageAspectFlags aspectMask,
@@ -677,7 +693,18 @@ class ImageHelper final : public CommandGraphResource
                       ImageLayout newLayout,
                       CommandBuffer *commandBuffer);
 
+    bool isQueueChangeNeccesary(uint32_t newQueueFamilyIndex);
+
+    void changeQueue(VkImageAspectFlags aspectMask,
+                     uint32_t newQueueFamilyIndex,
+                     CommandBuffer *commandBuffer);
+
   private:
+    void forceChangeLayout(VkImageAspectFlags aspectMask,
+                           ImageLayout newLayout,
+                           uint32_t newQueueFamilyIndex,
+                           CommandBuffer *commandBuffer);
+
     struct SubresourceUpdate
     {
         SubresourceUpdate();
@@ -729,6 +756,7 @@ class ImageHelper final : public CommandGraphResource
 
     // Current state.
     ImageLayout mCurrentLayout;
+    uint32_t mCurrentQueueFamilyIndex;
 
     // Cached properties.
     uint32_t mLayerCount;
