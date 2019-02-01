@@ -84,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "618b383c_a0c8db85",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T15:07:37Z",
+      "side": 1,
+      "message": "Agree on your reading for external sync. Regarding present, the spec just says\n\n\"The application can continue to present any images it acquired and has not yet presented using the old swapchain, as long as it has not entered a state that causes it to return VK_ERROR_OUT_OF_DATE_KHR\"\n\nBut I think you did get this out of date state? I\u0027m not very certain. Ian Elliot would probably know the answer.",
+      "parentUuid": "0ff18804_ce085e5d",
+      "range": {
+        "startLine": 469,
+        "startChar": 29,
+        "endLine": 469,
+        "endChar": 41
+      },
+      "revId": "cc5c6ba4a990321cc92ce83a05b8c082be02cc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2956dd0d_7a9cdf8f",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -131,6 +155,30 @@
     },
     {
       "key": {
+        "uuid": "6b57423c_23266e3a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T15:07:37Z",
+      "side": 1,
+      "message": "The app can read back the backbuffer (i.e. swapchain data) at any point. Also there\u0027s an EGL flag called EGL_SWAP_BEHAVIOR_PRESERVED_BIT. This might mean we need to preserve the data. But we don\u0027t support this just yet. Just a note for future work. Not necessary to fix it now.",
+      "parentUuid": "1cd95101_7ae54ce4",
+      "range": {
+        "startLine": 498,
+        "startChar": 45,
+        "endLine": 498,
+        "endChar": 57
+      },
+      "revId": "cc5c6ba4a990321cc92ce83a05b8c082be02cc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1537edb8_893fd2d3",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -175,6 +223,30 @@
       "revId": "cc5c6ba4a990321cc92ce83a05b8c082be02cc57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcc25c95_864b5662",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T15:07:37Z",
+      "side": 1,
+      "message": "SGTM. This is clearly and improvement and seems to be sufficient for the test platforms.",
+      "parentUuid": "65f24b7c_b34f43f2",
+      "range": {
+        "startLine": 730,
+        "startChar": 18,
+        "endLine": 730,
+        "endChar": 36
+      },
+      "revId": "cc5c6ba4a990321cc92ce83a05b8c082be02cc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
