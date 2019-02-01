@@ -25,7 +25,8 @@ TransformFeedbackGL::TransformFeedbackGL(const gl::TransformFeedbackState &state
       mStateManager(stateManager),
       mTransformFeedbackID(0),
       mIsActive(false),
-      mIsPaused(false)
+      mIsPaused(false),
+      mProgram(0)
 {
     mFunctions->genTransformFeedbacks(1, &mTransformFeedbackID);
 }
@@ -48,7 +49,7 @@ angle::Result TransformFeedbackGL::end(const gl::Context *context)
     mStateManager->onTransformFeedbackStateChange();
 
     // Immediately end the transform feedback so that the results are visible.
-    syncActiveState(false, gl::PrimitiveMode::InvalidEnum);
+    syncActiveState(false, gl::PrimitiveMode::InvalidEnum, 0);
     return angle::Result::Continue;
 }
 
@@ -107,7 +108,9 @@ GLuint TransformFeedbackGL::getTransformFeedbackID() const
     return mTransformFeedbackID;
 }
 
-void TransformFeedbackGL::syncActiveState(bool active, gl::PrimitiveMode primitiveMode) const
+void TransformFeedbackGL::syncActiveState(bool active,
+                                          gl::PrimitiveMode primitiveMode,
+                                          GLuint program) const
 {
     if (mIsActive != active)
     {
@@ -118,10 +121,18 @@ void TransformFeedbackGL::syncActiveState(bool active, gl::PrimitiveMode primiti
         if (mIsActive)
         {
             ASSERT(primitiveMode != gl::PrimitiveMode::InvalidEnum);
+            mProgram = program;
+            mStateManager->useProgram(program);
             mFunctions->beginTransformFeedback(gl::ToGLenum(primitiveMode));
         }
         else
         {
+            // Driver bug workaround: If transform feedback is paused and a new program is bound,
+            // calling endTransformFeedback does not correctly unpause first, creating an invalid
+            // paused but inactive state that causes errors later. Before calling
+            // endTransformFeedback we first ensure that the current program is the one associated
+            // with this transform feedback object when beginTransformFeedback was called.
+            mStateManager->useProgram(mProgram);
             mFunctions->endTransformFeedback();
         }
     }
