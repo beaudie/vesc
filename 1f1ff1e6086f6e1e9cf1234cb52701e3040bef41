@@ -34,6 +34,24 @@
       "revId": "1f1ff1e6086f6e1e9cf1234cb52701e3040bef41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0330d109_6dbb8e42",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-01T18:18:14Z",
+      "side": 1,
+      "message": "\u003e Correct me if I\u0027m wrong, but isn\u0027t it possible for something like this happen?\n\nYes.  That\u0027s why I wanted to review the spec language and think some more (it\u0027s one of the overly-complex parts of WSI that I flushed from my mental cache:-).  We\u0027ve even had a strange case in the last 1+ years where oldSwapchain can\u0027t be used (forget the details, but there\u0027s a bug out there somewhere that documents it).\n\nSome very-relevant spec language is:\n\n\u003e The application must not destroy a swapchain until after completion of all outstanding operations on images that were acquired from the swapchain. swapchain and all associated VkImage handles are destroyed, and must not be acquired or used any more by the application.\n\nI was trying to \"cheat\" with my previous comment (what might you get away with).  The proper solution will make sure that the above spec language is satisfied.  That\u0027s what we should go with, since we want ANGLE to be robust and work with all Vulkan implementations.  Some implications include:\n\n- All rendering on all previously-acquired/presented images must be complete.  Seems like ANGLE can use fences to track this.\n\n- Seems like the PE should no longer be displaying any previously-presented image from the old swapchain, but I\u0027m not sure about that.\n\nI\u0027ve just got pulled into something else.  I\u0027ll come back to this.  What do you about my comments?",
+      "parentUuid": "44ffe60e_1aef5739",
+      "revId": "1f1ff1e6086f6e1e9cf1234cb52701e3040bef41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
