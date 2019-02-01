@@ -28,6 +28,7 @@
 /third_party/cherry
 /third_party/deqp/src
 /third_party/gles1_conform
+/third_party/glmark2/src
 /third_party/glslang/src
 /third_party/googletest/src
 /third_party/jsoncpp
