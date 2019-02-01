@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38ee9709_01fdff7f",
+        "filename": "DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2019-02-01T19:15:18Z",
+      "side": 0,
+      "message": "Did you remove this intentionally? The tools/clang dep above updates the update script, and the update script is then supposed to run as a hook to download the actual compiler.",
+      "revId": "b7b0feaf346ceaba4c060383408fa5e3a0b17b56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
