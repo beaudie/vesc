@@ -371,6 +371,63 @@ TEST_P(CopyTexImageTest, SubDefaultFramebuffer)
     EXPECT_GL_NO_ERROR();
 }
 
+// Calling CopyTexSubImage to a non-cube-complete texture.
+TEST_P(CopyTexImageTest, CopyTexSubImageToNonCubeCompleteDestination)
+{
+    constexpr GLsizei kSize = 1;
+
+    GLColor redPixel = GLColor::red;
+
+    GLTexture srcTex;
+    glBindTexture(GL_TEXTURE_CUBE_MAP, srcTex);
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, &redPixel);
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, &redPixel);
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, &redPixel);
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, &redPixel);
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, &redPixel);
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, &redPixel);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+                           srcTex, 0);
+
+    ASSERT_GL_NO_ERROR();
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    GLColor bluePixel = GLColor::blue;
+
+    GLTexture dstTex;
+    glBindTexture(GL_TEXTURE_CUBE_MAP, dstTex);
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, &bluePixel);
+    glCopyTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, 0, 0, 0, 0, 1, 1);
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, &bluePixel);
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, &bluePixel);
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, &bluePixel);
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, &bluePixel);
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, &bluePixel);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+                           dstTex, 0);
+
+    ASSERT_GL_NO_ERROR();
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+}
+
 // specialization of CopyTexImageTest is added so that some tests can be explicitly run with an ES3
 // context
 class CopyTexImageTestES3 : public CopyTexImageTest

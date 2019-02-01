@@ -638,7 +638,7 @@ angle::Result TextureVk::copySubImage(const gl::Context *context,
                                       const gl::Rectangle &sourceArea,
                                       gl::Framebuffer *source)
 {
-    const gl::InternalFormat &currentFormat = *mState.getBaseLevelDesc().format.info;
+    const gl::InternalFormat &currentFormat = *mState.getImageDesc(index).format.info;
     return copySubImageImpl(context, index, destOffset, sourceArea, currentFormat, source);
 }
 
