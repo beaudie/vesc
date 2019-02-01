@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3bd395a_2e04bd21",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T16:03:32Z",
+      "side": 1,
+      "message": "can you pull this out into a helper that returns the override?",
+      "revId": "c5e72fc68226dfba67901388ef32a1077d591707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec80ffae_28e69549",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T16:03:32Z",
+      "side": 1,
+      "message": "try using GetEnvironmentVar in common/system_utils.h.",
+      "range": {
+        "startLine": 149,
+        "startChar": 0,
+        "endLine": 158,
+        "endChar": 9
+      },
+      "revId": "c5e72fc68226dfba67901388ef32a1077d591707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e7249c6_962c702d",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T16:03:32Z",
+      "side": 1,
+      "message": "can we use case insensitive compares?",
+      "range": {
+        "startLine": 164,
+        "startChar": 16,
+        "endLine": 164,
+        "endChar": 22
+      },
+      "revId": "c5e72fc68226dfba67901388ef32a1077d591707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebdaf068_2c4e1f10",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T16:03:32Z",
+      "side": 1,
+      "message": "nit: should be d3d11",
+      "range": {
+        "startLine": 178,
+        "startChar": 45,
+        "endLine": 178,
+        "endChar": 48
+      },
+      "revId": "c5e72fc68226dfba67901388ef32a1077d591707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
