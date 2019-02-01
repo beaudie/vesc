@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6686b171_ba8366e2",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-01T23:08:39Z",
+      "side": 1,
+      "message": "`changeLayout` doesn\u0027t do a barrier when `isLayoutChangeNecessary` is false.\n\nSee the comments on that function instead.",
+      "parentUuid": "0be905e3_0ec62230",
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ba266c47_e0fbe695",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -30,6 +48,30 @@
       "writtenOn": "2019-02-01T16:24:23Z",
       "side": 1,
       "message": "I\u0027d prefer the src/dst were switched in this struct. Seems more intuitive to me to have src first, then dst. I suspect there\u0027s a reason you ordered dst/src, though, so please share if you\u0027d like to stick with it.",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 32
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4b9c6e3_14d8ead7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-01T23:08:39Z",
+      "side": 1,
+      "message": "Yes, there _is_ a reason I did this. This struct contains information regarding both transition into and out of a layout. In chronological order, you first transition into the layout (where the `dst` stage/mask applies) then you transition out (where the `src` stage/mask applies).\n\nI was particularly afraid ordering them with src/dst would create the confusion that there\u0027s a src-\u003edst relationship. There\u0027s really a something-\u003edst followed by src-\u003esomething relationship here.\n\nI could rearrange them like this instead, if you think that\u0027s clearer:\n\n    // transition into the layout:\n    VkPipelineStageFlags dstStageMask;\n    VkAccessFlags dstAccessMask;\n    // transition out of the layout:\n    VkPipelineStageFlags srcStageMask;\n    VkAccessFlags srcAccessMask;",
+      "parentUuid": "ba266c47_e0fbe695",
       "range": {
         "startLine": 38,
         "startChar": 0,
@@ -89,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "ef5cffd0_2a21464d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-01T23:08:39Z",
+      "side": 1,
+      "message": "Just one clarification: as I said in a comment above, the dst/src information here are for transitions into and out of the layout. So the fact that there are two FS stages here doesn\u0027t mean the barrier is from FS to FS. It means it\u0027s from ?? to FS when transitioning in and from FS to ?? when transitioning out.\n\nThat implicitly means the src stage when transitioning is always derived from the previous barrier.\n\nFor example, say the image is in undefined layout and you do two transitions:\n\n- changeLayout(ImageLayout::ComputeShaderWrite)\n- changeLayout(ImageLayout::FragmentShaderReadOnly)\n\nThe first barrier is:\n\n- srcStageMask: ImageLayout::Undefined::srcStageMask\n    i.e. VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT\n- dstStageMask: ImageLayout::ComputeShaderWrite::dstStageMask\n    i.e. VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT\n\nThe second barrier is:\n\n- srcStageMask: ImageLayout::ComputeShaderWrite::srcStageMask\n    i.e. VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT\n- dstStageMask: ImageLayout::FragmentShaderReadOnly::dstStageMask\n    i.e. VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT\n\nNotice VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT in both cases, it\u0027s first used as dstStageMask and then as srcStageMask.  In each case above, the srcStageMask comes from mCurrentLayout and the dstStageMask comes from newLayout (which is then stored in mCurrentLayout).\n\n---\n\nI\u0027m going to add these examples to the code, to avoid similar confusions in the future.",
+      "parentUuid": "017e1ba3_ce6425cf",
+      "range": {
+        "startLine": 136,
+        "startChar": 12,
+        "endLine": 136,
+        "endChar": 49
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e621b43c_02173175",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -100,6 +166,30 @@
       "writtenOn": "2019-02-01T14:58:47Z",
       "side": 1,
       "message": "Maybe you should make this changeLayout and put it inlined in the header. Then make \"changeLayout\" into a private method \"changeLayoutImpl\"",
+      "range": {
+        "startLine": 1447,
+        "startChar": 0,
+        "endLine": 1456,
+        "endChar": 0
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afe4ff48_5c12da3d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1456,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-01T23:08:39Z",
+      "side": 1,
+      "message": "See next comment.\n\nAlso, note that this doesn\u0027t actually change the layout. It uses the cpp-private kImageMemoryBarrierData too.",
+      "parentUuid": "e621b43c_02173175",
       "range": {
         "startLine": 1447,
         "startChar": 0,
@@ -135,6 +225,30 @@
     },
     {
       "key": {
+        "uuid": "fe1d38ae_34299b0e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-01T23:08:39Z",
+      "side": 1,
+      "message": "First of all, let me say why I even added `isLayoutChangeNecessary` as a separate public function. Originally, I wanted to automatically skip the transition right here, so the caller wouldn\u0027t bother.\n\nBut look at this situations (as you noticed in UtilsVk, but without the `if`):\n\n//    if (image-\u003eisLayoutChangeNecessary(layout))\n    {\n        vk::CommandBuffer *srcLayoutChange;\n        ANGLE_TRY(src-\u003erecordCommands(contextVk, \u0026srcLayoutChange));\n        src-\u003echangeLayout(aspect, layout, srcLayoutChange);\n    }\n\nThat is, a command buffer is created just to do the transition. If I had relied solely on `changeLayout` to skip the transition, there would be an empty node created here for no reason. In cases like using some read-only texture many times (as in ProgramVk), this would add up.\n\nI briefly considered creating the command buffer automatically if doing the transition (and if not provided), but there are numerous call sites that don\u0027t expect an error (recordCommands can fail) and changing those didn\u0027t seem like a good idea.\n\nThen I turned this into an assert.  However, that meant that every caller to `changeLayout` had to call` isLayoutChangeNecessary`, which meant I had to sprinkle that all over the place. At this point, I went back to the original decision to make barrier skips automatic.\n\nFor the most part, the design is such that the caller says \"I want to be in this layout\" and this function decides whether to actually issue a barrier. There are only two places where `isLayoutChangeNecessary` is called before this function, and that\u0027s done for the sole purpose of avoiding the creation of an empty node/command buffer.\n\n---\n\nI hope this addressed all your concerns. Do let me know if something needs clarification, or you have further suggestions.",
+      "parentUuid": "d2e5eab4_c0e89ae3",
+      "range": {
+        "startLine": 1461,
+        "startChar": 9,
+        "endLine": 1461,
+        "endChar": 32
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6305d31b_23777a2f",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -146,6 +260,30 @@
       "writtenOn": "2019-02-01T16:24:23Z",
       "side": 1,
       "message": "I would favor transitionFrom and transitionTo as the names here. \"Out\" isn\u0027t intuitive to me if that\u0027s what you\u0027re going out \"of\" or out \"to.\"",
+      "range": {
+        "startLine": 1466,
+        "startChar": 0,
+        "endLine": 1467,
+        "endChar": 85
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33760698_eedcca80",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1467,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-01T23:08:39Z",
+      "side": 1,
+      "message": "Good suggestion. Done.\n\n(Never heard of `transition out to` though!)",
+      "parentUuid": "6305d31b_23777a2f",
       "range": {
         "startLine": 1466,
         "startChar": 0,
@@ -181,6 +319,30 @@
     },
     {
       "key": {
+        "uuid": "bbb34516_77fb204a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-01T23:08:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a078b5f_9a971ae1",
+      "range": {
+        "startLine": 570,
+        "startChar": 0,
+        "endLine": 592,
+        "endChar": 6
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa3e2ee7_b8a3232e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 5
@@ -201,6 +363,30 @@
       "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83f6a64f_88268336",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-01T23:08:39Z",
+      "side": 1,
+      "message": "I was hoping to keep `getCurrentLayout` inline with this, though I disliked the redundancy as well.\n\nDone.",
+      "parentUuid": "aa3e2ee7_b8a3232e",
+      "range": {
+        "startLine": 614,
+        "startChar": 4,
+        "endLine": 614,
+        "endChar": 35
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
