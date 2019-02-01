@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e9e5c22f_7a89eaec",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T15:49:34Z",
+      "side": 1,
+      "message": "Probably not. Might have been an attempt to solve a bug that I fixed somewhere else.",
+      "parentUuid": "d05c9c38_e076ba00",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 5
+      },
+      "revId": "0be6fd8dcdd2e892bf40d6b8e37b59e5e3fb63f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b727f845_ea82ae07",
         "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "0be6fd8dcdd2e892bf40d6b8e37b59e5e3fb63f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba389cfa_fcc9d0c6",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T15:49:34Z",
+      "side": 1,
+      "message": "This is only for Android. And the driver can provide us an ES 3.2 context if we request something lower. But if we specifically request ES 3.2, it will block it. We can refine this to specific devices since we have the SystemInfo. I left a note. Think this is safer for now since we have so many one-off Android devices and we don\u0027t need to explicitly request ES 3.2.",
+      "parentUuid": "b727f845_ea82ae07",
+      "range": {
+        "startLine": 149,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 9
+      },
+      "revId": "0be6fd8dcdd2e892bf40d6b8e37b59e5e3fb63f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
