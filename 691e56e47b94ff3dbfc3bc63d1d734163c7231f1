@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3ec542b4_2760bbaa",
+        "filename": "src/libANGLE/renderer/gl/TransformFeedbackGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-02-01T02:00:18Z",
+      "side": 1,
+      "message": "Does this cause the driver\u0027s current program to be lost? Should the endTransformFeedback call be followed by a call restoring the current program?",
+      "revId": "691e56e47b94ff3dbfc3bc63d1d734163c7231f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "123e99e1_72acc1c5",
         "filename": "src/libANGLE/renderer/gl/TransformFeedbackGL.h",
         "patchSetId": 3
