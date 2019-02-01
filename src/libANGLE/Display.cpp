@@ -138,6 +138,53 @@ rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap, const D
     rx::DisplayImpl *impl = nullptr;
     EGLAttrib displayType =
         attribMap.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE);
+
+    // On platforms with support for multiple back-ends, allow an environment variable to control
+    // the default.  This is useful to run angle with benchmarks without having to modify the
+    // benchmark source.  Possible values for this environment variable (ANGLE_DEFAULT_PLATFORM)
+    // are: vulkan, gl, d3d.
+    if (displayType == EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE)
+    {
+        const char *angleDefaultEnv = nullptr;
+#if defined(ANGLE_PLATFORM_LINUX)
+        angleDefaultEnv = getenv("ANGLE_DEFAULT_PLATFORM");
+#elif defined(ANGLE_PLATFORM_WINDOWS)
+        char angleDefaultEnvStorage[10];
+        DWORD envVariableLength = GetEnvironmentVariableA(
+            "ANGLE_DEFAULT_PLATFORM", angleDefaultEnvStorage, sizeof(angleDefaultEnvStorage));
+        if (envVariableLength != 0 || envVariableLength < sizeof(angleDefaultEnvStorage))
+        {
+            angleDefaultEnv = angleDefaultEnvStorage;
+        }
+#endif
+
+        if (angleDefaultEnv)
+        {
+#if defined(ANGLE_ENABLE_VULKAN)
+            if (strcmp(angleDefaultEnv, "vulkan") == 0)
+            {
+                displayType = EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE;
+            }
+            else
+#endif
+#if defined(ANGLE_ENABLE_OPENGL)
+                if (strcmp(angleDefaultEnv, "gl") == 0)
+            {
+                displayType = EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE;
+            }
+            else
+#endif
+#if defined(ANGLE_ENABLE_D3D11)
+                if (strcmp(angleDefaultEnv, "d3d") == 0)
+            {
+                displayType = EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE;
+            }
+            else
+#endif
+            {}
+        }
+    }
+
     switch (displayType)
     {
         case EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE:
