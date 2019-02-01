@@ -325,6 +325,11 @@ bool ValidateDrawArraysInstancedANGLE(Context *context,
                                       GLint first,
                                       GLsizei count,
                                       GLsizei primcount);
+bool ValidateDrawArraysInstancedEXT(Context *context,
+                                    PrimitiveMode mode,
+                                    GLint first,
+                                    GLsizei count,
+                                    GLsizei primcount);
 
 bool ValidateDrawElementsInstancedCommon(Context *context,
                                          PrimitiveMode mode,
