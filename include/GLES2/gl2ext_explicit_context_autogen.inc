@@ -163,8 +163,10 @@ typedef void (GL_APIENTRYP PFNGLDELETEQUERIESEXTCONTEXTANGLEPROC)(GLeglContext c
 typedef void (GL_APIENTRYP PFNGLDELETEVERTEXARRAYSOESCONTEXTANGLEPROC)(GLeglContext ctx, GLsizei n, const GLuint *arrays);
 typedef void (GL_APIENTRYP PFNGLDISCARDFRAMEBUFFEREXTCONTEXTANGLEPROC)(GLeglContext ctx, GLenum target, GLsizei numAttachments, const GLenum *attachments);
 typedef void (GL_APIENTRYP PFNGLDRAWARRAYSINSTANCEDANGLECONTEXTANGLEPROC)(GLeglContext ctx, GLenum mode, GLint first, GLsizei count, GLsizei primcount);
+typedef void (GL_APIENTRYP PFNGLDRAWARRAYSINSTANCEDEXTCONTEXTANGLEPROC)(GLeglContext ctx, GLenum mode, GLint start, GLsizei count, GLsizei primcount);
 typedef void (GL_APIENTRYP PFNGLDRAWBUFFERSEXTCONTEXTANGLEPROC)(GLeglContext ctx, GLsizei n, const GLenum *bufs);
 typedef void (GL_APIENTRYP PFNGLDRAWELEMENTSINSTANCEDANGLECONTEXTANGLEPROC)(GLeglContext ctx, GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei primcount);
+typedef void (GL_APIENTRYP PFNGLDRAWELEMENTSINSTANCEDEXTCONTEXTANGLEPROC)(GLeglContext ctx, GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei primcount);
 typedef void (GL_APIENTRYP PFNGLEGLIMAGETARGETRENDERBUFFERSTORAGEOESCONTEXTANGLEPROC)(GLeglContext ctx, GLenum target, GLeglImageOES image);
 typedef void (GL_APIENTRYP PFNGLEGLIMAGETARGETTEXTURE2DOESCONTEXTANGLEPROC)(GLeglContext ctx, GLenum target, GLeglImageOES image);
 typedef void (GL_APIENTRYP PFNGLENDQUERYEXTCONTEXTANGLEPROC)(GLeglContext ctx, GLenum target);
@@ -490,8 +492,10 @@ GL_APICALL void GL_APIENTRY glDeleteQueriesEXTContextANGLE(GLeglContext ctx, GLs
 GL_APICALL void GL_APIENTRY glDeleteVertexArraysOESContextANGLE(GLeglContext ctx, GLsizei n, const GLuint *arrays);
 GL_APICALL void GL_APIENTRY glDiscardFramebufferEXTContextANGLE(GLeglContext ctx, GLenum target, GLsizei numAttachments, const GLenum *attachments);
 GL_APICALL void GL_APIENTRY glDrawArraysInstancedANGLEContextANGLE(GLeglContext ctx, GLenum mode, GLint first, GLsizei count, GLsizei primcount);
+GL_APICALL void GL_APIENTRY glDrawArraysInstancedEXTContextANGLE(GLeglContext ctx, GLenum mode, GLint start, GLsizei count, GLsizei primcount);
 GL_APICALL void GL_APIENTRY glDrawBuffersEXTContextANGLE(GLeglContext ctx, GLsizei n, const GLenum *bufs);
 GL_APICALL void GL_APIENTRY glDrawElementsInstancedANGLEContextANGLE(GLeglContext ctx, GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei primcount);
+GL_APICALL void GL_APIENTRY glDrawElementsInstancedEXTContextANGLE(GLeglContext ctx, GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei primcount);
 GL_APICALL void GL_APIENTRY glEGLImageTargetRenderbufferStorageOESContextANGLE(GLeglContext ctx, GLenum target, GLeglImageOES image);
 GL_APICALL void GL_APIENTRY glEGLImageTargetTexture2DOESContextANGLE(GLeglContext ctx, GLenum target, GLeglImageOES image);
 GL_APICALL void GL_APIENTRY glEndQueryEXTContextANGLE(GLeglContext ctx, GLenum target);

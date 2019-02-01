@@ -595,6 +595,10 @@ EXPORTS
     ; GL_EXT_geometry_shader
     glFramebufferTextureEXT
 
+    ; GL_EXT_instanced_arrays
+    glDrawArraysInstancedEXT
+    glDrawElementsInstancedEXT
+
     ; GL_EXT_map_buffer_range
     glFlushMappedBufferRangeEXT
     glMapBufferRangeEXT
@@ -842,12 +846,14 @@ EXPORTS
     glDrawArraysIndirectContextANGLE
     glDrawArraysInstancedContextANGLE
     glDrawArraysInstancedANGLEContextANGLE
+    glDrawArraysInstancedEXTContextANGLE
     glDrawBuffersContextANGLE
     glDrawBuffersEXTContextANGLE
     glDrawElementsContextANGLE
     glDrawElementsIndirectContextANGLE
     glDrawElementsInstancedContextANGLE
     glDrawElementsInstancedANGLEContextANGLE
+    glDrawElementsInstancedEXTContextANGLE
     glDrawRangeElementsContextANGLE
     glDrawTexfOESContextANGLE
     glDrawTexfvOESContextANGLE

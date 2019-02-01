@@ -3137,6 +3137,47 @@ void GL_APIENTRY FramebufferTextureEXT(GLenum target,
     }
 }
 
+// GL_EXT_instanced_arrays
+void GL_APIENTRY DrawArraysInstancedEXT(GLenum mode, GLint start, GLsizei count, GLsizei primcount)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT("(GLenum mode = 0x%X, GLint start = %d, GLsizei count = %d, GLsizei primcount = %d)",
+          mode, start, count, primcount);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() ||
+            ValidateDrawArraysInstancedEXT(context, mode, start, count, primcount))
+        {
+            context->drawArraysInstanced(mode, start, count, primcount);
+        }
+    }
+}
+
+void GL_APIENTRY DrawElementsInstancedEXT(GLenum mode,
+                                          GLsizei count,
+                                          GLenum type,
+                                          const void *indices,
+                                          GLsizei primcount)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum mode = 0x%X, GLsizei count = %d, GLenum type = 0x%X, const void *indices = "
+        "0x%016" PRIxPTR ", GLsizei primcount = %d)",
+        mode, count, type, (uintptr_t)indices, primcount);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (context->skipValidation() ||
+            ValidateDrawElementsInstancedEXT(context, mode, count, type, indices, primcount))
+        {
+            context->drawElementsInstanced(mode, count, type, indices, primcount);
+        }
+    }
+}
+
 // GL_EXT_map_buffer_range
 void GL_APIENTRY FlushMappedBufferRangeEXT(GLenum target, GLintptr offset, GLsizeiptr length)
 {
@@ -6799,6 +6840,28 @@ void GL_APIENTRY DrawArraysInstancedANGLEContextANGLE(GLeglContext ctx,
     }
 }
 
+void GL_APIENTRY DrawArraysInstancedEXTContextANGLE(GLeglContext ctx,
+                                                    GLenum mode,
+                                                    GLint start,
+                                                    GLsizei count,
+                                                    GLsizei primcount)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT("(GLenum mode = 0x%X, GLint start = %d, GLsizei count = %d, GLsizei primcount = %d)",
+          mode, start, count, primcount);
+
+    Context *context = static_cast<gl::Context *>(ctx);
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        if (context->skipValidation() ||
+            ValidateDrawArraysInstancedEXT(context, mode, start, count, primcount))
+        {
+            context->drawArraysInstanced(mode, start, count, primcount);
+        }
+    }
+}
+
 void GL_APIENTRY DrawBuffersContextANGLE(GLeglContext ctx, GLsizei n, const GLenum *bufs)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
@@ -6932,6 +6995,31 @@ void GL_APIENTRY DrawElementsInstancedANGLEContextANGLE(GLeglContext ctx,
                                                primcount))
         {
             context->drawElementsInstanced(modePacked, count, typePacked, indices, primcount);
+        }
+    }
+}
+
+void GL_APIENTRY DrawElementsInstancedEXTContextANGLE(GLeglContext ctx,
+                                                      GLenum mode,
+                                                      GLsizei count,
+                                                      GLenum type,
+                                                      const void *indices,
+                                                      GLsizei primcount)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum mode = 0x%X, GLsizei count = %d, GLenum type = 0x%X, const void *indices = "
+        "0x%016" PRIxPTR ", GLsizei primcount = %d)",
+        mode, count, type, (uintptr_t)indices, primcount);
+
+    Context *context = static_cast<gl::Context *>(ctx);
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        if (context->skipValidation() ||
+            ValidateDrawElementsInstancedEXT(context, mode, count, type, indices, primcount))
+        {
+            context->drawElementsInstanced(mode, count, type, indices, primcount);
         }
     }
 }

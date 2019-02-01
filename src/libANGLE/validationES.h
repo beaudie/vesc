@@ -315,30 +315,29 @@ ANGLE_INLINE bool ValidateDrawBase(Context *context, PrimitiveMode mode)
     return true;
 }
 
-bool ValidateDrawArraysInstancedBase(Context *context,
-                                     PrimitiveMode mode,
-                                     GLint first,
-                                     GLsizei count,
-                                     GLsizei primcount);
 bool ValidateDrawArraysInstancedANGLE(Context *context,
                                       PrimitiveMode mode,
                                       GLint first,
                                       GLsizei count,
                                       GLsizei primcount);
+bool ValidateDrawArraysInstancedEXT(Context *context,
+                                    PrimitiveMode mode,
+                                    GLint first,
+                                    GLsizei count,
+                                    GLsizei primcount);
 
-bool ValidateDrawElementsInstancedCommon(Context *context,
-                                         PrimitiveMode mode,
-                                         GLsizei count,
-                                         DrawElementsType type,
-                                         const void *indices,
-                                         GLsizei primcount);
 bool ValidateDrawElementsInstancedANGLE(Context *context,
                                         PrimitiveMode mode,
                                         GLsizei count,
                                         DrawElementsType type,
                                         const void *indices,
                                         GLsizei primcount);
-bool ValidateDrawInstancedANGLE(Context *context);
+bool ValidateDrawElementsInstancedEXT(Context *context,
+                                      PrimitiveMode mode,
+                                      GLsizei count,
+                                      DrawElementsType type,
+                                      const void *indices,
+                                      GLsizei primcount);
 
 bool ValidateFramebufferTextureBase(Context *context,
                                     GLenum target,

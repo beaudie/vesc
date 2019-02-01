@@ -2381,11 +2381,6 @@ void DispatchTableGL::initProcsGLES(const gl::Version &version,
         ASSIGN("glFramebufferTextureEXT", framebufferTexture);
     }
 
-    if (extensions.count("GL_EXT_instanced_arrays") != 0)
-    {
-        ASSIGN("glVertexAttribDivisorEXT", vertexAttribDivisor);
-    }
-
     if (extensions.count("GL_EXT_map_buffer_range") != 0)
     {
         ASSIGN("glFlushMappedBufferRangeEXT", flushMappedBufferRange);
@@ -5099,11 +5094,6 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
     if (extensions.count("GL_EXT_geometry_shader") != 0)
     {
         framebufferTexture = &glFramebufferTextureNULL;
-    }
-
-    if (extensions.count("GL_EXT_instanced_arrays") != 0)
-    {
-        vertexAttribDivisor = &glVertexAttribDivisorNULL;
     }
 
     if (extensions.count("GL_EXT_map_buffer_range") != 0)

@@ -784,6 +784,19 @@ bool ValidateFramebufferTextureEXT(Context *context,
                                    GLuint texture,
                                    GLint level);
 
+// GL_EXT_instanced_arrays
+bool ValidateDrawArraysInstancedEXT(Context *context,
+                                    GLenum mode,
+                                    GLint start,
+                                    GLsizei count,
+                                    GLsizei primcount);
+bool ValidateDrawElementsInstancedEXT(Context *context,
+                                      GLenum mode,
+                                      GLsizei count,
+                                      GLenum type,
+                                      const void *indices,
+                                      GLsizei primcount);
+
 // GL_EXT_map_buffer_range
 bool ValidateFlushMappedBufferRangeEXT(Context *context,
                                        BufferBinding targetPacked,
