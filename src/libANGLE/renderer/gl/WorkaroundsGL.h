@@ -176,6 +176,13 @@ struct WorkaroundsGL
     // Some tests have been seen to fail using worker contexts, this switch allows worker contexts
     // to be disabled for some platforms. http://crbug.com/849576
     bool disableWorkerContexts = false;
+
+    // Nvidia drivers behave badly if you don't ensure that the program bound when you call
+    // EndTransformFeedback is the same as was bound when you called BeginTransformFeedback.
+    // If transform feedback is paused, then it won't be unpaused and the paused but inactive
+    // state causes inconsistent behavior when you try to use transform feedback later.
+    // http://crbug.com/832238
+    bool useProgramBeforeEndTransformFeedback = false;
 };
 
 inline WorkaroundsGL::WorkaroundsGL() = default;
