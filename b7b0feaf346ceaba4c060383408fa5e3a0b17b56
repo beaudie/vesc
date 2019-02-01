@@ -16,6 +16,24 @@
       "revId": "b7b0feaf346ceaba4c060383408fa5e3a0b17b56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a24b133_774253fb",
+        "filename": "DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T19:27:27Z",
+      "side": 0,
+      "message": "Yeah, was intentional but a mistake. The problem was fixed by rolling build/.",
+      "parentUuid": "38ee9709_01fdff7f",
+      "revId": "b7b0feaf346ceaba4c060383408fa5e3a0b17b56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
