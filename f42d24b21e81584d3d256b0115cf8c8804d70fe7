@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "ba266c47_e0fbe695",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-01T16:24:23Z",
+      "side": 1,
+      "message": "I\u0027d prefer the src/dst were switched in this struct. Seems more intuitive to me to have src first, then dst. I suspect there\u0027s a reason you ordered dst/src, though, so please share if you\u0027d like to stick with it.",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 32
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b32b65e5_fe5c3245",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -30,6 +53,30 @@
       "writtenOn": "2019-02-01T14:58:47Z",
       "side": 1,
       "message": "do the src and dst stages depend at all on the previous barrier calls? I thought at one point that the implementation of this feature would be a bit more complicated because we would have to track a mask of previous access mask bits set.",
+      "range": {
+        "startLine": 136,
+        "startChar": 12,
+        "endLine": 136,
+        "endChar": 49
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "017e1ba3_ce6425cf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-01T16:24:23Z",
+      "side": 1,
+      "message": "If I understand the ? correctly, no, there\u0027s no dependence on previous barrier calls. The src \u0026 dst of VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT for this state will create a dependency chain so that any commands that execute in the FS stage before this barrier are guaranteed to complete before any commands (or frame buffer operations) that execute in the FS stage after this barrier.",
+      "parentUuid": "b32b65e5_fe5c3245",
       "range": {
         "startLine": 136,
         "startChar": 12,
@@ -81,6 +128,29 @@
         "startChar": 9,
         "endLine": 1461,
         "endChar": 32
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6305d31b_23777a2f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1467,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-01T16:24:23Z",
+      "side": 1,
+      "message": "I would favor transitionFrom and transitionTo as the names here. \"Out\" isn\u0027t intuitive to me if that\u0027s what you\u0027re going out \"of\" or out \"to.\"",
+      "range": {
+        "startLine": 1466,
+        "startChar": 0,
+        "endLine": 1467,
+        "endChar": 85
       },
       "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
