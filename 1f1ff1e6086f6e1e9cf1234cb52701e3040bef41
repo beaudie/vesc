@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28f5ce44_f61c1c87",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-01T16:06:57Z",
+      "side": 1,
+      "message": "Hmm.  Depends on the WSI implementation.  It may not be safe to destroy swapchain 1 so soon (e.g. vkQueuePresentKHR is supposed to queue the present, to occur after all rendering has completed and when the next vblank occurs).  There\u0027s the spec and then there are the implementations.  Spec-wise, it would be much-safer to destroy swapchain 1 after you\u0027ve presented an image from swapchain 2.  Perhaps you might get away with destroying it after you\u0027ve acquired an image from swapchain 2.\n\nIt might be good for me to re-read the spec language (that I had a hand in writing/editing) and think some more about this.",
+      "revId": "1f1ff1e6086f6e1e9cf1234cb52701e3040bef41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
