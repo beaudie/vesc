@@ -67,6 +67,7 @@ bool IsNativeConfigSupported(const PlatformParameters &param, OSWindow *osWindow
 
 bool IsPlatformAvailable(const PlatformParameters &param)
 {
+    return true;
     switch (param.getRenderer())
     {
         case EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE:
