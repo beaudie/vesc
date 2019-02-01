@@ -16,6 +16,24 @@
       "revId": "1f1ff1e6086f6e1e9cf1234cb52701e3040bef41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44ffe60e_1aef5739",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-01T16:27:24Z",
+      "side": 1,
+      "message": "Thanks Ian. My impression from the spec was that as soon as the image is returned to the swapchain, it\u0027s safe to delete it (and the driver would keep track of when the image is actually presented and is allowed to be freed). I\u0027m not sure how either of waiting for one present from swapchain 2 or one acquire from it would ensure a vblank has passed for the present that was called for the last image of swapchain 1.\n\nCorrect me if I\u0027m wrong, but isn\u0027t it possible for something like this happen?\n\n- Create swapchain 1 with 3 images\n- Acquire image 1 and present it\n- Acquire image 2 and present it\n- VBlank: image 1 is presented, image 2 is queued for present\n- Create swapchain 2\n- Acquire image 3 from swapchain 2 and present it\n- VBLANK: image 2 is presented, image 3 is queued for present\n\nIn such a case, even after both one acquire and present involving swapchain 2, an image from swapchain 1 (image 2) is pending present.",
+      "parentUuid": "28f5ce44_f61c1c87",
+      "revId": "1f1ff1e6086f6e1e9cf1234cb52701e3040bef41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
