@@ -82,6 +82,7 @@ class TransformFeedback final : public RefCountObject, public LabeledObject
     void onVerticesDrawn(const Context *context, GLsizei count, GLsizei primcount);
 
     bool hasBoundProgram(GLuint program) const;
+    const Program *getBoundProgram() const { return mState.mProgram; };
 
     angle::Result bindIndexedBuffer(const Context *context,
                                     size_t index,
