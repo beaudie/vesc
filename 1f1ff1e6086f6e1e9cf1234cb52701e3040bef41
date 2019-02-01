@@ -52,6 +52,24 @@
       "revId": "1f1ff1e6086f6e1e9cf1234cb52701e3040bef41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e8622e4_f876c1a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-01T20:16:12Z",
+      "side": 1,
+      "message": "Ok, let\u0027s just play it safe. It will be fairly easy to defer the destruction to when the submit fence is signaled. That would be the submit operation right before the present. I don\u0027t know of a way to wait until the present itself is done though!",
+      "parentUuid": "0330d109_6dbb8e42",
+      "revId": "1f1ff1e6086f6e1e9cf1234cb52701e3040bef41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
