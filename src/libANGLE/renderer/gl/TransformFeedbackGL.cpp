@@ -9,10 +9,13 @@
 #include "libANGLE/renderer/gl/TransformFeedbackGL.h"
 
 #include "common/debug.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/State.h"
 #include "libANGLE/renderer/gl/BufferGL.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
+#include "libANGLE/renderer/gl/ProgramGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
+#include "libANGLE/renderer/gl/WorkaroundsGL.h"
 
 namespace rx
 {
@@ -25,7 +28,8 @@ TransformFeedbackGL::TransformFeedbackGL(const gl::TransformFeedbackState &state
       mStateManager(stateManager),
       mTransformFeedbackID(0),
       mIsActive(false),
-      mIsPaused(false)
+      mIsPaused(false),
+      mActiveProgram(0)
 {
     mFunctions->genTransformFeedbacks(1, &mTransformFeedbackID);
 }
@@ -48,7 +52,7 @@ angle::Result TransformFeedbackGL::end(const gl::Context *context)
     mStateManager->onTransformFeedbackStateChange();
 
     // Immediately end the transform feedback so that the results are visible.
-    syncActiveState(false, gl::PrimitiveMode::InvalidEnum);
+    syncActiveState(false, gl::PrimitiveMode::InvalidEnum, context);
     return angle::Result::Continue;
 }
 
@@ -107,21 +111,43 @@ GLuint TransformFeedbackGL::getTransformFeedbackID() const
     return mTransformFeedbackID;
 }
 
-void TransformFeedbackGL::syncActiveState(bool active, gl::PrimitiveMode primitiveMode) const
+void TransformFeedbackGL::syncActiveState(bool active,
+                                          gl::PrimitiveMode primitiveMode,
+                                          const gl::Context *context) const
 {
     if (mIsActive != active)
     {
+        const WorkaroundsGL &workarounds = GetWorkaroundsGL(context);
         mIsActive = active;
         mIsPaused = false;
+
+        gl::Program *program = context->getState().getProgram();
+        GLuint programID     = 0;
+        if (program)
+        {
+            programID = GetImplAs<ProgramGL>(context->getState().getProgram())->getProgramID();
+        }
 
         mStateManager->bindTransformFeedback(GL_TRANSFORM_FEEDBACK, mTransformFeedbackID);
         if (mIsActive)
         {
             ASSERT(primitiveMode != gl::PrimitiveMode::InvalidEnum);
+            mActiveProgram = programID;
+            mStateManager->useProgram(programID);
             mFunctions->beginTransformFeedback(gl::ToGLenum(primitiveMode));
         }
         else
         {
+            if (workarounds.useProgramBeforeEndTransformFeedback)
+            {
+                // Nvidia bug workaround: If transform feedback is paused and a new program is
+                // bound, calling endTransformFeedback does not unpause first, creating an invalid
+                // paused but inactive state that causes errors later. Before calling
+                // endTransformFeedback we first ensure that the current program is the one
+                // associated with this transform feedback object when beginTransformFeedback was
+                // called.
+                mStateManager->useProgram(mActiveProgram);
+            }
             mFunctions->endTransformFeedback();
         }
     }
