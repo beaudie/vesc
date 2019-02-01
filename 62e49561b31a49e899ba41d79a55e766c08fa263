@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b4f6e80_cd1aa126",
+        "filename": "src/libANGLE/Config.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2019-02-01T19:20:34Z",
+      "side": 1,
+      "message": "nit: I\u0027d recommend using the do { ... } while(0) you did elsewhere. As-is,\n\n  if (...)\n    SORT(...)\n  else\n    ...\n\nwill have its else attach to the if that\u0027s in the macro, which isn\u0027t what\u0027s intended. (in practice, -Wdangling-else will save the day, but the diagnostic will still be harder to read than with do/while)",
+      "revId": "62e49561b31a49e899ba41d79a55e766c08fa263",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
