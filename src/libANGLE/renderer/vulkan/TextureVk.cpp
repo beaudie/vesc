@@ -256,7 +256,7 @@ angle::Result TextureVk::copySubImage(const gl::Context *context,
                                       const gl::Rectangle &sourceArea,
                                       gl::Framebuffer *source)
 {
-    const gl::InternalFormat &currentFormat = *mState.getBaseLevelDesc().format.info;
+    const gl::InternalFormat &currentFormat = *mState.getImageDesc(index).format.info;
     return copySubImageImpl(context, index, destOffset, sourceArea, currentFormat, source);
 }
 
@@ -353,7 +353,8 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
         ASSERT(offsetImageIndex.getLayerCount() == 1);
 
         return copySubImageImplWithDraw(contextVk, offsetImageIndex, modifiedDestOffset, destFormat,
-                                        0, clippedSourceArea, isViewportFlipY, false, false, false,
+                                        0, colorReadRT->getLayerIndex(), clippedSourceArea,
+                                        isViewportFlipY, false, false, false,
                                         &colorReadRT->getImage(), colorReadRT->getReadImageView());
     }
 
@@ -402,7 +403,7 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
     if (CanCopyWithDraw(renderer, sourceVkFormat, destVkFormat) && !forceCpuPath)
     {
         return copySubImageImplWithDraw(contextVk, offsetImageIndex, destOffset, destVkFormat,
-                                        sourceLevel, sourceArea, false, unpackFlipY,
+                                        sourceLevel, 0, sourceArea, false, unpackFlipY,
                                         unpackPremultiplyAlpha, unpackUnmultiplyAlpha,
                                         &source->getImage(), &source->getReadImageView());
     }
@@ -552,6 +553,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
                                                   const gl::Offset &destOffset,
                                                   const vk::Format &destFormat,
                                                   size_t sourceLevel,
+                                                  size_t sourceLayer,
                                                   const gl::Rectangle &sourceArea,
                                                   bool isSrcFlipY,
                                                   bool unpackFlipY,
@@ -582,6 +584,33 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
     uint32_t baseLayer  = index.hasLayer() ? index.getLayerIndex() : 0;
     uint32_t layerCount = index.getLayerCount();
 
+    // If the source image is a cube map, the view is of VK_IMAGE_VIEW_TYPE_CUBE type.  However,
+    // GLSL's texelFetch cannot take a textureCube.  We need to create a 2D_ARRAY type view to be
+    // able to perform the copy.
+    //
+    // TODO(syoussefi): Array textures are not yet supported in Vulkan.  Once they are, the if below
+    // should be changed to detect cube maps only.
+    vk::ImageView cubeAs2DArrayView;
+    if (srcImage->getLayerCount() % 6 == 0)
+    {
+        // TODO(syoussefi): If the cube map is LUMA, we need swizzle.  http://anglebug.com/2911
+        // This can't happen when copying from framebuffers, so only source of concern would be
+        // copy[Sub]Texture copying from a LUMA cube map.
+        ASSERT(!srcImage->getFormat().textureFormat().isLUMA());
+
+        gl::TextureType arrayTextureType =
+            Get2DTextureType(srcImage->getLayerCount(), srcImage->getSamples());
+        ANGLE_TRY(srcImage->initImageView(contextVk, arrayTextureType, VK_IMAGE_ASPECT_COLOR_BIT,
+                                          gl::SwizzleState(), &cubeAs2DArrayView, 0,
+                                          srcImage->getLevelCount()));
+        srcView = &cubeAs2DArrayView;
+    }
+    else
+    {
+        // Source layer is otherwise baked into the view
+        sourceLayer = 0;
+    }
+
     // If destination is valid, copy the source directly into it.
     if (mImage->valid())
     {
@@ -590,7 +619,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
 
         for (uint32_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
         {
-            params.srcLayer = layerIndex;
+            params.srcLayer = sourceLayer + layerIndex;
 
             vk::ImageView *destView;
             ANGLE_TRY(
@@ -618,7 +647,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
 
         for (uint32_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
         {
-            params.srcLayer = layerIndex;
+            params.srcLayer = sourceLayer + layerIndex;
 
             // Create a temporary view for this layer.
             vk::ImageView stagingView;
@@ -638,6 +667,11 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
         mImage->stageSubresourceUpdateFromImage(
             stagingImage.release(), index, destOffset,
             gl::Extents(sourceArea.width, sourceArea.height, 1));
+    }
+
+    if (cubeAs2DArrayView.valid())
+    {
+        renderer->releaseObject(currentQueueSerial, &cubeAs2DArrayView);
     }
 
     return angle::Result::Continue;
