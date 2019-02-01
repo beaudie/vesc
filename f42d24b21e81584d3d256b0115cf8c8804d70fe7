@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0be905e3_0ec62230",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T14:58:47Z",
+      "side": 1,
+      "message": "maybe we should rename isLayoutChangeNecessary and changeLayout. changeLayout also does a barrier even \"isLayoutChangeNecessary\" is false.",
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b32b65e5_fe5c3245",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T14:58:47Z",
+      "side": 1,
+      "message": "do the src and dst stages depend at all on the previous barrier calls? I thought at one point that the implementation of this feature would be a bit more complicated because we would have to track a mask of previous access mask bits set.",
+      "range": {
+        "startLine": 136,
+        "startChar": 12,
+        "endLine": 136,
+        "endChar": 49
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e621b43c_02173175",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1456,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T14:58:47Z",
+      "side": 1,
+      "message": "Maybe you should make this changeLayout and put it inlined in the header. Then make \"changeLayout\" into a private method \"changeLayoutImpl\"",
+      "range": {
+        "startLine": 1447,
+        "startChar": 0,
+        "endLine": 1456,
+        "endChar": 0
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2e5eab4_c0e89ae3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T14:58:47Z",
+      "side": 1,
+      "message": "you should ASSERT this instead of checking to force the caller to check externally. will be better for inlining.",
+      "range": {
+        "startLine": 1461,
+        "startChar": 9,
+        "endLine": 1461,
+        "endChar": 32
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a078b5f_9a971ae1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T14:58:47Z",
+      "side": 1,
+      "message": "nit: could you pull this out into enum class ImageLayout?",
+      "range": {
+        "startLine": 570,
+        "startChar": 0,
+        "endLine": 592,
+        "endChar": 6
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa3e2ee7_b8a3232e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T14:58:47Z",
+      "side": 1,
+      "message": "This is redundant information with mCurrentLayout. Could you instead use an angle::PackedEnumMap to compute it when we need to call the driver?",
+      "range": {
+        "startLine": 614,
+        "startChar": 4,
+        "endLine": 614,
+        "endChar": 35
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
