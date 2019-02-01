@@ -38,7 +38,7 @@ class TransformFeedbackGL : public TransformFeedbackImpl
 
     GLuint getTransformFeedbackID() const;
 
-    void syncActiveState(bool active, gl::PrimitiveMode primitiveMode) const;
+    void syncActiveState(bool active, gl::PrimitiveMode primitiveMode, GLuint program) const;
     void syncPausedState(bool paused) const;
 
   private:
@@ -49,6 +49,7 @@ class TransformFeedbackGL : public TransformFeedbackImpl
 
     mutable bool mIsActive;
     mutable bool mIsPaused;
+    mutable GLuint mProgram;
 };
 }  // namespace rx
 
