@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58cf154f_52560d14",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-01T22:11:42Z",
+      "side": 1,
+      "message": "Makes sense, `copy[Sub]Texture` functions do the same.",
+      "revId": "470bb9365a125e2dbd14623a493d6e60ceb25708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d65758c_c95d201d",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-01T22:11:42Z",
+      "side": 1,
+      "message": "You can generalize this test to do a copy after each `glTexImage2D`, which would exercise copying into the different faces. The last one would exercise cube-complete too.\n\nI would recommend using 6 different colors for each face of the source, just to be sure for example one copy is not overwriting all faces or something.",
+      "revId": "470bb9365a125e2dbd14623a493d6e60ceb25708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
