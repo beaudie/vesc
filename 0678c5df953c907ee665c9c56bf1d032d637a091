@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d84d0f20_a38e720e",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T20:59:32Z",
+      "side": 1,
+      "message": "nit: can you make this a different method instead of using the bool parameter? just easier to parse.",
+      "range": {
+        "startLine": 57,
+        "startChar": 12,
+        "endLine": 57,
+        "endChar": 44
+      },
+      "revId": "0678c5df953c907ee665c9c56bf1d032d637a091",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1930901f_6cf4163a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1663,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-01T20:59:32Z",
+      "side": 1,
+      "message": "nit: you can change this into a note, since we don\u0027t have a tracking bug for 3D textures.",
+      "range": {
+        "startLine": 1663,
+        "startChar": 7,
+        "endLine": 1663,
+        "endChar": 50
+      },
+      "revId": "0678c5df953c907ee665c9c56bf1d032d637a091",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
