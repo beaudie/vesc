@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1a2f05e_c4ef663b",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-01T15:09:51Z",
+      "side": 1,
+      "message": "I don\u0027t think setting the global mutex here will work.  There many be many displays (there are many during runs of our end2end tests) and they will all overwrite the global mutex and if any one is terminated then the global mutex will be left as null for the other displays.\n\nLog messages are also generated before display creation if events are turned on, the EVENT macro would be called in eglQueryString, eglGetDisplay or any other function that is called before a display is initialized.\n\nI\u0027m not sure what the correct way to create a global mutex without using a global static.  It could be a global pointer that is checked for null and then allocated on each message but this could also cause races and leak but this at least be correct runtime behaviour.",
+      "revId": "6876fc0ab121ba1acecf59a1e92e8bce3bb3a2d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
