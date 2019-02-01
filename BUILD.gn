@@ -654,6 +654,7 @@ angle_shared_library("libGLESv2${angle_libs_suffix}") {
   ]
 
   public_deps = [
+    ":angle_gpu_info_util",
     ":angle_version",
   ]
 }
