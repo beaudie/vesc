@@ -19,6 +19,7 @@
 #include "libANGLE/Workarounds.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/queryconversions.h"
+#include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/gl/ContextGL.h"
 #include "libANGLE/renderer/gl/FenceNVGL.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
@@ -1449,6 +1450,9 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
     workarounds->dontRelinkProgramsInParallel = IsAndroid() || (IsWindows() && IsIntel(vendor));
 
     workarounds->disableWorkerContexts = !IsApple();
+
+    workarounds->useProgramBeforeEndTransformFeedback =
+        IsNvidia(vendor) || IsAMD(vendor) || (IsLinux() && IsIntel(vendor));
 }
 
 void ApplyWorkarounds(const FunctionsGL *functions, gl::Workarounds *workarounds)
