@@ -60,6 +60,11 @@ deps = {
     'url': '{chromium_git}/external/deqp@{deqp_revision}',
   },
 
+  # glmark2 is a GPL3-licensed OpenGL ES 2.0 benchmark. We use it for testing.
+  '{angle_root}/third_party/glmark2/src': {
+    'url': '{chromium_git}/external/github.com/glmark2/glmark2@0f81f3c89768c4a6593ad59b09c82627f9ceaace',
+  },
+
   '{angle_root}/third_party/glslang/src': {
     'url': '{chromium_git}/external/github.com/KhronosGroup/glslang@{glslang_revision}',
     'condition': 'not build_with_chromium',
