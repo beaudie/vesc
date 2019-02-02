@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6415a2b2_c3b2415c",
+        "filename": "doc/ExternalBenchmarks.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-02T04:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6b9e6b2_da61b1b5",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 22,
+        "endChar": 27
+      },
+      "revId": "462165f382ad0153644cc13fbf7c33c6adc3a81e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "decfdff0_693fab46",
         "filename": "doc/ExternalBenchmarks.md",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "462165f382ad0153644cc13fbf7c33c6adc3a81e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c28ab6e3_512fdbf4",
+        "filename": "doc/ExternalBenchmarks.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-02T04:47:31Z",
+      "side": 1,
+      "message": "It\u0027s a script inside the repo (hence the `./`). The README mentions some dependencies, but they are basically \"python 2\" and \"libGLESv2\". It asks for libpng too, which I suspect is ubiquitous.\n\nThat is, this should generally work without needing anything that isn\u0027t already installed on a typical Linux distro.",
+      "parentUuid": "decfdff0_693fab46",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 8
+      },
+      "revId": "462165f382ad0153644cc13fbf7c33c6adc3a81e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
