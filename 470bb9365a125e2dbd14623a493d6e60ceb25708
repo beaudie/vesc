@@ -33,6 +33,24 @@
       "revId": "470bb9365a125e2dbd14623a493d6e60ceb25708",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd51ee7e_57b4ed51",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-02T05:04:43Z",
+      "side": 1,
+      "message": "After seeing the validation error message on the bug, I think it\u0027s definitely worth it to test both when the texture is not cube-complete and when it is.\n\nAlso, I suggest adding a little bit more to the test. Something like this:\n\n    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,\n                 GL_UNSIGNED_BYTE, \u0026bluePixel);\n    glCopyTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, 0, 0, 0, 0, 1, 1);\n    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,\n                 GL_UNSIGNED_BYTE, \u0026bluePixel);\n    glCopyTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, 0, 0, 0, 0, 1, 1);\n    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,\n                 GL_UNSIGNED_BYTE, \u0026bluePixel);\n    glCopyTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, 0, 0, 0, 0, 1, 1);\n    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,\n                 GL_UNSIGNED_BYTE, \u0026bluePixel);\n    glCopyTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, 0, 0, 0, 0, 1, 1);\n    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,\n                 GL_UNSIGNED_BYTE, \u0026bluePixel);\n    glCopyTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, 0, 0, 0, 0, 1, 1);\n    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA,\n                 GL_UNSIGNED_BYTE, \u0026bluePixel);\n    glCopyTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, 0, 0, 0, 0, 1, 1);\n\nFollowed by:\n\n    glCopyTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, 0, 0, 0, 0, 1, 1);\n    glCopyTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, 0, 0, 0, 0, 1, 1);\n    glCopyTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, 0, 0, 0, 0, 1, 1);\n    glCopyTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, 0, 0, 0, 0, 1, 1);\n    glCopyTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, 0, 0, 0, 0, 1, 1);\n    glCopyTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, 0, 0, 0, 0, 1, 1);\n\nwith some color change somewhere that would make it easy to test for correctness. The first 5 copy calls are on a not-cube-complete texture, the 6th is on a newly cube-completed texture and the next 6 are all on the cube-complete texture.\n\nI want to know if the validation error would still fire for the last 7 copies. If so, we need to adjust the shader itself by adding another flag to it to distinguish between array and cube.",
+      "parentUuid": "1d65758c_c95d201d",
+      "revId": "470bb9365a125e2dbd14623a493d6e60ceb25708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
