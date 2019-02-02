@@ -1,0 +1,187 @@
+# Copyright 2019 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+#
+# Build integration for glmark2.
+
+import("../../gni/angle.gni")
+
+config("glmark2_libmatrix_config") {
+  include_dirs = [ "src/src/libmatrix" ]
+}
+
+raw_glmark_data_path = rebase_path("src/src/data", root_build_dir)
+print(raw_glmark_data_path)
+
+config("glmark2_gles_config") {
+  defines = [
+    "GLMARK2_USE_GLESv2",
+    "GLMARK_DATA_PATH=\"${raw_glmark_data_path}\"",
+  ]
+  if (is_win) {
+    # M_PI is nonstandard.
+    defines += [ "_USE_MATH_DEFINES" ]
+  }
+  include_dirs = [
+    "include",
+    "src/src",
+  ]
+}
+
+# Supplies a dirent equivalent on Win32.
+config("windirent_config") {
+  if (is_win) {
+    if (is_clang) {
+      cflags = [ "-Wno-unused-function" ]
+    }
+  }
+}
+
+source_set("windirent") {
+  if (is_win) {
+    sources = [
+      "include/dirent.h",
+    ]
+  }
+  public_configs = [ ":windirent_config" ]
+}
+
+# Supplies a getopt equivalent on Win32.
+config("getopt_config") {
+  if (is_win) {
+    if (is_clang) {
+      cflags = [
+        "-Wno-writable-strings",
+        "-Wno-extra-tokens",
+      ]
+    }
+  }
+}
+source_set("getopt") {
+  if (is_win) {
+    sources = [
+      "include/getopt.h",
+    ]
+  }
+  public_configs = [ ":getopt_config" ]
+}
+
+source_set("glmark2_libmatrix_gles") {
+  sources = [
+    "src/src/libmatrix/gl-if.h",
+    "src/src/libmatrix/log.cc",
+    "src/src/libmatrix/log.h",
+    "src/src/libmatrix/mat.cc",
+    "src/src/libmatrix/mat.h",
+    "src/src/libmatrix/program.cc",
+    "src/src/libmatrix/program.h",
+    "src/src/libmatrix/shader-source.cc",
+    "src/src/libmatrix/shader-source.h",
+    "src/src/libmatrix/stack.h",
+    "src/src/libmatrix/util.cc",
+    "src/src/libmatrix/util.h",
+    "src/src/libmatrix/vec.h",
+  ]
+
+  if (is_clang) {
+    cflags_cc = [ "-Wno-implicit-fallthrough" ]
+  }
+  include_dirs = [ "src/src" ]
+  configs += [ ":glmark2_gles_config" ]
+  public_configs = [ ":glmark2_libmatrix_config" ]
+  deps = [
+    ":windirent",
+    "${angle_root}:includes",
+  ]
+}
+
+config("glmark2_scene_terrain_config") {
+  include_dirs = [ "src/src/scene-terrain" ]
+}
+
+source_set("glmark2_scene_terrain") {
+  sources = [
+    "src/src/scene-terrain/base-renderer.cpp",
+    "src/src/scene-terrain/blur-renderer.cpp",
+    "src/src/scene-terrain/copy-renderer.cpp",
+    "src/src/scene-terrain/luminance-renderer.cpp",
+    "src/src/scene-terrain/normal-from-height-renderer.cpp",
+    "src/src/scene-terrain/overlay-renderer.cpp",
+    "src/src/scene-terrain/renderer-chain.cpp",
+    "src/src/scene-terrain/renderer.h",
+    "src/src/scene-terrain/simplex-noise-renderer.cpp",
+    "src/src/scene-terrain/terrain-renderer.cpp",
+    "src/src/scene-terrain/texture-renderer.cpp",
+  ]
+
+  configs += [ ":glmark2_gles_config" ]
+  public_configs = [ ":glmark2_scene_terrain_config" ]
+  deps = [
+    ":glmark2_libmatrix_gles",
+    "${angle_root}:includes",
+  ]
+}
+
+source_set("glmark2_gles2") {
+  sources = [
+    "src/src/benchmark-collection.cpp",
+    "src/src/benchmark-collection.h",
+    "src/src/benchmark.cpp",
+    "src/src/benchmark.h",
+    "src/src/canvas.h",
+    "src/src/default-benchmarks.h",
+    "src/src/gl-headers.cpp",
+    "src/src/gl-headers.h",
+    "src/src/gl-state.h",
+    "src/src/gl-visual-config.cpp",
+    "src/src/gl-visual-config.h",
+    "src/src/image-reader.cpp",
+    "src/src/image-reader.h",
+    "src/src/main-loop.cpp",
+    "src/src/main-loop.h",
+    "src/src/mesh.cpp",
+    "src/src/mesh.h",
+    "src/src/model.cpp",
+    "src/src/model.h",
+    "src/src/native-state.h",
+    "src/src/options.cpp",
+    "src/src/options.h",
+    "src/src/scene-buffer.cpp",
+    "src/src/scene-build.cpp",
+    "src/src/scene-bump.cpp",
+    "src/src/scene-clear.cpp",
+    "src/src/scene-collection.h",
+    "src/src/scene-conditionals.cpp",
+    "src/src/scene-default-options.cpp",
+    "src/src/scene-desktop.cpp",
+    "src/src/scene-effect-2d.cpp",
+    "src/src/scene-function.cpp",
+    "src/src/scene-grid.cpp",
+    "src/src/scene-jellyfish.cpp",
+    "src/src/scene-jellyfish.h",
+    "src/src/scene-loop.cpp",
+    "src/src/scene-pulsar.cpp",
+    "src/src/scene-refract.cpp",
+    "src/src/scene-refract.h",
+    "src/src/scene-shading.cpp",
+    "src/src/scene-shadow.cpp",
+    "src/src/scene-terrain.cpp",
+    "src/src/scene-texture.cpp",
+    "src/src/scene.cpp",
+    "src/src/scene.h",
+    "src/src/text-renderer.cpp",
+    "src/src/text-renderer.h",
+    "src/src/texture.cpp",
+    "src/src/texture.h",
+  ]
+
+  deps = [
+    ":getopt",
+    ":glmark2_libmatrix_gles",
+    ":glmark2_scene_terrain",
+    "${angle_libpng_dir}:libpng",
+    "${angle_root}:includes",
+    "${angle_root}/third_party:jpeg",
+  ]
+  configs += [ ":glmark2_gles_config" ]
+}
