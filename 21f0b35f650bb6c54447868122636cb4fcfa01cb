@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "3f958cf5_d4390604",
+        "filename": "include/EGL/eglplatform.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-04T22:03:25Z",
+      "side": 1,
+      "message": "Should this be \u0027struct FushiaEGLWindow\u0027?",
+      "range": {
+        "startLine": 129,
+        "startChar": 8,
+        "endLine": 129,
+        "endChar": 14
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "689f2350_68633305",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 7
@@ -87,6 +110,29 @@
         "startChar": 4,
         "endLine": 841,
         "endChar": 48
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a805732_97b5def9",
+        "filename": "src/libANGLE/renderer/vulkan/fuchsia/WindowSurfaceVkFuchsia.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-04T22:03:25Z",
+      "side": 1,
+      "message": "I think you can simplify this a bunch by doing:\n\n   FuchsiaEGLWindow* fushiaWindow \u003d static_cast\u003cFuchsiaEGLWindow*\u003e(window);\n   if (fushiaWindow.magic !\u003d FUCHSIA_EGL_WINDOW_MAGIC || fushiaWindow.size !\u003d sizeof(FuchsiaEGLWindow))\n   {\n       return false;\n   }",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 5
       },
       "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
