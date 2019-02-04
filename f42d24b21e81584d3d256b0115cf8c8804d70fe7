@@ -84,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "516b99e0_a96cb756",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-04T19:05:34Z",
+      "side": 1,
+      "message": "It is a bit confusing that the destination stage happens before the source. But if that\u0027s the nomenclature the spec uses we should keep it.",
+      "parentUuid": "d4b9c6e3_14d8ead7",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 32
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b32b65e5_fe5c3245",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -155,6 +179,30 @@
     },
     {
       "key": {
+        "uuid": "2bd38370_e370bafb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-04T19:05:34Z",
+      "side": 1,
+      "message": "SGTM",
+      "parentUuid": "ef5cffd0_2a21464d",
+      "range": {
+        "startLine": 136,
+        "startChar": 12,
+        "endLine": 136,
+        "endChar": 49
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e621b43c_02173175",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -202,6 +250,30 @@
     },
     {
       "key": {
+        "uuid": "4b47af1f_7ac5fb31",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1456,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-04T19:05:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "afe4ff48_5c12da3d",
+      "range": {
+        "startLine": 1447,
+        "startChar": 0,
+        "endLine": 1456,
+        "endChar": 0
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d2e5eab4_c0e89ae3",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -246,6 +318,30 @@
       "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b1bcf37_d62bd662",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-04T19:05:34Z",
+      "side": 1,
+      "message": "That\u0027s good to know, thanks. If we ever ditch secondaries we could probably consolidate these two. For now this seems good.",
+      "parentUuid": "fe1d38ae_34299b0e",
+      "range": {
+        "startLine": 1461,
+        "startChar": 9,
+        "endLine": 1461,
+        "endChar": 32
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
