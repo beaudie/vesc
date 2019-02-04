@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56cca5d7_644e6419",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-04T23:26:16Z",
+      "side": 1,
+      "message": "Interesting.  I know this CL isn\u0027t changing this, but I\u0027m wondering when this is planned to be changed?",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6a0d06a_ae512961",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-04T23:26:16Z",
+      "side": 1,
+      "message": "Hmm.  You may want to vary this logic based on which present mode you selected.  For example, Android adds one image to what you ask for if you select MAILBOX mode.",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce1f6f89_08520f92",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-04T23:26:16Z",
+      "side": 1,
+      "message": "I see mSwapHistory being resized here, but a definite value being set on line 491.  Are the uses consistent?",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3399ac1a_a19e1fd3",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-04T23:26:16Z",
+      "side": 1,
+      "message": "Is this slow?",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6204a285_6e35e6ff",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-04T23:26:16Z",
+      "side": 1,
+      "message": "What is currentExtents.{width|height} being set to otherwise?",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39ea7164_aa170643",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-04T23:26:16Z",
+      "side": 1,
+      "message": "When you say \"the CPU is throttled\" are you referring to something in ANGLE, or are you referring to Vulkan?\n\nFYI ... Vulkan doesn\u0027t provide any throttling guarantees, though I believe some of the platforms/drivers (including Android) do throttle.  I saw a driver a while back that allowed the application (or ANGLE) to queue unlimited numbers of frames.  For example, after a few seconds, it has queued many-1000 frames (which then took a long time to render and present in FIFO mode).",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
