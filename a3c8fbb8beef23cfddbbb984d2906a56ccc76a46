@@ -69,6 +69,30 @@
       "revId": "a3c8fbb8beef23cfddbbb984d2906a56ccc76a46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "268da9e2_eae44dbf",
+        "filename": "src/compiler/translator/Common.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-04T21:40:27Z",
+      "side": 1,
+      "message": "Slight preference for a unified way just so new code isn\u0027t as able to make the subtle mistake. But either way works.",
+      "parentUuid": "d4f45d54_7b76d2a2",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 135,
+        "endChar": 1
+      },
+      "revId": "a3c8fbb8beef23cfddbbb984d2906a56ccc76a46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
