@@ -117,6 +117,30 @@
     },
     {
       "key": {
+        "uuid": "20bb210a_dc4ba67a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3716,
+      "author": {
+        "id": 1322304
+      },
+      "writtenOn": "2019-02-04T22:04:07Z",
+      "side": 1,
+      "message": "I thought this code only got called if the bindings changed.",
+      "parentUuid": "c58b6fef_ea32ec95",
+      "range": {
+        "startLine": 3716,
+        "startChar": 12,
+        "endLine": 3716,
+        "endChar": 72
+      },
+      "revId": "fee4c609a6b18b6a1ec797dca3ec0c36461c5dda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ec86ded_0bd2141f",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 1
@@ -128,6 +152,30 @@
       "writtenOn": "2019-02-04T21:35:04Z",
       "side": 1,
       "message": "Could you store the UAVs in an array and bind them all at once at the end?",
+      "range": {
+        "startLine": 3745,
+        "startChar": 13,
+        "endLine": 3745,
+        "endChar": 86
+      },
+      "revId": "fee4c609a6b18b6a1ec797dca3ec0c36461c5dda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6be74789_7ca2d754",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3745,
+      "author": {
+        "id": 1322304
+      },
+      "writtenOn": "2019-02-04T22:04:07Z",
+      "side": 1,
+      "message": "I agree, I was planning on merge SSBOs, atomic counter and RW image types to a single array of UAVs in a future CL. Should I address it now?",
+      "parentUuid": "7ec86ded_0bd2141f",
       "range": {
         "startLine": 3745,
         "startChar": 13,
