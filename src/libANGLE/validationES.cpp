@@ -683,6 +683,11 @@ bool ValidateDrawInstancedANGLE(Context *context)
     return false;
 }
 
+bool ValidateDrawInstancedEXT(Context *context)
+{
+    return true;
+}
+
 bool ValidTexture3DDestinationTarget(const Context *context, TextureType target)
 {
     switch (target)
@@ -2840,7 +2845,7 @@ bool ValidateDrawArraysInstancedANGLE(Context *context,
                                       GLsizei count,
                                       GLsizei primcount)
 {
-    if (!context->getExtensions().instancedArrays)
+    if (!context->getExtensions().instancedArraysANGLE)
     {
         context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
@@ -2852,6 +2857,26 @@ bool ValidateDrawArraysInstancedANGLE(Context *context,
     }
 
     return ValidateDrawInstancedANGLE(context);
+}
+
+bool ValidateDrawArraysInstancedEXT(Context *context,
+                                    PrimitiveMode mode,
+                                    GLint first,
+                                    GLsizei count,
+                                    GLsizei primcount)
+{
+    if (!context->getExtensions().instancedArraysEXT)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    if (!ValidateDrawArraysInstancedBase(context, mode, first, count, primcount))
+    {
+        return false;
+    }
+
+    return ValidateDrawInstancedEXT(context);
 }
 
 const char *ValidateDrawElementsStates(Context *context)
@@ -2923,7 +2948,7 @@ bool ValidateDrawElementsInstancedANGLE(Context *context,
                                         const void *indices,
                                         GLsizei primcount)
 {
-    if (!context->getExtensions().instancedArrays)
+    if (!context->getExtensions().instancedArraysANGLE)
     {
         context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
@@ -2935,6 +2960,27 @@ bool ValidateDrawElementsInstancedANGLE(Context *context,
     }
 
     return ValidateDrawInstancedANGLE(context);
+}
+
+bool ValidateDrawElementsInstancedEXT(Context *context,
+                                      PrimitiveMode mode,
+                                      GLsizei count,
+                                      DrawElementsType type,
+                                      const void *indices,
+                                      GLsizei primcount)
+{
+    if (!context->getExtensions().instancedArraysEXT)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    if (!ValidateDrawElementsInstancedBase(context, mode, count, type, indices, primcount))
+    {
+        return false;
+    }
+
+    return ValidateDrawInstancedEXT(context);
 }
 
 bool ValidateFramebufferTextureBase(Context *context,
@@ -5231,7 +5277,8 @@ bool ValidateGetVertexAttribBase(Context *context,
                     GL_VERTEX_ATTRIB_ARRAY_DIVISOR == GL_VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE,
                     "ANGLE extension enums not equal to GL enums.");
                 if (context->getClientMajorVersion() < 3 &&
-                    !context->getExtensions().instancedArrays)
+                    !context->getExtensions().instancedArraysANGLE &&
+                    !context->getExtensions().instancedArraysEXT)
                 {
                     context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
                     return false;
