@@ -25,12 +25,8 @@ class EGLRecordableTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        EGLint dispattrs[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE, GetParam().getRenderer(), EGL_NONE};
-        mDisplay           = eglGetPlatformDisplayEXT(
-            EGL_PLATFORM_ANGLE_ANGLE, reinterpret_cast<void *>(EGL_DEFAULT_DISPLAY), dispattrs);
+        mDisplay = getEGLWindow()->getDisplay();
         ASSERT_TRUE(mDisplay != EGL_NO_DISPLAY);
-
-        ASSERT_EGL_TRUE(eglInitialize(mDisplay, nullptr, nullptr));
     }
 
     bool hasExtension() const
@@ -38,7 +34,7 @@ class EGLRecordableTest : public ANGLETest
         return ANGLETest::eglDisplayExtensionEnabled(mDisplay, "EGL_ANDROID_recordable");
     }
 
-    void TearDown() override { eglTerminate(mDisplay); }
+    void TearDown() override { ANGLETest::TearDown(); }
 
     EGLDisplay mDisplay = EGL_NO_DISPLAY;
 };
