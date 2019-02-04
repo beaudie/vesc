@@ -16,6 +16,24 @@
       "revId": "7175382cbaa62e140e32926aa92ecc7d04f71bb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17eb8ba0_78085c92",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-04T20:59:01Z",
+      "side": 1,
+      "message": "Yes, it\u0027s due to future changes where the first usage of a texture may be from an external source and a local one is never allocated at all.",
+      "parentUuid": "a61fae5c_c28ccfb5",
+      "revId": "7175382cbaa62e140e32926aa92ecc7d04f71bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
