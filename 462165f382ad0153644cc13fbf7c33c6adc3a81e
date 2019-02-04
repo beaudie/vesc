@@ -117,6 +117,30 @@
       "revId": "462165f382ad0153644cc13fbf7c33c6adc3a81e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0a9c7bec_bf446afc",
+        "filename": "doc/ExternalBenchmarks.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-04T14:00:21Z",
+      "side": 1,
+      "message": "I meant to say \"override libGLESv2 at the configure step\"",
+      "parentUuid": "218aa1a7_1e61b234",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 8
+      },
+      "revId": "462165f382ad0153644cc13fbf7c33c6adc3a81e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
