@@ -31,6 +31,14 @@ source_set("glmark2_glad_gl") {
   public_configs = [ ":glmark2_glad_config" ]
 }
 
+source_set("glmark2_glad_glx") {
+  sources = [
+    "src/src/glad/include/glad/glx.h",
+    "src/src/glad/src/glx.c",
+  ]
+  public_configs = [ ":glmark2_glad_config" ]
+}
+
 glmark_data_path = "${angle_root}/third_party/glmark2/src/data"
 raw_glmark_data_path = rebase_path(glmark_data_path, root_build_dir)
 
@@ -109,6 +117,9 @@ source_set("glmark2_headers") {
     "src/src/texture.h",
   ]
 
+  if (is_linux) {
+    sources += [ "src/src/gl-state-glx.h" ]
+  }
   if (is_win) {
     sources += [
       "src/src/gl-state-wgl.h",
@@ -377,6 +388,20 @@ glmark2_exe("glmark2_angle") {
     "EGL_EGL_PROTOTYPES=1",
     "GLMARK2_USE_EGL",
   ]
+}
+
+if (is_linux) {
+  glmark2_exe("glmark2_glx") {
+    sources = [
+      "src/src/gl-state-glx.cpp",
+    ]
+    deps = [
+      ":glmark2_common_gl",
+      ":glmark2_glad_glx",
+    ]
+
+    defines = [ "GLMARK2_USE_GLX" ]
+  }
 }
 
 if (is_win) {
