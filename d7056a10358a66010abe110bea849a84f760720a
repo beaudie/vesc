@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05b008c6_28cd5d1f",
+        "filename": "BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-02-04T21:15:30Z",
+      "side": 1,
+      "message": "Why the deps in tests are insufficient?",
+      "range": {
+        "startLine": 670,
+        "startChar": 0,
+        "endLine": 670,
+        "endChar": 27
+      },
+      "revId": "d7056a10358a66010abe110bea849a84f760720a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "622cd2de_8620441a",
+        "filename": "src/tests/egl_tests/EGLSanityCheckTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-02-04T21:15:30Z",
+      "side": 1,
+      "message": "Are these all the PlatformParameters that you want to test?\nIt felt there were more than these. Like, you can ask for NULL backend, or specific GLES/D3D version.",
+      "revId": "d7056a10358a66010abe110bea849a84f760720a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acfd31ee_49462d71",
+        "filename": "src/tests/egl_tests/EGLSanityCheckTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-02-04T21:15:30Z",
+      "side": 1,
+      "message": "nit: Could you move this 3 lines above?",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 23
+      },
+      "revId": "d7056a10358a66010abe110bea849a84f760720a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2db6f1b_99359f80",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-02-04T21:15:30Z",
+      "side": 1,
+      "message": "How does this pass on devices without Vulkan support?",
+      "range": {
+        "startLine": 235,
+        "startChar": 17,
+        "endLine": 235,
+        "endChar": 53
+      },
+      "revId": "d7056a10358a66010abe110bea849a84f760720a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
