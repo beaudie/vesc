@@ -20,6 +20,7 @@ class InstancingTest : public ANGLETest
         setConfigGreenBits(8);
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
+        setExtensionsEnabled(false);
     }
 
     void TearDown() override
@@ -76,7 +77,8 @@ class InstancingTest : public ANGLETest
         bool points,               // true: draw points, false: draw quad
         bool indexed,              // true: DrawElements, false: DrawArrays
         bool offset,               // true: pass nonzero offset to DrawArrays, false: zero offset
-        bool buffer)               // true: use instance data in buffer, false: in client memory
+        bool buffer,               // true: use instance data in buffer, false: in client memory
+        bool extVersion)  // true: GL_EXT_instanced_arrays, false: GL_ANGLE_instanced_arrays
     {
         // The window is divided into kMaxDrawn slices of size kDrawSize.
         // The slice drawn into is determined by the instance datum.
@@ -93,29 +95,47 @@ class InstancingTest : public ANGLETest
         glVertexAttribPointer(instanceAttrib, 1, GL_FLOAT, GL_FALSE, 0,
                               buffer ? nullptr : mInstanceData);
         glEnableVertexAttribArray(instanceAttrib);
-        glVertexAttribDivisorANGLE(instanceAttrib, divisor);
+        if (extVersion)
+            glVertexAttribDivisorEXT(instanceAttrib, divisor);
+        else
+            glVertexAttribDivisorANGLE(instanceAttrib, divisor);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glVertexAttribPointer(positionAttrib, 2, GL_FLOAT, GL_FALSE, 0,
                               points ? kPointVertices : kQuadVertices);
         glEnableVertexAttribArray(positionAttrib);
-        glVertexAttribDivisorANGLE(positionAttrib, 0);
+        if (extVersion)
+            glVertexAttribDivisorEXT(positionAttrib, 0);
+        else
+            glVertexAttribDivisorANGLE(positionAttrib, 0);
 
         glClear(GL_COLOR_BUFFER_BIT);
 
         if (points)
         {
             if (indexed)
-                glDrawElementsInstancedANGLE(GL_POINTS, ArraySize(kPointIndices), GL_UNSIGNED_SHORT,
-                                             kPointIndices, numInstance);
+                if (extVersion)
+                    glDrawElementsInstancedEXT(GL_POINTS, ArraySize(kPointIndices),
+                                               GL_UNSIGNED_SHORT, kPointIndices, numInstance);
+                else
+                    glDrawElementsInstancedANGLE(GL_POINTS, ArraySize(kPointIndices),
+                                                 GL_UNSIGNED_SHORT, kPointIndices, numInstance);
+            else if (extVersion)
+                glDrawArraysInstancedEXT(GL_POINTS, offset ? 2 : 0, 4, numInstance);
             else
                 glDrawArraysInstancedANGLE(GL_POINTS, offset ? 2 : 0, 4, numInstance);
         }
         else
         {
             if (indexed)
-                glDrawElementsInstancedANGLE(GL_TRIANGLES, ArraySize(kQuadIndices),
-                                             GL_UNSIGNED_SHORT, kQuadIndices, numInstance);
+                if (extVersion)
+                    glDrawElementsInstancedEXT(GL_TRIANGLES, ArraySize(kQuadIndices),
+                                               GL_UNSIGNED_SHORT, kQuadIndices, numInstance);
+                else
+                    glDrawElementsInstancedANGLE(GL_TRIANGLES, ArraySize(kQuadIndices),
+                                                 GL_UNSIGNED_SHORT, kQuadIndices, numInstance);
+            else if (extVersion)
+                glDrawArraysInstancedEXT(GL_TRIANGLES, offset ? 4 : 0, 6, numInstance);
             else
                 glDrawArraysInstancedANGLE(GL_TRIANGLES, offset ? 4 : 0, 6, numInstance);
         }
@@ -209,40 +229,64 @@ class InstancingTestPoints : public InstancingTest
 // This test uses a vertex shader with the first attribute (attribute zero) instanced.
 // On D3D9 and D3D11 FL9_3, this triggers a special codepath that rearranges the input layout sent
 // to D3D, to ensure that slot/stream zero of the input layout doesn't contain per-instance data.
-TEST_P(InstancingTestAllConfigs, AttributeZeroInstanced)
+TEST_P(InstancingTestAllConfigs, AttributeZeroInstancedANGLE)
 {
-    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_ANGLE_instanced_arrays"));
+    ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_ANGLE_instanced_arrays"));
 
     runTest(4, 1, true /* attrib 0 instanced */, false /* quads */, true /* DrawElements */,
-            false /* N/A */, false /* no buffer */);
+            false /* N/A */, false /* no buffer */, false /* GL_ANGLE_instanced_arrays */);
+}
+
+TEST_P(InstancingTestAllConfigs, AttributeZeroInstancedEXT)
+{
+    ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_EXT_instanced_arrays"));
+
+    runTest(4, 1, true /* attrib 0 instanced */, false /* quads */, true /* DrawElements */,
+            false /* N/A */, false /* no buffer */, true /* GL_EXT_instanced_arrays */);
 }
 
 // Same as AttributeZeroInstanced, but attribute zero is not instanced.
 // This ensures the general instancing codepath (i.e. without rearranging the input layout) works as
 // expected.
-TEST_P(InstancingTestAllConfigs, AttributeZeroNotInstanced)
+TEST_P(InstancingTestAllConfigs, AttributeZeroNotInstancedANGLE)
 {
-    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_ANGLE_instanced_arrays"));
+    ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_ANGLE_instanced_arrays"));
 
     runTest(4, 1, false /* attrib 1 instanced */, false /* quads */, true /* DrawElements */,
-            false /* N/A */, false /* no buffer */);
+            false /* N/A */, false /* no buffer */, false /* GL_ANGLE_instanced_arrays */);
+}
+
+TEST_P(InstancingTestAllConfigs, AttributeZeroNotInstancedEXT)
+{
+    ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_EXT_instanced_arrays"));
+
+    runTest(4, 1, false /* attrib 1 instanced */, false /* quads */, true /* DrawElements */,
+            false /* N/A */, false /* no buffer */, true /* GL_EXT_instanced_arrays */);
 }
 
 // Tests that the "first" parameter to glDrawArraysInstancedANGLE is only an offset into
 // the non-instanced vertex attributes.
-TEST_P(InstancingTestNo9_3, DrawArraysWithOffset)
+TEST_P(InstancingTestNo9_3, DrawArraysWithOffsetANGLE)
 {
-    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_ANGLE_instanced_arrays"));
+    ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_ANGLE_instanced_arrays"));
 
     runTest(4, 1, false /* attribute 1 instanced */, false /* quads */, false /* DrawArrays */,
-            true /* offset>0 */, true /* buffer */);
+            true /* offset>0 */, true /* buffer */, false /* GL_ANGLE_instanced_arrays */);
+}
+
+TEST_P(InstancingTestNo9_3, DrawArraysWithOffsetEXT)
+{
+    ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_EXT_instanced_arrays"));
+
+    runTest(4, 1, false /* attribute 1 instanced */, false /* quads */, false /* DrawArrays */,
+            true /* offset>0 */, true /* buffer */, true /* GL_EXT_instanced_arrays */);
 }
 
 // This test verifies instancing with GL_POINTS with glDrawArraysInstanced works.
 // On D3D11 FL9_3, this triggers a special codepath that emulates instanced points rendering.
-TEST_P(InstancingTestPoints, DrawArrays)
+TEST_P(InstancingTestPoints, DrawArraysANGLE)
 {
-    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_ANGLE_instanced_arrays"));
+    ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_ANGLE_instanced_arrays"));
 
     // Disable D3D11 SDK Layers warnings checks, see ANGLE issue 667 for details
     // On Win7, the D3D SDK Layers emits a false warning for these tests.
@@ -250,14 +294,27 @@ TEST_P(InstancingTestPoints, DrawArrays)
     ignoreD3D11SDKLayersWarnings();
 
     runTest(4, 1, false /* attrib 1 instanced */, true /* points */, false /* DrawArrays */,
-            false /* offset=0 */, true /* buffer */);
+            false /* offset=0 */, true /* buffer */, false /* GL_ANGLE_instanced_arrays */);
+}
+
+TEST_P(InstancingTestPoints, DrawArraysEXT)
+{
+    ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_EXT_instanced_arrays"));
+
+    // Disable D3D11 SDK Layers warnings checks, see ANGLE issue 667 for details
+    // On Win7, the D3D SDK Layers emits a false warning for these tests.
+    // This doesn't occur on Windows 10 (Version 1511) though.
+    ignoreD3D11SDKLayersWarnings();
+
+    runTest(4, 1, false /* attrib 1 instanced */, true /* points */, false /* DrawArrays */,
+            false /* offset=0 */, true /* buffer */, true /* GL_EXT_instanced_arrays */);
 }
 
 // This test verifies instancing with GL_POINTS with glDrawElementsInstanced works.
 // On D3D11 FL9_3, this triggers a special codepath that emulates instanced points rendering.
-TEST_P(InstancingTestPoints, DrawElements)
+TEST_P(InstancingTestPoints, DrawElementsANGLE)
 {
-    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_ANGLE_instanced_arrays"));
+    ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_ANGLE_instanced_arrays"));
 
     // Disable D3D11 SDK Layers warnings checks, see ANGLE issue 667 for details
     // On Win7, the D3D SDK Layers emits a false warning for these tests.
@@ -265,7 +322,20 @@ TEST_P(InstancingTestPoints, DrawElements)
     ignoreD3D11SDKLayersWarnings();
 
     runTest(4, 1, false /* attrib 1 instanced */, true /* points */, true /* DrawElements */,
-            false /* N/A */, true /* buffer */);
+            false /* N/A */, true /* buffer */, false /* GL_ANGLE_instanced_arrays */);
+}
+
+TEST_P(InstancingTestPoints, DrawElementsEXT)
+{
+    ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_EXT_instanced_arrays"));
+
+    // Disable D3D11 SDK Layers warnings checks, see ANGLE issue 667 for details
+    // On Win7, the D3D SDK Layers emits a false warning for these tests.
+    // This doesn't occur on Windows 10 (Version 1511) though.
+    ignoreD3D11SDKLayersWarnings();
+
+    runTest(4, 1, false /* attrib 1 instanced */, true /* points */, true /* DrawElements */,
+            false /* N/A */, true /* buffer */, true /* GL_EXT_instanced_arrays */);
 }
 
 class InstancingTestES3 : public InstancingTest
