@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2eec8f92_c2e44f95",
+        "filename": "src/libANGLE/renderer/gl/TransformFeedbackGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-02-04T23:58:30Z",
+      "side": 1,
+      "message": "StateManagerGL::useProgram sets the dirty bit for program state, so next time StateManagerGL::syncState is called, the correct program will be restored. Hopefully this is sufficient, but Jamie or Geoff should probably verify.",
+      "parentUuid": "3ec542b4_2760bbaa",
+      "revId": "691e56e47b94ff3dbfc3bc63d1d734163c7231f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "123e99e1_72acc1c5",
         "filename": "src/libANGLE/renderer/gl/TransformFeedbackGL.h",
         "patchSetId": 3
@@ -39,6 +57,30 @@
       "revId": "691e56e47b94ff3dbfc3bc63d1d734163c7231f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "139ccbf4_92bf9140",
+        "filename": "src/libANGLE/renderer/gl/TransformFeedbackGL.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-02-04T23:58:30Z",
+      "side": 1,
+      "message": "I\u0027ve renamed it to mActiveProgram.",
+      "parentUuid": "123e99e1_72acc1c5",
+      "range": {
+        "startLine": 52,
+        "startChar": 19,
+        "endLine": 52,
+        "endChar": 27
+      },
+      "revId": "691e56e47b94ff3dbfc3bc63d1d734163c7231f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
