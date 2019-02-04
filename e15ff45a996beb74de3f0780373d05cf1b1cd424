@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9faa4186_669f7409",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-02-04T20:55:44Z",
+      "side": 1,
+      "message": "I\u0027m worried this is not atomic with updating mSwapHistory above.\nWouldn\u0027t we get into a bad state if the code exists prematurely due to some ANGLE_TRY in between?",
+      "range": {
+        "startLine": 758,
+        "startChar": 0,
+        "endLine": 761,
+        "endChar": 0
+      },
+      "revId": "e15ff45a996beb74de3f0780373d05cf1b1cd424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c47de675_bfcf02a7",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-02-04T20:55:44Z",
+      "side": 1,
+      "message": "I\u0027ve never tried to have two Window surfaces active on Android, this probably won\u0027t work even if you can create a display.",
+      "range": {
+        "startLine": 254,
+        "startChar": 0,
+        "endLine": 256,
+        "endChar": 0
+      },
+      "revId": "e15ff45a996beb74de3f0780373d05cf1b1cd424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1932704_72a4d68d",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-02-04T20:55:44Z",
+      "side": 1,
+      "message": "In your code you use max(height,1), does this mean Vulkan supports 0 size by changing it to 1 internally?",
+      "range": {
+        "startLine": 304,
+        "startChar": 0,
+        "endLine": 304,
+        "endChar": 51
+      },
+      "revId": "e15ff45a996beb74de3f0780373d05cf1b1cd424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
