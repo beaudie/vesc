@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e75f6575_4127a744",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-04T22:02:12Z",
+      "side": 1,
+      "message": "You\u0027re right, that could be problematic. I\u0027ll fix it.",
+      "parentUuid": "9faa4186_669f7409",
+      "range": {
+        "startLine": 758,
+        "startChar": 0,
+        "endLine": 761,
+        "endChar": 0
+      },
+      "revId": "e15ff45a996beb74de3f0780373d05cf1b1cd424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c47de675_bfcf02a7",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 9
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "a7293757_177784fd",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-04T22:02:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c47de675_bfcf02a7",
+      "range": {
+        "startLine": 254,
+        "startChar": 0,
+        "endLine": 256,
+        "endChar": 0
+      },
+      "revId": "e15ff45a996beb74de3f0780373d05cf1b1cd424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f1932704_72a4d68d",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 9
@@ -59,6 +107,30 @@
       "writtenOn": "2019-02-04T20:55:44Z",
       "side": 1,
       "message": "In your code you use max(height,1), does this mean Vulkan supports 0 size by changing it to 1 internally?",
+      "range": {
+        "startLine": 304,
+        "startChar": 0,
+        "endLine": 304,
+        "endChar": 51
+      },
+      "revId": "e15ff45a996beb74de3f0780373d05cf1b1cd424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb0eb0da_2c06112c",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-04T22:02:12Z",
+      "side": 1,
+      "message": "That\u0027s what I aimed for, yes. This here refers to the window system though. For example, setting 0 width through X11 fails in X11 itself (and never reaches the vulkan code).",
+      "parentUuid": "f1932704_72a4d68d",
       "range": {
         "startLine": 304,
         "startChar": 0,
