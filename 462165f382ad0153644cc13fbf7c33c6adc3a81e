@@ -93,6 +93,30 @@
       "revId": "462165f382ad0153644cc13fbf7c33c6adc3a81e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "218aa1a7_1e61b234",
+        "filename": "doc/ExternalBenchmarks.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-04T13:59:47Z",
+      "side": 1,
+      "message": "Yeah, noticed this after initially commenting.\n\nDo you know if it\u0027s possible to point the configure step directly at ANGLE\u0027s libGLESv2 instead of the system copy? Or maybe if it\u0027s possible to override libGLESv2 at the linking step?\n\nI started working on integrating this into BUILD.gn and making it work on Windows. See:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1450222\n\nThis requires changes to glmark2:\n\nhttps://github.com/null77/glmark2/commit/1dd7b24a2297ca5e14f0884d96581f5c599cd435\n\nI started on a WGL back-end for glmark2. But this was trickier because it requires shifting glmark2 from directly linking against libGLESv2 to dynamically loading the entry points. On Windows opengl32.dll doesn\u0027t expose all GL eps. It only exposes the WGL methods that can be used to find them.",
+      "parentUuid": "c28ab6e3_512fdbf4",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 8
+      },
+      "revId": "462165f382ad0153644cc13fbf7c33c6adc3a81e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
