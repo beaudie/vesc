@@ -2568,6 +2568,7 @@ void Context::handleError(GLenum errorCode,
 
 void Context::validationError(GLenum errorCode, const char *message)
 {
+    ANGLE_CRASH();
     mErrors.validationError(errorCode, message);
 }
 
