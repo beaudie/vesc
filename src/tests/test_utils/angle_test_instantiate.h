@@ -90,6 +90,11 @@ struct CombinedPrintToStringParamName
 // Instantiate the test for a combination of N parameters and the enumeration of platforms in the
 // extra args, similar to ANGLE_INSTANTIATE_TEST.  The macros are defined only for the Ns currently
 // in use, and can be expanded as necessary.
+#define ANGLE_INSTANTIATE_TEST_COMBINE_1(testName, combine1, ...)                           \
+    ANGLE_INSTANTIATE_TEST_DEFINE_PLATFORMS(testName, __VA_ARGS__);                         \
+    INSTANTIATE_TEST_SUITE_P(                                                               \
+        , testName, testing::Combine(ANGLE_INSTANTIATE_TEST_PLATFORMS(testName), combine1), \
+        angle::CombinedPrintToStringParamName())
 #define ANGLE_INSTANTIATE_TEST_COMBINE_5(testName, combine1, combine2, combine3, combine4,       \
                                          combine5, ...)                                          \
     ANGLE_INSTANTIATE_TEST_DEFINE_PLATFORMS(testName, __VA_ARGS__);                              \
