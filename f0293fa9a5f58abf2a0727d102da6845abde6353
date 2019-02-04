@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d02490f_bcab2df9",
+        "filename": "src/tests/perf_tests/VulkanBarriersPerf.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-02-04T22:04:17Z",
+      "side": 1,
+      "message": "I understand that you have these variants so that you can tell what portion of the time can be attributed to barriers?\nCould you elaborate how the test results should be interpreted, i.e. what would indicate that barrier performance is improved (assuming this is the goal of this benchmark) and not something like shader run time?",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 0
+      },
+      "revId": "f0293fa9a5f58abf2a0727d102da6845abde6353",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
