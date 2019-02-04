@@ -240,8 +240,15 @@ void main()
     {
         if (getClientMajorVersion() <= 2)
         {
-            ASSERT_TRUE(extensionEnabled("GL_ANGLE_instanced_arrays"));
-            glVertexAttribDivisorANGLE(location, divisor);
+            if (extensionEnabled("GL_ANGLE_instanced_arrays"))
+            {
+                glVertexAttribDivisorANGLE(location, divisor);
+            }
+            else
+            {
+                ASSERT_TRUE(extensionEnabled("GL_EXT_instanced_arrays"));
+                glVertexAttribDivisorEXT(location, divisor);
+            }
         }
         else
         {
@@ -392,8 +399,13 @@ void main()
         {
             glRequestExtensionANGLE("GL_ANGLE_instanced_arrays");
         }
+        else if (extensionRequestable("GL_EXT_instanced_arrays"))
+        {
+            glRequestExtensionANGLE("GL_EXT_instanced_arrays");
+        }
 
-        if (!extensionEnabled("GL_ANGLE_instanced_arrays"))
+        if (!extensionEnabled("GL_ANGLE_instanced_arrays") &&
+            !extensionEnabled("GL_EXT_instanced_arrays"))
         {
             return false;
         }
