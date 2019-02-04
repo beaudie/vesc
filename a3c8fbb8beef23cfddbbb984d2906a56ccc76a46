@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a6701a0_0f7849a3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-04T21:15:10Z",
+      "side": 1,
+      "message": "Try to keep the first line of the commit message under 72 characters so it formats nicely in git log.  The other lines should be under 80.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 60
+      },
+      "revId": "a3c8fbb8beef23cfddbbb984d2906a56ccc76a46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d6edf4fd_f6ecca50",
         "filename": "src/compiler/translator/Common.h",
         "patchSetId": 12
@@ -13,6 +36,30 @@
       "writtenOn": "2019-02-01T22:04:45Z",
       "side": 1,
       "message": "is it possible to make this into a custom type? like TStringStream?",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 135,
+        "endChar": 1
+      },
+      "revId": "a3c8fbb8beef23cfddbbb984d2906a56ccc76a46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4f45d54_7b76d2a2",
+        "filename": "src/compiler/translator/Common.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-04T21:15:10Z",
+      "side": 1,
+      "message": "We could potentially add a class that wraps a stream and forwards some of its operators. I don\u0027t have a strong preference about doing that vs an initialize function.",
+      "parentUuid": "d6edf4fd_f6ecca50",
       "range": {
         "startLine": 128,
         "startChar": 0,
