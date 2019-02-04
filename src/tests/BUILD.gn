@@ -64,6 +64,7 @@ if (build_with_chromium) {
   group("all") {
     testonly = true
     deps = [
+      "//src/tests:angle_benchmarks",
       "//src/tests:angle_end2end_tests",
       "//src/tests:angle_perftests",
       "//src/tests:angle_unittests",
@@ -116,6 +117,10 @@ template("angle_tests_main") {
 # Should fix the naming here once we migrate away from Chromium "main" files.
 angle_tests_main("angle_unittests_main") {
   main = "angle_unittest_main"
+}
+
+angle_tests_main("angle_benchmarks_main") {
+  main = "angle_benchmarks_main"
 }
 
 angle_tests_main("angle_end2end_tests_main") {
@@ -288,6 +293,32 @@ if (is_win || is_linux || is_android || is_mac) {
     if (is_android) {
       use_native_activity = true
     }
+  }
+}
+
+if (is_linux) {
+  import("angle_benchmarks.gni")
+
+  angle_test("angle_benchmarks") {
+    include_dirs = [ "." ]
+    sources = angle_benchmarks_sources
+
+    deps = [
+      ":angle_benchmarks_main",
+      "${angle_root}:angle_common",
+      "${angle_root}:angle_system_utils",
+      "${angle_root}:angle_util",
+    ]
+
+    data_deps = [
+      "${angle_root}:libEGL${angle_libs_suffix}",
+      "${angle_root}:libGLESv2${angle_libs_suffix}",
+    ]
+
+    configs += [
+      "${angle_root}:libANGLE_config",
+      "${angle_root}:library_name_config",
+    ]
   }
 }
 

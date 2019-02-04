@@ -1,0 +1,13 @@
+# Copyright 2019 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+angle_benchmarks_sources = [
+  "benchmarks/glmark2.cpp",
+  "perf_tests/third_party/perf/perf_test.cc",
+  "perf_tests/third_party/perf/perf_test.h",
+  "test_utils/angle_test_configs.cpp",
+  "test_utils/angle_test_configs.h",
+  "test_utils/angle_test_instantiate.cpp",
+  "test_utils/angle_test_instantiate.h",
+]
