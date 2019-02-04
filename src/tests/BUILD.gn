@@ -20,6 +20,17 @@ googletest_deps = [
   "//third_party/googletest:gtest",
 ]
 
+glmark2_deps = []
+if (is_win || is_linux) {
+  glmark2_deps += [ "//third_party/glmark2:glmark2_angle" ]
+}
+if (is_win) {
+  glmark2_deps += [ "//third_party/glmark2:glmark2_wgl" ]
+}
+if (is_linux) {
+  glmark2_deps += [ "//third_party/glmark2:glmark2_glx" ]
+}
+
 if (build_with_chromium) {
   googletest_deps += [ "//base/test:test_support" ]
 } else {
@@ -51,13 +62,7 @@ if (build_with_chromium) {
     if (build_angle_gles1_conform_tests) {
       deps += [ "//src/tests:angle_gles1_conformance_tests" ]
     }
-
-    if (is_win) {
-      deps += [
-        "//third_party/glmark2:glmark2_angle",
-        "//third_party/glmark2:glmark2_wgl",
-      ]
-    }
+    deps += glmark2_deps
   }
 }
 
@@ -282,6 +287,8 @@ if (is_win || is_linux || is_android || is_mac || is_fuchsia) {
     if (is_android) {
       use_native_activity = true
     }
+
+    data_deps += glmark2_deps
   }
 }
 
