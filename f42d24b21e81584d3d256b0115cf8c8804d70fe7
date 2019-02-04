@@ -108,6 +108,30 @@
     },
     {
       "key": {
+        "uuid": "d640ec5f_b53a1d37",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-04T21:54:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "516b99e0_a96cb756",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 32
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b32b65e5_fe5c3245",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -333,6 +357,30 @@
       "side": 1,
       "message": "That\u0027s good to know, thanks. If we ever ditch secondaries we could probably consolidate these two. For now this seems good.",
       "parentUuid": "fe1d38ae_34299b0e",
+      "range": {
+        "startLine": 1461,
+        "startChar": 9,
+        "endLine": 1461,
+        "endChar": 32
+      },
+      "revId": "f42d24b21e81584d3d256b0115cf8c8804d70fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b47b8830_5b7070e2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-04T21:54:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0b1bcf37_d62bd662",
       "range": {
         "startLine": 1461,
         "startChar": 9,
