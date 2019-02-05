@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "8eb9ad14_486ea2cb",
+        "filename": "src/libANGLE/renderer/gl/TransformFeedbackGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-05T00:11:13Z",
+      "side": 1,
+      "message": "There will be a local dirty bit flagged for the active program.\n\ndid you try calling resume explicitly instead?",
+      "parentUuid": "3ec542b4_2760bbaa",
+      "revId": "691e56e47b94ff3dbfc3bc63d1d734163c7231f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "123e99e1_72acc1c5",
         "filename": "src/libANGLE/renderer/gl/TransformFeedbackGL.h",
         "patchSetId": 3
