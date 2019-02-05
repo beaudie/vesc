@@ -144,6 +144,24 @@
     },
     {
       "key": {
+        "uuid": "0829fe17_1341e681",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T20:31:23Z",
+      "side": 1,
+      "message": "\u003e what is your goal for adding one image?\n\nThis +1 was here from the very first implementation of this file. Perhaps Jamie can clarify his reasoning, but my guess is that on whichever platform this was tested, minImageCount was 2 and we wanted triple buffering (for the same reason you mentioned). I do agree that it could have been done better (for example default to 3, then clamp to min/max).\n\n\u003e Android added 1 image for MAILBOX in order for it to really work as intended.\n\nWouldn\u0027t it have made more sense for android to take min(3, requested) instead of requested+1 images? As in, if the developer asks for 3 images (even if min is 2), then android wouldn\u0027t add a fourth image?\n\n\u003e I\u0027m sorry that it\u0027s such a complicated situation!\n\nNo this is all very interesting. I would love it if this was actually documented with even more details.",
+      "parentUuid": "38a18811_5da14e52",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce1f6f89_08520f92",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
@@ -191,6 +209,24 @@
       "side": 1,
       "message": "I\u0027m still trying to wrap my head around this (sorry, but I got pulled into too many topics yesterday:-).\n\nWhat is the purpose of line 491 (mSwapHistory[swapHistoryIndex].swapchain \u003d oldSwapchain;)?  For all implementations that I know of, I would suspect that \u0027imageCount\u0027 will be the same each time UNLESS it starts running out of memory.  The scenario is if somebody takes the mouse and starts interactively resizing the window, and the app tries to keep up.  Many new swapchains can be created in a short time.  However, from our Khronos discussions, I think the drivers are responding by being more synchronous (e.g. throttling the app and flushing things so that old swapchains get freed quickly).  Not sure about this.\n\nI wonder if the Khronos Vulkan SI TSG should discuss this in the context of ANGLE sometime?",
       "parentUuid": "7e2ea201_ad759101",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eeacb720_f0d3a68a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T20:31:23Z",
+      "side": 1,
+      "message": "If you could guarantee that the same number is returned, that would keep things simple here, but if the image count could vary, it\u0027s really not difficult to account for it. I think it would be helpful to have it stated one way or the other, regardless of which way is chosen.\n\n---\n\nRegarding line 491, based on your earlier comment, I keep the old swapchain in the history of swap operations, so that when I wait for the corresponding fence (as part of the CPU throttling, see a previous comment in SurfaceVk.h), I know all operations on the old swapchain are finished and I can destroy the swapchain.",
+      "parentUuid": "1b0621b8_80da0479",
       "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -268,6 +304,24 @@
     },
     {
       "key": {
+        "uuid": "ea1be64c_1ae75482",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T20:31:23Z",
+      "side": 1,
+      "message": "`getCurrentWindowSize` is new in this change, you can find it in `xcb/WindowSurfaceVkXcb.cpp` or the android or win32 equivalents.\n\nOk I see. You are right, I should only be getting the window size below, on the else part of `if (width !\u003d 0xFFFFFFFFu)`. I think I had got inspired by another backend that was doing this.\n\nDone.",
+      "parentUuid": "9f9d0a7b_d4d27b99",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6204a285_6e35e6ff",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
@@ -321,6 +375,24 @@
     },
     {
       "key": {
+        "uuid": "b119694c_225c2d5a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T20:31:23Z",
+      "side": 1,
+      "message": "Please do take a look at `xcb/WindowSurfaceVkXcb.cpp` and the android and win32 equivalents right here in this CL. For brevity, on xcb we do this:\n\nxcb_get_geometry(...);\nxcb_get_geometry_reply_t *reply  \u003d xcb_get_geometry_reply(...);\n\non win32:\n\nGetClientRect(...);\n\non android:\n\nANativeWindow_getWidth/Height(...);\n\n---\n\nWe don\u0027t support wayland at the moment, but I\u0027m curious as to why you mentioned it. I\u0027m guessing on wayland `currentExtent.width/height` are not valid for some reason?",
+      "parentUuid": "66207bd7_dad3a07e",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "39ea7164_aa170643",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 10
@@ -368,6 +440,24 @@
       "side": 1,
       "message": "Connecting some topics ... Do you know which present mode is being used on NVIDIA/Linux?\n\nWhen you say \"finish\", is ANGLE ever checking when rendering for one frame is complete, and using that to throttle things?",
       "parentUuid": "40bb8847_7dd88021",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91c723ce_ebf3979b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T20:31:23Z",
+      "side": 1,
+      "message": "Immediate mode.\n\nYes, angle waits on the fence corresponding to the submission at the Nth previous frame. N depends on the number of images.\n\nThat is, something like this with 3 images:\n\n- Acquire image 1, submit work with fence 1, present image 1\n- Acquire image 2, submit work with fence 2, present image 2\n- Acquire image 3, submit work with fence 3, present image 3\n\n- wait on fence 1\n- Acquire image 1, submit work with fence 4, present image 1\n\n- wait on fence 2\n- Acquire image 2, submit work with fence 5, present image 2\n\n- wait on fence 3\n- Acquire image 3, submit work with fence 6, present image 3\n\n- wait on fence 4\n- Acquire image 1, submit work with fence 7, present image 1\n\n- wait on fence 5\n- Acquire image 2, submit work with fence 8, present image 2\n\n- wait on fence 6\n- Acquire image 3, submit work with fence 9, present image 3\n\n`vkAcquireNextImageKHR` on Linux/Nvidia doesn\u0027t actually wait for the image to become available, hence the necessary wait on the fence.",
+      "parentUuid": "f9f8a6ed_b32ba9c9",
       "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
