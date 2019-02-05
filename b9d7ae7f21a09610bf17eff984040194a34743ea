@@ -84,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "d1ea0bdd_85efdda9",
+        "filename": "src/libANGLE/renderer/gl/TransformFeedbackGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-05T14:22:32Z",
+      "side": 1,
+      "message": "I think we\u0027re safe to delete the useProgram. End is the one call that triggers this sync immediately. All the other paths will have called StateManagerGL::syncState. And the spec says it\u0027s an error if we resume after a change to the program:\n\nThe error INVALID_OPERATION is generated:\n\nby ResumeTransformFeedback if the program object being used by the\ncurrent transform feedback object is not active or has been re-linked since\ntransform feedback became active for the current transform feedback object;\n\nYou could add a getProgramID() to StateManagerGL and ASSERT that it matches mActiveProgram.",
+      "parentUuid": "04062b73_3a3f7e9d",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 49
+      },
+      "revId": "b9d7ae7f21a09610bf17eff984040194a34743ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "161de6f9_5ed162c5",
         "filename": "src/libANGLE/renderer/gl/TransformFeedbackGL.cpp",
         "patchSetId": 6

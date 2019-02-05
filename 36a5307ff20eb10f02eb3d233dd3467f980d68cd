@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d8eff352_2d6ea261",
+        "filename": "src/libANGLE/renderer/gl/WorkaroundsGL.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-05T14:22:32Z",
+      "side": 1,
+      "message": "Are we sure sure this is even a driver bug? Thinking more it seems like it might be an ANGLE bug. We don\u0027t call StateManagerGL::syncState before calling EndTransformFeedback. So there\u0027s no guarantee the correct program is bound after a context switch. And Resume (as quoted earlier) requires the correct program to be bound. Or the driver could correctly generate an error.",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 54
+      },
+      "revId": "36a5307ff20eb10f02eb3d233dd3467f980d68cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
