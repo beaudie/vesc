@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6e7c041_eeda0591",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3714,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-05T19:48:04Z",
+      "side": 1,
+      "message": "could you associate this TODO with an open bug to ensure we don\u0027t lose track of it?",
+      "range": {
+        "startLine": 3714,
+        "startChar": 11,
+        "endLine": 3714,
+        "endChar": 40
+      },
+      "revId": "bfb473fb291f0cfe6e6361f694264f6503058290",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96fef8b4_8bc363b6",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-05T19:48:04Z",
+      "side": 1,
+      "message": "thank you for the test.",
+      "revId": "bfb473fb291f0cfe6e6361f694264f6503058290",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
