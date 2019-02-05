@@ -46,6 +46,30 @@
       "revId": "36a5307ff20eb10f02eb3d233dd3467f980d68cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "177f017b_e52bd96e",
+        "filename": "src/libANGLE/renderer/gl/WorkaroundsGL.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-05T19:44:20Z",
+      "side": 1,
+      "message": "Right, no, I would advise we keep your workaround. I don\u0027t advise calling syncState before End.\n\nI do think there\u0027s some argument for this being an error case. As the ES 3.0 spec states:\n\n\"EndTransformFeedback first performs an implicit ResumeTransformFeedback (see below) if transform feedback is paused.\"\n\nThen it\u0027s clearly an error in Resume if the program changes.\n\nHowever, the desktop GL specs do *not* mention the implicit Resume call until the 4.2 spec. (https://www.khronos.org/registry/OpenGL/specs/gl/glspec42.core.pdf) This makes me think this behaviour is under-tested but not under-specified. I checked the 4.0 and 4.1 specs briefly.\n\nIn all cases I agree your workaround is correct and necessary. Thanks! But maybe ANGLE should at some point detect this error case in the front-end. A job for another day though.",
+      "parentUuid": "3ff32e90_bb587d7b",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 54
+      },
+      "revId": "36a5307ff20eb10f02eb3d233dd3467f980d68cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
