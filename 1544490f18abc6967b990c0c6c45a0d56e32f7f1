@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7f546fb5_56b67b8c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T16:42:40Z",
+      "side": 1,
+      "message": "I believe there\u0027s an EGL config that should drive this? At least something that says if vsync should be enabled or not.",
+      "parentUuid": "d465d865_80940b59",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f6a0d06a_ae512961",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
@@ -48,6 +66,24 @@
       "writtenOn": "2019-02-04T23:26:16Z",
       "side": 1,
       "message": "Hmm.  You may want to vary this logic based on which present mode you selected.  For example, Android adds one image to what you ask for if you select MAILBOX mode.",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f12fbb0b_7f57cce7",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T16:42:40Z",
+      "side": 1,
+      "message": "Interesting, why does Android do that? As the developer, I can\u0027t be expected to work around changes like this for every platform! Shouldn\u0027t this behavior be documented/exposed instead? Like a feature or something that says \"this platform adds one image if mailbox\".",
+      "parentUuid": "f6a0d06a_ae512961",
       "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -71,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "7e2ea201_ad759101",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T16:42:40Z",
+      "side": 1,
+      "message": "`mMinImageCount` is the parameter to `VkSwapchainCreateInfoKHR`. `imageCount` here is the actual number of images allocated.\n\nThere is one possible issue with the history, if calling `vkCreateSwapchainKHR` on the same device with the same `minImageCount` multiple times results different number of images allocated, in the sense that the parts of the history could get lost.\n\nMaybe you can verify this, but I believe no implementation would do that. In other words, the first time this function is called (where oldSwapchain is nullptr), this vector is resized, and in the next calls, `imageCount` should be the same as last time so nothing happens.\n\nI\u0027m gonna add an ASSERT for it here with a comment.",
+      "parentUuid": "ce1f6f89_08520f92",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3399ac1a_a19e1fd3",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
@@ -82,6 +136,24 @@
       "writtenOn": "2019-02-04T23:26:16Z",
       "side": 1,
       "message": "Is this slow?",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e27db56f_e5fac129",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T16:42:40Z",
+      "side": 1,
+      "message": "Do you know what could be faster? `vkGetPhysicalDeviceSurfaceCapabilitiesKHR()` gives the current window size, but I imagine it would use the same functionality as `getCurrentWindowSize()` to retrieve that information.\n\nUnless you are thinking of listening to the window events and looking for a resize? Not sure how easy that would be to implement here.",
+      "parentUuid": "3399ac1a_a19e1fd3",
       "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -105,6 +177,24 @@
     },
     {
       "key": {
+        "uuid": "f7cd06c0_0c3369a6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T16:42:40Z",
+      "side": 1,
+      "message": "What comes from `getCurrentWindowSize()`.",
+      "parentUuid": "6204a285_6e35e6ff",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "39ea7164_aa170643",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 10
@@ -116,6 +206,24 @@
       "writtenOn": "2019-02-04T23:26:16Z",
       "side": 1,
       "message": "When you say \"the CPU is throttled\" are you referring to something in ANGLE, or are you referring to Vulkan?\n\nFYI ... Vulkan doesn\u0027t provide any throttling guarantees, though I believe some of the platforms/drivers (including Android) do throttle.  I saw a driver a while back that allowed the application (or ANGLE) to queue unlimited numbers of frames.  For example, after a few seconds, it has queued many-1000 frames (which then took a long time to render and present in FIFO mode).",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40bb8847_7dd88021",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T16:42:40Z",
+      "side": 1,
+      "message": "It\u0027s something I implemented a while back. On Linux/Nvidia at least, that\u0027s exactly the behavior I saw. The throttling code simply waits for the Nth previous frame to \"finish\" (hence the reason a history of submission serials is kept).",
+      "parentUuid": "39ea7164_aa170643",
       "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
