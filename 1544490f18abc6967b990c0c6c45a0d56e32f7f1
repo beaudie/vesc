@@ -250,6 +250,24 @@
     },
     {
       "key": {
+        "uuid": "9f9d0a7b_d4d27b99",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-05T18:19:31Z",
+      "side": 1,
+      "message": "Strange ... \"grep getCurrentWindowSize -R .\" isn\u0027t finding anything.  Sorry about that.",
+      "parentUuid": "b5e60b6e_6e7b5a10",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6204a285_6e35e6ff",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
