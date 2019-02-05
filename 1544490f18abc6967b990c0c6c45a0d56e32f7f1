@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "99252916_b681039f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-05T22:16:41Z",
+      "side": 1,
+      "message": "FYI ... Following up ... Cody showed me a program that he thought was misbehaving with ANGLE (it\u0027s an Android Studio-available sample program (gl2jni).  He hadn\u0027t thought about MAILBOX vs. FIFO as a possibility.\n\nIn looking at it, I figured it was MAILBOX with ANGLE vs. FIFO for the native GLES driver.  I did an experiment (#if 0\u0027ing out the for-loop).  Sure enough, the app \"looked correct\" with ANGLE once it was using FIFO.  The app renders much faster than 60FPS, and MAILBOX let it fly!\n\nCan we do a separate CL that uses FIFO for Android?",
+      "parentUuid": "d27a14b7_6391fc4a",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f6a0d06a_ae512961",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
@@ -198,6 +216,24 @@
     },
     {
       "key": {
+        "uuid": "da7efc6b_43e0869c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-05T22:16:41Z",
+      "side": 1,
+      "message": "\u003e \u003e Android added 1 image for MAILBOX in order for it to really work as intended.\n\n\u003e Wouldn\u0027t it have made more sense for android to take min(3, requested) instead of requested+1 images? As in, if the developer asks for 3 images (even if min is 2), then android wouldn\u0027t add a fourth image?\n\nYes, I think you are correct.\n\n\u003e In progress:\n\nI like it!",
+      "parentUuid": "519f75e9_55b41120",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce1f6f89_08520f92",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
@@ -266,6 +302,24 @@
       "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd9a1edd_0e1a6ef5",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-05T22:16:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "eeacb720_f0d3a68a",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -394,6 +448,24 @@
     },
     {
       "key": {
+        "uuid": "e63e30d9_91b9f955",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-05T22:16:41Z",
+      "side": 1,
+      "message": "FYI ... NVIDIA\u0027s Linux rep to the SI TSG raised an issue with OUT_OF_DATE at the San Diego F2F.  The net result is that NVIDIA will probably stop reporting OUT_OF_DATE for window size changes.",
+      "parentUuid": "143e380a_1006c3d5",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6204a285_6e35e6ff",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
@@ -465,6 +537,24 @@
     },
     {
       "key": {
+        "uuid": "1ceb98cc_1115d012",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-05T22:16:41Z",
+      "side": 1,
+      "message": "Yes, I found it in the CL later (I was grepping my source tree for a function that\u0027s new in this CL:-).\n\nI mention Wayland because it was the first platform that had a width/height of 0xFFFFFFFFu (a.k.a. -1).  With Wayland, a window has no width/height to start out with.  When the swapchain is created, that gives the window a width/height.  Mir was another platform that did the same thing, but Mir was killed.  There are a few new platforms that might be following the Wayland example here, but ANGLE probably doesn\u0027t need to support them for a while.",
+      "parentUuid": "b119694c_225c2d5a",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "39ea7164_aa170643",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 10
@@ -533,6 +623,24 @@
       "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb9ea0fd_f9f4b21f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-05T22:16:41Z",
+      "side": 1,
+      "message": "This is a good approach (wait for the rendering), and thanks for the explanation!",
+      "parentUuid": "91c723ce_ebf3979b",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
