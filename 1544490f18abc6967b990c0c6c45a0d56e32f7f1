@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "d27a14b7_6391fc4a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-05T18:04:46Z",
+      "side": 1,
+      "message": "Yes, eglSwapInterval.  There\u0027s an extension (I forget the name of) that specifies the equivalent of MAILBOX.  Perhaps we should drive this from that.  For whatever reason, it doesn\u0027t work on Android, and so the Swappy library has been created to address the space.\n\nJamie, for power/battery reasons, I think that Android will want us to support FIFO as the default.\n\nBTW, Cody told me that he\u0027s seen tearing with ANGLE and Android/Vulkan..  I don\u0027t know how that happens, as I think Android only supports the Vulkan FIFO and MAILBOX present modes.",
+      "parentUuid": "7f546fb5_56b67b8c",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f6a0d06a_ae512961",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "Interesting, why does Android do that? As the developer, I can\u0027t be expected to work around changes like this for every platform! Shouldn\u0027t this behavior be documented/exposed instead? Like a feature or something that says \"this platform adds one image if mailbox\".",
       "parentUuid": "f6a0d06a_ae512961",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38a18811_5da14e52",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-05T18:04:46Z",
+      "side": 1,
+      "message": "Good questions and gripe!  In hindsight, I think we should have allowed getting capabilities per present-mode (we\u0027re looking at adding that).\n\nBefore I get into background, let me ask: what is your goal for adding one image?  Is it to allow ANGLE to have one image being displayed, one queued for presentation, and one to render to (i.e. avoid latency and increase frame rate)?\n\nI\u0027ll provide some explanation from spec-land, and what I know about different implementations (hopefully won\u0027t bore you to death:-) ...\n\nOriginally (I\u0027ve seen some changes lately), Android (and probably all other drivers/platforms) allowed a swapchain to be created with only 2 images (minImageCount \u003d 2).  Android (and I think other drivers/platforms that support MAILBOX) added 1 image for MAILBOX in order for it to really work as intended.  One image is being shown to the user (call it A).  One can be queued to be shown (B).  One can be rendered to (C).  If the app is running fast, it will call vkQueuePresent (QP) with C before B is ever shown to the user.  In that case, C becomes queued to be shown and B becomes the next image returned by vkAcquireNextImage (ANI).  If the app isn\u0027t running that fast (no reason for them to use MAILBOX), B will be shown to the user before QP is called with C, and A will be the next image returned by ANI.\n\nWithout 3 images, MAILBOX wouldn\u0027t work for a blocking implementation.  In my example above, if A is being shown to the user, once QP is called for B, ANI would block until B is shown and A becomes available.  The app would never be able to run faster than the display\u0027s refresh rate (which MAILBOX is designed to allow).\n\nAlternatively (for non-throttling implementations), A would be returned immediately by ANI.  A could be rendered to and QP called with it, and B would be returned by ANI, etc.  For example, a really fast app, with FIFO, could queue 1000 versions of B and 999 versions of A, all while the originally-rendered version of A is still being shown to the user.  For MAILBOX, the same app would queue that many versions of each, but the queue would be drained back down to 1 each time QP is called and the rendering is completed for the new image.  The last I knew, MoltenVk (Apple) worked that way, but I think they may have \"fixed that.\"\n\nBTW, we would consider that to be really bad for Android (waste of power), and the power governors might lower CPU power for that app until it\u0027s frame rate becomes more reasonable.\n\nBTW, shortly after Vulkan 1.0 came out, NVIDIA on Windows started doing a minImageCount of 1.  They can use an MS-Windows capability that allows them to quickly blit the image to a window-system-private buffer, allowing ANI to immediately return the same image again (and potentially not provide any throttling BTW).\n\nI\u0027m sorry that it\u0027s such a complicated situation!",
+      "parentUuid": "f12fbb0b_7f57cce7",
       "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -143,6 +179,24 @@
     },
     {
       "key": {
+        "uuid": "1b0621b8_80da0479",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-05T18:04:46Z",
+      "side": 1,
+      "message": "I\u0027m still trying to wrap my head around this (sorry, but I got pulled into too many topics yesterday:-).\n\nWhat is the purpose of line 491 (mSwapHistory[swapHistoryIndex].swapchain \u003d oldSwapchain;)?  For all implementations that I know of, I would suspect that \u0027imageCount\u0027 will be the same each time UNLESS it starts running out of memory.  The scenario is if somebody takes the mouse and starts interactively resizing the window, and the app tries to keep up.  Many new swapchains can be created in a short time.  However, from our Khronos discussions, I think the drivers are responding by being more synchronous (e.g. throttling the app and flushing things so that old swapchains get freed quickly).  Not sure about this.\n\nI wonder if the Khronos Vulkan SI TSG should discuss this in the context of ANGLE sometime?",
+      "parentUuid": "7e2ea201_ad759101",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3399ac1a_a19e1fd3",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
@@ -172,6 +226,24 @@
       "side": 1,
       "message": "Do you know what could be faster? `vkGetPhysicalDeviceSurfaceCapabilitiesKHR()` gives the current window size, but I imagine it would use the same functionality as `getCurrentWindowSize()` to retrieve that information.\n\nUnless you are thinking of listening to the window events and looking for a resize? Not sure how easy that would be to implement here.",
       "parentUuid": "3399ac1a_a19e1fd3",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5e60b6e_6e7b5a10",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-05T18:04:46Z",
+      "side": 1,
+      "message": "Sorry for not being more clear!\n\nI\u0027m thinking that you can only get the current window size if swapchainOutOfDate is true.  Otherwise, my concern is that each QP could result in a synchronous call to find out the window size (which is what swapchainOutOfDate is supposed to be telling you).",
+      "parentUuid": "e27db56f_e5fac129",
       "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -213,6 +285,24 @@
     },
     {
       "key": {
+        "uuid": "66207bd7_dad3a07e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-05T18:04:46Z",
+      "side": 1,
+      "message": "Sorry, I haven\u0027t found getCurrentWindowSize(), and so I don\u0027t know what it\u0027s doing, or what value it\u0027s getting for different Vulkan \"platforms\".\n\nI think I see what\u0027s going on here.  If this is not a Wayland-like platform, you\u0027re setting currentExtents to what comes back from Vulkan.  Otherwise, you\u0027re getting it from getCurrentWindowSize() (which again, I don\u0027t know what it\u0027s doing).",
+      "parentUuid": "f7cd06c0_0c3369a6",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "39ea7164_aa170643",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 10
@@ -242,6 +332,24 @@
       "side": 1,
       "message": "It\u0027s something I implemented a while back. On Linux/Nvidia at least, that\u0027s exactly the behavior I saw. The throttling code simply waits for the Nth previous frame to \"finish\" (hence the reason a history of submission serials is kept).",
       "parentUuid": "39ea7164_aa170643",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9f8a6ed_b32ba9c9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-05T18:04:46Z",
+      "side": 1,
+      "message": "Connecting some topics ... Do you know which present mode is being used on NVIDIA/Linux?\n\nWhen you say \"finish\", is ANGLE ever checking when rendering for one frame is complete, and using that to throttle things?",
+      "parentUuid": "40bb8847_7dd88021",
       "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
