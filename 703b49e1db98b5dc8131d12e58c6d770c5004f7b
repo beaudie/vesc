@@ -22,6 +22,40 @@
       "revId": "703b49e1db98b5dc8131d12e58c6d770c5004f7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab075e20_b89e35f3",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T17:05:07Z",
+      "side": 1,
+      "message": "Do notify me if this path is ever hit. If this is not a rare situation, I could prioritize optimizing it.",
+      "revId": "703b49e1db98b5dc8131d12e58c6d770c5004f7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20660f28_f905897a",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T17:05:07Z",
+      "side": 1,
+      "message": "Same with this.",
+      "revId": "703b49e1db98b5dc8131d12e58c6d770c5004f7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
