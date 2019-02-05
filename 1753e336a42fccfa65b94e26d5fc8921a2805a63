@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3976cbbe_5654b56a",
+        "filename": "src/tests/gl_tests/InstancingTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-05T19:51:01Z",
+      "side": 1,
+      "message": "could you split this into individual test cases? If you want to use a parameter generator it\u0027s a bit tricky but this has been done already with angle_end2end_tests. It just makes it much easier to debug if one specific test fails. I wouldn\u0027t recommend doing the parameter generator but just copy/pasting all the lines.",
+      "range": {
+        "startLine": 204,
+        "startChar": 0,
+        "endLine": 217,
+        "endChar": 1
+      },
+      "revId": "1753e336a42fccfa65b94e26d5fc8921a2805a63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55044c80_d7df80cd",
+        "filename": "src/tests/gl_tests/InstancingTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-05T19:51:01Z",
+      "side": 1,
+      "message": "same comment",
+      "range": {
+        "startLine": 220,
+        "startChar": 0,
+        "endLine": 225,
+        "endChar": 1
+      },
+      "revId": "1753e336a42fccfa65b94e26d5fc8921a2805a63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
