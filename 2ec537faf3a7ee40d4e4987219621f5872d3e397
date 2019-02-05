@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4efd46b7_dac31ea0",
+        "filename": "DEPS",
+        "patchSetId": 11
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T21:55:02Z",
+      "side": 1,
+      "message": "This commit doesn\u0027t exist?!",
+      "revId": "2ec537faf3a7ee40d4e4987219621f5872d3e397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d10cb29_e7f1b6fd",
+        "filename": "DEPS",
+        "patchSetId": 11
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T21:55:02Z",
+      "side": 1,
+      "message": "Missing {} here causing a gclient error.",
+      "revId": "2ec537faf3a7ee40d4e4987219621f5872d3e397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a52ff45e_86811d33",
+        "filename": "third_party/glmark2/BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T21:55:02Z",
+      "side": 1,
+      "message": "Should be `${angle_root}/include`. Otherwise it\u0027s adding -I.../glmark2/include",
+      "revId": "2ec537faf3a7ee40d4e4987219621f5872d3e397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
