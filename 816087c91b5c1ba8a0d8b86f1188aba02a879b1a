@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ace4bb62_413e27d1",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2983,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-02-05T22:12:00Z",
+      "side": 1,
+      "message": "can just return true",
+      "revId": "816087c91b5c1ba8a0d8b86f1188aba02a879b1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0cc95bc_598892c9",
+        "filename": "src/libANGLE/validationES.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-02-05T22:12:00Z",
+      "side": 1,
+      "message": "Get rid of this and just call ValidateDrawElementsInstancedBase",
+      "revId": "816087c91b5c1ba8a0d8b86f1188aba02a879b1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80528f17_f9457c26",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3143,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-02-05T22:12:00Z",
+      "side": 1,
+      "message": "should be ValidateDrawInstancedEXT (or just return true)",
+      "revId": "816087c91b5c1ba8a0d8b86f1188aba02a879b1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6985fd3c_91ad0902",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3215,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-02-05T22:12:00Z",
+      "side": 1,
+      "message": "should be ValidateDrawInstancedEXT (or just return true)\n\nAdd a test case to MultiDrawTest to catch this",
+      "revId": "816087c91b5c1ba8a0d8b86f1188aba02a879b1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
