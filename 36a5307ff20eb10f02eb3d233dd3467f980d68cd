@@ -22,6 +22,30 @@
       "revId": "36a5307ff20eb10f02eb3d233dd3467f980d68cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ff32e90_bb587d7b",
+        "filename": "src/libANGLE/renderer/gl/WorkaroundsGL.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-02-05T18:59:52Z",
+      "side": 1,
+      "message": "The spec does not say exactly what should happen if a different program is bound when End is called. You could make a case that it should cause INVALID_OPERATION, or that it should succeed. I haven\u0027t seen any drivers implement the former. I think the latter makes more sense (otherwise deleting the program would cause the TF object to be stuck in limbo forever), and some drivers do implement that. Regardless, the Nvidia driver\u0027s behavior in this situation is clearly buggy and violates the spec (e.g. writing to transform feedback buffers while transform feedback is paused).\n\nI think it does make sense for ANGLE to avoid triggering this ambiguous situation. However, calling StateManagerGL::syncState before calling EndTransformFeedback is not sufficient for that because the application itself can switch programs before calling EndTransformFeedback. This workaround of remembering the original program and switching back to it is still required. But even that isn\u0027t sufficient to fix the other drivers that fail this test. I still need to investigate what\u0027s happening on those other drivers.",
+      "parentUuid": "d8eff352_2d6ea261",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 54
+      },
+      "revId": "36a5307ff20eb10f02eb3d233dd3467f980d68cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
