@@ -22,6 +22,30 @@
       "revId": "f0293fa9a5f58abf2a0727d102da6845abde6353",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a23636e7_16352648",
+        "filename": "src/tests/perf_tests/VulkanBarriersPerf.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-05T14:58:31Z",
+      "side": 1,
+      "message": "So, first, these variants are not used at the moment and need to be revisited when we have ES3 or even 3.1. They can just as easily be removed. What\u0027s your preference?\n\nAs to the usage, the idea is to issue calls that use different pipelines and make sure the barriers don\u0027t unnecessarily block the wrong pipeline.\n\nFor example, if you do a couple of draw calls (as already done in this test) as well as a couple of copy calls, you would ideally get an execution like this (note: copy to editor with fixed-width font):\n\nGPU \"threads\":\n+ |---draw---||---draw---||---draw---||---draw---||---draw---|\n+ |-----------transfer------------||-----------transfer------------|\n+ |---draw---||---draw---||---draw---||---draw---||---draw---|\n+ |-----------transfer------------||-----------transfer------------|\n\nHowever, if the barriers are too restrictive, you could end up with something like this (draw is blocking transfer):\n\n+ |---draw---||---draw---||---draw---||---draw---||---draw---|\n+             |-----------transfer------------||-----------transfer------------|\n+ |---draw---||---draw---||---draw---||---draw---||---draw---|\n+             |-----------transfer------------||-----------transfer------------|\n\nOr like this (transfer is blocking draw):\n\n+ |---draw---|                     |---draw---|                     |---draw---|\n+ |-----------transfer------------||-----------transfer------------|\n+ |---draw---|                     |---draw---|                     |---draw---|\n+ |-----------transfer------------||-----------transfer------------|\n\nOr like this (draw and transfer blocking each other):\n\n+ |---draw---|                                 |---draw---|\n+             |-----------transfer------------|            |-----------transfer------------|\n+ |---draw---|                                 |---draw---|\n+             |-----------transfer------------|            |-----------transfer------------|\n\nThe idea of doing slow FS calls is to make the second case above slower (by making the draw slower than the transfer):\n\n+ |------------------draw------------------|                                 |-...draw...-|\n+ |-----------transfer------------|         |-----------transfer------------|\n+ |------------------draw------------------|                                 |-...draw...-|\n+ |-----------transfer------------|         |-----------transfer------------|\n\nAll this said, these can really only be done properly once ES3 support is in, to make sure things really do behave as expected. So, right now, they are just half-baked ideas.",
+      "parentUuid": "0d02490f_bcab2df9",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 0
+      },
+      "revId": "f0293fa9a5f58abf2a0727d102da6845abde6353",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
