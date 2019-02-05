@@ -1281,6 +1281,7 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
         mLastCompletedQueueSerial = batch.serial;
 
         batch.fence.destroy(mDevice);
+        TRACE_EVENT0("gpu.angle", "commandPool.destroy");
         batch.commandPool.destroy(mDevice);
         ++finishedCount;
     }

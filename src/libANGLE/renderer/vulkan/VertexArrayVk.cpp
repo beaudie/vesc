@@ -19,6 +19,8 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
+#include "third_party/trace_event/trace_event.h"
+
 namespace rx
 {
 namespace
@@ -261,6 +263,7 @@ angle::Result VertexArrayVk::convertVertexBufferCpu(ContextVk *contextVk,
                                                     size_t attribIndex,
                                                     const vk::Format &vertexFormat)
 {
+    TRACE_EVENT0("gpu.angle", "VertexArrayVk::convertVertexBufferCpu");
     // Needed before reading buffer or we could get stale data.
     ANGLE_TRY(contextVk->getRenderer()->finish(contextVk));
 
@@ -660,6 +663,7 @@ angle::Result VertexArrayVk::updateIndexTranslation(ContextVk *contextVk,
         // as well support the ubyte to ushort case with correct handling of primitive restart.
         // http://anglebug.com/3003
 
+        TRACE_EVENT0("gpu.angle", "VertexArrayVk::updateIndexTranslation");
         // Needed before reading buffer or we could get stale data.
         ANGLE_TRY(renderer->finish(contextVk));
 

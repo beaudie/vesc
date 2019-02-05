@@ -17,6 +17,8 @@
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
 #include "libANGLE/renderer/vulkan/SyncVk.h"
 
+#include "third_party/trace_event/trace_event.h"
+
 namespace rx
 {
 
@@ -81,6 +83,7 @@ DeviceImpl *DisplayVk::createDevice()
 
 egl::Error DisplayVk::waitClient(const gl::Context *context)
 {
+    TRACE_EVENT0("gpu.angle", "DisplayVk::waitClient");
     return angle::ToEGL(mRenderer->finish(this), this, EGL_BAD_ACCESS);
 }
 

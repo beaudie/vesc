@@ -17,6 +17,8 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
+#include "third_party/trace_event/trace_event.h"
+
 namespace rx
 {
 namespace
@@ -991,6 +993,7 @@ angle::Result TextureVk::copyImageDataToBuffer(ContextVk *contextVk,
                                                const gl::Rectangle &sourceArea,
                                                uint8_t **outDataPtr)
 {
+    TRACE_EVENT0("gpu.angle", "TextureVk::copyImageDataToBuffer");
     // Make sure the source is initialized and it's images are flushed.
     ANGLE_TRY(ensureImageInitialized(contextVk));
 
