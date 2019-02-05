@@ -857,6 +857,14 @@ TString DecorateVariableIfNeeded(const TVariable &variable)
         ASSERT(!name.beginsWith("_"));
         return TString(name.data());
     }
+    // For user defined variables, combine variable name with unique id
+    // so variables of the same name in different scopes do not get overwritten.
+    // Exclude varying variables since they need to stay consistent between shaders.
+    else if (variable.symbolType() == SymbolType::UserDefined &&
+             !IsVarying(variable.getType().getQualifier()))
+    {
+        return Decorate(variable.name()) + std::to_string(variable.uniqueId().get()).c_str();
+    }
     else
     {
         return Decorate(variable.name());
