@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2e0d7e3_db568dd5",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-05T16:32:01Z",
+      "side": 1,
+      "message": "nit: you can remove the space between these includes. same for the other files. git cl format should be able to sort them appropriately. only need spaces between the owning header and the other headers, and the other headers and system headers.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 48
+      },
+      "revId": "703b49e1db98b5dc8131d12e58c6d770c5004f7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
