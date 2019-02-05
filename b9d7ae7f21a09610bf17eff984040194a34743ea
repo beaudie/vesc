@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "52b5555f_c1cc405f",
+        "filename": "src/libANGLE/renderer/gl/TransformFeedbackGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-02-05T01:11:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c2c6a50_adfca0eb",
+      "revId": "b9d7ae7f21a09610bf17eff984040194a34743ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac0a5f03_8a6db381",
         "filename": "src/libANGLE/renderer/gl/TransformFeedbackGL.cpp",
         "patchSetId": 6
@@ -30,6 +48,30 @@
       "writtenOn": "2019-02-05T00:11:13Z",
       "side": 1,
       "message": "this is new - is this necessary?",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 49
+      },
+      "revId": "b9d7ae7f21a09610bf17eff984040194a34743ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04062b73_3a3f7e9d",
+        "filename": "src/libANGLE/renderer/gl/TransformFeedbackGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-02-05T01:11:44Z",
+      "side": 1,
+      "message": "The test passes without this. However, I am not sure of the correctness without it in all cases. The correct program must be current when calling beginTransformFeedback. I am not sure that it is always guaranteed to be set before syncActiveState is called. This ensures that it will be correct. It should be pretty cheap because the call will return early if the correct program is already current.\n\nI can remove this if you are confident that all callers of syncActiveState will ensure the correct program is current first.",
+      "parentUuid": "ac0a5f03_8a6db381",
       "range": {
         "startLine": 136,
         "startChar": 0,
@@ -62,6 +104,30 @@
       "revId": "b9d7ae7f21a09610bf17eff984040194a34743ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "615fc29a_6566fcbc",
+        "filename": "src/libANGLE/renderer/gl/TransformFeedbackGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-02-05T01:11:44Z",
+      "side": 1,
+      "message": "mActiveProgram needs to be stored because it is the program that was current when the transform feedback object became active (when beginTransformFeedback was called), not the current active program in the context state.",
+      "parentUuid": "161de6f9_5ed162c5",
+      "range": {
+        "startLine": 150,
+        "startChar": 42,
+        "endLine": 150,
+        "endChar": 56
+      },
+      "revId": "b9d7ae7f21a09610bf17eff984040194a34743ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
