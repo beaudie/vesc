@@ -21,6 +21,35 @@
 namespace gl
 {
 
+#define EXTENSION_MULTI_VENDOR1(ext, ven1)    \
+    union                                     \
+    {                                         \
+        struct                                \
+        {                                     \
+            bool ext##ven1;                   \
+        };                                    \
+        struct                                \
+        {                                     \
+            bool ven1;                        \
+            bool any() const { return ven1; } \
+        } ext;                                \
+    };
+#define EXTENSION_MULTI_VENDOR2(ext, ven1, ven2)      \
+    union                                             \
+    {                                                 \
+        struct                                        \
+        {                                             \
+            bool ext##ven1;                           \
+            bool ext##ven2;                           \
+        };                                            \
+        struct                                        \
+        {                                             \
+            bool ven1;                                \
+            bool ven2;                                \
+            bool any() const { return ven1 || ven2; } \
+        } ext;                                        \
+    };
+
 struct Extensions;
 
 typedef std::set<GLuint> SupportedSampleSet;
@@ -284,10 +313,8 @@ struct Extensions
     bool framebufferMultisample;
 
     // GL_ANGLE_instanced_arrays
-    bool instancedArraysANGLE;
-
     // GL_EXT_instanced_arrays
-    bool instancedArraysEXT;
+    EXTENSION_MULTI_VENDOR2(instancedArrays, ANGLE, EXT)
 
     // GL_ANGLE_pack_reverse_row_order
     bool packReverseRowOrder;

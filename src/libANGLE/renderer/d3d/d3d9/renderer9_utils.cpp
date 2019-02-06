@@ -711,8 +711,8 @@ void GenerateCaps(IDirect3D9 *d3d9,
     extensions->blendMinMax                = true;
     extensions->framebufferBlit            = true;
     extensions->framebufferMultisample     = true;
-    extensions->instancedArraysANGLE       = deviceCaps.PixelShaderVersion >= D3DPS_VERSION(3, 0);
-    extensions->instancedArraysEXT         = false;
+    extensions->instancedArrays = {.ANGLE = deviceCaps.PixelShaderVersion >= D3DPS_VERSION(3, 0),
+                                   .EXT   = false};
     extensions->packReverseRowOrder        = true;
     extensions->standardDerivatives =
         (deviceCaps.PS20Caps.Caps & D3DPS20CAPS_GRADIENTINSTRUCTIONS) != 0;
