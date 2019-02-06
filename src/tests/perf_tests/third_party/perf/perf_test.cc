@@ -4,8 +4,9 @@
 
 #include "perf_test.h"
 
-#include <stdio.h>
+#include <android/log.h>
 #include <stdarg.h>
+#include <stdio.h>
 #include <vector>
 
 namespace {
@@ -73,8 +74,15 @@ void PrintResultsImpl(const std::string& measurement,
                       const std::string& units,
                       bool important) {
   fflush(stdout);
+#if !defined(ANGLE_PLATFORM_ANDROID)
+  __android_log_print(
+      ANDROID_LOG_INFO, "ANGLE", "%s",
+      ResultsToString(measurement, modifier, trace, values, prefix, suffix, units, important)
+          .c_str());
+#else
   printf("%s", ResultsToString(measurement, modifier, trace, values,
                                prefix, suffix, units, important).c_str());
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
   fflush(stdout);
 }
 

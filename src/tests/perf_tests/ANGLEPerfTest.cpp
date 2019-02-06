@@ -14,6 +14,7 @@
 #include "util/shader_utils.h"
 #include "util/system_utils.h"
 
+#include <android/log.h>
 #include <cassert>
 #include <cmath>
 #include <fstream>
@@ -33,7 +34,7 @@ constexpr double kMicroSecondsPerSecond       = 1e6;
 constexpr double kNanoSecondsPerSecond        = 1e9;
 constexpr double kCalibrationRunTimeSeconds   = 1.0;
 constexpr double kMaximumRunTimeSeconds       = 10.0;
-constexpr unsigned int kNumTrials             = 3;
+constexpr unsigned int kNumTrials             = 10;
 
 bool gCalibration = false;
 Optional<unsigned int> gStepsToRunOverride;
@@ -214,11 +215,19 @@ void ANGLEPerfTest::run()
     // Do another warmup run. Seems to consistently improve results.
     doRunLoop(kMaximumRunTimeSeconds);
 
+    double totalTime = 0.0;
     for (unsigned int trial = 0; trial < kNumTrials; ++trial)
     {
         doRunLoop(kMaximumRunTimeSeconds);
-        printResults();
+        totalTime += printResults();
     }
+    double average = totalTime / kNumTrials;
+#if !defined(ANGLE_PLATFORM_ANDROID)
+    __android_log_print(ANDROID_LOG_INFO, "ANGLE", "Average of %d runs is: %f\n", kNumTrials,
+                        average);
+#else
+    printf("Average of %d runs is: %f\n", kNumTrials, average);
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
 }
 
 void ANGLEPerfTest::doRunLoop(double maxRunTime)
@@ -268,7 +277,7 @@ void ANGLEPerfTest::SetUp() {}
 
 void ANGLEPerfTest::TearDown() {}
 
-void ANGLEPerfTest::printResults()
+double ANGLEPerfTest::printResults()
 {
     double elapsedTimeSeconds[2] = {
         mTimer->getElapsedTime(),
@@ -283,6 +292,7 @@ void ANGLEPerfTest::printResults()
     // If measured gpu time is non-zero, print that too.
     size_t clocksToOutput = mGPUTimeNs > 0 ? 2 : 1;
 
+    double retValue = 0.0;
     for (size_t i = 0; i < clocksToOutput; ++i)
     {
         double secondsPerStep = elapsedTimeSeconds[i] / static_cast<double>(mNumStepsPerformed);
@@ -292,14 +302,17 @@ void ANGLEPerfTest::printResults()
         if (secondsPerIteration > 1e-3)
         {
             double microSecondsPerIteration = secondsPerIteration * kMicroSecondsPerSecond;
+            retValue                        = microSecondsPerIteration;
             printResult(clockNames[i], microSecondsPerIteration, "us", true);
         }
         else
         {
             double nanoSecPerIteration = secondsPerIteration * kNanoSecondsPerSecond;
+            retValue                   = nanoSecPerIteration;
             printResult(clockNames[i], nanoSecPerIteration, "ns", true);
         }
     }
+    return retValue;
 }
 
 double ANGLEPerfTest::normalizedTime(size_t value) const
