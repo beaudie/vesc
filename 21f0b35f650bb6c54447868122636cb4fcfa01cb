@@ -239,6 +239,30 @@
     },
     {
       "key": {
+        "uuid": "9a0e18df_6b8ee8ee",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T19:37:01Z",
+      "side": 1,
+      "message": "\u003e Removing from the list passed would not work. Vulkan extensions are opt-in, unlike OpenGL\n\u003e extensions; the list is passed to vkCreateInstance.\n\nVK_KHR_SURFACE_EXTENSION_NAME is passed to vkCreateInstance. VK_KHR_SWAPCHAIN_EXTENSION_NAME is passed to vkCreateDevice. For VK_KHR_SURFACE_EXTENSION_NAME we first verify the VkInstance extension is exposed by calling vkEnumerateInstanceExtensionProperties. Similarly we also call vkEnumerateDeviceExtensionProperties to find VK_KHR_SWAPCHAIN_EXTENSION_NAME for the device. Presumably VK_FUCHSIA_imagepipe_surface is a device extension.\n\nPlease check my understanding here. The Fuchsia layer does *not* expose VK_KHR_SWAPCHAIN_EXTENSION_NAME/VK_KHR_SURFACE_EXTENSION_NAME extensions via vkEnumerateInstanceExtensionProperties and vkEnumerateDeviceExtensionProperties and *does* require that we pass them to vkCreateInstance and vkCreateDevice.\n\nIf this is so, it\u0027s a bug in the Fuchsia layer. It\u0027s fine to commit a workaround but we should try to fix it upstream in parallel. I\u0027d prefer to do it with building the list in a different order based on IsFuchsia(). If that\u0027s not the case, please correct me.\n\nI\u0027d prefer to keep the checks for ANGLE internally to understand what layers are available and report problems before calling the loader.",
+      "parentUuid": "3c7438ff_4af16daa",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 6
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4b4c584_876db099",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 7
