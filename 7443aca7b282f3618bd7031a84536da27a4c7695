@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "52e0cf3f_7403b7d7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-06T22:19:54Z",
+      "side": 1,
+      "message": "FYI ... As Michael points out, this was deprecated.  At the time (very early in Vulkan 1.0), we knew of no device-level-only layers.  Thus, all layers are enabled at vkCreateInstance time and are available to have device extensions from.\n\nI was thinking that we could (in a separate CL), remove these calls, but as Michael pointed out, we encouraged applications to continue to call these.  Thus, leave them in:-).  Again, just FYI.",
+      "revId": "7443aca7b282f3618bd7031a84536da27a4c7695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0290d120_323d91cd",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
