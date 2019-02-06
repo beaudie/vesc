@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c688907c_6c8a8585",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T22:43:02Z",
+      "side": 1,
+      "message": "It actually seems to be not only encouraged but required. If we don\u0027t iterate over (instance \u003d\u003d device) layers we here will won\u0027t discover all of the device extensions and this leads to an error.",
+      "parentUuid": "52e0cf3f_7403b7d7",
+      "revId": "7443aca7b282f3618bd7031a84536da27a4c7695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0290d120_323d91cd",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
@@ -87,6 +105,30 @@
       "revId": "7443aca7b282f3618bd7031a84536da27a4c7695",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a267288_a5749438",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T22:43:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8ddfc4cf_3f8eaf52",
+      "range": {
+        "startLine": 839,
+        "startChar": 0,
+        "endLine": 843,
+        "endChar": 13
+      },
+      "revId": "7443aca7b282f3618bd7031a84536da27a4c7695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
