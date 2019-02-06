@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08a0be71_82ddd502",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T19:47:35Z",
+      "side": 1,
+      "message": "you could put a comment here detailing the limitations if you want. It should be sufficient as a comment instead of a \u003d false, since false is the default.",
+      "range": {
+        "startLine": 715,
+        "startChar": 4,
+        "endLine": 715,
+        "endChar": 51
+      },
+      "revId": "2c575ce2833eb97cba14ca9a119af62b47d048e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb501461_eb6b12de",
+        "filename": "src/tests/gl_tests/InstancingTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T19:47:35Z",
+      "side": 1,
+      "message": "heads up that Frank Henigman was looking at mutating this file.",
+      "revId": "2c575ce2833eb97cba14ca9a119af62b47d048e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
