@@ -185,6 +185,8 @@ struct sample_info
     VkSemaphore imageAcquiredSemaphore;
 
     VkCommandPool cmd_pool;
+    VkCommandPoolResetFlags cmd_pool_reset_flags;
+    VkCommandBufferResetFlags cmd_buffer_reset_flags;
 
     struct
     {
@@ -214,7 +216,6 @@ struct sample_info
     std::vector<float> MVP;
 
     VkCommandBuffer cmd;                 // Buffer for initialization commands
-    VkCommandBuffer cmd2;                // Place to hold secondary command buffer
     std::vector<VkCommandBuffer> cmds;   // Place to hold a lot of buffers
     std::vector<VkCommandBuffer> cmd2s;  // Place to hold a lot of 2nd buffers
     VkPipelineLayout pipeline_layout;
@@ -562,6 +563,8 @@ void destroy_swap_chain(struct sample_info &info);
 void destroy_command_buffer(struct sample_info &info);
 void destroy_command_buffer_array(struct sample_info &info, int numBuffers);
 void destroy_command_buffer2_array(struct sample_info &info, int numBuffers);
+void reset_command_buffer2_array(struct sample_info &info);
+void reset_command_pool(struct sample_info &info);
 void destroy_command_pool(struct sample_info &info);
 void destroy_device(struct sample_info &info);
 void destroy_instance(struct sample_info &info);
