@@ -46,6 +46,30 @@
       "revId": "7443aca7b282f3618bd7031a84536da27a4c7695",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ddfc4cf_3f8eaf52",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T21:42:25Z",
+      "side": 1,
+      "message": "Device layer deprecation discussed here:\nhttps://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#extended-functionality-device-layer-deprecation",
+      "parentUuid": "171bf51f_f10cd3a0",
+      "range": {
+        "startLine": 839,
+        "startChar": 0,
+        "endLine": 843,
+        "endChar": 13
+      },
+      "revId": "7443aca7b282f3618bd7031a84536da27a4c7695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
