@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14c9fa2e_469312c5",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3108,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-06T20:17:56Z",
+      "side": 1,
+      "message": "This can now call ValidateDrawArraysInstancedBase because the extension check is already done above.",
+      "revId": "dba1af01da42c7efaf8670704a8b7e274ed44e54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42c4eb00_ed11284a",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3129,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-06T20:17:56Z",
+      "side": 1,
+      "message": "I don\u0027t think this is used.  Instead we should make sure that ValidateMultiDrawArraysInstancedANGLE handles running when either GL_ANGLE_instanced_arrays or GL_EXT_instanced_arrays is present.\n\nglMultiDrawArraysInstancedANGLE and glMultiDrawElementsInstancedANGLE come from a different extension and explicitly call out that they interact with GL_ANGLE_instanced_arrays.\n\nWe should also update the extensions/ANGLE_multi_draw.txt spec to say it interacts with both GL_ANGLE_instanced_arrays and GL_EXT_instanced_arrays.  Adding enga@ to see if this is reasonable.",
+      "range": {
+        "startLine": 3124,
+        "startChar": 0,
+        "endLine": 3129,
+        "endChar": 59
+      },
+      "revId": "dba1af01da42c7efaf8670704a8b7e274ed44e54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae38dd2f_abfaf4b9",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3175,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-06T20:17:56Z",
+      "side": 1,
+      "message": "This can now call ValidateDrawElementsInstancedBase because the extension check is already done above.",
+      "revId": "dba1af01da42c7efaf8670704a8b7e274ed44e54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
