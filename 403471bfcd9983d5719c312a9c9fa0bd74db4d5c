@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e03d3a9d_379eb8b5",
+        "filename": "doc/ExternalBenchmarks.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-02-06T21:03:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0286338f_efee4135",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 205
+      },
+      "revId": "403471bfcd9983d5719c312a9c9fa0bd74db4d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c770ac20_3b3c51c1",
         "filename": "doc/ExternalBenchmarks.md",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "97f5e762_c68646a1",
+        "filename": "doc/ExternalBenchmarks.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-02-06T21:03:08Z",
+      "side": 1,
+      "message": "Either one works for me, I tend to use the .git nomenclature.  Using https is more open, don\u0027t have to be logged in.\n\nDone",
+      "parentUuid": "c770ac20_3b3c51c1",
+      "range": {
+        "startLine": 96,
+        "startChar": 10,
+        "endLine": 96,
+        "endChar": 46
+      },
+      "revId": "403471bfcd9983d5719c312a9c9fa0bd74db4d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b069b7c_f8cd4bec",
         "filename": "doc/ExternalBenchmarks.md",
         "patchSetId": 5
@@ -68,6 +116,30 @@
       "revId": "403471bfcd9983d5719c312a9c9fa0bd74db4d5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7553d4a9_d4948500",
+        "filename": "doc/ExternalBenchmarks.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-02-06T21:03:08Z",
+      "side": 1,
+      "message": "Environment variables don\u0027t work like that on Android.\n\nI went ahead and added the steps used to select ANGLE as the driver.",
+      "parentUuid": "8b069b7c_f8cd4bec",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 74
+      },
+      "revId": "403471bfcd9983d5719c312a9c9fa0bd74db4d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
