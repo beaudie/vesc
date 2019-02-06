@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "118720c6_bec98517",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T19:26:49Z",
+      "side": 1,
+      "message": "it\u0027s a bit weird to put this here. but I\u0027m ok with it if it passes the bots. can clean it up later if we need to.",
+      "range": {
+        "startLine": 480,
+        "startChar": 6,
+        "endLine": 480,
+        "endChar": 25
+      },
+      "revId": "0b63fd61e760c85cfc5123fd2827406c1e104ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
