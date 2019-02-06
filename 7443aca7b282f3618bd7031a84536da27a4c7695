@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "a5420e92_c02758c9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T22:44:35Z",
+      "side": 1,
+      "message": "Sorry for the word salad :(\n\nI meant: If we don\u0027t iterate over (instance \u003d\u003d device) layers here we won\u0027t discover all of the device extensions and this leads to an error.",
+      "parentUuid": "c688907c_6c8a8585",
+      "revId": "7443aca7b282f3618bd7031a84536da27a4c7695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0290d120_323d91cd",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
