@@ -22,6 +22,7 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h"
+#include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace egl
 {
