@@ -61,3 +61,41 @@ To run glmark2 on a specific back-end of ANGLE:
 ```
 $ ANGLE_DEFAULT_PLATFORM=vulkan LD_LIBRARY_PATH=/path/to/angle/out/release/ ./glmark2-es2
 ```
+
+### glmark2 on Android
+
+Below steps are set up to use version 26.0.1 of build-tools, which can be installed with Android Studio. Other build-tools versions may work fine, you would just need to update the script.
+
+Tested with r19 of NDK.
+
+Note: This is built from a branch that has fixes for Android. It only supports 32-bit ARM (armeabi-v7a). Supporting other ABIs requires more work, possibly including a move to cmake instead of ndk-build.
+
+#### Building on Linux for Android
+
+Setup:
+
+```
+export ANDROID_SDK=<path_to_Android_SDK>
+
+export ANDROID_NDK=$ANDROID_SDK/ndk-bundle
+
+sudo apt-get install openjdk-8-jdk
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+```
+
+Build:
+
+```
+git clone git@github.com:cnorthrop/glmark2.git
+git checkout android_fixes
+cd glmark2/android
+./build.sh
+```
+
+Install:
+
+```
+adb install --abi armeabi-v7a glmark2.apk
+```
+
+TODO: Update with more steps for driver and backend selection for Android.
