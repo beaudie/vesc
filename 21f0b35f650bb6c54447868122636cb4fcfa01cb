@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4d116320_20dca063",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T16:41:39Z",
+      "side": 1,
+      "message": "The contents of that file are not included in the Fuchsia build; Fuchsia provides prebuilt validation layers and if we build them ourselves they won\u0027t support the Fuchsia extensions.\n\nI added an assert(!is_fuchsia) to the layers BUILD.gn to avoid generating any of the layer targets, and to make sure accidental dependencies on them cause an error at \"gn gen\" time and not at compile time or later.\n\nShould we move all the configs to a better place? third_party/vulkan-validation-layers/BUILD.gn seems like an odd place for them as they are needed regardless of whether validation is enabled.",
+      "parentUuid": "6797b751_7aa371ad",
+      "range": {
+        "startLine": 449,
+        "startChar": 19,
+        "endLine": 449,
+        "endChar": 42
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f958cf5_d4390604",
         "filename": "include/EGL/eglplatform.h",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2019-02-04T22:03:25Z",
       "side": 1,
       "message": "Should this be \u0027struct FushiaEGLWindow\u0027?",
+      "range": {
+        "startLine": 129,
+        "startChar": 8,
+        "endLine": 129,
+        "endChar": 14
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "872daec0_38776202",
+        "filename": "include/EGL/eglplatform.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T16:41:39Z",
+      "side": 1,
+      "message": "eglCreatePlatformWindowSurface uses void *. I think that\u0027s probably the right thing for new platforms to use (and that this typedef and the variable signature of eglCreateWindowSurface was a mistake).\n\nWe did the same thing with USE_OZONE but we used intptr_t because X11 windows are integers and C spec says it\u0027s undefined behavior to put an integer into a pointer.",
+      "parentUuid": "3f958cf5_d4390604",
       "range": {
         "startLine": 129,
         "startChar": 8,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "4bfd7b5a_602cf7cd",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T16:41:39Z",
+      "side": 1,
+      "message": "We can\u0027t use functions for extensions that are not enabled (the loader will refuse look them up for us).\n\nThe spec actually says that layers may not add new functions. The Fuchsia spec adds new extensions which add new functions. I don\u0027t think this is really the intended use of layers but that\u0027s how Fuchsia has organized things. The result is that they don\u0027t enumerate, but we have to know that the layer makes them available and ask for them anyway.",
+      "parentUuid": "689f2350_68633305",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 6
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4b4c584_876db099",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b559dde0_4af0a45a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T16:41:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4b4c584_876db099",
+      "range": {
+        "startLine": 639,
+        "startChar": 4,
+        "endLine": 639,
+        "endChar": 48
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "45bb4c43_44f90f0e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T16:41:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9943bd66_ab77586e",
+      "range": {
+        "startLine": 841,
+        "startChar": 4,
+        "endLine": 841,
+        "endChar": 48
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a805732_97b5def9",
         "filename": "src/libANGLE/renderer/vulkan/fuchsia/WindowSurfaceVkFuchsia.cpp",
         "patchSetId": 7
@@ -128,6 +248,30 @@
       "writtenOn": "2019-02-04T22:03:25Z",
       "side": 1,
       "message": "I think you can simplify this a bunch by doing:\n\n   FuchsiaEGLWindow* fushiaWindow \u003d static_cast\u003cFuchsiaEGLWindow*\u003e(window);\n   if (fushiaWindow.magic !\u003d FUCHSIA_EGL_WINDOW_MAGIC || fushiaWindow.size !\u003d sizeof(FuchsiaEGLWindow))\n   {\n       return false;\n   }",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 5
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37cfb5c7_f1feb4fe",
+        "filename": "src/libANGLE/renderer/vulkan/fuchsia/WindowSurfaceVkFuchsia.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T16:41:39Z",
+      "side": 1,
+      "message": "It doesn\u0027t make much sense to me to cast before doing the checks because the checks are trying to determine whether the cast is safe. memcpy is safer in terms of the the types of violation that can be diagnosed without running afoul of undefined behavior.\n\nThe latest patch removes the struct though.",
+      "parentUuid": "5a805732_97b5def9",
       "range": {
         "startLine": 30,
         "startChar": 4,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "3663a989_00bd5396",
+        "filename": "src/libANGLE/renderer/vulkan/fuchsia/WindowSurfaceVkFuchsia.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T16:41:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff1e5c15_2a21dc1b",
+      "range": {
+        "startLine": 45,
+        "startChar": 9,
+        "endLine": 45,
+        "endChar": 41
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab681175_faacbedb",
         "filename": "util/OSWindow.h",
         "patchSetId": 7
@@ -183,6 +351,30 @@
       "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af42930d_cd1eebc4",
+        "filename": "util/OSWindow.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T16:41:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab681175_faacbedb",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 67
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
