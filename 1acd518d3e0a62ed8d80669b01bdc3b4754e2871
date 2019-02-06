@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d88b356d_db8ac42b",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T22:45:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1057a8ad_95b58bfd",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 6
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fc566d5_ea7bc20f",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 12
@@ -45,6 +69,30 @@
       "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddaa2688_81d0982c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T22:45:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fc566d5_ea7bc20f",
+      "range": {
+        "startLine": 755,
+        "startChar": 0,
+        "endLine": 757,
+        "endChar": 6
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "dfb2aa6a_35c894dc",
+        "filename": "src/libANGLE/renderer/vulkan/fuchsia/WindowSurfaceVkFuchsia.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T22:45:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11479a56_fe9ee095",
+      "range": {
+        "startLine": 53,
+        "startChar": 2,
+        "endLine": 56,
+        "endChar": 44
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "20d5eaa2_597d94e9",
         "filename": "src/tests/BUILD.gn",
         "patchSetId": 12
@@ -91,6 +163,30 @@
       "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "392497c8_b660722f",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T22:45:51Z",
+      "side": 1,
+      "message": "Needed for some explicit #includes in gtest:\n\nhttps://cs.chromium.org/chromium/src/third_party/googletest/src/googletest/src/gtest-death-test.cc?q\u003dgtest-death-test.cc\u0026sq\u003dpackage:chromium\u0026dr\u0026l\u003d67-78\n\nCan move it more centrally if it\u0027s easier.",
+      "parentUuid": "20d5eaa2_597d94e9",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 5
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "74ff08be_a6ca95b0",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T22:45:51Z",
+      "side": 1,
+      "message": "Looks like it is OK. Not sure what was wrong before. Fixed.",
+      "parentUuid": "652d87a9_494e2c1b",
+      "range": {
+        "startLine": 79,
+        "startChar": 15,
+        "endLine": 79,
+        "endChar": 36
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7379ade6_a5fabd89",
         "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
         "patchSetId": 12
@@ -137,6 +257,30 @@
       "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c3499f4_24b34e0b",
+        "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T22:45:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7379ade6_a5fabd89",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 35
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "bb87a801_54db7c42",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T22:45:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc77153d_045ca5c7",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 35
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e30a5a69_d34271b0",
         "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
         "patchSetId": 12
@@ -183,6 +351,30 @@
       "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b482283f_7c09006e",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T22:45:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e30a5a69_d34271b0",
+      "range": {
+        "startLine": 211,
+        "startChar": 8,
+        "endLine": 218,
+        "endChar": 9
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "2b4a04c2_c3cdc505",
+        "filename": "third_party/vulkan-loader/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T22:45:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3675639_72620de2",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 6
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e79ea257_2803b001",
         "filename": "third_party/vulkan-tools/BUILD.gn",
         "patchSetId": 12
@@ -229,6 +445,30 @@
       "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "def473ee_09d0bda8",
+        "filename": "third_party/vulkan-tools/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T22:45:51Z",
+      "side": 1,
+      "message": "It is not provided by the SDK.\n\nI am not sure what is involved in porting this, possibly just adding some json files and adjusting build rules.",
+      "parentUuid": "e79ea257_2803b001",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 6
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -255,6 +495,30 @@
     },
     {
       "key": {
+        "uuid": "26ff7348_a7913288",
+        "filename": "third_party/vulkan-validation-layers/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T22:45:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9a6b0cb_0e68a40b",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 6
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a643eb8_61f4350f",
         "filename": "util/EGLWindow.cpp",
         "patchSetId": 12
@@ -278,6 +542,30 @@
     },
     {
       "key": {
+        "uuid": "3082e2cf_afc275cf",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T22:45:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a643eb8_61f4350f",
+      "range": {
+        "startLine": 307,
+        "startChar": 9,
+        "endLine": 307,
+        "endChar": 33
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8c6d795f_7c3253ab",
         "filename": "util/fuchsia/FuchsiaTimer.h",
         "patchSetId": 12
@@ -298,6 +586,30 @@
       "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18274ff9_55f39e59",
+        "filename": "util/fuchsia/FuchsiaTimer.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T22:45:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c6d795f_7c3253ab",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
