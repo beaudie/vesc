@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "10833d94_1bca8417",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-06T23:10:29Z",
+      "side": 1,
+      "message": "Yes, unless ANGLE were to keep the layer list around and reuse it here (should work, but I\u0027ve never tried that).",
+      "parentUuid": "a5420e92_c02758c9",
+      "revId": "7443aca7b282f3618bd7031a84536da27a4c7695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0290d120_323d91cd",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
