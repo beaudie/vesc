@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0286338f_efee4135",
+        "filename": "doc/ExternalBenchmarks.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T20:26:49Z",
+      "side": 1,
+      "message": "nit: can you wrap this line to 80 or 100 chars?",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 205
+      },
+      "revId": "403471bfcd9983d5719c312a9c9fa0bd74db4d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c770ac20_3b3c51c1",
+        "filename": "doc/ExternalBenchmarks.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T20:26:49Z",
+      "side": 1,
+      "message": "this clone command looks unusual. I think it has your LDAP embedded. you probably want:\n\ngit clone https://github.com/cnorthrop/glmark2.git",
+      "range": {
+        "startLine": 96,
+        "startChar": 10,
+        "endLine": 96,
+        "endChar": 46
+      },
+      "revId": "403471bfcd9983d5719c312a9c9fa0bd74db4d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b069b7c_f8cd4bec",
+        "filename": "doc/ExternalBenchmarks.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T20:26:49Z",
+      "side": 1,
+      "message": "probably can use the default environment variable as above.",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 74
+      },
+      "revId": "403471bfcd9983d5719c312a9c9fa0bd74db4d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
