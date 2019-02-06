@@ -16,6 +16,24 @@
       "revId": "2ab0519b66b4c66147335941d8a540f291e7bc99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91f22cf3_314273ec",
+        "filename": "doc/ExternalBenchmarks.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-02-06T21:12:40Z",
+      "side": 1,
+      "message": "Yes, it works.  I don\u0027t believe settings delete takes a third parameter.\n\n$ adb shell settings list global | grep angle\nangle_gl_driver_selection_pkgs\u003dorg.linaro.glmark2\nangle_gl_driver_selection_values\u003dangle\nangle_whitelist\u003dcom.android.angle,com.google.android.apps.internal.cubey,com.android.gl2jni\n\n$ adb shell settings delete global angle_gl_driver_selection_values\nDeleted 1 rows\n$ adb shell settings delete global angle_gl_driver_selection_pkgs\nDeleted 1 rows\n\n$ adb shell settings list global | grep angle\nangle_whitelist\u003dcom.android.angle,com.google.android.apps.internal.cubey,com.android.gl2jni",
+      "parentUuid": "a13e9a53_f9dbb72b",
+      "revId": "2ab0519b66b4c66147335941d8a540f291e7bc99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
