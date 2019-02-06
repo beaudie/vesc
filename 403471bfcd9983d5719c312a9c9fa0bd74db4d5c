@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "11515c5a_967b92b1",
+        "filename": "doc/ExternalBenchmarks.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-06T21:31:15Z",
+      "side": 1,
+      "message": "git@github.com:user/repo uses ssh to retrieve the repo. If the user doesn\u0027t have their ssh key set up with github, they won\u0027t be able to clone. (nit: it\u0027s not LDAP, by the way, it\u0027s the github username).\n\nhttps://github.com/user/repo is publicly clonable.",
+      "parentUuid": "97f5e762_c68646a1",
+      "range": {
+        "startLine": 96,
+        "startChar": 10,
+        "endLine": 96,
+        "endChar": 46
+      },
+      "revId": "403471bfcd9983d5719c312a9c9fa0bd74db4d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b069b7c_f8cd4bec",
         "filename": "doc/ExternalBenchmarks.md",
         "patchSetId": 5
