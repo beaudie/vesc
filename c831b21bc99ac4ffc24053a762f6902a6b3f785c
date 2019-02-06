@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5d80c279_276b73e6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-06T15:50:14Z",
+      "side": 1,
+      "message": "That\u0027s correct.",
+      "parentUuid": "a2a4aa4e_0fbb1345",
+      "revId": "c831b21bc99ac4ffc24053a762f6902a6b3f785c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9556c799_2fc0018a",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 13
@@ -30,6 +48,24 @@
       "writtenOn": "2019-02-05T22:49:12Z",
       "side": 1,
       "message": "Just checking: do you need to reset swap.serial?",
+      "revId": "c831b21bc99ac4ffc24053a762f6902a6b3f785c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acd11edc_7c334a87",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-06T15:50:14Z",
+      "side": 1,
+      "message": "Wouldn\u0027t matter. The only thing that serial is used for is to eventually wait on its fence (if not already). So if by some error/mistake/bug we end up doing a `finishToSerial` on it, it would be a no-op.",
+      "parentUuid": "9556c799_2fc0018a",
       "revId": "c831b21bc99ac4ffc24053a762f6902a6b3f785c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "3b63fb64_a7c5fc6f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-06T15:50:14Z",
+      "side": 1,
+      "message": "See the beginning of the function:\n\n    VkSwapchainKHR oldSwapchain \u003d mSwapchain;\n    mSwapchain                  \u003d VK_NULL_HANDLE;\n\nIn fact, `oldSwapchain` at this point is really the current swapchain. The new swapchain will be created based on this.\n\nThe loop above is not destroying the current swapchain, because the local variable `oldSwapchain` is not yet written in `mSwapHistory`. That is, the for loop above only destroys any swapchain that was created before the current one (and not including it).",
+      "parentUuid": "ffa0789a_297f66f1",
+      "revId": "c831b21bc99ac4ffc24053a762f6902a6b3f785c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a2b1737e_dd6acf55",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 13
@@ -64,6 +118,24 @@
       "writtenOn": "2019-02-05T22:49:12Z",
       "side": 1,
       "message": "This seems wrong.  The following Vulkan \"platforms\" do not allow zero-sized windows: Win32, X11, and Xcb.  It painted us into a corner on Windows, X11, and Xcb, where the following 2 spec statements can\u0027t work out for a minimized window (which is given the size of (0, 0)):\n\n\u003e With Win32, minImageExtent, maxImageExtent, and currentExtent must always equal the window size.\n\u003e \n\u003e The currentExtent of a Win32 surface must have both width and height greater than 0, or both of them 0.\n\nIt\u0027s why we added a Note, and why we came back to the topic at the San Diego F2F.",
+      "revId": "c831b21bc99ac4ffc24053a762f6902a6b3f785c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b38ae2f2_a09fcc31",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-06T15:50:14Z",
+      "side": 1,
+      "message": "`platformSupportsZeroSize` is true only for d3d11 and d3d9, so the test never sends a 0 size to any vulkan backends..\n\nRegarding 0 size, indeed it\u0027s a gray area for me what happens with minimized windows. What I ended up doing in the Vulkan backend is to set width and height to at least 1. So, if a platform creates a 0x0 window size, I create a 1x1 swapchain. Do you see any reason why that would be problematic?",
+      "parentUuid": "a2b1737e_dd6acf55",
       "revId": "c831b21bc99ac4ffc24053a762f6902a6b3f785c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

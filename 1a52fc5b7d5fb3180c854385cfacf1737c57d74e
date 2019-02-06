@@ -16,6 +16,24 @@
       "revId": "1a52fc5b7d5fb3180c854385cfacf1737c57d74e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a64e479_d8da592a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-06T15:50:14Z",
+      "side": 1,
+      "message": "Good catch. Fixed.",
+      "parentUuid": "438f156e_7841ce2a",
+      "revId": "1a52fc5b7d5fb3180c854385cfacf1737c57d74e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

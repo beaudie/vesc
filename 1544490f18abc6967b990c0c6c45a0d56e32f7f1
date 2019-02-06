@@ -109,6 +109,24 @@
     },
     {
       "key": {
+        "uuid": "4f615236_1cddbc43",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-06T15:50:14Z",
+      "side": 1,
+      "message": "I\u0027m surprised that mailbox made the app look incorrectly (where they depending on each frame taking exactly 16.6ms?!).\n\nYes, that should be doable. I can take a look at implementing eglSwapInterval, which defaults to FIFO, and change our perf tests to specifically ask for mailbox/immediate. That should automatically cover Android defaulting to FIFO.",
+      "parentUuid": "99252916_b681039f",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f6a0d06a_ae512961",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
@@ -466,6 +484,24 @@
     },
     {
       "key": {
+        "uuid": "0e58ac29_7fcdbd6e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-06T15:50:14Z",
+      "side": 1,
+      "message": "As the bots show, Windows/Intel and Windows/AMD also seem to not return OUT_OF_DATE when the end2end test resizes the window.\n\nI understand vendors are not a fan of OUT_OF_DATE, but shouldn\u0027t they have returned SUBOPTIMAL? Or blitting to a resized window is not really considered \"suboptimal\" for them and they happily accept it?\n\nIf OUT_OF_DATE/SUBOPTIMAL is unreliable, what other option would I have than to check for window size on every swap?\n\nFYI, on glx, cgl and d3d, I see that they query the window size to know if they have to resize the swapchain.",
+      "parentUuid": "e63e30d9_91b9f955",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6204a285_6e35e6ff",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
@@ -555,6 +591,24 @@
     },
     {
       "key": {
+        "uuid": "e920414a_c0265f17",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-06T15:50:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1ceb98cc_1115d012",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "39ea7164_aa170643",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 10
@@ -638,6 +692,24 @@
       "side": 1,
       "message": "This is a good approach (wait for the rendering), and thanks for the explanation!",
       "parentUuid": "91c723ce_ebf3979b",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c83b8313_9305908a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-06T15:50:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "eb9ea0fd_f9f4b21f",
       "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
