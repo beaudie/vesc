@@ -1736,22 +1736,6 @@ void init_viewports_array(struct sample_info &info, int index)
 #endif
 }
 
-void init_viewports2(struct sample_info &info)
-{
-#ifdef __ANDROID__
-// Disable dynamic viewport on Android. Some drive has an issue with the dynamic viewport
-// feature.
-#else
-    info.viewport.height = (float)info.height;
-    info.viewport.width = (float)info.width;
-    info.viewport.minDepth = (float)0.0f;
-    info.viewport.maxDepth = (float)1.0f;
-    info.viewport.x = 0;
-    info.viewport.y = 0;
-    vkCmdSetViewport(info.cmd2, 0, NUM_VIEWPORTS, &info.viewport);
-#endif
-}
-
 void init_viewports2_array(struct sample_info &info, int index)
 {
 #ifdef __ANDROID__
@@ -1855,9 +1839,22 @@ void destroy_command_buffer_array(struct sample_info &info, int numBuffers)
     vkFreeCommandBuffers(info.device, info.cmd_pool, numBuffers, info.cmds.data());
 }
 
+void reset_command_buffer2_array(struct sample_info &info)
+{
+    for (auto cb : info.cmd2s)
+    {
+        vkResetCommandBuffer(cb, info.cmd_buffer_reset_flags);
+    }
+}
+
 void destroy_command_buffer2_array(struct sample_info &info, int numBuffers)
 {
     vkFreeCommandBuffers(info.device, info.cmd_pool, numBuffers, info.cmd2s.data());
+}
+
+void reset_command_pool(struct sample_info &info)
+{
+    vkResetCommandPool(info.device, info.cmd_pool, info.cmd_buffer_reset_flags);
 }
 
 void destroy_command_pool(struct sample_info &info)
