@@ -15,6 +15,7 @@
 #include "test_utils/ANGLETest.h"
 #include "util/EGLWindow.h"
 #include "util/OSWindow.h"
+#include "util/Timer.h"
 
 #if defined(ANGLE_ENABLE_D3D11)
 #    define INITGUID
@@ -339,6 +340,84 @@ TEST_P(EGLSurfaceTest, ResizeWindow)
     eglQuerySurface(mDisplay, mWindowSurface, EGL_HEIGHT, &height);
     ASSERT_EGL_SUCCESS();
     ASSERT_EQ(64, height);
+}
+
+// Test that swap interval works.
+TEST_P(EGLSurfaceTest, SwapInterval)
+{
+    // On OSX, the test takes tens of milliseconds, which should be impossible with
+    // setSwapInterval(1) followed by 240 swaps as done below.  http://anglebug.com/TODO
+    ANGLE_SKIP_TEST_IF(IsOSX());
+
+    initializeDisplay();
+    initializeSurfaceWithDefaultConfig();
+    initializeContext();
+
+    eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
+    eglSwapBuffers(mDisplay, mWindowSurface);
+    ASSERT_EGL_SUCCESS();
+
+    EGLint minInterval, maxInterval;
+
+    ASSERT_TRUE(eglGetConfigAttrib(mDisplay, mConfig, EGL_MIN_SWAP_INTERVAL, &minInterval));
+    ASSERT_TRUE(eglGetConfigAttrib(mDisplay, mConfig, EGL_MAX_SWAP_INTERVAL, &maxInterval));
+    fprintf(stderr, "min: %d, max: %d\n", minInterval, maxInterval);
+
+    for (int iter = 0; iter < 2; ++iter)
+    {
+        fprintf(stderr, "Try %d\n", iter + 1);
+        if (maxInterval >= 1)
+        {
+            fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+            std::unique_ptr<Timer> timer(CreateTimer());
+            fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+
+            eglSwapInterval(mDisplay, 1);
+            fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+            timer->start();
+            fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+            for (int i = 0; i < 120; ++i)
+            {
+                fprintf(stderr, "%s:%d (%d)\n", __FILE__, __LINE__, i);
+                eglSwapBuffers(mDisplay, mWindowSurface);
+            }
+            fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+            timer->stop();
+            fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+            ASSERT_EGL_SUCCESS();
+            fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+
+            // 120 frames at 60fps should take 2s.  At lower fps, it should take even longer.  At
+            // 90fps, it would take 1.33s.  Let's use 1s as a lower bound.
+            // ASSERT_GT(timer->getElapsedTime(), 1);
+        }
+
+        if (minInterval <= 0)
+        {
+            fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+            std::unique_ptr<Timer> timer(CreateTimer());
+            fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+
+            eglSwapInterval(mDisplay, 0);
+            fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+            timer->start();
+            fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+            for (int i = 0; i < 100; ++i)
+            {
+                fprintf(stderr, "%s:%d (%d)\n", __FILE__, __LINE__, i);
+                eglSwapBuffers(mDisplay, mWindowSurface);
+            }
+            fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+            timer->stop();
+            fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+            ASSERT_EGL_SUCCESS();
+            fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+
+            // 100 no-op swaps should be fairly fast, though there is no guarantee how fast it can
+            // be. 10ms per swap is probably a safe upper bound.
+            // ASSERT_LT(timer->getElapsedTime(), 1);
+        }
+    }
 }
 
 // Test creating a surface that supports a EGLConfig with 16bit
