@@ -1,0 +1,303 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1057a8ad_95b58bfd",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "could you add a new virtual function to DisplayVk that initializes platform extensions? Something like generatePlatformExceptions or generateExceptionsImpl. Defaults to {}. Then in DisplayVkFucsia you can expose this without the #if defined.\n\nWouldn\u0027t be a functional change but might make things easier for other platform overrides.",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 6
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fc566d5_ea7bc20f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "can probably go in WindowSurfaceVkFuchsia.",
+      "range": {
+        "startLine": 755,
+        "startChar": 0,
+        "endLine": 757,
+        "endChar": 6
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11479a56_fe9ee095",
+        "filename": "src/libANGLE/renderer/vulkan/fuchsia/WindowSurfaceVkFuchsia.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "you can use the methods in vk_utils.h here to init the function pointer and use it.",
+      "range": {
+        "startLine": 53,
+        "startChar": 2,
+        "endLine": 56,
+        "endChar": 44
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20d5eaa2_597d94e9",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "are these needed for IO? Maybe they should go into angle_executable and angle_shared_library in gni/angle.gni?",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 5
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "652d87a9_494e2c1b",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "any difficulties in building perftests out of curiosity?",
+      "range": {
+        "startLine": 79,
+        "startChar": 15,
+        "endLine": 79,
+        "endChar": 36
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7379ade6_a5fabd89",
+        "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "can you use the IsFuchsia() method in angle_test_instantiate.cpp?",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 35
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc77153d_045ca5c7",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "same comment.",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 35
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e30a5a69_d34271b0",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "nit: you can probably just return getRenderer() \u003d\u003d VULKAN_ANGLE",
+      "range": {
+        "startLine": 211,
+        "startChar": 8,
+        "endLine": 218,
+        "endChar": 9
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3675639_72620de2",
+        "filename": "third_party/vulkan-loader/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "nit: maybe a comment?",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 6
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e79ea257_2803b001",
+        "filename": "third_party/vulkan-tools/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "do you also supply a mock ICD? if you don\u0027t, could be useful to include the tools at some point.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 6
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9a6b0cb_0e68a40b",
+        "filename": "third_party/vulkan-validation-layers/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "maybe comment here?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 6
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a643eb8_61f4350f",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "can you add a comment here as to why you\u0027re using fixed size?",
+      "range": {
+        "startLine": 307,
+        "startChar": 9,
+        "endLine": 307,
+        "endChar": 33
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c6d795f_7c3253ab",
+        "filename": "util/fuchsia/FuchsiaTimer.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "tiny nit: you can omit the (c) from all new files. also this one is 2015",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

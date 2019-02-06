@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "47065bdf_b19df1df",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "This sounds good. Please move vulkan_config to this file inside the angle_enable_vulkan block. Try removing the API_NAME line entirely from vulkan_config. API_NAME is already specified in a public config in the loader. So we might not need to duplicate it.",
+      "parentUuid": "4d116320_20dca063",
+      "range": {
+        "startLine": 449,
+        "startChar": 19,
+        "endLine": 449,
+        "endChar": 42
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f958cf5_d4390604",
         "filename": "include/EGL/eglplatform.h",
         "patchSetId": 7
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "f946bb4f_22643e8b",
+        "filename": "include/EGL/eglplatform.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "intptr_t or void * both sound good to me.",
+      "parentUuid": "872daec0_38776202",
+      "range": {
+        "startLine": 129,
+        "startChar": 8,
+        "endLine": 129,
+        "endChar": 14
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "689f2350_68633305",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 7
@@ -131,6 +179,30 @@
       "side": 1,
       "message": "We can\u0027t use functions for extensions that are not enabled (the loader will refuse look them up for us).\n\nThe spec actually says that layers may not add new functions. The Fuchsia spec adds new extensions which add new functions. I don\u0027t think this is really the intended use of layers but that\u0027s how Fuchsia has organized things. The result is that they don\u0027t enumerate, but we have to know that the layer makes them available and ask for them anyway.",
       "parentUuid": "689f2350_68633305",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 6
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c945871b_ef45b5ce",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "Still don\u0027t understand. Why do you need to include them in enabledExtensionNames here if you are skipping the check? Just remove them from enabledExtensionNames before entering this function.",
+      "parentUuid": "4bfd7b5a_602cf7cd",
       "range": {
         "startLine": 84,
         "startChar": 0,

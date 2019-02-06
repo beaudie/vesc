@@ -104,6 +104,24 @@
       "revId": "dc2c17ec0300197d0e220c23789c45c6c399d840",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ebed9c2_e36169e0",
+        "filename": "src/libANGLE/renderer/vulkan/fuchsia/DisplayVkFuchsia.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-06T17:36:31Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "025a1328_b79fac37",
+      "revId": "dc2c17ec0300197d0e220c23789c45c6c399d840",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
