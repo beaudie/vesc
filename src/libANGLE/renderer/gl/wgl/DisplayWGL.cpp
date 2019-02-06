@@ -826,7 +826,7 @@ HGLRC DisplayWGL::initializeContextAttribs(const egl::AttributeMap &eglAttribute
         }
         else if (info.type == ContextCreationTry::Type::ES)
         {
-            profileFlag |= WGL_CONTEXT_ES_PROFILE_BIT_EXT;
+            profileFlag |= WGL_CONTEXT_ES2_PROFILE_BIT_EXT;
         }
 
         HGLRC context = createContextAttribs(info.version, profileFlag, sharedContext, useARBShare,
