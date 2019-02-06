@@ -237,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "46428ad4_eec069b6",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T23:29:29Z",
+      "side": 1,
+      "message": "Oh, it\u0027s the white box tests that won\u0027t build, because they don\u0027t use OSWindow. So those won\u0027t build without additional porting.",
+      "parentUuid": "74ff08be_a6ca95b0",
+      "range": {
+        "startLine": 79,
+        "startChar": 15,
+        "endLine": 79,
+        "endChar": 36
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7379ade6_a5fabd89",
         "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
         "patchSetId": 12
