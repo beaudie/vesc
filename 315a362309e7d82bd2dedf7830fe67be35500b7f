@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a7db467_62e8889a",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-06T21:07:26Z",
+      "side": 1,
+      "message": "These two defines should have the same value according to https://www.khronos.org/registry/OpenGL/extensions/EXT/WGL_EXT_create_context_es2_profile.txt",
+      "range": {
+        "startLine": 829,
+        "startChar": 27,
+        "endLine": 829,
+        "endChar": 58
+      },
+      "revId": "315a362309e7d82bd2dedf7830fe67be35500b7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
