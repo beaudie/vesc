@@ -215,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "3c7438ff_4af16daa",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T18:41:17Z",
+      "side": 1,
+      "message": "Removing from the list passed would not work. Vulkan extensions are opt-in, unlike OpenGL extensions; the list is passed to vkCreateInstance.\n\nWe could add them to the list after running this function, but that would require building the list in a different order depdending on IsFuchsia(). I\u0027m happy to do that if that\u0027s better.\n\nThis VerifyExtensionsPresent might not actually be useful, because the loader does the same checks inside vkCreateInstance(). It will not create a VkInstance that enables extensions which are not available\n\nShould we just remove this check? Or call VerifyExtensionsPresent on a partial list? Or just remove VerifyExtensionsPresent?",
+      "parentUuid": "c945871b_ef45b5ce",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 6
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4b4c584_876db099",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 7
@@ -353,6 +377,30 @@
       "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cba63624_fdcdd0e5",
+        "filename": "src/libANGLE/renderer/vulkan/fuchsia/WindowSurfaceVkFuchsia.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T18:41:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "37cfb5c7_f1feb4fe",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 5
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
