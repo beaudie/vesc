@@ -22,6 +22,7 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h"
+#include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace egl
 {
@@ -260,6 +261,10 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceProperties mPhysicalDeviceProperties;
     VkPhysicalDeviceFeatures mPhysicalDeviceFeatures;
     std::vector<VkQueueFamilyProperties> mQueueFamilyProperties;
+    // List of vulkan layers enabled for mInstance.
+    VulkanLayerVector mEnabledInstanceLayerNames;
+    // List of vulkan layers enabled for mDevice;
+    VulkanLayerVector mEnabledDeviceLayerNames;
     VkQueue mQueue;
     uint32_t mCurrentQueueFamilyIndex;
     VkDevice mDevice;
