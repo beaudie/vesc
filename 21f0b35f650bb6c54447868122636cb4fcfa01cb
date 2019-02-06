@@ -263,6 +263,30 @@
     },
     {
       "key": {
+        "uuid": "da34aa3e_c97790ac",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-06T21:07:43Z",
+      "side": 1,
+      "message": "The missing piece of the puzzle is that I didnt\u0027 realize the EnumerateExtensions functions had a layer argument :(\n\nIf we want to do our own checking we also have to iterate over explicit layers.",
+      "parentUuid": "9a0e18df_6b8ee8ee",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 6
+      },
+      "revId": "21f0b35f650bb6c54447868122636cb4fcfa01cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4b4c584_876db099",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 7
