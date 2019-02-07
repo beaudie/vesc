@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "026edc67_076aff6b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-07T21:41:09Z",
+      "side": 1,
+      "message": "nit: can you make the commit message take the form:\n\n\u003cone short sentence less than 70 chars\u003e\n\u003cspace\u003e\n\u003cparagraph with details\u003e\n\u003cspace\u003e\n\u003cbug tag, etc\u003e",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 16
+      },
+      "revId": "58c8bc5357a0e27d2a3a6bf12be37dcc2b587347",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
