@@ -256,7 +256,8 @@ Extensions::Extensions()
       maxDualSourceDrawBuffers(0),
       memorySize(false),
       textureMultisample(false),
-      multiDraw(false)
+      multiDraw(false),
+      testExtension({.angle = false, .ext = false})
 {}
 
 Extensions::Extensions(const Extensions &other) = default;

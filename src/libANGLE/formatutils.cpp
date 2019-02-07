@@ -92,6 +92,14 @@ static bool RequireExt(const Version &, const Extensions &extensions)
     return extensions.*bool1;
 }
 
+// Check support for a single test extension
+template <size_t offset>
+static bool RequireExtRef(const Version &, const Extensions &extensions)
+{
+    ExtensionRef ref1(offset);
+    return ref1.get(extensions);
+}
+
 // Check for a minimum client version or a single extension
 template <GLuint minCoreGLMajorVersion, GLuint minCoreGLMinorVersion, ExtensionBool bool1>
 static bool RequireESOrExt(const Version &clientVersion, const Extensions &extensions)
