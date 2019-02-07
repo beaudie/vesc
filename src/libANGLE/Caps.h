@@ -473,6 +473,14 @@ struct Extensions
 
     // GL_ANGLE_provoking_vertex
     bool provokingVertex = false;
+
+    // Test extension with multiple vendors
+    struct
+    {
+        bool ANGLE;
+
+        bool EXT;
+    } testExtension;
 };
 
 struct ExtensionInfo
@@ -483,6 +491,31 @@ struct ExtensionInfo
     // Pointer to a boolean member of the Extensions struct
     typedef bool(Extensions::*ExtensionBool);
     ExtensionBool ExtensionsMember = nullptr;
+};
+
+#define EXTENSIONREF_OFFSET(member) (offsetof(gl::Extensions, member))
+#define EXTENSIONREF(member) gl::ExtensionRef(EXTENSIONREF_OFFSET(member))
+#define EXTENSIONREF_VAR(var, member) gl::ExtensionRef var(EXTENSIONREF_OFFSET(member))
+
+struct ExtensionRef
+{
+    ExtensionRef() { ASSERT(false); }
+
+    ExtensionRef(size_t off)
+    {
+        ASSERT(off <= sizeof(Extensions));
+        offset = off;
+    }
+
+    void set(Extensions &extensions, bool setVal)
+    {
+        *(bool *)(&((char *)(&extensions))[offset]) = setVal;
+    }
+
+    bool get(const Extensions &extensions) { return *(bool *)(&((char *)(&extensions))[offset]); }
+
+  private:
+    size_t offset;
 };
 
 using ExtensionInfoMap = std::map<std::string, ExtensionInfo>;

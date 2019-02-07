@@ -16,6 +16,19 @@
 #include <algorithm>
 #include <sstream>
 
+static bool testFunc(gl::Extensions &extensions)
+{
+    EXTENSIONREF_VAR(ref, testExtension.ANGLE);
+    printf("created ref: %d ext: %d\n", (int)ref.get(extensions), extensions.testExtension.ANGLE);
+    ref.set(extensions, true);
+    printf("ref.set(true); ref: %d ext: %d\n", (int)ref.get(extensions),
+           extensions.testExtension.ANGLE);
+    extensions.testExtension.ANGLE = false;
+    printf("extensions... = false; ref: %d ext: %d\n", (int)ref.get(extensions),
+           extensions.testExtension.ANGLE);
+    return ref.get(extensions);
+}
+
 static void InsertExtensionString(const std::string &extension,
                                   bool supported,
                                   std::vector<std::string> *extensionVector)
@@ -256,8 +269,11 @@ Extensions::Extensions()
       maxDualSourceDrawBuffers(0),
       memorySize(false),
       textureMultisample(false),
-      multiDraw(false)
-{}
+      multiDraw(false),
+      testExtension({.ANGLE = false, .EXT = false})
+{
+    testFunc(*this);
+}
 
 Extensions::Extensions(const Extensions &other) = default;
 

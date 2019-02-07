@@ -92,6 +92,14 @@ static bool RequireExt(const Version &, const Extensions &extensions)
     return extensions.*bool1;
 }
 
+// Check support for a single test extension
+template <size_t offset>
+static bool RequireExtRef(const Version &, const Extensions &extensions)
+{
+    ExtensionRef ref1(offset);
+    return ref1.get(extensions);
+}
+
 // Check for a minimum client version or a single extension
 template <GLuint minCoreGLMajorVersion, GLuint minCoreGLMinorVersion, ExtensionBool bool1>
 static bool RequireESOrExt(const Version &clientVersion, const Extensions &extensions)
@@ -782,7 +790,7 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
     AddRGBAFormat(&map, GL_RGBA16F,       true, 16, 16, 16, 16, 0, GL_RGBA, GL_HALF_FLOAT,     GL_FLOAT,        false, SizedHalfFloatSupport,      SizedHalfFloatFilterSupport,                 SizedHalfFloatRGBATextureAttachmentSupport,   SizedHalfFloatRGBARenderbufferSupport    );
     AddRGBAFormat(&map, GL_R32F,          true, 32,  0,  0,  0, 0, GL_RED,  GL_FLOAT,          GL_FLOAT,        false, SizedFloatRGSupport,        RequireExt<&Extensions::textureFloatLinear>, RequireExt<&Extensions::colorBufferFloat>,    RequireExt<&Extensions::colorBufferFloat>);
     AddRGBAFormat(&map, GL_RG32F,         true, 32, 32,  0,  0, 0, GL_RG,   GL_FLOAT,          GL_FLOAT,        false, SizedFloatRGSupport,        RequireExt<&Extensions::textureFloatLinear>, RequireExt<&Extensions::colorBufferFloat>,    RequireExt<&Extensions::colorBufferFloat>);
-    AddRGBAFormat(&map, GL_RGB32F,        true, 32, 32, 32,  0, 0, GL_RGB,  GL_FLOAT,          GL_FLOAT,        false, SizedFloatRGBSupport,       RequireExt<&Extensions::textureFloatLinear>, RequireExt<&Extensions::colorBufferFloatRGB>, NeverSupported                           );
+    AddRGBAFormat(&map, GL_RGB32F,        true, 32, 32, 32,  0, 0, GL_RGB,  GL_FLOAT,          GL_FLOAT,        false, SizedFloatRGBSupport,       RequireExt<&Extensions::textureFloatLinear>, RequireExtRef<EXTENSIONREF_OFFSET(colorBufferFloatRGB)>, NeverSupported                           );
     AddRGBAFormat(&map, GL_RGBA32F,       true, 32, 32, 32, 32, 0, GL_RGBA, GL_FLOAT,          GL_FLOAT,        false, SizedFloatRGBASupport,      RequireExt<&Extensions::textureFloatLinear>, SizedFloatRGBATextureAttachmentSupport,       RequireExt<&Extensions::colorBufferFloat>);
 
     // Depth stencil formats
