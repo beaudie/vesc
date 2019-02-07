@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3b7ae8d8_b7c4c1d2",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3108,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-02-07T15:13:25Z",
+      "side": 1,
+      "message": "ValidateDrawInstancedANGLE does different checks than just verifying the extension is active",
+      "parentUuid": "14c9fa2e_469312c5",
+      "revId": "dba1af01da42c7efaf8670704a8b7e274ed44e54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42c4eb00_ed11284a",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 9
@@ -66,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "4ec993c2_13165f76",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3129,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-02-07T15:13:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a198a963_99a478fd",
+      "range": {
+        "startLine": 3124,
+        "startChar": 0,
+        "endLine": 3129,
+        "endChar": 59
+      },
+      "revId": "dba1af01da42c7efaf8670704a8b7e274ed44e54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae38dd2f_abfaf4b9",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 9
@@ -80,6 +122,24 @@
       "revId": "dba1af01da42c7efaf8670704a8b7e274ed44e54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a9a82f4_db052db1",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3175,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-02-07T15:13:25Z",
+      "side": 1,
+      "message": "ValidateDrawInstancedANGLE does different checks than just verifying the extension is active",
+      "parentUuid": "ae38dd2f_abfaf4b9",
+      "revId": "dba1af01da42c7efaf8670704a8b7e274ed44e54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
