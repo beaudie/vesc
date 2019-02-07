@@ -6419,7 +6419,7 @@ bool ValidateTexStorage2DEXT(Context *context,
 
 bool ValidateVertexAttribDivisorANGLE(Context *context, GLuint index, GLuint divisor)
 {
-    if (!context->getExtensions().instancedArraysANGLE)
+    if (!context->getExtensions().instancedArrays.angle)
     {
         context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
@@ -6449,7 +6449,7 @@ bool ValidateVertexAttribDivisorANGLE(Context *context, GLuint index, GLuint div
 
 bool ValidateVertexAttribDivisorEXT(Context *context, GLuint index, GLuint divisor)
 {
-    if (!context->getExtensions().instancedArraysEXT)
+    if (!context->getExtensions().instancedArrays.ext)
     {
         context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
