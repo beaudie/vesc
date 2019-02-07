@@ -2988,8 +2988,8 @@ void Context::initExtensionStrings()
     for (const auto &extensionInfo : GetExtensionInfoMap())
     {
         if (extensionInfo.second.Requestable &&
-            !(mState.mExtensions.*(extensionInfo.second.ExtensionsMember)) &&
-            mSupportedExtensions.*(extensionInfo.second.ExtensionsMember))
+            !(extensionInfo.second.ExtensionsMember.get(mState.mExtensions)) &&
+            extensionInfo.second.ExtensionsMember.get(mSupportedExtensions))
         {
             mRequestableExtensionStrings.push_back(MakeStaticString(extensionInfo.first));
         }
@@ -3052,7 +3052,7 @@ bool Context::isExtensionRequestable(const char *name)
     auto extension                         = extensionInfos.find(name);
 
     return extension != extensionInfos.end() && extension->second.Requestable &&
-           mSupportedExtensions.*(extension->second.ExtensionsMember);
+           extension->second.ExtensionsMember.get(mSupportedExtensions);
 }
 
 void Context::requestExtension(const char *name)
@@ -3063,13 +3063,13 @@ void Context::requestExtension(const char *name)
     ASSERT(extension.Requestable);
     ASSERT(isExtensionRequestable(name));
 
-    if (mState.mExtensions.*(extension.ExtensionsMember))
+    if (extension.ExtensionsMember.get(mState.mExtensions))
     {
         // Extension already enabled
         return;
     }
 
-    mState.mExtensions.*(extension.ExtensionsMember) = true;
+    extension.ExtensionsMember.set(mState.mExtensions, true);
     updateCaps();
     initExtensionStrings();
 
@@ -3289,7 +3289,7 @@ void Context::initCaps()
         // disable them.
         if (!mExtensionsEnabled && extensionInfo.second.Requestable)
         {
-            mState.mExtensions.*(extensionInfo.second.ExtensionsMember) = false;
+            extensionInfo.second.ExtensionsMember.set(mState.mExtensions, false);
         }
     }
 

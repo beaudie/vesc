@@ -1123,13 +1123,13 @@ void GenerateCaps(const FunctionsGL *functions,
                                      functions->hasGLESExtension("GL_OES_texture_border_clamp") ||
                                      functions->hasGLESExtension("GL_EXT_texture_border_clamp") ||
                                      functions->hasGLESExtension("GL_NV_texture_border_clamp");
-    extensions->instancedArraysANGLE = functions->isAtLeastGL(gl::Version(3, 1)) ||
-                                       (functions->hasGLExtension("GL_ARB_instanced_arrays") &&
-                                        (functions->hasGLExtension("GL_ARB_draw_instanced") ||
-                                         functions->hasGLExtension("GL_EXT_draw_instanced"))) ||
-                                       functions->isAtLeastGLES(gl::Version(3, 0)) ||
-                                       functions->hasGLESExtension("GL_EXT_instanced_arrays");
-    extensions->instancedArraysEXT = extensions->instancedArraysANGLE;
+    extensions->instancedArrays.angle = functions->isAtLeastGL(gl::Version(3, 1)) ||
+                                        (functions->hasGLExtension("GL_ARB_instanced_arrays") &&
+                                         (functions->hasGLExtension("GL_ARB_draw_instanced") ||
+                                          functions->hasGLExtension("GL_EXT_draw_instanced"))) ||
+                                        functions->isAtLeastGLES(gl::Version(3, 0)) ||
+                                        functions->hasGLESExtension("GL_EXT_instanced_arrays");
+    extensions->instancedArrays.ext = extensions->instancedArrays.angle;
     extensions->unpackSubimage = functions->standard == STANDARD_GL_DESKTOP ||
                                  functions->isAtLeastGLES(gl::Version(3, 0)) ||
                                  functions->hasGLESExtension("GL_EXT_unpack_subimage");
