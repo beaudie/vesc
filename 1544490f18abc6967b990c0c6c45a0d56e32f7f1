@@ -127,6 +127,24 @@
     },
     {
       "key": {
+        "uuid": "aba14844_8c4badb9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-07T16:21:25Z",
+      "side": 1,
+      "message": "\u003e I\u0027m surprised that mailbox made the app look incorrectly (where they depending on each frame taking exactly 16.6ms?!).\n\nI\u0027ll explain.  The simple app draws the same triangle, but varies the background color.  With FIFO, it gradually transitions from black/dark-grey towards white, and then quickly goes back to black/dark-grey again.  With MAILBOX, it just seemed to flash between dark and light in a seemingly-random manner.  Given that Cody didn\u0027t know what was going on (e.g. MAILBOX), he thought it was a bug.  Since I had been looking at the MAILBOX code, I recognized what it was doing (not showing multiple consecutive frames, and therefore appearing to flash).\n\n\n\u003e Yes, that should be doable. I can take a look at implementing eglSwapInterval, which defaults to FIFO, and change our perf tests to specifically ask for mailbox/immediate. That should automatically cover Android defaulting to FIFO.\n\nThat would be great!",
+      "parentUuid": "4f615236_1cddbc43",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f6a0d06a_ae512961",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
@@ -496,6 +514,24 @@
       "side": 1,
       "message": "As the bots show, Windows/Intel and Windows/AMD also seem to not return OUT_OF_DATE when the end2end test resizes the window.\n\nI understand vendors are not a fan of OUT_OF_DATE, but shouldn\u0027t they have returned SUBOPTIMAL? Or blitting to a resized window is not really considered \"suboptimal\" for them and they happily accept it?\n\nIf OUT_OF_DATE/SUBOPTIMAL is unreliable, what other option would I have than to check for window size on every swap?\n\nFYI, on glx, cgl and d3d, I see that they query the window size to know if they have to resize the swapchain.",
       "parentUuid": "e63e30d9_91b9f955",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3a46658_63e9e0e3",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-07T16:21:25Z",
+      "side": 1,
+      "message": "Good questions!  I didn\u0027t realize how far away from the original spec the different implementations had gone.  NVIDIA brought it up in San Diego (since they were still trying to do it, but getting push-back from other ISVs).  The group consensus was to allow implementations to not provide OUT_OF_DATE, and to create an extension so that apps can query whether they will get OUT_OF_DATE.\n\nI don\u0027t have a strong view of what ANGLE should do.  Given the other problems you\u0027ve seen, perhaps leaving your polling of width and height is best.  It\u0027s just once per frame.",
+      "parentUuid": "0e58ac29_7fcdbd6e",
       "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
