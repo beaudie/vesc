@@ -538,6 +538,24 @@
     },
     {
       "key": {
+        "uuid": "87bf5466_7ee03088",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-07T17:17:40Z",
+      "side": 1,
+      "message": "Polling once per present seems fine to me. This is what we do on D3D. I would probably suggest moving it into a helper function called \"checkForOutOfDateSwapChain\".",
+      "parentUuid": "e3a46658_63e9e0e3",
+      "revId": "1544490f18abc6967b990c0c6c45a0d56e32f7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6204a285_6e35e6ff",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
