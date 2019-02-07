@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c52c5e87_b295d45e",
+        "filename": "doc/DirtyBits.md",
+        "patchSetId": 12
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-07T22:00:43Z",
+      "side": 1,
+      "message": "loops",
+      "range": {
+        "startLine": 28,
+        "startChar": 13,
+        "endLine": 28,
+        "endChar": 18
+      },
+      "revId": "5da126685b4a89a08778561cf21af4f779bec9d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa8844da_73e74a93",
+        "filename": "doc/DirtyBits.md",
+        "patchSetId": 12
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-07T22:00:43Z",
+      "side": 1,
+      "message": "extra \"in\"",
+      "revId": "5da126685b4a89a08778561cf21af4f779bec9d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de19eeae_0e52822e",
+        "filename": "doc/DirtyBits.md",
+        "patchSetId": 12
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-07T22:00:43Z",
+      "side": 1,
+      "message": "a specific",
+      "range": {
+        "startLine": 38,
+        "startChar": 30,
+        "endLine": 38,
+        "endChar": 42
+      },
+      "revId": "5da126685b4a89a08778561cf21af4f779bec9d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d277b29_ef14bee3",
+        "filename": "doc/DirtyBits.md",
+        "patchSetId": 12
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-07T22:00:43Z",
+      "side": 1,
+      "message": "draw",
+      "range": {
+        "startLine": 47,
+        "startChar": 47,
+        "endLine": 47,
+        "endChar": 52
+      },
+      "revId": "5da126685b4a89a08778561cf21af4f779bec9d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6bded77_1c461b46",
+        "filename": "doc/DirtyBits.md",
+        "patchSetId": 12
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-07T22:00:43Z",
+      "side": 1,
+      "message": "cache",
+      "range": {
+        "startLine": 57,
+        "startChar": 26,
+        "endLine": 57,
+        "endChar": 32
+      },
+      "revId": "5da126685b4a89a08778561cf21af4f779bec9d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35fa1b67_39003292",
+        "filename": "doc/DirtyBits.md",
+        "patchSetId": 12
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-07T22:00:43Z",
+      "side": 1,
+      "message": ",",
+      "range": {
+        "startLine": 58,
+        "startChar": 48,
+        "endLine": 58,
+        "endChar": 60
+      },
+      "revId": "5da126685b4a89a08778561cf21af4f779bec9d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
