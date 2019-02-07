@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b8b47221_a727e9c1",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-07T14:27:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92bd6e96_4791f36c",
+      "range": {
+        "startLine": 63,
+        "startChar": 21,
+        "endLine": 63,
+        "endChar": 40
+      },
+      "revId": "eeb0f28c1f3631a2dfe99e1c326cfc2f911d69ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "165d9cee_a3400b6d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "cdeb54e2_aa5da468",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-07T14:27:37Z",
+      "side": 1,
+      "message": "I changed it to releaseAndDeleteImage to make it clear that it is not just calling release on the image but deleting the ImageHelper too.  What do you think?\n\nI\u0027m also flexible on the terminology for owned/non-owned but \u0027shared\u0027 doesn\u0027t really convey who owns it.",
+      "parentUuid": "5117b7b7_947763dc",
+      "range": {
+        "startLine": 563,
+        "startChar": 16,
+        "endLine": 563,
+        "endChar": 28
+      },
+      "revId": "eeb0f28c1f3631a2dfe99e1c326cfc2f911d69ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6f3ddb32_c50a4341",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
@@ -82,6 +130,30 @@
       "writtenOn": "2019-02-05T18:58:03Z",
       "side": 1,
       "message": "I think this should be an ASSERT that the image isn\u0027t shared. The front-end is responsible for calling TextureImpl::releaseTexImage before any redefinition of the texture images. See Texture::setImage for example in Texture.cpp (releaseTexImageInternal). So wouldn\u0027t the release already be done at this point?",
+      "range": {
+        "startLine": 613,
+        "startChar": 0,
+        "endLine": 615,
+        "endChar": 44
+      },
+      "revId": "eeb0f28c1f3631a2dfe99e1c326cfc2f911d69ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1ed7f95_97cdc6d2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-07T14:27:37Z",
+      "side": 1,
+      "message": "That assert would be fine for this patch but won\u0027t be enough for the EGL images which don\u0027t have an explicit call for breaking the connection.",
+      "parentUuid": "6f3ddb32_c50a4341",
       "range": {
         "startLine": 613,
         "startChar": 0,
@@ -117,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "67bfcb12_a537ccc1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-07T14:27:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25684e0e_da45b610",
+      "range": {
+        "startLine": 788,
+        "startChar": 0,
+        "endLine": 790,
+        "endChar": 35
+      },
+      "revId": "eeb0f28c1f3631a2dfe99e1c326cfc2f911d69ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2caa7ed9_4dc258e4",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
@@ -140,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "7e8a5bd2_556a2e2e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-07T14:27:37Z",
+      "side": 1,
+      "message": "The staging buffer should still be around after the releaseImage call.",
+      "parentUuid": "2caa7ed9_4dc258e4",
+      "range": {
+        "startLine": 798,
+        "startChar": 4,
+        "endLine": 798,
+        "endChar": 16
+      },
+      "revId": "eeb0f28c1f3631a2dfe99e1c326cfc2f911d69ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3155df9f_173af22c",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
@@ -151,6 +271,30 @@
       "writtenOn": "2019-02-05T18:58:03Z",
       "side": 1,
       "message": "aside: maybe at some point we could look at using a ref counted design.",
+      "range": {
+        "startLine": 1043,
+        "startChar": 0,
+        "endLine": 1050,
+        "endChar": 9
+      },
+      "revId": "eeb0f28c1f3631a2dfe99e1c326cfc2f911d69ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a79d2ab_17a194da",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1050,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-07T14:27:37Z",
+      "side": 1,
+      "message": "I agree, there is still a strict owner but I would like to come back to this after and refactor it to have a wrapper that tracks the ownership.",
+      "parentUuid": "3155df9f_173af22c",
       "range": {
         "startLine": 1043,
         "startChar": 0,
