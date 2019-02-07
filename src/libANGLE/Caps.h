@@ -21,6 +21,21 @@
 namespace gl
 {
 
+// Helper macros to define new extensions in the Extensions struct
+#define EXTENSION_VENDOR1(ext, ven1)             \
+    struct                                       \
+    {                                            \
+        bool ven1;                               \
+        inline bool any() const { return ven1; } \
+    } ext;
+#define EXTENSION_VENDOR2(ext, ven1, ven2)                 \
+    struct                                                 \
+    {                                                      \
+        bool ven1;                                         \
+        bool ven2;                                         \
+        inline bool any() const { return (ven1 || ven2); } \
+    } ext;
+
 struct Extensions;
 
 typedef std::set<GLuint> SupportedSampleSet;
@@ -283,11 +298,8 @@ struct Extensions
     // GL_ANGLE_framebuffer_multisample
     bool framebufferMultisample;
 
-    // GL_ANGLE_instanced_arrays
-    bool instancedArraysANGLE;
-
-    // GL_EXT_instanced_arrays
-    bool instancedArraysEXT;
+    // GL_ANGLE_instanced_arrays and GL_EXT_instanced_arrays
+    EXTENSION_VENDOR2(instancedArrays, angle, ext)
 
     // GL_ANGLE_pack_reverse_row_order
     bool packReverseRowOrder;
@@ -478,14 +490,42 @@ struct Extensions
     bool provokingVertex = false;
 };
 
+// Helper macros for constructing ExtensionRef objects
+#define EXTENSIONREF_OFFSET(member) (offsetof(gl::Extensions, member))
+#define EXTENSIONREF(member) gl::ExtensionRef(EXTENSIONREF_OFFSET(member))
+#define EXTENSIONREF_VAR(var, member) gl::ExtensionRef var(EXTENSIONREF_OFFSET(member))
+
+struct ExtensionRef
+{
+    ExtensionRef() : offset(sizeof(Extensions)) {}
+
+    ExtensionRef(size_t off)
+    {
+        ASSERT(off < sizeof(Extensions));
+        offset = off;
+    }
+
+    void set(Extensions &extensions, bool setVal) const
+    {
+        *(bool *)(&((char *)(&extensions))[offset]) = setVal;
+    }
+
+    bool get(const Extensions &extensions) const
+    {
+        return *(bool *)(&((char *)(&extensions))[offset]);
+    }
+
+  private:
+    size_t offset;
+};
+
 struct ExtensionInfo
 {
     // If this extension can be enabled with glRequestExtension (GL_ANGLE_request_extension)
     bool Requestable = false;
 
-    // Pointer to a boolean member of the Extensions struct
-    typedef bool(Extensions::*ExtensionBool);
-    ExtensionBool ExtensionsMember = nullptr;
+    // Reference to a boolean member of the Extensions struct
+    ExtensionRef ExtensionsMember;
 };
 
 using ExtensionInfoMap = std::map<std::string, ExtensionInfo>;

@@ -2840,7 +2840,7 @@ bool ValidateDrawArraysInstancedANGLE(Context *context,
                                       GLsizei count,
                                       GLsizei primcount)
 {
-    if (!context->getExtensions().instancedArraysANGLE)
+    if (!context->getExtensions().instancedArrays.angle)
     {
         context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
@@ -2860,7 +2860,7 @@ bool ValidateDrawArraysInstancedEXT(Context *context,
                                     GLsizei count,
                                     GLsizei primcount)
 {
-    if (!context->getExtensions().instancedArraysEXT)
+    if (!context->getExtensions().instancedArrays.ext)
     {
         context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
@@ -2933,7 +2933,7 @@ bool ValidateDrawElementsInstancedANGLE(Context *context,
                                         const void *indices,
                                         GLsizei primcount)
 {
-    if (!context->getExtensions().instancedArraysANGLE)
+    if (!context->getExtensions().instancedArrays.angle)
     {
         context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
@@ -2954,7 +2954,7 @@ bool ValidateDrawElementsInstancedEXT(Context *context,
                                       const void *indices,
                                       GLsizei primcount)
 {
-    if (!context->getExtensions().instancedArraysEXT)
+    if (!context->getExtensions().instancedArrays.ext)
     {
         context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
@@ -5262,8 +5262,7 @@ bool ValidateGetVertexAttribBase(Context *context,
                     GL_VERTEX_ATTRIB_ARRAY_DIVISOR == GL_VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE,
                     "ANGLE extension enums not equal to GL enums.");
                 if (context->getClientMajorVersion() < 3 &&
-                    !context->getExtensions().instancedArraysANGLE &&
-                    !context->getExtensions().instancedArraysEXT)
+                    !context->getExtensions().instancedArrays.any())
                 {
                     context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
                     return false;
