@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "aa6841e8_0ca10bea",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-07T14:38:44Z",
+      "side": 1,
+      "message": "SGTM on releaseAndDeleteImage. Maybe call it an \"image reference\" in the \"non owned\" scenario? Or \"image pointer\"?",
+      "parentUuid": "cdeb54e2_aa5da468",
+      "range": {
+        "startLine": 563,
+        "startChar": 16,
+        "endLine": 563,
+        "endChar": 28
+      },
+      "revId": "eeb0f28c1f3631a2dfe99e1c326cfc2f911d69ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6f3ddb32_c50a4341",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
@@ -154,6 +178,30 @@
       "side": 1,
       "message": "That assert would be fine for this patch but won\u0027t be enough for the EGL images which don\u0027t have an explicit call for breaking the connection.",
       "parentUuid": "6f3ddb32_c50a4341",
+      "range": {
+        "startLine": 613,
+        "startChar": 0,
+        "endLine": 615,
+        "endChar": 44
+      },
+      "revId": "eeb0f28c1f3631a2dfe99e1c326cfc2f911d69ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c7285dc_2227d51c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-07T14:38:44Z",
+      "side": 1,
+      "message": "I think you might be mistaken. Look in Texture.cpp. There\u0027s lots of calls to orphanImages.  See in Texture::setImage for instance. I think it\u0027s handled in the front end for EGL Images as well.",
+      "parentUuid": "c1ed7f95_97cdc6d2",
       "range": {
         "startLine": 613,
         "startChar": 0,
@@ -257,6 +305,30 @@
       "revId": "eeb0f28c1f3631a2dfe99e1c326cfc2f911d69ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95e15d86_6aff6623",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-07T14:38:44Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7e8a5bd2_556a2e2e",
+      "range": {
+        "startLine": 798,
+        "startChar": 4,
+        "endLine": 798,
+        "endChar": 16
+      },
+      "revId": "eeb0f28c1f3631a2dfe99e1c326cfc2f911d69ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
