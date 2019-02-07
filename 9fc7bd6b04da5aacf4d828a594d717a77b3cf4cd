@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5596aec7_b7556cda",
+        "filename": "src/tests/perf_tests/VulkanCommandBufferPerf.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-07T21:31:53Z",
+      "side": 1,
+      "message": "You can initialize these with the `#define` values above. It would be unnecessary to set the same value again below for each case.",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 21
+      },
+      "revId": "9fc7bd6b04da5aacf4d828a594d717a77b3cf4cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcee88cc_5499032a",
+        "filename": "src/tests/perf_tests/VulkanCommandBufferPerf.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-07T21:31:53Z",
+      "side": 1,
+      "message": "Try to remove VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT from this case, since it won\u0027t need it.",
+      "revId": "9fc7bd6b04da5aacf4d828a594d717a77b3cf4cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89b0ccce_0fd42b21",
+        "filename": "src/tests/perf_tests/VulkanCommandBufferPerf.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-07T21:31:53Z",
+      "side": 1,
+      "message": "How is this differentiated from the SecondaryCB benchmark?",
+      "revId": "9fc7bd6b04da5aacf4d828a594d717a77b3cf4cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fdc0028_f91a4f93",
+        "filename": "src/tests/test_utils/third_party/vulkan_command_buffer_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-07T21:31:53Z",
+      "side": 1,
+      "message": "Do the flags need to be persistent? Looks like you could have just sent the flags through the new `reset_command_*` functions.",
+      "revId": "9fc7bd6b04da5aacf4d828a594d717a77b3cf4cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
