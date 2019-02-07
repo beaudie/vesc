@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9464d1f_ea28cbe0",
+        "filename": "doc/DirtyBits.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-07T19:40:57Z",
+      "side": 1,
+      "message": "Can you please wrap at 100 chars?\n\n(If your editor doesn\u0027t have such a feature, vim to the rescue:\n\n:set textwidth\u003d100\nggVGgq\n)\n\nAlso, for the sake of readability, you can use this style:\n\nSee [here][1] for info. See [there][2] for stuff.\n\n[1] link-to-info\n[2] link-to-stuff",
+      "revId": "34ba2390fde9a2b318a3b60cfa29f293a0b009d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
