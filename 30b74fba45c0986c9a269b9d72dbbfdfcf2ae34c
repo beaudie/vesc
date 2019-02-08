@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0be34598_0137d998",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-08T15:36:40Z",
+      "side": 1,
+      "message": "Sorry to iterate on this more but we probably shouldn\u0027t make a new method.  Instead just override generateExtensions in the child classes, set some additional extensions and then call the parent class\u0027s generateExtensions to keep filling out the struct.",
+      "revId": "30b74fba45c0986c9a269b9d72dbbfdfcf2ae34c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1f80f14_6e299de2",
+        "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-08T15:36:40Z",
+      "side": 1,
+      "message": "Could you check for the fixed size extension here instead of just the platform?",
+      "revId": "30b74fba45c0986c9a269b9d72dbbfdfcf2ae34c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e1ee64d_e61d4c4c",
+        "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-08T15:36:40Z",
+      "side": 1,
+      "message": "Is the reset necessary?  I only see the window used with one surface.",
+      "range": {
+        "startLine": 84,
+        "startChar": 8,
+        "endLine": 84,
+        "endChar": 39
+      },
+      "revId": "30b74fba45c0986c9a269b9d72dbbfdfcf2ae34c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1895c70_add5284a",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-08T15:36:40Z",
+      "side": 1,
+      "message": "Same extension check.",
+      "range": {
+        "startLine": 142,
+        "startChar": 12,
+        "endLine": 142,
+        "endChar": 30
+      },
+      "revId": "30b74fba45c0986c9a269b9d72dbbfdfcf2ae34c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "274b3abe_4a28b468",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-08T15:36:40Z",
+      "side": 1,
+      "message": "Same question.",
+      "range": {
+        "startLine": 156,
+        "startChar": 8,
+        "endLine": 156,
+        "endChar": 39
+      },
+      "revId": "30b74fba45c0986c9a269b9d72dbbfdfcf2ae34c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec1cf5bb_4ca61741",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-08T15:36:40Z",
+      "side": 1,
+      "message": "Small request: add a mUseFixedWindow optional parameter to EGLWindow and initialize it to true when on Fuchia so other platforms can use it too.",
+      "range": {
+        "startLine": 307,
+        "startChar": 0,
+        "endLine": 319,
+        "endChar": 5
+      },
+      "revId": "30b74fba45c0986c9a269b9d72dbbfdfcf2ae34c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
