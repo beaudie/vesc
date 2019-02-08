@@ -91,8 +91,8 @@ def gen_libegl_loader():
     all_cmds = xml.all_cmd_names.get_all_commands()
 
     path = os.path.join("..", "src", "libEGL")
-    write_header(data_source_name, all_cmds, "egl", libegl_preamble, path, "LIBEGL", "", "EGL_")
-    write_source(data_source_name, all_cmds, "egl", path, "", "EGL_")
+    write_header(data_source_name, all_cmds, "egl", libegl_preamble, path, "LIBEGL", "_")
+    write_source(data_source_name, all_cmds, "egl", path, "_")
 
 def gen_gl_loader():
 

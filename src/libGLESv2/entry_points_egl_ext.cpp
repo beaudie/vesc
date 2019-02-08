@@ -6,7 +6,8 @@
 
 // entry_points_ext.cpp : Implements the EGL extension entry points.
 
-#include "libGLESv2/entry_points_egl_ext.h"
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
 
 #include "common/debug.h"
 #include "libANGLE/Context.h"
@@ -24,10 +25,10 @@ using namespace egl;
 extern "C" {
 
 // EGL_ANGLE_query_surface_pointer
-EGLBoolean EGLAPIENTRY EGL_QuerySurfacePointerANGLE(EGLDisplay dpy,
-                                                    EGLSurface surface,
-                                                    EGLint attribute,
-                                                    void **value)
+EGLBoolean EGLAPIENTRY eglQuerySurfacePointerANGLE(EGLDisplay dpy,
+                                                   EGLSurface surface,
+                                                   EGLint attribute,
+                                                   void **value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSurface surface = 0x%016" PRIxPTR
@@ -98,12 +99,12 @@ EGLBoolean EGLAPIENTRY EGL_QuerySurfacePointerANGLE(EGLDisplay dpy,
 }
 
 // EGL_NV_post_sub_buffer
-EGLBoolean EGLAPIENTRY EGL_PostSubBufferNV(EGLDisplay dpy,
-                                           EGLSurface surface,
-                                           EGLint x,
-                                           EGLint y,
-                                           EGLint width,
-                                           EGLint height)
+EGLBoolean EGLAPIENTRY eglPostSubBufferNV(EGLDisplay dpy,
+                                          EGLSurface surface,
+                                          EGLint x,
+                                          EGLint y,
+                                          EGLint width,
+                                          EGLint height)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSurface surface = 0x%016" PRIxPTR
@@ -164,9 +165,9 @@ EGLBoolean EGLAPIENTRY EGL_PostSubBufferNV(EGLDisplay dpy,
 }
 
 // EGL_EXT_platform_base
-EGLDisplay EGLAPIENTRY EGL_GetPlatformDisplayEXT(EGLenum platform,
-                                                 void *native_display,
-                                                 const EGLint *attrib_list)
+EGLDisplay EGLAPIENTRY eglGetPlatformDisplayEXT(EGLenum platform,
+                                                void *native_display,
+                                                const EGLint *attrib_list)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLenum platform = %d, void* native_display = 0x%016" PRIxPTR
@@ -200,10 +201,10 @@ EGLDisplay EGLAPIENTRY EGL_GetPlatformDisplayEXT(EGLenum platform,
     }
 }
 
-EGLSurface EGLAPIENTRY EGL_CreatePlatformWindowSurfaceEXT(EGLDisplay dpy,
-                                                          EGLConfig config,
-                                                          void *native_window,
-                                                          const EGLint *attrib_list)
+EGLSurface EGLAPIENTRY eglCreatePlatformWindowSurfaceEXT(EGLDisplay dpy,
+                                                         EGLConfig config,
+                                                         void *native_window,
+                                                         const EGLint *attrib_list)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLConfig config = 0x%016" PRIxPTR
@@ -227,10 +228,10 @@ EGLSurface EGLAPIENTRY EGL_CreatePlatformWindowSurfaceEXT(EGLDisplay dpy,
     return EGL_NO_SURFACE;
 }
 
-EGLSurface EGLAPIENTRY EGL_CreatePlatformPixmapSurfaceEXT(EGLDisplay dpy,
-                                                          EGLConfig config,
-                                                          void *native_pixmap,
-                                                          const EGLint *attrib_list)
+EGLSurface EGLAPIENTRY eglCreatePlatformPixmapSurfaceEXT(EGLDisplay dpy,
+                                                         EGLConfig config,
+                                                         void *native_pixmap,
+                                                         const EGLint *attrib_list)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLConfig config = 0x%016" PRIxPTR
@@ -255,9 +256,9 @@ EGLSurface EGLAPIENTRY EGL_CreatePlatformPixmapSurfaceEXT(EGLDisplay dpy,
 }
 
 // EGL_EXT_device_query
-EGLBoolean EGLAPIENTRY EGL_QueryDeviceAttribEXT(EGLDeviceEXT device,
-                                                EGLint attribute,
-                                                EGLAttrib *value)
+EGLBoolean EGLAPIENTRY eglQueryDeviceAttribEXT(EGLDeviceEXT device,
+                                               EGLint attribute,
+                                               EGLAttrib *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDeviceEXT device = 0x%016" PRIxPTR
@@ -316,7 +317,7 @@ EGLBoolean EGLAPIENTRY EGL_QueryDeviceAttribEXT(EGLDeviceEXT device,
 }
 
 // EGL_EXT_device_query
-const char *EGLAPIENTRY EGL_QueryDeviceStringEXT(EGLDeviceEXT device, EGLint name)
+const char *EGLAPIENTRY eglQueryDeviceStringEXT(EGLDeviceEXT device, EGLint name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDeviceEXT device = 0x%016" PRIxPTR ", EGLint name = %d)", (uintptr_t)device, name);
@@ -348,7 +349,7 @@ const char *EGLAPIENTRY EGL_QueryDeviceStringEXT(EGLDeviceEXT device, EGLint nam
 }
 
 // EGL_EXT_device_query
-EGLBoolean EGLAPIENTRY EGL_QueryDisplayAttribEXT(EGLDisplay dpy, EGLint attribute, EGLAttrib *value)
+EGLBoolean EGLAPIENTRY eglQueryDisplayAttribEXT(EGLDisplay dpy, EGLint attribute, EGLAttrib *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR
@@ -389,11 +390,11 @@ EGLBoolean EGLAPIENTRY EGL_QueryDisplayAttribEXT(EGLDisplay dpy, EGLint attribut
     return EGL_TRUE;
 }
 
-ANGLE_EXPORT EGLImageKHR EGLAPIENTRY EGL_CreateImageKHR(EGLDisplay dpy,
-                                                        EGLContext ctx,
-                                                        EGLenum target,
-                                                        EGLClientBuffer buffer,
-                                                        const EGLint *attrib_list)
+EGLImageKHR EGLAPIENTRY eglCreateImageKHR(EGLDisplay dpy,
+                                          EGLContext ctx,
+                                          EGLenum target,
+                                          EGLClientBuffer buffer,
+                                          const EGLint *attrib_list)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLContext ctx = 0x%016" PRIxPTR
@@ -426,7 +427,7 @@ ANGLE_EXPORT EGLImageKHR EGLAPIENTRY EGL_CreateImageKHR(EGLDisplay dpy,
     return static_cast<EGLImage>(image);
 }
 
-ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_DestroyImageKHR(EGLDisplay dpy, EGLImageKHR image)
+EGLBoolean EGLAPIENTRY eglDestroyImageKHR(EGLDisplay dpy, EGLImageKHR image)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLImage image = 0x%016" PRIxPTR ")",
@@ -449,9 +450,9 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_DestroyImageKHR(EGLDisplay dpy, EGLImage
     return EGL_TRUE;
 }
 
-ANGLE_EXPORT EGLDeviceEXT EGLAPIENTRY EGL_CreateDeviceANGLE(EGLint device_type,
-                                                            void *native_device,
-                                                            const EGLAttrib *attrib_list)
+EGLDeviceEXT EGLAPIENTRY eglCreateDeviceANGLE(EGLint device_type,
+                                              void *native_device,
+                                              const EGLAttrib *attrib_list)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLint device_type = %d, void* native_device = 0x%016" PRIxPTR
@@ -480,7 +481,7 @@ ANGLE_EXPORT EGLDeviceEXT EGLAPIENTRY EGL_CreateDeviceANGLE(EGLint device_type,
     return device;
 }
 
-ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_ReleaseDeviceANGLE(EGLDeviceEXT device)
+EGLBoolean EGLAPIENTRY eglReleaseDeviceANGLE(EGLDeviceEXT device)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDeviceEXT device = 0x%016" PRIxPTR ")", (uintptr_t)device);
@@ -502,7 +503,7 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_ReleaseDeviceANGLE(EGLDeviceEXT device)
 }
 
 // EGL_KHR_stream
-EGLStreamKHR EGLAPIENTRY EGL_CreateStreamKHR(EGLDisplay dpy, const EGLint *attrib_list)
+EGLStreamKHR EGLAPIENTRY eglCreateStreamKHR(EGLDisplay dpy, const EGLint *attrib_list)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", const EGLAttrib* attrib_list = 0x%016" PRIxPTR ")",
@@ -531,7 +532,7 @@ EGLStreamKHR EGLAPIENTRY EGL_CreateStreamKHR(EGLDisplay dpy, const EGLint *attri
     return static_cast<EGLStreamKHR>(stream);
 }
 
-EGLBoolean EGLAPIENTRY EGL_DestroyStreamKHR(EGLDisplay dpy, EGLStreamKHR stream)
+EGLBoolean EGLAPIENTRY eglDestroyStreamKHR(EGLDisplay dpy, EGLStreamKHR stream)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLStreamKHR = 0x%016" PRIxPTR ")", (uintptr_t)dpy,
@@ -555,10 +556,10 @@ EGLBoolean EGLAPIENTRY EGL_DestroyStreamKHR(EGLDisplay dpy, EGLStreamKHR stream)
     return EGL_TRUE;
 }
 
-EGLBoolean EGLAPIENTRY EGL_StreamAttribKHR(EGLDisplay dpy,
-                                           EGLStreamKHR stream,
-                                           EGLenum attribute,
-                                           EGLint value)
+EGLBoolean EGLAPIENTRY eglStreamAttribKHR(EGLDisplay dpy,
+                                          EGLStreamKHR stream,
+                                          EGLenum attribute,
+                                          EGLint value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLStreamKHR stream = 0x%016" PRIxPTR
@@ -594,10 +595,10 @@ EGLBoolean EGLAPIENTRY EGL_StreamAttribKHR(EGLDisplay dpy,
     return EGL_TRUE;
 }
 
-EGLBoolean EGLAPIENTRY EGL_QueryStreamKHR(EGLDisplay dpy,
-                                          EGLStreamKHR stream,
-                                          EGLenum attribute,
-                                          EGLint *value)
+EGLBoolean EGLAPIENTRY eglQueryStreamKHR(EGLDisplay dpy,
+                                         EGLStreamKHR stream,
+                                         EGLenum attribute,
+                                         EGLint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLStreamKHR stream = 0x%016" PRIxPTR
@@ -636,10 +637,10 @@ EGLBoolean EGLAPIENTRY EGL_QueryStreamKHR(EGLDisplay dpy,
     return EGL_TRUE;
 }
 
-EGLBoolean EGLAPIENTRY EGL_QueryStreamu64KHR(EGLDisplay dpy,
-                                             EGLStreamKHR stream,
-                                             EGLenum attribute,
-                                             EGLuint64KHR *value)
+EGLBoolean EGLAPIENTRY eglQueryStreamu64KHR(EGLDisplay dpy,
+                                            EGLStreamKHR stream,
+                                            EGLenum attribute,
+                                            EGLuint64KHR *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLStreamKHR stream = 0x%016" PRIxPTR
@@ -675,7 +676,7 @@ EGLBoolean EGLAPIENTRY EGL_QueryStreamu64KHR(EGLDisplay dpy,
     return EGL_TRUE;
 }
 
-EGLBoolean EGLAPIENTRY EGL_StreamConsumerGLTextureExternalKHR(EGLDisplay dpy, EGLStreamKHR stream)
+EGLBoolean EGLAPIENTRY eglStreamConsumerGLTextureExternalKHR(EGLDisplay dpy, EGLStreamKHR stream)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLStreamKHR = 0x%016" PRIxPTR ")", (uintptr_t)dpy,
@@ -706,7 +707,7 @@ EGLBoolean EGLAPIENTRY EGL_StreamConsumerGLTextureExternalKHR(EGLDisplay dpy, EG
     return EGL_TRUE;
 }
 
-EGLBoolean EGLAPIENTRY EGL_StreamConsumerAcquireKHR(EGLDisplay dpy, EGLStreamKHR stream)
+EGLBoolean EGLAPIENTRY eglStreamConsumerAcquireKHR(EGLDisplay dpy, EGLStreamKHR stream)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLStreamKHR = 0x%016" PRIxPTR ")", (uintptr_t)dpy,
@@ -737,7 +738,7 @@ EGLBoolean EGLAPIENTRY EGL_StreamConsumerAcquireKHR(EGLDisplay dpy, EGLStreamKHR
     return EGL_TRUE;
 }
 
-EGLBoolean EGLAPIENTRY EGL_StreamConsumerReleaseKHR(EGLDisplay dpy, EGLStreamKHR stream)
+EGLBoolean EGLAPIENTRY eglStreamConsumerReleaseKHR(EGLDisplay dpy, EGLStreamKHR stream)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLStreamKHR = 0x%016" PRIxPTR ")", (uintptr_t)dpy,
@@ -768,9 +769,9 @@ EGLBoolean EGLAPIENTRY EGL_StreamConsumerReleaseKHR(EGLDisplay dpy, EGLStreamKHR
     return EGL_TRUE;
 }
 
-EGLBoolean EGLAPIENTRY EGL_StreamConsumerGLTextureExternalAttribsNV(EGLDisplay dpy,
-                                                                    EGLStreamKHR stream,
-                                                                    const EGLAttrib *attrib_list)
+EGLBoolean EGLAPIENTRY eglStreamConsumerGLTextureExternalAttribsNV(EGLDisplay dpy,
+                                                                   EGLStreamKHR stream,
+                                                                   const EGLAttrib *attrib_list)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLStreamKHR stream = 0x%016" PRIxPTR
@@ -804,9 +805,9 @@ EGLBoolean EGLAPIENTRY EGL_StreamConsumerGLTextureExternalAttribsNV(EGLDisplay d
     return EGL_TRUE;
 }
 
-EGLBoolean EGLAPIENTRY EGL_CreateStreamProducerD3DTextureANGLE(EGLDisplay dpy,
-                                                               EGLStreamKHR stream,
-                                                               const EGLAttrib *attrib_list)
+EGLBoolean EGLAPIENTRY eglCreateStreamProducerD3DTextureANGLE(EGLDisplay dpy,
+                                                              EGLStreamKHR stream,
+                                                              const EGLAttrib *attrib_list)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLStreamKHR stream = 0x%016" PRIxPTR
@@ -838,10 +839,10 @@ EGLBoolean EGLAPIENTRY EGL_CreateStreamProducerD3DTextureANGLE(EGLDisplay dpy,
     return EGL_TRUE;
 }
 
-EGLBoolean EGLAPIENTRY EGL_StreamPostD3DTextureANGLE(EGLDisplay dpy,
-                                                     EGLStreamKHR stream,
-                                                     void *texture,
-                                                     const EGLAttrib *attrib_list)
+EGLBoolean EGLAPIENTRY eglStreamPostD3DTextureANGLE(EGLDisplay dpy,
+                                                    EGLStreamKHR stream,
+                                                    void *texture,
+                                                    const EGLAttrib *attrib_list)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLStreamKHR stream = 0x%016" PRIxPTR
@@ -876,9 +877,7 @@ EGLBoolean EGLAPIENTRY EGL_StreamPostD3DTextureANGLE(EGLDisplay dpy,
 }
 
 // EGL_KHR_fence_sync
-ANGLE_EXPORT EGLSync EGLAPIENTRY EGL_CreateSyncKHR(EGLDisplay dpy,
-                                                   EGLenum type,
-                                                   const EGLint *attrib_list)
+EGLSync EGLAPIENTRY eglCreateSyncKHR(EGLDisplay dpy, EGLenum type, const EGLint *attrib_list)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR
@@ -904,7 +903,7 @@ ANGLE_EXPORT EGLSync EGLAPIENTRY EGL_CreateSyncKHR(EGLDisplay dpy,
     return static_cast<EGLSync>(syncObject);
 }
 
-ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_DestroySyncKHR(EGLDisplay dpy, EGLSync sync)
+EGLBoolean EGLAPIENTRY eglDestroySyncKHR(EGLDisplay dpy, EGLSync sync)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSync sync = 0x%016" PRIxPTR ")", (uintptr_t)dpy,
@@ -923,10 +922,7 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_DestroySyncKHR(EGLDisplay dpy, EGLSync s
     return EGL_TRUE;
 }
 
-ANGLE_EXPORT EGLint EGLAPIENTRY EGL_ClientWaitSyncKHR(EGLDisplay dpy,
-                                                      EGLSync sync,
-                                                      EGLint flags,
-                                                      EGLTime timeout)
+EGLint EGLAPIENTRY eglClientWaitSyncKHR(EGLDisplay dpy, EGLSync sync, EGLint flags, EGLTime timeout)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSync sync = 0x%016" PRIxPTR
@@ -949,10 +945,10 @@ ANGLE_EXPORT EGLint EGLAPIENTRY EGL_ClientWaitSyncKHR(EGLDisplay dpy,
     return syncStatus;
 }
 
-ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_GetSyncAttribKHR(EGLDisplay dpy,
-                                                         EGLSync sync,
-                                                         EGLint attribute,
-                                                         EGLint *value)
+EGLBoolean EGLAPIENTRY eglGetSyncAttribKHR(EGLDisplay dpy,
+                                           EGLSync sync,
+                                           EGLint attribute,
+                                           EGLint *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSync sync = 0x%016" PRIxPTR
@@ -975,7 +971,7 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_GetSyncAttribKHR(EGLDisplay dpy,
 }
 
 // EGL_KHR_wait_sync
-ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_WaitSyncKHR(EGLDisplay dpy, EGLSync sync, EGLint flags)
+EGLint EGLAPIENTRY eglWaitSyncKHR(EGLDisplay dpy, EGLSync sync, EGLint flags)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy =0x%016" PRIxPTR "p, EGLSync sync = 0x%016" PRIxPTR
@@ -997,11 +993,11 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_WaitSyncKHR(EGLDisplay dpy, EGLSync sync
     return EGL_TRUE;
 }
 
-EGLBoolean EGLAPIENTRY EGL_GetSyncValuesCHROMIUM(EGLDisplay dpy,
-                                                 EGLSurface surface,
-                                                 EGLuint64KHR *ust,
-                                                 EGLuint64KHR *msc,
-                                                 EGLuint64KHR *sbc)
+EGLBoolean EGLAPIENTRY eglGetSyncValuesCHROMIUM(EGLDisplay dpy,
+                                                EGLSurface surface,
+                                                EGLuint64KHR *ust,
+                                                EGLuint64KHR *msc,
+                                                EGLuint64KHR *sbc)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSurface surface = 0x%016" PRIxPTR
@@ -1034,10 +1030,10 @@ EGLBoolean EGLAPIENTRY EGL_GetSyncValuesCHROMIUM(EGLDisplay dpy,
     return EGL_TRUE;
 }
 
-EGLBoolean EGLAPIENTRY EGL_SwapBuffersWithDamageKHR(EGLDisplay dpy,
-                                                    EGLSurface surface,
-                                                    EGLint *rects,
-                                                    EGLint n_rects)
+EGLBoolean EGLAPIENTRY eglSwapBuffersWithDamageKHR(EGLDisplay dpy,
+                                                   EGLSurface surface,
+                                                   EGLint *rects,
+                                                   EGLint n_rects)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSurface surface = 0x%016" PRIxPTR
@@ -1070,9 +1066,9 @@ EGLBoolean EGLAPIENTRY EGL_SwapBuffersWithDamageKHR(EGLDisplay dpy,
     return EGL_TRUE;
 }
 
-EGLBoolean EGLAPIENTRY EGL_PresentationTimeANDROID(EGLDisplay dpy,
-                                                   EGLSurface surface,
-                                                   EGLnsecsANDROID time)
+EGLBoolean EGLAPIENTRY eglPresentationTimeANDROID(EGLDisplay dpy,
+                                                  EGLSurface surface,
+                                                  EGLnsecsANDROID time)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSurface surface = 0x%016" PRIxPTR
@@ -1093,9 +1089,9 @@ EGLBoolean EGLAPIENTRY EGL_PresentationTimeANDROID(EGLDisplay dpy,
     return EGL_TRUE;
 }
 
-ANGLE_EXPORT void EGLAPIENTRY EGL_SetBlobCacheFuncsANDROID(EGLDisplay dpy,
-                                                           EGLSetBlobFuncANDROID set,
-                                                           EGLGetBlobFuncANDROID get)
+void EGLAPIENTRY eglSetBlobCacheFuncsANDROID(EGLDisplay dpy,
+                                             EGLSetBlobFuncANDROID set,
+                                             EGLGetBlobFuncANDROID get)
 {
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSetBlobFuncANDROID set = 0x%016" PRIxPTR
           ", EGLGetBlobFuncANDROID get "
@@ -1112,7 +1108,7 @@ ANGLE_EXPORT void EGLAPIENTRY EGL_SetBlobCacheFuncsANDROID(EGLDisplay dpy,
     display->setBlobCacheFuncs(set, get);
 }
 
-EGLint EGLAPIENTRY EGL_ProgramCacheGetAttribANGLE(EGLDisplay dpy, EGLenum attrib)
+EGLint EGLAPIENTRY eglProgramCacheGetAttribANGLE(EGLDisplay dpy, EGLenum attrib)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLenum attrib = 0x%X)", (uintptr_t)dpy, attrib);
@@ -1127,12 +1123,12 @@ EGLint EGLAPIENTRY EGL_ProgramCacheGetAttribANGLE(EGLDisplay dpy, EGLenum attrib
     return display->programCacheGetAttrib(attrib);
 }
 
-void EGLAPIENTRY EGL_ProgramCacheQueryANGLE(EGLDisplay dpy,
-                                            EGLint index,
-                                            void *key,
-                                            EGLint *keysize,
-                                            void *binary,
-                                            EGLint *binarysize)
+void EGLAPIENTRY eglProgramCacheQueryANGLE(EGLDisplay dpy,
+                                           EGLint index,
+                                           void *key,
+                                           EGLint *keysize,
+                                           void *binary,
+                                           EGLint *binarysize)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLint index = %d, void *key = 0x%016" PRIxPTR
@@ -1154,11 +1150,11 @@ void EGLAPIENTRY EGL_ProgramCacheQueryANGLE(EGLDisplay dpy,
     thread->setSuccess();
 }
 
-void EGLAPIENTRY EGL_ProgramCachePopulateANGLE(EGLDisplay dpy,
-                                               const void *key,
-                                               EGLint keysize,
-                                               const void *binary,
-                                               EGLint binarysize)
+void EGLAPIENTRY eglProgramCachePopulateANGLE(EGLDisplay dpy,
+                                              const void *key,
+                                              EGLint keysize,
+                                              const void *binary,
+                                              EGLint binarysize)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", void *key = 0x%016" PRIxPTR
@@ -1179,7 +1175,7 @@ void EGLAPIENTRY EGL_ProgramCachePopulateANGLE(EGLDisplay dpy,
     thread->setSuccess();
 }
 
-EGLint EGLAPIENTRY EGL_ProgramCacheResizeANGLE(EGLDisplay dpy, EGLint limit, EGLenum mode)
+EGLint EGLAPIENTRY eglProgramCacheResizeANGLE(EGLDisplay dpy, EGLint limit, EGLenum mode)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLint limit = %d, EGLenum mode = 0x%X)",
@@ -1195,8 +1191,7 @@ EGLint EGLAPIENTRY EGL_ProgramCacheResizeANGLE(EGLDisplay dpy, EGLint limit, EGL
     return display->programCacheResize(limit, mode);
 }
 
-EGLint EGLAPIENTRY EGL_DebugMessageControlKHR(EGLDEBUGPROCKHR callback,
-                                              const EGLAttrib *attrib_list)
+EGLint EGLAPIENTRY eglDebugMessageControlKHR(EGLDEBUGPROCKHR callback, const EGLAttrib *attrib_list)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDEBUGPROCKHR callback = 0x%016" PRIxPTR ", EGLAttrib attrib_list = 0x%016" PRIxPTR
@@ -1221,7 +1216,7 @@ EGLint EGLAPIENTRY EGL_DebugMessageControlKHR(EGLDEBUGPROCKHR callback,
     return EGL_SUCCESS;
 }
 
-EGLBoolean EGLAPIENTRY EGL_QueryDebugKHR(EGLint attribute, EGLAttrib *value)
+EGLBoolean EGLAPIENTRY eglQueryDebugKHR(EGLint attribute, EGLAttrib *value)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLint attribute = 0x%X, EGLAttrib* value = 0x%016" PRIxPTR ")", attribute,
@@ -1258,10 +1253,10 @@ EGLBoolean EGLAPIENTRY EGL_QueryDebugKHR(EGLint attribute, EGLAttrib *value)
     return EGL_TRUE;
 }
 
-EGLint EGLAPIENTRY EGL_LabelObjectKHR(EGLDisplay dpy,
-                                      EGLenum objectType,
-                                      EGLObjectKHR object,
-                                      EGLLabelKHR label)
+EGLint EGLAPIENTRY eglLabelObjectKHR(EGLDisplay dpy,
+                                     EGLenum objectType,
+                                     EGLObjectKHR object,
+                                     EGLLabelKHR label)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR
@@ -1291,9 +1286,9 @@ EGLint EGLAPIENTRY EGL_LabelObjectKHR(EGLDisplay dpy,
     return EGL_SUCCESS;
 }
 
-ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_GetCompositorTimingSupportedANDROID(EGLDisplay dpy,
-                                                                            EGLSurface surface,
-                                                                            EGLint name)
+EGLBoolean EGLAPIENTRY eglGetCompositorTimingSupportedANDROID(EGLDisplay dpy,
+                                                              EGLSurface surface,
+                                                              EGLint name)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSurface surface = 0x%016" PRIxPTR
@@ -1312,11 +1307,11 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_GetCompositorTimingSupportedANDROID(EGLD
     return eglSurface->getSupportedCompositorTimings().test(nameInternal);
 }
 
-ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_GetCompositorTimingANDROID(EGLDisplay dpy,
-                                                                   EGLSurface surface,
-                                                                   EGLint numTimestamps,
-                                                                   const EGLint *names,
-                                                                   EGLnsecsANDROID *values)
+EGLBoolean EGLAPIENTRY eglGetCompositorTimingANDROID(EGLDisplay dpy,
+                                                     EGLSurface surface,
+                                                     EGLint numTimestamps,
+                                                     const EGLint *names,
+                                                     EGLnsecsANDROID *values)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSurface surface = 0x%016" PRIxPTR
@@ -1339,9 +1334,9 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_GetCompositorTimingANDROID(EGLDisplay dp
     return EGL_TRUE;
 }
 
-ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_GetNextFrameIdANDROID(EGLDisplay dpy,
-                                                              EGLSurface surface,
-                                                              EGLuint64KHR *frameId)
+EGLBoolean EGLAPIENTRY eglGetNextFrameIdANDROID(EGLDisplay dpy,
+                                                EGLSurface surface,
+                                                EGLuint64KHR *frameId)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSurface surface = 0x%016" PRIxPTR
@@ -1361,9 +1356,9 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_GetNextFrameIdANDROID(EGLDisplay dpy,
     return EGL_TRUE;
 }
 
-ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_GetFrameTimestampSupportedANDROID(EGLDisplay dpy,
-                                                                          EGLSurface surface,
-                                                                          EGLint timestamp)
+EGLBoolean EGLAPIENTRY eglGetFrameTimestampSupportedANDROID(EGLDisplay dpy,
+                                                            EGLSurface surface,
+                                                            EGLint timestamp)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSurface surface = 0x%016" PRIxPTR
@@ -1382,12 +1377,12 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_GetFrameTimestampSupportedANDROID(EGLDis
     return eglSurface->getSupportedTimestamps().test(timestampInternal);
 }
 
-ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_GetFrameTimestampsANDROID(EGLDisplay dpy,
-                                                                  EGLSurface surface,
-                                                                  EGLuint64KHR frameId,
-                                                                  EGLint numTimestamps,
-                                                                  const EGLint *timestamps,
-                                                                  EGLnsecsANDROID *values)
+EGLBoolean EGLAPIENTRY eglGetFrameTimestampsANDROID(EGLDisplay dpy,
+                                                    EGLSurface surface,
+                                                    EGLuint64KHR frameId,
+                                                    EGLint numTimestamps,
+                                                    const EGLint *timestamps,
+                                                    EGLnsecsANDROID *values)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLSurface surface = 0x%016" PRIxPTR

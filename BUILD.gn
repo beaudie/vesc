@@ -682,6 +682,7 @@ angle_shared_library("libGLESv2${angle_libs_suffix}") {
   }
 
   configs += [
+    ":angle_egl_visibility_config",
     ":angle_gl_visibility_config",
     ":debug_annotations_config",
     ":gl_prototypes",
@@ -708,6 +709,10 @@ angle_static_library("libGLESv2_static") {
   ]
   public_deps = [
     ":libANGLE",
+  ]
+  defines = [
+    "EGL_EGL_PROTOTYPES=1",
+    "EGL_EGLEXT_PROTOTYPES",
   ]
 }
 
@@ -758,20 +763,24 @@ angle_source_set("libEGL_egl_loader") {
   ]
 }
 
+config("angle_egl_visibility_config") {
+  if (is_win) {
+    defines = [ "EGLAPI=" ]
+  } else {
+    defines = [ "EGLAPI=__attribute__((visibility(\"default\")))" ]
+  }
+}
+
 angle_shared_library("libEGL${angle_libs_suffix}") {
   sources = libegl_sources
 
   configs += [
+    ":angle_egl_visibility_config",
     ":debug_annotations_config",
     ":library_name_config",
   ]
 
   defines = [ "LIBEGL_IMPLEMENTATION" ]
-  if (is_win) {
-    defines += [ "EGLAPI=" ]
-  } else {
-    defines += [ "EGLAPI=__attribute__((visibility(\"default\")))" ]
-  }
 
   if (is_win) {
     sources += [ "src/libEGL/libEGL.def" ]
@@ -792,16 +801,8 @@ angle_shared_library("libEGL${angle_libs_suffix}") {
   ]
 }
 
-angle_static_library("libEGL_static") {
-  sources = libegl_sources
-
-  configs += [
-    ":debug_annotations_config",
-    ":library_name_config",
-  ]
-
-  public_configs += [ ":angle_static" ]
-
+group("libEGL_static") {
+  public_configs = [ ":angle_static" ]
   deps = [
     ":includes",
     ":libGLESv2_static",
