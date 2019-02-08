@@ -574,7 +574,11 @@ void CommandGraph::setNewBarrier(CommandGraphNode *newBarrier)
 angle::Result CommandGraph::submitCommands(Context *context,
                                            Serial serial,
                                            RenderPassCache *renderPassCache,
+#if COMMAND_POOL_POOL
+                                           VkCommandPool commandPool,
+#else
                                            CommandPool *commandPool,
+#endif
                                            CommandBuffer *primaryCommandBufferOut)
 {
     // There is no point in submitting an empty command buffer, so make sure not to call this
@@ -594,7 +598,11 @@ angle::Result CommandGraph::submitCommands(Context *context,
 
     VkCommandBufferAllocateInfo primaryInfo = {};
     primaryInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+#if COMMAND_POOL_POOL
+    primaryInfo.commandPool = commandPool;
+#else
     primaryInfo.commandPool                 = commandPool->getHandle();
+#endif
     primaryInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     primaryInfo.commandBufferCount          = 1;
 

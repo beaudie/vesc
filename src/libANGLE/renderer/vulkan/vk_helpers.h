@@ -208,6 +208,60 @@ class DynamicallyGrowingPool : angle::NonCopyable
     uint32_t mCurrentFreeEntry;
 };
 
+// DynamicCommandPoolPool allocates CommandPools out of CommandPoolPool as needed.  If all
+// CommandPools are in use, another is created.  The command pools live permanently, but reset as
+// commands complete.
+
+// These are arbitrary default sizes for semaphore pools.
+constexpr uint32_t kDefaultCommandPoolPoolSize = 3;
+
+class CommandPoolHelper;
+
+class DynamicCommandPoolPool final : public DynamicallyGrowingPool<CommandPool>
+{
+  public:
+    DynamicCommandPoolPool();
+    ~DynamicCommandPoolPool() override;
+
+    angle::Result init(Context *context, uint32_t currentQueueFamilyIndex, uint32_t poolSize);
+    void destroy(VkDevice device);
+
+    bool isValid() { return mPoolSize > 0; }
+
+    angle::Result allocateCommandPool(Context *context, CommandPoolHelper *commandPoolOut);
+    void freeCommandPool(Context *context, CommandPoolHelper *commandPool);
+
+  private:
+    angle::Result allocateNewCommandPool(Context *context);
+
+    // Information required to create new command pool
+    uint32_t mCurrentQueueFamilyIndex;
+};
+
+// Command Pools that are allocated from the command pool pool are encapsulated in a helper object,
+// keeping track of where in the pool they are allocated from.
+class CommandPoolHelper final : angle::NonCopyable
+{
+  public:
+    CommandPoolHelper();
+    ~CommandPoolHelper();
+
+    CommandPoolHelper(CommandPoolHelper &&other);
+    CommandPoolHelper &operator=(CommandPoolHelper &&other);
+
+    void init(const size_t commandPoolIndex, const CommandPool *commandPool);
+    void deinit();
+
+    const CommandPool *getCommandPool() const { return mCommandPool; }
+
+    // Used only by DynamicCommandPoolPool.
+    size_t getCommandPoolPoolIndex() const { return mCommandPoolPoolIndex; }
+
+  private:
+    size_t mCommandPoolPoolIndex;
+    const CommandPool *mCommandPool;
+};
+
 // DynamicQueryPool allocates indices out of QueryPool as needed.  Once a QueryPool is exhausted,
 // another is created.  The query pools live permanently, but are recycled as indices get freed.
 

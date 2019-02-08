@@ -486,7 +486,11 @@ RendererVk::CommandBatch &RendererVk::CommandBatch::operator=(CommandBatch &&oth
 
 void RendererVk::CommandBatch::destroy(VkDevice device)
 {
+#if COMMAND_POOL_POOL
+    // Don't need to do anything here, pool is recycled
+#else
     commandPool.destroy(device);
+#endif
     fence.destroy(device);
 }
 
@@ -540,10 +544,17 @@ void RendererVk::onDestroy(vk::Context *context)
 
     GlslangWrapper::Release();
 
+#if defined(COMMAND_POOL_POOL)
+    if (mCommandPoolPool.isValid())
+    {
+        mCommandPoolPool.destroy(mDevice);
+    }
+#else
     if (mCommandPool.valid())
     {
         mCommandPool.destroy(mDevice);
     }
+#endif
 
     if (mDevice)
     {
@@ -926,12 +937,16 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, 0, &mQueue);
 
     // Initialize the command pool now that we know the queue family index.
+#if defined(COMMAND_POOL_POOL)
+    ANGLE_TRY(mCommandPoolPool.init(displayVk, mCurrentQueueFamilyIndex,
+                                    vk::kDefaultCommandPoolPoolSize));
+#else
     VkCommandPoolCreateInfo commandPoolInfo = {};
     commandPoolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     commandPoolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
     commandPoolInfo.queueFamilyIndex        = mCurrentQueueFamilyIndex;
-
     ANGLE_VK_TRY(displayVk, mCommandPool.init(mDevice, commandPoolInfo));
+#endif
 
     // Initialize the vulkan pipeline cache.
     ANGLE_TRY(initPipelineCache(displayVk));
@@ -1227,7 +1242,11 @@ uint32_t RendererVk::getMaxActiveTextures()
 
 const vk::CommandPool &RendererVk::getCommandPool() const
 {
+#if defined(COMMAND_POOL_POOL)
+    return *mCurrentCommandPool.getCommandPool();
+#else
     return mCommandPool;
+#endif
 }
 
 angle::Result RendererVk::finish(vk::Context *context)
@@ -1291,7 +1310,11 @@ void RendererVk::freeAllInFlightResources()
             ASSERT(status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST);
         }
         batch.fence.destroy(mDevice);
+#if COMMAND_POOL_POOL
+        // Don't destroy command pool, it's recycled
+#else
         batch.commandPool.destroy(mDevice);
+#endif
     }
     mInFlightCommands.clear();
 
@@ -1321,8 +1344,12 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
         mLastCompletedQueueSerial = batch.serial;
 
         batch.fence.destroy(mDevice);
+#if COMMAND_POOL_POOL
+        // Don't destroy command pool, it will be recycled
+#else
         TRACE_EVENT0("gpu.angle", "commandPool.destroy");
         batch.commandPool.destroy(mDevice);
+#endif
         ++finishedCount;
     }
 
@@ -1360,7 +1387,13 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     ANGLE_VK_TRY(context, vkQueueSubmit(mQueue, 1, &submitInfo, batch.fence.getHandle()));
 
     // Store this command buffer in the in-flight list.
+#if COMMAND_POOL_POOL
+    // Assign current command pool and free it so it's not re-used until complete
+    batch.commandPool = mCurrentCommandPool.getCommandPool()->getHandle();
+    mCommandPoolPool.freeCommandPool(context, &mCurrentCommandPool);
+#else
     batch.commandPool = std::move(mCommandPool);
+#endif
     batch.serial      = mCurrentQueueSerial;
 
     mInFlightCommands.emplace_back(scopedBatch.release());
@@ -1383,6 +1416,10 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     // Simply null out the command buffer here - it was allocated using the command pool.
     commandBuffer.releaseHandle();
 
+#if defined(COMMAND_POOL_POOL)
+    // Update current command pool with one that's available
+    ANGLE_TRY(mCommandPoolPool.allocateCommandPool(context, &mCurrentCommandPool));
+#else
     // Reallocate the command pool for next frame.
     // TODO(jmadill): Consider reusing command pools.
     VkCommandPoolCreateInfo poolInfo = {};
@@ -1391,6 +1428,7 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     poolInfo.queueFamilyIndex        = mCurrentQueueFamilyIndex;
 
     ANGLE_VK_TRY(context, mCommandPool.init(mDevice, poolInfo));
+#endif
     return angle::Result::Continue;
 }
 
@@ -1496,8 +1534,14 @@ vk::CommandGraph *RendererVk::getCommandGraph()
 
 angle::Result RendererVk::flushCommandGraph(vk::Context *context, vk::CommandBuffer *commandBatch)
 {
+#if defined(COMMAND_POOL_POOL)
+    return mCommandGraph.submitCommands(context, mCurrentQueueSerial, &mRenderPassCache,
+                                        mCurrentCommandPool.getCommandPool()->getHandle(),
+                                        commandBatch);
+#else
     return mCommandGraph.submitCommands(context, mCurrentQueueSerial, &mRenderPassCache,
                                         &mCommandPool, commandBatch);
+#endif
 }
 
 angle::Result RendererVk::flush(vk::Context *context)
@@ -1664,7 +1708,11 @@ angle::Result RendererVk::getTimestamp(vk::Context *context, uint64_t *timestamp
 
     VkCommandBufferAllocateInfo commandBufferInfo = {};
     commandBufferInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+#if defined(COMMAND_POOL_POOL)
+    commandBufferInfo.commandPool = mCurrentCommandPool.getCommandPool()->getHandle();
+#else
     commandBufferInfo.commandPool                 = mCommandPool.getHandle();
+#endif
     commandBufferInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     commandBufferInfo.commandBufferCount          = 1;
 
@@ -1855,7 +1903,11 @@ angle::Result RendererVk::synchronizeCpuGpuTime(vk::Context *context)
 
         VkCommandBufferAllocateInfo commandBufferInfo = {};
         commandBufferInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+#if defined(COMMAND_POOL_POOL)
+        commandBufferInfo.commandPool = mCurrentCommandPool.getCommandPool()->getHandle();
+#else
         commandBufferInfo.commandPool        = mCommandPool.getHandle();
+#endif
         commandBufferInfo.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
         commandBufferInfo.commandBufferCount = 1;
 
