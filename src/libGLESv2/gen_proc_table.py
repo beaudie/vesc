@@ -31,8 +31,9 @@ template_cpp = """// GENERATED FILE - DO NOT EDIT.
 
 #include "libGLESv2/proc_table.h"
 
-#include "libGLESv2/entry_points_egl.h"
-#include "libGLESv2/entry_points_egl_ext.h"
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+
 #include "libGLESv2/entry_points_gles_1_0_autogen.h"
 #include "libGLESv2/entry_points_gles_2_0_autogen.h"
 #include "libGLESv2/entry_points_gles_3_0_autogen.h"
@@ -66,8 +67,6 @@ for description, functions in json_data.iteritems():
             # Special handling for EGL_ANGLE_explicit_context extension
             if support_egl_ANGLE_explicit_context:
                 all_functions[function + "ContextANGLE"] = "gl::" + function[2:] + "ContextANGLE"
-        elif function.startswith("egl"):
-            all_functions[function] = "EGL_" + function[3:]
         else:
             all_functions[function] = function
 

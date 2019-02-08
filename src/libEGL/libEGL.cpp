@@ -10,12 +10,11 @@
 
 #include <memory>
 
-#if defined(ANGLE_USE_EGL_LOADER)
-#    include "libEGL/egl_loader_autogen.h"
-#else
-#    include "libGLESv2/entry_points_egl.h"
-#    include "libGLESv2/entry_points_egl_ext.h"
+#if !defined(ANGLE_USE_EGL_LOADER)
+#    error Must be used with the EGL loader.
 #endif  // defined(ANGLE_USE_EGL_LOADER)
+
+#include "libEGL/egl_loader_autogen.h"
 
 namespace
 {
@@ -35,7 +34,7 @@ void EnsureEGLLoaded()
 
     gEntryPointsLib.reset(angle::OpenSharedLibrary(ANGLE_GLESV2_LIBRARY_NAME));
     angle::LoadEGL(GlobalLoad);
-    if (!EGL_GetPlatformDisplay)
+    if (!_eglGetPlatformDisplay)
     {
         fprintf(stderr, "Error loading EGL entry points.\n");
     }
@@ -58,7 +57,7 @@ EGLBoolean EGLAPIENTRY eglChooseConfig(EGLDisplay dpy,
                                        EGLint *num_config)
 {
     EnsureEGLLoaded();
-    return EGL_ChooseConfig(dpy, attrib_list, configs, config_size, num_config);
+    return _eglChooseConfig(dpy, attrib_list, configs, config_size, num_config);
 }
 
 EGLBoolean EGLAPIENTRY eglCopyBuffers(EGLDisplay dpy,
@@ -66,7 +65,7 @@ EGLBoolean EGLAPIENTRY eglCopyBuffers(EGLDisplay dpy,
                                       EGLNativePixmapType target)
 {
     EnsureEGLLoaded();
-    return EGL_CopyBuffers(dpy, surface, target);
+    return _eglCopyBuffers(dpy, surface, target);
 }
 
 EGLContext EGLAPIENTRY eglCreateContext(EGLDisplay dpy,
@@ -75,7 +74,7 @@ EGLContext EGLAPIENTRY eglCreateContext(EGLDisplay dpy,
                                         const EGLint *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_CreateContext(dpy, config, share_context, attrib_list);
+    return _eglCreateContext(dpy, config, share_context, attrib_list);
 }
 
 EGLSurface EGLAPIENTRY eglCreatePbufferSurface(EGLDisplay dpy,
@@ -83,7 +82,7 @@ EGLSurface EGLAPIENTRY eglCreatePbufferSurface(EGLDisplay dpy,
                                                const EGLint *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_CreatePbufferSurface(dpy, config, attrib_list);
+    return _eglCreatePbufferSurface(dpy, config, attrib_list);
 }
 
 EGLSurface EGLAPIENTRY eglCreatePixmapSurface(EGLDisplay dpy,
@@ -92,7 +91,7 @@ EGLSurface EGLAPIENTRY eglCreatePixmapSurface(EGLDisplay dpy,
                                               const EGLint *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_CreatePixmapSurface(dpy, config, pixmap, attrib_list);
+    return _eglCreatePixmapSurface(dpy, config, pixmap, attrib_list);
 }
 
 EGLSurface EGLAPIENTRY eglCreateWindowSurface(EGLDisplay dpy,
@@ -101,19 +100,19 @@ EGLSurface EGLAPIENTRY eglCreateWindowSurface(EGLDisplay dpy,
                                               const EGLint *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_CreateWindowSurface(dpy, config, win, attrib_list);
+    return _eglCreateWindowSurface(dpy, config, win, attrib_list);
 }
 
 EGLBoolean EGLAPIENTRY eglDestroyContext(EGLDisplay dpy, EGLContext ctx)
 {
     EnsureEGLLoaded();
-    return EGL_DestroyContext(dpy, ctx);
+    return _eglDestroyContext(dpy, ctx);
 }
 
 EGLBoolean EGLAPIENTRY eglDestroySurface(EGLDisplay dpy, EGLSurface surface)
 {
     EnsureEGLLoaded();
-    return EGL_DestroySurface(dpy, surface);
+    return _eglDestroySurface(dpy, surface);
 }
 
 EGLBoolean EGLAPIENTRY eglGetConfigAttrib(EGLDisplay dpy,
@@ -122,7 +121,7 @@ EGLBoolean EGLAPIENTRY eglGetConfigAttrib(EGLDisplay dpy,
                                           EGLint *value)
 {
     EnsureEGLLoaded();
-    return EGL_GetConfigAttrib(dpy, config, attribute, value);
+    return _eglGetConfigAttrib(dpy, config, attribute, value);
 }
 
 EGLBoolean EGLAPIENTRY eglGetConfigs(EGLDisplay dpy,
@@ -131,37 +130,37 @@ EGLBoolean EGLAPIENTRY eglGetConfigs(EGLDisplay dpy,
                                      EGLint *num_config)
 {
     EnsureEGLLoaded();
-    return EGL_GetConfigs(dpy, configs, config_size, num_config);
+    return _eglGetConfigs(dpy, configs, config_size, num_config);
 }
 
 EGLDisplay EGLAPIENTRY eglGetCurrentDisplay(void)
 {
     EnsureEGLLoaded();
-    return EGL_GetCurrentDisplay();
+    return _eglGetCurrentDisplay();
 }
 
 EGLSurface EGLAPIENTRY eglGetCurrentSurface(EGLint readdraw)
 {
     EnsureEGLLoaded();
-    return EGL_GetCurrentSurface(readdraw);
+    return _eglGetCurrentSurface(readdraw);
 }
 
 EGLDisplay EGLAPIENTRY eglGetDisplay(EGLNativeDisplayType display_id)
 {
     EnsureEGLLoaded();
-    return EGL_GetDisplay(display_id);
+    return _eglGetDisplay(display_id);
 }
 
 EGLint EGLAPIENTRY eglGetError(void)
 {
     EnsureEGLLoaded();
-    return EGL_GetError();
+    return _eglGetError();
 }
 
 EGLBoolean EGLAPIENTRY eglInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor)
 {
     EnsureEGLLoaded();
-    return EGL_Initialize(dpy, major, minor);
+    return _eglInitialize(dpy, major, minor);
 }
 
 EGLBoolean EGLAPIENTRY eglMakeCurrent(EGLDisplay dpy,
@@ -170,7 +169,7 @@ EGLBoolean EGLAPIENTRY eglMakeCurrent(EGLDisplay dpy,
                                       EGLContext ctx)
 {
     EnsureEGLLoaded();
-    return EGL_MakeCurrent(dpy, draw, read, ctx);
+    return _eglMakeCurrent(dpy, draw, read, ctx);
 }
 
 EGLBoolean EGLAPIENTRY eglQueryContext(EGLDisplay dpy,
@@ -179,13 +178,13 @@ EGLBoolean EGLAPIENTRY eglQueryContext(EGLDisplay dpy,
                                        EGLint *value)
 {
     EnsureEGLLoaded();
-    return EGL_QueryContext(dpy, ctx, attribute, value);
+    return _eglQueryContext(dpy, ctx, attribute, value);
 }
 
 const char *EGLAPIENTRY eglQueryString(EGLDisplay dpy, EGLint name)
 {
     EnsureEGLLoaded();
-    return EGL_QueryString(dpy, name);
+    return _eglQueryString(dpy, name);
 }
 
 EGLBoolean EGLAPIENTRY eglQuerySurface(EGLDisplay dpy,
@@ -194,43 +193,43 @@ EGLBoolean EGLAPIENTRY eglQuerySurface(EGLDisplay dpy,
                                        EGLint *value)
 {
     EnsureEGLLoaded();
-    return EGL_QuerySurface(dpy, surface, attribute, value);
+    return _eglQuerySurface(dpy, surface, attribute, value);
 }
 
 EGLBoolean EGLAPIENTRY eglSwapBuffers(EGLDisplay dpy, EGLSurface surface)
 {
     EnsureEGLLoaded();
-    return EGL_SwapBuffers(dpy, surface);
+    return _eglSwapBuffers(dpy, surface);
 }
 
 EGLBoolean EGLAPIENTRY eglTerminate(EGLDisplay dpy)
 {
     EnsureEGLLoaded();
-    return EGL_Terminate(dpy);
+    return _eglTerminate(dpy);
 }
 
 EGLBoolean EGLAPIENTRY eglWaitGL(void)
 {
     EnsureEGLLoaded();
-    return EGL_WaitGL();
+    return _eglWaitGL();
 }
 
 EGLBoolean EGLAPIENTRY eglWaitNative(EGLint engine)
 {
     EnsureEGLLoaded();
-    return EGL_WaitNative(engine);
+    return _eglWaitNative(engine);
 }
 
 EGLBoolean EGLAPIENTRY eglBindTexImage(EGLDisplay dpy, EGLSurface surface, EGLint buffer)
 {
     EnsureEGLLoaded();
-    return EGL_BindTexImage(dpy, surface, buffer);
+    return _eglBindTexImage(dpy, surface, buffer);
 }
 
 EGLBoolean EGLAPIENTRY eglReleaseTexImage(EGLDisplay dpy, EGLSurface surface, EGLint buffer)
 {
     EnsureEGLLoaded();
-    return EGL_ReleaseTexImage(dpy, surface, buffer);
+    return _eglReleaseTexImage(dpy, surface, buffer);
 }
 
 EGLBoolean EGLAPIENTRY eglSurfaceAttrib(EGLDisplay dpy,
@@ -239,25 +238,25 @@ EGLBoolean EGLAPIENTRY eglSurfaceAttrib(EGLDisplay dpy,
                                         EGLint value)
 {
     EnsureEGLLoaded();
-    return EGL_SurfaceAttrib(dpy, surface, attribute, value);
+    return _eglSurfaceAttrib(dpy, surface, attribute, value);
 }
 
 EGLBoolean EGLAPIENTRY eglSwapInterval(EGLDisplay dpy, EGLint interval)
 {
     EnsureEGLLoaded();
-    return EGL_SwapInterval(dpy, interval);
+    return _eglSwapInterval(dpy, interval);
 }
 
 EGLBoolean EGLAPIENTRY eglBindAPI(EGLenum api)
 {
     EnsureEGLLoaded();
-    return EGL_BindAPI(api);
+    return _eglBindAPI(api);
 }
 
 EGLenum EGLAPIENTRY eglQueryAPI(void)
 {
     EnsureEGLLoaded();
-    return EGL_QueryAPI();
+    return _eglQueryAPI();
 }
 
 EGLSurface EGLAPIENTRY eglCreatePbufferFromClientBuffer(EGLDisplay dpy,
@@ -267,43 +266,43 @@ EGLSurface EGLAPIENTRY eglCreatePbufferFromClientBuffer(EGLDisplay dpy,
                                                         const EGLint *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_CreatePbufferFromClientBuffer(dpy, buftype, buffer, config, attrib_list);
+    return _eglCreatePbufferFromClientBuffer(dpy, buftype, buffer, config, attrib_list);
 }
 
 EGLBoolean EGLAPIENTRY eglReleaseThread(void)
 {
     EnsureEGLLoaded();
-    return EGL_ReleaseThread();
+    return _eglReleaseThread();
 }
 
 EGLBoolean EGLAPIENTRY eglWaitClient(void)
 {
     EnsureEGLLoaded();
-    return EGL_WaitClient();
+    return _eglWaitClient();
 }
 
 EGLContext EGLAPIENTRY eglGetCurrentContext(void)
 {
     EnsureEGLLoaded();
-    return EGL_GetCurrentContext();
+    return _eglGetCurrentContext();
 }
 
 EGLSync EGLAPIENTRY eglCreateSync(EGLDisplay dpy, EGLenum type, const EGLAttrib *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_CreateSync(dpy, type, attrib_list);
+    return _eglCreateSync(dpy, type, attrib_list);
 }
 
 EGLBoolean EGLAPIENTRY eglDestroySync(EGLDisplay dpy, EGLSync sync)
 {
     EnsureEGLLoaded();
-    return EGL_DestroySync(dpy, sync);
+    return _eglDestroySync(dpy, sync);
 }
 
 EGLint EGLAPIENTRY eglClientWaitSync(EGLDisplay dpy, EGLSync sync, EGLint flags, EGLTime timeout)
 {
     EnsureEGLLoaded();
-    return EGL_ClientWaitSync(dpy, sync, flags, timeout);
+    return _eglClientWaitSync(dpy, sync, flags, timeout);
 }
 
 EGLBoolean EGLAPIENTRY eglGetSyncAttrib(EGLDisplay dpy,
@@ -312,7 +311,7 @@ EGLBoolean EGLAPIENTRY eglGetSyncAttrib(EGLDisplay dpy,
                                         EGLAttrib *value)
 {
     EnsureEGLLoaded();
-    return EGL_GetSyncAttrib(dpy, sync, attribute, value);
+    return _eglGetSyncAttrib(dpy, sync, attribute, value);
 }
 
 EGLImage EGLAPIENTRY eglCreateImage(EGLDisplay dpy,
@@ -322,13 +321,13 @@ EGLImage EGLAPIENTRY eglCreateImage(EGLDisplay dpy,
                                     const EGLAttrib *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_CreateImage(dpy, ctx, target, buffer, attrib_list);
+    return _eglCreateImage(dpy, ctx, target, buffer, attrib_list);
 }
 
 EGLBoolean EGLAPIENTRY eglDestroyImage(EGLDisplay dpy, EGLImage image)
 {
     EnsureEGLLoaded();
-    return EGL_DestroyImage(dpy, image);
+    return _eglDestroyImage(dpy, image);
 }
 
 EGLDisplay EGLAPIENTRY eglGetPlatformDisplay(EGLenum platform,
@@ -336,7 +335,7 @@ EGLDisplay EGLAPIENTRY eglGetPlatformDisplay(EGLenum platform,
                                              const EGLAttrib *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_GetPlatformDisplay(platform, native_display, attrib_list);
+    return _eglGetPlatformDisplay(platform, native_display, attrib_list);
 }
 
 EGLSurface EGLAPIENTRY eglCreatePlatformWindowSurface(EGLDisplay dpy,
@@ -345,7 +344,7 @@ EGLSurface EGLAPIENTRY eglCreatePlatformWindowSurface(EGLDisplay dpy,
                                                       const EGLAttrib *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_CreatePlatformWindowSurface(dpy, config, native_window, attrib_list);
+    return _eglCreatePlatformWindowSurface(dpy, config, native_window, attrib_list);
 }
 
 EGLSurface EGLAPIENTRY eglCreatePlatformPixmapSurface(EGLDisplay dpy,
@@ -354,13 +353,13 @@ EGLSurface EGLAPIENTRY eglCreatePlatformPixmapSurface(EGLDisplay dpy,
                                                       const EGLAttrib *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_CreatePlatformPixmapSurface(dpy, config, native_pixmap, attrib_list);
+    return _eglCreatePlatformPixmapSurface(dpy, config, native_pixmap, attrib_list);
 }
 
 EGLBoolean EGLAPIENTRY eglWaitSync(EGLDisplay dpy, EGLSync sync, EGLint flags)
 {
     EnsureEGLLoaded();
-    return EGL_WaitSync(dpy, sync, flags);
+    return _eglWaitSync(dpy, sync, flags);
 }
 
 EGLBoolean EGLAPIENTRY eglQuerySurfacePointerANGLE(EGLDisplay dpy,
@@ -369,7 +368,7 @@ EGLBoolean EGLAPIENTRY eglQuerySurfacePointerANGLE(EGLDisplay dpy,
                                                    void **value)
 {
     EnsureEGLLoaded();
-    return EGL_QuerySurfacePointerANGLE(dpy, surface, attribute, value);
+    return _eglQuerySurfacePointerANGLE(dpy, surface, attribute, value);
 }
 
 EGLBoolean EGLAPIENTRY eglPostSubBufferNV(EGLDisplay dpy,
@@ -380,7 +379,7 @@ EGLBoolean EGLAPIENTRY eglPostSubBufferNV(EGLDisplay dpy,
                                           EGLint height)
 {
     EnsureEGLLoaded();
-    return EGL_PostSubBufferNV(dpy, surface, x, y, width, height);
+    return _eglPostSubBufferNV(dpy, surface, x, y, width, height);
 }
 
 EGLDisplay EGLAPIENTRY eglGetPlatformDisplayEXT(EGLenum platform,
@@ -388,7 +387,7 @@ EGLDisplay EGLAPIENTRY eglGetPlatformDisplayEXT(EGLenum platform,
                                                 const EGLint *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_GetPlatformDisplayEXT(platform, native_display, attrib_list);
+    return _eglGetPlatformDisplayEXT(platform, native_display, attrib_list);
 }
 
 EGLSurface EGLAPIENTRY eglCreatePlatformWindowSurfaceEXT(EGLDisplay dpy,
@@ -397,7 +396,7 @@ EGLSurface EGLAPIENTRY eglCreatePlatformWindowSurfaceEXT(EGLDisplay dpy,
                                                          const EGLint *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_CreatePlatformWindowSurfaceEXT(dpy, config, native_window, attrib_list);
+    return _eglCreatePlatformWindowSurfaceEXT(dpy, config, native_window, attrib_list);
 }
 
 EGLSurface EGLAPIENTRY eglCreatePlatformPixmapSurfaceEXT(EGLDisplay dpy,
@@ -406,13 +405,13 @@ EGLSurface EGLAPIENTRY eglCreatePlatformPixmapSurfaceEXT(EGLDisplay dpy,
                                                          const EGLint *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_CreatePlatformPixmapSurfaceEXT(dpy, config, native_pixmap, attrib_list);
+    return _eglCreatePlatformPixmapSurfaceEXT(dpy, config, native_pixmap, attrib_list);
 }
 
 EGLBoolean EGLAPIENTRY eglQueryDisplayAttribEXT(EGLDisplay dpy, EGLint attribute, EGLAttrib *value)
 {
     EnsureEGLLoaded();
-    return EGL_QueryDisplayAttribEXT(dpy, attribute, value);
+    return _eglQueryDisplayAttribEXT(dpy, attribute, value);
 }
 
 EGLBoolean EGLAPIENTRY eglQueryDeviceAttribEXT(EGLDeviceEXT device,
@@ -420,13 +419,13 @@ EGLBoolean EGLAPIENTRY eglQueryDeviceAttribEXT(EGLDeviceEXT device,
                                                EGLAttrib *value)
 {
     EnsureEGLLoaded();
-    return EGL_QueryDeviceAttribEXT(device, attribute, value);
+    return _eglQueryDeviceAttribEXT(device, attribute, value);
 }
 
 const char *EGLAPIENTRY eglQueryDeviceStringEXT(EGLDeviceEXT device, EGLint name)
 {
     EnsureEGLLoaded();
-    return EGL_QueryDeviceStringEXT(device, name);
+    return _eglQueryDeviceStringEXT(device, name);
 }
 
 EGLImageKHR EGLAPIENTRY eglCreateImageKHR(EGLDisplay dpy,
@@ -436,13 +435,13 @@ EGLImageKHR EGLAPIENTRY eglCreateImageKHR(EGLDisplay dpy,
                                           const EGLint *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_CreateImageKHR(dpy, ctx, target, buffer, attrib_list);
+    return _eglCreateImageKHR(dpy, ctx, target, buffer, attrib_list);
 }
 
 EGLBoolean EGLAPIENTRY eglDestroyImageKHR(EGLDisplay dpy, EGLImageKHR image)
 {
     EnsureEGLLoaded();
-    return EGL_DestroyImageKHR(dpy, image);
+    return _eglDestroyImageKHR(dpy, image);
 }
 
 EGLDeviceEXT EGLAPIENTRY eglCreateDeviceANGLE(EGLint device_type,
@@ -450,31 +449,31 @@ EGLDeviceEXT EGLAPIENTRY eglCreateDeviceANGLE(EGLint device_type,
                                               const EGLAttrib *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_CreateDeviceANGLE(device_type, native_device, attrib_list);
+    return _eglCreateDeviceANGLE(device_type, native_device, attrib_list);
 }
 
 EGLBoolean EGLAPIENTRY eglReleaseDeviceANGLE(EGLDeviceEXT device)
 {
     EnsureEGLLoaded();
-    return EGL_ReleaseDeviceANGLE(device);
+    return _eglReleaseDeviceANGLE(device);
 }
 
 __eglMustCastToProperFunctionPointerType EGLAPIENTRY eglGetProcAddress(const char *procname)
 {
     EnsureEGLLoaded();
-    return EGL_GetProcAddress(procname);
+    return _eglGetProcAddress(procname);
 }
 
 EGLStreamKHR EGLAPIENTRY eglCreateStreamKHR(EGLDisplay dpy, const EGLint *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_CreateStreamKHR(dpy, attrib_list);
+    return _eglCreateStreamKHR(dpy, attrib_list);
 }
 
 EGLBoolean EGLAPIENTRY eglDestroyStreamKHR(EGLDisplay dpy, EGLStreamKHR stream)
 {
     EnsureEGLLoaded();
-    return EGL_DestroyStreamKHR(dpy, stream);
+    return _eglDestroyStreamKHR(dpy, stream);
 }
 
 EGLBoolean EGLAPIENTRY eglStreamAttribKHR(EGLDisplay dpy,
@@ -483,7 +482,7 @@ EGLBoolean EGLAPIENTRY eglStreamAttribKHR(EGLDisplay dpy,
                                           EGLint value)
 {
     EnsureEGLLoaded();
-    return EGL_StreamAttribKHR(dpy, stream, attribute, value);
+    return _eglStreamAttribKHR(dpy, stream, attribute, value);
 }
 
 EGLBoolean EGLAPIENTRY eglQueryStreamKHR(EGLDisplay dpy,
@@ -492,7 +491,7 @@ EGLBoolean EGLAPIENTRY eglQueryStreamKHR(EGLDisplay dpy,
                                          EGLint *value)
 {
     EnsureEGLLoaded();
-    return EGL_QueryStreamKHR(dpy, stream, attribute, value);
+    return _eglQueryStreamKHR(dpy, stream, attribute, value);
 }
 
 EGLBoolean EGLAPIENTRY eglQueryStreamu64KHR(EGLDisplay dpy,
@@ -501,25 +500,25 @@ EGLBoolean EGLAPIENTRY eglQueryStreamu64KHR(EGLDisplay dpy,
                                             EGLuint64KHR *value)
 {
     EnsureEGLLoaded();
-    return EGL_QueryStreamu64KHR(dpy, stream, attribute, value);
+    return _eglQueryStreamu64KHR(dpy, stream, attribute, value);
 }
 
 EGLBoolean EGLAPIENTRY eglStreamConsumerGLTextureExternalKHR(EGLDisplay dpy, EGLStreamKHR stream)
 {
     EnsureEGLLoaded();
-    return EGL_StreamConsumerGLTextureExternalKHR(dpy, stream);
+    return _eglStreamConsumerGLTextureExternalKHR(dpy, stream);
 }
 
 EGLBoolean EGLAPIENTRY eglStreamConsumerAcquireKHR(EGLDisplay dpy, EGLStreamKHR stream)
 {
     EnsureEGLLoaded();
-    return EGL_StreamConsumerAcquireKHR(dpy, stream);
+    return _eglStreamConsumerAcquireKHR(dpy, stream);
 }
 
 EGLBoolean EGLAPIENTRY eglStreamConsumerReleaseKHR(EGLDisplay dpy, EGLStreamKHR stream)
 {
     EnsureEGLLoaded();
-    return EGL_StreamConsumerReleaseKHR(dpy, stream);
+    return _eglStreamConsumerReleaseKHR(dpy, stream);
 }
 
 EGLBoolean EGLAPIENTRY eglStreamConsumerGLTextureExternalAttribsNV(EGLDisplay dpy,
@@ -527,7 +526,7 @@ EGLBoolean EGLAPIENTRY eglStreamConsumerGLTextureExternalAttribsNV(EGLDisplay dp
                                                                    const EGLAttrib *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_StreamConsumerGLTextureExternalAttribsNV(dpy, stream, attrib_list);
+    return _eglStreamConsumerGLTextureExternalAttribsNV(dpy, stream, attrib_list);
 }
 
 EGLBoolean EGLAPIENTRY eglCreateStreamProducerD3DTextureANGLE(EGLDisplay dpy,
@@ -535,7 +534,7 @@ EGLBoolean EGLAPIENTRY eglCreateStreamProducerD3DTextureANGLE(EGLDisplay dpy,
                                                               const EGLAttrib *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_CreateStreamProducerD3DTextureANGLE(dpy, stream, attrib_list);
+    return _eglCreateStreamProducerD3DTextureANGLE(dpy, stream, attrib_list);
 }
 
 EGLBoolean EGLAPIENTRY eglStreamPostD3DTextureANGLE(EGLDisplay dpy,
@@ -544,7 +543,7 @@ EGLBoolean EGLAPIENTRY eglStreamPostD3DTextureANGLE(EGLDisplay dpy,
                                                     const EGLAttrib *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_StreamPostD3DTextureANGLE(dpy, stream, texture, attrib_list);
+    return _eglStreamPostD3DTextureANGLE(dpy, stream, texture, attrib_list);
 }
 
 EGLBoolean EGLAPIENTRY eglGetSyncValuesCHROMIUM(EGLDisplay dpy,
@@ -554,7 +553,7 @@ EGLBoolean EGLAPIENTRY eglGetSyncValuesCHROMIUM(EGLDisplay dpy,
                                                 EGLuint64KHR *sbc)
 {
     EnsureEGLLoaded();
-    return EGL_GetSyncValuesCHROMIUM(dpy, surface, ust, msc, sbc);
+    return _eglGetSyncValuesCHROMIUM(dpy, surface, ust, msc, sbc);
 }
 
 EGLBoolean EGLAPIENTRY eglSwapBuffersWithDamageKHR(EGLDisplay dpy,
@@ -563,7 +562,7 @@ EGLBoolean EGLAPIENTRY eglSwapBuffersWithDamageKHR(EGLDisplay dpy,
                                                    EGLint n_rects)
 {
     EnsureEGLLoaded();
-    return EGL_SwapBuffersWithDamageKHR(dpy, surface, rects, n_rects);
+    return _eglSwapBuffersWithDamageKHR(dpy, surface, rects, n_rects);
 }
 
 EGLBoolean EGLAPIENTRY eglPresentationTimeANDROID(EGLDisplay dpy,
@@ -571,13 +570,13 @@ EGLBoolean EGLAPIENTRY eglPresentationTimeANDROID(EGLDisplay dpy,
                                                   EGLnsecsANDROID time)
 {
     EnsureEGLLoaded();
-    return EGL_PresentationTimeANDROID(dpy, surface, time);
+    return _eglPresentationTimeANDROID(dpy, surface, time);
 }
 
 EGLint EGLAPIENTRY eglProgramCacheGetAttribANGLE(EGLDisplay dpy, EGLenum attrib)
 {
     EnsureEGLLoaded();
-    return EGL_ProgramCacheGetAttribANGLE(dpy, attrib);
+    return _eglProgramCacheGetAttribANGLE(dpy, attrib);
 }
 
 void EGLAPIENTRY eglProgramCacheQueryANGLE(EGLDisplay dpy,
@@ -587,7 +586,7 @@ void EGLAPIENTRY eglProgramCacheQueryANGLE(EGLDisplay dpy,
                                            void *binary,
                                            EGLint *binarysize)
 {
-    EGL_ProgramCacheQueryANGLE(dpy, index, key, keysize, binary, binarysize);
+    _eglProgramCacheQueryANGLE(dpy, index, key, keysize, binary, binarysize);
 }
 
 void EGLAPIENTRY eglProgramCachePopulateANGLE(EGLDisplay dpy,
@@ -596,25 +595,25 @@ void EGLAPIENTRY eglProgramCachePopulateANGLE(EGLDisplay dpy,
                                               const void *binary,
                                               EGLint binarysize)
 {
-    EGL_ProgramCachePopulateANGLE(dpy, key, keysize, binary, binarysize);
+    _eglProgramCachePopulateANGLE(dpy, key, keysize, binary, binarysize);
 }
 
 EGLint EGLAPIENTRY eglProgramCacheResizeANGLE(EGLDisplay dpy, EGLint limit, EGLenum mode)
 {
     EnsureEGLLoaded();
-    return EGL_ProgramCacheResizeANGLE(dpy, limit, mode);
+    return _eglProgramCacheResizeANGLE(dpy, limit, mode);
 }
 
 EGLint EGLAPIENTRY eglDebugMessageControlKHR(EGLDEBUGPROCKHR callback, const EGLAttrib *attrib_list)
 {
     EnsureEGLLoaded();
-    return EGL_DebugMessageControlKHR(callback, attrib_list);
+    return _eglDebugMessageControlKHR(callback, attrib_list);
 }
 
 EGLBoolean EGLAPIENTRY eglQueryDebugKHR(EGLint attribute, EGLAttrib *value)
 {
     EnsureEGLLoaded();
-    return EGL_QueryDebugKHR(attribute, value);
+    return _eglQueryDebugKHR(attribute, value);
 }
 
 EGLint EGLAPIENTRY eglLabelObjectKHR(EGLDisplay dpy,
@@ -623,7 +622,7 @@ EGLint EGLAPIENTRY eglLabelObjectKHR(EGLDisplay dpy,
                                      EGLLabelKHR label)
 {
     EnsureEGLLoaded();
-    return EGL_LabelObjectKHR(dpy, objectType, object, label);
+    return _eglLabelObjectKHR(dpy, objectType, object, label);
 }
 
 void EGLAPIENTRY eglSetBlobCacheFuncsANDROID(EGLDisplay dpy,
@@ -631,7 +630,7 @@ void EGLAPIENTRY eglSetBlobCacheFuncsANDROID(EGLDisplay dpy,
                                              EGLGetBlobFuncANDROID get)
 {
     EnsureEGLLoaded();
-    return EGL_SetBlobCacheFuncsANDROID(dpy, set, get);
+    return _eglSetBlobCacheFuncsANDROID(dpy, set, get);
 }
 
 EGLBoolean EGLAPIENTRY eglGetCompositorTimingSupportedANDROID(EGLDisplay dpy,
@@ -639,7 +638,7 @@ EGLBoolean EGLAPIENTRY eglGetCompositorTimingSupportedANDROID(EGLDisplay dpy,
                                                               EGLint name)
 {
     EnsureEGLLoaded();
-    return EGL_GetCompositorTimingSupportedANDROID(dpy, surface, name);
+    return _eglGetCompositorTimingSupportedANDROID(dpy, surface, name);
 }
 
 EGLBoolean EGLAPIENTRY eglGetCompositorTimingANDROID(EGLDisplay dpy,
@@ -649,7 +648,7 @@ EGLBoolean EGLAPIENTRY eglGetCompositorTimingANDROID(EGLDisplay dpy,
                                                      EGLnsecsANDROID *values)
 {
     EnsureEGLLoaded();
-    return EGL_GetCompositorTimingANDROID(dpy, surface, numTimestamps, names, values);
+    return _eglGetCompositorTimingANDROID(dpy, surface, numTimestamps, names, values);
 }
 
 EGLBoolean EGLAPIENTRY eglGetNextFrameIdANDROID(EGLDisplay dpy,
@@ -657,7 +656,7 @@ EGLBoolean EGLAPIENTRY eglGetNextFrameIdANDROID(EGLDisplay dpy,
                                                 EGLuint64KHR *frameId)
 {
     EnsureEGLLoaded();
-    return EGL_GetNextFrameIdANDROID(dpy, surface, frameId);
+    return _eglGetNextFrameIdANDROID(dpy, surface, frameId);
 }
 
 EGLBoolean EGLAPIENTRY eglGetFrameTimestampSupportedANDROID(EGLDisplay dpy,
@@ -665,7 +664,7 @@ EGLBoolean EGLAPIENTRY eglGetFrameTimestampSupportedANDROID(EGLDisplay dpy,
                                                             EGLint timestamp)
 {
     EnsureEGLLoaded();
-    return EGL_GetFrameTimestampSupportedANDROID(dpy, surface, timestamp);
+    return _eglGetFrameTimestampSupportedANDROID(dpy, surface, timestamp);
 }
 
 EGLBoolean EGLAPIENTRY eglGetFrameTimestampsANDROID(EGLDisplay dpy,
@@ -676,6 +675,6 @@ EGLBoolean EGLAPIENTRY eglGetFrameTimestampsANDROID(EGLDisplay dpy,
                                                     EGLnsecsANDROID *values)
 {
     EnsureEGLLoaded();
-    return EGL_GetFrameTimestampsANDROID(dpy, surface, frameId, numTimestamps, timestamps, values);
+    return _eglGetFrameTimestampsANDROID(dpy, surface, frameId, numTimestamps, timestamps, values);
 }
 }  // extern "C"

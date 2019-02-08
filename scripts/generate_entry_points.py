@@ -798,8 +798,6 @@ def get_egl_exports():
     egl = registry_xml.RegistryXML('egl.xml', 'egl_angle_ext.xml')
     exports = []
 
-    capser = lambda fn: "EGL_" + fn[3:]
-
     for major, minor in [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5]]:
         annotation = "{}_{}".format(major, minor)
         name_prefix = "EGL_VERSION_"
@@ -814,7 +812,7 @@ def get_egl_exports():
             continue
 
         exports.append("\n    ; EGL %d.%d" % (major, minor))
-        exports += get_exports(commands, capser)
+        exports += get_exports(commands)
 
     egl.AddExtensionCommands(registry_xml.supported_egl_extensions, ['egl'])
 
@@ -824,7 +822,7 @@ def get_egl_exports():
             continue
 
         exports.append("\n    ; %s" % extension_name)
-        exports += get_exports(ext_cmd_names, capser)
+        exports += get_exports(ext_cmd_names)
 
     return exports
 
