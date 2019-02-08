@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b739a162_a5cdac5b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-08T19:24:07Z",
+      "side": 1,
+      "message": "The for loop above will *not* destroy `oldSwapchain`. That pointer is not yet in `mSwapHistory`, so the for loop above never sees `oldSwapchain`.",
+      "parentUuid": "74199ea2_20074fb8",
+      "revId": "e6608c3c3c125ac54ec719b0a15258990448da23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b60aa469_41f9d8ba",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 11
@@ -30,6 +48,24 @@
       "writtenOn": "2019-02-08T16:54:03Z",
       "side": 1,
       "message": "As with the previous review (above), if swap.swapchain can be VK_NULL_HANDLE, it\u0027s better to move the finishToSerial() call down to just above the vkDestroySwapchainKHR() call",
+      "revId": "e6608c3c3c125ac54ec719b0a15258990448da23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f681d524_1391f0ef",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-08T19:24:07Z",
+      "side": 1,
+      "message": "This case is different. This loop removes entries that will not fit in the new history (because the history is shorter). So in line with staying at most `N` frames behind the GPU, when `N` is reduced, we want to catch up (which has nothing to do with swapchain destruction).\n\nLook at the diagrams in the comment above. Say you have 3 images (and the history contains serials 9, 10 and 11) and the CPU can be 3 frames behind the GPU. When you change present modes and end up with 2 images, now the CPU could be 3 frames behind the GPU, while we want to shoot for being at most 2 frames behind (now that we have only 2 images). So we wait for serial 9 to finish. On next swap, we wait for serial 10 to finish.\n\nIf I didn\u0027t wait for 9 to finish (assume there was no swapchain to destroy), then the next swap would have waited for serial 10 to finish anyway.\n\n---\n\nIn short, this loop is similar in concept to the one in `swapImpl`, rather than the one in `recreateSwapchain`.",
+      "parentUuid": "b60aa469_41f9d8ba",
       "revId": "e6608c3c3c125ac54ec719b0a15258990448da23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "6fb0c089_fb4d82c8",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-08T19:24:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "362b11bb_fc730fdc",
+      "revId": "e6608c3c3c125ac54ec719b0a15258990448da23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f61ed54_069d5379",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 11
@@ -67,6 +121,24 @@
       "revId": "e6608c3c3c125ac54ec719b0a15258990448da23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1170c4ca_1a3f8c4e",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-08T19:24:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0f61ed54_069d5379",
+      "revId": "e6608c3c3c125ac54ec719b0a15258990448da23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
