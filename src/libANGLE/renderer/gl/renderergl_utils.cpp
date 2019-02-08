@@ -1457,6 +1457,7 @@ void ApplyWorkarounds(const FunctionsGL *functions, gl::Workarounds *workarounds
 
     workarounds->disableProgramCachingForTransformFeedback = IsAndroid() && IsQualcomm(vendor);
     workarounds->syncFramebufferBindingsOnTexImage         = IsWindows() && IsIntel(vendor);
+    workarounds->roundDownUniformBindBufferRangeSize       = IsAndroid() && IsQualcomm(vendor);
 }
 
 }  // namespace nativegl_gl

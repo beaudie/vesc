@@ -28,6 +28,12 @@ struct Workarounds
     // Flaky crashes can occur unless we sync the Framebuffer bindings. The workaround is to add
     // Framebuffer binding dirty bits to TexImage updates. See http://anglebug.com/2906
     bool syncFramebufferBindingsOnTexImage = false;
+
+    // Android Qualcomm drivers incorrectly validate that the |size| parameter passed to
+    // glBindBufferRange must always be a multiple of 4. According to spec, this is only true
+    // when the buffer target is TRANSFORM_FEEDBACK. This workaround is to round down the |size|
+    // to a multiple of 4 so a valid value is always passed to the driver.
+    bool roundDownUniformBindBufferRangeSize = false;
 };
 }  // namespace gl
 
