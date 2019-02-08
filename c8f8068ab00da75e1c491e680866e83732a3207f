@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0411ef1a_d03b8abc",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-08T03:47:42Z",
+      "side": 1,
+      "message": "Is this missing?\n\nrenderer-\u003ereleaseObject(renderer-\u003egetCurrentQueueSerial(), \u0026mImageView);\n\nIt would be useful to turn the cleanup into a helper function so things won\u0027t accidentally get partially cleaned.",
+      "revId": "c8f8068ab00da75e1c491e680866e83732a3207f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
