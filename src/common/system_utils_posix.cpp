@@ -80,7 +80,12 @@ class PosixLibrary : public Library
             return nullptr;
         }
 
-        return dlsym(mModule, symbolName);
+        void *sym = dlsym(mModule, symbolName);
+        if (!sym)
+        {
+            fprintf(stderr, "dlsym error: %s\n", dlerror());
+        }
+        return sym;
     }
 
     void *getNative() const override { return mModule; }
