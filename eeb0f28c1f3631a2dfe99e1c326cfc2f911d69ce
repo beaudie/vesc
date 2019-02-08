@@ -286,6 +286,30 @@
     },
     {
       "key": {
+        "uuid": "457a57ae_101c64c4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-08T18:30:19Z",
+      "side": 1,
+      "message": "It gets piped to EGLImageImpl::orphan. You should be able to handle the decoupling of the image at that point I think.",
+      "parentUuid": "7f7a2446_d52e59d0",
+      "range": {
+        "startLine": 613,
+        "startChar": 0,
+        "endLine": 615,
+        "endChar": 44
+      },
+      "revId": "eeb0f28c1f3631a2dfe99e1c326cfc2f911d69ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "25684e0e_da45b610",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
