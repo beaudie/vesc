@@ -1506,20 +1506,6 @@ angle::Result State::setIndexedBufferBinding(const Context *context,
             setBufferBinding(context, target, buffer);
             break;
         case BufferBinding::Uniform:
-            if (context->getWorkarounds().roundDownUniformBindBufferRangeSize)
-            {
-                size = size & ~3;
-                if (size == 0)
-                {
-                    // This case is invalid and we shouldn't call the driver.
-                    // Without rounding, this would generate INVALID_OPERATION
-                    // at draw time because the size is not enough to fill the smallest
-                    // possible uniform block (4 bytes).
-                    // Unbind the buffer instead which will also generate INVALID_OPERATION
-                    // at draw time.
-                    buffer = nullptr;
-                }
-            }
             UpdateIndexedBufferBinding(context, &mUniformBuffers[index], buffer, target, offset,
                                        size);
             break;
