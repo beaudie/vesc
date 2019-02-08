@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "83b24175_f6640d16",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-08T21:03:04Z",
+      "side": 1,
+      "message": "Okay, I misunderstood what the SwapHistory was doing.  I thought it was keeping track of the serial for each call to vkQueuePresentKHR, but I see now that it isn\u0027t.  Thanks!",
+      "parentUuid": "b739a162_a5cdac5b",
+      "revId": "e6608c3c3c125ac54ec719b0a15258990448da23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b60aa469_41f9d8ba",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 11
@@ -69,6 +87,24 @@
       "revId": "e6608c3c3c125ac54ec719b0a15258990448da23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "007d3351_f243e233",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-08T21:03:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f681d524_1391f0ef",
+      "revId": "e6608c3c3c125ac54ec719b0a15258990448da23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
