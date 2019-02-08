@@ -34,6 +34,24 @@
       "revId": "6876fc0ab121ba1acecf59a1e92e8bce3bb3a2d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53d6ee0f_9121f44f",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-02-08T12:24:35Z",
+      "side": 1,
+      "message": "Jamie, do you think we can use the global static mutex for simplicity here before working out a more graceful solution? After all it\u0027s much simpler, and logically correct. It seems Android log system also uses such global static mutex. https://android.googlesource.com/platform/system/core/+/master/liblog/logger_lock.cpp#28",
+      "parentUuid": "5f272585_08a1773a",
+      "revId": "6876fc0ab121ba1acecf59a1e92e8bce3bb3a2d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
