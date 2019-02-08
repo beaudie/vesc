@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1eb3e617_431feaad",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-08T15:32:46Z",
+      "side": 1,
+      "message": "The bug was in the change I committed yesterday.",
+      "parentUuid": "c0034fbc_51161271",
+      "range": {
+        "startLine": 593,
+        "startChar": 0,
+        "endLine": 595,
+        "endChar": 66
+      },
+      "revId": "ade3a4ba22b58b1a9fbe1f0461a90399375ac651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3c9ca17d_66c56784",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
@@ -66,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "a4f26e44_e6939f50",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-08T15:32:46Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "3c9ca17d_66c56784",
+      "revId": "ade3a4ba22b58b1a9fbe1f0461a90399375ac651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd470650_3e861597",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
@@ -77,6 +119,24 @@
       "writtenOn": "2019-02-08T14:42:20Z",
       "side": 1,
       "message": "Could we assume we never go beyond triple buffering and use a FixedVector?",
+      "revId": "ade3a4ba22b58b1a9fbe1f0461a90399375ac651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfc0a336_4d218f23",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-08T15:32:46Z",
+      "side": 1,
+      "message": "In practice, maybe, but the spec doesn\u0027t guarantee an upper limit to the number of allocated images.\n\nThat said, this code can only ever be reached when switching between vsync and no-vsync, so it\u0027s going to be extremely rare.",
+      "parentUuid": "cd470650_3e861597",
       "revId": "ade3a4ba22b58b1a9fbe1f0461a90399375ac651",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -106,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "268f64a3_ef61f29d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-08T15:32:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a96c81b2_56869eac",
+      "range": {
+        "startLine": 917,
+        "startChar": 0,
+        "endLine": 918,
+        "endChar": 51
+      },
+      "revId": "ade3a4ba22b58b1a9fbe1f0461a90399375ac651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fbdb6bbc_f894ff3a",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
@@ -126,6 +210,30 @@
       "revId": "ade3a4ba22b58b1a9fbe1f0461a90399375ac651",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fe64bc6_662efa13",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-08T15:32:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbdb6bbc_f894ff3a",
+      "range": {
+        "startLine": 934,
+        "startChar": 44,
+        "endLine": 934,
+        "endChar": 45
+      },
+      "revId": "ade3a4ba22b58b1a9fbe1f0461a90399375ac651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
