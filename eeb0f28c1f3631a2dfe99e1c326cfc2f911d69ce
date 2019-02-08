@@ -334,6 +334,30 @@
     },
     {
       "key": {
+        "uuid": "978c7696_2792bab3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-08T19:04:06Z",
+      "side": 1,
+      "message": "OK, I get it. Yeah it seems fairly harmless to keep it like it is here. Thanks.",
+      "parentUuid": "05567635_dfc82517",
+      "range": {
+        "startLine": 613,
+        "startChar": 0,
+        "endLine": 615,
+        "endChar": 44
+      },
+      "revId": "eeb0f28c1f3631a2dfe99e1c326cfc2f911d69ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "25684e0e_da45b610",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
