@@ -164,6 +164,10 @@ config("includes_config") {
 }
 
 # Holds the shared includes so we only need to list them once.
+config("includes_config") {
+  include_dirs = [ "include" ]
+}
+
 angle_source_set("includes") {
   sources = libangle_includes
   public_configs = [ ":includes_config" ]
