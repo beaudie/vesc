@@ -52,6 +52,24 @@
       "revId": "6876fc0ab121ba1acecf59a1e92e8bce3bb3a2d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e82f28f5_ad5bcc2a",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-08T14:15:00Z",
+      "side": 1,
+      "message": "We aren\u0027t allowed to add static initializers in Chromium code. Or else there is a bot that will fail and we\u0027ll need to revert this change.\n\nI think just adding some ifs in debug.cpp will be sufficient.",
+      "parentUuid": "53d6ee0f_9121f44f",
+      "revId": "6876fc0ab121ba1acecf59a1e92e8bce3bb3a2d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
