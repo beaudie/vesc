@@ -176,6 +176,12 @@ struct WorkaroundsGL
     // Some tests have been seen to fail using worker contexts, this switch allows worker contexts
     // to be disabled for some platforms. http://crbug.com/849576
     bool disableWorkerContexts = false;
+
+    // Android Qualcomm drivers incorrectly validate that the |size| parameter passed to
+    // glBindBufferRange must always be a multiple of 4. According to spec, this is only true
+    // when the buffer target is TRANSFORM_FEEDBACK. This workaround is to round down the |size|
+    // to a multiple of 4 so a valid value is always passed to the driver. http://crbug.com/906743
+    bool roundDownUniformBindBufferRangeSize = false;
 };
 
 inline WorkaroundsGL::WorkaroundsGL() = default;
