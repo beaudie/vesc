@@ -263,7 +263,17 @@ class RendererVk : angle::NonCopyable
     VkQueue mQueue;
     uint32_t mCurrentQueueFamilyIndex;
     VkDevice mDevice;
+    // Command Pool that's currently being allocated from
+#define COMMAND_POOL_POOL 1
+#if COMMAND_POOL_POOL
+    vk::CommandPoolHelper mCurrentCommandPool;
+
+    // Pool of command pools
+    vk::DynamicCommandPoolPool mCommandPoolPool;
+#else
     vk::CommandPool mCommandPool;
+#endif
+
     SerialFactory mQueueSerialFactory;
     SerialFactory mShaderSerialFactory;
     Serial mLastCompletedQueueSerial;
@@ -280,8 +290,11 @@ class RendererVk : angle::NonCopyable
         CommandBatch &operator=(CommandBatch &&other);
 
         void destroy(VkDevice device);
-
+#if COMMAND_POOL_POOL
+        VkCommandPool commandPool;
+#else
         vk::CommandPool commandPool;
+#endif
         vk::Fence fence;
         Serial serial;
     };

@@ -641,9 +641,109 @@ void DynamicallyGrowingPool<Pool>::onEntryFreed(Context *context, size_t poolInd
 {
     ASSERT(poolIndex < mPoolStats.size() && mPoolStats[poolIndex].freedCount < mPoolSize);
 
-    // Take note of the current serial to avoid reallocating a query in the same pool
+    // Take note of the current serial to avoid reallocating in the same pool
     mPoolStats[poolIndex].serial = context->getRenderer()->getCurrentQueueSerial();
     ++mPoolStats[poolIndex].freedCount;
+}
+
+// DynamicCommandPoolPool implementation
+DynamicCommandPoolPool::DynamicCommandPoolPool() = default;
+
+DynamicCommandPoolPool::~DynamicCommandPoolPool() = default;
+
+angle::Result DynamicCommandPoolPool::init(Context *context,
+                                           uint32_t currentQueueFamilyIndex,
+                                           uint32_t poolSize)
+{
+    ANGLE_TRY(initEntryPool(context, poolSize));
+    mCurrentQueueFamilyIndex = currentQueueFamilyIndex;
+    ANGLE_TRY(allocateNewCommandPool(context));
+
+    return angle::Result::Continue;
+}
+
+void DynamicCommandPoolPool::destroy(VkDevice device)
+{
+    for (CommandPool &commandPool : mPools)
+    {
+        commandPool.destroy(device);
+    }
+
+    destroyEntryPool();
+}
+
+angle::Result DynamicCommandPoolPool::allocateCommandPool(Context *context,
+                                                          CommandPoolHelper *commandPoolOut)
+{
+    ASSERT(!commandPoolOut->getCommandPool());
+
+    if (mCurrentFreeEntry >= mPoolSize)
+    {
+        // No more command pools left in this pool, create another one.
+        ANGLE_TRY(allocateNewCommandPool(context));
+    }
+
+    commandPoolOut->init(mCurrentPool, &mPools[mCurrentPool]);
+
+    return angle::Result::Continue;
+}
+
+void DynamicCommandPoolPool::freeCommandPool(Context *context, CommandPoolHelper *commandPool)
+{
+    if (commandPool->getCommandPool())
+    {
+        commandPool->getCommandPool()->reset(context->getDevice());
+        onEntryFreed(context, commandPool->getCommandPoolPoolIndex());
+        commandPool->deinit();
+    }
+}
+
+angle::Result DynamicCommandPoolPool::allocateNewCommandPool(Context *context)
+{
+    if (findFreeEntryPool(context))
+    {
+        return angle::Result::Continue;
+    }
+
+    VkCommandPoolCreateInfo commandPoolInfo = {};
+    commandPoolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    commandPoolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+    commandPoolInfo.queueFamilyIndex        = mCurrentQueueFamilyIndex;
+
+    vk::CommandPool commandPool;
+    ANGLE_VK_TRY(context, commandPool.init(context->getDevice(), commandPoolInfo));
+
+    return allocateNewEntryPool(context, std::move(commandPool));
+}
+
+// CommandPoolHelper implementation
+CommandPoolHelper::CommandPoolHelper() : mCommandPoolPoolIndex(0), mCommandPool(nullptr) {}
+
+CommandPoolHelper::~CommandPoolHelper() {}
+
+CommandPoolHelper::CommandPoolHelper(CommandPoolHelper &&other)
+    : mCommandPoolPoolIndex(other.mCommandPoolPoolIndex), mCommandPool(other.mCommandPool)
+{
+    other.mCommandPool = nullptr;
+}
+
+CommandPoolHelper &CommandPoolHelper::operator=(CommandPoolHelper &&other)
+{
+    std::swap(mCommandPoolPoolIndex, other.mCommandPoolPoolIndex);
+    std::swap(mCommandPool, other.mCommandPool);
+    return *this;
+}
+
+void CommandPoolHelper::init(const size_t commandPoolPoolIndex, const vk::CommandPool *commandPool)
+{
+    mCommandPoolPoolIndex = commandPoolPoolIndex;
+    mCommandPool          = commandPool;
+}
+
+void CommandPoolHelper::deinit()
+{
+    mCommandPoolPoolIndex = 0;
+    mCommandPool          = nullptr;
 }
 
 // DynamicQueryPool implementation
@@ -821,7 +921,7 @@ angle::Result DynamicSemaphorePool::allocateSemaphore(Context *context,
 
     if (mCurrentFreeEntry >= mPoolSize)
     {
-        // No more queries left in this pool, create another one.
+        // No more semaphores left in this pool, create another one.
         ANGLE_TRY(allocateNewPool(context));
     }
 
@@ -865,7 +965,7 @@ angle::Result DynamicSemaphorePool::allocateNewPool(Context *context)
 }
 
 // SemaphoreHelper implementation
-SemaphoreHelper::SemaphoreHelper() : mSemaphorePoolIndex(0), mSemaphore(0) {}
+SemaphoreHelper::SemaphoreHelper() : mSemaphorePoolIndex(0), mSemaphore(nullptr) {}
 
 SemaphoreHelper::~SemaphoreHelper() {}
 
