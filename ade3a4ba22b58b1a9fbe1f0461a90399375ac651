@@ -22,6 +22,110 @@
       "revId": "ade3a4ba22b58b1a9fbe1f0461a90399375ac651",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0034fbc_51161271",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-08T14:42:20Z",
+      "side": 1,
+      "message": "Yikes!  Could this have been affecting our performance benchmarking?",
+      "parentUuid": "59ea24b2_51dec139",
+      "range": {
+        "startLine": 593,
+        "startChar": 0,
+        "endLine": 595,
+        "endChar": 66
+      },
+      "revId": "ade3a4ba22b58b1a9fbe1f0461a90399375ac651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c9ca17d_66c56784",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-08T14:42:20Z",
+      "side": 1,
+      "message": "Could you cache the getWidth() and getHeight() calls into a gl::Extents too? You can then compare it with currentExents directly here and below too.",
+      "revId": "ade3a4ba22b58b1a9fbe1f0461a90399375ac651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd470650_3e861597",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-08T14:42:20Z",
+      "side": 1,
+      "message": "Could we assume we never go beyond triple buffering and use a FixedVector?",
+      "revId": "ade3a4ba22b58b1a9fbe1f0461a90399375ac651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a96c81b2_56869eac",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-08T14:42:20Z",
+      "side": 1,
+      "message": "nit: You can use gl::clamp\n\nBeen meaning to move many of those math helpers into the angle namespace.",
+      "range": {
+        "startLine": 917,
+        "startChar": 0,
+        "endLine": 918,
+        "endChar": 51
+      },
+      "revId": "ade3a4ba22b58b1a9fbe1f0461a90399375ac651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbdb6bbc_f894ff3a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-08T14:42:20Z",
+      "side": 1,
+      "message": "nit: 2u would probably avoid the need for the type.",
+      "range": {
+        "startLine": 934,
+        "startChar": 44,
+        "endLine": 934,
+        "endChar": 45
+      },
+      "revId": "ade3a4ba22b58b1a9fbe1f0461a90399375ac651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
