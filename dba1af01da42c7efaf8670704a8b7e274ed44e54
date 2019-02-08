@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "6f45e39b_b9c92c03",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3108,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-08T14:49:27Z",
+      "side": 1,
+      "message": "Yea, I think that\u0027s ok.  We want the multidraw extension to work with either the EXT and ANGLE extensions.",
+      "parentUuid": "3b7ae8d8_b7c4c1d2",
+      "revId": "dba1af01da42c7efaf8670704a8b7e274ed44e54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42c4eb00_ed11284a",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 9
