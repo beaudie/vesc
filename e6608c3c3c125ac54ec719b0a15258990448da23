@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "74199ea2_20074fb8",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-08T16:54:03Z",
+      "side": 1,
+      "message": "Perhaps I\u0027m missing something, but I think we don\u0027t want this line as long as we have the for-loop above it OR we want to change the for-loop to not destroy oldSwapchain (my currently-preferred solution).\n\nThe idea is that the for-loop will destroy oldSwapchain, but then its handle is being kept around (both here, and it\u0027s given to vkCreateSwapchainKHR().  I think that could cause a crash if we came back here quickly enough that the above-for-loop tries to destroy this swapchain again.  Is my logic correct?",
+      "revId": "e6608c3c3c125ac54ec719b0a15258990448da23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b60aa469_41f9d8ba",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-08T16:54:03Z",
+      "side": 1,
+      "message": "As with the previous review (above), if swap.swapchain can be VK_NULL_HANDLE, it\u0027s better to move the finishToSerial() call down to just above the vkDestroySwapchainKHR() call",
+      "revId": "e6608c3c3c125ac54ec719b0a15258990448da23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

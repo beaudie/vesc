@@ -143,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "281960f8_bf1b191b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-08T16:54:03Z",
+      "side": 1,
+      "message": "FYI ... The spec indicates that you will get at least as many images as requested, but you can get back several more images than requested.  The design was influenced by Jesse (in 2015), who discussed  how if Android tries to record video from an application window, the swapchain might have 5 or 7 (forget which) images on behalf of the HW video encoder.",
+      "parentUuid": "bfc0a336_4d218f23",
+      "revId": "ade3a4ba22b58b1a9fbe1f0461a90399375ac651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a96c81b2_56869eac",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
