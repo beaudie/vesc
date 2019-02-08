@@ -149,6 +149,21 @@ TEST_P(UniformBufferTest, UniformBufferRange)
     drawQuad(mProgram, essl3_shaders::PositionAttrib(), 0.5f);
     EXPECT_GL_NO_ERROR();
     EXPECT_PIXEL_EQ(px, py, 110, 120, 130, 140);
+
+    // Non 4-byte aligned sizes should not be invalid to bind
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, mUniformBuffer, 0, 3);
+    EXPECT_GL_NO_ERROR();
+    // There's a workaround for some drivers that rounds the size.
+    // Check that queries are still correct.
+    GLint boundBuffer;
+    GLint64 boundBufferSize;
+    glGetIntegeri_v(GL_UNIFORM_BUFFER_BINDING, 0, &boundBuffer);
+    glGetInteger64i_v(GL_UNIFORM_BUFFER_SIZE, 0, &boundBufferSize);
+    EXPECT_EQ(static_cast<GLuint>(boundBuffer), mUniformBuffer);
+    EXPECT_EQ(boundBufferSize, 3);
+    // Binding 3 bytes is too small and should generate INVALID_OPERATION
+    drawQuad(mProgram, essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 }
 
 // Test uniform block bindings.

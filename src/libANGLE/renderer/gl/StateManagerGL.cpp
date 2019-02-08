@@ -901,8 +901,23 @@ void StateManagerGL::updateProgramUniformBufferBindings(const gl::Context *conte
             }
             else
             {
+                GLsizeiptr size = uniformBuffer.getSize();
+                if (GetWorkaroundsGL(context).roundDownUniformBindBufferRangeSize)
+                {
+                    size = size & ~3;
+                    if (size == 0)
+                    {
+                        // This case is invalid and we shouldn't call the driver.
+                        // Without rounding, this would generate INVALID_OPERATION
+                        // at draw time because the size is not enough to fill the smallest
+                        // possible uniform block (4 bytes).
+                        // Clear the buffer binding because it will not be used.
+                        bindBufferBase(gl::BufferBinding::Uniform, binding, 0);
+                        return;
+                    }
+                }
                 bindBufferRange(gl::BufferBinding::Uniform, binding, bufferGL->getBufferID(),
-                                uniformBuffer.getOffset(), uniformBuffer.getSize());
+                                uniformBuffer.getOffset(), size);
             }
         }
     }
