@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64ee4bea_8f5a25eb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-08T18:47:27Z",
+      "side": 1,
+      "message": "can you reformat this slighty? keep the first sentence description \u003c 60 chars. and then wrap your longer paragraph to 70 chars?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 114
+      },
+      "revId": "16441c89f4c6b439feb8f8e59ba00783dec96348",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d1381f4_262b998b",
+        "filename": "src/compiler/translator/UtilsHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-08T18:47:27Z",
+      "side": 1,
+      "message": "We have a helper str() for converting to a string. Can you use that instead?",
+      "range": {
+        "startLine": 866,
+        "startChar": 43,
+        "endLine": 866,
+        "endChar": 92
+      },
+      "revId": "16441c89f4c6b439feb8f8e59ba00783dec96348",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
