@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "02ce9acd_570a75af",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-08T15:54:01Z",
+      "side": 1,
+      "message": "That seems fine too. I suggested the first way because I dislike C++\u0027s syntax of calling the super class. With the inherited way I would call the parent before overriding extensions in the subclass.",
+      "parentUuid": "0be34598_0137d998",
+      "revId": "30b74fba45c0986c9a269b9d72dbbfdfcf2ae34c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e1f80f14_6e299de2",
         "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
         "patchSetId": 15

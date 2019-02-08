@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "87e2ab6c_815df97a",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-08T15:54:01Z",
+      "side": 1,
+      "message": "No, that seems ok.",
+      "parentUuid": "392497c8_b660722f",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 5
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "652d87a9_494e2c1b",
         "filename": "src/tests/BUILD.gn",
         "patchSetId": 12
@@ -484,6 +508,30 @@
       "side": 1,
       "message": "It is not provided by the SDK.\n\nI am not sure what is involved in porting this, possibly just adding some json files and adjusting build rules.",
       "parentUuid": "e79ea257_2803b001",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 6
+      },
+      "revId": "1acd518d3e0a62ed8d80669b01bdc3b4754e2871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "44f37ff7_5930a327",
+        "filename": "third_party/vulkan-tools/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-08T15:54:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "def473ee_09d0bda8",
       "range": {
         "startLine": 13,
         "startChar": 0,
