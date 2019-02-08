@@ -33,6 +33,40 @@
       "revId": "e6608c3c3c125ac54ec719b0a15258990448da23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "362b11bb_fc730fdc",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-08T17:15:24Z",
+      "side": 1,
+      "message": "There are 120Hz and 144Hz displays out there.  Might be better for the for-loop to do 180 swaps, and then still use 1 sec as the lower bound.",
+      "revId": "e6608c3c3c125ac54ec719b0a15258990448da23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f61ed54_069d5379",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-08T17:15:24Z",
+      "side": 1,
+      "message": "FYI ... Android always uses vsync.  However (as we\u0027ve seen), MAILBOX lets ANGLE go really fast (dropping frames).",
+      "revId": "e6608c3c3c125ac54ec719b0a15258990448da23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
