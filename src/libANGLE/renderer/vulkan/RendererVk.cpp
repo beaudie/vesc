@@ -540,10 +540,14 @@ void RendererVk::onDestroy(vk::Context *context)
 
     GlslangWrapper::Release();
 
+#if defined(COMMAND_POOL_POOL)
+    mCommandPoolPool.destroy(mDevice);
+#else
     if (mCommandPool.valid())
     {
         mCommandPool.destroy(mDevice);
     }
+#endif
 
     if (mDevice)
     {
@@ -931,7 +935,11 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     commandPoolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
     commandPoolInfo.queueFamilyIndex        = mCurrentQueueFamilyIndex;
 
+#if defined(COMMAND_POOL_POOL)
+    ANGLE_VK_TRY(displayVk, mCommandPoolPool.init(mDevice, commandPoolInfo));
+#else
     ANGLE_VK_TRY(displayVk, mCommandPool.init(mDevice, commandPoolInfo));
+#endif
 
     // Initialize the vulkan pipeline cache.
     ANGLE_TRY(initPipelineCache(displayVk));
@@ -1227,7 +1235,12 @@ uint32_t RendererVk::getMaxActiveTextures()
 
 const vk::CommandPool &RendererVk::getCommandPool() const
 {
+#if defined(COMMAND_POOL_POOL)
+    // Get the currently active command pool from the command pool pool
+    return mCommandPoolPool.getCurrent();
+#else
     return mCommandPool;
+#endif
 }
 
 angle::Result RendererVk::finish(vk::Context *context)
@@ -1360,7 +1373,12 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     ANGLE_VK_TRY(context, vkQueueSubmit(mQueue, 1, &submitInfo, batch.fence.getHandle()));
 
     // Store this command buffer in the in-flight list.
+#if COMMAND_POOL_POOL
+    // Use up current pool, command pool pool will make it unavailable
+    batch.commandPool = std::move(mCommandPoolPool.use());
+#else
     batch.commandPool = std::move(mCommandPool);
+#endif
     batch.serial      = mCurrentQueueSerial;
 
     mInFlightCommands.emplace_back(scopedBatch.release());
@@ -1383,6 +1401,9 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     // Simply null out the command buffer here - it was allocated using the command pool.
     commandBuffer.releaseHandle();
 
+#if defined(COMMAND_POOL_POOL)
+    // We don't need to do anything here, we'll fetch available pool from pool pool when needed
+#else
     // Reallocate the command pool for next frame.
     // TODO(jmadill): Consider reusing command pools.
     VkCommandPoolCreateInfo poolInfo = {};
@@ -1391,6 +1412,7 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     poolInfo.queueFamilyIndex        = mCurrentQueueFamilyIndex;
 
     ANGLE_VK_TRY(context, mCommandPool.init(mDevice, poolInfo));
+#endif
     return angle::Result::Continue;
 }
 
@@ -1496,8 +1518,13 @@ vk::CommandGraph *RendererVk::getCommandGraph()
 
 angle::Result RendererVk::flushCommandGraph(vk::Context *context, vk::CommandBuffer *commandBatch)
 {
+#if defined(COMMAND_POOL_POOL)
+    return mCommandGraph.submitCommands(context, mCurrentQueueSerial, &mRenderPassCache,
+                                        &mCommandPoolPool.getCurrent(), commandBatch);
+#else
     return mCommandGraph.submitCommands(context, mCurrentQueueSerial, &mRenderPassCache,
                                         &mCommandPool, commandBatch);
+#endif
 }
 
 angle::Result RendererVk::flush(vk::Context *context)
@@ -1664,7 +1691,11 @@ angle::Result RendererVk::getTimestamp(vk::Context *context, uint64_t *timestamp
 
     VkCommandBufferAllocateInfo commandBufferInfo = {};
     commandBufferInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+#if defined(COMMAND_POOL_POOL)
+    commandBufferInfo.commandPool = mCommandPoolPool.getCurrent().getHandle();
+#else
     commandBufferInfo.commandPool                 = mCommandPool.getHandle();
+#endif
     commandBufferInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     commandBufferInfo.commandBufferCount          = 1;
 
@@ -1855,7 +1886,11 @@ angle::Result RendererVk::synchronizeCpuGpuTime(vk::Context *context)
 
         VkCommandBufferAllocateInfo commandBufferInfo = {};
         commandBufferInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+#if defined(COMMAND_POOL_POOL)
+        commandBufferInfo.commandPool = mCommandPoolPool.getCurrent().getHandle();
+#else
         commandBufferInfo.commandPool        = mCommandPool.getHandle();
+#endif
         commandBufferInfo.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
         commandBufferInfo.commandBufferCount = 1;
 

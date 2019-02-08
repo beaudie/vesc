@@ -646,6 +646,25 @@ void DynamicallyGrowingPool<Pool>::onEntryFreed(Context *context, size_t poolInd
     ++mPoolStats[poolIndex].freedCount;
 }
 
+angle::Result DynamicCommandPoolPool::init(VkDevice device, uint32_t currentQueueFamilyIndex)
+{
+    mCurrentQueueFamilyIndex = currentQueueFamilyIndex;
+    return mPool.init(device, &createInfo);
+}
+
+angle::Result DynamicCommandPoolPool::allocateNewPool(Context *context)
+{
+    if (findFreeEntryPool(context))
+    {
+        return angle::Results::Continue;
+    }
+
+    VkCommandPoolCreateInfo commandPoolInfo = {};
+    commandPoolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    commandPoolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+    commandPoolInfo.queueFamilyIndex        = mCurrentQueueFamilyIndex;
+}
+
 // DynamicQueryPool implementation
 DynamicQueryPool::DynamicQueryPool() = default;
 

@@ -208,6 +208,31 @@ class DynamicallyGrowingPool : angle::NonCopyable
     uint32_t mCurrentFreeEntry;
 };
 
+// DynamicCommandPoolPool allocates CommandPools out of CommandPoolPool as needed.  If all
+// CommandPools are in use, another is created.  The command pools live permanently, but reset as
+// commands complete.
+
+class DynamicCommandPoolPool final : public DynamicallyGrowingPool<CommandPool>
+{
+  public:
+    CommandPoolPool();
+    ~CommandPoolPool() override;
+
+    angle::Result init(VkDevice device, const VkCommandPoolCreateInfo &createInfo);
+    void destroy(VkDevice device);
+
+    bool isValid() { return mPoolSize > 0; }
+
+    angle::Result allocatePool(Context *context, QueryHelper *queryOut);
+    void freePool(Context *context, QueryHelper *query);
+
+  private:
+    angle::Result allocateNewPool(VkDevice device);
+
+    // Information required to create new command pool
+    uint32_t mCurrentQueueFamilyIndex;
+};
+
 // DynamicQueryPool allocates indices out of QueryPool as needed.  Once a QueryPool is exhausted,
 // another is created.  The query pools live permanently, but are recycled as indices get freed.
 
