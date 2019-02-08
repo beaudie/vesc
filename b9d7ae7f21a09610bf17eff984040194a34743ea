@@ -108,6 +108,30 @@
     },
     {
       "key": {
+        "uuid": "a2b6cda3_a150dd5b",
+        "filename": "src/libANGLE/renderer/gl/TransformFeedbackGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-02-08T21:57:12Z",
+      "side": 1,
+      "message": "I just realized that this useProgram is required after all. Because syncActiveState is called lazily, the current program is not necessarily the one that was bound when the application called BeginTransformFeedback. We have to ask the current transform feedback object what the right program to use is and bind that one.\n\nI\u0027ve added a test that requires this.",
+      "parentUuid": "d1ea0bdd_85efdda9",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 49
+      },
+      "revId": "b9d7ae7f21a09610bf17eff984040194a34743ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "161de6f9_5ed162c5",
         "filename": "src/libANGLE/renderer/gl/TransformFeedbackGL.cpp",
         "patchSetId": 6
