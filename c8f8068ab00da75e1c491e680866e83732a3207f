@@ -16,6 +16,24 @@
       "revId": "c8f8068ab00da75e1c491e680866e83732a3207f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97c715d4_9d77bdb6",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-08T14:43:31Z",
+      "side": 1,
+      "message": "+1 to making a helper",
+      "parentUuid": "0411ef1a_d03b8abc",
+      "revId": "c8f8068ab00da75e1c491e680866e83732a3207f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

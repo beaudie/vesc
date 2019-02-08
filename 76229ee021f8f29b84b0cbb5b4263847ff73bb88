@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "754bc7d2_60d6de40",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-08T14:43:31Z",
+      "side": 1,
+      "message": "nit: apparent",
+      "range": {
+        "startLine": 11,
+        "startChar": 26,
+        "endLine": 11,
+        "endChar": 34
+      },
+      "revId": "76229ee021f8f29b84b0cbb5b4263847ff73bb88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7b54bd1_7b457d78",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-08T14:43:31Z",
+      "side": 1,
+      "message": "nit: Suppress",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 8
+      },
+      "revId": "76229ee021f8f29b84b0cbb5b4263847ff73bb88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c33d978d_52a8d346",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-08T14:43:31Z",
+      "side": 1,
+      "message": "could you try using mState.source-\u003egetAttachmentRenderTarget?\n\ncan make initStagingBuffer an \"ensure\" operation so the redundant call doesn\u0027t do anything for Textures.\n\nAlso might be worth throwing in a temporary ASSERT(level \u003d\u003d 0) to confirm we don\u0027t support nonzero Texture mips yet.",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 44
+      },
+      "revId": "76229ee021f8f29b84b0cbb5b4263847ff73bb88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31e7bd9a_240463cd",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-08T14:43:31Z",
+      "side": 1,
+      "message": "nit: maybe in header?",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 1
+      },
+      "revId": "76229ee021f8f29b84b0cbb5b4263847ff73bb88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76c39600_ad007a50",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-08T14:43:31Z",
+      "side": 1,
+      "message": "nit: seems unnecessary",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 47
+      },
+      "revId": "76229ee021f8f29b84b0cbb5b4263847ff73bb88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee9ac433_a7bdd85f",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-08T14:43:31Z",
+      "side": 1,
+      "message": "nit: maybe also in header?",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 199,
+        "endChar": 1
+      },
+      "revId": "76229ee021f8f29b84b0cbb5b4263847ff73bb88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd9df238_22045649",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-08T14:43:31Z",
+      "side": 1,
+      "message": "Using vk::Context is going to be a bit of an issue if we want to wrap queue access through a GL Context for multithreading. The good news is that egl::Display::createImage takes a Context pointer that is valid for all the target types we currently support.\n\nCould you pipe the gl::Context down from egl::Display::createImage to egl::Image::initialize down to here? Could be a split patch.",
+      "range": {
+        "startLine": 151,
+        "startChar": 41,
+        "endLine": 151,
+        "endChar": 61
+      },
+      "revId": "76229ee021f8f29b84b0cbb5b4263847ff73bb88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
