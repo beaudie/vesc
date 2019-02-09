@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c3eda58_437dcd0a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-09T03:23:24Z",
+      "side": 1,
+      "message": "I suggest `InitImagePipeSurfaceFUCHSIAFunctions` to be in similar form to the others `Init\u003cExtNameTAG\u003eFunctions`",
+      "revId": "5b322c11091f44942d4e0a2c908cb785fe544179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6becd928_ae4209cc",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 17
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-09T03:23:24Z",
+      "side": 1,
+      "message": "Doesn\u0027t look like it was previously needed",
+      "range": {
+        "startLine": 277,
+        "startChar": 1,
+        "endLine": 278,
+        "endChar": 0
+      },
+      "revId": "5b322c11091f44942d4e0a2c908cb785fe544179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f96245c4_b8246920",
+        "filename": "util/fuchsia/FuchsiaTimer.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-09T03:23:24Z",
+      "side": 1,
+      "message": "Since this is identical to Linux, I suggest simply doing `typedef LinuxTimer FuchsiaTimer;` in the header and add LinuxTimer.* to Fuchsia build.\n\nAt some point in the future, `LinuxTimer.*` should move to `posix/` and become `PosixTimer.*`.",
+      "revId": "5b322c11091f44942d4e0a2c908cb785fe544179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5e0d536_de800a7d",
+        "filename": "util/fuchsia/Fuchsia_system_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-09T03:23:24Z",
+      "side": 1,
+      "message": "Why is Fuchsia not using `Posix_system_utils.cpp`?",
+      "revId": "5b322c11091f44942d4e0a2c908cb785fe544179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44523e3e_f509cc17",
+        "filename": "util/fuchsia/ScenicWindow.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-09T03:23:24Z",
+      "side": 1,
+      "message": "Please add test skips similar to what\u0027s done here:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1459602",
+      "revId": "5b322c11091f44942d4e0a2c908cb785fe544179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
