@@ -70,6 +70,24 @@
       "revId": "6876fc0ab121ba1acecf59a1e92e8bce3bb3a2d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c961f39_67bf7a73",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-02-09T11:46:08Z",
+      "side": 1,
+      "message": "Thanks for pointing out the static initializer constraint. I made a trick deferring the initializer until ~LogMessage is first called.",
+      "parentUuid": "e82f28f5_ad5bcc2a",
+      "revId": "6876fc0ab121ba1acecf59a1e92e8bce3bb3a2d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
