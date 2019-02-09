@@ -44,7 +44,8 @@ constexpr char kLineRasterDefine[]     = R"(#version 450 core
 
 void GetBuiltInResourcesFromCaps(const gl::Caps &caps, TBuiltInResource *outBuiltInResources)
 {
-    outBuiltInResources->maxDrawBuffers                   = caps.maxDrawBuffers;
+    // TODO(jmadill): Will need to increase this for EXT_draw_buffers. http://anglebug.com/2394
+    outBuiltInResources->maxDrawBuffers                   = 1;
     outBuiltInResources->maxAtomicCounterBindings         = caps.maxAtomicCounterBufferBindings;
     outBuiltInResources->maxAtomicCounterBufferSize       = caps.maxAtomicCounterBufferSize;
     outBuiltInResources->maxClipPlanes                    = caps.maxClipPlanes;
