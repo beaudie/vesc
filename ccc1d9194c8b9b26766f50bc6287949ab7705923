@@ -25,6 +25,53 @@
     },
     {
       "key": {
+        "uuid": "c132cb6f_902af118",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2019-02-11T02:25:06Z",
+      "side": 1,
+      "message": "changed to 1",
+      "parentUuid": "d3eaebfb_d3ef9c47",
+      "range": {
+        "startLine": 506,
+        "startChar": 57,
+        "endLine": 506,
+        "endChar": 58
+      },
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f442f2e9_29bf06a8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2019-02-11T02:25:06Z",
+      "side": 1,
+      "message": "changed to 1",
+      "range": {
+        "startLine": 548,
+        "startChar": 56,
+        "endLine": 548,
+        "endChar": 58
+      },
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f6c67b37_9e7fe6dc",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
@@ -48,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "0a7058e5_68ea2d9f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2019-02-11T02:25:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6c67b37_9e7fe6dc",
+      "range": {
+        "startLine": 453,
+        "startChar": 3,
+        "endLine": 454,
+        "endChar": 92
+      },
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fe7db3ac_8e9ef1ed",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
@@ -59,6 +130,24 @@
       "writtenOn": "2018-11-20T07:29:55Z",
       "side": 1,
       "message": "You just decided whether to add this extension just above. You can keep a flag to avoid doing another linear search. The extension is added in the back, so you can alternatively search in `rbegin()` and `rend()`.",
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8943c7c4_e7cc50b2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2019-02-11T02:25:06Z",
+      "side": 1,
+      "message": "Didn\u0027t think it was worth the complication of an additional flag - there\u0027s only a few items in the list.   rbegin/rend only help when it\u0027s in the list, and only until the code gets rewritten so that it\u0027s no longer at the end.",
+      "parentUuid": "fe7db3ac_8e9ef1ed",
       "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -100,6 +189,24 @@
     },
     {
       "key": {
+        "uuid": "8532f776_1365676e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2019-02-11T02:25:06Z",
+      "side": 1,
+      "message": "I added the hoop jumping when this didn\u0027t compile on the Android bots.",
+      "parentUuid": "529263c5_cff44f92",
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dbe8afb2_92afa128",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
@@ -123,6 +230,30 @@
     },
     {
       "key": {
+        "uuid": "bda7451f_f09da0e9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2019-02-11T02:25:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbe8afb2_92afa128",
+      "range": {
+        "startLine": 596,
+        "startChar": 19,
+        "endLine": 596,
+        "endChar": 23
+      },
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e78c42a3_2f482560",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
@@ -143,6 +274,30 @@
       "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "382bec31_f9ee7d5d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2019-02-11T02:25:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e78c42a3_2f482560",
+      "range": {
+        "startLine": 630,
+        "startChar": 2,
+        "endLine": 631,
+        "endChar": 84
+      },
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -216,6 +371,30 @@
     },
     {
       "key": {
+        "uuid": "460cb6ca_f3dac89e",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2019-02-11T02:25:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c365321d_3feba46e",
+      "range": {
+        "startLine": 486,
+        "startChar": 0,
+        "endLine": 487,
+        "endChar": 51
+      },
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec8635c6_29a0ff1a",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 5
@@ -251,6 +430,24 @@
     },
     {
       "key": {
+        "uuid": "1cf93dd7_3379f61a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2019-02-11T02:25:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c76fd06a_5b4bee37",
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27a4c3cf_8e18bd99",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 5
@@ -280,6 +477,24 @@
       "side": 1,
       "message": "How about keeping this function here but making it a member of RendererVk? It\u0027s a bit weird to have it in a separate file, but seems harmless.",
       "parentUuid": "27a4c3cf_8e18bd99",
+      "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "989b1b1d_fbe53257",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2019-02-11T02:25:06Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "3455de9c_4fe925aa",
       "revId": "ccc1d9194c8b9b26766f50bc6287949ab7705923",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
