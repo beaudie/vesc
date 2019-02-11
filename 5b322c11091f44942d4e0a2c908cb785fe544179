@@ -84,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "a9484f00_8c2992b3",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 17
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-11T16:59:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5bc278e8_632534c1",
+      "range": {
+        "startLine": 277,
+        "startChar": 1,
+        "endLine": 278,
+        "endChar": 0
+      },
+      "revId": "5b322c11091f44942d4e0a2c908cb785fe544179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f96245c4_b8246920",
         "filename": "util/fuchsia/FuchsiaTimer.cpp",
         "patchSetId": 17
@@ -165,6 +189,24 @@
       "side": 1,
       "message": "IsOzone() is true under Fuchsia so those skips apply anyway. We may want to sort that out by changing all of the IsOzone() tests to something like IsGbm().\n\nThe rest of the skips are done in the next patch.",
       "parentUuid": "44523e3e_f509cc17",
+      "revId": "5b322c11091f44942d4e0a2c908cb785fe544179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "71081a41_37930bc4",
+        "filename": "util/fuchsia/ScenicWindow.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-11T16:59:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "483f58a6_1f54a556",
       "revId": "5b322c11091f44942d4e0a2c908cb785fe544179",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
