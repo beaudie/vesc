@@ -87,6 +87,24 @@
       "revId": "a4e4f26d6d3e78f7a39055dbbf466e300b22da51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa42201_151ba1df",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-11T17:45:34Z",
+      "side": 1,
+      "message": "Good to know they turned it into a guarantee.",
+      "parentUuid": "c92f2bac_c3e7974b",
+      "revId": "a4e4f26d6d3e78f7a39055dbbf466e300b22da51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
