@@ -69,6 +69,24 @@
       "revId": "a4e4f26d6d3e78f7a39055dbbf466e300b22da51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c92f2bac_c3e7974b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-11T17:36:04Z",
+      "side": 1,
+      "message": "I think we\u0027re okay with the guaranteed copy elision in c++17.\n\nhttps://en.cppreference.com/w/cpp/io/basic_stringstream/str\nhttps://en.cppreference.com/w/cpp/language/copy_elision",
+      "parentUuid": "4751f9c7_2b5c7cb7",
+      "revId": "a4e4f26d6d3e78f7a39055dbbf466e300b22da51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
