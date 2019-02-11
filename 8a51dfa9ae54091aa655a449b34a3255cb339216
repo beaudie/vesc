@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "59605bef_e7a24c6e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1001426
+      },
+      "writtenOn": "2019-02-11T18:14:36Z",
+      "side": 1,
+      "message": "And there were a couple existing std::vector in here which I can change while I\u0027m at it.",
+      "parentUuid": "fed3fa98_0ac1cfa2",
+      "revId": "8a51dfa9ae54091aa655a449b34a3255cb339216",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c02f3e11_7d4da455",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 11
