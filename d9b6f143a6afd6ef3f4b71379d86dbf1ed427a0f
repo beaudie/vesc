@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84b19cab_6f38f17f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-11T16:21:22Z",
+      "side": 1,
+      "message": "Can you add `region.imageSubresource.levelCount \u003d 1;`? That seems to have been missing.",
+      "revId": "d9b6f143a6afd6ef3f4b71379d86dbf1ed427a0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
