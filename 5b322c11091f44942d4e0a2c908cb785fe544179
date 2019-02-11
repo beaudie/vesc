@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a4e2a185_448eba10",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-11T16:25:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c3eda58_437dcd0a",
+      "revId": "5b322c11091f44942d4e0a2c908cb785fe544179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6becd928_ae4209cc",
         "filename": "src/tests/BUILD.gn",
         "patchSetId": 17
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "5bc278e8_632534c1",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 17
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-11T16:25:13Z",
+      "side": 1,
+      "message": "We can build angle_perftests but not angle_white_box_perftests on Fuchsia so this separates the conditions.",
+      "parentUuid": "6becd928_ae4209cc",
+      "range": {
+        "startLine": 277,
+        "startChar": 1,
+        "endLine": 278,
+        "endChar": 0
+      },
+      "revId": "5b322c11091f44942d4e0a2c908cb785fe544179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f96245c4_b8246920",
         "filename": "util/fuchsia/FuchsiaTimer.cpp",
         "patchSetId": 17
@@ -56,6 +98,24 @@
       "revId": "5b322c11091f44942d4e0a2c908cb785fe544179",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80bfa138_4007427a",
+        "filename": "util/fuchsia/FuchsiaTimer.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-11T16:25:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f96245c4_b8246920",
+      "revId": "5b322c11091f44942d4e0a2c908cb785fe544179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -90,6 +150,24 @@
       "revId": "5b322c11091f44942d4e0a2c908cb785fe544179",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "483f58a6_1f54a556",
+        "filename": "util/fuchsia/ScenicWindow.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-02-11T16:25:13Z",
+      "side": 1,
+      "message": "IsOzone() is true under Fuchsia so those skips apply anyway. We may want to sort that out by changing all of the IsOzone() tests to something like IsGbm().\n\nThe rest of the skips are done in the next patch.",
+      "parentUuid": "44523e3e_f509cc17",
+      "revId": "5b322c11091f44942d4e0a2c908cb785fe544179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
