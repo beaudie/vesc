@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "42147e40_c3ec7ecc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-11T15:26:13Z",
+      "side": 1,
+      "message": "Not sure this is the right approach. If none of the `UtilsVk` functions are ever called, you would be setting dirty bits unnecessarily.\n\nI was honestly wondering when working on UtilsVk if I would be messing up the dirty bits. At the time, my feeling was that it would be best to set the dirty bits in UtilsVk itself, which knows if and what it has changed something (but since the bots didn\u0027t show up any issue, I didn\u0027t get around to looking into it).\n\nThat would be something like:\n\nUtilsVk::clearImage:\n    contextVk-\u003esetExternallyDirtiedBits(...)",
+      "revId": "a4e4f26d6d3e78f7a39055dbbf466e300b22da51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4751f9c7_2b5c7cb7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-11T15:26:13Z",
+      "side": 1,
+      "message": "std::move",
+      "revId": "a4e4f26d6d3e78f7a39055dbbf466e300b22da51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
