@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7967d6a1_979a644e",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-11T19:33:34Z",
+      "side": 1,
+      "message": "would call this SourceTextureType instead of Base. To distinguish it from BASE_LEVEL etc in ES. Probably could go in ImageState as well I imagine.",
+      "range": {
+        "startLine": 36,
+        "startChar": 20,
+        "endLine": 36,
+        "endChar": 36
+      },
+      "revId": "d2985604936797de1af4d18ae4ae046b345c2be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
