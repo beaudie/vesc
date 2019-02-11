@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9d10c87_6957fa0f",
+        "filename": "util/posix/Posix_system_utils.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-11T19:10:06Z",
+      "side": 1,
+      "message": "maybe you can just move this #if up a bit?",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 24
+      },
+      "revId": "fa0ff231e4f3de1264fa03cf28bd8b6c7f9f6072",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
