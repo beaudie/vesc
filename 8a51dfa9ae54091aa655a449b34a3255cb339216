@@ -220,6 +220,24 @@
     },
     {
       "key": {
+        "uuid": "8913941e_8c84d002",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-11T19:12:38Z",
+      "side": 1,
+      "message": "Let\u0027s say the `if` at line 680 is false. That is, `VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2` is not present.\n\nChaining structs with `pNext` as done here, is to pass data to an extension. Every extension searches this chain until it finds its own data. If you chain a struct that\u0027s not picked up by any extension, the data in that struct would be left unused (this is likely caught by a validation error).\n\nIn other words, if `VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2` is not present, chaining `VkPhysicalDeviceFeatures2` to `VkDeviceCreateInfo` would be useless, i.e. the features will not get enabled.\n\nDoes that make sense?\n\n---\n\nThat extension is old, ubiquitous, and core in 1.1, so I think we are safe to assume it exists everywhere. My suggestion would be to turn the `if` at line 680 into an assert. Then, you can remove the `if` at line 764 too.",
+      "parentUuid": "d4cacfae_411b2e73",
+      "revId": "8a51dfa9ae54091aa655a449b34a3255cb339216",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9ef1e7e2_024968a3",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 11
