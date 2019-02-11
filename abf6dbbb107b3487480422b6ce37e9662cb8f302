@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9535080d_bee7e552",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-11T14:37:21Z",
+      "side": 0,
+      "message": "maybe we should leave a TODO and ASSERT that the divisor is less than uint8_max. Rather than letting SetBitField do something non-obvious.",
+      "range": {
+        "startLine": 699,
+        "startChar": 4,
+        "endLine": 699,
+        "endChar": 0
+      },
+      "revId": "abf6dbbb107b3487480422b6ce37e9662cb8f302",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
