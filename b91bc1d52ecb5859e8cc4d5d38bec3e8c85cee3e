@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8656e65c_9be6471f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-11T19:15:51Z",
+      "side": 1,
+      "message": "won\u0027t this call reset? Seems like this reset call should be triggered when the command batch is destroyed.",
+      "range": {
+        "startLine": 1393,
+        "startChar": 21,
+        "endLine": 1393,
+        "endChar": 36
+      },
+      "revId": "b91bc1d52ecb5859e8cc4d5d38bec3e8c85cee3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
