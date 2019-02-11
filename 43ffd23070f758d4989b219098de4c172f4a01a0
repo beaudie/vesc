@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e15a93e1_3bb32a7c",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-11T18:52:10Z",
+      "side": 1,
+      "message": "seems okay, but rounding down could theoretically cut off the last few bytes. rounding up is tricky too because you could round past the end of the buffer. so I can see this being the best choice.",
+      "range": {
+        "startLine": 907,
+        "startChar": 21,
+        "endLine": 907,
+        "endChar": 37
+      },
+      "revId": "43ffd23070f758d4989b219098de4c172f4a01a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
