@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "f3cdf2bf_97cff5dc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-11T15:58:39Z",
+      "side": 1,
+      "message": "Hadn\u0027t noticed the change that introduced CommandBufferOwner.\n\nOk, this makes more sense now.",
+      "parentUuid": "fa3e86ad_62e1e4d4",
+      "revId": "a4e4f26d6d3e78f7a39055dbbf466e300b22da51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4751f9c7_2b5c7cb7",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
